@@ -39,7 +39,6 @@
     "trix": "^0.10.2"
   },
   "devDependencies": {
-    "bower": "^1.8.0",
     "css-loader": "^0.28.3",
     "extract-text-webpack-plugin": "^2.1.2",
     "file-loader": "^0.11.1",
