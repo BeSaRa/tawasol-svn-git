@@ -28,7 +28,24 @@
         </div>
         <div layout="row" flex>
             <md-sidenav md-is-locked-open="!ctrl.fullScreen" ng-if="!ctrl.fullScreen">
-                <h1>welcome BeSaRa</h1>
+                <div class="p20" layout="column" scroll-directive>
+                    <ul id="document-properties">
+                        <li class="document-properties">
+                            <ul class="work-item-properties">
+                                <li>
+                                    <span class="property-key">{{lang.document_subject}}</span>
+                                    <span class="property-value">{{ctrl.correspondence.getTranslatedName()}}</span>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="document-properties">
+                            <ul class="correspondence-properties">
+                                <li><span class="property-key">العنوان : </span><span
+                                        class="property-value">أهلا وسهلا</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </md-sidenav>
             <md-sidenav ng-if="ctrl.detailsReady && ctrl.correspondence" id="correspondence-details"
                         md-whiteframe="3"
@@ -134,7 +151,8 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.correspondence.documentComments.length" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS')">
+                        <accordion-item pass-when="!!ctrl.correspondence.documentComments.length"
+                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS')">
                             <accordion-title>
                                 <md-icon md-svg-icon="comment"></md-icon>
                                 <span>{{lang.outgoing_manage_comments}}</span>

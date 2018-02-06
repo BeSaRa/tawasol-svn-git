@@ -1559,7 +1559,7 @@ tr.unread-row {
 }
 
 .read-td {
-  padding-right: 0px !important;
+  padding-right: 0 !important;
   .status {
     height: 47px;
     content: '';
@@ -1685,4 +1685,32 @@ tr.default-theme:hover {
 
 .field-set-hidden {
   border: none;
+}
+
+#document-properties {
+  padding: 0;
+  margin: 0;
+  float: right;
+  width: 100%;
+  .document-properties {
+    width: 100%;
+    float: right;
+    padding: 5px 0;
+    font-size: 12px;
+    & > ul {
+      padding: 0;
+      margin: 0;
+    }
+  }
+  .property-value {
+    padding-left: 7px;
+  }
+  .property-key:after {
+    position: absolute;
+    content: ':';
+    margin-left: 4px;
+  }
+  .property-key.property-block {
+    display: block;
+  }
 }
