@@ -1,6 +1,6 @@
 var path = require('path'),
     webpack = require('webpack'),
-    NgAnnotate = require('ng-annotate-webpack-plugin'),
+    NGAnnotate = require('ng-annotate-webpack-plugin'),
     ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
@@ -69,7 +69,7 @@ module.exports = {
             }
         }),
         new ExtractTextPlugin('dist/css/style.css'),
-        new NgAnnotate(),
+        new NGAnnotate(),
         new webpack.optimize.AggressiveMergingPlugin(),
         new webpack.optimize.UglifyJsPlugin({
             mangle: true,

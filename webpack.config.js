@@ -1,6 +1,6 @@
 var path = require('path'),
     webpack = require('webpack'),
-    ngAnnotate = require('ng-annotate-webpack-plugin');
+    NGAnnotate = require('ng-annotate-webpack-plugin');
 
 module.exports = {
     context: path.resolve(__dirname),
@@ -33,17 +33,6 @@ module.exports = {
                     {loader: 'resolve-url-loader'},
                     {loader: 'sass-loader', options: {sourceMap: true}}
                 ]
-                /*ExtractTextPlugin.extract(
-                    {
-                        fallback: 'style-loader',
-                        use: [
-                            // {loader: 'style-loader', options: {sourceMap: true}},
-                            {loader: 'css-loader', options: {sourceMap: true}},
-                            {loader: 'resolve-url-loader', options: {sourceMap: true}},
-                            {loader: 'sass-loader', options: {sourceMap: true}}
-                        ]
-                    }
-                )*/
             },
             {test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/, loaders: ['file-loader']},
             {
@@ -69,6 +58,6 @@ module.exports = {
             CountUp: 'countup.js'
         }),
         new webpack.HotModuleReplacementPlugin(),
-        new ngAnnotate()
+        new NGAnnotate()
     ]
 };
