@@ -31,17 +31,39 @@
                 <div class="p20" layout="column" scroll-directive>
                     <ul id="document-properties">
                         <li class="document-properties">
-                            <ul class="work-item-properties">
+                            <ul ng-if="!!ctrl.workItem" class="work-item-properties">
                                 <li>
-                                    <span class="property-key">{{lang.document_subject}}</span>
-                                    <span class="property-value">{{ctrl.correspondence.getTranslatedName()}}</span>
+                                    <span class="property-key">{{lang.previous_action}}</span>
+                                    <span class="property-value">{{ctrl.workItem.action.getTranslatedName()}}</span>
+                                </li>
+                                <li>
+                                    <span class="property-key">{{lang.previous_comment}}</span>
+                                    <span class="property-value">{{ctrl.workItem.comments}}</span>
+                                </li>
+                                <li>
+                                    <span class="property-key">{{lang.work_item_sender}}</span>
+                                    <span class="property-value">{{ctrl.workItem.senderInfo.getTranslatedName()}}</span>
+                                </li>
+                                <li>
+                                    <span class="property-key">{{lang.action_date}}</span>
+                                    <span class="property-value">{{ctrl.workItem.getReceivedDate()}}</span>
+                                </li>
+                                <li>
+                                    <span class="property-key">{{lang.time}}</span>
+                                    <span class="property-value">{{ctrl.workItem.getReceivedTime()}}</span>
                                 </li>
                             </ul>
                         </li>
                         <li class="document-properties">
                             <ul class="correspondence-properties">
-                                <li><span class="property-key">العنوان : </span><span
-                                        class="property-value">أهلا وسهلا</span></li>
+                                <li>
+                                    <span class="property-key">{{lang.document_number}}</span>
+                                    <span class="property-value">{{ctrl.workItem.getReceivedTime()}}</span>
+                                </li>
+                                <li>
+                                    <span class="property-key">{{lang.document_number}}</span>
+                                    <span class="property-value">{{ctrl.workItem.getReceivedTime()}}</span>
+                                </li>
                             </ul>
                         </li>
                     </ul>

@@ -1,12 +1,14 @@
 module.exports = function (app) {
-    app.factory('GeneralStepElementView', function (CMSModelInterceptor, 
-                                                    _, 
-                                                    generator, 
-                                                    WorkItem, 
-                                                    Outgoing, 
-                                                    Internal, 
-                                                    Incoming, 
-                                                    Information, 
+    app.factory('GeneralStepElementView', function (CMSModelInterceptor,
+                                                    _,
+                                                    generator,
+                                                    moment,
+                                                    WorkItem,
+                                                    langService,
+                                                    Outgoing,
+                                                    Internal,
+                                                    Incoming,
+                                                    Information,
                                                     $sce) {
         'ngInject';
         return function GeneralStepElementView(model) {
@@ -94,6 +96,12 @@ module.exports = function (app) {
 
             GeneralStepElementView.prototype.hasContent = function () {
                 return this.correspondence.hasContent();
+            };
+            GeneralStepElementView.prototype.getReceivedDate = function () {
+                return this.generalStepElm.receivedDate ? moment(this.generalStepElm.receivedDate).format(langService.current === 'ar' ? 'DD-MM-YYYY' : 'YYYY-MM-DD') : '';
+            };
+            GeneralStepElementView.prototype.getReceivedTime = function () {
+                return this.generalStepElm.receivedDate ? moment(this.generalStepElm.receivedDate).format('hh:mm A') : '';
             };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

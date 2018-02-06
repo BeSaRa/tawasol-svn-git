@@ -318,7 +318,7 @@ module.exports = function (app) {
         /**
          * @description get correspondence information (documentClass , vsId ) from given correspondence or WorkItem.
          * @param correspondence
-         * @return {{documentClass: *, vsId: *}}
+         * @return {CorrespondenceInfo}
          */
         self.getCorrespondenceInformation = function (correspondence) {
             return new CorrespondenceInfo({
@@ -944,10 +944,7 @@ module.exports = function (app) {
          */
         self.viewCorrespondence = function (correspondence, actions, department, readyToExport) {
             var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : _createInstance(correspondence).getInfo();
-            //var workItem = info.wobNumber ? correspondence : false;
-            var workItem = info.wobNumber && info.workFlow !== 'internal' ? correspondence : false;
-            console.log('workItem', info);
-            if (workItem)
+            if (info.isWorkItem())
                 return self.viewCorrespondenceWorkItem(info, actions, department, readyToExport);
 
             return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))

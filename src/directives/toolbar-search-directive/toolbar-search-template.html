@@ -1,7 +1,7 @@
 <div layout="row" flex="none" ng-class="{'show-search-bar':search.quick.searchForm}" layout-align="start center"
      id="toolbar-search">
     <label for="query">
-        <md-button ng-click="search.showSearch()" class="md-icon-button m015">
+        <md-button  ng-click="search.showSearch()" class="md-icon-button m015">
             <md-icon md-svg-icon="magnify"></md-icon>
         </md-button>
     </label>
@@ -17,7 +17,7 @@
         {{lang.get(search.searchCriteria.value)}}
     </div>
     <md-menu ng-if="search.quick.searchForm">
-        <md-button aria-label="" class="md-icon-button" ng-click="search.openMenu($mdMenu, $event)">
+        <md-button aria-label="search-menu" class="md-icon-button" ng-click="search.openMenu($mdMenu, $event)">
             <md-icon md-menu-origin md-svg-icon="dots-vertical"></md-icon>
         </md-button>
         <md-menu-content width="4">

@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                               QuickSearchCorrespondence,
                                                               tokenService,
                                                               $rootScope,
+                                                              correspondenceService,
                                                               $timeout,
                                                               _,
                                                               dialog,
@@ -46,8 +47,8 @@ module.exports = function (app) {
         self.loadQuickSearchCorrespondence = function (quickSearch) {
             return $http.post(urlService.quickSearchCorrespondence, quickSearch)
                 .then(function (result) {
-                    self.quickSearchCorrespondence = generator.generateCollection(result.data.rs, QuickSearchCorrespondence, self._sharedMethods);
-                    self.quickSearchCorrespondence = generator.interceptReceivedCollection('QuickSearchCorrespondence', self.quickSearchCorrespondence);
+                    // self.quickSearchCorrespondence = generator.generateCollection(result.data.rs, QuickSearchCorrespondence, self._sharedMethods);
+                    self.quickSearchCorrespondence = correspondenceService.interceptReceivedCollectionBasedOnEachDocumentClass(result.data.rs);
                     return self.quickSearchCorrespondence;
                 });
         };

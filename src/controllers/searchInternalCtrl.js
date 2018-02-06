@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('searchInternalCtrl', function (lookupService,
                                                    langService,
                                                    Internal,
+                                                   ResolveDefer,
                                                    viewDocumentService,
                                                    organizations,
                                                    correspondenceSiteTypes,
@@ -384,7 +385,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
@@ -404,7 +405,7 @@ module.exports = function (app) {
                 .exportSearchInternal(searchedInternalDocument, $event)
                 .then(function (result) {
                     self.reloadSearchedInternalDocument(self.grid.page)
-                        .then(function(){
+                        .then(function () {
                             toast.success(langService.get('export_success'));
                         });
                 });
@@ -422,7 +423,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
@@ -443,7 +444,7 @@ module.exports = function (app) {
 
             return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
                 .then(function () {
-                   distributionWorkflowService
+                    distributionWorkflowService
                         .controllerMethod
                         .distributionWorkflowSend(searchedInternalDocument, false, false, null, "internal", $event)
                         .then(function (result) {
@@ -683,6 +684,20 @@ module.exports = function (app) {
             return (!action.hide);
         };
 
+        /**
+         * @description do broadcast for correspondence.
+         */
+        self.doBroadcast = function (correspondence, $event, defer) {
+            correspondence
+                .correspondenceBroadcast()
+                .then(function () {
+                    self.reloadSearchedInternalDocument(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        })
+                })
+        };
+
         self.gridActions = [
             {
                 type: 'action',
@@ -738,6 +753,17 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: self.checkToShowAction
             },
+            {
+                type: 'action',
+                icon: 'bullhorn',
+                text: 'grid_action_broadcast',
+                shortcut: false,
+                hide: false,
+                callback: self.doBroadcast,
+                checkShow: function (action, model) {
+                    return !model.needApprove();
+                }
+            },
             // Print Barcode
             {
                 type: 'action',
@@ -747,7 +773,7 @@ module.exports = function (app) {
                 callback: self.printBarcode,
                 class: "action-green",
                 permissionKey: 'PRINT_BARCODE',
-                checkShow: function(action, model){
+                checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && model.barcodeReady();
                 }
             },

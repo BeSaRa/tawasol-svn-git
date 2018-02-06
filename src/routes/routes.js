@@ -1008,6 +1008,9 @@ module.exports = function (app) {
                 resolve: {
                     quickSearchCorrespondence: function (quickSearchCorrespondenceService, $stateParams) {
                         'ngInject';
+                        if (!$stateParams.key) {
+                            return [];
+                        }
                         var searchJSON = {};
                         searchJSON[$stateParams.key] = $stateParams.q;
                         return quickSearchCorrespondenceService.loadQuickSearchCorrespondence(searchJSON);

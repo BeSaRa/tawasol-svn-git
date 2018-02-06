@@ -1700,6 +1700,11 @@ tr.default-theme:hover {
     & > ul {
       padding: 0;
       margin: 0;
+      & > li {
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+        border-bottom: 1px solid #EEE;
+      }
     }
   }
   .property-value {

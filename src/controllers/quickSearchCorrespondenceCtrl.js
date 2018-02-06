@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('quickSearchCorrespondenceCtrl', function (lookupService,
                                                               quickSearchCorrespondenceService,
                                                               quickSearchCorrespondence,
+                                                              ResolveDefer,
                                                               $q,
                                                               langService,
                                                               viewDocumentService,
@@ -341,6 +342,20 @@ module.exports = function (app) {
             return (!action.hide);
         };
 
+        /**
+         * @description do broadcast for correspondence.
+         */
+        self.doBroadcast = function (correspondence, $event, defer) {
+            correspondence
+                .correspondenceBroadcast()
+                .then(function () {
+                    self.reloadQuickSearchCorrespondence(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        })
+                })
+        };
+
         self.gridActions = [
             {
                 type: 'action',
@@ -389,6 +404,17 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
+                }
+            },
+            {
+                type: 'action',
+                icon: 'bullhorn',
+                text: 'grid_action_broadcast',
+                shortcut: false,
+                hide: false,
+                callback: self.doBroadcast,
+                checkShow: function (action, model) {
+                    return !model.needApprove() || model.hisDocumentClass('incoming');
                 }
             },
             // View Tracking Sheet

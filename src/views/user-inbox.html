@@ -107,14 +107,14 @@
 
                                     <td md-cell class="indicator-td">
                                         <!-- Paper Document -->
-                                       <!-- <span flex
-                                              ng-class="{'indicator-content': userInbox.isPaperIndicator}">
-                                            <md-icon ng-if="userInbox.isPaperIndicator"
-                                                     class="{{userInbox.isPaperIndicator.class}}"
-                                                     md-svg-icon="{{userInbox.isPaperIndicator.icon}}"
-                                                     tooltip="{{lang[userInbox.isPaperIndicator.tooltip]}}"
-                                            ></md-icon>
-                                        </span>-->
+                                        <!-- <span flex
+                                               ng-class="{'indicator-content': userInbox.isPaperIndicator}">
+                                             <md-icon ng-if="userInbox.isPaperIndicator"
+                                                      class="{{userInbox.isPaperIndicator.class}}"
+                                                      md-svg-icon="{{userInbox.isPaperIndicator.icon}}"
+                                                      tooltip="{{lang[userInbox.isPaperIndicator.tooltip]}}"
+                                             ></md-icon>
+                                         </span>-->
                                         <!-- Security Level -->
                                         <span flex
                                               ng-class="{'indicator-content': userInbox.securityLevelIndicator}">
@@ -200,7 +200,7 @@
                                     </td>
                                     <td md-cell>{{userInbox.generalStepElm.docFullSerial}}</td>
                                     <td md-cell class="indicator-td text-right"
-                                        style="padding-right:0 !important; padding-left:0px !important;">
+                                        style="padding-right:0 !important; padding-left:0 !important;">
                                                 <span ng-class="{'indicator-content': userInbox.priorityLevelIndicator}">
                                                     <md-icon ng-if="userInbox.priorityLevelIndicator"
                                                              class="{{userInbox.priorityLevelIndicator.class}}"
@@ -222,7 +222,7 @@
                                            ng-click="ctrl.viewDocument(userInbox, $event)">{{userInbox.generalStepElm.docSubject}}</a>
                                         <span ng-if="!userInbox.hasContent()">{{userInbox.generalStepElm.docSubject}}</span>
                                     </td>
-                                    <td md-cell>{{userInbox.generalStepElm.receivedDate}}</td>
+                                    <td md-cell>{{userInbox.getReceivedDate()}}</td>
                                     <td md-cell>{{userInbox.action.getTranslatedName()}}</td>
                                     <td md-cell class="td-data">
                                         <div layout="row">

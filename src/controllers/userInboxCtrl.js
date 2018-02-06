@@ -718,7 +718,7 @@ module.exports = function (app) {
             workItem
                 .correspondenceBroadcast()
                 .then(function () {
-                    self.reloadApprovedInternals(self.grid.page)
+                    self.reloadUserInboxes(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
                         })
@@ -812,9 +812,11 @@ module.exports = function (app) {
                 icon: 'bullhorn',
                 text: 'grid_action_broadcast',
                 shortcut: false,
-                hide: true,
+                hide: false,
                 callback: self.doBroadcast,
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model) {
+                    return (!model.needApprove() || model.hisDocumentClass('incoming')) && !model.isBroadcasted();
+                }
             },
             // Reply
             {

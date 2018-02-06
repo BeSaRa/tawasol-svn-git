@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('searchIncomingCtrl', function (lookupService,
                                                    langService,
                                                    Incoming,
+                                                   ResolveDefer,
                                                    viewDocumentService,
                                                    organizations,
                                                    correspondenceSiteTypes,
@@ -154,6 +155,7 @@ module.exports = function (app) {
 
         /**
          * @description Set the selected year on changing the value
+         * @param searchForm
          * @param $event
          */
         self.setSelectedYear = function (searchForm, $event) {
@@ -707,6 +709,20 @@ module.exports = function (app) {
             return (!action.hide);
         };
 
+        /**
+         * @description do broadcast for correspondence.
+         */
+        self.doBroadcast = function (correspondence, $event, defer) {
+            correspondence
+                .correspondenceBroadcast()
+                .then(function () {
+                    self.reloadSearchedIncomingDocument(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        })
+                })
+        };
+
         self.gridActions = [
             {
                 type: 'action',
@@ -773,6 +789,15 @@ module.exports = function (app) {
                 callback: self.launchDistributionWorkflow,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                checkShow: self.checkToShowAction
+            },
+            {
+                type: 'action',
+                icon: 'bullhorn',
+                text: 'grid_action_broadcast',
+                shortcut: false,
+                hide: false,
+                callback: self.doBroadcast,
                 checkShow: self.checkToShowAction
             },
             // Print Barcode

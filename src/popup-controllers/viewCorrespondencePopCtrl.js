@@ -9,8 +9,8 @@ module.exports = function (app) {
         self.employeeService = employeeService;
         $timeout(function () {
             self.detailsReady = true;
-            //console.log('self.correspondence ', self.correspondence);
             self.model = angular.copy(self.correspondence);
+            console.log(self.model);
         }, 100);
 
         /**

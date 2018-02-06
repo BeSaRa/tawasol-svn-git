@@ -135,6 +135,9 @@ module.exports = function (app) {
             EventHistory.prototype.getCommentsCount = function ($event) {
                 return this.comments && this.comments.length ? this.comments.length : 0;
             };
+            EventHistory.prototype.hisDocumentClass = function (documentClass) {
+                return this.getInfo().documentClass.toLowerCase() === documentClass.toLowerCase();
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

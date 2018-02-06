@@ -86,8 +86,8 @@
                                             </tr>
                                             </thead>
                                             <tbody md-body>
+                                            <!--ng-if="ctrl.notCurrentUser(applicationUser)"-->
                                             <tr md-row
-                                                ng-if="ctrl.notCurrentUser(applicationUser)"
                                                 md-select="applicationUser"
                                                 ng-disabled="ctrl.disableRow(applicationUser)"
                                                 ng-repeat="applicationUser in ctrl.applicationUsers | limitTo: ctrl.gridAllUser.limit: ((ctrl.gridAllUser.page - 1) * ctrl.gridAllUser.limit) |orderBy:ctrl.gridAllUser.order track by $index">

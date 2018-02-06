@@ -34,13 +34,10 @@
         // $qProvider.errorOnUnhandledRejections(false);
     });
 
-    window.onload = function (ev) {
-        angular.element(function () {
-            'ngInject';
-            angular.bootstrap(document, ['app']);
-        });
-    };
-
+    angular.element(function () {
+        'ngInject';
+        angular.bootstrap(document, ['app']);
+    });
 
     app.run(function () {
         'ngInject';

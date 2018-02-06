@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                    Outgoing,
                                                    viewDocumentService,
                                                    organizations,
+                                                   ResolveDefer,
                                                    correspondenceSiteTypes,
                                                    //mainCorrespondenceSites,
                                                    correspondenceSiteService,
@@ -711,6 +712,20 @@ module.exports = function (app) {
             return (!action.hide);
         };
 
+        /**
+         * @description do broadcast for workItem.
+         */
+        self.doBroadcast = function (correspondence, $event, defer) {
+            correspondence
+                .correspondenceBroadcast()
+                .then(function () {
+                    self.reloadSearchedOutgoingDocument(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        })
+                })
+        };
+
         self.gridActions = [
             {
                 type: 'action',
@@ -781,6 +796,17 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: self.checkToShowAction
+            },
+            {
+                type: 'action',
+                icon: 'bullhorn',
+                text: 'grid_action_broadcast',
+                shortcut: false,
+                hide: false,
+                callback: self.doBroadcast,
+                checkShow: function (action, model) {
+                    return !model.needApprove();
+                }
             },
             // Print Barcode
             {

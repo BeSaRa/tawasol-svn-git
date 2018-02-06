@@ -439,7 +439,10 @@ module.exports = function (app) {
                 return correspondenceService.broadcastCorrespondence(this, $event);
             };
             Correspondence.prototype.needApprove = function () {
-                return this.docStatus < 24;
+                return this.docStatus < 24 && !this.addMethod;
+            };
+            Correspondence.prototype.hisDocumentClass = function (documentClass) {
+                return this.getInfo().documentClass.toLowerCase() === documentClass.toLowerCase();
             };
 
             // don't remove CMSModelInterceptor from last line

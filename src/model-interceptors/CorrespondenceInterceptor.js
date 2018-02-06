@@ -144,6 +144,11 @@ module.exports = function (app) {
             model.docTypeInfo = model.docTypeInfo ? new Information(model.docTypeInfo) : new Information();
             model.securityLevelInfo = model.securityLevelInfo ? new Information(model.securityLevelInfo) : new Information();
             model.priorityLevelInfo = model.priorityLevelInfo ? new Information(model.priorityLevelInfo) : new Information();
+            model.mainClassificationInfo = model.mainClassificationInfo ? new Information(model.mainClassificationInfo) : new Information();
+            model.subClassificationInfo = model.subClassificationInfo ? new Information(model.subClassificationInfo) : new Information();
+            model.docStatusInfo = model.docStatusInfo ? new Information(model.docStatusInfo) : new Information();
+            model.registeryOuInfo = model.registeryOuInfo ? new Information(model.registeryOuInfo) : new Information();
+            model.documentFileInfo = model.documentFileInfo ? new Information(model.documentFileInfo) : new Information();
 
             model.mainClassification = correspondenceService.getCorrespondenceLookupById(documentClass, 'classifications', model.mainClassification) || model.mainClassification;
             model.subClassification = correspondenceService.getCorrespondenceLookupById(documentClass, 'classifications', model.subClassification) || model.subClassification;

@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, correspondenceService, Site) {
+    app.run(function (CMSModelInterceptor, Information, correspondenceService, Site) {
         'ngInject';
         var modelName = 'Incoming';
 
@@ -34,6 +34,9 @@ module.exports = function (app) {
                 subArSiteText: model.subSiteInfo.arName,
                 siteType: correspondenceService.getLookup('incoming', 'siteTypes', model.siteType)
             }) : null;
+            model.siteTypeInfo = model.siteTypeInfo ? new Information(model.siteTypeInfo) : new Information();
+            model.subSiteInfo = model.subSiteInfo ? new Information(model.subSiteInfo) : new Information();
+            model.mainSiteInfo = model.mainSiteInfo ? new Information(model.mainSiteInfo) : new Information();
             return model;
         });
 

@@ -150,7 +150,19 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.needApprove = function () {
-                return this.generalStepElm.docStatus < 24;
+                return this.generalStepElm.docStatus < 24 && !this.generalStepElm.addMethod;
+            };
+
+            WorkItem.prototype.getReceivedDate = function () {
+                return this.generalStepElm.receivedDate;
+            };
+
+            WorkItem.prototype.hisDocumentClass = function (documentClass) {
+                return this.getInfo().documentClass.toLowerCase() === documentClass.toLowerCase();
+            };
+
+            WorkItem.prototype.isBroadcasted = function () {
+                return this.generalStepElm.isBrodcasted;
             };
 
             // don't remove CMSModelInterceptor from last line

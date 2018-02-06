@@ -240,12 +240,9 @@ module.exports = function (app) {
          */
         self.openApprovedInternal = function (approvedInternal, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
+                return dialog.infoMessage(langService.get('no_view_permission'));
             }
-            //correspondenceService.viewCorrespondence(approvedInternal, self.gridActions);
-            correspondenceService.viewCorrespondence(approvedInternal, self.gridActions, true);
-            return;
+            return correspondenceService.viewCorrespondence(approvedInternal, self.gridActions, true);
         };
 
         /**
