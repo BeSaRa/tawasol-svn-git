@@ -1,0 +1,225 @@
+<md-dialog id="broadcastDialog" class="dialog-extend" ng-attr-aria-label="{{lang.broadcast}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.broadcast}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <md-tabs md-dynamic-height>
+                <md-tab label="{{lang.organizations}}">
+                    <md-content scroll-directive>
+                        <form name="broadcast_organization_form" autocomplete="off">
+                            <div layout="column" class="p20">
+                                <div layout="row" flex>
+                                    <md-input-container flex>
+                                        <label>{{lang.organizations}}</label>
+                                        <md-select ng-model-options="{trackBy: '$value.id'}" required
+                                                   name="ouBroadcast" ng-model="ctrl.ouBroadcast">
+                                            <md-option ng-if="ctrl.organizationNotExists(organization)" md-truncate ng-value="organization"
+                                                       ng-repeat="organization in ctrl.organizations track by $index">
+                                                {{organization.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="broadcast_organization_form.ouBroadcast.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <div>
+                                        <div flex>
+                                            <md-button class="md-raised"
+                                                       ng-disabled="!ctrl.ouBroadcast.id"
+                                                       ng-click="ctrl.addOrganizationToBroadcast(broadcast_organization_form)">
+                                                {{lang.add}}
+                                            </md-button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <md-card layout="column" class="card-overlay">
+                                    <md-table-container flex scroll-directive style="max-height:200px !important;">
+                                        <table md-table multiple md-row-select ng-model="ctrl.selectedOrganizationBroadcast">
+                                            <thead md-head>
+                                            <tr md-row>
+                                                <th colspan="3" class="table-selector-header"
+                                                    ng-if="ctrl.selectedOrganizationBroadcast.length" md-column>
+                                                    <div layout="row" layout-align="start center">
+                                                        <span>{{ctrl.selectedOrganizationBroadcast.length}} {{lang.items_selected}} </span>
+                                                        <span flex></span>
+                                                        <md-button class="md-icon-button"
+                                                                   ng-click="ctrl.removeBulkOrganizationBroadcast()">
+                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                        </md-button>
+                                                    </div>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedOrganizationBroadcast.length" md-column>
+                                                    {{lang.arabic_name}}
+                                                </th>
+                                                <th ng-if="!ctrl.selectedOrganizationBroadcast.length" md-column>
+                                                    {{lang.english_name}}
+                                                </th>
+                                                <th ng-if="!ctrl.selectedOrganizationBroadcast.length" md-column>
+                                                    {{lang.action}}
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody md-body>
+                                            <tr md-row md-select="organization"
+                                                ng-disabled="ctrl.disableRow(organization)"
+                                                ng-repeat="organization in ctrl.organizationsBroadcast | limitTo: ctrl.gridOrganizations.limit: ((ctrl.gridOrganizations.page - 1) * ctrl.gridOrganizations.limit) |orderBy:ctrl.gridOrganizations.order track by $index">
+                                                <td md-cell>
+                                                    {{organization.arName}}
+                                                </td>
+                                                <td md-cell>
+                                                    {{organization.enName}}
+                                                </td>
+                                                <td md-cell>
+                                                    <div flex layout="row" layout-align="start center">
+                                                        <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                                   ng-click="ctrl.removeOrganizationBroadcast(organization)">
+                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                        </md-button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <md-table-pagination
+                                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                md-limit-options="ctrl.gridOrganizations.limitOptions"
+                                                md-limit="ctrl.gridOrganizations.limit"
+                                                md-page="ctrl.gridOrganizations.page"
+                                                md-total="{{ctrl.organizationsBroadcast.length}}" md-page-select>
+                                        </md-table-pagination>
+                                    </md-table-container>
+                                </md-card>
+                            </div>
+                        </form>
+                    </md-content>
+                </md-tab>
+                <md-tab label="{{lang.workflow_groups}}">
+                    <md-content scroll-directive>
+                        <form name="broadcast_workflowGroup_form" autocomplete="off">
+                            <div layout="column" class="p20">
+                                <div layout="row" flex>
+                                    <md-input-container flex>
+                                        <label>{{lang.workflow_groups}}</label>
+                                        <md-select ng-model-options="{trackBy: '$value.id'}" required
+                                                   name="workflowGroupBroadcast" ng-model="ctrl.workflowGroupBroadcast">
+                                            <md-option md-truncate ng-value="workflowGroup"
+                                                       ng-repeat="workflowGroup in ctrl.workflowGroups track by $index">
+                                                {{workflowGroup.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="broadcast_workflowGroup_form.workflowGroupBroadcast.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <div>
+                                        <div flex>
+                                            <md-button class="md-raised"
+                                                       ng-disabled="!ctrl.workflowGroupBroadcast.id"
+                                                       ng-click="ctrl.addWorkflowGroupToBroadcast(broadcast_workflowGroup_form)">
+                                                {{lang.add}}
+                                            </md-button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <md-card layout="column" class="card-overlay">
+                                    <md-table-container flex scroll-directive style="max-height:200px !important;">
+                                        <table md-table multiple md-row-select ng-model="ctrl.selectedWorkflowGroupBroadcast">
+                                            <thead md-head>
+                                            <tr md-row>
+                                                <th colspan="3" class="table-selector-header"
+                                                    ng-if="ctrl.selectedWorkflowGroupBroadcast.length" md-column>
+                                                    <div layout="row" layout-align="start center">
+                                                        <span>{{ctrl.selectedWorkflowGroupBroadcast.length}} {{lang.items_selected}} </span>
+                                                        <span flex></span>
+                                                        <md-button class="md-icon-button"
+                                                                   ng-click="ctrl.removeBulkWorkflowGroupBroadcast()">
+                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                        </md-button>
+                                                    </div>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedWorkflowGroupBroadcast.length" md-column>
+                                                    {{lang.arabic_name}}
+                                                </th>
+                                                <th ng-if="!ctrl.selectedWorkflowGroupBroadcast.length" md-column>
+                                                    {{lang.english_name}}
+                                                </th>
+                                                <th ng-if="!ctrl.selectedWorkflowGroupBroadcast.length" md-column>
+                                                    {{lang.action}}
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody md-body>
+                                            <tr md-row md-select="workflowGroup"
+                                                ng-disabled="ctrl.disableRow(workflowGroup)"
+                                                ng-repeat="workflowGroup in ctrl.allSelectedWorkflowGroups | limitTo: ctrl.gridWorkflowGroups.limit: ((ctrl.gridWorkflowGroups.page - 1) * ctrl.gridWorkflowGroups.limit) |orderBy:ctrl.gridWorkflowGroups.order track by $index">
+                                                <td md-cell>
+                                                    {{workflowGroup.arName}}
+                                                </td>
+                                                <td md-cell>
+                                                    {{workflowGroup.enName}}
+                                                </td>
+                                                <td md-cell>
+                                                    <div flex layout="row" layout-align="start center">
+                                                        <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                                   ng-click="ctrl.removeWorkflowGroupBroadcast(workflowGroup)">
+                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                        </md-button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <md-table-pagination
+                                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                md-limit-options="ctrl.gridWorkflowGroups.limitOptions"
+                                                md-limit="ctrl.gridWorkflowGroups.limit"
+                                                md-page="ctrl.gridWorkflowGroups.page"
+                                                md-total="{{ctrl.allSelectedWorkflowGroups.length}}" md-page-select>
+                                        </md-table-pagination>
+                                    </md-table-container>
+                                </md-card>
+                            </div>
+                        </form>
+                    </md-content>
+                </md-tab>
+                <md-tab label="{{lang.action}}">
+                    <form name="broadcast_form" autocomplete="off">
+                        <div layout="column" class="p20">
+                            <div layout="row" flex>
+                                <md-input-container flex>
+                                    <label for="selectedAction">{{lang.dwf_label_selectaction}}</label>
+                                    <md-select name="selectedAction" id="selectedAction" required
+                                               ng-model="ctrl.selectedAction">
+                                        <md-option ng-value="action"
+                                                   ng-repeat="action in ctrl.actions track by $index">
+                                            {{action.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="broadcast_form.selectedAction.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                        </div>
+                    </form>
+                </md-tab>
+            </md-tabs>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised"
+                           ng-disabled="!(ctrl.organizationsBroadcast.length || ctrl.allSelectedWorkflowGroups.length) || !ctrl.selectedAction"
+                           ng-click="ctrl.startBroadcast()">
+                    <!--|| !ctrl.allSelectedWorkflowGroups.length-->
+                    {{lang.broadcast}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeBroadcastPopupFromCtrl()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

@@ -1,0 +1,367 @@
+module.exports = function (app) {
+    app.controller('incomingCtrl', function (Incoming,
+                                             // classifications,
+                                             $state,
+                                             incomingService,
+                                             queueStatusService,
+                                             organizationService,
+                                             // documentTypes,
+                                             officeWebAppService,
+                                             counterService,
+                                             generator,
+                                             // documentFiles,
+                                             managerService,
+                                             documentFileService,
+                                             documentTypeService,
+                                             validationService,
+                                             langService,
+                                             toast,
+                                             employeeService,
+                                             $timeout,
+                                             // templates,
+                                             lookupService,
+                                             contextHelpService,
+                                             organizations,
+                                             cmsTemplate,
+                                             lookups,
+                                             dialog,
+                                             receive, // available when the normal receive.
+                                             distributionWorkflowService,
+                                             correspondenceService) {
+        'ngInject';
+        var self = this;
+        self.controllerName = 'incomingCtrl';
+        contextHelpService.setHelpTo('add-incoming');
+        self.employeeService = employeeService;
+        // current employee
+        self.employee = employeeService.getEmployee();
+        // validation for accordion
+        self.validation = true;
+        // collapse from label
+        self.collapse = true;
+        // current mode
+        self.editMode = !!receive;
+        // self.editMode = false;
+        // copy of the current incoming if saved.
+        // self.model = angular.copy(demoOutgoing);
+        self.model = null;
+
+        self.emptySubSites = false;
+
+        self.maxCreateDate = new Date();
+        // all system organizations
+        self.organizations = organizations;
+
+        self.templates = lookups.templates;
+
+        self.documentInformation = null;
+
+        // incoming document
+        self.incoming = /*demoOutgoing;*/
+            new Incoming({
+                ou: self.employee.getOUID(),
+                addMethod: 1,//Paper document
+                createdOn: new Date(),
+                docDate: new Date(),
+                registryOU: self.employee.getRegistryOUID(),
+                securityLevel: lookups.securityLevels[0]
+            });
+
+        if (receive) {
+            self.receive = true;
+            self.incoming = receive.metaData;
+            self.model = angular.copy(self.incoming);
+            self.documentInformation = receive.content;
+        }
+
+        self.preventPropagation = function ($event) {
+            $event.stopPropagation();
+        };
+
+
+        self.saveCorrespondence = function (status) {
+            if (status && !self.documentInformation) {
+                toast.error(langService.get('cannot_save_as_draft_without_content'));
+                return;
+            }
+            var promise = null;
+            //var isDocHasVsId = angular.copy(self.incoming).hasVsId();
+
+            promise = self.incoming
+                .saveDocument(status);
+
+            promise.then(function (result) {
+                self.incoming = result;
+                self.model = angular.copy(self.incoming);
+                var newId = self.model.vsId;
+
+                /*If content file was attached */
+                if (self.incoming.contentFile) {
+                    self.incoming.addDocumentContentFile()
+                        .then(function () {
+                            saveCorrespondenceFinished(status, newId);
+                        })
+                }
+                else {
+                    saveCorrespondenceFinished(status, newId);
+                }
+
+            });
+        };
+
+        self.requestCompleted = false;
+        var saveCorrespondenceFinished = function (status, newId) {
+            counterService.loadCounters();
+            if (status) {// || (self.incoming.contentFile)
+                toast.success(langService.get('save_success'));
+                /*$timeout(function () {
+                    $state.go('app.incoming.draft');
+                })*/
+            }
+            else {
+                var successKey = 'incoming_metadata_saved_success';
+                if (self.documentInformation) {
+                    self.incoming.contentSize = 1;
+                    successKey = 'save_success';
+                }
+                else if (self.incoming.contentFile && self.incoming.contentFile.size) {
+                    self.incoming.contentSize = self.incoming.contentFile.size;
+                    successKey = 'save_success';
+                }
+                counterService.loadCounters();
+                self.requestCompleted = true;
+                toast.success(langService.get(successKey));
+            }
+        };
+
+        /* self.openDocumentActions = function () {
+             return dialog
+                 .showDialog({
+                     targetEvent: null,
+                     template: cmsTemplate.getPopup('incoming-add-content-actions'),
+                     controller: 'incomingAddContentActionsPopCtrl',
+                     controllerAs: 'ctrl',
+                     locals: {
+                         incomingDocument: self.incoming,
+                         documentInformation: self.documentInformation
+                     }
+                 });
+         };*/
+
+        /**
+         * demo manage document tags
+         * @param $event
+         */
+        self.openManageDocumentTags = function ($event) {
+            managerService
+                .manageDocumentTags(self.incoming.vsId, self.incoming.docClassName, self.incoming.docSubject, $event)
+                .then(function (tags) {
+                    self.incoming.tags = tags;
+                })
+                .catch(function (tags) {
+                    self.incoming.tags = tags;
+                });
+        };
+        /**
+         * demo for manage document attachments.
+         * @param $event
+         */
+        self.openManageDocumentAttachments = function ($event) {
+            managerService
+                .manageDocumentAttachments(self.incoming.vsId, self.incoming.docClassName, self.incoming.docSubject, $event)
+                .then(function (attachments) {
+                    self.incoming.attachments = attachments;
+                })
+                .catch(function (attachments) {
+                    self.incoming.attachments = attachments;
+                });
+        };
+        /**
+         * demo for manage document comments .
+         * @param $event
+         */
+        self.openManageDocumentComments = function ($event) {
+            managerService
+                .manageDocumentComments(self.incoming.vsId, self.incoming.docSubject, $event)
+                .then(function (documentComments) {
+                    self.incoming.documentComments = documentComments;
+                })
+                .catch(function (documentComments) {
+                    self.incoming.documentComments = documentComments;
+                });
+        };
+
+        self.openManageDocumentProperties = function ($event) {
+            // properties to preserve from override.
+            var properties = [
+                'attachments',
+                'linkedEntities',
+                'documentComments',
+                'linkedDocs',
+                'sitesInfoTo',
+                'sitesInfoCC'
+            ];
+
+            managerService
+                .manageDocumentProperties(self.incoming.vsId, self.incoming.docClassName, self.incoming.docSubject, $event)
+                .then(function (document) {
+                    self.incoming = generator.preserveProperties(properties, self.incoming, document);
+                })
+                .catch(function (document) {
+                    self.incoming = generator.preserveProperties(properties, self.incoming, document);
+                });
+        };
+
+
+        self.docActionPrintBarcode = function (document, $event) {
+            document.barcodePrint(document);
+        };
+
+        /*self.docActionCreateContent = function (document, $event) {
+            console.log('create content', document);
+        };*/
+
+        self.docActionLaunchDistributionWorkflow = function (document, $event) {
+            //console.log('launch distribution workflow', document);
+            if (!self.incoming.hasContent()) {
+                dialog.alertMessage(langService.get("content_not_found"));
+                return;
+            }
+
+            distributionWorkflowService
+                .controllerMethod
+                .distributionWorkflowSend(self.incoming, false, false, null, "incoming", $event)
+                .then(function () {
+                    counterService.loadCounters();
+                    self.resetAddCorrespondence();
+                });
+        };
+
+        self.docActionManageTasks = function (document, $event) {
+            console.log('manage tasks', document);
+        };
+
+        self.docActionConfigureSecurity = function (document, $event) {
+            console.log('configure document security', document);
+        };
+
+        self.documentAction = null;
+        self.performDocumentAction = function ($event) {
+            self.documentAction.callback(self.incoming, $event);
+        };
+
+        /**
+         * @description Check if action will be shown in dropdown or not
+         * @param action
+         * @param model
+         * @returns {boolean}
+         */
+        self.checkToShowAction = function (action, model) {
+            /*if (action.hasOwnProperty('permissionKey'))
+                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+            return (!action.hide);*/
+
+            if (action.hasOwnProperty('permissionKey')) {
+                if (typeof action.permissionKey === 'string') {
+                    return (!action.hide) && employeeService.hasPermissionTo(action.permissionKey);
+                }
+                else if (angular.isArray(action.permissionKey)) {
+                    if (!action.permissionKey.length) {
+                        return (!action.hide);
+                    }
+                    else {
+                        var hasPermissions = _.map(action.permissionKey, function (key) {
+                            return employeeService.hasPermissionTo(key);
+                        });
+                        return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
+                            return isPermission !== true;
+                        }));
+                    }
+                }
+            }
+            return (!action.hide);
+        };
+
+        self.documentActions = [
+            //Print Barcode
+            {
+                text: langService.get('content_action_print_barcode'),
+                callback: self.docActionPrintBarcode,
+                class: "action-green",
+                permissionKey: "PRINT_BARCODE",
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model)
+                }
+
+            },
+            /* // Create Content
+             {
+                 text: langService.get('content_action_create_content'),
+                 callback: self.docActionCreateContent,
+                 class: "action-red",
+                 checkShow: function (action, model) {
+                     //Show if meta-data only
+                     return self.checkToShowAction(action, model) && !self.incoming.contentFile;
+                 }
+             },*/
+            // Launch Distribution Workflow
+            {
+                text: langService.get('content_action_launch_distribution_workflow'),
+                callback: self.docActionLaunchDistributionWorkflow,
+                class: "action-green",
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                checkShow: function (action, model) {
+                    //Show if content is uploaded
+                    return self.checkToShowAction(action, model) && self.incoming.contentFile;
+                }
+            },
+            // Manage Tasks
+            {
+                text: langService.get('content_action_manage_tasks'),
+                callback: self.docActionManageTasks,
+                class: "action-red",
+                checkShow: self.checkToShowAction,
+                hide: true
+            },
+            //Configure Security
+            {
+                text: langService.get('content_action_configure_security'),
+                callback: self.docActionConfigureSecurity,
+                class: "action-red",
+                checkShow: self.checkToShowAction,
+                hide: true
+            }
+        ];
+
+
+        /**
+         * @description Reset the Add Incoming form
+         * @param $event
+         */
+        self.resetAddCorrespondence = function ($event) {
+            self.incoming = new Incoming({
+                ou: self.employee.getOUID(),
+                addMethod: 1,
+                createdOn: new Date(),
+                docDate: new Date(),
+                registryOU: self.employee.getRegistryOUID(),
+                securityLevel: lookups.securityLevels[0],
+                site: null
+            });
+            self.emptySubSites = true;
+            self.documentInformation = null;
+            self.document_properties.$setUntouched();
+        };
+
+        /**
+         * @description Redirects the user to landing-page
+         * @param $event
+         */
+        self.cancelAddCorrespondence = function ($event) {
+            $timeout(function () {
+                $state.go('app.landing-page');
+            })
+        };
+
+    });
+};

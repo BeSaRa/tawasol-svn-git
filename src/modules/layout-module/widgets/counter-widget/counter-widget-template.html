@@ -1,0 +1,60 @@
+<md-card id="{{widget.getWidgetTagId()}}" flex
+         class="card-color widget {{ctrl.options.color.optionValue ? ctrl.options.color.optionValue : ctrl.default}} counter-widget">
+    <md-menu-bar class="widget-options">
+        <md-menu>
+            <md-button ng-click="$mdMenu.open()" class="md-icon-button">
+                <md-icon md-svg-icon="dots-vertical"></md-icon>
+            </md-button>
+            <md-menu-content width="3">
+                <md-menu-item>
+                    <md-menu>
+                        <md-button ng-click="$mdMenu.open()">
+                            {{lang.counter_widget_colors}}
+                        </md-button>
+                        <md-menu-content class="menu-content-no-padding" width="1">
+                            <md-menu-item ng-repeat="bgColor in ctrl.colors track by $index">
+                                <md-button aria-label="{{bgColor}}" ng-click="ctrl.setCurrentSelectedColor(bgColor)"
+                                           class="card-color color-link {{bgColor}}"></md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-menu>
+                        <md-button ng-click="$mdMenu.open()">
+                            {{lang.counter_widget_data_source}}
+                        </md-button>
+                        <md-menu-content class="menu-content-no-padding" width="1">
+                            <md-menu-item ng-repeat="source in ctrl.dataSources track by $index">
+                                <md-button
+                                        aria-label="{{source[lang.current]}}"
+                                        ng-click="ctrl.setCurrentSelectedDataSource(source)">
+                                    {{source[lang.current]}}
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button ng-click="ctrl.removeCounter()">{{lang.remove}}</md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+    </md-menu-bar>
+    <md-button class="md-icon-button counter-refresh" ng-click="ctrl.reloadCounter()">
+        <md-icon md-svg-icon="refresh"></md-icon>
+    </md-button>
+    <div class="counter-widget-content" layout="column">
+        <div class="counter-widget-count">
+            <h4 counter-directive="ctrl.counter"></h4>
+        </div>
+        <div class="counter-widget-label">
+            <h4 ng-if="!ctrl.hideLabel" ng-dblclick="ctrl.onHideLabel($event)">
+                {{ctrl.model[lang.current+'Name'].optionValue || lang.counter_widget}}</h4>
+            <input ng-if="ctrl.hideLabel" id="title-{{widget.id}}" ng-keydown="ctrl.onLabelKeyPress($event)"
+                   ng-blur="ctrl.onLabelBlur()"
+                   class="label-value" ng-model="ctrl.options[lang.current+'Name'].optionValue"/>
+        </div>
+        <md-icon class="counter-widget-icon" md-svg-icon="file-document"></md-icon>
+    </div>
+</md-card>

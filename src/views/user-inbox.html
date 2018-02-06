@@ -1,0 +1,277 @@
+<!-- start of view -->
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_user_inbox}}</span>
+            <md-button ng-click="ctrl.reloadUserInboxes()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <md-table-container flex scroll-directive>
+                            <table md-table md-row-select multiple ng-model="ctrl.selectedUserInboxes"
+                                   md-progress="ctrl.progress">
+                                <thead md-head md-order="ctrl.grid.order">
+                                <tr md-row>
+                                    <th colspan="{{ctrl.selectedUserInboxes.length > 1 ? 10 : 11}}"
+                                        ng-if="ctrl.selectedUserInboxes.length" md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedUserInboxes.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+
+                                            <!--ng-if="ctrl.selectedUserInboxes.length > 1"-->
+                                            <md-button class="md-icon-button" aria-label="{{lang.inbox_terminate}}"
+                                                       tooltip="{{lang.inbox_terminate}}"
+                                                       ng-click="ctrl.terminateUserInboxBulk($event)">
+                                                <md-icon md-svg-icon="stop" class="action-green"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button" aria-label="{{lang.inbox_add_to_folder}}"
+                                                       tooltip="{{lang.inbox_add_to_folder}}"
+                                                       ng-click="ctrl.addToFolderUserInboxBulk($event)">
+                                                <md-icon md-svg-icon="folder-plus" class="action-green"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button action-green" aria-label="{{lang.star}}"
+                                                       tooltip="{{lang.star}}"
+                                                       ng-click="ctrl.changeUserInboxStarBulk('starBulk',$event)">
+                                                <md-icon class="star-yellow" md-svg-icon="star"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button action-green" aria-label="{{lang.un_star}}"
+                                                       tooltip="{{lang.un_star}}"
+                                                       ng-click="ctrl.changeUserInboxStarBulk('unStarBulk' ,$event)">
+                                                <md-icon class="star-yellow" md-svg-icon="star-outline"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="">
+                                        <!-- Security Level, Document type, Tags, Re-assigned Indicators -->
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="">
+                                        <!-- Star/unstar -->
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column
+                                        md-order-by="generalStepElm.docFullSerial">
+                                        <span>{{lang.inbox_serial}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="">
+                                        <!-- Priority Level and Has Attachment Indicators -->
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column
+                                        md-order-by="generalStepElm.docSubject">
+                                        <span>{{lang.subject}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column
+                                        md-order-by="generalStepElm.receivedDate">
+                                        <span>{{lang.received_date}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="action">
+                                        <span>{{lang.action}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="sender">
+                                        <span>{{lang.sender}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column
+                                        md-order-by="generalStepElm.dueDate">
+                                        <span>{{lang.due_date}}</span>
+                                    </th>
+                                    <!--<th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="">
+                                        <span>{{lang.correspondence_sites}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="docType">
+                                        <span>{{lang.type}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="numberOfDays">
+                                        <span>{{lang.number_of_days}}</span>
+                                    </th>-->
+                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column>
+                                        <!-- Grid Actions -->
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column>
+                                        <!-- Read/Unread Indicator -->
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="userInbox" grid-right-click-directive="userInbox"
+                                    model="userInbox"
+                                    ng-class="!userInbox.generalStepElm.isOpen? 'unread-row': 'read-row'"
+                                    selected-length="{{ctrl.selectedUserInboxes.length ? ctrl.selectedUserInboxes.length : 0}}"
+                                    ng-repeat="userInbox in ctrl.userInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+
+                                    <td md-cell class="indicator-td">
+                                        <!-- Paper Document -->
+                                       <!-- <span flex
+                                              ng-class="{'indicator-content': userInbox.isPaperIndicator}">
+                                            <md-icon ng-if="userInbox.isPaperIndicator"
+                                                     class="{{userInbox.isPaperIndicator.class}}"
+                                                     md-svg-icon="{{userInbox.isPaperIndicator.icon}}"
+                                                     tooltip="{{lang[userInbox.isPaperIndicator.tooltip]}}"
+                                            ></md-icon>
+                                        </span>-->
+                                        <!-- Security Level -->
+                                        <span flex
+                                              ng-class="{'indicator-content': userInbox.securityLevelIndicator}">
+                                            <md-icon ng-if="userInbox.securityLevelIndicator"
+                                                     class="{{userInbox.securityLevelIndicator.class}}"
+                                                     md-svg-icon="{{userInbox.securityLevelIndicator.icon}}"
+                                                     tooltip="{{lang[userInbox.securityLevelIndicator.tooltip].change({name: userInbox.securityLevelLookup.getTranslatedName()})}}"
+                                            ></md-icon>
+                                        </span>
+                                        <!-- Is Reassigned -->
+                                        <span flex ng-class="{'indicator-content': userInbox.isReassignedIndicator}">
+                                            <md-icon ng-if="userInbox.isReassignedIndicator"
+                                                     class="{{userInbox.isReassignedIndicator.class}}"
+                                                     md-svg-icon="{{userInbox.isReassignedIndicator.icon}}"
+                                                     tooltip="{{lang[userInbox.isReassignedIndicator.tooltip]}}"
+                                            ></md-icon>
+                                        </span>
+                                        <!-- Doc Type -->
+                                        <span flex ng-class="{'indicator-content': userInbox.docTypeIndicator}">
+                                                    <md-icon ng-if="userInbox.docTypeIndicator"
+                                                             class="{{userInbox.docTypeIndicator.class}}"
+                                                             md-svg-icon="{{userInbox.docTypeIndicator.icon}}"
+                                                             tooltip="{{lang[userInbox.docTypeIndicator.tooltip]}}"
+                                                    ></md-icon>
+                                                </span>
+                                        <!-- Linked Documents -->
+                                        <span flex ng-class="{'indicator-content': userInbox.linkedDocsIndicator}">
+                                                   <md-icon ng-if="userInbox.linkedDocsIndicator"
+                                                            class="{{userInbox.linkedDocsIndicator.class}}"
+                                                            md-svg-icon="{{userInbox.linkedDocsIndicator.icon}}"
+                                                            tooltip="{{lang[userInbox.linkedDocsIndicator.tooltip]}}"
+                                                   ></md-icon>
+                                               </span>
+                                        <!--<span flex class="indicator"
+                                              ng-class="{'indicator-content': userInbox.tagsIndicator}">
+                                                 <span ng-if="userInbox.tagsIndicator"
+                                                       tooltip="{{lang[userInbox.tagsIndicator.tooltip]}}"
+                                                       class="{{userInbox.tagsIndicator.class}}">
+                                                     {{userInbox.tagsIndicator.text}}
+                                                 </span>
+                                             </span>-->
+                                        <!-- Follow up Status -->
+                                        <span flex
+                                              ng-class="{'indicator-content': userInbox.followUpStatusIndicator}">
+                                            <md-icon ng-if="userInbox.followUpStatusIndicator"
+                                                     class="{{userInbox.followUpStatusIndicator.class}}"
+                                                     md-svg-icon="{{userInbox.followUpStatusIndicator.icon}}"
+                                                     tooltip="{{lang[userInbox.followUpStatusIndicator.tooltip].change({name: userInbox.followupStatusLookup.getTranslatedName()})}}"
+                                            ></md-icon>
+                                        </span>
+                                    </td>
+                                    <td md-cell>
+                                        <!--tooltip="{{userInbox.getTranslatedStarred()}}"-->
+                                        <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
+                                                 ng-if="userInbox.generalStepElm.starred && (!ctrl.selectedUserInboxes.length
+                                                         || ctrl.selectedUserInboxes.length===1 && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber)"
+                                                 md-svg-icon="star"
+                                                 ng-click="ctrl.changeUserInboxStar(userInbox, $event)"
+                                        ></md-icon>
+                                        <!--tooltip="{{userInbox.getTranslatedStarred()}}"-->
+                                        <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
+                                                 ng-if="userInbox.generalStepElm.starred
+                                                         && ((ctrl.selectedUserInboxes.length === 1
+                                                         && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber != userInbox.generalStepElm.workObjectNumber)
+                                                            || ctrl.selectedUserInboxes.length > 1)"
+                                                 md-svg-icon="star"
+                                        ></md-icon>
+                                        <!--tooltip="{{userInbox.getTranslatedStarred()}}"-->
+                                        <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
+                                                 ng-if="!userInbox.generalStepElm.starred && (!ctrl.selectedUserInboxes.length
+                                                          || ctrl.selectedUserInboxes.length===1 && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber)"
+                                                 md-svg-icon="star-outline"
+                                                 ng-click="ctrl.changeUserInboxStar(userInbox, $event)"
+                                        ></md-icon>
+                                        <!--tooltip="{{userInbox.getTranslatedStarred()}}"-->
+                                        <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
+                                                 ng-if="!userInbox.generalStepElm.starred
+                                                         && ((ctrl.selectedUserInboxes.length === 1
+                                                         && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber != userInbox.generalStepElm.workObjectNumber)
+                                                            || ctrl.selectedUserInboxes.length > 1)"
+                                                 md-svg-icon="star-outline"
+                                        ></md-icon>
+                                    </td>
+                                    <td md-cell>{{userInbox.generalStepElm.docFullSerial}}</td>
+                                    <td md-cell class="indicator-td text-right"
+                                        style="padding-right:0 !important; padding-left:0px !important;">
+                                                <span ng-class="{'indicator-content': userInbox.priorityLevelIndicator}">
+                                                    <md-icon ng-if="userInbox.priorityLevelIndicator"
+                                                             class="{{userInbox.priorityLevelIndicator.class}}"
+                                                             md-svg-icon="{{userInbox.priorityLevelIndicator.icon}}"
+                                                             tooltip="{{lang[userInbox.priorityLevelIndicator.tooltip].change({name: userInbox.priorityLevelLookup.getTranslatedName()})}}"
+                                                    ></md-icon>
+                                                </span>
+                                        <span class="float-right"
+                                              ng-class="{'indicator-content': userInbox.attachmentsIndicator}">
+                                                    <md-icon ng-if="userInbox.attachmentsIndicator"
+                                                             class="{{userInbox.attachmentsIndicator.class}}"
+                                                             md-svg-icon="{{userInbox.attachmentsIndicator.icon}}"
+                                                             tooltip="{{lang[userInbox.attachmentsIndicator.tooltip]}}"
+                                                    ></md-icon>
+                                                </span>
+                                    </td>
+                                    <td md-cell md-truncate class="subject">
+                                        <a href="" class="view-doc" md-truncate ng-if="userInbox.hasContent()"
+                                           ng-click="ctrl.viewDocument(userInbox, $event)">{{userInbox.generalStepElm.docSubject}}</a>
+                                        <span ng-if="!userInbox.hasContent()">{{userInbox.generalStepElm.docSubject}}</span>
+                                    </td>
+                                    <td md-cell>{{userInbox.generalStepElm.receivedDate}}</td>
+                                    <td md-cell>{{userInbox.action.getTranslatedName()}}</td>
+                                    <td md-cell class="td-data">
+                                        <div layout="row">
+                                            <span flex>{{userInbox.senderInfo.getTranslatedName()}}</span>
+                                        </div>
+                                    </td>
+                                    <td md-cell class="td-data">
+                                            <span class="{{userInbox.dueDateStatusIndicator.class}}"
+                                                  tooltip="{{lang[userInbox.dueDateStatusIndicator.tooltip].change({due_date_status:lang[userInbox.dueDateStatusIndicator.text] })}}">
+                                                {{userInbox.generalStepElm.dueDate}}</span>
+                                    </td>
+                                    <!--<td md-cell></td>
+                                    <td md-cell>{{userInbox.generalStepElm.docType}}</td>
+                                    <td md-cell>{{userInbox.generalStepElm.numberOfDays}}</td>-->
+                                    <td md-cell class="p-r0" ng-if="ctrl.selectedUserInboxes.length < 2">
+                                        <div layout-align="start center" flex ng-if="!ctrl.selectedUserInboxes.length
+                                                          || ctrl.selectedUserInboxes.length===1 && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber">
+                                            <grid-actions-directive menu-direction="horizontal"
+                                                                    grid-actions="ctrl.gridActions"
+                                                                    model="userInbox"
+                                                                    shortcut="true">
+                                            </grid-actions-directive>
+                                        </div>
+                                    </td>
+                                    <td md-cell class="read-td">
+                                        <div class="cursor-pointer status"
+                                             ng-class="userInbox.generalStepElm.isOpen===true? 'read' : 'unread'"
+                                             ng-click="ctrl.markAsReadUnread(userInbox, $event)"
+                                             ng-if="!ctrl.selectedUserInboxes.length
+                                                          || ctrl.selectedUserInboxes.length===1 && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber"
+                                             tooltip="{{userInbox.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
+                                             tooltip-direction="{{ctrl.langService.getCurrentLang() === 'en' ? 'left' : 'right'}}">
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.userInboxes.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>
+<!-- end of view -->

@@ -1,0 +1,50 @@
+<div class="container" ng-cloak>
+    <div class="table-responsive">
+        <br/>
+        <br/>
+        <br/>
+        <div class="col-sm-4">
+            <input type="text" ng-model="new.key" class="form-control" placeholder="lang key"/>
+            <br/>
+            <input type="text" ng-model="new.ar" class="form-control" placeholder="Arabic Translate"/>
+            <br/>
+            <input type="text" ng-model="new.en" class="form-control" placeholder="English Translate"/>
+            <br/>
+            <button ng-click="addKey(new)" class="btn btn-primary">Add Key</button>
+            <div class="clearfix"></div>
+            <br/>
+        </div>
+        <div class="col-sm-4" ng-if="selected.key">
+            <input ng-readonly="true" type="text" ng-model="selected.key" class="form-control" placeholder="lang key"/>
+            <br/>
+            <input type="text" ng-model="selected.ar" class="form-control" placeholder="Arabic Translate"/>
+            <br/>
+            <input type="text" ng-model="selected.en" class="form-control" placeholder="English Translate"/>
+            <br/>
+            <button ng-click="update(currentSelected , selected )" class="btn btn-success">update Key</button>
+            <button ng-click="delete(currentSelected)" class="btn btn-danger">Delete Key</button>
+            <button ng-click="cancel()" class="btn btn-info">Cancel Edit</button>
+            <div class="clearfix"></div>
+            <br/>
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="col-sm-4"><input class="form-control" ng-model="search" placeholder="search"/></div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Key</th>
+                <th>Arabic</th>
+                <th>English</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat=" object in data| filter:search" ng-click="edit(object)">
+                <td>{{object.key}}</td>
+                <td>{{object.ar}}</td>
+                <td>{{object.en}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

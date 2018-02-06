@@ -1,0 +1,175 @@
+md-dialog#scanner-dialog {
+  width: 99%;
+  height: 99%;
+  overflow: hidden;
+}
+
+md-dialog.full-screen {
+  height: 100% !important;
+  width: 100% !important;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#scanner-settings {
+  max-width: 210px;
+}
+
+#scanner-properties {
+
+  button, label {
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+
+#scanner-properties {
+  min-height: 300px;
+  max-width:150px;
+}
+
+.transparent-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  max-height: 100%;
+}
+
+.hide-import-file {
+  opacity: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 2;
+  left: 0;
+  top: 0;
+}
+
+#scanner-import-label {
+  position: relative;
+}
+
+#selected-scanner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+#scanner-layout {
+  max-height: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  position: fixed;
+  left: 20px;
+  right: 20px;
+  top: 40px;
+  bottom: 50px;
+}
+
+#scanner-pages {
+  max-height: inherit;
+  max-width: 180px;
+  position: fixed !important;
+  top: 50px;
+  bottom: 50px;
+  left: 190px;
+  overflow: hidden;
+  width: 150px;
+}
+html.rtl {
+  #scanner-pages {
+    left: auto;
+    right: 190px;
+  }
+}
+
+#scanner-actions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.scanner-page-link {
+  margin-bottom: 5px;
+  display: block;
+  position: relative;
+  min-height: 120px;
+  img {
+    border: 1px solid #EEE;
+    padding: 5px;
+    outline: none;
+    cursor: pointer;
+    &.selected {
+      background-color: lighten(#0b93d5, 50);
+    }
+  }
+}
+
+.page-arrows {
+  position: absolute;
+  width: 40px;
+  height: 110px;
+  z-index: 3;
+  box-sizing: border-box;
+  right: 5px;
+  span {
+    position: relative;
+    height: 36px;
+    button {
+      margin: 0 !important;
+      position: absolute;
+    }
+    &.page-arrow-up {
+      button {
+        top: 0;
+        bottom: auto;
+      }
+    }
+    &.page-arrow-down {
+      button {
+        bottom: 0;
+        top: auto;
+      }
+    }
+  }
+}
+html.rtl {
+  .page-arrows {
+    left: 5px;
+    right: auto;
+  }
+}
+
+#workspace-tools {
+  padding-bottom: 20px;
+  box-sizing: content-box;
+  md-input-container {
+    height: 40px;
+    margin-bottom: 0;
+    .md-errors-spacer {
+      display: none;
+    }
+    .md-input {
+      max-width: 70px;
+    }
+    button {
+      margin: 0;
+    }
+  }
+}
+
+#scanner-workspace {
+  position: fixed;
+  left: 345px;
+  right: 20px;
+  bottom: 50px;
+  top: 40px;
+}
+html.rtl {
+  #scanner-workspace {
+    right: 345px;
+    left: 20px;
+  }
+}

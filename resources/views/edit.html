@@ -1,0 +1,32 @@
+<md-dialog style="width: 500px" aria-label="Edit Language">
+    <md-toolbar layout="row" layout-padding>
+        <span flex>{{ ctrl.translate}}</span>
+        <md-button ng-click="ctrl.close()" class="md-icon-button">
+            <md-icon md-svg-icon="close"></md-icon>
+        </md-button>
+    </md-toolbar>
+    <md-content layout-padding>
+        <div layout="column">
+            <md-input-container flex>
+                <label for="lang_key">Language Key</label>
+                <input id="lang_key" ng-model="ctrl.item.lang_key">
+            </md-input-container>
+            <md-input-container flex>
+                <label for="state">State</label>
+                <input id="state" ng-model="ctrl.item.state">
+            </md-input-container>
+            <md-input-container flex>
+                <label for="link">Link</label>
+                <input id="link" ng-model="ctrl.item.link">
+            </md-input-container>
+            <md-switch ng-model="ctrl.item.active">
+                Status : {{ctrl.item.active ? 'active' : 'inactive'}}
+            </md-switch>
+            <div flex>
+                <md-button ng-click="ctrl.save()">
+                    Save
+                </md-button>
+            </div>
+        </div>
+    </md-content>
+</md-dialog>

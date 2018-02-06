@@ -1,0 +1,12 @@
+<div>
+    <md-select
+            class="table-status-change"
+            aria-label="{{lang.select_status}}"
+            ng-model="ctrl.selectedStatus"
+            md-on-close="ctrl.statusChanged()">
+        <md-option ng-value="status"
+                   ng-repeat="status in ctrl.status track by $index">
+            {{lang.get(status.lang)}}
+        </md-option>
+    </md-select>
+</div>

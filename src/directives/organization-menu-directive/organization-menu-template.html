@@ -1,0 +1,35 @@
+<span class="node-menu">
+    <md-menu-bar>
+        <md-menu>
+            <md-button class="md-icon-button" ng-click="$mdMenu.open()">
+            <md-icon md-svg-icon="dots-vertical"></md-icon>
+        </md-button>
+        <md-menu-content width="3">
+            <md-menu-item>
+                <md-button ng-click="orgMenuCtrl.openAddDialog(orgMenuCtrl.node , $event )">
+                    <span layout="row">
+                        <md-icon md-svg-icon="plus"></md-icon>
+                        <span>{{$root.lang.add}}</span>
+                    </span>
+                </md-button>
+            </md-menu-item>
+            <md-menu-item ng-if="!orgMenuCtrl.node.itIsRoot">
+                <md-button ng-click="orgMenuCtrl.openEditDialog(orgMenuCtrl.node , $event)">
+                    <span layout="row">
+                        <md-icon md-svg-icon="pencil"></md-icon>
+                        <span>{{$root.lang.edit}}</span>
+                    </span>
+                </md-button>
+            </md-menu-item>
+            <!--<md-menu-item ng-if="!!orgMenuCtrl.node.parent">-->
+            <!--<md-button ng-click="orgMenuCtrl.deleteOrganizationFromCtrl(orgMenuCtrl.node , $event)">-->
+            <!--<span layout="row">-->
+            <!--<md-icon md-svg-icon="delete"></md-icon>-->
+            <!--<span>{{lang.delete}}</span>-->
+            <!--</span>-->
+            <!--</md-button>-->
+            <!--</md-menu-item>-->
+        </md-menu-content>
+        </md-menu>
+    </md-menu-bar>
+</span>

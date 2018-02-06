@@ -1,0 +1,1874 @@
+{
+  "password": {
+    "ar": "\u0643\u0644\u0645\u0629 \u0627\u0644\u0645\u0631\u0648\u0631",
+    "en": "Password"
+  },
+  "login": {
+    "ar": "\u062f\u062e\u0648\u0644",
+    "en": "login"
+  },
+  "field_required": {
+    "ar": "\u0645\u0637\u0644\u0648\u0628 \u0644\u0627 \u062a\u062a\u0631\u0643\u0647 \u0641\u0627\u0631\u063a\u0623",
+    "en": "This is required"
+  },
+  "error_messages": {
+    "ar": "\u0631\u0633\u0627\u0626\u0644 \u0627\u0644\u062e\u0637\u0627\u0621",
+    "en": "Error messages"
+  },
+  "info_messages": {
+    "ar": "\u0631\u0633\u0627\u0626\u0644 \u0627\u0644\u0627\u0639\u0644\u0627\u0645",
+    "en": "Info Messages"
+  },
+  "warning_messages": {
+    "ar": "\u0631\u0633\u0627\u0626\u0644 \u0627\u0644\u062a\u0646\u0628\u064a\u0647",
+    "en": "Warning Messags"
+  },
+  "success_messages": {
+    "ar": "\u0631\u0633\u0627\u0626\u0644 \u0627\u062a\u0645\u0627\u0645 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0628\u0646\u062c\u0627\u062d",
+    "en": "Success Messages"
+  },
+  "username": {
+    "ar": "\u0623\u0633\u0645 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645",
+    "en": "User Name"
+  },
+  "success_login": {
+    "ar": "\u062a\u0645 \u062a\u0633\u062c\u064a\u0644 \u062f\u062e\u0648\u0644\u0643 \u0628\u0646\u062c\u0627\u062d \u0648\u062c\u0627\u0631\u064a \u062a\u062d\u0648\u0644\u064a\u0643 \u0625\u0644\u064a \u0648\u0627\u062c\u0647\u0629 \u0627\u0644\u0646\u0638\u0627\u0645",
+    "en": "You are logged successfully"
+  },
+  "access_denied": {
+    "ar": "\u063a\u064a\u0631 \u0645\u0635\u0631\u062d \u0644\u0643 \u0628\u0627\u0644\u0648\u0635\u0648\u0644",
+    "en": "access denied"
+  },
+  "project_name": {
+    "ar": "\u0625\u064a\u0628\u0644\u0627 \u0644\u0644\u0645\u0631\u0627\u0633\u0644\u0627\u062a",
+    "en": "Ebla CMS"
+  },
+  "user_mail": {
+    "ar": "\u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0634\u062e\u0635\u064a",
+    "en": "Private User Inbox"
+  },
+  "outgoing_entry": {
+    "ar": "\u0625\u062f\u062e\u0627\u0644 \u0643\u062a\u0628 \u0635\u0627\u062f\u0631\u0629",
+    "en": "\u0650\u0650Add outgoing Books"
+  },
+  "favourites_mail": {
+    "ar": "\u0628\u0631\u064a\u062f \u0627\u0644\u0645\u0641\u0636\u0644\u0627\u062a",
+    "en": "Favourites User Mails"
+  },
+  "add_book": {
+    "ar": "\u0625\u0636\u0627\u0641\u0629",
+    "en": "Add"
+  },
+  "revise_book": {
+    "ar": "\u062a\u062f\u0642\u064a\u0642",
+    "en": "Revision"
+  },
+  "send_book": {
+    "ar": "\u0625\u0631\u0633\u0627\u0644",
+    "en": "Sending"
+  },
+  "incoming": {
+    "ar": "\u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0648\u0627\u0631\u062f",
+    "en": "Incoming Mail"
+  },
+  "outgoing": {
+    "ar": "\u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0635\u0627\u062f\u0631",
+    "en": "Outgoing Mail"
+  },
+  "memo": {
+    "ar": "\u0627\u0644\u0645\u0630\u0643\u0631\u0629 \u0627\u0644\u062f\u0627\u062e\u0644\u064a\u0629",
+    "en": "Internal Memo"
+  },
+  "follow_up_user_mail": {
+    "ar": "\u0645\u062a\u0627\u0628\u0639\u0629 \u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0634\u062e\u0635\u064a",
+    "en": "Follow-up user mail"
+  },
+  "follow_up_emp_mail": {
+    "ar": "\u0645\u062a\u0627\u0628\u0639\u0629 \u0628\u0631\u064a\u062f \u0627\u0644\u0645\u0648\u0638\u0641\u064a\u0646",
+    "en": "follow-up employees mail"
+  },
+  "user_folders": {
+    "ar": "\u0645\u062c\u0644\u062f\u0627\u062a \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645",
+    "en": "User Folders"
+  },
+  "select_assistant": {
+    "ar": "\u0623\u062e\u062a\u064a\u0627\u0631 \u0645\u0639\u0627\u0648\u0646",
+    "en": "Select Assistant"
+  },
+  "group_mail": {
+    "ar": "\u0628\u0631\u064a\u062f \u0627\u0644\u0645\u062c\u0645\u0648\u0639\u0629",
+    "en": "Group Mail"
+  },
+  "my_fav": {
+    "ar": "\u0627\u0644\u0643\u062a\u0628 \u0627\u0644\u0645\u0641\u0636\u0644\u0629",
+    "en": "My favorites"
+  },
+  "sarch_for_item": {
+    "ar": "\u0623\u0628\u062d\u062b \u0639\u0646 \u0639\u0646\u0635\u0631 \u0641\u064a \u0627\u0644\u0642\u0627\u0626\u0645\u0629",
+    "en": "Search for an item in menu"
+  },
+  "login_form_text": {
+    "ar": "\u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644",
+    "en": "Sign In"
+  },
+  "fav_links": {
+    "ar": "\u0627\u0644\u0631\u0648\u0627\u0628\u0637 \u0627\u0644\u0645\u0641\u0636\u0644\u0629",
+    "en": "Favourite Links"
+  },
+  "back": {
+    "ar": "\u0627\u0644\u0639\u0648\u062f\u0647",
+    "en": "Back"
+  },
+  "selected": {
+    "ar": "\u0645\u062e\u062a\u0627\u0631\u0647",
+    "en": "Selected"
+  },
+  "serial": {
+    "ar": "\u0645\u0633\u0644\u0633\u0644",
+    "en": "Serial"
+  },
+  "subject": {
+    "ar": "\u0627\u0644\u0645\u0648\u0636\u0648\u0639",
+    "en": "Subject"
+  },
+  "received_date": {
+    "ar": "\u062a\u0627\u0631\u064a\u062e \u0627\u0644\u0627\u0633\u062a\u0644\u0627\u0645",
+    "en": "Received Date"
+  },
+  "action": {
+    "ar": "\u0627\u0644\u0625\u062c\u0631\u0627\u0621",
+    "en": "Action"
+  },
+  "sender": {
+    "ar": "\u0627\u0644\u0645\u0631\u0633\u0644",
+    "en": "Sender"
+  },
+  "site": {
+    "ar": "\u0627\u0644\u062c\u0647\u0629",
+    "en": "Site"
+  },
+  "type": {
+    "ar": "\u0627\u0644\u0646\u0648\u0639",
+    "en": "Type"
+  },
+  "days": {
+    "ar": "\u0623\u064a\u0627\u0645",
+    "en": "Days"
+  },
+  "success_logout": {
+    "ar": "\u062a\u0645 \u062a\u0633\u062c\u064a\u0644 \u062e\u0631\u0648\u0643 \u0628\u0646\u062c\u0627\u062d",
+    "en": "You are logged out successfully"
+  },
+  "dashboard": {
+    "ar": "\u0644\u0648\u062d\u0629 \u0627\u0644\u0628\u062f\u0627\u064a\u0629",
+    "en": "Dashboard"
+  },
+  "search": {
+    "ar": "\u0627\u0644\u0628\u062d\u062b",
+    "en": "Search"
+  },
+  "security_degree": {
+    "ar": "\u062f\u0631\u062c\u0629 \u0627\u0644\u0633\u0631\u064a\u0629",
+    "en": "Security degree"
+  },
+  "incoming_date": {
+    "ar": "\u062a\u0627\u0631\u064a\u062e \u0627\u0644\u0648\u0627\u0631\u062f",
+    "en": "Incoming date"
+  },
+  "document_number": {
+    "ar": "\u0631\u0642\u0645 \u0627\u0644\u0643\u062a\u0627\u0628",
+    "en": "Document number"
+  },
+  "document_date": {
+    "ar": "\u062a\u0627\u0631\u064a\u062e \u0627\u0644\u0643\u062a\u0627\u0628",
+    "en": "Document date"
+  },
+  "main_classification": {
+    "ar": "\u0627\u0644\u062a\u0635\u0646\u064a\u0641 \u0627\u0644\u0631\u0626\u064a\u0633\u064a",
+    "en": "Main classification"
+  },
+  "classification": {
+    "ar": "\u0627\u0644\u062a\u0635\u0646\u064a\u0641",
+    "en": "Classification"
+  },
+  "administration_topic": {
+    "ar": "\u062c\u0647\u0629 \u0627\u0644\u0643\u062a\u0627\u0628",
+    "en": "The Administration topic"
+  },
+  "document_nature": {
+    "ar": "\u0646\u0648\u0639 \u0627\u0644\u0643\u062a\u0627\u0628",
+    "en": "Document nature"
+  },
+  "high_level": {
+    "ar": "\u0639\u0627\u0644\u064a \u0627\u0644\u0633\u0631\u064a\u0629",
+    "en": "High Level"
+  },
+  "book": {
+    "ar": "\u0643\u062a\u0627\u0628",
+    "en": "Book"
+  },
+  "book_memo": {
+    "ar": "\u0645\u0630\u0643\u0631\u0629 \u062f\u0627\u062e\u0644\u064a\u0629",
+    "en": "Internal Memo"
+  },
+  "settings": {
+    "ar": "\u0627\u0644\u0627\u0639\u062f\u0627\u062f\u0627\u062a",
+    "en": "Settings"
+  },
+  "privacy_settings": {
+    "ar": "\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u0627\u0644\u062e\u0635\u0648\u0635\u064a\u0629",
+    "en": "Privacy Settings"
+  },
+  "view_profile": {
+    "ar": "\u0645\u0634\u0627\u0647\u062f\u0647 \u0627\u0644\u0645\u0644\u0641 \u0627\u0644\u0634\u062e\u0635\u064a",
+    "en": "View Profile"
+  },
+  "logout": {
+    "ar": "\u062a\u0633\u062c\u064a\u0644 \u062e\u0631\u0648\u062c",
+    "en": "Logout"
+  },
+  "general_administration": {
+    "ar": "\u0625\u062f\u0627\u0631\u0629 \u0639\u0627\u0645\u0629",
+    "en": "General Administration"
+  },
+  "administration": {
+    "ar": "\u0625\u062f\u0627\u0631\u0629",
+    "en": "Administration"
+  },
+  "branch": {
+    "ar": "\u0641\u0631\u0639",
+    "en": "Branch"
+  },
+  "department": {
+    "ar": "\u0642\u0633\u0645",
+    "en": "Department"
+  },
+  "unit": {
+    "ar": "\u0648\u062d\u062f\u0629",
+    "en": "Unit"
+  },
+  "desk": {
+    "ar": "\u0645\u0643\u062a\u0628",
+    "en": "Desk"
+  },
+  "add": {
+    "ar": "\u0623\u0636\u0641",
+    "en": "Add"
+  },
+  "organization_chart": {
+    "ar": "\u0627\u0644\u0647\u064a\u0643\u0644 \u0627\u0644\u062a\u0646\u0638\u064a\u0645\u064a",
+    "en": "Organization Structure"
+  },
+  "no_structue": {
+    "ar": "\u0644\u0627 \u064a\u0648\u062c\u062f \u0647\u064a\u0643\u0644 \u062a\u0646\u0638\u064a\u0645\u064a \u062d\u0627\u0644\u064a\u0623",
+    "en": "organizational structure not found"
+  },
+  "add_root": {
+    "ar": "\u0623\u0636\u0641 \u0647\u064a\u0643\u0644",
+    "en": "Add Structure"
+  },
+  "ar_desc": {
+    "ar": "\u0627\u0644\u0648\u0635\u0641 \u0628\u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629",
+    "en": "Arabic Description"
+  },
+  "en_desc": {
+    "ar": "\u0627\u0644\u0648\u0635\u0641 \u0628\u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0627\u0646\u062c\u0644\u064a\u0632\u064a\u0629",
+    "en": "English Description"
+  },
+  "select_type": {
+    "ar": "\u0641\u0636\u0644\u0627 \u0623\u062e\u062a\u0631 \u0627\u0644\u0646\u0648\u0639",
+    "en": "Please Select a Type"
+  },
+  "active": {
+    "ar": "\u0641\u0639\u0627\u0644",
+    "en": "Active"
+  },
+  "inactive": {
+    "ar": "\u063a\u064a\u0631 \u0641\u0639\u0627\u0644",
+    "en": "Inactive"
+  },
+  "status": {
+    "ar": "\u0627\u0644\u062d\u0627\u0644\u0629",
+    "en": "Status"
+  },
+  "hascorres": {
+    "ar": "\u0644\u062f\u064a\u0647\u0627 \u0645\u0631\u0627\u0633\u0644\u0627\u062a",
+    "en": "has Correspondence"
+  },
+  "yes": {
+    "ar": "\u0646\u0639\u0645",
+    "en": "Yes"
+  },
+  "no": {
+    "ar": "\u0644\u0627",
+    "en": "No"
+  },
+  "child": {
+    "ar": "\u0637\u0641\u0644",
+    "en": "Child"
+  },
+  "addto": {
+    "ar": "\u0623\u0636\u0641 \u0625\u0644\u064a",
+    "en": "Add to"
+  },
+  "carchive": {
+    "ar": "\u0623\u0631\u0634\u064a\u0641 \u0645\u0631\u0643\u0632\u064a",
+    "en": "Central Archive"
+  },
+  "basicinfo": {
+    "ar": "\u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0627\u0644\u0627\u0633\u0627\u0633\u064a\u0629",
+    "en": "Basic Info"
+  },
+  "subinfo": {
+    "ar": "\u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0627\u0644\u0641\u0631\u0639\u064a\u0629",
+    "en": "Sub Info"
+  },
+  "serialpfx": {
+    "ar": "\u0628\u0627\u062f\u0626\u0629 \u0627\u0644\u062a\u0633\u0644\u0633\u0644",
+    "en": "serial Prefix"
+  },
+  "save": {
+    "ar": "\u062d\u0641\u0638",
+    "en": "Save"
+  },
+  "email": {
+    "ar": "\u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0627\u0644\u0643\u062a\u0631\u0648\u0646\u064a",
+    "en": "E-mail Address"
+  },
+  "field_email_type": {
+    "ar": "\u0631\u062c\u0627\u0621 \u0643\u062a\u0627\u0628\u0629 \u0628\u0631\u064a\u062f \u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a \u0635\u0627\u0644\u062d",
+    "en": "please type a valid email"
+  },
+  "toshort": {
+    "ar": "\u0642\u0635\u064a\u0631 \u062c\u062f\u0627",
+    "en": "it is too short"
+  },
+  "rmode": {
+    "ar": "\u0648\u0636\u0639 \u0625\u0639\u0627\u062f\u0629 \u0627\u0644\u062a\u0634\u063a\u064a\u0644",
+    "en": "Reset Mode"
+  },
+  "manual": {
+    "ar": "\u064a\u062f\u0648\u064a",
+    "en": "Manual"
+  },
+  "automatic": {
+    "ar": "\u062a\u0644\u0642\u0627\u0626\u064a",
+    "en": "A\u0650utomatic"
+  },
+  "seclevel": {
+    "ar": "\u062f\u0631\u062c\u0627\u062a \u0627\u0644\u0633\u0631\u064a\u0629",
+    "en": "Security Levels"
+  },
+  "defaultsec": {
+    "ar": "\u0627\u0644\u0648\u0636\u0639 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u064a \u0644\u062f\u0631\u062c\u0629 \u0627\u0644\u0633\u0631\u064a\u0629",
+    "en": "Default Security Level"
+  },
+  "priodefault": {
+    "ar": "\u0627\u0644\u0648\u0636\u0639 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u064a \u0644\u0644\u0623\u0648\u0644\u0648\u064a\u0629",
+    "en": "Default Priority Level"
+  },
+  "edit": {
+    "ar": "\u062a\u0639\u062f\u064a\u0644",
+    "en": "Edit"
+  },
+  "add_success": {
+    "ar": "\u062a\u0645 \u0623\u0636\u0627\u0641\u0629 ( :name ) \u0628\u0646\u062c\u0627\u062d",
+    "en": "Added ( :name ) successfully"
+  },
+  "save_success": {
+    "ar": "\u062a\u0645 \u0627\u0644\u062d\u0641\u0638 \u0628\u0646\u062c\u0627\u062d",
+    "en": "Save Successfully"
+  },
+  "amail": {
+    "ar": "\u0628\u0631\u064a\u062f \u0627\u0644\u0625\u062f\u0627\u0631\u0629",
+    "en": "Administration Mail"
+  },
+  "system_administration": {
+    "ar": "\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0646\u0638\u0627\u0645",
+    "en": "System Administration"
+  },
+  "current_language": {
+    "ar": "\u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u062d\u0627\u0644\u064a\u0629",
+    "en": "Current Language"
+  },
+  "lang_short": {
+    "ar": "\u0644\u0644\u062a\u062d\u0648\u064a\u0644 \u0627\u0644\u0633\u0631\u064a\u0639 \u0627\u0636\u063a\u0637 \u0639\u0644\u0649 ( Ctrl + Alt + 1 )",
+    "en": "to quick change click ( Ctrl + Alt +  1 )"
+  },
+  "search_in_tree": {
+    "ar": "\u0627\u0628\u062d\u062b \u062f\u0627\u062e\u0644 \u0627\u0644\u0647\u064a\u0643\u0644 \u0627\u0644\u062a\u0646\u0638\u064a\u0645\u064a",
+    "en": "Search in Organization Tree"
+  },
+  "tree_not_found": {
+    "ar": "\u063a\u064a\u0631 \u0645\u0648\u062c\u0648\u062f \u0628\u0627\u0644\u0647\u064a\u0643\u0644 \u0627\u0644\u062a\u0646\u0638\u064a\u0645\u064a",
+    "en": "not found in Organization Chart"
+  },
+  "add_new": {
+    "ar": "\u0623\u0636\u0641 \u062c\u062f\u064a\u062f !",
+    "en": "Add new One !"
+  },
+  "select_parent": {
+    "ar": "\u0627\u062e\u062a\u0631 \u0627\u0644\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0627\u0645",
+    "en": "Select Parent Administration"
+  },
+  "put_down": {
+    "ar": "\u0627\u062f\u0631\u062c :name \u062a\u062d\u062a",
+    "en": "Drop :name down:"
+  },
+  "classifications": {
+    "ar": "\u0627\u0644\u062a\u0635\u0646\u064a\u0641\u0627\u062a",
+    "en": "Classifications"
+  },
+  "status_success": {
+    "ar": "\u062a\u0645 \u062a\u062d\u062f\u064a\u062b \u0627\u0644\u062d\u0627\u0644\u0629 \u0628\u0646\u062c\u0627\u062d",
+    "en": "Status updated successfully"
+  },
+  "common": {
+    "ar": "\u0645\u0634\u062a\u0631\u0643",
+    "en": "common"
+  },
+  "cancel": {
+    "ar": "\u0627\u0644\u063a\u0627\u0621",
+    "en": "Cancel"
+  },
+  "cls": {
+    "ar": "\u062a\u0635\u0646\u064a\u0641",
+    "en": "Classification"
+  },
+  "em": {
+    "ar": "\u062d\u062f\u062b \u062e\u0637\u0627\u0621 \u0645\u0627 \u0627\u062b\u0646\u0627\u0621 :e",
+    "en": "An error occurred while :e"
+  },
+  "change_to_main": {
+    "ar": "\u062a\u062d\u0648\u064a\u0644 \u0644\u0631\u0626\u064a\u0633\u064a",
+    "en": "change to main"
+  },
+  "no_cls_found": {
+    "ar": "\u0644\u0627 \u064a\u0648\u062c\u062f \u062a\u0635\u0646\u064a\u0641\u0627\u062a \u0644\u0639\u0631\u0636\u0647\u0627",
+    "en": "No Classifications to Display"
+  },
+  "version": {
+    "ar": "\u00a9\u062c\u0645\u064a\u0639 \u0627\u0644\u062d\u0642\u0648\u0642 \u0645\u062d\u0641\u0648\u0638\u0629 \u0634\u0631\u0643\u0629 \u0625\u064a\u0628\u0644\u0627 \u0644\u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0643\u0645\u0628\u064a\u0648\u062a\u0631 2016 -\u0646\u0633\u062e\u0629 0.12",
+    "en": "\u00a9 2016 EBLA Computer Consultancy RIGHTS RESERVED"
+  },
+  "rememberMe": {
+    "ar": "\u062a\u0630\u0643\u0631\u0646\u0649 !",
+    "en": "Remember me"
+  },
+  "bookContent": {
+    "ar": "\u0645\u062d\u062a\u0648\u0649 \u0627\u0644\u0643\u062a\u0627\u0628",
+    "en": "The Book's Content"
+  },
+  "authorized": {
+    "ar": "\u0643\u062a\u0627\u0628 \u0645\u0639\u062a\u0645\u062f",
+    "en": "Authorized Book"
+  },
+  "details": {
+    "ar": "\u0627\u0644\u0643\u062a\u0627\u0628 \u064a\u062d\u062a\u0648\u064a \u0639\u0644\u064a \u0643\u062a\u0628 \u0645\u0631\u062a\u0628\u0637\u0629",
+    "en": "Connected Book"
+  },
+  "versionWarning": {
+    "ar": "\u0647\u0646\u0627\u0643 \u062d\u0642\u064a\u0642\u0629 \u0645\u062b\u0628\u062a\u0629 \u0645\u0646\u0630 \u0632\u0645\u0646 \u0637\u0648\u064a\u0644 \u0648\u0647\u064a \u0623\u0646 \u0627\u0644\u0645\u062d\u062a\u0648\u0649 \u0627\u0644\u0645\u0642\u0631\u0648\u0621 \u0644\u0635\u0641\u062d\u0629 \u0645\u0627 \u0633\u064a\u0644\u0647\u064a \u0627\u0644\u0642\u0627\u0631\u0626 \u0639\u0646 \u0627\u0644\u062a\u0631\u0643\u064a\u0632 \u0639\u0644\u0649 \u0627\u0644\u0634\u0643\u0644 \u0627\u0644\u062e\u0627\u0631\u062c\u064a \u0644\u0644\u0646\u0635 \u0623\u0648 \u0634\u0643\u0644 \u062a\u0648\u0636\u0639 \u0627\u0644\u0641\u0642\u0631\u0627\u062a \u0641\u064a \u0627\u0644\u0635\u0641\u062d\u0629 \u0627\u0644\u062a\u064a \u064a\u0642\u0631\u0623\u0647\u0627. \u0648\u0644\u0630\u0644\u0643 \u064a\u062a\u0645 \u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0637\u0631\u064a\u0642\u0629 \u0644\u0648\u0631\u064a\u0645 \u0625\u064a\u0628\u0633\u0648\u0645 \u0644\u0623\u0646\u0647\u0627 \u062a\u0639\u0637\u064a \u062a\u0648\u0632\u064a\u0639\u0627\u064e \u0637\u0628\u064a\u0639\u064a\u0627\u064e",
+    "en": "The construction of this layout differs from the normal one. In other words, the HTML markup of the navbar and the content will slightly differ than that of the normal layout."
+  },
+  "appName": {
+    "ar": "\u0646\u0638\u0627\u0645 \u062a\u0648\u0627\u0635\u0644 \u0644\u0644\u0645\u0631\u0627\u0633\u0644\u0627\u062a",
+    "en": "TAWASOL Correspondence System"
+  },
+  "search_content": {
+    "ar": "\u0628\u062d\u062b \u0641\u064a \u0627\u0644\u0645\u062d\u062a\u0648\u0649",
+    "en": "Search in Content"
+  },
+  "search_outgoing": {
+    "ar": "\u0628\u062d\u062b \u0641\u064a \u0627\u0644\u0635\u0627\u062f\u0631",
+    "en": "Search in Outgoing Books"
+  },
+  "warning": {
+    "ar": "\u062a\u0646\u0628\u064a\u0647!",
+    "en": "Warning !"
+  },
+  "copyrights": {
+    "ar": "\u00a9 \u062c\u0645\u064a\u0639 \u0627\u0644\u062d\u0642\u0648\u0642 \u0645\u062d\u0641\u0648\u0638\u0629 \u0644\u0634\u0631\u0643\u0629 \u0625\u064a\u0628\u0644\u0627 \u0644\u0644\u0623\u0633\u062a\u0634\u0627\u0631\u0627\u062a \u0627\u0644\u0643\u0645\u0628\u064a\u0648\u062a\u0631",
+    "en": "\u00a9 2017 Eblacorp. All rights reserved. Designed and built by EblaCorp"
+  },
+  "internalMemo": {
+    "ar": "\u0645\u0630\u0643\u0631\u0629 \u062f\u0627\u062e\u0644\u064a\u0629",
+    "en": "Internal Memo"
+  },
+  "publication": {
+    "ar": "\u062a\u0639\u0645\u064a\u0645",
+    "en": "Publication"
+  },
+  "org_mail_filtered": {
+    "ar": "\u0628\u0631\u064a\u062f \u0627\u0644\u0648\u062d\u062f\u0629 \u0627\u0644\u0645\u0635\u0641\u0649",
+    "en": "Filtered Inbox Mails"
+  },
+  "notification_settings": {
+    "ar": "\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u0627\u0644\u062a\u0646\u0628\u064a\u0647\u0627\u062a",
+    "en": "Notification Settings"
+  },
+  "notification_settings_header": {
+    "ar": "\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u0627\u0644\u062a\u0646\u0628\u064a\u0647\u0627\u062a \u0627\u0644\u062e\u0627\u0635\u0629 \u0628\u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645",
+    "en": "User Notification Settings"
+  },
+  "usage_report": {
+    "ar": "\u062a\u0642\u0631\u064a\u0631 \u0639\u0646 \u0625\u0633\u062a\u062e\u062f\u0627\u0645 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645",
+    "en": "Usage Report"
+  },
+  "notification_setting_active": {
+    "ar": "\u062a\u0641\u0639\u064a\u0644 \u062a\u0646\u0628\u064a\u0647\u0627\u062a \u0627\u0628\u0645\u0633\u062a\u062e\u062f\u0645",
+    "en": "Activation Of User Notifications"
+  },
+  "notification_follow_up": {
+    "ar": "\u0627\u0644\u062a\u0646\u0628\u064a\u0647 \u0641\u064a \u062d\u0627\u0644\u0629 \u0645\u062a\u0627\u0628\u0639\u0629 \u0643\u062a\u0627\u0628",
+    "en": "Notification in case of follow-up"
+  },
+  "notification_mail_inbox": {
+    "ar": "\u0627\u0644\u062a\u0646\u0628\u064a\u0647 \u0641\u064a \u062d\u0627\u0644\u0629 \u0627\u0633\u062a\u0642\u0628\u0627\u0644 \u0643\u062a\u0627\u0628",
+    "en": "Notification in case of receiving book"
+  },
+  "user__followup_mail": {
+    "ar": "\u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0634\u062e\u0635\u064a \u0644\u0644\u0645\u062a\u0627\u0628\u0639\u0629",
+    "en": "Private Mail for Follow Up"
+  },
+  "user__followup_phone_number": {
+    "ar": "\u0627\u0633\u062a\u0642\u0628\u0627\u0644 \u0631\u0633\u0627\u0626\u0644 \u0634\u062e\u0635\u064a\u0629 \u0639\u0644\u0649 \u0631\u0642\u0645",
+    "en": "Private Phone Number for Follow-up"
+  },
+  "user_followup_email_format": {
+    "ar": "\u0635\u064a\u063a\u0629 \u0628\u0631\u064a\u062f \u0627\u0644\u0645\u062a\u0627\u0628\u0639\u0629",
+    "en": "Followup Email Format"
+  },
+  "user_followup_sms_format": {
+    "ar": "\u0627\u0644\u0635\u064a\u063a\u0629 \u0627\u0644\u0646\u0635\u064a\u0629 \u0644\u0644\u062a\u064a\u0641\u0648\u0646 \u0627\u0644\u062c\u0648\u0627\u0644",
+    "en": "Followup SMS Format"
+  },
+  "entityName": {
+    "ar": "\u0648\u0632\u0627\u0631\u0629 \u0627\u0644\u0628\u0644\u062f\u064a\u0629 \u0648\u0627\u0644\u062a\u062e\u0637\u064a\u0637 \u0627\u0644\u0639\u0645\u0631\u0627\u0646\u0649",
+    "en": "Ministry Of Municipality and Urban Planning"
+  },
+  "org_mail_inbox": {
+    "ar": "\u0628\u0631\u064a\u062f \u0627\u0644\u0648\u062d\u062f\u0627\u062a \u0627\u0644\u062a\u0646\u0638\u064a\u0645\u064a\u0629",
+    "en": "Organization's Unit Inbox"
+  },
+  "org_mail_inbox_singular": {
+    "ar": "\u0628\u0631\u064a\u062f \u0627\u0644\u0648\u062d\u062f\u0629 \u0627\u0644\u062a\u0646\u0638\u064a\u0645\u064a\u0629",
+    "en": "Organization's Unit Inbox"
+  },
+  "org_mail_inbox_normal": {
+    "en": "Normal Public Inbox",
+    "ar": "\u0628\u0631\u064a\u062f \u0627\u0644\u0648\u062d\u062f\u0629 \u0627\u0644\u0639\u0627\u062f\u064a"
+  },
+  "org_mail_inbox_secure": {
+    "ar": "\u0628\u0631\u064a\u062f \u0627\u0644\u0648\u062d\u062f\u0629 \u0627\u0644\u0633\u0631\u064a",
+    "en": "Secure Public Inbox"
+  },
+  "searchPlaceHolder": {
+    "ar": "\u064a\u0645\u0643\u0646\u0643 \u0625\u062f\u062e\u0627\u0644 \u0643\u0644\u0645\u0627\u062a \u0644\u0644\u0628\u062d\u062b \u0645\u0646 \u062e\u0644\u0627\u0644 \u0647\u0630\u0627 \u0627\u0644\u062d\u0642\u0644",
+    "en": "You Can enter your keywords here"
+  },
+  "noResults_quick_search": {
+    "ar": "\u0644\u0627 \u062a\u0648\u062c\u062f \u0646\u062a\u0627\u0626\u062c \u062a\u062a\u0637\u0627\u0628\u0642",
+    "en": "No results were found"
+  },
+  "CreationDate": {
+    "en": "User's Creation Date",
+    "ar": "\u062a\u0627\u0631\u064a\u062e \u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645"
+  },
+  "LastLoginDate": {
+    "en": "User's Last Login Date",
+    "ar": "\u062a\u0627\u0631\u064a\u062e \u0627\u062e\u0631 \u062f\u062e\u0648\u0644 \u0644\u0644\u0645\u0633\u062a\u062e\u062f\u0645"
+  },
+  "TotalNumberOfLoginOperations": {
+    "en": "Total Number Of Login Operations",
+    "ar": "\u0639\u062f\u062f \u0645\u0631\u0627\u062a \u062f\u062e\u0648\u0644 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645"
+  },
+  "TotalNumberOfDocuments": {
+    "en": "Total Number Of Documents",
+    "ar": "\u0639\u062f\u062f \u0627\u0644\u0643\u062a\u0628 \u0627\u0644\u062a\u064a \u062a\u0645 \u0625\u0646\u0634\u0627\u0626\u0647\u0627"
+  },
+  "AverageDocumentSize": {
+    "en": "Average Document Size",
+    "ar": "\u0645\u0639\u062f\u0644 \u062d\u062c\u0645 \u0627\u0644\u0643\u062a\u0627\u0628 \u0628\u0627\u0644\u0643\u064a\u0644\u0648 \u0628\u0627\u064a\u062a"
+  },
+  "TotalNumberOfIncoming": {
+    "en": "Total Number Of Incoming Books",
+    "ar": "\u0639\u062f\u062f \u0627\u0644\u0643\u062a\u0628 \u0627\u0644\u062a\u064a \u062a\u0645 \u0625\u0646\u0634\u0627\u0626\u0647\u0627 \u0643\u0648\u0627\u0631\u062f"
+  },
+  "TotalNumberOfOutgoing": {
+    "en": "Total Number Of Outgoing Books",
+    "ar": "\u0639\u062f\u062f \u0627\u0644\u0643\u062a\u0628 \u0627\u0644\u062a\u064a \u062a\u0645 \u0625\u0646\u0634\u0627\u0626\u0647\u0627 \u0643\u0635\u0627\u062f\u0631"
+  },
+  "TotalNumberOfAttachments": {
+    "en": "Total Number Of Attachments",
+    "ar": "\u0639\u062f\u062f \u0627\u0644\u0645\u0631\u0641\u0642\u0627\u062a \u0627\u0644\u062a\u064a \u062a\u0645 \u0625\u0636\u0627\u0641\u062a\u0647\u0627 \u0644\u0644\u0643\u062a\u0628"
+  },
+  "NumberOfPendingWorkflowSteps": {
+    "en": "Total Number of Private Inbox Mails",
+    "ar": "\u0639\u062f\u062f \u0627\u0644\u0631\u0633\u0627\u0626\u0644 \u0641\u064a \u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0634\u062e\u0635\u064a \u0627\u0644\u062e\u0627\u0635 \u0628\u0627\u0644\u0646\u0638\u0627\u0645"
+  },
+  "NumberOfWorkflowSteps": {
+    "en": "Total Number of Pending Inbox Mails",
+    "ar": "\u0639\u062f\u062f \u0627\u0644\u0631\u0633\u0627\u0626\u0644 \u0641\u064a \u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0634\u062e\u0635\u064a \u0628\u0627\u0644\u0646\u0638\u0627\u0645"
+  },
+  "userStats": {
+    "ar": "\u0625\u062d\u0635\u0627\u0626\u064a\u0627\u062a \u0625\u0633\u062a\u062e\u062f\u0627\u0645 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645",
+    "en": "User Usage Statistics"
+  },
+  "WorkFlowNumberStepsReport": {
+    "en": "Report About Current WorkFlow Steps over Period Of Time",
+    "ar": "\u062a\u0642\u0631\u064a\u0631 \u0639\u0646 \u0639\u062f\u062f \u062e\u0637\u0648\u0627\u062a \u0627\u0644\u0639\u0645\u0644 \u0627\u0644\u062a\u064a \u062a\u0645 \u0627\u0646\u0634\u0627\u0626\u0647\u0627 \u062e\u0644\u0627\u0644 \u0641\u062a\u0631\u0629 \u0645\u0639\u064a\u0646\u0629"
+  },
+  "loginReport": {
+    "en": "Report About Number of Login Times Of User",
+    "ar": "\u062a\u0642\u0631\u064a\u0631 \u0639\u0646 \u0639\u062f\u062f \u0645\u0631\u0627\u062a \u062f\u062e\u0648\u0644 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645 \u062e\u0644\u0627\u0644 \u0645\u062f\u0647 \u0645\u0639\u064a\u0646\u0629 "
+  },
+  "user_notification_status": {
+    "en": "Notification is inactive From Date To Date",
+    "ar": "\u0627\u0644\u062a\u0646\u0628\u064a\u0647\u0627\u062a \u063a\u064a\u0631 \u0641\u0639\u0627\u0644\u0629 \u0645\u0646 \u062a\u0627\u0631\u064a\u062e \u0644\u062a\u0627\u0631\u064a\u062e"
+  },
+  "search_date": {
+    "ar": "\u062a\u0627\u0631\u064a\u062e \u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u0643\u062a\u0627\u0628 \u0645\u0646 \u062a\u0627\u0631\u064a\u062e \u0644\u062a\u0627\u0631\u064a\u062e",
+    "en": "Search Interval"
+  },
+  "search_subject": {
+    "ar": "\u0645\u0648\u0636\u0648\u0639 \u0627\u0644\u0643\u062a\u0627\u0628 \u064a\u062d\u062a\u0648\u064a \u0639\u0644\u0649 \u0643\u0644\u0645\u0627\u062a",
+    "en": "Document subject contains text "
+  },
+  "search_serial": {
+    "ar": "\u0631\u0642\u0645 \u0627\u0644\u0643\u062a\u0627\u0628",
+    "en": "Book's Serial"
+  },
+  "search_corres_site": {
+    "ar": "\u062c\u0647\u0629 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0629 \u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629",
+    "en": "Correspondence Main Site"
+  },
+  "search_sub_corres_site": {
+    "ar": "\u062c\u0647\u0629 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0629 \u0627\u0644\u0641\u0631\u0639\u064a\u0629",
+    "en": "Correspondence Sub Site"
+  },
+  "main_corre_site": {
+    "ar": "\u062c\u0647\u0629 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0629 \u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629",
+    "en": "Correspondence Main Site"
+  },
+  "sub_corre_site": {
+    "ar": "\u062c\u0647\u0629 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0629 \u0627\u0644\u0641\u0631\u0639\u064a\u0629",
+    "en": "Correspondence Sub Site"
+  },
+  "new_search": {
+    "en": "New Search",
+    "ar": "\u0628\u062d\u062b \u062c\u062f\u064a\u062f"
+  },
+  "paper_outgoing": {
+    "en": "Paper based books",
+    "ar": "\u0635\u0627\u062f\u0631 \u0648\u0631\u0642\u064a"
+  },
+  "e_outgoing": {
+    "en": "E-Outgoing based books",
+    "ar": "\u0635\u0627\u062f\u0631 \u0627\u0644\u0643\u062a\u0631\u0648\u0646\u064a"
+  },
+  "sub_classification": {
+    "en": "Sub Classification",
+    "ar": "\u062a\u0635\u0646\u064a\u0641 \u0641\u0631\u0639\u064a"
+  },
+  "search_content_tags": {
+    "ar": "\u0645\u062d\u062a\u0648\u0649 \u0627\u0644\u0643\u062a\u0627\u0628 \u064a\u062d\u062a\u0648\u064a \u0639\u0644\u0649 \u0643\u0644\u0645\u0627\u062a",
+    "en": "Book's content contains "
+  },
+  "tags": {
+    "en": "Tags",
+    "ar": "\u0643\u0644\u0645\u0627\u062a \u0627\u0633\u062a\u062f\u0644\u0627\u0644\u064a\u0629"
+  },
+  "countOutgoingBooks": {
+    "ar": "\u062a\u0642\u0631\u064a\u0631 \u0639\u0646 \u0639\u062f\u062f \u0627\u0644\u0643\u062a\u0628 \u0627\u0644\u0635\u0627\u062f\u0631\u0629 \u062e\u0644\u0627\u0644 \u0634\u0647\u0648\u0631 \u0645\u0639\u064a\u0646\u0629",
+    "en": "Report About Outgoing Books through period"
+  },
+  "arabic_translate": {
+    "en": "Arabic Translate",
+    "ar": "\u0627\u0644\u062a\u0631\u062c\u0645\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629"
+  },
+  "english_translate": {
+    "en": "English Translate",
+    "ar": "\u0627\u0644\u062a\u0631\u062c\u0645\u0629 \u0627\u0644\u0627\u0646\u062c\u0644\u064a\u0632\u064a\u0629"
+  },
+  "color": {
+    "en": "Color",
+    "ar": "\u0627\u0644\u0644\u0648\u0646"
+  },
+  "countIncomingBooks": {
+    "ar": "\u062a\u0642\u0631\u064a\u0631 \u0639\u0646 \u0639\u062f\u062f \u0627\u0644\u0643\u062a\u0628 \u0627\u0644\u0648\u0627\u0631\u062f\u0629 \u062e\u0644\u0627\u0644 \u0634\u0647\u0648\u0631 \u0645\u0639\u064a\u0646\u0629",
+    "en": "Report About Incoming Books through period"
+  },
+  "Cloud_Setup": {
+    "ar": "\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u062a\u062e\u0631\u064a\u0646",
+    "en": "Cloud Setup"
+  },
+  "AddTheme": {
+    "ar": "\u0648\u0627\u062c\u0647\u0627\u062a \u0627\u0644\u0646\u0638\u0627\u0645",
+    "en": "Add New Theme"
+  },
+  "AddOrganization": {
+    "ar": "\u0625\u0636\u0627\u0641\u0629 \u062c\u0647\u0629 \u0644\u0644\u0646\u0638\u0627\u0645",
+    "en": "Add New Organization"
+  },
+  "e_singature": {
+    "ar": "\u062a\u0648\u0642\u064a\u0639 \u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a",
+    "en": "Electronic Signature"
+  },
+  "next": {
+    "en": "Next",
+    "ar": "\u0627\u0644\u062a\u0627\u0644\u064a"
+  },
+  "openBook": {
+    "en": "OpenBook",
+    "ar": "\u0645\u062d\u062a\u0648\u0649 \u0627\u0644\u0643\u062a\u0627\u0628"
+  },
+  "NumberOfTotalBooks": {
+    "en": "Total Number Of Books",
+    "ar": "\u0645\u062c\u0645\u0648\u0639 \u0639\u062f\u062f \u0627\u0644\u0648\u062b\u0627\u0626\u0642 "
+  },
+  "MeanTimeForTasks": {
+    "en": "Mean Time For Task Accomplishment ",
+    "ar": "\u0645\u0639\u062f\u0644 \u0625\u0646\u062c\u0627\u0632 \u0627\u0644\u0645\u0647\u0627\u0645 "
+  },
+  "MeanTimeForReply": {
+    "en": "Mean Reply Time For The Received Books ",
+    "ar": "\u0645\u0639\u062f\u0644 \u0627\u0644\u0631\u062f \u0639\u0644\u0649 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0627\u062a \u0627\u0644\u062a\u064a \u0628\u062d\u0627\u062c\u0629 \u0627\u0644\u0649 \u0631\u062f "
+  },
+  "AddedBooks": {
+    "en": "Number Of Added Books",
+    "ar": "\u0639\u062f\u062f \u0627\u0644\u0648\u062b\u0627\u0626\u0642 \u0627\u0644\u062a\u064a \u062a\u0645 \u0625\u0636\u0627\u0641\u062a\u0647\u0627 "
+  },
+  "AccomplishedTasks": {
+    "en": "Total Number Of Accomplished Tasks",
+    "ar": "\u0639\u062f\u062f\u0627\u0644\u0645\u0647\u0627\u0645 \u0627\u0644\u0645\u0646\u062c\u0632\u0629"
+  },
+  "DelayedTasks": {
+    "en": "Total Number Of Delayed Tasks",
+    "ar": "\u0639\u062f\u062f\u0627\u0644\u0645\u0647\u0627\u0645 \u0627\u0644\u0645\u062a\u0623\u062e\u0631\u0629"
+  },
+  "AccomplishedBooks": {
+    "en": "Total Number Of Accomplished Books",
+    "ar": "\u0639\u062f\u062f \u0627\u0644\u0648\u062b\u0627\u0626\u0642  \u0627\u0644\u0645\u0646\u062c\u0632\u0629"
+  },
+  "DelayedBooks": {
+    "en": "Total Number Of Delayed Books",
+    "ar": " \u0639\u062f\u062f \u0627\u0644\u0648\u062b\u0627\u0626\u0642 \u0627\u0644\u0645\u062a\u0623\u062e\u0631\u0629 "
+  },
+  "hour": {
+    "en": "Hour",
+    "ar": "\u0633\u0627\u0639\u0629"
+  },
+  "day": {
+    "en": "Day",
+    "ar": "\u064a\u0648\u0645"
+  },
+  "TasksStatus": {
+    "en": "Tasks Total",
+    "ar": "\u0639\u062f\u062f \u0627\u0644\u0645\u0647\u0627\u0645"
+  },
+  "BooksStatus": {
+    "en": "Books Total",
+    "ar": "\u0639\u062f\u062f \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0627\u062a"
+  },
+  "manage_organization_types": {
+    "ar": "\u0623\u0646\u0648\u0627\u0639 \u0627\u0644\u0645\u0646\u0638\u0645\u0627\u062a",
+    "en": "Organization types"
+  },
+  "arabic_name": {
+    "ar": "\u0627\u0644\u0627\u0633\u0645 \u0628\u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629",
+    "en": "Arabic Name"
+  },
+  "english_name": {
+    "ar": "\u0627\u0644\u0627\u0633\u0645 \u0628\u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0627\u0646\u062c\u0644\u064a\u0632\u064a\u0629",
+    "en": "English Name"
+  },
+  "close": {
+    "ar": "\u0625\u063a\u0644\u0627\u0642",
+    "en": "close"
+  },
+  "name_duplication_message": {
+    "ar": "\u0644\u0627 \u064a\u0645\u0643\u0646 \u062a\u0643\u0631\u0627\u0631 \u0646\u0641\u0633 \u0627\u0644\u0627\u0633\u0645",
+    "en": "Name can not be duplicated"
+  },
+  "edit_success": {
+    "ar": "\u062a\u0645 \u062a\u0639\u062f\u064a\u0644 ( :name ) \u0628\u0646\u062c\u0627\u062d",
+    "en": "Edited ( :name ) successfully"
+  },
+  "item_selected": {
+    "ar": "\u0639\u0646\u0635\u0631 \u0645\u062e\u062a\u0627\u0631",
+    "en": "Item selected"
+  },
+  "items_selected": {
+    "ar": "\u0639\u0646\u0627\u0635\u0631 \u0645\u062e\u062a\u0627\u0631\u0629",
+    "en": "Items selected"
+  },
+  "rows_per_page": {
+    "ar": "\u0639\u062f\u062f \u0627\u0644\u0639\u0646\u0627\u0635\u0631 \u0628\u0627\u0644\u0635\u0641\u062d\u0629 :",
+    "en": "Rows per page:"
+  },
+  "count_of": {
+    "ar": "\u0645\u0646",
+    "en": "of"
+  },
+  "manage_document_types": {
+    "ar": "\u0627\u0646\u0648\u0627\u0639 \u0627\u0644\u0645\u0644\u0641\u0627\u062a",
+    "en": "Document types"
+  },
+  "files": {
+    "ar": "\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0645\u0644\u0641\u0627\u062a",
+    "en": "Manage files"
+  },
+  "code": {
+    "ar": "\u0627\u0644\u0631\u0645\u0632",
+    "en": "Code"
+  },
+  "is_global": {
+    "ar": "\u0639\u0627\u0645",
+    "en": "Global"
+  },
+  "global_success": {
+    "ar": "\u062a\u0645 \u062a\u062d\u062f\u064a\u062b \u062d\u0627\u0644\u0629 \u0627\u0644\u0633\u0631\u064a\u0629 \u0628\u0646\u062c\u0627\u062d",
+    "en": "Security status updated successfully"
+  },
+  "confirm_delete": {
+    "ar": "\u0647\u0644 \u062a\u0631\u064a\u062f \u062d\u0630\u0641 :name\u061f",
+    "en": "\u0650Are you sure you want to delete :name?"
+  },
+  "delete_success": {
+    "ar": "\u062a\u0645 \u0627\u0644\u062d\u0630\u0641 \u0628\u0646\u062c\u0627\u062d",
+    "en": "Deleted successfully"
+  },
+  "cross_site_management": {
+    "ar": "\u0625\u062f\u0627\u0631\u0629 \u062c\u0647\u0627\u062a \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0629",
+    "en": "Correspondence Sites"
+  },
+  "delete": {
+    "ar": "\u062d\u0630\u0641",
+    "en": "Delete"
+  },
+  "sub_correspondence_sites": {
+    "ar": "\u062c\u0647\u0627\u062a \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0629 \u0627\u0644\u0641\u0631\u0639\u064a\u0629",
+    "en": "Sub Correspondence Sites"
+  },
+  "add_new_sub_correspondence_site": {
+    "ar": "\u0623\u0636\u0627\u0641\u0629 \u062c\u0647\u0629 \u0645\u0631\u0627\u0633\u0644\u0629 \u0641\u0631\u0639\u064a\u0629",
+    "en": "Add new Sub Correspondence Site"
+  },
+  "refresh": {
+    "ar": "\u0625\u0639\u0627\u062f\u0629 \u062a\u062d\u0645\u064a\u0644",
+    "en": "Refresh"
+  },
+  "has_sub_correspondence_delete": {
+    "ar": "\u064a\u0648\u062c\u062f \u062c\u0647\u0627\u062a \u0641\u0631\u0639\u064a\u0629 \u0633\u064a\u062a\u0645 \u062d\u0630\u0641\u0647\u0627",
+    "en": "Sub Correspondence Site will be deleted"
+  },
+  "id": {
+    "ar": "\u0627\u0644\u0645\u064f\u0639\u064e\u0631\u0641",
+    "en": "Identifier"
+  },
+  "show_sub_correspondence": {
+    "ar": "\u0639\u0631\u0636 \u0627\u0644\u062c\u0647\u0627\u062a \u0627\u0644\u0641\u0631\u0639\u064a\u0629",
+    "en": "Show Sub Correspondence Sites"
+  },
+  "count_sub_correspondence_sites": {
+    "ar": "\u0639\u062f\u062f \u062c\u0647\u0627\u062a \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0629 \u0627\u0644\u0641\u0631\u0639\u064a\u0629",
+    "en": "Count Sun Correspondence Sites"
+  },
+  "manage_government_entities": {
+    "ar": "\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u062c\u0647\u0627\u062a \u0627\u0644\u062d\u0643\u0648\u0645\u064a\u0629",
+    "en": "Manage Government Entities"
+  },
+  "save_and_create": {
+    "ar": "\u062d\u0641\u0638 \u0648\u0625\u0646\u0634\u0627\u0621 \u062c\u062f\u064a\u062f",
+    "en": "Save and create new"
+  },
+  "app_arabic_name": {
+    "ar": "\u0627\u0633\u0645 \u0627\u0644\u0628\u0631\u0646\u0627\u0645\u062c \u0628\u0627\u0644\u0639\u0631\u0628\u064a\u0629",
+    "en": "Application Arabic Name"
+  },
+  "app_english_name": {
+    "ar": "\u0627\u0633\u0645 \u0627\u0644\u0628\u0631\u0646\u0627\u0645\u062c \u0628\u0627\u0644\u0627\u0646\u062c\u0644\u064a\u0632\u064a\u0629",
+    "en": "Application English Name"
+  },
+  "government_entities": {
+    "ar": "\u0627\u0644\u062c\u0647\u0627\u062a \u0627\u0644\u062d\u0643\u0648\u0645\u064a\u0629",
+    "en": "Government Entities"
+  },
+  "entity_group_prefix": {
+    "ar": "\u0627\u0644\u0645\u0642\u0637\u0639 \u0627\u0644\u0633\u0627\u0628\u0642 \u0644\u0627\u0633\u0645 \u0627\u0644\u0645\u062c\u0645\u0648\u0639\u0629",
+    "en": "Entity Group Prefix"
+  },
+  "help_url": {
+    "ar": "\u0631\u0627\u0628\u0637 \u0627\u0644\u0645\u0633\u0627\u0639\u062f\u0629",
+    "en": "Help URL"
+  },
+  "cm_username": {
+    "ar": "\u0627\u0633\u0645 \u0645\u0633\u062a\u062e\u062f\u0645 \u0645\u062f\u064a\u0631 \u0627\u0644\u0645\u062d\u062a\u0648\u0649",
+    "en": "Content Manager Username"
+  },
+  "cm_password": {
+    "ar": "\u0643\u0644\u0645\u0629 \u0633\u0631 \u0645\u062f\u064a\u0631 \u0627\u0644\u0645\u062d\u062a\u0648\u0649",
+    "en": "Content Manager Password"
+  },
+  "reenter_cm_password": {
+    "ar": "\u0627\u0639\u062f \u0625\u062f\u062e\u0627\u0644 \u0643\u0644\u0645\u0629 \u0633\u0631 \u0645\u062f\u064a\u0631 \u0627\u0644\u0645\u062d\u062a\u0648\u0649",
+    "en": "Confirm Content Manager Password"
+  },
+  "correspondence_site": {
+    "ar": "\u062c\u0647\u0629 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0629",
+    "en": "Correspondence Site"
+  },
+  "add_new_correspondence_site": {
+    "ar": "\u0623\u0636\u0627\u0641\u0629 \u062c\u0647\u0629 \u0645\u0631\u0627\u0633\u0644\u0629",
+    "en": "Add New Correspondence Site"
+  },
+  "global_settings": {
+    "ar": "\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u0639\u0627\u0645\u0629",
+    "en": "Global settings"
+  },
+  "identifier": {
+    "ar": "\u0631\u0645\u0632 \u0627\u0644\u062a\u0639\u0631\u064a\u0641",
+    "en": "Identifier"
+  },
+  "edit_something": {
+    "ar": "\u062a\u0639\u062f\u064a\u0644 \u062d\u0627\u062c\u0629",
+    "en": "Edit Something"
+  },
+  "entity_type": {
+    "ar": "\u0646\u0648\u0639 \u0627\u0644\u062c\u0647\u0629",
+    "en": "Entity Type"
+  },
+  "item_order": {
+    "ar": "\u062a\u0631\u062a\u064a\u0628 \u0627\u0644\u0639\u0646\u0635\u0631",
+    "en": "Item Order"
+  },
+  "entity_exists": {
+    "ar": "\u0623\u062d\u062f \u0647\u0630\u0647 \u0627\u0644\u0627\u0633\u0645\u0627\u0621 ( :names ) \u0645\u0648\u062c\u0648\u062f \u0645\u0633\u0628\u0642\u0627\u0621",
+    "en": "One of these names ( :names ) already exists."
+  },
+  "delete_specific_success": {
+    "ar": "\u062a\u0645 \u062d\u0630\u0641 ( :name ) \u0628\u0646\u062c\u0627\u062d",
+    "en": "Deleted successfully ( :name )"
+  },
+  "select_status": {
+    "ar": "\u0623\u062e\u062a\u0631 \u0627\u0644\u062d\u0627\u0644\u0629",
+    "en": "Select a Status"
+  },
+  "specific_status_success": {
+    "ar": "\u062a\u0645 \u062a\u062d\u062f\u064a\u062b \u062d\u0627\u0644\u0629 ( :name ) \u0628\u0646\u062c\u0627\u062d",
+    "en": "( :name ) status has been successfully updated"
+  },
+  "numberonly": {
+    "ar": "\u0627\u0644\u0631\u062c\u0627\u0621 \u0625\u062f\u062e\u0627\u0644 \u0627\u0631\u0642\u0627\u0645 \u0641\u0642\u0637",
+    "en": "Please enter positive number only"
+  },
+  "selected_status_updated": {
+    "ar": "\u062a\u0645 \u062a\u062d\u062f\u064a\u062b \u0627\u0644\u062d\u0627\u0644\u0629 \u0628\u0646\u062c\u0627\u062d \u0644\u0644\u0639\u0646\u0627\u0635\u0631 \u0627\u0644\u0645\u062d\u062f\u062f\u0629",
+    "en": "Status updated successfully for selected items"
+  },
+  "confirm_delete_selected_multiple": {
+    "ar": "\u0647\u0644 \u062a\u0631\u064a\u062f \u0628\u0627\u0644\u062a\u0623\u0643\u064a\u062f \u062d\u0630\u0641 \u0627\u0644\u0639\u0646\u0627\u0635\u0631 \u0627\u0644\u0645\u062e\u062a\u0627\u0631\u0629\u061f",
+    "en": "Are you sure you want to delete selected items?"
+  },
+  "job_title": {
+    "ar": "\u0627\u0644\u0645\u0633\u0645\u0649 \u0627\u0644\u0648\u0638\u064a\u0641\u064a",
+    "en": "Job Title"
+  },
+  "basic_properties": {
+    "ar": "\u062e\u0635\u0627\u0626\u0635 \u0623\u0633\u0627\u0633\u064a\u0629",
+    "en": "Basic properties"
+  },
+  "appearence": {
+    "ar": "\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u0638\u0627\u0647\u0631\u064a\u0629",
+    "en": "Appearence"
+  },
+  "audit_log": {
+    "ar": "\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u0633\u062c\u0644 \u0627\u0644\u0645\u0631\u0627\u062c\u0639\u0629",
+    "en": "Audit log"
+  },
+  "document_security_settings": {
+    "ar": "\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u0633\u0631\u064a\u0629 \u0627\u0644\u0645\u0644\u0641\u0627\u062a",
+    "en": "Document security"
+  },
+  "workflow_security_settings": {
+    "ar": "\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u0633\u0631\u064a\u0629 \u062f\u0648\u0631\u0629 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0627\u062a",
+    "en": "Workflow security"
+  },
+  "workflow_notification": {
+    "ar": "\u062a\u0646\u0628\u064a\u0647\u0627\u062a \u062f\u0648\u0631\u0629 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0627\u062a",
+    "en": "Workflow notification"
+  },
+  "sorting_settings": {
+    "ar": "\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u0627\u0644\u062a\u0631\u062a\u064a\u0628",
+    "en": "Sorting settings"
+  },
+  "other_properties": {
+    "ar": "\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u0627\u062e\u0631\u0649",
+    "en": "Other properties"
+  },
+  "entity_arabic_name": {
+    "ar": "\u0627\u0633\u0645 \u0627\u0644\u062c\u0647\u0629 \u0628\u0627\u0644\u0639\u0631\u0628\u064a\u0629",
+    "en": "Entity arabic name"
+  },
+  "entity_english_name": {
+    "ar": "\u0627\u0633\u0645 \u0627\u0644\u062c\u0647\u0629 \u064a\u0627\u0644\u0627\u0646\u062c\u0644\u064a\u0632\u064a\u0629",
+    "en": "Entity english name"
+  },
+  "default_max_row_search": {
+    "ar": "\u0627\u0644\u0642\u064a\u0645\u0629 \u0627\u0644\u0623\u0641\u062a\u0631\u0627\u0636\u064a\u0629 \u0644\u0646\u062a\u0627\u0626\u062c \u0627\u0644\u0628\u062d\u062b \u0641\u0649 \u0627\u0644\u0645\u0644\u0641\u0627\u062a \u0648\u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645\u064a\u0646",
+    "en": "Default max rows count of search operation"
+  },
+  "limited_max_row_search": {
+    "ar": "\u0627\u0644\u062d\u062f \u0627\u0644\u0627\u0642\u0635\u0649 \u0644\u0646\u062a\u0627\u0626\u062c \u0627\u0644\u0628\u062d\u062b \u0641\u0649 \u0627\u0644\u0645\u0644\u0641\u0627\u062a \u0648\u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645\u064a\u0646",
+    "en": "Limited Max Rows Count of Search Operation"
+  },
+  "default_max_row_inbox": {
+    "ar": "\u0627\u0644\u0642\u064a\u0645\u0629 \u0627\u0644\u0623\u0641\u062a\u0631\u0627\u0636\u064a\u0629 \u0644\u0646\u062a\u0627\u0626\u062c \u0627\u0644\u0628\u062d\u062b \u0641\u0649 \u0628\u0631\u064a\u062f \u0627\u0644\u0648\u0627\u0631\u062f",
+    "en": "Default max rows count of inbox page"
+  },
+  "limited_max_row_inbox": {
+    "ar": "\u0627\u0644\u062d\u062f \u0627\u0644\u0627\u0642\u0635\u0649 \u0644\u0646\u062a\u0627\u0626\u062c \u0627\u0644\u0628\u062d\u062b \u0641\u0649 \u0628\u0631\u064a\u062f \u0627\u0644\u0648\u0627\u0631\u062f",
+    "en": "Limited max rows count of inbox page"
+  },
+  "inbox_refresh_interval": {
+    "ar": "\u0632\u0645\u0646 \u062a\u062d\u062f\u064a\u062b \u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0648\u0627\u0631\u062f",
+    "en": "Inbox refresh interval"
+  },
+  "session_time_out": {
+    "ar": "\u0632\u0645\u0646 \u0627\u0646\u062a\u0647\u0627\u0621 \u062c\u0644\u0633\u0629 \u0627\u0644\u0627\u062a\u0635\u0627\u0644",
+    "en": "Session time out"
+  },
+  "user_help_url": {
+    "ar": "\u0639\u0646\u0648\u0627\u0646 \u062f\u0644\u064a\u0644 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645",
+    "en": "User help URL"
+  },
+  "user_help_document": {
+    "ar": "\u0645\u0644\u0641 \u062f\u0644\u064a\u0644 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645",
+    "en": "User help document"
+  },
+  "file_size": {
+    "ar": "\u062d\u062c\u0645 \u0627\u0644\u0645\u0644\u0641",
+    "en": "File size"
+  },
+  "file_type": {
+    "ar": "\u0646\u0648\u0639 \u0627\u0644\u0645\u0644\u0641",
+    "en": "File type"
+  },
+  "login_page_additional_content": {
+    "ar": "\u0645\u062d\u062a\u0648\u0649 \u0627\u0636\u0627\u0641\u064a \u0644\u0635\u0641\u062d\u0629 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644",
+    "en": "Login page additional content"
+  },
+  "copyright_text": {
+    "ar": "\u0634\u0631\u0648\u0637 \u0648\u0633\u064a\u0627\u0633\u0629 \u0627\u0644\u0627\u0633\u062a\u062e\u062f\u0627\u0645",
+    "en": "Copyright text"
+  },
+  "default_application_theme": {
+    "ar": "\u0627\u0644\u0646\u0645\u0637 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u064a \u0644\u0623\u0644\u0648\u0627\u0646 \u0627\u0644\u0646\u0638\u0627\u0645",
+    "en": "Default application theme"
+  },
+  "upload_file": {
+    "ar": "\u062a\u062d\u0645\u064a\u0644 \u0627\u0644\u0645\u0644\u0641",
+    "en": "Upload file"
+  },
+  "usage_terms_and_condition": {
+    "ar": "\u0634\u0631\u0648\u0637 \u0648\u0633\u064a\u0627\u0633\u0629 \u0627\u0644\u0627\u0633\u062a\u062e\u062f\u0627\u0645",
+    "en": "Usage terms and condition"
+  },
+  "upload_banner_logo": {
+    "ar": "\u062a\u062d\u0645\u064a\u0644 \u0635\u0648\u0631\u0629 \u0627\u0644\u063a\u0644\u0627\u0641",
+    "en": "Upload banner photo"
+  },
+  "upload_login_logo": {
+    "ar": "\u062a\u062d\u0645\u064a\u0644 \u0635\u0648\u0631\u0629 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644",
+    "en": "Upload login photo"
+  },
+  "register_login_logout_operations": {
+    "ar": "\u062a\u0633\u062c\u064a\u0644 \u0639\u0645\u0644\u064a\u0627\u062a \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644 \u0648\u0627\u0644\u062e\u0631\u0648\u062c \u0645\u0646 \u0627\u0644\u0646\u0638\u0627\u0645",
+    "en": "Register login / logout operations"
+  },
+  "register_document_view_operation": {
+    "ar": "\u062a\u0633\u062c\u064a\u0644 \u0639\u0645\u0644\u064a\u0627\u062a \u0639\u0631\u0636 \u0627\u0644\u0645\u0644\u0641\u0627\u062a",
+    "en": "Register document view operation"
+  },
+  "register_administration_operation": {
+    "ar": "\u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0639\u0645\u0644\u064a\u0627\u062a \u0627\u0644\u062e\u0627\u0635\u0629 \u0628\u0645\u062f\u064a\u0631\u064a \u0627\u0644\u0646\u0638\u0627\u0645",
+    "en": "Register administration operation"
+  },
+  "enter_users_to_be_excluded_from_audit_log": {
+    "ar": "\u0627\u062e\u062a\u0627\u0631 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645\u064a\u0646 \u0627\u0644\u0630\u064a\u0646 \u064a\u062a\u0645 \u0627\u0633\u062a\u062b\u0646\u0627\u0626\u0647\u0645 \u0645\u0646 \u062a\u0642\u0627\u0631\u064a\u0631 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644",
+    "en": "Enter users to be excluded from audit log"
+  },
+  "attachment_inherit_main_document_security": {
+    "ar": "\u0627\u0644\u0645\u0631\u0641\u0642 \u064a\u0633\u062a\u0645\u062f \u0627\u0639\u062f\u0627\u062f\u0627\u062a \u0627\u0644\u0633\u0631\u064a\u0629 \u0645\u0646 \u0627\u0644\u0627\u0639\u062f\u0627\u062f\u0627\u062a \u0627\u0644\u0639\u0627\u0645\u0629",
+    "en": "Attachment inherit main document security"
+  },
+  "attachment_has_its_own_security_level": {
+    "ar": "\u0627\u0644\u0645\u0631\u0641\u0642 \u0644\u0647 \u0627\u0639\u062f\u0627\u062f\u0627\u062a \u0633\u0631\u064a\u0629 \u062e\u0627\u0635\u0629 \u0628\u0647",
+    "en": "attachment has its own security level"
+  },
+  "export_outgoing_with_attachment": {
+    "ar": "\u062a\u0635\u062f\u064a\u0631 \u0645\u0644\u0641 \u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0635\u0627\u062f\u0631 \u0645\u0639 \u0627\u0644\u0645\u0631\u0641\u0642",
+    "en": "Export outgoing with attachment"
+  },
+  "export_outgoing_with_linked_documents": {
+    "ar": "\u062a\u0635\u062f\u064a\u0631 \u0645\u0644\u0641 \u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0635\u0627\u062f\u0631 \u0627\u0644\u0645\u0631\u062a\u0628\u0637 \u0628\u0627\u0644\u0645\u0631\u0641\u0642",
+    "en": "Export outgoing with linked documents"
+  },
+  "export_outgoing_with_workflow_history": {
+    "ar": "\u062a\u0635\u062f\u064a\u0631 \u0645\u0644\u0641 \u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0635\u0627\u062f\u0631 \u0645\u0639 \u0633\u062c\u0644 \u062f\u0648\u0631\u0629 \u0627\u0644\u0639\u0645\u0644",
+    "en": "Export outgoing with workflow history"
+  },
+  "export_outgoing_with_linked_objects": {
+    "ar": "\u062a\u0635\u062f\u064a\u0631 \u0645\u0644\u0641 \u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0635\u0627\u062f\u0631 \u0645\u0639 \u0627\u0644\u0643\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0645\u0631\u062a\u0628\u0637\u0629 \u0628\u0647",
+    "en": "Export outgoing with linked objects"
+  },
+  "security_per_organization_hierarchy": {
+    "ar": "\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u0627\u0644\u0633\u0631\u064a\u0629 \u062d\u0633\u0628 \u0647\u064a\u0643\u0644\u0629 \u0627\u0644\u062c\u0647\u0629",
+    "en": "Security per organization hierarchy"
+  },
+  "security_per_limited_organization_hierarchy": {
+    "ar": "\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u0627\u0644\u0633\u0631\u064a\u0629 \u062d\u0633\u0628 \u0647\u064a\u0643\u0644\u0629 \u0627\u0644\u062c\u0647\u0629 \u0627\u0644\u0645\u0642\u064a\u062f\u0629",
+    "en": "Security per limited organization hierarchy"
+  },
+  "user_send_document_to_all_ou": {
+    "ar": "\u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645 \u064a\u0633\u062a\u0637\u064a\u0639 \u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0645\u0644\u0641\u0627\u062a \u0644\u0643\u0644 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645\u064a\u0646 \u0628\u0627\u0644\u0645\u0646\u0638\u0645\u0629",
+    "en": "User can send the document to all organization users"
+  },
+  "user_send_to_any_and_units_have_same_corr": {
+    "ar": "\u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645 \u064a\u0633\u062a\u0637\u064a\u0639 \u0627\u0631\u0633\u0627\u0644 \u0627\u0644\u0645\u0644\u0641\u0627\u062a \u0644\u0623\u064a \u0645\u0633\u062a\u062e\u062f\u0645 \u0628\u0646\u0641\u0633 \u0627\u0644\u062c\u0647\u0629 \u0648\u0623\u064a \u062c\u0647\u0629 \u0627\u062e\u0631\u0649 \u0644\u0647\u0627 \u0646\u0641\u0633 \u0633\u062c\u0644 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0627\u062a",
+    "en": "User can send to any user in the same unit and to all units having the same correspondence register"
+  },
+  "user_send_to_any_in_same_unit_and_parent_and_child_units": {
+    "ar": "\u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645 \u064a\u0633\u062a\u0637\u064a\u0639 \u0627\u0631\u0633\u0627\u0644 \u0627\u0644\u0645\u0644\u0641\u0627\u062a \u0644\u0623\u064a \u0645\u0633\u062a\u062e\u062f\u0645 \u0628\u0646\u0641\u0633 \u0627\u0644\u062c\u0647\u0629 \u0648\u0628\u0627\u0644\u062c\u0647\u0629 \u0627\u0644\u0623\u0645 \u0648\u0628\u0627\u0644\u062c\u0647\u0627\u062a \u0627\u0644\u0641\u0631\u0639\u064a\u0629 \u0648\u0628\u0627\u0644\u062c\u0647\u0627\u062a \u0627\u0644\u062a\u0649 \u0644\u0647\u0627 \u0646\u0641\u0633 \u0627\u0644\u062c\u0647\u0629 \u0627\u0644\u0623\u0645",
+    "en": "User can send the document to any user in the same unit, parent unit, child units and units having the same parent"
+  },
+  "notify_sender_when_deadline": {
+    "ar": "\u062a\u0646\u0628\u064a\u0647 \u0627\u0644\u0645\u0631\u0633\u0644 \u0628\u0627\u0644\u0648\u0635\u0648\u0644 \u0644\u0644\u0645\u0648\u0639\u062f \u0627\u0644\u0646\u0647\u0627\u0626\u064a \u062f\u0648\u0646 \u0627\u062a\u062e\u0627\u0630 \u0627\u062c\u0631\u0627\u0621",
+    "en": "Notify the sender when reach deadline without action"
+  },
+  "notify_receiver_when_deadline": {
+    "ar": "\u062a\u0646\u0628\u064a\u0647 \u0627\u0644\u0645\u0633\u062a\u0642\u0628\u0644 \u0628\u0627\u0644\u0648\u0635\u0648\u0644 \u0644\u0644\u0645\u0648\u0639\u062f \u0627\u0644\u0646\u0647\u0627\u0626\u064a \u062f\u0648\u0646 \u0627\u062a\u062e\u0627\u0630 \u0627\u062c\u0631\u0627\u0621",
+    "en": "Notify the receiver when reach deadline without action"
+  },
+  "enable_sms_notification": {
+    "ar": "\u062a\u0641\u0639\u064a\u0644 \u062e\u062f\u0645\u0629 \u062a\u0646\u0628\u064a\u0647 \u0627\u0644\u0631\u0633\u0627\u0626\u0644 \u0627\u0644\u0642\u0635\u064a\u0631\u0629",
+    "en": "Enable SMS Notification"
+  },
+  "enable_email_notification": {
+    "ar": "\u062a\u0641\u0639\u064a\u0644 \u062e\u062f\u0645\u0629 \u062a\u0646\u0628\u064a\u0647 \u0631\u0633\u0627\u0626\u0644 \u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0627\u0644\u0643\u062a\u0631\u0648\u0646\u0649",
+    "en": "Enable Email Notification"
+  },
+  "send_a_reminder_before_deadline_date_with": {
+    "ar": "\u0627\u0631\u0633\u0627\u0644 \u0627\u0644\u062a\u0646\u0628\u064a\u0647 \u0642\u0628\u0644 \u0627\u0644\u0645\u0648\u0639\u062f \u0628\u0640",
+    "en": "Send a reminder before deadline date with"
+  },
+  "send_a_reminder_before_deadline": {
+    "ar": "\u0625\u0631\u0633\u0627\u0644 \u062a\u0630\u0643\u064a\u0631 \u0642\u0628\u0644 \u0627\u0644\u0648\u0635\u0648\u0644 \u0644\u0644\u0645\u0648\u0639\u062f \u0627\u0644\u0646\u0647\u0627\u0626\u064a",
+    "en": "Send a reminder before deadline"
+  },
+  "choose_escalation_process": {
+    "ar": "\u0627\u062e\u062a\u064a\u0627\u0631 \u0637\u0631\u064a\u0642\u0629 \u062a\u0635\u0639\u064a\u062f \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0629",
+    "en": "Escalation process"
+  },
+  "return_workflow_to_ sender": {
+    "ar": "\u0625\u0639\u0627\u062f\u0629 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0629 \u0645\u0631\u0629 \u0627\u062e\u0631\u0649 \u0627\u0644\u0649 \u0627\u0644\u0645\u0631\u0633\u0644",
+    "en": "Return the workflow item back to the sender"
+  },
+  "sort_users": {
+    "ar": "\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u062a\u0631\u062a\u064a\u0628 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645\u064a\u0646",
+    "en": "Sort Users"
+  },
+  "sort_correspondence": {
+    "ar": "\u0625\u0639\u062f\u0627\u062f\u0627\u062a \u062a\u0631\u062a\u064a\u0628 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0627\u062a",
+    "en": "Sort correspondence"
+  },
+  "return_workflow_to_sender": {
+    "ar": "\u0625\u0639\u0627\u062f\u0629 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0629 \u0645\u0631\u0629 \u0627\u062e\u0631\u0649 \u0627\u0644\u0649 \u0627\u0644\u0645\u0631\u0633\u0644",
+    "en": "Return the workflow item back to the sender"
+  },
+  "assign_workflow_manager": {
+    "ar": "\u0625\u0633\u0646\u0627\u062f \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0629 \u0627\u0644\u0649 \u0627\u0644\u0645\u062f\u064a\u0631 \u0627\u0644\u0645\u0628\u0627\u0634\u0631",
+    "en": "Assign the workflow item to the direct manager"
+  },
+  "assign_workflow_to_manager": {
+    "ar": "\u0625\u0633\u0646\u0627\u062f \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0629 \u0627\u0644\u0649 \u0627\u0644\u0645\u062f\u064a\u0631 \u0627\u0644\u0645\u0628\u0627\u0634\u0631",
+    "en": "Assign the workflow item to the direct manager"
+  },
+  "alphabet": {
+    "ar": "\u0627\u0628\u062c\u062f\u064a\u0627\u064b",
+    "en": "Alphabet"
+  },
+  "as_per_job_title": {
+    "ar": "\u062d\u0633\u0628 \u0627\u0644\u0645\u0633\u0645\u0649 \u0627\u0644\u0648\u0638\u064a\u0641\u064a",
+    "en": "Job Title"
+  },
+  "ascending": {
+    "ar": "\u062a\u0635\u0627\u0639\u062f\u064a\u0627\u064b",
+    "en": "Ascending"
+  },
+  "descending": {
+    "ar": "\u062a\u0646\u0627\u0632\u0644\u064a\u0627\u064b",
+    "en": "Descending"
+  },
+  "creation_date": {
+    "ar": "\u062d\u0633\u0628 \u0627\u0644\u062a\u0627\u0631\u064a\u062e",
+    "en": "Creation Date"
+  },
+  "automatic_ou_identifier": {
+    "ar": "\u062a\u0648\u0644\u064a\u062f \u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u062a\u0639\u0631\u064a\u0641\u064a \u0644\u0644\u062c\u0647\u0629 \u0627\u0648\u062a\u0648\u0645\u0627\u062a\u064a\u0643\u064a\u0627\u064b",
+    "en": "Automatic OU identifier"
+  },
+  "documents_security_schema": {
+    "ar": "\u0627\u062e\u062a\u0627\u0631 \u0627\u0639\u062f\u0627\u062f\u0627\u062a \u0627\u0644\u0633\u0631\u064a\u0629 \u0627\u0644\u0641\u0639\u0627\u0644\u0629",
+    "en": "Documents security schema"
+  },
+  "edited_successfully": {
+    "ar": "\u062a\u0645 \u0627\u0644\u062a\u0639\u062f\u064a\u0644 \u0628\u0646\u062c\u0627\u062d",
+    "en": "Edited Successfully"
+  },
+  "positive_number_only": {
+    "ar": "\u0627\u0644\u0631\u062c\u0627\u0621 \u0625\u062f\u062e\u0627\u0644 \u0627\u0631\u0642\u0627\u0645 \u0641\u0642\u0637",
+    "en": "Please enter positive number only"
+  },
+  "should_less_max-limit": {
+    "ar": "\u0644\u0627 \u064a\u0645\u0643\u0646 \u0627\u062f\u062e\u0627\u0644 \u0631\u0642\u0645 \u0627\u0643\u0628\u0631 \u0645\u0646 \u0627\u0644\u062d\u062f \u0627\u0644\u0627\u0642\u0635\u0649",
+    "en": "Should be less than max limit"
+  },
+  "should_more_default_value": {
+    "ar": "\u0644\u0627 \u064a\u0645\u0643\u0646 \u0627\u062f\u062e\u0627\u0644 \u0631\u0642\u0645 \u0627\u0642\u0644 \u0645\u0646 \u0627\u0644\u0642\u064a\u0645\u0629 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u064a\u0629",
+    "en": "Should be more than default value"
+  },
+  "should_not_less_than_zero": {
+    "ar": "\u0644\u0627 \u064a\u0645\u0643\u0646 \u0625\u062f\u062e\u0627\u0644 \u0642\u064a\u0645\u0629 \u0627\u0642\u0644 \u0645\u0646 \u0627\u0644\u0635\u0641\u0631",
+    "en": "Shouldn't be less than zero"
+  },
+  "url_only": {
+    "ar": "\u064a\u062c\u0628 \u0627\u062f\u062e\u0627\u0644 \u0631\u0627\u0628\u0637 \u0645\u0648\u0642\u0639 \u0627\u0644\u0643\u062a\u0631\u0648\u0646\u064a",
+    "en": "The URL is not valid"
+  },
+  "enable_mobile_access": {
+    "ar": "\u062a\u0641\u0639\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644 \u0645\u0646 \u0627\u0644\u0647\u0627\u062a\u0641",
+    "en": "Enable mobile access"
+  },
+  "min_number": {
+    "ar": "\u0627\u0644\u0631\u062c\u0627\u0621 \u0625\u062f\u062e\u0627\u0644 \u0631\u0642\u0645 \u0623\u0643\u0628\u0631 \u0645\u0646 :number",
+    "en": "Please enter number greater than :number"
+  },
+  "document_class": {
+    "ar": "\u0641\u0626\u0629 \u0627\u0644\u0648\u062b\u064a\u0642\u0629",
+    "en": "Document Class"
+  },
+  "outgoing_document_class": {
+    "ar": "\u0634\u062e\u0635 \u0627\u062c\u062a\u0645\u0627\u0639\u064a",
+    "en": "Outgoing"
+  },
+  "incoming_document_class": {
+    "ar": "\u0627\u0644\u0648\u0627\u0631\u062f",
+    "en": "Incoming"
+  },
+  "internal_document_class": {
+    "ar": "\u062f\u0627\u062e\u0644\u064a",
+    "en": "Internal"
+  },
+  "document_status": {
+    "ar": "\u062d\u0627\u0644\u0629 \u0627\u0644\u0645\u0633\u062a\u0646\u062f",
+    "en": "Document Status"
+  },
+  "sms_template": {
+    "ar": "\u0646\u0635 \u0627\u0644\u0631\u0633\u0627\u0644\u0629 \u0627\u0644\u0642\u0635\u064a\u0631\u0629",
+    "en": "SMS Template"
+  },
+  "sms_message": {
+    "ar": "\u0631\u0633\u0627\u0644\u0629 \u0642\u0635\u064a\u0631\u0629",
+    "en": "SMS Message"
+  },
+  "is_global_sms_template": {
+    "ar": "Global SMS Template",
+    "en": "Global SMS Template"
+  },
+  "global_sms_template_success": {
+    "ar": "Global sms template updated successfully",
+    "en": "Global sms template updated successfully"
+  },
+  "security": {
+    "ar": "\u0627\u0644\u0623\u0645\u0627\u0646",
+    "en": "Security"
+  },
+  "manage_roles": {
+    "ar": "\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0635\u0644\u0627\u062d\u064a\u0627\u062a",
+    "en": "Manage Roles"
+  },
+  "description": {
+    "ar": "\u0627\u0644\u0648\u0635\u0641",
+    "en": "Description"
+  },
+  "permissions": {
+    "ar": "\u0627\u0644\u0635\u0627\u0644\u062d\u064a\u0627\u062a \u0642",
+    "en": "Permissions"
+  },
+  "view_members": {
+    "ar": "\u0639\u0631\u0636 \u0627\u0644\u0623\u0639\u0636\u0627\u0621",
+    "en": "View Members"
+  },
+  "login_name": {
+    "ar": "\u0627\u0633\u0645 \u0627\u0644\u062f\u062e\u0648\u0644",
+    "en": "Login name"
+  },
+  "employee_number": {
+    "ar": "\u0631\u0642\u0645 \u0627\u0644\u0645\u0648\u0638\u0641",
+    "en": "Employee number"
+  },
+  "organization_unit": {
+    "ar": "\u0648\u062d\u062f\u0629 \u0625\u062f\u0627\u0631\u064a\u0629",
+    "en": "Organization Unit"
+  },
+  "permission_change_popup_message": {
+    "ar": "\u062a\u0645 \u062a\u0639\u064a\u064a\u0646 \u0627\u0644\u062f\u0648\u0631 \u0627\u0644\u0645\u062e\u0635\u0635 \u0628\u0627\u0644\u0641\u0639\u0644 \u0645\u0639 \u0645\u0633\u062a\u062e\u062f\u0645 \u0627\u0644\u062a\u0637\u0628\u064a\u0642\u060c \u0647\u0644 \u062a\u0631\u064a\u062f \u062a\u062d\u062f\u064a\u062b \u0625\u0630\u0646 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645 \u0627\u0644\u0645\u0639\u064a\u0646",
+    "en": "The custom role is already assigned with application user, do you want to update the assigned user\u2019s permission"
+  },
+  "enter_users_for_smstemplate_security": {
+    "ar": "Enter app user to add to SMS Template",
+    "en": "Enter app user to add to SMS Template"
+  },
+  "app_users": {
+    "ar": "\u0645\u0633\u062a\u062e\u062f\u0645 \u0627\u0644\u062a\u0637\u0628\u064a\u0642",
+    "en": "App User"
+  },
+  "manage_workflow_group": {
+    "ar": "\u0625\u062f\u0627\u0631\u0629 \u0645\u062c\u0645\u0648\u0639\u0629 \u0633\u064a\u0631 \u0627\u0644\u0639\u0645\u0644",
+    "en": "Manage Workflow Group"
+  },
+  "group_members": {
+    "ar": "\u0623\u0639\u0636\u0627\u0621 \u0627\u0644\u0645\u062c\u0645\u0648\u0639\u0629",
+    "en": "Group Members"
+  },
+  "global_workflow_group_success": {
+    "ar": "Global workflow group updated successfully",
+    "en": "Global workflow group updated successfully"
+  },
+  "enter_group_members": {
+    "ar": "Enter group members",
+    "en": "Enter group members"
+  },
+  "maximum_days_to_reply_document": {
+    "ar": "\u0627\u0642\u0635\u0649 \u0639\u062f\u062f \u0627\u064a\u0627\u0645 \u0644\u0644\u0631\u062f \u0639\u0644\u0649 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0627\u062a \u0627\u0644\u062a\u0649 \u062a\u0646\u062a\u0638\u0631 \u0631\u062f",
+    "en": "Maximum number of days to reply to a correspondence document that need a reply"
+  },
+  "manage_reference_number_plan": {
+    "ar": "\u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0645\u0631\u062c\u0639\u064a",
+    "en": "Manage Reference Number Plan"
+  },
+  "global": {
+    "ar": "\u0639\u0627\u0645",
+    "en": "Global"
+  },
+  "not_global": {
+    "ar": "\u063a\u064a\u0631 \u0639\u0627\u0645",
+    "en": "Not global"
+  },
+  "reference_number_plan": {
+    "ar": "\u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0645\u0631\u062c\u0639\u064a",
+    "en": "Reference Number Plan"
+  },
+  "globalization_success": {
+    "ar": "\u062a\u0645 \u062a\u062d\u062f\u064a\u062b \u0627\u0644\u062e\u0635\u0648\u0635\u064a\u0629 \u0628\u0646\u062c\u0627\u062d",
+    "en": "Globalization updated successfully"
+  },
+  "globalization": {
+    "ar": "\u0627\u0644\u062e\u0635\u0648\u0635\u064a\u0629",
+    "en": "Globalization"
+  },
+  "organization_units": {
+    "ar": "\u0648\u062d\u062f\u0627\u062a \u0625\u062f\u0627\u0631\u064a\u0629",
+    "en": "Organization Units"
+  },
+  "group_prefix": {
+    "ar": "\u0628\u0627\u062f\u0626\u0629 \u0627\u0644\u0645\u062c\u0645\u0648\u0639\u0629",
+    "en": "Group Prefix"
+  },
+  "parent": {
+    "ar": "\u0627\u0644\u0623\u0628\u0648\u064a\u0646",
+    "en": "Parent"
+  },
+  "add_new_classification": {
+    "ar": "\u0625\u0636\u0627\u0641\u0629 \u062a\u0635\u0646\u064a\u0641 \u062c\u062f\u064a\u062f",
+    "en": "Add New Classification"
+  },
+  "add_new_sub_classification": {
+    "ar": "\u0625\u0636\u0627\u0641\u0629 \u062a\u0635\u0646\u064a\u0641 \u0641\u0631\u0639\u0649 \u062c\u062f\u064a\u062f",
+    "en": "Add new Sub Classification"
+  },
+  "global_document_template_success": {
+    "ar": "\u062a\u0645 \u062a\u062d\u062f\u064a\u062b \u0627\u0644\u0642\u0627\u0644\u0628 \u0628\u0646\u062c\u0627\u062d",
+    "en": "Global document template updated successfully"
+  },
+  "manage_document_templates": {
+    "ar": "\u0625\u062f\u0627\u0631\u0629 \u0642\u0648\u0627\u0644\u0628 \u0627\u0644\u0645\u0633\u062a\u0646\u062f\u0627\u062a",
+    "en": "Manage Document Templates"
+  },
+  "has_sub_classification_delete": {
+    "ar": "\u0633\u062a\u0645 \u062d\u0630\u0641 \u0627\u0644\u062a\u0635\u0646\u064a\u0641\u0627\u062a \u0627\u0644\u0641\u0631\u0639\u064a\u0629",
+    "en": "Sub Classification(s) will be deleted"
+  },
+  "invalid_file_upload": {
+    "ar": "\u0627\u0644\u0645\u0644\u0641 \u0627\u0644\u0645\u062e\u062a\u0627\u0631 \u063a\u064a\u0631 \u0635\u0627\u0644\u062d \u0644\u0644\u062a\u062d\u0645\u064a\u0644",
+    "en": "Invalid file for upload"
+  },
+  "enter_org_unit_security": {
+    "ar": "Enter organization unit to add",
+    "en": "Enter organization unit to add"
+  },
+  "manage_application_users": {
+    "ar": "\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645\u064a\u0646",
+    "en": "Manage Users"
+  },
+  "has_registry": {
+    "ar": "\u0644\u0647\u0627 \u0633\u062c\u0644 \u0645\u0631\u0627\u0633\u0644\u0627\u062a",
+    "en": "Has registry"
+  },
+  "is_central_archive": {
+    "ar": "\u0623\u0631\u0634\u064a\u0641 \u0645\u0631\u0643\u0632\u064a",
+    "en": "Is central archive"
+  },
+  "is_not_central_archive": {
+    "ar": "\u0644\u064a\u0633\u062a \u0623\u0631\u0634\u064a\u0641 \u0645\u0631\u0643\u0632\u064a",
+    "en": "Is not central archive"
+  },
+  "has_not_registry": {
+    "ar": "\u0644\u064a\u0633 \u0644\u0647\u0627 \u0633\u062c\u0644 \u0645\u0631\u0627\u0633\u0644\u0627\u062a",
+    "en": "Has not registry"
+  },
+  "select_registry": {
+    "ar": "\u0627\u062e\u062a\u0627\u0631 \u0633\u062c\u0644 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0627\u062a",
+    "en": "Select correspondence registry"
+  },
+  "select_organization_type": {
+    "ar": "\u0627\u062e\u062a\u0627\u0631 \u0646\u0648\u0639 \u0627\u0644\u062c\u0647\u0629",
+    "en": "Select organization type"
+  },
+  "select_manager": {
+    "ar": "\u0627\u062e\u062a\u0631 \u0645\u062f\u064a\u0631 \u0627\u0644\u062c\u0647\u0629",
+    "en": "Select manager"
+  },
+  "select_vice_manager": {
+    "ar": "\u0627\u062e\u062a\u0631 \u0646\u0627\u0626\u0628 \u0645\u062f\u064a\u0631 \u0627\u0644\u062c\u0647\u0629",
+    "en": "Select vice manager"
+  },
+  "select_admin": {
+    "ar": "\u0627\u062e\u062a\u0631 \u0645\u062f\u064a\u0631 \u0627\u0644\u0646\u0638\u0627\u0645",
+    "en": "Select admin"
+  },
+  "select_reference_plan": {
+    "ar": "\u0627\u062e\u062a\u0631 \u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0645\u0631\u062c\u0639\u064a",
+    "en": "Select reference plan"
+  },
+  "add_to": {
+    "ar": "\u0623\u0636\u0641 \u0625\u0644\u0649",
+    "en": "Add to"
+  },
+  "move_to": {
+    "ar": "\u062a\u063a\u064a\u064a\u0631 \u062a\u0628\u0639\u064a\u0629 \u0627\u0644\u062c\u0647\u0629",
+    "en": "Change parent of"
+  },
+  "select_organization": {
+    "ar": "\u0627\u062e\u062a\u0627\u0631 \u0627\u0644\u062c\u0647\u0629",
+    "en": "Select organization"
+  },
+  "correspondence_site_type": {
+    "ar": "\u0627\u0646\u0648\u0627\u0639 \u062c\u0647\u0627\u062a \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0629",
+    "en": "Correspondence Site Types"
+  },
+  "more_details": {
+    "ar": "\u062a\u0642\u0627\u0635\u064a\u0644 \u0627\u0643\u062b\u0631",
+    "en": "More Details"
+  },
+  "user_details": {
+    "ar": "\u062a\u0641\u0627\u0635\u064a\u0644 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645",
+    "en": "User Details"
+  },
+  "domain_name": {
+    "ar": "\u0623\u0633\u0645 \u0627\u0644\u0646\u0637\u0627\u0642",
+    "en": "Domain Name"
+  },
+  "default_organization": {
+    "ar": "\u0627\u0644\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u064a\u0629",
+    "en": "Default Organization"
+  },
+  "default_language": {
+    "ar": "\u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u064a\u0629",
+    "en": "Default Language"
+  },
+  "gender": {
+    "ar": "\u0627\u0644\u062c\u0646\u0633",
+    "en": "Gender"
+  },
+  "male": {
+    "ar": "\u0630\u0643\u0631",
+    "en": "Male"
+  },
+  "female": {
+    "ar": "\u0623\u0646\u062b\u0649",
+    "en": "Female"
+  },
+  "qid": {
+    "ar": "\u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0634\u062e\u0635\u0649 \u0627\u0644\u0642\u0637\u0631\u0649",
+    "en": "Qatari ID"
+  },
+  "not_found": {
+    "ar": "\u0644\u0627 \u064a\u0648\u062c\u062f",
+    "en": "Not Found"
+  },
+  "default_theme": {
+    "ar": "\u0627\u0644\u0642\u0627\u0644\u0628 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u0649",
+    "en": "Default Theme"
+  },
+  "mobile_number": {
+    "ar": "\u0631\u0642\u0645 \u0627\u0644\u062c\u0648\u0627\u0644",
+    "en": "Mobile Number"
+  },
+  "other_info": {
+    "ar": "\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0627\u062e\u0631\u064a",
+    "en": "Other Information"
+  },
+  "notify_add_new_book": {
+    "ar": "\u0623\u0636\u0627\u0641\u0629 \u0643\u062a\u0627\u0628",
+    "en": "Add Document"
+  },
+  "deadline_notify": {
+    "ar": "\u062a\u0646\u0628\u064a\u0629 \u0628\u0627\u0644\u0645\u0648\u0639\u062f \u0627\u0644\u0646\u0647\u0627\u0626\u064a",
+    "en": "Deadline Notify"
+  },
+  "days_duration": {
+    "ar": "\u0627\u0644\u0645\u062f\u0629 \u0628\u0627\u0644\u0623\u064a\u0627\u0645",
+    "en": "Duration in days"
+  },
+  "sms": {
+    "ar": "\u0627\u0644\u0631\u0633\u0627\u0626\u0644 \u0627\u0644\u0646\u0635\u064a\u0629",
+    "en": "SMS"
+  },
+  "notifications": {
+    "ar": "\u0627\u0644\u062a\u0646\u0628\u064a\u0647\u0627\u062a",
+    "en": "Notifications"
+  },
+  "notification_subscribe": {
+    "ar": "\u0627\u0644\u0627\u0634\u062a\u0631\u0627\u0643 \u0628\u0627\u0644\u062a\u0646\u0628\u064a\u0647\u0627\u062a",
+    "en": "Subscribe to notifications"
+  },
+  "notify_when": {
+    "ar": "\u062a\u0646\u0628\u064a\u0629 \u0639\u0646\u062f",
+    "en": "Notify When"
+  },
+  "reminder": {
+    "ar": "\u0644\u0644\u062a\u0630\u0643\u0631\u0629 \u0639\u0628\u0631",
+    "en": "for reminder by"
+  },
+  "user_super_admin_can_not_delete": {
+    "ar": "\u0647\u0630\u0627 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645 \u0633\u0648\u0628\u0631 \u0623\u062f\u0645\u0646 \u0644\u0627 \u064a\u0645\u0643\u0646 \u062d\u0630\u0641\u0629",
+    "en": "This User Super admin cannot deleted"
+  },
+  "confirm_delete_msg": {
+    "ar": "\u0647\u0644 \u0627\u0646\u062a \u0645\u062a\u0623\u0643\u062f \u0645\u0646 \u0627\u0644\u062d\u0630\u0641\u061f",
+    "en": "Are you sure you want to delete?"
+  },
+  "ip_validation": {
+    "ar": "\u0639\u0646\u0648\u0627\u0646 IP \u0641\u0642\u0637",
+    "en": "IP address only"
+  },
+  "server_address": {
+    "ar": "\u0639\u0646\u0648\u0627\u0646 \u0627\u0644\u0633\u064a\u0631\u0641\u0631",
+    "en": "Server address"
+  },
+  "domain_controller": {
+    "ar": "\u062f\u0648\u0645\u064a\u0646 \u0643\u0648\u0646\u062a\u0631\u0648\u0644\u0631",
+    "en": "Domain controller"
+  },
+  "add_application_user": {
+    "ar": "\u0623\u0636\u0627\u0641\u0629 \u0645\u0633\u062a\u062e\u062f\u0645 \u062c\u062f\u064a\u062f",
+    "en": "Add New Application User"
+  },
+  "to_long": {
+    "ar": "\u0623\u0643\u062b\u0631 \u0645\u0646 \u0627\u0644\u0644\u0627\u0632\u0645",
+    "en": "too long"
+  },
+  "change_status_confirm": {
+    "ar": "\u0647\u0644 \u062a\u0631\u064a\u062f :status :name\u061f",
+    "en": "Do you want to :status :name?"
+  },
+  "activate": {
+    "ar": "\u062a\u0641\u0639\u064a\u0644",
+    "en": "activate"
+  },
+  "deactivate": {
+    "ar": "\u062a\u0639\u0637\u064a\u0644",
+    "en": "deactivate"
+  },
+  "activate_custom_role": {
+    "ar": "Are you sure, custom role will be activated?",
+    "en": "Are you sure, custom role will be activated?"
+  },
+  "deactivate_custom_role": {
+    "ar": "Are you sure, custom role will be deactivated?",
+    "en": "Are you sure, custom role will be deactivated?"
+  },
+  "name_lookupstringkey_duplicate": {
+    "ar": "Name and code should be unique",
+    "en": "Name and code should be unique"
+  },
+  "tasks": {
+    "ar": "\u0627\u0644\u0645\u0647\u0627\u0645",
+    "en": "Tasks"
+  },
+  "distribution_lists": {
+    "ar": "\u0642\u0627\u0626\u0645\u0629 \u0627\u0644\u062a\u0648\u0632\u064a\u0639",
+    "en": "Distribution Lists"
+  },
+  "your_tasks": {
+    "ar": "\u0645\u0647\u0627\u0645\u0643",
+    "en": "Your Tasks"
+  },
+  "public_announcements": {
+    "ar": "Public Announcements",
+    "en": "Public Announcements"
+  },
+  "application_name": {
+    "ar": "\u062a\u0648\u0627\u0635\u0644",
+    "en": "TAWASOL"
+  },
+  "start_date": {
+    "ar": "Start Date",
+    "en": "Start Date"
+  },
+  "application_description": {
+    "ar": "\u0646\u0638\u0627\u0645 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0627\u062a \u0627\u0644\u062f\u0627\u062e\u0644\u0649",
+    "en": "Internal Correspondence System"
+  },
+  "end_date": {
+    "ar": "End Date",
+    "en": "End Date"
+  },
+  "login_to_your_account": {
+    "ar": "\u0633\u062c\u0644 \u0627\u0644\u062f\u062e\u0648\u0644 \u0625\u0644\u0649 \u0639\u0636\u0648\u064a\u062a\u0643 !",
+    "en": "log in to your account !"
+  },
+  "arabic_subject": {
+    "ar": "Arabic Subject Name",
+    "en": "Arabic Subject Name"
+  },
+  "english_subject_name": {
+    "ar": "English Subject Name",
+    "en": "English Subject Name"
+  },
+  "english_body_text": {
+    "ar": "English Body Text",
+    "en": "English Body Text"
+  },
+  "arabic_body_text": {
+    "ar": "Arabic Body Text",
+    "en": "Arabic Body Text"
+  },
+  "private_announcements": {
+    "ar": "Private Announcements",
+    "en": "Private Announcements"
+  },
+  "always_active": {
+    "ar": "Always Active",
+    "en": "Always Active"
+  },
+  "excluded_org_units": {
+    "ar": "Excluded Organization Units",
+    "en": "Excluded Organization Units"
+  },
+  "manage_workflow_actions": {
+    "ar": "\u0625\u062f\u0627\u0631\u0629 \u0639\u0645\u0644\u064a\u0627\u062a \u0633\u064a\u0631 \u0627\u0644\u0639\u0645\u0644",
+    "en": "Manage workflow actions"
+  },
+  "not_exportable": {
+    "ar": "\u063a\u064a\u0631 \u0642\u0627\u0628\u0644 \u0644\u0644\u062a\u0635\u062f\u064a\u0631",
+    "en": "Not exportable"
+  },
+  "exportable": {
+    "ar": "\u0642\u0627\u0628\u0644 \u0644\u0644\u062a\u0635\u062f\u064a\u0631",
+    "en": "Exportable"
+  },
+  "organization_type": {
+    "ar": "\u0646\u0648\u0639 \u0627\u0644\u062c\u0647\u0629",
+    "en": "Organization type"
+  },
+  "registry_status": {
+    "ar": "\u062d\u0627\u0644\u0629 \u0633\u062c\u0644 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0627\u062a",
+    "en": "Registry status"
+  },
+  "vice_manager": {
+    "ar": "\u0646\u0627\u0626\u0628 \u0627\u0644\u0645\u062f\u064a\u0631",
+    "en": "Vice manager"
+  },
+  "manager": {
+    "ar": "\u0627\u0644\u0645\u062f\u064a\u0631",
+    "en": "Manager"
+  },
+  "corr_registry": {
+    "ar": "\u0633\u062c\u0644 \u0627\u0644\u0645\u0631\u0627\u0633\u0644\u0627\u062a",
+    "en": "Correspondence registry"
+  },
+  "admin": {
+    "ar": "\u0645\u062f\u064a\u0631 \u0627\u0644\u0646\u0638\u0627\u0645",
+    "en": "Admin"
+  },
+  "central_archiving_status": {
+    "ar": "\u062d\u0627\u0644\u0629 \u0627\u0644\u0623\u0631\u0634\u064a\u0641 \u0627\u0644\u0645\u0631\u0643\u0632\u064a",
+    "en": "Central archive status"
+  },
+  "view": {
+    "ar": "\u0639\u0631\u0636",
+    "en": "View"
+  },
+  "copy": {
+    "ar": "\u0646\u0633\u062e",
+    "en": "Copy"
+  },
+  "activate_announcement": {
+    "ar": "Are you sure, want to activate announcement?",
+    "en": "Are you sure, want to activate announcement?"
+  },
+  "deactivate_announcement": {
+    "ar": "Are you sure, want to deactivate announcement?",
+    "en": "Are you sure, want to deactivate announcement?"
+  },
+  "lookup_key": {
+    "ar": "\u0645\u0641\u062a\u0627\u062d \u0627\u0644\u0628\u062d\u062b",
+    "en": "Lookup key"
+  },
+  "user_permissions": {
+    "ar": "\u062a\u0635\u0627\u0631\u064a\u062d \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645",
+    "en": "User Permissions"
+  },
+  "user_organizations_permissions": {
+    "ar": "\u062a\u0635\u0627\u0631\u064a\u062d \u0627\u0644\u0625\u062f\u0627\u0631\u0627\u062a",
+    "en": "Organization Units Permissions"
+  },
+  "user_classifications_permissions": {
+    "ar": "\u062a\u0635\u0627\u0631\u064a\u062d \u0627\u0644\u062a\u0635\u0646\u064a\u0641\u0627\u062a",
+    "en": "Classifications Permissions"
+  },
+  "user_in_other_organizations": {
+    "ar": "\u0627\u0644\u0627\u062f\u0627\u0631\u0627\u062a \u0627\u0644\u0627\u062e\u0631\u0649",
+    "en": "Other Organization Units"
+  },
+  "user_workflow": {
+    "ar": "\u062a\u0633\u064a\u0631 \u0627\u0644\u0639\u0645\u0644",
+    "en": "Workflow"
+  },
+  "user_out_of_office": {
+    "ar": "\u062e\u0627\u0631\u062c \u0627\u0644\u0645\u0643\u062a\u0628",
+    "en": "Out Of Office"
+  },
+  "select_system_admins": {
+    "ar": "\u0642\u0645 \u0628\u0623\u062e\u062a\u064a\u0627\u0631 \u0645\u062f\u064a\u0631\u064a \u0627\u0644\u0646\u0638\u0627\u0645",
+    "en": "Select system admins"
+  },
+  "filenet_content_manager_username": {
+    "ar": "\u0627\u0633\u0645 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645",
+    "en": "Content manager username"
+  },
+  "filenet_content_manager_password": {
+    "ar": "\u0643\u0644\u0645\u0629 \u0627\u0644\u0633\u0631",
+    "en": "Content manager password"
+  },
+  "filenet_content_manager_ejb_address": {
+    "ar": "\u0639\u0646\u0648\u0627\u0646 EJB",
+    "en": "Content Manager EJB Address"
+  },
+  "filenet_content_manager_stanza": {
+    "ar": "\u0633\u062a\u0627\u0646\u0632\u0627",
+    "en": "content manager stanza"
+  },
+  "filenet_object_store_name": {
+    "ar": "\u0627\u0644\u0627\u0633\u0645",
+    "en": "Object store name"
+  },
+  "filenet_process_engine_router_name": {
+    "ar": "\u0627\u0644\u0627\u0633\u0645",
+    "en": "Process engine router name"
+  },
+  "smtp_from_email": {
+    "ar": "\u0645\u0646 \u0628\u0631\u064a\u062f \u0627\u0644\u0643\u062a\u0631\u0648\u0646\u064a",
+    "en": "From email"
+  },
+  "smtp_username": {
+    "ar": "\u0627\u0633\u0645 \u0627\u0644\u0645\u0633\u062a\u062e\u062f\u0645",
+    "en": "Username"
+  },
+  "smtp_password": {
+    "ar": "\u0643\u0644\u0645\u0629 \u0627\u0644\u0645\u0631\u0648\u0631",
+    "en": "Password"
+  },
+  "smtp_subject": {
+    "ar": "\u0627\u0644\u0639\u0646\u0648\u0627\u0646",
+    "en": "Subject"
+  },
+  "smtp_port": {
+    "ar": "\u0645\u0646\u0641\u0630 \u0627\u0644\u0648\u0635\u0648\u0644",
+    "en": "Port"
+  },
+  "sub_org_unit": {
+    "ar": "Sub Organization Unit",
+    "en": "Sub Organization Unit"
+  },
+  "exclude_org_units": {
+    "ar": "Exclude Organization Units",
+    "en": "Exclude Organization Units"
+  },
+  "ldap_dc": {
+    "ar": "Domain controller",
+    "en": "Domain controller"
+  },
+  "tawasol_ou": {
+    "ar": "Tawasol OU",
+    "en": "Tawasol OU"
+  },
+  "save_ldap": {
+    "ar": "save LDAP",
+    "en": "save LDAP"
+  },
+  "add_ldap": {
+    "ar": "Add LDAP",
+    "en": "Add LDAP"
+  },
+  "invalid_server_name": {
+    "ar": "\u0627\u0633\u0645 \u0627\u0644\u0633\u064a\u0631\u0641\u0631 \u063a\u064a\u0631 \u0635\u062d\u064a\u062d",
+    "en": "Invalid server name"
+  },
+  "clearance_level": {
+    "ar": "\u0645\u0633\u062a\u0648\u0649 \u0627\u0644\u062a\u0635\u0627\u0631\u064a\u062d \u0627\u0644\u0631\u0633\u0645\u064a\u0629",
+    "en": "Clearance Level"
+  },
+  "authentication_type": {
+    "ar": "\u0637\u0631\u064a\u0642\u0629 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644",
+    "en": "Authentication Type"
+  },
+  "mobile_number_otp": {
+    "ar": "\u0631\u0642\u0645 \u062c\u0648\u0627\u0644 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644",
+    "en": "Mobile Number OTP"
+  },
+  "private_user": {
+    "ar": "\u0645\u0633\u062a\u062e\u062f\u0645 \u062e\u0627\u0635",
+    "en": "Private User"
+  },
+  "add_user": {
+    "ar": "\u0623\u0636\u0627\u0641\u0629 \u0645\u0633\u062a\u062e\u062f\u0645",
+    "en": "Add User"
+  },
+  "please_select_organization_to_login": {
+    "ar": "\u0631\u062c\u0627\u0621 \u0623\u062e\u062a\u064a\u0627\u0631 \u0623\u062d\u062f\u0649 \u0627\u0644\u0627\u062f\u0627\u0631\u0627\u062a \u0644\u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644",
+    "en": "Please Select One of the below Departments to login"
+  },
+  "connection_error": {
+    "ar": "\u062d\u062f\u062b \u0645\u0634\u0643\u0644\u0629 \u0623\u062b\u0646\u0627\u0621 \u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u0623\u062a\u0635\u0627\u0644, \u0631\u062c\u0627\u0621 \u0627\u0644\u0645\u062d\u0627\u0648\u0644\u0629 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649",
+    "en": "There was a problem during the connection process, please try again"
+  },
+  "forget_password": {
+    "ar": "\u0646\u0633\u064a\u062a \u0643\u0644\u0645\u0629 \u0627\u0644\u0645\u0631\u0648\u0631 !",
+    "en": "Forget Password !"
+  }
+}

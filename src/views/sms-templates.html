@@ -1,0 +1,111 @@
+<!-- start of view -->
+<div background-directive="tall" flex class="page-content">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_sms_template}}</span>
+            <md-button ng-click="ctrl.openAddSmsTemplateDialog($event)" class="md-icon-button" tooltip="{{lang.add}}">
+                <md-icon md-svg-icon="plus"></md-icon>
+            </md-button>
+            <md-button ng-click="ctrl.reloadSmsTemplates()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+
+                        <md-table-container flex scroll-directive>
+                            <table md-table md-row-select multiple ng-model="ctrl.selectedSmsTemplates"
+                                   md-progress="ctrl.progress">
+                                <thead md-head md-order="ctrl.grid.order">
+                                <tr md-row>
+                                    <th colspan="6" ng-if="ctrl.selectedSmsTemplates.length" md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedSmsTemplates.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+                                            <table-status-directive
+                                                    when-close="ctrl.changeStatusBulkSmsTemplates"></table-status-directive>
+                                            <md-button class="md-icon-button"
+                                                       ng-click="ctrl.removeBulkSmsTemplates($event)">
+                                                <md-icon md-svg-icon="delete"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSmsTemplates.length" md-column md-order-by="arName">
+                                        <span>{{lang.arabic_name}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSmsTemplates.length" md-column md-order-by="enName">
+                                        <span>{{lang.english_name}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSmsTemplates.length" md-column md-order-by="status">
+                                        <span>{{lang.status}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSmsTemplates.length" md-column md-order-by="isGlobal">
+                                        <span>{{lang.global}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSmsTemplates.length" md-column>
+                                        <span>{{lang.actions}}</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="smsTemplate"
+                                    ng-repeat="smsTemplate in ctrl.smsTemplates  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    <td md-cell>{{smsTemplate.arName}}</td>
+                                    <td md-cell>{{smsTemplate.enName}}</td>
+                                    <td md-cell>
+                                        <md-switch aria-label="{{lang.status}}"
+                                                   title="{{smsTemplate.getTranslatedStatus()}}"
+                                                   ng-change="ctrl.changeStatusSmsTemplate(smsTemplate)"
+                                                   ng-model="smsTemplate.status">
+                                        </md-switch>
+                                    </td>
+                                    <td md-cell>
+                                        <md-switch aria-label="{{lang.global}}"
+                                                   title="{{smsTemplate.getTranslatedGlobal()}}"
+                                                   ng-change="ctrl.changeGlobalSmsTemplate(smsTemplate)"
+                                                   ng-model="smsTemplate.isGlobal">
+                                        </md-switch>
+                                    </td>
+                                    <td md-cell>
+                                        <div flex layout="row" layout-align="start center">
+                                            <md-button class="md-icon-button" title="{{lang.view}}"
+                                                       ng-click="ctrl.showSmsTemplateContent(smsTemplate, $event)">
+                                                <md-icon md-svg-icon="eye"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                       ng-click="ctrl.removeSmsTemplate(smsTemplate, $event)">
+                                                <md-icon md-svg-icon="delete"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button" title="{{lang.edit}}"
+                                                       ng-click="ctrl.openEditSmsTemplateDialog(smsTemplate, $event)">
+                                                <md-icon md-svg-icon="pencil"></md-icon>
+                                            </md-button>
+
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.smsTemplates.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>
+<!-- end of view -->

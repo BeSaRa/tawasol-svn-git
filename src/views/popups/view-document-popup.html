@@ -1,0 +1,32 @@
+<md-dialog id="documentView" ng-class="ctrl.fullscreen ? 'full-screen': 'width-80'" class="dialog-extend p20"
+           ng-attr-aria-label="{{lang.view_document}}">
+    <div flex layout="column">
+        <div>
+            <div layout="row" layout-align="start center">
+                <span flex>View Document</span>
+                <div layout="row" layout-align="start center">
+                    <md-button ng-click="ctrl.fullScreenToggle()" class="md-icon-button">
+                        <md-icon md-svg-icon="{{ctrl.fullscreen ? 'fullscreen-exit' : 'fullscreen'}}"></md-icon>
+                    </md-button>
+                    <md-button ng-click="ctrl.closeView()" class="md-icon-button">
+                        <md-icon md-svg-icon="close"></md-icon>
+                    </md-button>
+                </div>
+            </div>
+        </div>
+
+        <view-document-queue-directive
+                url="ctrl.documentUrl"
+                ng-if="!ctrl.outgoing.generalStepElm"
+                outgoing="ctrl.outgoing"
+                buttons-to-show="ctrl.buttonsToShow">
+        </view-document-queue-directive>
+
+        <view-document-inbox-directive
+                url="ctrl.documentUrl"
+                ng-if="ctrl.outgoing.generalStepElm"
+                outgoing="ctrl.outgoing"
+                buttons-to-show="ctrl.buttonsToShow">
+        </view-document-inbox-directive>
+    </div>
+</md-dialog>

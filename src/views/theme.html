@@ -1,0 +1,120 @@
+<!-- start of view -->
+<div background-directive="tall" flex class="page-content">
+    <div layout="column" class="content">
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_themes}}</span>
+            <md-button ng-click="ctrl.openAddThemeDialog($event)" class="md-icon-button"
+                       tooltip="{{lang.add}}">
+                <md-icon md-svg-icon="plus"></md-icon>
+            </md-button>
+            <md-button ng-click="ctrl.reloadThemes()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div><!-- page-header -->
+
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <md-table-container flex scroll-directive>
+                            <table md-table md-row-select="true"
+                                   multiple="true"
+                                   ng-model="ctrl.selectedThemes"
+                                   md-progress="ctrl.progress">
+                                <thead md-head md-order="ctrl.grid.order">
+                                <tr md-row>
+                                    <th colspan="6" class="table-selector-header"
+                                        ng-if="ctrl.selectedThemes.length" md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedThemes.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+                                            <table-status-directive
+                                                    when-close="ctrl.changeBulkStatusThemes"></table-status-directive>
+                                            <md-button class="md-icon-button"
+                                                       ng-click="ctrl.removeBulkThemes()">
+                                                <md-icon md-svg-icon="delete"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedThemes.length" md-column md-order-by="arName"><span>{{lang.arabic_name}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedThemes.length" md-column md-order-by="enName"><span>{{lang.english_name}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedThemes.length" md-column md-order-by="status"><span>{{lang.status}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedThemes.length" md-column md-order-by=""><span>{{lang.color_palette}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedThemes.length" md-column md-order-by=""><span>{{lang.actions}}</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-select="theme" md-row ng-class="{'default-theme': ctrl.isDefaultTheme(theme, $event)}"
+                                    ng-repeat="theme in ctrl.themes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    <td md-cell>{{theme.arName}}</td>
+                                    <td md-cell>{{theme.enName}}</td>
+                                    <td md-cell>
+                                        <md-switch aria-label="{{lang.status}}"
+                                                   ng-model="theme.status"
+                                                   ng-change="ctrl.changeStatusForTheme(theme)"
+                                                   title="{{theme.getTranslatedStatus()}}"></md-switch>
+                                    </td>
+                                    <td md-cell>
+                                        <ul class="palettePreview">
+                                            <li class="md-color-picker-checkered-bg radio-color list"
+                                                ng-repeat="clr in theme.colors | orderBy:'id' track by clr.id">
+                                                <div class="block-color" ng-style="{background: clr.color}"></div>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td md-cell>
+                                        <div flex layout="row" layout-align="start center">
+                                            <md-button class="md-icon-button"
+                                                       title="{{$parent.lang.edit}}"
+                                                       aria-label="{{$parent.lang.edit}}"
+                                                       ng-click="ctrl.openEditThemeDialog(theme, $event)">
+                                                <md-icon md-svg-icon="pencil"></md-icon>
+                                            </md-button>
+                                            <md-button title="{{$parent.lang.copy}}"
+                                                       ng-click="ctrl.copyThemeToAdd(theme, $event)"
+                                                       aria-label="{{$parent.lang.copy}}"
+                                                       class="md-icon-button"
+                                                       title="{{lang.copy}}">
+                                                <md-icon md-svg-icon="content-copy"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button"
+                                                       title="{{$parent.lang.delete}}"
+                                                       aria-label="{{$parent.lang.remove}}"
+                                                       ng-click="ctrl.removeTheme(theme)"
+                                                       ng-if="!ctrl.isDefaultTheme(theme, $event)"
+                                                       title="{{lang.delete}}">
+                                                <md-icon md-svg-icon="delete"></md-icon>
+                                            </md-button>
+                                            <md-button
+                                                     class="md-icon-button"
+                                                     aria-label="{{$parent.lang.default_theme}}"
+                                                     title="{{$parent.lang.default_theme}}"
+                                                     ng-if="ctrl.isDefaultTheme(theme, $event)">
+                                                <md-icon class="red-text" md-svg-icon="asterisk"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.themes.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div><!-- page-content-->
+    </div>
+</div>
+<!-- end of view -->

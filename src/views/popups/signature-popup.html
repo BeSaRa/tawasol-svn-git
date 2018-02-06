@@ -1,0 +1,30 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.add_signature}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20" ng-if="!ctrl.model.id">{{lang.add_signature}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="signaturesForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="row" flex ng-repeat="signatureChunk in ctrl.signatureChunks track by $index">
+                        <label ng-repeat="signature in signatureChunk track by $index">
+                            <input type="radio" name="sign" value="{{signature}}" ng-click="ctrl.setSelectedSignature(signature, $event)"/>
+                            <img ng-src="{{signature.contentElementUrl}}" width="100" height="100">
+                        </label>
+                    </div>
+                </div>
+                <div layout="row">
+                    <md-button class="md-raised" ng-disabled="!ctrl.selectedSignature"
+                               ng-click="ctrl.signDocumentFromCtrl()">
+                        {{lang.add}}
+                    </md-button>
+                    <span flex></span>
+                    <md-button class="md-raised" ng-click="ctrl.closeSignaturesPopupFromCtrl()">
+                        {{lang.close}}
+                    </md-button>
+                </div>
+            </form>
+        </md-content>
+    </div>
+</md-dialog>

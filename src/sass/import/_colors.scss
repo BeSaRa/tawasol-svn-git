@@ -1,0 +1,27 @@
+$white: white;
+$black: black;
+$link: rgb(3, 155, 229);
+$main-bg: #34495e;
+$main-bg-color: lighten($main-bg, 50);
+$main-bg-color-hover: darken($main-bg, 70);
+$shadow-main-bg: #2c3e50;
+
+$header-bg-colors-list: red yellow green orange blue;
+$header-bg-colors-map: (
+        red : red,
+        yellow :yellow,
+        green : rgb(0,150,136),
+        orange : orange,
+        blue: rgb(63,81,181)
+);
+
+@each $color in $header-bg-colors-list {
+  @if map-has_key($header-bg-colors-map, $color) {
+    .header-bg-#{$color} {
+      background-color: map_get($header-bg-colors-map, $color);
+    }
+  } @else {
+    @warn "Unfortunately, no value could be retrieved from"#{$color};
+  }
+
+}

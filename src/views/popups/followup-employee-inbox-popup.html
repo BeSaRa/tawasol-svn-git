@@ -1,0 +1,55 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.select_organization_and_user}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.select_organization_and_user}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="organizationAndUserForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="organization">{{lang.organization_unit}}</label>
+                            <md-select name="organization" id="organization" required
+                                       ng-change="ctrl.getApplicationUsersForOU($event)"
+                                       aria-label="{{lang.organization_unit}}"
+                                       ng-model="ctrl.selectedOrganization">
+                                <md-option ng-value="ou.id" ng-repeat="ou in ctrl.organizations track by $index">
+                                    {{ou.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="organizationAndUserForm.organization.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="applicationUser">{{lang.app_users}}</label>
+                            <md-select name="applicationUser" id="applicationUser"
+                                       ng-required="ctrl.selectedOrganization"
+                                       ng-disabled="!ctrl.selectedOrganization"
+                                       aria-label="{{lang.app_users}}"
+                                       ng-model="ctrl.selectedApplicationUser">
+                                <md-option ng-value="user.applicationUser" ng-repeat="user in ctrl.applicationUsers track by $index">
+                                    {{user.getTranslatedApplicationUserName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="organizationAndUserForm.applicationUser.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="row">
+                    <md-button class="md-raised" ng-disabled="organizationAndUserForm.$invalid"
+                               ng-click="ctrl.getFollowupEmployeeDataForOUAndUser($event)">
+                        {{lang.follow_up_get_inbox}}
+                    </md-button>
+                    <span flex></span>
+                    <md-button class="md-raised" ng-click="ctrl.closeFollowupEmployeeInboxPopupFromCtrl()">
+                        {{lang.close}}
+                    </md-button>
+                </div>
+            </form>
+        </md-content>
+    </div>
+</md-dialog>

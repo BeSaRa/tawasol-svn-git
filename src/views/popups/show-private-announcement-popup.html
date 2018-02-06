@@ -1,0 +1,14 @@
+<md-dialog id="show-private-announcement-dialog"
+           ng-attr-aria-label="show-private-announcement">
+
+    <md-toolbar style="background: transparent;">
+        <md-button class="md-icon-button close-dialog-button"
+                   ng-click="showPrivateAnnouncementCtrl.closeShowPrivateAnnouncementPopupFromCtrl()">
+            <md-icon md-svg-icon="close-circle"></md-icon>
+        </md-button>
+    </md-toolbar>
+    <login-announcement-directive ng-if="showPrivateAnnouncementCtrl.privateAnnouncements.length>0"
+                                  announcements="showPrivateAnnouncementCtrl.privateAnnouncements">
+    </login-announcement-directive>
+
+</md-dialog>

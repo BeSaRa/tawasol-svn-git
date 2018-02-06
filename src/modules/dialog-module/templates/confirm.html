@@ -1,0 +1,13 @@
+<div layout="column" class="dialog-alert-box">
+    <div scroll-directive class="dialog-content">
+        <img ng-if="!ctrl.hideIcon" class="dialog-image" src="../../../../assets/images/question.png"/>
+        <div class="dialog-paragraph" ng-bind-html="ctrl.content"></div>
+    </div>
+    <div class="dialog-footer button_message">
+        <button class="button radius md-raised md-button md-ink-ripple" ng-click="ctrl.accept()">{{ctrl.acceptButton}}
+        </button>
+        <button class="button radius md-raised md-button md-ink-ripple" id="dialog-close-btn" ng-click="ctrl.cancel()">
+            {{ctrl.cancelButton}}
+        </button>
+    </div>
+</div>

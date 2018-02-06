@@ -1,0 +1,126 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.out_of_office_settings}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.out_of_office_settings}} : {{ctrl.model.ouid.getTranslatedName()}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="outOfOfficeSettingsForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <fieldset flex>
+                        <legend class="md-accent">
+                            <!-- Out Of Office -->
+                            <md-switch flex ng-model="ctrl.isOutOfOffice"
+                                       ng-change="ctrl.changeOutOfOffice(outOfOfficeSettingsForm)"
+                                       aria-label="{{lang.user_out_of_office}}">
+                                <label>{{lang.user_out_of_office}}</label>
+                            </md-switch>
+                        </legend>
+                        <div layout="row">
+                            <!-- User On Behalf / Proxy User -->
+                            <md-input-container flex>
+                                <label>{{lang.user_on_behalf}}</label>
+                                <md-select name="proxyUser" id="proxyUser"
+                                           ng-required="ctrl.isOutOfOffice"
+                                           ng-disabled="!ctrl.isOutOfOffice"
+                                           ng-model-options="{'trackBy':'$value.id'}"
+                                           ng-model="ctrl.ouApplicationUser.proxyUser">
+                                    <md-option
+                                            ng-repeat="applicationUser in ctrl.applicationUsers"
+                                            ng-if="applicationUser.id != ctrl.model.applicationUser.id && applicationUser.id != ctrl.currentEmployee.id"
+                                            ng-value="applicationUser">
+                                        {{applicationUser.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                                <div ng-messages="outOfOfficeSettingsForm.proxyUser.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+
+                            <!-- Authority Levels -->
+                            <md-input-container flex>
+                                <label>{{lang.authority_level}}</label>
+                                <md-select ng-required="ctrl.isOutOfOffice" multiple name="proxyAuthorityLevels"
+                                           id="proxyAuthorityLevels"
+                                           ng-disabled="!ctrl.isOutOfOffice"
+                                           ng-model="ctrl.ouApplicationUser.proxyAuthorityLevels"
+                                           ng-model-options="{trackBy: '$value.id'}">
+                                    <md-option ng-repeat="securityLevel in ctrl.securityLevels track by $index"
+                                               ng-value="securityLevel">
+                                        {{securityLevel.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                                <div ng-messages="outOfOfficeSettingsForm.proxyAuthorityLevels.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <div layout="row">
+                            <!-- Start Date -->
+                            <md-input-container flex>
+                                <label for="proxyStartDate">{{lang.start_date}}</label>
+                                <md-datepicker id="proxyStartDate" name="proxyStartDate"
+                                               ng-required="ctrl.isOutOfOffice"
+                                               md-min-date="ctrl.today"
+                                               ng-model="ctrl.ouApplicationUser.proxyStartDate"
+                                               md-max-date="ctrl.ouApplicationUser.proxyEndDate"
+                                               ng-change="ctrl.onStartDateChange()"
+                                               ng-disabled="!ctrl.isOutOfOffice"
+                                ></md-datepicker>
+                                <div ng-messages="privateAnnouncementForm.proxyStartDate.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+
+                            <!-- End Date -->
+                            <md-input-container flex>
+                                <label for="proxyEndDate">{{lang.end_date}}</label>
+                                <md-datepicker id="proxyEndDate" name="proxyEndDate"
+                                               ng-required="ctrl.isOutOfOffice"
+                                               ng-model="ctrl.ouApplicationUser.proxyEndDate"
+                                               md-min-date="ctrl.ouApplicationUser.proxyStartDate"
+                                               ng-change="ctrl.onEndDateChange()"
+                                               ng-disabled="!ctrl.isOutOfOffice"
+                                ></md-datepicker>
+                                <div ng-messages="privateAnnouncementForm.proxyEndDate.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <div layout="row">
+                            <!-- View Proxy Message -->
+                            <md-switch flex ng-model="ctrl.ouApplicationUser.viewProxyMessage"
+                                       ng-disabled="!ctrl.isOutOfOffice"
+                                       aria-label="{{lang.view_message_to_sender}}">
+                                <label>{{lang.view_message_to_sender}}</label>
+                            </md-switch>
+                            <md-input-container flex>
+                                <label>{{lang.out_of_office_message}}</label>
+                                <textarea ng-required="ctrl.ouApplicationUser.viewProxyMessage"
+                                          ng-model="ctrl.ouApplicationUser.proxyMessage"
+                                          ng-disabled="!ctrl.isOutOfOffice"
+                                          name="proxyMessage" id="proxyMessage" minlength="4" maxlength="265">
+                            </textarea>
+                                <div ng-messages="outOfOfficeSettingsForm.proxyMessage.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                    <div ng-message="minlength">{{lang.short}}</div>
+                                    <div ng-message="maxlength">{{lang.max_length.change({length:300})}}</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                    </fieldset>
+                </div>
+                <div layout="row">
+                    <md-button class="md-raised" ng-disabled="outOfOfficeSettingsForm.$invalid"
+                               ng-click="ctrl.addApplicationUserOutOfOfficeSettingsFromCtrl()">
+                        {{lang.add}}
+                    </md-button>
+                    <span flex></span>
+                    <md-button class="md-raised" ng-click="ctrl.closeApplicationUserOutOfOfficeSettingPopupFromCtrl()">
+                        {{lang.close}}
+                    </md-button>
+                </div>
+            </form>
+        </md-content>
+    </div>
+</md-dialog>

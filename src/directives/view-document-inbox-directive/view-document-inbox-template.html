@@ -1,0 +1,178 @@
+<div class="document-viewer-full-width-height" layout="row">
+    <div flex class="section-margin-right"><!--flex="75"-->
+        <iframe ng-src="{{ctrl.url}}" class="document-viewer-full-width-height" frameborder="0"></iframe>
+    </div>
+    <div scroll-directive flex="25" id="document-view-sidebar" class="hidden">
+        <div layout="row" class="section-margin-bottom">
+            <md-table-container flex scroll-directive>
+                <table md-table id="details-table-view-document">
+                    <tbody md-body>
+                    <tr md-row>
+                        <td md-cell>{{lang.label_serial}}</td>
+                        <td md-cell>{{ ctrl.outgoing.generalStepElm.docSerial }}</td>
+                    </tr>
+                    <tr md-row>
+                        <td md-cell>{{lang.received}}</td>
+                        <td md-cell>{{ ctrl.outgoing.generalStepElm.receivedDate }}
+                        </td>
+                    </tr>
+                    <tr md-row>
+                        <td md-cell>{{lang.due}}</td>
+                        <td md-cell>{{ ctrl.outgoing.generalStepElm.dueDate }}
+                        </td>
+                    </tr>
+                    <tr md-row>
+                        <td md-cell>{{lang.author}}</td>
+                        <td md-cell></td>
+                    </tr>
+                    <tr md-row>
+                        <td md-cell>{{lang.sender}}</td>
+                        <td md-cell>{{ctrl.outgoing.senderInfo.getTranslatedName()}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </md-table-container>
+        </div>
+        <!--<div>
+            <accordion-directive validation="false" label-collapse="true">
+                <accordion-item class="fail-validation section-width section-margin-bottom">
+                    <accordion-title>
+                        {{lang.description}}
+                    </accordion-title>
+                    <accordion-content>
+                        <md-input-container flex style="display: block !important;">
+                            <label for="description">{{lang.description}}</label>
+                            <textarea id="description" name="description"
+                                      rows="4" md-select-on-focus
+                                      ng-model="ctrl.document.description">
+                                    </textarea>
+                            <div ng-messages="ctrl.description.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </accordion-content>
+                </accordion-item>
+            </accordion-directive>
+        </div>-->
+        <div>
+            <accordion-directive validation="false" label-collapse="true">
+                <!--Document content-->
+                <!--  <accordion-item class="fail-validation section-width section-margin-bottom">
+                      <accordion-title>
+                          <md-icon md-svg-icon="format-align-justify"></md-icon>
+                          {{lang.outgoing_create_content}}
+                      </accordion-title>
+                      <accordion-content>
+                          <ng-form name="create_content">
+                              <div layout="row">
+
+                              </div>
+                          </ng-form>
+                      </accordion-content>
+                  </accordion-item>-->
+                <!--Document Tags-->
+                <accordion-item class="fail-validation section-width section-margin-bottom">
+                    <accordion-title>
+                        <md-icon md-svg-icon="tag-multiple"></md-icon>
+                        {{lang.outgoing_manage_tags}}
+                    </accordion-title>
+                    <accordion-content>
+                        <div>
+                            <manage-tags-directive document="ctrl.outgoing"></manage-tags-directive>
+                        </div>
+                    </accordion-content>
+                </accordion-item>
+                <!--Document Attachment-->
+                <accordion-item class="fail-validation section-width section-margin-bottom">
+                    <accordion-title>
+                        <md-icon md-svg-icon="attachment"></md-icon>
+                        {{lang.outgoing_manage_attachments}}
+                    </accordion-title>
+                    <accordion-content>
+                        <div layout="row">
+                            <manage-attachment-directive
+                                    document="ctrl.outgoing" flex>
+                            </manage-attachment-directive>
+                        </div>
+                    </accordion-content>
+                </accordion-item>
+                <!--Document Comments-->
+                <accordion-item class="fail-validation section-width section-margin-bottom">
+                    <accordion-title>
+                        <md-icon md-svg-icon="comment"></md-icon>
+                        {{lang.outgoing_manage_comments}}
+                    </accordion-title>
+                    <accordion-content>
+                        <div layout="row">
+                            <manage-comments-directive
+                                    show-comment-form="ctrl.showDocumentComment"
+                                    document="ctrl.outgoing"
+                                    flex>
+                            </manage-comments-directive>
+                        </div>
+                    </accordion-content>
+                </accordion-item>
+                <!--Document Entities-->
+                <accordion-item class="fail-validation section-width section-margin-bottom">
+                    <accordion-title>
+                        <md-icon md-svg-icon="vector-triangle"></md-icon>
+                        {{lang.outgoing_linked_entities}}
+                    </accordion-title>
+                    <accordion-content>
+                        <div>
+                            <manage-entities-directive document="ctrl.outgoing"></manage-entities-directive>
+                        </div>
+                        <div layout="row">
+                            <div>
+                                <md-button ng-disabled="outgoing_properties.$invalid"
+                                           ng-click="ctrl.saveCorrespondence()" class="md-raised">
+                                    {{lang.outgoing_save}}
+                                </md-button>
+                            </div>
+                        </div>
+                    </accordion-content>
+                </accordion-item>
+            </accordion-directive>
+        </div>
+
+        <div ng-if="ctrl.buttonsToShow.length > 0">
+            <div layout="row" layout-align="center center"
+                 ng-repeat="addButton in ctrl.buttonsToShow track by $index">
+                <div layout="row" flex ng-if="button.isVisible" ng-repeat="button in addButton track by $index">
+                    <md-button ng-if="!button.isSubMenu"
+                               ng-click="button.callback ? button.params ? ctrl.processButtonsCallback(button.callback, ctrl.outgoing, button.params, $event) : ctrl.processButtonsCallbackWithParams(button.callback, ctrl.outgoing, $event):''"
+                               class="md-raised" flex>
+                        <div layout="row">
+                            <md-icon md-svg-icon={{button.icon}}></md-icon>
+                            <span flex>{{button.langKey}}</span>
+                        </div>
+                    </md-button>
+                    <md-menu-bar class="menu-buttons-view-document" ng-if="button.isSubMenu" flex>
+                        <md-menu flex class="menu-bar-width">
+                            <md-button flex class="md-raised menu-bar-button" ng-click="$mdMenu.open()">
+                                <div layout="row">
+                                    <md-icon md-svg-icon="{{button.icon}}"></md-icon>
+                                    <span flex>{{button.langKey}}</span>
+                                </div>
+                            </md-button>
+                            <md-menu-content width="1">
+                                <md-menu-item ng-repeat="submenu in button.subMenuOptions">
+                                    <md-button
+                                            ng-click="submenu.callback ? submenu.params ? ctrl.processButtonsCallback(submenu.callback, ctrl.outgoing, submenu.params, $event) : ctrl.processButtonsCallbackWithParams(submenu.callback, ctrl.outgoing, $event): ''"
+                                            flex>
+                                        <div layout="row">
+                                            <md-icon md-svg-icon="{{submenu.icon}}"></md-icon>
+                                            <span flex>{{submenu.langKey}}</span>
+                                        </div>
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </md-menu-bar>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

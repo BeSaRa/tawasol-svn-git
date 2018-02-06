@@ -1,0 +1,116 @@
+<div flex layout="column">
+    <div layout="row">
+        <md-button class="md-raised" ng-click="ctrl.openSearchDialog($event)">
+            {{lang.search}}
+        </md-button>
+        <div flex></div>
+    </div>
+    <div layout="row" ng-if="ctrl.linkedDocs.length">
+        <md-card flex>
+            <md-table-container flex scroll-directive>
+                <table md-table md-row-select multiple ng-model="ctrl.selectedCorrespondences"
+                       md-progress="ctrl.progress">
+                    <thead md-head md-order="ctrl.grid.order">
+                    <tr md-row>
+                        <th ng-if="ctrl.selectedCorrespondences.length" md-column>
+                            <div layout="row" layout-align="start center">
+                                <span>{{ctrl.selectedCorrespondences.length}} {{lang.items_selected}} </span>
+                                <span flex></span>
+                            </div>
+                        </th>
+                        <th ng-if="!ctrl.selectedCorrespondences.length" md-column>
+                            <!-- Indicators -->
+                        </th>
+                        <th md-column md-order-by="docSubject">
+                            <span>{{lang.subject}}</span>
+                        </th>
+                        <th md-column md-order-by="priorityLevel">
+                            <span>{{lang.priority_level}}</span>
+                        </th>
+                        <th md-column md-order-by="securityLevel">
+                            <span>{{lang.security_level}}</span>
+                        </th>
+                        <th md-column md-order-by="createdBy">
+                            <span>{{lang.creator}}</span>
+                        </th>
+                        <th md-column md-order-by="createdOn">
+                            <span>{{lang.created_on}}</span>
+                        </th>
+                        <th md-column>
+                            <span>{{lang.actions}}</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody md-body>
+                    <tr md-row md-select="correspondence" model="correspondence"
+                        selected-length="{{ctrl.selectedCorrespondences.length ? ctrl.selectedCorrespondences.length : 0}}"
+                        ng-repeat="correspondence in ctrl.linkedDocs | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                        <td md-cell class="indicator-td">
+                                    <span flex
+                                          ng-class="{'indicator-content': correspondence.securityLevelIndicator}">
+                                        <md-icon ng-if="correspondence.securityLevelIndicator"
+                                                 class="{{correspondence.securityLevelIndicator.class}}"
+                                                 md-svg-icon="{{correspondence.securityLevelIndicator.icon}}"
+                                                 tooltip="{{lang[correspondence.securityLevelIndicator.tooltip].change({name: correspondence.securityLevel.getTranslatedName()})}}"
+                                        ></md-icon>
+                                    </span>
+                            <span flex
+                                  ng-class="{'indicator-content': correspondence.priorityLevelIndicator}">
+                                        <md-icon ng-if="correspondence.priorityLevelIndicator"
+                                                 class="{{correspondence.priorityLevelIndicator.class}}"
+                                                 md-svg-icon="{{correspondence.priorityLevelIndicator.icon}}"
+                                                 tooltip="{{lang[correspondence.priorityLevelIndicator.tooltip].change({name: correspondence.priorityLevel.getTranslatedName()})}}"
+                                        ></md-icon>
+                                    </span>
+                            <span flex
+                                  ng-class="{'indicator-content': correspondence.attachmentsIndicator}">
+                                        <md-icon ng-if="correspondence.attachmentsIndicator"
+                                                 class="{{correspondence.attachmentsIndicator.class}}"
+                                                 md-svg-icon="{{correspondence.attachmentsIndicator.icon}}"
+                                                 tooltip="{{lang[correspondence.attachmentsIndicator.tooltip]}}"
+                                        ></md-icon>
+                                    </span>
+                            <span flex
+                                  ng-class="{'indicator-content': correspondence.linkedDocsIndicator}">
+                                        <md-icon ng-if="correspondence.linkedDocsIndicator"
+                                                 class="{{correspondence.linkedDocsIndicator.class}}"
+                                                 md-svg-icon="{{correspondence.linkedDocsIndicator.icon}}"
+                                                 tooltip="{{lang[correspondence.linkedDocsIndicator.tooltip]}}"
+                                        ></md-icon>
+                                    </span>
+                            <!--<span flex class="indicator-badge"
+                                  ng-class="{'indicator-content': correspondence.tagsIndicator}">
+                                        <span ng-if="correspondence.tagsIndicator"
+                                              tooltip="{{lang[correspondence.tagsIndicator.tooltip]}}"
+                                              class="{{correspondence.tagsIndicator.class}}">
+                                            {{correspondence.tagsIndicator.text}}
+                                        </span>
+                                    </span>-->
+                        </td>
+                        <td md-cell class="td-data">
+                            <a href="" ng-if="correspondence.hasContent()" class="view-doc"
+                               ng-click="ctrl.viewCorrespondence(correspondence, $event)">{{correspondence.docSubject}}</a>
+                            <span ng-if="!correspondence.hasContent()">{{correspondence.docSubject}}</span>
+                        </td>
+                        <td md-cell>{{correspondence.priorityLevel.getTranslatedName()}}</td>
+                        <td md-cell>{{correspondence.securityLevel.getTranslatedName()}}</td>
+                        <td md-cell>{{correspondence.getTranslatedCreator()}}</td>
+                        <td md-cell>{{correspondence.createdOn}}</td>
+                        <td md-cell>
+                            <md-button class="md-icon-button" ng-click="ctrl.deleteLinkedDocument(correspondence)">
+                                <md-icon md-svg-icon="delete"></md-icon>
+                            </md-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <md-table-pagination
+                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                        md-limit-options="ctrl.grid.limitOptions"
+                        md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                        md-total="{{ctrl.linkedDocs.length}}" md-page-select>
+                </md-table-pagination>
+            </md-table-container>
+        </md-card>
+    </div>
+</div>

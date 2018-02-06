@@ -1,0 +1,91 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.import_organizations}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.import_organizations}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="importOrganizationForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <input name="uploadExcelFile" id="uploadExcelFile" accept=".xls,.xlsx"
+                                   type="file" required>
+                            <div ng-messages="importOrganizationForm.uploadExcelFile.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <div>
+                            <md-button class="md-raised" ng-disabled="importOrganizationForm.$invalid"
+                                       ng-click="ctrl.uploadExcelFile()">
+                                {{$root.lang.upload}}
+                            </md-button>
+                            <md-button class="md-raised" ng-disabled="!ctrl.validateURL"
+                                       ng-click="ctrl.validateExcelFile()">
+                                {{$root.lang.validate_file}}
+                            </md-button>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div ng-if="ctrl.organizations.length">Total number of Organizations to be created:
+                     {{ctrl.organizations.length}}
+                 </div>
+                -->
+                <md-card ng-if="ctrl.organizations.length" layout="column" class="card-overlay">
+                    <md-table-container flex>
+                        <table md-table>
+                            <thead md-head>
+                            <tr md-row>
+                                <th md-column>
+                                    <span>{{lang.code}}</span>
+                                </th>
+                                <th md-column>
+                                    <span>{{lang.arabic_name}}</span>
+                                </th>
+                                <th md-column>
+                                    <span>{{lang.english_name}}</span>
+                                </th>
+                                <th md-column>
+                                    <span>{{lang.description}}</span>
+                                </th>
+                                <th md-column>
+                                    <span>{{lang.parent}}</span>
+                                </th>
+                                <th md-column>
+                                    <span>{{lang.error_message}}</span>
+                                </th>
+                                <th md-column>
+                                    <span>{{lang.status}}</span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row md-select="organization"
+                                ng-repeat="organization in ctrl.organizations track by $index">
+                                <td md-cell>{{organization.code}}</td>
+                                <td md-cell>{{organization.arName}}</td>
+                                <td md-cell>{{organization.enName}}</td>
+                                <td md-cell>{{organization.description}}</td>
+                                <td md-cell>{{organization.parent}}</td>
+                                <td md-cell>{{organization.errorMessage}}</td>
+                                <td md-cell>
+                                    <span ng-if="organization.errorCode">{{lang.failed}}</span>
+                                    <span ng-if="!organization.errorCode">{{lang.passed}}</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+
+                </md-card>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-disabled="true" ng-click="ctrl.saveImportOrganizations()">
+                    {{lang.import}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

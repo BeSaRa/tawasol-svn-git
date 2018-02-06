@@ -1,0 +1,975 @@
+module.exports = function (app) {
+    app.controller('searchGeneralCtrl', function (lookupService,
+                                                  langService,
+                                                  Correspondence,
+                                                  viewDocumentService,
+                                                  organizations,
+                                                  correspondenceSiteTypes,
+                                                  //mainCorrespondenceSites,
+                                                  correspondenceSiteService,
+                                                  searchGeneralService,
+                                                  $q,
+                                                  DocumentSearch,
+                                                  propertyConfigurations,
+                                                  validationService,
+                                                  generator,
+                                                  documentFiles,
+                                                  documentTypes,
+                                                  classificationService,
+                                                  mainClassifications,
+                                                  rootEntity,
+                                                  managerService,
+                                                  contextHelpService,
+                                                  toast,
+                                                  viewTrackingSheetService,
+                                                  documentStatuses,
+                                                  downloadService,
+                                                  DocumentStatus,
+                                                  employeeService,
+                                                  counterService,
+                                                  distributionWorkflowService,
+                                                  correspondenceService,
+                                                  dialog) {
+        'ngInject';
+
+        var self = this;
+        self.controllerName = 'searchGeneralCtrl';
+        contextHelpService.setHelpTo('search-general');
+        // employee service to check the permission in html
+        self.employeeService = employeeService;
+        self.progress = null;
+        self.showAdvancedSearch = false;
+        self.searchGeneral = new DocumentSearch({"reqType": 3});
+        self.searchGeneralModel = angular.copy(self.searchGeneral);
+
+        self.organizations = organizations;
+        self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        self.propertyConfigurations = propertyConfigurations;
+        /*self.docStatuses = [
+            {text: 'Receive', 'value': 1},
+            {text: 'Meta Data', 'value': 2},
+            {text: 'Draft', 'value': 3},
+            {text: 'Completed', 'value': 4},
+            {text: 'Rejected', 'value': 7},
+            {text: 'Ready For Sent', 'value': 8},
+            {text: 'Removed', 'value': 9},
+            {text: 'Archived', 'value': 21}
+        ];*/
+        self.docStatuses = documentStatuses;
+        self.docStatuses.unshift(new DocumentStatus({arName: 'الكل', enName: 'All'}));
+        self.followupStatuses = lookupService.returnLookups(lookupService.followupStatus);
+        self.approvers = [];
+        self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
+        self.documentTypes = documentTypes;
+        self.documentFiles = documentFiles;
+
+        self.years = function () {
+            var currentYear = new Date().getFullYear(), years = ['All'];
+            var lastYearForRange = currentYear - 10;
+            while (lastYearForRange <= currentYear) {
+                years.push(currentYear--);
+            }
+            return years;
+        };
+        self.correspondenceSiteTypes = correspondenceSiteTypes;
+        //self.mainCorrespondenceSites_Copy = angular.copy(mainCorrespondenceSites);
+        self.mainClassifications = mainClassifications;
+
+        /**
+         * @description Get the dynamic required fields
+         */
+        self.getSearchGeneralRequiredFields = function () {
+            var requiredFields = _.map(_.filter(self.propertyConfigurations, function (propertyConfiguration) {
+                return propertyConfiguration.isMandatory;
+            }), 'symbolicName');
+            requiredFields.push('year');
+            return requiredFields;
+        };
+
+        self.requiredFieldsSearchGeneral = self.getSearchGeneralRequiredFields();
+
+        self.validateLabelsSearchGeneral = {};
+
+
+        /**
+         * @description Checks if the field is mandatory
+         * @param fieldName
+         * @param langKey
+         * @returns {Array}
+         */
+        self.dynamicRequired = function (fieldName, langKey) {
+            if (self.requiredFieldsSearchGeneral.indexOf(fieldName) > -1) {
+                var obj = {};
+                obj[fieldName] = langKey;
+                if (!_.some(self.validateLabelsSearchGeneral, obj)) {
+                    self.validateLabelsSearchGeneral[fieldName] = langKey;
+                }
+                return true;
+            }
+            return false;
+        };
+
+
+        /**
+         * @description Checks the required fields validation
+         * @param model
+         * @returns {Array}
+         */
+        self.checkRequiredFieldsSearchGeneral = function (model) {
+            var required = self.requiredFieldsSearchGeneral, result = [];
+            /*_.map(required, function (property) {
+                var propertyValueToCheck = (model.hasOwnProperty(property) ? model[property] : model.props[property]);
+                if (!generator.validRequired(propertyValueToCheck))
+                    result.push(property);
+            });*/
+
+            _.map(required, function (property) {
+                var propertyValueToCheck = model[property];
+                if (!generator.validRequired(propertyValueToCheck))
+                    result.push(property);
+            });
+            return [];
+            //return result;
+        };
+
+
+        self.dynamicValidations = {
+            'Integer': {type: 'number', message: langService.get('numberonly')},
+            'String': {type: 'ALL', message: ''}
+        };
+
+        /**
+         * @description Check the type of value allowed in the field
+         * @param fieldName
+         * @param typeOrMessage
+         * @returns {*}
+         */
+        self.dynamicType = function (fieldName, typeOrMessage) {
+            var dataType = _.find(self.propertyConfigurations, function (propertyConfiguration) {
+                return propertyConfiguration.symbolicName.toLowerCase() === fieldName.toLowerCase();
+            }).dataType;
+            return self.dynamicValidations[dataType][typeOrMessage];
+        };
+
+
+        self.toggleAdvancedSearch = function () {
+            self.showAdvancedSearch = !self.showAdvancedSearch;
+        };
+
+        /**
+         * @description Set the selected year on changing the value
+         * @param $event
+         */
+        self.setSelectedYear = function (searchForm, $event) {
+            self.selectedYear = self.searchGeneral.year;
+            self.searchGeneral.docDateFrom = self.searchGeneral.docDateTo = null;
+            searchForm.docDateFrom.$setUntouched();
+            searchForm.docDateTo.$setUntouched();
+            if (self.selectedYear === 'All') {
+                self.requiredFieldsSearchGeneral.push('docDateFrom');
+                self.requiredFieldsSearchGeneral.push('docDateTo');
+            }
+            else {
+                var dateFromIndex = self.requiredFieldsSearchGeneral.indexOf('docDateFrom');
+                if (dateFromIndex > -1)
+                    self.requiredFieldsSearchGeneral.splice(dateFromIndex, 1);
+                var dateToIndex = self.requiredFieldsSearchGeneral.indexOf('docDateTo');
+                if (dateToIndex > -1)
+                    self.requiredFieldsSearchGeneral.splice(dateToIndex, 1);
+
+                self.docDateFromCopy = self.selectedYear + '-01-01 00:00:00.000';
+                self.docDateToCopy = self.selectedYear + '-12-31 23:59:59.999';
+                self.setMinMaxDocDate('year');
+            }
+        };
+
+        /**
+         * @description Set the min and max range of date
+         * @param changedBy
+         * @param $event
+         */
+        self.setMinMaxDocDate = function (changedBy, $event) {
+            /*If value is instance of date, that means user has changed the value from datepicker
+            * else value is changed on change of year field and we need to cast the value to date type.
+            */
+            if (changedBy === 'year') {
+                self.maxDocDate = self.maxDateForTo = new Date(self.docDateToCopy);
+                self.minDocDate = self.minDateForFrom = new Date(self.docDateFromCopy);
+            }
+            else if (changedBy === 'picker') {
+                if (self.selectedYear === 'All') {
+                    self.maxDocDate = self.searchGeneral.docDateTo;
+                    self.minDocDate = self.searchGeneral.docDateFrom;
+                    self.minDateForFrom = null;
+                    self.maxDateForTo = null;
+                }
+                else {
+                    self.maxDocDate = self.searchGeneral.docDateTo ? self.searchGeneral.docDateTo : new Date(self.docDateToCopy);
+                    self.minDocDate = self.searchGeneral.docDateFrom ? self.searchGeneral.docDateFrom : new Date(self.docDateFromCopy);
+                    self.minDateForFrom = new Date(self.docDateFromCopy);
+                    self.maxDateForTo = new Date(self.docDateToCopy);
+                }
+            }
+        };
+
+
+        /**
+         * @description Get the main correspondence sites by correspondence site type
+         * @returns {Array|*}
+         */
+        self.getMainCorrespondenceSites = function ($event) {
+            self.searchGeneral.mainSiteId = self.searchGeneral.subSiteId = null;
+            return correspondenceSiteService.getMainCorrespondenceSitesWithSiteTypeId(self.searchGeneral.siteType).then(function (result) {
+                self.mainCorrespondenceSites = result;
+                return self.mainCorrespondenceSites;
+            });
+        };
+
+        /**
+         * @description Get the sub correspondence sites by main correspondence site
+         * @returns {Array|*}
+         */
+        self.getSubCorrespondenceSites = function ($event) {
+            self.searchGeneral.subSiteId = null;
+            return correspondenceSiteService.getSubCorrespondenceSitesWithSiteTypeId(self.searchGeneral.mainSiteId.id).then(function (result) {
+                self.subCorrespondenceSites = result;
+                return self.subCorrespondenceSites;
+            });
+        };
+
+        /**
+         * @description Get the sub classifications by main classification
+         * @returns {Array|*}
+         */
+        self.getSubClassifications = function (searchGeneralForm, $event) {
+            self.searchGeneral.subClassification = null;
+            searchGeneralForm.subClassification.$setUntouched();
+            self.subClassifications = classificationService.getSubClassifications(self.searchGeneral.mainClassification);
+            return self.subClassifications;
+        };
+
+        /**
+         * @description Contains the selected tab name
+         * @type {string}
+         */
+        self.selectedTabName = "ens";
+        self.selectedTab = 0;
+
+        /**
+         * @description Set the current tab name
+         * @param tabName
+         */
+        self.setCurrentTab = function (tabName) {
+            self.selectedTabName = tabName;
+        };
+
+        self.showResults = false;
+
+        /**
+         * @description All application users
+         * @type {*}
+         */
+        self.searchedGeneralDocuments = [];
+
+        self.progress = null;
+        /**
+         * @description Contains the selected search results
+         * @type {Array}
+         */
+        self.selectedSearchedGeneralDocuments = [];
+
+
+        /**
+         * @description Search the document on basis of search criteria
+         */
+        self.search = function () {
+            validationService
+                .createValidation('SEARCH_GENERAL')
+                .addStep('check_required', true, self.checkRequiredFieldsSearchGeneral, self.searchGeneral, function (result) {
+                    return !result.length;
+                })
+                .notifyFailure(function (step, result) {
+                    var labels = _.map(result, function (label) {
+                        return self.validateLabelsSearchGeneral[label];
+                    });
+                    generator.generateErrorFields('check_this_fields', labels);
+                })
+                .validate()
+                .then(function () {
+                    searchGeneralService
+                        .searchGeneralDocuments(self.searchGeneral, self.propertyConfigurations)
+                        .then(function (result) {
+                            self.searchGeneralModel = angular.copy(self.searchGeneral);
+                            self.showResults = true;
+                            self.selectedTab = 1;
+                            self.searchedGeneralDocuments = result;
+                            self.selectedSearchedGeneralDocuments = [];
+                        })
+                        .catch(function (error) {
+
+                        });
+                })
+                .catch(function () {
+
+                });
+        };
+
+        /**
+         * @description Resets the document search criteria
+         * @param form
+         */
+        self.resetFilters = function (form) {
+            self.searchGeneral = new DocumentSearch({"reqType": 0});
+            self.searchGeneralModel = angular.copy(self.searchGeneral);
+            self.mainCorrespondenceSites = self.subCorrespondenceSites = self.subClassifications = [];
+            form.$setUntouched();
+        };
+
+        /**
+         * @description Saves the search criteria
+         */
+        self.saveSearch = function () {
+            console.log('save search');
+        };
+
+        self.globalSetting = rootEntity.returnRootEntity().settings;
+        /**
+         * @description Contains options for grid configuration
+         * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
+         */
+        self.grid = {
+            limit: 5, //self.globalSetting.searchAmount, // default limit
+            page: 1, // first page
+            //order: 'arName', // default sorting order
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, // limit options
+                {
+                    /*label: self.globalSetting.searchAmountLimit.toString(),
+                    value: function () {
+                        return self.globalSetting.searchAmountLimit
+                    }*/
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.searchedGeneralDocuments.length + 21);
+                    }
+                }
+            ],
+            filter: {search: {}}
+        };
+
+        /**
+         * @description Reload the grid of searched general documents
+         * @param pageNumber
+         * @return {*|Promise<U>}
+         */
+        self.reloadSearchedGeneralDocument = function (pageNumber) {
+            var defer = $q.defer();
+            self.progress = defer.promise;
+            return searchGeneralService
+                .searchGeneralDocuments(self.searchGeneralModel, self.propertyConfigurations)
+                .then(function (result) {
+                    counterService.loadCounters();
+                    self.searchedGeneralDocuments = result;
+                    self.selectedSearchedGeneralDocuments = [];
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.grid.page = pageNumber;
+                    return result;
+                });
+        };
+
+
+        self.viewDocument = function (searchedGeneralDocument, $event) {
+            if (!searchedGeneralDocument.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(searchedGeneralDocument, self.gridActions);
+            return;
+        };
+
+        /**
+         * @description Export searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         * @type {[*]}
+         */
+        self.exportSearchGeneralDocument = function (searchedGeneralDocument, $event) {
+            //console.log('export searched general document : ', searchedGeneralDocument);
+            searchGeneralService
+                .exportSearchGeneral(searchedGeneralDocument, $event)
+                .then(function (result) {
+                    self.reloadSearchedGeneralDocument(self.grid.page)
+                        .then(function () {
+                            toast.success(langService.get('export_success'));
+                        });
+                });
+        };
+
+        /**
+         * @description open searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.openSearchGeneralDocument = function (searchedGeneralDocument, $event) {
+            //console.log('open searched general document : ', searchedGeneralDocument);
+
+            if (!searchedGeneralDocument.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(searchedGeneralDocument, self.gridActions, true);
+            return;
+        };
+
+        /**
+         * @description Launch distribution workflow for internal item
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+
+        self.launchDistributionWorkflow = function (searchedGeneralDocument, $event) {
+            if (!searchedGeneralDocument.hasContent()) {
+                dialog.alertMessage(langService.get("content_not_found"));
+                return;
+            }
+
+            return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
+                .then(function () {
+                    distributionWorkflowService
+                        .controllerMethod
+                        .distributionWorkflowSend(searchedGeneralDocument, false, false, null, "internal", $event)
+                        .then(function (result) {
+                            self.reloadSearchedGeneralDocument(self.grid.page);
+                        })
+                        .catch(function (result) {
+                            self.reloadSearchedGeneralDocument(self.grid.page);
+                        });
+                });
+        };
+
+        /**
+         * @description Print Barcode
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.printBarcode = function (searchedGeneralDocument, $event) {
+            searchedGeneralDocument.barcodePrint($event);
+        };
+
+        /**
+         * @description View Tracking Sheet
+         * @param searchedGeneralDocument
+         * @param params
+         * @param $event
+         */
+        self.viewTrackingSheet = function (searchedGeneralDocument, params, $event) {
+            viewTrackingSheetService
+                .controllerMethod
+                .viewTrackingSheetPopup(searchedGeneralDocument, params, $event).then(function (result) {
+            });
+        };
+
+        /**
+         * @description manage tag for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.manageTags = function (searchedGeneralDocument, $event) {
+            //console.log('manage tag for searched general document : ', searchedGeneralDocument);
+            var info = searchedGeneralDocument.getInfo();
+            managerService.manageDocumentTags(info.vsId, info.documentClass, info.title, $event)
+                .then(function (tags) {
+                    searchedGeneralDocument.tags = tags;
+                })
+                .catch(function (tags) {
+                    searchedGeneralDocument.tags = tags;
+                });
+        };
+
+        /**
+         * @description manage comments for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.manageComments = function (searchedGeneralDocument, $event) {
+            //console.log('manage comments for searched general document : ', searchedGeneralDocument);
+            managerService.manageDocumentComments(searchedGeneralDocument.vsId, searchedGeneralDocument.docSubject, $event)
+                .then(function (documentComments) {
+                    searchedGeneralDocument.documentComments = documentComments;
+                })
+                .catch(function (documentComments) {
+                    searchedGeneralDocument.documentComments = documentComments;
+                });
+        };
+
+        /**
+         * @description manage tasks for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.manageTasks = function (searchedGeneralDocument, $event) {
+            console.log('manage tasks for searched general document : ', searchedGeneralDocument);
+        };
+
+        /**
+         * @description manage attachments for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.manageAttachments = function (searchedGeneralDocument, $event) {
+            //console.log('manage attachments for searched general document : ', searchedGeneralDocument);
+            var info = searchedGeneralDocument.getInfo();
+            //managerService.manageDocumentAttachments(searchedGeneralDocument.vsId, searchedGeneralDocument.docClassName, searchedGeneralDocument.docSubject, $event)
+            managerService.manageDocumentAttachments(info.vsId, info.documentClass, info.title, $event)
+                .then(function (attachments) {
+                    searchedGeneralDocument = attachments;
+                })
+                .catch(function (attachments) {
+                    searchedGeneralDocument = attachments;
+                });
+        };
+
+        /**
+         * @description manage linked documents for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.manageLinkedDocuments = function (searchedGeneralDocument, $event) {
+            //console.log('manage linked documents for searched general document : ', searchedGeneralDocument);
+            var info = searchedGeneralDocument.getInfo();
+            return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
+        };
+
+        /**
+         * @description manage linked entities for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.manageLinkedEntities = function (searchedGeneralDocument, $event) {
+            //console.log('manage linked entities for searched general document : ', searchedGeneralDocument);
+            managerService
+                .manageDocumentEntities(searchedGeneralDocument.vsId, searchedGeneralDocument.docClassName, searchedGeneralDocument.docSubject, $event);
+        };
+
+        /**
+         * @description download main document for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.downloadMainDocument = function (searchedGeneralDocument, $event) {
+            //console.log('download main document for searched general document : ', searchedGeneralDocument);
+            downloadService.controllerMethod
+                .downloadMainDocument(searchedGeneralDocument.vsId);
+        };
+
+        /**
+         * @description download composite document for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.downloadCompositeDocument = function (searchedGeneralDocument, $event) {
+            //console.log('download composite document for searched general document : ', searchedGeneralDocument);
+            downloadService.controllerMethod
+                .downloadCompositeDocument(searchedGeneralDocument.vsId);
+        };
+
+        /**
+         * @description send link to document for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.sendLinkToDocumentByEmail = function (searchedGeneralDocument, $event) {
+            console.log('send link to document for searched general document : ', searchedGeneralDocument);
+        };
+
+        /**
+         * @description send composite document as attachment for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.sendCompositeDocumentAsAttachmentByEmail = function (searchedGeneralDocument, $event) {
+            console.log('send composite document as attachment for searched general document : ', searchedGeneralDocument);
+        };
+
+        /**
+         * @description send composite document as attachment for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.sendCompositeDocumentAsAttachmentByEmail = function (searchedGeneralDocument, $event) {
+            console.log('send composite document as attachment for searched general document : ', searchedGeneralDocument);
+        };
+
+        /**
+         * @description send main document fax for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.sendMainDocumentFax = function (searchedGeneralDocument, $event) {
+            console.log('send main document fax for searched general document : ', searchedGeneralDocument);
+        };
+
+        /**
+         * @description send sms for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.sendSMS = function (searchedGeneralDocument, $event) {
+            console.log('send sms for searched general document : ', searchedGeneralDocument);
+        };
+
+        /**
+         * @description get link for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.getLink = function (searchedGeneralDocument, $event) {
+            console.log('get link for searched general document : ', searchedGeneralDocument);
+        };
+
+        /**
+         * @description subscribe for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.subscribe = function (searchedGeneralDocument, $event) {
+            console.log('subscribe for searched general document : ', searchedGeneralDocument);
+        };
+
+        /**
+         * @description create copy for searched general document
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.createCopy = function (searchedGeneralDocument, $event) {
+            console.log('create copy for searched general document : ', searchedGeneralDocument);
+        };
+
+
+        /**
+         * @description Check if action will be shown on grid or not
+         * @param action
+         * @param model
+         * @returns {boolean}
+         */
+        self.checkToShowAction = function (action, model) {
+            /*if (action.hasOwnProperty('permissionKey'))
+                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+            return (!action.hide);*/
+
+            if (action.hasOwnProperty('permissionKey')) {
+                if (typeof action.permissionKey === 'string') {
+                    return (!action.hide) && employeeService.hasPermissionTo(action.permissionKey);
+                }
+                else if (angular.isArray(action.permissionKey)) {
+                    if (!action.permissionKey.length) {
+                        return (!action.hide);
+                    }
+                    else {
+                        var hasPermissions = _.map(action.permissionKey, function (key) {
+                            return employeeService.hasPermissionTo(key);
+                        });
+                        return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
+                            return isPermission !== true;
+                        }));
+                    }
+                }
+            }
+            return (!action.hide);
+        };
+
+        self.gridActions = [
+            {
+                type: 'action',
+                icon: 'information-variant',
+                text: 'grid_action_document_info',
+                shortcut: false,
+                submenu: [
+                    {
+                        type: 'info',
+                        checkShow: self.checkToShowAction
+                    }
+                ],
+                class: "action-green",
+                checkShow: self.checkToShowAction
+            },
+            {
+                type: 'separator',
+                checkShow: self.checkToShowAction
+            },
+            // Export
+            {
+                type: 'action',
+                icon: 'export',
+                text: 'grid_action_export',
+                shortcut: true,
+                callback: self.exportSearchGeneralDocument,
+                class: "action-yellow",
+                checkShow: function (action, model) {
+                    //If document is paper outgoing and unapproved/partially approved, show the button.
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && model.docStatus < 24 && info.isPaper && info.documentClass == "outgoing";
+                }
+            },
+            //Open
+            {
+                type: 'action',
+                icon: 'book-open-variant',
+                text: 'grid_action_open',
+                shortcut: false,
+                callback: self.openSearchGeneralDocument,
+                class: "action-green",
+                permissionKey: 'VIEW_DOCUMENT',
+                checkShow: function (action, model) {
+                    //If no content or no view document permission, hide the button
+                    return self.checkToShowAction(action, model) && model.hasContent();
+                }
+            },
+            // Launch Distribution Workflow
+            {
+                type: 'action',
+                icon: 'sitemap',
+                text: 'grid_action_launch_distribution_workflow',
+                shortcut: true,
+                callback: self.launchDistributionWorkflow,
+                class: "action-green",
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                checkShow: self.checkToShowAction
+            },
+            // Print Barcode
+            {
+                type: 'action',
+                icon: 'barcode-scan',
+                text: 'grid_action_print_barcode',
+                shortcut: true,
+                callback: self.printBarcode,
+                class: "action-green",
+                permissionKey: 'PRINT_BARCODE',
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && model.barcodeReady() && (info.documentClass === "incoming" || (info.documentClass === "outgoing" && info.isPaper));
+                }
+            },
+            // View Tracking Sheet
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'view_tracking_sheet',
+                shortcut: false,
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: self.checkToShowAction,
+                submenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
+            },
+            // Manage
+            {
+                type: 'action',
+                icon: 'settings',
+                text: 'grid_action_manage',
+                shortcut: false,
+                checkShow: self.checkToShowAction,
+                submenu: [
+                    // Tags
+                    {
+                        type: 'action',
+                        icon: 'tag',
+                        text: 'grid_action_tags',
+                        shortcut: false,
+                        callback: self.manageTags,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Comments
+                    {
+                        type: 'action',
+                        icon: 'comment',
+                        text: 'grid_action_comments',
+                        shortcut: false,
+                        permissionKey: "MANAGE_DOCUMENT’S_COMMENTS",
+                        callback: self.manageComments,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Tasks
+                    {
+                        type: 'action',
+                        icon: 'note-multiple',
+                        text: 'grid_action_tasks',
+                        shortcut: false,
+                        callback: self.manageTasks,
+                        class: "action-red",
+                        hide: true,
+                        checkShow: self.checkToShowAction
+                    },
+                    // Attachments
+                    {
+                        type: 'action',
+                        icon: 'attachment',
+                        text: 'grid_action_attachments',
+                        shortcut: false,
+                        callback: self.manageAttachments,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Linked Documents
+                    {
+                        type: 'action',
+                        icon: 'file-document',
+                        text: 'grid_action_linked_documents',
+                        shortcut: false,
+                        callback: self.manageLinkedDocuments,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Linked Entities
+                    {
+                        type: 'action',
+                        icon: 'link-variant',
+                        text: 'grid_action_linked_entities',
+                        shortcut: false,
+                        callback: self.manageLinkedEntities,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    }
+                ]
+            },
+            // Download
+            {
+                type: 'action',
+                icon: 'download',
+                text: 'grid_action_download',
+                shortcut: false,
+                checkShow: self.checkToShowAction,
+                submenu: [
+                    // Main Document
+                    {
+                        type: 'action',
+                        icon: 'file-document',
+                        text: 'grid_action_main_document',
+                        shortcut: false,
+                        callback: self.downloadMainDocument,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Composite Document
+                    {
+                        type: 'action',
+                        icon: 'file-document',
+                        text: 'grid_action_composite_document',
+                        shortcut: false,
+                        callback: self.downloadCompositeDocument,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    }
+                ]
+            },
+            // Send
+            {
+                type: 'action',
+                icon: 'send',
+                text: 'grid_action_send',
+                shortcut: false,
+                hide: true,
+                checkShow: self.checkToShowAction,
+                submenu: [
+                    // Link To Document By Email
+                    {
+                        type: 'action',
+                        icon: 'link-variant',
+                        text: 'grid_action_link_to_document_by_email',
+                        shortcut: false,
+                        callback: self.sendLinkToDocumentByEmail,
+                        class: "action-red",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Composite Document As Attachment By Email
+                    {
+                        type: 'action',
+                        icon: 'attachment',
+                        text: 'grid_action_composite_document_as_attachment_by_email',
+                        shortcut: false,
+                        callback: self.sendCompositeDocumentAsAttachmentByEmail,
+                        class: "action-red",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Main Document Fax
+                    {
+                        type: 'action',
+                        icon: 'fax',
+                        text: 'grid_action_main_document_fax',
+                        shortcut: false,
+                        callback: self.sendMainDocumentFax,
+                        class: "action-red",
+                        checkShow: self.checkToShowAction
+                    },
+                    // SMS
+                    {
+                        type: 'action',
+                        icon: 'message',
+                        text: 'grid_action_send_sms',
+                        shortcut: false,
+                        callback: self.sendSMS,
+                        class: "action-red",
+                        checkShow: self.checkToShowAction
+                    }
+                ]
+            },
+            // Get Link
+            {
+                type: 'action',
+                icon: 'link',
+                text: 'grid_action_get_link',
+                shortcut: false,
+                callback: self.getLink,
+                class: "action-red",
+                hide: true,
+                checkShow: self.checkToShowAction
+            },
+            // Subscribe
+            {
+                type: 'action',
+                icon: 'bell-plus',
+                text: 'grid_action_subscribe',
+                shortcut: false,
+                callback: self.subscribe,
+                class: "action-red",
+                hide: true,
+                checkShow: self.checkToShowAction
+            },
+            // Create Copy
+            {
+                type: 'action',
+                icon: 'content-copy',
+                text: 'grid_action_create_copy',
+                shortcut: true,
+                callback: self.createCopy,
+                class: "action-red",
+                hide: true,
+                checkShow: self.checkToShowAction
+            }
+        ];
+
+       /* console.log('general search grid main actions length', self.gridActions.length);
+        var actions = [];
+        for (var i = 0; i < self.gridActions.length; i++) {
+            if (self.gridActions[i].type === 'action')
+                actions.push(langService.getKey(self.gridActions[i].text, 'en'));
+            if (self.gridActions[i].hasOwnProperty('submenu')) {
+                var submenus = self.gridActions[i].submenu;
+                for (var j = 0; j < submenus.length; j++) {
+                    if (submenus[j].type === 'action')
+                        actions.push(langService.getKey(submenus[j].text, 'en'));
+                }
+            }
+        }
+        console.log('general search all grid actions', actions);*/
+    });
+};

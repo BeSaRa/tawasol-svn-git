@@ -1,0 +1,142 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.add_new_document_status}}">
+    <div layout="column">
+        <md-toolbar>
+            <span ng-if="!ctrl.editMode" class="p20">{{lang.add_new_theme}}</span>
+            <span ng-if="ctrl.editMode" class="p20">{{ctrl.model.getNames()}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="doc" autocomplete="off">
+                <md-tabs md-dynamic-height>
+                    <md-tab label="{{lang.basic_info}}">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="arName">{{lang.arabic_name}}</label>
+                                        <input name="arName" id="arName" required minlength="4"
+                                               ng-model="ctrl.theme.arName"
+                                               custom-validate-directive="ANS" maxlength="150">
+                                        <div ng-messages="doc.arName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="ANS">{{lang.arabic_number_space}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:150})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="enName">{{lang.english_name}}</label>
+                                        <input name="enName" id="enName" required minlength="4"
+                                               ng-model="ctrl.theme.enName"
+                                               custom-validate-directive="ENS" maxlength="150">
+                                        <div ng-messages="doc.enName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="ENS">{{lang.english_number_space}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:150})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label>{{$parent.lang.arabic_font_family}}</label>
+                                        <md-select required ng-model="ctrl.theme.arFontFamily"
+                                                   aria-label="{{$parent.lang.arabic_font_family}}">
+                                            <md-option ng-repeat="font in ctrl.theme.arFonts()" ng-value="font"><span
+                                                    ng-style="{'font-family':font}">نموذج الخط</span> - {{font}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="doc.lookupStrKey.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label>{{$parent.lang.english_font_family}}</label>
+                                        <md-select required ng-model="ctrl.theme.enFontFamily"
+                                                   aria-label="{{$parent.lang.english_font_family}}">
+                                            <md-option ng-repeat="font in ctrl.theme.enFonts()" ng-value="font"><span
+                                                    ng-style="{'font-family':font}">{{font}}</span></md-option>
+                                        </md-select>
+                                        <div ng-messages="edit_form.enFont.$error">
+                                            <div ng-message="required">{{$parent.lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <div flex class="p20">
+                                        <md-switch ng-model="ctrl.theme.status">
+                                            <label>{{lang.status}} :
+                                                {{ctrl.theme.getTranslatedStatus()}}</label>
+                                        </md-switch>
+                                    </div>
+                                </div>
+                                <span>{{$parent.lang.create_your_palette}}</span>
+                                <div layout="row">
+
+                                    <div flex class="p20">
+
+                                        <ul class="paletteBuilder">
+                                            <li ng-repeat="clr in ctrl.colors | orderBy:'id' track by $index">
+                                                <div md-color-picker
+                                                     ng-model="ctrl.theme.colors[$index].color"
+                                                     required
+                                                     md-color-clear-button="false"
+                                                     has-backdrop="false"
+                                                     open-on-input="false"
+                                                     md-color-alpha-channel="true"
+                                                     md-color-history="false"
+                                                     md-color-sliders="false">
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+
+                    <md-tab label="{{lang.additional_properties}}" ng-disabled="ctrl.theme.colors.length < 8">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <div layout="row">
+                                    <ul class="propertiesBuilder">
+                                        <li ng-repeat="(key , value ) in ctrl.theme.themeKeys track by value.id">
+                                            <div class="propertiesEle">
+                                                <div class="md-color-picker-checkered-bg radio-color">
+                                                    <div class="paletteDisplay"
+                                                         ng-style="{'background':ctrl.theme.themeKeys[key].parent.propertyValue}"></div>
+                                                </div>
+                                                <h3>{{value.defaultEnName}}</h3>
+                                            </div>
+                                            <md-radio-group ng-model="ctrl.theme.themeKeys[key].parent.propertyValue">
+                                                <div class="md-color-picker-checkered-bg radio-color"
+                                                     ng-repeat="color in ctrl.theme.colors track by $index">
+                                                    <md-radio-button aria-label="{{color}}" class="paletteRadio"
+                                                                     ng-value="color.color"
+                                                                     ng-style="{'background':color.color}">
+                                                    </md-radio-button>
+                                                </div>
+                                            </md-radio-group>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-disabled="doc.$invalid" ng-if="!ctrl.editMode"
+                           ng-click="ctrl.addThemeFromCtrl()">{{lang.add}}
+                </md-button>
+                <md-button class="md-raised" ng-if="ctrl.editMode"
+                           ng-click="ctrl.editThemeFromCtrl()">{{lang.save}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closePopUp()">{{lang.close}}</md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

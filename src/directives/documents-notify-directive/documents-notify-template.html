@@ -1,0 +1,32 @@
+<md-menu-bar class="notify-list">
+    <md-menu md-position-mode="left bottom" md-offset="0 12">
+        <div layout="column" class="notify">
+            <md-button class="md-icon-button" ng-click="ctrl.openNotificationMenu($mdMenu)">
+                <md-icon md-svg-icon="bell-outline"></md-icon>
+            </md-button>
+            <span ng-if="ctrl.mailService.unreadNotificationsCount > 0" ng-click="ctrl.openNotificationMenu($mdMenu)"
+                  class="counter blue">{{ctrl.mailService.unreadNotificationsCount}}</span>
+        </div>
+        <md-menu-content class="toolbar-menu-content">
+            <div scroll-directive class="notify-list-wrapper">
+                <ul>
+                    <li ng-repeat="item in ctrl.mailService.notifications track by $index" layout="row">
+                        <div class="task-body" flex layout="column">
+                            <div class="task-header" layout="row">
+                                <h5 md-truncate flex ng-if="!item.read">
+                                    <a href="#" ng-click="ctrl.openNotificationItem(item,$event)">{{item.getNotificationSubject()}}</a>
+                                </h5>
+                                <a href="#" md-truncate flex ng-if="item.read" class="notification-subject" ng-click="ctrl.openNotificationItem(item,$event)">{{item.getNotificationSubject()}}</a>
+                            </div>
+                            <div layout="column">
+                                <div class="tasks-date-text">{{item.receivedDate}}
+                                    <md-icon class="tasks-date-icon" md-svg-icon="update"></md-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </md-menu-content>
+    </md-menu>
+</md-menu-bar>

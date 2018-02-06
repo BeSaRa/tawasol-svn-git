@@ -1,0 +1,192 @@
+<!-- start of view -->
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_sent_items}}</span>
+            <md-button ng-click="ctrl.reloadUserSentItems()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <!-- exact table from live demo -->
+                        <md-table-container flex scroll-directive>
+                            <table md-table md-row-select ng-model="ctrl.selectedUserSentItems"
+                                   md-progress="ctrl.progress"><!--multiple-->
+                                <thead md-head md-order="ctrl.grid.order"><!--md-on-reorder="ctrl.reloadUserSentItems"-->
+                                <tr md-row>
+                                    <th colspan="{{ctrl.selectedUserSentItems.length > 1 ? 9 : 10}}"
+                                        ng-if="ctrl.selectedUserSentItems.length" md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedUserSentItems.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+                                            <!--ng-if="ctrl.selectedUserSentItems.length > 1"-->
+                                            <!--<md-button class="md-icon-button"
+                                                       tooltip="{{lang.grid_action_reassign}}"
+                                                       ng-click="ctrl.reassignBulkSentItems($event)">
+                                                <md-icon md-svg-icon="tag" class="action-red"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button"
+                                                       tooltip="{{lang.grid_action_recall}}"
+                                                       ng-click="ctrl.recallBulkSentItems($event)">
+                                                <md-icon md-svg-icon="tag" class="action-red"></md-icon>
+                                            </md-button>-->
+                                        </div>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column
+                                        md-order-by="priorityLevelIndicator.text">
+                                        <!-- Indicators -->
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="docFullSerial">
+                                        <span>{{lang.sent_items_serial_number}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="docSubject">
+                                        <span>{{lang.sent_items_document_subject}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="actionDate">
+                                        <span>{{lang.sent_items_receive_date}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="workflowActionId">
+                                        <span>{{lang.sent_items_action}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="userFromInfo">
+                                        <span>{{lang.sent_items_sender}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column
+                                        md-order-by="workflowActionInfo">
+                                        <span>{{lang.sent_items_due_date}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="">
+                                        <span>{{lang.sent_items_correspondence_site}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="">
+                                        <span>{{lang.sent_items_type}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column>
+
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="userSentItem" model="userSentItem" grid-right-click-directive="userSentItem"
+                                    selected-length="{{ctrl.selectedUserSentItems.length ? ctrl.selectedUserSentItems.length : 0}}"
+                                    ng-repeat="userSentItem in ctrl.userSentItems  | filter:ctrl.searchModel |orderBy:ctrl.grid.order  track by $index">
+                                    <!-- | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) -->
+                                    <td md-cell class="indicator-td">
+                                        <span flex ng-class="{'indicator-content': userSentItem.securityLevelIndicator}">
+                                            <md-icon ng-if="userSentItem.securityLevelIndicator"
+                                                     class="{{userSentItem.securityLevelIndicator.class}}"
+                                                     md-svg-icon="{{userSentItem.securityLevelIndicator.icon}}"
+                                                     tooltip="{{lang[userSentItem.securityLevelIndicator.tooltip].change({name: userSentItem.securityLevelLookup.getTranslatedName()})}}"
+                                            ></md-icon>
+                                        </span>
+                                        <span class="indicator-badge"
+                                              ng-class="{'indicator-content': userSentItem.docTypeIndicator}">
+                                            <span ng-if="userSentItem.docTypeIndicator"
+                                                  tooltip="{{lang[userSentItem.docTypeIndicator.tooltip]}}"
+                                                  class="{{userSentItem.docTypeIndicator.class}}">
+                                                {{lang[userSentItem.docTypeIndicator.text]}}
+                                            </span>
+                                        </span>
+                                        <span flex ng-class="{'indicator-content': userSentItem.priorityLevelIndicator}">
+                                            <md-icon ng-if="userSentItem.priorityLevelIndicator"
+                                                     class="{{userSentItem.priorityLevelIndicator.class}}"
+                                                     md-svg-icon="{{userSentItem.priorityLevelIndicator.icon}}"
+                                                     tooltip="{{lang[userSentItem.priorityLevelIndicator.tooltip].change({name: userSentItem.priorityLevelLookup.getTranslatedName()})}}"
+                                            ></md-icon>
+                                        </span>
+                                        <span flex ng-class="{'indicator-content': userSentItem.attachmentsIndicator}">
+                                            <md-icon ng-if="userSentItem.attachmentsIndicator"
+                                                     class="{{userSentItem.attachmentsIndicator.class}}"
+                                                     md-svg-icon="{{userSentItem.attachmentsIndicator.icon}}"
+                                                     tooltip="{{lang[userSentItem.attachmentsIndicator.tooltip]}}"
+                                            ></md-icon>
+                                        </span>
+                                        <span flex ng-class="{'indicator-content': userSentItem.linkedDocsIndicator}">
+                                           <md-icon ng-if="userSentItem.linkedDocsIndicator"
+                                                    class="{{userSentItem.linkedDocsIndicator.class}}"
+                                                    md-svg-icon="{{userSentItem.linkedDocsIndicator.icon}}"
+                                                    tooltip="{{lang[userSentItem.linkedDocsIndicator.tooltip]}}"
+                                           ></md-icon>
+                                       </span>
+                                        <span flex ng-class="{'indicator-content': userSentItem.followUpStatusIndicator}">
+                                            <md-icon ng-if="userSentItem.followUpStatusIndicator"
+                                                     class="{{userSentItem.followUpStatusIndicator.class}}"
+                                                     md-svg-icon="{{userSentItem.followUpStatusIndicator.icon}}"
+                                                     tooltip="{{lang[userSentItem.followUpStatusIndicator.tooltip].change({name: userSentItem.followupStatusLookup.getTranslatedName()})}}"
+                                            ></md-icon>
+                                        </span>
+                                        <!--<span flex ng-class="{'indicator-content': userSentItem.dueDateStatusIndicator}">
+                                            <md-icon ng-if="userSentItem.dueDateStatusIndicator"
+                                                     class="{{userSentItem.dueDateStatusIndicator.class}}"
+                                                     md-svg-icon="{{userSentItem.dueDateStatusIndicator.icon}}"
+                                                     tooltip="{{lang[userSentItem.dueDateStatusIndicator.tooltip].change({date:userSentItem.generalStepElm.dueDate, status:lang[userSentItem.dueDateStatusIndicator.text] })}}"
+                                            ></md-icon>
+                                        </span>-->
+                                        <!--<span flex class="indicator-badge" ng-class="{'indicator-content': userSentItem.tagsIndicator}">
+                                            <span ng-if="userSentItem.tagsIndicator"
+                                                  tooltip="{{lang[userSentItem.tagsIndicator.tooltip]}}"
+                                                  class="{{userSentItem.tagsIndicator.class}}">
+                                                {{userSentItem.tagsIndicator.text}}
+                                            </span>
+                                        </span>-->
+                                        <!--<span flex class="indicator-badge" ng-class="{'indicator-content': userInbox.commentsIndicator}">
+                                            <span ng-if="userSentItem.commentsIndicator"
+                                                  tooltip="{{lang[userSentItem.commentsIndicator.tooltip]}}"
+                                                  class="{{userSentItem.commentsIndicator.class}}">
+                                                {{userSentItem.commentsIndicator.text}}
+                                            </span>
+                                        </span>-->
+                                    </td>
+                                    <td md-cell>{{userSentItem.docFullSerial}}</td>
+                                    <td md-cell><a href="" class="view-doc"
+                                                   ng-click="ctrl.viewDocument(userSentItem, $event)">{{userSentItem.docSubject}}</a>
+                                    </td>
+                                    <td md-cell>{{userSentItem.actionDate}}</td>
+                                    <td md-cell>{{userSentItem.getTranslatedAction()}}</td>
+                                    <td md-cell>{{userSentItem.getTranslatedUserFrom()}}</td>
+                                    <td md-cell>{{userSentItem.dueDate}}</td>
+                                    <td md-cell> <!--class="td-data"-->
+                                        <!--<main-site-sub-site-directive
+                                                main-site-info="userSentItem.mainSiteInfo"
+                                                sub-site-info="userSentItem.subSiteInfo"
+                                        ></main-site-sub-site-directive>-->
+                                    </td>
+
+                                    <td md-cell></td>
+                                    <td md-cell ng-if="ctrl.selectedUserSentItems.length < 2">
+                                        <div layout-align="start center" ng-if="!ctrl.selectedUserSentItems.length
+                                                  || ctrl.selectedUserSentItems.length===1 && ctrl.selectedUserSentItems[0].id === userSentItem.id">
+                                            <grid-actions-directive menu-direction="horizontal"
+                                                                    grid-actions="ctrl.gridActions"
+                                                                    model="userSentItem"
+                                                                    shortcut="true">
+                                            </grid-actions-directive>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.userSentItemService.totalCount}}" md-page-select
+                                    md-on-paginate="ctrl.reloadUserSentItems">
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>
+<!-- end of view -->

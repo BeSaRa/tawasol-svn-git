@@ -1,0 +1,67 @@
+<md-dialog class="dialog-extend"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_layout : ctrl.model.getTranslatedName()}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20" ng-if="!ctrl.editMode">{{lang.dashboard_add_layout}}</span>
+            <span class="p20" ng-if="ctrl.editMode">{{ctrl.model.getTranslatedName()}}</span>
+            <close-dialog-directive when-close="ctrl.closeLayoutDialog"></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="layout_form">
+                <div layout="column" class="p20">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="arName">{{lang.dashboard_layout_arabic_name}}</label>
+                            <input name="arName" id="arName" required minlength="4" maxlength="80"
+                                   ng-model="ctrl.layout.arName"
+                                   custom-validate-directive="ANS">
+                            <div ng-messages="layout_form.arName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="ANS">{{lang.arabic_number_space}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="enName">{{lang.dashboard_layout_english_name}}</label>
+                            <input name="enName" id="enName" required minlength="4" maxlength="80"
+                                   ng-model="ctrl.layout.enName"
+                                   custom-validate-directive="ENS">
+                            <div ng-messages="layout_form.enName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="ENS">{{lang.english_number_space}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div ng-if="!ctrl.editMode" layout="row">
+                        <div flex>
+                            <md-switch ng-model="ctrl.layout.isCurrent"
+                                       aria-label="{{lang.dashboard_layout_is_current}}">
+                                <label>{{lang.dashboard_layout_is_current}} :
+                                    {{ctrl.layout.getTranslatedIsCurrent()}}</label>
+                            </md-switch>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row" layout-align="start center">
+                <md-button class="md-raised" ng-disabled="layout_form.$invalid" ng-if="!ctrl.editMode"
+                           ng-click="ctrl.saveLayout()">
+                    {{lang.add}}
+                </md-button>
+                <md-button class="md-raised"
+                           ng-disabled="layout_form.$invalid"
+                           ng-if="ctrl.editMode"
+                           ng-click="ctrl.saveLayout()">
+                    {{lang.save}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeLayoutDialog()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

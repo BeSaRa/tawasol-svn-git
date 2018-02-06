@@ -1,0 +1,36 @@
+.theme-model {
+
+}
+
+.theme-title {
+  padding: 10px 0;
+}
+
+.theme-preview {
+  height: 100px;
+  border: 1px solid #EEE;
+  overflow: hidden;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+
+.theme-toolbar-bg {
+  border-bottom: 1px solid #EEE;
+  height: 20px;
+}
+
+.theme-page-header-bg {
+  height: 30px;
+}
+
+.theme-sidebar-bg-selected {
+  height: 20px;
+  &.banner {
+    height: 40px;
+  }
+}
+
+#theme-sidebar {
+  z-index: 61;
+}

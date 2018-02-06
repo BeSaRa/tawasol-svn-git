@@ -1,0 +1,91 @@
+<md-menu-bar id="user-menu">
+    <md-menu flex md-position-mode="right bottom">
+        <md-button ng-click="$mdMenu.open()">
+            <div layout="row" flex layout-align="start center">
+                <div layout="column" layout-align="start center" class="avatar-wrapper">
+                    <img ng-if="!userMenu.employeeService.hasProxy()" class="avatar-image"
+                         src="../../../assets/images/profile.jpg">
+                    <img ng-if="userMenu.employeeService.hasProxy()" class="avatar-image"
+                         src="../../../assets/images/profile-proxy.png">
+                    <md-icon class="profile-status" ng-class="userMenu.selectedStatus.class"
+                             md-svg-icon="{{userMenu.selectedStatus.icon}}"></md-icon>
+                </div>
+                <span flex class="user-name">{{userMenu.employee.getTranslatedName()}}</span>
+                <md-icon md-svg-icon="chevron-down"></md-icon>
+            </div>
+        </md-button>
+        <md-menu-content width="3">
+            <md-menu-item ng-if="!userMenu.employeeService.isAdminUser()">
+                <md-button ng-click="userMenu.userPreferences($event)">
+                    <div layout="row" layout-align="start center">
+                        <md-icon md-svg-icon="account-settings-variant"></md-icon>
+                        <span>{{lang.user_preferences}}</span>
+                    </div>
+                </md-button>
+            </md-menu-item>
+            <!--<md-menu-item>
+                <md-button ng-click="userMenu.moveToFolders($event)">
+                    <div layout="row" layout-align="start center">
+                        <md-icon md-svg-icon="folder-move"></md-icon>
+                        <span>{{lang.move_to_folder}}</span>
+                    </div>
+                </md-button>
+            </md-menu-item>-->
+            <md-menu-item ng-if="!userMenu.employeeService.isAdminUser()">
+                <md-menu>
+                    <md-button ng-click="$mdMenu.open()">
+                        <div layout="row" layout-align="start center">
+                            <md-icon md-svg-icon="account-switch"></md-icon>
+                            <span>{{lang.organizations}}</span>
+                        </div>
+                    </md-button>
+                    <md-menu-content width="3">
+                        <md-menu-item>
+                            <md-button ng-disabled="true">
+                                {{userMenu.employee.userOrganization.getTranslatedName()}}
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-divider></md-menu-divider>
+                        <md-menu-item ng-if="!userMenu.isCurrentOrganization(organization)"
+                                      ng-repeat="organization in userMenu.employee.ouList track by $index">
+                            <md-button ng-click="userMenu.switchOrganization(organization)">
+                                {{organization.getTranslatedName()}}
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-item>
+            <md-menu-item class="hidden">
+                <md-menu>
+                    <md-button ng-click="$mdMenu.open($event)">
+                        <div layout="row" layout-align="start center">
+                            <md-icon md-svg-icon="{{userMenu.selectedStatus.icon}}"
+                                     ng-class="userMenu.selectedStatus.class"></md-icon>
+                            <span>{{userMenu.selectedStatus.title}}</span>
+                        </div>
+                    </md-button>
+                    <md-menu-content width="2">
+                        <md-menu-item ng-repeat="status in userMenu.statusList track by $index">
+                            <md-button class="user-status" ng-class="{'selected':userMenu.isStatusSelected(status)}"
+                                       ng-click="userMenu.selectStatus(status)">
+                                <div layout="row" layout-align="start center">
+                                    <md-icon ng-class="status.class" md-svg-icon="{{status.icon}}"></md-icon>
+                                    <span>{{status.title}}</span>
+                                </div>
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu><!-- end sub menu-->
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+                <md-button ng-click="userMenu.logoutEmployee()">
+                    <div layout="row" layout-align="start center">
+                        <md-icon md-svg-icon="logout"></md-icon>
+                        <span>{{lang.logout}}</span>
+                    </div>
+                </md-button>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+</md-menu-bar>

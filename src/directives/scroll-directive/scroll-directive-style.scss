@@ -1,0 +1,12 @@
+.ps:hover > .ps__scrollbar-y-rail:hover, .ps:hover > .ps__scrollbar-y-rail {
+  background-color: transparent !important;
+}
+
+.ps > .ps__scrollbar-y-rail {
+  z-index: 3;
+}
+
+.scrollable-element {
+  max-height: 100%;
+  max-width: 100%;
+}

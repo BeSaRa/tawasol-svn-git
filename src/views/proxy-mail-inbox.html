@@ -1,0 +1,201 @@
+<!-- start of view -->
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_proxy_mail_inbox}}</span>
+            <md-button ng-click="ctrl.reloadProxyMailInboxes()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <md-input-container flex>
+                <label for="selectUser">{{lang.select_user}}</label>
+                <md-select id="selectUser"
+                           name="selectUser"
+                           ng-change="ctrl.getProxyMailForUser()"
+                           ng-model="ctrl.selectUser">
+                    <md-option ng-value="proxyUser" ng-repeat="proxyUser in ctrl.proxyUsers">
+                        {{proxyUser.getTranslatedName()}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <md-table-container flex scroll-directive>
+                            <table md-table md-row-select multiple ng-model="ctrl.selectedProxyMailInboxes"
+                                   md-progress="ctrl.progress">
+                                <thead md-head md-order="ctrl.grid.order">
+                                <tr md-row>
+                                    <th colspan="{{ctrl.selectedProxyMailInboxes.length > 1 ? 10 : 11}}"
+                                        ng-if="ctrl.selectedProxyMailInboxes.length" md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedProxyMailInboxes.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+
+                                            <!--ng-if="ctrl.selectedProxyMailInboxes.length > 1"-->
+                                            <md-button class="md-icon-button" aria-label="{{lang.inbox_terminate}}"
+                                                       tooltip="{{lang.inbox_terminate}}"
+                                                       ng-click="ctrl.terminateProxyMailInboxBulk($event)">
+                                                <md-icon md-svg-icon="stop" class="action-green"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button" aria-label="{{lang.inbox_add_to_folder}}"
+                                                       tooltip="{{lang.inbox_add_to_folder}}"
+                                                       ng-click="ctrl.addToFolderProxyMailInboxBulk($event)">
+                                                <md-icon md-svg-icon="folder-plus" class="action-green"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button action-green" aria-label="{{lang.star}}"
+                                                       tooltip="{{lang.star}}"
+                                                       ng-click="ctrl.changeProxyMailInboxStarBulk('starBulk',$event)">
+                                                <md-icon class="star-yellow" md-svg-icon="star"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button action-green" aria-label="{{lang.un_star}}"
+                                                       tooltip="{{lang.un_star}}"
+                                                       ng-click="ctrl.changeProxyMailInboxStarBulk('unStarBulk' ,$event)">
+                                                <md-icon class="star-yellow" md-svg-icon="star-outline"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="">
+
+                                    </th>
+                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="docSerial">
+                                        <span>{{lang.inbox_serial}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column
+                                        md-order-by="docSubject">
+                                        <span>{{lang.subject}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column
+                                        md-order-by="receivedDate">
+                                        <span>{{lang.received_date}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="action">
+                                        <span>{{lang.action}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="sender">
+                                        <span>{{lang.sender}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="dueDate">
+                                        <span>{{lang.due_date}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="">
+                                        <span>{{lang.correspondence_sites}}</span>
+                                    </th>
+                                    <!--<th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="subSite">
+                                        <span>{{lang.inbox_sub_site}}</span>
+                                    </th>-->
+                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="docType">
+                                        <span>{{lang.type}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column
+                                        md-order-by="numberOfDays">
+                                        <span>{{lang.number_of_days}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column>
+                                        <span></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="proxyMailInbox" grid-right-click-directive="proxyMailInbox"
+                                    model="proxyMailInbox"
+                                    selected-length="{{ctrl.selectedProxyMailInboxes.length ? ctrl.selectedProxyMailInboxes.length : 0}}"
+                                    ng-repeat="proxyMailInbox in ctrl.proxyMailInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    <td md-cell>
+                                        <md-button class="md-icon-button"
+                                                   ng-if="proxyMailInbox.generalStepElm.starred && (!ctrl.selectedProxyMailInboxes.length
+                                                 || ctrl.selectedProxyMailInboxes.length===1 && ctrl.selectedProxyMailInboxes[0].generalStepElm.workObjectNumber === proxyMailInbox.generalStepElm.workObjectNumber)"
+                                                   ng-click="ctrl.changeProxyMailInboxStar(proxyMailInbox, $event)">
+                                            <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
+                                                     md-svg-icon="star"
+                                                     tooltip="{{proxyMailInbox.getTranslatedStarred()}}"
+                                            ></md-icon>
+                                        </md-button>
+                                        <md-button class="md-icon-button"
+                                                   ng-if="proxyMailInbox.generalStepElm.starred
+                                        && ((ctrl.selectedProxyMailInboxes.length === 1
+                                        && ctrl.selectedProxyMailInboxes[0].generalStepElm.workObjectNumber != proxyMailInbox.generalStepElm.workObjectNumber)
+                                        || ctrl.selectedProxyMailInboxes.length > 1)">
+                                            <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
+                                                     md-svg-icon="star"
+                                                     tooltip="{{proxyMailInbox.getTranslatedStarred()}}"
+                                            ></md-icon>
+                                        </md-button>
+                                        <md-button class="md-icon-button"
+                                                   ng-click="ctrl.changeProxyMailInboxStar(proxyMailInbox, $event)"
+                                                   ng-if="!proxyMailInbox.generalStepElm.starred && (!ctrl.selectedProxyMailInboxes.length
+                                                  || ctrl.selectedProxyMailInboxes.length===1 && ctrl.selectedProxyMailInboxes[0].generalStepElm.workObjectNumber === proxyMailInbox.generalStepElm.workObjectNumber)">
+                                            <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
+                                                     md-svg-icon="star-outline"
+                                                     tooltip="{{proxyMailInbox.getTranslatedStarred()}}"
+                                            ></md-icon>
+                                        </md-button>
+                                        <md-button class="md-icon-button"
+                                                   ng-if="!proxyMailInbox.generalStepElm.starred
+                                                   && ((ctrl.selectedProxyMailInboxes.length === 1
+                                                   && ctrl.selectedProxyMailInboxes[0].generalStepElm.workObjectNumber != proxyMailInbox.generalStepElm.workObjectNumber)
+                                                    || ctrl.selectedProxyMailInboxes.length > 1)">
+                                            <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
+                                                     md-svg-icon="star-outline"
+                                                     tooltip="{{proxyMailInbox.getTranslatedStarred()}}"
+                                            ></md-icon>
+                                        </md-button>
+                                    </td>
+                                    <td md-cell>{{proxyMailInbox.generalStepElm.docSerial}}</td>
+                                    <td md-cell class="td-data">
+                                        <a href="" class="view-doc" ng-if="proxyMailInbox.hasContent()"
+                                           ng-click="ctrl.viewDocument(proxyMailInbox, $event)">{{proxyMailInbox.generalStepElm.docSubject}}</a>
+                                        <span ng-if="!proxyMailInbox.hasContent()">{{proxyMailInbox.generalStepElm.docSubject}}</span>
+                                    </td>
+                                    <td md-cell>{{proxyMailInbox.generalStepElm.receivedDate}}</td>
+                                    <td md-cell>{{proxyMailInbox.action.getTranslatedName()}}</td>
+                                    <td md-cell class="td-data">
+                                        <div layout="row">
+                                            <span flex>{{proxyMailInbox.senderInfo.getTranslatedName()}}</span>
+                                            <!--<md-icon aria-label="{{lang.sender}}"
+                                                     md-svg-icon="information-variant"
+                                                     tooltip="<p><span>{{lang.get('rank')}}: </span><span>{{proxyMailInbox.sender.rank}}</span></p>
+                                        <p><span>{{lang.get('email')}}: </span><span>{{proxyMailInbox.sender.email}}</span></p>
+                                        <p><span>{{lang.get('mobile')}}: </span><span>{{proxyMailInbox.sender.mobile}}</span></p>
+                                        "></md-icon>-->
+                                        </div>
+                                    </td>
+                                    <td md-cell>{{proxyMailInbox.generalStepElm.dueDate}}</td>
+                                    <td md-cell></td>
+                                    <!--<td md-cell>{{proxyMailInbox.subCoreSite.getTranslatedName()}}</td>-->
+                                    <td md-cell>{{proxyMailInbox.generalStepElm.docType}}</td>
+                                    <td md-cell>{{proxyMailInbox.generalStepElm.numberOfDays}}</td>
+                                    <td md-cell ng-if="ctrl.selectedProxyMailInboxes.length < 2">
+                                        <div layout-align="start center" ng-if="!ctrl.selectedProxyMailInboxes.length
+                                                  || ctrl.selectedProxyMailInboxes.length===1 && ctrl.selectedProxyMailInboxes[0].generalStepElm.workObjectNumber === proxyMailInbox.generalStepElm.workObjectNumber">
+                                            <grid-actions-directive menu-direction="horizontal"
+                                                                    grid-actions="ctrl.gridActions"
+                                                                    model="proxyMailInbox"
+                                                                    shortcut="true">
+                                            </grid-actions-directive>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.proxyMailInboxes.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>
+<!-- end of view -->

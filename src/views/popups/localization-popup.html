@@ -1,0 +1,83 @@
+<md-dialog class="dialog-extend"
+           ng-attr-aria-label="{{ctrl.model.getLocalizationKey()}}">
+    <div layout="column">
+        <md-toolbar>
+            <span ng-if="!ctrl.newLocalizationKey"
+                  class="p20">{{lang.edit }} - {{ctrl.model.getLocalizationKey()}}</span>
+            <span ng-if="ctrl.newLocalizationKey"
+                  class="p20">{{lang.add_new_localization}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="localization_form" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div ng-if="ctrl.newLocalizationKey" layout="row">
+                        <md-input-container flex>
+                            <label for="localizationKey">{{lang.localization_localization_key}}</label>
+                            <input name="localizationKey"
+                                   lang-key-exists-directive
+                                   id="localizationKey"
+                                   custom-validate-directive="E_" required
+                                   minlength="1" maxlength="200"
+                                   ng-model="ctrl.localization.localizationKey">
+                            <div ng-messages="localization_form.localizationKey.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="E_">{{lang.arabic_number_space}}</div>
+                                <div ng-message="lang_key_exists">{{lang.lang_key_exists}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="module">{{lang.select_localization_module}}</label>
+                            <md-select name="module" id="module" required ng-model="ctrl.localization.module">
+                                <md-option ng-value="module.lookupKey" ng-repeat="module in ctrl.localizationModules">
+                                    {{module.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="localization_form.module.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="column">
+                        <md-input-container flex>
+                            <label for="arName">{{lang.localization_arabic_translate}}</label>
+                            <textarea rows="3" name="arName" id="arName" required minlength="1" maxlength="200"
+                                      ng-model="ctrl.localization.arName"></textarea>
+                            <div ng-messages="localization_form.arName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="enName">{{lang.localization_english_translate}}</label>
+                            <textarea rows="3" name="enName" id="enName" required minlength="1" maxlength="200"
+                                      ng-model="ctrl.localization.enName"></textarea>
+                            <div ng-messages="localization_form.enName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row" layout-align="start center">
+                <md-button class="md-raised" ng-disabled="localization_form.$invalid || localization_form.$pending"
+                           ng-click="ctrl.saveLocalization()">
+                    {{lang.save}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised"
+                           ng-click="ctrl.resetModel()">
+                    {{lang.reset}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeLocalizationPopup()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

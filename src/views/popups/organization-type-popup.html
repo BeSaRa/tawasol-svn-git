@@ -1,0 +1,97 @@
+<md-dialog class="dialog-extend"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_organization_type : ctrl.model.getNames()}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20" ng-if="!ctrl.model.id">{{lang.add_new_organization_type}}</span>
+            <span class="p20" ng-if="ctrl.model.id">{{ctrl.model.getNames()}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="organizationTypeForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="arName">{{lang.arabic_name}}</label>
+                            <input name="arName" id="arName" required minlength="4"
+                                   maxlength="150"
+                                   ng-model="ctrl.organizationType.arName"
+                                   custom-validate-directive="A1NS">
+                            <!--custom-validate-directive="ANS"-->
+                            <div ng-messages="organizationTypeForm.arName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:150})}}</div>
+                                <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="enName">{{lang.english_name}}</label>
+                            <input name="enName" id="enName" required minlength="4"
+                                   maxlength="150"
+                                   ng-model="ctrl.organizationType.enName"
+                                   custom-validate-directive="E1NS">
+                            <!--custom-validate-directive="ENS"-->
+                            <div ng-messages="organizationTypeForm.enName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:150})}}</div>
+                                <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="lookupStrKey">{{lang.code}}</label>
+                            <input name="lookupStrKey" id="lookupStrKey" required
+                                   ng-model="ctrl.organizationType.lookupStrKey"
+                                   custom-validate-directive="EN_" minlength="4" no-space-directive>
+                            <div ng-messages="organizationTypeForm.lookupStrKey.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="EN_">{{lang.english_number_under_score}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="itemOrder">{{lang.item_order}}</label>
+                            <input name="itemOrder" id="itemOrder" required
+                                   ng-model="ctrl.organizationType.itemOrder"
+                                   custom-validate-directive="number">
+                            <div ng-messages="organizationTypeForm.itemOrder.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="number">{{lang.numberonly}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <div flex class="p20">
+                            <md-switch ng-model="ctrl.organizationType.status" aria-label="{{lang.status}}">
+                                <label>{{lang.status}} : {{ctrl.organizationType.getTranslatedStatus()}}</label>
+                            </md-switch>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-disabled="organizationTypeForm.$invalid" ng-if="!ctrl.editMode"
+                           ng-click="ctrl.addOrganizationTypeFromCtrl()">
+                    {{lang.add}}
+                </md-button>
+                <md-button class="md-raised" ng-disabled="organizationTypeForm.$invalid" ng-if="ctrl.editMode"
+                           ng-click="ctrl.editOrganizationTypeFromCtrl()">
+                    {{lang.save}}
+                </md-button>
+                <span flex=""></span>
+                <md-button class="md-raised"
+                           ng-click="ctrl.resetModel()">
+                    {{lang.reset}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeOrganizationTypePopupFromCtrl()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

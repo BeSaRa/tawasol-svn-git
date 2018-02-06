@@ -1,0 +1,46 @@
+.reference-element-item {
+  border: 1px solid #CCC;
+  float: right;
+  margin: 5px;
+  cursor: move;
+  background-color: #FFF;
+  padding: 0 0 0 15px;
+  button {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+#reference-pattern {
+  padding: 20px 0;
+  overflow: hidden;
+}
+
+.element-separator {
+  background-color: #9E9E9E;
+  .padding-input {
+    padding: 0 0 0 20px;
+  }
+}
+
+html.rtl {
+  .element-separator {
+    .padding-input {
+      padding: 0 20px 0 0;
+    }
+  }
+}
+
+.element-edit {
+  width: 50px;
+}
+
+html.rtl {
+  .reference-element-item {
+    padding: 0 15px 0 0;
+  }
+}
+
+#elements {
+  position: relative;
+}

@@ -1,0 +1,544 @@
+module.exports = function (app) {
+    app.controller('favoriteDocumentsCtrl', function (lookupService,
+                                                      favoriteDocumentsService,
+                                                      favoriteDocuments,
+                                                      $q,
+                                                      langService,
+                                                      toast,
+                                                      dialog,
+                                                      contextHelpService,
+                                                      employeeService,
+                                                      viewDocumentService,
+                                                      viewTrackingSheetService,
+                                                      managerService,
+                                                      distributionWorkflowService,
+                                                      counterService,
+                                                      ResolveDefer,
+                                                      correspondenceService) {
+        'ngInject';
+        var self = this;
+
+        self.controllerName = 'favoriteDocumentsCtrl';
+        contextHelpService.setHelpTo('favorite-documents');
+        self.progress = null;
+
+        /**
+         * @description All favorite documents
+         * @type {*}
+         */
+        self.favoriteDocuments = favoriteDocuments;
+        self.favoriteDocumentsService = favoriteDocumentsService;
+
+        /**
+         * @description Contains the selected favorite documents
+         * @type {Array}
+         */
+        self.selectedFavoriteDocuments = [];
+
+        /**
+         * @description Contains options for grid configuration
+         * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
+         */
+        self.grid = {
+            limit: 5, // default limit
+            page: 1, // first page
+            order: 'arName', // default sorting order
+            limitOptions: [5, 10, 20, // limit options
+                {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.favoriteDocuments.length + 21);
+                    }
+                }
+            ]
+        };
+
+        /**
+         * @description Reload the grid of favorite document
+         * @param pageNumber
+         * @return {*|Promise<U>}
+         */
+        self.reloadFavoriteDocuments = function (pageNumber) {
+            var defer = $q.defer();
+            self.progress = defer.promise;
+            return favoriteDocumentsService
+                .loadFavoriteDocuments(self.grid.page, self.grid.limit)
+                .then(function (result) {
+                    counterService.loadCounters();
+                    self.favoriteDocuments = result;
+                    self.selectedFavoriteDocuments = [];
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.grid.page = pageNumber;
+                    return result;
+                });
+        };
+
+
+        /**
+         * @description View document
+         * @param favoriteDocument
+         * @param $event
+         */
+        self.viewDocument = function (favoriteDocument, $event) {
+            //console.log("favoriteDocument", favoriteDocument);
+            if (!favoriteDocument.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(favoriteDocument, self.gridActions);
+            return;
+        };
+
+        /**
+         * @description Remove the document from favorite documents
+         * @param favoriteDocument
+         * @param $event
+         * @param defer
+         */
+        self.removeFavoriteDocument = function (favoriteDocument, $event, defer) {
+            return favoriteDocumentsService.controllerMethod.favoriteDocumentRemove(favoriteDocument, $event)
+                .then(function (result) {
+                    self.reloadFavoriteDocuments(self.grid.page)
+                        .then(function () {
+                            toast.success(langService.get("remove_from_favorite_specific_success").change({name: favoriteDocument.getNames()}));
+                            new ResolveDefer(defer);
+                        });
+                })
+        };
+
+        /**
+         * @description Remove bulk documents from favorite documents
+         * @param $event
+         */
+        self.removeBulkFavoriteDocuments = function ($event) {
+            favoriteDocumentsService
+                .controllerMethod
+                .favoriteDocumentRemoveBulk(self.selectedFavoriteDocuments, $event)
+                .then(function () {
+                    self.reloadFavoriteDocuments(self.grid.page);
+                });
+        };
+
+        /**
+         * @description Edit Content
+         * @param favoriteDocument
+         * @param $event
+         */
+        self.editContent = function (favoriteDocument, $event) {
+            var info = favoriteDocument.getInfo();
+            managerService.manageDocumentContent(info.vsId, info.documentClass, info.title, $event);
+        };
+
+        /**
+         * @description Edit Properties
+         * @param favoriteDocument
+         * @param $event
+         */
+        self.editProperties = function (favoriteDocument, $event) {
+            var info = favoriteDocument.getInfo();
+            managerService
+                .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
+                .finally(function () {
+                    self.reloadFavoriteDocuments(self.grid.page)
+                });
+        };
+
+        /**
+         * @description Launch distribution workflow for favorite document
+         * @param favoriteDocument
+         * @param $event
+         */
+        self.launchDistributionWorkflow = function (favoriteDocument, $event, defer) {
+            /*if (!favoriteDocument.hasContent()) {
+                dialog.alertMessage(langService.get("content_not_found"));
+                return;
+            }
+
+            distributionWorkflowService
+                .controllerMethod
+                .distributionWorkflowSend(favoriteDocument, false, false, null, favoriteDocument.classDescription.toLowerCase(), $event)
+                .then(function (result) {
+                    self.reloadFavoriteDocuments(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                    //self.replaceRecord(result);
+                })
+                .catch(function (result) {
+                    self.reloadFavoriteDocuments(self.grid.page);
+                    //self.replaceRecord(result);
+                });*/
+        };
+
+        /**
+         * @description View Tracking Sheet
+         * @param favoriteDocument
+         * @param params
+         * @param $event
+         */
+        self.viewTrackingSheet = function (favoriteDocument, params, $event) {
+            viewTrackingSheetService
+                .controllerMethod
+                .viewTrackingSheetPopup(favoriteDocument, params, $event).then(function (result) {
+            });
+        };
+
+        /**
+         * @description Manage document tags for favorite document
+         * @param favoriteDocument
+         * @param $event
+         */
+        self.manageTags = function (favoriteDocument, $event) {
+            managerService.manageDocumentTags(favoriteDocument.vsId, favoriteDocument.classDescription, favoriteDocument.docSubject, $event)
+                .then(function (tags) {
+                    favoriteDocument.tags = tags;
+                })
+                .catch(function (tags) {
+                    favoriteDocument.tags = tags;
+                });
+        };
+
+        /**
+         * @description Manage document comments for favorite document
+         * @param favoriteDocument
+         * @param $event
+         */
+        self.manageComments = function (favoriteDocument, $event) {
+            managerService.manageDocumentComments(favoriteDocument.vsId, favoriteDocument.docSubject, $event)
+                .then(function (documentComments) {
+                    favoriteDocument.documentComments = documentComments;
+                })
+                .catch(function (documentComments) {
+                    favoriteDocument.documentComments = documentComments;
+                });
+        };
+
+        /**
+         * @description Manage document attachments for favorite document
+         * @param favoriteDocument
+         * @param $event
+         */
+        self.manageAttachments = function (favoriteDocument, $event) {
+            //console.log('manage attachments : ', favoriteDocument);
+            managerService.manageDocumentAttachments(favoriteDocument.vsId, favoriteDocument.classDescription, favoriteDocument.docSubject, $event)
+                .then(function (attachments) {
+                    favoriteDocument = attachments;
+                })
+                .catch(function (attachments) {
+                    favoriteDocument = attachments;
+                });
+        };
+
+        /**
+         * @description Manage entities for favorite document
+         * @param favoriteDocument
+         * @param $event
+         */
+        self.manageEntities = function (favoriteDocument, $event) {
+            managerService
+                .manageDocumentEntities(favoriteDocument.vsId, favoriteDocument.classDescription, favoriteDocument.docSubject, $event);
+        };
+
+        /**
+         * @description Manage linked documents for favorite document
+         * @param favoriteDocument
+         * @param $event
+         */
+        self.manageLinkedDocuments = function (favoriteDocument, $event) {
+            var info = favoriteDocument.getInfo();
+            return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
+        };
+
+
+        /**
+         * @description Open favorite document
+         * @param favoriteDocument
+         * @param $event
+         */
+        self.openFavoriteDocument = function (favoriteDocument, $event) {
+            if (!favoriteDocument.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(favoriteDocument, self.gridActions);
+            return;
+        };
+
+
+        /**
+         * @description Check if action will be shown on grid or not
+         * @param action
+         * @param model
+         * @returns {boolean}
+         */
+        self.checkToShowAction = function (action, model) {
+            /*if (action.hasOwnProperty('permissionKey'))
+                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+            return (!action.hide);*/
+
+            if (action.hasOwnProperty('permissionKey')) {
+                if (typeof action.permissionKey === 'string') {
+                    return (!action.hide) && employeeService.hasPermissionTo(action.permissionKey);
+                }
+                else if (angular.isArray(action.permissionKey)) {
+                    if (!action.permissionKey.length) {
+                        return (!action.hide);
+                    }
+                    else {
+                        var hasPermissions = _.map(action.permissionKey, function (key) {
+                            return employeeService.hasPermissionTo(key);
+                        });
+                        return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
+                            return isPermission !== true;
+                        }));
+                    }
+                }
+            }
+            return (!action.hide);
+        };
+
+        /**
+         * @description Array of actions that can be performed on grid
+         * @type {[*]}
+         */
+        self.gridActions = [
+            // Document Information
+            {
+                type: 'action',
+                icon: 'information-variant',
+                text: 'grid_action_document_info',
+                shortcut: false,
+                showInView: false,
+                submenu: [
+                    {
+                        type: 'info',
+                        checkShow: self.checkToShowAction
+                    }
+                ],
+                class: "action-green",
+                checkShow: self.checkToShowAction
+            },
+            // Separator
+            {
+                type: 'separator',
+                checkShow: self.checkToShowAction,
+                showInView: false
+            },
+            // Remove
+            {
+                type: 'action',
+                icon: 'delete',
+                text: 'grid_action_remove_from_favorite',
+                shortcut: true,
+                callback: self.removeFavoriteDocument,
+                class: "action-green",
+                checkShow: self.checkToShowAction
+            },
+            // Edit
+            {
+                type: 'action',
+                icon: 'pencil',
+                text: 'grid_action_edit',
+                shortcut: false,
+                showInView: false,
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    var hasPermission = false;
+                    if (info.documentClass === "internal")
+                        hasPermission = (employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT"));
+                    else if (info.documentClass === "incoming")
+                        hasPermission = ( employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES")|| employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT"));
+                    else if (info.documentClass === "outgoing")
+                        hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                    return self.checkToShowAction(action, model) && hasPermission;
+                },
+                submenu: [
+                    // Content
+                    {
+                        type: 'action',
+                        icon: 'pencil-box',
+                        //text: 'grid_action_content',
+                        text: function () {
+                            return {
+                                contextText: 'grid_action_content',
+                                shortcutText: 'grid_action_edit_content'
+                            };
+                        },
+                        shortcut: false,
+                        callback: self.editContent,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            var hasPermission = false;
+                            if (info.documentClass === "internal")
+                                hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
+                            else if (info.documentClass === "incoming")
+                                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
+                            else if (info.documentClass === "outgoing")
+                                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
+                            return self.checkToShowAction(action, model) && hasPermission;
+                        }
+                    },
+                    // Properties
+                    {
+                        type: 'action',
+                        icon: 'pencil',
+                        text: function () {
+                            return {
+                                contextText: 'grid_action_properties',
+                                shortcutText: 'grid_action_edit_properties'
+                            };
+                        },
+                        shortcut: false,
+                        callback: self.editProperties,
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            var hasPermission = false;
+                            if (info.documentClass === "internal")
+                                hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                            else if (info.documentClass === "incoming")
+                                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+                            else if (info.documentClass === "outgoing")
+                                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                            return self.checkToShowAction(action, model) && hasPermission;
+                        }
+                    }
+                ]
+            },
+            // Send To Review
+            {
+                type: 'action',
+                icon: 'send',
+                text: 'grid_action_send_to_review',
+                shortcut: true,
+                hide: true,
+                callback: self.sendFavoriteDocumentToReview,
+                class: "action-red",
+                checkShow: self.checkToShowAction
+            },
+            // Launch Distribution Workflow
+            {
+                type: 'action',
+                icon: 'sitemap',
+                text: 'grid_action_launch_distribution_workflow',
+                shortcut: true,
+                callback: self.launchDistributionWorkflow,
+                class: "action-red",
+                hide: true, /* Launch Distribution is not clear, so need to be discussed with Mr. Abu Al Nassr*/
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                checkShow: self.checkToShowAction
+            },
+            // View Tracking Sheet
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'view_tracking_sheet',
+                shortcut: false,
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: self.checkToShowAction,
+                submenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
+            },
+            // Manage
+            {
+                type: 'action',
+                icon: 'settings',
+                text: 'grid_action_manage',
+                shortcut: false,
+                showInView: false,
+                checkShow: self.checkToShowAction,
+                submenu: [
+                    // Tags
+                    {
+                        type: 'action',
+                        icon: 'tag',
+                        text: 'grid_action_tags',
+                        shortcut: false,
+                        callback: self.manageTags,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Comments
+                    {
+                        type: 'action',
+                        icon: 'comment',
+                        text: 'grid_action_comments',
+                        shortcut: false,
+                        permissionKey: "MANAGE_DOCUMENT’S_COMMENTS",
+                        callback: self.manageComments,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Attachments
+                    {
+                        type: 'action',
+                        icon: 'attachment',
+                        text: 'grid_action_attachments',
+                        shortcut: false,
+                        callback: self.manageAttachments,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Entities
+                    {
+                        type: 'action',
+                        icon: 'pencil-box-outline',
+                        text: 'grid_action_entities',
+                        shortcut: false,
+                        callback: self.manageEntities,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Linked Documents
+                    {
+                        type: 'action',
+                        icon: 'file-document',
+                        text: 'grid_action_linked_documents',
+                        shortcut: false,
+                        callback: self.manageLinkedDocuments,
+                        class: "action-green",
+                        //hide: true,
+                        checkShow: self.checkToShowAction
+                    },
+                    /*{
+                        type: 'action',
+                        icon: 'stop',
+                        text: 'grid_action_destinations',
+                        shortcut: false,
+                        callback: self.manageDestinations,
+                        permissionKey: "MANAGE_DESTINATIONS",
+                        class: "action-red",
+                        hide: true,
+                        checkShow: self.checkToShowAction
+                    }*/
+                ]
+            },
+            // Open
+            {
+                type: 'action',
+                icon: 'book-open-variant',
+                text: 'grid_action_open',
+                shortcut: false,
+                callback: self.openFavoriteDocument,
+                class: "action-green",
+                showInView: false,
+                permissionKey: 'VIEW_DOCUMENT',
+                checkShow: function (action, model) {
+                    //If no content or no view document permission, hide the button
+                    return self.checkToShowAction(action, model) && model.hasContent();
+                }
+            }
+        ];
+
+
+    });
+};

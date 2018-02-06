@@ -1,0 +1,44 @@
+md-menu-item > .md-button md-icon, md-menu-item > md-menu > .md-button md-icon {
+  margin: auto 16px auto 0;
+}
+
+[dir=rtl] md-menu-item > .md-button md-icon, [dir=rtl] md-menu-item > md-menu > .md-button md-icon {
+  margin: auto 0 auto 16px;
+}
+
+md-tab-content {
+  top: 3px;
+}
+
+/***** table fix ******/
+table.md-table:not(.md-row-select) td.md-cell:nth-child(n+2):nth-last-child(n+2), table.md-table:not(.md-row-select) th.md-column:nth-child(n+2):nth-last-child(n+2) {
+  padding: 0 24px 0;
+}
+
+.md-tab {
+  padding: 12px 18px;
+}
+
+.table-selector-header {
+  padding: 0 56px 0 24px !important;
+}
+
+table.md-table.md-row-select td.md-cell:nth-child(n+3):nth-last-child(n+2), table.md-table.md-row-select th.md-column:nth-child(n+3):nth-last-child(n+2) {
+  padding: 0 24px 0 0 !important;
+}
+
+table.md-table th.md-column md-icon:not(:last-child) {
+  margin: 0;
+}
+
+.md-datepicker-button {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.md-datepicker-input-container {
+  margin-left: 0 !important;
+}
+md-menu-item.selected > button:not([disabled]){
+  background-color: rgba(158,158,158,0.2);
+}

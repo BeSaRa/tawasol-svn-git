@@ -1,0 +1,6122 @@
+{
+  "password": {
+    "ar": "كلمة المرور",
+    "en": "Password"
+  },
+  "login": {
+    "ar": "دخول",
+    "en": "login"
+  },
+  "field_required": {
+    "ar": "مطلوب لا تتركه فارغأ",
+    "en": "This is required"
+  },
+  "error_messages": {
+    "ar": "حدث خطاء ما اثناء أتخاذ الاجراء",
+    "en": "Something went wrong while taking action"
+  },
+  "info_messages": {
+    "ar": "رسائل الاعلام",
+    "en": "Info Messages"
+  },
+  "warning_messages": {
+    "ar": "رسائل التنبيه",
+    "en": "Warning Messages"
+  },
+  "success_messages": {
+    "ar": "تم اتمام العملية بنجاح",
+    "en": "The process was successfully completed"
+  },
+  "username": {
+    "ar": "اسم المستخدم",
+    "en": "Username"
+  },
+  "success_login": {
+    "ar": "تم تسجيل دخولك بنجاح وجاري تحوليك إلي واجهة النظام",
+    "en": "You are logged successfully"
+  },
+  "access_denied": {
+    "ar": "غير مصرح لك بالوصول",
+    "en": "access denied"
+  },
+  "project_name": {
+    "ar": "إيبلا للمراسلات",
+    "en": "Ebla CMS"
+  },
+  "user_mail": {
+    "ar": "البريد الشخصي",
+    "en": "Private User Inbox"
+  },
+  "outgoing_entry": {
+    "ar": "إدخال كتب صادرة",
+    "en": "ِِAdd outgoing Books"
+  },
+  "favourites_mail": {
+    "ar": "بريد المفضلات",
+    "en": "Favourites User Mails"
+  },
+  "add_book": {
+    "ar": "إضافة",
+    "en": "Add"
+  },
+  "revise_book": {
+    "ar": "تدقيق",
+    "en": "Revision"
+  },
+  "send_book": {
+    "ar": "إرسال",
+    "en": "Sending"
+  },
+  "memo": {
+    "ar": "المذكرة الداخلية",
+    "en": "Internal Memo"
+  },
+  "follow_up_user_mail": {
+    "ar": "متابعة البريد الشخصي",
+    "en": "Follow-up user mail"
+  },
+  "follow_up_emp_mail": {
+    "ar": "متابعة بريد الموظفين",
+    "en": "follow-up employees mail"
+  },
+  "user_folders": {
+    "ar": "مجلدات المستخدم",
+    "en": "User Folders"
+  },
+  "select_assistant": {
+    "ar": "أختيار معاون",
+    "en": "Select Assistant"
+  },
+  "group_mail": {
+    "ar": "بريد المجموعة",
+    "en": "Group Mail"
+  },
+  "my_fav": {
+    "ar": "الكتب المفضلة",
+    "en": "My favorites"
+  },
+  "login_form_text": {
+    "ar": "تسجيل الدخول",
+    "en": "Sign In"
+  },
+  "fav_links": {
+    "ar": "الروابط المفضلة",
+    "en": "Favourite Links"
+  },
+  "back": {
+    "ar": "العوده",
+    "en": "Back"
+  },
+  "selected": {
+    "ar": "مختاره",
+    "en": "Selected"
+  },
+  "serial": {
+    "ar": "مسلسل",
+    "en": "Serial"
+  },
+  "subject": {
+    "ar": "الموضوع",
+    "en": "Subject"
+  },
+  "received_date": {
+    "ar": "تاريخ الاستلام",
+    "en": "Received Date"
+  },
+  "action": {
+    "ar": "الإجراء",
+    "en": "Action"
+  },
+  "sender": {
+    "ar": "المرسل",
+    "en": "Sender"
+  },
+  "site": {
+    "ar": "الجهة",
+    "en": "Site"
+  },
+  "type": {
+    "ar": "النوع",
+    "en": "Type"
+  },
+  "days": {
+    "ar": "أيام",
+    "en": "Days"
+  },
+  "success_logout": {
+    "ar": "تم تسجيل خروك بنجاح",
+    "en": "You are logged out successfully"
+  },
+  "search": {
+    "ar": "البحث",
+    "en": "Search"
+  },
+  "security_degree": {
+    "ar": "درجة السرية",
+    "en": "Security degree"
+  },
+  "incoming_date": {
+    "ar": "تاريخ الوارد",
+    "en": "Incoming date"
+  },
+  "document_number": {
+    "ar": "رقم الكتاب",
+    "en": "Document number"
+  },
+  "document_date": {
+    "ar": "تاريخ الكتاب",
+    "en": "Document Date"
+  },
+  "main_classification": {
+    "ar": "التصنيف الرئيسي",
+    "en": "Main classification"
+  },
+  "classification": {
+    "ar": "التصنيف",
+    "en": "Classification"
+  },
+  "administration_topic": {
+    "ar": "جهة الكتاب",
+    "en": "The Administration topic"
+  },
+  "document_nature": {
+    "ar": "نوع الكتاب",
+    "en": "Document nature"
+  },
+  "high_level": {
+    "ar": "عالي السرية",
+    "en": "High Level"
+  },
+  "book": {
+    "ar": "كتاب",
+    "en": "Book"
+  },
+  "book_memo": {
+    "ar": "مذكرة داخلية",
+    "en": "Internal Memo"
+  },
+  "settings": {
+    "ar": "الاعدادات",
+    "en": "Settings"
+  },
+  "privacy_settings": {
+    "ar": "إعدادات الخصوصية",
+    "en": "Privacy Settings"
+  },
+  "view_profile": {
+    "ar": "مشاهده الملف الشخصي",
+    "en": "View Profile"
+  },
+  "logout": {
+    "ar": "تسجيل خروج",
+    "en": "Logout"
+  },
+  "general_administration": {
+    "ar": "إدارة عامة",
+    "en": "General Administration"
+  },
+  "administration": {
+    "ar": "إدارة",
+    "en": "Administration"
+  },
+  "branch": {
+    "ar": "فرع",
+    "en": "Branch"
+  },
+  "department": {
+    "ar": "قسم",
+    "en": "Department"
+  },
+  "unit": {
+    "ar": "وحدة",
+    "en": "Unit"
+  },
+  "desk": {
+    "ar": "مكتب",
+    "en": "Desk"
+  },
+  "add": {
+    "ar": "أضف",
+    "en": "Add"
+  },
+  "no_structue": {
+    "ar": "لا يوجد هيكل تنظيمي حاليأ",
+    "en": "organizational structure not found"
+  },
+  "add_root": {
+    "ar": "أضف هيكل",
+    "en": "Add Structure"
+  },
+  "ar_desc": {
+    "ar": "الوصف باللغة العربية",
+    "en": "Arabic Description"
+  },
+  "en_desc": {
+    "ar": "الوصف باللغة الانجليزية",
+    "en": "English Description"
+  },
+  "select_type": {
+    "ar": "فضلا أختر النوع",
+    "en": "Please Select a Type"
+  },
+  "active": {
+    "ar": "فعال",
+    "en": "Active"
+  },
+  "inactive": {
+    "ar": "غير فعال",
+    "en": "Inactive"
+  },
+  "status": {
+    "ar": "الحالة",
+    "en": "Status"
+  },
+  "hascorres": {
+    "ar": "لديها مراسلات",
+    "en": "has Correspondence"
+  },
+  "yes": {
+    "ar": "نعم",
+    "en": "Yes"
+  },
+  "no": {
+    "ar": "لا",
+    "en": "No"
+  },
+  "child": {
+    "ar": "طفل",
+    "en": "Child"
+  },
+  "addto": {
+    "ar": "أضف إلي",
+    "en": "Add to"
+  },
+  "carchive": {
+    "ar": "أرشيف مركزي",
+    "en": "Central Archive"
+  },
+  "basicinfo": {
+    "ar": "المعلومات الاساسية",
+    "en": "Basic Info"
+  },
+  "subinfo": {
+    "ar": "المعلومات الفرعية",
+    "en": "Sub Info"
+  },
+  "serialpfx": {
+    "ar": "بادئة التسلسل",
+    "en": "serial Prefix"
+  },
+  "save": {
+    "ar": "حفظ",
+    "en": "Save"
+  },
+  "email": {
+    "ar": "البريد الالكتروني",
+    "en": "E-mail Address"
+  },
+  "toshort": {
+    "ar": "قصير جدا",
+    "en": "it is too short"
+  },
+  "rmode": {
+    "ar": "وضع إعادة التشغيل",
+    "en": "Reset Mode"
+  },
+  "manual": {
+    "ar": "يدوي",
+    "en": "Manual"
+  },
+  "automatic": {
+    "ar": "تلقائي",
+    "en": "Aِutomatic"
+  },
+  "defaultsec": {
+    "ar": "الوضع الافتراضي لدرجة السرية",
+    "en": "Default Security Level"
+  },
+  "priodefault": {
+    "ar": "الوضع الافتراضي للأولوية",
+    "en": "Default Priority Level"
+  },
+  "edit": {
+    "ar": "تعديل",
+    "en": "Edit"
+  },
+  "add_success": {
+    "ar": "تم أضافة ( :name ) بنجاح",
+    "en": "Added ( :name ) successfully"
+  },
+  "save_success": {
+    "ar": "تم الحفظ بنجاح",
+    "en": "Save Successfully"
+  },
+  "amail": {
+    "ar": "بريد الإدارة",
+    "en": "Administration Mail"
+  },
+  "current_language": {
+    "ar": "اللغة الحالية",
+    "en": "Current Language"
+  },
+  "lang_short": {
+    "ar": "للتحويل السريع اضغط على ( Ctrl + Alt + 1 )",
+    "en": "to quick change click ( Ctrl + Alt +  1 )"
+  },
+  "search_in_tree": {
+    "ar": "ابحث داخل الهيكل التنظيمي",
+    "en": "Search in Organization Tree"
+  },
+  "tree_not_found": {
+    "ar": "غير موجود بالهيكل التنظيمي",
+    "en": "not found in Organization Chart"
+  },
+  "add_new": {
+    "ar": "أضف جديد !",
+    "en": "Add new One !"
+  },
+  "select_parent": {
+    "ar": "اختر الإدارة الام",
+    "en": "Select Parent Administration"
+  },
+  "put_down": {
+    "ar": "ادرج :name تحت",
+    "en": "Drop :name down:"
+  },
+  "status_success": {
+    "ar": "تم تحديث الحالة بنجاح",
+    "en": "Status updated successfully"
+  },
+  "common": {
+    "ar": "مشترك",
+    "en": "common"
+  },
+  "cancel": {
+    "ar": "الغاء",
+    "en": "Cancel"
+  },
+  "cls": {
+    "ar": "تصنيف",
+    "en": "Classification"
+  },
+  "em": {
+    "ar": "حدث خطاء ما اثناء :e",
+    "en": "An error occurred while :e"
+  },
+  "change_to_main": {
+    "ar": "تحويل لرئيسي",
+    "en": "change to main"
+  },
+  "no_cls_found": {
+    "ar": "لا يوجد تصنيفات لعرضها",
+    "en": "No Classifications to Display"
+  },
+  "authorized": {
+    "ar": "كتاب معتمد",
+    "en": "Authorized Book"
+  },
+  "details": {
+    "ar": "الكتاب يحتوي علي كتب مرتبطة",
+    "en": "Connected Book"
+  },
+  "search_content": {
+    "ar": "بحث في المحتوى",
+    "en": "Search in Content"
+  },
+  "search_outgoing": {
+    "ar": "بحث في الصادر",
+    "en": "Search in Outgoing Books"
+  },
+  "warning": {
+    "ar": "تنبيه!",
+    "en": "Warning !"
+  },
+  "publication": {
+    "ar": "تعميم",
+    "en": "Publication"
+  },
+  "org_mail_filtered": {
+    "ar": "بريد الوحدة المصفى",
+    "en": "Filtered Inbox Mails"
+  },
+  "notification_settings": {
+    "ar": "إعدادات التنبيهات",
+    "en": "Notification Settings"
+  },
+  "notification_settings_header": {
+    "ar": "إعدادات التنبيهات الخاصة بالمستخدم",
+    "en": "User Notification Settings"
+  },
+  "usage_report": {
+    "ar": "تقرير عن إستخدام المستخدم",
+    "en": "Usage Report"
+  },
+  "notification_setting_active": {
+    "ar": "تفعيل تنبيهات ابمستخدم",
+    "en": "Activation Of User Notifications"
+  },
+  "notification_follow_up": {
+    "ar": "التنبيه في حالة متابعة كتاب",
+    "en": "Notification in case of follow-up"
+  },
+  "notification_mail_inbox": {
+    "ar": "التنبيه في حالة استقبال كتاب",
+    "en": "Notification in case of receiving book"
+  },
+  "user_followup_email_format": {
+    "ar": "صيغة بريد المتابعة",
+    "en": "Followup Email Format"
+  },
+  "user_followup_sms_format": {
+    "ar": "الصيغة النصية للتيفون الجوال",
+    "en": "Followup SMS Format"
+  },
+  "org_mail_inbox": {
+    "ar": "بريد الوحدات التنظيمية",
+    "en": "Organization's Unit Inbox"
+  },
+  "org_mail_inbox_singular": {
+    "ar": "بريد الوحدة التنظيمية",
+    "en": "Organization's Unit Inbox"
+  },
+  "org_mail_inbox_normal": {
+    "en": "Normal Public Inbox",
+    "ar": "بريد الوحدة العادي"
+  },
+  "org_mail_inbox_secure": {
+    "ar": "بريد الوحدة السري",
+    "en": "Secure Public Inbox"
+  },
+  "user_notification_status": {
+    "en": "Notification is inactive From Date To Date",
+    "ar": "التنبيهات غير فعالة من تاريخ لتاريخ"
+  },
+  "search_date": {
+    "ar": "تاريخ إنشاء الكتاب من تاريخ لتاريخ",
+    "en": "Search Interval"
+  },
+  "search_subject": {
+    "ar": "موضوع الكتاب يحتوي على كلمات",
+    "en": "Document subject contains text "
+  },
+  "search_serial": {
+    "ar": "رقم الكتاب",
+    "en": "Book's Serial"
+  },
+  "search_corres_site": {
+    "ar": "جهة المراسلة الرئيسية",
+    "en": "Correspondence Main Site"
+  },
+  "search_sub_corres_site": {
+    "ar": "جهة المراسلة الفرعية",
+    "en": "Correspondence Sub Site"
+  },
+  "main_corre_site": {
+    "ar": "جهة المراسلة الرئيسية",
+    "en": "Correspondence Main Site"
+  },
+  "sub_corre_site": {
+    "ar": "جهة المراسلة الفرعية",
+    "en": "Correspondence Sub Site"
+  },
+  "new_search": {
+    "en": "New Search",
+    "ar": "بحث جديد"
+  },
+  "paper_outgoing": {
+    "en": "Paper based books",
+    "ar": "صادر ورقي"
+  },
+  "e_outgoing": {
+    "en": "E-Outgoing based books",
+    "ar": "صادر الكتروني"
+  },
+  "sub_classification": {
+    "en": "Sub Classification",
+    "ar": "تصنيف فرعي"
+  },
+  "search_content_tags": {
+    "ar": "محتوى الكتاب يحتوي على كلمات",
+    "en": "Book's content contains "
+  },
+  "tags": {
+    "en": "Tags",
+    "ar": "كلمات استدلالية"
+  },
+  "arabic_translate": {
+    "en": "Arabic Translate",
+    "ar": "الترجمة العربية"
+  },
+  "english_translate": {
+    "en": "English Translate",
+    "ar": "الترجمة الانجليزية"
+  },
+  "color": {
+    "en": "Color",
+    "ar": "اللون"
+  },
+  "next": {
+    "en": "Next",
+    "ar": "التالي"
+  },
+  "hour": {
+    "en": "Hour",
+    "ar": "ساعة"
+  },
+  "day": {
+    "en": "Day",
+    "ar": "يوم"
+  },
+  "manage_organization_types": {
+    "ar": "أنواع المنظمات",
+    "en": "Organization types"
+  },
+  "arabic_name": {
+    "ar": "الاسم باللغة العربية",
+    "en": "Arabic Name"
+  },
+  "english_name": {
+    "ar": "الاسم باللغة الانجليزية",
+    "en": "English Name"
+  },
+  "close": {
+    "ar": "إغلاق",
+    "en": "close"
+  },
+  "name_duplication_message": {
+    "ar": "لا يمكن تكرار نفس الاسم",
+    "en": "Name can not be duplicated"
+  },
+  "edit_success": {
+    "ar": "تم تعديل ( :name ) بنجاح",
+    "en": "Edited ( :name ) successfully"
+  },
+  "item_selected": {
+    "ar": "عنصر مختار",
+    "en": "Item selected"
+  },
+  "items_selected": {
+    "ar": "عناصر مختارة",
+    "en": "Items selected"
+  },
+  "rows_per_page": {
+    "ar": "عدد العناصر بالصفحة:",
+    "en": "Rows per page:"
+  },
+  "count_of": {
+    "ar": "من",
+    "en": "of"
+  },
+  "manage_document_types": {
+    "ar": "انواع الملفات",
+    "en": "Document types"
+  },
+  "files": {
+    "ar": "إدارة الملفات",
+    "en": "Manage files"
+  },
+  "code": {
+    "ar": "الرمز",
+    "en": "Code"
+  },
+  "global_success": {
+    "ar": "تم تحديث حالة السرية بنجاح",
+    "en": "Security status updated successfully"
+  },
+  "confirm_delete": {
+    "ar": "هل تريد حذف :name؟",
+    "en": "ِAre you sure you want to delete :name?"
+  },
+  "delete_success": {
+    "ar": "تم الحذف بنجاح",
+    "en": "Deleted successfully"
+  },
+  "delete": {
+    "ar": "حذف",
+    "en": "Delete"
+  },
+  "sub_correspondence_sites": {
+    "ar": "جهات المراسلة الفرعية",
+    "en": "Sub Correspondence Sites"
+  },
+  "add_new_sub_correspondence_site": {
+    "ar": "أضافة جهة مراسلة فرعية",
+    "en": "Add New Sub Correspondence Site"
+  },
+  "refresh": {
+    "ar": "إعادة تحميل",
+    "en": "Refresh"
+  },
+  "has_sub_correspondence_delete": {
+    "ar": "يوجد جهات فرعية سيتم حذفها",
+    "en": "Sub Correspondence Site will be deleted"
+  },
+  "id": {
+    "ar": "المُعَرف",
+    "en": "Identifier"
+  },
+  "show_sub_correspondence": {
+    "ar": "عرض الجهات الفرعية",
+    "en": "Show Sub Correspondence Sites"
+  },
+  "count_sub_correspondence_sites": {
+    "ar": "عدد جهات المراسلة الفرعية",
+    "en": "Count Sun Correspondence Sites"
+  },
+  "save_and_create": {
+    "ar": "حفظ وإنشاء جديد",
+    "en": "Save and create new"
+  },
+  "app_arabic_name": {
+    "ar": "اسم البرنامج بالعربية",
+    "en": "Application Arabic Name"
+  },
+  "app_english_name": {
+    "ar": "اسم البرنامج بالانجليزية",
+    "en": "Application English Name"
+  },
+  "help_url": {
+    "ar": "رابط المساعدة",
+    "en": "Help URL"
+  },
+  "cm_username": {
+    "ar": "اسم مستخدم مدير المحتوى",
+    "en": "Content Manager Username"
+  },
+  "cm_password": {
+    "ar": "كلمة سر مدير المحتوى",
+    "en": "Content Manager Password"
+  },
+  "reenter_cm_password": {
+    "ar": "اعد إدخال كلمة سر مدير المحتوى",
+    "en": "Confirm Content Manager Password"
+  },
+  "correspondence_site": {
+    "ar": "جهة المراسلة",
+    "en": "Correspondence Site"
+  },
+  "add_new_correspondence_site": {
+    "ar": "أضافة جهة مراسلة",
+    "en": "Add New Correspondence Site"
+  },
+  "identifier": {
+    "ar": "رمز التعريف",
+    "en": "Identifier"
+  },
+  "edit_something": {
+    "ar": "تعديل حاجة",
+    "en": "Edit Something"
+  },
+  "item_order": {
+    "ar": "ترتيب العنصر",
+    "en": "Item Order"
+  },
+  "entity_exists": {
+    "ar": "أحد هذه الاسماء ( :names ) موجود مسبقاء",
+    "en": "One of these names ( :names ) already exists."
+  },
+  "delete_specific_success": {
+    "ar": "تم حذف ( :name ) بنجاح",
+    "en": "Deleted successfully ( :name )"
+  },
+  "select_status": {
+    "ar": "أختر الحالة",
+    "en": "Select a Status"
+  },
+  "specific_status_success": {
+    "ar": "تم تحديث حالة ( :name ) بنجاح",
+    "en": "( :name ) status has been successfully updated"
+  },
+  "numberonly": {
+    "ar": "الرجاء إدخال ارقام فقط",
+    "en": "Please enter number only"
+  },
+  "selected_status_updated": {
+    "ar": "تم تحديث الحالة بنجاح للعناصر المحددة",
+    "en": "Status updated successfully for selected items"
+  },
+  "confirm_delete_selected_multiple": {
+    "ar": "هل تريد حذف العناصر المختارة؟",
+    "en": "Are you sure you want to delete selected items?"
+  },
+  "basic_properties": {
+    "ar": "خصائص أساسية",
+    "en": "Basic properties"
+  },
+  "appearence": {
+    "ar": "إعدادات ظاهرية",
+    "en": "Appearance"
+  },
+  "audit_log": {
+    "ar": "سجل المراجعة",
+    "en": "Audit Log"
+  },
+  "document_security_settings": {
+    "ar": "سرية الملفات",
+    "en": "Document security"
+  },
+  "workflow_security_settings": {
+    "ar": "سرية دورة المراسلات",
+    "en": "WF Security"
+  },
+  "workflow_notification": {
+    "ar": "تنبيهات دورة المراسلات",
+    "en": "WF Notification"
+  },
+  "sorting_settings": {
+    "ar": "إعدادات الترتيب",
+    "en": "Sorting settings"
+  },
+  "other_properties": {
+    "ar": "إعدادات اخرى",
+    "en": "Other properties"
+  },
+  "entity_arabic_name": {
+    "ar": "اسم الجهة بالعربية",
+    "en": "Entity arabic name"
+  },
+  "entity_english_name": {
+    "ar": "اسم الجهة يالانجليزية",
+    "en": "Entity english name"
+  },
+  "default_max_row_search": {
+    "ar": "القيمة الأفتراضية لنتائج البحث",
+    "en": "Default max rows count of search operation"
+  },
+  "limited_max_row_search": {
+    "ar": "الحد الاقصى لنتائج البحث",
+    "en": "Limited Max Rows Count of Search Operation"
+  },
+  "default_max_row_inbox": {
+    "ar": "القيمة الأفتراضية لنتائج البحث فى بريد الوارد",
+    "en": "Default max rows count of inbox page"
+  },
+  "limited_max_row_inbox": {
+    "ar": "الحد الاقصى لنتائج البحث فى بريد الوارد",
+    "en": "Limited max rows count of inbox page"
+  },
+  "inbox_refresh_interval": {
+    "ar": "زمن تحديث البريد الوارد",
+    "en": "Inbox Refresh Interval"
+  },
+  "session_time_out": {
+    "ar": "زمن انتهاء جلسة الاتصال",
+    "en": "Session time out"
+  },
+  "user_help_url": {
+    "ar": "عنوان دليل المستخدم",
+    "en": "User help URL"
+  },
+  "user_help_document": {
+    "ar": "ملف دليل المستخدم",
+    "en": "User help document"
+  },
+  "file_size": {
+    "ar": "حجم الملف",
+    "en": "File Size"
+  },
+  "file_type": {
+    "ar": "نوع الملف",
+    "en": "File Type"
+  },
+  "login_page_additional_content": {
+    "ar": "محتوى اضافي لصفحة تسجيل الدخول",
+    "en": "Login Page Additional Content"
+  },
+  "copyright_text": {
+    "ar": "نص الحقوق",
+    "en": "Copyright Text"
+  },
+  "default_application_theme": {
+    "ar": "النمط الافتراضي لألوان النظام",
+    "en": "Default application theme"
+  },
+  "upload_file": {
+    "ar": "تحميل الملف",
+    "en": "Upload file"
+  },
+  "usage_terms_and_condition": {
+    "ar": "شروط وسياسة الاستخدام",
+    "en": "Usage terms and condition"
+  },
+  "upload_banner_logo": {
+    "ar": "تحميل صورة الغلاف",
+    "en": "Upload banner photo"
+  },
+  "upload_login_logo": {
+    "ar": "تحميل صورة تسجيل الدخول",
+    "en": "Upload login photo"
+  },
+  "register_login_logout_operations": {
+    "ar": "تسجيل عمليات تسجيل الدخول والخروج من النظام",
+    "en": "Register login / logout operations"
+  },
+  "register_document_view_operation": {
+    "ar": "تسجيل عمليات عرض الملفات",
+    "en": "Register document view operation"
+  },
+  "register_administration_operation": {
+    "ar": "تسجيل العمليات الخاصة بمديري النظام",
+    "en": "Register administration operation"
+  },
+  "enter_users_to_be_excluded_from_audit_log": {
+    "ar": "اختار المستخدمين الذين يتم استثنائهم من تقارير تسجيل الدخول",
+    "en": "Enter users to be excluded from audit log"
+  },
+  "attachment_inherit_main_document_security": {
+    "ar": "المرفق يستمد اعدادات السرية من الاعدادات العامة",
+    "en": "Attachment Inherit Main Document Security"
+  },
+  "attachment_has_its_own_security_level": {
+    "ar": "المرفق له اعدادات سرية خاصة به",
+    "en": "attachment has its own security level"
+  },
+  "export_outgoing_with_attachment": {
+    "ar": "تصدير ملف البريد الصادر مع المرفق",
+    "en": "Export Outgoing With Attachment"
+  },
+  "export_outgoing_with_linked_documents": {
+    "ar": "تصدير ملف البريد الصادر المرتبط بالمرفق",
+    "en": "Export Outgoing With Linked Documents"
+  },
+  "export_outgoing_with_workflow_history": {
+    "ar": "تصدير ملف البريد الصادر مع سجل دورة العمل",
+    "en": "Export Outgoing With Workflow History"
+  },
+  "export_outgoing_with_linked_objects": {
+    "ar": "تصدير ملف البريد الصادر مع الكيانات المرتبطة به",
+    "en": "Export Outgoing With Linked Objects"
+  },
+  "security_per_organization_hierarchy": {
+    "ar": "إعدادات السرية حسب هيكلة الجهة",
+    "en": "Security per organization hierarchy"
+  },
+  "security_per_limited_organization_hierarchy": {
+    "ar": "إعدادات السرية حسب هيكلة الجهة المقيدة",
+    "en": "Security per limited organization hierarchy"
+  },
+  "user_send_document_to_all_ou": {
+    "ar": "المستخدم يستطيع إرسال الملفات لكل المستخدمين بالمنظمة",
+    "en": "User can send the document to all organization users"
+  },
+  "user_send_to_any_and_units_have_same_corr": {
+    "ar": "المستخدم يستطيع ارسال الملفات لأي مستخدم بنفس الجهة وأي جهة اخرى لها نفس سجل المراسلات",
+    "en": "User can send to any user in the same unit and to all units having the same correspondence register"
+  },
+  "user_send_to_any_in_same_unit_and_parent_and_child_units": {
+    "ar": "المستخدم يستطيع ارسال الملفات لأي مستخدم بنفس الجهة وبالجهة الأم وبالجهات الفرعية وبالجهات التى لها نفس الجهة الأم",
+    "en": "User can send the document to any user in the same unit, parent unit, child units and units having the same parent"
+  },
+  "notify_sender_when_deadline": {
+    "ar": "تنبيه المرسل بالوصول للموعد النهائي دون اتخاذ اجراء",
+    "en": "Notify the sender when reach deadline without action"
+  },
+  "notify_receiver_when_deadline": {
+    "ar": "تنبيه المستقبل بالوصول للموعد النهائي دون اتخاذ اجراء",
+    "en": "Notify the receiver when reach deadline without action"
+  },
+  "enable_sms_notification": {
+    "ar": "تفعيل خدمة تنبيه الرسائل القصيرة",
+    "en": "Enable SMS Notification"
+  },
+  "enable_email_notification": {
+    "ar": "تفعيل خدمة تنبيه رسائل البريد الالكترونى",
+    "en": "Enable Email Notification"
+  },
+  "send_a_reminder_before_deadline_date_with": {
+    "ar": "ارسال التنبيه قبل الموعد بـ",
+    "en": "Send a reminder before deadline date with"
+  },
+  "send_a_reminder_before_deadline": {
+    "ar": "إرسال تذكير قبل الوصول للموعد النهائي",
+    "en": "Send a reminder before deadline"
+  },
+  "choose_escalation_process": {
+    "ar": "اختيار طريقة تصعيد المراسلة",
+    "en": "Escalation process"
+  },
+  "return_workflow_to_ sender": {
+    "ar": "إعادة المراسلة مرة اخرى الى المرسل",
+    "en": "Return the workflow item back to the sender"
+  },
+  "sort_users": {
+    "ar": "إعدادات ترتيب المستخدمين",
+    "en": "Sort Users"
+  },
+  "sort_correspondence": {
+    "ar": "إعدادات ترتيب المراسلات",
+    "en": "Sort correspondence"
+  },
+  "return_workflow_to_sender": {
+    "ar": "إعادة المراسلة مرة اخرى الى المرسل",
+    "en": "Return the workflow item back to the sender"
+  },
+  "assign_workflow_manager": {
+    "ar": "إسناد المراسلة الى المدير المباشر",
+    "en": "Assign the workflow item to the direct manager"
+  },
+  "assign_workflow_to_manager": {
+    "ar": "إسناد المراسلة الى المدير المباشر",
+    "en": "Assign the workflow item to the direct manager"
+  },
+  "alphabet": {
+    "ar": "ابجدياً",
+    "en": "Alphabet"
+  },
+  "as_per_job_title": {
+    "ar": "حسب المسمى الوظيفي",
+    "en": "Job Title"
+  },
+  "ascending": {
+    "ar": "تصاعدياً",
+    "en": "Ascending"
+  },
+  "descending": {
+    "ar": "تنازلياً",
+    "en": "Descending"
+  },
+  "creation_date": {
+    "ar": "حسب التاريخ",
+    "en": "Creation Date"
+  },
+  "automatic_ou_identifier": {
+    "ar": "توليد الرقم التعريفي للجهة اوتوماتيكياً",
+    "en": "Automatic OU identifier"
+  },
+  "documents_security_schema": {
+    "ar": "اختار اعدادات السرية الفعالة",
+    "en": "Documents Security Schema"
+  },
+  "edited_successfully": {
+    "ar": "تم التعديل بنجاح",
+    "en": "Edited Successfully"
+  },
+  "positive_number_only": {
+    "ar": "الرجاء إدخال ارقام فقط",
+    "en": "Please enter positive number only"
+  },
+  "should_less_max-limit": {
+    "ar": "لا يمكن ادخال رقم اكبر من الحد الاقصى",
+    "en": "Should be less than max limit"
+  },
+  "should_more_default_value": {
+    "ar": "لا يمكن ادخال رقم اقل من القيمة الافتراضية",
+    "en": "Should be more than default value"
+  },
+  "should_not_less_than_zero": {
+    "ar": "لا يمكن إدخال قيمة اقل من الصفر",
+    "en": "Shouldn't be less than zero"
+  },
+  "url_only": {
+    "ar": "يجب ادخال رابط موقع الكتروني",
+    "en": "The URL is not valid"
+  },
+  "enable_mobile_access": {
+    "ar": "تفعيل الدخول من الهاتف",
+    "en": "Enable Mobile Access"
+  },
+  "min_number": {
+    "ar": "الرجاء إدخال رقم أكبر من :number",
+    "en": "Please enter number greater than :number"
+  },
+  "document_class": {
+    "ar": "فئة الكتاب",
+    "en": "Document Class"
+  },
+  "outgoing_document_class": {
+    "ar": "شخص اجتماعي",
+    "en": "Outgoing"
+  },
+  "incoming_document_class": {
+    "ar": "الوارد",
+    "en": "Incoming"
+  },
+  "internal_document_class": {
+    "ar": "داخلي",
+    "en": "Internal"
+  },
+  "sms_message": {
+    "ar": "رسالة قصيرة",
+    "en": "SMS Message"
+  },
+  "security": {
+    "ar": "الأمان",
+    "en": "Security"
+  },
+  "description": {
+    "ar": "الوصف",
+    "en": "Description"
+  },
+  "permissions": {
+    "ar": "الصالحيات",
+    "en": "Permissions"
+  },
+  "view_members": {
+    "ar": "عرض الأعضاء",
+    "en": "View Members"
+  },
+  "login_name": {
+    "ar": "اسم الدخول",
+    "en": "Login name"
+  },
+  "employee_number": {
+    "ar": "رقم الموظف",
+    "en": "Employee Number"
+  },
+  "organization_unit": {
+    "ar": "وحدة إدارية",
+    "en": "Organization Unit"
+  },
+  "permission_change_popup_message": {
+    "ar": "تم تعيين الدور المخصص بالفعل مع مستخدم التطبيق، هل تريد تحديث إذن المستخدم المعين",
+    "en": "The custom role is already assigned with application user, do you want to update the assigned user’s permission"
+  },
+  "enter_users_for_smstemplate_security": {
+    "ar": "ادخل مستخدم ليتم اضافته للقالب",
+    "en": "Enter app user to add to SMS Template"
+  },
+  "app_users": {
+    "ar": "مستخدم التطبيق",
+    "en": "App User"
+  },
+  "group_members": {
+    "ar": "أعضاء المجموعة",
+    "en": "Group Members"
+  },
+  "global_workflow_group_success": {
+    "ar": "تم تعديل مجموعات العمل بنجاح",
+    "en": "Global workflow group updated successfully"
+  },
+  "enter_group_members": {
+    "ar": "ادخل اعضاء المجموعه",
+    "en": "Enter group members"
+  },
+  "maximum_days_to_reply_document": {
+    "ar": "اقصى عدد ايام للرد على المراسلات التى تنتظر رد",
+    "en": "Maximum number of days to reply to a correspondence document that need a reply"
+  },
+  "manage_reference_number_plan": {
+    "ar": "الرقم المرجعي",
+    "en": "Manage Reference Number Plan"
+  },
+  "global": {
+    "ar": "عام",
+    "en": "Global"
+  },
+  "not_global": {
+    "ar": "غير عام",
+    "en": "Not global"
+  },
+  "reference_number_plan": {
+    "ar": "الرقم المرجعي",
+    "en": "Reference Number Plan"
+  },
+  "globalization_success": {
+    "ar": "تم تحديث الخصوصية بنجاح",
+    "en": "Globalization updated successfully"
+  },
+  "globalization": {
+    "ar": "الخصوصية",
+    "en": "Globalization"
+  },
+  "organization_units": {
+    "ar": "وحدات إدارية",
+    "en": "Organization Units"
+  },
+  "group_prefix": {
+    "ar": "بادئة المجموعة",
+    "en": "Group Prefix"
+  },
+  "parent": {
+    "ar": "الأبوين",
+    "en": "Parent"
+  },
+  "add_new_classification": {
+    "ar": "إضافة تصنيف جديد",
+    "en": "Add New Classification"
+  },
+  "add_new_sub_classification": {
+    "ar": "إضافة تصنيف فرعى جديد",
+    "en": "Add new Sub Classification"
+  },
+  "global_document_template_success": {
+    "ar": "تم تحديث القالب بنجاح",
+    "en": "Global document template updated successfully"
+  },
+  "has_sub_classification_delete": {
+    "ar": "ستم حذف التصنيفات الفرعية",
+    "en": "Sub Classification(s) will be deleted"
+  },
+  "invalid_file_upload": {
+    "ar": "الملف المختار غير صالح للتحميل",
+    "en": "Invalid file for upload"
+  },
+  "enter_org_unit_security": {
+    "ar": "ادخل الوحده الاداريه ليتم الاضافه",
+    "en": "Enter organization unit to add"
+  },
+  "manage_application_users": {
+    "ar": "إدارة المستخدمين",
+    "en": "Manage Users"
+  },
+  "has_registry": {
+    "ar": "لها سجل مراسلات",
+    "en": "Has registry"
+  },
+  "is_central_archive": {
+    "ar": "أرشيف مركزي",
+    "en": "Is central archive"
+  },
+  "is_not_central_archive": {
+    "ar": "ليست أرشيف مركزي",
+    "en": "Is not central archive"
+  },
+  "has_not_registry": {
+    "ar": "ليس لها سجل مراسلات",
+    "en": "Has not registry"
+  },
+  "select_registry": {
+    "ar": "اختار سجل المراسلات",
+    "en": "Select correspondence registry"
+  },
+  "select_organization_type": {
+    "ar": "اختار نوع الجهة",
+    "en": "Select organization type"
+  },
+  "select_manager": {
+    "ar": "اختر مدير الجهة",
+    "en": "Select manager"
+  },
+  "select_vice_manager": {
+    "ar": "اختر نائب مدير الجهة",
+    "en": "Select vice manager"
+  },
+  "select_admin": {
+    "ar": "اختر إدارى",
+    "en": "Select admin"
+  },
+  "select_reference_plan": {
+    "ar": "اختر الرقم المرجعي",
+    "en": "Select reference plan"
+  },
+  "add_to": {
+    "ar": "أضف إلى",
+    "en": "Add to"
+  },
+  "move_to": {
+    "ar": "تغيير تبعية الجهة",
+    "en": "Change parent of"
+  },
+  "select_organization": {
+    "ar": "اختار الجهة",
+    "en": "Select organization"
+  },
+  "more_details": {
+    "ar": "تقاصيل اكثر",
+    "en": "More Details"
+  },
+  "user_details": {
+    "ar": "تفاصيل المستخدم",
+    "en": "User Details"
+  },
+  "domain_name": {
+    "ar": "أسم النطاق",
+    "en": "Domain Name"
+  },
+  "default_organization": {
+    "ar": "الإدارة الافتراضية",
+    "en": "Default Organization"
+  },
+  "default_language": {
+    "ar": "اللغة الافتراضية",
+    "en": "Default Language"
+  },
+  "gender": {
+    "ar": "الجنس",
+    "en": "Gender"
+  },
+  "male": {
+    "ar": "ذكر",
+    "en": "Male"
+  },
+  "female": {
+    "ar": "أنثى",
+    "en": "Female"
+  },
+  "qid": {
+    "ar": "الرقم الشخصى القطرى",
+    "en": "Qatari ID"
+  },
+  "not_found": {
+    "ar": "لا يوجد",
+    "en": "Not Found"
+  },
+  "default_theme": {
+    "ar": "القالب الافتراضى",
+    "en": "Default Theme"
+  },
+  "mobile_number": {
+    "ar": "رقم الجوال",
+    "en": "Mobile Number"
+  },
+  "other_info": {
+    "ar": "معلومات اخري",
+    "en": "Other Information"
+  },
+  "notify_add_new_book": {
+    "ar": "أضافة كتاب",
+    "en": "Add Document"
+  },
+  "deadline_notify": {
+    "ar": "تنبية بالموعد النهائي",
+    "en": "Deadline Notify"
+  },
+  "days_duration": {
+    "ar": "المدة بالأيام",
+    "en": "Duration in days"
+  },
+  "sms": {
+    "ar": "الرسائل النصية",
+    "en": "SMS"
+  },
+  "notifications": {
+    "ar": "التنبيهات",
+    "en": "Notifications"
+  },
+  "notification_subscribe": {
+    "ar": "الاشتراك بالتنبيهات",
+    "en": "Subscribe to notifications"
+  },
+  "notify_when": {
+    "ar": "تنبية عند",
+    "en": "Notify When"
+  },
+  "reminder": {
+    "ar": "للتذكرة عبر",
+    "en": "for reminder by"
+  },
+  "user_super_admin_can_not_delete": {
+    "ar": "هذا المستخدم سوبر أدمن لا يمكن حذفة",
+    "en": "This User Super admin cannot deleted"
+  },
+  "confirm_delete_msg": {
+    "ar": "هل انت متأكد من الحذف؟",
+    "en": "Are you sure you want to delete?"
+  },
+  "ip_validation": {
+    "ar": "عنوان IP فقط",
+    "en": "IP address only"
+  },
+  "server_address": {
+    "ar": "عنوان السيرفر",
+    "en": "Server Address"
+  },
+  "domain_controller": {
+    "ar": "دومين كونترولر",
+    "en": "Domain Controller"
+  },
+  "add_application_user": {
+    "ar": "أضافة مستخدم جديد",
+    "en": "Add New Application User"
+  },
+  "to_long": {
+    "ar": "أكثر من اللازم",
+    "en": "too long"
+  },
+  "change_status_confirm": {
+    "ar": "هل تريد :status :name؟",
+    "en": "Do you want to :status :name?"
+  },
+  "activate": {
+    "ar": "تفعيل",
+    "en": "activate"
+  },
+  "deactivate": {
+    "ar": "تعطيل",
+    "en": "deactivate"
+  },
+  "activate_custom_role": {
+    "ar": "Are you sure, custom role will be activated?",
+    "en": "Are you sure, custom role will be activated?"
+  },
+  "deactivate_custom_role": {
+    "ar": "Are you sure, custom role will be deactivated?",
+    "en": "Are you sure, custom role will be deactivated?"
+  },
+  "name_lookupstringkey_duplicate": {
+    "ar": "Name and code should be unique",
+    "en": "Name and code should be unique"
+  },
+  "tasks": {
+    "ar": "المهام",
+    "en": "Tasks"
+  },
+  "your_tasks": {
+    "ar": "مهامك",
+    "en": "Your Tasks"
+  },
+  "application_name": {
+    "ar": "تواصل",
+    "en": "TAWASOL"
+  },
+  "start_date": {
+    "ar": "تاريخ البدء",
+    "en": "Start Date"
+  },
+  "application_description": {
+    "ar": "نظام المراسلات الداخلى",
+    "en": "Internal Correspondence System"
+  },
+  "end_date": {
+    "ar": "تاريخ الانتهاء",
+    "en": "End Date"
+  },
+  "login_to_your_account": {
+    "ar": "سجل الدخول إلى عضويتك !",
+    "en": "log in to your account !"
+  },
+  "arabic_subject": {
+    "ar": "Arabic Subject Name",
+    "en": "Arabic Subject Name"
+  },
+  "english_subject_name": {
+    "ar": "الموضوع بالانكليزيه",
+    "en": "English Subject Name"
+  },
+  "english_body_text": {
+    "ar": "النص بالانكليزيه",
+    "en": "English Body Text"
+  },
+  "arabic_body_text": {
+    "ar": "النص بالعربيه",
+    "en": "Arabic Body Text"
+  },
+  "always_active": {
+    "ar": "فعال دوما",
+    "en": "Always Active"
+  },
+  "excluded_org_units": {
+    "ar": "الوحدات الاداريه المستثنيه",
+    "en": "Excluded Organization Units"
+  },
+  "manage_workflow_actions": {
+    "ar": "إدارة عمليات سير العمل",
+    "en": "Manage workflow actions"
+  },
+  "not_exportable": {
+    "ar": "غير قابل للتصدير",
+    "en": "Not exportable"
+  },
+  "exportable": {
+    "ar": "قابل للتصدير",
+    "en": "Exportable"
+  },
+  "organization_type": {
+    "ar": "نوع الادارة",
+    "en": "Organization type"
+  },
+  "registry_status": {
+    "ar": "حالة سجل المراسلات",
+    "en": "Registry status"
+  },
+  "vice_manager": {
+    "ar": "نائب المدير",
+    "en": "Vice manager"
+  },
+  "manager": {
+    "ar": "المدير",
+    "en": "Manager"
+  },
+  "corr_registry": {
+    "ar": "سجل المراسلات",
+    "en": "Correspondence registry"
+  },
+  "admin": {
+    "ar": "مدير النظام",
+    "en": "Admin"
+  },
+  "central_archiving_status": {
+    "ar": "حالة الأرشيف المركزي",
+    "en": "Central archive status"
+  },
+  "view": {
+    "ar": "عرض",
+    "en": "View"
+  },
+  "copy": {
+    "ar": "نسخ",
+    "en": "Copy"
+  },
+  "activate_announcement": {
+    "ar": "Are you sure, want to activate announcement?",
+    "en": "Are you sure, want to activate announcement?"
+  },
+  "deactivate_announcement": {
+    "ar": "Are you sure, want to deactivate announcement?",
+    "en": "Are you sure, want to deactivate announcement?"
+  },
+  "lookup_key": {
+    "ar": "مفتاح البحث",
+    "en": "Lookup key"
+  },
+  "user_permissions": {
+    "ar": "تصاريح المستخدم",
+    "en": "User Permissions"
+  },
+  "user_organizations_permissions": {
+    "ar": "تصاريح الإدارات",
+    "en": "Organization Units Permissions"
+  },
+  "user_classifications_permissions": {
+    "ar": "تصاريح التصنيفات",
+    "en": "Classifications Permissions"
+  },
+  "user_in_other_organizations": {
+    "ar": "الادارات الاخرى",
+    "en": "Other Organization Units"
+  },
+  "user_workflow": {
+    "ar": "تسير العمل",
+    "en": "Workflow"
+  },
+  "user_out_of_office": {
+    "ar": "خارج المكتب",
+    "en": "Out Of Office"
+  },
+  "select_system_admins": {
+    "ar": "قم بأختيار مديري النظام",
+    "en": "Select system admins"
+  },
+  "filenet_content_manager_username": {
+    "ar": "اسم المستخدم",
+    "en": "Content Manager Username"
+  },
+  "filenet_content_manager_password": {
+    "ar": "كلمة السر",
+    "en": "Content Manager Password"
+  },
+  "filenet_content_manager_ejb_address": {
+    "ar": "عنوان EJB",
+    "en": "Content Manager EJB Address"
+  },
+  "filenet_content_manager_stanza": {
+    "ar": "ستانزا",
+    "en": "Content Manager Stanza"
+  },
+  "filenet_object_store_name": {
+    "ar": "أسم ال Object Store",
+    "en": "Object Store Name"
+  },
+  "filenet_process_engine_router_name": {
+    "ar": "أسم Process Engine Router",
+    "en": "Process Engine Router Name"
+  },
+  "smtp_from_email": {
+    "ar": "من بريد الكتروني",
+    "en": "From email"
+  },
+  "smtp_port": {
+    "ar": "منفذ الوصول",
+    "en": "Port"
+  },
+  "sub_org_unit": {
+    "ar": "الوحده الاداريه الفرعيه",
+    "en": "Sub Organization Unit"
+  },
+  "exclude_org_units": {
+    "ar": "الوحدات الاداريه المستثنيه",
+    "en": "Exclude Organization Units"
+  },
+  "tawasol_ou": {
+    "ar": "Tawasol OU",
+    "en": "Tawasol OU"
+  },
+  "save_ldap": {
+    "ar": "save LDAP",
+    "en": "save LDAP"
+  },
+  "add_ldap": {
+    "ar": "Add LDAP",
+    "en": "Add LDAP"
+  },
+  "clearance_level": {
+    "ar": "مستوى التصاريح الرسمية",
+    "en": "Clearance Level"
+  },
+  "authentication_type": {
+    "ar": "طريقة تسجيل الدخول",
+    "en": "Authentication Type"
+  },
+  "mobile_number_otp": {
+    "ar": "رقم جوال تسجيل الدخول",
+    "en": "Mobile Number OTP"
+  },
+  "private_user": {
+    "ar": "مستخدم خاص",
+    "en": "Private User"
+  },
+  "add_user": {
+    "ar": "أضافة مستخدم",
+    "en": "Add User"
+  },
+  "please_select_organization_to_login": {
+    "ar": "رجاء أختيار أحدى الادارات لتسجيل الدخول",
+    "en": "Please Select One of the below Departments to login"
+  },
+  "connection_error": {
+    "ar": "حدث مشكلة أثناء عملية الأتصال, رجاء المحاولة مرة أخرى",
+    "en": "There was a problem during the connection process, please try again"
+  },
+  "forget_password": {
+    "ar": "نسيت كلمة المرور !",
+    "en": "Forget Password !"
+  },
+  "session_expired": {
+    "ar": "ربما انتهت جلستك رجاء تسجيل الدخول مرة أخرى",
+    "en": "Your session may have expired Please log in again"
+  },
+  "idle_status": {
+    "ar": "يبدو انك فى حالة غير نشطة",
+    "en": "You seem to be idle"
+  },
+  "you_are_logged_out_by_session": {
+    "ar": "تم تسجيل خروجك لوجودك  غير نشط لفترة طويلة",
+    "en": "You have been logged out for being idle for a long time"
+  },
+  "grid_view": {
+    "ar": "عرض شبكي",
+    "en": "Grid view"
+  },
+  "organization_view": {
+    "ar": "عرض هيكلى",
+    "en": "Organization Chart"
+  },
+  "hierarchy_view": {
+    "ar": "عرض هرمي",
+    "en": "Hierarchy List"
+  },
+  "add_new_organization": {
+    "ar": "أضف إدارة جديده",
+    "en": "Add New Department"
+  },
+  "parent_organization": {
+    "ar": "يتبع لـ",
+    "en": "Parent / Reporting to"
+  },
+  "add_new_organization_type": {
+    "ar": "أضافة نوع إدارة جديد",
+    "en": "Add New Organization Type"
+  },
+  "select_user": {
+    "ar": "أختر مستخدم",
+    "en": "Select User"
+  },
+  "ar_name": {
+    "ar": "الاسم العربي",
+    "en": "Arabic Name"
+  },
+  "en_name": {
+    "ar": "الاسم الانجليزي",
+    "en": "English Name"
+  },
+  "full_name": {
+    "ar": "الاسم كامل",
+    "en": "Full Name"
+  },
+  "role": {
+    "ar": "الوظيفة",
+    "en": "Role"
+  },
+  "actions": {
+    "ar": "الاجراءات",
+    "en": "Actions"
+  },
+  "no_users_found_to_display": {
+    "ar": "لا يوجد مستخدمين لعرضهم",
+    "en": "No Users found to display"
+  },
+  "confirm_leave_select_user": {
+    "ar": "هل انت متأكد انك تريد الخروج الذهاب دون أختيار مستخدم",
+    "en": "Are You Sure you want leave without select any user"
+  },
+  "sure_you_leave_without_save_changes": {
+    "ar": "هل انت متأكد انك تريد المغادرة دون حفظ تغيراتك",
+    "en": "Are you sure you want to leave without saving your changes?"
+  },
+  "remove_selected_admin": {
+    "ar": "هل انت متأكد من حذف الاداري  <br /> :name",
+    "en": "are you you want to delete the admin <br /> :name"
+  },
+  "remove_selected_vice_manager": {
+    "ar": "هل انت متأكد من حذف  نائب  المدير<br /> :name",
+    "en": "are you you want to delete the vice manager <br /> :name"
+  },
+  "remove_selected_manager": {
+    "ar": "هل انت متأكد من حذف المدير<br /> :name",
+    "en": "are you you want to delete the  manager <br /> :name"
+  },
+  "has_central_archive": {
+    "ar": "لديها أرشيف مركزي",
+    "en": "has central archive"
+  },
+  "select_central_archive": {
+    "ar": "أختر الأرشيف المركزي",
+    "en": "select central archive"
+  },
+  "prefix": {
+    "ar": "بادئة التسلسل",
+    "en": "prefix"
+  },
+  "short": {
+    "ar": "قصير جدا",
+    "en": "it is too short"
+  },
+  "add_new_reference_plan_number": {
+    "ar": "أضافة رقم مرجعي جديد",
+    "en": "Add New Reference Plan Number"
+  },
+  "mobile": {
+    "ar": "رقم الجوال",
+    "en": "Mobile Number"
+  },
+  "basic_info": {
+    "ar": "معلومات اساسية",
+    "en": "Basic info"
+  },
+  "childs": {
+    "ar": "الابناء",
+    "en": "Children"
+  },
+  "correspondence_sites": {
+    "ar": "جهات المراسلة",
+    "en": "Correspondence sites"
+  },
+  "users": {
+    "ar": "مستخدمين",
+    "en": "Users"
+  },
+  "templates": {
+    "ar": "القوالب",
+    "en": "Templates"
+  },
+  "document_security": {
+    "ar": "امان الملفات",
+    "en": "Document Security"
+  },
+  "security_schema": {
+    "ar": "طريقة الحماية",
+    "en": "Security Schema"
+  },
+  "security_settings": {
+    "ar": "أعدادات الامان",
+    "en": "security settings"
+  },
+  "workflow_settings": {
+    "ar": "إعدادات تسير العمل",
+    "en": "Workflow Settings"
+  },
+  "number_of_days": {
+    "ar": "#أيام",
+    "en": "#Days"
+  },
+  "escalation_settings": {
+    "ar": "أعدادات التصعيد",
+    "en": "Escalation Settings"
+  },
+  "enable_escalation_mode": {
+    "ar": "تفعيل وضع التصعيد",
+    "en": "Enable Escalation Mode"
+  },
+  "has_archive": {
+    "ar": "لديها أرشف مركزي",
+    "en": "has Central Archive"
+  },
+  "sla": {
+    "ar": "الحد الأقصى لعدد الأيام للرد على المراسلات",
+    "en": "The maximum number of days to reply to a correspondence"
+  },
+  "registry_parent": {
+    "ar": "السجل التابع",
+    "en": "follow registry"
+  },
+  "tab_location": {
+    "ar": "اسم اللسان",
+    "en": "Tab Name"
+  },
+  "field": {
+    "ar": "الحقل",
+    "en": "Field"
+  },
+  "can_not_add_for_these_reasons": {
+    "ar": "لا يمكن الاضافة لهذه الاسباب",
+    "en": "Can not be added to these reasons"
+  },
+  "check_this_fields": {
+    "ar": "رجاء التأكد من هذه الحقول أولا",
+    "en": "Please check these fields first"
+  },
+  "add_new_document_type": {
+    "ar": "اضف نوع وثيقة جديده",
+    "en": "Add New Document Type"
+  },
+  "all": {
+    "ar": "الكل",
+    "en": "All"
+  },
+  "add_new_role": {
+    "ar": "اضافه جديد",
+    "en": "Add New Role"
+  },
+  "add_new_document_status": {
+    "ar": "اضافه جديد",
+    "en": "Add New Document Status"
+  },
+  "color_palette": {
+    "ar": "Color Palette",
+    "en": "Color Palette"
+  },
+  "following_records_failed_to_delete": {
+    "ar": "Selected records deleted successfully except following records",
+    "en": "Selected records deleted successfully except following records"
+  },
+  "failed_delete_selected": {
+    "ar": "Failed to delete selected records",
+    "en": "Failed to delete selected records"
+  },
+  "add_new_theme": {
+    "ar": "Add New Theme",
+    "en": "Add New Theme"
+  },
+  "additional_properties": {
+    "ar": "Additional Properties",
+    "en": "Additional Properties"
+  },
+  "add_new_job_title": {
+    "ar": "اضافه مسمى وظيفي",
+    "en": "Add New Job Title"
+  },
+  "add_new_sms_template": {
+    "ar": "اضافه قالب رساله جديد",
+    "en": "Add New Sms Template"
+  },
+  "add_app_users": {
+    "ar": "اضافه مستخدم",
+    "en": "Add app users"
+  },
+  "add_sms_template_subscribers": {
+    "ar": "تم اضافه قالب رساله بنجاح",
+    "en": "Add Sms Template Subscribers"
+  },
+  "add_new_workflow_group": {
+    "ar": "اضافه مجموعه سير عمل جديد",
+    "en": "Add New Workflow Group"
+  },
+  "announcement_message_body": {
+    "ar": "نص التعميم",
+    "en": "Announcement Body"
+  },
+  "cannot_delete_records": {
+    "ar": "لا يمكن حذف السجل",
+    "en": "Cannot delete records!"
+  },
+  "reload": {
+    "ar": "إعادة تحميل",
+    "en": "Reload"
+  },
+  "members": {
+    "ar": "Members",
+    "en": "Members"
+  },
+  "manage_sms_template_subscribers": {
+    "ar": "Manage Sms Template Subscribers",
+    "en": "Manage Sms Template Subscribers"
+  },
+  "something_happened_when_update_global": {
+    "ar": "Something happened while updating globalization. Please try again.",
+    "en": "Something happened while updating globalization. Please try again."
+  },
+  "something_happened_when_update_status": {
+    "ar": "Something happened while updating status. Please try again.",
+    "en": "Something happened while updating status. Please try again."
+  },
+  "add_new_entity": {
+    "ar": "Add New Entity",
+    "en": "Add New Entity"
+  },
+  "connection_settings": {
+    "ar": "Connection Settings",
+    "en": "Connection Settings"
+  },
+  "ldap_providers": {
+    "ar": "LDAP Providers",
+    "en": "LDAP Providers"
+  },
+  "server_name_ip": {
+    "ar": "Server Name/IP",
+    "en": "Server Name/IP"
+  },
+  "filenet": {
+    "ar": "FileNet",
+    "en": "FileNet"
+  },
+  "invalid_server_name_ip": {
+    "ar": "Invalid Server Name/IP",
+    "en": "Invalid Server Name/IP"
+  },
+  "invalid_address": {
+    "ar": "Invalid Address",
+    "en": "Invalid Address"
+  },
+  "tawasol_supporting_database": {
+    "ar": "TAWASOL Supporting Database",
+    "en": "TAWASOL Supporting Database"
+  },
+  "database_name": {
+    "ar": "Database Name",
+    "en": "Database Name"
+  },
+  "smtp": {
+    "ar": "SMTP",
+    "en": "SMTP"
+  },
+  "invalid_server_address": {
+    "ar": "Invalid Server Address",
+    "en": "Invalid Server Address"
+  },
+  "data_source_name": {
+    "ar": "Data Source Name",
+    "en": "Data Source Name"
+  },
+  "domain_controller_name": {
+    "ar": "Domain Controller Name",
+    "en": "Domain Controller Name"
+  },
+  "add_new_public_announcement": {
+    "ar": "Add New Public Announcement",
+    "en": "Add New Public Announcement"
+  },
+  "english_font_family": {
+    "ar": "Font Family",
+    "en": "Font Family"
+  },
+  "arabic_font_family": {
+    "ar": "Arabic Font Family",
+    "en": "Arabic Font Family"
+  },
+  "create_your_palette": {
+    "ar": "Create Your Palette",
+    "en": "Create Your Palette"
+  },
+  "security_levels": {
+    "ar": "درجات السرية",
+    "en": "Security Levels"
+  },
+  "can_change_password": {
+    "ar": "أماكنية تغير كلمة المرور",
+    "en": "Can Change Password"
+  },
+  "show_copyright": {
+    "ar": "عرض نص الحقوق",
+    "en": "Show Copyright Text"
+  },
+  "support_phone": {
+    "ar": "Support Phone",
+    "en": "Support Phone"
+  },
+  "support_email": {
+    "ar": "Support Email",
+    "en": "Support Email"
+  },
+  "workflow_governance_rules": {
+    "ar": "قاعدة سير العمل",
+    "en": "Workflow Governance Rules"
+  },
+  "enable_escalation_process": {
+    "ar": "Enable Escalation Process",
+    "en": "Enable Escalation Process"
+  },
+  "use_central_archive_internally": {
+    "ar": "Use Central Archive Internally",
+    "en": "Use Central Archive Internally"
+  },
+  "add_new_global_setting": {
+    "ar": "أضف إعدادات جديده لـ :",
+    "en": "Add New Global Setting To :"
+  },
+  "excluded_users": {
+    "ar": "Excluded Users",
+    "en": "Excluded Users"
+  },
+  "manage_users_to_exclude_from_audit_log": {
+    "ar": "أستثناء مستخدمين من سجل التدقيق",
+    "en": "Manage Users To Exclude From Audit Log"
+  },
+  "select_organizations_to_exclude": {
+    "ar": "Select Organizations To Exclude",
+    "en": "Select Organizations To Exclude"
+  },
+  "record_has_related_records": {
+    "ar": "لا يمكن حذف السجل لأنه مرتبط بسجلات أخرى يجب حذفها أولا",
+    "en": "Cannot delete the record as it has related records"
+  },
+  "change_global_success": {
+    "ar": "تم تحديث ( :name ) إلى ( :global ) بنجاح",
+    "en": "(:name) updated successfully to be ( :global )"
+  },
+  "sub_classifications_to": {
+    "ar": "التصنيفات الفرعية لـ :",
+    "en": "Sub Classification to :"
+  },
+  "parent_classification": {
+    "ar": "التصنيف الرئيسي",
+    "en": "Main classification"
+  },
+  "no_parent": {
+    "ar": "لا يوجد",
+    "en": "There is no"
+  },
+  "upload": {
+    "ar": "تحميل",
+    "en": "Upload"
+  },
+  "banner_logo_success": {
+    "ar": "Banner Logo Saved Successfully",
+    "en": "Banner Logo Saved Successfully"
+  },
+  "login_logo_success": {
+    "ar": "Login Logo Saved Successfully",
+    "en": "Login Logo Saved Successfully"
+  },
+  "image_dimension_greater": {
+    "ar": "Please upload image upto 283px X 283px",
+    "en": "Please upload image upto 283px X 283px"
+  },
+  "delete_selected_items": {
+    "ar": "Delete Selected",
+    "en": "Delete Selected"
+  },
+  "add_new_application_user": {
+    "ar": "Add New Application User",
+    "en": "Add New Application User"
+  },
+  "appearance": {
+    "ar": "مظهر خارجي",
+    "en": "Appearance"
+  },
+  "add_new_correspondence_site_type": {
+    "ar": "أضف نوع جهة مراسلة",
+    "en": "Add New Correspondence Site Type"
+  },
+  "copy_ar": {
+    "ar": "نسخ",
+    "en": "نسخ"
+  },
+  "document_file_related_ous": {
+    "ar": "الإدارات المرتبطة",
+    "en": "Linked Department"
+  },
+  "phone": {
+    "ar": "هاتف",
+    "en": "Phone"
+  },
+  "arabic_full_name": {
+    "ar": "الاسم بالعربية كامل",
+    "en": "Arabic Full Name"
+  },
+  "english_full_name": {
+    "ar": "الاسم بالانجليزية كامل",
+    "en": "English Full Name"
+  },
+  "subscription_sms": {
+    "ar": "أشتراك الرسائل القصية",
+    "en": "Subscription SMS"
+  },
+  "new_item_email": {
+    "ar": "أشعار جديد/ بريد",
+    "en": "New Item Email"
+  },
+  "deadline_email": {
+    "ar": "أشعار ميعاد الاستحقاق / بريد",
+    "en": "Deadline Email"
+  },
+  "subscription_email": {
+    "ar": "أشتراك البريد الالكترونى",
+    "en": "Subscription Email"
+  },
+  "deadline_sms": {
+    "ar": "أشعار ميعاد الاستحقاق / رسائل",
+    "en": "Deadline SMS"
+  },
+  "reminder_email": {
+    "ar": "أشعار بالبريد الاكترونى",
+    "en": "Reminder Email"
+  },
+  "reminder_sms": {
+    "ar": "تنبية الرسائل القصيرة",
+    "en": "Reminder SMS"
+  },
+  "classification_view_permission": {
+    "ar": "صلاحيات التصنيفات",
+    "en": "Classification View Permission"
+  },
+  "other_organizations": {
+    "ar": "إدارات أخرى",
+    "en": "Other Organizations"
+  },
+  "security_level": {
+    "ar": "درجة السرية",
+    "en": "Security Level"
+  },
+  "classification_view_permission_exists": {
+    "ar": "الصلاحية موجوده من قبل",
+    "en": "Classification View Permission Already Exists"
+  },
+  "group_members_required": {
+    "ar": "Group Members Required!",
+    "en": "Group Members Required!"
+  },
+  "related_organizations_deleted_success": {
+    "ar": "تم حذف الإدارات المرتبطة بنجاح",
+    "en": "Successfully linked departments have been deleted"
+  },
+  "related_organization_confirm": {
+    "ar": "بأتخاذ هذا الاجراء سيتم حذف الإدارات المرتبطة  <br /> رجاء تأكيد الحذف",
+    "en": "By taking this action, the associated organization(s) will be deleted. <br /> Please confirm the deletion"
+  },
+  "add_new_document_file": {
+    "ar": "أضف ملف جديد",
+    "en": "Add New Document File"
+  },
+  "reset_month": {
+    "ar": "Reset Month",
+    "en": "Reset Month"
+  },
+  "reset_day": {
+    "ar": "Reset Day",
+    "en": "Reset Day"
+  },
+  "start_serial": {
+    "ar": "Start Serial",
+    "en": "Start Serial"
+  },
+  "has_status_date": {
+    "ar": "لديها تاريخ إعادة",
+    "en": "Has Status Date"
+  },
+  "add_new_distribution_list": {
+    "ar": "Add New Distribution List",
+    "en": "Add New Distribution List"
+  },
+  "add_sub_classification": {
+    "ar": "أضف تصنيف فرعي",
+    "en": "Add Sub Classification"
+  },
+  "linked_organizations": {
+    "ar": "الإدارات المرتبطة",
+    "en": "Linked Organizations"
+  },
+  "workflow_action": {
+    "ar": "Workflow Action",
+    "en": "Workflow Action"
+  },
+  "add_new_workflow_action": {
+    "ar": "Add New Workflow Action",
+    "en": "Add New Workflow Action"
+  },
+  "workflow_related_users": {
+    "ar": "Workflow Related Users",
+    "en": "Workflow Related Users"
+  },
+  "sub_correspondence_site": {
+    "ar": "جهات مراسلة فرعية",
+    "en": "Sub Correspondence Site"
+  },
+  "sub_correspondence_sites_to": {
+    "ar": "جهات المراسلة الفرعية لــ :",
+    "en": "Sub Correspondence Sites to :"
+  },
+  "correspondence_type_site": {
+    "ar": "نوع جهة المراسة",
+    "en": "Correspondence site type"
+  },
+  "related_user_confirm": {
+    "ar": "بأتخاذ هذا الاجراء سيتم حذف المستخدمين المرتبطين <br /> رجاء تأكيد الحذف",
+    "en": "By taking this action, the associated users will be deleted.<br /> Please confirm the deletion"
+  },
+  "new_item_email_priority": {
+    "ar": "لأولوية البريد",
+    "en": "New Item Email priority"
+  },
+  "deadline_sms_priority": {
+    "ar": "لأولوية البريد",
+    "en": "Deadline SMS Priority"
+  },
+  "deadline_email_priority": {
+    "ar": "لأولوية البريد",
+    "en": "Deadline Email Priority"
+  },
+  "reminder_sms_priority": {
+    "ar": "لأولوية البريد",
+    "en": "Reminder SMS Priority"
+  },
+  "reminder_email_priority": {
+    "ar": "لأولوية البريد",
+    "en": "Reminder Email Priority"
+  },
+  "reminder_sms_days": {
+    "ar": "عدد الايام",
+    "en": "Reminder SMS Days"
+  },
+  "reminder_email_days": {
+    "ar": "عدد الايام",
+    "en": "Reminder Email Days"
+  },
+  "arabic_number_space": {
+    "ar": "حروف عربية فقط , ارقام , مساحة فارغة هى المسموح بها هنا",
+    "en": "Only arabic characters, numbers, space are allowed"
+  },
+  "department_name": {
+    "ar": "أسم الإدارة",
+    "en": "Department Name"
+  },
+  "employee_number_duplication_message": {
+    "ar": "Employee Number should be unique",
+    "en": "Employee Number should be unique"
+  },
+  "qid_duplication_message": {
+    "ar": "Qatari Id should be unique",
+    "en": "Qatari Id should be unique"
+  },
+  "select_classification_security_level": {
+    "ar": "رجاء اختار التصنيف ودرجة السرية",
+    "en": "Please Select Classification And  Security Levels"
+  },
+  "add_new_correspondencesite": {
+    "ar": "أضف جهة مراسلة جديده",
+    "en": "Add New Correspondence Site"
+  },
+  "classification_view_permission_success": {
+    "ar": "تم أضافة الصلاحية بنجاح",
+    "en": "Classification View Permission Added Successfully"
+  },
+  "classification_view_permission_update_success": {
+    "ar": "تم تحديث الصلاحية بنجاح",
+    "en": "Classification View Permission Updated Successfully"
+  },
+  "classification_view_permission_delete_success": {
+    "ar": "تم حذف الصلاحية بنجاح",
+    "en": "Classification View Permission Deleted Successfully"
+  },
+  "not_found_to_display": {
+    "ar": "لا يوجد :name لعرضها",
+    "en": "no :name to display it"
+  },
+  "select_classification": {
+    "ar": "اختر تصنيف",
+    "en": "Select Calssification"
+  },
+  "select_correspondence_site": {
+    "ar": "اختر جهة مراسلة",
+    "en": "Select Correspondence Site"
+  },
+  "classification_options": {
+    "ar": "خيارات التصنيفات",
+    "en": "Classification Options"
+  },
+  "add_all": {
+    "ar": "أضف الكل",
+    "en": "add all"
+  },
+  "send": {
+    "ar": "إرسال",
+    "en": "Send"
+  },
+  "roles": {
+    "ar": "Roles",
+    "en": "Roles"
+  },
+  "grid_action_edit_permission": {
+    "ar": "تعديل الصلاحيات",
+    "en": "Edit Permission"
+  },
+  "grid_action_edit_workflow_participation": {
+    "ar": "تعديل مشاركات سير العمل",
+    "en": "Edit Workflow Participation"
+  },
+  "out_of_office_settings": {
+    "ar": "تحديد معاون",
+    "en": "Out Of Office Settings"
+  },
+  "private": {
+    "ar": "Private",
+    "en": "Private"
+  },
+  "select_permissions": {
+    "ar": "Select Permissions",
+    "en": "Select Permissions"
+  },
+  "permissions_required": {
+    "ar": "Permissions Required!",
+    "en": "Permissions Required!"
+  },
+  "send_to_private_users": {
+    "ar": "Send To Private Users",
+    "en": "Send To Private Users"
+  },
+  "send_to_managers": {
+    "ar": "Send To Managers",
+    "en": "Send To Managers"
+  },
+  "send_to_all_organizations_users": {
+    "ar": "Send to All Organization’s Users",
+    "en": "Send to All Organization’s Users"
+  },
+  "send_to_any_user_in_same_unit_and_to_all_units": {
+    "ar": "Send to any user in the same unit and to all units having the same correspondence register",
+    "en": "Send to any user in the same unit and to all units having the same correspondence register"
+  },
+  "send_to_any_user_in_same_unit_parent_child_same_parent": {
+    "ar": "Send to any user in the same unit, parent unit, child units and units having the same parent",
+    "en": "Send to any user in the same unit, parent unit, child units and units having the same parent"
+  },
+  "workflow_participation": {
+    "ar": "Workflow Participation",
+    "en": "Workflow Participation"
+  },
+  "update_success": {
+    "ar": "تم التحديث بنجاح",
+    "en": "Updated Successfully"
+  },
+  "correspondence_site_options": {
+    "ar": "خيارات جهات المراسلة",
+    "en": "Correspondence Site Options"
+  },
+  "authority_level": {
+    "ar": "درجات الاطلاع",
+    "en": "Authority Level"
+  },
+  "user_on_behalf": {
+    "ar": "المستخدم البديل",
+    "en": "User On Behalf"
+  },
+  "out_of_office_message": {
+    "ar": "الرسالة",
+    "en": "Out Of Office Message"
+  },
+  "view_message_to_sender": {
+    "ar": "أظهار رسالة إلى المرسل",
+    "en": "View Message to the sender"
+  },
+  "max_length": {
+    "ar": "يجب ان لا تتجاوز :length",
+    "en": "Should be maximum :length characters"
+  },
+  "private_users": {
+    "ar": "مستخدم خاص",
+    "en": "Private Users"
+  },
+  "managers": {
+    "ar": "المديرين",
+    "en": "Managers"
+  },
+  "localizations": {
+    "ar": "التعريب",
+    "en": "localizations"
+  },
+  "add_new_entity_type": {
+    "ar": "Add New Entity Type",
+    "en": "Add New Entity Type"
+  },
+  "select_ou_role_security_level": {
+    "ar": "رجاء اختار الادارة  والوظيفة ودرجة السرية",
+    "en": "Please Select Organization, Role And  Security Levels"
+  },
+  "theme_additional_properties": {
+    "ar": "Theme Additional Properties",
+    "en": "Theme Additional Properties"
+  },
+  "identifier_duplication_message": {
+    "ar": "Identifier can not be duplicated",
+    "en": "Identifier can not be duplicated"
+  },
+  "method_deprecated": {
+    "ar": "This method has been deprecated.",
+    "en": "This method has been deprecated."
+  },
+  "organizations": {
+    "ar": "الإدارت",
+    "en": "Organizations"
+  },
+  "port_validation": {
+    "ar": "Port Number should be between 1 and 65535",
+    "en": "Port Number should be between 1 and 65535"
+  },
+  "english_number_space": {
+    "ar": "Only english alphabets, numbers, space are allowed",
+    "en": "Only english alphabets, numbers, space are allowed"
+  },
+  "invalid_email": {
+    "ar": "رجاء كتابة بريد إلكتروني صالح",
+    "en": "please type a valid email"
+  },
+  "invalid_phone_mobile": {
+    "ar": ":phonemob number should be in format +974xxxxxxxx",
+    "en": ":phonemob number should be in format +974xxxxxxxx"
+  },
+  "number_decimal": {
+    "ar": "Please enter decimal number",
+    "en": "Please enter decimal number"
+  },
+  "english_underscore": {
+    "ar": "Only english characters and underscore are allowed",
+    "en": "Only english characters and underscore are allowed"
+  },
+  "all_validation": {
+    "ar": "Only english, arabic, digits, space, hyphen, dot, forward slash, backward slash are allowed",
+    "en": "Only english, arabic, digits, space, hyphen, dot, forward slash, backward slash are allowed"
+  },
+  "arabic_english": {
+    "ar": "حروف عربية وانجليزية فقط المسموح بها هنا",
+    "en": "Only arabic and english characters are allowed"
+  },
+  "english_only": {
+    "ar": "Only english characters are allowed",
+    "en": "Only english characters are allowed"
+  },
+  "arabic_only": {
+    "ar": "فقط حروف عربية هنا المسموح بها",
+    "en": "Only arabic characters are allowed"
+  },
+  "arabic_number": {
+    "ar": "فقط حروف عربية وارقام المسموح بها هنا",
+    "en": "Only arabic characters, numbers are allowed"
+  },
+  "english_number": {
+    "ar": "Only english alphabets, numbers are allowed",
+    "en": "Only english alphabets, numbers are allowed"
+  },
+  "arabic_english_number": {
+    "ar": "حروف عربية وارقام حروف انجليزية و الشرطة الامامية متاحة هنا",
+    "en": "Only arabic, english, digits, hyphen, forward slash are allowed. Hyphen, forward slash should not be at end"
+  },
+  "arabic_english_space": {
+    "ar": "الحروق العربية والانجلزيزية والفرغات المسموح بها هنا",
+    "en": "Only arabic, english, space are allowed"
+  },
+  "max_number": {
+    "ar": "رجاء ادخل رقم اقل من :number",
+    "en": "Please enter number less than :number"
+  },
+  "arabic_underscore": {
+    "ar": "الحروف العربية وشرطة الصغري المسموح بها هنا",
+    "en": "Only arabic characters and underscore are allowed"
+  },
+  "user_preferences": {
+    "ar": "خيارات المستخدم",
+    "en": "User Preferences"
+  },
+  "manage_preferences": {
+    "ar": "Manage Preferences",
+    "en": "Manage Preferences"
+  },
+  "received": {
+    "ar": "أستلم",
+    "en": "Received"
+  },
+  "due": {
+    "ar": "Due",
+    "en": "Due"
+  },
+  "main_site": {
+    "ar": "الجهة الرئيسية",
+    "en": "Main-Site"
+  },
+  "sub_site": {
+    "ar": "الجهة الفرعية",
+    "en": "Sub-Site"
+  },
+  "reply": {
+    "ar": "رد",
+    "en": "Reply"
+  },
+  "reference_pattern": {
+    "ar": "النمط المرجعى",
+    "en": "Reference Pattern"
+  },
+  "name": {
+    "ar": "الاسم",
+    "en": "Name"
+  },
+  "reference_elements": {
+    "ar": "عناصر تكوين الرقم المرجعى",
+    "en": "Components of the reference number"
+  },
+  "general": {
+    "ar": "أعدادات عامة",
+    "en": "General"
+  },
+  "preferences_success": {
+    "ar": "Preferences updated successfully",
+    "en": "Preferences updated successfully"
+  },
+  "user_comments": {
+    "ar": "التعليقات",
+    "en": "User Comments"
+  },
+  "comment": {
+    "ar": "Comment",
+    "en": "Comment"
+  },
+  "short_comment": {
+    "ar": "تعليق قصير",
+    "en": "Short Comment"
+  },
+  "out_of_office_success": {
+    "ar": "Out of office updated successfully",
+    "en": "Out of office updated successfully"
+  },
+  "general_notification_settings_success": {
+    "ar": "General and Notification settings updated successfully",
+    "en": "General and Notification settings updated successfully"
+  },
+  "static_text": {
+    "ar": "نص ثابت",
+    "en": "Static text"
+  },
+  "attachments": {
+    "ar": "المرفقات",
+    "en": "Attachments"
+  },
+  "attachment_name": {
+    "ar": "Attachment Name",
+    "en": "Attachment Name"
+  },
+  "import_organizations": {
+    "ar": "استيراد أقسام",
+    "en": "Import Organizations"
+  },
+  "error_message": {
+    "ar": "Error message",
+    "en": "Error message"
+  },
+  "file_upload_success": {
+    "ar": "File Uploaded Successfully",
+    "en": "File Uploaded Successfully"
+  },
+  "validate_file": {
+    "ar": "Validate File",
+    "en": "Validate File"
+  },
+  "file_required": {
+    "ar": "Please Upload a File!",
+    "en": "Please Upload a File!"
+  },
+  "excel_file_required": {
+    "ar": "رجاء قم برفع ملف من نوع Excel",
+    "en": "Please Upload Excel File only!"
+  },
+  "import": {
+    "ar": "Import",
+    "en": "Import"
+  },
+  "failed": {
+    "ar": "Failed",
+    "en": "Failed"
+  },
+  "passed": {
+    "ar": "Passed",
+    "en": "Passed"
+  },
+  "scan": {
+    "ar": "Scan",
+    "en": "Scan"
+  },
+  "browse_file": {
+    "ar": "Browse File...",
+    "en": "Browse File..."
+  },
+  "children": {
+    "ar": "ملفات فرعية",
+    "en": "Sub Files"
+  },
+  "test_connection": {
+    "ar": "Test Connection",
+    "en": "Test Connection"
+  },
+  "connection_success": {
+    "ar": "نجح اختبار الاتصال",
+    "en": "Connection test success"
+  },
+  "arabic_display_name": {
+    "ar": "Arabic Display Name",
+    "en": "Arabic Display Name"
+  },
+  "english_display_name": {
+    "ar": "English Display Name",
+    "en": "English Display Name"
+  },
+  "scanner_dialog": {
+    "ar": "نافذة الماسح الضوئى",
+    "en": "Scanner Dialog"
+  },
+  "select_scanner": {
+    "ar": "اختر الماسح الضوئي",
+    "en": "Select Scanner"
+  },
+  "change_selected_scanner": {
+    "ar": "تغير الماسح الضوئي",
+    "en": "Change Selected Scanner"
+  },
+  "color_format": {
+    "ar": "تنسيق اللون",
+    "en": "Color Format"
+  },
+  "scan_mode": {
+    "ar": "وضع الماسح الضوئي",
+    "en": "Scan Mode"
+  },
+  "paper_size": {
+    "ar": "حجم الورق",
+    "en": "Paper Size"
+  },
+  "advanced_scanner_settings": {
+    "ar": "إعدادات متقدمة",
+    "en": "Advanced Settings"
+  },
+  "update_browser": {
+    "ar": "هذا المتصفح لا يدعم رفع الملفات بطريقة HTML 5 رجاء التحديث",
+    "en": "This version of web browser does not support FileReader object, please upgrade. If you use Internet Explorer, disable the 'Compatibility View' option."
+  },
+  "import_image": {
+    "ar": "تحميل صورة",
+    "en": "Import Image"
+  },
+  "scan_pages": {
+    "ar": "مسح الصفحات",
+    "en": "Scan Pages"
+  },
+  "cancel_scan": {
+    "ar": "ألغاء المسح",
+    "en": "Cancel Scan"
+  },
+  "scanning_please_wait": {
+    "ar": "رجاء الانتظار حتى انتهاء العمليه",
+    "en": "Please wait while the operation complete"
+  },
+  "default_color": {
+    "ar": "اللون الافتراضى",
+    "en": "Default Color"
+  },
+  "binary_color": {
+    "ar": "ثنائى",
+    "en": "Binary"
+  },
+  "gray_color": {
+    "ar": "رمادي",
+    "en": "Gray"
+  },
+  "brightness": {
+    "ar": "السطوع",
+    "en": "Brightness"
+  },
+  "contrast": {
+    "ar": "التباين",
+    "en": "contrast"
+  },
+  "rotate_left": {
+    "ar": "الدوران لليسار",
+    "en": "Rotate Left"
+  },
+  "rotate_right": {
+    "ar": "الدوران لليمين",
+    "en": "Rotate Right"
+  },
+  "auto_rotate": {
+    "ar": "دوران تلقائي",
+    "en": "Auto Rotate"
+  },
+  "deskew": {
+    "ar": "تعديل الصورة",
+    "en": "Deskew"
+  },
+  "line_removal": {
+    "ar": "إزالة الخط",
+    "en": "line removal"
+  },
+  "despeckle": {
+    "ar": "تمويه داخلي",
+    "en": "despeckle"
+  },
+  "auto_crop": {
+    "ar": "أقتصاص تلقائى",
+    "en": "Auto Crop"
+  },
+  "overscan_removal": {
+    "ar": "إزالة الخروج عن الشاشة",
+    "en": "Overscan Removal"
+  },
+  "blank_pages": {
+    "ar": "كشف عن الصفحات الفارغة",
+    "en": "blank page detection"
+  },
+  "number_of_pages": {
+    "ar": "عدد الصفحات",
+    "en": "Number of Pages"
+  },
+  "state": {
+    "ar": "الحالة",
+    "en": "State"
+  },
+  "barcode_settings": {
+    "ar": "الباركود",
+    "en": "Barcode"
+  },
+  "document_properties": {
+    "ar": "خصائص المراسلة",
+    "en": "Document Properties"
+  },
+  "document_subject": {
+    "ar": "عنوان المراسلة",
+    "en": "Document Subject"
+  },
+  "linked_documents": {
+    "ar": "الكتب المرتبطه",
+    "en": "Linked Documents"
+  },
+  "linked_persons": {
+    "ar": "Linked Persons",
+    "en": "Linked Persons"
+  },
+  "notes": {
+    "ar": "Notes",
+    "en": "Notes"
+  },
+  "author": {
+    "ar": "المرسل",
+    "en": "Author"
+  },
+  "search_module_main_organization_units": {
+    "ar": "وحدات إدارية عامة",
+    "en": "Main organization units"
+  },
+  "search_module_serial": {
+    "ar": "الرقم التسلسلي",
+    "en": "Serial"
+  },
+  "search_module_year": {
+    "ar": "العام",
+    "en": "Year"
+  },
+  "search_module_security_levels": {
+    "ar": "درجات السرية",
+    "en": "Security level"
+  },
+  "search_module_correspondence_site_types": {
+    "ar": "انواع جهات المراسلة",
+    "en": "Correspondence site types"
+  },
+  "search_module_main_correspondence_sites": {
+    "ar": "جهات المراسلة الرئيسية",
+    "en": "Main correspondence sites"
+  },
+  "search_module_sub_correspondence_sites": {
+    "ar": "جهات المراسلة الفرعية",
+    "en": "Sub correspondence sites"
+  },
+  "search_module_subject": {
+    "ar": "الموضوع",
+    "en": "Subject"
+  },
+  "search_module_creation_start_date": {
+    "ar": "Creation Date From",
+    "en": "Creation Date From"
+  },
+  "search_module_creation_end_date": {
+    "ar": "Creation Date To",
+    "en": "Creation Date To"
+  },
+  "search_module_reset_filters": {
+    "ar": "حذف خيارات البحث",
+    "en": "Reset filters"
+  },
+  "search_module_advanced_search_options": {
+    "ar": "خيارات بحث متقدمة",
+    "en": "Advanced search options"
+  },
+  "search_module_save_search": {
+    "ar": "حفظ البحث",
+    "en": "Save search"
+  },
+  "search_module_start_date": {
+    "ar": "من",
+    "en": "From"
+  },
+  "search_module_end_date": {
+    "ar": "الى",
+    "en": "To"
+  },
+  "search_module_document_types": {
+    "ar": "انواع الملفات",
+    "en": "Document types"
+  },
+  "search_module_follow_up_status": {
+    "ar": "حالات المتابعة",
+    "en": "Follow-up status"
+  },
+  "search_module_status": {
+    "ar": "الحالة",
+    "en": "Status"
+  },
+  "search_module_main_classifications": {
+    "ar": "التصنيفات الرئيسية",
+    "en": "Main classifications"
+  },
+  "search_module_sub_classifications": {
+    "ar": "التصنيفات الفرعية",
+    "en": "Sub classifications"
+  },
+  "search_module_priority_levels": {
+    "ar": "درجة الاولوية",
+    "en": "Priority levels"
+  },
+  "search_module_file": {
+    "ar": "الملف",
+    "en": "File"
+  },
+  "search_module_file_code": {
+    "ar": "كود الملف",
+    "en": "File code"
+  },
+  "search_module_file_number": {
+    "ar": "رقم الملف",
+    "en": "File number"
+  },
+  "search_module_approved_by": {
+    "ar": "اعتمد بواسطة",
+    "en": "Approved by"
+  },
+  "search_module_comments": {
+    "ar": "التعليقات",
+    "en": "Comments"
+  },
+  "search_module_show_advanced_search": {
+    "ar": "اظهار خيارات البحث المتقدمة",
+    "en": "Show Advanced Search"
+  },
+  "search_module_hide_advanced_search": {
+    "ar": "اخفاء خيارات البحث المتقدمة",
+    "en": "Hide Advanced Search"
+  },
+  "priority_level": {
+    "ar": "مستوى الاولوية",
+    "en": "Priority Level"
+  },
+  "title": {
+    "ar": "عنوان",
+    "en": "Title"
+  },
+  "view_tracking_sheet": {
+    "ar": "عرض سجل الكتاب",
+    "en": "View Tracking Sheet"
+  },
+  "manage_tags": {
+    "ar": "Manage Tags",
+    "en": "Manage Tags"
+  },
+  "entities": {
+    "ar": "جهات",
+    "en": "Entities"
+  },
+  "comments": {
+    "ar": "الملاحظات",
+    "en": "Comments"
+  },
+  "destinations": {
+    "ar": "الجهات",
+    "en": "Destinations"
+  },
+  "open": {
+    "ar": "فتح",
+    "en": "Open"
+  },
+  "workflow_groups": {
+    "ar": "مجموعات",
+    "en": "Workflow Groups"
+  },
+  "accept": {
+    "ar": "قبول",
+    "en": "Accept"
+  },
+  "reject": {
+    "ar": "رفض",
+    "en": "Reject"
+  },
+  "terminate": {
+    "ar": "إنهاء",
+    "en": "Terminate"
+  },
+  "new_item_sms": {
+    "ar": "أشعار جديد / رسائل",
+    "en": "New Item SMS"
+  },
+  "creator": {
+    "ar": "بواسطة",
+    "en": "Creator"
+  },
+  "create_date_from": {
+    "ar": "Create Date From",
+    "en": "Create Date From"
+  },
+  "create_date_to": {
+    "ar": "Create Date To",
+    "en": "Create Date To"
+  },
+  "search_module_document_number": {
+    "ar": "رقم الملف",
+    "en": "Document number"
+  },
+  "create_content": {
+    "ar": "إنشاء محتوى",
+    "en": "Create Content"
+  },
+  "search_for_item": {
+    "ar": "أبحث عن عنصر في القائمة",
+    "en": "Search for an item in menu"
+  },
+  "outgoing_main_classification": {
+    "ar": "التصنيف الرئيسيى",
+    "en": "Main Classification"
+  },
+  "outgoing_sub_classification": {
+    "ar": "التصنيف الفرعي",
+    "en": "Sub Classifiaction"
+  },
+  "outgoing_priority_level": {
+    "ar": "درجة الأولوية",
+    "en": "Priority Level"
+  },
+  "outgoing_document_type": {
+    "ar": "نوع الكتاب",
+    "en": "Document Type"
+  },
+  "outgoing_file": {
+    "ar": "الملف",
+    "en": "File"
+  },
+  "outgoing_file_code": {
+    "ar": "كود الملف",
+    "en": "File Code"
+  },
+  "outgoing_file_serial": {
+    "ar": "رقم الملف",
+    "en": "File Number"
+  },
+  "outgoing_create_content": {
+    "ar": "محتوى الكتاب",
+    "en": "Document Content"
+  },
+  "dwf_mainheader": {
+    "ar": "توزيع سير العمل",
+    "en": "New Distribution Workflow"
+  },
+  "dwf_tabs_users": {
+    "ar": "المستخرمين",
+    "en": "Users"
+  },
+  "dwf_tabs_managers": {
+    "ar": "المديرين",
+    "en": "Managers"
+  },
+  "dwf_tabs_mainorganizationgroups": {
+    "ar": "المجموعات الرئيسية للمنظمة",
+    "en": "Main Organization Groups"
+  },
+  "dwf_tabs_myworkflowgroups": {
+    "ar": "مجموعات سير العمل",
+    "en": "My Workflow Groups"
+  },
+  "dwf_tabs_privateusers": {
+    "ar": "المستخدمين الخاصين",
+    "en": "Private Users"
+  },
+  "dwf_tabs_favouriteusers": {
+    "ar": "المستخدمين المفضلين",
+    "en": "Favourite Users"
+  },
+  "dwf_result_name": {
+    "ar": "الاسم",
+    "en": "Name"
+  },
+  "dwf_result_deprtment": {
+    "ar": "القسم",
+    "en": "Department"
+  },
+  "dwf_result_organization": {
+    "ar": "المنظمة",
+    "en": "Organization"
+  },
+  "dwf_result_action": {
+    "ar": "الامر",
+    "en": "Action"
+  },
+  "dwf_result_due": {
+    "ar": "تاريخ الموعد",
+    "en": "Due"
+  },
+  "dwf_result_notification": {
+    "ar": "اشعار",
+    "en": "Notification"
+  },
+  "dwf_result_escalation": {
+    "ar": "تصعيد",
+    "en": "Escalation"
+  },
+  "dwf_label_searchforusers": {
+    "ar": "ابحث عن مستخدمين",
+    "en": "Search for users"
+  },
+  "dwf_label_selectaction": {
+    "ar": "اختر الأمر",
+    "en": "Select Action"
+  },
+  "dwf_label_escalation": {
+    "ar": "التصعيد",
+    "en": "Escalation Process"
+  },
+  "dwf_label_duedate": {
+    "ar": "تاريخ الموعد",
+    "en": "Due Date"
+  },
+  "dwf_label_smsnotification": {
+    "ar": "اشعارات بالرسائل النصية",
+    "en": "SMS Notification"
+  },
+  "dwf_label_emailnotification": {
+    "ar": "اشعارات بالبريد الالكتروني",
+    "en": "Email Notification"
+  },
+  "dwf_users_name": {
+    "ar": "الاسم",
+    "en": "Name"
+  },
+  "dwf_users_deprtment": {
+    "ar": "القسم",
+    "en": "Department"
+  },
+  "dwf_users_organization": {
+    "ar": "المنظمة",
+    "en": "Organization Unit"
+  },
+  "outgoing_add_new_document_file": {
+    "ar": "أضف ملف جديد",
+    "en": "Add New Document File"
+  },
+  "outgoing_electronic": {
+    "ar": "صادر الكترونى",
+    "en": "Outgoing Electronic"
+  },
+  "outgoing_paper": {
+    "ar": "صادر ورقى",
+    "en": "Outgoing Paper"
+  },
+  "outgoing_send_to_prepare": {
+    "ar": "ارسال إلى اعداد",
+    "en": "send to prepare"
+  },
+  "outgoing_metadata_saved_success": {
+    "ar": "تم حفظ البيانات الرئيسية للمراسلة بنجاح",
+    "en": "Successfully saved master data for correspondence"
+  },
+  "search_module_edit_or_new_search": {
+    "ar": "بحث جديد او تعديل البحث",
+    "en": "Edit or new search"
+  },
+  "search_module_search_results": {
+    "ar": "نتائج البحث",
+    "en": "Search results"
+  },
+  "add_new_document_template": {
+    "ar": "Add New Document Template",
+    "en": "Add New Document Template"
+  },
+  "document_type": {
+    "ar": "طبيعة الكتاب",
+    "en": "Document Type"
+  },
+  "template_type": {
+    "ar": "Template Type",
+    "en": "Template Type"
+  },
+  "signatures_count": {
+    "ar": "Signatures Count",
+    "en": "Signatures Count"
+  },
+  "document_title": {
+    "ar": "Document Title",
+    "en": "Document Title"
+  },
+  "document_file": {
+    "ar": "الملفات",
+    "en": "Document File"
+  },
+  "add_new_attachment_type": {
+    "ar": "Add New Attachment Type",
+    "en": "Add New Attachment Type"
+  },
+  "attachment_type": {
+    "ar": "Attachment Type",
+    "en": "Attachment Type"
+  },
+  "outgoing_manage_tags": {
+    "ar": "إدارة وسوم الكتاب",
+    "en": "Manage Document Tags"
+  },
+  "outgoing_save": {
+    "ar": "حفظ",
+    "en": "Save"
+  },
+  "outgoing_manage_attachments": {
+    "ar": "إدارة مرفقات الكتاب",
+    "en": "Manage Document Attachments"
+  },
+  "outgoing_upload_attachment": {
+    "ar": "تحميل مرفق",
+    "en": "Upload Attachment"
+  },
+  "assign_tag_to_document": {
+    "ar": "أضف وسم للكتاب",
+    "en": "Assign tag to Document"
+  },
+  "simple_search": {
+    "ar": "Simple Search",
+    "en": "Simple Search"
+  },
+  "advanced_search": {
+    "ar": "Advanced Search",
+    "en": "Advanced Search"
+  },
+  "distribution_workflow": {
+    "ar": "سير عمل جديد",
+    "en": "Distribution Workflow"
+  },
+  "add_new_distribution_workflow": {
+    "ar": "أضافة قائمة توزيع",
+    "en": "Add New Distribution Workflow"
+  },
+  "main_organization_groups": {
+    "ar": "مجموعات الادارت الرئيسية",
+    "en": "Main Organization Groups"
+  },
+  "my_workflow_groups": {
+    "ar": "مجموعاتى",
+    "en": "My Workflow Groups"
+  },
+  "favourite_users": {
+    "ar": "المفضلة",
+    "en": "Favorite"
+  },
+  "clear": {
+    "ar": "مسح / تنظيف",
+    "en": "Clear"
+  },
+  "search_manger": {
+    "ar": "بحث عن مدير",
+    "en": "Search for Manger"
+  },
+  "attachment_upload_file": {
+    "ar": "تحميل مرفق",
+    "en": "Upload Attachment"
+  },
+  "attachment_scanner": {
+    "ar": "الماسح الضوئي",
+    "en": "Scanner"
+  },
+  "attachment_document_title": {
+    "ar": "أسم المرفق",
+    "en": "Attachment Name"
+  },
+  "attachment_document_title_optional": {
+    "ar": "يمكنك تجاوزة",
+    "en": "you can leave it empty"
+  },
+  "attachment_attachment_type": {
+    "ar": "نوع المرفق",
+    "en": "Attachment Type"
+  },
+  "attachment_attachment_security_level": {
+    "ar": "درجة السرية",
+    "en": "Security Level"
+  },
+  "attachment_add": {
+    "ar": "أضف",
+    "en": "add"
+  },
+  "attachment_file": {
+    "ar": "ملف مرفق",
+    "en": "File Attachment"
+  },
+  "attachment_view": {
+    "ar": "عرض المرفق",
+    "en": "View Attachment"
+  },
+  "attachment_edit": {
+    "ar": "تعديل المرفق",
+    "en": "edit attachment"
+  },
+  "attachment_delete": {
+    "ar": "حذف المرفق",
+    "en": "Delete attachment"
+  },
+  "signature": {
+    "ar": "التوقيع",
+    "en": "Signature"
+  },
+  "upload_signature": {
+    "ar": "تحميل توقيع",
+    "en": "Upload Signature"
+  },
+  "image_only": {
+    "ar": "Only upload image",
+    "en": "Only upload image"
+  },
+  "email_notification": {
+    "ar": "الايميل",
+    "en": "Email"
+  },
+  "invalid_uploaded_file": {
+    "ar": "امتداد الملف غير صالح ، إذا سمحت اختار من أحد هذه الأمتدادات",
+    "en": "File extension is invalid. Please choose one of these extensions."
+  },
+  "duplicate_doc_subject_title": {
+    "ar": "Document subject and title can not be duplicated",
+    "en": "Document subject and title can not be duplicated"
+  },
+  "created_on": {
+    "ar": "بتاريخ",
+    "en": "Created On"
+  },
+  "attachment_remove_confirm": {
+    "ar": "هل تريد إزالة الملف الحالى",
+    "en": "Do you want to remove the current attachment"
+  },
+  "attachment_remove": {
+    "ar": "مسح",
+    "en": "remove"
+  },
+  "property_configuration": {
+    "ar": "خاصية",
+    "en": "Property Configuration"
+  },
+  "data_type": {
+    "ar": "نوع البيانات",
+    "en": "Data Type"
+  },
+  "default_operator": {
+    "ar": "العملية الافتراضية",
+    "en": "Default Operator"
+  },
+  "default_value": {
+    "ar": "القيمة الافتراضية",
+    "en": "Default Value"
+  },
+  "sp_name": {
+    "ar": "أسم الاجراء",
+    "en": "SP Name"
+  },
+  "sp_parameters": {
+    "ar": "معاملات الإجراء",
+    "en": "SP Parameters"
+  },
+  "symbolic_name": {
+    "ar": "أسم رمزى",
+    "en": "Symbolic Name"
+  },
+  "is_mandatory": {
+    "ar": "مطلوب",
+    "en": "Mandatory"
+  },
+  "is_list": {
+    "ar": "قائمة",
+    "en": "List"
+  },
+  "is_sequence": {
+    "ar": "توالى",
+    "en": "Sequence"
+  },
+  "outgoing_manage_comments": {
+    "ar": "إدارة تعليقات الكتاب",
+    "en": "Manage Document Comments"
+  },
+  "outgoing_add_document_comment": {
+    "ar": "أضف تعليق",
+    "en": "Add Comment"
+  },
+  "comments_comment": {
+    "ar": "التعليق",
+    "en": "Comment"
+  },
+  "comments_short_description": {
+    "ar": "وصف قصير للتعليق",
+    "en": "Comment Short Description"
+  },
+  "comments_description": {
+    "ar": "محتوى التعليق",
+    "en": "Comment Content"
+  },
+  "comments_privacy_status": {
+    "ar": "حالة الخصوصية :",
+    "en": "Privacy status :"
+  },
+  "comments_private": {
+    "ar": "خاص",
+    "en": "Private"
+  },
+  "comments_global": {
+    "ar": "عام",
+    "en": "Global"
+  },
+  "comments_add": {
+    "ar": "أضف",
+    "en": "add"
+  },
+  "comments_includes": {
+    "ar": "يشمل",
+    "en": "includes"
+  },
+  "comments_excludes": {
+    "ar": "يستثني",
+    "en": "excludes"
+  },
+  "comments_organizations": {
+    "ar": "الإدارات",
+    "en": "Organizations"
+  },
+  "comments_users": {
+    "ar": "المستخدمين",
+    "en": "Users"
+  },
+  "comments_confirm_per_organization_change": {
+    "ar": "من خلال اتخاذ هذا الاجراء سيتم إزالة :type المختارين من قبل",
+    "en": "By taking this action, the selected :type will be removed"
+  },
+  "comments_search_in_organizations": {
+    "ar": "أبحث عن إدارة",
+    "en": "Search in Organizations"
+  },
+  "comments_search_in_users": {
+    "ar": "أبحث عن مستخدم",
+    "en": "Search in Users"
+  },
+  "add_new_property_configuration": {
+    "ar": "أضافة خاصية جديدة",
+    "en": "Add New Property Configuration"
+  },
+  "edit_property_configuration": {
+    "ar": "تعديل الخاصية",
+    "en": "Edit Property Configuration"
+  },
+  "comments_with_sub_organizations": {
+    "ar": "الإدارات الفرعية",
+    "en": "Sub Organizations"
+  },
+  "comments_close": {
+    "ar": "أغلاق",
+    "en": "Close"
+  },
+  "comments_save": {
+    "ar": "حفظ",
+    "en": "Save"
+  },
+  "outgoing_save_draft": {
+    "ar": "حفظ كـ مسودة",
+    "en": "Save As Draft"
+  },
+  "comments_creation_date": {
+    "ar": "تاريخ الاضافة",
+    "en": "Creation Date"
+  },
+  "outgoing_date_from": {
+    "ar": "Outgoing Date From",
+    "en": "Outgoing Date From"
+  },
+  "comments_confirm_include_exclude_remove": {
+    "ar": "باتخاذ هذا الاجراء سيتم حذف إعدادات الشمول والاستثناء",
+    "en": "By Taking this action will delete the inclusion and exclusion settings"
+  },
+  "comments_confirm_include_remove": {
+    "ar": "باتخاذ هذا الاجراء سيتم حذف إعدادات الشمول",
+    "en": "By Taking this action will delete the inclusion settings"
+  },
+  "english_number_under_score": {
+    "ar": "Only english alphabets, numbers, underscore, space are allowed",
+    "en": "Only english alphabets, numbers, underscore, space are allowed"
+  },
+  "outgoing_linked_entities": {
+    "ar": "إدارة الكيانات المرتبطة",
+    "en": "Manage Linked entities"
+  },
+  "tags_manage_document_tags": {
+    "ar": "إدارة وسوم الكتاب",
+    "en": "Manage Document Tags"
+  },
+  "tags_save": {
+    "ar": "حفظ",
+    "en": "Save"
+  },
+  "tags_saved_success": {
+    "ar": "تم حفظ الوسوم بنجاح",
+    "en": "Saved tags successfully"
+  },
+  "attachments_manage_document_attachments": {
+    "ar": "إدارة مرفقات الكتاب",
+    "en": "Manage Document Attachments"
+  },
+  "comments_manage_document_comments": {
+    "ar": "إدارة تعليقات الكتاب",
+    "en": "Manage Document Comments"
+  },
+  "properties_manage_document_properties": {
+    "ar": "إدارة خصائص الكتاب",
+    "en": "Manage Document Properties"
+  },
+  "properties_save": {
+    "ar": "حفظ",
+    "en": "Save"
+  },
+  "properties_close": {
+    "ar": "أغلق",
+    "en": "Close"
+  },
+  "outgoing_date_to": {
+    "ar": "Outgoing Date To",
+    "en": "Outgoing Date To"
+  },
+  "follow_up_from": {
+    "ar": "Follow-up From",
+    "en": "Follow-up From"
+  },
+  "follow_up_to": {
+    "ar": "Follow-up To",
+    "en": "Follow-up To"
+  },
+  "approve_date_from": {
+    "ar": "Approve Date From",
+    "en": "Approve Date From"
+  },
+  "approve_date_to": {
+    "ar": "Approve Date To",
+    "en": "Approve Date To"
+  },
+  "file_serial": {
+    "ar": "File Serial",
+    "en": "File Serial"
+  },
+  "head_of_government_entities": {
+    "ar": "روساء الأقسام",
+    "en": "Head of Government Entities"
+  },
+  "work_flow_history": {
+    "ar": "سجل سير العمل",
+    "en": "Work Flow History"
+  },
+  "document_history": {
+    "ar": "سجل المستند",
+    "en": "Document History"
+  },
+  "document_update_history": {
+    "ar": "سجل تحديث المستند",
+    "en": "Document Update History"
+  },
+  "attachments_history": {
+    "ar": "سجل تحديث المرفقات",
+    "en": "Attachments History"
+  },
+  "view_tracking_sheet_destination_history": {
+    "ar": "سجل جهات المراسله",
+    "en": "Destination History"
+  },
+  "document_status_history": {
+    "ar": "سجل حاله المستند",
+    "en": "Document Status History"
+  },
+  "unassigned_users": {
+    "ar": "Unassigned Users",
+    "en": "Unassigned Users"
+  },
+  "entities_add_entity": {
+    "ar": "أضف",
+    "en": "add"
+  },
+  "entities_other": {
+    "ar": "اخرى",
+    "en": "Other"
+  },
+  "entities_name": {
+    "ar": "الاسم",
+    "en": "Name"
+  },
+  "entities_description": {
+    "ar": "الوصف",
+    "en": "Description"
+  },
+  "entities_mobile_number": {
+    "ar": "رقم الجوال",
+    "en": "Mobile Number"
+  },
+  "entities_qid": {
+    "ar": "الرقم الشخصى القطري",
+    "en": "Qatari ID"
+  },
+  "entities_employee_number": {
+    "ar": "الرقم الوظيفيى",
+    "en": "Employee Number"
+  },
+  "entities_close": {
+    "ar": "غلق",
+    "en": "Close"
+  },
+  "entities_add": {
+    "ar": "أضف",
+    "en": "Add"
+  },
+  "entities_registration_number": {
+    "ar": "رقم السجل",
+    "en": "Registration No."
+  },
+  "entities_save": {
+    "ar": "حفظ",
+    "en": "Save"
+  },
+  "entities_type": {
+    "ar": "النوع",
+    "en": "Entity Type"
+  },
+  "serial_number": {
+    "ar": "رقم الاشارة",
+    "en": "Serial Number"
+  },
+  "due_date": {
+    "ar": "تاريخ الاستحقاق",
+    "en": "Due Date"
+  },
+  "inbox_main_site": {
+    "ar": "الجهه الرئيسيه",
+    "en": "Main Site"
+  },
+  "inbox_serial": {
+    "ar": "رقم الاشارة",
+    "en": "Serial"
+  },
+  "user_from": {
+    "ar": "User Assigned By",
+    "en": "User Assigned By"
+  },
+  "user_to": {
+    "ar": "User Assigned",
+    "en": "User Assigned"
+  },
+  "action_date": {
+    "ar": "تاريخ الاجراء",
+    "en": "Action Date"
+  },
+  "inbox_sub_site": {
+    "ar": "الجهه الفرعيه",
+    "en": "Sub Site"
+  },
+  "move_to_folder": {
+    "ar": "اضافه لمجلد",
+    "en": "Move To Folder"
+  },
+  "inbox_forward": {
+    "ar": "تحويل",
+    "en": "Forward"
+  },
+  "inbox_add_to_favorite": {
+    "ar": "اضافه للمفضله",
+    "en": "Add To Favorite"
+  },
+  "inbox_reply": {
+    "ar": "رد",
+    "en": "Reply"
+  },
+  "inbox_export": {
+    "ar": "تصدير",
+    "en": "Export"
+  },
+  "inbox_terminate": {
+    "ar": "انهاء",
+    "en": "Terminate"
+  },
+  "action_by": {
+    "ar": "Action By",
+    "en": "Action By"
+  },
+  "updated_by": {
+    "ar": "حدث بواسطه",
+    "en": "Updated By"
+  },
+  "updated_date": {
+    "ar": "تاريخ التحديث",
+    "en": "Updated Date"
+  },
+  "manage": {
+    "ar": "يدير",
+    "en": "Manage"
+  },
+  "linked_entities": {
+    "ar": "الكيانات المرتبطة",
+    "en": "Linked Entities"
+  },
+  "direct_linked_documents": {
+    "ar": "Direct Linked Documents",
+    "en": "Direct Linked Documents"
+  },
+  "complete_linked_documents": {
+    "ar": "Complete Linked Documents",
+    "en": "Complete Linked Documents"
+  },
+  "download": {
+    "ar": "تحميل",
+    "en": "Download"
+  },
+  "document": {
+    "ar": "مستند",
+    "en": "Document"
+  },
+  "document_with_attachments_linked_documents": {
+    "ar": "Document With Attachments and Linked Documents",
+    "en": "Document With Attachments and Linked Documents"
+  },
+  "main_document": {
+    "ar": "الوثيقة الرئيسية",
+    "en": "Main Document"
+  },
+  "link_to_document_by_email": {
+    "ar": "Link To Document By Email",
+    "en": "Link To Document By Email"
+  },
+  "composite_document_as_attachment": {
+    "ar": "Composite Document As Attachment",
+    "en": "Composite Document As Attachment"
+  },
+  "main_document_fax": {
+    "ar": "Main Document Fax",
+    "en": "Main Document Fax"
+  },
+  "main_document_as_attachment": {
+    "ar": "Main Document As Attachment",
+    "en": "Main Document As Attachment"
+  },
+  "link": {
+    "ar": "حلقة الوصل",
+    "en": "Link"
+  },
+  "digital_signature": {
+    "ar": "Digital Signature",
+    "en": "Digital Signature"
+  },
+  "e_signature": {
+    "ar": "توقيع إلكتروني",
+    "en": "Electronic Signature"
+  },
+  "received_by": {
+    "ar": "المستلم",
+    "en": "Received By"
+  },
+  "delivery_date": {
+    "ar": "تاريخ الاستلام",
+    "en": "Received Date"
+  },
+  "content": {
+    "ar": "يحتوى",
+    "en": "Content"
+  },
+  "properties": {
+    "ar": "Properties",
+    "en": "Properties"
+  },
+  "grid_action_composite_document_as_attachment_by_email": {
+    "ar": "Composite Document As Attachment By Email",
+    "en": "Composite Document As Attachment By Email"
+  },
+  "launch_success_distribution_workflow": {
+    "ar": "تم الارسال بنجاح",
+    "en": "Distribution Workflow Sent Successfully"
+  },
+  "inbox_star_workflow": {
+    "ar": " ",
+    "en": "Star Workflow"
+  },
+  "create_reply": {
+    "ar": "انشاء رد",
+    "en": "Create Reply"
+  },
+  "get_link": {
+    "ar": "Get Link",
+    "en": "Get Link"
+  },
+  "subscribe": {
+    "ar": "أشترك",
+    "en": "Subscribe"
+  },
+  "outgoing_date": {
+    "ar": "Outgoing Date",
+    "en": "Outgoing Date"
+  },
+  "followup_date": {
+    "ar": "Followup Date",
+    "en": "Followup Date"
+  },
+  "approved_date": {
+    "ar": "Approved Date",
+    "en": "Approved Date"
+  },
+  "search_module_advanced_search": {
+    "ar": "Advanced Search",
+    "en": "Advanced Search"
+  },
+  "starred": {
+    "ar": "Starred",
+    "en": "Starred"
+  },
+  "failed_star_selected": {
+    "ar": "Failed to star the selected items",
+    "en": "Failed to star the selected items"
+  },
+  "selected_star_success": {
+    "ar": "Selected records starred successfully",
+    "en": "Selected records starred successfully"
+  },
+  "star_success_except_following": {
+    "ar": "Successfully starred selected items except",
+    "en": "Successfully starred selected items except"
+  },
+  "star_specific_success": {
+    "ar": "(:name) starred successfully",
+    "en": "(:name) starred successfully"
+  },
+  "unstar_specific_success": {
+    "ar": "(:name) unstarred successfully",
+    "en": "(:name) unstarred successfully"
+  },
+  "failed_unstar_selected": {
+    "ar": "Failed to unstar the selected items",
+    "en": "Failed to unstar the selected items"
+  },
+  "unstar_success_except_following": {
+    "ar": "Successfully unstarred selected items except",
+    "en": "Successfully unstarred selected items except"
+  },
+  "selected_unstar_success": {
+    "ar": "Selected records unstarred successfully",
+    "en": "Selected records unstarred successfully"
+  },
+  "something_happened_when_update_starred": {
+    "ar": "Something happened while updating starred. Please try again.",
+    "en": "Something happened while updating starred. Please try again."
+  },
+  "un_starred": {
+    "ar": "Unstarred",
+    "en": "Unstarred"
+  },
+  "star": {
+    "ar": "Star",
+    "en": "Star"
+  },
+  "un_star": {
+    "ar": "Unstar",
+    "en": "Unstar"
+  },
+  "select_users": {
+    "ar": "الرجاء اختيار المستخدم",
+    "en": "Please select users!"
+  },
+  "inbox_un_star_workflow": {
+    "ar": "Unstar Workflow",
+    "en": "Unstar Workflow"
+  },
+  "terminate_success": {
+    "ar": "تم انهاء الكتاب بنجاح",
+    "en": "Terminated Successfully"
+  },
+  "following_records_failed_to_terminate": {
+    "ar": "Selected records terminated successfully except following records",
+    "en": "Selected records terminated successfully except following records"
+  },
+  "failed_terminate_selected": {
+    "ar": "Failed to terminate the selected items",
+    "en": "Failed to terminate the selected items"
+  },
+  "selected_terminate_success": {
+    "ar": "Selected records terminated successfully",
+    "en": "Selected records terminated successfully"
+  },
+  "archive": {
+    "ar": "Archive",
+    "en": "Archive"
+  },
+  "export_success": {
+    "ar": "تم التصدير بنجاح",
+    "en": "Exported Successfully"
+  },
+  "rank": {
+    "ar": "مرتبة",
+    "en": "Rank"
+  },
+  "dashboard_current_layout": {
+    "ar": "المخطط الحالى",
+    "en": "Current Layout"
+  },
+  "dashboard_view_mode": {
+    "ar": "وضع المشاهده",
+    "en": "View Mode"
+  },
+  "dashboard_edit_mode": {
+    "ar": "وضع التعديل",
+    "en": "Edit Mode"
+  },
+  "dashboard_add_layout": {
+    "ar": "أضف مخطط جديد",
+    "en": "Add New Layout"
+  },
+  "dashboard_no_layouts_to_display": {
+    "ar": "لا يوجد مخططات للعرض",
+    "en": "No Layouts to Display"
+  },
+  "dashboard_layout_is_current": {
+    "ar": "الحالي",
+    "en": "is Current"
+  },
+  "dashboard_layout_arabic_name": {
+    "ar": "الاسم بالعربية",
+    "en": "Arabic Name"
+  },
+  "dashboard_layout_english_name": {
+    "ar": "الاسم بالانجليزية",
+    "en": "English Name"
+  },
+  "dashboard_layout_elements": {
+    "ar": "عناصر التخطيط",
+    "en": "Layout Elements"
+  },
+  "dashboard_layout_widgets": {
+    "ar": "القطع البرمجية",
+    "en": "Widgets"
+  },
+  "forward_distribution_workflow": {
+    "ar": "تحويل",
+    "en": "Forward"
+  },
+  "folders": {
+    "ar": "مجلدات",
+    "en": "Folders"
+  },
+  "add_new_user_folder": {
+    "ar": "أضافة مجلد جديد",
+    "en": "Add New User Folder"
+  },
+  "confirm_delete_folder_subfolder": {
+    "ar": "Are you sure you want to delete folder and its sub folders?",
+    "en": "Are you sure you want to delete folder and its sub folders?"
+  },
+  "terminate_specific_success": {
+    "ar": "Terminated successfully (:name)",
+    "en": "Terminated successfully (:name)"
+  },
+  "move": {
+    "ar": "Move",
+    "en": "Move"
+  },
+  "add_root_folder": {
+    "ar": "أضافة مجلد رئيسي",
+    "en": "Add Root Folder"
+  },
+  "send_to_draft": {
+    "ar": "ارسال للمسوده",
+    "en": "Send To Draft"
+  },
+  "sent_to_draft_success": {
+    "ar": "(:name) تم الارسال للمسوده بنجاح",
+    "en": "(:name) Sent To Draft Successfully"
+  },
+  "inbox_add_to_folder": {
+    "ar": "اضافه لمجلد",
+    "en": "Add To Folder"
+  },
+  "inbox_add_to_folder_specific_success": {
+    "ar": "(:name) added to :folder successfully",
+    "en": "(:name) added to :folder successfully"
+  },
+  "inbox_failed_add_to_folder_selected": {
+    "ar": "Failed to add the selected items to folder",
+    "en": "Failed to add the selected items to folder"
+  },
+  "add_to_folder_success_except_following": {
+    "ar": "Successfully added selected items to folder except",
+    "en": "Successfully added selected items to folder except"
+  },
+  "add_to_folder_success": {
+    "ar": "Selected records added to folder successfully",
+    "en": "Selected records added to folder successfully"
+  },
+  "cannot_add_to_same_folder": {
+    "ar": "Item can't be added to same folder",
+    "en": "Item can't be added to same folder"
+  },
+  "remove": {
+    "ar": "إزالة",
+    "en": "Remove"
+  },
+  "archive_specific_success": {
+    "ar": "(:name) archived successfully",
+    "en": "(:name) archived successfully"
+  },
+  "failed_archive_selected": {
+    "ar": "Failed to archive selected records",
+    "en": "Failed to archive selected records"
+  },
+  "archive_success_except_following": {
+    "ar": "Successfully archived selected items except",
+    "en": "Successfully archived selected items except"
+  },
+  "archive_success": {
+    "ar": "Archived successfully",
+    "en": "Archived successfully"
+  },
+  "reject_specific_success": {
+    "ar": "(:name) rejected successfully",
+    "en": "(:name) rejected successfully"
+  },
+  "export_incoming": {
+    "ar": "Export Incoming",
+    "en": "Export Incoming"
+  },
+  "export_outgoing": {
+    "ar": "Export Outgoing",
+    "en": "Export Outgoing"
+  },
+  "failed_to_download": {
+    "ar": "Failed to download",
+    "en": "Failed to download"
+  },
+  "failed_reject_selected": {
+    "ar": "Failed to reject the selected items",
+    "en": "Failed to reject the selected items"
+  },
+  "reject_success_except_following": {
+    "ar": "Successfully rejected selected items except",
+    "en": "Successfully rejected selected items except"
+  },
+  "reject_success": {
+    "ar": "Rejected successfully",
+    "en": "Rejected successfully"
+  },
+  "create_copy": {
+    "ar": "Create Copy",
+    "en": "Create Copy"
+  },
+  "search_module_send_main_doc_fax": {
+    "ar": "Send Main Document Fax",
+    "en": "Send Main Document Fax"
+  },
+  "search_module_export": {
+    "ar": "تصدير",
+    "en": "Export"
+  },
+  "send_to_review_specific_success": {
+    "ar": "(:name) sent to review successfully",
+    "en": "(:name) sent to review successfully"
+  },
+  "failed_send_to_review_selected": {
+    "ar": "Failed to send selected records to review",
+    "en": "Failed to send selected records to review"
+  },
+  "send_to_review_success_except_following": {
+    "ar": "Successfully sent selected items to review except",
+    "en": "Successfully sent selected items to review except"
+  },
+  "selected_send_to_review_success": {
+    "ar": "Selected records sent to review successfully",
+    "en": "Selected records sent to review successfully"
+  },
+  "accept_specific_success": {
+    "ar": "(:name) accepted successfully",
+    "en": "(:name) accepted successfully"
+  },
+  "failed_accept_selected": {
+    "ar": "Failed to accept selected records",
+    "en": "Failed to accept selected records"
+  },
+  "accept_success_except_following": {
+    "ar": "Successfully accepted selected items except",
+    "en": "Successfully accepted selected items except"
+  },
+  "selected_accept_success": {
+    "ar": "Selected records accepted successfully",
+    "en": "Selected records accepted successfully"
+  },
+  "confirm_remove": {
+    "ar": "ِAre you sure you want to remove :name?",
+    "en": "ِAre you sure you want to remove :name?"
+  },
+  "remove_specific_success": {
+    "ar": "Removed successfully ( :name )",
+    "en": "Removed successfully ( :name )"
+  },
+  "remove_success": {
+    "ar": "Removed successfully",
+    "en": "Removed successfully"
+  },
+  "confirm_remove_selected_multiple": {
+    "ar": "Are you sure you want to remove selected items?",
+    "en": "Are you sure you want to remove selected items?"
+  },
+  "failed_remove_selected": {
+    "ar": "Failed to remove selected records",
+    "en": "Failed to remove selected records"
+  },
+  "delete_success_except_following": {
+    "ar": "Successfully deleted selected items except",
+    "en": "Successfully deleted selected items except"
+  },
+  "remove_success_except_following": {
+    "ar": "Successfully removed selected items except",
+    "en": "Successfully removed selected items except"
+  },
+  "counter_widget": {
+    "ar": "عداد",
+    "en": "Counter"
+  },
+  "counter_widget_colors": {
+    "ar": "اللون",
+    "en": "Color"
+  },
+  "counter_widget_data_source": {
+    "ar": "مصدر البيانات",
+    "en": "Data Source"
+  },
+  "counter_user_inbox": {
+    "ar": "البريد الشخصى",
+    "en": "User Inbox"
+  },
+  "counter_outgoing_accepted": {
+    "ar": "صادر- جهاز للأرسال",
+    "en": "Outgoing - Ready to send"
+  },
+  "counter_outgoing_draft": {
+    "ar": "صادر - مسودة",
+    "en": "Outgoing - Draft"
+  },
+  "counter_outgoing_prepare": {
+    "ar": "صادر - إعداد",
+    "en": "Outgoing - Prepare"
+  },
+  "counter_outgoing_rejected": {
+    "ar": "صادر- معاد",
+    "en": "Outgoing - Rejected"
+  },
+  "copied": {
+    "ar": "نسخة",
+    "en": "Copied"
+  },
+  "main": {
+    "ar": "أصلى",
+    "en": "Main"
+  },
+  "return": {
+    "ar": "اعاده",
+    "en": "Return"
+  },
+  "quick_accept": {
+    "ar": "القبول السريع",
+    "en": "Quick Accept"
+  },
+  "select_template_to_prepare": {
+    "ar": "اختر قالب للتحضير",
+    "en": "Select Template to Prepare"
+  },
+  "prepare_document_content": {
+    "ar": "تحضير كتاب",
+    "en": "Prepare Document"
+  },
+  "fill_required_data_to_prepare": {
+    "ar": "رجاء ملء البيانات الرئيسية مثل ( موضوع الكتاب , التصنيف الرئيسي , التصنيف الفرعى )",
+    "en": "Please fill the required data like Document subject , Main Classification , Sub Classification"
+  },
+  "content_upload": {
+    "ar": "تحميل محتوى",
+    "en": "Upload Content"
+  },
+  "something_happened_when_sign": {
+    "ar": "Something happened while signing document. Please try again.",
+    "en": "Something happened while signing document. Please try again."
+  },
+  "sign_specific_success": {
+    "ar": "(:name) signed successfully",
+    "en": "(:name) signed successfully"
+  },
+  "manage_correspondence_sites": {
+    "ar": "إدارة جهات المراسلة",
+    "en": "Manage Correspondence Sites"
+  },
+  "main_correspondence_site": {
+    "ar": "جهة المراسالة الرئيسية",
+    "en": "Main correspondence site"
+  },
+  "follow_up_status": {
+    "ar": "حالات المتابعة",
+    "en": "Follow-up status"
+  },
+  "manage_correspondence_required_fields": {
+    "ar": "Please fill follow-up status, correspondence site type, main correspondence site, sub correspondence site to add",
+    "en": "Please fill follow-up status, correspondence site type, main correspondence site, sub correspondence site to add"
+  },
+  "add_to_site_info": {
+    "ar": "TO",
+    "en": "TO"
+  },
+  "add_to_site_info_cc": {
+    "ar": "CC",
+    "en": "CC"
+  },
+  "site_info_cc": {
+    "ar": "Site Info CC",
+    "en": "Site Info CC"
+  },
+  "site_info_to": {
+    "ar": "Site Info To",
+    "en": "Site Info To"
+  },
+  "counter_outgoing_export": {
+    "ar": "جاهز للتصدير",
+    "en": "Outgoing - Export"
+  },
+  "add_to_folder": {
+    "ar": "اضافه لملف",
+    "en": "Add To Folder"
+  },
+  "subject_duplication_message": {
+    "ar": "Subject can not be duplicated",
+    "en": "Subject can not be duplicated"
+  },
+  "view_document": {
+    "ar": "عرض الكتاب",
+    "en": "View Document"
+  },
+  "electronic": {
+    "ar": "الكتروني",
+    "en": "Electronic"
+  },
+  "digital": {
+    "ar": "رقمي",
+    "en": "Digital"
+  },
+  "approve": {
+    "ar": "اعتماد",
+    "en": "Approve"
+  },
+  "quick_receive": {
+    "ar": "أستلام سريع",
+    "en": "Quick Receive"
+  },
+  "receive": {
+    "ar": "أستلام",
+    "en": "Receive"
+  },
+  "bar_chart": {
+    "ar": "شريط بيانى",
+    "en": "Bar Chart"
+  },
+  "receive_specific_success": {
+    "ar": "تم أستلام (:name) بنجاح",
+    "en": "(:name) received successfully"
+  },
+  "return_specific_success": {
+    "ar": "( :name ) returned successfully",
+    "en": "( :name ) returned successfully"
+  },
+  "returned_dep_inbox_terminate": {
+    "ar": "انهاء",
+    "en": "Terminate"
+  },
+  "resend": {
+    "ar": "اعاده ارسال",
+    "en": "Resend"
+  },
+  "launch_new_distribution_workflow": {
+    "ar": "انشاء سير عمل جديد",
+    "en": "Launch New Distribution Workflow"
+  },
+  "search_criteria": {
+    "ar": "معايير البحث",
+    "en": "Search Criteria"
+  },
+  "barcode": {
+    "ar": "الباركود",
+    "en": "Barcode"
+  },
+  "full_serial": {
+    "ar": "الرقم التسلسلي",
+    "en": "Full Serial"
+  },
+  "quick_search": {
+    "ar": "بحث سريع",
+    "en": "Quick Search"
+  },
+  "created_by": {
+    "ar": "بواسطة",
+    "en": "Created By"
+  },
+  "incoming_draft": {
+    "ar": "مسودة",
+    "en": "Draft"
+  },
+  "incoming_delivery_reports": {
+    "ar": "Incoming Delivery Reports",
+    "en": "Incoming Delivery Reports"
+  },
+  "help": {
+    "ar": "مساعده",
+    "en": "Help"
+  },
+  "internal_accept": {
+    "ar": "قبول",
+    "en": "Accept"
+  },
+  "internal_reject": {
+    "ar": "رفض",
+    "en": "Reject"
+  },
+  "internal_delivery_reports": {
+    "ar": "Internal Delivery Reports",
+    "en": "Internal Delivery Reports"
+  },
+  "inbox_follow_up_user_mail": {
+    "ar": "Follow-up User Mail",
+    "en": "Follow-up User Mail"
+  },
+  "followup_employee_inbox_move_to_folder": {
+    "ar": "اضافه لمجلد",
+    "en": "Move To Folder"
+  },
+  "followup_employee_inbox_send_main_doc_fax": {
+    "ar": "Send Main Document Fax",
+    "en": "Send Main Document Fax"
+  },
+  "followup_employee_inbox_send_composite_doc_by_fax": {
+    "ar": "Send Composite Document By Fax",
+    "en": "Send Composite Document By Fax"
+  },
+  "followup_employee_inbox_terminate": {
+    "ar": "إنهاء",
+    "en": "Terminate"
+  },
+  "select_organization_and_user": {
+    "ar": "اختيار الوحده الاداريه والمستخدم المطلوب",
+    "en": "Select Organization and User"
+  },
+  "no_private_announcement": {
+    "ar": "ا يوجد أشعارات خاصة لعرضها",
+    "en": "No private announcement available to show"
+  },
+  "name_domain_duplication_message": {
+    "ar": "Name and domain can not be duplicated",
+    "en": "Name and domain can not be duplicated"
+  },
+  "sites_select_site_type": {
+    "ar": "نوع جهة المراسلة",
+    "en": "Correspondence Type"
+  },
+  "undefined": {
+    "ar": "جهة المراسلة الرئيسية",
+    "en": "Main Correspondence Site"
+  },
+  "sites_select_main_site": {
+    "ar": "جهة المراسلة الرئيسية",
+    "en": "Main Correspondence Site"
+  },
+  "sites_select_sub_site": {
+    "ar": "ابحث عن جهة فرعية",
+    "en": "Sub Correspondence Sites Search"
+  },
+  "sites_sub_site": {
+    "ar": "الجهة الفرعية",
+    "en": "Sub Site"
+  },
+  "sites_main_site": {
+    "ar": "الجهة الرئيسية",
+    "en": "Main Site"
+  },
+  "sites_follow_up_status": {
+    "ar": "حالة المتابعة",
+    "en": "Follow up status"
+  },
+  "sites_original": {
+    "ar": "أصلى",
+    "en": "Original"
+  },
+  "sites_copy": {
+    "ar": "نسخة",
+    "en": "Copy"
+  },
+  "sites": {
+    "ar": "نتائج البحث",
+    "en": "Search Results"
+  },
+  "sites_search_results": {
+    "ar": "نتائج البحث",
+    "en": "Search Results"
+  },
+  "sites_follow_up_date": {
+    "ar": "تاريخ المتابعة",
+    "en": "Followup Date"
+  },
+  "sites_change_to_copy": {
+    "ar": "تحويل إلى نسخة",
+    "en": "Change to Copy"
+  },
+  "sites_please_select_followup_date": {
+    "ar": "رجاء أختيار تاريخ المتابعة أولا",
+    "en": "Please Select Followup Date First."
+  },
+  "sites_change_to_original": {
+    "ar": "تحويل إلى أصل",
+    "en": "Change to Original"
+  },
+  "view_tracking_sheet_actions": {
+    "ar": "الاجراء",
+    "en": "Actions"
+  },
+  "view_tracking_sheet_view_actions": {
+    "ar": "عرض الاجراء",
+    "en": "View Actions"
+  },
+  "view_tracking_sheet_comments": {
+    "ar": "الملاحظات",
+    "en": "Comments"
+  },
+  "view_tracking_sheet_doc_creation_date": {
+    "ar": "تاريخ الانشاء",
+    "en": "Creation Date"
+  },
+  "view_tracking_sheet_workflow_action": {
+    "ar": "اجراء سير العمل",
+    "en": "Workflow Action"
+  },
+  "view_tracking_sheet_user_from": {
+    "ar": "مرسل من",
+    "en": "User From"
+  },
+  "view_tracking_sheet_user_to": {
+    "ar": "مرسل الى",
+    "en": "User To"
+  },
+  "view_tracking_sheet_action_date": {
+    "ar": "تاريخ الإجراء",
+    "en": "Action Date"
+  },
+  "view_tracking_sheet_doc_subject": {
+    "ar": "الموضوع",
+    "en": "Subject"
+  },
+  "view_tracking_sheet_work_flow_history": {
+    "ar": "سجل سير العمل",
+    "en": "Work Flow History"
+  },
+  "view_tracking_sheet_merged_linked_document_history": {
+    "ar": "سجل دمج الملفات المرتبطه",
+    "en": "Merged Linked Document History"
+  },
+  "view_tracking_sheet_linked_documents_history": {
+    "ar": "سجل الملفات المرتبطه",
+    "en": "Linked Documents History"
+  },
+  "view_tracking_sheet_attachments_history": {
+    "ar": "سجل المرفقات",
+    "en": "Attachments History"
+  },
+  "view_tracking_sheet_content_view_history": {
+    "ar": "سجل مشاهده المحتوى",
+    "en": "Content View History"
+  },
+  "view_tracking_sheet_outgoing_delivery_reports": {
+    "ar": "تقارير التسليم الصادرة",
+    "en": "Outgoing Delivery Reports"
+  },
+  "view_tracking_sheet_full_history": {
+    "ar": "تقرير كامل",
+    "en": "Full History"
+  },
+  "view_tracking_sheet_linked_entities_history": {
+    "ar": "سجل الكيانات المرتبطه",
+    "en": "Linked Entities History"
+  },
+  "view_tracking_sheet_sms_logs": {
+    "ar": "SMS Logs",
+    "en": "SMS Logs"
+  },
+  "sent_by": {
+    "ar": "المرسل",
+    "en": "Sent By"
+  },
+  "sent_date": {
+    "ar": "تاريخ الارسال",
+    "en": "Sent Date"
+  },
+  "sites_hide_search": {
+    "ar": "أخفاء النتائج",
+    "en": "Hide Results"
+  },
+  "manage_actions": {
+    "ar": "إدارة",
+    "en": "Manage"
+  },
+  "proxy_domain": {
+    "ar": "النطاق البديل",
+    "en": "Proxy Domain"
+  },
+  "proxy_user_message": {
+    "ar": "هؤلاء المستخدمين خارج المكتب",
+    "en": "The following users are out of office"
+  },
+  "proxy_arabic_name": {
+    "ar": "اسم البديل العربى",
+    "en": "Proxy Arabic Name"
+  },
+  "proxy_english_name": {
+    "ar": "أسم البديل الانجليزى",
+    "en": "Proxy English Name"
+  },
+  "attachment_attachments": {
+    "ar": "المرفقات",
+    "en": "Attahcments"
+  },
+  "attachment_import": {
+    "ar": "تحميل",
+    "en": "Upload"
+  },
+  "attachment_drag": {
+    "ar": "سحب وأفلات",
+    "en": "Drag & Drop"
+  },
+  "attachments_drop_your_file": {
+    "ar": "أسقط ملفاتك هنا",
+    "en": "Drop your Files here"
+  },
+  "sent_items_sender": {
+    "ar": "المرسل",
+    "en": "Sender"
+  },
+  "sent_items_action": {
+    "ar": "إجراء",
+    "en": "Action"
+  },
+  "sent_items_receive_date": {
+    "ar": "تاريخ الاستلام",
+    "en": "Receive Date"
+  },
+  "sent_items_document_subject": {
+    "ar": "الموضوع",
+    "en": "Subject"
+  },
+  "sent_items_serial_number": {
+    "ar": "رقم الاشارة",
+    "en": "Serial Number"
+  },
+  "sent_items_due_date": {
+    "ar": "تاريخ الموعد",
+    "en": "Due Date"
+  },
+  "sent_items_correspondence_site": {
+    "ar": "الجهات",
+    "en": "Correspondence Site"
+  },
+  "sent_items_type": {
+    "ar": "النوع",
+    "en": "Type"
+  },
+  "grid_action_recall": {
+    "ar": "سحب",
+    "en": "Recall"
+  },
+  "grid_action_reassign": {
+    "ar": "إعادة تعيين",
+    "en": "Reassign"
+  },
+  "grid_action_tags": {
+    "ar": "الوسوم",
+    "en": "Tags"
+  },
+  "grid_action_comments": {
+    "ar": "الملاحظات",
+    "en": "Comments"
+  },
+  "grid_action_attachments": {
+    "ar": "المرفقات",
+    "en": "Attachments"
+  },
+  "grid_action_linked_documents": {
+    "ar": "الكتب المرتبطه",
+    "en": "Linked Documents"
+  },
+  "grid_action_send_composite_doc_by_fax": {
+    "ar": "Send Composite Document By Fax",
+    "en": "Send Composite Document By Fax"
+  },
+  "broadcast": {
+    "ar": "تعمميم",
+    "en": "Broadcast"
+  },
+  "properties_notes": {
+    "ar": "ملاحظات",
+    "en": "Notes"
+  },
+  "success": {
+    "ar": "نجح",
+    "en": "Success"
+  },
+  "content_not_found": {
+    "ar": "لا يوجد محتوى للكتاب",
+    "en": "Content not available for document!"
+  },
+  "quick_receive_specific_success": {
+    "ar": "(:name) quick received successfully",
+    "en": "(:name) quick received successfully"
+  },
+  "page": {
+    "ar": "صفحة:",
+    "en": "Page:"
+  },
+  "view_tracking_sheet_doc_update_history": {
+    "ar": "سجل تحديث المستند",
+    "en": "Document Update History"
+  },
+  "view_tracking_sheet_doc_status_history": {
+    "ar": "سجل حاله المستند",
+    "en": "Document Status History"
+  },
+  "new_item_sms_priority": {
+    "ar": "لأولوية البريد",
+    "en": "New Item SMS Priority"
+  },
+  "add_signature": {
+    "ar": "اضافه توقيع",
+    "en": "Add Signature"
+  },
+  "can_not_delete_current_user": {
+    "ar": "Current user can not be deleted",
+    "en": "Current user can not be deleted"
+  },
+  "broadcast_success": {
+    "ar": "تم أرسال التعميم بنجاح",
+    "en": "Broadcast Success"
+  },
+  "pie_chart": {
+    "ar": "دائرة البيانات",
+    "en": "Pie Chart"
+  },
+  "overdue_books": {
+    "ar": "المتأخرة",
+    "en": "Overdue"
+  },
+  "approved_books": {
+    "ar": "معتمدة",
+    "en": "Approved"
+  },
+  "returned_books": {
+    "ar": "المعادة",
+    "en": "Returned"
+  },
+  "exported_books": {
+    "ar": "المصدرة",
+    "en": "Exported"
+  },
+  "follow_up_get_inbox": {
+    "ar": "عرض صندوق البريد",
+    "en": "Get Inbox"
+  },
+  "view_tracking_sheet_sender": {
+    "ar": "المرسل",
+    "en": "Sender"
+  },
+  "view_tracking_sheet_receiver": {
+    "ar": "المستلم",
+    "en": "Receiver"
+  },
+  "view_tracking_sheet_action": {
+    "ar": "الاجراء",
+    "en": "Action"
+  },
+  "view_tracking_sheet_action_by": {
+    "ar": "صاحب الاجراء",
+    "en": "Action By"
+  },
+  "view_tracking_sheet_full_serial_number": {
+    "ar": "الرقم التسلسلي الكامل",
+    "en": "Full Serial Number"
+  },
+  "view_tracking_sheet_type": {
+    "ar": "النوع",
+    "en": "Type"
+  },
+  "view_tracking_sheet_creation_date": {
+    "ar": "تاريخ الانشاء",
+    "en": "Creation Date"
+  },
+  "view_tracking_sheet_main_doc": {
+    "ar": "المستند الرئيسي",
+    "en": "Main Document"
+  },
+  "view_tracking_sheet_destination_identifier": {
+    "ar": "معرف الجهه",
+    "en": "Destination Identifier"
+  },
+  "view_tracking_sheet_destination_full_name": {
+    "ar": "الاسم الكامل للجهه",
+    "en": "Destination Fullname"
+  },
+  "view_tracking_sheet_organization": {
+    "ar": "الوحده الاداريه",
+    "en": "Organization"
+  },
+  "view_tracking_sheet_updated_by": {
+    "ar": "حدث بواسطه",
+    "en": "Updated By"
+  },
+  "view_tracking_sheet_updated_on": {
+    "ar": "تاريخ التحديث",
+    "en": "Updated On"
+  },
+  "grid_action_document_info": {
+    "ar": "حول الكتاب",
+    "en": "Document Information"
+  },
+  "grid_action_remove": {
+    "ar": "إزالة",
+    "en": "Remove"
+  },
+  "grid_action_edit_outgoing_properties": {
+    "ar": "تعديل بيانات الكتاب",
+    "en": "Edit Outgoing Properties"
+  },
+  "grid_action_edit_outgoing_content": {
+    "ar": "تعديل محتوى الكتاب",
+    "en": "Edit Outgoing Content"
+  },
+  "grid_action_launch_distribution_workflow": {
+    "ar": "إرسال",
+    "en": "Launch Distribution Workflow"
+  },
+  "grid_action_accept_launch_distribution_workflow": {
+    "ar": "قبول وارسال",
+    "en": "Accept And Launch Distribution Workflow"
+  },
+  "grid_action_send_to_review": {
+    "ar": "إرسال إلى المراجعة",
+    "en": "Send To Review"
+  },
+  "grid_action_entities": {
+    "ar": "جهات",
+    "en": "Entities"
+  },
+  "grid_action_security": {
+    "ar": "الأمان",
+    "en": "Security"
+  },
+  "grid_action_destinations": {
+    "ar": "الجهات",
+    "en": "Destinations"
+  },
+  "grid_action_open": {
+    "ar": "فتح",
+    "en": "Open"
+  },
+  "grid_action_broadcast": {
+    "ar": "تعمميم",
+    "en": "Broadcast"
+  },
+  "grid_action_edit_internal_properties": {
+    "ar": "تعديل بيانات الكتاب",
+    "en": "Edit Internal Properties"
+  },
+  "grid_action_edit_internal_content": {
+    "ar": "تعديل محتوى الكتاب",
+    "en": "Edit Internal Content"
+  },
+  "grid_action_edit_incoming_content": {
+    "ar": "تعديل محتوى الكتاب",
+    "en": "Edit Incoming Content"
+  },
+  "grid_action_edit_incoming_properties": {
+    "ar": "تعديل بيانات الكاتب",
+    "en": "Edit Incoming Properties"
+  },
+  "grid_action_terminate": {
+    "ar": "إنهاء",
+    "en": "Terminate"
+  },
+  "grid_action_export": {
+    "ar": "تصدير",
+    "en": "Export"
+  },
+  "grid_action_out_of_office_settings": {
+    "ar": "تحديد معاون",
+    "en": "Out Of Office Settings"
+  },
+  "grid_action_archive": {
+    "ar": "Archive",
+    "en": "Archive"
+  },
+  "grid_action_return": {
+    "ar": "اعاده",
+    "en": "Return"
+  },
+  "grid_action_main_document": {
+    "ar": "الوثيقة الرئيسية",
+    "en": "Main Document"
+  },
+  "grid_action_composite_document": {
+    "ar": "المستند بالكامل",
+    "en": "Composite Document"
+  },
+  "attachment_ready_to_upload": {
+    "ar": "جاهز للتحميل",
+    "en": "Ready to Upload"
+  },
+  "attachment_uploaded": {
+    "ar": "تم التحميل",
+    "en": "Uploaded"
+  },
+  "setting_disabled_by_admin": {
+    "ar": "The settings have been disabled by an administrator",
+    "en": "The settings have been disabled by an administrator"
+  },
+  "no_records_found": {
+    "ar": "No Records Found",
+    "en": "No Records Found"
+  },
+  "no_records_found_matching_search": {
+    "ar": "No records found matching search criteria",
+    "en": "No records found matching search criteria"
+  },
+  "proxy_message": {
+    "ar": "Proxy Message",
+    "en": "Proxy Message"
+  },
+  "content_action_print_barcode": {
+    "ar": "طباعة الباركود",
+    "en": "Print Barcode"
+  },
+  "content_action_close": {
+    "ar": "Close",
+    "en": "Close"
+  },
+  "content_action_create_content": {
+    "ar": "إنشاء محتوى",
+    "en": "Create Content"
+  },
+  "content_action_launch_distribution_workflow": {
+    "ar": "Launch Distribution Workflow",
+    "en": "Launch Distribution Workflow"
+  },
+  "content_action_send_to_review": {
+    "ar": "Send To Review",
+    "en": "Send To Review"
+  },
+  "content_action_save_as_draft": {
+    "ar": "Save As Draft",
+    "en": "Save As Draft"
+  },
+  "content_action_manage_comments": {
+    "ar": "Manage Comments",
+    "en": "Manage Comments"
+  },
+  "content_action_manage_tags": {
+    "ar": "Manage Tags",
+    "en": "Manage Tags"
+  },
+  "content_action_manage_tasks": {
+    "ar": "Manage Tasks",
+    "en": "Manage Tasks"
+  },
+  "content_action_configure_security": {
+    "ar": "Configure Security",
+    "en": "Configure Security"
+  },
+  "content_action_export": {
+    "ar": "تصدير",
+    "en": "Export"
+  },
+  "document_action": {
+    "ar": "Document Action",
+    "en": "Doucment Action"
+  },
+  "go": {
+    "ar": "Go",
+    "en": "Go"
+  },
+  "content_actions": {
+    "ar": "Actions",
+    "en": "Actions"
+  },
+  "incoming_save": {
+    "ar": "حفظ",
+    "en": "Save"
+  },
+  "incoming_manage_tags": {
+    "ar": "إدارة وسوم الكتاب",
+    "en": "Manage Document Tags"
+  },
+  "incoming_create_content": {
+    "ar": "محتوى الكتاب",
+    "en": "Document Content"
+  },
+  "incoming_manage_attachments": {
+    "ar": "إدارة مرفقات الكتاب",
+    "en": "Manage Document Attachments"
+  },
+  "incoming_manage_comments": {
+    "ar": "إدارة تعليقات الكتاب",
+    "en": "Manage Document Comments"
+  },
+  "incoming_linked_entities": {
+    "ar": "إدارة الكيانات المرتبطة",
+    "en": "Manage Linked entities"
+  },
+  "internal_metadata_saved_success": {
+    "ar": "تم حفظ البيانات الرئيسية للمراسلة بنجاح",
+    "en": "Successfully saved master data for correspondence"
+  },
+  "internal_document_type": {
+    "ar": "نوع الكتاب",
+    "en": "Document Type"
+  },
+  "internal_create_content": {
+    "ar": "محتوى الكتاب",
+    "en": "Document Content"
+  },
+  "internal_manage_tags": {
+    "ar": "إدارة وسوم الكتاب",
+    "en": "Manage Document Tags"
+  },
+  "internal_manage_attachments": {
+    "ar": "إدارة مرفقات الكتاب",
+    "en": "Manage Document Attachments"
+  },
+  "internal_manage_comments": {
+    "ar": "إدارة تعليقات الكتاب",
+    "en": "Manage Document Comments"
+  },
+  "internal_linked_entities": {
+    "ar": "إدارة الكيانات المرتبطة",
+    "en": "Manage Linked entities"
+  },
+  "internal_save": {
+    "ar": "حفظ",
+    "en": "Save"
+  },
+  "internal_save_draft": {
+    "ar": "حفظ كـ مسودة",
+    "en": "Save As Draft"
+  },
+  "indicator_doc_has_attachment": {
+    "ar": "المرفقات",
+    "en": "Attachments"
+  },
+  "indicator_doc_has_linked_doc": {
+    "ar": "الكتب المرتبطه",
+    "en": "Linked Documents"
+  },
+  "indicator_security_level": {
+    "ar": "(:name) درجة السرية",
+    "en": "Security Level (:name)"
+  },
+  "indicator_priority_level": {
+    "ar": "(:name) مستوى الاولوية",
+    "en": "Priority Level (:name)"
+  },
+  "indicator_tags": {
+    "ar": "كلمات استدلالية",
+    "en": "Tags"
+  },
+  "indicator_due_date": {
+    "ar": ":due_date_status",
+    "en": ":due_date_status"
+  },
+  "indicator_date_passed": {
+    "ar": "Passed",
+    "en": "Passed"
+  },
+  "indicator_date_coming": {
+    "ar": "Coming",
+    "en": "Coming"
+  },
+  "indicator_date_today": {
+    "ar": "Today",
+    "en": "Today"
+  },
+  "indicator_incoming": {
+    "ar": "الوارد",
+    "en": "Incoming"
+  },
+  "indicator_outgoing": {
+    "ar": "شخص اجتماعي",
+    "en": "Outgoing"
+  },
+  "indicator_internal": {
+    "ar": "داخلي",
+    "en": "Internal"
+  },
+  "indicator_reassigned": {
+    "ar": "تم تحويلة",
+    "en": "Reassigned"
+  },
+  "indicator_opened": {
+    "ar": "Opened",
+    "en": "Opened"
+  },
+  "indicator_not_opened": {
+    "ar": "Not Opened",
+    "en": "Not Opened"
+  },
+  "indicator_not_reassigned": {
+    "ar": "Not Reassigned",
+    "en": "Not Reassigned"
+  },
+  "send_bulk_distribution_workflow": {
+    "ar": "Send Bulk",
+    "en": "Send Bulk"
+  },
+  "content_not_found_bulk": {
+    "ar": "Content not available for some documents!",
+    "en": "Content not available for some documents!"
+  },
+  "dw_success_except_following": {
+    "ar": "Successfully sent selected items except",
+    "en": "Successfully sent selected items except"
+  },
+  "indicator_comments": {
+    "ar": "الملاحظات",
+    "en": "Comments"
+  },
+  "ready_to_export_options": {
+    "ar": "خيارات التصدير",
+    "en": "Export Options"
+  },
+  "export": {
+    "ar": "تصدير",
+    "en": "Export"
+  },
+  "related_books": {
+    "ar": "الكتب المرتبطة",
+    "en": "Related Books"
+  },
+  "related_objects": {
+    "ar": "الكيانات المرتبطة",
+    "en": "Related Objects"
+  },
+  "export_failed": {
+    "ar": "Export Failed",
+    "en": "Export Failed"
+  },
+  "indicator_mark_unread": {
+    "ar": "Mark as unread",
+    "en": "Mark as unread"
+  },
+  "indicator_mark_read": {
+    "ar": "Mark as read",
+    "en": "Mark as read"
+  },
+  "mark_as_read_success": {
+    "ar": "(:name) marked as read successfully",
+    "en": "(:name) marked as read successfully"
+  },
+  "mark_as_unread_success": {
+    "ar": "(:name) marked as unread successfully",
+    "en": "(:name) marked as unread successfully"
+  },
+  "incoming_metadata_saved_success": {
+    "ar": "تم حفظ البيانات الرئيسية للمراسلة بنجاح",
+    "en": "Successfully saved master data for correspondence"
+  },
+  "resend_specific_success": {
+    "ar": "(:name) Resent Successfully",
+    "en": "(:name) Resent Successfully"
+  },
+  "selected_resend_success": {
+    "ar": "Selected Items Resent Successfully",
+    "en": "Selected Items Resent Successfully"
+  },
+  "resend_success_except_following": {
+    "ar": "Successfully resent selected items except",
+    "en": "Successfully resent selected items except"
+  },
+  "failed_resend_selected": {
+    "ar": "Failed to resend the selected items",
+    "en": "Failed to resend the selected items"
+  },
+  "incoming_date_from": {
+    "ar": "Incoming Date From",
+    "en": "Incoming Date From"
+  },
+  "incoming_date_to": {
+    "ar": "Incoming Date To",
+    "en": "Incoming Date To"
+  },
+  "view_tracking_sheet_incoming_delivery_reports": {
+    "ar": "Incoming Delivery Reports",
+    "en": "Incoming Delivery Reports"
+  },
+  "remove_content": {
+    "ar": "Remove Content",
+    "en": "Remove Content"
+  },
+  "outgoing_new": {
+    "ar": "جديد !",
+    "en": "New"
+  },
+  "outgoing_cancel": {
+    "ar": "الغاء",
+    "en": "Cancel"
+  },
+  "action_submit": {
+    "ar": "Submit",
+    "en": "Submit"
+  },
+  "failed_return_selected": {
+    "ar": "Failed to return the selected items",
+    "en": "Failed to return the selected items"
+  },
+  "return_success_except_following": {
+    "ar": "Successfully returned selected items except",
+    "en": "Successfully returned selected items except"
+  },
+  "selected_return_success": {
+    "ar": "Selected Items Returned Successfully",
+    "en": "Selected Items Returned Successfully"
+  },
+  "internal_new": {
+    "ar": "جديد !",
+    "en": "New"
+  },
+  "internal_cancel": {
+    "ar": "الغاء",
+    "en": "Cancel"
+  },
+  "internal_date": {
+    "ar": "Internal Date",
+    "en": "Internal Date"
+  },
+  "internal_date_from": {
+    "ar": "Internal Date From",
+    "en": "Internal Date From"
+  },
+  "internal_date_to": {
+    "ar": "Internal Date To",
+    "en": "Internal Date To"
+  },
+  "export_internal": {
+    "ar": "Export Internal",
+    "en": "Export Internal"
+  },
+  "view_tracking_sheet_internal_delivery_reports": {
+    "ar": "Internal Delivery Reports",
+    "en": "Internal Delivery Reports"
+  },
+  "incoming_new": {
+    "ar": "جديد !",
+    "en": "New"
+  },
+  "incoming_cancel": {
+    "ar": "الغاء",
+    "en": "Cancel"
+  },
+  "select_month_and_year": {
+    "ar": "Select Month and Year",
+    "en": "Select Month and Year"
+  },
+  "dep_month": {
+    "ar": "شهر",
+    "en": "Month"
+  },
+  "dep_year": {
+    "ar": "العام",
+    "en": "Year"
+  },
+  "select_date_and_year": {
+    "ar": "Select Date and Year",
+    "en": "Select Date and Year"
+  },
+  "dep_get_sent_items": {
+    "ar": "Get Sent Items",
+    "en": "Get Sent Items"
+  },
+  "internal_approved": {
+    "ar": "Approved",
+    "en": "Approved"
+  },
+  "correspondence_sites_save_success": {
+    "ar": "Correspondence Sites Saved Successfully",
+    "en": "Correspondence Sites Saved Successfully"
+  },
+  "content_updated_successfully": {
+    "ar": "Content Updated Successfully",
+    "en": "Content Updated Successfully"
+  },
+  "january": {
+    "ar": "يناير",
+    "en": "January"
+  },
+  "february": {
+    "ar": "فبراير",
+    "en": "February"
+  },
+  "march": {
+    "ar": "مارس",
+    "en": "March"
+  },
+  "april": {
+    "ar": "ابريل",
+    "en": "April"
+  },
+  "may": {
+    "ar": "مايو",
+    "en": "May"
+  },
+  "june": {
+    "ar": "يونيو",
+    "en": "June"
+  },
+  "july": {
+    "ar": "يوليو",
+    "en": "July"
+  },
+  "august": {
+    "ar": "أغسطس",
+    "en": "August"
+  },
+  "september": {
+    "ar": "سبتمبر",
+    "en": "September"
+  },
+  "october": {
+    "ar": "أكتوبر",
+    "en": "October"
+  },
+  "november": {
+    "ar": "نوفمبر",
+    "en": "November"
+  },
+  "december": {
+    "ar": "ديسمبر",
+    "en": "December"
+  },
+  "approved_terminate": {
+    "ar": "انهاء",
+    "en": "Terminate"
+  },
+  "approved_add_to_folder": {
+    "ar": "اضافه لمجلد",
+    "en": "Add To Folder"
+  },
+  "approved_serial": {
+    "ar": "رقم الاشارة",
+    "en": "Serial"
+  },
+  "approved_internal_forward": {
+    "ar": "تحويل",
+    "en": "Forward"
+  },
+  "approved_internal_export": {
+    "ar": "تصدير",
+    "en": "Export"
+  },
+  "approved_internal_failed_add_to_folder_selected": {
+    "ar": "Failed to add the selected items to folder",
+    "en": "Failed to add the selected items to folder"
+  },
+  "approved_internal_add_to_folder_specific_success": {
+    "ar": "(:name) added to :folder successfully",
+    "en": "(:name) added to :folder successfully"
+  },
+  "approved_internal_reply": {
+    "ar": "رد",
+    "en": "Reply"
+  },
+  "please_select_or_upload_document": {
+    "ar": "Please select or upload the document",
+    "en": "Please select or upload the document"
+  },
+  "department_sent_items_serial": {
+    "ar": "رقم الاشارة",
+    "en": "Serial"
+  },
+  "main_site_from": {
+    "ar": "Main Site From",
+    "en": "Main Site From"
+  },
+  "sub_site_from": {
+    "ar": "Sub Site From",
+    "en": "Sub Site From"
+  },
+  "sub_site_to": {
+    "ar": "Sub Site To",
+    "en": "Sub Site To"
+  },
+  "main_site_to": {
+    "ar": "Main Site To",
+    "en": "Main Site To"
+  },
+  "grid_action_launch_new_distribution_workflow": {
+    "ar": "Launch New Distribution Workflow",
+    "en": "Launch New Distribution Workflow"
+  },
+  "grid_action_send_sms": {
+    "ar": "الرسائل النصية",
+    "en": "SMS"
+  },
+  "grid_action_get_link": {
+    "ar": "Get Link",
+    "en": "Get Link"
+  },
+  "grid_action_subscribe": {
+    "ar": "أشترك",
+    "en": "Subscribe"
+  },
+  "grid_action_edit": {
+    "ar": "تعديل",
+    "en": "Edit"
+  },
+  "grid_action_delete": {
+    "ar": "حذف",
+    "en": "Delete"
+  },
+  "grid_action_manage": {
+    "ar": "إدارة",
+    "en": "Manage"
+  },
+  "grid_action_download": {
+    "ar": "تحميل",
+    "en": "Download"
+  },
+  "grid_action_send": {
+    "ar": "إرسال",
+    "en": "Send"
+  },
+  "grid_action_main_document_fax": {
+    "ar": "Main Document Fax",
+    "en": "Main Document Fax"
+  },
+  "grid_action_create_content": {
+    "ar": "إنشاء محتوى",
+    "en": "Create Content"
+  },
+  "grid_action_linked_entities": {
+    "ar": "الكيانات المرتبطة",
+    "en": "Linked Entities"
+  },
+  "grid_action_create_copy": {
+    "ar": "Create Copy",
+    "en": "Create Copy"
+  },
+  "grid_action_send_to_draft": {
+    "ar": "ارسال للمسوده",
+    "en": "Send To Draft"
+  },
+  "grid_action_correspondence_sites": {
+    "ar": "جهات المراسلة",
+    "en": "Correspondence sites"
+  },
+  "grid_action_add_to_folder": {
+    "ar": "اضافه لملف",
+    "en": "Add To Folder"
+  },
+  "grid_action_create_reply": {
+    "ar": "انشاء رد",
+    "en": "Create Reply"
+  },
+  "grid_action_forward": {
+    "ar": "تحويل",
+    "en": "Forward"
+  },
+  "grid_action_reply": {
+    "ar": "رد",
+    "en": "Reply"
+  },
+  "grid_action_view": {
+    "ar": "عرض",
+    "en": "View"
+  },
+  "grid_action_composite_document_as_attachment": {
+    "ar": "Composite Document As Attachment",
+    "en": "Composite Document As Attachment"
+  },
+  "grid_action_main_document_as_attachment": {
+    "ar": "Main Document As Attachment",
+    "en": "Main Document As Attachment"
+  },
+  "grid_action_send_link": {
+    "ar": "حلقة الوصل",
+    "en": "Link"
+  },
+  "grid_action_approve": {
+    "ar": "اعتماد",
+    "en": "Approve"
+  },
+  "grid_action_electronic": {
+    "ar": "الكتروني",
+    "en": "Electronic"
+  },
+  "grid_action_digital": {
+    "ar": "رقمي",
+    "en": "Digital"
+  },
+  "grid_action_content": {
+    "ar": "محتوى",
+    "en": "Content"
+  },
+  "grid_action_properties": {
+    "ar": "خصائص",
+    "en": "Properties"
+  },
+  "grid_action_reject": {
+    "ar": "رفض",
+    "en": "Reject"
+  },
+  "grid_action_accept": {
+    "ar": "قبول",
+    "en": "Accept"
+  },
+  "grid_action_move_to_folder": {
+    "ar": "اضافه لمجلد",
+    "en": "Move To Folder"
+  },
+  "grid_action_resend": {
+    "ar": "اعاده ارسال",
+    "en": "Resend"
+  },
+  "add_organizations": {
+    "ar": "Add Organizations",
+    "en": "Add Organizations"
+  },
+  "internal_electronic": {
+    "ar": "Internal Electronic",
+    "en": "Internal Electronic"
+  },
+  "internal_paper": {
+    "ar": "Internal Paper",
+    "en": "Internal Paper"
+  },
+  "admin_add_new_workflow_group": {
+    "ar": "أضف مجموعة تسير عمل جديده",
+    "en": "add new workflow group"
+  },
+  "parent_correspondence_site": {
+    "ar": "جهة المراسلة الرئيسية",
+    "en": "Main Correspondence Site"
+  },
+  "outgoing_manage_linked_document": {
+    "ar": "إدارة الكتب المرتبطة",
+    "en": "Manage Linked Documents"
+  },
+  "date": {
+    "ar": "تاريخ",
+    "en": "Date"
+  },
+  "general_date": {
+    "ar": "General Date",
+    "en": "General Date"
+  },
+  "general_date_from": {
+    "ar": "General Date From",
+    "en": "General Date From"
+  },
+  "general_date_to": {
+    "ar": "General Date To",
+    "en": "General Date To"
+  },
+  "filter_organizations": {
+    "ar": "Filter Organizations",
+    "en": "Filter Organizations"
+  },
+  "no_matching_organizations_found": {
+    "ar": "No organizations matching \":searchText\" were found.",
+    "en": "No organizations matching \":searchText\" were found."
+  },
+  "organization": {
+    "ar": "الادارة",
+    "en": "Organization"
+  },
+  "reset": {
+    "ar": "أعادة تعين",
+    "en": "Reset"
+  },
+  "item_order_duplicated": {
+    "ar": "ترتيب العنصر موجود مسبقا رجاء التغير",
+    "en": "Item Order exist , please change it."
+  },
+  "arabic_english_cannot_be_just_numbers": {
+    "ar": "الاسم العربى والانجليزيى لا يمكن ان يكون ارقام فقط",
+    "en": "The Arabic and English name can not be numbers only"
+  },
+  "the_status_already_changed": {
+    "ar": "لا يمكن تغير الحالة , لانها مغيرة بالفعل",
+    "en": "The status can not be changed, because it has already changed"
+  },
+  "reason": {
+    "ar": "السبب",
+    "en": "The reason"
+  },
+  "terminate_reason": {
+    "ar": "سبب الانهاء",
+    "en": "The Terminate Reason"
+  },
+  "custom_reason": {
+    "ar": "سبب خاص",
+    "en": "special reason"
+  },
+  "reason_all": {
+    "ar": "إذا ما اخترت سبب خاص للعنصر سيتم تطبيق هذا السبب إليه",
+    "en": "If you do not choose a special reason, this will be applied to all Items"
+  },
+  "document_search": {
+    "ar": "بحث عن كتاب",
+    "en": "Search For Document"
+  },
+  "linked_document_subject": {
+    "ar": "عنوان الكتاب",
+    "en": "Document Subject"
+  },
+  "linked_document_serial": {
+    "ar": "الرقم التسلسلى",
+    "en": "Serial Number"
+  },
+  "linked_document_type": {
+    "ar": "نوع الكتاب",
+    "en": "Document Type"
+  },
+  "linked_document_organization": {
+    "ar": "الادارة",
+    "en": "Organizaion"
+  },
+  "linked_document_security_level": {
+    "ar": "درجة السرية",
+    "en": "Security Level"
+  },
+  "linked_document_main_classification": {
+    "ar": "التصنيف الرئيسيى",
+    "en": "Main Classification"
+  },
+  "linked_document_sub_classification": {
+    "ar": "التصنيف الفرعى",
+    "en": "Sub Classification"
+  },
+  "linked_document_year": {
+    "ar": "السنة",
+    "en": "Year"
+  },
+  "linked_document_file": {
+    "ar": "الملف",
+    "en": "File"
+  },
+  "linked_document_file_code": {
+    "ar": "كود الملف",
+    "en": "File Code"
+  },
+  "linked_document_file_number": {
+    "ar": "رقم الملف",
+    "en": "File Number"
+  },
+  "linked_document_search_button": {
+    "ar": "بحث",
+    "en": "Search"
+  },
+  "linked_document_search_result": {
+    "ar": "نتائج البحث",
+    "en": "Search Result"
+  },
+  "linked_document_link_button": {
+    "ar": "ربط",
+    "en": "Link"
+  },
+  "no_results_found_for_your_search_criteria": {
+    "ar": "لا توجد نتائج لمعايز بحثك",
+    "en": "No results found for your search criteria"
+  },
+  "linked_document_manage": {
+    "ar": "الكتب المرتبطة",
+    "en": "Linked Documents"
+  },
+  "linked_document_save": {
+    "ar": "حفظ",
+    "en": "Save"
+  },
+  "linked_document_close": {
+    "ar": "إغلاق",
+    "en": "Close"
+  },
+  "prepare_reply": {
+    "ar": "إعداد كتاب رد",
+    "en": "Prepare Reply"
+  },
+  "cannot_delete_lookup": {
+    "ar": "لا يمكن حذف :lookup لانة مستخدم من قبل :used",
+    "en": "The :lookup can not be deleted because it is used by :used"
+  },
+  "other_users": {
+    "ar": "مستخدمين أخرين",
+    "en": "other users"
+  },
+  "last_organization_delete": {
+    "ar": "هذة أخر إدارة عند حذفها سيتم تحديث (:name) إلى عام تلقائيا",
+    "en": "This last department when deleted will update :name to global automatically"
+  },
+  "content_will_remove_confirm": {
+    "ar": "بأتخاذك هذا الاجراء سيتم حذف المحتوى الحالى للكتاب",
+    "en": "By taking this action, the current content of the book will be deleted"
+  },
+  "custom_role_warning_message": {
+    "ar": "بأتخاذك هذا الاجراء سيتم تعين نفس التصاريح للأعضاء الذين يستخدمون نفس الصلاحية",
+    "en": "By taking this action, the same permissions will be assigned to members using the same Role"
+  },
+  "user_added_to_organization_successfully": {
+    "ar": "تم أضافة :user إلى :organization بنجاح",
+    "en": ":user has been successfully added to :organization"
+  },
+  "one_arabic_number_space": {
+    "ar": "Only arabic characters, numbers, space are allowed with at least 1 arabic character",
+    "en": "Only arabic characters, numbers, space are allowed with at least 1 arabic character"
+  },
+  "one_english_number_space": {
+    "ar": "Only english alphabets, numbers, space are allowed with at least 1 english character",
+    "en": "Only english alphabets, numbers, space are allowed with at least 1 english character"
+  },
+  "cannot_send_unapproved_document_to_multi_users": {
+    "ar": "لا يمكن أرسال كتاب غير معتمد لأكثر من مستخدم واحد",
+    "en": "cannot send unapproved document to multi users"
+  },
+  "transfer_mail": {
+    "ar": "نقل إلى موظف اخر",
+    "en": "Transfer to another employee"
+  },
+  "transfer_reason": {
+    "ar": "سبب التحويل",
+    "en": "Transfer Reason"
+  },
+  "transfer": {
+    "ar": "تحويل",
+    "en": "Transfer"
+  },
+  "transfer_mail_success": {
+    "ar": "تم تحويل الكتاب بنجاح",
+    "en": "The Document has transferred successfully"
+  },
+  "select_reason": {
+    "ar": "اختر السبب",
+    "en": "Select Reason"
+  },
+  "send_to_ready_to_export": {
+    "ar": "إرسال إلى جاهز للتصدير",
+    "en": "Send To Ready To Export"
+  },
+  "edit_after_approved": {
+    "ar": "تعديل بعد الاعتماد",
+    "en": "Edit After Approved"
+  },
+  "signature_serial_will_removed": {
+    "ar": "سيتم حذف التوقيع و الرقم المتسلسل من المستند",
+    "en": "The signature and serial number of the document will be deleted"
+  },
+  "the_book_will_go_to_audit": {
+    "ar": "سينقل الكتاب بعد التعديل إلى مرحلة التدقيق, ليعاد تدقيقه من جديد",
+    "en": "After the amendment, the book will be submitted to the audit stage, for further review"
+  },
+  "serial_retained": {
+    "ar": "سيتم الاحتفاظ بالرقم المتسلسل الحالي ليتم استخدامه مرة أخرى عند إعادة اعتماد هذا الكتاب",
+    "en": "The current serial number will be retained to be used again when you're-sign this book"
+  },
+  "global_templates": {
+    "ar": "القوالب العامة",
+    "en": "Global Templates"
+  },
+  "user_followup_mail": {
+    "ar": "البريد الشخصي للمتابعة",
+    "en": "Private Mail for Follow Up"
+  },
+  "user_followup_phone_number": {
+    "ar": "استقبال رسائل شخصية على رقم",
+    "en": "Private Phone Number for Follow-up"
+  },
+  "grid_action_receive": {
+    "ar": "أستلام",
+    "en": "Receive"
+  },
+  "grid_action_quick_receive": {
+    "ar": "أستلام سريع",
+    "en": "Quick Receive"
+  },
+  "grid_action_tasks": {
+    "ar": "المهام",
+    "en": "Tasks"
+  },
+  "grid_action_link_to_document_by_email": {
+    "ar": "Link To Document By Email",
+    "en": "Link To Document By Email"
+  },
+  "confirm_launch_new_distribution_workflow": {
+    "ar": "Are you sure you want to launch new distribution workflow?",
+    "en": "Are you sure you want to launch new distribution workflow?"
+  },
+  "grid_action_print_barcode": {
+    "ar": "طباعة الباركود",
+    "en": "Print Barcode"
+  },
+  "no_view_permission": {
+    "ar": "There is no permission to view document",
+    "en": "There is no permission to view document"
+  },
+  "central_archive": {
+    "ar": "أرشيف مركزي",
+    "en": "Central Archive"
+  },
+  "select_central_archive_if_found": {
+    "ar": "أختر الأرشيف المركزي إن وجد",
+    "en": "select central archive if found"
+  },
+  "select_registry_if_found": {
+    "ar": "أختر سجل المرسلات أن وجد",
+    "en": "Select correspondence registry if found"
+  },
+  "archive_and_has_registry": {
+    "ar": "لا يمكن اختيار الأدارة كارشيف مركزى وليس لديها سجل مراسلات",
+    "en": "can not choose a central archive and does not have a Correspondence Registry"
+  },
+  "edit_content": {
+    "ar": "تعديل الحتوى",
+    "en": "Edit Content"
+  },
+  "remember_me": {
+    "ar": "تذكرني !",
+    "en": "Remember Me !"
+  },
+  "localization_page_title": {
+    "ar": "التعريب",
+    "en": "Localizaion"
+  },
+  "select_localization_module": {
+    "ar": "اختر وحدة التعريب",
+    "en": "Select Localization Module"
+  },
+  "select": {
+    "ar": "أختر",
+    "en": "Select"
+  },
+  "localization_localization_key": {
+    "ar": "رمز التعريب",
+    "en": "Localization Key"
+  },
+  "localization_arabic_translate": {
+    "ar": "الترجمة العربية",
+    "en": "Arabic Translate"
+  },
+  "localization_english_translate": {
+    "ar": "الترجمة الانجليزية",
+    "en": "English Translate"
+  },
+  "localization_current_selected_module": {
+    "ar": "الوحدة المختارة",
+    "en": "Current Selected Module"
+  },
+  "menu_item_incoming": {
+    "ar": "البريد الوارد",
+    "en": "Incoming Mail"
+  },
+  "menu_item_outgoing": {
+    "ar": "البريد الصادر",
+    "en": "Outgoing Mail"
+  },
+  "menu_item_dashboard": {
+    "ar": "لوحة البداية",
+    "en": "Dashboard"
+  },
+  "menu_item_organization_chart": {
+    "ar": "الهيكل التنظيمي",
+    "en": "Organization Structure"
+  },
+  "menu_item_system_administration": {
+    "ar": "إدارة النظام",
+    "en": "System Administration"
+  },
+  "menu_item_classifications": {
+    "ar": "التصنيفات",
+    "en": "Classifications"
+  },
+  "menu_item_cross_site_management": {
+    "ar": "جهات المراسلة",
+    "en": "Correspondence Sites"
+  },
+  "menu_item_government_entities": {
+    "ar": "الجهات الحكومية",
+    "en": "Government Entities"
+  },
+  "menu_item_global_settings": {
+    "ar": "إعدادات عامة",
+    "en": "Global Settings"
+  },
+  "menu_item_entity_type": {
+    "ar": "نوع الجهة",
+    "en": "Entity Types"
+  },
+  "menu_item_job_title": {
+    "ar": "المسمى الوظيفي",
+    "en": "Job Titles"
+  },
+  "menu_item_document_status": {
+    "ar": "حالة المستند",
+    "en": "Document Status"
+  },
+  "menu_item_sms_template": {
+    "ar": "قوالب الرسائل القصيرة",
+    "en": "Sms Template"
+  },
+  "menu_item_manage_roles": {
+    "ar": "إدارة الصلاحيات",
+    "en": "Roles"
+  },
+  "menu_item_manage_workflow_group": {
+    "ar": "إدارة مجموعة سير العمل",
+    "en": "Workflow Group"
+  },
+  "menu_item_correspondence_site_type": {
+    "ar": "انواع جهات المراسلة",
+    "en": "Correspondence Site Types"
+  },
+  "menu_item_distribution_lists": {
+    "ar": "قائمة التوزيع",
+    "en": "Distribution Lists"
+  },
+  "menu_item_public_announcements": {
+    "ar": "إعلان عام",
+    "en": "Public Announcements"
+  },
+  "menu_item_private_announcements": {
+    "ar": "إعلان خاص",
+    "en": "Private Announcements"
+  },
+  "menu_item_internal": {
+    "ar": "البريد الداخلى",
+    "en": "Internal Mail"
+  },
+  "menu_item_document_types": {
+    "ar": "أنواع الملفات",
+    "en": "Document Types"
+  },
+  "menu_item_organization_types": {
+    "ar": "انواع الادارات",
+    "en": "Organizations Types"
+  },
+  "menu_item_themes": {
+    "ar": "الموضوعات",
+    "en": "Themes"
+  },
+  "menu_item_document_files": {
+    "ar": "الملفات",
+    "en": "Document Files"
+  },
+  "menu_item_reference_number_plans": {
+    "ar": "الرقم المرجعى",
+    "en": "Reference Number Plans"
+  },
+  "menu_item_workflow_actions": {
+    "ar": "إجراءات تسير العمل",
+    "en": "Workflow Actions"
+  },
+  "menu_item_inbox": {
+    "ar": "صندوق البريد",
+    "en": "Inbox"
+  },
+  "menu_item_global_localization": {
+    "ar": "التعريب العام",
+    "en": "Global Localization"
+  },
+  "menu_item_outgoing_prepare": {
+    "ar": "تحضير",
+    "en": "Prepare"
+  },
+  "menu_item_outgoing_draft": {
+    "ar": "مسوده",
+    "en": "Draft"
+  },
+  "menu_item_outgoing_review": {
+    "ar": "مراجعة",
+    "en": "Review"
+  },
+  "menu_item_outgoing_rejected": {
+    "ar": "مرفوض",
+    "en": "Rejected"
+  },
+  "menu_item_application_users": {
+    "ar": "مستخدمين النظام",
+    "en": "Application Users"
+  },
+  "menu_item_search_module": {
+    "ar": "البحث",
+    "en": "Search"
+  },
+  "menu_item_search_module_outgoing": {
+    "ar": "بحث في الصادر",
+    "en": "Outgoing Search"
+  },
+  "menu_item_search_module_incoming": {
+    "ar": "بحث في الوارد",
+    "en": "Incoming Search"
+  },
+  "menu_item_search_module_internal": {
+    "ar": "بحث في المراسلات الداخلية",
+    "en": "Internal Search"
+  },
+  "menu_item_document_templates": {
+    "ar": "قوالب المستندات",
+    "en": "Document Templates"
+  },
+  "menu_item_attachment_types": {
+    "ar": "انواع المرفقات",
+    "en": "Attachment Types"
+  },
+  "menu_item_user_inbox": {
+    "ar": "البريد الشخصى",
+    "en": "User Inbox"
+  },
+  "menu_item_department_inbox": {
+    "ar": "بريد الإدارة",
+    "en": "Department Inbox"
+  },
+  "menu_item_dep_incoming": {
+    "ar": "البريد الوارد",
+    "en": "Incoming Mail"
+  },
+  "menu_item_outgoing_ready_to_send": {
+    "ar": "جاهز للأرسال",
+    "en": "Ready to send"
+  },
+  "menu_item_dep_ready_to_export": {
+    "ar": "جاهز للتصدير",
+    "en": "Ready to Export"
+  },
+  "menu_item_dep_returned": {
+    "ar": "البريد المعاد",
+    "en": "Returned Mail"
+  },
+  "menu_item_incoming_review": {
+    "ar": "مراجعة",
+    "en": "Review"
+  },
+  "menu_item_incoming_rejected": {
+    "ar": "مرفوض",
+    "en": "Rejected"
+  },
+  "menu_item_incoming_scan": {
+    "ar": "الماسح الضوئي",
+    "en": "Scan"
+  },
+  "menu_item_incoming_ready_to_send": {
+    "ar": "جاهز للأرسال",
+    "en": "Ready To Send"
+  },
+  "menu_item_internal_prepare": {
+    "ar": "تحضير",
+    "en": "Prepare"
+  },
+  "menu_item_internal_draft": {
+    "ar": "مسودة",
+    "en": "Draft"
+  },
+  "menu_item_internal_review": {
+    "ar": "مراجعة",
+    "en": "Review"
+  },
+  "menu_item_internal_ready_to_send": {
+    "ar": "جاهز للأرسال",
+    "en": "Ready To Send"
+  },
+  "menu_item_internal_rejected": {
+    "ar": "مرفوض",
+    "en": "Rejected"
+  },
+  "menu_item_internal_add": {
+    "ar": "أضافة",
+    "en": "Add"
+  },
+  "menu_item_incoming_add": {
+    "ar": "أضف",
+    "en": "Add"
+  },
+  "menu_item_followup_employee_inbox": {
+    "ar": "متابعة بريد الموظفين",
+    "en": "Followup Employee Inbox"
+  },
+  "menu_item_proxy_mail_inbox": {
+    "ar": "بريد الموكل",
+    "en": "Proxy Mail Inbox"
+  },
+  "menu_item_sent_items": {
+    "ar": "البريد المرسل",
+    "en": "Sent Items"
+  },
+  "menu_item_add_outgoing": {
+    "ar": "أضف",
+    "en": "Add"
+  },
+  "menu_item_dep_sent_items": {
+    "ar": "البريد المرسل",
+    "en": "Sent Items"
+  },
+  "menu_item_approved_internal_queue": {
+    "ar": "Approved",
+    "en": "Approved"
+  },
+  "menu_item_search_module_general": {
+    "ar": "البحث العام",
+    "en": "General Search"
+  },
+  "menu_item_user_favorite_documents": {
+    "ar": "Favorite Documents",
+    "en": "Favorite Documents"
+  },
+  "menu_item_localization": {
+    "ar": "التعريب",
+    "en": "Localization"
+  },
+  "grid_action_remove_from_favorite": {
+    "ar": "Remove from favorite",
+    "en": "Remove from favorite"
+  },
+  "remove_from_favorite_specific_success": {
+    "ar": "Removed from favorite documents successfully ( :name )",
+    "en": "Removed from favorite documents successfully ( :name )"
+  },
+  "grid_action_add_to_favorite": {
+    "ar": "Add To Favorite",
+    "en": "Add To Favorite"
+  },
+  "add_to_favorite_specific_success": {
+    "ar": "(:name) added to favorite documents successfully",
+    "en": "(:name) added to favorite documents successfully"
+  },
+  "add_to_favorite_duplicate_record": {
+    "ar": "Favorite documents can't be duplicate",
+    "en": "Favorite documents can't be duplicate"
+  },
+  "starred_tab": {
+    "ar": "Starred",
+    "en": "Starred"
+  },
+  "primary_tab": {
+    "ar": "Primary",
+    "en": "Primary"
+  },
+  "add_reference_plan_item": {
+    "ar": "أضافة عنصر",
+    "en": "Add element"
+  },
+  "reference_plan_element_expression": {
+    "ar": "التعبير المرجعي",
+    "en": "Reference Expression"
+  },
+  "reference_plan_element_pattern": {
+    "ar": "النمط المرجعى",
+    "en": "Reference Pattern"
+  },
+  "no_records_to_add": {
+    "ar": "لايوجد :name لأضافتها",
+    "en": "There are no :name to add"
+  },
+  "this_is_a_super_admin": {
+    "ar": "هذا المستخدم Super admin ليس لدية أى خيارات شخصية",
+    "en": "this is a super admin , no preferences found."
+  },
+  "resolution": {
+    "ar": "Resolution",
+    "en": "Resolution"
+  },
+  "no_signature_available": {
+    "ar": "There is no signature available. Please upload the signature in user preferences and try again",
+    "en": "There is no signature available. Please upload the signature in user preferences and try again"
+  },
+  "minutes": {
+    "ar": "Minutes",
+    "en": "Minutes"
+  },
+  "logo_info": {
+    "ar": "The logo size should be less than 283px x 283px",
+    "en": "The logo size should be less than 283px x 283px"
+  },
+  "work_item_not_found": {
+    "ar": "الدورة المستندية للكتاب غير موجودة  <br /> :wobNumber",
+    "en": "Work Item Not found  <br /> :wobNumber"
+  },
+  "internal_server_error": {
+    "ar": "حدثت مشكلة عند معالجة الاجراء",
+    "en": "something went wrong."
+  },
+  "correspondence_site_will_change": {
+    "ar": "سيتم تغير جهة المراسلة الحالية",
+    "en": "The current correspondence site will be changed"
+  },
+  "confirm_delete_correspondence_site": {
+    "ar": "هل انت متأكذ من حذف جهة المراسلة , <br /> (:name)",
+    "en": "Are you sure you want to delete Correspondence Site <br /> ( :name )"
+  },
+  "both": {
+    "ar": "كلاهما",
+    "en": "Both"
+  },
+  "authorize_failed": {
+    "ar": "حدث خطاء أثناء التوقيع ربما القالب غير صحيح",
+    "en": "An error occurred while signing the template may not be correct"
+  },
+  "indicator_followup_status": {
+    "ar": "(:name) حالات المتابعة",
+    "en": "Follow-up status (:name)"
+  },
+  "parent_folder_option": {
+    "ar": "This is a parent folder",
+    "en": "This is a parent folder"
+  },
+  "confirm_delete_theme": {
+    "ar": "Deleting the theme will reset the theme of users using it to default theme. Are you sure you want to delete :name?",
+    "en": "Deleting the theme will reset the theme of users using it to default theme. Are you sure you want to delete :name?"
+  },
+  "multiple_destinations": {
+    "ar": "Multiple Destinations",
+    "en": "Multiple Destinations"
+  },
+  "multiple_correspondence_sites": {
+    "ar": "Multiple Correspondence Sites",
+    "en": "Multiple Correspondence Sites"
+  },
+  "grid_action_send_to_ready_to_export": {
+    "ar": "إرسال إلى تصدير",
+    "en": "Send To Export"
+  },
+  "the_element": {
+    "ar": "العنصر",
+    "en": "Element"
+  },
+  "please_select_reference_format": {
+    "ar": "رجاء اختيار نمط الرقم المرجعى.",
+    "en": "Please Select reference Format."
+  },
+  "per_ou": {
+    "ar": "إدارة",
+    "en": "organization"
+  },
+  "per_entity": {
+    "ar": "جهة",
+    "en": "Entity"
+  },
+  "per": {
+    "ar": "لكل",
+    "en": "Per"
+  },
+  "encrypt": {
+    "ar": "تشفير",
+    "en": "Encrypt"
+  },
+  "items_start_serial": {
+    "ar": "بادئة تسلسل العناصر",
+    "en": "Items Start Serial"
+  },
+  "reference_hint": {
+    "ar": "سيتم أعتماد القيم الافتراضية لل Start Serial فى حالة لم تقم بالتعديل عليها",
+    "en": "The default values of Start Serial will be used if you do not modify them"
+  },
+  "start_serial_from": {
+    "ar": "بداية الرقم التسلسلى",
+    "en": "Start Serial"
+  },
+  "edit_start_serial": {
+    "ar": "تعديل بداية الارقام التسلسلية",
+    "en": "Edit Start Serial"
+  },
+  "reference_plan_item_duplicated": {
+    "ar": "التعبير المرجعى مكرر من قبل رجاء تغير التعبير المرجعى",
+    "en": "Repeated reference expression Please change the reference expression"
+  },
+  "connection_fail": {
+    "ar": "أخفق اختبار الاتصال",
+    "en": "Connection test failed"
+  },
+  "no_entity_types_to_add": {
+    "ar": "لا يوجد أنواع كيانات متاحة للأضافة",
+    "en": "No Entity Type available to add"
+  },
+  "permission": {
+    "ar": "Permission",
+    "en": "Permission"
+  },
+  "internal_manage_linked_document": {
+    "ar": "إدارة الكتب المرتبطة",
+    "en": "Manage Linked Documents"
+  },
+  "incoming_manage_linked_document": {
+    "ar": "إدارة الكتب المرتبطة",
+    "en": "Manage Linked Documents"
+  },
+  "other_places": {
+    "ar": "أماكن أخرى بالنظام",
+    "en": "Other Places in the System"
+  },
+  "grid_action_edit_content": {
+    "ar": "تعديل الحتوى",
+    "en": "Edit Content"
+  },
+  "grid_action_edit_properties": {
+    "ar": "تعديل خصائص الكتاب",
+    "en": "Edit Properties"
+  },
+  "root_entity_not_found": {
+    "ar": "لم تقدم جهة للأتصال عن طريقها  <br /> أو ان الجهة غير موجودة للأتصال",
+    "en": "No Entity has been provided, to contact through. <br /> Or that the entity does not exist for the connection"
+  },
+  "export_to_excel": {
+    "ar": "Export To Excel",
+    "en": "Export To Excel"
+  },
+  "error_export_to_excel": {
+    "ar": "An error occurred while exporting to excel",
+    "en": "An error occurred while exporting to excel"
+  },
+  "no_data_to_export": {
+    "ar": "There is no data to export",
+    "en": "There is no data to export"
+  },
+  "print": {
+    "ar": "Print",
+    "en": "Print"
+  },
+  "invalid_template": {
+    "ar": "The uploaded template is invalid. Please upload a valid template",
+    "en": "The uploaded template is invalid. Please upload a valid template"
+  },
+  "cannot_save_as_draft_without_content": {
+    "ar": "Correspondence can't be saved as draft without content",
+    "en": "Correspondence can't be saved as draft without content"
+  },
+  "file_with_size_extension_not_allowed": {
+    "ar": "Cannot upload file with this size or extension",
+    "en": "Cannot upload file with this size or extension"
+  },
+  "reassign_success": {
+    "ar": "Reassigned Successfully",
+    "en": "Reassigned Successfully"
+  },
+  "no_data_to_print": {
+    "ar": "There is no data to print",
+    "en": "There is no data to print"
+  },
+  "error_print": {
+    "ar": "An error occurred while printing",
+    "en": "An error occurred while printing"
+  }
+}

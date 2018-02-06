@@ -1,0 +1,278 @@
+<!-- start of view -->
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_followup_employee_inbox}}</span>
+            <md-button ng-click="ctrl.reloadFollowupEmployeeInboxes()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <div>{{ctrl.currentSelectedUser.getTranslatedName()}}</div>
+            <md-button ng-click="ctrl.getEmployeeForFollowupEmployeeInbox($event)" class="md-icon-button"
+                       tooltip="{{lang.select_organization_and_user}}">
+                <md-icon md-svg-icon="account-multiple"></md-icon>
+            </md-button>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <md-table-container flex scroll-directive>
+                            <table md-table md-row-select multiple ng-model="ctrl.selectedFollowupEmployeeInboxes"
+                                   md-progress="ctrl.progress">
+                                <thead md-head md-order="ctrl.grid.order">
+                                <tr md-row>
+                                    <th colspan="{{ctrl.selectedFollowupEmployeeInboxes.length > 1 ? 13 : 14}}"
+                                        ng-if="ctrl.selectedFollowupEmployeeInboxes.length" md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedFollowupEmployeeInboxes.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+
+                                            <!--ng-if="ctrl.selectedFollowupEmployeeInboxes.length > 1"-->
+                                           <!-- <md-button class="md-icon-button" aria-label="{{lang.inbox_terminate}}"
+                                                       tooltip="{{lang.followup_employee_inbox_terminate}}"
+                                                       ng-click="ctrl.terminateFollowupEmployeeInboxBulk($event)">
+                                                <md-icon md-svg-icon="stop" class="action-green"></md-icon>
+                                            </md-button>-->
+                                            <md-button class="md-icon-button" aria-label="{{lang.transfer_mail}}"
+                                                       tooltip="{{lang.transfer_mail}}"
+                                                       ng-click="ctrl.transferToAnotherEmployeeBulk($event)">
+                                                <md-icon md-svg-icon="transfer" class="action-green"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button" aria-label="{{lang.inbox_add_to_folder}}"
+                                                       tooltip="{{lang.inbox_add_to_folder}}"
+                                                       ng-click="ctrl.moveToFolderFollowupEmployeeInboxBulk($event)">
+                                                <md-icon md-svg-icon="folder-plus" class="action-green"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button action-green" aria-label="{{lang.star}}"
+                                                       tooltip="{{lang.star}}"
+                                                       ng-click="ctrl.changeFollowupEmployeeInboxStarBulk('starBulk',$event)">
+                                                <md-icon class="star-yellow" md-svg-icon="star"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button action-green" aria-label="{{lang.un_star}}"
+                                                       tooltip="{{lang.un_star}}"
+                                                       ng-click="ctrl.changeFollowupEmployeeInboxStarBulk('unStarBulk' ,$event)">
+                                                <md-icon class="star-yellow" md-svg-icon="star-outline"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column md-order-by="">
+                                        <!-- Indicators -->
+                                    </th>
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column md-order-by="">
+                                        <!-- Star/Unstar -->
+                                    </th>
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
+                                        md-order-by="docSerial">
+                                        <span>{{lang.inbox_serial}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column md-order-by="">
+                                        <!-- Priority Level and Has Attachment Indicators -->
+                                    </th>
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
+                                        md-order-by="docSubject">
+                                        <span>{{lang.subject}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
+                                        md-order-by="receivedDate">
+                                        <span>{{lang.received_date}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
+                                        md-order-by="action">
+                                        <span>{{lang.action}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
+                                        md-order-by="sender">
+                                        <span>{{lang.sender}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
+                                        md-order-by="dueDate">
+                                        <span>{{lang.due_date}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column md-order-by="">
+                                        <span>{{lang.correspondence_sites}}</span>
+                                    </th>
+                                    <!--<th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column md-order-by="subSite">
+                                        <span>{{lang.inbox_sub_site}}</span>
+                                    </th>-->
+                                   <!-- <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
+                                        md-order-by="docType">
+                                        <span>{{lang.type}}</span>
+                                    </th>-->
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
+                                        md-order-by="numberOfDays">
+                                        <span>{{lang.number_of_days}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column>
+                                        <!-- Grid Actions -->
+                                    </th>
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column>
+                                        <!-- Read/Unread Indicator -->
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="followupEmployeeInbox"
+                                    grid-right-click-directive="followupEmployeeInbox"
+                                    model="followupEmployeeInbox"
+                                    ng-class="!followupEmployeeInbox.generalStepElm.isOpen? 'unread-row': 'read-row'"
+                                    selected-length="{{ctrl.selectedFollowupEmployeeInboxes.length ? ctrl.selectedFollowupEmployeeInboxes.length : 0}}"
+                                    ng-repeat="followupEmployeeInbox in ctrl.followupEmployeeInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    <td md-cell class="indicator-td">
+                                        <span flex
+                                              ng-class="{'indicator-content': followupEmployeeInbox.securityLevelIndicator}">
+                                            <md-icon ng-if="followupEmployeeInbox.securityLevelIndicator"
+                                                     class="{{followupEmployeeInbox.securityLevelIndicator.class}}"
+                                                     md-svg-icon="{{followupEmployeeInbox.securityLevelIndicator.icon}}"
+                                                     tooltip="{{lang[followupEmployeeInbox.securityLevelIndicator.tooltip].change({name: followupEmployeeInbox.securityLevelLookup.getTranslatedName()})}}"
+                                            ></md-icon>
+                                        </span>
+                                        <!--<span flex ng-class="{'indicator-content': followupEmployeeInbox.isOpenedIndicator}">
+                                            <md-icon ng-if="followupEmployeeInbox.isOpenedIndicator"
+                                                     class="{{followupEmployeeInbox.isOpenedIndicator.class}}"
+                                                     md-svg-icon="{{followupEmployeeInbox.isOpenedIndicator.icon}}"
+                                                     tooltip="{{lang[followupEmployeeInbox.isOpenedIndicator.tooltip]}}"
+                                            ></md-icon>
+                                        </span>-->
+                                        <span flex
+                                              ng-class="{'indicator-content': followupEmployeeInbox.docTypeIndicator}">
+                                                    <md-icon ng-if="followupEmployeeInbox.docTypeIndicator"
+                                                             class="{{followupEmployeeInbox.docTypeIndicator.class}}"
+                                                             md-svg-icon="{{followupEmployeeInbox.docTypeIndicator.icon}}"
+                                                             tooltip="{{lang[followupEmployeeInbox.docTypeIndicator.tooltip]}}"
+                                                    ></md-icon>
+                                                </span>
+                                        <span flex
+                                              ng-class="{'indicator-content': followupEmployeeInbox.linkedDocsIndicator}">
+                                           <md-icon ng-if="followupEmployeeInbox.linkedDocsIndicator"
+                                                    class="{{followupEmployeeInbox.linkedDocsIndicator.class}}"
+                                                    md-svg-icon="{{followupEmployeeInbox.linkedDocsIndicator.icon}}"
+                                                    tooltip="{{lang[followupEmployeeInbox.linkedDocsIndicator.tooltip]}}"
+                                           ></md-icon>
+                                       </span>
+                                        <span flex
+                                              ng-class="{'indicator-content': followupEmployeeInbox.followUpStatusIndicator}">
+                                            <md-icon ng-if="followupEmployeeInbox.followUpStatusIndicator"
+                                                     class="{{followupEmployeeInbox.followUpStatusIndicator.class}}"
+                                                     md-svg-icon="{{followupEmployeeInbox.followUpStatusIndicator.icon}}"
+                                                     tooltip="{{lang[followupEmployeeInbox.followUpStatusIndicator.tooltip].change({name: followupEmployeeInbox.followupStatusLookup.getTranslatedName()})}}"
+                                            ></md-icon>
+                                        </span>
+                                    </td>
+                                    <td md-cell>
+                                        <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
+                                                 ng-if="followupEmployeeInbox.generalStepElm.starred && (!ctrl.selectedFollowupEmployeeInboxes.length
+                                                 || ctrl.selectedFollowupEmployeeInboxes.length===1 && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber === followupEmployeeInbox.generalStepElm.workObjectNumber)"
+                                                 md-svg-icon="star"
+                                                 ng-click="ctrl.changeFollowupEmployeeInboxStar(followupEmployeeInbox, $event)"
+                                        ></md-icon>
+                                        <!--tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"-->
+                                        <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
+                                                 ng-if="followupEmployeeInbox.generalStepElm.starred
+                                                 && ((ctrl.selectedFollowupEmployeeInboxes.length === 1
+                                                 && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber != followupEmployeeInbox.generalStepElm.workObjectNumber)
+                                                    || ctrl.selectedFollowupEmployeeInboxes.length > 1)"
+                                                 md-svg-icon="star"
+                                        ></md-icon>
+                                        <!--tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"-->
+                                        <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
+                                                 ng-if="!followupEmployeeInbox.generalStepElm.starred && (!ctrl.selectedFollowupEmployeeInboxes.length
+                                                  || ctrl.selectedFollowupEmployeeInboxes.length===1 && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber === followupEmployeeInbox.generalStepElm.workObjectNumber)"
+                                                 md-svg-icon="star-outline"
+                                                 ng-click="ctrl.changeFollowupEmployeeInboxStar(followupEmployeeInbox, $event)"
+                                        ></md-icon>
+                                        <!--tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"-->
+                                        <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
+                                                 ng-if="!followupEmployeeInbox.generalStepElm.starred
+                                                 && ((ctrl.selectedFollowupEmployeeInboxes.length === 1
+                                                 && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber != followupEmployeeInbox.generalStepElm.workObjectNumber)
+                                                    || ctrl.selectedFollowupEmployeeInboxes.length > 1)"
+                                                 md-svg-icon="star-outline"
+                                        ></md-icon>
+                                        <!--tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"-->
+                                    </td>
+                                    <td md-cell>{{followupEmployeeInbox.generalStepElm.docSerial}}</td>
+                                    <td md-cell class="indicator-td text-right"
+                                        style="padding-right:0 !important; padding-left:0px !important;">
+                                                <span ng-class="{'indicator-content': followupEmployeeInbox.priorityLevelIndicator}">
+                                                    <md-icon ng-if="followupEmployeeInbox.priorityLevelIndicator"
+                                                             class="{{followupEmployeeInbox.priorityLevelIndicator.class}}"
+                                                             md-svg-icon="{{followupEmployeeInbox.priorityLevelIndicator.icon}}"
+                                                             tooltip="{{lang[followupEmployeeInbox.priorityLevelIndicator.tooltip].change({name: followupEmployeeInbox.priorityLevelLookup.getTranslatedName()})}}"
+                                                    ></md-icon>
+                                                </span>
+                                        <span class="float-right"
+                                              ng-class="{'indicator-content': followupEmployeeInbox.attachmentsIndicator}">
+                                                    <md-icon ng-if="followupEmployeeInbox.attachmentsIndicator"
+                                                             class="{{followupEmployeeInbox.attachmentsIndicator.class}}"
+                                                             md-svg-icon="{{followupEmployeeInbox.attachmentsIndicator.icon}}"
+                                                             tooltip="{{lang[followupEmployeeInbox.attachmentsIndicator.tooltip]}}"
+                                                    ></md-icon>
+                                                </span>
+                                    </td>
+                                    <td md-cell md-truncate class="subject">
+                                        <a href="" class="view-doc" md-truncate
+                                           ng-if="followupEmployeeInbox.hasContent()"
+                                           ng-click="ctrl.viewDocument(followupEmployeeInbox, $event)">
+                                            {{followupEmployeeInbox.generalStepElm.docSubject}}
+                                        </a>
+                                        <span ng-if="!followupEmployeeInbox.hasContent()">{{followupEmployeeInbox.generalStepElm.docSubject}}</span>
+                                    </td>
+                                    <td md-cell>{{followupEmployeeInbox.generalStepElm.receivedDate}}</td>
+                                    <td md-cell>{{followupEmployeeInbox.action.getTranslatedName()}}</td>
+                                    <td md-cell class="td-data">
+                                        <div layout="row">
+                                            <span flex>{{followupEmployeeInbox.senderInfo.getTranslatedName()}}</span>
+                                        </div>
+                                    </td>
+                                    <td md-cell class="td-data">
+                                                <span class="{{followupEmployeeInbox.dueDateStatusIndicator.class}}"
+                                                      tooltip="{{lang[followupEmployeeInbox.dueDateStatusIndicator.tooltip].change({due_date_status:lang[followupEmployeeInbox.dueDateStatusIndicator.text] })}}">
+                                                    {{followupEmployeeInbox.generalStepElm.dueDate}}</span>
+                                    </td>
+                                    <td md-cell></td>
+                                    <!--<td md-cell>{{followupEmployeeInbox.subCoreSite.getTranslatedName()}}</td>-->
+                                   <!-- <td md-cell>{{followupEmployeeInbox.generalStepElm.docType}}</td>-->
+                                    <td md-cell>{{followupEmployeeInbox.generalStepElm.numberOfDays}}</td>
+                                    <td md-cell ng-if="ctrl.selectedFollowupEmployeeInboxes.length < 2">
+                                        <div layout-align="start center" ng-if="!ctrl.selectedFollowupEmployeeInboxes.length
+                                                  || ctrl.selectedFollowupEmployeeInboxes.length===1 && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber === followupEmployeeInbox.generalStepElm.workObjectNumber">
+                                            <grid-actions-directive menu-direction="horizontal"
+                                                                    grid-actions="ctrl.gridActions"
+                                                                    model="followupEmployeeInbox"
+                                                                    shortcut="true">
+                                            </grid-actions-directive>
+                                        </div>
+                                    </td>
+                                    <td md-cell class="read-td">
+                                        <div class="cursor-pointer status"
+                                             ng-class="followupEmployeeInbox.generalStepElm.isOpen===true? 'read' : 'unread'"
+                                             ng-click="ctrl.markAsReadUnread(followupEmployeeInbox, $event)"
+                                             ng-if="!ctrl.selectedFollowupEmployeeInboxes.length
+                                                          || ctrl.selectedFollowupEmployeeInboxes.length===1 && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber === followupEmployeeInbox.generalStepElm.workObjectNumber"
+                                             tooltip="{{followupEmployeeInbox.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
+                                             tooltip-direction="{{ctrl.langService.getCurrentLang() === 'en' ? 'left' : 'right'}}">
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.followupEmployeeInboxes.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>
+<!-- end of view -->

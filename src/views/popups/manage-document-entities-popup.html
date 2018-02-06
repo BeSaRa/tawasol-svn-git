@@ -1,0 +1,22 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.manage_linked}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.linked_entities}} : {{ctrl.documentSubject}}</span>
+            <close-dialog-directive when-close="ctrl.closeDocumentEntities"></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <div class="p20">
+                <manage-entities-directive
+                        vs-id="ctrl.vsId"
+                        document-class="ctrl.documentClass"
+                        from-dialog="true"
+                        linked-entities="ctrl.linkedEntities"></manage-entities-directive>
+            </div>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-click="ctrl.closeDocumentEntities()">{{lang.close}}</md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

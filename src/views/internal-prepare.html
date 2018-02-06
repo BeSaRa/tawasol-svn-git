@@ -1,0 +1,110 @@
+<!-- start of view -->
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_internal_prepare}}</span>
+            <!--<md-button ng-click="ctrl.openAddPrepareInternalDialog($event)" class="md-icon-button"
+                       tooltip="{{lang.add}}">
+                <md-icon md-svg-icon="plus"></md-icon>
+            </md-button>-->
+            <md-button ng-click="ctrl.reloadPrepareInternals()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+
+                        <md-table-container flex scroll-directive>
+                            <table md-table md-row-select multiple ng-model="ctrl.selectedPrepareInternals"
+                                   md-progress="ctrl.progress">
+                                <thead md-head md-order="ctrl.grid.order">
+                                <tr md-row>
+                                    <th colspan="{{ctrl.selectedPrepareInternals.length > 1 ? 5 : 6}}"
+                                        ng-if="ctrl.selectedPrepareInternals.length" md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedPrepareInternals.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+
+                                            <!-- ng-if="ctrl.selectedPrepareInternals.length > 1"-->
+                                            <md-button class="md-icon-button"
+                                                       tooltip="{{lang.remove}}"
+                                                       ng-click="ctrl.removeBulk($event)">
+                                                <md-icon md-svg-icon="delete" class="action-green"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedPrepareInternals.length" md-column
+                                        md-order-by="docSubject">
+                                        <span>{{lang.subject}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedPrepareInternals.length" md-column
+                                        md-order-by="priorityLevel">
+                                        <span>{{lang.priority_level}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedPrepareInternals.length" md-column
+                                        md-order-by="securityLevel">
+                                        <span>{{lang.security_level}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedPrepareInternals.length" md-column
+                                        md-order-by="createdBy">
+                                        <span>{{lang.creator}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedPrepareInternals.length" md-column
+                                        md-order-by="createdOn">
+                                        <span>{{lang.created_on}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedPrepareInternals.length && ctrl.selectedPrepareInternals.length < 2"
+                                        md-column>
+                                        <span></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="prepareInternal" grid-right-click-directive
+                                    model="prepareInternal"
+                                    selected-length="{{ctrl.selectedPrepareInternals.length ? ctrl.selectedPrepareInternals.length : 0}}"
+                                    ng-repeat="prepareInternal in ctrl.prepareInternals | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    <td md-cell class="td-data">
+                                        <a href="" class="view-doc" ng-if="prepareInternal.hasContent()"
+                                           ng-click="ctrl.viewDocument(prepareInternal, $event)">{{prepareInternal.docSubject}}</a>
+                                        <span ng-if="!prepareInternal.hasContent()">{{prepareInternal.docSubject}}</span>
+                                    </td>
+                                    <td md-cell>{{prepareInternal.priorityLevel.getTranslatedName()}}</td>
+                                    <td md-cell>{{prepareInternal.securityLevel.getTranslatedName()}}</td>
+                                    <td md-cell>{{prepareInternal.getTranslatedCreator()}}</td>
+                                    <td md-cell>{{prepareInternal.createdOn}}</td>
+                                    <td md-cell ng-if="ctrl.selectedPrepareInternals.length < 2">
+                                        <div layout-align="start center" ng-if="!ctrl.selectedPrepareInternals.length
+                                                  || ctrl.selectedPrepareInternals.length===1 && ctrl.selectedPrepareInternals[0].id === prepareInternal.id">
+                                            <grid-actions-directive menu-direction="horizontal"
+                                                                    grid-actions="ctrl.gridActions"
+                                                                    model="prepareInternal"
+                                                                    shortcut="true"
+                                            ></grid-actions-directive>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.prepareInternals.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>
+<!-- end of view -->

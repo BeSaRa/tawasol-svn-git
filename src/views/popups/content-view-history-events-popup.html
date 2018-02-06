@@ -1,0 +1,58 @@
+<md-dialog class="dialog-extend" id="content-view-history-events-dialog"
+           ng-attr-aria-label="{{lang.view_tracking_sheet_events}}">
+    <div layout="column">
+        <md-toolbar layout="row" layout-align="start center">
+            <span class="p20">{{lang.view_tracking_sheet_events}} : {{ctrl.contentViewHistorySubject}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="contentViewHistoryEventsForm" autocomplete="off">
+                <div md-dynamic-height>
+                    <md-content>
+                        <div layout="column" class="p20">
+                            <md-card>
+                                <md-table-container flex scroll-directive>
+                                    <table md-table>
+                                        <thead md-head md-order="ctrl.grid.order">
+                                        <tr md-row>
+                                            <th md-column md-order-by="actionBy"><span>{{lang.view_tracking_sheet_action_by}}</span>
+                                            </th>
+                                            <th md-column md-order-by="ouInfo"><span>{{lang.view_tracking_sheet_department}}</span>
+                                            </th>
+                                            <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-select="contentViewHistoryEvent" md-row
+                                            ng-repeat="contentViewHistoryEvent in ctrl.contentViewHistoryEvents | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                            <td md-cell>{{contentViewHistoryEvent.actionByInfo.getTranslatedName()}}</td>
+                                            <td md-cell>{{contentViewHistoryEvent.ouInfo.getTranslatedName()}}</td>
+                                            <td md-cell>{{contentViewHistoryEvent.actionDate_vts}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <md-table-pagination
+                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                            md-limit-options="ctrl.grid.limitOptions"
+                                            md-limit="ctrl.grid.limit"
+                                            md-page="ctrl.grid.page"
+                                            md-total="{{ctrl.contentViewHistoryEvents.length}}"
+                                            md-page-select></md-table-pagination>
+                                </md-table-container>
+                            </md-card>
+                        </div>
+                    </md-content>
+                </div>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeContentViewHistoryEventsPopupFromCtrl()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

@@ -1,0 +1,42 @@
+<!-- start of view -->
+<div background-directive="short" color="blue" flex class="page-content">
+    <div layout="column" class="content">
+        <div layout="row" layout-align="start center" class="page-header nmb padding-header small">
+            <span>{{lang.menu_item_organization_chart}}</span>
+            <!--<md-button ng-click="ctrl.selectOrganizationToAdd($event)" class="md-icon-button" tooltip="{{lang.add}}">-->
+            <!--<md-icon md-svg-icon="plus"></md-icon>-->
+            <!--</md-button>-->
+            <md-button ng-click="ctrl.reloadOrganizations()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+        </div>
+        <md-tabs class="content white-bg">
+            <md-tab label="{{lang.organization_view}}">
+                <md-content id="block-content" class="over-flow-hidden">
+                    <!--<md-button id="importOrganizations" ng-click="ctrl.importOrganizations($event)" class="md-icon-button">
+                        <md-icon md-svg-icon="file-import"></md-icon>
+                    </md-button>-->
+                    <md-button id="exportOrganizations" ng-click="ctrl.exportOrganizations()" class="md-icon-button">
+                        <md-icon md-svg-icon="file-export" tooltip="{{lang.export}}"></md-icon>
+                    </md-button>
+                    <md-button id="reset-view" ng-click="orgCtrl.resetView()" class="md-icon-button">
+                        <md-icon md-svg-icon="eye" tooltip="{{lang.reset}}"></md-icon>
+                    </md-button>
+                    <!--<md-button id="full-screen-view" ng-click="orgCtrl.fullScreenMode()" class="md-icon-button">-->
+                    <!--<md-icon md-svg-icon="fullscreen"></md-icon>-->
+                    <!--</md-button>-->
+                    <organization-chart-directive
+                            id="organization-chart">
+                    </organization-chart-directive>
+                </md-content>
+            </md-tab>
+            <!--<md-tab label="{{lang.hierarchy_view}}">-->
+            <!--<md-content>-->
+            <!--<organization-hierarchy-view-directive></organization-hierarchy-view-directive>-->
+            <!--</md-content>-->
+            <!--</md-tab>-->
+            <!--<md-tab label="{{lang.grid_view}}"></md-tab>-->
+        </md-tabs>
+    </div>
+</div>
+<!-- end of view -->

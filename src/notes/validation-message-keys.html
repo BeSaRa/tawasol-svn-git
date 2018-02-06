@@ -1,0 +1,68 @@
+<!--//How to apply Custom validate directive ?-->
+<!--Use custom-validate-directive as an attribute for any tag and give its error message as follows:-->
+
+<!--<input id="url" name"url" custom-validate-directive="url">-->
+
+<!--<div ng-messages="formId.url.$error">-->
+    <!--<div ng-message="url">{{lang.url_only}}</div>-->
+<!--</div>-->
+
+<!--You can use more than one validation at a time with custom validate directive by giving 2 more validation types separated by | like-->
+<!--<input name="serverAddress" id="serverAddress" custom-validate-directive="url|ip">-->
+
+<!--<div ng-messages="formId.serverAddress.$error">-->
+    <!--<div ng-message="url|ip">{{lang.invalid_server_name_ip}}</div>-->
+<!--</div>-->
+
+<!--=> Available custom validations and error message keys for custom validate directive:-->
+
+<!--1. url = url_only-->
+
+<!--2. ip  = ip_validation-->
+
+<!--3. email = invalid_email-->
+
+<!--4. number = numberonly-->
+
+<!--5. phone_mobile = invalid_phone_mobile-->
+<!--<div ng-message="phone_mobile">{{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}</div>-->
+
+<!--6. ND = number_decimal-->
+
+<!--7. A = arabic_only-->
+
+<!--8. E = english_only-->
+
+<!--9. AN = arabic_number-->
+
+<!--10. EN = english_number-->
+
+<!--11. ANS = arabic_number_space-->
+
+<!--12. ENS = english_number_space-->
+
+<!--13. AE = arabic_english-->
+
+<!--14. AEN = arabic_english_number-->
+
+<!--15. AES = arabic_english_space-->
+
+<!--16. A_ = arabic_underscore-->
+
+<!--17. E_ = english_underscore-->
+
+<!--18. ALL = all_validation-->
+
+<!--19. port = port_validation-->
+
+
+<!--Other Validations and their use:-->
+
+<!--1. maxlength = max_length-->
+<!--<div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>-->
+
+<!--2. min_number = min_number-->
+<!--<div ng-message="min_number">{{lang.min_number.change({number:5})}}</div> where 5 is the minimum allowed value for field-->
+
+<!--3. max_number = max_number-->
+<!--<div ng-message="max_number">{{lang.max_number.change({number:5})}}</div> where 5 is the maximum allowed value for field-->

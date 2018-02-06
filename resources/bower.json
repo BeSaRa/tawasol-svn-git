@@ -1,0 +1,23 @@
+{
+  "name": "resource-manager",
+  "authors": [
+    "Ahmed Mostafa <besara@windowslive.com>"
+  ],
+  "description": "this small app to manage the resource files",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery-ui": "^1.12.1",
+    "angular-material": "^1.1.4",
+    "lodash": "^4.17.4"
+  }
+}

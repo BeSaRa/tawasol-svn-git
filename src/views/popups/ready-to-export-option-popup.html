@@ -1,0 +1,109 @@
+<md-dialog id="ready-to-export-options" class="dialog-extend" ng-attr-aria-label="{{lang.ready_to_export_options}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.export_message}} <!--{{lang.ready_to_export_options}}--></span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="readyToExportOptionsForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div>
+                        <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                            <md-table-container flex scroll-directive>
+                                <table md-table md-row-select="false" md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.subSearchResult.order">
+                                    <tr md-row>
+                                        <th md-column>
+                                            <span>{{lang.sites_main_site}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_sub_site}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.type}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.export_type}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="site"
+                                        ng-repeat="site in ctrl.correspondenceSites  track by $index">
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedParentName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getVersionType()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getExportType()}}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </md-table-container>
+                        </md-card>
+                    </div>
+                    <div ng-if="ctrl.settings.canExport('Attachment') ||  ctrl.settings.canExport('LinkedDoc')"
+                         layout="row">
+                        <div ng-if="ctrl.settings.canExport('Attachment')" flex>
+                            <md-switch ng-model="ctrl.model.ATTACHMENTS"
+                                       layout-align="start center"
+                                       name="attachmentExportOption" id="attachmentExportOption"
+                                       aria-label="{{lang.attachments}}">
+                                <span>{{lang.attachments}} : </span>
+                                {{ctrl.model.getTranslatedAttachmentStatus()}}
+                            </md-switch>
+                        </div>
+                        <div ng-if="ctrl.settings.canExport('LinkedDoc')" flex>
+                            <md-switch ng-model="ctrl.model.RELATED_BOOKS"
+                                       layout-align="start center"
+                                       name="relatedBookExportOption" id="relatedBookExportOption"
+                                       aria-label="{{lang.related_books}}">
+                                <span>{{lang.related_books}} : </span>
+                                {{ctrl.model.getTranslatedRelatedBookStatus()}}
+                            </md-switch>
+                        </div>
+                    </div>
+                    <div ng-if="ctrl.settings.canExport('LinkedObj')" layout="row">
+                        <div flex>
+                            <md-switch ng-model="ctrl.model.RELATED_OBJECTS"
+                                       layout-align="start center"
+                                       name="relatedObjectExportOption" id="relatedObjectExportOption"
+                                       aria-label="{{lang.related_objects}}">
+                                <span>{{lang.related_objects}} : </span>
+                                {{ctrl.model.getTranslatedRelatedObjectStatus()}}
+                            </md-switch>
+                        </div>
+                        <div flex></div>
+                    </div>
+                </div>
+                <div layout="row">
+                    <md-button class="md-raised" ng-click="ctrl.exportWorkItem()">
+                        {{lang.export}}
+                    </md-button>
+                    <span ng-if="ctrl.hasExternalSite" flex></span>
+                    <md-button ng-if="ctrl.hasExternalSite" class="md-raised" ng-click="ctrl.printWithTerminate()">
+                        {{lang.print_with_terminate}}
+                    </md-button>
+                    <span flex></span>
+                    <md-button class="md-raised" ng-click="ctrl.closeExportPopupFromCtrl()">
+                        {{lang.close}}
+                    </md-button>
+                </div>
+            </form>
+        </md-content>
+    </div>
+</md-dialog>

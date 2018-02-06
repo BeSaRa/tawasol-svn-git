@@ -1,0 +1,25 @@
+<md-dialog class="dialog-extend"
+           ng-attr-aria-label="{{lang.content_action_print_barcode}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.content_action_print_barcode}} : {{ctrl.title}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <div class="p20" layout="column">
+                <div id="barcode-area" layout="row">
+                    <span flex></span>
+                    <img ng-src="{{ctrl.barcode}}">
+                    <span flex></span>
+                </div>
+                <div layout="row">
+                    <span flex></span>
+                    <md-button ng-click="ctrl.printCorrespondenceBarcodeFromCtrl()" class="md-raised">
+                        {{lang.content_action_print_barcode}}
+                    </md-button>
+                    <span flex></span>
+                </div>
+            </div>
+        </md-content>
+    </div>
+</md-dialog>

@@ -1,0 +1,11 @@
+<div id="wrapper" flex layout="row">
+    <div id="loading-overlay" ng-if="body.loadingService.loading"></div>
+    <sidebar-left-directive></sidebar-left-directive>
+    <div id="content-container" ng-class="{'sidebar-open':body.isSidebarOpen()}" layout="column" flex>
+        <toolbar-directive></toolbar-directive>
+        <div layout="column" id="page-content">
+            <ui-view class="sub-view" flex layout="column"></ui-view>
+        </div>
+    </div>
+    <sidebar-right-directive></sidebar-right-directive>
+</div>

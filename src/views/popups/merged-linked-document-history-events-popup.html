@@ -1,0 +1,87 @@
+<md-dialog class="dialog-extend" id="merged-linked-doc-history-events-dialog"
+           ng-attr-aria-label="{{lang.view_tracking_sheet_actions}}">
+    <div layout="column">
+        <md-toolbar layout="row" layout-align="start center">
+            <span class="p20">{{lang.view_tracking_sheet_actions}} : {{ctrl.mergedLinkedDocHistorySubject}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="mergedLinkedDocHistoryEventsForm" autocomplete="off">
+                <div md-dynamic-height>
+                    <md-content>
+                        <div layout="column" class="p20">
+                            <md-card>
+                                <md-table-container flex scroll-directive>
+                                    <table md-table>
+                                        <thead md-head md-order="ctrl.grid.order">
+                                        <!--<tr md-row>
+                                            <th md-column md-order-by="userFromInfo"><span>{{lang.view_tracking_sheet_sender}}</span>
+                                            </th>
+                                            <th md-column md-order-by="userToInfo"><span>{{lang.view_tracking_sheet_receiver}}</span>
+                                            </th>
+                                            <th md-column md-order-by="workflowActionInfo"><span>{{lang.view_tracking_sheet_action}}</span>
+                                            </th>
+                                            <th md-column md-order-by="documentCreationDate"><span>{{lang.view_tracking_sheet_creation_date}}</span>
+                                            </th>
+                                            <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            </th>
+                                            <th md-column md-order-by="comments"><span>{{lang.view_tracking_sheet_comments}}</span>
+                                            </th>
+                                        </tr>-->
+                                        <tr md-row>
+                                            <th md-column md-order-by="userFromInfo"><span>{{lang.view_tracking_sheet_sender}}</span>
+                                            </th>
+                                            <th md-column md-order-by="userToInfo"><span>{{lang.view_tracking_sheet_receiver}}</span>
+                                            </th>
+                                            <th md-column md-order-by="workflowActionInfo"><span>{{lang.view_tracking_sheet_action}}</span>
+                                            </th>
+                                            <th md-column md-order-by="documentCreationDate_vts"><span>{{lang.view_tracking_sheet_creation_date}}</span>
+                                            </th>
+                                            <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                            </th>
+                                            <th md-column md-order-by="comments"><span>{{lang.view_tracking_sheet_comments}}</span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-select="mergedLinkedDocHistoryEvent" md-row
+                                            ng-repeat="mergedLinkedDocHistoryEvent in ctrl.mergedLinkedDocHistoryEvents | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                            <!--<td md-cell>{{mergedLinkedDocHistoryEvent.getTranslatedUserFrom()}}</td>
+                                            <td md-cell>{{mergedLinkedDocHistoryEvent.getTranslatedUserTo()}}</td>
+                                            <td md-cell>{{mergedLinkedDocHistoryEvent.getTranslatedName()}}</td>
+                                            <td md-cell>{{mergedLinkedDocHistoryEvent.documentCreationDate}}</td>
+                                            <td md-cell>{{mergedLinkedDocHistoryEvent.actionDate}}</td>
+                                            <td md-cell>{{mergedLinkedDocHistoryEvent.comments}}</td>-->
+                                            <td md-cell>{{mergedLinkedDocHistoryEvent.getTranslatedUserFrom()}}</td>
+                                            <td md-cell>{{mergedLinkedDocHistoryEvent.getTranslatedUserTo()}}</td>
+                                            <td md-cell>{{mergedLinkedDocHistoryEvent.getTranslatedAction()}}</td>
+                                            <td md-cell>{{mergedLinkedDocHistoryEvent.documentCreationDate_vts}}</td>
+                                            <td md-cell>{{mergedLinkedDocHistoryEvent.actionDate_vts}}</td>
+                                            <td md-cell>{{mergedLinkedDocHistoryEvent.comments}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                <md-table-pagination
+                                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                        md-limit-options="ctrl.grid.limitOptions"
+                                        md-limit="ctrl.grid.limit"
+                                        md-page="ctrl.grid.page"
+                                        md-total="{{ctrl.mergedLinkedDocHistoryEvents.length}}"
+                                        md-page-select></md-table-pagination>
+                                </md-table-container>
+                            </md-card>
+                        </div>
+                    </md-content>
+                </div>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeMergedLinkedDocHistoryEventsPopupFromCtrl()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

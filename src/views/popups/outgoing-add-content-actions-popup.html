@@ -1,0 +1,30 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.content_actions}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.content_actions}} : {{ctrl.model.docSubject}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="outgoingAddContentActionsForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="column">
+                        <div flex layout="row" ng-repeat="actionChunk in ctrl.documentActions track by $index">
+                            <md-button flex class="md-raised"
+                                       ng-if="action.checkShow(action, ctrl.outgoingDocument)"
+                                       ng-repeat="action in actionChunk track by $index"
+                                       ng-click="ctrl.performDocumentAction(action, $event)">
+                                <span class="{{action.class}}">{{action.text}}</span>
+                            </md-button>
+                        </div>
+                    </div>
+                </div>
+                <div layout="row">
+                    <span flex></span>
+                    <md-button class="md-raised" ng-click="ctrl.closeOutgoingActionsPopupFromCtrl($event)">
+                        {{lang.close}}
+                    </md-button>
+                </div>
+            </form>
+        </md-content>
+    </div>
+</md-dialog>

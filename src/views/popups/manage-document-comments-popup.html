@@ -1,0 +1,33 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.comments_manage_document_comments}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.comments_manage_document_comments}} : {{ctrl.documentSubject}}</span>
+            <close-dialog-directive when-close="ctrl.closeDocumentComments"></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <manage-comments-directive
+                    vs-id="ctrl.vsId"
+                    document-comments="ctrl.documentComments"
+                    source-close-callback="ctrl.closeDocumentComments"
+                    source-save-callback="ctrl.saveDocumentComments"
+                    source-create-callback="ctrl.createDocumentComment"
+                    source-edit-mode="ctrl.editMode"
+                    source-comment="ctrl.documentComment"
+                    from-dialog="ctrl.fromDialog"></manage-comments-directive>
+        </md-content>
+        <div>
+            <div layout="row">
+                <div ng-if="!!ctrl.documentComment">
+                    <md-button class="md-raised" ng-if="!ctrl.editMode" ng-click="ctrl.createDocumentComment()">
+                        {{lang.add}}
+                    </md-button>
+                    <md-button class="md-raised" ng-if="ctrl.editMode" ng-click="ctrl.saveDocumentComments()">
+                        {{lang.save}}
+                    </md-button>
+                </div>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeDocumentComments()">{{lang.close}}</md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

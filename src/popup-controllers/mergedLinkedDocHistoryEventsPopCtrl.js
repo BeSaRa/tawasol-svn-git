@@ -1,0 +1,36 @@
+module.exports = function (app) {
+    app.controller('mergedLinkedDocHistoryEventsPopCtrl', function (
+                                                    _,
+                                                    generator,
+                                                    dialog,
+                                                    langService,
+                                                    mergedLinkedDocHistoryEvents,
+                                                    mergedLinkedDocHistorySubject) {
+        'ngInject';
+        var self = this;
+        self.controllerName = 'mergedLinkedDocHistoryEventsPopCtrl';
+        self.mergedLinkedDocHistoryEvents = angular.copy(mergedLinkedDocHistoryEvents);
+	    self.mergedLinkedDocHistorySubject= mergedLinkedDocHistorySubject;
+        self.grid = {
+            limit: 5, // default limit
+            page: 1, // first page
+            //order: 'arName', // default sorting order
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, // limit options
+                {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.mergedLinkedDocHistoryEvents.length + 21);
+                    }
+                }
+            ]
+        };
+
+        /**
+         * @description Close the popup
+         */
+        self.closeMergedLinkedDocHistoryEventsPopupFromCtrl = function(){
+            dialog.cancel();
+        }
+    });
+};

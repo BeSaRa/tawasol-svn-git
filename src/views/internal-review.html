@@ -1,0 +1,119 @@
+<!-- start of view -->
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_internal_review}}</span>
+            <md-button ng-click="ctrl.reloadReviewInternals()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+
+                        <md-table-container flex scroll-directive>
+                            <table md-table md-row-select multiple ng-model="ctrl.selectedReviewInternals"
+                                   md-progress="ctrl.progress">
+                                <thead md-head md-order="ctrl.grid.order">
+                                <tr md-row>
+                                    <th colspan="{{ctrl.selectedReviewInternals.length > 1 ? 5 : 6}}"
+                                        ng-if="ctrl.selectedReviewInternals.length" md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedReviewInternals.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+
+                                            <!--ng-if="ctrl.selectedReviewInternals.length > 1"-->
+                                            <md-button class="md-icon-button" ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
+                                                       tooltip="{{lang.grid_action_accept_launch_distribution_workflow}}"
+                                                       ng-click="ctrl.acceptAndLaunchDistributionWorkflowBulk($event)">
+                                                <md-icon md-svg-icon="sitemap" class="action-green"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button"
+                                                       tooltip="{{lang.accept}}"
+                                                       ng-click="ctrl.acceptInternalBulk($event)">
+                                                <md-icon md-svg-icon="check" class="action-green"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button"
+                                                       tooltip="{{lang.reject}}"
+                                                       ng-click="ctrl.rejectInternalBulk($event)">
+                                                <md-icon md-svg-icon="close" class="action-green"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button"
+                                                       tooltip="{{lang.remove}}"
+                                                       ng-click="ctrl.removeBulkReviewInternals($event)">
+                                                <md-icon md-svg-icon="delete" class="action-green"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedReviewInternals.length" md-column
+                                        md-order-by="docSubject">
+                                        <span>{{lang.subject}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedReviewInternals.length" md-column
+                                        md-order-by="priorityLevel">
+                                        <span>{{lang.priority_level}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedReviewInternals.length" md-column
+                                        md-order-by="securityLevel">
+                                        <span>{{lang.security_level}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedReviewInternals.length" md-column
+                                        md-order-by="createdBy">
+                                        <span>{{lang.creator}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedReviewInternals.length" md-column
+                                        md-order-by="createdOn">
+                                        <span>{{lang.created_on}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedReviewInternals.length && ctrl.selectedReviewInternals.length < 2"
+                                        md-column>
+                                        <span></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="reviewInternal" grid-right-click-directive model="reviewInternal" selected-length="{{ctrl.selectedReviewInternals.length ? ctrl.selectedReviewInternals.length : 0}}"
+                                    ng-repeat="reviewInternal in ctrl.reviewInternals  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    <td md-cell class="td-data">
+                                        <a href="" ng-if="reviewInternal.hasContent() && ctrl.employeeService.hasPermissionTo('VIEW_DOCUMENT')" class="view-doc"
+                                           ng-click="ctrl.viewDocument(reviewInternal, $event)">{{reviewInternal.docSubject}}</a>
+                                        <span ng-if="!reviewInternal.hasContent()">{{reviewInternal.docSubject}}</span>
+                                    </td>
+                                    <td md-cell>{{reviewInternal.priorityLevel.getTranslatedName()}}</td>
+                                    <td md-cell>{{reviewInternal.securityLevel.getTranslatedName()}}</td>
+                                    <td md-cell>{{reviewInternal.getTranslatedCreator()}}</td>
+                                    <td md-cell>{{reviewInternal.createdOn}}</td>
+                                    <td md-cell ng-if="ctrl.selectedReviewInternals.length < 2">
+                                        <div layout-align="start center" ng-if="!ctrl.selectedReviewInternals.length
+                                                  || ctrl.selectedReviewInternals.length===1 && ctrl.selectedReviewInternals[0].id === reviewInternal.id">
+                                            <grid-actions-directive menu-direction="horizontal"
+                                                                    grid-actions="ctrl.gridActions"
+                                                                    model="reviewInternal"
+                                                                    shortcut="true">
+                                            </grid-actions-directive>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.reviewInternals.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>
+<!-- end of view -->

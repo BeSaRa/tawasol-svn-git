@@ -1,0 +1,125 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_role : ctrl.model.getNames()}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20" ng-if="!ctrl.editMode">{{lang.add_new_role}}</span>
+            <span class="p20" ng-if="ctrl.editMode">{{ctrl.model.getNames()}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="role_form" autocomplete="off">
+                <md-tabs md-dynamic-height>
+                    <md-tab label="{{lang.basic_info}}">
+                        <div layout="column" class="p20">
+                            <div layout="row">
+                                <md-input-container flex>
+                                    <label for="arName">{{lang.arabic_name}}</label>
+                                    <input name="arName" id="arName" required minlength="4" maxlength="80"
+                                           ng-model="ctrl.role.arName"
+                                           custom-validate-directive="ANS">
+                                    <div ng-messages="role_form.arName.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                        <div ng-message="minlength">{{lang.short}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                        <div ng-message="ANS">{{lang.arabic_number_space}}</div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label for="enName">{{lang.english_name}}</label>
+                                    <input name="enName" id="enName" required minlength="4" maxlength="80"
+                                           ng-model="ctrl.role.enName"
+                                           custom-validate-directive="ENS">
+                                    <div ng-messages="role_form.enName.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                        <div ng-message="minlength">{{lang.short}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                        <div ng-message="ENS">{{lang.english_number_space}}</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout="row">
+                                <md-input-container flex>
+                                    <label for="description">{{lang.description}}</label>
+                                    <input type="textarea" id="description" maxlength="200" name="description"
+                                           ng-model="ctrl.role.description">
+                                    <div ng-messages="role_form.description.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length:200})}}</div>
+                                    </div>
+                                </md-input-container>
+                                <div flex class="p20">
+                                    <md-switch ng-model="ctrl.role.status" aria-label="{{lang.status}}">
+                                        <label>{{lang.status}} : {{ctrl.role.getTranslatedStatus()}}</label>
+                                    </md-switch>
+                                </div>
+                            </div>
+                        </div>
+                    </md-tab>
+                    <md-tab label="{{lang.permissions}}">
+                        <md-content scroll-directive>
+
+                            <!--<form name="" autocomplete="off">
+                                <div layout="column" class="p20">
+                                    <div layout="row" flex
+                                         ng-repeat="permissionChunk in ctrl.permissionsList track by $index">
+                                        <md-checkbox flex ng-repeat="permission in permissionChunk track by $index"
+                                                     ng-checked="ctrl.customRolePermissionsExists(permission)"
+                                                     title="{{permission.description}}"
+                                                     ng-click="ctrl.selectPermissions(permission)">
+                                            {{lang.current==='en'? permission.enName :permission.arName}}
+                                        </md-checkbox>
+                                    </div>
+                                </div>
+                            </form>-->
+
+                            <div class="p20">
+                                <div layout="column"
+                                     ng-repeat="(key, permissionHeading) in (lang.current==='en' ? ctrl.permissionsList[0]: ctrl.permissionsList[1]) track by $index">
+                                    <md-checkbox ng-model="ctrl[key]"
+                                                 ng-checked="ctrl.selectParentCheckbox(permissionHeading,key)"
+                                                 ng-click="ctrl.selectAllGroupPermissions(permissionHeading,key)"
+                                                 aria-label="{{key}}">{{key}}
+                                    </md-checkbox>
+                                    <div class="p20">
+                                        <div flex layout="row"
+                                             ng-repeat="permissionArr in permissionHeading track by $index">
+                                            <md-checkbox ng-if="permission!==null"
+                                                         ng-repeat="permission in permissionArr track by $index"
+                                                         ng-checked="ctrl.customRolePermissionsExists(permission)"
+                                                         ng-click="ctrl.selectPermissions(permission)"
+                                                         flex aria-label="{{permission.arName}}">
+                                                {{lang.current==='en'? permission.enName :permission.arName}}
+                                            </md-checkbox>
+
+                                            <div flex ng-if="permission===null" class="emptyPermissionCheckboxMargin"
+                                                 ng-repeat="permission in permissionArr track by $index"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </md-content>
+
+                    </md-tab>
+                </md-tabs>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised"
+                           ng-disabled="role_form.$invalid || ctrl.role.customRolePermission.length===0"
+                           ng-if="!ctrl.editMode"
+                           ng-click="ctrl.addRoleFromCtrl()">{{lang.add}}
+                </md-button>
+                <md-button class="md-raised"
+                           ng-disabled="role_form.$invalid || ctrl.role.customRolePermission.length===0"
+                           ng-if="ctrl.editMode"
+                           ng-click="ctrl.editRoleFromCtrl()">{{lang.save}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeRolePopupFromCtrl()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

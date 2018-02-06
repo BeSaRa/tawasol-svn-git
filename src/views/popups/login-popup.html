@@ -1,0 +1,55 @@
+<div scroll-directive id="login-popup" layout="column">
+    <h4 flex class="small-h">{{lang.session_expired}}</h4>
+    <div layout="column" flex layout-align="center center">
+        <div id="login-logo-popup" layout="row" layout-align="center center">
+            <img ng-if="login.rootEntity.getLoginLogoUrl()" ng-src="{{login.rootEntity.getLoginLogoUrl()}}"
+                 alt="{{login.rootEntity.getTranslatedAppName()}}">
+            <img ng-if="!login.rootEntity.getLoginLogoUrl()" src="../../assets/images/ebla-logo.png"
+                 alt="{{login.rootEntity.getTranslatedAppName()}}">
+        </div>
+        <div class="small-h application-data" layout="column" layout-align="center center">
+            <h2>{{login.rootEntity.getTranslatedName()}}</h2>
+            <h4>{{login.rootEntity.getTranslatedAppName()}} - {{ lang.application_description }}</h4>
+        </div>
+        <form name="login_form" id="login_form" novalidate enter-submit-directive="login-button">
+            <div layout="row">
+                <md-input-container flex>
+                    <input name="username" required ng-model="login.credentials.username"
+                           placeholder="{{lang.username}}">
+                    <div ng-messages="login_form.username.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <md-input-container flex>
+                    <input type="password" name="password" required ng-model="login.credentials.password"
+                           placeholder="{{lang.password}}">
+                    <div ng-messages="login_form.password.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="column">
+                <div layout="row">
+                    <md-checkbox aria-label="{{lang.remember_me}}">
+                        {{lang.remember_me}}
+                    </md-checkbox>
+                    <span flex></span>
+                    <a id="forget-password-link" href="#">{{lang.forget_password}}</a>
+                </div>
+                <br/>
+                <md-button id="login-button" ng-disabled="login_form.$invalid || login.loginStatus"
+                           ng-click="login.login($event , callback)"
+                           class="md-raised md-primary">{{lang.login}}
+                </md-button>
+            </div>
+        </form>
+        <!--<div class="login-announcements">-->
+        <!--<div md-whiteframe="1" class="announcement danger">-->
+        <!--<md-icon class="announcement-icon" md-svg-icon="bullhorn"></md-icon>-->
+        <!--<p>{{lang.versionWarning}}</p>-->
+        <!--</div>-->
+        <!--</div>-->
+    </div>
+</div>

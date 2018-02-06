@@ -1,0 +1,18 @@
+<md-dialog class="dialog-extend"
+           ng-attr-aria-label="{{lang.select_template_to_prepare}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.select_template_to_prepare}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <div class="p20" layout="column">
+                <div ng-repeat="template in ctrl.templates" layout="row">
+                    <md-button flex class="md-raised" ng-click="ctrl.sendTemplateToPrepare(template)">
+                        {{template.getSubjectTitle()}}
+                    </md-button>
+                </div>
+            </div>
+        </md-content>
+    </div>
+</md-dialog>

@@ -1,0 +1,35 @@
+<div layout="row" flex="none" ng-class="{'show-search-bar':search.quick.searchForm}" layout-align="start center"
+     id="toolbar-search">
+    <label for="query">
+        <md-button ng-click="search.showSearch()" class="md-icon-button m015">
+            <md-icon md-svg-icon="magnify"></md-icon>
+        </md-button>
+    </label>
+    <input placeholder="{{search.labels.search|lang}}" ng-if="search.quick.searchForm" md-autofocus class="no-style"
+           id="query"
+           ng-model="search.query"
+           ng-keydown="search.onKeyPressSearch($event)"
+           name="query" flex type="text">
+    <md-progress-circular md-mode="indeterminate"
+                          ng-if="search.loadingService.loading && search.quick.searchForm "></md-progress-circular>
+    &nbsp;
+    <div ng-if="search.quick.searchForm">
+        {{lang.get(search.searchCriteria.value)}}
+    </div>
+    <md-menu ng-if="search.quick.searchForm">
+        <md-button aria-label="" class="md-icon-button" ng-click="search.openMenu($mdMenu, $event)">
+            <md-icon md-menu-origin md-svg-icon="dots-vertical"></md-icon>
+        </md-button>
+        <md-menu-content width="4">
+            <md-menu-item ng-if="item.checkShow(item, null)" ng-repeat="item in search.availableSearchCriteria">
+                <md-button ng-click="search.setSelectedKey(item)">
+                    {{ lang.get(item.value) }}
+                </md-button>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+
+    <md-button ng-click="search.hideSearch()" ng-if="search.quick.searchForm" class="md-icon-button">
+        <md-icon md-svg-icon="close"></md-icon>
+    </md-button>
+</div>

@@ -1,0 +1,405 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_entity: ctrl.model.getNames()}}">
+    <div layout="column">
+        <md-toolbar layout="row" layout-align="start center">
+            <span class="p20" ng-if="!ctrl.editMode">{{lang.add_new_entity}}</span>
+            <span class="p20" ng-if="ctrl.editMode">{{ctrl.model.getTranslatedName()}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+
+        <md-content scroll-directive>
+            <form name="entityForm" autocomplete="off">
+                <md-tabs md-dynamic-height>
+                    <md-tab label="{{lang.basic_info}}">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="arName">{{lang.identifier}}</label>
+                                        <input name="identifier" id="identifier" required minlength="3" maxlength="10"
+                                               ng-readonly="ctrl.editMode" ng-model="ctrl.entity.identifier"
+                                               custom-validate-directive="E" no-space-directive>
+                                        <div ng-messages="entityForm.identifier.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:10})}}</div>
+                                            <div ng-message="E">{{lang.english_only}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="arName">{{lang.arabic_name}}</label>
+                                        <input name="arName" id="arName" required minlength="4"
+                                               maxlength="80" ng-model="ctrl.entity.arName"
+                                               custom-validate-directive="ANS">
+                                        <div ng-messages="entityForm.arName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="ANS">{{lang.arabic_number_space}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="enName">{{lang.english_name}}</label>
+                                        <input name="enName" id="enName" required minlength="4"
+                                               maxlength="80" ng-model="ctrl.entity.enName"
+                                               custom-validate-directive="ENS">
+                                        <div ng-messages="entityForm.enName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="ENS">{{lang.english_number_space}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="appArName">{{lang.app_arabic_name}}</label>
+                                        <input name="appArName" id="appArName" minlength="4"
+                                               ng-model="ctrl.entity.appArName" maxlength="20"
+                                               custom-validate-directive="ANS">
+                                        <div ng-messages="entityForm.appArName.$error">
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:20})}}</div>
+                                            <div ng-message="ANS">{{lang.arabic_number_space}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="appEnName">{{lang.app_english_name}}</label>
+                                        <input name="appEnName" id="appEnName" minlength="4"
+                                               ng-model="ctrl.entity.appEnName" maxlength="20"
+                                               custom-validate-directive="ENS">
+                                        <div ng-messages="entityForm.appEnName.$error">
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:20})}}</div>
+                                            <div ng-message="ENS">{{lang.english_number_space}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!--<md-input-container flex>
+                                        <label for="groupPrefix">{{lang.group_prefix}}</label>
+                                        <input name="groupPrefix" id="groupPrefix" minlength="4"
+                                               ng-readonly="ctrl.editMode" maxlength="10"
+                                               ng-model="ctrl.entity.groupPrefix"
+                                               custom-validate-directive="E" no-space-directive>
+                                        <div ng-messages="entityForm.groupPrefix.$error">
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:10})}}</div>
+                                            <div ng-message="E">{{lang.english_only}}</div>
+                                        </div>
+                                    </md-input-container>-->
+                                    <md-switch flex ng-model="ctrl.entity.status" aria-label="{{lang.status}}">
+                                        <label>{{lang.status}} : {{ctrl.entity.getTranslatedStatus()}}</label>
+                                    </md-switch>
+                                    <md-input-container flex>
+                                        <label for="enName">{{lang.help_url}}</label>
+                                        <input name="helpUrl" id="helpUrl" maxlength="500"
+                                               ng-model="ctrl.entity.helpUrl">
+                                        <div ng-messages="entityForm.helpUrl.$error">
+                                            <div ng-message="url">{{lang.url_only}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:500})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <div flex class="p20">
+
+                                    </div>
+                                    <div flex></div>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="{{lang.connection_settings}}">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <!-- LDAP PROVIDERS -->
+                                <fieldset flex>
+                                    <legend class="md-accent">{{lang.ldap_providers}}</legend>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="serverAddress">{{lang.server_name_ip}}</label>
+                                            <input name="serverAddress" id="serverAddress" required
+                                                   ng-model="ctrl.entity.serverAddress" maxlength="70">
+                                            <div ng-messages="entityForm.serverAddress.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <!--<div ng-message="url|ip">{{lang.invalid_server_name_ip}}</div>-->
+                                                <!--<div ng-message="maxlength">{{lang.max_length.change({length:20})}}-->
+                                                <!--</div>-->
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="dc">{{lang.domain_controller_name}}</label>
+                                            <input name="dc" id="dc" required minlength="2" ng-model="ctrl.entity.dc"
+                                                   maxlength="70">
+                                            <div ng-messages="entityForm.dc.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <!--<div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
+                                                </div>-->
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="userName">{{lang.username}}</label>
+                                            <input name="userName" id="userName" required maxlength="50"
+                                                   ng-model="ctrl.entity.userName" minlength="2">
+                                            <div ng-messages="entityForm.userName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="password">{{lang.password}}</label>
+                                            <input type="password" name="password" id="password" no-space-directive
+                                                   required minlength="2" ng-model="ctrl.entity.password"
+                                                   maxlength="50">
+                                            <div ng-messages="entityForm.password.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="tawasolOU">{{lang.tawasol_ou}}</label>
+                                            <input name="tawasolOU" id="tawasolOU" required maxlength="100"
+                                                   ng-model="ctrl.entity.tawasolOU" minlength="2">
+                                            <div ng-messages="entityForm.tawasolOU.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:100})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row">
+                                        <md-button class="md-raised" ng-if="ctrl.editMode"
+                                                   ng-disabled="entityForm.$invalid"
+                                                   ng-click="ctrl.testLdapConnection()">{{lang.test_connection}}
+                                        </md-button>
+                                    </div>
+                                </fieldset>
+                                <!-- FILE NET -->
+                                <fieldset flex>
+                                    <legend class="md-accent">{{lang.filenet}}</legend>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="cmUserName">{{lang.filenet_content_manager_username}}</label>
+                                            <input name="cmUserName" id="cmUserName" required
+                                                   ng-model="ctrl.entity.cmUserName" custom-validate-directive="EN"
+                                                   minlength="2" maxlength="50">
+                                            <div ng-messages="entityForm.cmUserName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                                </div>
+                                                <div ng-message="EN">{{lang.english_number}}</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="cmPassword">{{lang.filenet_content_manager_password}}</label>
+                                            <input type="password" name="cmPassword" id="cmPassword" no-space-directive
+                                                   required minlength="2" ng-model="ctrl.entity.cmPassword"
+                                                   maxlength="50">
+                                            <div ng-messages="entityForm.cmPassword.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="cmEJBaddress">{{lang.filenet_content_manager_ejb_address}}</label>
+                                            <input name="cmEJBaddress" id="cmEJBaddress" required
+                                                   ng-model="ctrl.entity.cmEJBaddress" maxlength="500">
+                                            <!--custom-validate-directive="url|ip"-->
+                                            <div ng-messages="entityForm.cmEJBaddress.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <!--<div ng-message="url|ip">{{lang.invalid_address}}</div>-->
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:500})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="cmStanza">{{lang.filenet_content_manager_stanza}}</label>
+                                            <input name="cmStanza" id="cmStanza" required maxlength="20"
+                                                   minlength="2" ng-model="ctrl.entity.cmStanza">
+                                            <div ng-messages="entityForm.cmStanza.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="osName">{{lang.filenet_object_store_name}}</label>
+                                            <input name="osName" id="osName" required maxlength="20"
+                                                   ng-model="ctrl.entity.osName" minlength="2">
+                                            <div ng-messages="entityForm.osName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="peRouterName">{{lang.filenet_process_engine_router_name}}</label>
+                                            <input name="peRouterName" id="peRouterName" required maxlength="20"
+                                                   ng-model="ctrl.entity.peRouterName" minlength="2">
+                                            <div ng-messages="entityForm.peRouterName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row">
+                                        <md-button class="md-raised" ng-if="ctrl.editMode"
+                                                   ng-disabled="entityForm.$invalid"
+                                                   ng-click="ctrl.testFileNetConnection()">{{lang.test_connection}}
+                                        </md-button>
+                                    </div>
+                                </fieldset>
+                                <!-- TAWASOL SUPPORTING DATABASE -->
+                                <fieldset flex>
+                                    <legend class="md-accent">{{lang.tawasol_supporting_database}}</legend>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="cmsDatabaseName">{{lang.database_name}}</label>
+                                            <input name="cmsDatabaseName" id="cmsDatabaseName" required
+                                                   ng-model="ctrl.entity.cmsDatabaseName" minlength="2" maxlength="30">
+                                            <div ng-messages="entityForm.cmsDatabaseName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:30})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="cmsDataSourceName">{{lang.data_source_name}}</label>
+                                            <input name="cmsDataSourceName" id="cmsDataSourceName" minlength="2"
+                                                   required ng-model="ctrl.entity.cmsDataSourceName" maxlength="30">
+                                            <div ng-messages="entityForm.cmsDataSourceName.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:30})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                </fieldset>
+                                <!-- SMTP -->
+                                <fieldset flex>
+                                    <legend class="md-accent">{{lang.smtp}}</legend>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="smtpServerAddress">{{lang.server_address}}</label>
+                                            <input name="smtpServerAddress" id="smtpServerAddress"
+                                                   ng-model="ctrl.entity.smtpServerAddress" maxlength="20">
+                                            <div ng-messages="entityForm.smtpServerAddress.$error">
+                                                <!--<div ng-message="url|ip">{{lang.invalid_server_address}}</div>-->
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="smtpUserName">{{lang.username}}</label>
+                                            <input name="smtpUserName" id="smtpUserName" maxlength="50"
+                                                   minlength="2" ng-model="ctrl.entity.smtpUserName"
+                                                   custom-validate-directive="EN">
+                                            <div ng-messages="entityForm.smtpUserName.$error">
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                                </div>
+                                                <div ng-message="EN">{{lang.english_number}}</div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="smtpPassword">{{lang.password}}</label>
+                                            <input type="password" name="smtpPassword" id="smtpPassword"
+                                                   no-space-directive maxlength="50"
+                                                   minlength="2" ng-model="ctrl.entity.smtpPassword">
+                                            <div ng-messages="entityForm.smtpPassword.$error">
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="smtpFromEmail">{{lang.smtp_from_email}}</label>
+                                            <input name="smtpFromEmail" id="smtpFromEmail"
+                                                   custom-validate-directive="email" maxlength="50"
+                                                   ng-model="ctrl.entity.smtpFromEmail">
+                                            <div ng-messages="entityForm.smtpFromEmail.$error">
+                                                <div ng-message="email">{{lang.invalid_email}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:50})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <label for="smtpSubject">{{lang.subject}}</label>
+                                            <input name="smtpSubject" id="smtpSubject" maxlength="20"
+                                                   ng-model="ctrl.entity.smtpSubject" minlength="2">
+                                            <div ng-messages="entityForm.smtpSubject.$error">
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container flex>
+                                            <label for="smtpPort">{{lang.smtp_port}}</label>
+                                            <input name="smtpPort" id="smtpPort" custom-validate-directive="port"
+                                                   ng-model="ctrl.entity.smtpPort" custom-validate-directive="N">
+                                            <div ng-messages="entityForm.smtpPort.$error">
+                                                <div ng-message="number">{{lang.numberonly}}</div>
+                                                <div ng-message="port">{{lang.port_validation}}</div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row">
+                                        <md-button class="md-raised" ng-if="ctrl.editMode"
+                                                   ng-disabled="entityForm.$invalid"
+                                                   ng-click="ctrl.testSmtpConnection()">{{lang.test_connection}}
+                                        </md-button>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-if="!ctrl.editMode"
+                           ng-disabled="entityForm.$invalid"
+                           ng-click="ctrl.addEntityFromCtrl()">{{lang.add}}
+                </md-button>
+                <md-button class="md-raised" ng-if="ctrl.editMode"
+                           ng-disabled="entityForm.$invalid"
+                           ng-click="ctrl.editEntityFromCtrl()">{{lang.save}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeEntityPopupFromCtrl()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

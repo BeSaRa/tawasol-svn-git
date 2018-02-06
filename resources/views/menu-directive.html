@@ -1,0 +1,14 @@
+<ul class="sortable-menu" id="parent-{{parent.ID}}" sortable-directive>
+    <li ng-dblclick="selectMenuItem(item , $event)"  id="item-id-{{item.ID}}"
+        ng-class="{'root-item':!item.parent,'selected':isSelected(item)}"
+        ng-repeat="item in items |orderBy:'sort_order' track by $index">
+        <a>
+            <md-icon md-svg-icon="{{item.icon}}"></md-icon>
+            <span>{{langService.getLangKey(item.lang_key)}}</span>
+            <md-button ng-click="editMenuItem(item)" class="md-icon-button">
+                <md-icon class="" md-svg-icon="pencil"></md-icon>
+            </md-button>
+            <span class="handler"></span></a>
+        <menu-directive lang="lang" ng-if="item.children.length" parent="item" items="item.children"></menu-directive>
+    </li>
+</ul>

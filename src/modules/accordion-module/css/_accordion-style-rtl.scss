@@ -1,0 +1,36 @@
+html.rtl {
+  accordion-directive {
+    &.validation {
+      padding-right: 0;
+      padding-left: 50px;
+      accordion-item {
+
+        &:before {
+          right: auto;
+          left: -50px;
+          top: 0;
+        }
+        &:not(:last-child):after {
+          right: auto;
+          left: -30.5px;
+        }
+      }
+    }
+  }
+  .accordion-title {
+    padding-left:40px;
+    padding-right:0;
+    button {
+      left: 0;
+      right:auto;
+    }
+  }
+  .top-switch-handler {
+    position: absolute;
+    left:50px;
+    right:auto;
+  }
+}
+
+
+

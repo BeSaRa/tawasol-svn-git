@@ -1,0 +1,631 @@
+<div background-directive="short" color="blue" flex class="page-content">
+    <div layout="column" class="content">
+        <div layout="row" layout-align="start center" class="page-header nmb padding-header small">
+            <span>{{lang.menu_item_search_module_incoming}}</span>
+            <md-button ng-if="ctrl.selectedTab===1" ng-click="ctrl.reloadSearchedIncomingDocument()"
+                       class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+        </div>
+
+        <form class="white-bg" name="searchIncomingForm" id="searchIncomingForm" flex layout="column"
+              autocomplete="off" enter-submit-directive="btn_SearchIncoming">
+            <md-tabs class="content white-bg" md-selected="ctrl.selectedTab">
+                <!-- EDIT/NEW SEARCH TAB -->
+                <md-tab label="{{lang.search_module_edit_or_new_search}}" md-on-select="ctrl.setCurrentTab('ens')">
+                    <md-content scroll-directive class="white-bg">
+                        <div layout="column">
+                            <div layout="row" flex class="p020">
+                                <!-- Subject -->
+                                <md-input-container flex>
+                                    <label for="docSubject">{{lang.search_module_subject}}</label>
+                                    <input name="docSubject" id="docSubject"
+                                           ng-required="ctrl.dynamicRequired('docSubject','search_module_subject')"
+                                           ng-model="ctrl.searchIncoming.docSubject">
+                                    <div ng-messages="searchIncomingForm.docSubject.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
+                                <!-- Serial -->
+                                <md-input-container flex>
+                                    <label for="docSerial">{{lang.search_module_serial}}</label>
+                                    <input name="docSerial" id="docSerial"
+                                           custom-validate-directive="{{ctrl.dynamicType('docSerial','type')}}"
+                                           ng-required="{{ctrl.dynamicRequired('docSerial','search_module_serial')}}"
+                                           ng-model="ctrl.searchIncoming.docSerial">
+                                    <div ng-messages="searchIncomingForm.docSerial.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                        <div ng-message="{{ctrl.dynamicType('docSerial','type')}}">
+                                            {{ctrl.dynamicType('docSerial','message')}}
+                                        </div>
+                                    </div>
+                                </md-input-container>
+                                <!-- Year -->
+                                <md-input-container flex>
+                                    <label for="year">{{lang.search_module_year}}</label>
+                                    <md-select name="year" id="year"
+                                               ng-change="ctrl.setSelectedYear(searchIncomingForm, $event)"
+                                               ng-required="ctrl.dynamicRequired('year','search_module_year')"
+                                               ng-model="ctrl.searchIncoming.year">
+                                        <md-option ng-value="year"
+                                                   ng-repeat="year in ctrl.years() track by $index">
+                                            {{year}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="searchIncomingForm.year.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout="row" flex class="p020">
+                                <!-- Security Levels -->
+                                <md-input-container flex>
+                                    <label for="securityLevel">{{lang.security_level}}</label>
+                                    <!--<md-select multiple
+                                               ng-model-options="{trackBy: '$value.id'}"
+                                               ng-required="ctrl.dynamicRequired('securityLevel','security_levels')"
+                                               name="securityLevel" id="securityLevel"
+                                               ng-model="ctrl.searchIncoming.securityLevel">
+                                        <md-option ng-value="securityLevel"
+                                                   ng-repeat="securityLevel in ctrl.securityLevels track by $index">
+                                            {{securityLevel.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>-->
+                                    <md-select ng-required="ctrl.dynamicRequired('securityLevel','security_levels')"
+                                               name="securityLevel" id="securityLevel"
+                                               ng-model="ctrl.searchOutgoing.props.securityLevel">
+                                        <md-option ng-value="securityLevel.lookupKey"
+                                                   ng-repeat="securityLevel in ctrl.securityLevels track by $index">
+                                            {{securityLevel.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="searchIncomingForm.securityLevel.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
+                                <!-- Main Organization Units -->
+                                <md-input-container flex>
+                                    <label for="ou">{{lang.search_module_main_organization_units}}</label>
+                                    <md-select name="ou" id="ou" ng-model="ctrl.searchIncoming.ou"
+                                               ng-required="ctrl.dynamicRequired('ou','search_module_main_organization_units')">
+                                        <md-option ng-value="organization.id"
+                                                   ng-repeat="organization in ctrl.organizations track by $index">
+                                            {{organization.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="searchIncomingForm.ou.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
+                                <!-- Correspondence Site Type -->
+                                <!--<md-input-container flex>
+                                    <label for="siteType">{{lang.search_module_correspondence_site_types}}</label>
+                                    <md-select name="siteType" id="siteType"
+                                               ng-required="ctrl.dynamicRequired('siteType','search_module_correspondence_site_types')"
+                                               ng-change="ctrl.getMainCorrespondenceSites($event)"
+                                               ng-model="ctrl.searchIncoming.siteType">
+                                        <md-option ng-value="correspondenceSiteType.id"
+                                                   ng-repeat="correspondenceSiteType in ctrl.correspondenceSiteTypes track by $index">
+                                            {{correspondenceSiteType.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="searchIncomingForm.siteType.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>-->
+
+                                <!-- Incoming Date -->
+                                <fieldset flex layout="column" class="search-fieldset">
+                                    <legend class="md-accent">{{lang.incoming_date}}</legend>
+                                    <div layout="row">
+                                        <!-- Incoming Date From -->
+                                        <md-input-container flex>
+                                            <label for="docDateFrom">{{lang.search_module_start_date}}</label>
+                                            <md-datepicker id="docDateFrom" name="docDateFrom"
+                                                           ng-change="ctrl.setMinMaxDocDate('picker',$event)"
+                                                           ng-required="ctrl.dynamicRequired('docDateFrom','incoming_date_from')"
+                                                           ng-model="ctrl.searchIncoming.docDateFrom"
+                                                           md-max-date="ctrl.maxDocDate"
+                                                           md-min-date="ctrl.minDateForFrom"
+                                                           ng-disabled="!ctrl.searchIncoming.year"
+                                            ></md-datepicker>
+                                            <div ng-messages="searchIncomingForm.docDateFrom.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
+                                        </md-input-container>
+                                        <!-- Incoming Date To -->
+                                        <md-input-container flex>
+                                            <label for="docDateTo">{{lang.search_module_end_date}}</label>
+                                            <md-datepicker id="docDateTo" name="docDateTo"
+                                                           ng-change="ctrl.setMinMaxDocDate('picker',$event)"
+                                                           ng-required="ctrl.dynamicRequired('docDateTo','incoming_date_to')"
+                                                           ng-model="ctrl.searchIncoming.docDateTo"
+                                                           md-max-date="ctrl.maxDateForTo"
+                                                           md-min-date="ctrl.minDocDate"
+                                                           ng-disabled="!ctrl.searchIncoming.year"
+                                            ></md-datepicker>
+                                            <div ng-messages="searchIncomingForm.docDateTo.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <!--<div layout="row" flex class="p020">
+                                &lt;!&ndash; Main Correspondence Sites &ndash;&gt;
+                                <md-input-container flex>
+                                    <label for="mainSiteId">{{lang.search_module_main_correspondence_sites}}</label>
+                                    <md-select name="mainSiteId" id="mainSiteId"
+                                               ng-required="ctrl.dynamicRequired('mainSiteId','search_module_main_correspondence_sites')"
+                                               ng-change="ctrl.getSubCorrespondenceSites($event)"
+                                               ng-disabled="!ctrl.searchIncoming.siteType"
+                                               ng-model="ctrl.searchIncoming.mainSiteId">
+                                        <md-option ng-value="mainCorrespondenceSite"
+                                                   ng-repeat="mainCorrespondenceSite in ctrl.mainCorrespondenceSites track by $index">
+                                            {{mainCorrespondenceSite.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="searchIncomingForm.mainSiteId.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
+                                &lt;!&ndash; Sub Correspondence Sites &ndash;&gt;
+                                <md-input-container flex>
+                                    <label for="subSiteId">{{lang.search_module_sub_correspondence_sites}}</label>
+                                    <md-select name="subSiteId" id="subSiteId"
+                                               ng-required="ctrl.dynamicRequired('subSiteId','search_module_sub_correspondence_sites')"
+                                               ng-disabled="!ctrl.searchIncoming.siteType || !ctrl.searchIncoming.mainSiteId"
+                                               ng-model="ctrl.searchIncoming.subSiteId">
+                                        <md-option ng-value="subCorrespondenceSite"
+                                                   ng-repeat="subCorrespondenceSite in ctrl.subCorrespondenceSites track by $index">
+                                            {{subCorrespondenceSite.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="searchIncomingForm.subSiteId.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
+                                &lt;!&ndash; Creation Date &ndash;&gt;
+                                <fieldset flex layout="column" class="search-fieldset">
+                                    <legend class="md-accent">{{lang.creation_date}}</legend>
+                                    <div layout="row">
+                                        &lt;!&ndash; Creation Date From&ndash;&gt;
+                                        <md-input-container flex>
+                                            <label for="createdFrom">{{lang.search_module_start_date}}</label>
+                                            <md-datepicker id="createdFrom" name="createdFrom"
+                                                           ng-required="ctrl.dynamicRequired('createdFrom','search_module_creation_start_date')"
+                                                           ng-model="ctrl.searchIncoming.createdFrom"
+                                                           md-max-date="ctrl.searchIncoming.createdTo"
+                                            ></md-datepicker>
+                                            <div ng-messages="searchIncomingForm.createdFrom.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
+                                        </md-input-container>
+                                        &lt;!&ndash; Creation Date To&ndash;&gt;
+                                        <md-input-container flex>
+                                            <label for="createdTo">{{lang.search_module_end_date}}</label>
+                                            <md-datepicker id="createdTo" name="createdTo"
+                                                           ng-required="ctrl.dynamicRequired('createdTo','search_module_creation_end_date')"
+                                                           ng-model="ctrl.searchIncoming.createdTo"
+                                                           md-min-date="ctrl.searchIncoming.createdFrom"
+                                            ></md-datepicker>
+                                            <div ng-messages="searchIncomingForm.createdTo.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                </fieldset>
+                            </div>-->
+                            <div layout="column" id="advanceSearch" flex class="box-shadow-raised">
+                            <span layout="row" id="span_toggleAdvanceSearch" class="cursor-pointer" flex
+                                  ng-click="ctrl.toggleAdvancedSearch()">
+                                <div flex>{{lang.search_module_advanced_search}}</div>
+                                <md-icon
+                                        md-svg-icon="{{(ctrl.showAdvancedSearch) ? 'arrow-up-bold-circle-outline' : 'arrow-down-bold-circle-outline'}}"></md-icon>
+                            </span>
+                                <div layout="row" flex class="animate" ng-if="ctrl.showAdvancedSearch">
+                                    <div layout="column" flex>
+                                        <div layout="row" flex class="p020">
+                                            <!-- Document Type -->
+                                            <md-input-container flex>
+                                                <label for="docType">{{lang.label_document_type}}</label>
+                                                <md-select name="docType" id="docType"
+                                                           ng-required="ctrl.dynamicRequired('docType','document_type')"
+                                                           ng-model="ctrl.searchIncoming.docType">
+                                                    <md-option ng-value="documentType.lookupKey"
+                                                               ng-repeat="documentType in ctrl.documentTypes track by $index">
+                                                        {{documentType.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="searchIncomingForm.docType.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                            <!-- Document Status -->
+                                            <md-input-container flex>
+                                                <label for="status">{{lang.menu_item_document_status}}</label>
+                                                <md-select name="status" id="status"
+                                                           ng-required="ctrl.dynamicRequired('status','document_status')"
+                                                           ng-model="ctrl.searchIncoming.docStatus">
+                                                    <md-option ng-value="docStatus.lookupKey"
+                                                               ng-repeat="docStatus in ctrl.docStatuses track by $index">
+                                                        {{docStatus.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="searchIncomingForm.docStatus.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                            <!-- Document File -->
+                                            <md-input-container flex>
+                                                <label for="fileId">{{lang.document_file}}</label>
+                                                <md-select name="fileId" id="fileId"
+                                                           ng-required="ctrl.dynamicRequired('fileId','document_file')"
+                                                           ng-model="ctrl.searchIncoming.fileId">
+                                                    <md-option ng-value="documentFile.lookupKey"
+                                                               ng-repeat="documentFile in ctrl.documentFiles track by $index">
+                                                        {{documentFile.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="searchIncomingForm.fileId.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                            <!-- Document Number -->
+                                            <md-input-container flex>
+                                                <label for="refDocNumber">{{lang.search_module_document_number}}</label>
+                                                <input name="refDocNumber" id="refDocNumber"
+                                                       custom-validate-directive="{{ctrl.dynamicType('refDocNumber','type')}}"
+                                                       ng-required="ctrl.dynamicRequired('fileCode','search_module_document_number')"
+                                                       ng-model="ctrl.searchIncoming.fileCode">
+                                                <div ng-messages="searchIncomingForm.refDocNumber.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                    <div ng-message="{{ctrl.dynamicType('refDocNumber','type')}}">
+                                                        {{ctrl.dynamicType('refDocNumber','message')}}
+                                                    </div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                        <div layout="row" flex class="p020">
+                                            <!-- File Code -->
+                                            <md-input-container flex>
+                                                <label for="fileCode">{{lang.search_module_file_code}}</label>
+                                                <input name="fileCode" id="fileCode"
+                                                       custom-validate-directive="{{ctrl.dynamicType('fileCode','type')}}"
+                                                       ng-required="ctrl.dynamicRequired('fileCode','search_module_file_code')"
+                                                       ng-model="ctrl.searchIncoming.fileCode">
+                                                <div ng-messages="searchIncomingForm.fileCode.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                    <div ng-message="{{ctrl.dynamicType('fileCode','type')}}">
+                                                        {{ctrl.dynamicType('fileCode','message')}}
+                                                    </div>
+                                                </div>
+                                            </md-input-container>
+                                            <!-- File Number -->
+                                            <md-input-container flex>
+                                                <label for="fileSerial">{{lang.file_serial}}</label>
+                                                <input name="fileSerial" id="fileSerial"
+                                                       custom-validate-directive="{{ctrl.dynamicType('fileSerial','type')}}"
+                                                       ng-required="ctrl.dynamicRequired('fileSerial','file_serial')"
+                                                       ng-model="ctrl.searchIncoming.fileSerial">
+                                                <div ng-messages="searchIncomingForm.fileSerial.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                    <div ng-message="{{ctrl.dynamicType('fileSerial','type')}}">
+                                                        {{ctrl.dynamicType('fileSerial','message')}}
+                                                    </div>
+                                                </div>
+                                            </md-input-container>
+                                            <!-- Comments -->
+                                            <md-input-container flex>
+                                                <label for="comments">{{lang.comments}}</label>
+                                                <input name="comments" id="comments"
+                                                       ng-required="{{ctrl.dynamicRequired('comments', 'comments')}}"
+                                                       ng-model="ctrl.searchIncoming.docNotes">
+                                                <div ng-messages="searchIncomingForm.docNotes.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                            <!-- Priority Levels -->
+                                            <md-input-container flex>
+                                                <label for="priorityLevel">{{lang.priority_level}}</label>
+                                                <md-select name="priorityLevel" id="priorityLevel"
+                                                           ng-required="ctrl.dynamicRequired('priorityLevel','priority_level')"
+                                                           ng-model="ctrl.searchIncoming.priorityLevel">
+                                                    <md-option ng-value="priorityLevel.lookupKey"
+                                                               ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
+                                                        {{priorityLevel.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="searchIncomingForm.priorityLevel.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                        <div layout="row" flex class="p020">
+                                            <!-- Main Classification -->
+                                            <md-input-container flex>
+                                                <label for="mainClassification">{{lang.search_module_main_classifications}}</label>
+                                                <md-select name="mainClassification" id="mainClassification"
+                                                           ng-change="ctrl.getSubClassifications(searchIncomingForm, $event)"
+                                                           ng-required="ctrl.dynamicRequired('mainClassification','search_module_main_classifications')"
+                                                           ng-model="ctrl.searchIncoming.mainClassification">
+                                                    <md-option ng-value="mainClassification.id"
+                                                               ng-repeat="mainClassification in ctrl.mainClassifications track by $index">
+                                                        {{mainClassification.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="searchIncomingForm.mainClassification.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                            <!-- Sub Classification -->
+                                            <md-input-container flex>
+                                                <label for="subClassification">{{lang.search_module_sub_classifications}}</label>
+                                                <md-select name="subClassification" id="subClassification"
+                                                           ng-disabled="!ctrl.searchIncoming.mainClassification"
+                                                           ng-required="ctrl.dynamicRequired('subClassification','search_module_sub_classifications')"
+                                                           ng-model="ctrl.searchIncoming.subClassification">
+                                                    <md-option ng-value="subClassification.id"
+                                                               ng-repeat="subClassification in ctrl.subClassifications track by $index">
+                                                        {{subClassification.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="searchIncomingForm.subClassification.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                            <!-- Follow Up Status -->
+                                            <md-input-container flex class="hidden">
+                                                <label for="followupStatus">{{lang.search_module_follow_up_status}}</label>
+                                                <!--<md-select multiple
+                                                           ng-required="ctrl.dynamicRequired('followupStatus','search_module_follow_up_status')"
+                                                           ng-model-options="{trackBy: '$value.id'}"
+                                                           name="followupStatus" id="followupStatus"
+                                                           ng-model="ctrl.searchIncoming.followupStatus">
+                                                    <md-option ng-value="followupStatus"
+                                                               ng-repeat="followupStatus in ctrl.followupStatuses track by $index">
+                                                        {{followupStatus.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>-->
+                                                <md-select
+                                                           ng-required="ctrl.dynamicRequired('followupStatus','search_module_follow_up_status')"
+                                                           name="followupStatus" id="followupStatus"
+                                                           ng-model="ctrl.searchIncoming.followupStatus">
+                                                    <md-option ng-value="followupStatus.id"
+                                                               ng-repeat="followupStatus in ctrl.followupStatuses track by $index">
+                                                        {{followupStatus.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="searchIncomingForm.followupStatus.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                            <!-- Approved By -->
+                                            <md-input-container flex class="not-found hidden">
+                                                <label for="approvedBy">{{lang.search_module_approved_by}}</label>
+                                                <md-select multiple
+                                                           ng-required="ctrl.dynamicRequired('approvedBy','search_module_approved_by')"
+                                                           ng-model-options="{trackBy: '$value.id'}"
+                                                           name="approvedBy" id="approvedBy"
+                                                           ng-model="ctrl.searchIncoming.approvedBy">
+                                                    <md-option ng-value="approvedBy"
+                                                               ng-repeat="approvedBy in ctrl.approvers track by $index">
+                                                        {{approvedBy.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="searchIncomingForm.approvedBy.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                </div>
+                                            </md-input-container>
+                                            <!-- Creation Date -->
+                                            <fieldset flex layout="column" class="search-fieldset">
+                                                <legend class="md-accent">{{lang.creation_date}}</legend>
+                                                <div layout="row">
+                                                    <!-- Creation Date From-->
+                                                    <md-input-container flex>
+                                                        <label for="createdFrom">{{lang.search_module_start_date}}</label>
+                                                        <md-datepicker id="createdFrom" name="createdFrom"
+                                                                       ng-required="ctrl.dynamicRequired('createdFrom','search_module_creation_start_date')"
+                                                                       ng-model="ctrl.searchIncoming.createdFrom"
+                                                                       md-max-date="ctrl.searchIncoming.createdTo"
+                                                        ></md-datepicker>
+                                                        <div ng-messages="searchIncomingForm.createdFrom.$error">
+                                                            <div ng-message="required">{{lang.field_required}}</div>
+                                                        </div>
+                                                    </md-input-container>
+                                                    <!-- Creation Date To-->
+                                                    <md-input-container flex>
+                                                        <label for="createdTo">{{lang.search_module_end_date}}</label>
+                                                        <md-datepicker id="createdTo" name="createdTo"
+                                                                       ng-required="ctrl.dynamicRequired('createdTo','search_module_creation_end_date')"
+                                                                       ng-model="ctrl.searchIncoming.createdTo"
+                                                                       md-min-date="ctrl.searchIncoming.createdFrom"
+                                                        ></md-datepicker>
+                                                        <div ng-messages="searchIncomingForm.createdTo.$error">
+                                                            <div ng-message="required">{{lang.field_required}}</div>
+                                                        </div>
+                                                    </md-input-container>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                       <!-- <div layout="row" flex class="p020">
+                                            &lt;!&ndash; Incoming Date &ndash;&gt;
+                                            <fieldset flex layout="column" class="search-fieldset">
+                                                <legend class="md-accent">{{lang.creation_date}}</legend>
+                                                <div layout="row">
+                                                    &lt;!&ndash; Creation Date &ndash;&gt;
+                                                    <md-input-container flex>
+                                                        <label for="createdFrom">{{lang.search_module_start_date}}</label>
+                                                        <md-datepicker id="createdFrom" name="createdFrom"
+                                                                       ng-required="ctrl.dynamicRequired('createdFrom','search_module_creation_start_date')"
+                                                                       ng-model="ctrl.searchIncoming.createdFrom"
+                                                                       md-max-date="ctrl.searchIncoming.createdTo"
+                                                        ></md-datepicker>
+                                                        <div ng-messages="searchIncomingForm.createdFrom.$error">
+                                                            <div ng-message="required">{{lang.field_required}}</div>
+                                                        </div>
+                                                    </md-input-container>
+                                                    &lt;!&ndash; Creation Date To &ndash;&gt;
+                                                    <md-input-container flex>
+                                                        <label for="createdTo">{{lang.search_module_end_date}}</label>
+                                                        <md-datepicker id="createdTo" name="createdTo"
+                                                                       ng-required="ctrl.dynamicRequired('createdTo','search_module_creation_end_date')"
+                                                                       ng-model="ctrl.searchIncoming.createdTo"
+                                                                       md-min-date="ctrl.searchIncoming.createdFrom"
+                                                        ></md-datepicker>
+                                                        <div ng-messages="searchIncomingForm.createdTo.$error">
+                                                            <div ng-message="required">{{lang.field_required}}</div>
+                                                        </div>
+                                                    </md-input-container>
+                                                </div>
+                                            </fieldset>
+                                            <span flex></span>
+                                            <span flex></span>
+                                        </div>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </md-content>
+                </md-tab>
+                <md-tab label="{{lang.search_module_search_results}}" ng-if="ctrl.showResults"
+                        md-on-select="ctrl.setCurrentTab('sr')">
+                    <md-table-container flex scroll-directive>
+                        <table md-table md-row-select multiple ng-model="ctrl.selectedSearchedIncomingDocuments"
+                               md-progress="ctrl.progress">
+                            <thead md-head md-order="ctrl.grid.order">
+                            <tr md-row>
+                                <th colspan="{{ctrl.selectedSearchedIncomingDocuments.length > 1 ? 7 : 8}}"
+                                    ng-if="ctrl.selectedSearchedIncomingDocuments.length" md-column>
+                                    <div layout="row" layout-align="start center">
+                                        <span>{{ctrl.selectedSearchedIncomingDocuments.length}} {{lang.items_selected}} </span>
+                                        <span flex></span>
+                                    </div>
+                                </th>
+                                <th md-column>
+
+                                </th>
+                                <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
+                                    md-order-by="docSubject">
+                                    <span>{{lang.subject}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
+                                    md-order-by="priorityLevel">
+                                    <span>{{lang.priority_level}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
+                                    md-order-by="securityLevel">
+                                    <span>{{lang.security_level}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
+                                    md-order-by="docType">
+                                    <span>{{lang.label_document_type}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
+                                    md-order-by="createdBy">
+                                    <span>{{lang.creator}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
+                                    md-order-by="createdOn">
+                                    <span>{{lang.created_on}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length && ctrl.selectedSearchedIncomingDocuments.length < 2"
+                                    md-column>
+                                    <span></span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row md-select="searchedIncomingDocument" grid-right-click-directive
+                                model="searchedIncomingDocument"
+                                selected-length="{{ctrl.selectedSearchedIncomingDocuments.length ? ctrl.selectedSearchedIncomingDocuments.length : 0}}"
+                                ng-repeat="searchedIncomingDocument in ctrl.searchedIncomingDocuments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                <td md-cell class="indicator-td">
+                                    <span flex ng-class="{'indicator-content': searchedIncomingDocument.securityLevelIndicator}">
+                                        <md-icon ng-if="searchedIncomingDocument.securityLevelIndicator"
+                                                 class="{{searchedIncomingDocument.securityLevelIndicator.class}}"
+                                                 md-svg-icon="{{searchedIncomingDocument.securityLevelIndicator.icon}}"
+                                                 tooltip="{{lang[searchedIncomingDocument.securityLevelIndicator.tooltip].change({name: searchedIncomingDocument.securityLevel.getTranslatedName()})}}"
+                                        ></md-icon>
+                                    </span>
+                                    <span flex ng-class="{'indicator-content': searchedIncomingDocument.priorityLevelIndicator}">
+                                        <md-icon ng-if="searchedIncomingDocument.priorityLevelIndicator"
+                                                 class="{{searchedIncomingDocument.priorityLevelIndicator.class}}"
+                                                 md-svg-icon="{{searchedIncomingDocument.priorityLevelIndicator.icon}}"
+                                                 tooltip="{{lang[searchedIncomingDocument.priorityLevelIndicator.tooltip].change({name: searchedIncomingDocument.priorityLevel.getTranslatedName()})}}"
+                                        ></md-icon>
+                                    </span>
+                                    <span flex ng-class="{'indicator-content': searchedIncomingDocument.attachmentsIndicator}">
+                                        <md-icon ng-if="searchedIncomingDocument.attachmentsIndicator"
+                                                 class="{{searchedIncomingDocument.attachmentsIndicator.class}}"
+                                                 md-svg-icon="{{searchedIncomingDocument.attachmentsIndicator.icon}}"
+                                                 tooltip="{{lang[searchedIncomingDocument.attachmentsIndicator.tooltip]}}"
+                                        ></md-icon>
+                                    </span>
+                                    <span flex ng-class="{'indicator-content': searchedIncomingDocument.linkedDocsIndicator}">
+                                        <md-icon ng-if="searchedIncomingDocument.linkedDocsIndicator"
+                                                 class="{{searchedIncomingDocument.linkedDocsIndicator.class}}"
+                                                 md-svg-icon="{{searchedIncomingDocument.linkedDocsIndicator.icon}}"
+                                                 tooltip="{{lang[searchedIncomingDocument.linkedDocsIndicator.tooltip]}}"
+                                        ></md-icon>
+                                    </span>
+                                    <!--<span flex class="indicator-badge" ng-class="{'indicator-content': searchedIncomingDocument.tagsIndicator}">
+                                        <span ng-if="searchedIncomingDocument.tagsIndicator"
+                                              tooltip="{{lang[searchedIncomingDocument.tagsIndicator.tooltip]}}"
+                                              class="{{searchedIncomingDocument.tagsIndicator.class}}">
+                                            {{searchedIncomingDocument.tagsIndicator.text}}
+                                        </span>
+                                    </span>-->
+                                </td>
+                                <td md-cell class="td-data">
+                                    <a href="" ng-if="searchedIncomingDocument.hasContent()" class="view-doc"
+                                       ng-click="ctrl.viewDocument(searchedIncomingDocument, $event)">{{searchedIncomingDocument.docSubject}}</a>
+                                    <span ng-if="!searchedIncomingDocument.hasContent()">{{searchedIncomingDocument.docSubject}}</span>
+                                </td>
+                                <td md-cell>{{searchedIncomingDocument.priorityLevel.getTranslatedName()}}</td>
+                                <td md-cell>{{searchedIncomingDocument.securityLevel.getTranslatedName()}}</td>
+                                <td md-cell>{{lang[searchedIncomingDocument.getInfo().documentClass +"_document_class"]}}</td>
+                                <td md-cell>{{searchedIncomingDocument.getTranslatedCreator()}}</td>
+                                <td md-cell>{{searchedIncomingDocument.createdOn}}</td>
+                                <td md-cell ng-if="ctrl.selectedSearchedIncomingDocuments.length < 2">
+                                    <div layout-align="start center" ng-if="!ctrl.selectedSearchedIncomingDocuments.length
+                                                  || ctrl.selectedSearchedIncomingDocuments.length===1 && ctrl.selectedSearchedIncomingDocuments[0].id === searchedIncomingDocument.id">
+                                        <grid-actions-directive menu-direction="horizontal"
+                                                                grid-actions="ctrl.gridActions"
+                                                                model="searchedIncomingDocument"
+                                                                shortcut="true">
+                                        </grid-actions-directive>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.grid.limitOptions"
+                                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                md-total="{{ctrl.searchedIncomingDocuments.length}}" md-page-select>
+                        </md-table-pagination>
+                    </md-table-container>
+                </md-tab>
+            </md-tabs>
+
+            <div layout="row" ng-if="ctrl.selectedTab===0" layout-align="start center" class="p20">
+                <!--ng-class="{'static-button':ctrl.showAdvancedSearch }"-->
+                <md-button class="md-raised" ng-disabled="searchIncomingForm.$invalid"
+                           ng-click="ctrl.search($event)" id="btn_SearchIncoming">{{lang.search}}
+                </md-button>
+                <md-button class="md-raised"
+                           ng-click="ctrl.resetFilters(searchIncomingForm, $event)">
+                    {{lang.search_module_reset_filters}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised hidden"
+                           ng-click="ctrl.saveSearch(searchIncomingForm, $event)">
+                    {{lang.search_module_save_search}}
+                </md-button>
+            </div>
+        </form>
+
+    </div>
+</div>

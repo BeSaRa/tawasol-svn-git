@@ -1,0 +1,122 @@
+<!-- start of view -->
+<div background-directive="tall" flex class="page-content">
+    <div layout="column" class="content">
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_manage_workflow_group}}</span>
+            <md-button ng-click="ctrl.openAddWorkflowGroupDialog($event)" class="md-icon-button"
+                       tooltip="{{lang.admin_add_new_workflow_group}}">
+                <md-icon md-svg-icon="plus"></md-icon>
+            </md-button>
+            <md-button ng-click="ctrl.reloadWorkflowGroups()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div><!-- page-header -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <md-table-container flex scroll-directive>
+                            <table md-table
+                                   md-row-select="true"
+                                   multiple="true"
+                                   ng-model="ctrl.selectedWorkflowGroups"
+                                   md-progress="ctrl.progress">
+                                <thead md-head md-order="ctrl.grid.order">
+                                <tr md-row>
+                                    <th colspan="5" class="table-selector-header"
+                                        ng-if="ctrl.selectedWorkflowGroups.length" md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedWorkflowGroups.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+                                            <table-status-directive
+                                                    when-close="ctrl.changeBulkStatusWorkflowGroups"></table-status-directive>
+                                            <md-button class="md-icon-button"
+                                                       ng-click="ctrl.removeWorkflowGroups()">
+                                                <md-icon md-svg-icon="delete"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </th>
+
+                                    <th ng-if="!ctrl.selectedWorkflowGroups.length" md-column md-order-by="arName">
+                                        <span>{{lang.arabic_name}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedWorkflowGroups.length" md-column md-order-by="enName">
+                                        <span>{{lang.english_name}}</span></th>
+                                    <th ng-if="!ctrl.selectedWorkflowGroups.length" md-column md-order-by="status">
+                                        <span>{{lang.status}}</span></th>
+                                    <!--<th ng-if="!ctrl.selectedWorkflowGroups.length" md-column md-order-by="global">
+                                        <span>{{lang.global}}</span></th>-->
+                                    <th ng-if="!ctrl.selectedWorkflowGroups.length" md-column md-order-by="">
+                                        <span>{{lang.group_members}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedWorkflowGroups.length" md-column>{{lang.action}}</th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row
+                                    ng-if="workflowGroup.global"
+                                    md-select="workflowGroup"
+                                    ng-repeat="workflowGroup in ctrl.workflowGroups  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
+                                    <td md-cell>{{workflowGroup.arName}}</td>
+                                    <td md-cell>{{workflowGroup.enName}}</td>
+
+                                    <td md-cell>
+                                        <md-switch ng-model="workflowGroup.status"
+                                                   title="{{workflowGroup.getTranslatedStatus()}}"
+                                                   ng-change="ctrl.changeStatusWorkflowGroup(workflowGroup)"
+                                                   aria-label="Workflow Group Status"></md-switch>
+                                    </td>
+
+                                    <!--<td md-cell>
+                                        <md-switch ng-model="workflowGroup.global"
+                                                   title="{{workflowGroup.getTranslatedGlobal()}}"
+                                                   ng-change="ctrl.changeGlobalWorkflowGroup(workflowGroup)"
+                                                   aria-label="Workflow Group Global"></md-switch>
+                                    </td>-->
+
+                                    <td md-cell
+                                        ng-if="workflowGroup.groupMembers.length==1 || workflowGroup.groupMembers.length==0">
+                                        {{workflowGroup.getFirstMember().getTranslatedName()}}
+                                    </td>
+
+                                    <td md-cell ng-if="workflowGroup.groupMembers.length>1">
+                                        <md-button tooltip="{{$parent.lang.group_members}}"
+                                                   ng-click="ctrl.openPopupWorkflowGroupMembers(workflowGroup.groupMembers, $event )"
+                                                   aria-label="Show Group Members"
+                                                   class="md-icon-button md-raised">
+                                            <md-icon md-svg-icon="coins"></md-icon>
+                                        </md-button>
+                                    </td>
+
+                                    <td md-cell>
+                                        <div flex layout="row" layout-align="start center">
+                                            <md-button class="md-icon-button" title="{{lang.edit}}"
+                                                       ng-click="ctrl.openEditWorkflowGroupDialog(workflowGroup, $event)">
+                                                <md-icon md-svg-icon="pencil"></md-icon>
+                                            </md-button>
+                                            <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                       ng-click="ctrl.removeWorkflowGroup(workflowGroup, $event)">
+                                                <md-icon md-svg-icon="delete"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.workflowGroups.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div><!-- page-content-->
+    </div>
+</div>
+<!-- end of view -->

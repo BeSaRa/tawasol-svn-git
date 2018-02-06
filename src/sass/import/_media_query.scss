@@ -1,0 +1,6 @@
+// small media query
+@media (max-width: 959px) {
+  #content-container.sidebar-open, #content-container {
+    padding: 0 !important;
+  }
+}

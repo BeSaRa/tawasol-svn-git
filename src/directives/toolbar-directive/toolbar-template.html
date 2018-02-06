@@ -1,0 +1,54 @@
+<md-toolbar id="main-toolbar" ng-class="{'xs':mediaSize('xs')}" class="md-whiteframe-1dp md-menu-toolbar">
+    <div layout="row" layout-xs="column" layout-align-xs="space-between stretch" flex layout-align="start center">
+        <!-- Start toolbar-left-side-->
+        <div layout="row" layout-align="start center" flex class="toolbar-left-side"
+             ng-class="{'toolbar-border-bottom relative':toolbar.sizeXS()}">
+            <toolbar-search-directive flex hide-gt-xs ng-if="toolbar.quickSearchPermission"></toolbar-search-directive>
+            <md-button hide-sm hide-xs ng-click="toolbar.toggleSidebarLocked('main-sidebar')"
+                       class="md-icon-button m015">
+                <md-icon md-svg-icon="menu"></md-icon>
+            </md-button>
+            <md-button hide-gt-sm hide-xs ng-click="toolbar.toggleSidebar('main-sidebar')" class="md-icon-button m015">
+                <md-icon md-svg-icon="menu"></md-icon>
+            </md-button>
+            <div class="separator"></div>
+            <user-menu-directive flex hide-gt-xs></user-menu-directive>
+            <div class="separator"></div>
+            <!--<md-button class="md-icon-button m015">-->
+            <!--<md-icon md-svg-icon="star" class="star-yellow"></md-icon>-->
+            <!--</md-button>-->
+            <md-progress-circular md-mode="indeterminate" ng-if="toolbar.loadingService.loading"></md-progress-circular>
+        </div>
+        <!-- End toolbar-left-side-->
+        <!-- Start toolbar-right-side-->
+        <div layout="row" layout-align="start center" layout-align-xs="space-around center" class="toolbar-right-side">
+            <md-button hide-gt-xs ng-click="toolbar.toggleSidebar('main-sidebar')" class="md-icon-button m015">
+                <md-icon md-svg-icon="menu"></md-icon>
+            </md-button>
+            <toolbar-search-directive flex hide-xs
+                                      ng-if="toolbar.employeeService.hasPermissionTo('quick_search')"></toolbar-search-directive>
+            <div class="separator"></div>
+            <span flex hide-gt-xs></span>
+            <user-menu-directive hide-xs></user-menu-directive>
+            <!--<div class="separator"></div>
+            <tasks-notify-directive></tasks-notify-directive>-->
+            <div class="separator"></div>
+            <documents-notify-directive></documents-notify-directive>
+
+            <private-announcement-directive></private-announcement-directive>
+
+            <md-button ng-click="toolbar.openHelp()" class="md-icon-button">
+                <md-icon md-svg-icon="help"></md-icon>
+            </md-button>
+
+            <div hide-xs class="separator"></div>
+            <language-switcher-directive></language-switcher-directive>
+            <div ng-if="toolbar.themeService.themes.length" class="separator"></div>
+            <md-button ng-if="toolbar.themeService.themes.length" ng-click="toolbar.toggleSidebar('theme-sidebar')"
+                       class="md-icon-button m015">
+                <md-icon md-svg-icon="format-list-bulleted"></md-icon>
+            </md-button>
+        </div>
+        <!-- End toolbar-right-side-->
+    </div>
+</md-toolbar>

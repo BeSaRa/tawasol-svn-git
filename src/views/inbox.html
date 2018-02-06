@@ -1,0 +1,127 @@
+<!-- start of view -->
+<div background-directive="tall" flex class="page-content">
+    <div layout="column" class="content">
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_inbox}}</span>
+            <md-button ng-click="" class="md-icon-button"
+                       tooltip="{{lang.add}}">
+                <md-icon md-svg-icon="plus"></md-icon>
+            </md-button>
+            <md-button ng-click="ctrl.reloadEmails()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div><!-- page-header -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+
+                        <md-table-container flex scroll-directive>
+                            <table md-table md-row-select="true"
+                                   multiple="true"
+                                   ng-model="ctrl.selectedEmails"
+                                   md-progress="ctrl.progress">
+                                <thead md-head md-order="ctrl.grid.order">
+                                <tr md-row>
+                                    <th colspan="9" class="table-selector-header"
+                                        ng-if="ctrl.selectedEmails.length" md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedEmails.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+                                            <table-status-directive
+                                                    when-close="" ng-hide="true"></table-status-directive>
+                                            <md-button class="md-icon-button"
+                                                       ng-click="ctrl.removeInboxEmailBulkFrmCtrl()">
+                                                <md-icon md-svg-icon="delete"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedEmails.length" md-column md-order-by="subject"><span>{{lang.subject}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedEmails.length" md-column md-order-by="serial"><span>{{lang.label_serial}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedEmails.length" md-column md-order-by="received"><span>{{lang.received}}</span>
+                                    </th>
+                                    <!-- <th ng-if="!ctrl.selectedJobTitles.length" md-column md-order-by=""><span>{{lang.label_document_class}}</span>-->
+                                    </th>
+                                    <th ng-if="!ctrl.selectedEmails.length" md-column md-order-by="due">
+                                        <span>{{lang.due}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedEmails.length" md-column md-order-by="sender"><span>{{lang.sender}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedEmails.length" md-column md-order-by="mainSite"><span>{{lang.main_site}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedEmails.length" md-column md-order-by="subSite"><span>{{lang.sub_site}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedEmails.length" md-column md-order-by="days">
+                                        <span>{{lang.days}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedEmails.length" md-column md-order-by=""><span></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-select="email" md-row
+                                    ng-repeat="email in ctrl.emails | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    <td md-cell>{{email.subject}}</td>
+                                    <td md-cell>{{email.serial}}</td>
+                                    <td md-cell>
+                                        {{email.received}}
+                                    </td>
+                                    <td md-cell>{{email.due}}</td>
+                                    <td md-cell>{{email.sender}}</td>
+                                    <td md-cell>{{email.mainSite}}</td>
+                                    <td md-cell>{{email.subSite}}</td>
+                                    <td md-cell>{{email.days}}</td>
+                                    <td md-cell>
+                                        <div flex layout="row" layout-align="start center">
+                                            <span class="node-menu">
+                                                <md-menu-bar>
+                                                    <md-menu>
+                                                        <md-button class="md-icon-button" ng-click="$mdMenu.open()">
+                                                        <md-icon md-svg-icon="dots-vertical"></md-icon>
+                                                    </md-button>
+                                                    <md-menu-content width="1">
+                                                        <md-menu-item layout="">
+                                                            <md-button
+                                                                    ng-click="ctrl.removeInboxEmailFrmCtrl(email)">
+                                                                <span layout="row">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                    <span>{{lang.delete}}</span>
+                                                                </span>
+                                                            </md-button>
+                                                        </md-menu-item>
+                                                        <md-menu-item>
+                                                            <md-button
+                                                                    ng-click="ctrl.replyEmailFrmCtrl(email)">
+                                                                <span layout="row">
+                                                                    <md-icon md-svg-icon="pencil"></md-icon>
+                                                                    <span>{{lang.reply}}</span>
+                                                                </span>
+                                                            </md-button>
+                                                        </md-menu-item>
+                                                    </md-menu-content>
+                                                    </md-menu>
+                                                </md-menu-bar>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.grid.limitOptions"
+                                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                md-total="{{ctrl.emails.length}}" md-page-select></md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div><!-- page-content-->
+    </div>
+</div>
+<!-- end of view -->

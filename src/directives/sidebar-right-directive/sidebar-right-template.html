@@ -1,0 +1,12 @@
+<md-sidenav ng-class="{'md-sidenav-right': lang.current === 'en'}" id="theme-sidebar" md-component-id="theme-sidebar">
+    <div scroll-directive>
+        <div class="p20" layout="column">
+            <theme-preview-directive
+                    theme="theme"
+                    click-able="true"
+                    selected="ctrl.themeService.isSelectedTheme(theme)"
+                    ng-repeat="theme in ctrl.themeService.themes|orderBy:'id'">
+            </theme-preview-directive>
+        </div>
+    </div>
+</md-sidenav>

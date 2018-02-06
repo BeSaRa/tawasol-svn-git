@@ -1,0 +1,67 @@
+.gm-separator-horizontal {
+  min-height: 9px;
+  max-height: 9px;
+  height: 9px;
+}
+
+#grid-menu-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+#current-menu-container {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.menu-handler {
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.gm-info {
+  height: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  md-table-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  md-table-container tr {
+    height: 32px !important;
+  }
+  md-table-container tr td.md-cell {
+    border: none !important;
+  }
+}
+
+.grid-action-menu {
+  button {
+    margin: 0 !important
+  }
+}
+
+// Temporary classes to highlight any status of actions
+.action-red {
+  color: red;
+}
+
+.action-yellow {
+  color: #e7d118;
+}
+
+.action-green {
+  color: green;
+}

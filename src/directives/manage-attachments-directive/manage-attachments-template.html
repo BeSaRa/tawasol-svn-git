@@ -1,0 +1,162 @@
+<div flex layout="column">
+    <div flex layout="row">
+        <div ng-if="ctrl.allowUpload">
+            <md-menu-bar>
+                <md-menu>
+                    <md-button class="md-raised" ng-click="$mdMenu.open()">
+                        <md-icon md-svg-icon="attachment"></md-icon>
+                        <span>{{lang.attachment_attachments}}</span>
+                    </md-button>
+                    <md-menu-content width="3">
+                        <md-menu-item>
+                            <md-button id="btnOpenUploadAttachment">
+                                <div>
+                                    <span><md-icon md-svg-icon="upload"></md-icon></span>
+                                    <span>{{lang.attachment_import}}</span>
+                                </div>
+                            </md-button>
+                                <input reset-after-change="true" catch-upload-file-directive="ctrl.uploadAttachmentFile" class="hide-import-file"
+                                       type="file"
+                                       id="upload-attachment-file" name="upload-attachment-file">
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ng-click="ctrl.openDragDropDialog($event)">
+                                <div>
+                                    <span><md-icon md-svg-icon="checkbox-multiple-blank-circle"></md-icon></span>
+                                    <span>{{lang.attachment_drag}}</span>
+                                </div>
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-menu-bar>
+        </div>
+        <div ng-if="ctrl.allowScanner">
+            <md-button ng-disabled="!ctrl.scanner" ng-click="ctrl.openScannerDialog('scanner',$event)"
+                       class="md-raised">
+                <div layout="row" layout-align="start center">
+                    <md-icon md-svg-icon="scanner"></md-icon>
+                    <span>{{lang.attachment_scanner}}</span>
+                </div>
+            </md-button>
+        </div>
+        <ng-form flex layout="column" name="attachment_from">
+            <div ng-if="ctrl.attachment" flex layout="row">
+                <md-input-container flex>
+                    <label for="documentTitle">{{lang.attachment_document_title}}</label>
+                    <input ng-model="ctrl.attachment.documentTitle" name="documentTitle" id="documentTitle">
+                </md-input-container>
+                <md-input-container flex>
+                    <label for="attachmentType">{{lang.attachment_attachment_type}}</label>
+                    <md-select
+                            ng-required="true"
+                            id="attachmentType"
+                            name="attachmentType"
+                            ng-model="ctrl.attachment.attachmentType">
+                        <md-option ng-value="type" ng-repeat="type in ctrl.attachmentTypes">{{type.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="attachment_from.attachmentType.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <md-input-container ng-if="!ctrl.inheritSecurity" flex>
+                    <label for="securityLevel">{{lang.attachment_attachment_security_level}}</label>
+                    <md-select ng-model-options="{trackBy: '$value.id'}"
+                               id="securityLevel"
+                               name="securityLevel"
+                               ng-required="true"
+                               ng-model="ctrl.attachment.securityLevel">
+                        <md-option ng-value="level" ng-repeat="level in ctrl.securityLevel">
+                            {{level.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="attachment_from.securityLevel.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <div>
+                    <md-button ng-disabled="attachment_from.$invalid" ng-click="ctrl.addFileToAttachments()"
+                               class="md-primary md-raised alongside-input">
+                        {{lang.attachment_add}}
+                    </md-button>
+                </div>
+                <div>
+                    <md-button ng-click="ctrl.removeCurrentAttachedFile()"
+                               class="md-raised alongside-input">
+                        {{lang.attachment_remove}}
+                    </md-button>
+                </div>
+            </div>
+        </ng-form>
+    </div>
+    <div ng-if="!!ctrl.attachments.length" flex>
+        <md-card layout="column">
+
+            <md-table-container flex scroll-directive>
+                <table md-table md-row-select multiple ng-model="ctrl.selectedAttachments"
+                       md-progress="ctrl.progress">
+                    <thead md-head md-order="ctrl.grid.order">
+                    <tr md-row>
+                        <th colspan="5" class="table-selector-header"
+                            ng-if="ctrl.selectedAttachments.length" md-column>
+                            <div layout="row" layout-align="start center">
+                                <span>{{ctrl.selectedAttachments.length}} {{lang.items_selected}} </span>
+                                <span flex></span>
+                                <md-button class="md-icon-button"
+                                           ng-click="ctrl.deleteBulkAttachments($event)">
+                                    <md-icon md-svg-icon="delete"></md-icon>
+                                </md-button>
+                            </div>
+                        </th>
+                        <th ng-if="!ctrl.selectedAttachments.length" md-column md-order-by="documentTitle">
+                            <span>{{lang.attachment_document_title}}</span>
+                        </th>
+                        <th ng-if="!ctrl.selectedAttachments.length" md-column md-order-by="attachmentType">
+                            <span>{{lang.attachment_attachment_type}}</span>
+                        </th>
+                        <th ng-if="!ctrl.selectedAttachments.length" md-column>
+                            <span>{{lang.attachment_attachment_security_level}}</span>
+                        </th>
+                        <th ng-if="!ctrl.selectedAttachments.length" md-column>
+                            <span>{{lang.actions}}</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody md-body>
+                    <tr md-row md-select="attachment"
+                        ng-repeat="attachment in ctrl.attachments  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                        <td md-cell>{{attachment.documentTitle}}</td>
+                        <td md-cell>{{attachment.attachmentType.getTranslatedName()}}</td>
+                        <td md-cell>{{attachment.getSecurityLevels()}}</td>
+                        <td md-cell>
+                            <div flex layout="row" layout-align="start center">
+                                <md-button class="md-icon-button" title="{{lang.attachment_view}}"
+                                           ng-click="ctrl.openViewDocumentAttachment(attachment, $event)">
+                                    <md-icon md-svg-icon="eye"></md-icon>
+                                </md-button>
+                                <!--<md-button class="md-icon-button" title="{{lang.attachment_edit}}"-->
+                                <!--ng-click="ctrl.openEditDocumentAttahment(attachment, $event)">-->
+                                <!--<md-icon md-svg-icon="pencil"></md-icon>-->
+                                <!--</md-button>-->
+                                <md-button class="md-icon-button" title="{{lang.attachment_delete}}"
+                                           ng-click="ctrl.deleteDocumentAttachment(attachment, $event)">
+                                    <md-icon md-svg-icon="delete"></md-icon>
+                                </md-button>
+
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <md-table-pagination
+                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                        md-limit-options="ctrl.grid.limitOptions"
+                        md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                        md-total="{{ctrl.attachments.length}}" md-page-select>
+                </md-table-pagination>
+            </md-table-container>
+        </md-card>
+    </div>
+</div>
+

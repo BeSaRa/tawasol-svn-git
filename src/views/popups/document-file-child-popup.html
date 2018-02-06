@@ -1,0 +1,107 @@
+<md-dialog>
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.document_file_related_ous}}:  {{ctrl.documentFile.getNames()}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <div class="p20">
+                <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                    <md-table-container flex scroll-directive>
+                        <table md-table md-row-select="true"
+                               multiple="true"
+                               ng-model="ctrl.selectedDocumentFiles"
+                               md-progress="ctrl.progress">
+                            <thead md-head md-order="ctrl.grid.order">
+                            <tr md-row>
+                                <th colspan="6" class="table-selector-header"
+                                    ng-if="ctrl.selectedDocumentFiles.length" md-column>
+                                    <div layout="row" layout-align="start center">
+                                        <span>{{ctrl.selectedDocumentFiles.length}} {{lang.items_selected}} </span>
+                                        <span flex></span>
+                                        <table-status-directive
+                                                when-close="ctrl.changeStatusBulkDocumentFiles"></table-status-directive>
+                                        <md-button class="md-icon-button"
+                                                   ng-click="ctrl.removeBulkDocumentFiles()">
+                                            <md-icon md-svg-icon="delete"></md-icon>
+                                        </md-button>
+                                    </div>
+                                </th>
+                                <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.arabic_name}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.english_name}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.status}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.security_levels}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.organization_units}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.children}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.actions}}</span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-select="documentFile" md-row
+                                ng-repeat="documentFile in ctrl.documentFiles | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                <td md-cell>{{documentFile.arName}}</td>
+                                <td md-cell>{{documentFile.enName}}</td>
+                                <td md-cell>
+                                    <md-switch aria-label="{{lang.status}}"
+                                               ng-model="documentFile.status"
+                                               title="{{documentFile.getTranslatedStatus()}}"
+                                               ng-change="ctrl.changeStatusDocumentFile(documentFile)"></md-switch>
+                                </td>
+                                <td md-cell>{{documentFile.getSecurityLevels(documentFile)}}</td>
+                                <td md-cell>
+                                    <md-button
+                                            ng-click="ctrl.openOrganizationDialog(documentFile.relatedOus, documentFile, $event)"
+                                            class="md-icon-button"
+                                            tooltip="{{documentFile.relatedOus.length + ' ' + lang.organizations}}"
+                                            ng-class="{'md-raised':documentFile.relatedOus.length}"
+                                            ng-disabled="!documentFile.relatedOus.length">
+                                        <md-icon md-svg-icon="coins"></md-icon>
+                                    </md-button>
+                                </td>
+                                <td md-cell>
+                                    <md-button
+                                            ng-click="ctrl.openChildDocumentFilesDialog(documentFile.children, documentFile, $event)"
+                                            class="md-icon-button"
+                                            tooltip="{{documentFile.children.length + ' ' + (documentFile.children.length > 1?lang.children:lang.child)}}"
+                                            ng-class="{'md-raised':documentFile.children.length}"
+                                            ng-disabled="!documentFile.children.length">
+                                        <md-icon md-svg-icon="coins"></md-icon>
+                                    </md-button>
+                                </td>
+                                <td md-cell>
+                                    <div flex layout="row" layout-align="start center">
+                                        <md-button class="md-icon-button"
+                                                   ng-click="ctrl.openEditDocumentFileDialog(documentFile, $event)"
+                                                   title="{{lang.edit}}">
+                                            <md-icon md-svg-icon="pencil"></md-icon>
+                                        </md-button>
+                                        <md-button class="md-icon-button"
+                                                   ng-click="ctrl.removeDocumentFile(documentFile)"
+                                                   title="{{lang.delete}}">
+                                            <md-icon md-svg-icon="delete"></md-icon>
+                                        </md-button>
+
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </md-table-container>
+                    <md-table-pagination
+                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                            md-limit-options="ctrl.grid.limitOptions"
+                            md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                            md-total="{{ctrl.documentFiles.length}}" md-page-select></md-table-pagination>
+                    </md-table-container>
+                </md-card>
+            </div>
+        </md-content>
+    </div>
+</md-dialog>

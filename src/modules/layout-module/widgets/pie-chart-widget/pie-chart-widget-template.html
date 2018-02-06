@@ -1,0 +1,14 @@
+<md-card id="{{widget.getWidgetTagId()}}" flex
+         class="widget pie-chart-widget">
+    <div class="pie-chart-title">
+        <span ng-if="!ctrl.hideLabel" ng-dblclick="ctrl.onHideLabel($event)">{{ctrl.model[lang.current+'Name'].optionValue || lang.pie_chart}}</span>
+        <input ng-if="ctrl.hideLabel" id="title-{{widget.id}}" ng-keydown="ctrl.onLabelKeyPress($event)"
+               ng-blur="ctrl.onLabelBlur()"
+               class="label-value" ng-model="ctrl.options[lang.current+'Name'].optionValue"/>
+    </div>
+    <div layout="row" class="bar-chart-content">
+        <div flex>
+            <piechart-directive></piechart-directive>
+        </div>
+    </div>
+</md-card>

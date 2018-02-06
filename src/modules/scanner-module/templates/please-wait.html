@@ -1,0 +1,19 @@
+<md-dialog>
+    <div class="p20" layout="column">
+        <span>{{lang.scanning_please_wait}}</span>
+        <br>
+        <div layout="row" layout-align="center center" ng-if="ctrl.scanning">
+            <span>{{lang.number_of_pages}} : {{ctrl.CCToolkit.getDocument().pages.length}}</span>
+        </div>
+        <br>
+        <md-progress-linear></md-progress-linear>
+        <br>
+        <md-button class="md-raised" ng-if="ctrl.scanning && ctrl.buttonCallback " ng-click="ctrl.buttonCallback()">
+            {{lang.cancel_scan}}
+        </md-button>
+        <!--<br/>-->
+        <!--<md-button ng-if="!ctrl.scanning && !ctrl.buttonCallback " ng-click="ctrl.cancelOperation()">-->
+        <!--{{lang.cancel_operation}}-->
+        <!--</md-button>-->
+    </div>
+</md-dialog>

@@ -1,0 +1,253 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.terminate_reason}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.document_search}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <md-tabs md-selected="ctrl.selectedIndex" md-dynamic-height>
+                <!-- Basic Info Tab -->
+                <md-tab label="{{lang.search}}">
+                    <md-content>
+                        <div layout="column" class="p20">
+                            <div layout="row">
+                                <md-input-container flex>
+                                    <label for="docSubject">{{lang.linked_document_subject}}</label>
+                                    <input type="text" id="docSubject" name="docSubject"
+                                           ng-model="ctrl.correspondence.docSubject">
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label for="docSerial">{{lang.linked_document_serial}}</label>
+                                    <input type="text" id="docSerial" name="docSerial"
+                                           ng-model="ctrl.correspondence.docSerial">
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label for="docType">{{lang.linked_document_type}}</label>
+                                    <md-select id="docType" ng-model="ctrl.searchType">
+                                        <md-option ng-value="documentClass"
+                                                   ng-repeat="documentClass in ctrl.documentClasses">
+                                            {{documentClass.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                            <div layout="row">
+                                <md-input-container flex>
+                                    <label for="ou">{{lang.linked_document_organization}}</label>
+                                    <md-select id="ou" name="ou" ng-model="ctrl.correspondence.ou">
+                                        <md-option ng-value="organization"
+                                                   ng-repeat="organization in ctrl.organizations">
+                                            {{organization.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label for="securityLevel">{{lang.linked_document_security_level}}</label>
+                                    <md-select id="securityLevel" name="securityLevel"
+                                               ng-model="ctrl.correspondence.securityLevel">
+                                        <md-option ng-value="securityLevel"
+                                                   ng-repeat="securityLevel in ctrl.securityLevels">
+                                            {{securityLevel.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label>{{lang.linked_document_year}}</label>
+                                    <md-select ng-model="ctrl.correspondence.year">
+                                        <md-option ng-value="year" ng-repeat="year in ctrl.years()">{{year}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                            <div layout="row">
+                                <md-input-container flex>
+                                    <label for="mainClassification">{{lang.linked_document_main_classification}}</label>
+                                    <md-select name="mainClassification"
+                                               id="mainClassification"
+                                               ng-model="ctrl.correspondence.mainClassification"
+                                               ng-model-options="{trackBy: '$value.id'}">
+                                        <md-option ng-value="classification"
+                                                   ng-repeat="classification in ctrl.classifications">
+                                            {{classification.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label for="subClassification">{{lang.linked_document_sub_classification}}</label>
+                                    <md-select ng-disabled="!ctrl.correspondence.mainClassification"
+                                               name="subClassification"
+                                               id="subClassification"
+                                               ng-model="ctrl.correspondence.subClassification"
+                                               ng-model-options="{trackBy: '$value.id'}">
+                                        <md-option ng-value="classification"
+                                                   ng-repeat="classification in ctrl.correspondence.mainClassification.children">
+                                            {{classification.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label for="fileId">{{lang.linked_document_file}}</label>
+                                    <md-select name="fileId"
+                                               id="fileId"
+                                               ng-model="ctrl.correspondence.fileId"
+                                               ng-model-options="{trackBy: '$value.id'}">
+                                        <md-option ng-value="file"
+                                                   ng-repeat="file in ctrl.documentFiles">
+                                            {{file.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                            <div layout="row">
+                                <md-input-container flex>
+                                    <label for="fileCode">{{lang.linked_document_file_code}}</label>
+                                    <input name="fileCode"
+                                           id="fileCode"
+                                           ng-model="ctrl.correspondence.fileCode">
+                                </md-input-container>
+                                <md-input-container flex>
+                                    <label for="fileSerial">{{lang.linked_document_file_number}}</label>
+                                    <input name="fileSerial"
+                                           id="fileSerial"
+                                           ng-model="ctrl.correspondence.fileSerial">
+                                </md-input-container>
+                            </div>
+                        </div>
+                    </md-content>
+                </md-tab>
+                <md-tab ng-disabled="!ctrl.correspondences.length"
+                        label="{{ctrl.correspondences.length ? lang.linked_document_search_result + ' - ' + ctrl.correspondences.length : lang.linked_document_search_result }}">
+                    <md-content>
+                        <div layout="column" class="p20">
+                            <md-card flex>
+                                <md-table-container flex scroll-directive>
+                                    <table md-table md-row-select multiple ng-model="ctrl.selectedCorrespondences"
+                                           md-progress="ctrl.progress">
+                                        <thead md-head md-order="ctrl.grid.order">
+                                        <tr md-row>
+                                            <th ng-if="ctrl.selectedCorrespondences.length" md-column>
+                                                <div layout="row" layout-align="start center">
+                                                    <span>{{ctrl.selectedCorrespondences.length}} {{lang.items_selected}} </span>
+                                                    <span flex></span>
+                                                </div>
+                                            </th>
+                                            <th ng-if="!ctrl.selectedCorrespondences.length"  md-column>
+                                                <!-- Indicators -->
+                                            </th>
+                                            <th md-column
+                                                md-order-by="docSubject">
+                                                <span>{{lang.subject}}</span>
+                                            </th>
+                                            <th md-column
+                                                md-order-by="priorityLevel">
+                                                <span>{{lang.priority_level}}</span>
+                                            </th>
+                                            <th md-column
+                                                md-order-by="securityLevel">
+                                                <span>{{lang.security_level}}</span>
+                                            </th>
+                                            <th md-column
+                                                md-order-by="docType">
+                                                <span>{{lang.label_document_type}}</span>
+                                            </th>
+                                            <th md-column
+                                                md-order-by="createdBy">
+                                                <span>{{lang.creator}}</span>
+                                            </th>
+                                            <th md-column
+                                                md-order-by="createdOn">
+                                                <span>{{lang.created_on}}</span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-row md-select="correspondence" model="correspondence"
+                                            selected-length="{{ctrl.selectedCorrespondences.length ? ctrl.selectedCorrespondences.length : 0}}"
+                                            ng-repeat="correspondence in ctrl.correspondences | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                            <td md-cell class="indicator-td">
+                                    <span flex
+                                          ng-class="{'indicator-content': correspondence.securityLevelIndicator}">
+                                        <md-icon ng-if="correspondence.securityLevelIndicator"
+                                                 class="{{correspondence.securityLevelIndicator.class}}"
+                                                 md-svg-icon="{{correspondence.securityLevelIndicator.icon}}"
+                                                 tooltip="{{lang[correspondence.securityLevelIndicator.tooltip].change({name: correspondence.securityLevel.getTranslatedName()})}}"
+                                        ></md-icon>
+                                    </span>
+                                                <span flex
+                                                      ng-class="{'indicator-content': correspondence.priorityLevelIndicator}">
+                                        <md-icon ng-if="correspondence.priorityLevelIndicator"
+                                                 class="{{correspondence.priorityLevelIndicator.class}}"
+                                                 md-svg-icon="{{correspondence.priorityLevelIndicator.icon}}"
+                                                 tooltip="{{lang[correspondence.priorityLevelIndicator.tooltip].change({name: correspondence.priorityLevel.getTranslatedName()})}}"
+                                        ></md-icon>
+                                    </span>
+                                                <span flex
+                                                      ng-class="{'indicator-content': correspondence.attachmentsIndicator}">
+                                        <md-icon ng-if="correspondence.attachmentsIndicator"
+                                                 class="{{correspondence.attachmentsIndicator.class}}"
+                                                 md-svg-icon="{{correspondence.attachmentsIndicator.icon}}"
+                                                 tooltip="{{lang[correspondence.attachmentsIndicator.tooltip]}}"
+                                        ></md-icon>
+                                    </span>
+                                                <span flex
+                                                      ng-class="{'indicator-content': correspondence.linkedDocsIndicator}">
+                                        <md-icon ng-if="correspondence.linkedDocsIndicator"
+                                                 class="{{correspondence.linkedDocsIndicator.class}}"
+                                                 md-svg-icon="{{correspondence.linkedDocsIndicator.icon}}"
+                                                 tooltip="{{lang[correspondence.linkedDocsIndicator.tooltip]}}"
+                                        ></md-icon>
+                                    </span>
+                                                <!--<span flex class="indicator-badge"
+                                                      ng-class="{'indicator-content': correspondence.tagsIndicator}">
+                                        <span ng-if="correspondence.tagsIndicator"
+                                              tooltip="{{lang[correspondence.tagsIndicator.tooltip]}}"
+                                              class="{{correspondence.tagsIndicator.class}}">
+                                            {{correspondence.tagsIndicator.text}}
+                                        </span>
+                                    </span>-->
+                                            </td>
+                                            <td md-cell class="td-data">
+                                                <a href="" ng-if="correspondence.hasContent()" class="view-doc"
+                                                   ng-click="ctrl.viewCorrespondence(correspondence, $event)">{{correspondence.docSubject}}</a>
+                                                <span ng-if="!correspondence.hasContent()">{{correspondence.docSubject}}</span>
+                                            </td>
+                                            <td md-cell>{{correspondence.priorityLevel.getTranslatedName()}}</td>
+                                            <td md-cell>{{correspondence.securityLevel.getTranslatedName()}}</td>
+                                            <td md-cell>{{lang[correspondence.getInfo().documentClass +"_document_class"]}}</td>
+                                            <td md-cell>{{correspondence.getTranslatedCreator()}}</td>
+                                            <td md-cell>{{correspondence.createdOn}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <md-table-pagination
+                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                            md-limit-options="ctrl.grid.limitOptions"
+                                            md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                            md-total="{{ctrl.correspondences.length}}" md-page-select>
+                                    </md-table-pagination>
+                                </md-table-container>
+                            </md-card>
+                        </div>
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button ng-if="!ctrl.selectedCorrespondences.length" ng-click="ctrl.searchLinkedDocuments()"
+                           class="md-raised"
+                           ng-disabled="reason_form.$invalid && ctrl.itemNeedReason()">
+                    {{lang.linked_document_search_button}}
+                </md-button>
+                <md-button ng-if="ctrl.selectedCorrespondences.length" ng-click="ctrl.sendLinkedDocuments()"
+                           class="md-raised md-primary">
+                    {{lang.linked_document_link_button}}
+                </md-button>
+                <span flex></span>
+                <md-button ng-click="ctrl.closeLinkedDocuments()" class="md-raised">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

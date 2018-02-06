@@ -1,0 +1,77 @@
+move-to-folders-tree-view-directive {
+  /* prevent user selection */
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  /* default */
+  /*font-family: Tahoma;*/
+  /*font-size: 15px;*/
+  color: #555;
+  text-decoration: none;
+}
+
+move-to-folders-tree-view-directive ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: none;
+  overflow: hidden;
+}
+
+move-to-folders-tree-view-directive li {
+  position: relative;
+  padding: 0 0 0 20px;
+  line-height: 30px;
+}
+
+move-to-folders-tree-view-directive li .expanded {
+  padding: 1px 10px;
+  background: url("../../../assets/images/folder.png") no-repeat;
+}
+
+move-to-folders-tree-view-directive li .collapsed {
+  padding: 1px 10px;
+  background: url("../../../assets/images/folder-closed.png") no-repeat;
+}
+
+move-to-folders-tree-view-directive li .normal {
+  padding: 1px 10px;
+  background: url("../../../assets/images/folder-closed.png") no-repeat;
+}
+
+move-to-folders-tree-view-directive li .document {
+  padding: 1px 10px;
+  background: url("../../../assets/images/file.png") no-repeat;
+  /*background: url("http://cfile23.uf.tistory.com/image/165B663A50C13F4B196CCA") no-repeat;*/
+}
+
+move-to-folders-tree-view-directive li i, move-to-folders-tree-view-directive li span {
+  cursor: pointer;
+}
+
+move-to-folders-tree-view-directive li .selected {
+  background-color: #aaddff;
+  font-weight: bold;
+  padding: 1px 5px;
+}
+
+html.rtl {
+  move-to-folders-tree-view-directive li {
+    padding: 0 20px 0 0;
+    line-height: 1.5;
+    .node-text {
+      display: inline-block;
+      margin-top: -5px;
+    }
+    .node-icon {
+      position: relative;
+      display: inline-block;
+      height: 16px;
+      padding-top: 5px;
+      background-position: center 8px;
+    }
+  }
+}

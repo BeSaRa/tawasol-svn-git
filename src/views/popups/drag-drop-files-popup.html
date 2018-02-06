@@ -1,0 +1,159 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.inbox_add_to_folder}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20" ng-if="!ctrl.model.id">{{lang.attachment_attachments}}</span>
+            <close-dialog-directive when-close="ctrl.closeDrag"></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <div class="p20">
+                <div layout="row">
+                    <md-input-container flex>
+                        <label>{{lang.attachment_attachment_security_level}}</label>
+                        <md-select
+                                ng-model-options="{trackBy:'$value.lookupKey'}"
+                                ng-change="ctrl.changeValueOf('securityLevel',ctrl.securityLevel)"
+                                ng-model="ctrl.securityLevel">
+                            <md-option ng-value="level" ng-repeat="level in ctrl.securityLevels">
+                                {{level.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>{{lang.attachment_attachment_type}}</label>
+                        <md-select ng-change="ctrl.changeValueOf('attachmentType',ctrl.attachmentType)"
+                                   ng-model="ctrl.attachmentType">
+                            <md-option ng-value="type" ng-repeat="type in ctrl.attachmentTypes">
+                                {{type.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <div>
+                        <md-button class="md-raised md-primary" ng-click="ctrl.startUploadAttachments()">
+                            {{lang.attachment_add}}
+                        </md-button>
+                    </div>
+                </div>
+                <div layout="column" flex>
+                    <div layout="column" ng-if="ctrl.successFilesUploaded.length">
+                        <span>{{lang.attachment_uploaded}}</span>
+                        <md-card layout="column"
+                                 ng-repeat="attachment in ctrl.successFilesUploaded track by $index">
+                            <div layout="row" layout-align="start center">
+                                <div class="file-icon">
+                                    <md-icon md-svg-icon="{{ctrl.getFileIcon(attachment)}}"></md-icon>
+                                </div>
+                                <div class="drag-attachment-title">
+                                    <div md-truncate>{{attachment.documentTitle}}</div>
+                                </div>
+                                <div>
+                                    <md-menu-bar>
+                                        <md-menu>
+                                            <md-button ng-click="$mdMenu.open()">
+                                                {{attachment.attachmentType.getTranslatedName()}}
+                                            </md-button>
+                                            <md-menu-content>
+                                                <md-menu-item ng-repeat="type in ctrl.attachmentTypes track by $index">
+                                                    <md-button
+                                                            ng-click="ctrl.changeValueOfFor('attachmentType',attachment , type)"
+                                                            ng-class="{'menu-select':type.currentId(ctrl.attachmentType)}">
+                                                        {{type.getTranslatedName()}}
+                                                    </md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                    </md-menu-bar>
+                                </div>
+                                <div>
+                                    <md-menu-bar>
+                                        <md-menu>
+                                            <md-button ng-click="$mdMenu.open()">
+                                                {{attachment.securityLevel.getTranslatedName()}}
+                                            </md-button>
+                                            <md-menu-content>
+                                                <md-menu-item ng-repeat="level in ctrl.securityLevels track by $index">
+                                                    <md-button
+                                                            ng-click="ctrl.changeValueOfFor('securityLevel',attachment , level)"
+                                                            ng-class="{'menu-select':type.currentId(attachment.securityLevel)}">
+                                                        {{level.getTranslatedName()}}
+                                                    </md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                    </md-menu-bar>
+                                </div>
+                                <div>
+                                    <md-button ng-click="ctrl.deleteDragAttachment(attachment)" class="md-icon">
+                                        <md-icon md-svg-icon="delete"></md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </md-card>
+                    </div>
+                    <div layout="column" ng-if="ctrl.validFiles.length">
+                        <span>{{lang.attachment_ready_to_upload}}</span>
+                        <md-card layout="column"
+                                 ng-repeat="attachment in ctrl.validFiles track by $index">
+                            <div layout="row" layout-align="start center">
+                                <div class="file-icon">
+                                    <md-icon md-svg-icon="{{ctrl.getFileIcon(attachment)}}"></md-icon>
+                                </div>
+                                <div class="drag-attachment-title">
+                                    <div md-truncate>{{attachment.documentTitle}}</div>
+                                </div>
+                                <div>
+                                    <md-menu-bar>
+                                        <md-menu>
+                                            <md-button ng-click="$mdMenu.open()">
+                                                {{attachment.attachmentType.getTranslatedName()}}
+                                            </md-button>
+                                            <md-menu-content>
+                                                <md-menu-item ng-repeat="type in ctrl.attachmentTypes track by $index">
+                                                    <md-button
+                                                            ng-click="ctrl.changeValueOfFor('attachmentType',attachment , type)"
+                                                            ng-class="{'menu-select':type.currentId(ctrl.attachmentType)}">
+                                                        {{type.getTranslatedName()}}
+                                                    </md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                    </md-menu-bar>
+                                </div>
+                                <div>
+                                    <md-menu-bar>
+                                        <md-menu>
+                                            <md-button ng-click="$mdMenu.open()">
+                                                {{attachment.securityLevel.getTranslatedName()}}
+                                            </md-button>
+                                            <md-menu-content>
+                                                <md-menu-item ng-repeat="level in ctrl.securityLevels track by $index">
+                                                    <md-button
+                                                            ng-click="ctrl.changeValueOfFor('securityLevel',attachment , level)"
+                                                            ng-class="{'menu-select':type.currentId(attachment.securityLevel)}">
+                                                        {{level.getTranslatedName()}}
+                                                    </md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                    </md-menu-bar>
+                                </div>
+                                <div>
+                                    <md-button ng-click="ctrl.startUploadAttachment(attachment, true)"
+                                               class="md-raised md-primary">
+                                        {{lang.attachment_add}}
+                                    </md-button>
+                                </div>
+                            </div>
+                            <div layout="row">
+                                <md-progress-linear md-mode="determinate"
+                                                    ng-value="attachment.progress"></md-progress-linear>
+                            </div>
+                        </md-card>
+                    </div>
+                </div>
+                <div id="drop-area" layout="row" layout-align="center center" class="drag-dop">
+                    <p>{{lang.attachments_drop_your_file}}</p>
+                </div>
+            </div>
+        </md-content>
+    </div>
+</md-dialog>

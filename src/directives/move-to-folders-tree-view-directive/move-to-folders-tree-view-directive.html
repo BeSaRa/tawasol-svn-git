@@ -1,0 +1,33 @@
+<ul>
+    <li ng-repeat="node in ctrl.folders track by $index">
+        <i class="collapsed node-icon"
+           ng-show="(node.children.length || node.workItems.length) && node.collapsed && !node.isWorkItem"
+           ng-click="ctrl.toggleChildNodes(node)"></i>
+        <i class="expanded node-icon"
+           ng-show="(node.children.length || node.workItems.length) && !node.collapsed && !node.isWorkItem"
+           ng-click="ctrl.toggleChildNodes(node)"></i>
+
+        <i class="normal node-icon" ng-hide="node.children.length || node.workItems.length || node.isWorkItem"></i>
+
+        <i class="document node-icon" ng-show="node.isWorkItem"></i>
+
+        <span draggable-work-item-directive class="node-text" ng-if="!node.workItems.length"
+              ng-click="ctrl.selectCurrentNode(node)">{{node.generalStepElm.docSubject}}
+        </span>
+
+        <span class="node-text" ng-click="ctrl.selectCurrentNode(node)">{{ctrl.currentLang === 'en'? node.enName : node.arName }} <span
+                ng-if="node.children.length">({{node.children.length}})</span></span>
+
+        <move-to-folders-tree-view-directive
+                folders="node.workItems"
+                ng-hide="node.collapsed">
+        </move-to-folders-tree-view-directive>
+
+        <move-to-folders-tree-view-directive
+                droppable-work-item-directive
+                folders="node.children"
+                ng-hide="node.collapsed">
+        </move-to-folders-tree-view-directive>
+
+    </li>
+</ul>

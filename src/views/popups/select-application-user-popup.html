@@ -1,0 +1,98 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{ctrl.label || lang.select_user}}">
+    <md-toolbar layout="row" layout-align="start center">
+        <span class="p20" flex ng-if="ctrl.label">{{lang.get(ctrl.label) ? lang.get(ctrl.label) : ctrl.label }}</span>
+        <span class="p20" flex ng-if="!ctrl.label">{{lang.select_user}}</span>
+        <close-dialog-directive when-close="ctrl.close"></close-dialog-directive>
+    </md-toolbar>
+    <md-content scroll-directive class="p20" layout="column">
+        <div flex layout="row">
+            <md-input-container id="criteria-list" class="mt0">
+                <md-select aria-label="select-user"
+                           ng-model="ctrl.searchBy">
+                    <md-option md-truncate ng-value="criteria"
+                               ng-repeat="criteria in ctrl.availableSearchCriteria track by $index">
+                        {{lang.get(criteria.value)}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-autocomplete
+                    flex
+                    ng-disabled="ctrl.isDisabled"
+                    md-no-cache="true"
+                    md-selected-item="ctrl.applicationUser"
+                    md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+                    md-search-text="ctrl.searchText"
+                    md-selected-item-change="ctrl.applicationUserSelected(item)"
+                    md-items="item in ctrl.querySearch(ctrl.searchText , ctrl.searchBy)"
+                    md-item-text="item.loginName"
+                    md-min-length="3"
+                    placeholder="{{lang.select_user}}"
+                    md-menu-class="application-user-custom-template">
+                <md-item-template>
+                    <div layout="row" flex>
+                        <div layout="column" flex>
+                            <div layout="row" layout-align="start center" flex>
+                                <span class="key"> {{lang.login_name}} : </span>
+                                <span md-highlight-text="ctrl.searchText" md-highlight-flags="ig" class="value" flex> {{item.loginName}}</span>
+                            </div>
+                            <div layout="row" layout-align="start center" flex>
+                                <span class="key"> {{lang.organization_unit}} : </span>
+                                <span md-highlight-text="ctrl.searchText" md-highlight-flags="ig" class="value" flex> {{ctrl.organizationName(item)}}</span>
+                            </div>
+                            <div layout="row" layout-align="start center" flex>
+                                <span class="key"> {{lang.ar_name}} : </span>
+                                <span md-highlight-text="ctrl.searchText" md-highlight-flags="ig" class="value" flex> {{item.arFullName}}</span>
+                            </div>
+                            <div layout="row" layout-align="start center" flex>
+                                <span class="key"> {{lang.en_name}} : </span>
+                                <span md-highlight-text="ctrl.searchText" md-highlight-flags="ig" class="value" flex> {{item.enFullName}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </md-item-template>
+            </md-autocomplete>
+        </div>
+        <md-card>
+            <md-table-container>
+                <table md-table>
+                    <thead md-head>
+                    <tr md-row>
+                        <th md-column><span>{{lang.login_name}}</span></th>
+                        <th md-column><span>{{lang.domain_name}}</span></th>
+                        <th md-column><span>{{lang.actions}}</span></th>
+                    </tr>
+                    </thead>
+                    <tbody md-body>
+                    <tr ng-if="ctrl.applicationUsers.length" md-row
+                        ng-repeat="applicationUser in ctrl.applicationUsers track by $index">
+                        <td md-cell>
+                            <span tooltip="{{applicationUser.getNames()}}">{{applicationUser.loginName}}</span>
+                        </td>
+                        <td md-cell>
+                            <span tooltip="{{applicationUser.getDefaultOrganization().getNames()}}">{{applicationUser.domainName}}</span>
+                        </td>
+                        <td md-cell layout="row">
+                            <md-button tooltip="{{lang.delete}}" class="md-icon-button"
+                                       ng-click="ctrl.removeUser(applicaionUser)">
+                                <md-icon md-svg-icon="delete"></md-icon>
+                            </md-button>
+                        </td>
+                    </tr>
+                    <tr ng-if="!ctrl.applicationUsers.length" md-row>
+                        <td colspan="3">
+                                <span layout="row" layout-align="center center">
+                                    {{lang.no_users_found_to_display}}
+                                </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </md-table-container>
+        </md-card>
+        <div layout="row" layout-align="center center">
+            <md-button class="md-raised" ng-disabled="!ctrl.hasChanges" ng-click="ctrl.saveSelectedUsers()">
+                {{lang.save}}
+            </md-button>
+        </div>
+    </md-content>
+</md-dialog>

@@ -1,0 +1,256 @@
+<md-dialog id="addOrganizationsDistributionWorkflow" class="dialog-extend"
+           ng-attr-aria-label="{{lang.add_organizations}}">
+    <div layout="column">
+        <md-toolbar layout="row" layout-align="start center">
+            <span class="p20" ng-if="!ctrl.editMode">{{lang.add_organizations}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content>
+            <div layout="row" class="p20" style="height: 345px !important;">
+                <div layout="column">
+                    <div layout="row" style="margin: 8px;">
+                        <md-autocomplete flex md-selected-item="ctrl.selectedFilterOrganization"
+                                         md-search-text="ctrl.searchText"
+                                         md-selected-item-change="ctrl.filterOrganizationTree()"
+                                         md-items="item in ctrl.querySearch(ctrl.searchText)"
+                                         md-item-text="item.enName"
+                                         md-min-length="0"
+                                         placeholder="{{lang.filter_organizations}}">
+                            <md-item-template>
+                                <span md-highlight-text="ctrl.searchText"
+                                      md-highlight-flags="^i">{{item.getTranslatedName()}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                {{lang['no_matching_organizations_found'].change({searchText: ctrl.searchText})}}
+                            </md-not-found>
+                        </md-autocomplete>
+                    </div>
+                    <br>
+                    <div scroll-directive>
+                        <organization-without-reg-tree-view-directive
+                                ou-application-users="ctrl.ouApplicationUsers"
+                                selected-node=""
+                                selected-organizations="ctrl.selectedOrganizations"
+                                organizations="ctrl.organizations">
+                        </organization-without-reg-tree-view-directive>
+                    </div>
+                </div>
+                <div layout="column" scroll-directive flex>
+                    <md-card style="min-height: 100px !important;max-height:228px !important;">
+                        <md-table-container flex scroll-directive>
+                            <table md-table md-row-select multiple ng-model="ctrl.selectedOUApplicationUsers">
+                                <thead md-head>
+                                <tr md-row>
+                                    <th md-column>
+                                        <span>{{lang.arabic_name}}</span>
+                                    </th>
+                                    <th md-column>
+                                        <span>{{lang.english_name}}</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="ouApplicationUser"
+                                    ng-repeat="ouApplicationUser in ctrl.ouApplicationUsers | limitTo: ctrl.gridOUApplicationUsers.limit: ((ctrl.gridOUApplicationUsers.page - 1) * ctrl.gridOUApplicationUsers.limit) |orderBy:ctrl.gridOUApplicationUsers.order track by $index">
+                                    <td md-cell> {{ouApplicationUser.applicationUser.arFullName}}</td>
+                                    <td md-cell> {{ouApplicationUser.applicationUser.enFullName}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.gridOUApplicationUsers.limitOptions"
+                                    md-limit="ctrl.gridOUApplicationUsers.limit"
+                                    md-page="ctrl.gridOUApplicationUsers.page"
+                                    md-total="{{ctrl.ouApplicationUsers.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </md-content>
+        <div>
+            <form class="p20" name="distributionWorkflowReceivedOUForm" autocomplete="off">
+                <div layout="row" flex>
+                    <md-input-container flex>
+                        <label for="selectedAction">{{lang.dwf_label_selectaction}}</label>
+                        <md-select name="selectedAction" id="selectedAction"
+                                   required ng-model="ctrl.ouDistributionWorkflow.action">
+                            <md-option ng-value="action"
+                                       ng-repeat="action in ctrl.userActions track by $index">
+                                {{action.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="distributionWorkflowReceivedOUForm.selectedAction.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label for="dueDate">{{lang.dwf_label_duedate}}</label>
+                        <md-datepicker id="dueDate"
+                                       md-open-on-focus
+                                       md-min-date="ctrl.minDate"
+                                       ng-model="ctrl.ouDistributionWorkflow.dueDate"
+                                       required name="dueDate"></md-datepicker>
+                        <div ng-messages="distributionWorkflowReceivedOUForm.dueDate.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label for="escalationProcess">{{lang.dwf_label_escalation}}</label>
+                        <md-select name="escalationProcess"
+                                   id="escalationProcess" required
+                                   ng-model="ctrl.ouDistributionWorkflow.escalationProcess">
+                            <md-option ng-value="escalationProcess"
+                                       ng-repeat="escalationProcess in ctrl.escalationProcessList track by $index">
+                                {{lang.current==='en'? escalationProcess.enName :escalationProcess.arName}}
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="distributionWorkflowReceivedOUForm.escalationProcess.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                    <div flex>
+                        <md-switch ng-disabled="!ctrl.enableSMSNotification"
+                                   ng-model="ctrl.ouDistributionWorkflow.smsNotification"
+                                   layout-align="center center"
+                                   name="smsNotification"
+                                   id="smsNotification"
+                                   aria-label="{{lang.sms}}">
+                            <span>{{lang.sms}} : </span>
+                            {{ctrl.ouDistributionWorkflow.getTranslatedSMS()}}
+                            <!--{{ctrl.getTranslatedNotification(ctrl.ouDistributionWorkflow.smsNotification)}}-->
+                        </md-switch>
+                    </div>
+                    <div flex>
+                        <md-switch ng-disabled="!ctrl.enableEmailNotification"
+                                   ng-model="ctrl.ouDistributionWorkflow.emailNotification"
+                                   name="emailNotification"
+                                   id="emailNotification"
+                                   layout-align="center center"
+                                   aria-label="{{lang.email_notification}}">
+                            <span>{{lang.email_notification}} : </span>
+                            {{ctrl.ouDistributionWorkflow.getTranslatedEmail()}}
+                            <!--{{ctrl.getTranslatedNotification(ctrl.ouDistributionWorkflow.emailNotification)}}-->
+                        </md-switch>
+                    </div>
+                    <div flex>
+                        <md-button class="md-raised"
+                                   ng-disabled="distributionWorkflowReceivedOUForm.$invalid || (ctrl.selectedOrganizations.length === 0 && ctrl.selectedOUApplicationUsers.length===0)"
+                                   ng-click="ctrl.addOrganizationsToSendDistributionWorkflow(distributionWorkflowReceivedOUForm)">
+                            {{lang.add}}
+                        </md-button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <md-divider></md-divider>
+
+        <md-subheader class="md-primary cursor-pointer" ng-click="ctrl.toggleDistributionWorkflowAddedOUs()">
+            <span>{{lang.organizations}}</span>
+            <md-icon
+                    md-svg-icon="{{(ctrl.showDistributionWorkflowAddedOUs) ? 'minus-circle-outline' : 'plus-circle-outline'}}"></md-icon>
+        </md-subheader>
+        <div ng-if="ctrl.showDistributionWorkflowAddedOUs">
+            <md-card style="min-height: 100px !important;max-height:200px !important;">
+                <md-table-container flex scroll-directive>
+                    <table md-table md-row-select multiple
+                           ng-model="ctrl.selectedDistributionWorkflowsOUs">
+                        <thead md-head>
+                        <tr md-row>
+                            <th colspan="9" class="table-selector-header"
+                                ng-if="ctrl.selectedDistributionWorkflowsOUs.length" md-column>
+                                <div layout="row" layout-align="start center">
+                                    <span>{{ctrl.selectedDistributionWorkflowsOUs.length}} {{lang.items_selected}} </span>
+                                    <span flex></span>
+                                    <md-button class="md-icon-button"
+                                               ng-click="ctrl.removeAllDistributionWorkflowOUs()">
+                                        <md-icon md-svg-icon="delete"></md-icon>
+                                    </md-button>
+                                </div>
+                            </th>
+                            <th ng-if="!ctrl.selectedDistributionWorkflowsOUs.length" md-column>
+                                <span>{{lang.name}}</span>
+                            </th>
+                            <th ng-if="!ctrl.selectedDistributionWorkflowsOUs.length" md-column>
+                                <span>{{lang.organization_unit}}</span>
+                            </th>
+                            <th ng-if="!ctrl.selectedDistributionWorkflowsOUs.length" md-column>
+                                <span>{{lang.action}}</span>
+                            </th>
+                            <th ng-if="!ctrl.selectedDistributionWorkflowsOUs.length" md-column>
+                                <span>{{lang.sms}}</span>
+                            </th>
+                            <th ng-if="!ctrl.selectedDistributionWorkflowsOUs.length" md-column>
+                                <span>{{lang.email_notification}}</span>
+                            </th>
+                            <th ng-if="!ctrl.selectedDistributionWorkflowsOUs.length" md-column>
+                                <span>{{lang.action}}</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody md-body>
+                        <tr md-row md-select="selectedOU"
+                            ng-repeat="selectedOU in ctrl.selectedOUToSend | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
+                            <td md-cell>
+                                {{selectedOU.getTranslatedName()}}
+                            </td>
+                            <td md-cell>
+                                {{selectedOU.getTranslatedOUName()}}
+                            </td>
+                            <td md-cell>
+                                <md-select name="{{selectedOU.id}}" id="{{selectedOU.id}}"
+                                           ng-model-options="{trackBy: '$value.id'}"
+                                           ng-model="selectedOU.action" aria-label="actions">
+                                    <md-option ng-value="action"
+                                               ng-repeat="action in ctrl.userActions track by $index">
+                                        {{action.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                            </td>
+                            <td md-cell>
+                                <md-switch ng-disabled="!ctrl.enableSMSNotification"
+                                           ng-model="selectedOU.smsNotification"
+                                           aria-label="{{lang.dwf_label_smsnotification}}">
+                                </md-switch>
+                            </td>
+                            <td md-cell>
+                                <md-switch ng-disabled="!ctrl.enableEmailNotification"
+                                           ng-model="selectedOU.emailNotification"
+                                           aria-label="{{lang.dwf_label_emailnotification}}">
+                                </md-switch>
+                            </td>
+                            <td md-cell>
+                                <div flex layout="row" layout-align="start center">
+                                    <md-button class="md-icon-button" title="{{lang.delete}}"
+                                               ng-click="ctrl.removeSingleDistributionWorkflowOU(selectedOU, $event)">
+                                        <md-icon md-svg-icon="delete"></md-icon>
+                                    </md-button>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <md-table-pagination
+                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                            md-limit-options="ctrl.grid.limitOptions"
+                            md-limit="ctrl.grid.limit"
+                            md-page="ctrl.grid.page"
+                            md-total="{{ctrl.selectedOUToSend.length}}" md-page-select>
+                    </md-table-pagination>
+                </md-table-container>
+            </md-card>
+            <div>
+                <div layout="row">
+                    <md-button class="md-raised"
+                               ng-disabled="ctrl.selectedOUToSend.length===0"
+                               ng-click="ctrl.addSelectedOrganizationsToSendGrid()">
+                        {{lang.add}}
+                    </md-button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</md-dialog>
