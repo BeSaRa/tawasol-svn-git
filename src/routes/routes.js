@@ -908,27 +908,6 @@ module.exports = function (app) {
                     }
                 }
             })
-            // distribution workflow
-            .state('app.administration.distribution-workflow', {
-                url: '/distribution-workflow',
-                template: templateProvider.getView('distribution-workflow'),
-                controller: 'distributionWorkflowCtrl',
-                controllerAs: 'ctrl',
-                resolve: {
-                    distributionWorkflows: function () {
-                        'ngInject';
-                        return [];
-                    },
-                    organizations: function (organizationService) {
-                        'ngInject';
-                        return organizationService.loadOrganizations();
-                    },
-                    actions: function (distributionWorkflowService) {
-                        'ngInject';
-                        return distributionWorkflowService.loadActions();
-                    }
-                }
-            })
             // inbox
             .state('app.inbox', {
                 abstract: true,

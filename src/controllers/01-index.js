@@ -36,7 +36,6 @@ module.exports = function (app) {
     require('./prepareOutgoingCtrl')(app);
     require('./documentTemplateCtrl')(app);
     require('./attachmentTypeCtrl')(app);
-    require('./distributionWorkflowCtrl')(app);
     require('./userInboxCtrl')(app);
     require('./landingPageCtrl')(app);
     require('./incomingDepartmentInboxCtrl')(app);
