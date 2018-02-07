@@ -123,8 +123,7 @@ module.exports = function (app) {
                 return;
             }
             //correspondenceService.viewCorrespondence(approvedInternal, self.gridActions);
-            correspondenceService.viewCorrespondence(approvedInternal, self.gridActions, true);
-            return;
+            return correspondenceService.viewCorrespondence(approvedInternal, self.gridActions, false, false, true);
         };
 
         /**

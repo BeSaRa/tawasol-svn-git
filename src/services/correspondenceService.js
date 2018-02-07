@@ -117,7 +117,6 @@ module.exports = function (app) {
         }
 
         function _createWorkItemSchema(info, department, readyToExport) {
-            // (department) ? urlService.departmentWF : urlService.inboxWF
             var url = [readyToExport ? urlService.readyToExports : (department) ? urlService.departmentWF : urlService.inboxWF];
             if (!readyToExport)
                 url.push('wob-num');
@@ -941,11 +940,13 @@ module.exports = function (app) {
          * @param actions
          * @param department
          * @param readyToExport true if the view from readyToExport department.
+         * @param approvedQueue
          */
-        self.viewCorrespondence = function (correspondence, actions, department, readyToExport) {
+        self.viewCorrespondence = function (correspondence, actions, department, readyToExport, approvedQueue) {
             var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : _createInstance(correspondence).getInfo();
-            if (info.isWorkItem())
-                return self.viewCorrespondenceWorkItem(info, actions, department, readyToExport);
+            var workItem = info.isWorkItem() ? correspondence : false;
+            if (workItem)
+                return self.viewCorrespondenceWorkItem(info, actions, department, readyToExport, approvedQueue);
 
             return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
                 .then(function (result) {
@@ -982,13 +983,12 @@ module.exports = function (app) {
         /**
          * @description to view correspondence workItem
          */
-        self.viewCorrespondenceWorkItem = function (info, actions, department, readyToExport) {
-            return $http.get(_createWorkItemSchema(info, department, readyToExport))
+        self.viewCorrespondenceWorkItem = function (info, actions, department, readyToExport, approvedQueue) {
+            return $http.get(approvedQueue ? _createCorrespondenceWFSchema([info.documentClass, 'approved-queue', 'wob-num', info.wobNumber]) : _createWorkItemSchema(info, department, readyToExport))
                 .then(function (result) {
                     return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                 })
                 .then(function (generalStepElementView) {
-                    console.log('generalStepElementView', generalStepElementView);
                     return dialog.showDialog({
                         template: cmsTemplate.getPopup('view-correspondence'),
                         controller: 'viewCorrespondencePopCtrl',
@@ -1110,7 +1110,6 @@ module.exports = function (app) {
                 url.splice(-1, 0, 'wob-num', info.wobNumber);
             }
             return $http.put(_createCorrespondenceWFSchema(url), generator.interceptSendInstance('Broadcast', broadcast)).then(function (result) {
-                console.log(result);
                 return result;
             });
         };
