@@ -3,6 +3,7 @@ module.exports = function (app) {
                       organizationService,
                       langService,
                       workflowActionService,
+                      Information,
                       Organization) {
         'ngInject';
 

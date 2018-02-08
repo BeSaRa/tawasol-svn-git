@@ -42,6 +42,7 @@ module.exports = function (app) {
             self.defaultThemeID = null;
             self.classificationPermisssions = null;
             self.actions = null;
+            self.outOfOffice = false;
 
             var collectionResults = [
                 'reminderSmsPriority',

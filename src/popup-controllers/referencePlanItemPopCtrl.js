@@ -37,6 +37,7 @@ module.exports = function (app) {
             lookupKey: null,
             lookupStrKey: ''
         });
+        console.log('self.securityLevels',self.securityLevels);
 
         self.documentTypes.unshift(
             new DocumentType({

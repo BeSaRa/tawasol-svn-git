@@ -1,16 +1,14 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, langService) {
+    app.run(function (CMSModelInterceptor, Information) {
         'ngInject';
-        var modelName = 'Localization';
+        var modelName = 'ProxyMailUser';
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
-            model.setLangService(langService);
+            model.proxyUserOUInfo = new Information(model.proxyUserOUInfo);
             return model;
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            // if (!model.isOverrided)
-            //     delete model.id;
             return model;
         });
 

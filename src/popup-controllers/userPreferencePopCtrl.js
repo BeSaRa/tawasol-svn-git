@@ -39,7 +39,6 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'userPreferencePopCtrl';
-        //self.applicationUser = angular.copy(applicationUser);
         self.applicationUser = new ApplicationUser(applicationUser);
         self.applicationUser.signature = signature;
         self.currentEmployee = applicationUser;
@@ -63,6 +62,8 @@ module.exports = function (app) {
         self.userWorkflowGroups = userWorkflowGroups;
         self.userFolderService = userFolderService;
         self.currentNode = null;
+
+        console.log(self.globalSetting.getSecurityLevels());
 
         var currentDate = new Date();
 
@@ -385,10 +386,11 @@ module.exports = function (app) {
                         self.ouApplicationUserCopy = angular.copy(result);
                         toast.success(langService.get('out_of_office_success'));
                     });
-            }
-            else {
+            } else {
                 form.$setUntouched();
             }
+            if (!self.isOutOfOffice)
+                self.applicationUser.outOfOffice = false;
         };
 
         self.requiredFieldsOutOfOffice = [
@@ -449,8 +451,9 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
+                    self.ouApplicationUser.applicationUser = self.applicationUser;
                     ouApplicationUserService
-                        .updateOUApplicationUser(self.ouApplicationUser)
+                        .updateProxyUser(self.ouApplicationUser)
                         .then(function (result) {
                             employeeService.setCurrentOUApplicationUser(result);
                             self.ouApplicationUserCopy = angular.copy(result);

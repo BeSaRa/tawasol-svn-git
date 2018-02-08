@@ -66,7 +66,7 @@ module.exports = function (app) {
                     return (model.privateUsers.indexOf(applicationUser.id) > -1);
                 });
             }
-            model.managers = (model.managers && model.managers.length) ? JSON.parse(model.managers) : [];
+            model.managers = (model.managers && !angular.isArray(model.privateUsers)) ? JSON.parse(model.managers) : [];
             if (model.sendToManagers && model.managers.length) {
                 model.managers = _.filter(applicationUsers, function (applicationUser) {
                     return (model.managers.indexOf(applicationUser.id) > -1);

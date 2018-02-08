@@ -88,11 +88,6 @@ module.exports = function (app) {
             applicationUserService
                 .controllerMethod
                 .manageUserPreference(null, $event)
-            /*
-                            .then(function (result) {
-                                employeeService.setEmployee(result);
-                                //toast.success(langService.get('preferences_success'))
-                            });*/
         };
         /**
          * @description switch organization

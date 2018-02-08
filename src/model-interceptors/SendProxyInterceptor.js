@@ -1,16 +1,21 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, langService) {
+    app.run(function (CMSModelInterceptor, _) {
         'ngInject';
-        var modelName = 'Localization';
-
+        var modelName = 'SendProxy';
+        var collectionToDelete = [
+            'permissions',
+            'organization',
+            'ouList',
+            'userOrganization'
+        ];
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
-            model.setLangService(langService);
             return model;
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            // if (!model.isOverrided)
-            //     delete model.id;
+            _.map(collectionToDelete, function (key) {
+                delete model.applicationUser[key];
+            });
             return model;
         });
 

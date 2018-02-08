@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                       dialog,
                                                       $http,
                                                       $q,
+                                                      $timeout,
                                                       generator,
                                                       OUApplicationUser,
                                                       _,
@@ -215,6 +216,18 @@ module.exports = function (app) {
             return $http
                 .put(urlService.ouApplicationUsers,
                     generator.interceptSendInstance('OUApplicationUser', ouApplicationUser))
+                .then(function () {
+                    return generator.generateInstance(ouApplicationUser, OUApplicationUser, self._sharedMethods);
+                });
+        };
+        /**
+         * @description update proxy user for given ouApplicationUser
+         * @param ouApplicationUser
+         * @returns {*}
+         */
+        self.updateProxyUser = function (ouApplicationUser) {
+            return $http
+                .put(urlService.ouApplicationUsers + '/proxy',generator.interceptSendInstance(['OUApplicationUser','SendProxy'] , ouApplicationUser))
                 .then(function () {
                     return generator.generateInstance(ouApplicationUser, OUApplicationUser, self._sharedMethods);
                 });

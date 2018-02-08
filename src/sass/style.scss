@@ -472,6 +472,10 @@ md-sidenav {
 /********** view-port-content *******/
 .page-content {
   position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .padding-header {
@@ -1718,4 +1722,8 @@ tr.default-theme:hover {
   .property-key.property-block {
     display: block;
   }
+}
+
+.full-width-fieldset {
+  width: 100%;
 }

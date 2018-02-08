@@ -81,7 +81,7 @@ module.exports = function (app) {
              * @returns {string}
              */
             OUApplicationUser.prototype.getTranslatedApplicationUserName = function (reverse) {
-                return langService.current === 'ar' ? (reverse ? this.applicationUser.enFullName : this.applicationUser.arFullName ) : (reverse ? this.applicationUser.arFullName : this.applicationUser.enFullName );
+                return langService.current === 'ar' ? (reverse ? this.applicationUser.enFullName : this.applicationUser.arFullName) : (reverse ? this.applicationUser.arFullName : this.applicationUser.enFullName);
             };
 
             /**
@@ -116,6 +116,10 @@ module.exports = function (app) {
                 return _.map(this.securityLevels, function (securityLevel) {
                     return securityLevel.getTranslatedName();
                 }).join(', ');
+            };
+
+            OUApplicationUser.prototype.getOutOffOfficeTranslatedStatus = function (status) {
+                return langService.get('out_of_office_toggle_button').change({status: status ? langService.get('will') : langService.get('will_not')});
             };
 
             // don't remove CMSModelInterceptor from last line

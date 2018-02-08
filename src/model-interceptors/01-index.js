@@ -67,6 +67,7 @@ module.exports = function (app) {
     require('./ApplicationUserSignatureInterceptor')(app);
     require('./ViewOutgoingInterceptor')(app);
     require('./ViewIncomingInterceptor')(app);
+    require('./ViewInternalInterceptor')(app);
     require('./FavoriteDocumentInterceptor')(app);
     require('./GeneralStepElementViewInterceptor')(app);
     require('./ReferencePlanItemStartSerialInterceptor')(app);
@@ -74,4 +75,6 @@ module.exports = function (app) {
     require('./LocalizationInterceptor')(app);
     require('./MailNotificationInterceptor')(app);
     require('./ContentViewHistoryEventsInterceptor')(app);
+    require('./SendProxyInterceptor')(app);
+    require('./ProxyMailUserInterceptor')(app);
 };

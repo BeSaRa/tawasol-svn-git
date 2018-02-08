@@ -15,7 +15,7 @@
                            ng-change="ctrl.getProxyMailForUser()"
                            ng-model="ctrl.selectUser">
                     <md-option ng-value="proxyUser" ng-repeat="proxyUser in ctrl.proxyUsers">
-                        {{proxyUser.getTranslatedName()}}
+                        {{proxyUser.getTranslatedName() + ' - ' + proxyUser.proxyUserOUInfo.getTranslatedName() }}
                     </md-option>
                 </md-select>
             </md-input-container>
@@ -148,7 +148,7 @@
                                         </md-button>
                                     </td>
                                     <td md-cell>{{proxyMailInbox.generalStepElm.docSerial}}</td>
-                                    <td md-cell class="td-data">
+                                    <td md-cell md-truncate class="subject">
                                         <a href="" class="view-doc" ng-if="proxyMailInbox.hasContent()"
                                            ng-click="ctrl.viewDocument(proxyMailInbox, $event)">{{proxyMailInbox.generalStepElm.docSubject}}</a>
                                         <span ng-if="!proxyMailInbox.hasContent()">{{proxyMailInbox.generalStepElm.docSubject}}</span>

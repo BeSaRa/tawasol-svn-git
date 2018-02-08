@@ -561,6 +561,8 @@ module.exports = function (app) {
          * @param distributionWorkflowUsersForm
          */
         self.addUserToSendDistributionWorkflow = function (distributionWorkflowUsersForm) {
+
+
             if (self._canNotSendToMultiUsers() && (self.selectedSenderUser.length > 1 || self.allSelectedDistributionWorkflows.length)) {
                 dialog.errorMessage(langService.get('cannot_send_unapproved_document_to_multi_users'));
                 return false;
@@ -573,12 +575,12 @@ module.exports = function (app) {
                 var proxyUsers = [];
                 if (self.selectedSenderUser.length > 0) {
                     proxyUsers = _.filter(self.selectedSenderUser, function (user) {
-                        return user.proxyInfo !== null;
+                        return user.proxyInfo !== null && user.proxyInfo.outOfOffice;
                     });
                 }
                 if (self.selectedAppUsers.length > 0) {
                     proxyUsers = _.filter(self.selectedAppUsers, function (user) {
-                        return user.proxyInfo !== null;
+                        return user.proxyInfo !== null && user.proxyInfo.outOfOffice;
                     });
                 }
 
