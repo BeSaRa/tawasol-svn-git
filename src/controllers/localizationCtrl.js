@@ -14,7 +14,7 @@ module.exports = function (app) {
         // all selected localization
         self.selectedLocalizations = [];
         // search model to search inside the grid
-        self.searchModel = '';
+        //self.searchModel = '';
 
 
         self.grid = {
