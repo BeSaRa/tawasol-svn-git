@@ -1304,7 +1304,8 @@ module.exports = function (app) {
          */
         self.addRemoveSingleFavoriteOU = function (ouGroup, $event) {
             if (!ouGroup.selected) {
-                distributionWorkflowService.addSingleFavoriteOU({"frequentOUID": ouGroup.id}).then(function (result) {
+                //distributionWorkflowService.addSingleFavoriteOU({"frequentOUID": ouGroup.id}).then(function (result) {
+                distributionWorkflowService.addSingleFavoriteOU({"frequentUserOUID": ouGroup.id}).then(function (result) {
                     ouGroup.selected = !ouGroup.selected;
                     ouGroup.relationId = result;
                     self.loadFavoriteOUs().then(function (value) {
@@ -2524,6 +2525,10 @@ module.exports = function (app) {
             var date = new Date();
             date.setDate(date.getDate() + (days || 0));
             return date;
+        }
+
+        self.closeLaunchDistributionWorkflowPopup = function(){
+            return dialog.cancel();
         }
     });
 };

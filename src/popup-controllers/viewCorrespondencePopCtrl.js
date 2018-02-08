@@ -59,24 +59,24 @@ module.exports = function (app) {
             console.log(self.actions);
         };
 
-
-        /**
+/*
+        /!**
          * @description Check if the document is approved. If yes, don't allow to change properties and correspondence sites
          * @param document
          * @returns {boolean}
-         */
+         *!/
         self.checkIfEditDisabled = function (document) {
             if (!document)
                 return true;
-            /*If document is approved, don't allow to edit whether it is any document*/
-            /*If electronic outgoing/electronic internal and approved, don't allow to edit*/
-            /*If incoming, allow to edit*/
-            /*If not approved, allow to edit will depend on permission*/
+            /!*If document is approved, don't allow to edit whether it is any document*!/
+            /!*If electronic outgoing/electronic internal and approved, don't allow to edit*!/
+            /!*If incoming, allow to edit*!/
+            /!*If not approved, allow to edit will depend on permission*!/
 
-            /*FROM SRS*/
-            /*Outgoing properties can be editable at any time in department ready to export */
-            /*Outgoing content can be available if paper outgoing*/
-            /*Correspondence Sites can be editable if document is unapproved*/
+            /!*FROM SRS*!/
+            /!*Outgoing properties can be editable at any time in department ready to export *!/
+            /!*Outgoing content can be available if paper outgoing*!/
+            /!*Correspondence Sites can be editable if document is unapproved*!/
             var info = document.getInfo();
             var isApproved = info.docStatus >= 24;
             if (isApproved)
@@ -95,6 +95,6 @@ module.exports = function (app) {
 
         $timeout(function () {
             self.approved = self.checkIfEditDisabled(self.correspondence);
-        });
+        });*/
     });
 };

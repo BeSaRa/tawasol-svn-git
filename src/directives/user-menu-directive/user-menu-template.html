@@ -15,7 +15,7 @@
             </div>
         </md-button>
         <md-menu-content width="3">
-            <md-menu-item ng-if="!userMenu.employeeService.isAdminUser()">
+            <md-menu-item ng-if="!userMenu.employeeService.isAdminUser() && userMenu.employeeService.hasPermissionTo('MANAGE_PREFERENCES')">
                 <md-button ng-click="userMenu.userPreferences($event)">
                     <div layout="row" layout-align="start center">
                         <md-icon md-svg-icon="account-settings-variant"></md-icon>

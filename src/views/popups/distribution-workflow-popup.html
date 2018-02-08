@@ -1248,7 +1248,22 @@
                                ng-click="ctrl.replyDistributionWorkflow()">
                         {{lang.reply}}
                     </md-button>
+                    <span flex></span>
+
+                    <md-button class="md-raised"
+                               ng-click="ctrl.closeLaunchDistributionWorkflowPopup()">
+                        {{lang.cancel}}
+                    </md-button>
                 </div>
+            </div>
+        </div>
+        <div ng-if="!ctrl.showDistributionWorkflowAddedUsers">
+            <div layout="row">
+                <span flex></span>
+                <md-button class="md-raised"
+                           ng-click="ctrl.closeLaunchDistributionWorkflowPopup()">
+                    {{lang.cancel}}
+                </md-button>
             </div>
         </div>
     </div>

@@ -586,7 +586,7 @@
                                                            ng-model="ctrl.ouApplicationUser.proxyAuthorityLevels"
                                                            ng-model-options="{trackBy: '$value.id'}">
                                                     <md-option
-                                                            ng-repeat="securityLevel in ctrl.securityLevels track by $index"
+                                                            ng-repeat="securityLevel in ctrl.authorityLevels track by $index"
                                                             ng-value="securityLevel">
                                                         {{securityLevel.getTranslatedName()}}
                                                     </md-option>

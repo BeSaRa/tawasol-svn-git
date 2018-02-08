@@ -203,6 +203,7 @@ module.exports = function (app) {
         // if we have source form
         $timeout(function () {
             self.sourceForm = $scope.outgoing_properties;
+            self.approved = self.checkIfEditDisabled(self.document)
         });
 
         $scope.$watch(function () {
@@ -223,5 +224,39 @@ module.exports = function (app) {
                 "arName": "إداري",
                 "enName": "Departmental"
             }];
+
+
+        /**
+         * @description Check if the document is approved. If yes, don't allow to change properties and correspondence sites
+         * @param document
+         * @returns {boolean}
+         */
+        self.checkIfEditDisabled = function (document) {
+            if (!document)
+                return true;
+            /*If document is approved, don't allow to edit whether it is any document*/
+            /*If electronic outgoing/electronic internal and approved, don't allow to edit*/
+            /*If incoming, allow to edit*/
+            /*If not approved, allow to edit will depend on permission*/
+
+            /*FROM SRS*/
+            /*Outgoing properties can be editable at any time in department ready to export */
+            /*Outgoing content can be available if paper outgoing*/
+            /*Correspondence Sites can be editable if document is unapproved*/
+            var info = document.getInfo();
+            var isApproved = info.docStatus >= 24;
+            if (isApproved)
+                return true;
+
+            var hasPermission = false;
+            if (info.documentClass === "outgoing")
+                hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+            else if (info.documentClass === "internal")
+                hasPermission = (employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT"));
+            else if (info.documentClass === "incoming")
+                hasPermission = (employeeService.hasPermissionTo("EDIT_INCOMING'S_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INCOMING'S_CONTENT"));
+            return (isApproved && hasPermission);
+            //return (isApproved && ((info.documentClass === "outgoing" || info.documentClass === "internal") && !info.isPaper) && hasPermission);
+        };
     });
 };
