@@ -137,7 +137,8 @@
                                 </span>
                             </span>
                                         <md-button tooltip="{{lang.select_manager}}" class="md-icon-button"
-                                                   ng-click="ctrl.selectUser('managerId' , $event)">
+                                                   ng-click="ctrl.selectUser('managerId' , $event)"
+                                                    ng-disabled="!ctrl.organization.id">
                                             <md-icon md-svg-icon="plus"></md-icon>
                                         </md-button>
                                     </div>
