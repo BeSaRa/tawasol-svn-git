@@ -2,7 +2,9 @@ module.exports = function (app) {
     app.controller('returnedDepartmentInboxCtrl', function (lookupService,
                                                             returnedDepartmentInboxService,
                                                             returnedDepartmentInboxes,
+                                                            userInboxService,
                                                             $q,
+                                                            $timeout,
                                                             langService,
                                                             rootEntity,
                                                             toast,
@@ -525,6 +527,26 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Terminate User inboxes Bulk
+         * @param $event
+         */
+        self.terminateBulk = function ($event) {
+            var numberOfRecordsToTerminate = angular.copy(self.selectedReturnedDepartmentInboxes.length);
+            userInboxService
+                .controllerMethod
+                .userInboxTerminateBulk(self.selectedReturnedDepartmentInboxes, $event)
+                .then(function () {
+                    $timeout(function () {
+                        self.reloadReturnedDepartmentInboxes(self.grid.page)
+                            .then(function () {
+                                if (numberOfRecordsToTerminate === 1)
+                                    toast.success(langService.get("selected_terminate_success"));
+                            });
+                    }, 100);
+                });
+        };
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
@@ -783,70 +805,70 @@ module.exports = function (app) {
                     }
                 ]
             },
-           /* // Edit
-            {
-                type: 'action',
-                icon: 'pencil',
-                text: 'grid_action_edit',
-                shortcut: false,
-                showInView: false,
-                checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    var hasPermission = false;
-                    /!* if (info.documentClass === "internal")
-                         hasPermission = (employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT"));
-                     else if (info.documentClass === "incoming")
-                         hasPermission = ( employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES")|| employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT"));
-                     else*!/
-                    if (info.documentClass === "outgoing")
-                        hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-                    return !action.hide && hasPermission;
-                },
-                submenu: [
-                    // Content
-                    {
-                        type: 'action',
-                        //icon: 'link-variant',
-                        text: 'grid_action_content',
-                        shortcut: false,
-                        callback: self.editContent,
-                        class: "action-green",
-                        checkShow: function (action, model) {
-                            var info = model.getInfo();
-                            var hasPermission = false;
-                            /!*if (info.documentClass === "internal")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
-                            else if (info.documentClass === "incoming")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
-                            else*!/
-                            if (info.documentClass === "outgoing")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
-                            return !action.hide && hasPermission;
-                        }
-                    },
-                    // Properties
-                    {
-                        type: 'action',
-                        //icon: 'attachment',
-                        text: 'grid_action_properties',
-                        shortcut: false,
-                        callback: self.editProperties,
-                        class: "action-green",
-                        checkShow: function (action, model) {
-                            var info = model.getInfo();
-                            var hasPermission = false;
-                            /!*if (info.documentClass === "internal")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-                            else if (info.documentClass === "incoming")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
-                            else*!/
-                            if (info.documentClass === "outgoing")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
-                            return !action.hide && hasPermission;
-                        }
-                    }
-                ]
-            }*/
+            /* // Edit
+             {
+                 type: 'action',
+                 icon: 'pencil',
+                 text: 'grid_action_edit',
+                 shortcut: false,
+                 showInView: false,
+                 checkShow: function (action, model) {
+                     var info = model.getInfo();
+                     var hasPermission = false;
+                     /!* if (info.documentClass === "internal")
+                          hasPermission = (employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT"));
+                      else if (info.documentClass === "incoming")
+                          hasPermission = ( employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES")|| employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT"));
+                      else*!/
+                     if (info.documentClass === "outgoing")
+                         hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                     return !action.hide && hasPermission;
+                 },
+                 submenu: [
+                     // Content
+                     {
+                         type: 'action',
+                         //icon: 'link-variant',
+                         text: 'grid_action_content',
+                         shortcut: false,
+                         callback: self.editContent,
+                         class: "action-green",
+                         checkShow: function (action, model) {
+                             var info = model.getInfo();
+                             var hasPermission = false;
+                             /!*if (info.documentClass === "internal")
+                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
+                             else if (info.documentClass === "incoming")
+                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
+                             else*!/
+                             if (info.documentClass === "outgoing")
+                                 hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
+                             return !action.hide && hasPermission;
+                         }
+                     },
+                     // Properties
+                     {
+                         type: 'action',
+                         //icon: 'attachment',
+                         text: 'grid_action_properties',
+                         shortcut: false,
+                         callback: self.editProperties,
+                         class: "action-green",
+                         checkShow: function (action, model) {
+                             var info = model.getInfo();
+                             var hasPermission = false;
+                             /!*if (info.documentClass === "internal")
+                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                             else if (info.documentClass === "incoming")
+                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+                             else*!/
+                             if (info.documentClass === "outgoing")
+                                 hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                             return !action.hide && hasPermission;
+                         }
+                     }
+                 ]
+             }*/
         ];
 
 
