@@ -154,7 +154,8 @@
                                 </span>
                             </span>
                                         <md-button tooltip="{{lang.select_vice_manager}}" class="md-icon-button"
-                                                   ng-click="ctrl.selectUser('viceManagerId',$event)">
+                                                   ng-click="ctrl.selectUser('viceManagerId',$event)"
+                                                   ng-disabled="!ctrl.organization.id">
                                             <md-icon md-svg-icon="plus"></md-icon>
                                         </md-button>
                                     </div>
@@ -170,7 +171,8 @@
                                 </span>
                             </span>
                                         <md-button tooltip="{{lang.select_admin}}" class="md-icon-button"
-                                                   ng-click="ctrl.selectUser('adminUserId', $event)">
+                                                   ng-click="ctrl.selectUser('adminUserId', $event)"
+                                                   ng-disabled="!ctrl.organization.id">
                                             <md-icon md-svg-icon="plus"></md-icon>
                                         </md-button>
                                     </div>
