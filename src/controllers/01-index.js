@@ -43,7 +43,6 @@ module.exports = function (app) {
     require('./returnedDepartmentInboxCtrl')(app);
     require('./quickSearchCorrespondenceCtrl')(app);
     require('./scanIncomingCtrl')(app);
-    require('./draftIncomingCtrl')(app);
     require('./readyToSendIncomingCtrl')(app);
     require('./prepareInternalCtrl')(app);
     require('./draftInternalCtrl')(app);

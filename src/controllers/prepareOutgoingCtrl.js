@@ -8,7 +8,6 @@ module.exports = function (app) {
                                                     dialog,
                                                     generator,
                                                     counterService,
-                                                    viewDocumentService,
                                                     managerService,
                                                     validationService,
                                                     employeeService,
@@ -258,25 +257,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Open document for prepare outgoing
-         * @param prepareOutgoing
-         * @param $event
-         */
-        self.openOutgoing = function (prepareOutgoing, $event) {
-            //console.log('open prepare outgoing : ', prepareOutgoing);
-            if (!prepareOutgoing.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(prepareOutgoing, self.gridActions);
-            return;
-        };
-
-        /**
          * @description Manage destinations for prepare outgoing
          * @param prepareOutgoing
          * @param $event
@@ -516,13 +496,13 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && !model.hasContent();
                 }
             },
-            // Open
-            {
+            // Open (not needed as documents will always be without content in this grid)
+            /*{
                 type: 'action',
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
-                callback: self.openOutgoing,
+                callback: self.viewDocument,
                 showInView: false,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
@@ -530,7 +510,7 @@ module.exports = function (app) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
                 }
-            },
+            },*/
             // Broadcast
             {
                 type: 'action',
@@ -545,26 +525,5 @@ module.exports = function (app) {
                 }
             }
         ];
-
-        /**
-         * @description View document
-         * @param prepareOutgoing
-         * @param $event
-         */
-        self.viewDocument = function (prepareOutgoing, $event) {
-            //console.log("view prepareOutgoing", prepareOutgoing);
-            if (!prepareOutgoing.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-
-            correspondenceService.viewCorrespondence(prepareOutgoing, self.gridActions);
-            return;
-
-        };
     });
 };

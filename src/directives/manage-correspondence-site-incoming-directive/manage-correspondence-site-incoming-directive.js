@@ -11,7 +11,8 @@ module.exports = function (app) {
                 vsId: '=',
                 documentClass: '=',
                 emptySubRecords: '=',
-                site: '='
+                site: '=',
+                disableCorrespondence: '='
             }
         }
     });

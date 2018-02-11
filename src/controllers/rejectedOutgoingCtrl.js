@@ -404,25 +404,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Open outgoing
-         * @param rejectedOutgoing
-         * @param $event
-         */
-        self.openOutgoing = function (rejectedOutgoing, $event) {
-            //console.log('open rejected outgoing : ', rejectedOutgoing);
-            if (!rejectedOutgoing.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(rejectedOutgoing, self.gridActions);
-            return;
-        };
-
-        /**
          * @description broadcast selected organization and workflow group
          * @param rejectedOutgoing
          * @param $event
@@ -437,6 +418,32 @@ module.exports = function (app) {
                 .catch(function () {
                     self.reloadRejectedOutgoings(self.grid.page);
                 });
+        };
+
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var isEditAllowed = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+            if (checkForViewPopup)
+                return !isEditAllowed;
+            return isEditAllowed;
+        };
+
+        /**
+         * @description View document
+         * @param rejectedOutgoing
+         * @param $event
+         */
+        self.viewDocument = function (rejectedOutgoing, $event) {
+            if (!rejectedOutgoing.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(rejectedOutgoing, self.gridActions, checkIfEditPropertiesAllowed(rejectedOutgoing, true), false);
+            return;
         };
 
         /**
@@ -508,31 +515,31 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
-           /* // Edit Outgoing Properties
-            {
-                type: 'action',
-                icon: 'pencil',
-                text: 'grid_action_edit_outgoing_properties',
-                shortcut: false,
-                permissionKey: "EDIT_OUTGOING_PROPERTIES",
-                callback: self.editProperties,
-                class: "action-green",
-                showInView: false,
-                checkShow: self.checkToShowAction
-            },
-            // Edit Outgoing Content
-            {
-                type: 'action',
-                icon: 'pencil-box',
-                text: 'grid_action_edit_outgoing_content',
-                shortcut: false,
-                callback: self.editContent,
-                permissionKey: "EDIT_OUTGOING_CONTENT",
-                class: "action-green",
-                showInView: false,
-                checkShow: self.checkToShowAction
-            },*/
-           // Launch Distribution Workflow
+            /* // Edit Outgoing Properties
+             {
+                 type: 'action',
+                 icon: 'pencil',
+                 text: 'grid_action_edit_outgoing_properties',
+                 shortcut: false,
+                 permissionKey: "EDIT_OUTGOING_PROPERTIES",
+                 callback: self.editProperties,
+                 class: "action-green",
+                 showInView: false,
+                 checkShow: self.checkToShowAction
+             },
+             // Edit Outgoing Content
+             {
+                 type: 'action',
+                 icon: 'pencil-box',
+                 text: 'grid_action_edit_outgoing_content',
+                 shortcut: false,
+                 callback: self.editContent,
+                 permissionKey: "EDIT_OUTGOING_CONTENT",
+                 class: "action-green",
+                 showInView: false,
+                 checkShow: self.checkToShowAction
+             },*/
+            // Launch Distribution Workflow
             {
                 type: 'action',
                 icon: 'sitemap',
@@ -713,7 +720,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
-                callback: self.openOutgoing,
+                callback: self.viewDocument,
                 class: "action-green",
                 showInView: false,
                 permissionKey: 'VIEW_DOCUMENT',
@@ -736,23 +743,5 @@ module.exports = function (app) {
                 }
             }
         ];
-
-        /**
-         * @description View document
-         * @param rejectedOutgoing
-         * @param $event
-         */
-        self.viewDocument = function (rejectedOutgoing, $event) {
-            if (!rejectedOutgoing.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(rejectedOutgoing, self.gridActions);
-            return;
-        };
     });
 };

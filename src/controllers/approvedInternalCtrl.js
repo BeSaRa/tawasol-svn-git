@@ -113,20 +113,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description View document
-         * @param approvedInternal
-         * @param $event
-         */
-        self.viewDocument = function (approvedInternal, $event) {
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            //correspondenceService.viewCorrespondence(approvedInternal, self.gridActions);
-            return correspondenceService.viewCorrespondence(approvedInternal, self.gridActions, false, false, true);
-        };
-
-        /**
          * @description Terminate approved internals Bulk
          * @param $event
          */
@@ -230,18 +216,6 @@ module.exports = function (app) {
                 .viewTrackingSheetPopup(approvedInternal, params, $event).then(function (result) {
 
             });
-        };
-
-        /**
-         * @description Open approved internal
-         * @param approvedInternal
-         * @param $event
-         */
-        self.openApprovedInternal = function (approvedInternal, $event) {
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                return dialog.infoMessage(langService.get('no_view_permission'));
-            }
-            return correspondenceService.viewCorrespondence(approvedInternal, self.gridActions, true);
         };
 
         /**
@@ -380,6 +354,26 @@ module.exports = function (app) {
         self.sendApprovedInternalLink = function (approvedInternal, $event) {
             console.log('sendApprovedInternalLink : ', approvedInternal);
         };
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            /*var isEditAllowed = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+            if (checkForViewPopup)
+                return !isEditAllowed;
+            return isEditAllowed;*/
+            return true;
+        };
+
+        /**
+         * @description View document
+         * @param approvedInternal
+         * @param $event
+         */
+        self.viewDocument = function (approvedInternal, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            return correspondenceService.viewCorrespondence(approvedInternal, self.gridActions, checkIfEditPropertiesAllowed(approvedInternal, true), true, false, false, true);
+        };
 
         /**
          * @description Check if action will be shown on grid or not
@@ -481,7 +475,7 @@ module.exports = function (app) {
                 text: 'grid_action_open',
                 shortcut: false,
                 showInView: false,
-                callback: self.openApprovedInternal,
+                callback: self.viewDocument,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {

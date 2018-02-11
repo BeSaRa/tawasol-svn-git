@@ -24,10 +24,9 @@ module.exports = function (app) {
                                                                  ResolveDefer) {
         'ngInject';
         var self = this;
-
         /*
-       * IT WILL ALWAYS GET OUTGOING DOCUMENTS ONLY
-       * */
+       IT WILL ALWAYS GET OUTGOING DOCUMENTS ONLY
+       */
 
         self.controllerName = 'readyToExportDepartmentInboxCtrl';
 
@@ -208,25 +207,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description View document
-         * @param readyToExport
-         * @param $event
-         */
-        self.viewDocument = function (readyToExport, $event) {
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT', true)) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            return correspondenceService.viewCorrespondence(readyToExport, self.gridActions, true, true)
-                .then(function () {
-                    self.reloadReadyToExports(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadReadyToExports(self.grid.page);
-                });
-        };
-
-        /**
          * @description Terminate Ready To Export Bulk
          * @param $event
          */
@@ -392,26 +372,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Open Ready To Export
-         * @param readyToExport
-         * @param $event
-         */
-        self.openReadyToExport = function (readyToExport, $event) {
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            //correspondenceService.viewCorrespondence(readyToExport, self.gridActions, true);
-            return correspondenceService.viewCorrespondence(readyToExport, self.gridActions, true, true)
-                .then(function () {
-                    self.reloadReadyToExports(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadReadyToExports(self.grid.page);
-                });
-        };
-
-        /**
          * @description Manage Tags
          * @param readyToExport
          * @param $event
@@ -541,37 +501,6 @@ module.exports = function (app) {
         self.viewReadyToExportCompleteLinkedDocuments = function (readyToExport, $event) {
             console.log('viewReadyToExportCompleteLinkedDocuments : ', readyToExport);
         };
-        /**
-         * @description Check if action will be shown on grid or not
-         * @param action
-         * @param model
-         * @returns {boolean}
-         */
-        self.checkToShowAction = function (action, model) {
-            /*if (action.hasOwnProperty('permissionKey'))
-                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-            return (!action.hide);*/
-
-            if (action.hasOwnProperty('permissionKey')) {
-                if (typeof action.permissionKey === 'string') {
-                    return (!action.hide) && employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey)) {
-                    if (!action.permissionKey.length) {
-                        return (!action.hide);
-                    }
-                    else {
-                        var hasPermissions = _.map(action.permissionKey, function (key) {
-                            return employeeService.hasPermissionTo(key);
-                        });
-                        return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
-                    }
-                }
-            }
-            return (!action.hide);
-        };
 
         /**
          * @description Edit Outgoing Content
@@ -582,6 +511,7 @@ module.exports = function (app) {
             var info = readyToExport.getInfo();
             managerService.manageDocumentContent(info.vsId, info.workFlow, info.title, $event);
         };
+
 
         /**
          * @description Edit Outgoing Properties
@@ -596,7 +526,6 @@ module.exports = function (app) {
                     self.reloadReadyToExports(self.grid.page)
                 });
         };
-
 
         /**
          * @description broadcast selected organization and workflow group
@@ -643,6 +572,67 @@ module.exports = function (app) {
          */
         self.printBarcode = function (model, $event) {
             model.barcodePrint($event);
+        };
+
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var info = model.getInfo();
+            var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+            var allowed = hasPermission && info.isPaper;// && info.docStatus < 24
+            if(checkForViewPopup)
+                return !allowed;
+            return allowed;
+        };
+
+        /**
+         * @description View document
+         * @param readyToExport
+         * @param $event
+         */
+        self.viewDocument = function (readyToExport, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT', true)) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            return correspondenceService.viewCorrespondence(readyToExport, self.gridActions, checkIfEditPropertiesAllowed(readyToExport, true), false, true, true)
+                .then(function () {
+                    self.reloadReadyToExports(self.grid.page);
+                })
+                .catch(function () {
+                    self.reloadReadyToExports(self.grid.page);
+                });
+        };
+
+        /**
+         * @description Check if action will be shown on grid or not
+         * @param action
+         * @param model
+         * @returns {boolean}
+         */
+        self.checkToShowAction = function (action, model) {
+            /*if (action.hasOwnProperty('permissionKey'))
+                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+            return (!action.hide);*/
+
+            if (action.hasOwnProperty('permissionKey')) {
+                if (typeof action.permissionKey === 'string') {
+                    return (!action.hide) && employeeService.hasPermissionTo(action.permissionKey);
+                }
+                else if (angular.isArray(action.permissionKey)) {
+                    if (!action.permissionKey.length) {
+                        return (!action.hide);
+                    }
+                    else {
+                        var hasPermissions = _.map(action.permissionKey, function (key) {
+                            return employeeService.hasPermissionTo(key);
+                        });
+                        return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
+                            return isPermission !== true;
+                        }));
+                    }
+                }
+            }
+            return (!action.hide);
         };
 
         /**
@@ -723,7 +713,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: true,
-                callback: self.openReadyToExport,
+                callback: self.viewDocument,
                 class: "action-green",
                 showInView: false,
                 permissionKey: 'VIEW_DOCUMENT',
@@ -732,7 +722,7 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && model.hasContent();
                 }
             },
-            // Edit After Approve (Only electronic outgoing)
+            // Edit After Approve (Only electronic only)
             {
                 type: 'action',
                 icon: 'eraser-variant',
@@ -740,6 +730,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.editAfterApprove,
                 class: "action-green",
+                showInView: false,
                 permissionKey: "EDIT_OUTGOING_CONTENT", //TODO: Apply correct permission when added to database.
                 checkShow: function (action, model) {
                     var info = model.getInfo();
@@ -902,7 +893,7 @@ module.exports = function (app) {
                     }
                 ]
             },
-            // Edit
+            // Edit(Paper Only)
             {
                 type: 'action',
                 icon: 'pencil',
@@ -911,43 +902,31 @@ module.exports = function (app) {
                 showInView: false,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    var hasPermission = false;
-                    if (info.documentClass === "outgoing")
-                        hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-                    return self.checkToShowAction(action, model) && hasPermission;// && info.docStatus < 24
+                    var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                    return self.checkToShowAction(action, model) && hasPermission && info.isPaper;// && info.docStatus < 24
                 },
                 submenu: [
-                    // Content (Only for outgoing paper only)
+                    // Content
                     {
                         type: 'action',
                         //icon: 'link-variant',
                         text: 'grid_action_content',
                         shortcut: false,
                         callback: self.editContent,
+                        permissionKey: "EDIT_OUTGOING_CONTENT",
                         class: "action-green",
-                        checkShow: function (action, model) {
-                            var info = model.getInfo();
-                            var hasPermission = false;
-                            if (info.documentClass === "outgoing")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
-                            return self.checkToShowAction(action, model) && hasPermission && info.isPaper;
-                        }
+                        checkShow: self.checkToShowAction
                     },
-                    // Edit properties (Only for outgoing)
+                    // Edit properties
                     {
                         type: 'action',
                         //icon: 'pencil',
                         text: 'grid_action_properties',
                         shortcut: false,
                         callback: self.editProperties,
+                        permissionKey: "EDIT_OUTGOING_PROPERTIES",
                         class: "action-green",
-                        checkShow: function (action, model) {
-                            var info = model.getInfo();
-                            var hasPermission = false;
-                            if (info.documentClass === "outgoing")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
-                            return self.checkToShowAction(action, model) && hasPermission;
-                        }
+                        checkShow: self.checkToShowAction
                     }
                 ]
             },

@@ -379,21 +379,6 @@ module.exports = function (app) {
                 });
         };
 
-
-        self.viewDocument = function (searchedInternalDocument, $event) {
-            if (!searchedInternalDocument.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(searchedInternalDocument, self.gridActions);
-            return;
-        };
-
-
         /**
          * @description Export searched internal document
          * @param searchedInternalDocument
@@ -409,26 +394,6 @@ module.exports = function (app) {
                             toast.success(langService.get('export_success'));
                         });
                 });
-        };
-
-        /**
-         * @description open searched internal document
-         * @param searchedInternalDocument
-         * @param $event
-         */
-        self.openSearchInternalDocument = function (searchedInternalDocument, $event) {
-            //console.log('open searched internal document : ', searchedInternalDocument);
-
-            if (!searchedInternalDocument.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(searchedInternalDocument, self.gridActions);
-            return;
         };
 
         /**
@@ -651,6 +616,18 @@ module.exports = function (app) {
             console.log('create copy for searched internal document : ', searchedInternalDocument);
         };
 
+        self.viewDocument = function (searchedInternalDocument, $event) {
+            if (!searchedInternalDocument.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(searchedInternalDocument, self.gridActions, true, true);
+            return;
+        };
 
         /**
          * @description Check if action will be shown on grid or not
@@ -734,7 +711,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
-                callback: self.openSearchInternalDocument,
+                callback: self.viewDocument,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {

@@ -1,5 +1,5 @@
 <div class="p20" layout="column">
-    <div layout="row" flex>
+    <div layout="row" flex ng-if="!ctrl.disableCorrespondence">
         <md-input-container flex>
             <label>{{lang.sites_select_site_type}}</label>
             <md-select ng-model="ctrl.selectedType">
@@ -40,7 +40,7 @@
                         </div>
                         <div>
                             <md-button tooltip="{{lang.sites_hide_search}}" class="md-icon-button close-search-button"
-                                       ng-click="ctrl.onCloseSearch()">
+                                       ng-click="ctrl.onCloseSearch()" ng-disabled="!!ctrl.disableCorrespondence">
                                 <md-icon md-svg-icon="close"></md-icon>
                             </md-button>
                         </div>
@@ -88,7 +88,7 @@
                                 <div>
                                     <md-menu-bar class="follow-up-menu-bar">
                                         <md-menu>
-                                            <md-button ng-click="$mdMenu.open()">
+                                            <md-button ng-click="$mdMenu.open()" ng-disabled="!!ctrl.disableCorrespondence">
                                                 {{site.followupStatus.getTranslatedName() ||
                                                 lang.sites_follow_up_status}}
                                             </md-button>
@@ -107,14 +107,14 @@
                                                    name="followUpStatusDate"
                                                    ng-model="site.followupDate"
                                                    md-placeholder="{{lang.sites_follow_up_status_date}}"
-                                                   md-max-date="ctrl.maxCreateDate"
+                                                   md-max-date="ctrl.maxCreateDate" ng-disabled="!!ctrl.disableCorrespondence"
                                                    md-open-on-focus></md-datepicker>
                                 </div>
                             </div>
                         </td>
                         <td md-cell>
                             <div flex layout="row" layout-align="start center">
-                                <md-button class="md-icon-button" ng-click="ctrl.replaceSite(site)">
+                                <md-button class="md-icon-button" ng-click="ctrl.replaceSite(site)" ng-disabled="!!ctrl.disableCorrespondence">
                                     <md-icon md-svg-icon="plus"></md-icon>
                                 </md-button>
                             </div>
@@ -181,7 +181,7 @@
                         <td md-cell>
                             <div flex layout="row" layout-align="start center">
                                 <div>
-                                    <md-button ng-click="ctrl.deleteSite()" tooltip="{{lang.delete}}" class="md-icon-button">
+                                    <md-button ng-click="ctrl.deleteSite()" tooltip="{{lang.delete}}" ng-disabled="!!ctrl.disableCorrespondence" class="md-icon-button">
                                         <md-icon md-svg-icon="delete"></md-icon>
                                     </md-button>
                                 </div>

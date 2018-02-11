@@ -10,7 +10,6 @@ module.exports = function (app) {
                                                     employeeService,
                                                     viewTrackingSheetService,
                                                     managerService,
-                                                    viewDocumentService,
                                                     broadcastService,
                                                     counterService,
                                                     correspondenceService,
@@ -255,25 +254,6 @@ module.exports = function (app) {
                 })
         };
 
-
-        /**
-         * @description Open document for prepare internal
-         * @param prepareInternal
-         * @param $event
-         */
-        self.open = function (prepareInternal, $event) {
-            if (!prepareInternal.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            return correspondenceService.viewCorrespondence(prepareInternal, self.gridActions);
-
-        };
-
         /**
          * @description broadcast selected organizations and workflow groups
          * @param prepareInternal
@@ -481,21 +461,21 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && !model.hasContent();
                 }
             },
-            // Open
-            {
+            // Open (not needed as documents will always be without content in this grid)
+            /*{
                 type: 'action',
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
                 showInView: false,
-                callback: self.open,
+                callback: self.viewDocument,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
                 }
-            },
+            },*/
             // Broadcast
             {
                 type: 'action',
@@ -510,25 +490,5 @@ module.exports = function (app) {
                 }
             }
         ];
-
-        /**
-         * @description View document
-         * @param prepareInternal
-         * @param $event
-         */
-        self.viewDocument = function (prepareInternal, $event) {
-            if (!prepareInternal.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(prepareInternal, self.gridActions);
-            return;
-        };
-
-
     });
 };

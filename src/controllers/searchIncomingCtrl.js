@@ -386,24 +386,6 @@ module.exports = function (app) {
                 });
         };
 
-        /**
-         * @description View document
-         * @param searchedIncomingDocument
-         * @param $event
-         */
-        self.viewDocument = function (searchedIncomingDocument, $event) {
-            if (!searchedIncomingDocument.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(searchedIncomingDocument, self.gridActions);
-            return;
-        };
-
         /*
                 /!**
                  * @description Export searched incoming document
@@ -422,26 +404,6 @@ module.exports = function (app) {
                                 });
                         });
                 };*/
-
-        /**
-         * @description open searched incoming document
-         * @param searchedIncomingDocument
-         * @param $event
-         */
-        self.openSearchIncomingDocument = function (searchedIncomingDocument, $event) {
-            //console.log('open searched incoming document : ', searchedIncomingDocument);
-
-            if (!searchedIncomingDocument.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(searchedIncomingDocument, self.gridActions);
-            return;
-        };
 
 
         /**
@@ -677,6 +639,25 @@ module.exports = function (app) {
             $state.go('app.outgoing.add', {vsId: info.vsId, action: 'reply'});
         };
 
+
+        /**
+         * @description View document
+         * @param searchedIncomingDocument
+         * @param $event
+         */
+        self.viewDocument = function (searchedIncomingDocument, $event) {
+            if (!searchedIncomingDocument.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(searchedIncomingDocument, self.gridActions, true, true);
+            return;
+        };
+
         /**
          * @description Check if action will be shown on grid or not
          * @param action
@@ -758,7 +739,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
-                callback: self.openSearchIncomingDocument,
+                callback: self.viewDocument,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {

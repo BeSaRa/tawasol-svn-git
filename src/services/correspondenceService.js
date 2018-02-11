@@ -938,15 +938,17 @@ module.exports = function (app) {
          * @description view correspondence
          * @param correspondence
          * @param actions
+         * @param disableProperties
+         * @param disableCorrespondence
          * @param department
          * @param readyToExport true if the view from readyToExport department.
          * @param approvedQueue
          */
-        self.viewCorrespondence = function (correspondence, actions, department, readyToExport, approvedQueue) {
+        self.viewCorrespondence = function (correspondence, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue) {
             var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : _createInstance(correspondence).getInfo();
             var workItem = info.isWorkItem() ? correspondence : false;
             if (workItem)
-                return self.viewCorrespondenceWorkItem(info, actions, department, readyToExport, approvedQueue);
+                return self.viewCorrespondenceWorkItem(info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue);
 
             return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
                 .then(function (result) {
@@ -965,7 +967,9 @@ module.exports = function (app) {
                             correspondence: result.metaData,
                             content: result.content,
                             actions: actions,
-                            workItem: info.workFlow === 'internal' ? correspondence : workItem
+                            workItem: info.workFlow === 'internal' ? correspondence : workItem,
+                            disableProperties: disableProperties,
+                            disableCorrespondence: disableCorrespondence
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -983,7 +987,7 @@ module.exports = function (app) {
         /**
          * @description to view correspondence workItem
          */
-        self.viewCorrespondenceWorkItem = function (info, actions, department, readyToExport, approvedQueue) {
+        self.viewCorrespondenceWorkItem = function (info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue) {
             return $http.get(approvedQueue ? _createCorrespondenceWFSchema([info.documentClass, 'approved-queue', 'wob-num', info.wobNumber]) : _createWorkItemSchema(info, department, readyToExport))
                 .then(function (result) {
                     return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
@@ -1000,7 +1004,9 @@ module.exports = function (app) {
                             content: generalStepElementView.documentViewInfo,
                             actions: actions,
                             workItem: generalStepElementView,
-                            readyToExport: readyToExport
+                            readyToExport: readyToExport,
+                            disableProperties: disableProperties,
+                            disableCorrespondence: disableCorrespondence
                         },
                         resolve: {
                             organizations: function (organizationService) {

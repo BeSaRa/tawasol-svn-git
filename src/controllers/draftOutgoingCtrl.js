@@ -380,25 +380,6 @@ module.exports = function (app) {
             };
 
             /**
-             * @description Open draft outgoing
-             * @param draftOutgoing
-             * @param $event
-             */
-            self.openOutgoing = function (draftOutgoing, $event) {
-                if (!draftOutgoing.hasContent()) {
-                    dialog.alertMessage(langService.get('content_not_found'));
-                    return;
-                }
-                if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                    dialog.infoMessage(langService.get('no_view_permission'));
-                    return;
-                }
-
-                correspondenceService.viewCorrespondence(draftOutgoing, self.gridActions);
-                return;
-            };
-
-            /**
              * @description broadcast selected organizations and workflow groups
              * @param readyToExport
              * @param $event
@@ -413,6 +394,33 @@ module.exports = function (app) {
                     .catch(function () {
                         self.reloadDraftOutgoings(self.grid.page);
                     });
+            };
+
+            var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+                var isEditAllowed = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                if (checkForViewPopup)
+                    return !isEditAllowed;
+                return isEditAllowed;
+            };
+
+            /**
+             * @description View document
+             * @param draftOutgoing
+             * @param $event
+             */
+            self.viewDocument = function (draftOutgoing, $event) {
+                //console.log("draftOutgoing", draftOutgoing);
+                if (!draftOutgoing.hasContent()) {
+                    dialog.alertMessage(langService.get('content_not_found'));
+                    return;
+                }
+                if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                    dialog.infoMessage(langService.get('no_view_permission'));
+                    return;
+                }
+
+                correspondenceService.viewCorrespondence(draftOutgoing, self.gridActions, checkIfEditPropertiesAllowed(draftOutgoing, true), true);
+                return;
             };
 
             /**
@@ -653,7 +661,7 @@ module.exports = function (app) {
                     icon: 'book-open-variant',
                     text: 'grid_action_open',
                     shortcut: false,
-                    callback: self.openOutgoing,
+                    callback: self.viewDocument,
                     showInView: false,
                     class: "action-green",
                     permissionKey: 'VIEW_DOCUMENT',
@@ -676,26 +684,6 @@ module.exports = function (app) {
                     }
                 }
             ];
-
-            /**
-             * @description View document
-             * @param draftOutgoing
-             * @param $event
-             */
-            self.viewDocument = function (draftOutgoing, $event) {
-                //console.log("draftOutgoing", draftOutgoing);
-                if (!draftOutgoing.hasContent()) {
-                    dialog.alertMessage(langService.get('content_not_found'));
-                    return;
-                }
-                if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                    dialog.infoMessage(langService.get('no_view_permission'));
-                    return;
-                }
-
-                correspondenceService.viewCorrespondence(draftOutgoing, self.gridActions);
-                return;
-            };
         }
     )
     ;

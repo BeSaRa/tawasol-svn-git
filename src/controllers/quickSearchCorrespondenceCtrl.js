@@ -76,23 +76,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description open document viewer
-         * @param searchedCorrespondenceDocument
-         * @param $event
-         */
-        self.viewDocument = function (searchedCorrespondenceDocument, $event) {
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            /*var buttonsToShow = [];
-            buttonsToShow = _.chunk(buttonsToShow, 2);
-            viewDocumentService
-                .openQuickSearchDocumentPopup(searchedCorrespondenceDocument, false, buttonsToShow, $event);*/
-            correspondenceService.viewCorrespondence(searchedCorrespondenceDocument, []);
-        };
-
-        /**
          * @description Export quick searched Correspondence document
          * @param searchedCorrespondenceDocument
          * @param $event
@@ -107,25 +90,6 @@ module.exports = function (app) {
                             toast.success(langService.get('export_success'));
                         });
                 });
-        };
-
-        /**
-         * @description open searched Correspondence document
-         * @param searchedCorrespondenceDocument
-         * @param $event
-         * @type {[*]}
-         */
-        self.openQuickSearchCorrespondenceDocument = function (searchedCorrespondenceDocument, $event) {
-            if (!searchedCorrespondenceDocument.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-
-            correspondenceService.viewCorrespondence(searchedCorrespondenceDocument, self.gridActions);
         };
 
         /**
@@ -309,6 +273,19 @@ module.exports = function (app) {
             console.log('create copy for searched outgoing document : ', searchedCorrespondenceDocument);
         };
 
+        /**
+         * @description open document viewer
+         * @param searchedCorrespondenceDocument
+         * @param $event
+         */
+        self.viewDocument = function (searchedCorrespondenceDocument, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+
+            correspondenceService.viewCorrespondence(searchedCorrespondenceDocument, [], true, true);
+        };
 
         /**
          * @description Check if action will be shown on grid or not
@@ -397,7 +374,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
-                callback: self.openQuickSearchCorrespondenceDocument,
+                callback: self.viewDocument,
                 class: "action-green",
                 showInView: false,
                 permissionKey: 'VIEW_DOCUMENT',

@@ -70,7 +70,6 @@ module.exports = function (app) {
     require('./returnedDepartmentInboxService')(app);
     require('./quickSearchCorrespondenceService')(app);
     require('./scanIncomingService')(app);
-    require('./draftIncomingService')(app);
     require('./readyToSendIncomingService')(app);
     require('./contextHelpService')(app);
     require('./prepareInternalService')(app);

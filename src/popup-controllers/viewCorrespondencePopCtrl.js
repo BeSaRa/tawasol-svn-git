@@ -1,5 +1,12 @@
 module.exports = function (app) {
-    app.controller('viewCorrespondencePopCtrl', function ($mdSidenav, dialog, $element, toast, langService, $timeout, employeeService) {
+    app.controller('viewCorrespondencePopCtrl', function ($mdSidenav,
+                                                          dialog,
+                                                          $element,
+                                                          toast,
+                                                          langService,
+                                                          $timeout,
+                                                          employeeService,
+                                                          generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondencePopCtrl';

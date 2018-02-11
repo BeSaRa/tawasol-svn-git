@@ -1,5 +1,5 @@
 <div class="p20" layout="column">
-    <div layout="row" flex ng-if="!ctrl.approved">
+    <div layout="row" flex ng-if="!ctrl.disableCorrespondence">
         <!--<md-autocomplete
                 flex
                 md-autoselect
@@ -47,7 +47,7 @@
                         <div flex>{{lang.sites_search_results}}</div>
                         <div>
                             <md-button tooltip="{{lang.sites_hide_search}}" class="md-icon-button close-search-button"
-                                       ng-click="ctrl.onCloseSearch()" ng-disabled="ctrl.approved">
+                                       ng-click="ctrl.onCloseSearch()" ng-disabled="!!ctrl.disableCorrespondence">
                                 <md-icon md-svg-icon="close"></md-icon>
                             </md-button>
                         </div>
@@ -59,7 +59,7 @@
                             <div>
                                 <md-menu-bar class="follow-up-menu-bar">
                                     <md-menu>
-                                        <md-button ng-click="$mdMenu.open()" ng-disabled="ctrl.approved">
+                                        <md-button ng-click="$mdMenu.open()" ng-disabled="!!ctrl.disableCorrespondence">
                                             {{ctrl.followupStatus.getTranslatedName() || lang.sites_follow_up_status}}
                                         </md-button>
                                         <md-menu-content width="3">
@@ -76,24 +76,24 @@
                                 <md-datepicker ng-if="ctrl.needReply(ctrl.followupStatus)" name="followUpStatusDate"
                                                ng-model="ctrl.followUpStatusDate"
                                                md-placeholder="{{lang.sites_follow_up_status_date}}"
-                                               md-min-date="ctrl.minDate" ng-disabled="ctrl.approved"
+                                               md-min-date="ctrl.minDate" ng-disabled="!!ctrl.disableCorrespondence"
                                                ng-change="ctrl.onFollowupDateChange()"
                                                md-open-on-focus></md-datepicker>
                             </div>
                             <div layout="row" layout-align="start center">
                                 <md-menu-bar>
                                     <md-menu>
-                                        <button class="md-icon-button" ng-click="$mdMenu.open()" ng-disabled="ctrl.approved">
+                                        <button class="md-icon-button" ng-click="$mdMenu.open()" ng-disabled="!!ctrl.disableCorrespondence">
                                             <md-icon md-svg-icon="plus"></md-icon>
                                         </button>
                                         <md-menu-content width="3">
                                             <md-menu-item>
-                                                <md-button ng-click="ctrl.addSitesTo(ctrl.subSearchSelected)" ng-disabled="ctrl.approved">
+                                                <md-button ng-click="ctrl.addSitesTo(ctrl.subSearchSelected)" ng-disabled="!!ctrl.disableCorrespondence">
                                                     {{lang.sites_original}}
                                                 </md-button>
                                             </md-menu-item>
                                             <md-menu-item>
-                                                <md-button ng-click="ctrl.addSitesCC(ctrl.subSearchSelected)" ng-disabled="ctrl.approved">
+                                                <md-button ng-click="ctrl.addSitesCC(ctrl.subSearchSelected)" ng-disabled="!!ctrl.disableCorrespondence">
                                                     {{lang.sites_copy}}
                                                 </md-button>
                                             </md-menu-item>
@@ -147,7 +147,7 @@
                                 <div>
                                     <md-menu-bar class="follow-up-menu-bar">
                                         <md-menu>
-                                            <md-button ng-click="$mdMenu.open()" ng-disabled="ctrl.approved">
+                                            <md-button ng-click="$mdMenu.open()" ng-disabled="!!ctrl.disableCorrespondence">
                                                 {{site.followupStatus.getTranslatedName() ||
                                                 lang.sites_follow_up_status}}
                                             </md-button>
@@ -163,7 +163,7 @@
                                 </div>
                                 <div>
                                     <md-datepicker ng-if="ctrl.needReply(site.followupStatus)"
-                                                   name="followUpStatusDate" ng-disabled="ctrl.approved"
+                                                   name="followUpStatusDate" ng-disabled="!!ctrl.disableCorrespondence"
                                                    ng-model="site.followupDate"
                                                    md-placeholder="{{lang.sites_follow_up_status_date}}"
                                                    md-max-date="ctrl.maxCreateDate"
@@ -180,11 +180,11 @@
                                         </button>
                                         <md-menu-content width="3">
                                             <md-menu-item>
-                                                <md-button ng-click="ctrl.addSiteTo(site)" ng-disabled="ctrl.approved">{{lang.sites_original}}
+                                                <md-button ng-click="ctrl.addSiteTo(site)" ng-disabled="!!ctrl.disableCorrespondence">{{lang.sites_original}}
                                                 </md-button>
                                             </md-menu-item>
                                             <md-menu-item>
-                                                <md-button ng-click="ctrl.addSiteCC(site)" ng-disabled="ctrl.approved">{{lang.sites_copy}}
+                                                <md-button ng-click="ctrl.addSiteCC(site)" ng-disabled="!!ctrl.disableCorrespondence">{{lang.sites_copy}}
                                                 </md-button>
                                             </md-menu-item>
                                         </md-menu-content>
@@ -213,7 +213,7 @@
                     <div ng-if="ctrl.sitesInfoToSelected.length" layout="row" flex layout-align="start center">
                         <div>{{ctrl.sitesInfoToSelected.length}} {{lang.items_selected}}</div>
                         <span flex></span>
-                        <div layout="row" ng-if="!ctrl.approved">
+                        <div layout="row" ng-if="!ctrl.disableCorrespondence">
                             <div>
                                 <md-menu-bar class="follow-up-menu-bar">
                                     <md-menu>
@@ -232,7 +232,7 @@
                                 </md-menu-bar>
                             </div>
                             <div>
-                                <md-datepicker ng-if="!ctrl.approved && ctrl.needReply(ctrl.sitesInfoToFollowupStatus)"
+                                <md-datepicker ng-if="!ctrl.disableCorrespondence && ctrl.needReply(ctrl.sitesInfoToFollowupStatus)"
                                                name="sitesInfoToFollowupStatus"
                                                ng-model="ctrl.sitesInfoToFollowupStatusDate"
                                                md-placeholder="{{lang.sites_follow_up_status_date}}"
@@ -272,7 +272,7 @@
                     </tr>
                     </thead>
                     <tbody md-body>
-                    <tr md-row md-select="site" ng-disabled="ctrl.approved"
+                    <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
                         ng-repeat="site in ctrl.sitesInfoTo  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoTo.limit: ((ctrl.grid.sitesInfoTo.page - 1) * ctrl.grid.sitesInfoTo.limit) |orderBy:ctrl.grid.sitesInfoTo.order  track by $index">
                         <td md-cell>
                             <div flex layout="column">
@@ -296,7 +296,7 @@
                             <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span></div>
                         </td>
                         <td md-cell>
-                            <div flex layout="row" layout-align="start center" ng-if="!ctrl.approved">
+                            <div flex layout="row" layout-align="start center" ng-if="!ctrl.disableCorrespondence">
                                 <div>
                                     <md-button tooltip="{{lang.sites_change_to_copy}}" class="md-icon-button"
                                                ng-click="ctrl.changeSiteTo('CC',site,$index)">
@@ -326,7 +326,7 @@
                     <div ng-if="ctrl.sitesInfoCCSelected.length" layout="row" flex layout-align="start center">
                         <div>{{ctrl.sitesInfoCCSelected.length}} {{lang.items_selected}}</div>
                         <span flex></span>
-                        <div layout="row" ng-if="!ctrl.approved">
+                        <div layout="row" ng-if="!!ctrl.disableCorrespondence">
                             <div>
                                 <md-menu-bar class="follow-up-menu-bar">
                                     <md-menu>
@@ -345,7 +345,7 @@
                                 </md-menu-bar>
                             </div>
                             <div>
-                                <md-datepicker ng-if="!ctrl.approved && ctrl.needReply(ctrl.sitesInfoCCFollowupStatus)"
+                                <md-datepicker ng-if="!ctrl.disableCorrespondence && ctrl.needReply(ctrl.sitesInfoCCFollowupStatus)"
                                                name="sitesInfoCCFollowupStatus"
                                                ng-model="ctrl.sitesInfoCCFollowupStatusDate"
                                                md-placeholder="{{lang.sites_follow_up_status_date}}"
@@ -354,7 +354,7 @@
                                                md-open-on-focus></md-datepicker>
                             </div>
                             <div layout="row" layout-align="start center">
-                                <md-button class="md-icon-button" ng-click="ctrl.onSitesInfoDeleteBulk( 'CC' ,$event)" ng-if="!ctrl.approved">
+                                <md-button class="md-icon-button" ng-click="ctrl.onSitesInfoDeleteBulk( 'CC' ,$event)" ng-if="!ctrl.disableCorrespondence">
                                     <md-icon md-svg-icon="delete"></md-icon>
                                 </md-button>
                             </div>
@@ -385,7 +385,7 @@
                     </tr>
                     </thead>
                     <tbody md-body>
-                    <tr md-row md-select="site" ng-disabled="ctrl.approved"
+                    <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
                         ng-repeat="site in ctrl.sitesInfoCC  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoCC.limit: ((ctrl.grid.sitesInfoCC.page - 1) * ctrl.grid.sitesInfoCC.limit) |orderBy:ctrl.grid.sitesInfoCC.order  track by $index">
                         <td md-cell>
                             <div flex layout="column">
@@ -409,7 +409,7 @@
                             <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span></div>
                         </td>
                         <td md-cell>
-                            <div flex layout="row" layout-align="start center" ng-if="!ctrl.approved">
+                            <div flex layout="row" layout-align="start center" ng-if="!ctrl.disableCorrespondence">
                                 <div>
                                     <md-button tooltip="{{lang.sites_change_to_copy}}" class="md-icon-button"
                                                ng-click="ctrl.changeSiteTo('To',site,$index)">

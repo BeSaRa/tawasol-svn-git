@@ -74,26 +74,6 @@ module.exports = function (app) {
                 });
         };
 
-
-        /**
-         * @description View document
-         * @param favoriteDocument
-         * @param $event
-         */
-        self.viewDocument = function (favoriteDocument, $event) {
-            //console.log("favoriteDocument", favoriteDocument);
-            if (!favoriteDocument.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(favoriteDocument, self.gridActions);
-            return;
-        };
-
         /**
          * @description Remove the document from favorite documents
          * @param favoriteDocument
@@ -255,12 +235,37 @@ module.exports = function (app) {
         };
 
 
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var info = model.getInfo();
+            var hasPermission = false;
+            if (info.documentClass === "internal") {
+                //If approved internal electronic, don't allow to edit
+                if (info.docStatus >= 24 && !info.isPaper)
+                    hasPermission = false;
+                else
+                    hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+            }
+            else if (info.documentClass === "incoming")
+                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+            else if (info.documentClass === "outgoing") {
+                //If approved outgoing electronic, don't allow to edit
+                if (info.docStatus >= 24 && !info.isPaper)
+                    hasPermission = false;
+                else
+                    hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+            }
+            if (checkForViewPopup)
+                return !hasPermission;
+            return hasPermission;
+        };
+
         /**
-         * @description Open favorite document
+         * @description View document
          * @param favoriteDocument
          * @param $event
          */
-        self.openFavoriteDocument = function (favoriteDocument, $event) {
+        self.viewDocument = function (favoriteDocument, $event) {
             if (!favoriteDocument.hasContent()) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
@@ -269,7 +274,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(favoriteDocument, self.gridActions);
+            correspondenceService.viewCorrespondence(favoriteDocument, self.gridActions, checkIfEditPropertiesAllowed(favoriteDocument, true), true);
             return;
         };
 
@@ -402,7 +407,7 @@ module.exports = function (app) {
                         callback: self.editProperties,
                         class: "action-green",
                         checkShow: function (action, model) {
-                            var info = model.getInfo();
+                            /*var info = model.getInfo();
                             var hasPermission = false;
                             if (info.documentClass === "internal")
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
@@ -410,7 +415,8 @@ module.exports = function (app) {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
                             else if (info.documentClass === "outgoing")
                                 hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
-                            return self.checkToShowAction(action, model) && hasPermission;
+                            return self.checkToShowAction(action, model) && hasPermission;*/
+                            return self.checkToShowAction(action, model) && checkIfEditPropertiesAllowed(model);
                         }
                     }
                 ]
@@ -528,7 +534,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
-                callback: self.openFavoriteDocument,
+                callback: self.viewDocument,
                 class: "action-green",
                 showInView: false,
                 permissionKey: 'VIEW_DOCUMENT',

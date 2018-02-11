@@ -379,20 +379,6 @@ module.exports = function (app) {
                 });
         };
 
-
-        self.viewDocument = function (searchedGeneralDocument, $event) {
-            if (!searchedGeneralDocument.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(searchedGeneralDocument, self.gridActions);
-            return;
-        };
-
         /**
          * @description Export searched general document
          * @param searchedGeneralDocument
@@ -409,26 +395,6 @@ module.exports = function (app) {
                             toast.success(langService.get('export_success'));
                         });
                 });
-        };
-
-        /**
-         * @description open searched general document
-         * @param searchedGeneralDocument
-         * @param $event
-         */
-        self.openSearchGeneralDocument = function (searchedGeneralDocument, $event) {
-            //console.log('open searched general document : ', searchedGeneralDocument);
-
-            if (!searchedGeneralDocument.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(searchedGeneralDocument, self.gridActions, true);
-            return;
         };
 
         /**
@@ -656,6 +622,19 @@ module.exports = function (app) {
         };
 
 
+        self.viewDocument = function (searchedGeneralDocument, $event) {
+            if (!searchedGeneralDocument.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(searchedGeneralDocument, self.gridActions, true, true);
+            return;
+        };
+
         /**
          * @description Check if action will be shown on grid or not
          * @param action
@@ -732,7 +711,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     //If document is paper outgoing and unapproved/partially approved, show the button.
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && model.docStatus < 24 && info.isPaper && info.documentClass == "outgoing";
+                    return self.checkToShowAction(action, model) && model.docStatus < 24 && info.isPaper && info.documentClass === "outgoing";
                 }
             },
             //Open
@@ -741,7 +720,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
-                callback: self.openSearchGeneralDocument,
+                callback: self.viewDocument,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {

@@ -75,11 +75,12 @@
                                     model="prepareOutgoing"
                                     selected-length="{{ctrl.selectedPrepareOutgoings.length ? ctrl.selectedPrepareOutgoings.length : 0}}"
                                     ng-repeat="prepareOutgoing in ctrl.prepareOutgoings | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
-                                    <td md-cell class="td-data">
+                                    <!--<td md-cell class="td-data">
                                         <a href="" ng-if="prepareOutgoing.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(prepareOutgoing, $event)">{{prepareOutgoing.docSubject}}</a>
                                         <span ng-if="!prepareOutgoing.hasContent()">{{prepareOutgoing.docSubject}}</span>
-                                    </td>
+                                    </td>-->
+                                    <td md-cell>{{prepareOutgoing.docSubject}}</td>
                                     <td md-cell>{{prepareOutgoing.priorityLevel.getTranslatedName()}}</td>
                                     <td md-cell>{{prepareOutgoing.securityLevel.getTranslatedName()}}</td>
                                     <td md-cell>{{prepareOutgoing.getTranslatedCreator()}}</td>

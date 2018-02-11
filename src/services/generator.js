@@ -435,5 +435,52 @@ module.exports = function (app) {
             };
             return documentClass[Number(docType)];
         };
+
+        self.documentStatusAndGridMap = {
+            UNDER_RECEIVE: 1,
+            /**
+             * @description Status = 2; Prepare/Scan (Correspondence)
+             */
+            META_DATA_ONLY: 2,
+            /**
+             * @description Status = 3; Draft Outgoing/Internal (Correspondence)
+             */
+            DRAFT: 3,
+            COMPLETED: 4,
+            EDIT_AFTER_AUTHORIZED: 5,
+            EDIT_AFTER_EXPORTED: 6,
+            /**
+             * @description Status = 7; Rejected Outgoing/Incoming/Internal (Correspondence)
+             */
+            SENT_TO_RE_AUDIT: 7/* Rejected Books*/,
+            /**
+             * @description Status = 8; Ready To Send Outgoing/Incoming/Internal (Correspondence)
+             */
+            ACCEPTED: 8/*Ready for Sent*/,
+            REMOVED: 9,
+            CONTENT_ADDED: 10,
+            CONTENT_UPDATED: 11,
+            META_DATA_UPDATED: 12,
+            ARCHIVED: 21,
+            /**
+             * @description Status = 22; User inbox (WorkItem)
+             */
+            SENT: 22,
+            /**
+             * @description Status = 23; User inbox (WorkItem); Number of times signed is less than signature count
+             */
+            PARTIALLY_AUTHORIZED: 23,
+            /**
+             * @description Status = 24; Ready To Export (WorkItem)
+             */
+            FULLY_AUTHORIZED: 24,
+            /**
+             * @description Status = 25; Department Incoming/Returned (WorkItem)
+             */
+            EXPORTED: 25,
+            PARTIALLY_EXPORTED: 26,
+            REPLY_BOOK_CREATED: 27,
+            SENT_TO_READY_TO_EXPORT: 28
+        };
     })
 };

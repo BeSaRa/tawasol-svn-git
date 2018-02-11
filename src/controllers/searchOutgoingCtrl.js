@@ -380,19 +380,6 @@ module.exports = function (app) {
                 });
         };
 
-        self.viewDocument = function (searchedOutgoingDocument, $event) {
-            if (!searchedOutgoingDocument.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(searchedOutgoingDocument, self.gridActions);
-            return;
-        };
-
         /**
          * @description add an item to the favorite documents
          * @param sentItem
@@ -432,26 +419,6 @@ module.exports = function (app) {
                             toast.success(langService.get('export_success'));
                         });
                 });
-        };
-
-        /**
-         * @description open searched outgoing document
-         * @param searchedOutgoingDocument
-         * @param $event
-         */
-        self.openSearchOutgoingDocument = function (searchedOutgoingDocument, $event) {
-            //console.log('open searched outgoing document : ', searchedOutgoingDocument);
-
-            if (!searchedOutgoingDocument.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(searchedOutgoingDocument, self.gridActions);
-            return;
         };
 
         /**
@@ -679,6 +646,18 @@ module.exports = function (app) {
             console.log('create copy for searched outgoing document : ', searchedOutgoingDocument);
         };
 
+        self.viewDocument = function (searchedOutgoingDocument, $event) {
+            if (!searchedOutgoingDocument.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(searchedOutgoingDocument, self.gridActions, true, true);
+            return;
+        };
 
         /**
          * @description Check if action will be shown on grid or not
@@ -769,7 +748,7 @@ module.exports = function (app) {
                 class: "action-yellow",
                 checkShow: function (action, model) {
                     //If document is paper outgoing and unapproved/partially approved, show the button.
-                    return self.checkToShowAction(action, model) && model.docStatus < 24 && model.addMethod == 1;
+                    return self.checkToShowAction(action, model) && model.docStatus < 24 && model.addMethod === 1;
                 }
             },
             //Open
@@ -778,7 +757,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
-                callback: self.openSearchOutgoingDocument,
+                callback: self.viewDocument,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {

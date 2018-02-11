@@ -129,26 +129,6 @@ module.exports = function (app) {
         self.getEmployeeForFollowupEmployeeInbox();
 
         /**
-         * @description View document
-         * @param followupEmployeeInbox
-         * @param $event
-         */
-        self.viewDocument = function (followupEmployeeInbox, $event) {
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(followupEmployeeInbox, self.gridActions)
-                .then(function () {
-                    return self.reloadFollowupEmployeeInboxes(self.grid.page);
-                })
-                .catch(function(){
-                    return self.reloadFollowupEmployeeInboxes(self.grid.page);
-                });
-        };
-
-
-        /**
          * @description Move To Folder Followup Employee inboxes Bulk
          * @param $event
          */
@@ -259,27 +239,6 @@ module.exports = function (app) {
                 .controllerMethod
                 .viewTrackingSheetPopup(followupEmployeeInbox, params, $event).then(function (result) {
             });
-        };
-
-        /**
-         * @description Open followup employee inbox
-         * @param followupEmployeeInbox
-         * @param $event
-         */
-        self.openFollowupEmployeeInbox = function (followupEmployeeInbox, $event) {
-            //console.log('openFollowupEmployeeInbox : ', followupEmployeeInbox);
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-
-            correspondenceService.viewCorrespondence(followupEmployeeInbox, self.gridActions)
-                .then(function () {
-                    return self.reloadFollowupEmployeeInboxes(self.grid.page);
-                })
-                .catch(function () {
-                    return self.reloadFollowupEmployeeInboxes(self.grid.page);
-                });
         };
 
         /**
@@ -450,6 +409,29 @@ module.exports = function (app) {
                                 }));
                             });
                     }
+                });
+        };
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            return true;
+        };
+
+        /**
+         * @description View document
+         * @param followupEmployeeInbox
+         * @param $event
+         */
+        self.viewDocument = function (followupEmployeeInbox, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(followupEmployeeInbox, self.gridActions, checkIfEditPropertiesAllowed(followupEmployeeInbox, true), true)
+                .then(function () {
+                    return self.reloadFollowupEmployeeInboxes(self.grid.page);
+                })
+                .catch(function(){
+                    return self.reloadFollowupEmployeeInboxes(self.grid.page);
                 });
         };
 
@@ -743,7 +725,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: true,
-                callback: self.openFollowupEmployeeInbox,
+                callback: self.viewDocument,
                 class: "action-green",
                 showInView: false,
                 permissionKey: 'VIEW_DOCUMENT',

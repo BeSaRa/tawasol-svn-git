@@ -204,23 +204,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Open department sent item
-         * @param sentItemDepartmentInbox
-         * @param $event
-         */
-        self.open = function (sentItemDepartmentInbox, $event) {
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            /*correspondenceService.viewCorrespondence(sentItemDepartmentInbox, self.gridActions, false);
-            return;*/
-            correspondenceService.viewCorrespondence({
-                vsId: sentItemDepartmentInbox.vsId,
-                docClassName: self.docClassName
-            }, self.gridActions, true);
-        };
-        /**
          * @description Manage Tags
          * @param sentItemDepartmentInbox
          * @param $event
@@ -369,6 +352,21 @@ module.exports = function (app) {
             console.log('subscribe : ', sentItemDepartmentInbox);
         };
 
+        /**
+         * @description View document
+         * @param sentItemDepartmentInbox
+         * @param $event
+         */
+        self.viewDocument = function (sentItemDepartmentInbox, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence({
+                vsId: sentItemDepartmentInbox.vsId,
+                docClassName: self.docClassName
+            }, self.gridActions, true, true, true);
+        };
 
         /**
          * @description Check if action will be shown on grid or not
@@ -479,7 +477,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: true,
-                callback: self.open,
+                callback: self.viewDocument,
                 class: "action-green",
                 showInView: false,
                 permissionKey: 'VIEW_DOCUMENT',
@@ -672,25 +670,6 @@ module.exports = function (app) {
                 checkShow: self.checkToShowAction
             }
         ];
-
-        /**
-         * @description View document
-         * @param sentItemDepartmentInbox
-         * @param $event
-         */
-        self.viewDocument = function (sentItemDepartmentInbox, $event) {
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-           /* correspondenceService.viewCorrespondence(sentItemDepartmentInbox, self.gridActions, true);
-            return;*/
-
-            correspondenceService.viewCorrespondence({
-                vsId: sentItemDepartmentInbox.vsId,
-                docClassName: self.docClassName
-            }, self.gridActions, true);
-        };
 
     });
 };

@@ -347,25 +347,6 @@ module.exports = function (app) {
         };*/
 
         /**
-         * @description Open document
-         * @param readyToSendIncoming
-         * @param $event
-         */
-        self.open = function (readyToSendIncoming, $event) {
-            if (!readyToSendIncoming.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-
-            correspondenceService.viewCorrespondence(readyToSendIncoming, self.gridActions);
-            return;
-        };
-
-        /**
          * @description broadcast selected organization and workflow group
          * @param readyToSendIncoming
          * @param $event
@@ -382,6 +363,31 @@ module.exports = function (app) {
                 });
         };
 
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var isEditAllowed = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+            if (checkForViewPopup)
+                return !isEditAllowed;
+            return isEditAllowed;
+        };
+
+        /**
+         * @description View document
+         * @param readyToSendIncoming
+         * @param $event
+         */
+        self.viewDocument = function (readyToSendIncoming, $event) {
+            if (!readyToSendIncoming.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(readyToSendIncoming, self.gridActions, checkIfEditPropertiesAllowed(readyToSendIncoming, true), true);
+            return;
+        };
 
         /**
          * @description Check if action will be shown on grid or not
@@ -611,7 +617,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
-                callback: self.open,
+                callback: self.viewDocument,
                 showInView: false,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
@@ -634,23 +640,5 @@ module.exports = function (app) {
                 }
             }
         ];
-
-        /**
-         * @description View document
-         * @param readyToSendIncoming
-         * @param $event
-         */
-        self.viewDocument = function (readyToSendIncoming, $event) {
-            if (!readyToSendIncoming.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(readyToSendIncoming, self.gridActions);
-            return;
-        };
     });
 };

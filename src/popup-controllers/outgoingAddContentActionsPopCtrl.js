@@ -196,7 +196,7 @@ module.exports = function (app) {
                     callback: self.docActionExportDocument,
                     class: "action-red",
                     checkShow: function (action, model) {
-                        return !action.hide && model.addMethod && self.documentInformation; //Don't show if its electronic outgoing
+                        return self.checkToShowAction(action, model) && model.addMethod && self.documentInformation; //Don't show if its electronic outgoing
                     }
                 },
                 // Save as Draft
@@ -206,7 +206,7 @@ module.exports = function (app) {
                     class: "action-red",
                     hide: true,
                     checkShow: function (action, model) {
-                        return !action.hide && !model.addMethod && self.documentInformation; //Don't show if its paper outgoing
+                        return self.checkToShowAction(action, model) && !model.addMethod && self.documentInformation; //Don't show if its paper outgoing
                     }
                 }*/
             ],

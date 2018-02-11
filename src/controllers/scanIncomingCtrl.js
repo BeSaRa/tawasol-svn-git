@@ -12,8 +12,8 @@ module.exports = function (app) {
                                                  broadcastService,
                                                  generator,
                                                  contextHelpService,
-                                                 correspondenceService,
-                                                 ResolveDefer) {
+                                                 ResolveDefer,
+                                                 correspondenceService) {
         'ngInject';
         var self = this;
 
@@ -271,26 +271,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description open document for scan incoming
-         * @param scanIncoming
-         * @param $event
-         */
-        self.open = function (scanIncoming, $event) {
-            if (!scanIncoming.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-
-            correspondenceService.viewCorrespondence(scanIncoming, self.gridActions);
-            return;
-
-        };
-
-        /**
          * @description broadcast selected organizations and workflow groups
          * @param scanIncoming
          * @param $event
@@ -488,12 +468,12 @@ module.exports = function (app) {
                 }
             },
             // Open
-            {
+            /*{
                 type: 'action',
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
-                callback: self.open,
+                callback: self.viewDocument,
                 showInView: false,
                 class: "action-red",
                 permissionKey: 'VIEW_DOCUMENT',
@@ -501,7 +481,7 @@ module.exports = function (app) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
                 }
-            },
+            },*/
             // Broadcast
             {
                 type: 'action',
@@ -516,7 +496,5 @@ module.exports = function (app) {
                 }
             }
         ];
-
-
     });
 };

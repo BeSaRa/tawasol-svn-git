@@ -22,7 +22,9 @@ module.exports = function (app) {
                                                             correspondenceService) {
         'ngInject';
         var self = this;
-
+        /*
+        IT WILL ALWAYS GET OUTGOING DOCUMENTS ONLY
+         */
         self.controllerName = 'returnedDepartmentInboxCtrl';
 
         self.progress = null;
@@ -94,25 +96,6 @@ module.exports = function (app) {
                         self.grid.page = pageNumber;
                     return result;
                 });
-        };
-
-        /**
-         * @description View document
-         * @param returnedDepartmentInbox
-         * @param $event
-         */
-        self.viewDocument = function (returnedDepartmentInbox, $event) {
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            //correspondenceService.viewCorrespondence(returnedDepartmentInbox, self.gridActions, true);
-            var info = returnedDepartmentInbox.getInfo();
-            return correspondenceService.viewCorrespondence({
-                vsId: info.vsId,
-                docClassName: info.documentClass
-            }, self.gridActions, true);
-
         };
 
         /**
@@ -224,27 +207,6 @@ module.exports = function (app) {
                 .viewTrackingSheetPopup(returnedDepartmentInbox, params, $event).then(function (result) {
             });
         };
-
-        /**
-         * @description Open returned department inbox item
-         * @param returnedDepartmentInbox
-         * @param $event
-         */
-        self.open = function (returnedDepartmentInbox, $event) {
-            //console.log('openReturnedDepartmentInbox', returnedDepartmentInbox);
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            //correspondenceService.viewCorrespondence(returnedDepartmentInbox, self.gridActions, true);
-            var info = returnedDepartmentInbox.getInfo();
-            console.log("self.gridActions passed in open popup", self.gridActions);
-            return correspondenceService.viewCorrespondence({
-                vsId: info.vsId,
-                docClassName: info.documentClass
-            }, self.gridActions, true);
-        };
-
 
         /**
          * @description Resend returned department inbox item
@@ -445,30 +407,38 @@ module.exports = function (app) {
             console.log('sendMainDocumentFax : ', returnedDepartmentInbox);
         };
 
+        /**
+         * @description Edit After Export
+         * @param returnedDepartmentInbox
+         * @param $event
+         */
+        self.editAfterExport = function (returnedDepartmentInbox, $event) {
+            console.log('editAfterExport', returnedDepartmentInbox);
+        };
 
-        /* /!**
-          * @description Edit Outgoing Content
-          * @param returnedDepartmentInbox
-          * @param $event
-          *!/
-         self.editContent = function (returnedDepartmentInbox, $event) {
-             var info = returnedDepartmentInbox.getInfo();
-             managerService.manageDocumentContent(info.vsId, 'outgoing', info.title, $event);//info.workFlow
-         };
+        /**
+         * @description Edit Outgoing Content
+         * @param returnedDepartmentInbox
+         * @param $event
+         */
+        self.editContent = function (returnedDepartmentInbox, $event) {
+            var info = returnedDepartmentInbox.getInfo();
+            managerService.manageDocumentContent(info.vsId, 'outgoing', info.title, $event);//info.workFlow
+        };
 
-         /!**
-          * @description Edit Outgoing Properties
-          * @param returnedDepartmentInbox
-          * @param $event
-          *!/
-         self.editProperties = function (returnedDepartmentInbox, $event) {
-             var info = returnedDepartmentInbox.getInfo();
-             managerService
-                 .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
-                 .finally(function (document) {
-                     self.reloadReturnedDepartmentInboxes(self.grid.page)
-                 });
-         };*/
+        /**
+         * @description Edit Outgoing Properties
+         * @param returnedDepartmentInbox
+         * @param $event
+         */
+        self.editProperties = function (returnedDepartmentInbox, $event) {
+            var info = returnedDepartmentInbox.getInfo();
+            managerService
+                .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
+                .finally(function (document) {
+                    self.reloadReturnedDepartmentInboxes(self.grid.page)
+                });
+        };
 
         /**
          * @description Launch distribution workflow for selected draft outgoing mails
@@ -493,6 +463,36 @@ module.exports = function (app) {
                     self.reloadReturnedDepartmentInboxes(self.grid.page);
                 });
         };
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var info = model.getInfo();
+            var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+            var allowed = hasPermission && info.isPaper;// && info.docStatus < 24
+            if(checkForViewPopup)
+                return !allowed;
+            return allowed;
+        };
+
+
+        /**
+         * @description View document
+         * @param returnedDepartmentInbox
+         * @param $event
+         */
+        self.viewDocument = function (returnedDepartmentInbox, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+
+            var info = returnedDepartmentInbox.getInfo();
+            return correspondenceService.viewCorrespondence({
+                vsId: info.vsId,
+                docClassName: info.documentClass
+            }, self.gridActions, checkIfEditPropertiesAllowed(returnedDepartmentInbox, true), true, true);
+
+        };
+
 
         /**
          * @description Check if action will be shown on grid or not
@@ -611,7 +611,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: true,
-                callback: self.open,
+                callback: self.viewDocument,
                 showInView: false,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
@@ -805,70 +805,59 @@ module.exports = function (app) {
                     }
                 ]
             },
-            /* // Edit
-             {
-                 type: 'action',
-                 icon: 'pencil',
-                 text: 'grid_action_edit',
-                 shortcut: false,
-                 showInView: false,
-                 checkShow: function (action, model) {
-                     var info = model.getInfo();
-                     var hasPermission = false;
-                     /!* if (info.documentClass === "internal")
-                          hasPermission = (employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT"));
-                      else if (info.documentClass === "incoming")
-                          hasPermission = ( employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES")|| employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT"));
-                      else*!/
-                     if (info.documentClass === "outgoing")
-                         hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-                     return !action.hide && hasPermission;
-                 },
-                 submenu: [
-                     // Content
-                     {
-                         type: 'action',
-                         //icon: 'link-variant',
-                         text: 'grid_action_content',
-                         shortcut: false,
-                         callback: self.editContent,
-                         class: "action-green",
-                         checkShow: function (action, model) {
-                             var info = model.getInfo();
-                             var hasPermission = false;
-                             /!*if (info.documentClass === "internal")
-                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
-                             else if (info.documentClass === "incoming")
-                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
-                             else*!/
-                             if (info.documentClass === "outgoing")
-                                 hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
-                             return !action.hide && hasPermission;
-                         }
-                     },
-                     // Properties
-                     {
-                         type: 'action',
-                         //icon: 'attachment',
-                         text: 'grid_action_properties',
-                         shortcut: false,
-                         callback: self.editProperties,
-                         class: "action-green",
-                         checkShow: function (action, model) {
-                             var info = model.getInfo();
-                             var hasPermission = false;
-                             /!*if (info.documentClass === "internal")
-                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-                             else if (info.documentClass === "incoming")
-                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
-                             else*!/
-                             if (info.documentClass === "outgoing")
-                                 hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
-                             return !action.hide && hasPermission;
-                         }
-                     }
-                 ]
-             }*/
+            //Edit After Export (Electronic Only)
+            {
+                type: 'action',
+                icon: '',
+                text: 'grid_action_edit_after_export',//langKey not added yet in localization
+                shortcut: false,
+                showInView: false,
+                hide: true,
+                class: 'action-red',
+                callback: self.editAfterExport, //TODO: Service is not available yet
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                    return self.checkToShowAction(action, model) && hasPermission && !info.isPaper;
+                }
+            },
+            // Edit (Paper Only)
+            {
+                type: 'action',
+                icon: 'pencil',
+                text: 'grid_action_edit',
+                shortcut: false,
+                showInView: false,
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                    return self.checkToShowAction(action, model) && hasPermission && info.isPaper;
+                },
+                submenu: [
+                    // Content
+                    {
+                        type: 'action',
+                        //icon: 'link-variant',
+                        text: 'grid_action_content',
+                        shortcut: false,
+                        callback: self.editContent,
+                        permissionKey: "EDIT_OUTGOING_CONTENT",
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Properties
+                    {
+                        type: 'action',
+                        //icon: 'attachment',
+                        text: 'grid_action_properties',
+                        shortcut: false,
+                        callback: self.editProperties,
+                        permissionKey: "EDIT_OUTGOING_PROPERTIES",
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    }
+                ]
+            }
         ];
 
 

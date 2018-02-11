@@ -13,7 +13,7 @@ module.exports = function (app) {
                 vsId: '=',
                 documentClass: '=',
                 emptySubRecords: '=',
-                approved: '=?'
+                disableCorrespondence: '='
             }
         }
     });

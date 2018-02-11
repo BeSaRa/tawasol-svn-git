@@ -386,27 +386,6 @@ module.exports = function (app) {
             console.log('manage security : ', reviewInternal);
         };
 
-
-        /**
-         * @description Open
-         * @param reviewInternal
-         * @param $event
-         */
-        self.open = function (reviewInternal, $event) {
-            //console.log('open : ', reviewInternal);
-            if (!reviewInternal.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-
-            correspondenceService.viewCorrespondence(reviewInternal, self.gridActions);
-            return;
-        };
-
         /**
          * @description broadcast selected organization and workflow group
          * @param reviewInternal
@@ -422,6 +401,33 @@ module.exports = function (app) {
                 .catch(function () {
                     self.reloadReviewInternals(self.grid.page);
                 });
+        };
+
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var isEditAllowed = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+            if (checkForViewPopup)
+                return !isEditAllowed;
+            return isEditAllowed;
+        };
+
+        /**
+         * @description View document
+         * @param reviewInternal
+         * @param $event
+         */
+        self.viewDocument = function (reviewInternal, $event) {
+            if (!reviewInternal.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+
+            correspondenceService.viewCorrespondence(reviewInternal, self.gridActions, checkIfEditPropertiesAllowed(reviewInternal, true), true);
+            return;
         };
 
         /**
@@ -661,10 +667,10 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
-                callback: self.open,
-                class: "action-yellow",
+                callback: self.viewDocument,
+                class: "action-green",
                 showInView: false,
-                hide: true,
+                //hide: true,
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
@@ -685,24 +691,5 @@ module.exports = function (app) {
             }
         ];
 
-        /**
-         * @description View document
-         * @param reviewInternal
-         * @param $event
-         */
-        self.viewDocument = function (reviewInternal, $event) {
-            console.log('view document : ', reviewInternal);
-            if (!reviewInternal.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-
-            correspondenceService.viewCorrespondence(reviewInternal, self.gridActions);
-            return;
-        };
     });
 };

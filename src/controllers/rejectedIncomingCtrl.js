@@ -451,26 +451,6 @@ module.exports = function (app) {
         };*/
 
         /**
-         * @description Open Incoming
-         * @param rejectedIncoming
-         * @param $event
-         */
-        self.openIncoming = function (rejectedIncoming, $event) {
-            console.log('open rejected incoming : ', rejectedIncoming);
-            if (!rejectedIncoming.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-
-            correspondenceService.viewCorrespondence(rejectedIncoming, self.gridActions);
-            return;
-        };
-
-        /**
          * @description broadcast selected organization and workflow group
          * @param rejectedIncoming
          * @param $event
@@ -485,6 +465,32 @@ module.exports = function (app) {
                 .catch(function () {
                     self.reloadRejectedIncomings(self.grid.page);
                 });
+        };
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var isEditAllowed = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+            if (checkForViewPopup)
+                return !isEditAllowed;
+            return isEditAllowed;
+        };
+
+        /**
+         * @description View document
+         * @param rejectedIncoming
+         * @param $event
+         */
+        self.viewDocument = function (rejectedIncoming, $event) {
+            if (!rejectedIncoming.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+
+            correspondenceService.viewCorrespondence(rejectedIncoming, self.gridActions, checkIfEditPropertiesAllowed(rejectedIncoming, true), true);
+            return;
         };
 
         /**
@@ -736,7 +742,7 @@ module.exports = function (app) {
                 text: 'grid_action_open',
                 shortcut: false,
                 showInView: false,
-                callback: self.openIncoming,
+                callback: self.viewDocument,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {
@@ -757,24 +763,5 @@ module.exports = function (app) {
                 }
             }
         ];
-
-        /**
-         * @description View document
-         * @param rejectedIncoming
-         * @param $event
-         */
-        self.viewDocument = function (rejectedIncoming, $event) {
-            if (!rejectedIncoming.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-
-            correspondenceService.viewCorrespondence(rejectedIncoming, self.gridActions);
-            return;
-        };
     });
 };

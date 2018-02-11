@@ -463,24 +463,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Open
-         * @param reviewIncoming
-         * @param $event
-         */
-        self.openIncoming = function (reviewIncoming, $event) {
-            if (!reviewIncoming.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(reviewIncoming, self.gridActions);
-            return;
-        };
-
-        /**
          * @description broadcast selected organization and workflow group
          * @param reviewIncoming
          * @param $event
@@ -495,6 +477,32 @@ module.exports = function (app) {
                 .catch(function () {
                     self.reloadReviewIncomings(self.grid.page);
                 });
+        };
+
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var isEditAllowed = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+            if (checkForViewPopup)
+                return !isEditAllowed;
+            return isEditAllowed;
+        };
+
+        /**
+         * @description View document
+         * @param reviewIncoming
+         * @param $event
+         */
+        self.viewDocument = function (reviewIncoming, $event) {
+            if (!reviewIncoming.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(reviewIncoming, self.gridActions, checkIfEditPropertiesAllowed(reviewIncoming, true), false);
+            return;
         };
 
         /**
@@ -745,7 +753,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
-                callback: self.openIncoming,
+                callback: self.viewDocument,
                 class: "action-green",
                 showInView: false,
                 permissionKey: 'VIEW_DOCUMENT',
@@ -754,6 +762,7 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && model.hasContent();
                 }
             },
+            // Broadcast
             {
                 type: 'action',
                 icon: 'send',
@@ -766,45 +775,5 @@ module.exports = function (app) {
                 }
             }
         ];
-
-        /**
-         * @description View document
-         * @param reviewIncoming
-         * @param $event
-         */
-        self.viewDocument = function (reviewIncoming, $event) {
-            console.log('reviewIncoming', reviewIncoming);
-            if (!reviewIncoming.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(reviewIncoming, self.gridActions);
-            return;
-        };
-
-
-        /*/!**
-         * @description Change the globalization of review incoming email
-         * @param reviewIncoming
-         *!/
-         self.changeGlobalReviewIncoming = function (reviewIncoming) {
-         if (reviewIncoming.isGlobal) {
-         reviewIncomingService.updateReviewIncoming(reviewIncoming)
-         .then(function () {
-         toast.success(langService.get('globalization_success'));
-         })
-         .catch(function () {
-         reviewIncoming.global = !reviewIncoming.global;
-         dialog.errorMessage(langService.get('something_happened_when_update_global'));
-         });
-         }
-         else {
-         console.log("Open the popup to add relation entities");
-         }
-         };*/
     });
 };

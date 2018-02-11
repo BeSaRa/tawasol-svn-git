@@ -329,7 +329,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (rejectedInternal, $event) {
-            console.log('manage attachments : ', rejectedInternal);
+            //console.log('manage attachments : ', rejectedInternal);
             managerService.manageDocumentAttachments(rejectedInternal.vsId, rejectedInternal.docClassName, rejectedInternal.docSubject, $event)
                 .then(function (attachments) {
                     rejectedInternal.attachments = attachments;
@@ -345,7 +345,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageEntities = function (rejectedInternal, $event) {
-            console.log('manage entities : ', rejectedInternal);
+            //console.log('manage entities : ', rejectedInternal);
             var info = rejectedInternal.getInfo();
             managerService
                 .manageDocumentEntities(info.vsId, info.documentClass, info.title, $event);
@@ -373,25 +373,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Open the document
-         * @param rejectedInternal
-         * @param $event
-         */
-        self.open = function (rejectedInternal, $event) {
-            console.log('open : ', rejectedInternal);
-            if (!rejectedInternal.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(rejectedInternal, self.gridActions);
-            return;
-        };
-
-        /**
          * @description broadcast selected organization and workflow group
          * @param rejectedInternal
          * @param $event
@@ -406,6 +387,33 @@ module.exports = function (app) {
                 .catch(function () {
                     self.reloadRejectedInternals(self.grid.page);
                 });
+        };
+
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var isEditAllowed = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+            if (checkForViewPopup)
+                return !isEditAllowed;
+            return isEditAllowed;
+        };
+
+
+        /**
+         * @description View document
+         * @param rejectedInternal
+         * @param $event
+         */
+        self.viewDocument = function (rejectedInternal, $event) {
+            if (!rejectedInternal.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(rejectedInternal, self.gridActions, checkIfEditPropertiesAllowed(rejectedInternal, true), true);
+            return;
         };
 
         /**
@@ -645,7 +653,7 @@ module.exports = function (app) {
                 text: 'grid_action_open',
                 shortcut: false,
                 showInView: false,
-                callback: self.open,
+                callback: self.viewDocument,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {
@@ -666,24 +674,5 @@ module.exports = function (app) {
                 }
             }
         ];
-
-        /**
-         * @description View document
-         * @param rejectedInternal
-         * @param $event
-         */
-        self.viewDocument = function (rejectedInternal, $event) {
-            console.log('view document : ', rejectedInternal);
-            if (!rejectedInternal.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(rejectedInternal, self.gridActions);
-            return;
-        };
     });
 };

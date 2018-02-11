@@ -123,20 +123,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description View document
-         * @param proxyMailInbox
-         * @param $event
-         */
-        self.viewDocument = function (proxyMailInbox, $event) {
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(proxyMailInbox, self.gridActions);
-            return;
-        };
-
-        /**
          * @description Terminate proxy Mail Inboxes Bulk
          * @param $event
          */
@@ -346,22 +332,6 @@ module.exports = function (app) {
                 .viewTrackingSheetPopup(proxyMailInbox, params, $event).then(function (result) {
 
             });
-        };
-
-        /**
-         * @description Open proxy Mail inbox
-         * @param proxyMailInbox
-         * @param $event
-         */
-        self.openProxyMailInbox = function (proxyMailInbox, $event) {
-            //console.log('openProxyMailInbox : ', proxyMailInbox);
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-
-            correspondenceService.viewCorrespondence(proxyMailInbox, self.gridActions);
-            return;
         };
 
         /**
@@ -582,8 +552,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.editContent = function (proxyMailInbox, $event) {
-            console.log('editProxyMailInboxContent : ', proxyMailInbox);
+            var info = proxyMailInbox.getInfo();
+            managerService.manageDocumentContent(info.vsId, info.documentClass, info.title, $event);
         };
+
+
 
         /**
          * @description Edit Properties
@@ -591,7 +564,68 @@ module.exports = function (app) {
          * @param $event
          */
         self.editProperties = function (proxyMailInbox, $event) {
-            console.log('editProxyMailInboxProperties : ', proxyMailInbox);
+            //console.log('editProxyMailInboxProperties : ', proxyMailInbox);
+            var info = proxyMailInbox.getInfo();
+            managerService
+                .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
+                .finally(function () {
+                    self.reloadProxyMailInboxes(self.grid.page)
+                });
+        };
+
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var info = model.getInfo();
+            var hasPermission = false;
+            if (info.documentClass === "internal") {
+                //If approved internal electronic, don't allow to edit
+                if (info.docStatus >= 24 && !info.isPaper)
+                    hasPermission = false;
+                else
+                    hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+            }
+            else if (info.documentClass === "incoming")
+                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+            else if (info.documentClass === "outgoing") {
+                //If approved outgoing electronic, don't allow to edit
+                if (info.docStatus >= 24 && !info.isPaper)
+                    hasPermission = false;
+                else
+                    hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+            }
+            if (checkForViewPopup)
+                return !hasPermission;
+            return hasPermission;
+        };
+
+
+        var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
+            var info = model.getInfo();
+            var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+            var allowed = (hasPermission && info.documentClass !== "internal");
+            if (checkForViewPopup)
+                return !(allowed);
+            return allowed;
+        };
+
+
+        /**
+         * @description View document
+         * @param proxyMailInbox
+         * @param $event
+         */
+        self.viewDocument = function (proxyMailInbox, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(proxyMailInbox, self.gridActions, checkIfEditPropertiesAllowed(proxyMailInbox, true), checkIfEditCorrespondenceSiteAllowed(proxyMailInbox, true))
+                .then(function () {
+                    return self.reloadProxyMailInboxes(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadProxyMailInboxes(self.grid.page);
+                });
         };
 
         /**
@@ -750,7 +784,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: true,
-                callback: self.openProxyMailInbox,
+                callback: self.viewDocument,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
                 showInView: false,
@@ -1079,25 +1113,7 @@ module.exports = function (app) {
                         callback: self.editProperties,
                         class: "action-green",
                         checkShow: function (action, model) {
-                            var info = model.getInfo();
-                            var hasPermission = false;
-                            if (info.documentClass === "internal") {
-                                //If approved internal electronic, don't allow to edit
-                                if (info.docStatus >= 24 && !info.isPaper)
-                                    hasPermission = false;
-                                else
-                                    hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-                            }
-                            else if (info.documentClass === "incoming")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
-                            else if (info.documentClass === "outgoing") {
-                                //If approved outgoing electronic, don't allow to edit
-                                if (info.docStatus >= 24 && !info.isPaper)
-                                    hasPermission = false;
-                                else
-                                    hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
-                            }
-                            return self.checkToShowAction(action, model) && hasPermission;
+                            return self.checkToShowAction(action, model) && checkIfEditPropertiesAllowed(model);
                         }
                     }
                 ]

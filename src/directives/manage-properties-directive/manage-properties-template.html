@@ -1,5 +1,4 @@
 <ng-form name="outgoing_properties">
-    <!--<pre direction="ltr">{{ctrl.document | json}}</pre>-->
     <fieldset class="field-set-hidden">
         <div layout="column">
             <div layout="row">
@@ -7,7 +6,7 @@
                     <label for="ou">{{lang.organization_unit}}</label>
                     <md-select name="ou"
                                id="ou"
-                               ng-disabled="ctrl.approved || !ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
+                               ng-disabled="!!ctrl.disableProperties || !ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-model="ctrl.document.ou"
                                required>
@@ -31,7 +30,7 @@
                     <md-select name="securityLevel"
                                id="securityLevel"
                                ng-change="ctrl.onSecurityLevelChange()"
-                               ng-disabled="ctrl.approved"
+                               ng-disabled="!!ctrl.disableProperties"
                                ng-model="ctrl.document.securityLevel"
                                ng-model-options="{trackBy: '$value.id'}"
                                required>
@@ -48,7 +47,7 @@
                 <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "incoming"'>
                     <label for="refDocNumber">{{lang.document_number}}</label>
                     <input name="refDocNumber" id="refDocNumber"
-                           ng-disabled="ctrl.approved"
+                           ng-disabled="!!ctrl.disableProperties"
                            ng-model="ctrl.document.refDocNumber">
                     <!--custom-validate-directive="number"-->
                     <!--<div ng-messages="outgoing_properties.refDocNumber.$error">
@@ -59,7 +58,7 @@
                 <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "internal"'>
                     <label for="type">{{lang.type}}</label>
                     <md-select name="type" id="type"
-                               ng-disabled="ctrl.approved"
+                               ng-disabled="!!ctrl.disableProperties"
                                ng-model="ctrl.document.internalDocType" required>
                         <md-option ng-value="type.id"
                                    ng-repeat="type in ctrl.typeOptions track by $index">
@@ -74,7 +73,7 @@
                 <md-input-container>
                     <label for="docDate">{{lang.date}}</label>
                     <md-datepicker name="docDate" id="docDate"
-                                   ng-disabled="ctrl.approved"
+                                   ng-disabled="!!ctrl.disableProperties"
                                    ng-model="ctrl.document.docDate"
                                    md-max-date="ctrl.maxCreateDate"
                                    md-open-on-focus></md-datepicker>
@@ -89,7 +88,7 @@
                     <label for="mainClassification">{{lang.outgoing_main_classification}}</label>
                     <md-select name="mainClassification"
                                id="mainClassification"
-                               ng-disabled="ctrl.approved"
+                               ng-disabled="!!ctrl.disableProperties"
                                ng-model="ctrl.document.mainClassification"
                                ng-model-options="{trackBy: '$value.id'}"
                                required>
@@ -105,7 +104,7 @@
                 <md-input-container flex>
                     <label for="subClassification">{{lang.outgoing_sub_classification}}</label>
                     <md-select
-                            ng-disabled="ctrl.approved || !ctrl.document.mainClassification"
+                            ng-disabled="!!ctrl.disableProperties || !ctrl.document.mainClassification"
                             name="subClassification"
                             id="subClassification"
                             ng-model-options="{trackBy: '$value.id'}"
@@ -124,7 +123,7 @@
                     <label for="docSubject">{{lang.document_subject}}</label>
                     <input name="docSubject"
                            id="docSubject"
-                           ng-disabled="ctrl.approved"
+                           ng-disabled="!!ctrl.disableProperties"
                            custom-validate-directive="AEN"
                            ng-model="ctrl.document.docSubject"
                            required>
@@ -139,7 +138,7 @@
                     <label for="priorityLevel">{{lang.outgoing_priority_level}}</label>
                     <md-select name="priorityLevel"
                                id="priorityLevel"
-                               ng-disabled="ctrl.approved"
+                               ng-disabled="!!ctrl.disableProperties"
                                ng-model="ctrl.document.priorityLevel"
                                ng-model-options="{trackBy: '$value.id'}"
                                required>
@@ -156,7 +155,7 @@
                     <label for="docType">{{lang.outgoing_document_type}}</label>
                     <md-select name="docType"
                                id="docType"
-                               ng-disabled="ctrl.approved"
+                               ng-disabled="!!ctrl.disableProperties"
                                ng-model="ctrl.document.docType"
                                ng-model-options="{trackBy: '$value.id'}"
                                required>
@@ -169,9 +168,9 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-                <md-input-container ng-if="ctrl.approved">
+                <md-input-container ng-if="!ctrl.disableProperties">
                     <md-button class="md-icon-button"
-                               ng-disabled="ctrl.approved"
+                               ng-disabled="!!ctrl.disableProperties"
                                ng-click="ctrl.shortcut.addNewDocumentType($event)">
                         <md-icon md-svg-icon="plus"></md-icon>
                     </md-button>
@@ -184,7 +183,7 @@
                                id="fileId"
                                ng-change="ctrl.onFileChange(ctrl.document.fileId)"
                                ng-model="ctrl.document.fileId"
-                               ng-disabled="ctrl.approved"
+                               ng-disabled="!!ctrl.disableProperties"
                                ng-model-options="{trackBy: '$value.id'}"
                                required>
                         <md-option ng-value="file.file"
@@ -196,11 +195,11 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-                <md-input-container ng-if="ctrl.approved">
+                <md-input-container ng-if="!ctrl.disableProperties">
                     <md-button tooltip="{{lang.outgoing_add_new_document_file}}"
                                class="md-icon-button"
 
-                               ng-disabled="ctrl.approved"
+                               ng-disabled="!!ctrl.disableProperties"
                                ng-click="ctrl.shortcut.addNewDocumentFile($event)">
                         <md-icon md-svg-icon="plus"></md-icon>
                     </md-button>
@@ -209,7 +208,7 @@
                     <label for="fileCode">{{lang.outgoing_file_code}}</label>
                     <input name="fileCode"
                            id="fileCode"
-                           ng-disabled="ctrl.approved"
+                           ng-disabled="!!ctrl.disableProperties"
                            ng-enter="ctrl.onFileCodeChanged()"
                            ng-model="ctrl.document.fileCode"
                            required>
@@ -221,7 +220,7 @@
                     <label for="fileSerial">{{lang.outgoing_file_serial}}</label>
                     <input name="fileSerial" custom-validate-directive="number"
                            id="fileSerial"
-                           ng-disabled="ctrl.approved"
+                           ng-disabled="!!ctrl.disableProperties"
                            ng-model="ctrl.document.fileSerial"
                            required>
                     <div ng-messages="outgoing_properties.fileSerial.$error">
@@ -234,7 +233,7 @@
                 <md-input-container flex>
                     <label for="docNotes">{{lang.properties_notes}}</label>
                     <textarea name="docNotes" id="docNotes" ng-model="ctrl.document.docNotes" rows="5"
-                              ng-disabled="ctrl.approved"></textarea>
+                              ng-disabled="!!ctrl.disableProperties"></textarea>
                 </md-input-container>
             </div>
         </div>

@@ -64,11 +64,12 @@
                                 <tbody md-body>
                                 <tr md-row md-select="scanIncoming" grid-right-click-directive model="scanIncoming" selected-length="{{ctrl.selectedScanIncomings.length ? ctrl.selectedScanIncomings.length : 0}}"
                                     ng-repeat="scanIncoming in ctrl.scanIncomings | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
-                                    <td md-cell class="td-data">
+                                    <!--<td md-cell class="td-data">
                                         <a href="" ng-if="scanIncoming.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(scanIncoming, $event)">{{scanIncoming.docSubject}}</a>
                                         <span ng-if="!scanIncoming.hasContent()">{{scanIncoming.docSubject}}</span>
-                                    </td>
+                                    </td>-->
+                                    <td md-cell>{{scanIncoming.docSubject}}</td>
                                     <td md-cell>{{scanIncoming.priorityLevel.getTranslatedName()}}</td>
                                     <td md-cell>{{scanIncoming.securityLevel.getTranslatedName()}}</td>
                                     <td md-cell>{{scanIncoming.getTranslatedCreator()}}</td>

@@ -89,20 +89,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description View document of incoming department inbox
-         * @param incomingDepartmentInbox
-         * @param $event
-         */
-        self.viewDocument = function (incomingDepartmentInbox, $event) {
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(incomingDepartmentInbox, self.gridActions, true);
-            return;
-        };
-
-        /**
          * @description Opens the incoming department inbox document
          * @param incomingDepartmentInbox
          * @param $event
@@ -166,6 +152,29 @@ module.exports = function (app) {
                             new ResolveDefer(defer);
                         });
                 });
+        };
+
+        var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
+            var info = model.getInfo();
+            var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+            var allowed = (hasPermission && info.documentClass !== "internal");
+            if (checkForViewPopup)
+                return !(allowed);
+            return allowed;
+        };
+
+        /**
+         * @description View document of incoming department inbox
+         * @param incomingDepartmentInbox
+         * @param $event
+         */
+        self.viewDocument = function (incomingDepartmentInbox, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(incomingDepartmentInbox, self.gridActions,true, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true);
+            return;
         };
 
         /**

@@ -430,24 +430,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Open
-         * @param reviewOutgoing
-         * @param $event
-         */
-        self.openOutgoing = function (reviewOutgoing, $event) {
-            if (!reviewOutgoing.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(reviewOutgoing, self.gridActions);
-            return;
-        };
-
-        /**
          * @description broadcast selected organization and workflow group
          * @param reviewOutgoing
          * @param $event
@@ -488,6 +470,32 @@ module.exports = function (app) {
          */
         self.printBarcode = function (model, $event) {
             model.barcodePrint(model, $event);
+        };
+
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var isEditAllowed = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+            if (checkForViewPopup)
+                return !isEditAllowed;
+            return isEditAllowed;
+        };
+
+        /**
+         * @description View document
+         * @param reviewOutgoing
+         * @param $event
+         */
+        self.viewDocument = function (reviewOutgoing, $event) {
+            if (!reviewOutgoing.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(reviewOutgoing, self.gridActions, checkIfEditPropertiesAllowed(reviewOutgoing, true), false);
+            return;
         };
 
         /**
@@ -766,7 +774,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
-                callback: self.openOutgoing,
+                callback: self.viewDocument,
                 class: "action-green",
                 showInView: false,
                 permissionKey: 'VIEW_DOCUMENT',
@@ -789,23 +797,5 @@ module.exports = function (app) {
                 }
             }
         ];
-
-        /**
-         * @description View document
-         * @param reviewOutgoing
-         * @param $event
-         */
-        self.viewDocument = function (reviewOutgoing, $event) {
-            if (!reviewOutgoing.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(reviewOutgoing, self.gridActions);
-            return;
-        };
     });
 };

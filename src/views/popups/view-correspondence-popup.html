@@ -85,8 +85,8 @@
                                 <manage-properties-directive
                                         source-model="ctrl.model"
                                         source-form="ctrl.document_properties"
-                                        document="ctrl.correspondence">
-                                    <!--approved="ctrl.approved"-->
+                                        document="ctrl.correspondence"
+                                        disable-properties="ctrl.disableProperties">
                                 </manage-properties-directive>
                             </accordion-content>
                         </accordion-item>
@@ -105,12 +105,14 @@
                                             document-class="ctrl.correspondence.docClassName"
                                             sites-info-c-c="ctrl.correspondence.sitesInfoCC"
                                             sites-info-to="ctrl.correspondence.sitesInfoTo"
-                                            approved="ctrl.approved && ctrl.readyToExport"></manage-correspondence-sites-directive>
+                                            disable-correspondence="ctrl.disableCorrespondence">
+                                    </manage-correspondence-sites-directive>
                                     <manage-correspondence-site-incoming-directive
                                             ng-if="ctrl.correspondence.docClassName == 'Incoming'"
                                             vs-id="ctrl.correspondence.vsId"
                                             site="ctrl.correspondence.site"
-                                            document-class="ctrl.correspondence.docClassName"></manage-correspondence-site-incoming-directive>
+                                            document-class="ctrl.correspondence.docClassName"
+                                            disable-correspondence="ctrl.disableCorrespondence"></manage-correspondence-site-incoming-directive>
                                 </div>
                             </accordion-content>
                         </accordion-item>

@@ -13,8 +13,8 @@ module.exports = function (app) {
                 sourceModel: '=?',
                 documentFiles: '=?',
                 sourceForm: '=?',
-                fromDialog: '='/*,
-                approved: '=?'*/
+                fromDialog: '=',
+                disableProperties: '='
             }
         }
     })

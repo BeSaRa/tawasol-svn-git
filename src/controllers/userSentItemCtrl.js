@@ -1,23 +1,23 @@
 module.exports = function (app) {
     app.controller('userSentItemCtrl', function (lookupService,
-                                             userSentItemService,
-                                             userSentItems,
-                                             $q,
-                                             viewDocumentService,
-                                             langService,
-                                             rootEntity,
-                                             contextHelpService,
-                                             correspondenceService,
-                                             managerService,
-                                             viewTrackingSheetService,
-                                             downloadService,
-                                             employeeService,
-                                             favoriteDocumentsService,
-                                             toast,
-                                             correspondenceSiteService,
+                                                 userSentItemService,
+                                                 userSentItems,
+                                                 $q,
+                                                 viewDocumentService,
+                                                 langService,
+                                                 rootEntity,
+                                                 contextHelpService,
+                                                 correspondenceService,
+                                                 managerService,
+                                                 viewTrackingSheetService,
+                                                 downloadService,
+                                                 employeeService,
+                                                 favoriteDocumentsService,
+                                                 toast,
+                                                 correspondenceSiteService,
                                                  WorkItem,
                                                  ResolveDefer,
-                                                 generator ) {
+                                                 generator) {
         'ngInject';
         var self = this;
 
@@ -336,6 +336,33 @@ module.exports = function (app) {
             console.log('get link : ', userSentItem);
         };
 
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            /*var info = model.getInfo();
+            var hasPermission = false;
+            if (info.documentClass === "internal") {
+                //If approved internal electronic, don't allow to edit
+                if (info.docStatus >= 24 && !info.isPaper)
+                    hasPermission = false;
+                else
+                    hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+            }
+            else if (info.documentClass === "incoming")
+                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+            else if (info.documentClass === "outgoing") {
+                //If approved outgoing electronic, don't allow to edit
+                if (info.docStatus >= 24 && !info.isPaper)
+                    hasPermission = false;
+                else
+                    hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+            }
+            if (checkForViewPopup)
+                return !hasPermission;
+            return hasPermission;*/
+            return true;
+        };
+
+
         self.viewDocument = function (userSentItem, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
@@ -348,7 +375,7 @@ module.exports = function (app) {
             correspondenceService.viewCorrespondence({
                 vsId: info.vsId,
                 docClassName: info.documentClass
-            }, self.gridActions);
+            }, self.gridActions, checkIfEditPropertiesAllowed(userSentItem, true), true);
         };
 
         /**

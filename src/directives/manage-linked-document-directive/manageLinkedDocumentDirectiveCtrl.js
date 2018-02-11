@@ -57,7 +57,7 @@ module.exports = function (app) {
                 return;
             }
             correspondenceService
-                .viewCorrespondence(correspondence , []);
+                .viewCorrespondence(correspondence , [], true, true);
         };
         /**
          * @description open search dialog

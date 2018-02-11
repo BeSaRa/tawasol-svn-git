@@ -297,27 +297,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageDestinations = function (readyToSendOutgoing, $event) {
-            console.log('manage destinations : ', readyToSendOutgoing);
+            //console.log('manage destinations : ', readyToSendOutgoing);
             managerService.manageDocumentCorrespondence(readyToSendOutgoing.vsId, readyToSendOutgoing.docClassName, readyToSendOutgoing.docSubject, $event)
-        };
-
-        /**
-         * @description Open the document
-         * @param readyToSendOutgoing
-         * @param $event
-         */
-        self.openOutgoing = function (readyToSendOutgoing, $event) {
-            //console.log('open ready to send outgoing : ', readyToSendOutgoing);
-            if (!readyToSendOutgoing.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(readyToSendOutgoing, self.gridActions);
-            return;
         };
 
         /**
@@ -362,6 +343,32 @@ module.exports = function (app) {
             model.barcodePrint($event);
         };
 
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var isEditAllowed = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+            if (checkForViewPopup)
+                return !isEditAllowed;
+            return isEditAllowed;
+        };
+
+        /**
+         * @description View document
+         * @param readyToSendOutgoing
+         * @param $event
+         */
+        self.viewDocument = function (readyToSendOutgoing, $event) {
+            //console.log(readyToSendOutgoing);
+            if (!readyToSendOutgoing.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(readyToSendOutgoing, self.gridActions, checkIfEditPropertiesAllowed(readyToSendOutgoing, true), false);
+            return;
+        };
 
         /**
          * @description Check if action will be shown on grid or not
@@ -617,7 +624,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
-                callback: self.openOutgoing,
+                callback: self.viewDocument,
                 showInView: false,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
@@ -639,24 +646,5 @@ module.exports = function (app) {
                 }
             }
         ];
-
-        /**
-         * @description View document
-         * @param readyToSendOutgoing
-         * @param $event
-         */
-        self.viewDocument = function (readyToSendOutgoing, $event) {
-            //console.log(readyToSendOutgoing);
-            if (!readyToSendOutgoing.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(readyToSendOutgoing, self.gridActions);
-            return;
-        };
     });
 };

@@ -304,24 +304,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Open the document
-         * @param readyToSendInternal
-         * @param $event
-         */
-        self.open = function (readyToSendInternal, $event) {
-            if (!readyToSendInternal.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(readyToSendInternal, self.gridActions);
-            return;
-        };
-
-        /**
          * @description broadcast selected organization and workflow group
          * @param readyToSendInternal
          * @param $event
@@ -336,6 +318,31 @@ module.exports = function (app) {
                 .catch(function () {
                     self.reloadReadyToSendInternals(self.grid.page);
                 });
+        };
+
+        var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            var isEditAllowed = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+            if (checkForViewPopup)
+                return !isEditAllowed;
+            return isEditAllowed;
+        };
+
+        /**
+         * @description View document
+         * @param readyToSendInternal
+         * @param $event
+         */
+        self.viewDocument = function (readyToSendInternal, $event) {
+            if (!readyToSendInternal.hasContent()) {
+                dialog.alertMessage(langService.get('content_not_found'));
+                return;
+            }
+            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            correspondenceService.viewCorrespondence(readyToSendInternal, self.gridActions, checkIfEditPropertiesAllowed(readyToSendInternal, true), true);
+            return;
         };
 
         /**
@@ -578,7 +585,7 @@ module.exports = function (app) {
                 text: 'grid_action_open',
                 shortcut: false,
                 showInView: false,
-                callback: self.open,
+                callback: self.viewDocument,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {
@@ -600,22 +607,5 @@ module.exports = function (app) {
             }
         ];
 
-        /**
-         * @description View document
-         * @param readyToSendInternal
-         * @param $event
-         */
-        self.viewDocument = function (readyToSendInternal, $event) {
-            if (!readyToSendInternal.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
-            }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            correspondenceService.viewCorrespondence(readyToSendInternal, self.gridActions);
-            return;
-        };
     });
 };
