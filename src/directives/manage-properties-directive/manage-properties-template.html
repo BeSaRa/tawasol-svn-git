@@ -1,13 +1,13 @@
 <ng-form name="outgoing_properties">
     <!--<pre direction="ltr">{{ctrl.document | json}}</pre>-->
-    <fieldset class="field-set-hidden" ng-disabled="!ctrl.document.needApprove()">
+    <fieldset class="field-set-hidden">
         <div layout="column">
             <div layout="row">
                 <md-input-container flex>
                     <label for="ou">{{lang.organization_unit}}</label>
                     <md-select name="ou"
                                id="ou"
-                               ng-disabled="!ctrl.document.needApprove() ||ctrl.approved || !ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
+                               ng-disabled="ctrl.approved || !ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-model="ctrl.document.ou"
                                required>
@@ -31,7 +31,7 @@
                     <md-select name="securityLevel"
                                id="securityLevel"
                                ng-change="ctrl.onSecurityLevelChange()"
-                               ng-disabled="!ctrl.document.needApprove() || ctrl.approved"
+                               ng-disabled="ctrl.approved"
                                ng-model="ctrl.document.securityLevel"
                                ng-model-options="{trackBy: '$value.id'}"
                                required>
@@ -59,7 +59,7 @@
                 <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "internal"'>
                     <label for="type">{{lang.type}}</label>
                     <md-select name="type" id="type"
-                               ng-disabled="!ctrl.document.needApprove() || ctrl.approved"
+                               ng-disabled="ctrl.approved"
                                ng-model="ctrl.document.internalDocType" required>
                         <md-option ng-value="type.id"
                                    ng-repeat="type in ctrl.typeOptions track by $index">
@@ -74,7 +74,7 @@
                 <md-input-container>
                     <label for="docDate">{{lang.date}}</label>
                     <md-datepicker name="docDate" id="docDate"
-                                   ng-disabled="!ctrl.document.needApprove() || ctrl.approved"
+                                   ng-disabled="ctrl.approved"
                                    ng-model="ctrl.document.docDate"
                                    md-max-date="ctrl.maxCreateDate"
                                    md-open-on-focus></md-datepicker>
@@ -89,7 +89,7 @@
                     <label for="mainClassification">{{lang.outgoing_main_classification}}</label>
                     <md-select name="mainClassification"
                                id="mainClassification"
-                               ng-disabled="!ctrl.document.needApprove() || ctrl.approved"
+                               ng-disabled="ctrl.approved"
                                ng-model="ctrl.document.mainClassification"
                                ng-model-options="{trackBy: '$value.id'}"
                                required>
@@ -105,7 +105,7 @@
                 <md-input-container flex>
                     <label for="subClassification">{{lang.outgoing_sub_classification}}</label>
                     <md-select
-                            ng-disabled="!ctrl.document.needApprove() || ctrl.approved || !ctrl.document.mainClassification"
+                            ng-disabled="ctrl.approved || !ctrl.document.mainClassification"
                             name="subClassification"
                             id="subClassification"
                             ng-model-options="{trackBy: '$value.id'}"
@@ -139,7 +139,7 @@
                     <label for="priorityLevel">{{lang.outgoing_priority_level}}</label>
                     <md-select name="priorityLevel"
                                id="priorityLevel"
-                               ng-disabled="!ctrl.document.needApprove() || ctrl.approved"
+                               ng-disabled="ctrl.approved"
                                ng-model="ctrl.document.priorityLevel"
                                ng-model-options="{trackBy: '$value.id'}"
                                required>
@@ -156,7 +156,7 @@
                     <label for="docType">{{lang.outgoing_document_type}}</label>
                     <md-select name="docType"
                                id="docType"
-                               ng-disabled="!ctrl.document.needApprove() || ctrl.approved"
+                               ng-disabled="ctrl.approved"
                                ng-model="ctrl.document.docType"
                                ng-model-options="{trackBy: '$value.id'}"
                                required>
@@ -184,7 +184,7 @@
                                id="fileId"
                                ng-change="ctrl.onFileChange(ctrl.document.fileId)"
                                ng-model="ctrl.document.fileId"
-                               ng-disabled="!ctrl.document.needApprove() || ctrl.approved"
+                               ng-disabled="ctrl.approved"
                                ng-model-options="{trackBy: '$value.id'}"
                                required>
                         <md-option ng-value="file.file"
