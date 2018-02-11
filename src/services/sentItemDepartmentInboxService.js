@@ -25,7 +25,7 @@ module.exports = function (app) {
             /*
             * Pending(0),Sent(1),Delivered(2),Returned(3),Removed(4)
             * */
-            return $http.post(urlService.departmentInboxes + '/dept-sent-items/month/' + month + '/year/' + year, [0,1]).then(function (result) {
+            return $http.post(urlService.departmentInboxes + '/dept-sent-items/month/' + month + '/year/' + year, [0,1,2,3]).then(function (result) {
                 self.sentItemDepartmentInboxes = generator.generateCollection(result.data.rs, SentItemDepartmentInbox, self._sharedMethods);
                 self.sentItemDepartmentInboxes = generator.interceptReceivedCollection('SentItemDepartmentInbox', self.sentItemDepartmentInboxes);
                 return self.sentItemDepartmentInboxes;
