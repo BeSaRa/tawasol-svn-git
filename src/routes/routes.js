@@ -1255,5 +1255,11 @@ module.exports = function (app) {
                 controller: 'localizationCtrl',
                 controllerAs: 'ctrl'
             })
+            .state('app.inbox.group-inbox', {
+                url: '/group-inbox',
+                template: templateProvider.getView('group-inbox'),
+                controller: 'groupInboxCtrl',
+                controllerAs: 'ctrl'
+            })
     });
 };

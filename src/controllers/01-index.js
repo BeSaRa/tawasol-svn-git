@@ -63,4 +63,5 @@ module.exports = function (app) {
     require('./approvedInternalCtrl')(app);
     require('./favoriteDocumentsCtrl')(app);
     require('./passwordEncryptCtrl')(app);
+    require('./groupInboxCtrl')(app);
 };
