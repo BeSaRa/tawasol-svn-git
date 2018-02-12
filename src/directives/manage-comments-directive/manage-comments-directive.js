@@ -17,7 +17,8 @@ module.exports = function (app) {
                 sourceSaveCallback: '=?',
                 sourceCreateCallback: '=?',
                 sourceEditMode: '=?',
-                sourceComment: '=?'
+                sourceComment: '=?',
+                disableEverything: '=?'
             }
         }
     })

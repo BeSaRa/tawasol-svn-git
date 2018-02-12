@@ -141,7 +141,9 @@
                             <accordion-content>
                                 <div>
                                     <manage-tags-directive from-dialog="false"
-                                                           tags="ctrl.correspondence.tags"></manage-tags-directive>
+                                                           tags="ctrl.correspondence.tags"
+                                                            disable-everything="ctrl.disableEverything">
+                                    </manage-tags-directive>
                                 </div>
                             </accordion-content>
                         </accordion-item>
@@ -155,7 +157,9 @@
                                     <manage-linked-document-directive
                                             linked-docs="ctrl.correspondence.linkedDocs"
                                             vs-id="ctrl.correspondence.vsId"
-                                            document-class="ctrl.correspondence.docClassName"></manage-linked-document-directive>
+                                            document-class="ctrl.correspondence.docClassName"
+                                            disable-everything="ctrl.disableEverything">
+                                    </manage-linked-document-directive>
                                 </div>
                             </accordion-content>
                         </accordion-item>
@@ -170,7 +174,8 @@
                                             document="ctrl.correspondence"
                                             attachments="ctrl.correspondence.attachments"
                                             vs-id="ctrl.correspondence.vsId"
-                                            document-class="ctrl.correspondence.docClassName" flex>
+                                            document-class="ctrl.correspondence.docClassName"
+                                            disable-everything="ctrl.disableEverything" flex>
                                     </manage-attachment-directive>
                                 </div>
                             </accordion-content>
@@ -187,6 +192,7 @@
                                             vs-id="ctrl.correspondence.vsId"
                                             document-comments="ctrl.correspondence.documentComments"
                                             show-comment-form="ctrl.showDocumentComment"
+                                            disable-everything="ctrl.disableEverything"
                                             flex>
                                     </manage-comments-directive>
                                 </div>
@@ -202,7 +208,9 @@
                                     <manage-entities-directive
                                             vs-id="ctrl.correspondence.vsId"
                                             linked-entities="ctrl.correspondence.linkedEntities"
-                                            document-class="ctrl.correspondence.docClassName"></manage-entities-directive>
+                                            document-class="ctrl.correspondence.docClassName"
+                                            disable-everything="ctrl.disableEverything">
+                                    </manage-entities-directive>
                                 </div>
                             </accordion-content>
                         </accordion-item>

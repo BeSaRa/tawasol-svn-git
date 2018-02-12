@@ -1,5 +1,5 @@
 <div layout="column">
-    <div>
+    <div ng-if="!ctrl.disableEverything">
         <md-menu-bar class="menu-bar-has-button">
             <md-menu>
                 <md-button ng-disabled="ctrl.entity" class="md-raised"
@@ -82,7 +82,7 @@
                             md-order-by="arName">
                             <span>{{lang.entities_type}}</span>
                         </th>
-                        <th md-column>
+                        <th md-column ng-if="!ctrl.disableEverything">
                             <span ng-if="!ctrl.selectedEntities.length">{{lang.actions}}</span>
                             <md-button ng-if="ctrl.selectedEntities.length" class="md-icon-button"
                                        ng-click="ctrl.removeBulkDocumentEntities($event)">
@@ -93,6 +93,7 @@
                     </thead>
                     <tbody md-body>
                     <tr md-row md-select="entity"
+                        ng-disabled="ctrl.disableEverything"
                         ng-repeat="entity in ctrl.linkedEntities  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                         <td md-cell>
                             {{entity.name}}
@@ -100,7 +101,7 @@
                         <td md-cell>
                             {{entity.typeId.getTranslatedName()}}
                         </td>
-                        <td md-cell>
+                        <td md-cell ng-if="!ctrl.disableEverything">
                             <div flex layout="row" layout-align="start center">
                                 <div>
                                     <md-button class="md-icon-button" title="{{lang.delete}}"

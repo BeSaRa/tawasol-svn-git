@@ -35,6 +35,7 @@ module.exports = function (app) {
                                                        ApplicationUserSignature,
                                                        attachmentService,
                                                        currentOrganization,
+                                                       organizationService,
                                                        $q) {
         'ngInject';
         var self = this;
@@ -891,6 +892,16 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     locals: {
                         ouApplicationUser: ouApplicationUser
+                    },
+                    resolve: {
+                        organizations: function (organizationService) {
+                            'ngInject';
+                            return organizationService.loadOrganizations();
+                        },
+                        privateUsers: function(ouApplicationUserService){
+                            'ngInject'
+                            return ouApplicationUserService.loadAllPrivateUsers();
+                        }
                     }
                 })
                 .then(function (result) {

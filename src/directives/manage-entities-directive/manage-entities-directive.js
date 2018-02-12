@@ -12,7 +12,8 @@ module.exports = function (app) {
                 fromDialog: '=?',
                 linkedEntities: '=',
                 vsId: '=',
-                documentClass: '='
+                documentClass: '=',
+                disableEverything: '=?'
             }
         }
     })

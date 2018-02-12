@@ -1,6 +1,6 @@
 <div flex layout="column">
     <div flex layout="row">
-        <div ng-if="ctrl.allowUpload">
+        <div ng-if="ctrl.allowUpload && !ctrl.disableEverything">
             <md-menu-bar>
                 <md-menu>
                     <md-button class="md-raised" ng-click="$mdMenu.open()">
@@ -31,7 +31,7 @@
                 </md-menu>
             </md-menu-bar>
         </div>
-        <div ng-if="ctrl.allowScanner">
+        <div ng-if="ctrl.allowScanner && !ctrl.disableEverything">
             <md-button ng-disabled="!ctrl.scanner" ng-click="ctrl.openScannerDialog('scanner',$event)"
                        class="md-raised">
                 <div layout="row" layout-align="start center">
@@ -125,6 +125,7 @@
                     </thead>
                     <tbody md-body>
                     <tr md-row md-select="attachment"
+                        ng-disabled="ctrl.disableEverything"
                         ng-repeat="attachment in ctrl.attachments  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                         <td md-cell>{{attachment.documentTitle}}</td>
                         <td md-cell>{{attachment.attachmentType.getTranslatedName()}}</td>
@@ -140,6 +141,7 @@
                                 <!--<md-icon md-svg-icon="pencil"></md-icon>-->
                                 <!--</md-button>-->
                                 <md-button class="md-icon-button" title="{{lang.attachment_delete}}"
+                                           ng-if="!ctrl.disableEverything"
                                            ng-click="ctrl.deleteDocumentAttachment(attachment, $event)">
                                     <md-icon md-svg-icon="delete"></md-icon>
                                 </md-button>

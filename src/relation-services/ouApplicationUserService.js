@@ -67,6 +67,22 @@ module.exports = function (app) {
             return self.ouApplicationUsers.length ? $q.when(self.ouApplicationUsers) : self.loadOUApplicationUsers();
         };
 
+        self.loadAllPrivateUsers = function(){
+          return $http.get(urlService.allPrivateUsers).then(function(result){
+                  self.allPrivateUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
+                  self.allPrivateUsers = generator.interceptReceivedCollection('OUApplicationUser', self.allPrivateUsers);
+                  return self.allPrivateUsers;
+              })
+        };
+
+        /**
+         * @description get all private users as ouApplicationUsers from self.allPrivatesUsers if found and if not load it from server again.
+         * @returns {Promise|allPrivateUsers}
+         */
+        self.getOUApplicationUsers = function () {
+            return self.allPrivateUsers.length ? $q.when(self.allPrivateUsers) : self.loadAllPrivateUsers();
+        };
+
         /**
          * @description Contains methods for CRUD operations for ou application users
          */
@@ -76,14 +92,15 @@ module.exports = function (app) {
              * @param ouApplicationUsers
              * @param label to dialog. If not found, will be select user.
              * @param $event to display popup from the current mouse click event.
+             * @param isUserPreference
              * @returns {Promise|ApplicationUser} return the selected application users.
              */
             selectOUApplicationUsers: function (ouApplicationUsers, label, $event, isUserPreference) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('select-ou-application-user'),
+                        template: cmsTemplate.getPopup('select-ou-application-users'),
                         targetEvent: $event,
-                        controller: 'selectOUApplicationUserPopCtrl',
+                        controller: 'selectOUApplicationUsersPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
                             singleMode: false,
@@ -95,6 +112,51 @@ module.exports = function (app) {
                             organizations: function (organizationService) {
                                 'ngInject';
                                 return organizationService.getOrganizations();
+                            }
+                        }
+                    });
+            },
+            /**
+             * @description method to select ou application user from dialog.
+             * @param organization
+             * @param property
+             * @param label to dialog. If not found, will be select user.
+             * @param $event to display popup from the current mouse click event.
+             * @returns {Promise|ApplicationUser} return the selected application users.
+             */
+            selectOUApplicationUserSingle: function (organization, property, label, $event) {
+                return dialog
+                    .showDialog({
+                        template: cmsTemplate.getPopup('select-ou-application-user-single'),
+                        targetEvent: $event,
+                        controller: 'selectOUApplicationUserSinglePopCtrl',
+                        controllerAs: 'ctrl',
+                        locals: {
+                            ouApplicationUser: organization[property],
+                            label: label,
+                            organization: organization
+                        },
+                        resolve: {
+                            ouApplicationUsers: function () {
+                                'ngInject'
+                                return self.loadRelatedOUApplicationUsers(organization)
+                                    .then(function (result) {
+                                        return _.filter(result, function (ouApplicationUserResult) {
+                                            if (property === 'managerId') {
+                                                var viceManager = organization.viceManagerId;
+                                                if (viceManager)
+                                                    return ouApplicationUserResult.applicationUser.id !== viceManager.id;
+                                                return ouApplicationUserResult;
+                                            }
+                                            else if (property === 'viceManagerId') {
+                                                var manager = organization.managerId;
+                                                if (manager)
+                                                    return ouApplicationUserResult.applicationUser.id !== manager.id;
+                                                return ouApplicationUserResult;
+                                            }
+                                            return ouApplicationUserResult;
+                                        })
+                                    });
                             }
                         }
                     });
@@ -227,7 +289,7 @@ module.exports = function (app) {
          */
         self.updateProxyUser = function (ouApplicationUser) {
             return $http
-                .put(urlService.ouApplicationUsers + '/proxy',generator.interceptSendInstance(['OUApplicationUser','SendProxy'] , ouApplicationUser))
+                .put(urlService.ouApplicationUsers + '/proxy', generator.interceptSendInstance(['OUApplicationUser', 'SendProxy'], ouApplicationUser))
                 .then(function () {
                     return generator.generateInstance(ouApplicationUser, OUApplicationUser, self._sharedMethods);
                 });

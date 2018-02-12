@@ -260,7 +260,9 @@
                 //export to excel
                 .addToAllWithBase('exportToExcel', 'common/export/excel')
                 //export to pdf
-                .addToAllWithBase('exportToPdf', 'common/export/pdf');
+                .addToAllWithBase('exportToPdf', 'common/export/pdf')
+                //all private users
+                .addToAllWithBase('allPrivateUsers', 'cms-entity/admin/ou-application-user/dist/all-private-users');
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

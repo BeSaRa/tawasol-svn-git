@@ -5,7 +5,8 @@ module.exports = function (app) {
             restrict: 'E',
             scope: {
                 fromDialog: '=',
-                tags: '='
+                tags: '=',
+                disableEverything: '=?'
             },
             template: require('./manage-tags-template.html'),
             controller: 'manageTagsDirectiveCtrl',

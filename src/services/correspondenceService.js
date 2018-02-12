@@ -219,6 +219,20 @@ module.exports = function (app) {
             //return correspondence.hasOwnProperty('generalStepElm') ? correspondence.generalStepElm.vsId : correspondence.vsId;
         }
 
+        function _getIncomingVsId(correspondence) {
+            var incomingVsId = "";
+            if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) { /* WorkItem */
+                incomingVsId = correspondence.generalStepElm.incomingVSID;
+            }
+            /*else if (correspondence.hasOwnProperty('incomingVSID') && correspondence.incomingVSID) { /!* Event History *!/
+                incomingVsId = correspondence.incomingVSID;
+            }*/
+            else {  /* Correspondence */
+                incomingVsId = correspondence.incomingVSID;
+            }
+            return incomingVsId;
+        }
+
         function _getWorkFlow(correspondence) {
             return correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm ? correspondence.generalStepElm.workFlowName.toLowerCase() : null;
         }
@@ -328,7 +342,8 @@ module.exports = function (app) {
                 title: _getTitle(correspondence),
                 isPaper: _getDocumentType(correspondence),
                 docStatus: _getDocumentStatus(correspondence),
-                docFullSerial: _getDocFullSerial(correspondence)
+                docFullSerial: _getDocFullSerial(correspondence),
+                incomingVsId: _getIncomingVsId(correspondence)
             });
         };
         /**
@@ -943,14 +958,20 @@ module.exports = function (app) {
          * @param department
          * @param readyToExport true if the view from readyToExport department.
          * @param approvedQueue
+         * @param departmentIncoming
          */
-        self.viewCorrespondence = function (correspondence, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue) {
+        self.viewCorrespondence = function (correspondence, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming) {
             var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : _createInstance(correspondence).getInfo();
-            var workItem = info.isWorkItem() ? correspondence : false;
-            if (workItem)
-                return self.viewCorrespondenceWorkItem(info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue);
 
-            return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
+            var workItem = info.isWorkItem() ? correspondence : false;
+            var incomingWithIncomingVsId = departmentIncoming && info.incomingVsId;
+
+            if(incomingWithIncomingVsId)
+                workItem = false;
+            if (workItem)
+                return self.viewCorrespondenceWorkItem(info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming);
+
+            return $http.get(_createUrlSchema(incomingWithIncomingVsId ? info.incomingVsId : info.vsId, info.documentClass, 'with-content'))
                 .then(function (result) {
                     result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(info.documentClass), 'View' + _getModelName(info.documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(info.documentClass)));
                     return result.data.rs;
@@ -987,7 +1008,7 @@ module.exports = function (app) {
         /**
          * @description to view correspondence workItem
          */
-        self.viewCorrespondenceWorkItem = function (info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue) {
+        self.viewCorrespondenceWorkItem = function (info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming) {
             return $http.get(approvedQueue ? _createCorrespondenceWFSchema([info.documentClass, 'approved-queue', 'wob-num', info.wobNumber]) : _createWorkItemSchema(info, department, readyToExport))
                 .then(function (result) {
                     return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
@@ -1006,7 +1027,8 @@ module.exports = function (app) {
                             workItem: generalStepElementView,
                             readyToExport: readyToExport,
                             disableProperties: disableProperties,
-                            disableCorrespondence: disableCorrespondence
+                            disableCorrespondence: disableCorrespondence,
+                            disableEverything: departmentIncoming
                         },
                         resolve: {
                             organizations: function (organizationService) {

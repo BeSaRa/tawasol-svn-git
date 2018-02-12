@@ -69,7 +69,7 @@ module.exports = function (app) {
     require('./manageDocumentCorrespondencePopCtrl')(app);
     require('./manageDocumentContentPopCtrl')(app);
     require('./distributionWorkflowAddOUPopCtrl')(app);
-    require('./selectOUApplicationUserPopCtrl')(app);
+    require('./selectOUApplicationUsersPopCtrl')(app);
     require('./reasonPopCtrl')(app);
     require('./reasonBulkPopCtrl')(app);
     require('./searchLinkedDocumentPopCtrl')(app);
@@ -82,4 +82,5 @@ module.exports = function (app) {
     require('./viewAttachmentsOnlyPopCtrl')(app);
     require('./localizationPopCtrl')(app);
     require('./contentViewHistoryEventsPopCtrl')(app);
+    require('./selectOUApplicationUsersSinglePopCtrl')(app);
 };

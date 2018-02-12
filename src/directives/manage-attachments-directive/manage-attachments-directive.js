@@ -17,7 +17,8 @@ module.exports = function (app) {
                 fromDialog: '=?',
                 allowScanner: '=?',
                 allowUpload: '=?',
-                displayGrid: '=?'
+                displayGrid: '=?',
+                disableEverything: '=?'
             }
         }
     });

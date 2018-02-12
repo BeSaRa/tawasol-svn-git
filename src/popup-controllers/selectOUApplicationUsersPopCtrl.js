@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('selectOUApplicationUserPopCtrl', function (dialog,
+    app.controller('selectOUApplicationUsersPopCtrl', function (dialog,
                                                                label,
                                                                ouApplicationUsers,
                                                                ouApplicationUserService,
@@ -16,7 +16,7 @@ module.exports = function (app) {
                                                                singleMode) {
             'ngInject';
             var self = this;
-            self.controllerName = 'selectOUApplicationUserPopCtrl';
+            self.controllerName = 'selectOUApplicationUsersPopCtrl';
             // to check if single mode.
             self.singleMode = singleMode;
             // label for popup

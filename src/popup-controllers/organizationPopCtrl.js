@@ -284,12 +284,18 @@ module.exports = function (app) {
          * @param $event
          */
         self.selectUser = function (property, $event) {
-            applicationUserService
+            /*applicationUserService
                 .controllerMethod
                 .selectApplicationUser(self.organization[property], self.selectUserLabels[property], $event)
                 .then(function (applicationUser) {
                     self.organization[property] = applicationUser;
-                });
+                });*/
+            ouApplicationUserService
+                .controllerMethod
+                .selectOUApplicationUserSingle(self.organization, property, self.selectUserLabels[property],$event)
+                .then(function (ouApplicationUser) {
+                    self.organization[property] = ouApplicationUser;
+                })
         };
         /**
          * to delete user from admin , manager and vice manager.

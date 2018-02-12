@@ -45,7 +45,7 @@ module.exports = function (app) {
                 {
                     label: langService.get('all'),
                     value: function () {
-                        return ( self.incomingDepartmentInboxes.length + 21);
+                        return (self.incomingDepartmentInboxes.length + 21);
                     }
                 }
             ]
@@ -155,12 +155,15 @@ module.exports = function (app) {
         };
 
         var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
-            var info = model.getInfo();
+            /*var info = model.getInfo();
             var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
             var allowed = (hasPermission && info.documentClass !== "internal");
             if (checkForViewPopup)
                 return !(allowed);
-            return allowed;
+            return allowed;*/
+            if (checkForViewPopup)
+                return true;
+            return false;
         };
 
         /**
@@ -173,7 +176,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(incomingDepartmentInbox, self.gridActions,true, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true);
+            correspondenceService.viewCorrespondence(incomingDepartmentInbox, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true, false, false, true);
             return;
         };
 
@@ -222,10 +225,10 @@ module.exports = function (app) {
             var wfName = _getWorkflowName(incomingDepartmentInbox);
             //var wfName = 'outgoing';
             managerService.manageDocumentTags(vsId, wfName.toLowerCase(), incomingDepartmentInbox.getTranslatedName(), $event)
-                .then(function(){
+                .then(function () {
                     self.reloadIncomingDepartmentInboxes(self.grid.page);
                 })
-                .catch(function(error){
+                .catch(function (error) {
                     self.reloadIncomingDepartmentInboxes(self.grid.page);
                 });
         };
@@ -243,10 +246,10 @@ module.exports = function (app) {
             var wfName = _getWorkflowName(incomingDepartmentInbox);
             //var wfName = 'outgoing';
             managerService.manageDocumentComments(vsId, wfName.toLowerCase(), $event)
-                .then(function(){
+                .then(function () {
                     self.reloadIncomingDepartmentInboxes(self.grid.page);
                 })
-                .catch(function(error){
+                .catch(function (error) {
                     self.reloadIncomingDepartmentInboxes(self.grid.page);
                 });
         };
@@ -346,7 +349,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: true,
-                callback: self.openIncomingDepartmentInbox,
+                callback: self.viewDocument,
                 showInView: false,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
@@ -386,13 +389,14 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
-            // Manage
-            {
+            // Manage (Not in SRS)
+            /*{
                 type: 'action',
                 icon: 'settings',
                 text: 'grid_action_manage',
                 shortcut: false,
                 showInView: false,
+                hide: true,
                 checkShow: self.checkToShowAction,
                 submenu: [
                     // Tags
@@ -469,11 +473,11 @@ module.exports = function (app) {
                         class: "action-yellow",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
-                            return self.checkToShowAction(action, model) && info.documentClass !== "internal";
+                            return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
                         }
                     }
                 ]
-            }
+            }*/
         ];
     });
 };

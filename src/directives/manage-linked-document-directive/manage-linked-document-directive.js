@@ -10,7 +10,8 @@ module.exports = function (app) {
             scope: {
                 linkedDocs: '=',
                 documentClass: '=',
-                vsId: '='
+                vsId: '=',
+                disableEverything: '=?'
             },
             link: function ($scope) {
 

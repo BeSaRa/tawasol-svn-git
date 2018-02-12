@@ -3,10 +3,11 @@
               md-autocomplete-snap
               ng-model="ctrl.tags"
               name="tags"
-              md-removable="true"
+              md-removable="!ctrl.disableEverything"
               md-transform-chip="ctrl.transformChip($chip)"
               md-on-add="ctrl.addTagToDocument($chip)"
-              placeholder="{{lang.tags_add_tag}}">
+              placeholder="{{lang.tags_add_tag}}"
+              readonly="ctrl.disableEverything">
         <md-autocomplete
                 md-autoselect="true"
                 md-selected-item="ctrl.selectedItem"

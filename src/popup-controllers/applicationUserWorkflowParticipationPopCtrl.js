@@ -4,7 +4,9 @@ module.exports = function (app) {
                                                                             applicationUserService,
                                                                             validationService,
                                                                             generator,
-                                                                            lookupService) {
+                                                                            lookupService,
+                                                                            organizations,
+                                                                            privateUsers) {
         'ngInject';
         var self = this;
         self.controllerName = 'applicationUserWorkflowParticipationPopCtrl';
@@ -12,6 +14,19 @@ module.exports = function (app) {
         self.model = angular.copy(ouApplicationUser);
 
         self.applicationUsers = applicationUserService.applicationUsers;
+        self.organizationsWithManager = _.filter(organizations, 'managerId');
+        self.organizationsWithPrivateUsers = [];
+
+        _.map(privateUsers, function (privateUser) {
+            var index = _.findIndex(self.organizationsWithPrivateUsers, {id: privateUser.ouid.id});
+            if (index < 0)
+                self.organizationsWithPrivateUsers.push(privateUser.ouid);
+            if (index === -1)
+                index = _.findIndex(self.organizationsWithPrivateUsers, {id: privateUser.ouid.id});
+            if (!self.organizationsWithPrivateUsers[index].hasOwnProperty('privateUsers'))
+                self.organizationsWithPrivateUsers[index].privateUsers = [];
+            self.organizationsWithPrivateUsers[index].privateUsers.push(privateUser);
+        });
 
         self.workFlowSecurities = self.workFlowSecurities = lookupService.returnLookups(lookupService.workflowSecurity);
 
@@ -44,12 +59,12 @@ module.exports = function (app) {
         };
 
         self.sendToPrivateUsersChange = function () {
-            if(!self.ouApplicationUser.sendToPrivateUsers)
+            if (!self.ouApplicationUser.sendToPrivateUsers)
                 self.ouApplicationUser.privateUsers = null;
         };
 
         self.sendToManagersChange = function () {
-            if(!self.ouApplicationUser.sendToManagers)
+            if (!self.ouApplicationUser.sendToManagers)
                 self.ouApplicationUser.managers = null;
         };
 
@@ -95,8 +110,8 @@ module.exports = function (app) {
          * @description Close the popup
          */
         self.closeApplicationUserWorkflowParticipationPopupFromCtrl = function () {
-            self.ouApplicationUser = self.model;
-            dialog.cancel(self.ouApplicationUser);
+            //self.ouApplicationUser = self.model;
+            dialog.cancel(self.model);
         }
     });
 };
