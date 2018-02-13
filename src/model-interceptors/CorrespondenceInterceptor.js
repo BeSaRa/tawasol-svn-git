@@ -65,6 +65,10 @@ module.exports = function (app) {
             model.linkedDocList = _.map(model.linkedDocs, function (item) {
                 return _.pick(item, needsProperties);
             });
+            // for linked attachments when add or edit full Correspondence.
+            model.linkedAttachmenstList = _.map(model.attachments, function (item) {
+                return item.hasOwnProperty('id') ? generator.interceptSendInstance('Attachment', item) : item;
+            });
 
             if (model.linkedDocs && angular.isArray(model.linkedDocs) && model.linkedDocs.length) {
                 model.linkedDocs = model.linkedDocs[0].hasOwnProperty('vsId') ? angular.toJson(_.map(model.linkedDocs, 'vsId')) : angular.toJson(model.linkedDocs);
@@ -115,7 +119,7 @@ module.exports = function (app) {
             delete model.tagsIndicator;
             delete model.followUpStatusIndicator;
             delete model.dueDateStatusIndicator;
-            delete model.linkedAttachmenstList;
+            // delete model.linkedAttachmenstList;
             delete model.attachmentList;
             delete model.linkedEntitiesList;
             delete model.linkedAttachmentList;
