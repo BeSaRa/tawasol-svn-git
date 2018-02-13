@@ -22,7 +22,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            model.attachmentType = attachmentTypeService.getAttachmentTypeById(model.attachmentType);
+            model.attachmentType = attachmentTypeService.getAttachmentTypeByLookupKey(model.attachmentType);
             model.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             return model;
         });
