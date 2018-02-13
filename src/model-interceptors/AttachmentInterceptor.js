@@ -10,8 +10,8 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             var file = model.type === 'scanner' ? model.file.file : model.file, formData = new FormData();
-            model.attachmentType = model.attachmentType.id;
-            model.securityLevel = model.securityLevel.hasOwnProperty('id') ? model.securityLevel.id : model.securityLevel;
+            model.attachmentType = model.attachmentType.lookupKey;
+            model.securityLevel = model.securityLevel.hasOwnProperty('id') ? model.securityLevel.lookupKey : model.securityLevel;
             delete model.file;
             delete model.source;
             delete model.progress;
@@ -23,7 +23,7 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.attachmentType = attachmentTypeService.getAttachmentTypeById(model.attachmentType);
-            model.securityLevel = lookupService.getLookupById(lookupService.securityLevel, model.securityLevel);
+            model.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             return model;
         });
 
