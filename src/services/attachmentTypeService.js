@@ -194,10 +194,21 @@ module.exports = function (app) {
          * @returns {AttachmentType|undefined} return AttachmentType Model or undefined if not found.
          */
         self.getAttachmentTypeById = function (attachmentTypeId) {
-            attachmentTypeId = attachmentTypeId instanceof AttachmentType ? attachmentTypeId.id : attachmentTypeId;
+            attachmentTypeId = attachmentTypeId.hasOwnProperty('id') ? attachmentTypeId.id : attachmentTypeId;
             return _.find(self.attachmentTypes, function (attachmentType) {
                 return Number(attachmentType.id) === Number(attachmentTypeId)
             });
+        };
+        /**
+         * @description get attachment type by lookup key
+         * @param lookupKey
+         * @returns {*}
+         */
+        self.getAttachmentTypeByLookupKey = function (lookupKey) {
+            lookupKey = lookupKey.hasOwnProperty('id') ? lookupKey.lookupKey : lookupKey;
+            return _.find(self.attachmentTypes, function (lookup) {
+                return Number(lookup.lookupKey) === Number(lookupKey)
+            }) || lookupKey;
         };
 
         /**
