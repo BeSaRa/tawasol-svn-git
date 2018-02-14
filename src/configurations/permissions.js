@@ -77,7 +77,7 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_sent_items', 'SENT_ITEMS')
             .addMenuPermission('menu_item_followup_employee_inbox', 'FOLLOW-UP_EMPLOYEES’_INBOXES')
             .addMenuPermission('menu_item_proxy_mail_inbox', function (employee) {
-                return !employee.isAdmin && employee.isProxyUser();
+                return !employee.isAdmin && employee.isProxyUser() && _.map(employee.proxyUsers, 'proxyUserOU').indexOf(employee.organization.ouid) > -1;
             })
             .addMenuPermission('menu_item_user_favorite_documents','MANAGE_FAVORITE')
             .end()

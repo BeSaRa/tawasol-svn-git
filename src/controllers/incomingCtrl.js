@@ -312,7 +312,7 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
                     //Show if content is uploaded
-                    return self.checkToShowAction(action, model) && self.incoming.contentFile;
+                    return self.checkToShowAction(action, model) && (self.documentInformation || (self.incoming.contentFile && self.incoming.hasContent()));
                 }
             },
             // Manage Tasks

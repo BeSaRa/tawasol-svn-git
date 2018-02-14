@@ -53,18 +53,14 @@
                         <!-- Managers -->
                         <md-input-container flex>
                             <label for="managers">{{lang.managers}}</label>
-                            <md-select ng-model="selectedToppings" multiple name="managers" id="managers"
+                            <md-select multiple name="managers" id="managers"
                                        ng-required="ctrl.ouApplicationUser.sendToManagers"
                                        ng-model="ctrl.ouApplicationUser.managers"
-                                       ng-disabled="!ctrl.ouApplicationUser.sendToManagers">
-                                <!--<md-optgroup label="{{ou.getTranslatedName()}}" ng-repeat="ou in ctrl.organizationsWithManager">
-                                    <md-option ng-value="ou.managerId.id">{{ou.managerId.getTranslatedName()}}</md-option>
-                                </md-optgroup>-->
-
+                                       ng-disabled="!ctrl.ouApplicationUser.sendToManagers"
+                                       ng-model-options="{trackBy: '$value.id'}">
                                 <md-option ng-value="ou.managerId.id" ng-repeat="ou in ctrl.organizationsWithManager">
                                     {{ou.getTranslatedName() + ' - '+ ou.managerId.getTranslatedName()}}
                                 </md-option>
-
                             </md-select>
                             <!--<md-select multiple name="managers" id="managers"
                                        ng-required="ctrl.ouApplicationUser.sendToManagers"

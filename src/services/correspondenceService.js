@@ -971,7 +971,7 @@ module.exports = function (app) {
             if (workItem)
                 return self.viewCorrespondenceWorkItem(info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming);
 
-            return $http.get(_createUrlSchema(incomingWithIncomingVsId ? info.incomingVsId : info.vsId, info.documentClass, 'with-content'))
+            return $http.get(_createUrlSchema(incomingWithIncomingVsId ? info.incomingVsId : info.vsId, incomingWithIncomingVsId ? 'incoming' : info.documentClass, 'with-content'))
                 .then(function (result) {
                     result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(info.documentClass), 'View' + _getModelName(info.documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(info.documentClass)));
                     return result.data.rs;

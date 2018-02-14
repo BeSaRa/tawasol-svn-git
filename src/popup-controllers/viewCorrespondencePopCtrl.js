@@ -66,6 +66,16 @@ module.exports = function (app) {
             console.log(self.actions);
         };
 
+        self.checkDisabled = function(){
+            if(self.correspondence.docClassName == 'Incoming'){
+                return !self.correspondence.site;
+            }
+            else if(self.correspondence.docClassName == 'Outgoing'){
+                return !(self.correspondence.sitesInfoTo && self.correspondence.sitesInfoTo.length);
+            }
+            return false;
+        }
+
 /*
         /!**
          * @description Check if the document is approved. If yes, don't allow to change properties and correspondence sites

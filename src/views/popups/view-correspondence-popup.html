@@ -222,7 +222,8 @@
         </div>
         <div layout="row">
             <div ng-if="ctrl.correspondence">
-                <md-button class="md-raised" ng-click="ctrl.saveCorrespondenceChanges()">{{lang.save}}</md-button>
+                <md-button class="md-raised" ng-click="ctrl.saveCorrespondenceChanges()"
+                           ng-disabled="ctrl.checkDisabled()">{{lang.save}}</md-button>
             </div>
             <span flex></span>
             <div ng-if="ctrl.correspondence">
