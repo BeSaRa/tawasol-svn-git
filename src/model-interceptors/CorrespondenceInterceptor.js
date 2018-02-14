@@ -67,7 +67,7 @@ module.exports = function (app) {
             });
             // for linked attachments when add or edit full Correspondence.
             model.linkedAttachmenstList = _.map(model.attachments, function (item) {
-                return item.hasOwnProperty('id') ? generator.interceptSendInstance('Attachment', item) : item;
+                return item.hasOwnProperty('id') ? generator.interceptSendInstance('AttachmentView', item) : item;
             });
 
             if (model.linkedDocs && angular.isArray(model.linkedDocs) && model.linkedDocs.length) {

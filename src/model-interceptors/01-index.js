@@ -77,4 +77,5 @@ module.exports = function (app) {
     require('./ContentViewHistoryEventsInterceptor')(app);
     require('./SendProxyInterceptor')(app);
     require('./ProxyMailUserInterceptor')(app);
+    require('./AttachmentViewInterceptor')(app);
 };
