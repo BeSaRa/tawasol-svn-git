@@ -63,7 +63,7 @@ module.exports = function (app) {
         self.userFolderService = userFolderService;
         self.currentNode = null;
 
-        console.log(self.globalSetting.getSecurityLevels());
+        //console.log(self.globalSetting.getSecurityLevels());
 
         var currentDate = new Date();
 
@@ -845,6 +845,7 @@ module.exports = function (app) {
          * @description Close the popup
          */
         self.closeUserPreferencePopupFromCtrl = function () {
+
             dialog.cancel();
         };
 

@@ -64,7 +64,7 @@
         </md-content>
         <div>
             <div layout="row" layout-align="start center">
-                <md-button class="md-raised" ng-disabled="localization_form.$invalid || localization_form.$pending"
+                <md-button class="md-raised" ng-disabled="localization_form.$invalid || localization_form.$pending || ctrl.disableOnPost"
                            ng-click="ctrl.saveLocalization()">
                     {{lang.save}}
                 </md-button>

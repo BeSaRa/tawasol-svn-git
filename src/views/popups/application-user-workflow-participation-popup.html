@@ -40,7 +40,7 @@
                                        ng-disabled="!ctrl.ouApplicationUser.sendToPrivateUsers">
                                 <md-optgroup label="{{ou.getTranslatedName()}}"
                                              ng-repeat="ou in ctrl.organizationsWithPrivateUsers">
-                                    <md-option ng-value="privateUser.applicationUser.id"
+                                    <md-option ng-value="privateUser.applicationUser"
                                                ng-repeat="privateUser in ou.privateUsers">
                                         {{privateUser.applicationUser.getTranslatedName()}}
                                     </md-option>
@@ -58,7 +58,7 @@
                                        ng-model="ctrl.ouApplicationUser.managers"
                                        ng-disabled="!ctrl.ouApplicationUser.sendToManagers"
                                        ng-model-options="{trackBy: '$value.id'}">
-                                <md-option ng-value="ou.managerId.id" ng-repeat="ou in ctrl.organizationsWithManager">
+                                <md-option ng-value="ou.managerId" ng-repeat="ou in ctrl.organizationsWithManager">
                                     {{ou.getTranslatedName() + ' - '+ ou.managerId.getTranslatedName()}}
                                 </md-option>
                             </md-select>

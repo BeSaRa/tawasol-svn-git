@@ -16,6 +16,7 @@ module.exports = function (app) {
          * @description save the localization
          */
         self.saveLocalization = function () {
+            self.disableOnPost = true;
             if (self.newLocalizationKey) {
                 return self.localization
                     .addGlobalLocalization()
@@ -26,6 +27,7 @@ module.exports = function (app) {
                         dialog.hide(self.model);
                     })
                     .catch(function () {
+                        self.disableOnPost = false;
                         toast.error(langService.get('internal_server_error'));
                     });
 
@@ -38,6 +40,10 @@ module.exports = function (app) {
                     self.localization = angular.copy(self.model);
                     dialog.hide(self.model);
                 })
+                .catch(function(){
+                    self.disableOnPost = false;
+                    toast.error(langService.get('internal_server_error'));
+                });
         };
         /**
          * @description close the dialog
