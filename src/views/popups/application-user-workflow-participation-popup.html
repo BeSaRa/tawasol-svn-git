@@ -23,24 +23,16 @@
                         <!-- Private Users -->
                         <md-input-container flex>
                             <label for="privateUsers">{{lang.private_users}}</label>
-                            <!--<md-select multiple name="privateUsers" id="privateUsers"
+                            <md-select ng-model-options="{trackBy: '$value.id'}" multiple name="privateUsers" id="privateUsers"
                                        ng-required="ctrl.ouApplicationUser.sendToPrivateUsers"
                                        ng-model="ctrl.ouApplicationUser.privateUsers"
+
                                        ng-disabled="!ctrl.ouApplicationUser.sendToPrivateUsers"
-                                       ng-model-options="{trackBy: '$value.id'}">
-                                <md-option
-                                        ng-repeat="privateUser in ctrl.applicationUsers track by $index"
-                                        ng-value="privateUser">
-                                    {{privateUser.getTranslatedName()}}
-                                </md-option>
-                            </md-select>-->
-                            <md-select multiple name="privateUsers" id="privateUsers"
-                                       ng-required="ctrl.ouApplicationUser.sendToPrivateUsers"
-                                       ng-model="ctrl.ouApplicationUser.privateUsers"
-                                       ng-disabled="!ctrl.ouApplicationUser.sendToPrivateUsers">
+                                       md-selected-text="ctrl.getSelectedPrivateUsersText()"
+                            >
                                 <md-optgroup label="{{ou.getTranslatedName()}}"
                                              ng-repeat="ou in ctrl.organizationsWithPrivateUsers">
-                                    <md-option ng-value="privateUser.applicationUser"
+                                    <md-option ng-value="privateUser"
                                                ng-repeat="privateUser in ou.privateUsers">
                                         {{privateUser.applicationUser.getTranslatedName()}}
                                     </md-option>
@@ -57,22 +49,12 @@
                                        ng-required="ctrl.ouApplicationUser.sendToManagers"
                                        ng-model="ctrl.ouApplicationUser.managers"
                                        ng-disabled="!ctrl.ouApplicationUser.sendToManagers"
+                                       md-selected-text="ctrl.getSelectedManagersText()"
                                        ng-model-options="{trackBy: '$value.id'}">
-                                <md-option ng-value="ou.managerId" ng-repeat="ou in ctrl.organizationsWithManager">
-                                    {{ou.getTranslatedName() + ' - '+ ou.managerId.getTranslatedName()}}
+                                <md-option ng-value="ou" ng-repeat="ou in ctrl.organizationsWithManager">
+                                    {{ou.organization.getTranslatedName() + ' - '+ ou.manager.getTranslatedName()}}
                                 </md-option>
                             </md-select>
-                            <!--<md-select multiple name="managers" id="managers"
-                                       ng-required="ctrl.ouApplicationUser.sendToManagers"
-                                       ng-model="ctrl.ouApplicationUser.managers"
-                                       ng-disabled="!ctrl.ouApplicationUser.sendToManagers"
-                                       ng-model-options="{trackBy: '$value.id'}">
-                                <md-option
-                                        ng-repeat="manager in ctrl.applicationUsers track by $index"
-                                        ng-value="manager">
-                                    {{manager.getTranslatedName()}}
-                                </md-option>
-                            </md-select>-->
                             <div ng-messages="applicationUserWorkflowParticipationForm.managers.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>

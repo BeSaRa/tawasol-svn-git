@@ -6,7 +6,8 @@ module.exports = function (app) {
                                                                             generator,
                                                                             lookupService,
                                                                             organizations,
-                                                                            privateUsers) {
+                                                                            privateUsers,
+                                                                            langService) {
         'ngInject';
         var self = this;
         self.controllerName = 'applicationUserWorkflowParticipationPopCtrl';
@@ -14,7 +15,14 @@ module.exports = function (app) {
         self.model = angular.copy(ouApplicationUser);
 
         self.applicationUsers = applicationUserService.applicationUsers;
-        self.organizationsWithManager = _.filter(organizations, 'managerId');
+        self.ouWithManagersList = _.filter(organizations, 'managerId');
+
+        self.organizationsWithManager = _.map(self.ouWithManagersList, function (ou) {
+            return {
+                organization: ou,
+                manager: ou.managerId
+            }
+        });
         self.organizationsWithPrivateUsers = [];
 
         _.map(privateUsers, function (privateUser) {
@@ -30,6 +38,34 @@ module.exports = function (app) {
 
         self.workFlowSecurities = self.workFlowSecurities = lookupService.returnLookups(lookupService.workflowSecurity);
 
+
+        self.getSelectedPrivateUsersText = function () {
+            if (self.ouApplicationUser.privateUsers && self.ouApplicationUser.privateUsers.length) {
+                var map = _.map(self.ouApplicationUser.privateUsers, function (privateUser) {
+                    if (langService.current === 'en')
+                        return privateUser.ouid.getTranslatedName() + ' - ' + privateUser.applicationUser.getTranslatedName();
+                    return privateUser.applicationUser.getTranslatedName() + ' - ' + privateUser.ouid.getTranslatedName();
+                });
+                return map.join(', ');
+            }
+            return langService.get('private_users');
+        };
+
+        self.getSelectedManagersText = function () {
+            if (self.ouApplicationUser.managers && self.ouApplicationUser.managers.length) {
+                var map = _.map(self.ouApplicationUser.managers, function (manager) {
+                    /*if (langService.current === 'en')
+                        return manager.organization.getTranslatedName() + ' - ' + manager.manager.getTranslatedName();
+                    return manager.manager.getTranslatedName() + ' - ' + manager.organization.getTranslatedName();*/
+                    return manager.organization.getTranslatedName();
+                });
+                return map.join(', ');
+            }
+            return langService.get('managers');
+        };
+
+        self.getSelectedPrivateUsersText();
+
         var requiredFields = [
             'sendToPrivateUsers',
             'sendToManagers',
@@ -39,6 +75,7 @@ module.exports = function (app) {
             'sendToAllRegistryOUUsers',
             'sendToAllParentOUUsers'
         ];
+
         self.validateLabels = {
             sendToPrivateUsers: 'send_to_private_users',
             sendToManagers: 'send_to_managers',
@@ -61,11 +98,13 @@ module.exports = function (app) {
         self.sendToPrivateUsersChange = function () {
             if (!self.ouApplicationUser.sendToPrivateUsers)
                 self.ouApplicationUser.privateUsers = null;
+            self.getSelectedPrivateUsersText();
         };
 
         self.sendToManagersChange = function () {
             if (!self.ouApplicationUser.sendToManagers)
                 self.ouApplicationUser.managers = null;
+            self.getSelectedManagersText();
         };
 
 
@@ -73,6 +112,7 @@ module.exports = function (app) {
          * @description Add the workflow participation changes to grid
          */
         self.addApplicationUserWorkflowParticipationPopupFromCtrl = function () {
+            console.log(self.ouApplicationUser.privateUsers);
             self.requiredFields = angular.copy(requiredFields);
 
             if (!self.ouApplicationUser.sendToPrivateUsers) {

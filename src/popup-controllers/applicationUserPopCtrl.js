@@ -906,7 +906,7 @@ module.exports = function (app) {
                 })
                 .then(function (result) {
                     var indexOfUpdatedOUApplicationUser = _.findIndex(self.ouApplicationUsers, function (x) {
-                        return x.ouid.id == result.ouid.id;
+                        return x.ouid.id === result.ouid.id;
                     });
                     self.ouApplicationUsers.splice(indexOfUpdatedOUApplicationUser, 1, result);
                 });

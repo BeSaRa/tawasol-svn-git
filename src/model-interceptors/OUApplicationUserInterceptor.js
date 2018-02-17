@@ -7,7 +7,10 @@ module.exports = function (app) {
                       langService,
                       applicationUserService,
                       moment,
-                      ApplicationUser) {
+                      ApplicationUser,
+                      $q,
+                      OUApplicationUser,
+                      ouApplicationUserService) {
         'ngInject';
 
         var modelName = 'OUApplicationUser';
@@ -26,8 +29,23 @@ module.exports = function (app) {
 
             model.ouid = model.ouid.id;
             model.securityLevels = generator.getResultFromSelectedCollection(model.securityLevels, 'lookupKey');
-            model.privateUsers = (model.sendToPrivateUsers) ? JSON.stringify(_.map(model.privateUsers, 'id')) : "[]";
-            model.managers = (model.sendToManagers) ? JSON.stringify(_.map(model.managers, 'id')) : "[]";
+
+            //model.privateUsers = (model.sendToPrivateUsers) ? JSON.stringify(_.map(model.privateUsers, 'id')) : "[]";
+            //model.managers = (model.sendToManagers) ? JSON.stringify(_.map(model.managers, 'id')) : "[]";
+            var privateUsersCopy = angular.copy(model.privateUsers);
+            model.privateUsers = (model.sendToPrivateUsers) ? JSON.stringify(_.map(privateUsersCopy, function (privateUser) {
+                if (privateUser instanceof OUApplicationUser)
+                    return {id: privateUser.applicationUser.id, ouId: privateUser.ouid.id};
+                return false;
+            })) : "[]";
+
+            /*model.managers = (model.sendToManagers) ? JSON.stringify(_.map(model.managers, function (manager) {
+                return {id: manager.manager.id, ouId: manager.organization.id};
+            })) : "[]";*/
+            model.managers = (model.sendToManagers) ? JSON.stringify(_.map(model.managers, function (manager) {
+                return manager.organization.id;
+            })) : "[]";
+
             if (model.proxyUser) {
                 // model.proxyUser = model.proxyUser.id;
                 getUnixTimeStamp(model, ["proxyStartDate", "proxyEndDate"]);
@@ -43,54 +61,78 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.applicationUser = new ApplicationUser(model.applicationUser);
-            if (!model.ouid.hasOwnProperty('id')) {
-                //var organizations = organizationService.organizations;
-                organizationService.getOrganizations().then(function (organizations) {
+
+            var defer = $q.defer();
+            var organizations = [];
+            organizationService.getOrganizations().then(function (result) {
+                organizations = result;
+                defer.resolve(true);
+            });
+
+            defer.promise.then(function () {
+                if (!model.ouid.hasOwnProperty('id')) {
                     model.ouid = _.find(organizations, function (organization) {
                         return organization.id === model.ouid;
                     });
-                });
-
-            }
-            if (!model.customRoleId.hasOwnProperty('id')) {
-                var roles = roleService.roles;
-                model.customRoleId = _.find(roles, function (role) {
-                    return role.id === model.customRoleId;
-                });
-            }
-
-            var applicationUsers = applicationUserService.applicationUsers;
-            model.privateUsers = (model.privateUsers && !angular.isArray(model.privateUsers)) ? JSON.parse(model.privateUsers) : [];
-            if (model.sendToPrivateUsers && model.privateUsers.length) {
-                model.privateUsers = _.filter(applicationUsers, function (applicationUser) {
-                    return (model.privateUsers.indexOf(applicationUser.id) > -1);
-                });
-            }
-            model.managers = (model.managers && !angular.isArray(model.privateUsers)) ? JSON.parse(model.managers) : [];
-            if (model.sendToManagers && model.managers.length) {
-                model.managers = _.filter(applicationUsers, function (applicationUser) {
-                    return (model.managers.indexOf(applicationUser.id) > -1);
-                });
-            }
-
-            var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
-            if (typeof model.securityLevels !== "object") {
-                model.securityLevels = generator.getSelectedCollectionFromResult(securityLevels, model.securityLevels, 'lookupKey');
-            }
-
-            if (model.proxyUser) {
-                var proxyUser = model.proxyUser.hasOwnProperty('id') ? model.proxyUser.id : model.proxyUser;
-                model.proxyUser = _.find(applicationUsers, function (applicationUser) {
-                    return applicationUser.id === proxyUser;
-                });
-                if (typeof model.proxyAuthorityLevels !== "object") {
-                    model.proxyAuthorityLevels = generator.getSelectedCollectionFromResult(securityLevels, model.proxyAuthorityLevels, 'lookupKey');
                 }
-                getDateFromUnixTimeStamp(model, ['proxyStartDate', 'proxyEndDate']);
-            }
+
+                if (!model.customRoleId.hasOwnProperty('id')) {
+                    var roles = roleService.roles;
+                    model.customRoleId = _.find(roles, function (role) {
+                        return role.id === model.customRoleId;
+                    });
+                }
+
+                var applicationUsers = applicationUserService.applicationUsers;
+
+                model.privateUsers = (model.privateUsers && !angular.isArray(model.privateUsers)) ? JSON.parse(model.privateUsers) : [];
+                if (model.sendToPrivateUsers && model.privateUsers.length) {
+                    var ouApplicationUsers = ouApplicationUserService.ouApplicationUsers;
+                    model.privateUsers = _.map(model.privateUsers, function (privateUser) {
+                        return _.find(ouApplicationUsers, function (ouApplicationUser) {
+                            var ouId = ouApplicationUser.ouid.hasOwnProperty('id') ? ouApplicationUser.ouid.id : ouApplicationUser.ouid;
+                            return ouId === privateUser.ouId && ouApplicationUser.applicationUser.id === privateUser.id;
+                        })
+                    });
+                }
+
+                model.managers = (model.managers && !angular.isArray(model.managers)) ? JSON.parse(model.managers) : [];
+                if (model.sendToManagers && model.managers.length) {
+                    /*model.managers = _.map(model.managers, function (manager) {
+                         return {
+                             organization: _.find(organizations, {id: manager.ouId}),
+                             manager: _.find(applicationUsers, {id: manager.id})
+                         }
+                     });*/
+                    model.managers = _.map(model.managers, function (ouId) {
+                        var organization = _.find(organizations, {id: ouId});
+                        return {
+                            organization: organization,
+                            manager: _.find(applicationUsers, {'id': organization.managerId})
+                        };
+                    })
+                }
+
+                var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+                if (typeof model.securityLevels !== "object") {
+                    model.securityLevels = generator.getSelectedCollectionFromResult(securityLevels, model.securityLevels, 'lookupKey');
+                }
+
+                if (model.proxyUser) {
+                    /*var applicationUsers = applicationUserService.applicationUsers;*/
+                    var proxyUser = model.proxyUser.hasOwnProperty('id') ? model.proxyUser.id : model.proxyUser;
+                    model.proxyUser = _.find(applicationUsers, function (applicationUser) {
+                        return applicationUser.id === proxyUser;
+                    });
+                    if (typeof model.proxyAuthorityLevels !== "object") {
+                        model.proxyAuthorityLevels = generator.getSelectedCollectionFromResult(securityLevels, model.proxyAuthorityLevels, 'lookupKey');
+                    }
+                    getDateFromUnixTimeStamp(model, ['proxyStartDate', 'proxyEndDate']);
+                }
+
+            });
             return model;
         });
-
 
         /**
          * @description Convert Date to Unix Timestamp
