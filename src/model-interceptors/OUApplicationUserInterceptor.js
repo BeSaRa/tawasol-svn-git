@@ -67,11 +67,11 @@ module.exports = function (app) {
                     if (index < 0) {
                         privateUsersToSend.push({
                             ouId: privateUser.ouid.id,
-                            id: [privateUser.applicationUser.id]
+                            ids: [privateUser.applicationUser.id]
                         });
                     }
                     else {
-                        privateUsersToSend[index].id.push(privateUser.applicationUser.id);
+                        privateUsersToSend[index].ids.push(privateUser.applicationUser.id);
                     }
                 }
             }
@@ -120,7 +120,7 @@ module.exports = function (app) {
                     model.privateUsers = [];
                     for (var i = 0; i < privateUsersCopy.length; i++) {
                         var savedOuId = privateUsersCopy[i].ouId;
-                        var savedApplicationUsers = privateUsersCopy[i].id;
+                        var savedApplicationUsers = privateUsersCopy[i].ids;
                         for (var j = 0; j < savedApplicationUsers.length; j++) {
                             var applicationUserId = savedApplicationUsers[j];
                             var privateUser = _.find(ouApplicationUsers, function (ouApplicationUser) {
