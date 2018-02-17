@@ -54,9 +54,6 @@ module.exports = function (app) {
         self.getSelectedManagersText = function () {
             if (self.ouApplicationUser.managers && self.ouApplicationUser.managers.length) {
                 var map = _.map(self.ouApplicationUser.managers, function (manager) {
-                    /*if (langService.current === 'en')
-                        return manager.organization.getTranslatedName() + ' - ' + manager.manager.getTranslatedName();
-                    return manager.manager.getTranslatedName() + ' - ' + manager.organization.getTranslatedName();*/
                     return manager.organization.getTranslatedName();
                 });
                 return map.join(', ');

@@ -30,14 +30,13 @@ module.exports = function (app) {
             model.ouid = model.ouid.id;
             model.securityLevels = generator.getResultFromSelectedCollection(model.securityLevels, 'lookupKey');
 
-            //model.privateUsers = (model.sendToPrivateUsers) ? JSON.stringify(_.map(model.privateUsers, 'id')) : "[]";
-            //model.managers = (model.sendToManagers) ? JSON.stringify(_.map(model.managers, 'id')) : "[]";
-            var privateUsersCopy = angular.copy(model.privateUsers);
-            model.privateUsers = (model.sendToPrivateUsers) ? JSON.stringify(_.map(privateUsersCopy, function (privateUser) {
+            /*model.privateUsers = (model.sendToPrivateUsers) ? JSON.stringify(_.map(model.privateUsers, function (privateUser) {
                 if (privateUser instanceof OUApplicationUser)
                     return {id: privateUser.applicationUser.id, ouId: privateUser.ouid.id};
                 return false;
-            })) : "[]";
+            })) : "[]";*/
+            var privateUsersCopy = angular.copy(model.privateUsers);
+            model.privateUsers = (model.sendToPrivateUsers) ? JSON.stringify(getPrivateUsersToSend(privateUsersCopy)) : "[]";
 
             /*model.managers = (model.sendToManagers) ? JSON.stringify(_.map(model.managers, function (manager) {
                 return {id: manager.manager.id, ouId: manager.organization.id};
@@ -58,6 +57,26 @@ module.exports = function (app) {
             model.applicationUser = generator.interceptSendInstance('ApplicationUser', model.applicationUser);
             return model;
         });
+
+        var getPrivateUsersToSend = function (privateUsers) {
+            var privateUsersToSend = [];
+            for (var i = 0; i < privateUsers.length; i++) {
+                var privateUser = privateUsers[i];
+                if (privateUser instanceof OUApplicationUser) {
+                    var index = _.findIndex(privateUsersToSend, {'ouId': privateUser.ouid.id});
+                    if (index < 0) {
+                        privateUsersToSend.push({
+                            ouId: privateUser.ouid.id,
+                            id: [privateUser.applicationUser.id]
+                        });
+                    }
+                    else {
+                        privateUsersToSend[index].id.push(privateUser.applicationUser.id);
+                    }
+                }
+            }
+            return privateUsersToSend;
+        };
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.applicationUser = new ApplicationUser(model.applicationUser);
@@ -86,7 +105,7 @@ module.exports = function (app) {
                 var applicationUsers = applicationUserService.applicationUsers;
 
                 model.privateUsers = (model.privateUsers && !angular.isArray(model.privateUsers)) ? JSON.parse(model.privateUsers) : [];
-                if (model.sendToPrivateUsers && model.privateUsers.length) {
+                /*if (model.sendToPrivateUsers && model.privateUsers.length) {
                     var ouApplicationUsers = ouApplicationUserService.ouApplicationUsers;
                     model.privateUsers = _.map(model.privateUsers, function (privateUser) {
                         return _.find(ouApplicationUsers, function (ouApplicationUser) {
@@ -94,6 +113,24 @@ module.exports = function (app) {
                             return ouId === privateUser.ouId && ouApplicationUser.applicationUser.id === privateUser.id;
                         })
                     });
+                }*/
+                if (model.sendToPrivateUsers && model.privateUsers.length) {
+                    var ouApplicationUsers = ouApplicationUserService.ouApplicationUsers;
+                    var privateUsersCopy = angular.copy(model.privateUsers);
+                    model.privateUsers = [];
+                    for (var i = 0; i < privateUsersCopy.length; i++) {
+                        var savedOuId = privateUsersCopy[i].ouId;
+                        var savedApplicationUsers = privateUsersCopy[i].id;
+                        for (var j = 0; j < savedApplicationUsers.length; j++) {
+                            var applicationUserId = savedApplicationUsers[j];
+                            var privateUser = _.find(ouApplicationUsers, function (ouApplicationUser) {
+                                var ouId = ouApplicationUser.ouid.hasOwnProperty('id') ? ouApplicationUser.ouid.id : ouApplicationUser.ouid;
+                                return ouId === savedOuId && ouApplicationUser.applicationUser.id === applicationUserId;
+                            });
+                            if (privateUser)
+                                model.privateUsers.push(privateUser);
+                        }
+                    }
                 }
 
                 model.managers = (model.managers && !angular.isArray(model.managers)) ? JSON.parse(model.managers) : [];
