@@ -156,7 +156,7 @@ module.exports = function (app) {
                 }*/
 
                 model.privateUsers = (model.privateUsers && !angular.isArray(model.privateUsers)) ? JSON.parse(model.privateUsers) : [];
-                if (model.sendToPrivateUsers && model.privateUsers.appUserIds.length) {
+                if (model.sendToPrivateUsers && model.privateUsers.hasOwnProperty('appUserIds') && model.privateUsers.appUserIds.length) {
                     var ouApplicationUsers = ouApplicationUserService.ouApplicationUsers;
                     model.privateUsers = _.map(model.privateUsers.ouAppUserIds, function (privateUser) {
                         return _.find(ouApplicationUsers, function (ouApplicationUser) {
