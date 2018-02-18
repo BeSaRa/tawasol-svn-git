@@ -454,6 +454,19 @@ module.exports = function (app) {
                 checkShow: self.checkToShowAction,
                 submenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
             },
+            // View Tracking Sheet (Quick Action Only)
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'view_tracking_sheet',
+                shortcut: true,
+                onlyShortcut: true,
+                showInView: false,
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: self.checkToShowAction,
+                callback: self.viewTrackingSheet,
+                params: ['view_tracking_sheet', 'tabs']
+            },
             // Manage
             {
                 type: 'action',

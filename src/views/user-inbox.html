@@ -106,15 +106,6 @@
                                     ng-repeat="userInbox in ctrl.userInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
 
                                     <td md-cell class="indicator-td">
-                                        <!-- Paper Document -->
-                                        <!-- <span flex
-                                               ng-class="{'indicator-content': userInbox.isPaperIndicator}">
-                                             <md-icon ng-if="userInbox.isPaperIndicator"
-                                                      class="{{userInbox.isPaperIndicator.class}}"
-                                                      md-svg-icon="{{userInbox.isPaperIndicator.icon}}"
-                                                      tooltip="{{lang[userInbox.isPaperIndicator.tooltip]}}"
-                                             ></md-icon>
-                                         </span>-->
                                         <!-- Security Level -->
                                         <span flex
                                               ng-class="{'indicator-content': userInbox.securityLevelIndicator}">
@@ -140,6 +131,15 @@
                                                              tooltip="{{lang[userInbox.docTypeIndicator.tooltip]}}"
                                                     ></md-icon>
                                                 </span>
+                                        <!-- Paper Document -->
+                                        <span flex
+                                              ng-class="{'indicator-content': userInbox.isPaperIndicator}">
+                                             <md-icon ng-if="userInbox.isPaperIndicator"
+                                                      class="{{userInbox.isPaperIndicator.class}}"
+                                                      md-svg-icon="{{userInbox.isPaperIndicator.icon}}"
+                                                      tooltip="{{lang[userInbox.isPaperIndicator.tooltip]}}"
+                                             ></md-icon>
+                                         </span>
                                         <!-- Linked Documents -->
                                         <span flex ng-class="{'indicator-content': userInbox.linkedDocsIndicator}">
                                                    <md-icon ng-if="userInbox.linkedDocsIndicator"

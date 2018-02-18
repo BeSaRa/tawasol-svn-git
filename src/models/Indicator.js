@@ -180,7 +180,7 @@ module.exports = function (app) {
              */
             Indicator.prototype.getDocTypeIndicator = function (docType) {
                 docType = docType.toLowerCase();
-                var docClass = (docType === 'incoming' ? 'indicator inc' : (docType === 'outgoing' ? 'indicator out' : 'indicator int'));
+                var docClass = 'indicator ' + (docType === 'incoming' ? 'inc' : (docType === 'outgoing' ? 'out' : 'int'));
                 var text = (docType === 'incoming' ? 'indicator_incoming' : (docType === 'outgoing' ? 'indicator_outgoing' : 'indicator_internal'));
                 var icon = (docType === 'incoming' ? icons['incoming'] : (docType === 'outgoing' ? icons['outgoing'] : icons['internal']));
                 return new Indicator({
@@ -198,7 +198,7 @@ module.exports = function (app) {
              */
             Indicator.prototype.getReassignedIndicator = function (reassigned) {
                 return reassigned ? new Indicator({
-                    class: (reassigned ? 'indicator reassigned' : 'indicator no-reassigned'),
+                    class: 'indicator ' + (reassigned ? 'reassigned' : 'no-reassigned'),
                     text: (reassigned ? 'indicator_reassigned' : 'indicator_not_reassigned'),
                     icon: icons['reassigned'],
                     tooltip: (reassigned ? 'indicator_reassigned' : 'indicator_not_reassigned')
@@ -212,7 +212,7 @@ module.exports = function (app) {
              */
             Indicator.prototype.getOpenedIndicator = function (opened) {
                 return new Indicator({
-                    class: (opened ? 'indicator open' : 'indicator close'),
+                    class: 'indicator ' + (opened ? 'open' : 'close'),
                     text: (opened ? 'indicator_opened' : 'indicator_not_opened'),
                     icon: (opened ? icons['email_opened'] : icons['email_close']),
                     tooltip: (opened ? 'indicator_opened' : 'indicator_not_opened')
@@ -241,7 +241,7 @@ module.exports = function (app) {
              */
             Indicator.prototype.getIsPaperIndicator = function (isPaper) {
                 return new Indicator({
-                    class: (isPaper ? 'indicator' : 'indicator'),
+                    class: 'indicator', //(isPaper ? 'indicator' : 'indicator'),
                     text: (isPaper ? 'indicator_paper_document' : 'indicator_electronic_document'),
                     icon: (isPaper ? icons['paper_document'] : icons['electronic_document']),
                     tooltip: (isPaper ? 'indicator_paper_document' : 'indicator_electronic_document')

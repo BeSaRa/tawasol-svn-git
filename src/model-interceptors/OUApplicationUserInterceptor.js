@@ -35,8 +35,12 @@ module.exports = function (app) {
                     return {id: privateUser.applicationUser.id, ouId: privateUser.ouid.id};
                 return false;
             })) : "[]";*/
+
+            /*var privateUsersCopy = angular.copy(model.privateUsers);
+            model.privateUsers = (model.sendToPrivateUsers) ? JSON.stringify(getPrivateUsersToSend(privateUsersCopy)) : "[]";*/
+
             var privateUsersCopy = angular.copy(model.privateUsers);
-            model.privateUsers = (model.sendToPrivateUsers) ? JSON.stringify(getPrivateUsersToSend(privateUsersCopy)) : "[]";
+            model.privateUsers = (model.sendToPrivateUsers) ? JSON.stringify(getPrivateUsersToSend(model, privateUsersCopy)) : "[]";
 
             /*model.managers = (model.sendToManagers) ? JSON.stringify(_.map(model.managers, function (manager) {
                 return {id: manager.manager.id, ouId: manager.organization.id};
@@ -58,7 +62,7 @@ module.exports = function (app) {
             return model;
         });
 
-        var getPrivateUsersToSend = function (privateUsers) {
+        /*var getPrivateUsersToSend = function (privateUsers) {
             var privateUsersToSend = [];
             for (var i = 0; i < privateUsers.length; i++) {
                 var privateUser = privateUsers[i];
@@ -76,6 +80,19 @@ module.exports = function (app) {
                 }
             }
             return privateUsersToSend;
+        };*/
+
+        var getPrivateUsersToSend = function (model, privateUsers) {
+            var privateUsersToSendObject = {
+                appUserIds: _.map(privateUsers, 'applicationUser.id'),
+                ouAppUserIds: []
+            };
+            privateUsersToSendObject.ouAppUserIds = _.map(model.privateUsers, function (privateUser) {
+                if (privateUser instanceof OUApplicationUser)
+                    return {id: privateUser.applicationUser.id, ouId: privateUser.ouid.id};
+                return false;
+            });
+            return privateUsersToSendObject;
         };
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
@@ -104,7 +121,7 @@ module.exports = function (app) {
 
                 var applicationUsers = applicationUserService.applicationUsers;
 
-                model.privateUsers = (model.privateUsers && !angular.isArray(model.privateUsers)) ? JSON.parse(model.privateUsers) : [];
+                //model.privateUsers = (model.privateUsers && !angular.isArray(model.privateUsers)) ? JSON.parse(model.privateUsers) : [];
                 /*if (model.sendToPrivateUsers && model.privateUsers.length) {
                     var ouApplicationUsers = ouApplicationUserService.ouApplicationUsers;
                     model.privateUsers = _.map(model.privateUsers, function (privateUser) {
@@ -114,7 +131,8 @@ module.exports = function (app) {
                         })
                     });
                 }*/
-                if (model.sendToPrivateUsers && model.privateUsers.length) {
+
+                /*if (model.sendToPrivateUsers && model.privateUsers.length) {
                     var ouApplicationUsers = ouApplicationUserService.ouApplicationUsers;
                     var privateUsersCopy = angular.copy(model.privateUsers);
                     model.privateUsers = [];
@@ -131,6 +149,17 @@ module.exports = function (app) {
                                 model.privateUsers.push(privateUser);
                         }
                     }
+                }*/
+
+                model.privateUsers = (model.privateUsers && !angular.isArray(model.privateUsers)) ? JSON.parse(model.privateUsers) : [];
+                if (model.sendToPrivateUsers && model.privateUsers.appUserIds.length) {
+                    var ouApplicationUsers = ouApplicationUserService.ouApplicationUsers;
+                    model.privateUsers = _.map(model.privateUsers.ouAppUserIds, function (privateUser) {
+                        return _.find(ouApplicationUsers, function (ouApplicationUser) {
+                            var ouId = ouApplicationUser.ouid.hasOwnProperty('id') ? ouApplicationUser.ouid.id : ouApplicationUser.ouid;
+                            return ouId === privateUser.ouId && ouApplicationUser.applicationUser.id === privateUser.id;
+                        })
+                    });
                 }
 
                 model.managers = (model.managers && !angular.isArray(model.managers)) ? JSON.parse(model.managers) : [];
