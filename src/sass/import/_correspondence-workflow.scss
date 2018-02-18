@@ -1,0 +1,67 @@
+/******* correspondence workflow distribution ******/
+#correspondence-workflow-popup {
+  width: 80% !important;
+  height: 80% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  position: relative;
+  &.fullscreen {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.correspondence-workflow-popup-dialog-header {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+}
+
+#correspondence-workflow-container {
+  padding-top: 56px;
+}
+
+#sidebar-correspondence-workflow-popup {
+  max-width: 250px;
+  border: 1px solid #EEE;
+  min-height: 100%;
+  button {
+    margin: 0;
+    padding: 4px 10px;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    text-transform: none;
+    text-align: left;
+    text-indent: 10px;
+    .md-ripple-container {
+      -webkit-border-radius: 0;
+      -moz-border-radius: 0;
+      border-radius: 0;
+    }
+  }
+}
+
+ul.workflow-list {
+  padding: 0;
+  margin: 0;
+  li.selected-tab {
+    button {
+      background-color: rgba(158, 158, 158, 0.2);
+    }
+  }
+}
+
+html.rtl {
+  #sidebar-correspondence-workflow-popup {
+    left: 100% !important;
+    right: auto !important;
+    &.md-locked-open, &.md-locked-open.md-closed {
+      transform: translate3d(0, 0, 0);
+    }
+    button {
+      text-align: right;
+    }
+  }
+}

@@ -444,6 +444,9 @@ module.exports = function (app) {
             Correspondence.prototype.hisDocumentClass = function (documentClass) {
                 return this.getInfo().documentClass.toLowerCase() === documentClass.toLowerCase();
             };
+            Correspondence.prototype.launchWorkFlow = function ($event, action, tab) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

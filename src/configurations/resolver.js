@@ -161,7 +161,7 @@ module.exports = function (app) {
 
                     if (vsId) {
                         return correspondenceService
-                            .createReplyFromCorrespondence('incoming', vsId , 'outgoing',{})
+                            .createReplyFromCorrespondence('incoming', vsId, 'outgoing', {})
                             .then(function (outgoing) {
                                 return correspondenceService
                                     .loadCorrespondenceByVsIdClass(outgoing.linkedDocs[0], 'incoming')
@@ -272,6 +272,11 @@ module.exports = function (app) {
                 entityTypes: function (entityTypeService, employeeService) {
                     'ngInject';
                     return !employeeService.isCloudUser() ? entityTypeService.getEntityTypes() : [];
+                }
+            })
+            .bulkResolveToState('app.inbox.group-inbox', {
+                groupInboxWorkItems : function (correspondenceService) {
+                    return correspondenceService.loadGroupInbox();
                 }
             })
             .registerResolver();

@@ -83,4 +83,6 @@ module.exports = function (app) {
     require('./localizationPopCtrl')(app);
     require('./contentViewHistoryEventsPopCtrl')(app);
     require('./selectOUApplicationUsersSinglePopCtrl')(app);
+    require('./launchCorrespondenceWorkflowPopCtrl')(app);
+    require('./workflowItemSettingPopCtrl')(app);
 };

@@ -78,4 +78,7 @@ module.exports = function (app) {
     require('./SendProxyInterceptor')(app);
     require('./ProxyMailUserInterceptor')(app);
     require('./AttachmentViewInterceptor')(app);
+    require('./FavOrganizationInterceptor')(app);
+    require('./FavUserInterceptor')(app);
+    require('./DistributionWFInterceptor')(app);
 };

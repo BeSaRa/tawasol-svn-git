@@ -119,4 +119,14 @@ module.exports = function (app) {
     require('./Localization')(app);
     require('./ContentViewHistoryEvents')(app);
     require('./CorrespondenceInfo')(app);
+    require('./UserSearchCriteria')(app);
+    require('./DistributionWF')(app);
+    require('./DistributionWFItem')(app);
+    require('./DistributionUserWFItem')(app);
+    require('./DistributionGroupWFItem')(app);
+    require('./DistributionOUWFItem')(app);
+    require('./WFUser')(app);
+    require('./WFOrganization')(app);
+    require('./WFGroup')(app);
+    require('./ProxyInfo')(app);
 };

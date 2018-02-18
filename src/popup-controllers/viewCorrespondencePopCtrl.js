@@ -17,7 +17,6 @@ module.exports = function (app) {
         $timeout(function () {
             self.detailsReady = true;
             self.model = angular.copy(self.correspondence);
-            console.log(self.model);
         }, 100);
 
         /**

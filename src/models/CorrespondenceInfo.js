@@ -34,6 +34,13 @@ module.exports = function (app) {
             CorrespondenceInfo.prototype.isWorkItem = function () {
                 return !!this.wobNumber;
             };
+            /**
+             * to check if the document need to approve
+             * @returns {boolean}
+             */
+            CorrespondenceInfo.prototype.needToApprove = function () {
+                return (this.documentClass.toLowerCase() !== 'incoming') && (this.docStatus < 24)
+            };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('CorrespondenceInfo', 'init', this);

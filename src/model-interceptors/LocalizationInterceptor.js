@@ -4,6 +4,7 @@ module.exports = function (app) {
         var modelName = 'Localization';
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
+
             model.setLangService(langService);
             return model;
         });

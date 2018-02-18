@@ -3,6 +3,7 @@ module.exports = function (app) {
                       generator,
                       organizationService,
                       roleService,
+                      Information,
                       lookupService,
                       langService,
                       applicationUserService,
@@ -59,6 +60,9 @@ module.exports = function (app) {
             model.ouRegistryID = model.ouRegistryID.hasOwnProperty('id') ? model.ouRegistryID.id : model.ouRegistryID;
             model.proxyAuthorityLevels = generator.getResultFromSelectedCollection(model.proxyAuthorityLevels, 'lookupKey');
             model.applicationUser = generator.interceptSendInstance('ApplicationUser', model.applicationUser);
+
+            delete model.ouInfo;
+
             return model;
         });
 
@@ -97,7 +101,7 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.applicationUser = new ApplicationUser(model.applicationUser);
-
+            model.ouInfo = new Information(model.ouInfo);
             var defer = $q.defer();
             var organizations = [];
             organizationService.getOrganizations().then(function (result) {

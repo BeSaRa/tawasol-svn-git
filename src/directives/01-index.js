@@ -60,4 +60,9 @@ module.exports = function (app) {
     require('./manage-correspondence-site-incoming-directive/01-index')(app);
     require('./main-site-sub-site-directive/01-index')(app);
     require('./localization-module-converter-directive/01-index')(app);
+    require('./current-tab-label-directive/01-index')(app);
+    require('./vertical-menu-workflow-item-directive/01-index')(app);
+    require('./workflow-selected-users-directive/01-index')(app);
+    require('./workflow-users-directive/01-index')(app);
+    require('./organization-node-directive/01-index')(app);
 };

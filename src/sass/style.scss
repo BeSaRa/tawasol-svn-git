@@ -6,6 +6,7 @@
 @import "import/media_query";
 @import "import/colors";
 @import "themes/default-theme";
+@import "import/correspondence-workflow";
 
 html {
   direction: ltr;
@@ -545,9 +546,9 @@ md-tabs {
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .12);
   }
 }
-
+/* BESARA-CAHNGES */
 /********** organization chart ********/
-#block-content {
+.block-content {
   height: 100%;
   width: 100%;
   position: relative;
@@ -1726,4 +1727,20 @@ tr.default-theme:hover {
 
 .full-width-fieldset {
   width: 100%;
+}
+
+.current-label {
+  padding: 0 10px;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.md-cell.no-padding {
+  padding: 0 !important;
+}
+
+table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child(n+2), table.md-table.md-row-select th.md-column.no-padding:nth-child(n+3):nth-last-child(n+2) {
+  padding: 0 !important;
 }

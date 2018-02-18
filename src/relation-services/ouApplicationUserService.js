@@ -564,6 +564,17 @@ module.exports = function (app) {
                 return matchingResult === true;
             });
         };
+        /**
+         * @description search for ouApplicationUser by criteria.
+         * @param criteria
+         */
+        self.searchByCriteria = function (criteria) {
+            return $http
+                .post(urlService.ouApplicationUsers + '/search', criteria)
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('OUApplicationUser', generator.generateCollection(result.data.rs, OUApplicationUser));
+                });
+        }
 
 
     });

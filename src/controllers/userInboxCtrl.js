@@ -286,6 +286,13 @@ module.exports = function (app) {
          * @param defer
          */
         self.forward = function (userInbox, $event, defer) {
+            // userInbox.launchWorkFlow($event, 'forward', 'favorites')
+            //     .then(function () {
+            //         self.reloadUserInboxes(self.grid.page)
+            //             .then(function () {
+            //                 new ResolveDefer(defer);
+            //             });
+            //     });
             distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSend(userInbox.generalStepElm, true, false, null, userInbox.generalStepElm.workFlowName, $event)

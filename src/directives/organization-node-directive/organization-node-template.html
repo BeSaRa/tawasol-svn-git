@@ -1,0 +1,9 @@
+<ul ng-class="{'root-node':ctrl.node.itIsRoot}">
+    <li ng-class="{'parent-node':ctrl.node.itIsRoot , 'children-node':!ctrl.node.itIsRoot }">
+        <div class="node-title">
+            <div class="node-ar-title">{{ctrl.node.getNameByKey('ar')}}</div>
+            <div class="node-en-title">{{ctrl.node.getNameByKey('en')}}</div>
+        </div>
+        <organization-node-directive node="node" ng-repeat="node in ctrl.node.children"></organization-node-directive>
+    </li>
+</ul>

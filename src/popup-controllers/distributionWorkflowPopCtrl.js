@@ -2529,7 +2529,7 @@ module.exports = function (app) {
             return date;
         }
 
-        self.closeLaunchDistributionWorkflowPopup = function(){
+        self.closeLaunchDistributionWorkflowPopup = function () {
             return dialog.cancel();
         }
     });

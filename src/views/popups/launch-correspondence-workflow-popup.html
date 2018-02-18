@@ -1,0 +1,314 @@
+<md-dialog id="correspondence-workflow-popup" class="dialog-extend" ng-class="{'fullscreen':ctrl.fullScreen}"
+           aria-label="launch correspondence workflow">
+    <div class="correspondence-workflow-popup-dialog-header" layout="row" layout-align="start center">
+        <div>
+            <md-button class="md-icon-button" ng-click="ctrl.toggleWorkflowSidebar()">
+                <md-icon md-svg-icon="menu"></md-icon>
+            </md-button>
+        </div>
+        <span class="p20">{{ctrl.correspondence.getTranslatedName()}}</span>
+        <span flex></span>
+        <md-progress-circular md-mode="indeterminate"
+                              ng-if="ctrl.loadingIndicatorService.loading"></md-progress-circular>
+        <md-button ng-click="ctrl.toggleWorkflowFullScreen()" class="md-icon-button">
+            <md-icon md-svg-icon="fullscreen"></md-icon>
+        </md-button>
+        <md-button ng-click="ctrl.closeCorrespondenceWorkflow()"
+                   class="md-icon-button">
+            <md-icon md-svg-icon="close"></md-icon>
+        </md-button>
+    </div>
+    <div flex layout="row">
+        <div flex id="correspondence-workflow-container" layout="row">
+            <md-sidenav layout="column" md-is-locked-open="ctrl.sidebarStatus"
+                        md-component-id="correspondence-workflow-popup" id="sidebar-correspondence-workflow-popup">
+                <div scroll-directive>
+                    <ul class="workflow-list">
+                        <li layout="row" ng-class="{'selected-tab':ctrl.isSelectedTab(tab)}"
+                            ng-repeat="(tab , model) in ctrl.workflowTabs track by $index">
+                            <md-button flex ng-disabled="model.disabled" ng-click="ctrl.selectTab(tab)">
+                                <div layout="row" layout-align="start center">
+                                    <md-icon md-svg-icon="{{model.icon}}"></md-icon>
+                                    <span flex>{{lang.get(model.lang)}}</span>
+                                </div>
+                            </md-button>
+                        </li>
+                    </ul>
+                </div>
+            </md-sidenav>
+            <md-content flex scroll-directive class="relative" layout="row">
+                <div class="p20">
+                    <div flex layout="column" ng-if="ctrl.isSelectedTab('users')">
+                        <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                     workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                        <div flex enter-submit-directive="user_search" layout="row">
+                            <md-input-container flex>
+                                <label for="domain_name">{{lang.domain_name}}</label>
+                                <input id="domain_name" ng-model="ctrl.usersCriteria.domainName">
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label for="arabic_name">{{lang.arabic_name}}</label>
+                                <input id="arabic_name" ng-model="ctrl.usersCriteria.arName">
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label for="english_name">{{lang.english_name}}</label>
+                                <input id="english_name" ng-model="ctrl.usersCriteria.enName">
+                            </md-input-container>
+                            <div>
+                                <md-button id="user_search" ng-disabled="ctrl.loadingIndicatorService.loading"
+                                           class="md-raised"
+                                           ng-click="ctrl.onSearchUsers()">
+                                    {{lang.search}}
+                                </md-button>
+                            </div>
+                        </div>
+                        <workflow-users-directive
+                                exclude-selected="true"
+                                allow-favorites="true"
+                                callback-delete-from-selected="ctrl.deleteFromSelected"
+                                callback-add-selected-user-with-ignore-to-grid="ctrl.addSelectedUserWithIgnoreToGrid"
+                                callback-add-selected-user-to-grid="ctrl.addSelectedUserToGrid"
+                                callback-set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                callback-add-selected-users-with-ignore-to-grid="ctrl.addSelectedUsersWithIgnoreToGrid"
+                                callback-add-selected-users-to-grid="ctrl.addSelectedUsersToGrid"
+                                callback-set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                callback-open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                callback-toggle-fav="ctrl.toggleFav"
+                                callback-user-not-exists="ctrl.userNotExists"
+                                callback-all-in-favorites="ctrl.allInFavorites"
+                                callback-toggle-bulk-favorites="ctrl.toggleBulkFavorites"
+                                grid="ctrl.grid"
+                                multi-select="!ctrl.getApprovedStatus()"
+                                grid-name="users"
+                                grid-items="ctrl.users"></workflow-users-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <current-tab-label-directive override-title="selected_users" selected-tab="ctrl.selectedTab"
+                                                     workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <workflow-selected-users-directive callback-all-complete="ctrl.allComplete"
+                                                           has-selection="ctrl.hasSelection"
+                                                           grid-name="users"
+                                                           delete-bulk-selected="ctrl.deleteBulkSelected"
+                                                           delete-from-selected="ctrl.deleteFromSelected"
+                                                           set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                                           open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                                           grid-selected="ctrl.gridSelected"
+                                                           set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                                           selected-grids="ctrl.selectedGrids"></workflow-selected-users-directive>
+                    </div><!-- end tab -->
+                    <div flex layout="column" ng-if="ctrl.isSelectedTab('favorites')">
+                        <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                     workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <workflow-users-directive
+                                exclude-selected="false"
+                                allow-favorites="true"
+                                callback-delete-from-selected="ctrl.deleteFromSelected"
+                                callback-add-selected-user-with-ignore-to-grid="ctrl.addSelectedUserWithIgnoreToGrid"
+                                callback-add-selected-user-to-grid="ctrl.addSelectedUserToGrid"
+                                callback-set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                callback-add-selected-users-with-ignore-to-grid="ctrl.addSelectedUsersWithIgnoreToGrid"
+                                callback-add-selected-users-to-grid="ctrl.addSelectedUsersToGrid"
+                                callback-set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                callback-open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                callback-toggle-fav="ctrl.toggleFav"
+                                callback-user-not-exists="ctrl.userNotExists"
+                                callback-all-in-favorites="ctrl.allInFavorites"
+                                callback-toggle-bulk-favorites="ctrl.toggleBulkFavorites"
+                                grid="ctrl.grid"
+                                multi-select="!ctrl.getApprovedStatus()"
+                                grid-name="favoriteUsers"
+                                grid-items="ctrl.favoriteUsers"></workflow-users-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <current-tab-label-directive override-icon="account" override-title="selected_users"
+                                                     selected-tab="ctrl.selectedTab"
+                                                     workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <workflow-selected-users-directive callback-all-complete="ctrl.allComplete"
+                                                           has-selection="ctrl.hasSelection"
+                                                           grid-name="users"
+                                                           delete-bulk-selected="ctrl.deleteBulkSelected"
+                                                           delete-from-selected="ctrl.deleteFromSelected"
+                                                           set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                                           open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                                           grid-selected="ctrl.gridSelected"
+                                                           set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                                           selected-grids="ctrl.selectedGrids"></workflow-selected-users-directive>
+                    </div><!-- end tab -->
+                    <div flex layout="column" ng-if="ctrl.isSelectedTab('private_users')">
+                        <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                     workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <workflow-users-directive
+                                exclude-selected="false"
+                                allow-favorites="false"
+                                callback-delete-from-selected="ctrl.deleteFromSelected"
+                                callback-add-selected-user-with-ignore-to-grid="ctrl.addSelectedUserWithIgnoreToGrid"
+                                callback-add-selected-user-to-grid="ctrl.addSelectedUserToGrid"
+                                callback-set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                callback-add-selected-users-with-ignore-to-grid="ctrl.addSelectedUsersWithIgnoreToGrid"
+                                callback-add-selected-users-to-grid="ctrl.addSelectedUsersToGrid"
+                                callback-set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                callback-open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                callback-toggle-fav="ctrl.toggleFav"
+                                callback-user-not-exists="ctrl.userNotExists"
+                                callback-all-in-favorites="ctrl.allInFavorites"
+                                callback-toggle-bulk-favorites="ctrl.toggleBulkFavorites"
+                                grid="ctrl.grid"
+                                multi-select="!ctrl.getApprovedStatus()"
+                                grid-name="privateUsers"
+                                grid-items="ctrl.privateUsers"></workflow-users-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <current-tab-label-directive override-icon="account" override-title="selected_users"
+                                                     selected-tab="ctrl.selectedTab"
+                                                     workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <workflow-selected-users-directive callback-all-complete="ctrl.allComplete"
+                                                           has-selection="ctrl.hasSelection"
+                                                           grid-name="users"
+                                                           delete-bulk-selected="ctrl.deleteBulkSelected"
+                                                           delete-from-selected="ctrl.deleteFromSelected"
+                                                           set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                                           open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                                           grid-selected="ctrl.gridSelected"
+                                                           set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                                           selected-grids="ctrl.selectedGrids"></workflow-selected-users-directive>
+                    </div><!-- end tab -->
+                    <div flex layout="column" ng-if="ctrl.isSelectedTab('manager_users')">
+                        <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                     workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <workflow-users-directive
+                                exclude-selected="false"
+                                allow-favorites="false"
+                                callback-delete-from-selected="ctrl.deleteFromSelected"
+                                callback-add-selected-user-with-ignore-to-grid="ctrl.addSelectedUserWithIgnoreToGrid"
+                                callback-add-selected-user-to-grid="ctrl.addSelectedUserToGrid"
+                                callback-set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                callback-add-selected-users-with-ignore-to-grid="ctrl.addSelectedUsersWithIgnoreToGrid"
+                                callback-add-selected-users-to-grid="ctrl.addSelectedUsersToGrid"
+                                callback-set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                callback-open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                callback-toggle-fav="ctrl.toggleFav"
+                                callback-user-not-exists="ctrl.userNotExists"
+                                callback-all-in-favorites="ctrl.allInFavorites"
+                                callback-toggle-bulk-favorites="ctrl.toggleBulkFavorites"
+                                grid="ctrl.grid"
+                                multi-select="!ctrl.getApprovedStatus()"
+                                grid-name="managerUsers"
+                                grid-items="ctrl.managerUsers"></workflow-users-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <current-tab-label-directive override-icon="account" override-title="selected_users"
+                                                     selected-tab="ctrl.selectedTab"
+                                                     workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <workflow-selected-users-directive callback-all-complete="ctrl.allComplete"
+                                                           has-selection="ctrl.hasSelection"
+                                                           grid-name="users"
+                                                           delete-bulk-selected="ctrl.deleteBulkSelected"
+                                                           delete-from-selected="ctrl.deleteFromSelected"
+                                                           set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                                           open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                                           grid-selected="ctrl.gridSelected"
+                                                           set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                                           selected-grids="ctrl.selectedGrids"></workflow-selected-users-directive>
+                    </div><!-- end tab -->
+                    <div flex layout="column" ng-if="ctrl.isSelectedTab('heads_of_government_entities')">
+                        <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                     workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <workflow-users-directive
+                                exclude-selected="false"
+                                allow-favorites="false"
+                                callback-delete-from-selected="ctrl.deleteFromSelected"
+                                callback-add-selected-user-with-ignore-to-grid="ctrl.addSelectedUserWithIgnoreToGrid"
+                                callback-add-selected-user-to-grid="ctrl.addSelectedUserToGrid"
+                                callback-set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                callback-add-selected-users-with-ignore-to-grid="ctrl.addSelectedUsersWithIgnoreToGrid"
+                                callback-add-selected-users-to-grid="ctrl.addSelectedUsersToGrid"
+                                callback-set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                callback-open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                callback-toggle-fav="ctrl.toggleFav"
+                                callback-user-not-exists="ctrl.userNotExists"
+                                callback-all-in-favorites="ctrl.allInFavorites"
+                                callback-toggle-bulk-favorites="ctrl.toggleBulkFavorites"
+                                grid="ctrl.grid"
+                                multi-select="!ctrl.getApprovedStatus()"
+                                grid-name="governmentEntitiesHeads"
+                                grid-items="ctrl.governmentEntitiesHeads"></workflow-users-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <current-tab-label-directive override-icon="account" override-title="selected_users"
+                                                     selected-tab="ctrl.selectedTab"
+                                                     workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <workflow-selected-users-directive callback-all-complete="ctrl.allComplete"
+                                                           has-selection="ctrl.hasSelection"
+                                                           grid-name="users"
+                                                           delete-bulk-selected="ctrl.deleteBulkSelected"
+                                                           delete-from-selected="ctrl.deleteFromSelected"
+                                                           set-settings-to-dist-workflow-item="ctrl.setSettingsToDistWorkflowItem"
+                                                           open-workflow-user-out-of-office="ctrl.openWorkflowUserOutOfOffice"
+                                                           grid-selected="ctrl.gridSelected"
+                                                           set-default-workflow-items-settings="ctrl.setDefaultWorkflowItemsSettings"
+                                                           selected-grids="ctrl.selectedGrids"></workflow-selected-users-directive>
+                    </div><!-- end tab -->
+                    <div flex layout="column" ng-if="ctrl.isSelectedTab('workflow_groups')">
+                        <current-tab-label-directive selected-tab="ctrl.selectedTab"
+                                                     workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <workflow-groups-directive ctrl="ctrl" grid="true"></workflow-groups-directive>
+                        <div>
+                            <br/>
+                        </div>
+                        <current-tab-label-directive override-title="selected_workflow_groups"
+                                                     selected-tab="ctrl.selectedTab"
+                                                     workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
+                        <div>
+                            <br/>
+                        </div>
+                    </div><!-- end tab -->
+                </div>
+            </md-content>
+        </div>
+    </div>
+    <div layout="row">
+        <div>
+            <md-button class="md-raised" ng-click="ctrl.launchDistributionCorrespondenceWorkFlow()">{{lang.send}}
+            </md-button>
+        </div>
+        <span flex></span>
+        <div>
+            <md-button class="md-raised" ng-click="ctrl.closeCorrespondenceWorkflow()">{{lang.close}}</md-button>
+        </div>
+    </div>
+</md-dialog>

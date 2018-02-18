@@ -30,6 +30,7 @@ module.exports = function (app) {
                                                    toast,
                                                    General,
                                                    errorCode,
+                                                   DistributionWF, // just for make the inheritance
                                                    _,
                                                    Attachment) {
         'ngInject';
@@ -677,6 +678,8 @@ module.exports = function (app) {
         };
         /***
          * get lookups
+         * @param documentClass
+         * @param lookupKey
          * @param lookupName
          * @returns {*}
          */
@@ -707,6 +710,7 @@ module.exports = function (app) {
         };
         /**
          * get lookup By Id from lookups
+         * @param documentClass
          * @param lookupName
          * @param id
          */
@@ -766,6 +770,7 @@ module.exports = function (app) {
         /**
          * @description open print barcode dialog to start print the barcode.
          * @param correspondence
+         * @param $event
          * @returns {promise|*}
          */
         self.correspondencePrintBarcode = function (correspondence, $event) {
@@ -966,7 +971,7 @@ module.exports = function (app) {
             var workItem = info.isWorkItem() ? correspondence : false;
             var incomingWithIncomingVsId = departmentIncoming && info.incomingVsId;
 
-            if(incomingWithIncomingVsId)
+            if (incomingWithIncomingVsId)
                 workItem = false;
             if (workItem)
                 return self.viewCorrespondenceWorkItem(info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming);
@@ -1144,6 +1149,7 @@ module.exports = function (app) {
         /**
          * @description broadcast correspondence.
          * @param correspondence
+         * @param $event
          */
         self.broadcastCorrespondence = function (correspondence, $event) {
             return dialog
@@ -1172,6 +1178,79 @@ module.exports = function (app) {
                     }
                 });
         };
+        /**
+         * @description
+         * @param correspondence
+         * @param action
+         * @param tab
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab) {
+            return dialog
+                .showDialog({
+                    template: cmsTemplate.getPopup('launch-correspondence-workflow'),
+                    controller: 'launchCorrespondenceWorkflowPopCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event,
+                    locals: {
+                        multi: !!angular.isArray(correspondence),
+                        correspondence: correspondence,
+                        selectedTab: tab,
+                        actionKey: action
+                    },
+                    resolve: {
+                        favoritesUsers: function (distributionWFService) {
+                            'ngInject';
+                            return distributionWFService.loadFavorites('users');
+                        },
+                        favoritesOrganizations: function (distributionWFService) {
+                            'ngInject';
+                            return distributionWFService.loadFavorites('organizations');
+                        },
+                        distUsers: function (distributionWFService) {
+                            'ngInject';
+                            return distributionWFService.loadWorkflowUsers();
+                        },
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return userCommentService.getUserComments()
+                                .then(function (result) {
+                                    return _.filter(result, 'status');
+                                });
+                        },
+                        privateUsers: function (distributionWFService) {
+                            'ngInject';
+                            return distributionWFService.loadDistWorkflowUsers('privates');
+                        },
+                        managers: function (distributionWFService) {
+                            'ngInject';
+                            return distributionWFService.loadDistWorkflowUsers('managers');
+                        },
+                        governmentEntities: function (distributionWFService) {
+                            'ngInject';
+                            return distributionWFService.loadDistWorkflowUsers('heads');
+                        },
+                        workflowActions: function (workflowActionService) {
+                            'ngInject';
+                            return workflowActionService.loadCurrentUserWorkflowActions();
+                        },
+                        workflowGroups: function (distributionWFService) {
+                            return distributionWFService.loadDistWorkflowGroups();
+                        }
+                    }
+                });
+        };
+        /**
+         * @description load group inbox from service
+         */
+        self.loadGroupInbox = function () {
+            return $http
+                .get(urlService.correspondenceWF.replace('wf', 'ou-queue/all-mails'))
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
+                });
+        }
 
 
     });

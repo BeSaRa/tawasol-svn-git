@@ -177,7 +177,6 @@ module.exports = function (app) {
         /**
          * @description just to fix the document class lookupKey Number
          * @param collection
-         * @param key
          * @returns {*}
          */
         self.getResultFromSelectedCollectionDocumentClass = function (collection) {

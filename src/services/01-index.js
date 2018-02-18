@@ -97,4 +97,5 @@ module.exports = function (app) {
     require('./mailNotificationService')(app);
     require('./fileTypeService')(app);
     require('./stateHelperService')(app);
+    require('./distributionWFService')(app);
 };

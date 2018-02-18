@@ -105,7 +105,7 @@ module.exports = function(app){
                         self.last();
                     }
                 });
-            }
+            };
             return $delegate;
         }]);
     })

@@ -80,7 +80,7 @@ module.exports = function (app) {
              * @returns {string}
              */
             Entity.prototype.getTranslatedName = function (reverse) {
-                return langService.current === 'ar' ? (reverse ? this.enName : this.arName ) : (reverse ? this.arName : this.enName);
+                return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
 
             /**
@@ -89,6 +89,10 @@ module.exports = function (app) {
              */
             Entity.prototype.getTranslatedStatus = function () {
                 return this.status ? langService.get('active') : langService.get('inactive');
+            };
+
+            Entity.prototype.getNameByKey = function (langKey) {
+                return this[langKey + 'Name'];
             };
 
             /*/!**

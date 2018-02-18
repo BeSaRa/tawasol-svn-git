@@ -12,7 +12,7 @@
         </div>
         <md-tabs class="content white-bg">
             <md-tab label="{{lang.organization_view}}">
-                <md-content id="block-content" class="over-flow-hidden">
+                <md-content class="block-content over-flow-hidden">
                     <!--<md-button id="importOrganizations" ng-click="ctrl.importOrganizations($event)" class="md-icon-button">
                         <md-icon md-svg-icon="file-import"></md-icon>
                     </md-button>-->
@@ -30,12 +30,12 @@
                     </organization-chart-directive>
                 </md-content>
             </md-tab>
-            <!--<md-tab label="{{lang.hierarchy_view}}">-->
-            <!--<md-content>-->
-            <!--<organization-hierarchy-view-directive></organization-hierarchy-view-directive>-->
-            <!--</md-content>-->
-            <!--</md-tab>-->
-            <!--<md-tab label="{{lang.grid_view}}"></md-tab>-->
+            <md-tab label="{{lang.hierarchy_view}}">
+                <md-content scroll-directive class="block-content over-flow-hidden">
+                    <organization-hierarchy-view-directive></organization-hierarchy-view-directive>
+                </md-content>
+            </md-tab>
+            <md-tab label="{{lang.grid_view}}"></md-tab>
         </md-tabs>
     </div>
 </div>

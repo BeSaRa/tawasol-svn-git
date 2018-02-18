@@ -2,23 +2,23 @@ module.exports = function (app) {
     app.provider('cmsTemplate', function () {
         'ngInject';
         var provider = this;
-        var imagePath = '';
-        /**
-         * @description change image path of dialog for production.
-         * @param path
-         * @returns {*}
-         */
-        provider.changeImagePath = function (path) {
-            imagePath = path;
-            return provider;
-        };
-        /**
-         * @description retrieve image path for dialog to use it on configuration url file.
-         * @returns {string}
-         */
-        provider.getImagePath = function(){
-            return imagePath;
-        };
+        // var imagePath = '';
+        // /**
+        //  * @description change image path of dialog for production.
+        //  * @param path
+        //  * @returns {*}
+        //  */
+        // provider.changeImagePath = function (path) {
+        //     imagePath = path;
+        //     return provider;
+        // };
+        // /**
+        //  * @description retrieve image path for dialog to use it on configuration url file.
+        //  * @returns {string}
+        //  */
+        // provider.getImagePath = function(){
+        //     return imagePath;
+        // };
 
         function get(pathWithFileName, callback) {
             var template = require('./../' + pathWithFileName);

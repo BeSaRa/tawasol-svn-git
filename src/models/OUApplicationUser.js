@@ -27,6 +27,8 @@ module.exports = function (app) {
             self.permissionList = null;
             self.ouViewPermissionList = null;
 
+            self.ouInfo = null;
+
             self.wfsecurity = null;
 
             // every model has required fields
@@ -82,6 +84,24 @@ module.exports = function (app) {
              */
             OUApplicationUser.prototype.getTranslatedApplicationUserName = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.applicationUser.enFullName : this.applicationUser.arFullName) : (reverse ? this.applicationUser.arFullName : this.applicationUser.enFullName);
+            };
+            /**
+             * @description get translated Name by lang key
+             * @param key
+             * @returns {*}
+             */
+            OUApplicationUser.prototype.getFullNameByKey = function (key) {
+                return this.applicationUser.getFullNameByKey(key);
+            };
+            /**
+             * @description get applicationUser domainName
+             */
+            OUApplicationUser.prototype.getDomainName = function () {
+                return this.applicationUser.domainName;
+            };
+
+            OUApplicationUser.prototype.getOrganizationTranslate = function () {
+                return this.ouInfo.getTranslatedName();
             };
 
             /**

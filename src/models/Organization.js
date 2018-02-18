@@ -1,8 +1,8 @@
 module.exports = function (app) {
-    app.factory('Organization', function (CMSModelInterceptor, 
-                                          $q, 
-                                          OUClassification, 
-                                          OUCorrespondenceSite, 
+    app.factory('Organization', function (CMSModelInterceptor,
+                                          $q,
+                                          OUClassification,
+                                          OUCorrespondenceSite,
                                           langService) {
         'ngInject';
         return function Organization(model) {
@@ -246,6 +246,10 @@ module.exports = function (app) {
                     return new OUCorrespondenceSite({ouid: self.id, correspondenceSite: correspondenceSite});
                 });
                 return ouCorrespondenceSiteService.addBulkOUCorrespondenceSites(ouCorrespondenceSites);
+            };
+
+            Organization.prototype.getNameByKey = function (langKey) {
+                return this[langKey + 'Name'];
             };
 
             // don't remove CMSModelInterceptor from last line

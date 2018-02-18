@@ -139,6 +139,20 @@
                 .addToAllWithBase('propertyConfigurations', '/cms-entity/correspondence/property-configuration')
                 // search document
                 .addToAllWithBase('searchDocument', '/cms-entity/correspondence/search/:searchType')
+                // favoritesDWF for launch workflow
+                .addToAllWithBase('favoritesDWF', '/cms-entity/user/user-frequent-list')
+                // to get workflow dist users
+                .addToAllWithBase('distributionWF', '/cms-entity/admin/ou-application-user/dist')
+                // get all government users
+                .addToAllWithBase('distributionWFEUsers' , '/cms-entity/admin/application-user/dist/ge-heads')
+                // current user workflow actions
+                .addToAllWithBase('distributionWFActions', '/cms-entity/admin/wf-action/wf')
+                // private users for distribution workflow
+                .addToAllWithBase('distributionWFPrivate', '/cms-entity/admin/ou-application-user/dist/private-users')
+                // search managers distribution workflow
+                .addToAllWithBase('distributionWFManagers', '/cms-entity/admin/ou-application-user/dist/managers')
+                // workflow groups for distribution workflow.
+                .addToAllWithBase('distributionWFGroups', 'cms-entity/admin/user-wf-group/user/active')
                 /*// search outgoing
                 .addToAllWithBase('searchOutgoings', '/cms-entity/correspondence/search')
                 // search incoming

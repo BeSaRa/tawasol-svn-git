@@ -10,7 +10,7 @@ module.exports = function (app) {
          */
         function getTemplate(type) {
             var template = require('./templates/' + type + '.html');
-            return template.replace(/assets/g, cmsTemplate.getImagePath() + 'assets');
+            return template.replace(/..\/..\/..\/..\/assets/g,'assets');
         }
 
         /**
