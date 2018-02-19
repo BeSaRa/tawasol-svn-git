@@ -292,7 +292,7 @@ module.exports = function (app) {
                 });*/
             ouApplicationUserService
                 .controllerMethod
-                .selectOUApplicationUserSingle(self.organization, property, self.selectUserLabels[property],$event)
+                .selectOUApplicationUserSingle(self.organization, property, self.selectUserLabels[property], $event)
                 .then(function (ouApplicationUser) {
                     self.organization[property] = ouApplicationUser;
                 })
@@ -1177,7 +1177,7 @@ module.exports = function (app) {
 
                 });
         };
-        console.log('self.organization.centralArchiveUnitId', self.organization.centralArchiveUnitId , self.organization.registryParentId);
+        console.log('self.organization.centralArchiveUnitId', self.organization.centralArchiveUnitId, self.organization.registryParentId);
         /**
          * @description Assigns the unassigned user to organization
          * @param $event
