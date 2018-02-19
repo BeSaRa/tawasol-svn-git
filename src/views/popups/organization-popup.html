@@ -19,7 +19,7 @@
                                                         flex>
                                         <label>{{lang.parent_organization}}</label>
                                         <md-select ng-model-options="{trackBy: '$value.id'}"
-                                                   ng-disabled="!ctrl.editMode" required name="parent"
+                                                   ng-disabled="true" required name="parent"
                                                    ng-model="ctrl.parentOrganization">
                                             <md-option md-truncate ng-value="organization"
                                                        ng-repeat="organization in ctrl.organizations track by $index">
@@ -36,7 +36,7 @@
                                                         flex>
                                         <label>{{lang.parent_organization}}</label>
                                         <md-select ng-model-options="{trackBy: '$value.id'}"
-                                                   ng-disabled="!ctrl.editMode" required name="parent"
+                                                   ng-disabled="true" required name="parent"
                                                    ng-model="ctrl.parentOrganization">
                                             <md-option md-truncate ng-value="organization"
                                                        ng-repeat="organization in ctrl.availableParents track by $index">
