@@ -177,7 +177,7 @@ module.exports = function (app) {
 
             if (model.linkedEntities && !angular.isArray(model.linkedEntities)) {
                 model.linkedEntities = _.map(JSON.parse(model.linkedEntities), function (entity) {
-                    entity.typeId = entityTypeService.getLinkedType(entity.typeId);
+                    entity.typeId = entity.typeId === null ? entityTypeService.getLinkedType(0) : entityTypeService.getLinkedType(entity.typeId);
                     return new LinkedObject(entity);
                 });
             } else {
