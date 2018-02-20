@@ -22,7 +22,7 @@ module.exports = function (app) {
 
         self.userInboxes = [];
 
-        self.currentUser = employeeService.getEmployee();
+        // self.currentUser = employeeService.getEmployee();
 
         /**
          * @description Load the user inboxes from server.
@@ -216,9 +216,9 @@ module.exports = function (app) {
              * @returns {promise}
              */
             userInboxSignaturePopup: function (userInbox, $event) {
-                return applicationUserSignatureService.getApplicationUserSignatures(self.currentUser.id)
+                return applicationUserSignatureService.getApplicationUserSignatures(employeeService.getEmployee().id)
                     .then(function (signatures) {
-                        self.currentUser.signature = signatures;
+                        //self.currentUser.signature = signatures;
                         if (signatures && signatures.length === 1) {
                             return self.signDocument(userInbox, signatures[0])
                                 .then(function (result) {
