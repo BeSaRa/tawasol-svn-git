@@ -921,6 +921,7 @@ module.exports = function (app) {
                         icon: 'message',
                         text: 'grid_action_send_sms',
                         shortcut: false,
+                        permissionKey: "SEND_SMS",
                         callback: self.sendSMS,
                         class: "action-red",
                         checkShow: self.checkToShowAction

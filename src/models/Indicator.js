@@ -35,7 +35,7 @@ module.exports = function (app) {
             icons['incoming'] = 'arrow-down-bold-box';
             icons['internal'] = 'recycle';
             icons['paper_document'] ='file-document';
-            icons['electronic_document'] = 'cellphone-dock';
+            icons['electronic_document'] = 'tablet';//cellphone-dock';
 
 
             /**
