@@ -351,8 +351,8 @@ module.exports = function (app) {
             },
             {
                 type: 'separator',
-                showInView: false,
-                checkShow: self.checkToShowAction
+                checkShow: self.checkToShowAction,
+                showInView: false
             },
             // Export
             {
@@ -374,15 +374,17 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
+                showInView: false,
+                shortcut: true,
                 callback: self.viewDocument,
                 class: "action-green",
-                showInView: false,
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
                 }
             },
+            // Broadcast
             {
                 type: 'action',
                 icon: 'bullhorn',
@@ -403,6 +405,19 @@ module.exports = function (app) {
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: self.checkToShowAction,
                 submenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
+            },
+            // View Tracking Sheet (Quick Action Only)
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'view_tracking_sheet',
+                shortcut: true,
+                onlyShortcut: true,
+                showInView: false,
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: self.checkToShowAction,
+                callback: self.viewTrackingSheet,
+                params: ['view_tracking_sheet', 'tabs']
             },
             // Manage
             {

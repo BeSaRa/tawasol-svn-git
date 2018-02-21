@@ -971,9 +971,9 @@ module.exports = function (app) {
             var workItem = info.isWorkItem() ? correspondence : false;
             var incomingWithIncomingVsId = departmentIncoming && info.incomingVsId;
 
-            if (incomingWithIncomingVsId)
-                workItem = false;
-            if (workItem)
+            //if (incomingWithIncomingVsId)
+            //    workItem = false;
+            if (workItem && !incomingWithIncomingVsId)
                 return self.viewCorrespondenceWorkItem(info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming);
 
             return $http.get(_createUrlSchema(incomingWithIncomingVsId ? info.incomingVsId : info.vsId, incomingWithIncomingVsId ? 'incoming' : info.documentClass, 'with-content'))

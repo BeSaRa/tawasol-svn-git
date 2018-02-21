@@ -209,12 +209,12 @@ module.exports = function (app) {
                 })
         };
 
-        self.showEditContentInEditPopup = function(){
-           return (self.fromDialog && !self.document.getInfo().isPaper && self.document.contentSize) && !self.editAfterApproved;
+        self.showEditContentInEditPopup = function () {
+            return (self.fromDialog && !self.document.getInfo().isPaper && self.document.contentSize && self.document.getInfo().docStatus < 24) && !self.editAfterApproved;
         };
 
-        self.openEditContentInEditPopup = function(){
-            return correspondenceService.viewCorrespondence(self.document,[]);
+        self.openEditContentInEditPopup = function () {
+            return correspondenceService.viewCorrespondence(self.document, [], true, true);
         };
     });
 };

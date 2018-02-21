@@ -535,7 +535,7 @@ module.exports = function (app) {
         self.downloadMainDocument = function (searchedGeneralDocument, $event) {
             //console.log('download main document for searched general document : ', searchedGeneralDocument);
             downloadService.controllerMethod
-                .downloadMainDocument(searchedGeneralDocument.vsId);
+                .mainDocumentDownload(searchedGeneralDocument.vsId);
         };
 
         /**
@@ -546,7 +546,7 @@ module.exports = function (app) {
         self.downloadCompositeDocument = function (searchedGeneralDocument, $event) {
             //console.log('download composite document for searched general document : ', searchedGeneralDocument);
             downloadService.controllerMethod
-                .downloadCompositeDocument(searchedGeneralDocument.vsId);
+                .compositeDocumentDownload(searchedGeneralDocument.vsId);
         };
 
         /**
@@ -687,6 +687,7 @@ module.exports = function (app) {
                 icon: 'information-variant',
                 text: 'grid_action_document_info',
                 shortcut: false,
+                showInView: false,
                 submenu: [
                     {
                         type: 'info',
@@ -698,7 +699,8 @@ module.exports = function (app) {
             },
             {
                 type: 'separator',
-                checkShow: self.checkToShowAction
+                checkShow: self.checkToShowAction,
+                showInView: false
             },
             // Export
             {
@@ -720,6 +722,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
+                showInView: false,
                 callback: self.viewDocument,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',

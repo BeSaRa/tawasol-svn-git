@@ -130,6 +130,7 @@ module.exports = function (app) {
         self.receiveIncomingDepartmentInbox = function (incomingDepartmentInbox, $event, defer) {
             //console.log('Receive the incoming department inbox item : ', incomingDepartmentInbox);
             var info = incomingDepartmentInbox.getInfo();
+            dialog.hide();
             $state.go('app.incoming.add', {action: 'receive', workItem: info.wobNumber});
         };
 

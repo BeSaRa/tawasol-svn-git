@@ -326,7 +326,8 @@ module.exports = function (app) {
             },
             {
                 type: 'separator',
-                checkShow: self.checkToShowAction
+                checkShow: self.checkToShowAction,
+                showInView: false
             },
             // Remove
             {

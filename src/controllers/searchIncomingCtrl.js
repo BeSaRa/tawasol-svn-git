@@ -636,6 +636,7 @@ module.exports = function (app) {
          */
         self.createReply = function (userInbox, $event) {
             var info = userInbox.getInfo();
+            dialog.hide();
             $state.go('app.outgoing.add', {vsId: info.vsId, action: 'reply'});
         };
 
@@ -710,6 +711,7 @@ module.exports = function (app) {
                 icon: 'information-variant',
                 text: 'grid_action_document_info',
                 shortcut: false,
+                showInView: false,
                 submenu: [
                     {
                         type: 'info',
@@ -721,7 +723,8 @@ module.exports = function (app) {
             },
             {
                 type: 'separator',
-                checkShow: self.checkToShowAction
+                checkShow: self.checkToShowAction,
+                showInView: false
             },
             /*  // Export
               {
@@ -739,6 +742,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: false,
+                showInView: false,
                 callback: self.viewDocument,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',

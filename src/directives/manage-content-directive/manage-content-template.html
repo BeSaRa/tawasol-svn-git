@@ -27,16 +27,17 @@
                 </div>
             </md-button>
         </div>
-        <span flex ng-if="ctrl.displayPrepare && ctrl.documentInformation && ctrl.templateOrFileName">{{ctrl.templateOrFileName}}</span>
-        <span flex ng-if="!ctrl.displayPrepare && ctrl.document.contentFile && ctrl.templateOrFileName">{{ctrl.templateOrFileName}}</span>
-        <!--<span flex ng-if="ctrl.document.contentFile">{{ctrl.document.contentFile.name}}</span>-->
-        <!--<span flex ng-if="ctrl.displayPrepare && ctrl.template">{{ctrl.template.getSubjectTitle()}}</span>-->
         <div>
             <md-button ng-if="ctrl.showEditContentInEditPopup()"
                        class="md-raised" ng-click="ctrl.openEditContentInEditPopup()">
                 {{lang.edit_content}}
             </md-button>
         </div>
+        <span flex ng-if="ctrl.displayPrepare && ctrl.documentInformation && ctrl.templateOrFileName">{{ctrl.templateOrFileName}}</span>
+        <span flex ng-if="!ctrl.displayPrepare && ctrl.document.contentFile && ctrl.templateOrFileName">{{ctrl.templateOrFileName}}</span>
+        <!--<span flex ng-if="ctrl.document.contentFile">{{ctrl.document.contentFile.name}}</span>-->
+        <!--<span flex ng-if="ctrl.displayPrepare && ctrl.template">{{ctrl.template.getSubjectTitle()}}</span>-->
+
         <div>
             <md-icon md-svg-icon="close" class="cursor-pointer red-text" tooltip="{{lang.remove_content}}"
                      aria-label="{{lang.remove_content}}"
