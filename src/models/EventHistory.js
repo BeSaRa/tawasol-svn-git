@@ -96,9 +96,9 @@ module.exports = function (app) {
                 return indicator.getSecurityLevelIndicator(securityLevel);
             };
 
-            /*EventHistory.prototype.getPriorityLevelIndicator = function (priorityLevel) {
+            EventHistory.prototype.getPriorityLevelIndicator = function (priorityLevel) {
                 return indicator.getPriorityLevelIndicator(priorityLevel);
-            };*/
+            };
 
             EventHistory.prototype.getAttachmentsIndicator = function () {
                 return indicator.getAttachmentsIndicator();
@@ -135,7 +135,7 @@ module.exports = function (app) {
             EventHistory.prototype.getCommentsCount = function ($event) {
                 return this.comments && this.comments.length ? this.comments.length : 0;
             };
-            EventHistory.prototype.hisDocumentClass = function (documentClass) {
+            EventHistory.prototype.hasDocumentClass = function (documentClass) {
                 return this.getInfo().documentClass.toLowerCase() === documentClass.toLowerCase();
             };
 

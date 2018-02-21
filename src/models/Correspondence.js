@@ -441,7 +441,7 @@ module.exports = function (app) {
             Correspondence.prototype.needApprove = function () {
                 return this.docStatus < 24 && !this.addMethod;
             };
-            Correspondence.prototype.hisDocumentClass = function (documentClass) {
+            Correspondence.prototype.hasDocumentClass = function (documentClass) {
                 return this.getInfo().documentClass.toLowerCase() === documentClass.toLowerCase();
             };
             Correspondence.prototype.launchWorkFlow = function ($event, action, tab) {

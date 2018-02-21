@@ -418,12 +418,12 @@ module.exports = function (app) {
 
             /**
              * @description Returns the view tracking sheet options for grid actions
-             * @param checkShow
+             * @param checkToShowAction
              * @param callback
              * @param gridOrTabs
              * @returns {[]}
              */
-            self.getViewTrackingSheetOptions = function (checkShow, callback, gridOrTabs) {
+            self.getViewTrackingSheetOptions = function (checkToShowAction, callback, gridOrTabs) {
                 if (gridOrTabs === 'tabs')
                     return [];
                 return [
@@ -436,7 +436,7 @@ module.exports = function (app) {
                         callback: callback,
                         params: ['view_tracking_sheet_work_flow_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkShow
+                        checkShow: checkToShowAction
                     },
                     // Linked Documents History
                     {
@@ -447,7 +447,7 @@ module.exports = function (app) {
                         callback: callback,
                         params: ['view_tracking_sheet_linked_documents_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkShow
+                        checkShow: checkToShowAction
                     },
                     // Attachments History
                     {
@@ -458,7 +458,7 @@ module.exports = function (app) {
                         callback: callback,
                         params: ['view_tracking_sheet_attachments_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkShow
+                        checkShow: checkToShowAction
                     },
                     // Merged Linked Document History
                     {
@@ -469,7 +469,7 @@ module.exports = function (app) {
                         callback: callback,
                         params: ['view_tracking_sheet_merged_linked_document_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkShow
+                        checkShow: checkToShowAction
                     },
                     // Linked Entities History
                     {
@@ -480,7 +480,7 @@ module.exports = function (app) {
                         callback: callback,
                         params: ['view_tracking_sheet_linked_entities_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkShow
+                        checkShow: checkToShowAction
                     },
                     // Destination History
                     {
@@ -491,7 +491,7 @@ module.exports = function (app) {
                         callback: callback,
                         params: ['view_tracking_sheet_destination_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkShow
+                        checkShow: checkToShowAction
                     },
                     // Content View History
                     {
@@ -502,7 +502,7 @@ module.exports = function (app) {
                         callback: callback,
                         params: ['view_tracking_sheet_content_view_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkShow
+                        checkShow: checkToShowAction
                     },
                     // SMS Logs
                     {
@@ -514,7 +514,7 @@ module.exports = function (app) {
                         callback: callback,
                         params: ['view_tracking_sheet_sms_logs', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-red",
-                        checkShow: checkShow
+                        checkShow: checkToShowAction
                     },
                     // Outgoing Delivery Reports
                     {
@@ -527,7 +527,7 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
-                            return checkShow(action, model) && info.documentClass === "outgoing";
+                            return checkToShowAction(action, model) && info.documentClass === "outgoing";
                         }
                     },
                     // Full History
@@ -539,7 +539,7 @@ module.exports = function (app) {
                         callback: callback,
                         params: ['view_tracking_sheet_full_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkShow
+                        checkShow: checkToShowAction
                     }
                 ];
             };

@@ -6,9 +6,9 @@
         </md-toolbar>
         <md-content scroll-directive>
             <form name="userPreferencesForm" autocomplete="off">
-                <md-tabs md-dynamic-height>
+                <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
                     <!-- General Tab -->
-                    <md-tab label="{{lang.general}}" md-on-select="ctrl.setCurrentTab('general')">
+                    <md-tab label="{{lang.general}}" ng-if="ctrl.showTab('general')" md-on-select="ctrl.setCurrentTab('general')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row" flex>
@@ -287,7 +287,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Notification Settings Tab -->
-                    <md-tab label="{{lang.notification_settings}}" md-on-select="ctrl.setCurrentTab('ns')">
+                    <md-tab label="{{lang.notification_settings}}"ng-if="ctrl.showTab('ns')" md-on-select="ctrl.setCurrentTab('ns')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <!-- SMS Notifications -->
@@ -559,7 +559,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Out Of Office Settings Tab -->
-                    <md-tab label="{{lang.out_of_office_settings}}" md-on-select="ctrl.setCurrentTab('ooos')">
+                    <md-tab label="{{lang.out_of_office_settings}}"ng-if="ctrl.showTab('ooos')" md-on-select="ctrl.setCurrentTab('ooos')">
                         <md-content>
                             <ng-form name="outOfOfficeSettingsForm" autocomplete="off">
                                 <div layout="column" class="p20">
@@ -688,7 +688,7 @@
                         </md-content>
                     </md-tab>
                     <!-- User Comments Tab -->
-                    <md-tab label="{{lang.user_comments}}" md-on-select="ctrl.setCurrentTab('uc')">
+                    <md-tab label="{{lang.user_comments}}"ng-if="ctrl.showTab('uc')" md-on-select="ctrl.setCurrentTab('uc')">
                         <md-content>
                             <ng-form name="userCommentsForm" autocomplete="off">
                                 <div layout="column" class="p20" ng-if="ctrl.isUserCommentForm">
@@ -871,7 +871,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Workflow Groups Tab -->
-                    <md-tab label="{{lang.workflow_groups}}" md-on-select="ctrl.setCurrentTab('wfg')">
+                    <md-tab label="{{lang.workflow_groups}}"ng-if="ctrl.showTab('wfg')" md-on-select="ctrl.setCurrentTab('wfg')">
                         <md-content>
                             <div layout="column" class="content">
                                 <div layout="row" layout-align="start center" class="p25 small">
@@ -970,7 +970,7 @@
                         </md-content>
                     </md-tab>
                     <!--User Folders -->
-                    <md-tab label="{{lang.folders}}" md-on-select="ctrl.setCurrentTab('folders')">
+                    <md-tab label="{{lang.folders}}"ng-if="ctrl.showTab('folders')" md-on-select="ctrl.setCurrentTab('folders')">
                         <md-content layout-padding>
                             <div>
                                 <user-folders-tree-view-directive
@@ -983,7 +983,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Signature -->
-                    <md-tab label="{{lang.signature}}" md-on-select="ctrl.setCurrentTab('signature')">
+                    <md-tab label="{{lang.signature}}"ng-if="ctrl.showTab('signature')" md-on-select="ctrl.setCurrentTab('signature')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <ng-form layout="row" name="signatureForm">

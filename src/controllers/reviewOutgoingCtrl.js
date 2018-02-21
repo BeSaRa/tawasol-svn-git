@@ -566,7 +566,7 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    return info.documentClass === 'outgoing' && model.hasContent() && info.isPaper;
+                    return self.checkToShowAction(action, model) && info.documentClass === 'outgoing' && model.hasContent() && info.isPaper;
                 }
             },
             // Print Barcode
@@ -580,7 +580,7 @@ module.exports = function (app) {
                 permissionKey: "PRINT_BARCODE",
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    return (info.isPaper);
+                    return self.checkToShowAction(action, model) && (info.isPaper);
                 }
             },
             // Remove

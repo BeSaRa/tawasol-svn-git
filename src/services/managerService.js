@@ -276,10 +276,54 @@ module.exports = function (app) {
 
         self.manageDocumentCorrespondence = function (vsId, documentClass, documentSubject, $event) {
             documentClass = _checkDocumentClass(documentClass);
+            if(documentClass.toLowerCase() === 'incoming'){
+                return self.manageIncomingDocumentCorrespondence(vsId, documentClass, documentSubject, $event);
+            }
+            else {
+                var defer = $q.defer();
+                return dialog.showDialog({
+                    template: cmsTemplate.getPopup('manage-document-correspondence'),
+                    controller: 'manageDocumentCorrespondencePopCtrl',
+                    targetEvent: $event || false,
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    escapeToClose: false,
+                    locals: {
+                        fromDialog: true,
+                        vsId: vsId,
+                        documentClass: documentClass,
+                        documentSubject: documentSubject
+                    },
+                    resolve: {
+                        correspondence: function () {
+                            'ngInject';
+                            return correspondenceService
+                                .loadCorrespondenceByVsIdClass(vsId, documentClass)
+                                .then(function (correspondence) {
+                                    defer.resolve(correspondence);
+                                    return correspondence;
+                                });
+                        },
+                        sites: function (correspondenceService) {
+                            'ngInject';
+                            return defer.promise.then(function (correspondence) {
+                                return correspondenceService
+                                    .loadCorrespondenceSites(correspondence)
+                            });
+                        }
+                    }
+                });
+            }
+        };
+
+
+
+        self.manageIncomingDocumentCorrespondence = function (vsId, documentClass, documentSubject, $event) {
+            documentClass = _checkDocumentClass(documentClass);
             var defer = $q.defer();
             return dialog.showDialog({
                 template: cmsTemplate.getPopup('manage-document-correspondence'),
-                controller: 'manageDocumentCorrespondencePopCtrl',
+                controller: 'manageIncomingDocumentCorrespondencePopCtrl',
                 targetEvent: $event || false,
                 controllerAs: 'ctrl',
                 bindToController: true,
@@ -299,17 +343,11 @@ module.exports = function (app) {
                                 defer.resolve(correspondence);
                                 return correspondence;
                             });
-                    },
-                    sites: function (correspondenceService) {
-                        'ngInject';
-                        return defer.promise.then(function (correspondence) {
-                            return correspondenceService
-                                .loadCorrespondenceSites(correspondence)
-                        });
                     }
                 }
             });
         };
+
 
         self.manageDocumentContent = function (vsId, documentClass, documentSubject, $event) {
             documentClass = _checkDocumentClass(documentClass);

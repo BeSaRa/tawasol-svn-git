@@ -391,7 +391,7 @@ module.exports = function (app) {
                 hide: false,
                 callback: self.doBroadcast,
                 checkShow: function (action, model) {
-                    return !model.needApprove() || model.hisDocumentClass('incoming');
+                    return self.checkToShowAction(action, model) && !model.needApprove() || model.hasDocumentClass('incoming');
                 }
             },
             // View Tracking Sheet

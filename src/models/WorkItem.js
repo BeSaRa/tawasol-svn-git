@@ -157,7 +157,7 @@ module.exports = function (app) {
                 return this.generalStepElm.receivedDate;
             };
 
-            WorkItem.prototype.hisDocumentClass = function (documentClass) {
+            WorkItem.prototype.hasDocumentClass = function (documentClass) {
                 return this.getInfo().documentClass.toLowerCase() === documentClass.toLowerCase();
             };
 

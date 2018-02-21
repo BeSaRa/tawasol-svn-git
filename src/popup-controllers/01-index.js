@@ -85,4 +85,5 @@ module.exports = function (app) {
     require('./selectOUApplicationUsersSinglePopCtrl')(app);
     require('./launchCorrespondenceWorkflowPopCtrl')(app);
     require('./workflowItemSettingPopCtrl')(app);
+    require('./manageIncomingDocumentCorrespondencePopCtrl')(app);
 };

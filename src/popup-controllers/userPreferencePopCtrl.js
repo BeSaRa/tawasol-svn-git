@@ -35,7 +35,8 @@ module.exports = function (app) {
                                                       attachmentService,
                                                       $scope,
                                                       $q,
-                                                      signature) {
+                                                      signature,
+                                                      selectedTab) {
         'ngInject';
         var self = this;
         self.controllerName = 'userPreferencePopCtrl';
@@ -48,7 +49,7 @@ module.exports = function (app) {
         self.languages = lookupService.returnLookups(lookupService.language);
         self.authorityLevels = lookupService.returnLookups(lookupService.securityLevel);
         /*var ouAppUserSecurityLevels = self.applicationUser.organization.securityLevels;
-        self.authorityLevels = generator.getSelectedCollectionFromResult(self.authorityLevels, ouAppUserSecurityLevels, 'lookupKey');*/
+         self.authorityLevels = generator.getSelectedCollectionFromResult(self.authorityLevels, ouAppUserSecurityLevels, 'lookupKey');*/
         self.jobTitles = jobTitles;
         self.themes = themes;
         self.roles = roles;
@@ -201,8 +202,8 @@ module.exports = function (app) {
          * @description Contains the selected tab name
          * @type {string}
          */
-        self.selectedTab = "basic";
-
+        self.selectedTab = selectedTab ? selectedTab : "basic";
+        self.requestForApprove = (selectedTab === 'signature');
         /**
          * @description Set the current tab name
          * @param tabName
@@ -210,6 +211,20 @@ module.exports = function (app) {
         self.setCurrentTab = function (tabName) {
             self.selectedTab = tabName;
         };
+
+        self.tabsToShow = [
+            'general',
+            'ns',
+            'ooos',
+            'uc',
+            'wfg',
+            'folders',
+            'signature'
+        ];
+        self.showTab = function (tabName) {
+            return (self.tabsToShow.indexOf(tabName) > -1);
+        };
+        self.selectedTabIndex = self.tabsToShow.indexOf(self.selectedTab);
 
         /**
          * @description Changes the sms notifications to null/empty/0 when notifications are set to false or revert them when set to true
@@ -413,8 +428,8 @@ module.exports = function (app) {
 
         self.checkRequiredFieldsOutOfOffice = function (model) {
             var required = self.requiredFieldsOutOfOffice, result = [];
-            if(!self.applicationUser.outOfOffice){
-                required = _.filter(required, function(property){
+            if (!self.applicationUser.outOfOffice) {
+                required = _.filter(required, function (property) {
                     return property !== 'proxyStartDate' && property !== 'proxyEndDate';
                 })
             }
@@ -845,7 +860,8 @@ module.exports = function (app) {
          * @description Close the popup
          */
         self.closeUserPreferencePopupFromCtrl = function () {
-
+            if(self.requestForApprove)
+                dialog.hide(self.applicationUser.signature);
             dialog.cancel();
         };
 
@@ -855,11 +871,11 @@ module.exports = function (app) {
          * @return {Array}
          */
         /*self.checkRequiredFile = function () {
-            var result = [];
-            if (!self.fileUrl)
-                result.push('fileUrl');
-            return result;
-        };*/
+         var result = [];
+         if (!self.fileUrl)
+         result.push('fileUrl');
+         return result;
+         };*/
 
         self.checkRequiredFile = function () {
             return self.selectedFile;

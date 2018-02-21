@@ -102,23 +102,6 @@ module.exports = function (app) {
                 });
         };
 
-        /*  /!**
-         * @description Opens dialog for manage preferences for the user
-         * @param applicationUser
-         * @param $event
-         *!/
-         self.openUserPreferencesDialog = function(applicationUser, $event){
-         applicationUserService
-         .controllerMethod
-         .manageUserPreference(applicationUser, $event)
-         .then(function (result) {
-         // self.reloadApplicationUsers(self.grid.page)
-         //     .then(function () {
-         //         toast.success(langService.get('edit_success').change({name: result.getNames()}));
-         //     });
-         });
-         };*/
-
         /**
          * @description Reload the grid of application user
          * @param pageNumber

@@ -233,10 +233,11 @@ module.exports = function (app) {
             /**
              * @description Opens dialog to manage user preferences
              * @param {ApplicationUser}applicationUser
+             * @param selectedTab
              * @param $event
              * @returns {promise}
              */
-            manageUserPreference: function (applicationUser, $event) {
+            manageUserPreference: function (applicationUser, selectedTab, $event) {
                 applicationUser = applicationUser ? applicationUser : employeeService.getEmployee();
                 var resolveOuApplicationUsers = $q.defer();
                 return dialog
@@ -245,6 +246,10 @@ module.exports = function (app) {
                         template: cmsTemplate.getPopup('user-preference'),
                         controller: 'userPreferencePopCtrl',
                         controllerAs: 'ctrl',
+                        locals: {
+                            applicationUser: applicationUser,
+                            selectedTab: selectedTab
+                        },
                         resolve: {
                             jobTitles: function (jobTitleService) {
                                 'ngInject';
@@ -320,9 +325,6 @@ module.exports = function (app) {
                                         return result;
                                     });
                             }
-                        },
-                        locals: {
-                            applicationUser: applicationUser
                         }
                     });
             }

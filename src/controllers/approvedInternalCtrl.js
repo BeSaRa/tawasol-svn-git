@@ -511,7 +511,9 @@ module.exports = function (app) {
                 shortcut: false,
                 hide: false,
                 callback: self.doBroadcast,
-                checkShow: self.checkToShowAction
+                checkShow: function(action, model){
+                    return  self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
             },
             // Send
             {

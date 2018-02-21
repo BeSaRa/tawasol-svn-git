@@ -115,14 +115,6 @@
                                                      tooltip="{{lang[userInbox.securityLevelIndicator.tooltip].change({name: userInbox.securityLevelLookup.getTranslatedName()})}}"
                                             ></md-icon>
                                         </span>
-                                        <!-- Is Reassigned -->
-                                        <span flex ng-class="{'indicator-content': userInbox.isReassignedIndicator}">
-                                            <md-icon ng-if="userInbox.isReassignedIndicator"
-                                                     class="{{userInbox.isReassignedIndicator.class}}"
-                                                     md-svg-icon="{{userInbox.isReassignedIndicator.icon}}"
-                                                     tooltip="{{lang[userInbox.isReassignedIndicator.tooltip]}}"
-                                            ></md-icon>
-                                        </span>
                                         <!-- Doc Type -->
                                         <span flex ng-class="{'indicator-content': userInbox.docTypeIndicator}">
                                                     <md-icon ng-if="userInbox.docTypeIndicator"
@@ -140,6 +132,14 @@
                                                       tooltip="{{lang[userInbox.isPaperIndicator.tooltip]}}"
                                              ></md-icon>
                                          </span>
+                                        <!-- Is Reassigned -->
+                                        <span flex ng-class="{'indicator-content': userInbox.isReassignedIndicator}">
+                                            <md-icon ng-if="userInbox.isReassignedIndicator"
+                                                     class="{{userInbox.isReassignedIndicator.class}}"
+                                                     md-svg-icon="{{userInbox.isReassignedIndicator.icon}}"
+                                                     tooltip="{{lang[userInbox.isReassignedIndicator.tooltip]}}"
+                                            ></md-icon>
+                                        </span>
                                         <!-- Linked Documents -->
                                         <span flex ng-class="{'indicator-content': userInbox.linkedDocsIndicator}">
                                                    <md-icon ng-if="userInbox.linkedDocsIndicator"
@@ -201,13 +201,15 @@
                                     <td md-cell>{{userInbox.generalStepElm.docFullSerial}}</td>
                                     <td md-cell class="indicator-td text-right"
                                         style="padding-right:0 !important; padding-left:0 !important;">
-                                                <span ng-class="{'indicator-content': userInbox.priorityLevelIndicator}">
+                                        <!-- Priority Level -->
+                                        <span ng-class="{'indicator-content': userInbox.priorityLevelIndicator}">
                                                     <md-icon ng-if="userInbox.priorityLevelIndicator"
                                                              class="{{userInbox.priorityLevelIndicator.class}}"
                                                              md-svg-icon="{{userInbox.priorityLevelIndicator.icon}}"
                                                              tooltip="{{lang[userInbox.priorityLevelIndicator.tooltip].change({name: userInbox.priorityLevelLookup.getTranslatedName()})}}"
                                                     ></md-icon>
                                                 </span>
+                                        <!-- Has Attachment -->
                                         <span class="float-right"
                                               ng-class="{'indicator-content': userInbox.attachmentsIndicator}">
                                                     <md-icon ng-if="userInbox.attachmentsIndicator"

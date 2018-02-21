@@ -4,24 +4,50 @@
             <span class="p20">{{lang.correspondence_sites}} : {{ctrl.documentSubject}}</span>
             <close-dialog-directive when-close="ctrl.closeDocumentCorrespondence"></close-dialog-directive>
         </md-toolbar>
-        <md-content scroll-directive>
-            <manage-correspondence-sites-directive
-                    vs-id="ctrl.correspondence.vsId"
-                    document-class="ctrl.correspondence.docClassName"
-                    sites-info-c-c="ctrl.correspondence.sitesInfoCC"
-                    sites-info-to="ctrl.correspondence.sitesInfoTo">
-            </manage-correspondence-sites-directive>
-        </md-content>
-        <div>
-            <div layout="row">
-                <div>
-                    <md-button class="md-raised" ng-disabled="!ctrl.correspondence.hasSiteTO()"
-                               ng-click="ctrl.saveCorrespondenceSites()">
-                        {{lang.save}}
+        <div ng-if="ctrl.documentClass.toLowerCase()==='outgoing'">
+            <md-content scroll-directive>
+                <manage-correspondence-sites-directive
+                        vs-id="ctrl.correspondence.vsId"
+                        document-class="ctrl.correspondence.docClassName"
+                        sites-info-c-c="ctrl.correspondence.sitesInfoCC"
+                        sites-info-to="ctrl.correspondence.sitesInfoTo">
+                </manage-correspondence-sites-directive>
+            </md-content>
+            <div>
+                <div layout="row">
+                    <div>
+                        <md-button class="md-raised" ng-disabled="!ctrl.correspondence.hasSiteTO()"
+                                   ng-click="ctrl.saveCorrespondenceSites()">
+                            {{lang.save}}
+                        </md-button>
+                    </div>
+                    <span flex></span>
+                    <md-button class="md-raised" ng-click="ctrl.closeDocumentCorrespondence()">{{lang.close}}
                     </md-button>
                 </div>
-                <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.closeDocumentCorrespondence()">{{lang.close}}</md-button>
+            </div>
+        </div>
+
+        <div ng-if="ctrl.documentClass.toLowerCase()==='incoming'">
+            <md-content scroll-directive>
+                <manage-correspondence-site-incoming-directive
+                        vs-id="ctrl.correspondence.vsId"
+                        document-class="ctrl.correspondence.docClassName"
+                        site="ctrl.correspondence.site">
+                </manage-correspondence-site-incoming-directive>
+            </md-content>
+            <div>
+                <div layout="row">
+                    <div>
+                        <md-button class="md-raised" ng-disabled="!ctrl.correspondence.site"
+                                   ng-click="ctrl.saveCorrespondenceSite()">
+                            {{lang.save}}
+                        </md-button>
+                    </div>
+                    <span flex></span>
+                    <md-button class="md-raised" ng-click="ctrl.closeDocumentCorrespondence()">{{lang.close}}
+                    </md-button>
+                </div>
             </div>
         </div>
     </div>

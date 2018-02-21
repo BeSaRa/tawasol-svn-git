@@ -20,7 +20,8 @@
                         <md-table-container flex scroll-directive>
                             <table md-table md-row-select ng-model="ctrl.selectedUserSentItems"
                                    md-progress="ctrl.progress"><!--multiple-->
-                                <thead md-head md-order="ctrl.grid.order"><!--md-on-reorder="ctrl.reloadUserSentItems"-->
+                                <thead md-head md-order="ctrl.grid.order">
+                                <!--md-on-reorder="ctrl.reloadUserSentItems"-->
                                 <tr md-row>
                                     <th colspan="{{ctrl.selectedUserSentItems.length > 1 ? 9 : 10}}"
                                         ng-if="ctrl.selectedUserSentItems.length" md-column>
@@ -44,8 +45,12 @@
                                         md-order-by="priorityLevelIndicator.text">
                                         <!-- Indicators -->
                                     </th>
-                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="docFullSerial">
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column
+                                        md-order-by="docFullSerial">
                                         <span>{{lang.sent_items_serial_number}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="">
+                                        <!-- Priority Level and Has Attachment Indicators -->
                                     </th>
                                     <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="docSubject">
                                         <span>{{lang.sent_items_document_subject}}</span>
@@ -53,7 +58,8 @@
                                     <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="actionDate">
                                         <span>{{lang.sent_items_receive_date}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="workflowActionId">
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column
+                                        md-order-by="workflowActionId">
                                         <span>{{lang.sent_items_action}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="userFromInfo">
@@ -75,40 +81,30 @@
                                 </tr>
                                 </thead>
                                 <tbody md-body>
-                                <tr md-row md-select="userSentItem" model="userSentItem" grid-right-click-directive="userSentItem"
+                                <tr md-row md-select="userSentItem" model="userSentItem"
+                                    grid-right-click-directive="userSentItem"
                                     selected-length="{{ctrl.selectedUserSentItems.length ? ctrl.selectedUserSentItems.length : 0}}"
                                     ng-repeat="userSentItem in ctrl.userSentItems  | filter:ctrl.searchModel |orderBy:ctrl.grid.order  track by $index">
                                     <!-- | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) -->
                                     <td md-cell class="indicator-td">
-                                        <span flex ng-class="{'indicator-content': userSentItem.securityLevelIndicator}">
+                                        <!-- Security Level -->
+                                        <span flex
+                                              ng-class="{'indicator-content': userSentItem.securityLevelIndicator}">
                                             <md-icon ng-if="userSentItem.securityLevelIndicator"
                                                      class="{{userSentItem.securityLevelIndicator.class}}"
                                                      md-svg-icon="{{userSentItem.securityLevelIndicator.icon}}"
                                                      tooltip="{{lang[userSentItem.securityLevelIndicator.tooltip].change({name: userSentItem.securityLevelLookup.getTranslatedName()})}}"
                                             ></md-icon>
                                         </span>
-                                        <span class="indicator-badge"
-                                              ng-class="{'indicator-content': userSentItem.docTypeIndicator}">
-                                            <span ng-if="userSentItem.docTypeIndicator"
-                                                  tooltip="{{lang[userSentItem.docTypeIndicator.tooltip]}}"
-                                                  class="{{userSentItem.docTypeIndicator.class}}">
-                                                {{lang[userSentItem.docTypeIndicator.text]}}
-                                            </span>
-                                        </span>
-                                        <span flex ng-class="{'indicator-content': userSentItem.priorityLevelIndicator}">
-                                            <md-icon ng-if="userSentItem.priorityLevelIndicator"
-                                                     class="{{userSentItem.priorityLevelIndicator.class}}"
-                                                     md-svg-icon="{{userSentItem.priorityLevelIndicator.icon}}"
-                                                     tooltip="{{lang[userSentItem.priorityLevelIndicator.tooltip].change({name: userSentItem.priorityLevelLookup.getTranslatedName()})}}"
-                                            ></md-icon>
-                                        </span>
-                                        <span flex ng-class="{'indicator-content': userSentItem.attachmentsIndicator}">
-                                            <md-icon ng-if="userSentItem.attachmentsIndicator"
-                                                     class="{{userSentItem.attachmentsIndicator.class}}"
-                                                     md-svg-icon="{{userSentItem.attachmentsIndicator.icon}}"
-                                                     tooltip="{{lang[userSentItem.attachmentsIndicator.tooltip]}}"
-                                            ></md-icon>
-                                        </span>
+                                        <!-- Doc Type -->
+                                        <span flex ng-class="{'indicator-content': userSentItem.docTypeIndicator}">
+                                                    <md-icon ng-if="userSentItem.docTypeIndicator"
+                                                             class="{{userSentItem.docTypeIndicator.class}}"
+                                                             md-svg-icon="{{userSentItem.docTypeIndicator.icon}}"
+                                                             tooltip="{{lang[userSentItem.docTypeIndicator.tooltip]}}"
+                                                    ></md-icon>
+                                                </span>
+                                        <!-- Linked Documents -->
                                         <span flex ng-class="{'indicator-content': userSentItem.linkedDocsIndicator}">
                                            <md-icon ng-if="userSentItem.linkedDocsIndicator"
                                                     class="{{userSentItem.linkedDocsIndicator.class}}"
@@ -116,7 +112,9 @@
                                                     tooltip="{{lang[userSentItem.linkedDocsIndicator.tooltip]}}"
                                            ></md-icon>
                                        </span>
-                                        <span flex ng-class="{'indicator-content': userSentItem.followUpStatusIndicator}">
+                                        <!-- Follow up Status -->
+                                        <span flex
+                                              ng-class="{'indicator-content': userSentItem.followUpStatusIndicator}">
                                             <md-icon ng-if="userSentItem.followUpStatusIndicator"
                                                      class="{{userSentItem.followUpStatusIndicator.class}}"
                                                      md-svg-icon="{{userSentItem.followUpStatusIndicator.icon}}"
@@ -146,8 +144,29 @@
                                         </span>-->
                                     </td>
                                     <td md-cell>{{userSentItem.docFullSerial}}</td>
-                                    <td md-cell><a href="" class="view-doc"
-                                                   ng-click="ctrl.viewDocument(userSentItem, $event)">{{userSentItem.docSubject}}</a>
+                                    <td md-cell class="indicator-td text-right"
+                                        style="padding-right:0 !important; padding-left:0 !important;">
+                                        <!-- Priority Level -->
+                                        <span ng-class="{'indicator-content': userSentItem.priorityLevelIndicator}">
+                                                    <md-icon ng-if="userSentItem.priorityLevelIndicator"
+                                                             class="{{userSentItem.priorityLevelIndicator.class}}"
+                                                             md-svg-icon="{{userSentItem.priorityLevelIndicator.icon}}"
+                                                             tooltip="{{lang[userSentItem.priorityLevelIndicator.tooltip].change({name: userSentItem.priorityLevelLookup.getTranslatedName()})}}"
+                                                    ></md-icon>
+                                                </span>
+                                        <!-- Has Attachment -->
+                                        <span class="float-right"
+                                              ng-class="{'indicator-content': userSentItem.attachmentsIndicator}">
+                                                    <md-icon ng-if="userSentItem.attachmentsIndicator"
+                                                             class="{{userSentItem.attachmentsIndicator.class}}"
+                                                             md-svg-icon="{{userSentItem.attachmentsIndicator.icon}}"
+                                                             tooltip="{{lang[userSentItem.attachmentsIndicator.tooltip]}}"
+                                                    ></md-icon>
+                                                </span>
+                                    </td>
+                                    <td md-cell md-truncate class="subject">
+                                        <a href="" class="view-doc"
+                                           ng-click="ctrl.viewDocument(userSentItem, $event)">{{userSentItem.docSubject}}</a>
                                     </td>
                                     <td md-cell>{{userSentItem.actionDate}}</td>
                                     <td md-cell>{{userSentItem.getTranslatedAction()}}</td>

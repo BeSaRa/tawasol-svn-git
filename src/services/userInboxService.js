@@ -14,6 +14,7 @@ module.exports = function (app) {
                                               cmsTemplate,
                                               employeeService,
                                               applicationUserSignatureService,
+                                              applicationUserService,
                                               listGeneratorService,
                                               $window) {
         'ngInject';
@@ -215,7 +216,7 @@ module.exports = function (app) {
              * @param $event
              * @returns {promise}
              */
-            userInboxSignaturePopup: function (userInbox, $event) {
+            userInboxSignaturePopup: function (userInbox, isRecursiveRequest, $event) {
                 return applicationUserSignatureService.getApplicationUserSignatures(employeeService.getEmployee().id)
                     .then(function (signatures) {
                         //self.currentUser.signature = signatures;
@@ -244,7 +245,28 @@ module.exports = function (app) {
                                 });
                         }
                         else {
-                            dialog.alertMessage(langService.get('no_signature_available'))
+                            dialog.alertMessage(langService.get('no_signature_available'));
+
+                            /*Open the user preference with signature tab focused*/
+                            /*if (!isRecursiveRequest) {
+                                dialog.alertMessage(langService.get('no_signature_available'))
+                                    .then(function () {
+                                        applicationUserService.controllerMethod.manageUserPreference(null, 'signature', null)
+                                            .then(function (signaturesResult) {
+                                                if (signaturesResult && signaturesResult.length) {
+                                                    self.controllerMethod.userInboxSignaturePopup(userInbox, true, null)
+                                                        .then(function (result) {
+                                                            if (result)
+                                                                return true;
+                                                            else {
+                                                                toast.error(langService.get('something_happened_when_sign'));
+                                                                return false;
+                                                            }
+                                                        });
+                                                }
+                                            });
+                                    });
+                            }*/
                         }
                     });
             },

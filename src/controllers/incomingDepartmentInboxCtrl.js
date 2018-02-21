@@ -212,12 +212,13 @@ module.exports = function (app) {
             return (!action.hide);
         };
 
+/*
 
-        /**
+        /!**
          * @description Manage Tags
          * @param incomingDepartmentInbox
          * @param $event
-         */
+         *!/
         self.manageTags = function (incomingDepartmentInbox, $event) {
             var vsId = incomingDepartmentInbox.hasOwnProperty('generalStepElm')
                 ? (incomingDepartmentInbox.generalStepElm.hasOwnProperty('vsId') ? incomingDepartmentInbox.generalStepElm.vsId : incomingDepartmentInbox.generalStepElm)
@@ -233,11 +234,11 @@ module.exports = function (app) {
                 });
         };
 
-        /**
+        /!**
          * @description Manage Comments
          * @param incomingDepartmentInbox
          * @param $event
-         */
+         *!/
         self.manageComments = function (incomingDepartmentInbox, $event) {
             //console.log('manageUserInboxComments : ', incomingDepartmentInbox);
             var vsId = incomingDepartmentInbox.hasOwnProperty('generalStepElm')
@@ -254,20 +255,20 @@ module.exports = function (app) {
                 });
         };
 
-        /**
+        /!**
          * @description Manage Tasks
          * @param incomingDepartmentInbox
          * @param $event
-         */
+         *!/
         self.manageTasks = function (incomingDepartmentInbox, $event) {
             console.log('manageUserInboxTasks : ', incomingDepartmentInbox);
         };
 
-        /**
+        /!**
          * @description Manage Attachments
          * @param incomingDepartmentInbox
          * @param $event
-         */
+         *!/
         self.manageAttachments = function (incomingDepartmentInbox, $event) {
             //console.log('manageUserInboxAttachments : ', incomingDepartmentInbox);
             var vsId = incomingDepartmentInbox.hasOwnProperty('generalStepElm')
@@ -279,22 +280,22 @@ module.exports = function (app) {
         };
 
 
-        /**
+        /!**
          * @description Manage Linked Documents
          * @param incomingDepartmentInbox
          * @param $event
-         */
+         *!/
         self.manageLinkedDocuments = function (incomingDepartmentInbox, $event) {
             //console.log('manageUserInboxLinkedDocuments : ', incomingDepartmentInbox);
             var info = incomingDepartmentInbox.getInfo();
             managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass, "welcome");
         };
 
-        /**
+        /!**
          * @description Manage Linked Entities
          * @param incomingDepartmentInbox
          * @param $event
-         */
+         *!/
         self.manageLinkedEntities = function (incomingDepartmentInbox, $event) {
             //console.log('manageUserInboxLinkedEntities : ', incomingDepartmentInbox);
             //var wfName = 'outgoing';
@@ -303,11 +304,11 @@ module.exports = function (app) {
                 .manageDocumentEntities(incomingDepartmentInbox.generalStepElm.vsId, wfName.toLowerCase(), incomingDepartmentInbox.generalStepElm.docSubject, $event);
         };
 
-        /**
+        /!**
          * @description Destinations
          * @param incomingDepartmentInbox
          * @param $event
-         */
+         *!/
         self.manageDestinations = function (incomingDepartmentInbox, $event) {
             //console.log('manage destinations : ', incomingDepartmentInbox);
 
@@ -315,6 +316,7 @@ module.exports = function (app) {
 
             managerService.manageDocumentCorrespondence(incomingDepartmentInbox.generalStepElm.vsId, wfName.toLowerCase(), incomingDepartmentInbox.generalStepElm.docSubject, $event)
         };
+*/
 
         /**
          * @description Array of actions that can be performed on grid

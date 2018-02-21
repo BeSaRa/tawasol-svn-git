@@ -450,7 +450,7 @@ module.exports = function (app) {
                 callback: self.sentToReadyToExport,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return model.addMethod && model.hasContent();
+                    return self.checkToShowAction(action, model) && model.addMethod && model.hasContent();
                 }
             },
             // Launch Distribution Workflow

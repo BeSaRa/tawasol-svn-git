@@ -595,7 +595,7 @@ module.exports = function (app) {
         self.signESignature = function (userInbox, $event, defer) {
             userInboxService
                 .controllerMethod
-                .userInboxSignaturePopup(userInbox, $event)
+                .userInboxSignaturePopup(userInbox, false, $event)
                 .then(function (result) {
                     if (result)
                         self.reloadUserInboxes(self.grid.page)
@@ -793,7 +793,9 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.addToFolder,
                 class: "action-green",
-                checkShow: self.checkToShowAction
+                checkShow: function(action, model){
+                    return  self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
             },
             // Add To Favorite
             {
@@ -804,7 +806,9 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.addToFavorite,
                 class: "action-green",
-                checkShow: self.checkToShowAction
+                checkShow: function(action, model){
+                    return  self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
             },
             // Create Reply
             {
@@ -817,7 +821,7 @@ module.exports = function (app) {
                 //hide: true,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && info.documentClass === "incoming";
+                    return self.checkToShowAction(action, model) && info.documentClass === "incoming" && !model.isBroadcasted();
                 }
             },
             // Forward
@@ -828,8 +832,11 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.forward,
                 class: "action-green",
-                checkShow: self.checkToShowAction
+                checkShow: function(action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
             },
+            // Broadcast
             {
                 type: 'action',
                 icon: 'bullhorn',
@@ -838,7 +845,7 @@ module.exports = function (app) {
                 hide: false,
                 callback: self.doBroadcast,
                 checkShow: function (action, model) {
-                    return (!model.needApprove() || model.hisDocumentClass('incoming')) && !model.isBroadcasted();
+                    return self.checkToShowAction && (!model.needApprove() || model.hasDocumentClass('incoming')) && !model.isBroadcasted();
                 }
             },
             // Reply
@@ -849,8 +856,10 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.reply,
                 class: "action-green",
-                checkShow: self.checkToShowAction
-            },
+                checkShow: function(action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
+                },
             // Get Link
             {
                 type: 'action',
@@ -860,7 +869,9 @@ module.exports = function (app) {
                 callback: self.getLink,
                 class: "action-red",
                 hide: true,
-                checkShow: self.checkToShowAction
+                checkShow: function(action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
             },
             // Subscribe
             {
@@ -871,7 +882,9 @@ module.exports = function (app) {
                 callback: self.subscribe,
                 class: "action-red",
                 hide: true,
-                checkShow: self.checkToShowAction
+                checkShow: function(action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
             },
             // Export (Send to ready to export)
             {
@@ -887,7 +900,7 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     // If internal book, no export is allowed
                     // If incoming book, no addMethod will be available. So check workFlowName(if incoming) and show export button
-                    return self.checkToShowAction(action, model) && info.isPaper && info.documentClass === 'outgoing'
+                    return self.checkToShowAction(action, model) && info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted();
                     // (model.generalStepElm.addMethod && model.generalStepElm.workFlowName.toLowerCase() !== 'internal')
                     // || model.generalStepElm.workFlowName.toLowerCase() === 'incoming';
 
@@ -1086,7 +1099,9 @@ module.exports = function (app) {
                 text: 'grid_action_send',
                 shortcut: false,
                 hide: true,
-                checkShow: self.checkToShowAction,
+                checkShow: function(action, model){
+                    return  self.checkToShowAction(action, model) && !model.isBroadcasted();
+                },
                 submenu: [
                     // Link To Document By Email
                     {
@@ -1154,7 +1169,7 @@ module.exports = function (app) {
             // Sign(Approve)
             {
                 type: 'action',
-                icon: 'pencil-lock',
+                icon: 'approval',
                 text: 'grid_action_approve',//signature
                 shortcut: false,
                 checkShow: function (action, model) {
@@ -1167,7 +1182,7 @@ module.exports = function (app) {
                      docStatus = 24 is approved
                     */
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model)
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted()
                         && !info.isPaper
                         && (info.documentClass !== 'incoming')
                         && model.needApprove()
@@ -1215,7 +1230,7 @@ module.exports = function (app) {
                         hasPermission = (employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT"));
                     else if (info.documentClass === "outgoing")
                         hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-                    return self.checkToShowAction(action, model) && hasPermission;
+                    return self.checkToShowAction(action, model) && hasPermission && !model.isBroadcasted();
                 },
                 submenu: [
                     // Content

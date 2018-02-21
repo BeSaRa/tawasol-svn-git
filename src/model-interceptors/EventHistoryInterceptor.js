@@ -72,8 +72,8 @@ module.exports = function (app) {
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
 
-            /* model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
-             model.priorityLevelIndicator = (model.priorityLevelLookup && model.priorityLevelLookup.lookupKey != 0)? model.getPriorityLevelIndicator(model.priorityLevelLookup) : null;*/
+             model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
+             model.priorityLevelIndicator = (model.priorityLevelLookup && model.priorityLevelLookup.lookupKey != 0)? model.getPriorityLevelIndicator(model.priorityLevelLookup) : null;
 
             /*model.attachmentsIndicator = model.generalStepElm.attachementsNO ? model.getAttachmentsIndicator() : null;
             model.linkedDocsIndicator = model.generalStepElm.linkedDocsNO ? model.getLinkedDocumentsIndicator() : null;*/
@@ -84,9 +84,9 @@ module.exports = function (app) {
             // model.followUpStatusIndicator =  model.getFollowUpStatusIndicator(model);
             /*model.dueDateStatusIndicator = model.generalStepElm.dueDate ? model.getDueDateStatusIndicator(model.generalStepElm.workFlowName,model.generalStepElm.dueDate) : null;*/
 
-            /*model.tagsIndicator = model.generalStepElm.tagsNO ? model.getTagsIndicator(model.generalStepElm.tagsNO) : null;
-            model.docTypeIndicator = model.generalStepElm.workFlowName ? model.getDocTypeIndicator(model.generalStepElm.workFlowName) : null;
-*/
+            /*model.tagsIndicator = model.generalStepElm.tagsNO ? model.getTagsIndicator(model.generalStepElm.tagsNO) : null;*/
+            model.docTypeIndicator = model.docClassName ? model.getDocTypeIndicator(model.docClassName) : null;
+
             //model.commentsIndicator = model.comments ? model.getCommentsIndicator(model.comments.length) : null;
 
             return model;
