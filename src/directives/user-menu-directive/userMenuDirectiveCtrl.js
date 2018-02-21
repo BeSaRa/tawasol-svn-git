@@ -87,7 +87,7 @@ module.exports = function (app) {
         self.userPreferences = function ($event) {
             applicationUserService
                 .controllerMethod
-                .manageUserPreference(null, 'basic', $event)
+                .manageUserPreference(null, 'general', $event)
         };
         /**
          * @description switch organization

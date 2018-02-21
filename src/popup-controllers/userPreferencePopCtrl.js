@@ -202,7 +202,7 @@ module.exports = function (app) {
          * @description Contains the selected tab name
          * @type {string}
          */
-        self.selectedTab = selectedTab ? selectedTab : "basic";
+        self.selectedTab = selectedTab ? selectedTab : "general";
         self.requestForApprove = (selectedTab === 'signature');
         /**
          * @description Set the current tab name

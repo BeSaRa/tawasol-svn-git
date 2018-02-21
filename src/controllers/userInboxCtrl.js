@@ -276,6 +276,7 @@ module.exports = function (app) {
         self.createReplyIncoming = function (userInbox, $event) {
             //console.log("createReplyIncoming" , userInbox);
             var info = userInbox.getInfo();
+            dialog.hide();
             $state.go('app.outgoing.add', {workItem: info.wobNumber, action: 'reply'});
         };
 

@@ -208,5 +208,13 @@ module.exports = function (app) {
                     return self.checkContentFile([result.file]);
                 })
         };
+
+        self.showEditContentInEditPopup = function(){
+           return (self.fromDialog && !self.document.getInfo().isPaper && self.document.contentSize) && !self.editAfterApproved;
+        };
+
+        self.openEditContentInEditPopup = function(){
+            return correspondenceService.viewCorrespondence(self.document,[]);
+        };
     });
 };
