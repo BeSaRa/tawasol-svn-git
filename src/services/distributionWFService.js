@@ -18,10 +18,17 @@ module.exports = function (app) {
 
         self.registryOrganizations = [];
 
-        self.organizationalUnits = [];
+        self.organizationGroups = [];
 
         self.workflowGroups = [];
 
+        function _emptyDistributionWFData() {
+            _.map(self, function (item, index) {
+                if (angular.isArray(item)) {
+                    self[index] = [];
+                }
+            });
+        }
 
         // all favorites segment urls.
         self.favoriteUrlMap = {
@@ -56,12 +63,12 @@ module.exports = function (app) {
 
         self.organizationsMap = {
             registry: {
-                url: null,
+                url: urlService.distributionWFREGOrganization,
                 property: 'registryOrganizations'
             },
             organizations: {
-                url: null,
-                property: 'organizationalUnits'
+                url: urlService.distributionWFOrganization,
+                property: 'organizationGroups'
             }
         };
         /**
@@ -76,6 +83,15 @@ module.exports = function (app) {
             });
         };
         /**
+         * @description to user it on demand.
+         * @param name
+         * @param force
+         * @returns {Promise}
+         */
+        self.getDistWorkflowUsers = function (name, force) {
+            return !force && self[self.usersMap[name].property].length ? $q.when(self[self.usersMap[name].property]) : self.loadDistWorkflowUsers(name);
+        };
+        /**
          * @description load dist
          * @param name
          */
@@ -85,12 +101,40 @@ module.exports = function (app) {
             });
         };
         /**
+         * @description to use it for on demand
+         * @param name
+         * @param force
+         * @returns {Promise}
+         */
+        self.getDistWorkflowOrganizations = function (name, force) {
+            return !force && self[self.organizationsMap[name].property].length ? $q.when(self[self.organizationsMap[name].property]) : self.loadDistWorkflowOrganizations(name);
+        };
+        /**
          * @description load dist workflow Groups
          */
         self.loadDistWorkflowGroups = function () {
             return $http.get(urlService.distributionWFGroups).then(function (result) {
                 return self.workflowGroups = generator.interceptReceivedCollection('WFGroup', _.map(result.data.rs, 'wfgroup'));
             })
+        };
+        /**
+         * @description to use it for on demand.
+         * @param force
+         * @returns {Promise}
+         */
+        self.getDistWorkflowGroups = function (force) {
+            return !force && self.workflowGroups.length ? $q.when(self.workflowGroups) : self.loadDistWorkflowGroups();
+        };
+        /**
+         * @description load sender information to prepare reply.
+         * @param workItem
+         */
+        self.loadSenderUserForWorkItem = function (workItem) {
+            var info = workItem.getInfo();
+            return $http.get(urlService.distributionWFSender.replace('{wobNum}', info.wobNumber))
+                .then(function (result) {
+                    return generator.generateInstance(result.data.rs, WFUser);
+                });
         };
 
         /**
@@ -150,7 +194,7 @@ module.exports = function (app) {
          * @param searchCriteria
          */
         self.searchUsersByCriteria = function (searchCriteria) {
-            return $http.post(urlService.distributionWF + '/search', searchCriteria)
+            return $http.post(urlService.distributionWF + '/search', generator.interceptSendInstance('UserSearchCriteria', searchCriteria))
                 .then(function (result) {
                     return generator.interceptReceivedCollection('WFUser', generator.generateCollection(result.data.rs, WFUser));
                 });
@@ -237,6 +281,7 @@ module.exports = function (app) {
                     return workflowItems;
                 });
         };
+
         /**
          * @description start launch distribution workflow.
          * @param distributionWF
@@ -251,6 +296,7 @@ module.exports = function (app) {
             return $http
                 .post(info.isWorkItem() ? workItemUrl.join('/') : correspondenceUrl.join('/'), generator.interceptSendInstance('DistributionWF', distributionWF))
                 .then(function (result) {
+                    _emptyDistributionWFData();
                     return result.data.rs;
                 })
         };
@@ -272,9 +318,88 @@ module.exports = function (app) {
                 }),
                 second: generator.interceptSendInstance('DistributionWF', distributionWF)
             }).then(function (result) {
+                _emptyDistributionWFData();
                 return result.data.rs;
-            })
-        }
+            });
+        };
+        // tabs links
+        self.tabsLinks = {
+            users: {
+                defaultReturn: [],
+                onDemand: false
+            },
+            favorites: {
+                defaultReturn: [],
+                onDemand: false
+            },
+            private_users: {
+                defaultReturn: [],
+                onDemand: true,
+                method: self.loadDistWorkflowUsers,
+                name: 'privates',
+                property: 'privateUsers'
+            },
+            manager_users: {
+                defaultReturn: [],
+                onDemand: true,
+                method: self.loadDistWorkflowUsers,
+                name: 'managers',
+                property: 'managerUsers'
+            },
+            heads_of_government_entities: {
+                defaultReturn: [],
+                onDemand: true,
+                method: self.loadDistWorkflowUsers,
+                name: 'heads',
+                property: 'governmentEntitiesHeads'
+            },
+            workflow_groups: {
+                defaultReturn: [],
+                onDemand: true,
+                method: self.loadDistWorkflowGroups,
+                name: null,
+                property: 'workflowGroups'
+            },
+            organizational_unit_mail: {
+                defaultReturn: [],
+                onDemand: true,
+                method: self.loadDistWorkflowOrganizations,
+                name: 'organizations',
+                property: 'organizationGroups'
+            },
+            registry_organizations: {
+                defaultReturn: [],
+                onDemand: true,
+                method: self.loadDistWorkflowOrganizations,
+                name: 'registry',
+                property: 'registryOrganizations'
+            }
+        };
+        /**
+         * @description load content for given tab.
+         * @param tab
+         */
+        self.loadTabContent = function (tab) {
+            if (!self.tabsLinks[tab].onDemand)
+                return $timeout(function () {
+                    return {
+                        onDemand: false,
+                        data: null
+                    }
+                });
+
+            return self
+                .tabsLinks[tab]
+                .method(self.tabsLinks[tab].name)
+                .then(function (result) {
+                    return {
+                        onDemand: true,
+                        property: self.tabsLinks[tab].property,
+                        data: result
+                    }
+                });
+        };
+
 
     });
 };

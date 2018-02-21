@@ -49,10 +49,6 @@ module.exports = function (app) {
                     .setProxyInfo(user.proxyInfo);
             };
 
-            DistributionUserWFItem.prototype.getTranslatedName = function () {
-                return this[langService.current + 'Name'];
-            };
-
             DistributionUserWFItem.prototype.setToUserDomain = function (toUserDomain) {
                 this.toUserDomain = toUserDomain;
                 return this;
@@ -70,14 +66,6 @@ module.exports = function (app) {
                 return this;
             };
 
-            DistributionUserWFItem.prototype.getFullNameByKey = function (langKey) {
-                return this[langKey.toLowerCase() + 'Name'];
-            };
-
-            DistributionUserWFItem.prototype.getTranslatedOrganizationName = function () {
-                return this[langService.current + 'OUName'];
-            };
-
             DistributionUserWFItem.prototype.getDomainName = function () {
                 return this.toUserDomain;
             };
@@ -93,6 +81,10 @@ module.exports = function (app) {
 
             DistributionUserWFItem.prototype.isUserOutOfOffice = function () {
                 return this.proxyInfo && this.proxyInfo.outOfOffice && this.proxyInfo.proxyEndDate > Date.now();
+            };
+
+            DistributionUserWFItem.prototype.getTranslatedOrganizationName = function () {
+                return this[langService.current + 'OUName'];
             };
             /**
              * @description to check if given user the same user or not
@@ -121,8 +113,14 @@ module.exports = function (app) {
                 })
             };
 
+            DistributionUserWFItem.prototype.isDepartment = function () {
+                return false;
+            };
             DistributionUserWFItem.prototype.isUser = function () {
                 return true;
+            };
+            DistributionUserWFItem.prototype.isGroup = function () {
+                return false;
             };
 
             DistributionUserWFItem.prototype.mapSend = function () {
@@ -135,6 +133,14 @@ module.exports = function (app) {
                 delete this.gridName;
                 this.action = this.action.hasOwnProperty('id') ? this.action.id : this.action;
                 return this;
+            };
+            /**
+             * @description to check if the distWorkflowItem is same.
+             * @param distWorkflowItem
+             * @returns {boolean}
+             */
+            DistributionUserWFItem.prototype.isSameWorkflowItem = function (distWorkflowItem) {
+                return distWorkflowItem.isUser() ? this.isSameUser(distWorkflowItem) : false;
             };
 
             // don't remove CMSModelInterceptor from last line

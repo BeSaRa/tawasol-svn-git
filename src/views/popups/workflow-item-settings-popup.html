@@ -10,7 +10,8 @@
                     <div layout="row">
                         <md-input-container flex>
                             <label for="action">{{lang.select_action}}</label>
-                            <md-select required id="action" name="action" ng-model="ctrl.distWorkflowItem.action">
+                            <md-select required id="action" ng-model-options="{trackBy:'$value.id'}" name="action"
+                                       ng-model="ctrl.distWorkflowItem.action">
                                 <md-option ng-value="action" ng-repeat="action in ctrl.workflowActions">
                                     {{action.getTranslatedName()}}
                                 </md-option>
@@ -40,11 +41,8 @@
                     <div layout="row">
                         <md-input-container flex>
                             <label for="comments"> {{lang.type_your_comment}}</label>
-                            <textarea rows="5" id="comments" name="comments" required
+                            <textarea rows="5" id="comments" name="comments"
                                       ng-model="ctrl.distWorkflowItem.comments"></textarea>
-                            <div ng-messages="distWorkflowItem_form.comments.$error">
-                                <div ng-message="required">{{lang.field_required}}</div>
-                            </div>
                         </md-input-container>
                     </div>
                 </form>

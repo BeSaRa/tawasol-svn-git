@@ -1,0 +1,102 @@
+module.exports = function (app) {
+    app.controller('selectedWorkflowItemsDirectiveCtrl', function ($scope, _, dialog, cmsTemplate, langService, DistributionWFItem, LangWatcher) {
+        'ngInject';
+        var self = this;
+        self.controllerName = 'selectedWorkflowItemsDirectiveCtrl';
+        LangWatcher($scope);
+        // workflowItems users , organizations , workflowGroups
+        self.workflowItems = [];
+        // selected workflow items
+        self.selectedWorkflowItems = [];
+
+        self.defaultWorkflowItemsSettings = new DistributionWFItem();
+
+        /**
+         * @description to check all items has actions
+         * @param items
+         * @returns {boolean}
+         * @private
+         */
+        function _allActionsSelected(items) {
+            return !_.some(items, function (item) {
+                return !item.isWFComplete();
+            });
+        }
+
+        function _setDistWorkflowItem(distWorkflowItem, result) {
+            distWorkflowItem
+                .setDueDate(result.dueDate)
+                .setComments(result.comments)
+                .setAction(result.action);
+        }
+
+        /**
+         * @description get translated key name to use it in orderBy.
+         * @returns {string}
+         */
+        self.getTranslatedKey = function () {
+            return langService.current === 'ar' ? 'arName' : 'enName';
+        };
+        /**
+         * check all items complete
+         * @returns {number|*}
+         */
+        self.checkAllComplete = function () {
+            return self.workflowItems.length && _allActionsSelected(self.workflowItems);
+        };
+        /**
+         * delete workflowItem
+         * @param workflowItem
+         * @param $event
+         */
+        self.deleteWorkflowItem = function (workflowItem, $event) {
+            self.workflowItems = _.filter(self.workflowItems, function (item) {
+                return !workflowItem.isSameWorkflowItem(item)
+            });
+        };
+        /**
+         * @description delete bulk selected
+         * @param $event
+         */
+        self.deleteSelectedBulk = function ($event) {
+            _.map(self.selectedWorkflowItems, function (item) {
+                self.deleteWorkflowItem(item);
+            });
+            // make selected again empty array.
+            self.selectedWorkflowItems = [];
+        };
+        self.workflowItemSettingDialog = function (dialogTitle, distWorkflowItem, $event) {
+            return dialog.showDialog({
+                template: cmsTemplate.getPopup('workflow-item-settings'),
+                controller: 'workflowItemSettingPopCtrl',
+                controllerAs: 'ctrl',
+                targetEvent: $event,
+                locals: {
+                    comments: self.workflowComments,
+                    workflowActions: self.workflowActions,
+                    dialogTitle: dialogTitle,
+                    distWorkflowItem: distWorkflowItem
+                }
+            })
+        };
+        self.setBulkWorkflowItemSettings = function ($event) {
+            return self
+                .workflowItemSettingDialog(langService.get('set_default_workflow_attributes'), self.defaultWorkflowItemsSettings, $event)
+                .then(function (result) {
+                    _setDistWorkflowItem(self.defaultWorkflowItemsSettings, result);
+                    _.map(self.workflowItems, function (item, index) {
+                        _setDistWorkflowItem(self.workflowItems[index], result);
+                    });
+                });
+        };
+
+        self.setWorkflowItemSettings = function (workflowItem, $event) {
+            return self
+                .workflowItemSettingDialog((langService.get('workflow_properties') + ' ' + workflowItem.getTranslatedName()), workflowItem, $event)
+                .then(function (result) {
+                    _setDistWorkflowItem(workflowItem, result);
+                });
+        };
+
+    });
+};

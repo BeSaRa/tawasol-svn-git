@@ -1207,37 +1207,51 @@ module.exports = function (app) {
                         favoritesOrganizations: function (distributionWFService) {
                             'ngInject';
                             return distributionWFService.loadFavorites('organizations');
-                        },
+                        }, /*
                         distUsers: function (distributionWFService) {
                             'ngInject';
                             return distributionWFService.loadWorkflowUsers();
-                        },
+                        },*/
                         comments: function (userCommentService) {
                             'ngInject';
                             return userCommentService.getUserComments()
                                 .then(function (result) {
                                     return _.filter(result, 'status');
                                 });
-                        },
+                        }, /*
                         privateUsers: function (distributionWFService) {
                             'ngInject';
                             return distributionWFService.loadDistWorkflowUsers('privates');
-                        },
+                        },*//*
                         managers: function (distributionWFService) {
                             'ngInject';
                             return distributionWFService.loadDistWorkflowUsers('managers');
-                        },
+                        }*//*,
                         governmentEntities: function (distributionWFService) {
                             'ngInject';
                             return distributionWFService.loadDistWorkflowUsers('heads');
-                        },
+                        },*/
                         workflowActions: function (workflowActionService) {
                             'ngInject';
                             return workflowActionService.loadCurrentUserWorkflowActions();
-                        },
+                        }/*,
                         workflowGroups: function (distributionWFService) {
                             return distributionWFService.loadDistWorkflowGroups();
+                        }*/,
+                        organizationGroups: function (distributionWFService) {
+                            'ngInject';
+                            return distributionWFService.loadDistWorkflowOrganizations('registry')
+                        },
+                        replyOn: function (distributionWFService, $timeout) {
+                            'ngInject';
+                            if (angular.isArray(correspondence) || !correspondence.getInfo().isWorkItem() || action !== 'reply') {
+                                return $timeout(function () {
+                                    return false;
+                                })
+                            }
+                            return distributionWFService.loadSenderUserForWorkItem(correspondence)
                         }
+
                     }
                 });
         };

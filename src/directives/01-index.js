@@ -62,7 +62,8 @@ module.exports = function (app) {
     require('./localization-module-converter-directive/01-index')(app);
     require('./current-tab-label-directive/01-index')(app);
     require('./vertical-menu-workflow-item-directive/01-index')(app);
-    require('./workflow-selected-users-directive/01-index')(app);
+    require('./selected-workflow-items-directive/01-index')(app);
     require('./workflow-users-directive/01-index')(app);
     require('./organization-node-directive/01-index')(app);
+    require('./workflow-items-directive/01-index')(app);
 };

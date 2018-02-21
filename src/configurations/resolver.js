@@ -275,7 +275,7 @@ module.exports = function (app) {
                 }
             })
             .bulkResolveToState('app.inbox.group-inbox', {
-                groupInboxWorkItems : function (correspondenceService) {
+                workItems: function (correspondenceService) {
                     return correspondenceService.loadGroupInbox();
                 }
             })

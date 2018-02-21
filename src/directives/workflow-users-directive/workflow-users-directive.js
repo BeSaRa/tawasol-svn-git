@@ -26,7 +26,9 @@ module.exports = function (app) {
                 callbackSetSettingsToDistWorkflowItem: '=',
                 callbackAddSelectedUserToGrid: '=',
                 callbackAddSelectedUserWithIgnoreToGrid: '=',
-                callbackDeleteFromSelected: '='
+                callbackDeleteFromSelected: '=',
+                workflowActions: '=',
+                workflowComments: '='
             }
         }
     });

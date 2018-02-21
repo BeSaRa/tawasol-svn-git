@@ -202,9 +202,9 @@ module.exports = function (app) {
          * @description Terminate User Inbox Item
          * @param userInbox
          * @param $event
+         * @param defer
          */
         self.terminate = function (userInbox, $event, defer) {
-            console.log(userInbox);
             userInboxService
                 .controllerMethod
                 .userInboxTerminate(userInbox, $event)
@@ -287,26 +287,26 @@ module.exports = function (app) {
          * @param defer
          */
         self.forward = function (userInbox, $event, defer) {
-            // userInbox.launchWorkFlow($event, 'forward', 'favorites')
-            //     .then(function () {
-            //         self.reloadUserInboxes(self.grid.page)
-            //             .then(function () {
-            //                 new ResolveDefer(defer);
-            //             });
-            //     });
-            distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(userInbox.generalStepElm, true, false, null, userInbox.generalStepElm.workFlowName, $event)
+            userInbox.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
-                    dialog.hide();
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
                         });
-                })
-                .catch(function () {
-                    self.reloadUserInboxes(self.grid.page);
                 });
+            // distributionWorkflowService
+            //     .controllerMethod
+            //     .distributionWorkflowSend(userInbox.generalStepElm, true, false, null, userInbox.generalStepElm.workFlowName, $event)
+            //     .then(function () {
+            //         dialog.hide();
+            //         self.reloadUserInboxes(self.grid.page)
+            //             .then(function () {
+            //                 new ResolveDefer(defer);
+            //             });
+            //     })
+            //     .catch(function () {
+            //         self.reloadUserInboxes(self.grid.page);
+            //     });
         };
 
         /**

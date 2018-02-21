@@ -26,6 +26,12 @@ module.exports = function (app) {
             DistributionOUWFItem.prototype.isDepartment = function () {
                 return true;
             };
+            DistributionOUWFItem.prototype.isUser = function () {
+                return false;
+            };
+            DistributionOUWFItem.prototype.isGroup = function () {
+                return false;
+            };
             DistributionOUWFItem.prototype.mapFromWFOrganization = function (organization) {
                 return this
                     .setRelationId(organization.relationId)
@@ -53,6 +59,14 @@ module.exports = function (app) {
                 delete this.gridName;
                 this.action = this.action.hasOwnProperty('id') ? this.action.id : this.action;
                 return this;
+            };
+            /**
+             * @description to check if the distWorkflowItem is same.
+             * @param distWorkflowItem
+             * @returns {boolean}
+             */
+            DistributionOUWFItem.prototype.isSameWorkflowItem = function (distWorkflowItem) {
+                return distWorkflowItem.isDepartment() ? this.isSameDepartment(distWorkflowItem) : false;
             };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

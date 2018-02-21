@@ -546,6 +546,7 @@ md-tabs {
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .12);
   }
 }
+
 /* BESARA-CAHNGES */
 /********** organization chart ********/
 .block-content {
@@ -1743,4 +1744,16 @@ tr.default-theme:hover {
 
 table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child(n+2), table.md-table.md-row-select th.md-column.no-padding:nth-child(n+3):nth-last-child(n+2) {
   padding: 0 !important;
+}
+
+.mt16 {
+  margin-top: 16px !important;
+}
+
+.normal-case {
+  text-transform: none !important;
+}
+
+.red-color {
+  color: red !important;
 }

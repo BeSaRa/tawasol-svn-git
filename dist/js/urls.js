@@ -153,6 +153,12 @@
                 .addToAllWithBase('distributionWFManagers', '/cms-entity/admin/ou-application-user/dist/managers')
                 // workflow groups for distribution workflow.
                 .addToAllWithBase('distributionWFGroups', 'cms-entity/admin/user-wf-group/user/active')
+                // dist workflow reg ou
+                .addToAllWithBase('distributionWFREGOrganization', '/cms-entity/admin/ou/dist/reg-ous')
+                // dist workflow normal ou
+                .addToAllWithBase('distributionWFOrganization', '/cms-entity/admin/ou/dist/ous')
+                // get sender information to reply.
+                .addToAllWithBase('distributionWFSender', 'cms-entity/user/inbox/{wobNum}/reply')
                 /*// search outgoing
                 .addToAllWithBase('searchOutgoings', '/cms-entity/correspondence/search')
                 // search incoming

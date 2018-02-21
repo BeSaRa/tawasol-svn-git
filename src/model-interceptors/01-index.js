@@ -81,4 +81,5 @@ module.exports = function (app) {
     require('./FavOrganizationInterceptor')(app);
     require('./FavUserInterceptor')(app);
     require('./DistributionWFInterceptor')(app);
+    require('./UserSearchCriteriaInterceptor')(app);
 };

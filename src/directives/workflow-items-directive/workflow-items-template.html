@@ -1,0 +1,192 @@
+<div layout="row">
+    <md-card layout="column" flex class="card-overlay">
+        <md-table-container>
+            <table md-table ng-model="ctrl.selectedWorkflowItems"
+                   md-row-select="true"
+                   multiple="ctrl.multiSelect">
+                <thead md-head md-order="ctrl.grid.order">
+                <tr md-row>
+                    <th md-column class="no-padding" ng-if="ctrl.allowFavorites">
+                        <md-button
+                                ng-if="ctrl.excludeSelected && ctrl.allowFavorites"
+                                ng-disabled="self.bulkActionStatus || !(ctrl.workflowItems | filter: ctrl.runItemNotExists).length"
+                                class="md-icon-button"
+                                ng-click="ctrl.callbackToggleBulkFavorites(ctrl.workflowItems, ctrl.gridType)">
+                            <md-icon class="star-yellow"
+                                     md-svg-icon="{{ctrl.callbackAllInFavorites(ctrl.workflowItems) ? 'star' :  'star-outline' }}"></md-icon>
+                        </md-button>
+                        <md-button ng-if="!ctrl.excludeSelected && ctrl.allowFavorites"
+                                   ng-disabled="self.bulkActionStatus || !ctrl.workflowItems.length"
+                                   class="md-icon-button"
+                                   ng-click="ctrl.callbackToggleBulkFavorites(ctrl.workflowItems, ctrl.gridType)">
+                            <md-icon class="star-yellow"
+                                     md-svg-icon="{{ctrl.callbackAllInFavorites(ctrl.workflowItems) ? 'star' :  'star-outline' }}"></md-icon>
+                        </md-button>
+                    </th>
+                    <th colspan="3" ng-if="ctrl.selectedWorkflowItems.length" md-column>
+                        <span>{{ctrl.selectedWorkflowItems.length}} {{lang.items_selected}} </span>
+                    </th>
+                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length" md-order-by="arName">
+                        {{lang.arabic_name}}
+                    </th>
+                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length" md-order-by="enName">
+                        {{lang.english_name}}
+                    </th>
+                    <th ng-if="!ctrl.selectedWorkflowItems.length" md-column>
+                        {{lang.action}}
+                    </th>
+                    <th md-column>
+                        <div layout="row">
+                            <div>
+                                <md-button class="md-icon-button"
+                                           ng-click="ctrl.setBulkWorkflowItemSettings($event)">
+                                    <md-icon md-svg-icon="settings-box"></md-icon>
+                                </md-button>
+                            </div>
+                            <vertical-menu-workflow-item-directive
+                                    display="ctrl.allInSelected(ctrl.selectedWorkflowItems) && ctrl.selectedWorkflowItems.length"
+                                    callback="ctrl.addBulkWorkflowItems"
+                                    display-button="true"
+                                    item="ctrl.selectedWorkflowItems"
+                                    release="ctrl.selectedWorkflowItems"
+                                    ignore-callback="ctrl.runAddSelectedUsersWithIgnoreToGrid"></vertical-menu-workflow-item-directive>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr ng-if="ctrl.excludeSelected" md-row md-select="workflowItem"
+                    ng-repeat="workflowItem in ctrl.workflowItems | filter:ctrl.runItemNotExists |limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
+                    <td md-cell ng-if="ctrl.allowFavorites" class="no-padding">
+                        <md-button ng-click="ctrl.runToggleFav(workflowItem)"
+                                   class="md-icon-button">
+                            <md-icon
+                                    class="star-yellow"
+                                    md-svg-icon="{{workflowItem.isFavorite() ? 'star' : 'star-outline'}}"></md-icon>
+                        </md-button>
+                    </td>
+                    <td md-cell>
+                                                <span md-highlight-text="ctrl.workflowItemsCriteria.arName"
+                                                      md-highlight-flags="i">{{workflowItem.getFullNameByKey('ar')}}</span>
+                    </td>
+                    <td md-cell>
+                                                <span md-highlight-text="ctrl.workflowItemsCriteria.enName"
+                                                      md-highlight-flags="i">{{workflowItem.getFullNameByKey('en')}}</span>
+                    </td>
+                    <td md-cell>
+                        <md-menu-bar class="no-padding">
+                            <md-menu>
+                                <md-button class="normal-case m0" ng-click="$mdMenu.open()">
+                                    <span ng-class="{'red-color':!workflowItem.isWFComplete()}">{{workflowItem.isWFComplete() ? workflowItem.action.getTranslatedName() : workflowItem.getActionMessage()}}</span>
+                                </md-button>
+                                <md-menu-content>
+                                    <md-menu-item ng-repeat="action in ctrl.workflowActions track by $index">
+                                        <md-button ng-click="workflowItem.setAction(action)">
+                                            {{action.getTranslatedName()}}
+                                        </md-button>
+                                    </md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+                        </md-menu-bar>
+                    </td>
+                    <td md-cell>
+                        <div layout="row">
+                            <div>
+                                <md-button
+                                        class="md-icon-button"
+                                        ng-click="ctrl.setWorkflowItemSettings(workflowItem,$event)">
+                                    <md-icon md-svg-icon="settings-box"></md-icon>
+                                </md-button>
+                            </div>
+                            <vertical-menu-workflow-item-directive
+                                    display="true"
+                                    callback="ctrl.addWorkflowItem"
+                                    display-button="true"
+                                    item="workflowItem"
+                                    release="ctrl.selectedWorkflowItems"
+                                    ignore-callback="ctrl.runAddSelectedUserWithIgnoreToGrid"></vertical-menu-workflow-item-directive>
+                        </div>
+                    </td>
+                </tr>
+                <tr ng-if="!ctrl.excludeSelected" ng-class="{'default-theme':!ctrl.runItemNotExists(workflowItem)}"
+                    md-row
+                    md-select="workflowItem"
+                    ng-repeat="workflowItem in ctrl.workflowItems |limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
+                    <td md-cell ng-if="ctrl.allowFavorites" class="no-padding">
+                        <md-button ng-click="ctrl.runToggleFav(workflowItem)"
+                                   class="md-icon-button">
+                            <md-icon
+                                    class="star-yellow"
+                                    md-svg-icon="{{workflowItem.isFavorite() ? 'star' : 'star-outline'}}"></md-icon>
+                        </md-button>
+                    </td>
+                    <td md-cell>
+                                                <span md-highlight-text="ctrl.workflowItemsCriteria.arName"
+                                                      md-highlight-flags="i">{{workflowItem.getFullNameByKey('ar')}}</span>
+                    </td>
+                    <td md-cell>
+                                                <span md-highlight-text="ctrl.workflowItemsCriteria.enName"
+                                                      md-highlight-flags="i">{{workflowItem.getFullNameByKey('en')}}</span>
+                    </td>
+                    <td md-cell>
+                        <md-menu-bar class="no-padding">
+                            <md-menu>
+                                <md-button class="normal-case m0" ng-click="$mdMenu.open()">
+                                    <span ng-class="{'red-color':!workflowItem.isWFComplete()}">{{workflowItem.isWFComplete() ? workflowItem.action.getTranslatedName() : workflowItem.getActionMessage()}}</span>
+                                </md-button>
+                                <md-menu-content>
+                                    <md-menu-item ng-repeat="action in ctrl.workflowActions track by $index">
+                                        <md-button ng-click="workflowItem.setAction(action)">
+                                            {{action.getTranslatedName()}}
+                                        </md-button>
+                                    </md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+                        </md-menu-bar>
+                    </td>
+                    <td md-cell>
+                        <div layout="row">
+                            <div>
+                                <md-button
+                                        class="md-icon-button"
+                                        ng-click="ctrl.setWorkflowItemSettings(workflowItem,$event)">
+                                    <md-icon md-svg-icon="settings-box"></md-icon>
+                                </md-button>
+                            </div>
+                            <div ng-if="!ctrl.runItemNotExists(workflowItem)">
+                                <md-button
+                                        class="md-icon-button"
+                                        ng-click="ctrl.deleteWorkflowItem(workflowItem,$event)">
+                                    <md-icon md-svg-icon="delete"></md-icon>
+                                </md-button>
+                            </div>
+                            <vertical-menu-workflow-item-directive
+                                    ng-if="ctrl.runItemNotExists(workflowItem)"
+                                    display="true"
+                                    callback="ctrl.addWorkflowItem"
+                                    display-button="true"
+                                    item="workflowItem"
+                                    release="ctrl.selectedWorkflowItems"
+                                    ignore-callback="ctrl.runAddSelectedUserWithIgnoreToGrid"></vertical-menu-workflow-item-directive>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <md-table-pagination
+                    ng-if="!ctrl.excludeSelected"
+                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                    md-limit-options="ctrl.grid.limitOptions"
+                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                    md-total="{{ctrl.workflowItems.length}}" md-page-select>
+            </md-table-pagination>
+            <md-table-pagination
+                    ng-if="ctrl.excludeSelected"
+                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                    md-limit-options="ctrl.grid.limitOptions"
+                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                    md-total="{{(ctrl.workflowItems  | filter:ctrl.runItemNotExists).length}}" md-page-select>
+            </md-table-pagination>
+        </md-table-container>
+    </md-card>
+</div>

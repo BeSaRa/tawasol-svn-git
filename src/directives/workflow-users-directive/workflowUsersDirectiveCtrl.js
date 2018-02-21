@@ -10,6 +10,7 @@ module.exports = function (app) {
          * @param type
          */
         self.runToggleBulkFavorites = function (selected, type) {
+            debugger;
             self.callbackToggleBulkFavorites(selected, type);
         };
 
@@ -53,8 +54,8 @@ module.exports = function (app) {
             return self.callbackAddSelectedUserWithIgnoreToGrid(item, $event);
         };
 
-        self.runDeleteFromSelected = function (gridName, workItem, $event) {
-            return self.callbackDeleteFromSelected(gridName, workItem, $event);
+        self.runDeleteFromSelected = function (workItem, $event) {
+            return self.callbackDeleteFromSelected(workItem, $event);
         };
 
     });

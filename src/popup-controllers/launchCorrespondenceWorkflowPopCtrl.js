@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                                     toast,
                                                                     cmsTemplate,
                                                                     _,
+                                                                    replyOn,
                                                                     actionKey,
                                                                     multi,
                                                                     tableGeneratorService,
@@ -71,7 +72,6 @@ module.exports = function (app) {
             return approvedStatus;
         }
 
-
         // cannot_send_to_multi
         self.actionKey = actionKey;
         // selected_document_has_not_approved_document
@@ -83,7 +83,7 @@ module.exports = function (app) {
         // current correspondence or workItem
         self.correspondence = correspondence;
         // current selected tab
-        self.selectedTab = selectedTab || 'users';
+        self.selectedTab = /*selectedTab || */'users';
         // current sidebar status
         self.sidebarStatus = true;
         // full screen status
@@ -94,10 +94,7 @@ module.exports = function (app) {
         self.comments = comments;
         // all current user workflow actions
         self.workflowActions = workflowActions;
-        // users search criteria
-        self.usersCriteria = new UserSearchCriteria({
-            ou: employeeService.getEmployee().getOUID()
-        });
+
         self.favoritesTypes = {
             users: {
                 map: _mapWFUser,
@@ -126,12 +123,20 @@ module.exports = function (app) {
         // all workflow groups
         self.workflowGroups = _mapWFGroup(distributionWFService.workflowGroups);
         // all registry organizations
-        self.registryOrganizations = [];
+        self.registryOrganizations = _mapWFOrganization(distributionWFService.registryOrganizations, 'OUReg');
         // all organizations for organization mail unit
-        self.organizationalUnits = [];
+        self.organizationGroups = _mapWFOrganization(distributionWFService.organizationGroups, 'OUGroup');
+        // users search criteria
+        self.usersCriteria = new UserSearchCriteria({
+            ou: self.organizationGroups.length ? _.find(self.organizationGroups, function (item) {
+                console.log(item.toOUId, employeeService.getEmployee().getOUID());
+                return item.toOUId === employeeService.getEmployee().getOUID()
+            }) : employeeService.getEmployee().getOUID(),
+            hide: !self.organizationGroups.length
+        });
 
-        // selected users
-        self.selectedUsers = [];
+        // selected workflowItems
+        self.selectedWorkflowItems = [];
 
         // grid options for all grids
         self.grid = {
@@ -265,7 +270,7 @@ module.exports = function (app) {
                 show: true,
                 disabled: _getApprovedStatus(),
                 modelName: 'workflowGroups'
-            },
+            }, /*,
             organizational_unit_mail: {
                 lang: 'workflow_menu_item_registry_organizational_unit_mail',
                 icon: 'contact-mail',
@@ -273,7 +278,7 @@ module.exports = function (app) {
                 disabled: _getApprovedStatus(),
                 modelName: 'organizationalUnits'
 
-            },
+            },*/
             registry_organizations: {
                 lang: 'workflow_menu_item_registry_organizations',
                 icon: 'bank',
@@ -287,34 +292,6 @@ module.exports = function (app) {
 
         // distribution workflow
         self.distributionWF = new DistributionWF();
-        // selected Grids
-        self.selectedGrids = {
-            users: {
-                selected: [],
-                collection: [],
-                defaultSettings: new DistributionWFItem(),
-                langKey: 'selected_users'
-            },
-            workflowGroups: {
-                selected: [],
-                collection: [],
-                defaultSettings: new DistributionWFItem(),
-                langKey: 'workflow_groups'
-            },
-            organizations: {
-                selected: [],
-                collection: [],
-                defaultSettings: new DistributionWFItem(),
-                langKey: 'organizations_registry'
-            },
-            organizationGroups: {
-                selected: [],
-                collection: [],
-                defaultSettings: new DistributionWFItem(),
-                langKey: 'organizations_group'
-            }
-        };
-
         // for all selected grids
         self.gridSelected = {
             users: {
@@ -355,40 +332,55 @@ module.exports = function (app) {
         // create default workflow item Settings for each tab
         _createDefaultWFItemTabs();
 
-
-        function _mapWFGroup(collection) {
+        /**
+         * @description map workflow Item to WorkflowGroup
+         * @param collection
+         * @param gridName
+         * @returns {Array}
+         * @private
+         */
+        function _mapWFGroup(collection, gridName) {
             return _.map(collection, function (workflowOrganization) {
-                return (new DistributionGroupWFItem()).mapFromWFGroup(workflowOrganization)
+                return (new DistributionGroupWFItem()).mapFromWFGroup(workflowOrganization).setGridName(gridName || null);
             });
         }
 
-        function _mapWFOrganization(collection) {
+        /**
+         * @description map workflow item to WFOrganization
+         * @param collection
+         * @param gridName
+         * @returns {Array}
+         * @private
+         */
+        function _mapWFOrganization(collection, gridName) {
             return _.map(collection, function (workflowOrganization) {
-                return (new DistributionOUWFItem()).mapFromWFOrganization(workflowOrganization)
+                return (new DistributionOUWFItem()).mapFromWFOrganization(workflowOrganization).setGridName(gridName || null);
             });
         }
 
         /**
          * @description map the WFUser to be dist user.
          * @param collection
+         * @param gridName
          * @returns {Array}
          * @private
          */
-        function _mapWFUser(collection) {
+        function _mapWFUser(collection, gridName) {
             return _.map(collection, function (workflowUser) {
-                return (new DistributionUserWFItem()).mapFromWFUser(workflowUser)
+                return (new DistributionUserWFItem()).mapFromWFUser(workflowUser).setGridName(gridName || null);
             });
         }
 
         /**
          * @description map ouApplicationUser
          * @param collection
+         * @param gridName
          * @returns {Array}
          * @private
          */
-        function _mapOUApplicationUser(collection) {
+        function _mapOUApplicationUser(collection, gridName) {
             return _.map(collection, function (ouApplicationUser) {
-                return (new DistributionUserWFItem()).mapOUApplicationUser(ouApplicationUser);
+                return (new DistributionUserWFItem()).mapOUApplicationUser(ouApplicationUser).setGridName(gridName || null);
             });
         }
 
@@ -434,7 +426,7 @@ module.exports = function (app) {
          */
         function _addUsersToSelectedGrid(users) {
             users = angular.isArray(users) ? users : [users];
-            self.selectedGrids.users.collection = self.selectedGrids.users.collection.concat(users);
+            self.selectedWorkflowItems = self.selectedWorkflowItems.concat(users);
         }
 
         /**
@@ -460,12 +452,12 @@ module.exports = function (app) {
 
         /**
          * @description to check if the user exists inside selected users or not.
-         * @param user
          * @private
+         * @param workflowItem
          */
-        function _userExists(user) {
-            return _.find(self.selectedGrids.users.collection, function (disWorkflowUserItem) {
-                return disWorkflowUserItem.isSameUser(user);
+        function _workflowItemExists(workflowItem) {
+            return _.find(self.selectedWorkflowItems, function (disWorkflowUserItem) {
+                return disWorkflowUserItem.isSameWorkflowItem(workflowItem);
             });
         }
 
@@ -501,7 +493,7 @@ module.exports = function (app) {
          */
         function _getUsersExistORNotFromSelectedGrid(users, exists) {
             return _.filter(users, function (user) {
-                return exists ? _userExists(user) : !_userExists(user);
+                return exists ? _workflowItemExists(user) : !_workflowItemExists(user);
             });
         }
 
@@ -540,37 +532,34 @@ module.exports = function (app) {
 
         /**
          * @description remove from selected grid for type user
-         * @param selected
          * @param distWorkflowItem
          * @private
          */
-        function _removeFromSelectedUser(selected, distWorkflowItem) {
-            self.selectedGrids[selected].collection = _.filter(self.selectedGrids[selected].collection, function (item) {
-                return !item.isSameUser(distWorkflowItem);
+        function _removeFromSelectedUser(distWorkflowItem) {
+            self.selectedWorkflowItems = _.filter(self.selectedWorkflowItems, function (item) {
+                return !item.isSameWorkflowItem(distWorkflowItem)
             });
         }
 
         /**
          * @description remove from selected grid for type department
-         * @param selected
          * @param distWorkflowItem
          * @private
          */
-        function _removeFromSelectedDepartment(selected, distWorkflowItem) {
-            self.selectedGrids[selected].collection = _.filter(self.selectedGrids[selected].collection, function (item) {
-                return item.toOUId === distWorkflowItem.toOUId;
+        function _removeFromSelectedDepartment(distWorkflowItem) {
+            self.selectedWorkflowItems = _.filter(self.selectedWorkflowItems, function (item) {
+                return !item.isSameWorkflowItem(distWorkflowItem);
             });
         }
 
         /**
          * @description remove from selected grid for type group
-         * @param selected
          * @param distWorkflowItem
          * @private
          */
-        function _removeFromSelectedGroup(selected, distWorkflowItem) {
-            self.selectedGrids[selected].collection = _.filter(self.selectedGrids[selected].collection, function (item) {
-                return item.wfGroupId === distWorkflowItem.wfGroupId;
+        function _removeFromSelectedGroup(distWorkflowItem) {
+            self.selectedWorkflowItems = _.filter(self.selectedWorkflowItems, function (item) {
+                return !item.isSameWorkflowItem(distWorkflowItem);
             });
         }
 
@@ -592,10 +581,16 @@ module.exports = function (app) {
             organization: _changeOrganizationFavStatus
         };
         // grids type
-        self.gridTypes = {
-            users: ['users', 'favoritesUsers'],
-            organizations: []
-        };
+        self.gridTypes = [
+            'users',
+            'favoriteUsers',
+            'favoriteOrganizations',
+            'privateUsers',
+            'managerUsers',
+            // 'governmentEntitiesHeads',
+            'registryOrganizations',
+            'organizationGroups'
+        ];
 
         /**
          * @description change relationId for organizations.
@@ -605,7 +600,7 @@ module.exports = function (app) {
          */
         function _changeRelationForOrganizations(collection, workflowItem) {
             _.map(collection, function (item, index) {
-                collection[index].isSameDepartment(workflowItem) ? collection[index].setRelationId(workflowItem.relationId) : null;
+                collection[index].isSameWorkflowItem(workflowItem) ? collection[index].setRelationId(workflowItem.relationId) : null;
             })
         }
 
@@ -617,7 +612,7 @@ module.exports = function (app) {
          */
         function _changeRelationForUsers(collection, workflowItem) {
             _.map(collection, function (item, index) {
-                if (collection[index].isSameUser(workflowItem)) {
+                if (collection[index].isSameWorkflowItem(workflowItem)) {
                     collection[index].setRelationId(workflowItem.relationId);
                 }
             })
@@ -627,7 +622,7 @@ module.exports = function (app) {
          * @description change
          * @private
          */
-        function _changeOrganizationFavStatus() {
+        function _changeOrganizationFavStatus(grids, workflowItems) {
             _.map(workflowItems, function (item) {
                 _.map(grids, function (grid) {
                     // for the mainGrids
@@ -638,14 +633,7 @@ module.exports = function (app) {
                     if (self.grid.hasOwnProperty(grid) && self.grid[grid].selected.length) {
                         _changeRelationForUsers(self.grid[grid].selected, item);
                     }
-                    // for main selected grids .
-                    if (self.selectedGrids.hasOwnProperty(grid) && self.selectedGrids[grid].collection.length) {
-                        _changeRelationForUsers(self.selectedGrids[grid].collection, item);
-                    }
-                    // for main selected grid selected.
-                    if (self.selectedGrids.hasOwnProperty(grid) && self.selectedGrids[grid].selected.length) {
-                        _changeRelationForUsers(self.selectedGrids[grid].selected, item);
-                    }
+                    _changeRelationForUsers(self.selectedWorkflowItems, item);
                 })
             })
         }
@@ -667,15 +655,7 @@ module.exports = function (app) {
                     if (self.grid.hasOwnProperty(grid) && self.grid[grid].selected.length) {
                         _changeRelationForUsers(self.grid[grid].selected, item);
                     }
-                    // for main selected grids.
-                    if (self.selectedGrids.hasOwnProperty(grid) && self.selectedGrids[grid].collection.length) {
-                        _changeRelationForUsers(self.selectedGrids[grid].collection, item);
-                    }
-                    // for main selected grid selected.
-                    if (self.selectedGrids.hasOwnProperty(grid) && self.selectedGrids[grid].selected.length) {
-                        _changeRelationForUsers(self.selectedGrids[grid].selected, item);
-                    }
-
+                    _changeRelationForUsers(self.selectedWorkflowItems, item);
                 })
             })
         }
@@ -692,19 +672,68 @@ module.exports = function (app) {
             self.changeFavStatus[type](grids, workflowItems);
         }
 
+        function _filterWFUsers(item) {
+            return item.isUser();
+        }
+
+        function _filterWFGroups(item) {
+            return item.isGroup();
+        }
+
+        function _filterWFRegDepartments(item) {
+            return item.gridName === 'OUReg';
+        }
+
+        function _filterWFDepartmentsGroup(item) {
+            return item.gridName === 'OUGroup';
+        }
+
         /**
          * @description close workflow dialog.
          */
         self.closeCorrespondenceWorkflow = function () {
             dialog.cancel();
         };
-
+        self.tabMapper = {
+            privateUsers: _mapWFUser,
+            managerUsers: _mapWFUser,
+            governmentEntitiesHeads: _mapWFUser,
+            workflowGroups: _mapWFGroup,
+            organizationGroups: _mapWFOrganization,
+            registryOrganizations: _mapWFOrganization
+        };
         /**
          * @description select clicked tab
          * @param tab
          */
         self.selectTab = function (tab) {
-            self.selectedTab = tab;
+            distributionWFService
+                .loadTabContent(tab)
+                .then(function (result) {
+                    console.log('result',result);
+                    var gridName = null;
+                    switch (result.property) {
+                        case 'registryOrganizations':
+                            gridName = 'OUReg';
+                            break;
+                        case 'organizationGroups':
+                            gridName = 'OUGroup';
+                            break;
+                        default:
+                            gridName = null;
+                    }
+
+                    if (result.onDemand) {
+                        self[result.property] = self.tabMapper[result.property](result.data, gridName);
+                        console.log(console.log('self.registryOrganizations', result.data, result.property, self.registryOrganizations));
+                    }
+                    self.selectedTab = tab;
+                })
+                .catch(function (error) {
+                    console.log("Error", error);
+                    console.log(error);
+                });
+
         };
         /**
          * @description toggle sidebar.
@@ -757,10 +786,11 @@ module.exports = function (app) {
                     } else {
                         _loadFavorites('organizations')
                     }
-                    _changeFavoritesStatus(self.gridTypes.users, workflowItem);
+                    _changeFavoritesStatus(self.gridTypes, workflowItem);
                     toast.success(langService.get(result.action ? 'add_to_favorites_success' : 'remove_favorites_success').change({name: workflowItem.getTranslatedName()}))
                 })
                 .catch(function (error) {
+                    console.log(error);
                     toast.error(langService.get('error_messages'));
                 });
         };
@@ -772,7 +802,7 @@ module.exports = function (app) {
         self.allInFavorites = function (selected) {
             return !_.some(selected, function (workflowItem) {
                 return !workflowItem.isFavorite();
-            });
+            }) && selected.length;
         };
 
         /**
@@ -798,14 +828,16 @@ module.exports = function (app) {
                 // remove all selected workflowItems from favorites.
                 promise = distributionWFService
                     .removeBulkWorkflowItemFromFavorites(selected)
-                    .then(function () {
+                    .then(function (items) {
+                        _changeFavoritesStatus(self.gridTypes, items);
                         toast.success(langService.get('bulk_favorites_removed_success').change({name: self.structureTypes[type]}))
                     });
             } else {
                 // add the remaining to favorites
                 promise = distributionWFService
                     .addBulkWorkflowItemToFavorites(unFavorites, type)
-                    .then(function () {
+                    .then(function (items) {
+                        _changeFavoritesStatus(self.gridTypes, items);
                         toast.success(langService.get('bulk_favorites_added_success').change({name: self.structureTypes[type]}));
                     })
             }
@@ -909,8 +941,18 @@ module.exports = function (app) {
          * @param $event
          */
         self.addSelectedUserWithIgnoreToGrid = function (selectedUser, $event) {
-            var user = _getUsersNotExists([selectedUser]);
-            _addUsersToSelectedGrid(user);
+            if (self.selectedWorkflowItems.length && self.getApprovedStatus()) {
+                dialog
+                    .confirmMessage(langService.get('user_will_replaced_by_new_selection'))
+                    .then(function () {
+                        self.selectedWorkflowItems = [];
+                        var user = _getUsersNotExists([selectedUser]);
+                        _addUsersToSelectedGrid(user);
+                    });
+            } else {
+                var user = _getUsersNotExists([selectedUser]);
+                _addUsersToSelectedGrid(user);
+            }
         };
         /**
          * @description add selected user to grid
@@ -920,21 +962,38 @@ module.exports = function (app) {
         self.addSelectedUserToGrid = function (selectedUser, $event) {
             // just to filter the users before add.
             var users = _getUsersNotExists([selectedUser]);
-            // get proxies users to display message before add.
-            var proxies = _getProxiesUsers(users);
-            // display proxy message
-            if (proxies.length)
-                dialog.alertMessage(_prepareProxyMessage(proxies));
-            // add users to grid
-            _addUsersToSelectedGrid(users);
+
+            if (self.selectedWorkflowItems.length && self.getApprovedStatus()) {
+                dialog
+                    .confirmMessage(langService.get('user_will_replaced_by_new_selection'))
+                    .then(function () {
+                        self.selectedWorkflowItems = [];
+                        // get proxies users to display message before add.
+                        var proxies = _getProxiesUsers(users);
+                        // display proxy message
+                        if (proxies.length)
+                            dialog.alertMessage(_prepareProxyMessage(proxies));
+                        // add users to grid
+                        _addUsersToSelectedGrid(users);
+                    });
+            } else {
+                // get proxies users to display message before add.
+                var proxies = _getProxiesUsers(users);
+                // display proxy message
+                if (proxies.length)
+                    dialog.alertMessage(_prepareProxyMessage(proxies));
+                // add users to grid
+                _addUsersToSelectedGrid(users);
+            }
+
         };
         /**
          * @description check if the user not exists.
-         * @param user
          * @returns {boolean}
+         * @param workflowItem
          */
-        self.userNotExists = function (user) {
-            return !_userExists(user);
+        self.workItemNotExists = function (workflowItem) {
+            return !_workflowItemExists(workflowItem);
         };
         /**
          * @description check if has No Selected users.
@@ -947,13 +1006,12 @@ module.exports = function (app) {
 
         /**
          * @description to remove from selected grid
-         * @param selected
          * @param distWorkflowItem
          * @param $event
          */
-        self.deleteFromSelected = function (selected, distWorkflowItem, $event) {
+        self.deleteFromSelected = function (distWorkflowItem, $event) {
             if (distWorkflowItem.isUser()) {
-                _removeFromSelectedUser(selected, distWorkflowItem);
+                _removeFromSelectedUser(distWorkflowItem);
             } else if (distWorkflowItem.isGroup()) {
                 _removeFromSelectedGroup(selected, distWorkflowItem);
             } else if (distWorkflowItem.isDepartment()) {
@@ -1012,29 +1070,20 @@ module.exports = function (app) {
             }) && self.selectedGrids[gridName].collection.length;
         };
 
-        function _filterWFUsers(item) {
-            return item.isUser();
-        }
+        self.addToSelected = function (workflowItem, checkProxy) {
+            if (_getUsersNotExists(workflowItem).length) {
+                self.selectedWorkflowItems.push(workflowItem);
+            }
+        };
 
-        function _filterWFGroups(item) {
-            return item.isGroup();
-        }
-
-        function _filterWFRegDepartments(item) {
-            return item.gridName === 'organizations_registry'
-        }
-
-        function _filterWFDepartmentsGroup(item) {
-            return item.gridName === 'organizations_group';
-        }
-
-        /**
-         * @description launchWorkflow
-         */
         self.launchDistributionCorrespondenceWorkFlow = function () {
             return self.checkWorkflowItemsCompleteStatus()
                 .then(function (collection) {
                     self.distributionWF.setNormalUsers(_.filter(collection, _filterWFUsers));
+                    self.distributionWF.setReceivedOUs(_.filter(collection, _filterWFDepartmentsGroup));
+                    self.distributionWF.setReceivedRegOUs(_.filter(collection, _filterWFRegDepartments));
+                    self.distributionWF.setWfGroups(_.filter(collection, _filterWFGroups));
+
                     distributionWFService.startLaunchWorkflow(self.distributionWF, self.correspondence)
                         .then(function () {
                             toast.success(langService.get('launch_success_distribution_workflow'));
@@ -1044,14 +1093,7 @@ module.exports = function (app) {
         };
 
         self.checkWorkflowItemsCompleteStatus = function () {
-            var result = false, gridKeys = Object.keys(self.selectedGrids), collections = [];
-            _.map(gridKeys, function (name) {
-                var current = _.map(angular.copy(self.selectedGrids[name].collection), function (item) {
-                    item.setGridName(self.selectedGrids[name].langKey);
-                    return item;
-                });
-                collections = collections.concat(current);
-            });
+            var result = false, collections = self.selectedWorkflowItems;
             // unCompleted
             var unCompleted = _.filter(collections, function (item) {
                 return !item.isWFComplete();
@@ -1084,9 +1126,6 @@ module.exports = function (app) {
                     });
             }
             return $q.resolve(collections);
-
         };
-
-
     });
 };

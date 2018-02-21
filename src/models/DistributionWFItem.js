@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('DistributionWFItem', function (CMSModelInterceptor, distributionWFService) {
+    app.factory('DistributionWFItem', function (CMSModelInterceptor, langService, distributionWFService) {
         'ngInject';
         return function DistributionWFItem(model) {
             var self = this;
@@ -42,11 +42,7 @@ module.exports = function (app) {
                     });
             };
             DistributionWFItem.prototype.setRelationId = function (relationId) {
-                if (this.toUserDomain === 'testuser2')
-                    console.log("Before", this.relationId);
                 this.relationId = relationId === -1 ? null : relationId;
-                if (this.toUserDomain === 'testuser2')
-                    console.log("After", this.relationId);
                 return this;
             };
             DistributionWFItem.prototype.isFavorite = function () {
@@ -70,7 +66,7 @@ module.exports = function (app) {
                 return this;
             };
             DistributionWFItem.prototype.setComments = function (comments) {
-                this.comments = comments;
+                this.comments = comments && comments.hasOwnProperty('id') ? comments.comment : comments;
                 return this;
             };
             DistributionWFItem.prototype.isUser = function () {
@@ -91,12 +87,55 @@ module.exports = function (app) {
                 return this;
             };
             DistributionWFItem.prototype.isWFComplete = function () {
-                return !!(this.comments && this.action)
+                return !!this.action;
             };
             DistributionWFItem.prototype.setGridName = function (gridName) {
                 this.gridName = gridName;
                 return this;
             };
+            DistributionWFItem.prototype.isSameWorkflowItem = function () {
+                return false;
+            };
+            DistributionWFItem.prototype.getTranslatedKey = function () {
+                return langService.current === 'ar' ? 'arName' : 'enName';
+            };
+
+            DistributionWFItem.prototype.getWorkflowItemIcon = function () {
+                var icon = 'account';
+                if (this.isDepartment()) {
+                    icon = 'bank';
+                } else if (this.isGroup()) {
+                    icon = 'account-group'
+                }
+                return icon;
+            };
+
+            DistributionWFItem.prototype.getWorkflowItemType = function () {
+                var title = 'user';
+                if (this.isDepartment()) {
+                    title = 'organization';
+                } else if (this.isGroup()) {
+                    title = 'workflow_group'
+                }
+                return title;
+            };
+            DistributionWFItem.prototype.getActionMessage = function () {
+                return langService.get('please_select_action');
+            };
+
+            DistributionWFItem.prototype.getFullNameByKey = function (langKey) {
+                return this[langKey.toLowerCase() + 'Name'];
+            };
+
+            DistributionWFItem.prototype.getTranslatedName = function () {
+                return this[langService.current + 'Name'];
+            };
+
+            DistributionWFItem.prototype.getCommentMessage = function () {
+                return langService.get('select_comment');
+            };
+
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('DistributionWFItem', 'init', this);
