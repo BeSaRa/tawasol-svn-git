@@ -1240,7 +1240,7 @@ module.exports = function (app) {
                         }*/,
                         organizationGroups: function (distributionWFService) {
                             'ngInject';
-                            return distributionWFService.loadDistWorkflowOrganizations('registry')
+                            return distributionWFService.loadDistWorkflowOrganizations('organizations')
                         },
                         replyOn: function (distributionWFService, $timeout) {
                             'ngInject';

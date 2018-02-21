@@ -83,7 +83,7 @@ module.exports = function (app) {
         // current correspondence or workItem
         self.correspondence = correspondence;
         // current selected tab
-        self.selectedTab = /*selectedTab || */'users';
+        self.selectedTab = selectedTab || 'users';
         // current sidebar status
         self.sidebarStatus = true;
         // full screen status
@@ -229,19 +229,19 @@ module.exports = function (app) {
 
         // workflow tabs
         self.workflowTabs = {
-            users: {
-                lang: 'workflow_menu_item_users',
-                icon: 'account',
-                show: true,
-                disabled: false,
-                modelName: 'users'
-            },
             favorites: {
                 lang: 'workflow_menu_item_favorites',
                 icon: 'star',
                 show: true,
                 disabled: false,
                 modelName: 'favoriteUsers'
+            },
+            users: {
+                lang: 'workflow_menu_item_users',
+                icon: 'account',
+                show: true,
+                disabled: false,
+                modelName: 'users'
             },
             private_users: {
                 lang: 'workflow_menu_item_private_users',
