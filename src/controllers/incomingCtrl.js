@@ -93,16 +93,24 @@ module.exports = function (app) {
             promise.then(function (result) {
                 self.incoming = result;
                 self.model = angular.copy(self.incoming);
+                self.documentInformationExist = !!angular.copy(self.documentInformation);
+
                 var newId = self.model.vsId;
 
                 /*If content file was attached */
                 if (self.incoming.contentFile) {
                     self.incoming.addDocumentContentFile()
                         .then(function () {
+                            self.contentFileExist = !!(self.incoming.hasOwnProperty('contentFile') && self.incoming.contentFile);
+                            self.contentFileSizeExist = !!(self.contentFileExist && self.incoming.contentFile.size);
+
                             saveCorrespondenceFinished(status, newId);
                         })
                 }
                 else {
+                    self.contentFileExist = false;
+                    self.contentFileSizeExist = false;
+
                     saveCorrespondenceFinished(status, newId);
                 }
 
@@ -128,7 +136,7 @@ module.exports = function (app) {
                     self.incoming.contentSize = self.incoming.contentFile.size;
                     successKey = 'save_success';
                 }
-                counterService.loadCounters();
+                //counterService.loadCounters();
                 self.requestCompleted = true;
                 toast.success(langService.get(successKey));
             }
@@ -250,6 +258,9 @@ module.exports = function (app) {
             self.documentAction.callback(self.incoming, $event);
         };
 
+        self.visibilityArray = [];
+        self.isActionsAvailable = false;
+
         /**
          * @description Check if action will be shown in dropdown or not
          * @param action
@@ -282,6 +293,7 @@ module.exports = function (app) {
             return (!action.hide);
         };
 
+        var isVisible = false;
         self.documentActions = [
             //Print Barcode
             {
@@ -289,8 +301,11 @@ module.exports = function (app) {
                 callback: self.docActionPrintBarcode,
                 class: "action-green",
                 permissionKey: "PRINT_BARCODE",
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model)
+                checkShow: function (action, model, index) {
+                    isVisible = self.checkToShowAction(action, model); //Incoming is always a paper
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    //return self.checkToShowAction(action, model);
                 }
 
             },
@@ -299,7 +314,7 @@ module.exports = function (app) {
                  text: langService.get('content_action_create_content'),
                  callback: self.docActionCreateContent,
                  class: "action-red",
-                 checkShow: function (action, model) {
+                 checkShow: function (action, model, index) {
                      //Show if meta-data only
                      return self.checkToShowAction(action, model) && !self.incoming.contentFile;
                  }
@@ -310,9 +325,12 @@ module.exports = function (app) {
                 callback: self.docActionLaunchDistributionWorkflow,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
-                checkShow: function (action, model) {
+                checkShow: function (action, model, index) {
                     //Show if content is uploaded
-                    return self.checkToShowAction(action, model) && (self.documentInformation || (self.incoming.contentFile && self.incoming.hasContent()));
+                    isVisible = self.checkToShowAction(action, model) &&  (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    //return self.checkToShowAction(action, model) && (self.documentInformation || (self.incoming.contentFile && self.incoming.hasContent()));
                 }
             },
             // Manage Tasks
@@ -320,18 +338,37 @@ module.exports = function (app) {
                 text: langService.get('content_action_manage_tasks'),
                 callback: self.docActionManageTasks,
                 class: "action-red",
-                checkShow: self.checkToShowAction,
-                hide: true
+                hide: true,
+                checkShow: function (action, model, index) {
+                    isVisible = self.checkToShowAction(action, model);
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    // return self.checkToShowAction(action, model);
+                }
             },
             //Configure Security
             {
                 text: langService.get('content_action_configure_security'),
                 callback: self.docActionConfigureSecurity,
                 class: "action-red",
-                checkShow: self.checkToShowAction,
-                hide: true
+                hide: true,
+                checkShow: function (action, model, index) {
+                    isVisible = self.checkToShowAction(action, model);
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    // return self.checkToShowAction(action, model);
+                }
             }
         ];
+
+        self.setAvailability = function(index, isVisible){
+            if(index === 0)
+                self.visibilityArray = [];
+            self.visibilityArray.push(isVisible);
+            if (index + 1 === self.documentActions.length) {
+                self.isActionsAvailable = !self.visibilityArray.length ? false : self.visibilityArray.indexOf(true) > -1;
+            }
+        };
 
 
         /**

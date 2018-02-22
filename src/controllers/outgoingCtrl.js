@@ -129,16 +129,23 @@ module.exports = function (app) {
             promise.then(function (result) {
                 self.outgoing = result;
                 self.model = angular.copy(self.outgoing);
+                self.documentInformationExist = !!angular.copy(self.documentInformation);
+
                 var newId = self.model.vsId;
 
                 /*If content file was attached */
                 if (self.outgoing.contentFile) {
                     self.outgoing.addDocumentContentFile()
                         .then(function () {
+                            self.contentFileExist = !!(self.outgoing.hasOwnProperty('contentFile') && self.outgoing.contentFile);
+                            self.contentFileSizeExist = !!(self.contentFileExist && self.outgoing.contentFile.size);
+
                             saveCorrespondenceFinished(status, newId);
                         })
                 }
                 else {
+                    self.contentFileExist =  false;
+                    self.contentFileSizeExist = false;
                     saveCorrespondenceFinished(status, newId);
                 }
             });
@@ -164,7 +171,7 @@ module.exports = function (app) {
                 }
 
                 self.requestCompleted = true;
-                counterService.loadCounters();
+                //counterService.loadCounters();
                 toast.success(langService.get(successKey));
             }
         };
@@ -278,6 +285,9 @@ module.exports = function (app) {
             self.documentAction.callback(self.outgoing, $event);
         };
 
+        self.visibilityArray = [];
+        self.isActionsAvailable = false;
+
         /**
          * @description Check if action will be shown in dropdown or not
          * @param action
@@ -288,7 +298,6 @@ module.exports = function (app) {
             /*if (action.hasOwnProperty('permissionKey'))
              return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
              return (!action.hide);*/
-
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
                     return (!action.hide) && employeeService.hasPermissionTo(action.permissionKey);
@@ -310,15 +319,19 @@ module.exports = function (app) {
             return (!action.hide);
         };
 
+        var isVisible = false;
         self.documentActions = [
             {
                 text: langService.get('content_action_print_barcode'),
                 callback: self.docActionPrintBarcode,
                 class: "action-green",
                 permissionKey: "PRINT_BARCODE",
-                checkShow: function (action, model) {
+                checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && info.isPaper; //Don't show if its electronic outgoing
+                    isVisible = self.checkToShowAction(action, model) && info.isPaper !== 0; //Don't show if its electronic outgoing
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    //return self.checkToShowAction(action, model, index) && info.isPaper; //Don't show if its electronic outgoing
                 }
             },
             {
@@ -326,9 +339,11 @@ module.exports = function (app) {
                 callback: self.docActionLaunchDistributionWorkflow,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
-                checkShow: function (action, model) {
-                    //var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && (self.documentInformation || (self.outgoing.contentFile && self.outgoing.hasContent()));
+                checkShow: function (action, model, index) {
+                    isVisible = self.checkToShowAction(action, model) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    //return self.checkToShowAction(action, model, index) && (self.documentInformation || (self.outgoing.contentFile && self.outgoing.hasContent()));
                 }
             },
             {
@@ -336,8 +351,11 @@ module.exports = function (app) {
                 callback: self.docActionSendToReview,
                 class: "action-red",
                 hide: true,
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && (self.documentInformation || (self.outgoing.contentFile && self.outgoing.hasContent()));
+                checkShow: function (action, model, index) {
+                    isVisible =self.checkToShowAction(action, model) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    //return self.checkToShowAction(action, model) && (self.documentInformation || (self.outgoing.contentFile && self.outgoing.hasContent()));
                 }
             },
             {
@@ -345,8 +363,11 @@ module.exports = function (app) {
                 callback: self.docActionManageTasks,
                 class: "action-red",
                 hide: true,
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model);
+                checkShow: function (action, model, index) {
+                    isVisible = self.checkToShowAction(action, model);
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    //return self.checkToShowAction(action, model);
                 }
             },
             {
@@ -354,8 +375,11 @@ module.exports = function (app) {
                 callback: self.docActionConfigureSecurity,
                 class: "action-red",
                 hide: true,
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model);
+                checkShow: function (action, model, index) {
+                    isVisible = self.checkToShowAction(action, model);
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    //return self.checkToShowAction(action, model);
                 }
             },
             {
@@ -363,12 +387,24 @@ module.exports = function (app) {
                 callback: self.docActionExportDocument,
                 class: "action-red",
                 hide: true,
-                checkShow: function (action, model) {
+                checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && info.isPaper; //Don't show if its electronic outgoing
+                    isVisible = self.checkToShowAction(action, model) && info.isPaper; //Don't show if its electronic outgoing
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    //return self.checkToShowAction(action, model) && info.isPaper; //Don't show if its electronic outgoing
                 }
             }
         ];
+
+        self.setAvailability = function(index, isVisible){
+            if(index === 0)
+                self.visibilityArray = [];
+            self.visibilityArray.push(isVisible);
+            if (index + 1 === self.documentActions.length) {
+                self.isActionsAvailable = !self.visibilityArray.length ? false : self.visibilityArray.indexOf(true) > -1;
+            }
+        };
 
         /**
          * @description Reset the Add Outgoing form

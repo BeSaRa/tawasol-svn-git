@@ -95,15 +95,23 @@ module.exports = function (app) {
             promise.then(function (result) {
                 self.internal = result;
                 self.model = angular.copy(self.internal);
+                self.documentInformationExist = !!angular.copy(self.documentInformation);
+
 
                 /*If content file was attached */
                 if (self.internal.contentFile) {
                     self.internal.addDocumentContentFile()
                         .then(function () {
+                            self.contentFileExist = !!(self.internal.hasOwnProperty('contentFile') && self.internal.contentFile);
+                            self.contentFileSizeExist = !!(self.contentFileExist && self.internal.contentFile.size);
+
                             saveCorrespondenceFinished(status);
                         })
                 }
                 else {
+                    self.contentFileExist = false;
+                    self.contentFileSizeExist = false;
+
                     saveCorrespondenceFinished(status);
                 }
             });
@@ -129,40 +137,40 @@ module.exports = function (app) {
                 }
 
                 self.requestCompleted = true;
-                counterService.loadCounters();
+                //counterService.loadCounters();
                 toast.success(langService.get(successKey));
             }
             /*
-            if (status) {// || (self.internal.contentFile)
-                counterService.loadCounters();
-                toast.success(langService.get('internal_metadata_saved_success'));
-                $timeout(function () {
-                    $state.go('app.internal.draft');
-                })
-            }
-            else {
-                /!*correspondenceService
-                    .loadCorrespondenceById(newId, self.internal.docClassName)
-                    .then(function (result) {
-                        self.internal = result;
-                        self.model = angular.copy(self.internal);
-                        self.requestCompleted = true;
-                        counterService.loadCounters();
-                        toast.success(langService.get('internal_metadata_saved_success'));
+             if (status) {// || (self.internal.contentFile)
+             counterService.loadCounters();
+             toast.success(langService.get('internal_metadata_saved_success'));
+             $timeout(function () {
+             $state.go('app.internal.draft');
+             })
+             }
+             else {
+             /!*correspondenceService
+             .loadCorrespondenceById(newId, self.internal.docClassName)
+             .then(function (result) {
+             self.internal = result;
+             self.model = angular.copy(self.internal);
+             self.requestCompleted = true;
+             counterService.loadCounters();
+             toast.success(langService.get('internal_metadata_saved_success'));
 
-                    });*!/
+             });*!/
 
-                /!*correspondenceService
-                    .loadCorrespondenceByVsIdClass(self.internal.vsId, self.internal.docClassName)
-                    .then(function (result) {
-                        self.internal = result;
-                        self.model = angular.copy(self.internal);
-                        self.requestCompleted = true;
-                        counterService.loadCounters();
-                        toast.success(langService.get('internal_metadata_saved_success'));
+             /!*correspondenceService
+             .loadCorrespondenceByVsIdClass(self.internal.vsId, self.internal.docClassName)
+             .then(function (result) {
+             self.internal = result;
+             self.model = angular.copy(self.internal);
+             self.requestCompleted = true;
+             counterService.loadCounters();
+             toast.success(langService.get('internal_metadata_saved_success'));
 
-                    });*!/
-            }*/
+             });*!/
+             }*/
         };
 
         self.openDocumentActions = function () {
@@ -248,7 +256,7 @@ module.exports = function (app) {
         };
 
         /* self.docActionCreateContent = function (document, $event){
-             console.log('create content', document);
+         console.log('create content', document);
          };*/
 
         self.docActionLaunchDistributionWorkflow = function (document, $event) {
@@ -289,6 +297,9 @@ module.exports = function (app) {
             self.documentAction.callback(self.internal, $event);
         };
 
+        self.visibilityArray = [];
+        self.isActionsAvailable = false;
+
         /**
          * @description Check if action will be shown in dropdown or not
          * @param action
@@ -297,8 +308,8 @@ module.exports = function (app) {
          */
         self.checkToShowAction = function (action, model) {
             /*if (action.hasOwnProperty('permissionKey'))
-                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-            return (!action.hide);*/
+             return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+             return (!action.hide);*/
 
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
@@ -313,23 +324,27 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                                return isPermission !== true;
+                            }));
                     }
                 }
             }
             return (!action.hide);
         };
 
+        var isVisible = false;
         self.documentActions = [
             {
                 text: langService.get('content_action_print_barcode'),
                 callback: self.docActionPrintBarcode,
                 class: "action-green",
                 permissionKey: "PRINT_BARCODE",
-                checkShow: function (action, model) {
+                checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && info.isPaper;
+                    isVisible = self.checkToShowAction(action, model) && info.isPaper !== 0; //Don't show if its electronic internal
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    //return self.checkToShowAction(action, model) && info.isPaper;
                 }
             },
             {
@@ -337,8 +352,11 @@ module.exports = function (app) {
                 callback: self.docActionLaunchDistributionWorkflow,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && (self.documentInformation || (self.internal.contentFile && self.internal.hasContent()));
+                checkShow: function (action, model, index) {
+                    isVisible = self.checkToShowAction(action, model) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    //return self.checkToShowAction(action, model) && (self.documentInformation || (self.internal.contentFile && self.internal.hasContent()));
                 }
             },
             {
@@ -346,8 +364,11 @@ module.exports = function (app) {
                 callback: self.docActionSendToReview,
                 class: "action-red",
                 hide: true,
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && (self.documentInformation || (self.internal.contentFile && self.internal.hasContent()));
+                checkShow: function (action, model, index) {
+                    isVisible = self.checkToShowAction(action, model) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    //return self.checkToShowAction(action, model) && (self.documentInformation || (self.internal.contentFile && self.internal.hasContent()));
                 }
             },
             {
@@ -355,14 +376,24 @@ module.exports = function (app) {
                 callback: self.docActionManageTasks,
                 class: "action-red",
                 hide: true,
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model, index) {
+                    isVisible = self.checkToShowAction(action, model);
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    // return self.checkToShowAction(action, model);
+                }
             },
             {
                 text: langService.get('content_action_configure_security'),
                 callback: self.docActionConfigureSecurity,
                 class: "action-red",
                 hide: true,
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model, index) {
+                    isVisible = self.checkToShowAction(action, model);
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    // return self.checkToShowAction(action, model);
+                }
             },
             {
                 text: langService.get('content_action_export'),
@@ -370,10 +401,24 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && model.addMethod === 1; //Don't show if its electronic internal
+                    var info = model.getInfo();
+                    isVisible = self.checkToShowAction(action, model) && info.isPaper; //Don't show if its electronic internal
+                    self.setAvailability(index, isVisible);
+                    return isVisible;
+                    //return self.checkToShowAction(action, model) && model.addMethod === 1; //Don't show if its electronic internal
                 }
             }
         ];
+
+        self.setAvailability = function (index, isVisible) {
+            if (index === 0)
+                self.visibilityArray = [];
+            self.visibilityArray.push(isVisible);
+            if (index + 1 === self.documentActions.length) {
+                self.isActionsAvailable = !self.visibilityArray.length ? false : self.visibilityArray.indexOf(true) > -1;
+            }
+        };
+
 
         /**
          * @description Reset the Add internal form

@@ -145,7 +145,7 @@
                     </accordion-directive>
                     <div layout="row">
                         <div>
-                            <md-button ng-disabled="ctrl.document_properties.$invalid || !ctrl.incoming.site "
+                            <md-button ng-disabled="ctrl.document_properties.$invalid || !ctrl.incoming.site || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.incoming.contentFile))"
                                        ng-click="ctrl.saveCorrespondence()" class="md-raised"
                                        ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                 {{lang.incoming_save}}
@@ -165,9 +165,10 @@
                             <md-input-container>
                                 <label for="documentAction">{{lang.document_action}}</label>
                                 <md-select name="documentAction" id="documentAction"
+                                           ng-disabled="!ctrl.isActionsAvailable"
                                            ng-model="ctrl.documentAction">
                                     <md-option ng-value="action" class="{{action.class}}"
-                                               ng-if="action.checkShow(action, ctrl.incoming)"
+                                               ng-if="action.checkShow(action, ctrl.incoming, $index)"
                                                ng-repeat="action in ctrl.documentActions track by $index">
                                         {{action.text}}
                                     </md-option>
