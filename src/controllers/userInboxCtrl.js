@@ -316,24 +316,29 @@ module.exports = function (app) {
          * @param defer
          */
         self.reply = function (userInbox, $event, defer) {
-            var senderInfo = {
-                sender: userInbox.senderInfo,
-                domain: userInbox.generalStepElm.sender,
-                senderOuInfo: new Information(userInbox.fromOuInfo)
-            };
-            distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(userInbox.generalStepElm, false, true, senderInfo, userInbox.generalStepElm.workFlowName, $event)
+            // var senderInfo = {
+            //     sender: userInbox.senderInfo,
+            //     domain: userInbox.generalStepElm.sender,
+            //     senderOuInfo: new Information(userInbox.fromOuInfo)
+            // };
+            // distributionWorkflowService
+            //     .controllerMethod
+            //     .distributionWorkflowSend(userInbox.generalStepElm, false, true, senderInfo, userInbox.generalStepElm.workFlowName, $event)
+            //     .then(function () {
+            //         dialog.hide();
+            //         self.reloadUserInboxes(self.grid.page)
+            //             .then(function () {
+            //                 new ResolveDefer(defer);
+            //             });
+            //     })
+            //     .catch(function () {
+            //         self.reloadUserInboxes(self.grid.page);
+            //     });
+            userInbox.launchWorkFlow($event, 'reply')
                 .then(function () {
-                    dialog.hide();
-                    self.reloadUserInboxes(self.grid.page)
-                        .then(function () {
-                            new ResolveDefer(defer);
-                        });
-                })
-                .catch(function () {
                     self.reloadUserInboxes(self.grid.page);
-                });
+                })
+
         };
 
         /**
@@ -794,8 +799,8 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.addToFolder,
                 class: "action-green",
-                checkShow: function(action, model){
-                    return  self.checkToShowAction(action, model) && !model.isBroadcasted();
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 }
             },
             // Add To Favorite
@@ -807,8 +812,8 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.addToFavorite,
                 class: "action-green",
-                checkShow: function(action, model){
-                    return  self.checkToShowAction(action, model) && !model.isBroadcasted();
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 }
             },
             // Create Reply
@@ -833,7 +838,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.forward,
                 class: "action-green",
-                checkShow: function(action, model) {
+                checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 }
             },
@@ -857,10 +862,10 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.reply,
                 class: "action-green",
-                checkShow: function(action, model) {
+                checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 }
-                },
+            },
             // Get Link
             {
                 type: 'action',
@@ -870,7 +875,7 @@ module.exports = function (app) {
                 callback: self.getLink,
                 class: "action-red",
                 hide: true,
-                checkShow: function(action, model) {
+                checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 }
             },
@@ -883,7 +888,7 @@ module.exports = function (app) {
                 callback: self.subscribe,
                 class: "action-red",
                 hide: true,
-                checkShow: function(action, model) {
+                checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 }
             },
@@ -1100,8 +1105,8 @@ module.exports = function (app) {
                 text: 'grid_action_send',
                 shortcut: false,
                 hide: true,
-                checkShow: function(action, model){
-                    return  self.checkToShowAction(action, model) && !model.isBroadcasted();
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 },
                 submenu: [
                     // Link To Document By Email

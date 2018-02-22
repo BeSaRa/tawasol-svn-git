@@ -39,7 +39,7 @@ module.exports = function (app) {
              * @returns {boolean}
              */
             CorrespondenceInfo.prototype.needToApprove = function () {
-                return (this.documentClass.toLowerCase() !== 'incoming') && (this.docStatus < 24)
+                return (this.documentClass.toLowerCase() !== 'incoming') && (this.docStatus < 24) && !this.isPaper;
             };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

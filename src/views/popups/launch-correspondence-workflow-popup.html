@@ -6,7 +6,12 @@
                 <md-icon md-svg-icon="menu"></md-icon>
             </md-button>
         </div>
-        <span class="p20">{{ctrl.correspondence.getTranslatedName()}}</span>
+        <bulk-correspondence-status-directive ng-if="ctrl.multi"
+                                              delete-callback="ctrl.deleteFromSelectedCorrespondence"
+                                              items="ctrl.multiStatus"></bulk-correspondence-status-directive>
+        <span ng-if="!ctrl.multi"
+              class="p20">{{lang.get(ctrl.textButton)}} : {{ctrl.correspondence.getTranslatedName()}}</span>
+        <span ng-if="ctrl.multi" class="p20">{{lang.send_documents}}</span>
         <span flex></span>
         <md-progress-circular md-mode="indeterminate"
                               ng-if="ctrl.loadingIndicatorService.loading"></md-progress-circular>
@@ -380,7 +385,8 @@
     </div>
     <div layout="row">
         <div>
-            <md-button class="md-raised" ng-click="ctrl.launchDistributionCorrespondenceWorkFlow()">{{lang.send}}
+            <md-button class="md-raised" ng-click="ctrl.launchDistributionCorrespondenceWorkFlow()">
+                {{lang.get(ctrl.textButton)}}
             </md-button>
         </div>
         <span flex></span>

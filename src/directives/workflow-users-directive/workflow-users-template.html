@@ -1,7 +1,7 @@
 <div layout="row">
     <md-card layout="column" flex class="card-overlay">
         <md-table-container>
-            <table md-table ng-model="ctrl.grid[ctrl.gridName].selected"
+            <table md-table ng-model="ctrl.selectedWorkflowItems"
                    md-row-select="true"
                    multiple="ctrl.multiSelect">
                 <thead md-head md-order="ctrl.grid[ctrl.gridName].order">
@@ -20,43 +20,44 @@
                                    class="md-icon-button"
                                    ng-click="ctrl.callbackToggleBulkFavorites(ctrl.gridItems, 'User')">
                             <md-icon class="star-yellow"
-                                     md-svg-icon="{{ctrl.runAllInFavorites((ctrl.gridItems | filter: ctrl.runUserNotExists)) ? 'star' :  'star-outline' }}"></md-icon>
+                                     md-svg-icon="{{ctrl.runAllInFavorites((ctrl.gridItems)) ? 'star' :  'star-outline' }}"></md-icon>
                         </md-button>
                     </th>
-                    <th colspan="{{ctrl.allowFavorites ? '5' : '6'}}" ng-if="ctrl.grid[ctrl.gridName].selected.length" md-column>
-                        <span>{{ctrl.grid[ctrl.gridName].selected.length}} {{lang.items_selected}} </span>
+                    <th colspan="{{ctrl.allowFavorites ? '5' : '6'}}" ng-if="ctrl.selectedWorkflowItems.length"
+                        md-column>
+                        <span>{{ctrl.selectedWorkflowItems.length}} {{lang.items_selected}} </span>
                     </th>
-                    <th md-column ng-if="!ctrl.grid[ctrl.gridName].selected.length" md-order-by="toUserDomain">
+                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length" md-order-by="toUserDomain">
                         {{lang.domain_name}}
                     </th>
                     <th md-column class="no-padding">
                         <!-- just to display out of office  --></th>
-                    <th md-column ng-if="!ctrl.grid[ctrl.gridName].selected.length" md-order-by="arName">
+                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length" md-order-by="arName">
                         {{lang.arabic_name}}
                     </th>
-                    <th md-column ng-if="!ctrl.grid[ctrl.gridName].selected.length" md-order-by="enName">
+                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length" md-order-by="enName">
                         {{lang.english_name}}
                     </th>
-                    <th ng-if="!ctrl.grid[ctrl.gridName].selected.length" md-column>
+                    <th ng-if="!ctrl.selectedWorkflowItems.length" md-column>
                         {{lang.organization_unit}}
                     </th>
-                    <th ng-if="!ctrl.grid[ctrl.gridName].selected.length" md-column>
+                    <th ng-if="!ctrl.selectedWorkflowItems.length" md-column>
                         {{lang.action}}
                     </th>
                     <th md-column>
                         <div layout="row">
                             <div>
-                                <md-button class="md-icon-button"
-                                           ng-click="ctrl.runSetDefaultWorkflowItemsSettings(ctrl.gridItems , ctrl.gridName , $event)">
+                                <md-button ng-disabled="!ctrl.gridItems.length" class="md-icon-button"
+                                           ng-click="ctrl.runSetDefaultWorkflowItemsSettings(ctrl.gridItems , ctrl.defaultWorkflowItemsSettings , $event)">
                                     <md-icon md-svg-icon="settings-box"></md-icon>
                                 </md-button>
                             </div>
                             <vertical-menu-workflow-item-directive
-                                    display="ctrl.grid[ctrl.gridName].selected.length"
+                                    display="ctrl.selectedWorkflowItems.length"
                                     callback="ctrl.runAddSelectedUsersToGrid"
                                     display-button="false"
-                                    item="ctrl.grid[ctrl.gridName].selected"
-                                    release="ctrl.grid[ctrl.gridName].selected"
+                                    item="ctrl.selectedWorkflowItems"
+                                    release="ctrl.selectedWorkflowItems"
                                     ignore-callback="ctrl.runAddSelectedUsersWithIgnoreToGrid"></vertical-menu-workflow-item-directive>
                         </div>
                     </th>
@@ -125,7 +126,7 @@
                                     callback="ctrl.runAddSelectedUserToGrid"
                                     display-button="!workflowUser.isUserOutOfOffice()"
                                     item="workflowUser"
-                                    release="ctrl.grid[ctrl.gridName].selected"
+                                    release="ctrl.selectedWorkflowItems"
                                     ignore-callback="ctrl.runAddSelectedUserWithIgnoreToGrid"></vertical-menu-workflow-item-directive>
                         </div>
                     </td>
@@ -202,7 +203,7 @@
                                     callback="ctrl.runAddSelectedUserToGrid"
                                     display-button="!workflowUser.isUserOutOfOffice()"
                                     item="workflowUser"
-                                    release="ctrl.grid[ctrl.gridName].selected"
+                                    release="ctrl.selectedWorkflowItems"
                                     ignore-callback="ctrl.runAddSelectedUserWithIgnoreToGrid"></vertical-menu-workflow-item-directive>
                         </div>
                     </td>

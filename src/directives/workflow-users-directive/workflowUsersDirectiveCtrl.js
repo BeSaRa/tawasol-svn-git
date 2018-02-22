@@ -1,9 +1,14 @@
 module.exports = function (app) {
-    app.controller('workflowUsersDirectiveCtrl', function ($scope, $interval, $timeout, LangWatcher) {
+    app.controller('workflowUsersDirectiveCtrl', function ($scope, DistributionWFItem, $timeout, LangWatcher) {
         'ngInject';
         var self = this;
         self.controllerName = 'workflowUsersDirectiveCtrl';
         LangWatcher($scope);
+
+        self.selectedWorkflowItems = [];
+
+        self.defaultWorkflowItemsSettings = new DistributionWFItem();
+
         /**
          * @description run toggle bulk favorites.
          * @param selected

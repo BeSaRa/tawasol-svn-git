@@ -1187,6 +1187,7 @@ module.exports = function (app) {
          * @returns {promise|*}
          */
         self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab) {
+            var multi = angular.isArray(correspondence) && correspondence.length > 1;
             return dialog
                 .showDialog({
                     template: cmsTemplate.getPopup('launch-correspondence-workflow'),
@@ -1194,8 +1195,8 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     targetEvent: $event,
                     locals: {
-                        multi: !!angular.isArray(correspondence),
-                        correspondence: correspondence,
+                        multi: multi,
+                        correspondence: multi ? correspondence : (angular.isArray(correspondence) ? correspondence[0] : correspondence),
                         selectedTab: tab,
                         actionKey: action
                     },

@@ -164,7 +164,13 @@ module.exports = function (app) {
             WorkItem.prototype.isBroadcasted = function () {
                 return this.generalStepElm.isBrodcasted;
             };
-
+            /**
+             * @description to start launch workflow item.
+             * @param $event
+             * @param action
+             * @param tab
+             * @returns {promise|*}
+             */
             WorkItem.prototype.launchWorkFlow = function ($event, action, tab) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
             };

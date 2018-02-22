@@ -292,6 +292,7 @@ module.exports = function (app) {
             })
             .bulkResolveToState('app.inbox.group-inbox', {
                 workItems: function (correspondenceService) {
+                    'ngInject';
                     return correspondenceService.loadGroupInbox();
                 }
             })

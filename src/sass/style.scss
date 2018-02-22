@@ -1757,3 +1757,16 @@ table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child
 .red-color {
   color: red !important;
 }
+
+.sign-status {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #EEE;
+  margin: 5px;
+}
+
+.no-height-md-menu-item {
+  md-menu-item {
+    height: auto !important;
+  }
+}

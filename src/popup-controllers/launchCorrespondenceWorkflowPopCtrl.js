@@ -31,6 +31,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
 
+
         /**
          * get multi info in case the correspondence array.
          * @param correspondences
@@ -58,12 +59,15 @@ module.exports = function (app) {
             });
         }
 
-        function _justForYourInformationDialog() {
-            var result = self.multi ? approvedStatus = _.some(self.info, function (item) {
+        function _justForYourInformationDialog(multiStatus, ignoreMessage) {
+            var result = self.multi ? approvedStatus = _.some(multiStatus, function (item) {
                     return item.status
                 }) : approvedStatus,
-                message = self.multi ? langService.get('selected_document_has_not_approved_document').addLineBreak(_.map(self.info, 'title')).join('<br />') : langService.get('cannot_send_to_multi');
-            result ? $timeout(function () {
+                message = self.multi ? langService.get('selected_document_has_not_approved_document') : langService.get('cannot_send_to_multi');
+            self.multi ? _.map(self.info, function (item) {
+                message = message.addLineBreak(item.title);
+            }) : null;
+            result && !ignoreMessage ? $timeout(function () {
                 dialog.infoMessage(message)
             }, 800) : false;
         }
@@ -78,12 +82,15 @@ module.exports = function (app) {
         self.multi = multi;
         // current correspondence information
         self.info = self.multi ? _getMultiInfo(correspondence) : correspondence.getInfo();
+        self.multiStatus = null;
+        var approvedStatus = null;
         // check document if approved or not.
-        var approvedStatus = self.multi ? _getMultiApproveStatus(self.info) : self.info.needToApprove();
+        self.multi ? self.multiStatus = _getMultiApproveStatus(self.info) : approvedStatus = self.info.needToApprove();
         // current correspondence or workItem
         self.correspondence = correspondence;
         // current selected tab
         self.selectedTab = selectedTab || 'users';
+
         // current sidebar status
         self.sidebarStatus = true;
         // full screen status
@@ -108,6 +115,7 @@ module.exports = function (app) {
         // our grids properties
         // users
         self.users = _mapWFUser(distributionWFService.workflowUsers);
+
         // favorite Users
         self.favoriteUsers = _mapWFUser(distributionWFService.favoriteUsers);
         // favorite Organizations
@@ -129,7 +137,6 @@ module.exports = function (app) {
         // users search criteria
         self.usersCriteria = new UserSearchCriteria({
             ou: self.organizationGroups.length ? _.find(self.organizationGroups, function (item) {
-                console.log(item.toOUId, employeeService.getEmployee().getOUID());
                 return item.toOUId === employeeService.getEmployee().getOUID()
             }) : employeeService.getEmployee().getOUID(),
             hide: !self.organizationGroups.length
@@ -137,7 +144,13 @@ module.exports = function (app) {
 
         // selected workflowItems
         self.selectedWorkflowItems = [];
+        self.textButton = 'send';
 
+        if (replyOn) {
+            self.users = _mapWFUser([replyOn]);
+            _addUserReply(self.users);
+            self.textButton = 'reply';
+        }
         // grid options for all grids
         self.grid = {
             users: {
@@ -226,6 +239,8 @@ module.exports = function (app) {
             }
         };
 
+        // to display alert to inform the user this document not approved and will not send it to many users.
+        _justForYourInformationDialog(self.multiStatus);
 
         // workflow tabs
         self.workflowTabs = {
@@ -327,8 +342,7 @@ module.exports = function (app) {
             WFGroup: _mapWFGroup
         };
 
-        // to display alert to inform the user this document not approved and will not send it to many users.
-        _justForYourInformationDialog();
+
         // create default workflow item Settings for each tab
         _createDefaultWFItemTabs();
 
@@ -710,7 +724,6 @@ module.exports = function (app) {
             distributionWFService
                 .loadTabContent(tab)
                 .then(function (result) {
-                    console.log('result',result);
                     var gridName = null;
                     switch (result.property) {
                         case 'registryOrganizations':
@@ -733,6 +746,26 @@ module.exports = function (app) {
                     console.log("Error", error);
                     console.log(error);
                 });
+
+        };
+        /**
+         * @description delete from selected bulk correspondence by index.
+         * @param $index
+         * @param $event
+         */
+        self.deleteFromSelectedCorrespondence = function ($index, $event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            correspondence.splice($index, 1);
+            if (self.correspondence.length === 1) {
+                correspondence = correspondence[0];
+                self.multi = false;
+            }
+            self.info = self.multi ? _getMultiInfo(correspondence) : correspondence.getInfo();
+            self.correspondence = correspondence;
+            self.multi ? self.multiStatus = _getMultiApproveStatus(self.info) : approvedStatus = self.info.needToApprove();
+            _justForYourInformationDialog(self.multiStatus, true);
 
         };
         /**
@@ -881,12 +914,11 @@ module.exports = function (app) {
         /**
          * @description set default dist Workflow Item Properties
          * @param collection
-         * @param selectedTab
+         * @param distWorkflowItem
          * @param notDefault
          * @param $event
          */
-        self.setDefaultWorkflowItemsSettings = function (collection, selectedTab, $event, notDefault) {
-            var distWorkflowItem = notDefault ? self.selectedGrids[selectedTab].defaultSettings : self.defaultWorkflowTabSettings[selectedTab];
+        self.setDefaultWorkflowItemsSettings = function (collection, distWorkflowItem, $event, notDefault) {
             // workflow_properties
             return self
                 .workflowItemSettingDialog(langService.get('set_default_workflow_attributes'), distWorkflowItem, $event)
@@ -909,6 +941,19 @@ module.exports = function (app) {
                     _setDistWorkflowItem(distWorkflowItem, result);
                 })
         };
+
+        function _addUserReply(selectedUsers) {
+            // just to filter the users before add.
+            selectedUsers = _getUsersNotExists(selectedUsers);
+            // get proxies users to display message before add.
+            var proxies = _getProxiesUsers(selectedUsers);
+            // display proxy message
+            if (proxies.length)
+                dialog.alertMessage(_prepareProxyMessage(proxies));
+            // add users to grid
+            _addUsersToSelectedGrid(selectedUsers);
+        }
+
         /**
          * @description add selected users to selectedGrid
          * @param selectedUsers

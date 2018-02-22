@@ -66,4 +66,5 @@ module.exports = function (app) {
     require('./workflow-users-directive/01-index')(app);
     require('./organization-node-directive/01-index')(app);
     require('./workflow-items-directive/01-index')(app);
+    require('./bulk-correspondence-status-directive/01-index')(app);
 };

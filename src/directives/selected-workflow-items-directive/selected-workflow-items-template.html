@@ -24,7 +24,7 @@
                     <th md-column>
                         <div layout="row">
                             <div>
-                                <md-button class="md-icon-button"
+                                <md-button ng-disabled="!ctrl.workflowItems.length" class="md-icon-button"
                                            ng-click="ctrl.setBulkWorkflowItemSettings($event)">
                                     <md-icon md-svg-icon="settings-box"></md-icon>
                                 </md-button>

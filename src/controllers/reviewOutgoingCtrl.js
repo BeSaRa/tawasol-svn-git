@@ -17,6 +17,7 @@ module.exports = function (app) {
                                                    $timeout,
                                                    viewTrackingSheetService,
                                                    contextHelpService,
+                                                   distributionWFService,
                                                    distributionWorkflowService,
                                                    broadcastService,
                                                    ResolveDefer) {
@@ -176,17 +177,11 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found_bulk"));
                 return;
             }
-
-            distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSendBulk(self.selectedReviewOutgoings, "outgoing", $event)
+            return correspondenceService
+                .launchCorrespondenceWorkflow(self.selectedReviewOutgoings, $event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadReviewOutgoings(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadReviewOutgoings(self.grid.page);
                 });
-
         };
 
         /**
