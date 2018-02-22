@@ -27,6 +27,7 @@ module.exports = function (app) {
                                              dialog,
                                              distributionWorkflowService,
                                              draftInternalService,
+                                             editAfterApproved,
                                              correspondenceService) {
         'ngInject';
         var self = this;
@@ -40,11 +41,13 @@ module.exports = function (app) {
         // collapse from label
         self.collapse = true;
         // current mode
-        self.editMode = false;
+        self.editMode = !!(editAfterApproved);
         // self.editMode = false;
         // copy of the current internal if saved.
         // self.model = angular.copy(demoInternal);
-        self.model = null;
+        self.model = editAfterApproved ? angular.copy(editAfterApproved.metaData) : null;
+
+        self.editAfterApproved = false;
 
 
         self.maxCreateDate = new Date();
@@ -66,6 +69,12 @@ module.exports = function (app) {
                 registryOU: self.employee.getRegistryOUID(),
                 securityLevel: lookups.securityLevels[0]
             });
+
+        if (editAfterApproved) {
+            self.internal = editAfterApproved.metaData;
+            self.documentInformation = editAfterApproved.content;
+            self.editAfterApproved = true;
+        }
 
         self.preventPropagation = function ($event) {
             $event.stopPropagation();
@@ -400,7 +409,7 @@ module.exports = function (app) {
                 callback: self.docActionExportDocument,
                 class: "action-red",
                 hide: true,
-                checkShow: function (action, model) {
+                checkShow: function (action, model, index) {
                     var info = model.getInfo();
                     isVisible = self.checkToShowAction(action, model) && info.isPaper; //Don't show if its electronic internal
                     self.setAvailability(index, isVisible);

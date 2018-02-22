@@ -367,7 +367,7 @@ module.exports = function (app) {
             console.log("RESET MODEL");
         };
         /**
-         * @description upper case first latter.
+         * @description upper case first letter.
          * @param string
          * @returns {string}
          */

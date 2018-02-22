@@ -726,7 +726,7 @@ module.exports = function (app) {
             {
                 type: 'action',
                 icon: 'eraser-variant',
-                text: 'edit_after_approved',
+                text: 'grid_action_edit_after_approved',
                 shortcut: true,
                 callback: self.editAfterApprove,
                 class: "action-green",

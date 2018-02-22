@@ -238,6 +238,22 @@ module.exports = function (app) {
                 organizations: function (organizationService) {
                     'ngInject';
                     return organizationService.getOrganizations();
+                },
+                editAfterApproved: function ($timeout, $stateParams, correspondenceService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, workItem = $stateParams.workItem, action = $stateParams.action;
+                    if (action !== 'editAfterApproved') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                    return correspondenceService
+                        .correspondenceEditAfterApproved('internal', vsId, workItem)
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
                 }
             })
             .bulkResolveToState('app.landing-page', {

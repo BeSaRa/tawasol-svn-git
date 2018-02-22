@@ -1104,7 +1104,7 @@ module.exports = function (app) {
             })
             // add-internal
             .state('app.internal.add', {
-                url: '/add',
+                url: '/add?vsId?workItem?action',
                 template: templateProvider.getView('internal-add'),
                 controller: 'internalCtrl',
                 controllerAs: 'ctrl'
@@ -1174,6 +1174,7 @@ module.exports = function (app) {
                     }
                 }
             })
+            // approved internal
             .state('app.internal.approved', {
                 url: '/approved',
                 template: templateProvider.getView('internal-approved'),
