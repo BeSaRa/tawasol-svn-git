@@ -196,6 +196,17 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Get the list of Parent Organizations with registry and select default ou with registry.
+         */
+        self.getParentOrganizationsWithRegistry = function () {
+            self.parentsWithRegistryList = organizationService.getAllParentsHasRegistry(self.ouApplicationUser.ouid, false);
+            self.ouApplicationUser.ouRegistryID = (self.parentsWithRegistryList && self.parentsWithRegistryList.length)
+                ? (self.ouApplicationUserBeforeEdit ? self.ouApplicationUserBeforeEdit.ouRegistryID : self.parentsWithRegistryList[0].id)
+                : null;
+        };
+
+
+        /**
          * @description Checks the required fields validation by skipping notification if notification is false
          * @param model
          * @returns {Array}
@@ -204,10 +215,10 @@ module.exports = function (app) {
             var required = new ApplicationUser().getRequiredFields(), result = [];
 
             /*
-                        if(!self.applicationUser.id){
-                            required.splice(required.indexOf('defaultOUID'),1);
-                        }
-            */
+             if(!self.applicationUser.id){
+             required.splice(required.indexOf('defaultOUID'),1);
+             }
+             */
             /* If notification property is false, remove the property from required */
             for (var i = 0; i < self.notificationProperties.length; i++) {
                 var property = self.notificationProperties[i].property;
@@ -415,11 +426,11 @@ module.exports = function (app) {
          * @return {Array}
          */
         /*self.checkRequiredFile = function () {
-            var result = [];
-            if (!self.fileUrl)
-                result.push('fileUrl');
-            return result;
-        };*/
+         var result = [];
+         if (!self.fileUrl)
+         result.push('fileUrl');
+         return result;
+         };*/
 
         self.checkRequiredFile = function () {
             return self.selectedFile;
@@ -783,6 +794,7 @@ module.exports = function (app) {
         self.editOUApplicationUserFromCtrl = function (ouApplicationUser, $event) {
             self.ouApplicationUserBeforeEdit = angular.copy(ouApplicationUser);
             self.ouApplicationUser = angular.copy(ouApplicationUser);
+            self.getParentOrganizationsWithRegistry();
         };
 
         /**
@@ -898,7 +910,7 @@ module.exports = function (app) {
                             'ngInject';
                             return organizationService.loadOrganizations();
                         },
-                        privateUsers: function(ouApplicationUserService){
+                        privateUsers: function (ouApplicationUserService) {
                             'ngInject'
                             return ouApplicationUserService.loadAllPrivateUsers();
                         }

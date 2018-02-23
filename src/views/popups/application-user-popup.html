@@ -824,7 +824,7 @@
                                     <!-- Organizations Dropdown-->
                                     <md-input-container flex ng-if="!ctrl.ouApplicationUserBeforeEdit">
                                         <label for="ouid">{{lang.organization_unit}}</label>
-                                        <md-select id="ouid" name="ouid"
+                                        <md-select id="ouid" name="ouid" ng-change="ctrl.getParentOrganizationsWithRegistry()"
                                                    ng-disabled="ctrl.ouApplicationUser.id"
                                                    ng-model="ctrl.ouApplicationUser.ouid">
                                             <md-option ng-value="organization"
@@ -842,6 +842,20 @@
                                                ng-disabled="true" ng-readonly="true"
                                                title="{{ctrl.ouApplicationUser.ouid.getTranslatedName()}}"
                                                ng-value="ctrl.ouApplicationUser.ouid.getTranslatedName()">
+                                    </md-input-container>
+
+                                    <!-- Organizations Parents With Registry Dropdown-->
+                                    <md-input-container flex ><!--ng-if="!ctrl.ouApplicationUserBeforeEdit"-->
+                                        <label for="ouRegistryID">{{lang.parent_organization}}</label>
+                                        <md-select id="ouRegistryID" name="ouRegistryID"
+                                                   ng-disabled = "!ctrl.ouApplicationUser.ouid"
+                                                   ng-model="ctrl.ouApplicationUser.ouRegistryID">
+                                            <md-option ng-value="organizationWithRegistry.id"
+                                                       ng-if="ctrl.parentsWithRegistryList.length > 0"
+                                                       ng-repeat="organizationWithRegistry in ctrl.parentsWithRegistryList track by $index">
+                                                {{organizationWithRegistry.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
                                     </md-input-container>
 
                                     <!-- Roles -->
