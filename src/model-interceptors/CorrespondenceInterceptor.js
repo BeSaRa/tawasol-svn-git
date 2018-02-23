@@ -6,6 +6,7 @@ module.exports = function (app) {
                       generator,
                       employeeService,
                       attachmentService,
+                      Attachment,
                       entityTypeService,
                       documentFileService,
                       LinkedObject,
@@ -67,7 +68,7 @@ module.exports = function (app) {
             });
             // for linked attachments when add or edit full Correspondence.
             model.linkedAttachmenstList = _.map(model.attachments, function (item) {
-                return item.hasOwnProperty('id') ? generator.interceptSendInstance('AttachmentView', item) : item;
+                return item.hasOwnProperty('id') ? generator.interceptSendInstance('AttachmentView', item) : generator.interceptSendInstance('AttachmentView', new Attachment({vsId: item}));
             });
 
             if (model.linkedDocs && angular.isArray(model.linkedDocs) && model.linkedDocs.length) {
