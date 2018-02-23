@@ -1188,6 +1188,7 @@ module.exports = function (app) {
          */
         self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab) {
             var multi = angular.isArray(correspondence) && correspondence.length > 1;
+            action = action || 'forward';
             return dialog
                 .showDialog({
                     template: cmsTemplate.getPopup('launch-correspondence-workflow'),

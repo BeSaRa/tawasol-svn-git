@@ -10,7 +10,7 @@ module.exports = function (app) {
                                                       toast,
                                                       Correspondence,
                                                       employeeService,
-    errorCode) {
+                                                      errorCode) {
         'ngInject';
         var self = this;
         self.serviceName = 'favoriteDocumentsService';
@@ -133,12 +133,7 @@ module.exports = function (app) {
             return $http
                 .post((urlService.favoriteDocuments), data)
                 .then(function (result) {
-                    debugger;
-                    /* 1008 is an error code for duplicate entry */
-                    /*if (!result.data.hasOwnProperty('rs') && result.data.hasOwnProperty('ec') && result.data.ec === 1008) {
-                        return {status: false, message: "add_to_favorite_duplicate_record"};
-                    }*/
-                    if(errorCode.checkIf(result, 'DUPLICATE_ENTRY'))
+                    if (errorCode.checkIf(result, 'DUPLICATE_ENTRY'))
                         return {status: false, message: "add_to_favorite_duplicate_record"};
                     return {status: true, message: "success"};
                 })
