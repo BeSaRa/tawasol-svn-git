@@ -2,8 +2,10 @@ module.exports = function (app) {
     app.controller('returnedDepartmentInboxCtrl', function (lookupService,
                                                             returnedDepartmentInboxService,
                                                             returnedDepartmentInboxes,
+                                                            listGeneratorService,
                                                             userInboxService,
                                                             $q,
+                                                            $state,
                                                             $timeout,
                                                             langService,
                                                             rootEntity,
@@ -413,7 +415,19 @@ module.exports = function (app) {
          * @param $event
          */
         self.editAfterExport = function (returnedDepartmentInbox, $event) {
-            console.log('editAfterExport', returnedDepartmentInbox);
+            var info = returnedDepartmentInbox.getInfo(), list = listGeneratorService.createUnOrderList(),
+                langKeys = ['signature_serial_will_removed', 'the_book_will_go_to_audit', 'serial_retained'];
+            _.map(langKeys, function (item) {
+                list.addItemToList(langService.get(item));
+            });
+            dialog.confirmMessage(list.getList(), null, null, $event)
+                .then(function () {
+                    $state.go('app.outgoing.add', {
+                        workItem: info.wobNumber,
+                        vsId: info.vsId,
+                        action: 'editAfterExport'
+                    });
+                });
         };
 
         /**
@@ -468,7 +482,7 @@ module.exports = function (app) {
             var info = model.getInfo();
             var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
             var allowed = hasPermission && info.isPaper;// && info.docStatus < 24
-            if(checkForViewPopup)
+            if (checkForViewPopup)
                 return !allowed;
             return allowed;
         };
@@ -809,12 +823,11 @@ module.exports = function (app) {
             //Edit After Export (Electronic Only)
             {
                 type: 'action',
-                icon: '',
+                icon: 'eraser-variant',
                 text: 'grid_action_edit_after_export',//langKey not added yet in localization
                 shortcut: false,
                 showInView: false,
-                hide: true,
-                class: 'action-red',
+                class: 'action-green',
                 callback: self.editAfterExport, //TODO: Service is not available yet
                 checkShow: function (action, model) {
                     var info = model.getInfo();

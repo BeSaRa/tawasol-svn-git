@@ -9,7 +9,7 @@ module.exports = function (app) {
             bindToController: true,
             scope: {
                 fromDialog: '=',
-                editAfterApproved: '=',
+                editContent: '=',
                 displayPrepare: '=',
                 templates: '=',
                 vsId: '=',

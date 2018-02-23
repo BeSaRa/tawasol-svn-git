@@ -30,6 +30,7 @@ module.exports = function (app) {
                                              draftOutgoingService,
                                              replyTo,
                                              editAfterApproved,
+                                             editAfterExport,
                                              lookups, // new injector for all lookups can user access
                                              correspondenceService) {
         'ngInject';
@@ -45,13 +46,17 @@ module.exports = function (app) {
         // collapse from label
         self.collapse = true;
         // current mode
-        self.editMode = !!(editAfterApproved);
+        self.editMode = !!(editAfterApproved || editAfterExport);
         // self.editMode = false;
         // copy of the current outgoing if saved.
         // self.model = angular.copy(demoOutgoing);
-        self.model = editAfterApproved ? angular.copy(editAfterApproved.metaData) : null;
-
-        self.editAfterApproved = false;
+        self.model = null;
+        if (editAfterApproved) {
+            self.model = angular.copy(editAfterApproved.metaData);
+        } else if (editAfterExport) {
+            self.model = angular.copy(editAfterExport.metaData);
+        }
+        self.editContent = false;
 
         self.maxCreateDate = new Date();
         // all system organizations
@@ -82,7 +87,11 @@ module.exports = function (app) {
         if (editAfterApproved) {
             self.outgoing = editAfterApproved.metaData;
             self.documentInformation = editAfterApproved.content;
-            self.editAfterApproved = true;
+            self.editContent = true;
+        } else if (editAfterExport) {
+            self.outgoing = editAfterExport.metaData;
+            self.documentInformation = editAfterExport.content;
+            self.editContent = true;
         }
 
         self.preventPropagation = function ($event) {
@@ -144,7 +153,7 @@ module.exports = function (app) {
                         })
                 }
                 else {
-                    self.contentFileExist =  false;
+                    self.contentFileExist = false;
                     self.contentFileSizeExist = false;
                     saveCorrespondenceFinished(status, newId);
                 }
@@ -311,8 +320,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }
@@ -352,7 +361,7 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true,
                 checkShow: function (action, model, index) {
-                    isVisible =self.checkToShowAction(action, model) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    isVisible = self.checkToShowAction(action, model) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
                     self.setAvailability(index, isVisible);
                     return isVisible;
                     //return self.checkToShowAction(action, model) && (self.documentInformation || (self.outgoing.contentFile && self.outgoing.hasContent()));
@@ -397,8 +406,8 @@ module.exports = function (app) {
             }
         ];
 
-        self.setAvailability = function(index, isVisible){
-            if(index === 0)
+        self.setAvailability = function (index, isVisible) {
+            if (index === 0)
                 self.visibilityArray = [];
             self.visibilityArray.push(isVisible);
             if (index + 1 === self.documentActions.length) {

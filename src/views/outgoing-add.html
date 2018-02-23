@@ -60,7 +60,7 @@
                             <accordion-content>
                                 <div layout="row">
                                     <manage-content-directive
-                                            edit-after-approved="ctrl.editAfterApproved"
+                                            edit-content="ctrl.editContent"
                                             display-prepare="!ctrl.outgoing.addMethod"
                                             document-information="ctrl.documentInformation"
                                             vs-id="ctrl.outgoing.vsId"
@@ -112,7 +112,8 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.outgoing.documentComments.length" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS') && ctrl.employeeService.hasPermissionTo('ADD_DOCUMENT_COMMENT')">
+                        <accordion-item pass-when="!!ctrl.outgoing.documentComments.length"
+                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS') && ctrl.employeeService.hasPermissionTo('ADD_DOCUMENT_COMMENT')">
                             <accordion-title>
                                 <md-icon md-svg-icon="comment"></md-icon>
                                 <span>{{lang.outgoing_manage_comments}}</span>
@@ -147,13 +148,13 @@
                         <div>
                             <md-button ng-disabled="ctrl.document_properties.$invalid || !ctrl.outgoing.sitesInfoTo.length ||
                                         ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
-                                    ng-click="ctrl.saveCorrespondence()" class="md-raised"
-                                    ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
+                                       ng-click="ctrl.saveCorrespondence()" class="md-raised"
+                                       ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                 <!--|| (ctrl.documentInformation || ctrl.outgoing.contentFile)-->
                                 {{lang.outgoing_save}}
                             </md-button>
                         </div>
-                        <div ng-if="!ctrl.outgoing.addMethod && !ctrl.editAfterApproved">
+                        <div ng-if="!ctrl.outgoing.addMethod && !ctrl.editContent">
                             <md-button ng-disabled="ctrl.document_properties.$invalid
                                                     || !ctrl.outgoing.sitesInfoTo.length
                                                     || !(ctrl.documentInformation || ctrl.outgoing.contentFile)"

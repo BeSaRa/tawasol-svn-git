@@ -24,7 +24,7 @@ module.exports = function (app) {
         self.lastTemplate = null;
 
         self.document = null;
-        self.editAfterApproved = false;
+        self.editContent = false;
 
         LangWatcher($scope);
 
@@ -40,7 +40,7 @@ module.exports = function (app) {
 
         self.openPrepareTemplateDialog = function ($event) {
             self.checkRequired($event).then(function () {
-                if (self.editAfterApproved) {
+                if (self.editContent) {
                     return dialog
                         .confirmMessage(langService.get('content_will_remove_confirm'))
                         .then(function () {
@@ -210,7 +210,7 @@ module.exports = function (app) {
         };
 
         self.showEditContentInEditPopup = function () {
-            return (self.fromDialog && !self.document.getInfo().isPaper && self.document.contentSize && self.document.getInfo().docStatus < 24) && !self.editAfterApproved;
+            return (self.fromDialog && !self.document.getInfo().isPaper && self.document.contentSize && self.document.getInfo().docStatus < 24) && !self.editContent;
         };
 
         self.openEditContentInEditPopup = function () {

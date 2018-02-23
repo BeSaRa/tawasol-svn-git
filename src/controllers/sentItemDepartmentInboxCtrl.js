@@ -470,6 +470,7 @@ module.exports = function (app) {
                 callback: self.editAfterExport,
                 class: "action-green",
                 showInView: false,
+                hide: true,
                 permissionKey: "EDIT_OUTGOING_CONTENT", //TODO: Apply correct permission when added to database.
                 checkShow: function (action, model) {
                     var info = model.getInfo();
