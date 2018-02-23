@@ -922,6 +922,20 @@ module.exports = function (app) {
                 });
         };
         /**
+         * @description edit after export while the current document
+         * @param documentClass
+         * @param vsId
+         * @param wobNumber
+         */
+        self.correspondenceEditAfterExport = function (documentClass, vsId, wobNumber) {
+            return $http
+                .put(_createUrlSchema(null, documentClass, 'vsid/' + vsId + '/wob-num/' + wobNumber + '/export/edit'))
+                .then(function (result) {
+                    result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                    return result.data.rs;
+                });
+        };
+        /**
          * @description load correspondence Sites for correspondence.
          * @param correspondence
          */

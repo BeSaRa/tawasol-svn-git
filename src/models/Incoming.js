@@ -13,6 +13,7 @@ module.exports = function (app) {
             self.siteType = null;
             self.mainSiteId = null;
             self.subSiteId = null;
+            self.addMethod = 1;
             // G2G FROM ABU AL NASSER
             self.g2gMHId = null;
             /*These fields come from common correspondence model. The below fields are not in Incoming model*/

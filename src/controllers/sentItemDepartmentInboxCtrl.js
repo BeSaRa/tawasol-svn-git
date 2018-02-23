@@ -2,6 +2,8 @@ module.exports = function (app) {
     app.controller('sentItemDepartmentInboxCtrl', function (lookupService,
                                                             sentItemDepartmentInboxService,
                                                             $q,
+                                                            $state,
+                                                            listGeneratorService,
                                                             langService,
                                                             toast,
                                                             dialog,
@@ -401,6 +403,27 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Edit After Approve
+         * @param model
+         * @param $event
+         */
+        self.editAfterExport = function (model, $event) {
+            var info = model.getInfo(), list = listGeneratorService.createUnOrderList(),
+                langKeys = ['signature_serial_will_removed', 'the_book_will_go_to_audit', 'serial_retained'];
+            _.map(langKeys, function (item) {
+                list.addItemToList(langService.get(item));
+            });
+            dialog.confirmMessage(list.getList(), null, null, $event)
+                .then(function () {
+                    $state.go('app.outgoing.add', {
+                        workItem: info.wobNumber,
+                        vsId: info.vsId,
+                        action: 'editAfterExport'
+                    });
+                });
+        };
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
@@ -437,6 +460,21 @@ module.exports = function (app) {
                 class: "action-red",
                 hide: true, /*THERE IS NO WORK OBJECT NUMBER IN SENT ITEMS*/
                 checkShow: self.checkToShowAction
+            },
+            // Edit After Approve (Only electronic only)
+            {
+                type: 'action',
+                icon: 'eraser-variant',
+                text: 'grid_action_edit_after_export',
+                shortcut: true,
+                callback: self.editAfterExport,
+                class: "action-green",
+                showInView: false,
+                permissionKey: "EDIT_OUTGOING_CONTENT", //TODO: Apply correct permission when added to database.
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && !info.isPaper;
+                }
             },
             // Recall
             {

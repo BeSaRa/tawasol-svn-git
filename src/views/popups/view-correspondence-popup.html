@@ -27,7 +27,7 @@
             </div>
         </div>
         <div layout="row" flex>
-            <md-sidenav md-is-locked-open="!ctrl.fullScreen" ng-if="!ctrl.fullScreen">
+            <md-sidenav md-is-locked-open="!ctrl.fullScreen" ng-if="false">
                 <div class="p20" layout="column" scroll-directive>
                     <ul id="document-properties">
                         <li class="document-properties">
@@ -142,7 +142,7 @@
                                 <div>
                                     <manage-tags-directive from-dialog="false"
                                                            tags="ctrl.correspondence.tags"
-                                                            disable-everything="ctrl.disableEverything">
+                                                           disable-everything="ctrl.disableEverything">
                                     </manage-tags-directive>
                                 </div>
                             </accordion-content>
@@ -223,7 +223,8 @@
         <div layout="row">
             <div ng-if="ctrl.correspondence">
                 <md-button class="md-raised" ng-click="ctrl.saveCorrespondenceChanges()"
-                           ng-disabled="ctrl.checkDisabled()">{{lang.save}}</md-button>
+                           ng-disabled="ctrl.checkDisabled()">{{lang.save}}
+                </md-button>
             </div>
             <span flex></span>
             <div ng-if="ctrl.correspondence">

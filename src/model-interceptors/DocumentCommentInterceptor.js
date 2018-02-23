@@ -29,7 +29,7 @@ module.exports = function (app) {
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.includedIDs = _.map(JSON.parse(model.includedIDs), function (item) {
                 if (model.isPerOU) {
-                    item = organizationService.getOrganizationTypeById(item);
+                    item = organizationService.getOrganizationById(item);
                     item = angular.extend(item, {display: item[langService.current + 'Name']});
                 } else {
                     item = applicationUserService.getApplicationUserById(item);
@@ -39,7 +39,7 @@ module.exports = function (app) {
             });
             model.excludedIDs = _.map(JSON.parse(model.excludedIDs), function (item) {
                 if (model.isPerOU) {
-                    item = organizationService.getOrganizationTypeById(item);
+                    item = organizationService.getOrganizationById(item);
                     item = angular.extend(item, {display: item[langService.current + 'Name']});
                 } else {
                     item = applicationUserService.getApplicationUserById(item);

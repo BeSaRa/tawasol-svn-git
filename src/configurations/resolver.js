@@ -208,6 +208,22 @@ module.exports = function (app) {
                                 return false;
                             });
                         });
+                },
+                editAfterExport: function ($timeout, $stateParams, correspondenceService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, workItem = $stateParams.workItem, action = $stateParams.action;
+                    if (action !== 'editAfterExport') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                    return correspondenceService
+                        .correspondenceEditAfterExport('outgoing', vsId, workItem)
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
                 }
 
             })
@@ -288,6 +304,10 @@ module.exports = function (app) {
                 entityTypes: function (entityTypeService, employeeService) {
                     'ngInject';
                     return !employeeService.isCloudUser() ? entityTypeService.getEntityTypes() : [];
+                },
+                organizations: function (organizationService) {
+                    'ngInject';
+                    return organizationService.getOrganizations();
                 }
             })
             .bulkResolveToState('app.inbox.group-inbox', {
