@@ -46,6 +46,8 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.docClassName = 'outgoing';
+            model.deliveryDate ? getDateFromUnixTimeStamp(model, ['deliveryDate']) : "";
+
             if (!angular.isArray(model.tags))
                 model.tags = (model.tags && model.tags.length) ? Array.prototype.slice.call(JSON.parse(model.tags)) : [];
 
@@ -79,5 +81,17 @@ module.exports = function (app) {
             return model;
         });
 
+        /**
+         * convert unix timestamp to Original Date Format (YYYY-MM-DD)
+         * @param model
+         * @param modelProperties
+         * @returns {*}
+         */
+        var getDateFromUnixTimeStamp = function (model, modelProperties) {
+            for (var i = 0; i < modelProperties.length; i++) {
+                model[modelProperties[i]] = model[modelProperties[i]] ? moment(model[modelProperties[i]]).format('YYYY-MM-DD') : null;
+            }
+            return model;
+        };
     })
 };

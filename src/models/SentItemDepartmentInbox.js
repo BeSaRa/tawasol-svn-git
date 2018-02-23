@@ -55,6 +55,10 @@ module.exports = function (app) {
                 return this.docSubject;
             };
 
+            SentItemDepartmentInbox.prototype.getTranslatedType = function () {
+                return this.type === 0 ? langService.get('original') : langService.get('copy');
+            };
+
             var indicator = new Indicator();
             SentItemDepartmentInbox.prototype.getSecurityLevelIndicator = function (securityLevel) {
                 return indicator.getSecurityLevelIndicator(securityLevel);

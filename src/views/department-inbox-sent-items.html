@@ -27,7 +27,7 @@
                                    md-progress="ctrl.progress">
                                 <thead md-head md-order="ctrl.grid.order">
                                 <tr md-row>
-                                    <th colspan="{{ctrl.selectedSentItemDepartmentInboxes.length > 1 ? 10 : 11}}"
+                                    <th colspan="{{ctrl.selectedSentItemDepartmentInboxes.length > 1 ? 11 : 12}}"
                                         ng-if="ctrl.selectedSentItemDepartmentInboxes.length" md-column>
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedSentItemDepartmentInboxes.length}} {{lang.items_selected}} </span>
@@ -55,14 +55,13 @@
                                         <span>{{lang.subject}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="receivedDate">
-                                        <span>{{lang.received_date}}</span>
+                                        md-order-by="type">
+                                        <span>{{lang.type}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
                                         md-order-by="sender">
                                         <span>{{lang.sender}}</span>
                                     </th>
-
                                     <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
                                         md-order-by="mainSiteFromIdInfo">
                                         <span>{{lang.main_site_from}}</span>
@@ -78,6 +77,10 @@
                                     <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
                                         md-order-by="subSiteToIdInfo">
                                         <span>{{lang.sub_site_to}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
+                                        md-order-by="receivedDate">
+                                        <span>{{lang.received_date}}</span>
                                     </th>
 
                                     <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column>
@@ -108,9 +111,7 @@
                                                     ></md-icon>
                                                 </span>
                                     </td>
-
                                     <td md-cell>{{sentItemDepartmentInbox.docFullSerial}}</td>
-
                                     <td md-cell class="indicator-td text-right"
                                         style="padding-right:0 !important; padding-left:0px !important;">
                                                 <span ng-class="{'indicator-content': sentItemDepartmentInbox.priorityLevelIndicator}">
@@ -144,7 +145,6 @@
                                             ></md-icon>
                                         </span>
                                     </td>
-
                                     <td md-cell md-truncate class="subject">
                                         <a href="" class="view-doc" md-truncate
                                            ng-click="ctrl.viewDocument(sentItemDepartmentInbox, $event)"
@@ -152,7 +152,7 @@
                                             {{sentItemDepartmentInbox.docSubject}}
                                         </a>
                                     </td>
-                                    <td md-cell></td>
+                                    <td md-cell>{{sentItemDepartmentInbox.getTranslatedType()}}</td>
                                     <td md-cell class="td-data">
                                         <div layout="row">
                                             <span flex>{{sentItemDepartmentInbox.sentByIdInfo.getTranslatedName()}}</span>
@@ -178,7 +178,7 @@
                                             <span flex>{{sentItemDepartmentInbox.subSiteToIdInfo.getTranslatedName()}}</span>
                                         </div>
                                     </td>
-
+                                    <td md-cell>{{sentItemDepartmentInbox.deliveryDate}}</td>
                                     <td md-cell class="p-r0" ng-if="ctrl.selectedSentItemDepartmentInboxes.length < 2">
                                         <div layout-align="start center" flex ng-if="!ctrl.selectedSentItemDepartmentInboxes.length
                                                           || ctrl.selectedSentItemDepartmentInboxes.length===1 && ctrl.selectedSentItemDepartmentInboxes[0].workObjectNumber === sentItemDepartmentInbox.workObjectNumber">

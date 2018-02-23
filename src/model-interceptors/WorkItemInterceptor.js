@@ -60,10 +60,8 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.generalStepElm.numberOfDays = getNumberOfDays(model.generalStepElm.receivedDate);
-            if (model.generalStepElm.receivedDate)
-                getDateFromUnixTimeStamp(model.generalStepElm, ["receivedDate"]);
-            else
-                model.generalStepElm.receivedDate = "";
+            model.generalStepElm.receivedDate? getDateFromUnixTimeStamp(model.generalStepElm, ["receivedDate"]) : "";
+
             model.dueDateOriginal = angular.copy(model.generalStepElm.dueDate);
             if (model.generalStepElm.dueDate && model.generalStepElm.dueDate > 0 && model.generalStepElm.dueDate >= moment().unix())
                 getDateFromUnixTimeStamp(model.generalStepElm, ["dueDate"]);
