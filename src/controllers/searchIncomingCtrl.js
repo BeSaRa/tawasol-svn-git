@@ -812,6 +812,7 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: self.checkToShowAction
             },
+            // Broadcast
             {
                 type: 'action',
                 icon: 'bullhorn',
@@ -819,7 +820,13 @@ module.exports = function (app) {
                 shortcut: false,
                 hide: false,
                 callback: self.doBroadcast,
-                checkShow: self.checkToShowAction
+                checkShow: function(action, model){
+                    var info = model.getInfo();
+                    if(info.isPaper){
+                        return self.checkToShowAction(action, model) && model.needApprove();
+                    }
+                    return self.checkToShowAction(action, model);
+                }
             },
             // Print Barcode
             {
