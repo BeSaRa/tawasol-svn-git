@@ -112,7 +112,7 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.incoming.documentComments.length" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS')">
+                        <accordion-item pass-when="!!ctrl.incoming.documentComments.length" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS') && ctrl.employeeService.hasPermissionTo('ADD_DOCUMENT_COMMENT')">
                             <accordion-title>
                                 <md-icon md-svg-icon="comment"></md-icon>
                                 <span>{{lang.incoming_manage_comments}}</span>

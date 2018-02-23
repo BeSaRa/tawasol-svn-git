@@ -12,7 +12,8 @@ module.exports = function (app) {
                                                               viewTrackingSheetService,
                                                               downloadService,
                                                               employeeService,
-                                                              correspondenceService) {
+                                                              correspondenceService,
+                                                              favoriteDocumentsService) {
         'ngInject';
         var self = this;
 
@@ -72,6 +73,27 @@ module.exports = function (app) {
                     if (pageNumber)
                         self.grid.page = pageNumber;
                     return result;
+                });
+        };
+
+
+        /**
+         * @description add an item to the favorite documents
+         * @param searchedCorrespondenceDocument
+         * @param $event
+         */
+        self.addToFavorite = function (searchedCorrespondenceDocument, $event) {
+            favoriteDocumentsService.controllerMethod
+                .favoriteDocumentAdd(searchedCorrespondenceDocument.getInfo().vsId, $event)
+                .then(function (result) {
+                    if (result.status) {
+                        toast.success(langService.get("add_to_favorite_specific_success").change({
+                            name: searchedCorrespondenceDocument.getTranslatedName()
+                        }));
+                    }
+                    else {
+                        dialog.alertMessage(langService.get(result.message));
+                    }
                 });
         };
 
@@ -354,6 +376,20 @@ module.exports = function (app) {
                 checkShow: self.checkToShowAction,
                 showInView: false
             },
+            // Add To Favorite
+            {
+                type: 'action',
+                icon: 'star',
+                text: 'grid_action_add_to_favorite',
+                permissionKey: "MANAGE_FAVORITE",
+                shortcut: false,
+                callback: self.addToFavorite,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && info.docStatus >= 22;
+                }
+            },
             // Export
             {
                 type: 'action',
@@ -373,7 +409,6 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
-                shortcut: false,
                 showInView: false,
                 shortcut: true,
                 callback: self.viewDocument,

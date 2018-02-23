@@ -9,15 +9,18 @@ module.exports = function (app) {
             ENTITY_NOT_FOUND: 12000,
             AUTHORIZE_FAILED: 3008,
             ROOT_ENTITY_NOT_FOUND: 1001,
-            FILE_NOT_ALLOWED : 2041,
-            SIZE_EXTENSION_NOT_ALLOWED: 2006
+            FILE_NOT_ALLOWED: 2041,
+            SIZE_EXTENSION_NOT_ALLOWED: 2006,
+            DUPLICATE_ENTRY: 1008
         };
 
         return {
             checkIf: function (error, errorCode, callback) {
                 var code = error.hasOwnProperty('data') ? error.data.ec : error;
                 if (code === errorCodes[errorCode]) {
-                    return callback();
+                    if (callback)
+                        return callback();
+                    return true;
                 }
                 return $q.reject(error);
             }

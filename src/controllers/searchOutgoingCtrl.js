@@ -48,15 +48,15 @@ module.exports = function (app) {
         self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
         self.propertyConfigurations = propertyConfigurations;
         /*self.docStatuses = [
-            {text: 'Receive', 'value': 1},
-            {text: 'Meta Data', 'value': 2},
-            {text: 'Draft', 'value': 3},
-            {text: 'Completed', 'value': 4},
-            {text: 'Rejected', 'value': 7},
-            {text: 'Ready For Sent', 'value': 8},
-            {text: 'Removed', 'value': 9},
-            {text: 'Archived', 'value': 21}
-        ];*/
+         {text: 'Receive', 'value': 1},
+         {text: 'Meta Data', 'value': 2},
+         {text: 'Draft', 'value': 3},
+         {text: 'Completed', 'value': 4},
+         {text: 'Rejected', 'value': 7},
+         {text: 'Ready For Sent', 'value': 8},
+         {text: 'Removed', 'value': 9},
+         {text: 'Archived', 'value': 21}
+         ];*/
         self.docStatuses = documentStatuses;
         self.docStatuses.unshift(new DocumentStatus({arName: 'الكل', enName: 'All'}));
         self.followupStatuses = lookupService.returnLookups(lookupService.followupStatus);
@@ -120,10 +120,10 @@ module.exports = function (app) {
         self.checkRequiredFieldsSearchOutgoing = function (model) {
             var required = self.requiredFieldsSearchOutgoing, result = [];
             /*_.map(required, function (property) {
-                var propertyValueToCheck = (model.hasOwnProperty(property) ? model[property] : model.props[property]);
-                if (!generator.validRequired(propertyValueToCheck))
-                    result.push(property);
-            });*/
+             var propertyValueToCheck = (model.hasOwnProperty(property) ? model[property] : model.props[property]);
+             if (!generator.validRequired(propertyValueToCheck))
+             result.push(property);
+             });*/
             _.map(required, function (property) {
                 var propertyValueToCheck = model[property];
                 if (!generator.validRequired(propertyValueToCheck))
@@ -191,8 +191,8 @@ module.exports = function (app) {
          */
         self.setMinMaxDocDate = function (changedBy, $event) {
             /*If value is instance of date, that means user has changed the value from datepicker
-            * else value is changed on change of year field and we need to cast the value to date type.
-            */
+             * else value is changed on change of year field and we need to cast the value to date type.
+             */
             if (changedBy === 'year') {
                 self.maxDocDate = self.maxDateForTo = new Date(self.docDateToCopy);
                 self.minDocDate = self.minDateForFrom = new Date(self.docDateFromCopy);
@@ -347,9 +347,9 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, // limit options
                 {
                     /*label: self.globalSetting.searchAmountLimit.toString(),
-                    value: function () {
-                        return self.globalSetting.searchAmountLimit
-                    }*/
+                     value: function () {
+                     return self.globalSetting.searchAmountLimit
+                     }*/
                     label: langService.get('all'),
                     value: function () {
                         return (self.searchedOutgoingDocuments.length + 21);
@@ -382,7 +382,7 @@ module.exports = function (app) {
 
         /**
          * @description add an item to the favorite documents
-         * @param sentItem
+         * @param searchedOutgoingDocument
          * @param $event
          */
         self.addToFavorite = function (searchedOutgoingDocument, $event) {
@@ -390,12 +390,9 @@ module.exports = function (app) {
                 .favoriteDocumentAdd(searchedOutgoingDocument.getInfo().vsId, $event)
                 .then(function (result) {
                     if (result.status) {
-                        self.reloadUserSentItems(self.grid.page)
-                            .then(function () {
-                                toast.success(langService.get("add_to_favorite_specific_success").change({
-                                    name: searchedOutgoingDocument.getTranslatedName()
-                                }));
-                            });
+                        toast.success(langService.get("add_to_favorite_specific_success").change({
+                            name: searchedOutgoingDocument.getTranslatedName()
+                        }));
                     }
                     else {
                         dialog.alertMessage(langService.get(result.message));
@@ -667,8 +664,8 @@ module.exports = function (app) {
          */
         self.checkToShowAction = function (action, model) {
             /*if (action.hasOwnProperty('permissionKey'))
-                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-            return (!action.hide);*/
+             return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+             return (!action.hide);*/
 
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
@@ -683,8 +680,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                                return isPermission !== true;
+                            }));
                     }
                 }
             }
@@ -735,9 +732,9 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.addToFavorite,
                 class: "action-green",
-                checkShow: function(action, model){
+                checkShow: function (action, model) {
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && info.wobNumber;
+                    return self.checkToShowAction(action, model) && info.docStatus >= 22;
                 }
             },
             // Export
@@ -1005,18 +1002,18 @@ module.exports = function (app) {
         ];
 
         /*console.log('outgoing search grid main actions length', self.gridActions.length);
-        var actions = [];
-        for(var i=0; i < self.gridActions.length; i++){
-            if(self.gridActions[i].type === 'action')
-                actions.push(langService.getKey(self.gridActions[i].text, 'en'));
-            if(self.gridActions[i].hasOwnProperty('submenu')){
-                var submenus = self.gridActions[i].submenu;
-                for(var j=0; j< submenus.length; j++){
-                    if(submenus[j].type === 'action')
-                        actions.push(langService.getKey(submenus[j].text, 'en'));
-                }
-            }
-        }
-        console.log('outgoing search all grid actions', actions);*/
+         var actions = [];
+         for(var i=0; i < self.gridActions.length; i++){
+         if(self.gridActions[i].type === 'action')
+         actions.push(langService.getKey(self.gridActions[i].text, 'en'));
+         if(self.gridActions[i].hasOwnProperty('submenu')){
+         var submenus = self.gridActions[i].submenu;
+         for(var j=0; j< submenus.length; j++){
+         if(submenus[j].type === 'action')
+         actions.push(langService.getKey(submenus[j].text, 'en'));
+         }
+         }
+         }
+         console.log('outgoing search all grid actions', actions);*/
     });
 };
