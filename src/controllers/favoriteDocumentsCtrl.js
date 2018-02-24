@@ -373,7 +373,7 @@ module.exports = function (app) {
                         hasPermission = ( employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES")|| employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT"));
                     else if (info.documentClass === "outgoing")
                         hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-                    return self.checkToShowAction(action, model) && hasPermission;
+                    return self.checkToShowAction(action, model) && hasPermission && info.docStatus < 24;
                 },
                 submenu: [
                     // Content

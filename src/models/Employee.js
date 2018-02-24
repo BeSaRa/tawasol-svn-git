@@ -46,6 +46,7 @@ module.exports = function (app) {
             self.proxyUsers = [];
             self.userOrganization = null;
             self.ouList = [];
+            self.outOfOffice = false;
 
             var collectionResults = [
                 'reminderSmsPriority',

@@ -41,15 +41,16 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'userPreferencePopCtrl';
         self.applicationUser = new ApplicationUser(applicationUser);
+
         self.applicationUser.signature = signature;
         self.currentEmployee = applicationUser;
         self.model = angular.copy(self.applicationUser);
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
         self.genders = lookupService.returnLookups(lookupService.gender);
         self.languages = lookupService.returnLookups(lookupService.language);
-        self.authorityLevels = lookupService.returnLookups(lookupService.securityLevel);
-        /*var ouAppUserSecurityLevels = self.applicationUser.organization.securityLevels;
-         self.authorityLevels = generator.getSelectedCollectionFromResult(self.authorityLevels, ouAppUserSecurityLevels, 'lookupKey');*/
+        //self.authorityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        self.authorityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
+
         self.jobTitles = jobTitles;
         self.themes = themes;
         self.roles = roles;
@@ -406,6 +407,7 @@ module.exports = function (app) {
             }
             if (!self.isOutOfOffice)
                 self.applicationUser.outOfOffice = false;
+            employeeService.setCurrentEmployee(self.applicationUser);
         };
 
         self.requiredFieldsOutOfOffice = [
@@ -477,6 +479,7 @@ module.exports = function (app) {
                         .then(function (result) {
                             employeeService.setCurrentOUApplicationUser(result);
                             self.ouApplicationUserCopy = angular.copy(result);
+                            employeeService.setCurrentEmployee(self.applicationUser);
                             toast.success(langService.get('out_of_office_success'));
                         });
                 })

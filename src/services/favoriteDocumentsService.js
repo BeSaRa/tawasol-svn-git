@@ -73,7 +73,7 @@ module.exports = function (app) {
                 return dialog.confirmMessage(langService.get('confirm_remove').change({name: favoriteDocument.getNames()}), null, null, $event)
                     .then(function () {
                         return self.removeFromFavoriteDocument(favoriteDocument).then(function () {
-                            toast.success(langService.get("remove_specific_success").change({name: favoriteDocument.getNames()}));
+                            //toast.success(langService.get("remove_specific_success").change({name: favoriteDocument.getNames()}));
                             return true;
                         })
                     });
@@ -133,7 +133,7 @@ module.exports = function (app) {
             return $http
                 .post((urlService.favoriteDocuments), data)
                 .then(function (result) {
-                    if (errorCode.checkIf(result, 'DUPLICATE_ENTRY'))
+                    if (result.data.hasOwnProperty('ec') && errorCode.checkIf(result, 'DUPLICATE_ENTRY'))
                         return {status: false, message: "add_to_favorite_duplicate_record"};
                     return {status: true, message: "success"};
                 })
