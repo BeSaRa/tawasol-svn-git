@@ -66,9 +66,9 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, // limit options
                 {
                     /*label: self.globalSetting.searchAmountLimit.toString(),
-                    value: function () {
-                        return self.globalSetting.searchAmountLimit
-                    }*/
+                     value: function () {
+                     return self.globalSetting.searchAmountLimit
+                     }*/
                     label: langService.get('all'),
                     value: function () {
                         return (self.proxyMailInboxes.length + 21);
@@ -246,18 +246,25 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.forwardProxyMailInbox = function (proxyMailInbox, $event, defer) {
-            distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(proxyMailInbox.generalStepElm, true, false, null, proxyMailInbox.generalStepElm.workFlowName, $event)
-                .then(function (result) {
-                    dialog.hide();
-                    self.reloadProxyMailInboxes(self.grid.page).then(function () {
-                        new ResolveDefer(defer);
-                    });
-                })
-                .catch(function (result) {
-                    self.reloadProxyMailInboxes(self.grid.page);
+        self.forward = function (proxyMailInbox, $event, defer) {
+            /*distributionWorkflowService
+             .controllerMethod
+             .distributionWorkflowSend(proxyMailInbox.generalStepElm, true, false, null, proxyMailInbox.generalStepElm.workFlowName, $event)
+             .then(function (result) {
+             dialog.hide();
+             self.reloadProxyMailInboxes(self.grid.page).then(function () {
+             new ResolveDefer(defer);
+             });
+             })
+             .catch(function (result) {
+             self.reloadProxyMailInboxes(self.grid.page);
+             });*/
+            proxyMailInbox.launchWorkFlow($event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadProxyMailInboxes(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
                 });
 
         };
@@ -268,18 +275,25 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.replyProxyMailInbox = function (proxyMailInbox, $event, defer) {
-            distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(proxyMailInbox.generalStepElm, false, true, proxyMailInbox.senderInfo, proxyMailInbox.generalStepElm.workFlowName, $event)
-                .then(function (result) {
-                    dialog.hide();
-                    self.reloadProxyMailInboxes(self.grid.page).then(function () {
-                        new ResolveDefer(defer);
-                    });
-                })
-                .catch(function (result) {
-                    self.reloadProxyMailInboxes(self.grid.page);
+        self.reply = function (proxyMailInbox, $event, defer) {
+            /*distributionWorkflowService
+             .controllerMethod
+             .distributionWorkflowSend(proxyMailInbox.generalStepElm, false, true, proxyMailInbox.senderInfo, proxyMailInbox.generalStepElm.workFlowName, $event)
+             .then(function (result) {
+             dialog.hide();
+             self.reloadProxyMailInboxes(self.grid.page).then(function () {
+             new ResolveDefer(defer);
+             });
+             })
+             .catch(function (result) {
+             self.reloadProxyMailInboxes(self.grid.page);
+             });*/
+            proxyMailInbox.launchWorkFlow($event, 'reply')
+                .then(function () {
+                    self.reloadProxyMailInboxes(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
                 });
         };
 
@@ -557,7 +571,6 @@ module.exports = function (app) {
         };
 
 
-
         /**
          * @description Edit Properties
          * @param proxyMailInbox
@@ -636,8 +649,8 @@ module.exports = function (app) {
          */
         self.checkToShowAction = function (action, model) {
             /*if (action.hasOwnProperty('permissionKey'))
-                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-            return (!action.hide);*/
+             return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+             return (!action.hide);*/
 
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
@@ -652,8 +665,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                                return isPermission !== true;
+                            }));
                     }
                 }
             }
@@ -726,7 +739,7 @@ module.exports = function (app) {
                 icon: 'share',
                 text: 'grid_action_forward',
                 shortcut: true,
-                callback: self.forwardProxyMailInbox,
+                callback: self.forward,
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
@@ -736,7 +749,7 @@ module.exports = function (app) {
                 icon: 'reply',
                 text: 'grid_action_reply',
                 shortcut: true,
-                callback: self.replyProxyMailInbox,
+                callback: self.reply,
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
@@ -1022,8 +1035,8 @@ module.exports = function (app) {
                     // If outgoing or internal, show the button
 
                     /*If document is unapproved or partially approved, show the button. If fully approved, hide the button.
-                    24 is approved
-                    */
+                     24 is approved
+                     */
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model)
                         && !info.isPaper

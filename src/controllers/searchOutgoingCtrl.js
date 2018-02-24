@@ -431,7 +431,7 @@ module.exports = function (app) {
 
             return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
                 .then(function () {
-                    distributionWorkflowService
+                    /*distributionWorkflowService
                         .controllerMethod
                         .distributionWorkflowSend(searchedOutgoingDocument, false, false, null, "outgoing", $event)
                         .then(function (result) {
@@ -441,6 +441,10 @@ module.exports = function (app) {
                         .catch(function (result) {
                             self.reloadSearchedOutgoingDocument(self.grid.page);
                             //self.replaceRecord(result);
+                        });*/
+                    searchedOutgoingDocument.launchWorkFlow($event, 'forward', 'favorites')
+                        .then(function () {
+                            self.reloadSearchedOutgoingDocument(self.grid.page);
                         });
                 });
         };

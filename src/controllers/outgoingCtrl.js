@@ -261,9 +261,14 @@ module.exports = function (app) {
                 return;
             }
 
-            distributionWorkflowService
+            /*distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSend(self.outgoing, false, false, null, "outgoing", $event)
+                .then(function () {
+                    counterService.loadCounters();
+                    self.resetAddCorrespondence();
+                });*/
+            document.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     counterService.loadCounters();
                     self.resetAddCorrespondence();
@@ -274,7 +279,11 @@ module.exports = function (app) {
         self.docActionSendToReview = function (document, $event) {
             //console.log('send to review', document);
             draftOutgoingService.controllerMethod
-                .draftOutgoingSendToReview(self.outgoing, $event);
+                .draftOutgoingSendToReview(self.outgoing, $event)
+                .then(function(){
+                    counterService.loadCounters();
+                    self.resetAddCorrespondence();
+                });
         };
 
         self.docActionManageTasks = function (document, $event) {

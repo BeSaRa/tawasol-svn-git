@@ -132,14 +132,15 @@ module.exports = function (app) {
          * @description Launch distribution workflow for favorite document
          * @param favoriteDocument
          * @param $event
+         * @param defer
          */
         self.launchDistributionWorkflow = function (favoriteDocument, $event, defer) {
-            /*if (!favoriteDocument.hasContent()) {
+            if (!favoriteDocument.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
 
-            distributionWorkflowService
+            /*distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSend(favoriteDocument, false, false, null, favoriteDocument.classDescription.toLowerCase(), $event)
                 .then(function (result) {
@@ -153,6 +154,14 @@ module.exports = function (app) {
                     self.reloadFavoriteDocuments(self.grid.page);
                     //self.replaceRecord(result);
                 });*/
+            favoriteDocument.launchWorkFlow($event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadFavoriteDocuments(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
+
         };
 
         /**

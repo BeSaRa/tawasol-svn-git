@@ -201,7 +201,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.acceptAndLaunchDistributionWorkflowBulk = function ($event) {
-            console.log('accept and launch distribution workflow bulk : ', self.selectedReviewIncomings);
 
             var contentNotExist = _.filter(self.selectedReviewIncomings, function (reviewIncoming) {
                 return !reviewIncoming.hasContent();
@@ -211,7 +210,7 @@ module.exports = function (app) {
                 return;
             }
 
-            distributionWorkflowService
+            /*distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSendBulk(self.selectedReviewIncomings, "incoming", $event)
                 .then(function () {
@@ -219,8 +218,12 @@ module.exports = function (app) {
                 })
                 .catch(function () {
                     self.reloadReviewIncomings(self.grid.page);
+                });*/
+            return correspondenceService
+                .launchCorrespondenceWorkflow(self.selectedReviewIncomings, $event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadReviewIncomings(self.grid.page);
                 });
-
         };
 
         /**
@@ -228,7 +231,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.acceptIncomingBulk = function ($event) {
-            console.log('accept review incoming mails bulk : ', self.selectedReviewIncomings);
             reviewIncomingService
                 .controllerMethod
                 .reviewIncomingAcceptBulk(self.selectedReviewIncomings, $event)
@@ -242,7 +244,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.rejectIncomingBulk = function ($event) {
-            console.log('reject review incoming mails bulk : ', self.selectedReviewIncomings);
             reviewIncomingService
                 .controllerMethod
                 .reviewIncomingRejectBulk(self.selectedReviewIncomings, $event)
@@ -296,14 +297,13 @@ module.exports = function (app) {
          * @param defer
          */
         self.acceptAndLaunchDistributionWorkflow = function (reviewIncoming, $event, defer) {
-            //console.log('accept and launch distribution workflow');
 
             if (!reviewIncoming.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
 
-            distributionWorkflowService
+            /*distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSend(reviewIncoming, false, false, null, "incoming", $event)
                 .then(function (result) {
@@ -316,6 +316,13 @@ module.exports = function (app) {
                 .catch(function (result) {
                     self.reloadReviewIncomings(self.grid.page);
                     //self.replaceRecord(result);
+                });*/
+            reviewIncoming.launchWorkFlow($event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadReviewIncomings(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
                 });
         };
         /**

@@ -106,9 +106,9 @@ module.exports = function (app) {
          * @description Remove single review outgoing email
          * @param reviewOutgoing
          * @param $event
+         * @param defer
          */
         self.removeReviewOutgoing = function (reviewOutgoing, $event, defer) {
-            //console.log('remove review outgoing mail : ', reviewOutgoing);
             reviewOutgoingService
                 .controllerMethod
                 .reviewOutgoingRemove(reviewOutgoing, $event)
@@ -133,35 +133,6 @@ module.exports = function (app) {
                     self.reloadReviewOutgoings(self.grid.page);
                 });
         };
-        /*
-                /!**
-                 * @description Change the status of review outgoing email
-                 * @param reviewOutgoing
-                 *!/
-                self.changeStatusReviewOutgoing = function (reviewOutgoing) {
-                    self.statusServices[reviewOutgoing.status](reviewOutgoing)
-                        .then(function () {
-                            toast.success(langService.get('status_success'));
-                        })
-                        .catch(function () {
-                            reviewOutgoing.status = !reviewOutgoing.status;
-                            dialog.errorMessage(langService.get('something_happened_when_update_status'));
-                        })
-                };*/
-        /*
-                /!**
-                 * @description Change the status of selected review outgoing emails
-                 * @param status
-                 *!/
-                self.changeStatusBulkReviewOutgoings = function (status) {
-                    self.statusServices[status](self.selectedReviewOutgoings)
-                        .then(function () {
-                            self.reloadReviewOutgoings(self.grid.page)
-                                .then(function () {
-                                    toast.success(langService.get('selected_status_updated'));
-                                });
-                        });
-                };*/
 
         /**
          * @description Launch distribution workflow for selected review outgoing mails
@@ -262,7 +233,7 @@ module.exports = function (app) {
                 return;
             }
 
-            distributionWorkflowService
+            /*distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSend(reviewOutgoing, false, false, null, "outgoing", $event)
                 .then(function (result) {
@@ -277,6 +248,14 @@ module.exports = function (app) {
                         new ResolveDefer(defer);
                     });
                     //self.replaceRecord(result);
+                });*/
+
+            reviewOutgoing.launchWorkFlow($event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadReviewOutgoings(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
                 });
         };
         /**

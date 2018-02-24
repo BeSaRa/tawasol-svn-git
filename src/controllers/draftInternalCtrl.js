@@ -136,7 +136,7 @@ module.exports = function (app) {
                 return;
             }
 
-            distributionWorkflowService
+            /*distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSendBulk(self.selectedDraftInternals, "internal", $event)
                 .then(function () {
@@ -144,8 +144,12 @@ module.exports = function (app) {
                 })
                 .catch(function () {
                     self.reloadDraftInternals(self.grid.page);
+                });*/
+            return correspondenceService
+                .launchCorrespondenceWorkflow(self.selectedDraftInternals, $event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadDraftInternals(self.grid.page);
                 });
-
         };
 
         /**
@@ -153,7 +157,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendToReviewBulk = function ($event) {
-            console.log('send to review outgoing mails bulk : ', self.selectedDraftInternals);
             draftInternalService
                 .controllerMethod
                 .draftInternalSendToReviewBulk(self.selectedDraftInternals, $event)
@@ -229,7 +232,7 @@ module.exports = function (app) {
                 return;
             }
 
-            distributionWorkflowService
+            /*distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSend(draftInternal, false, false, null, "internal", $event)
                 .then(function (result) {
@@ -240,6 +243,14 @@ module.exports = function (app) {
                 })
                 .catch(function (result) {
                     self.reloadDraftInternals(self.grid.page);
+                });*/
+
+            draftInternal.launchWorkFlow($event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadDraftInternals(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
                 });
         };
 

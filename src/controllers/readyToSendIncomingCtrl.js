@@ -131,7 +131,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.launchDistributionWorkflowBulk = function ($event) {
-            console.log('launch distribution workflow bulk : ', self.selectedReadyToSendIncomings);
 
             var contentNotExist = _.filter(self.selectedReadyToSendIncomings, function (readyToSendIncoming) {
                 return !readyToSendIncoming.hasContent();
@@ -141,13 +140,18 @@ module.exports = function (app) {
                 return;
             }
 
-            distributionWorkflowService
+            /*distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSendBulk(self.selectedReadyToSendIncomings, "incoming", $event)
                 .then(function () {
                     self.reloadReadyToSendIncomings(self.grid.page);
                 })
                 .catch(function () {
+                    self.reloadReadyToSendIncomings(self.grid.page);
+                });*/
+            return correspondenceService
+                .launchCorrespondenceWorkflow(self.selectedReadyToSendIncomings, $event, 'forward', 'favorites')
+                .then(function () {
                     self.reloadReadyToSendIncomings(self.grid.page);
                 });
 
@@ -208,12 +212,12 @@ module.exports = function (app) {
          * @param defer
          */
         self.launchDistributionWorkflow = function (readyToSendIncoming, $event, defer) {
-            console.log('launch distribution workflow', readyToSendIncoming);
+
             if (!readyToSendIncoming.hasContent()) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
-            distributionWorkflowService
+           /* distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSend(readyToSendIncoming, false, false, null, "incoming", $event)
                 .then(function (result) {
@@ -224,6 +228,13 @@ module.exports = function (app) {
                 })
                 .catch(function (result) {
                     self.reloadReadyToSendIncomings(self.grid.page);
+                });*/
+            readyToSendIncoming.launchWorkFlow($event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadReadyToSendIncomings(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
                 });
 
         };

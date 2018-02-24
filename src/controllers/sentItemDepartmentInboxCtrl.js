@@ -17,13 +17,14 @@ module.exports = function (app) {
                                                             contextHelpService,
                                                             employeeService,
                                                             correspondenceService,
-                                                            ResolveDefer) {
+                                                            ResolveDefer,
+                                                            favoriteDocumentsService) {
         'ngInject';
         var self = this;
 
         /*
-        * IT WILL ALWAYS GET OUTGOING DOCUMENTS ONLY
-        * */
+         * IT WILL ALWAYS GET OUTGOING DOCUMENTS ONLY
+         * */
 
         self.controllerName = 'sentItemDepartmentInboxCtrl';
         contextHelpService.setHelpTo('sent-items-department');
@@ -56,9 +57,9 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, // limit options
                 {
                     /*label: self.globalSetting.searchAmountLimit.toString(),
-                    value: function () {
-                        return self.globalSetting.searchAmountLimit
-                    }*/
+                     value: function () {
+                     return self.globalSetting.searchAmountLimit
+                     }*/
                     label: langService.get('all'),
                     value: function () {
                         return (self.sentItemDepartmentInboxes.length + 21);
@@ -123,15 +124,15 @@ module.exports = function (app) {
          */
         self.terminate = function (sentItemDepartmentInbox, $event, defer) {
             /*sentItemDepartmentInboxService.controllerMethod
-                .sentItemDepartmentInboxTerminate(sentItemDepartmentInbox, $event)
-                .then(function (result) {
-                    self.reloadUserInboxes(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get("terminate_specific_success").change({name: sentItemDepartmentInbox.generalStepElm.docSubject}));
-                            new ResolveDefer(defer);
-                        })
-                    ;
-                });*/
+             .sentItemDepartmentInboxTerminate(sentItemDepartmentInbox, $event)
+             .then(function (result) {
+             self.reloadUserInboxes(self.grid.page)
+             .then(function () {
+             toast.success(langService.get("terminate_specific_success").change({name: sentItemDepartmentInbox.generalStepElm.docSubject}));
+             new ResolveDefer(defer);
+             })
+             ;
+             });*/
         };
 
         /**
@@ -150,21 +151,28 @@ module.exports = function (app) {
          * @param defer
          */
         self.launchNewDistributionWorkflow = function (sentItemDepartmentInbox, $event, defer) {
-            //console.log('launch new distribution workflow : ', sentItemDepartmentInbox);
 
             //records will always come from outgoing so to Launch, create URL by passing outgoing
-            distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(sentItemDepartmentInbox, false, false, null, "outgoing", $event)
-                .then(function (result) {
+            /*distributionWorkflowService
+             .controllerMethod
+             .distributionWorkflowSend(sentItemDepartmentInbox, false, false, null, "outgoing", $event)
+             .then(function (result) {
+             self.reloadSentItemDepartmentInboxes(self.grid.page)
+             .then(function () {
+             new ResolveDefer(defer);
+             });
+             })
+             .catch(function (result) {
+             self.reloadSentItemDepartmentInboxes(self.grid.page);
+             });*/
+            sentItemDepartmentInbox.launchWorkFlow($event, 'forward', 'favorites')
+                .then(function () {
                     self.reloadSentItemDepartmentInboxes(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
                         });
-                })
-                .catch(function (result) {
-                    self.reloadSentItemDepartmentInboxes(self.grid.page);
                 });
+
         };
 
         /**
@@ -173,8 +181,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.addToFavorite = function (sentItemDepartmentInbox, $event) {
-            sentItemDepartmentInbox.controllerMethod
-                .favoriteDocumentAdd(sentItemDepartmentInbox.generalStepElm.vsId, $event)
+            favoriteDocumentsService.controllerMethod
+                .favoriteDocumentAdd(sentItemDepartmentInbox.vsId, $event)
                 .then(function (result) {
                         if (result.status) {
                             self.reloadSentItemDepartmentInboxes(self.grid.page)
@@ -378,8 +386,8 @@ module.exports = function (app) {
          */
         self.checkToShowAction = function (action, model) {
             /*if (action.hasOwnProperty('permissionKey'))
-                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-            return (!action.hide);*/
+             return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+             return (!action.hide);*/
 
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
@@ -394,8 +402,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                                return isPermission !== true;
+                            }));
                     }
                 }
             }

@@ -175,13 +175,18 @@ module.exports = function (app) {
                     return;
                 }
 
-                distributionWorkflowService
+                /*distributionWorkflowService
                     .controllerMethod
                     .distributionWorkflowSendBulk(self.selectedDraftOutgoings, "outgoing", $event)
                     .then(function () {
                         self.reloadDraftOutgoings(self.grid.page);
                     })
                     .catch(function () {
+                        self.reloadDraftOutgoings(self.grid.page);
+                    });*/
+                return correspondenceService
+                    .launchCorrespondenceWorkflow(self.selectedDraftOutgoings, $event, 'forward', 'favorites')
+                    .then(function () {
                         self.reloadDraftOutgoings(self.grid.page);
                     });
             };
@@ -266,7 +271,7 @@ module.exports = function (app) {
                     return;
                 }
 
-                distributionWorkflowService
+                /*distributionWorkflowService
                     .controllerMethod
                     .distributionWorkflowSend(draftOutgoing, false, false, null, "outgoing", $event)
                     .then(function (result) {
@@ -279,7 +284,15 @@ module.exports = function (app) {
                     .catch(function (result) {
                         self.reloadDraftOutgoings(self.grid.page);
                         //self.replaceRecord(result);
-                    });
+                    });*/
+
+            draftOutgoing.launchWorkFlow($event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadDraftOutgoings(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
             };
 
             /**

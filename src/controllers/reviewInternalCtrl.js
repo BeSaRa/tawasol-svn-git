@@ -130,8 +130,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.acceptAndLaunchDistributionWorkflowBulk = function ($event) {
-            console.log('accept and launch distribution workflow bulk : ', self.selectedReviewInternals);
-
             var contentNotExist = _.filter(self.selectedReviewInternals, function (reviewInternal) {
                 return !reviewInternal.hasContent();
             });
@@ -140,13 +138,18 @@ module.exports = function (app) {
                 return;
             }
 
-            distributionWorkflowService
+            /*distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSendBulk(self.selectedReviewInternals, "internal", $event)
                 .then(function () {
                     self.reloadReviewInternals(self.grid.page);
                 })
                 .catch(function () {
+                    self.reloadReviewInternals(self.grid.page);
+                });*/
+            return correspondenceService
+                .launchCorrespondenceWorkflow(self.selectedReviewInternals, $event, 'forward', 'favorites')
+                .then(function () {
                     self.reloadReviewInternals(self.grid.page);
                 });
         };
@@ -235,7 +238,7 @@ module.exports = function (app) {
                 return;
             }
 
-            distributionWorkflowService
+            /*distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSend(reviewInternal, false, false, null, "internal", $event)
                 .then(function (result) {
@@ -248,6 +251,13 @@ module.exports = function (app) {
                 .catch(function (result) {
                     self.reloadReviewInternals(self.grid.page);
                     //self.replaceRecord(result);
+                });*/
+            reviewInternal.launchWorkFlow($event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadReviewInternals(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
                 });
         };
         /**

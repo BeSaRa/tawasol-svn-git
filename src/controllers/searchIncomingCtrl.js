@@ -441,16 +441,20 @@ module.exports = function (app) {
 
             return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
                 .then(function () {
-                    distributionWorkflowService
-                        .controllerMethod
-                        .distributionWorkflowSend(searchedIncomingDocument, false, false, null, "incoming", $event)
-                        .then(function (result) {
+                    /*distributionWorkflowService
+                     .controllerMethod
+                     .distributionWorkflowSend(searchedIncomingDocument, false, false, null, "incoming", $event)
+                     .then(function (result) {
+                     self.reloadSearchedIncomingDocument(self.grid.page);
+                     //self.replaceRecord(result);
+                     })
+                     .catch(function (result) {
+                     self.reloadSearchedIncomingDocument(self.grid.page);
+                     //self.replaceRecord(result);
+                     });*/
+                    searchedIncomingDocument.launchWorkFlow($event, 'forward', 'favorites')
+                        .then(function () {
                             self.reloadSearchedIncomingDocument(self.grid.page);
-                            //self.replaceRecord(result);
-                        })
-                        .catch(function (result) {
-                            self.reloadSearchedIncomingDocument(self.grid.page);
-                            //self.replaceRecord(result);
                         });
                 });
         };

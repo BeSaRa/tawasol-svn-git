@@ -148,7 +148,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.launchDistributionWorkflowBulk = function ($event) {
-            console.log('launch distribution workflow bulk : ', self.selectedRejectedOutgoings);
+           // console.log('launch distribution workflow bulk : ', self.selectedRejectedOutgoings);
 
             var contentNotExist = _.filter(self.selectedRejectedOutgoings, function (rejectedOutgoing) {
                 return !rejectedOutgoing.hasContent();
@@ -158,7 +158,7 @@ module.exports = function (app) {
                 return;
             }
 
-            distributionWorkflowService
+            /*distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSendBulk(self.selectedRejectedOutgoings, "outgoing", $event)
                 .then(function () {
@@ -166,8 +166,12 @@ module.exports = function (app) {
                 })
                 .catch(function () {
                     self.reloadRejectedOutgoings(self.grid.page);
+                });*/
+            return correspondenceService
+                .launchCorrespondenceWorkflow(self.selectedRejectedOutgoings, $event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadRejectedOutgoings(self.grid.page);
                 });
-
         };
 
         /**
@@ -243,7 +247,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
-            distributionWorkflowService
+            /*distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSend(rejectedOutgoing, false, false, null, "outgoing", $event)
                 .then(function (result) {
@@ -257,6 +261,14 @@ module.exports = function (app) {
                 .catch(function (result) {
                     self.reloadRejectedOutgoings(self.grid.page);
                     //self.replaceRecord(result);
+                });*/
+
+            rejectedOutgoing.launchWorkFlow($event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadRejectedOutgoings(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
                 });
         };
         /**
@@ -266,7 +278,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.archiveOutgoing = function (rejectedOutgoing, $event, defer) {
-            console.log('archive outgoing : ', rejectedOutgoing);
             rejectedOutgoingService
                 .controllerMethod
                 .rejectedOutgoingArchive(rejectedOutgoing, $event)

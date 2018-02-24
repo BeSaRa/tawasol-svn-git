@@ -336,9 +336,11 @@ module.exports = function (app) {
             //     });
             userInbox.launchWorkFlow($event, 'reply')
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page);
-                })
-
+                    self.reloadUserInboxes(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
         };
 
         /**
@@ -653,6 +655,7 @@ module.exports = function (app) {
 
 
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+            debugger;
             var info = model.getInfo();
             var hasPermission = false;
             if (info.documentClass === "internal") {

@@ -25,7 +25,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         /*
-        IT WILL ALWAYS GET OUTGOING DOCUMENTS ONLY
+         IT WILL ALWAYS GET OUTGOING DOCUMENTS ONLY
          */
         self.controllerName = 'returnedDepartmentInboxCtrl';
 
@@ -58,9 +58,9 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, // limit options
                 {
                     /*label: self.globalSetting.searchAmountLimit.toString(),
-                    value: function () {
-                        return self.globalSetting.searchAmountLimit
-                    }*/
+                     value: function () {
+                     return self.globalSetting.searchAmountLimit
+                     }*/
                     label: langService.get('all'),
                     value: function () {
                         return (self.returnedDepartmentInboxes.length + 21);
@@ -118,24 +118,24 @@ module.exports = function (app) {
          * @param $event
          */
         /* self.changeStar = function (returnedDepartmentInbox, $event) {
-             self.starServices[returnedDepartmentInbox.generalStepElm.starred](returnedDepartmentInbox)
-                 .then(function (result) {
-                     if (result) {
-                         self.reloadReturnedDepartmentInboxes(self.grid.page)
-                             .then(function () {
-                                 if (!returnedDepartmentInbox.generalStepElm.starred)
-                                     toast.success(langService.get("star_specific_success").change({name: returnedDepartmentInbox.generalStepElm.docSubject}));
-                                 else
-                                     toast.success(langService.get("unstar_specific_success").change({name: returnedDepartmentInbox.generalStepElm.docSubject}));
-                             });
-                     }
-                     else {
-                         dialog.errorMessage(langService.get('something_happened_when_update_starred'));
-                     }
-                 })
-                 .catch(function () {
-                     dialog.errorMessage(langService.get('something_happened_when_update_starred'));
-                 });
+         self.starServices[returnedDepartmentInbox.generalStepElm.starred](returnedDepartmentInbox)
+         .then(function (result) {
+         if (result) {
+         self.reloadReturnedDepartmentInboxes(self.grid.page)
+         .then(function () {
+         if (!returnedDepartmentInbox.generalStepElm.starred)
+         toast.success(langService.get("star_specific_success").change({name: returnedDepartmentInbox.generalStepElm.docSubject}));
+         else
+         toast.success(langService.get("unstar_specific_success").change({name: returnedDepartmentInbox.generalStepElm.docSubject}));
+         });
+         }
+         else {
+         dialog.errorMessage(langService.get('something_happened_when_update_starred'));
+         }
+         })
+         .catch(function () {
+         dialog.errorMessage(langService.get('something_happened_when_update_starred'));
+         });
          };*/
 
         /**
@@ -144,11 +144,11 @@ module.exports = function (app) {
          * @param $event
          */
         /*self.changeStarBulk = function (starUnStar, $event) {
-            self.starServices[starUnStar](self.selectedReturnedDepartmentInboxes)
-                .then(function (result) {
-                    self.reloadReturnedDepartmentInboxes(self.grid.page);
-                });
-        };*/
+         self.starServices[starUnStar](self.selectedReturnedDepartmentInboxes)
+         .then(function (result) {
+         self.reloadReturnedDepartmentInboxes(self.grid.page);
+         });
+         };*/
 
 
         /**
@@ -159,14 +159,14 @@ module.exports = function (app) {
          */
         self.terminate = function (returnedDepartmentInbox, $event, defer) {
             /*returnedDepartmentInboxService.controllerMethod
-                .returnedDepartmentInboxTerminate(returnedDepartmentInbox, $event)
-                .then(function (result) {
-                    self.reloadReturnedDepartmentInboxes(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get("terminate_specific_success").change({name: returnedDepartmentInbox.generalStepElm.docSubject}));
-                            new ResolveDefer(defer);
-                        });
-                });*/
+             .returnedDepartmentInboxTerminate(returnedDepartmentInbox, $event)
+             .then(function (result) {
+             self.reloadReturnedDepartmentInboxes(self.grid.page)
+             .then(function () {
+             toast.success(langService.get("terminate_specific_success").change({name: returnedDepartmentInbox.generalStepElm.docSubject}));
+             new ResolveDefer(defer);
+             });
+             });*/
             returnedDepartmentInboxService
                 .controllerMethod
                 .returnedDepartmentInboxTerminate(returnedDepartmentInbox, $event)
@@ -239,20 +239,28 @@ module.exports = function (app) {
             //returnedDepartmentInbox.generalStepElm.workFlowName = Export,
             // but it need in DW popup to create URL, records will always come from Outgoing export
             returnedDepartmentInbox.generalStepElm.workFlowName = "Outgoing";
-            distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(returnedDepartmentInbox.generalStepElm, false, false, null, "outgoing", $event)
-                .then(function (result) {
+
+            /*distributionWorkflowService
+             .controllerMethod
+             .distributionWorkflowSend(returnedDepartmentInbox.generalStepElm, false, false, null, "outgoing", $event)
+             .then(function (result) {
+             self.reloadReturnedDepartmentInboxes(self.grid.page)
+             .then(function () {
+             new ResolveDefer(defer);
+             })
+             ;
+             //self.replaceRecord(result);
+             })
+             .catch(function (result) {
+             self.reloadReturnedDepartmentInboxes(self.grid.page);
+             //self.replaceRecord(result);
+             });*/
+            returnedDepartmentInbox.launchWorkFlow($event, 'forward', 'favorites')
+                .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
-                        })
-                    ;
-                    //self.replaceRecord(result);
-                })
-                .catch(function (result) {
-                    self.reloadReturnedDepartmentInboxes(self.grid.page);
-                    //self.replaceRecord(result);
+                        });
                 });
         };
 
@@ -516,8 +524,8 @@ module.exports = function (app) {
          */
         self.checkToShowAction = function (action, model) {
             /*if (action.hasOwnProperty('permissionKey'))
-                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-            return (!action.hide);*/
+             return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+             return (!action.hide);*/
 
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
@@ -532,8 +540,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                                return isPermission !== true;
+                            }));
                     }
                 }
             }
@@ -653,6 +661,7 @@ module.exports = function (app) {
                 callback: self.launchNewDistributionWorkflow,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                hide: true, /*To be discussed with Mr. Ahmed Abu Al Nassr*/
                 checkShow: self.checkToShowAction
             },
             // View Tracking Sheet

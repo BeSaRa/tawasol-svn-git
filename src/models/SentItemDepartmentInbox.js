@@ -43,6 +43,7 @@ module.exports = function (app) {
             self.securityLevelInfo = null;
             self.priorityLevelInfo = null;
             self.g2GRefNo = null;
+            self.docStatus = 24;/*Default status to show its already approved*/
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -122,6 +123,10 @@ module.exports = function (app) {
              */
             SentItemDepartmentInbox.prototype.getInfo = function () {
                 return correspondenceService.getCorrespondenceInformation(this);
+            };
+
+            SentItemDepartmentInbox.prototype.launchWorkFlow = function ($event, action, tab) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
             };
 
             // don't remove CMSModelInterceptor from last line

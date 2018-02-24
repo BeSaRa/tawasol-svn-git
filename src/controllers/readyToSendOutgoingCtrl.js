@@ -93,16 +93,20 @@ module.exports = function (app) {
                 return;
             }
 
-            distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSendBulk(self.selectedReadyToSendOutgoings, "outgoing", $event)
+            /*distributionWorkflowService
+             .controllerMethod
+             .distributionWorkflowSendBulk(self.selectedReadyToSendOutgoings, "outgoing", $event)
+             .then(function () {
+             self.reloadReadyToSendOutgoings(self.grid.page);
+             })
+             .catch(function () {
+             self.reloadReadyToSendOutgoings(self.grid.page);
+             });*/
+            return correspondenceService
+                .launchCorrespondenceWorkflow(self.selectedReadyToSendOutgoings, $event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadReadyToSendOutgoings(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadReadyToSendOutgoings(self.grid.page);
                 });
-
         };
 
         /**
@@ -165,19 +169,26 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
-            distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(readyToSendOutgoing, false, false, null, "outgoing", $event)
-                .then(function (result) {
+            /*distributionWorkflowService
+             .controllerMethod
+             .distributionWorkflowSend(readyToSendOutgoing, false, false, null, "outgoing", $event)
+             .then(function (result) {
+             self.reloadReadyToSendOutgoings(self.grid.page)
+             .then(function () {
+             new ResolveDefer(defer);
+             });
+             //self.replaceRecord(result);
+             })
+             .catch(function (result) {
+             self.reloadReadyToSendOutgoings(self.grid.page);
+             //self.replaceRecord(result);
+             });*/
+            readyToSendOutgoing.launchWorkFlow($event, 'forward', 'favorites')
+                .then(function () {
                     self.reloadReadyToSendOutgoings(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
                         });
-                    //self.replaceRecord(result);
-                })
-                .catch(function (result) {
-                    self.reloadReadyToSendOutgoings(self.grid.page);
-                    //self.replaceRecord(result);
                 });
         };
         /**
@@ -378,8 +389,8 @@ module.exports = function (app) {
          */
         self.checkToShowAction = function (action, model) {
             /*if (action.hasOwnProperty('permissionKey'))
-                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-            return (!action.hide);*/
+             return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+             return (!action.hide);*/
 
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
@@ -394,8 +405,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                                return isPermission !== true;
+                            }));
                     }
                 }
             }

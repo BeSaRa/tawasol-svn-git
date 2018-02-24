@@ -129,7 +129,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.launchDistributionWorkflowBulk = function ($event) {
-            console.log('launch distribution workflow bulk : ', self.selectedRejectedInternals);
 
             var contentNotExist = _.filter(self.selectedRejectedInternals, function (rejectedInternal) {
                 return !rejectedInternal.hasContent();
@@ -139,7 +138,7 @@ module.exports = function (app) {
                 return;
             }
 
-            distributionWorkflowService
+            /*distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSendBulk(self.selectedRejectedInternals, "internal", $event)
                 .then(function () {
@@ -147,8 +146,12 @@ module.exports = function (app) {
                 })
                 .catch(function () {
                     self.reloadRejectedInternals(self.grid.page);
+                });*/
+            return correspondenceService
+                .launchCorrespondenceWorkflow(self.selectedRejectedInternals, $event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadRejectedInternals(self.grid.page);
                 });
-
         };
 
         /**
@@ -219,13 +222,12 @@ module.exports = function (app) {
          * @param defer
          */
         self.launchDistributionWorkflow = function (rejectedInternal, $event, defer) {
-            console.log('launch distribution workflow : ', rejectedInternal);
 
             if (!rejectedInternal.hasContent()) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
-            distributionWorkflowService
+            /*distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSend(rejectedInternal, false, false, null, "internal", $event)
                 .then(function (result) {
@@ -238,6 +240,13 @@ module.exports = function (app) {
                 .catch(function (result) {
                     self.reloadRejectedInternals(self.grid.page);
                     //self.replaceRecord(result);
+                });*/
+            rejectedInternal.launchWorkFlow($event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadRejectedInternals(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
                 });
         };
         /**
@@ -247,7 +256,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.archiveInternal = function (rejectedInternal, $event, defer) {
-            console.log('archive internal : ', rejectedInternal);
+
             rejectedInternalService
                 .controllerMethod
                 .rejectedInternalArchive(rejectedInternal, $event)

@@ -432,13 +432,17 @@ module.exports = function (app) {
 
             return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
                 .then(function () {
-                    distributionWorkflowService
-                        .controllerMethod
-                        .distributionWorkflowSend(searchedInternalDocument, false, false, null, "internal", $event)
-                        .then(function (result) {
-                            self.reloadSearchedInternalDocument(self.grid.page);
-                        })
-                        .catch(function (result) {
+                    /*distributionWorkflowService
+                     .controllerMethod
+                     .distributionWorkflowSend(searchedInternalDocument, false, false, null, "internal", $event)
+                     .then(function (result) {
+                     self.reloadSearchedInternalDocument(self.grid.page);
+                     })
+                     .catch(function (result) {
+                     self.reloadSearchedInternalDocument(self.grid.page);
+                     });*/
+                    searchedInternalDocument.launchWorkFlow($event, 'forward', 'favorites')
+                        .then(function () {
                             self.reloadSearchedInternalDocument(self.grid.page);
                         });
                 });

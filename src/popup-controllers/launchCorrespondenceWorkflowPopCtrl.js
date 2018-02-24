@@ -286,14 +286,14 @@ module.exports = function (app) {
                 disabled: _getApprovedStatus(),
                 modelName: 'workflowGroups'
             }, /*,
-            organizational_unit_mail: {
-                lang: 'workflow_menu_item_registry_organizational_unit_mail',
-                icon: 'contact-mail',
-                show: true,
-                disabled: _getApprovedStatus(),
-                modelName: 'organizationalUnits'
+             organizational_unit_mail: {
+             lang: 'workflow_menu_item_registry_organizational_unit_mail',
+             icon: 'contact-mail',
+             show: true,
+             disabled: _getApprovedStatus(),
+             modelName: 'organizationalUnits'
 
-            },*/
+             },*/
             registry_organizations: {
                 lang: 'workflow_menu_item_registry_organizations',
                 icon: 'bank',
@@ -834,8 +834,8 @@ module.exports = function (app) {
          */
         self.allInFavorites = function (selected) {
             return !_.some(selected, function (workflowItem) {
-                return !workflowItem.isFavorite();
-            }) && selected.length;
+                    return !workflowItem.isFavorite();
+                }) && selected.length;
         };
 
         /**
@@ -1111,8 +1111,8 @@ module.exports = function (app) {
          */
         self.allComplete = function (gridName) {
             return !_.some(self.selectedGrids[gridName].collection, function (item) {
-                return !item.isWFComplete();
-            }) && self.selectedGrids[gridName].collection.length;
+                    return !item.isWFComplete();
+                }) && self.selectedGrids[gridName].collection.length;
         };
 
         self.addToSelected = function (workflowItem, checkProxy) {

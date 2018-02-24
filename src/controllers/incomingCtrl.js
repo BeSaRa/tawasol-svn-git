@@ -236,9 +236,14 @@ module.exports = function (app) {
                 return;
             }
 
-            distributionWorkflowService
+           /* distributionWorkflowService
                 .controllerMethod
                 .distributionWorkflowSend(self.incoming, false, false, null, "incoming", $event)
+                .then(function () {
+                    counterService.loadCounters();
+                    self.resetAddCorrespondence();
+                });*/
+            document.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     counterService.loadCounters();
                     self.resetAddCorrespondence();
