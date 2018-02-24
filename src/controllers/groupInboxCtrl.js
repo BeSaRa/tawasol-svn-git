@@ -260,7 +260,7 @@ module.exports = function (app) {
                     return;
                 }
 
-                correspondenceService.viewCorrespondence(workItem, self.gridActions, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
+                correspondenceService.viewCorrespondenceGroupMail(workItem, self.gridActions)
                     .then(function () {
                         return self.reloadGroupInbox(self.grid.page);
                     })

@@ -1025,6 +1025,48 @@ module.exports = function (app) {
                 });
         };
         /**
+         * @description open group inbox
+         * @param correspondence
+         * @param actions
+         */
+        self.viewCorrespondenceGroupMail = function (correspondence, actions) {
+            var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : _createInstance(correspondence).getInfo();
+            var workItem = info.isWorkItem() ? correspondence : false;
+            return $http.get([urlService.correspondence, 'ou-queue', 'wob-num', info.wobNumber].join('/'))
+                .then(function (result) {
+                    return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
+                })
+                .then(function (generalStepElementView) {
+                    return dialog.showDialog({
+                        template: cmsTemplate.getPopup('view-correspondence'),
+                        controller: 'viewCorrespondencePopCtrl',
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        escapeToCancel: false,
+                        locals: {
+                            correspondence: generalStepElementView.correspondence,
+                            content: generalStepElementView.documentViewInfo,
+                            actions: actions,
+                            workItem: generalStepElementView,
+                            readyToExport: false,
+                            disableProperties: true,
+                            disableCorrespondence: true,
+                            disableEverything: true
+                        },
+                        resolve: {
+                            organizations: function (organizationService) {
+                                'ngInject';
+                                return organizationService.getOrganizations();
+                            },
+                            lookups: function (correspondenceService) {
+                                'ngInject';
+                                return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                            }
+                        }
+                    });
+                });
+        };
+        /**
          * @description to view correspondence workItem
          */
         self.viewCorrespondenceWorkItem = function (info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming) {
