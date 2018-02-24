@@ -9,12 +9,14 @@ module.exports = function (app) {
                                                         lookupService,
                                                         roleService,
                                                         ouApplicationUserService,
-                                                        UserOuPermission) {
+                                                        UserOuPermission,
+                                                        rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'ouUnassignedUserPopCtrl';
         self.ouApplicationUser = ouApplicationUser;
-        self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
         self.roles = roleService.roles;
 
         /**

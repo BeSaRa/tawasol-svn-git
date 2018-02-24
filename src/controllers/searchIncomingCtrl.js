@@ -42,7 +42,8 @@ module.exports = function (app) {
         self.searchIncoming = new DocumentSearch({"reqType": 1});
         self.searchIncomingModel = angular.copy(self.searchIncoming);
         self.organizations = organizations;
-        self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
         self.propertyConfigurations = propertyConfigurations;
         /*self.docStatuses = [
          {text: 'Receive', 'value': 1},

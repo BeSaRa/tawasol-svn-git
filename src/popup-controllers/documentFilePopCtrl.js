@@ -14,6 +14,7 @@ module.exports = function (app) {
                                                     RelatedOUDocumentFile,
                                                     relatedOUDocumentFileService,
                                                     parent,
+                                                    rootEntity,
                                                     sub) {
         'ngInject';
         var self = this;
@@ -22,7 +23,8 @@ module.exports = function (app) {
         self.organization = [];
         self.documentFile = angular.copy(documentFile);
         self.model = angular.copy(self.documentFile);
-        self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
         self.organizations = [];
         self.tabIndex = 0;
         self.relatedOUStatus = true;

@@ -13,14 +13,16 @@ module.exports = function (app) {
                                                       dialog,
                                                       Classification,
                                                       editMode,
-                                                      classification) {
+                                                      classification,
+                                                      rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'classificationPopCtrl';
         self.editMode = editMode;
         self.classification = new Classification(classification);
         self.organizations = organizationService.organizations;
-        self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
         self.selectedSubClassifications = [];
         self.selectedOrganization = null;
         self.selectedOUClassifications = [];
