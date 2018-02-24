@@ -655,7 +655,6 @@ module.exports = function (app) {
 
 
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
-            debugger;
             var info = model.getInfo();
             var hasPermission = false;
             if (info.documentClass === "internal") {
@@ -676,7 +675,7 @@ module.exports = function (app) {
             }
             if (checkForViewPopup)
                 return !hasPermission;
-            return hasPermission;
+            return hasPermission  && !model.isBroadcasted();
         };
 
 
