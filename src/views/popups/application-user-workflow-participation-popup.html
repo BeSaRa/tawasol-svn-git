@@ -26,7 +26,6 @@
                             <md-select ng-model-options="{trackBy: '$value.id'}" multiple name="privateUsers" id="privateUsers"
                                        ng-required="ctrl.ouApplicationUser.sendToPrivateUsers"
                                        ng-model="ctrl.ouApplicationUser.privateUsers"
-
                                        ng-disabled="!ctrl.ouApplicationUser.sendToPrivateUsers"
                                        md-selected-text="ctrl.getSelectedPrivateUsersText()"
                             >
@@ -50,7 +49,7 @@
                                        ng-model="ctrl.ouApplicationUser.managers"
                                        ng-disabled="!ctrl.ouApplicationUser.sendToManagers"
                                        md-selected-text="ctrl.getSelectedManagersText()"
-                                       ng-model-options="{trackBy: '$value.id'}">
+                                       ng-model-options="{trackBy: '$value.organization.id'}">
                                 <md-option ng-value="ou" ng-repeat="ou in ctrl.organizationsWithManager">
                                     {{ou.organization.getTranslatedName() + ' - '+ ou.manager.getTranslatedName()}}
                                 </md-option>

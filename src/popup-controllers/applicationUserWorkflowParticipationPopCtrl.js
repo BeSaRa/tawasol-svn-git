@@ -15,16 +15,16 @@ module.exports = function (app) {
         self.model = angular.copy(ouApplicationUser);
 
         self.applicationUsers = applicationUserService.applicationUsers;
-        self.ouWithManagersList = _.filter(organizations, 'managerId');
 
+        self.ouWithManagersList = _.filter(organizations, 'managerId');
         self.organizationsWithManager = _.map(self.ouWithManagersList, function (ou) {
             return {
                 organization: ou,
                 manager: ou.managerId
             }
         });
-        self.organizationsWithPrivateUsers = [];
 
+        self.organizationsWithPrivateUsers = [];
         _.map(privateUsers, function (privateUser) {
             var index = _.findIndex(self.organizationsWithPrivateUsers, {id: privateUser.ouid.id});
             if (index < 0)
@@ -62,6 +62,8 @@ module.exports = function (app) {
         };
 
         self.getSelectedPrivateUsersText();
+
+        self.getSelectedManagersText();
 
         var requiredFields = [
             'sendToPrivateUsers',
