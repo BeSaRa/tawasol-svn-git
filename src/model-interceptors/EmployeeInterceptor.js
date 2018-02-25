@@ -13,7 +13,7 @@ module.exports = function (app) {
             model.setOrganizationService(organizationService);
             model.setOrganizationModel(Organization);
             model.setWorkflowActionService(workflowActionService);
-            langService.setSelectedLanguageById(model.defaultDisplayLang);
+            // langService.setSelectedLanguageById(model.defaultDisplayLang);
             return model;
         });
 

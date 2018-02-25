@@ -308,6 +308,13 @@ module.exports = function (app) {
                 organizations: function (organizationService, employeeService) {
                     'ngInject';
                     return !employeeService.isCloudUser() ? organizationService.getOrganizations() : [];
+                },
+                language: function (employeeService, $timeout, langService) {
+                    'ngInject';
+                    $timeout(function () {
+                        langService.setSelectedLanguageById(employeeService.getEmployee().defaultDisplayLang);
+                    }, 1000);
+                    return true;
                 }
             })
             .bulkResolveToState('app.inbox.group-inbox', {
