@@ -461,7 +461,7 @@ module.exports = function (app) {
                     hide: false,
                     callback: self.doBroadcast,
                     checkShow: function (action, model) {
-                        return (!model.needApprove() || model.hisDocumentClass('incoming')) && !model.isBroadcasted();
+                        return (!model.needApprove() || model.hasDocumentClass('incoming')) && !model.isBroadcasted();
                     }
                 },
                 // Reply

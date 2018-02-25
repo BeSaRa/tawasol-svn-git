@@ -3,8 +3,6 @@
         .module('app')
         .config(function (urlServiceProvider, rootEntityProvider, cmsTemplateProvider) {
             'ngInject';
-            //cmsTemplateProvider.changeImagePath('ui/');
-
             urlServiceProvider
                 .setEnvironment('stage')
                 .setBaseUrl('dev', 'http://localhost:9080/CMSServices/service')

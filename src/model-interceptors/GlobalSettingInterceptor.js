@@ -24,11 +24,10 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.fileType = angular.fromJson(model.fileType);
-            model.theme = model.theme.id;
-
+            model.theme = model.theme && model.theme.hasOwnProperty('id') ? model.theme.id : model.theme;
             var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
             model.securityLevels = generator.getSelectedCollectionFromResult(securityLevels, model.securityLevels, 'lookupKey');
-            var excludedUsersFromAudit = JSON.parse(model.excludedUsersFromAudit);
+            var excludedUsersFromAudit = model.excludedUsersFromAudit ? JSON.parse(model.excludedUsersFromAudit) : model.excludedUsersFromAudit;
             model.excludedUsersFromAudit = _.filter(applicationUserService.applicationUsers, function (applicationUser) {
                 return (excludedUsersFromAudit.indexOf(applicationUser.id) > -1);
             });

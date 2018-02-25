@@ -6122,5 +6122,9 @@
     "menu_item_group_inbox": {
         "ar": "بريد الوحدة التنظيمية",
         "en": "Group Mail"
+    },
+    "menu_item_folders": {
+        "ar": "المجلدات",
+        "en": "Folders"
     }
 }

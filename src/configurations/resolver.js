@@ -305,9 +305,9 @@ module.exports = function (app) {
                     'ngInject';
                     return !employeeService.isCloudUser() ? entityTypeService.getEntityTypes() : [];
                 },
-                organizations: function (organizationService) {
+                organizations: function (organizationService, employeeService) {
                     'ngInject';
-                    return organizationService.getOrganizations();
+                    return !employeeService.isCloudUser() ? organizationService.getOrganizations() : [];
                 }
             })
             .bulkResolveToState('app.inbox.group-inbox', {
