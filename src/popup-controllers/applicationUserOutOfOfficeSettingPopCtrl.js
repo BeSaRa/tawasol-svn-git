@@ -85,7 +85,7 @@ module.exports = function (app) {
          * @param form
          *!/
          self.changeOutOfOffice = function (form) {
-         debugger;
+
          if (!self.isOutOfOffice && self.model.proxyUser) {
          self.ouApplicationUser.proxyUser = null;
          self.ouApplicationUser.proxyStartDate = null;

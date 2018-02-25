@@ -11,7 +11,6 @@ module.exports = function (app) {
         self.correspondence = correspondence;
 
         self.saveCorrespondenceSite = function () {
-            debugger;
             self.correspondence
                 .saveDocument(false)
                 .then(function () {

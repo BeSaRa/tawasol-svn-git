@@ -168,7 +168,6 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-                    //debugger;
                     globalSettingService
                         .updateGlobalSetting(self.globalSetting)
                         .then(function () {

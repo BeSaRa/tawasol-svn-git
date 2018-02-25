@@ -5,7 +5,8 @@ module.exports = function (app) {
                       correspondenceService,
                       SenderInfo,
                       entityTypeService,
-                      LinkedObject) {
+                      LinkedObject,
+                      moment) {
         'ngInject';
 
         var modelName = 'SentItemDepartmentInbox';

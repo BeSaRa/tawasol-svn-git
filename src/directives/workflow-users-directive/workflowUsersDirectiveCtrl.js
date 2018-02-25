@@ -15,7 +15,6 @@ module.exports = function (app) {
          * @param type
          */
         self.runToggleBulkFavorites = function (selected, type) {
-            debugger;
             self.callbackToggleBulkFavorites(selected, type);
         };
 
