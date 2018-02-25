@@ -28,6 +28,11 @@
                                             <span flex></span>
 
                                             <!--ng-if="ctrl.selectedUserInboxes.length > 1"-->
+                                            <md-button class="md-icon-button"
+                                                       tooltip="{{lang.grid_action_forward}}"
+                                                       ng-click="ctrl.forwardBulk($event)">
+                                                <md-icon md-svg-icon="share" class="action-green"></md-icon>
+                                            </md-button>
                                             <md-button class="md-icon-button" aria-label="{{lang.inbox_terminate}}"
                                                        tooltip="{{lang.inbox_terminate}}"
                                                        ng-click="ctrl.terminateUserInboxBulk($event)">

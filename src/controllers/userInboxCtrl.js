@@ -79,9 +79,9 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, // limit options
                 {
                     /*label: self.globalSetting.searchAmountLimit.toString(),
-                    value: function () {
-                        return (self.globalSetting.searchAmountLimit + 5)
-                    }*/
+                     value: function () {
+                     return (self.globalSetting.searchAmountLimit + 5)
+                     }*/
                     label: langService.get('all'),
                     value: function () {
                         return (self.userInboxes.length + 21);
@@ -145,6 +145,40 @@ module.exports = function (app) {
                     }, 100);
                 });
         };
+
+
+        /**
+         * @description Launch distribution workflow for selected review outgoing mails
+         * @param $event
+         */
+        self.forwardBulk = function ($event) {
+            var itemsAlreadyBroadCasted = [];
+            _.filter(self.selectedUserInboxes, function (workItem) {
+                if (workItem.isBroadcasted())
+                    itemsAlreadyBroadCasted.push(workItem.generalStepElm.vsId);
+            });
+            var selectedItems = angular.copy(self.selectedUserInboxes);
+            if (itemsAlreadyBroadCasted && itemsAlreadyBroadCasted.length) {
+                dialog.confirmMessage(langService.get('some_items_already_broadcasted_skip_and_broadcast'), null, null, $event).then(function () {
+                    self.selectedUserInboxes = selectedItems = _.filter(self.selectedUserInboxes, function (workItem) {
+                        return itemsAlreadyBroadCasted.indexOf(workItem.generalStepElm.vsId) === -1;
+                    });
+                    forwardBulk(selectedItems, $event);
+                })
+            }
+            else {
+                forwardBulk(selectedItems, $event);
+            }
+        };
+
+        function forwardBulk(selectedItems, $event) {
+            return correspondenceService
+                .launchCorrespondenceWorkflow(selectedItems, $event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadUserInboxes(self.grid.page);
+                });
+        }
+
 
         /**
          * @description Add To Folder User inboxes Bulk
@@ -440,9 +474,9 @@ module.exports = function (app) {
          */
         self.manageAttachments = function (userInbox, $event) {
             /*var vsId = userInbox.hasOwnProperty('generalStepElm')
-                ? (userInbox.generalStepElm.hasOwnProperty('vsId') ? userInbox.generalStepElm.vsId : userInbox.generalStepElm)
-                : (userInbox.hasOwnProperty('vsId') ? userInbox.vsId : userInbox);
-            var wfName = _getWorkflowName(userInbox);*/
+             ? (userInbox.generalStepElm.hasOwnProperty('vsId') ? userInbox.generalStepElm.vsId : userInbox.generalStepElm)
+             : (userInbox.hasOwnProperty('vsId') ? userInbox.vsId : userInbox);
+             var wfName = _getWorkflowName(userInbox);*/
             var info = userInbox.getInfo();
             managerService.manageDocumentAttachments(info.vsId, info.documentClass, info.title, $event);
         };
@@ -675,7 +709,7 @@ module.exports = function (app) {
             }
             if (checkForViewPopup)
                 return !hasPermission;
-            return hasPermission  && !model.isBroadcasted();
+            return hasPermission && !model.isBroadcasted();
         };
 
 
@@ -718,8 +752,8 @@ module.exports = function (app) {
          */
         self.checkToShowAction = function (action, model) {
             /*if (action.hasOwnProperty('permissionKey'))
-                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-            return (!action.hide);*/
+             return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+             return (!action.hide);*/
 
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
@@ -734,8 +768,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                                return isPermission !== true;
+                            }));
                     }
                 }
             }
@@ -1188,7 +1222,7 @@ module.exports = function (app) {
 
                     /*If document is unapproved or partially approved, show the button. If fully approved, hide the button.
                      docStatus = 24 is approved
-                    */
+                     */
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model) && !model.isBroadcasted()
                         && !info.isPaper
@@ -1298,11 +1332,10 @@ module.exports = function (app) {
             return userInboxService.controllerMethod
                 .userInboxMarkAsReadUnread(userInbox, $event)
                 .then(function (result) {
-                    if (result.generalStepElm.isOpen)
+                    if (!result.generalStepElm.isOpen)
                         toast.success(langService.get('mark_as_unread_success').change({name: userInbox.getTranslatedName()}));
                     else
                         toast.success(langService.get('mark_as_read_success').change({name: userInbox.getTranslatedName()}));
-                    //self.reloadUserInboxes(self.grid.page);
                     self.replaceRecord(result);
                 })
         };
