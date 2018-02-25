@@ -79,12 +79,6 @@ module.exports = function (app) {
             dialog.hide();
         });
 
-        $scope.bundleVersion = '2.0.0';
-        // // just for test the service.
-        // correspondenceService.viewCorrespondence(new Correspondence({
-        //     docClassName: 'Outgoing',
-        //     vsId: "{FA6671DE-194A-CBA8-868F-608ED9200000}"
-        // }));
-
+        $scope.bundleVersion = '2.0.1';
     });
 };
