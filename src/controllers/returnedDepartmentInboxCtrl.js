@@ -21,7 +21,8 @@ module.exports = function (app) {
                                                             generator,
                                                             employeeService,
                                                             ResolveDefer,
-                                                            correspondenceService) {
+                                                            correspondenceService,
+                                                            favoriteDocumentsService) {
         'ngInject';
         var self = this;
         /*
@@ -149,6 +150,30 @@ module.exports = function (app) {
          self.reloadReturnedDepartmentInboxes(self.grid.page);
          });
          };*/
+
+
+        /**
+         * @description add an item to the favorite documents
+         * @param followupEmployeeInbox
+         * @param $event
+         */
+        self.addToFavorite = function (followupEmployeeInbox, $event) {
+            favoriteDocumentsService.controllerMethod
+                .favoriteDocumentAdd(followupEmployeeInbox.generalStepElm.vsId, $event)
+                .then(function (result) {
+                    if (result.status) {
+                        self.reloadReturnedDepartmentInboxes(self.grid.page)
+                            .then(function () {
+                                toast.success(langService.get("add_to_favorite_specific_success").change({
+                                    name: followupEmployeeInbox.getTranslatedName()
+                                }));
+                            });
+                    }
+                    else {
+                        dialog.alertMessage(langService.get(result.message));
+                    }
+                });
+        };
 
 
         /**
@@ -594,6 +619,19 @@ module.exports = function (app) {
                 type: 'separator',
                 checkShow: self.checkToShowAction,
                 showInView: false
+            },
+            // Add To Favorite
+            {
+                type: 'action',
+                icon: 'star',
+                text: 'grid_action_add_to_favorite',
+                permissionKey: "MANAGE_FAVORITE",
+                shortcut: false,
+                callback: self.addToFavorite,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
             },
             // Terminate
             {

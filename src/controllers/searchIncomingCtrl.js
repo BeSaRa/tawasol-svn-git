@@ -40,7 +40,7 @@ module.exports = function (app) {
         self.progress = null;
         self.showAdvancedSearch = false;
         self.searchIncoming = new DocumentSearch({"reqType": 1});
-        self.searchIncoming.registryO = employeeService.getCurrentOUApplicationUser().ouRegistryID;
+        self.searchIncoming.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
         self.searchIncomingModel = angular.copy(self.searchIncoming);
         self.organizations = organizations;
         //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
@@ -328,7 +328,7 @@ module.exports = function (app) {
          */
         self.resetFilters = function (form, $event) {
             self.searchIncoming = new DocumentSearch({"reqType": 1});
-            self.searchIncoming.registryO = employeeService.getCurrentOUApplicationUser().ouRegistryID;
+            self.searchIncoming.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
             self.searchIncomingModel = angular.copy(self.searchIncoming);
             self.mainCorrespondenceSites = self.subCorrespondenceSites = self.subClassifications = [];
             self.maxDocDate = self.maxDateForTo = self.minDocDate = self.minDateForFrom = null;

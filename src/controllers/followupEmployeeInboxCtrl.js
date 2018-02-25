@@ -22,7 +22,8 @@ module.exports = function (app) {
                                                           employeeService,
                                                           ResolveDefer,
                                                           mailNotificationService,
-                                                          $timeout) {
+                                                          $timeout,
+                                                          favoriteDocumentsService) {
         'ngInject';
         var self = this;
 
@@ -68,9 +69,9 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, // limit options
                 {
                     /*label: self.globalSetting.searchAmountLimit.toString(),
-                    value: function () {
-                        return self.globalSetting.searchAmountLimit
-                    }*/
+                     value: function () {
+                     return self.globalSetting.searchAmountLimit
+                     }*/
                     label: langService.get('all'),
                     value: function () {
                         return (self.followupEmployeeInboxes.length + 21);
@@ -142,10 +143,10 @@ module.exports = function (app) {
                 });
         };
 
-        /**
+       /* /!**
          * @description Terminate followup employee inbox Bulk
          * @param $event
-         */
+         *!/
         self.terminateFollowupEmployeeInboxBulk = function ($event) {
             var numberOfRecordsToTerminate = angular.copy(self.selectedFollowupEmployeeInboxes.length);
             followupEmployeeInboxService
@@ -160,7 +161,7 @@ module.exports = function (app) {
                             });
                     }, 100);
                 });
-        };
+        };*/
 
         /**
          * @description Change the starred for followup employee inbox
@@ -200,24 +201,48 @@ module.exports = function (app) {
                 });
         };
 
-           /**
-            * @description Terminate followup employee Item
-            * @param followupEmployeeInbox
-            * @param $event
-            * @param defer
-            */
-           self.terminateFollowupEmployeeInbox = function (followupEmployeeInbox, $event, defer) {
-               followupEmployeeInboxService
-                   .controllerMethod
-                   .followupEmployeeInboxTerminate(followupEmployeeInbox, $event)
-                   .then(function () {
-                       self.reloadFollowupEmployeeInboxes(self.grid.page)
-                           .then(function () {
-                               toast.success(langService.get("terminate_specific_success").change({name: followupEmployeeInbox.getTranslatedName()}));
-                               new ResolveDefer(defer);
-                           });
-                   });
-           };
+
+        /**
+         * @description add an item to the favorite documents
+         * @param followupEmployeeInbox
+         * @param $event
+         */
+        self.addToFavorite = function (followupEmployeeInbox, $event) {
+            favoriteDocumentsService.controllerMethod
+                .favoriteDocumentAdd(followupEmployeeInbox.generalStepElm.vsId, $event)
+                .then(function (result) {
+                    if (result.status) {
+                        self.reloadFollowupEmployeeInboxes(self.grid.page)
+                            .then(function () {
+                                toast.success(langService.get("add_to_favorite_specific_success").change({
+                                    name: followupEmployeeInbox.getTranslatedName()
+                                }));
+                            });
+                    }
+                    else {
+                        dialog.alertMessage(langService.get(result.message));
+                    }
+                });
+        };
+
+       /* /!**
+         * @description Terminate followup employee Item
+         * @param followupEmployeeInbox
+         * @param $event
+         * @param defer
+         *!/
+        self.terminateFollowupEmployeeInbox = function (followupEmployeeInbox, $event, defer) {
+            followupEmployeeInboxService
+                .controllerMethod
+                .followupEmployeeInboxTerminate(followupEmployeeInbox, $event)
+                .then(function () {
+                    self.reloadFollowupEmployeeInboxes(self.grid.page)
+                        .then(function () {
+                            toast.success(langService.get("terminate_specific_success").change({name: followupEmployeeInbox.getTranslatedName()}));
+                            new ResolveDefer(defer);
+                        });
+                });
+        };*/
 
         /**
          * @description Get the link of followup employee inbox
@@ -430,7 +455,7 @@ module.exports = function (app) {
                 .then(function () {
                     return self.reloadFollowupEmployeeInboxes(self.grid.page);
                 })
-                .catch(function(){
+                .catch(function () {
                     return self.reloadFollowupEmployeeInboxes(self.grid.page);
                 });
         };
@@ -443,8 +468,8 @@ module.exports = function (app) {
          */
         self.checkToShowAction = function (action, model) {
             /*if (action.hasOwnProperty('permissionKey'))
-                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-            return (!action.hide);*/
+             return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+             return (!action.hide);*/
 
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
@@ -459,8 +484,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                                return isPermission !== true;
+                            }));
                     }
                 }
             }
@@ -522,6 +547,19 @@ module.exports = function (app) {
                 type: 'separator',
                 checkShow: self.checkToShowAction,
                 showInView: false
+            },
+            // Add To Favorite
+            {
+                type: 'action',
+                icon: 'star',
+                text: 'grid_action_add_to_favorite',
+                permissionKey: "MANAGE_FAVORITE",
+                shortcut: false,
+                callback: self.addToFavorite,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
             },
             // Manage
             {
@@ -691,13 +729,13 @@ module.exports = function (app) {
             /* Not Required as per discussion with Mr. Abu Al Nassr */
             /* // Terminate
              {
-                 type: 'action',
-                 icon: 'stop',
-                 text: 'grid_action_terminate',
-                 shortcut: true,
-                 callback: self.terminateFollowupEmployeeInbox,
-                 class: "action-green",
-                 checkShow: self.checkToShowAction
+             type: 'action',
+             icon: 'stop',
+             text: 'grid_action_terminate',
+             shortcut: true,
+             callback: self.terminateFollowupEmployeeInbox,
+             class: "action-green",
+             checkShow: self.checkToShowAction
              },*/
             // Transfer To Another Employee
             {
