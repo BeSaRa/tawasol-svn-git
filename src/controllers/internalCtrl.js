@@ -47,7 +47,7 @@ module.exports = function (app) {
         // self.model = angular.copy(demoInternal);
         self.model = editAfterApproved ? angular.copy(editAfterApproved.metaData) : null;
 
-        self.editAfterApproved = false;
+        self.editContent = false;
 
 
         self.maxCreateDate = new Date();
@@ -73,7 +73,7 @@ module.exports = function (app) {
         if (editAfterApproved) {
             self.internal = editAfterApproved.metaData;
             self.documentInformation = editAfterApproved.content;
-            self.editAfterApproved = true;
+            self.editContent = true;
         }
 
         self.preventPropagation = function ($event) {
@@ -338,8 +338,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }

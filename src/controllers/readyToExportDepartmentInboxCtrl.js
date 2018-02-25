@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                                  $state,
                                                                  employeeService,
                                                                  listGeneratorService,
+                                                                 correspondenceStorageService,
                                                                  correspondenceService,
                                                                  $q,
                                                                  langService,
@@ -557,11 +558,18 @@ module.exports = function (app) {
             });
             dialog.confirmMessage(list.getList(), null, null, $event)
                 .then(function () {
-                    $state.go('app.outgoing.add', {
-                        workItem: info.wobNumber,
-                        vsId: info.vsId,
-                        action: 'editAfterApproved'
-                    });
+                    correspondenceStorageService
+                        .runEditAfter('Approved', model)
+                        .then(function () {
+                            $state.go('app.outgoing.add', {
+                                workItem: info.wobNumber,
+                                vsId: info.vsId,
+                                action: 'editAfterApproved'
+                            });
+                        })
+                        .catch(function () {
+                            dialog.errorMessage(langService.get('error_messages'));
+                        });
                 });
         };
 
@@ -579,7 +587,7 @@ module.exports = function (app) {
             var info = model.getInfo();
             var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
             var allowed = hasPermission && info.isPaper;// && info.docStatus < 24
-            if(checkForViewPopup)
+            if (checkForViewPopup)
                 return !allowed;
             return allowed;
         };

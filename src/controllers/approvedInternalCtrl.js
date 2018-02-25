@@ -4,6 +4,7 @@ module.exports = function (app) {
                                           approvedInternalService,
                                           approvedInternals,
                                           counterService,
+                                          correspondenceStorageService,
                                           $q,
                                           langService,
                                           toast,
@@ -402,8 +403,8 @@ module.exports = function (app) {
                                 return employeeService.hasPermissionTo(key);
                             });
                             return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                    return isPermission !== true;
-                                }));
+                                return isPermission !== true;
+                            }));
                         }
                     }
                 }
@@ -434,14 +435,20 @@ module.exports = function (app) {
                 _.map(langKeys, function (item) {
                     list.addItemToList(langService.get(item));
                 });
+
                 dialog.confirmMessage(list.getList(), null, null, $event)
                     .then(function () {
-                        $state.go('app.internal.add', {
-                            workItem: info.wobNumber,
-                            vsId: info.vsId,
-                            action: 'editAfterApproved'
-                        });
+                        correspondenceStorageService
+                            .runEditAfter('Approved', model)
+                            .then(function () {
+                                $state.go('app.internal.add', {
+                                    workItem: info.wobNumber,
+                                    vsId: info.vsId,
+                                    action: 'editAfterApproved'
+                                });
+                            });
                     });
+
             };
 
             /**

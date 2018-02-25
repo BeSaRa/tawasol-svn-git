@@ -98,4 +98,5 @@ module.exports = function (app) {
     require('./fileTypeService')(app);
     require('./stateHelperService')(app);
     require('./distributionWFService')(app);
+    require('./correspondenceStorageService')(app);
 };

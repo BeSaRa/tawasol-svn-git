@@ -193,7 +193,7 @@ module.exports = function (app) {
                         })
                     }
                 },
-                editAfterApproved: function ($timeout, $stateParams, correspondenceService) {
+                editAfterApproved: function ($timeout, $stateParams, correspondenceStorageService, correspondenceService) {
                     'ngInject';
                     var vsId = $stateParams.vsId, workItem = $stateParams.workItem, action = $stateParams.action;
                     if (action !== 'editAfterApproved') {
@@ -201,15 +201,15 @@ module.exports = function (app) {
                             return false;
                         })
                     }
-                    return correspondenceService
-                        .correspondenceEditAfterApproved('outgoing', vsId, workItem)
+                    return correspondenceStorageService
+                        .getCorrespondence('approved')
                         .catch(function () {
                             return $timeout(function () {
                                 return false;
                             });
                         });
                 },
-                editAfterExport: function ($timeout, $stateParams, correspondenceService) {
+                editAfterExport: function ($timeout, $stateParams, correspondenceStorageService, correspondenceService) {
                     'ngInject';
                     var vsId = $stateParams.vsId, workItem = $stateParams.workItem, action = $stateParams.action;
                     if (action !== 'editAfterExport') {
@@ -217,8 +217,8 @@ module.exports = function (app) {
                             return false;
                         })
                     }
-                    return correspondenceService
-                        .correspondenceEditAfterExport('outgoing', vsId, workItem)
+                    return correspondenceStorageService
+                        .getCorrespondence('export')
                         .catch(function () {
                             return $timeout(function () {
                                 return false;
@@ -255,7 +255,7 @@ module.exports = function (app) {
                     'ngInject';
                     return organizationService.getOrganizations();
                 },
-                editAfterApproved: function ($timeout, $stateParams, correspondenceService) {
+                editAfterApproved: function ($timeout, $stateParams, correspondenceStorageService, correspondenceService) {
                     'ngInject';
                     var vsId = $stateParams.vsId, workItem = $stateParams.workItem, action = $stateParams.action;
                     if (action !== 'editAfterApproved') {
@@ -263,8 +263,8 @@ module.exports = function (app) {
                             return false;
                         })
                     }
-                    return correspondenceService
-                        .correspondenceEditAfterApproved('internal', vsId, workItem)
+                    return correspondenceStorageService
+                        .getCorrespondence('approved')
                         .catch(function () {
                             return $timeout(function () {
                                 return false;

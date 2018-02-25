@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                             returnedDepartmentInboxService,
                                                             returnedDepartmentInboxes,
                                                             listGeneratorService,
+                                                            correspondenceStorageService,
                                                             userInboxService,
                                                             $q,
                                                             $state,
@@ -455,11 +456,19 @@ module.exports = function (app) {
             });
             dialog.confirmMessage(list.getList(), null, null, $event)
                 .then(function () {
-                    $state.go('app.outgoing.add', {
-                        workItem: info.wobNumber,
-                        vsId: info.vsId,
-                        action: 'editAfterExport'
-                    });
+                    correspondenceStorageService
+                        .runEditAfter('Export', returnedDepartmentInbox)
+                        .then(function () {
+                            $state.go('app.outgoing.add', {
+                                workItem: info.wobNumber,
+                                vsId: info.vsId,
+                                action: 'editAfterExport'
+                            });
+                        })
+                        .catch(function () {
+                            dialog.errorMessage(langService.get('error_messages'));
+                        });
+
                 });
         };
 
@@ -565,8 +574,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }
