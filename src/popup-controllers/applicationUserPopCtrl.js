@@ -846,6 +846,11 @@ module.exports = function (app) {
                         //if (!self.currentOrganization) {
                         toast.success(langService.get('edited_successfully'));
                         //}
+
+                        if (employeeService.isCurrentEmployee(self.applicationUser)) {
+                            employeeService.setCurrentOUApplicationUser(ouApplicationUser);
+                            employeeService.setCurrentEmployee(self.ouApplicationUser.applicationUser);
+                        }
                         return true;
                     });
             }

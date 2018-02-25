@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                                          generator,
                                                                          toast,
                                                                          langService,
+                                                                         rootEntity,
                                                                          ouApplicationUserService) {
         'ngInject';
         var self = this;
@@ -15,8 +16,10 @@ module.exports = function (app) {
         self.applicationUsers = applicationUserService.applicationUsers;
         self.ouApplicationUser = angular.copy(ouApplicationUser);
         self.model = angular.copy(ouApplicationUser);
-        self.currentEmployee = employeeService.getEmployee();
-        self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        //self.currentEmployee = employeeService.getEmployee();
+        self.applicationUser = self.model.applicationUser;
+        //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        self.authorityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
         var currentDate = new Date();
         self.today = new Date(
             currentDate.getFullYear(),
@@ -58,6 +61,11 @@ module.exports = function (app) {
 
         self.checkRequiredFieldsAppUserOutOfOffice = function (model) {
             var required = self.requiredFields, result = [];
+            if (!self.applicationUser.outOfOffice) {
+                required = _.filter(required, function (property) {
+                    return property !== 'proxyStartDate' && property !== 'proxyEndDate';
+                })
+            }
             _.map(required, function (property) {
                 if (!generator.validRequired(model[property]))
                     result.push(property);
@@ -71,6 +79,33 @@ module.exports = function (app) {
                 result.push(property);
             return result;
         };
+        /*
+         /!**
+         * @description Saves the ou application user data when not out of office
+         * @param form
+         *!/
+         self.changeOutOfOffice = function (form) {
+         debugger;
+         if (!self.isOutOfOffice && self.model.proxyUser) {
+         self.ouApplicationUser.proxyUser = null;
+         self.ouApplicationUser.proxyStartDate = null;
+         self.ouApplicationUser.proxyEndDate = null;
+         self.ouApplicationUser.proxyAuthorityLevels = null;
+         self.ouApplicationUser.viewProxyMessage = false;
+         self.ouApplicationUser.proxyMessage = null;
+         ouApplicationUserService
+         .updateOUApplicationUser(self.ouApplicationUser)
+         .then(function (result) {
+         employeeService.setCurrentOUApplicationUser(result);
+         self.model = angular.copy(result);
+         toast.success(langService.get('out_of_office_success'));
+         });
+         }
+         else {
+         form.$setUntouched();
+         }
+         };*/
+
 
         /**
          * @description Saves the ou application user data when not out of office
@@ -84,48 +119,47 @@ module.exports = function (app) {
                 self.ouApplicationUser.proxyAuthorityLevels = null;
                 self.ouApplicationUser.viewProxyMessage = false;
                 self.ouApplicationUser.proxyMessage = null;
-                ouApplicationUserService
-                    .updateOUApplicationUser(self.ouApplicationUser)
-                    .then(function (result) {
-                        employeeService.setCurrentOUApplicationUser(result);
-                        self.model = angular.copy(result);
-                        toast.success(langService.get('out_of_office_success'));
-                    });
-            }
-            else {
+            } else {
                 form.$setUntouched();
             }
+            if (!self.isOutOfOffice)
+                self.ouApplicationUser.applicationUser.outOfOffice = false;
         };
 
         /**
          * @description Add the Application User out of office settings in the ouApplicationUser model
          */
         self.addApplicationUserOutOfOfficeSettingsFromCtrl = function () {
-            validationService
-                .createValidation('ADD_OUT_OF_OFFICE_SETTINGS')
-                .addStep('check_required', true, self.checkRequiredFieldsAppUserOutOfOffice, self.ouApplicationUser, function (result) {
-                    return !result.length;
-                })
-                .notifyFailure(function (step, result) {
-                    var labels = _.map(result, function (label) {
-                        return self.validateLabels[label];
-                    });
-                    generator.generateErrorFields('check_this_fields', labels);
-                })
-                .addStep('check_message_required', true, self.checkRequiredOutOfOfficeMessage, self.ouApplicationUser, function (result) {
-                    return !result.length;
-                })
-                .notifyFailure(function (step, result) {
-                    var labels = ['out_of_office_message'];
-                    generator.generateErrorFields('check_this_fields', labels);
-                })
-                .validate()
-                .then(function () {
-                    dialog.hide(self.ouApplicationUser);
-                })
-                .catch(function () {
+            if (!self.isOutOfOffice) {
+                dialog.hide(self.ouApplicationUser);
+            } else {
+                validationService
+                    .createValidation('ADD_OUT_OF_OFFICE_SETTINGS')
+                    .addStep('check_required', true, self.checkRequiredFieldsAppUserOutOfOffice, self.ouApplicationUser, function (result) {
+                        return !result.length;
+                    })
+                    .notifyFailure(function (step, result) {
+                        var labels = _.map(result, function (label) {
+                            return self.validateLabels[label];
+                        });
+                        generator.generateErrorFields('check_this_fields', labels);
+                    })
+                    .addStep('check_message_required', true, self.checkRequiredOutOfOfficeMessage, self.ouApplicationUser, function (result) {
+                        return !result.length;
+                    })
+                    .notifyFailure(function (step, result) {
+                        var labels = ['out_of_office_message'];
+                        generator.generateErrorFields('check_this_fields', labels);
+                    })
+                    .validate()
+                    .then(function () {
+                        self.ouApplicationUser.applicationUser = self.applicationUser;
+                        dialog.hide(self.ouApplicationUser);
+                    })
+                    .catch(function () {
 
-                });
+                    });
+            }
         };
 
         /**

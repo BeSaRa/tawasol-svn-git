@@ -47,6 +47,7 @@ module.exports = function (app) {
             self.userOrganization = null;
             self.ouList = [];
             self.outOfOffice = false;
+            self.isAdmin = false;
 
             var collectionResults = [
                 'reminderSmsPriority',

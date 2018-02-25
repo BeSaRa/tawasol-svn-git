@@ -1177,7 +1177,7 @@ module.exports = function (app) {
 
                 });
         };
-        console.log('self.organization.centralArchiveUnitId', self.organization.centralArchiveUnitId, self.organization.registryParentId);
+        //console.log('self.organization.centralArchiveUnitId', self.organization.centralArchiveUnitId, self.organization.registryParentId);
         /**
          * @description Assigns the unassigned user to organization
          * @param $event
