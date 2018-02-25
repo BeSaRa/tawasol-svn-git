@@ -61,7 +61,7 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-                <md-input-container flex>
+                <md-input-container ng-if="!ctrl.inheritSecurity" flex>
                     <label for="securityLevel">{{lang.attachment_attachment_security_level}}</label>
                     <md-select ng-model-options="{trackBy: '$value.id'}"
                                id="securityLevel"
