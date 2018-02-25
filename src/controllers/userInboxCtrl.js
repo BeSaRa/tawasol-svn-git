@@ -159,11 +159,12 @@ module.exports = function (app) {
             });
             var selectedItems = angular.copy(self.selectedUserInboxes);
             if (itemsAlreadyBroadCasted && itemsAlreadyBroadCasted.length) {
-                dialog.confirmMessage(langService.get('some_items_already_broadcasted_skip_and_broadcast'), null, null, $event).then(function () {
+                dialog.confirmMessage(langService.get('some_items_are_broadcasted_skip_and_forward'), null, null, $event).then(function () {
                     self.selectedUserInboxes = selectedItems = _.filter(self.selectedUserInboxes, function (workItem) {
                         return itemsAlreadyBroadCasted.indexOf(workItem.generalStepElm.vsId) === -1;
                     });
-                    forwardBulk(selectedItems, $event);
+                    if (saelf.selectedUserInboxes.length)
+                        forwardBulk(selectedItems, $event);
                 })
             }
             else {
@@ -768,8 +769,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }
