@@ -39,6 +39,7 @@ module.exports = function (app) {
         self.progress = null;
         self.showAdvancedSearch = false;
         self.searchInternal = new DocumentSearch({"reqType": 2});
+        self.searchInternal.registryO = employeeService.getCurrentOUApplicationUser().ouRegistryID;
         self.searchInternalModel = angular.copy(self.searchInternal);
         self.organizations = organizations;
         //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
@@ -323,6 +324,7 @@ module.exports = function (app) {
          */
         self.resetFilters = function (form) {
             self.searchInternal = new DocumentSearch({"reqType": 2});
+            self.searchIncoming.registryO = employeeService.getCurrentOUApplicationUser().ouRegistryID;
             self.searchInternalModel = angular.copy(self.searchInternal);
             self.mainCorrespondenceSites = self.subCorrespondenceSites = self.subClassifications = [];
             form.$setUntouched();

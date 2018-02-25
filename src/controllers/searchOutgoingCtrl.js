@@ -41,7 +41,9 @@ module.exports = function (app) {
 
         self.progress = null;
         self.showAdvancedSearch = false;
-        self.searchOutgoing = new DocumentSearch({"reqType": 0});
+
+        self.searchOutgoing = new DocumentSearch({'reqType': 0});
+        self.searchOutgoing.registryO = employeeService.getCurrentOUApplicationUser().ouRegistryID;
         self.searchOutgoingModel = angular.copy(self.searchOutgoing);
 
         self.organizations = organizations;
@@ -322,6 +324,7 @@ module.exports = function (app) {
          */
         self.resetFilters = function (form) {
             self.searchOutgoing = new DocumentSearch({"reqType": 0});
+            self.searchOutgoing.registryO = employeeService.getCurrentOUApplicationUser().ouRegistryID;
             self.searchOutgoingModel = angular.copy(self.searchOutgoing);
             self.mainCorrespondenceSites = self.subCorrespondenceSites = self.subClassifications = [];
             self.maxDocDate = self.maxDateForTo = self.minDocDate = self.minDateForFrom = null;
@@ -433,16 +436,16 @@ module.exports = function (app) {
             return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
                 .then(function () {
                     /*distributionWorkflowService
-                        .controllerMethod
-                        .distributionWorkflowSend(searchedOutgoingDocument, false, false, null, "outgoing", $event)
-                        .then(function (result) {
-                            self.reloadSearchedOutgoingDocument(self.grid.page);
-                            //self.replaceRecord(result);
-                        })
-                        .catch(function (result) {
-                            self.reloadSearchedOutgoingDocument(self.grid.page);
-                            //self.replaceRecord(result);
-                        });*/
+                     .controllerMethod
+                     .distributionWorkflowSend(searchedOutgoingDocument, false, false, null, "outgoing", $event)
+                     .then(function (result) {
+                     self.reloadSearchedOutgoingDocument(self.grid.page);
+                     //self.replaceRecord(result);
+                     })
+                     .catch(function (result) {
+                     self.reloadSearchedOutgoingDocument(self.grid.page);
+                     //self.replaceRecord(result);
+                     });*/
                     searchedOutgoingDocument.launchWorkFlow($event, 'forward', 'favorites')
                         .then(function () {
                             self.reloadSearchedOutgoingDocument(self.grid.page);
