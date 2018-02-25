@@ -472,6 +472,7 @@ module.exports = function (app) {
                     shortcut: false,
                     callback: self.reply,
                     class: "action-green",
+                    hide: true,
                     checkShow: self.checkToShowAction
                 },
                 // Get Link
