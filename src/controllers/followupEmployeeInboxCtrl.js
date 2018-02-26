@@ -316,8 +316,8 @@ module.exports = function (app) {
          */
         self.manageAttachments = function (followupEmployeeInbox, $event) {
             var info = followupEmployeeInbox.getInfo();
-            var wfName = 'outgoing';
-            managerService.manageDocumentAttachments(info.vsId, wfName.toLowerCase(), info.title, $event);
+            //var wfName = 'outgoing';
+            managerService.manageDocumentAttachments(info.vsId, info.documentClass, info.title, $event);
         };
 
 
