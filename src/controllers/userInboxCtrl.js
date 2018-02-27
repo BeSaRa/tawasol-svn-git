@@ -163,7 +163,7 @@ module.exports = function (app) {
                     self.selectedUserInboxes = selectedItems = _.filter(self.selectedUserInboxes, function (workItem) {
                         return itemsAlreadyBroadCasted.indexOf(workItem.generalStepElm.vsId) === -1;
                     });
-                    if (saelf.selectedUserInboxes.length)
+                    if (self.selectedUserInboxes.length)
                         forwardBulk(selectedItems, $event);
                 })
             }
@@ -398,7 +398,7 @@ module.exports = function (app) {
 
         /**
          * @description Export user inbox (export to ready to export)
-         * @param userInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
@@ -769,8 +769,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                                return isPermission !== true;
+                            }));
                     }
                 }
             }
