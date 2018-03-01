@@ -187,7 +187,7 @@ module.exports = function (app) {
         function _getDocumentType(correspondence) {
             var docType = "";
             if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) { /*WorkItem */
-                docType = correspondence.generalStepElm.hasOwnProperty('addMethod') ? correspondence.generalStepElm.addMethod : 1;
+                docType = correspondence.generalStepElm.addMethod ;
             }
             else if (correspondence.hasOwnProperty('addMethod')) { /* Correspondence */
                 docType = correspondence.addMethod;

@@ -18,7 +18,8 @@ module.exports = function (app) {
                 gridType: '@',
                 callbackAllInFavorites: '=',
                 selected: '=',
-                multiSelect: '='
+                multiSelect: '=',
+                toggleFav: '='
             }
         }
     })

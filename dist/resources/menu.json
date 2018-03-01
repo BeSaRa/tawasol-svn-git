@@ -802,5 +802,29 @@
         "sort_order": 6,
         "active": true,
         "sort_value": 0
+    },
+    {
+        "ID": 80,
+        "lang_key": "menu_item_central_archive_mail",
+        "icon": "archive",
+        "parent": null,
+        "link": "#",
+        "state": "app.central-archive",
+        "icon_type": "font",
+        "sort_order": 6,
+        "active": true,
+        "sort_value": 0
+    },
+    {
+        "ID": 80,
+        "lang_key": "menu_item_central_archive_ready_to_export",
+        "icon": "archive",
+        "parent": 80,
+        "link": "#ready-to-export",
+        "state": "app.central-archive.ready-to-export",
+        "icon_type": "font",
+        "sort_order": 6,
+        "active": true,
+        "sort_value": 0
     }
 ]

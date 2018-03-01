@@ -233,16 +233,13 @@ module.exports = function (app) {
                     dialog.alertMessage(langService.get("content_not_found"));
                     return;
                 }
-                distributionWorkflowService.controllerMethod
-                    .distributionWorkflowSend(approvedInternal.generalStepElm, false, false, null, "internal", $event)
+                approvedInternal
+                    .launchWorkFlow($event, 'forward')
                     .then(function () {
                         self.reloadApprovedInternals(self.grid.page)
                             .then(function () {
                                 new ResolveDefer(defer);
                             });
-                    })
-                    .catch(function () {
-                        self.reloadApprovedInternals(self.grid.page);
                     });
             };
 
@@ -258,10 +255,8 @@ module.exports = function (app) {
                     dialog.alertMessage(langService.get("content_not_found_bulk"));
                     return;
                 }
-
-                distributionWorkflowService
-                    .controllerMethod
-                    .distributionWorkflowSendBulk(self.selectedApprovedInternals, "internal", $event)
+                correspondenceService
+                    .launchCorrespondenceWorkflow(self.selectedApprovedInternals, $event)
                     .then(function () {
                         self.reloadApprovedInternals(self.grid.page);
                     })

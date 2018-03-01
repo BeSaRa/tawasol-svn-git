@@ -1268,5 +1268,28 @@ module.exports = function (app) {
                 controller: 'folderCtrl',
                 controllerAs: 'ctrl'
             })
+            .state('app.central-archive', {
+                abstract: true,
+                url: '/central-archive',
+                template: '<div id="sub-view-wrapper"><ui-view flex layout="column" class="sub-view" /></div>',
+                resolve: {
+                    lookups: function (correspondenceService) {
+                        'ngInject';
+                        return correspondenceService
+                            .loadCorrespondenceLookups('common');
+                    }
+                }
+            })
+            .state('app.central-archive.ready-to-export', {
+                url: '/ready-to-export',
+                template: templateProvider.getView('department-inbox-ready-to-export'),
+                resolve: {
+                    lookups: function (correspondenceService) {
+                        'ngInject';
+                        return correspondenceService
+                            .loadCorrespondenceLookups('common');
+                    }
+                }
+            })
     });
 };

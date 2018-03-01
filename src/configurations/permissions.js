@@ -79,7 +79,7 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_proxy_mail_inbox', function (employee) {
                 return !employee.isAdmin && employee.isProxyUser() && _.map(employee.proxyUsers, 'proxyUserOU').indexOf(employee.organization.ouid) > -1;
             })
-            .addMenuPermission('menu_item_user_favorite_documents','MANAGE_FAVORITE')
+            .addMenuPermission('menu_item_user_favorite_documents', 'MANAGE_FAVORITE')
             .end()
             .addMenuPermission('menu_item_dashboard', 'landing_page')
             .addMenuPermissionGroup('menu_item_search_module')
@@ -90,6 +90,10 @@ module.exports = function (app) {
             .end()
             .addMenuPermission('menu_item_user_favorite_documents', function (employee) {
                 return !employee.isAdmin;
+            })
+            .addMenuPermissionGroup('menu_item_central_archive_mail')
+            .addMenuPermission('menu_item_central_archive_ready_to_export', function () {
+                return false;
             })
 
     })

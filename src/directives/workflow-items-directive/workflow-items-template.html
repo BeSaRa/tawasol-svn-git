@@ -58,7 +58,7 @@
                 <tr ng-if="ctrl.excludeSelected" md-row md-select="workflowItem"
                     ng-repeat="workflowItem in ctrl.workflowItems | filter:ctrl.runItemNotExists |limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
                     <td md-cell ng-if="ctrl.allowFavorites" class="no-padding">
-                        <md-button ng-click="ctrl.runToggleFav(workflowItem)"
+                        <md-button ng-click="ctrl.toggleFav(workflowItem)"
                                    class="md-icon-button">
                             <md-icon
                                     class="star-yellow"
@@ -113,7 +113,7 @@
                     md-select="workflowItem"
                     ng-repeat="workflowItem in ctrl.workflowItems |limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
                     <td md-cell ng-if="ctrl.allowFavorites" class="no-padding">
-                        <md-button ng-click="ctrl.runToggleFav(workflowItem)"
+                        <md-button ng-click="ctrl.toggleFav(workflowItem)"
                                    class="md-icon-button">
                             <md-icon
                                     class="star-yellow"
