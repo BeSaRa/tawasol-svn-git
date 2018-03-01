@@ -1,0 +1,95 @@
+#sidebar-folder-structure {
+  width: 300px !important;
+}
+
+.first-folder-list {
+  & > .folder-list {
+    padding: 0 !important;
+    & > li.folder {
+      &:before, &:after {
+        content: '';
+        height: 0;
+        width: 0;
+        border: none;
+      }
+    }
+  }
+  .folder-list {
+    padding-right: 30px;
+  }
+  .folder-icon {
+    margin-left: 7px;
+  }
+}
+
+html:not(.rtl) {
+  .folder-list {
+    padding-left: 30px;
+    padding-right: 0;
+  }
+  .folder-icon {
+    margin-right: 7px;
+    margin-left: 0;
+  }
+}
+html.rtl {
+  .folder {
+    &:before {
+      left: auto !important;
+      right: -12px;
+    }
+    &:not(:last-of-type):after {
+      left: auto !important;
+      right: -12px;
+    }
+    &:last-of-type:after {
+      left: auto !important;
+      right: -12px;
+    }
+  }
+}
+
+.folder {
+  position: relative;
+  button {
+    margin: 0;
+    text-transform: none;
+  }
+  &:before {
+    content: '';
+    width: 18px;
+    border: 1px solid #EEE;
+    position: absolute;
+    top: 17px;
+    left: -12px;
+  }
+  &:not(:last-of-type):after {
+    content: '';
+    height: 100%;
+    border: 1px solid #EEE;
+    position: absolute;
+    top: -10px;
+    left: -12px;
+  }
+  &:last-of-type:after {
+    content: '';
+    height: 28px;
+    border: 1px solid #EEE;
+    position: absolute;
+    top: -12px;
+    left: -12px;
+  }
+}
+
+.block-button {
+  display: block;
+}
+
+.folder-button-icon {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.first-folder-list {
+
+}

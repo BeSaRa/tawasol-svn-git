@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.service('correspondenceService', function (urlService,
                                                    $http,
                                                    cmsTemplate,
+                                                   employeeService,
                                                    langService,
                                                    CorrespondenceInfo,
                                                    Site,
@@ -186,7 +187,7 @@ module.exports = function (app) {
         function _getDocumentType(correspondence) {
             var docType = "";
             if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) { /*WorkItem */
-                docType = correspondence.generalStepElm.addMethod;
+                docType = correspondence.generalStepElm.hasOwnProperty('addMethod') ? correspondence.generalStepElm.addMethod : 1;
             }
             else if (correspondence.hasOwnProperty('addMethod')) { /* Correspondence */
                 docType = correspondence.addMethod;
@@ -295,6 +296,37 @@ module.exports = function (app) {
                 documentStatus = generator.getDocumentClassName(correspondence.docClassId);
             }*/
             return docFullSerial;
+        }
+
+        /**
+         * @description bulk message for any bulk actions.
+         * @param result
+         * @param collection
+         * @param ignoreMessage
+         * @param errorMessage
+         * @param successMessage
+         * @param failureSomeMessage
+         * @returns {*}
+         * @private
+         */
+        function _bulkMessages(result, collection, ignoreMessage, errorMessage, successMessage, failureSomeMessage) {
+            var failureCollection = [];
+            _.map(result.data.rs, function (value, index) {
+                if (!value)
+                    failureCollection.push(collection[index]);
+            });
+            if (!ignoreMessage) {
+                if (failureCollection.length === collection.length) {
+                    toast.error(langService.get(errorMessage));
+                } else if (failureCollection.length) {
+                    generator.generateFailedBulkActionRecords(failureSomeMessage, _.map(failureCollection, function (workItem) {
+                        return workItem.getTranslatedName();
+                    }));
+                } else {
+                    toast.success(langService.get(successMessage));
+                }
+            }
+            return collection;
         }
 
         /**
@@ -1245,6 +1277,7 @@ module.exports = function (app) {
         self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab) {
             var multi = angular.isArray(correspondence) && correspondence.length > 1;
             action = action || 'forward';
+            var errorMessage = [];
             return dialog
                 .showDialog({
                     template: cmsTemplate.getPopup('launch-correspondence-workflow'),
@@ -1255,16 +1288,25 @@ module.exports = function (app) {
                         multi: multi,
                         correspondence: multi ? correspondence : (angular.isArray(correspondence) ? correspondence[0] : correspondence),
                         selectedTab: tab,
-                        actionKey: action
+                        actionKey: action,
+                        errorMessage: errorMessage
                     },
                     resolve: {
                         favoritesUsers: function (distributionWFService) {
                             'ngInject';
-                            return distributionWFService.loadFavorites('users');
+                            return distributionWFService.loadFavorites('users')
+                                .catch(function () {
+                                    errorMessage.push('users');
+                                    return []
+                                });
                         },
                         favoritesOrganizations: function (distributionWFService) {
                             'ngInject';
-                            return distributionWFService.loadFavorites('organizations');
+                            return distributionWFService.loadFavorites('organizations')
+                                .catch(function () {
+                                    errorMessage.push('organizations');
+                                    return [];
+                                });
                         }, /*
                         distUsers: function (distributionWFService) {
                             'ngInject';
@@ -1322,6 +1364,421 @@ module.exports = function (app) {
                 .then(function (result) {
                     return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
                 });
+        };
+        /**
+         * @description load user inbox
+         */
+        self.loadUserInbox = function () {
+            return $http
+                .get(urlService.inboxWF + '/all-mails')
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
+                });
+        };
+        /**
+         * @description load folder content by folder Id
+         * @param folder
+         */
+        self.loadUserInboxByFolder = function (folder) {
+            var folderId = folder.hasOwnProperty('id') ? folder.id : folder;
+            return $http
+                .get(urlService.inboxWF + '/folder/' + folderId)
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
+                });
+        };
+        /**
+         * @description star workItem.
+         * @param workItem
+         * @param ignoreMessage
+         */
+        self.starWorkItem = function (workItem, ignoreMessage) {
+            var wobNumber = workItem.getInfo().wobNumber;
+            return $http
+                .put(urlService.inboxWF + '/star', [wobNumber])
+                .then(function (result) {
+                    if (!ignoreMessage) {
+                        if (result.data.rs[wobNumber]) {
+                            workItem.setStar(true);
+                            toast.success(langService.get("star_specific_success").change({name: workItem.getTranslatedName()}));
+                        } else {
+                            toast.error(langService.get('something_happened_when_update_starred'));
+                        }
+                    }
+                    return workItem;
+                })
+        };
+        /**
+         * @description unStart workItem.
+         * @param workItem
+         * @param ignoreMessage
+         */
+        self.unStarWorkItem = function (workItem, ignoreMessage) {
+            var wobNumber = workItem.getInfo().wobNumber;
+            return $http
+                .put(urlService.inboxWF + '/un-star', [wobNumber])
+                .then(function (result) {
+                    if (!ignoreMessage) {
+                        if (result.data.rs[wobNumber]) {
+                            workItem.setStar(false);
+                            toast.success(langService.get("unstar_specific_success").change({name: workItem.getTranslatedName()}));
+                        } else {
+                            toast.error(langService.get('something_happened_when_update_starred'));
+                        }
+                    }
+                    return workItem;
+                });
+        };
+        /**
+         * @description star bulk workflowItems,
+         * @param workItems
+         * @param ignoreMessage
+         */
+        self.starBulkWorkItems = function (workItems, ignoreMessage) {
+            var wobNumbers = _.map(workItems, function (item) {
+                return item.getInfo().wobNumber;
+            });
+            return $http
+                .put(urlService.inboxWF + '/star', wobNumbers)
+                .then(function (result) {
+                    var failureCollection = [];
+                    _.map(result.data.rs, function (value, index) {
+                        if (!value)
+                            failureCollection.push(workItems[index]);
+                    });
+                    if (!ignoreMessage) {
+                        if (failureCollection.length === workItems.length) {
+                            toast.error(langService.get("failed_star_selected"));
+                        } else if (failureCollection.length) {
+                            generator.generateFailedBulkActionRecords('star_success_except_following', _.map(failureCollection, function (workItem) {
+                                return workItem.getTranslatedName();
+                            }));
+                        } else {
+                            toast.success(langService.get("selected_star_success"));
+                        }
+                    }
+                    return workItems;
+                });
+        };
+        /**
+         * @description un-star bulk workflow items.
+         * @param workItems
+         * @param ignoreMessage
+         */
+        self.unStarBulkWorkItems = function (workItems, ignoreMessage) {
+            var wobNumbers = _.map(workItems, function (item) {
+                return item.getInfo().wobNumber;
+            });
+            return $http
+                .put(urlService.inboxWF + '/un-star', wobNumbers)
+                .then(function (result) {
+                    var failureCollection = [];
+                    _.map(result.data.rs, function (value, index) {
+                        if (!value)
+                            failureCollection.push(workItems[index]);
+                    });
+                    if (!ignoreMessage) {
+                        if (failureCollection.length === workItems.length) {
+                            toast.error(langService.get("failed_unstar_selected"));
+                        } else if (failureCollection.length) {
+                            generator.generateFailedBulkActionRecords('unstar_success_except_following', _.map(failureCollection, function (workItem) {
+                                return workItem.getTranslatedName();
+                            }));
+                        } else {
+                            toast.success(langService.get("selected_unstar_success"));
+                        }
+                    }
+                    return workItems;
+                });
+        };
+        /**
+         * @description terminate work item.
+         * @param workItem
+         * @param $event
+         * @param ignoreMessage
+         */
+        self.terminateWorkItem = function (workItem, $event, ignoreMessage) {
+            var info = workItem.getInfo();
+            return self.showReasonDialog($event)
+                .then(function (reason) {
+                    return $http
+                        .put(urlService.userInboxActions + "/" + info.documentClass + "/terminate/wob-num", {
+                            first: info.wobNumber,
+                            second: reason
+                        })
+                        .then(function (result) {
+                            if (!ignoreMessage) {
+                                toast.success(langService.get("terminate_specific_success").change({name: workItem.getTranslatedName()}));
+                            }
+                            return workItem;
+                        });
+                });
+
+        };
+        /**
+         * @description terminate bulk workItems.
+         * @param workItems
+         * @param $event
+         * @param ignoreMessage
+         * @returns {*}
+         */
+        self.terminateBulkWorkItem = function (workItems, $event, ignoreMessage) {
+            // if the selected workItem has just one record.
+            if (workItems.length === 1)
+                return self.terminateWorkItem(workItems[0], $event);
+            return self
+                .showReasonBulkDialog(workItems, $event)
+                .then(function (workItems) {
+                    var items = _.map(workItems, function (workItem) {
+                        return {
+                            first: workItem.getWobNumber(),
+                            second: workItem.reason
+                        };
+                    });
+                    var wfName = 'outgoing';
+                    return $http
+                        .put((urlService.userInboxActions + "/" + wfName.toLowerCase() + "/terminate/bulk"), items)
+                        .then(function (result) {
+                            var failureCollection = [];
+                            _.map(result.data.rs, function (value, index) {
+                                if (!value)
+                                    failureCollection.push(workItems[index]);
+                            });
+                            if (!ignoreMessage) {
+                                if (failureCollection.length === workItems.length) {
+                                    toast.error(langService.get("failed_terminate_selected"));
+                                } else if (failureCollection.length) {
+                                    generator.generateFailedBulkActionRecords('following_records_failed_to_terminate', _.map(failureCollection, function (workItem) {
+                                        return workItem.getTranslatedName();
+                                    }));
+                                } else {
+                                    toast.success(langService.get("selected_terminate_success"));
+                                }
+                            }
+                            return workItems;
+                        });
+                })
+        };
+        /**
+         * @description  open reason dialog
+         * @returns {promise|*}
+         */
+        self.showReasonDialog = function ($event) {
+            return dialog
+                .showDialog({
+                    template: cmsTemplate.getPopup('reason'),
+                    controller: 'reasonPopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    targetEvent: $event,
+                    resolve: {
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return userCommentService.getUserComments()
+                                .then(function (result) {
+                                    return _.filter(result, 'status');
+                                });
+                        }
+                    }
+                });
+        };
+        /**
+         * @description open bulk reason.
+         * @param workItems
+         * @param $event
+         */
+        self.showReasonBulkDialog = function (workItems, $event) {
+            return dialog
+                .showDialog({
+                    template: cmsTemplate.getPopup('reason-bulk'),
+                    controller: 'reasonBulkPopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    locals: {
+                        workItems: workItems
+                    },
+                    resolve: {
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return userCommentService.getUserComments()
+                                .then(function (result) {
+                                    return _.filter(result, 'status');
+                                });
+                        }
+                    }
+                });
+        };
+        /**
+         * @description add correspondence to favorites.
+         * @param correspondence
+         * @param ignoreMessage
+         */
+        self.addCorrespondenceToFavorite = function (correspondence, ignoreMessage) {
+            var info = correspondence.getInfo();
+            return $http
+                .post((urlService.favoriteDocuments), {
+                    documentVSId: info.vsId,
+                    applicationUserId: employeeService.getEmployee().id
+                })
+                .then(function (result) {
+                    var message = {};
+                    if (result.data.hasOwnProperty('ec') && errorCode.checkIf(result, 'DUPLICATE_ENTRY')) {
+                        message = {status: false, message: "add_to_favorite_duplicate_record", method: 'error'};
+                    } else {
+                        message = {status: true, message: "add_to_favorite_success", method: 'success'};
+                    }
+                    if (!ignoreMessage) {
+                        toast[message.method](langService.get(message.message));
+                    }
+                    return correspondence;
+                })
+        };
+        /**
+         * @description remove correspondence from favorites.
+         * @param correspondence
+         * @param ignoreMessage
+         */
+        self.deleteCorrespondenceFromFavorite = function (correspondence, ignoreMessage) {
+            var vsId = correspondence.getInfo().vsId;
+            return $http
+                .delete(urlService.favoriteDocuments + '/vsid/' + vsId)
+                .then(function (result) {
+                    if (!ignoreMessage)
+                        toast.success(langService.get("remove_from_favorite_specific_success").change({name: correspondence.getTranslatedName()}));
+                    return correspondence;
+                });
+        };
+        /**
+         * @description add bulk documents to favorites.
+         * @param correspondences
+         * @param ignoreMessage
+         */
+        self.addBulkCorrespondenceToFavorite = function (correspondences, ignoreMessage) {
+            var employeeId = employeeService.getEmployee().id;
+            return $http
+                .post((urlService.favoriteDocuments + '/bulk'), _.map(correspondences, function (item) {
+                    var info = item.getInfo();
+                    return {
+                        documentVSId: info.vsId,
+                        applicationUserId: employeeId
+                    }
+                }))
+                .then(function (result) {
+                    return _bulkMessages(result, correspondences, ignoreMessage, 'failed_add_selected_to_favorite', 'add_to_favorite_documents_success', 'add_to_favorite_documents_success_except_following');
+                });
+        };
+        /**
+         * @description delete bulk correspondence from favorites.
+         * @param correspondences
+         * @param ignoreMessage
+         */
+        self.deleteBulkCorrespondenceFromFavorite = function (correspondences, ignoreMessage) {
+            var bulkVsIds = correspondences[0].hasOwnProperty('vsId') ? _.map(correspondences, 'vsId') : correspondences;
+            return $http({
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                url: urlService.favoriteDocuments + '/vsid/bulk',
+                data: bulkVsIds
+            }).then(function (result) {
+                return _bulkMessages(result, correspondences, ignoreMessage, 'failed_remove_selected_from_favorite', 'remove_from_favorite_documents_success', 'remove_from_favorite_documents_success_except_following');
+            });
+        };
+        /**
+         * @description show folder dialog
+         * @param workItems
+         * @param folders
+         * @param $event
+         * @param showInbox
+         * @returns {promise|*}
+         */
+        self.showFolderDialog = function (workItems, folders, $event, showInbox) {
+            workItems = angular.isArray(workItems) ? workItems : [workItems];
+            return dialog
+                .showDialog({
+                    template: cmsTemplate.getPopup('folder-tree-popup'),
+                    controller: 'folderTreePopCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event,
+                    locals: {
+                        folders: folders,
+                        workItems: workItems,
+                        showInbox: showInbox
+                    }
+                });
+        };
+        /**
+         * @description add work item to folders
+         * @param workItem
+         * @param folders
+         * @param $event
+         * @param showInbox
+         * @returns {promise|*}
+         */
+        self.showAddWorkItemToFolder = function (workItem, folders, $event, showInbox) {
+            return self.showFolderDialog(workItem, folders, $event, showInbox);
+        };
+        /**
+         * @description add bulk work items to folders.
+         * @param workItems
+         * @param folders
+         * @param $event
+         * @param showInbox
+         * @returns {promise|*}
+         */
+        self.showAddBulkWorkItemsToFolder = function (workItems, folders, $event, showInbox) {
+            return self.showFolderDialog(workItems, folders, $event, showInbox);
+        };
+        /**
+         * @description the
+         * @param workItems
+         * @param folder
+         * @returns {Promise}
+         */
+        self.commonAddToFolder = function (workItems, folder) {
+            var wobNumbers = _.map(workItems, function (item) {
+                return item.getInfo().wobNumber;
+            });
+            return $http
+                .put(urlService.userInbox + '/folder', {
+                    first: folder.hasOwnProperty('id') ? folder.id : folder,
+                    second: wobNumbers
+                });
+        };
+        /**
+         * @description add workItem to folder
+         * @param workItems
+         * @param folder
+         * @param ignoreMessage
+         * @returns {Promise<any>}
+         */
+        self.addWorkItemToFolder = function (workItems, folder, ignoreMessage) {
+            return self.commonAddToFolder(workItems, folder)
+                .then(function (result) {
+                    if (!ignoreMessage) {
+                        if (!result.data.rs[workItems[0].getInfo().wobNumber]) {
+                            toast.success(langService.get('inbox_add_to_folder_specific_success'));
+                        } else {
+                            toast.success(langService.get('inbox_failed_add_to_folder_selected'));
+                        }
+                    }
+                    return workItems
+                });
+        };
+        /**
+         * @description add bulk workItems to folders
+         * @param workItems
+         * @param folder
+         * @param ignoreMessage
+         * @returns {Promise<any>}
+         */
+        self.addBulkWorkItemsToFolder = function (workItems, folder, ignoreMessage) {
+            if (workItems.length === 1)
+                return self.addWorkItemToFolder(workItems, folder, ignoreMessage);
+            return self.commonAddToFolder(workItems, folder).then(function (result) {
+                return _bulkMessages(result, workItems, ignoreMessage, 'inbox_failed_add_to_folder_selected', 'add_to_folder_success', 'add_to_folder_success_except_following');
+            });
         }
 
 

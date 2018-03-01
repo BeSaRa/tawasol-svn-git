@@ -50,6 +50,7 @@
                             <md-input-container ng-if="!ctrl.usersCriteria.hide">
                                 <label for="ou">{{lang.select_organization}}</label>
                                 <md-select id="ou" name="ou"
+                                           ng-change="ctrl.onSearchUsers()"
                                            ng-model="ctrl.usersCriteria.ou">
                                     <md-option required ng-value="organization"
                                                ng-repeat="organization in ctrl.organizationGroups">
@@ -59,7 +60,7 @@
                             </md-input-container>
                             <div ng-if="!ctrl.usersCriteria.hide">
                                 <md-button tooltip="{{lang.send_to_whole_department}}" id="add_organization"
-                                           ng-disabled="ctrl.getApprovedStatus() || !ctrl.workItemNotExists(ctrl.usersCriteria.ou) || ctrl.loadingIndicatorService.loading"
+                                           ng-disabled="ctrl.getApprovedStatus() || !ctrl.workItemNotExists(ctrl.usersCriteria.ou) || ctrl.loadingIndicatorService.loading || !ctrl.usersCriteria.ou || ctrl.usersCriteria.ou.isRegOU() "
                                            class="md-icon-button mt16"
                                            ng-click="ctrl.addToSelected(ctrl.usersCriteria.ou)">
                                     <md-icon md-svg-icon="plus"></md-icon>

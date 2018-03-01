@@ -278,9 +278,9 @@ module.exports = function (app) {
             self.viewTrackingSheet = function (workItem, params, $event) {
                 viewTrackingSheetService
                     .controllerMethod
-                    .viewTrackingSheetPopup(workItem, params, $event).then(function (result) {
-
-                });
+                    .viewTrackingSheetPopup(workItem, params, $event)
+                    .then(function (result) {
+                    });
             };
 
             /**

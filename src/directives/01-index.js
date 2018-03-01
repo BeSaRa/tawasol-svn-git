@@ -67,4 +67,5 @@ module.exports = function (app) {
     require('./organization-node-directive/01-index')(app);
     require('./workflow-items-directive/01-index')(app);
     require('./bulk-correspondence-status-directive/01-index')(app);
+    require('./folders-tree-structure-directive/01-index')(app);
 };

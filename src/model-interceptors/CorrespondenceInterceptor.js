@@ -12,7 +12,9 @@ module.exports = function (app) {
                       LinkedObject,
                       classificationService,
                       documentTypeService,
+                      managerService,
                       documentTagService,
+                      downloadService,
                       documentCommentService,
                       correspondenceService,
                       Information) {
@@ -49,7 +51,9 @@ module.exports = function (app) {
                 .setCorrespondenceService(correspondenceService)
                 .setAttachmentService(attachmentService)
                 .setDocumentTagService(documentTagService)
-                .setDocumentCommentService(documentCommentService);
+                .setDocumentCommentService(documentCommentService)
+                .setManagerService(managerService)
+                .setDownloadService(downloadService);
             return model;
         });
 

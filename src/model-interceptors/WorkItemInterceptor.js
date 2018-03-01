@@ -7,11 +7,13 @@ module.exports = function (app) {
                       CorrespondenceSite,
                       correspondenceService,
                       CorrespondenceSiteType,
+                      managerService,
                       ApplicationUser,
                       WorkflowAction,
                       SenderInfo,
                       langService,
                       Organization,
+                      downloadService,
                       WorkItemType,
                       WorkItemDepartment,
                       lookupService,
@@ -21,7 +23,10 @@ module.exports = function (app) {
         var modelName = 'WorkItem';
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
-            model.setCorrespondenceService(correspondenceService);
+            model
+                .setCorrespondenceService(correspondenceService)
+                .setManagerService(managerService)
+                .setDownloadService(downloadService);
             model.mainCoreSite = new CorrespondenceSite(model.mainCoreSite);
             model.subCoreSite = new CorrespondenceSite(model.subCoreSite);
             model.siteType = new CorrespondenceSiteType(model.siteType);
@@ -60,7 +65,7 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.generalStepElm.numberOfDays = getNumberOfDays(model.generalStepElm.receivedDate);
-            model.generalStepElm.receivedDate? getDateFromUnixTimeStamp(model.generalStepElm, ["receivedDate"]) : "";
+            model.generalStepElm.receivedDate ? getDateFromUnixTimeStamp(model.generalStepElm, ["receivedDate"]) : "";
 
             model.dueDateOriginal = angular.copy(model.generalStepElm.dueDate);
             if (model.generalStepElm.dueDate && model.generalStepElm.dueDate > 0 && model.generalStepElm.dueDate >= moment().unix())

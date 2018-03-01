@@ -6,6 +6,7 @@ module.exports = function (app) {
             DistributionWFItem.call(this);
             self.toOUId = null;
             self.originality = null;
+            self.hasRegistry = false;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
@@ -37,6 +38,7 @@ module.exports = function (app) {
                     .setRelationId(organization.relationId)
                     .setArName(organization.arName)
                     .setEnName(organization.enName)
+                    .setHasRegistry(organization.hasRegistry)
                     .setToOUId(organization.id);
             };
             DistributionOUWFItem.prototype.setToOUId = function (toOUId) {
@@ -47,7 +49,10 @@ module.exports = function (app) {
                 this.originality = originality;
                 return this;
             };
-
+            DistributionOUWFItem.prototype.setHasRegistry = function (hasRegistry) {
+                this.hasRegistry = hasRegistry;
+                return this;
+            };
             DistributionOUWFItem.prototype.isSameDepartment = function (workflowItem) {
                 return this.toOUId === workflowItem.toOUId;
             };
@@ -67,6 +72,9 @@ module.exports = function (app) {
              */
             DistributionOUWFItem.prototype.isSameWorkflowItem = function (distWorkflowItem) {
                 return distWorkflowItem.isDepartment() ? this.isSameDepartment(distWorkflowItem) : false;
+            };
+            DistributionOUWFItem.prototype.isRegOU = function () {
+                return !!this.hasRegistry;
             };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

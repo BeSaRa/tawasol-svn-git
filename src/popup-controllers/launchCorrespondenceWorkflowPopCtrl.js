@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                                     comments,
                                                                     toast,
                                                                     cmsTemplate,
+                                                                    errorMessage,
                                                                     _,
                                                                     replyOn,
                                                                     actionKey,
@@ -133,7 +134,7 @@ module.exports = function (app) {
         // all registry organizations
         self.registryOrganizations = _mapWFOrganization(distributionWFService.registryOrganizations, 'OUReg');
         // all organizations for organization mail unit
-        self.organizationGroups = _mapWFOrganization(distributionWFService.organizationGroups, 'OUGroup');
+        self.organizationGroups = _mapOrganizationByType(distributionWFService.organizationGroups);
         // users search criteria
         self.usersCriteria = new UserSearchCriteria({
             ou: self.organizationGroups.length ? _.find(self.organizationGroups, function (item) {
@@ -345,6 +346,33 @@ module.exports = function (app) {
 
         // create default workflow item Settings for each tab
         _createDefaultWFItemTabs();
+
+        //_checkFavoritesError();
+
+
+        function _mapOrganizationByType(organizations) {
+            var groups = _.filter(organizations, function (item) {
+                return !item.hasRegistry;
+            });
+            var reg = _.filter(organizations, function (item) {
+                return item.hasRegistry;
+            });
+            groups = _mapWFOrganization(groups, 'OUGroup');
+            reg = _mapWFOrganization(reg, 'OUReg');
+            return [].concat(groups, reg);
+        }
+
+        function _checkFavoritesError() {
+            if (!errorMessage || !errorMessage.length)
+                return;
+
+            return dialog
+                .errorMessage(langService.get('error_occurred_while_load_favorites').change({
+                    name: _.map(errorMessage, function (item) {
+                        return langService.get(item);
+                    }).join(', ')
+                }));
+        }
 
         /**
          * @description map workflow Item to WorkflowGroup
@@ -799,12 +827,16 @@ module.exports = function (app) {
          * @description search users
          */
         self.onSearchUsers = function () {
+            if (!self.usersCriteria.ou)
+                return;
             return distributionWFService
                 .searchUsersByCriteria(self.usersCriteria)
                 .then(function (result) {
                     self.users = _mapWFUser(result);
                 });
         };
+
+        self.onSearchUsers();
 
         /**
          * @description toggle favorites workflowItem.
@@ -834,8 +866,8 @@ module.exports = function (app) {
          */
         self.allInFavorites = function (selected) {
             return !_.some(selected, function (workflowItem) {
-                    return !workflowItem.isFavorite();
-                }) && selected.length;
+                return !workflowItem.isFavorite();
+            }) && selected.length;
         };
 
         /**
@@ -1111,8 +1143,8 @@ module.exports = function (app) {
          */
         self.allComplete = function (gridName) {
             return !_.some(self.selectedGrids[gridName].collection, function (item) {
-                    return !item.isWFComplete();
-                }) && self.selectedGrids[gridName].collection.length;
+                return !item.isWFComplete();
+            }) && self.selectedGrids[gridName].collection.length;
         };
 
         self.addToSelected = function (workflowItem, checkProxy) {

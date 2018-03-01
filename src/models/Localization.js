@@ -51,7 +51,7 @@ module.exports = function (app) {
              */
             Localization.prototype.saveLocalizationKey = function () {
                 return this.isOverrided ? this.updateLocalization() : this.addLocalization();
-                 // return this.updateLocalization();
+                // return this.updateLocalization();
             };
             Localization.prototype.addGlobalLocalization = function () {
                 return langService.addGlobalLocalizationKey(this);

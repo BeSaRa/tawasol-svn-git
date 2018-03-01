@@ -18,7 +18,7 @@ module.exports = function (app) {
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [
-                'arName','enName'
+                'arName', 'enName'
             ];
 
             if (model)
@@ -47,7 +47,7 @@ module.exports = function (app) {
              * @returns {string}
              */
             UserFolder.prototype.getTranslatedName = function (reverse) {
-                return langService.current === 'ar' ? (reverse ? this.enName : this.arName ) : (reverse ? this.arName : this.enName);
+                return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
 
             /**
@@ -65,6 +65,15 @@ module.exports = function (app) {
              UserFolder.prototype.getTranslatedGlobal = function () {
              return this.global ? langService.get('yes') : langService.get('no');
              };*/
+
+            UserFolder.prototype.hasParent = function () {
+                return !!this.parent;
+            };
+
+            UserFolder.prototype.setChildren = function (folders) {
+                this.children = folders;
+                return this;
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

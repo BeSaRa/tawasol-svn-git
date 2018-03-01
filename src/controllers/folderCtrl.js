@@ -1,141 +1,113 @@
 module.exports = function (app) {
-    app.controller('userInboxCtrl', function (lookupService,
-                                              userInboxService,
-                                              userInboxes,
-                                              errorCode,
-                                              $timeout,
-                                              ResolveDefer,
-                                              generator,
-                                              correspondenceService,
-                                              $state,
-                                              counterService,
-                                              $q,
-                                              langService,
-                                              toast,
-                                              dialog,
-                                              rootEntity,
-                                              viewDocumentService,
-                                              managerService,
-                                              distributionWorkflowService,
-                                              userFolders,
-                                              $window,
-                                              tokenService,
-                                              contextHelpService,
-                                              userFolderService,
-                                              readyToExportService,
-                                              viewTrackingSheetService,
-                                              downloadService,
-                                              employeeService,
-                                              favoriteDocumentsService,
-                                              Information,
-                                              mailNotificationService) {
+    app.controller('folderCtrl', function (langService,
+                                           folders,
+                                           $q,
+                                           mailNotificationService,
+                                           counterService,
+                                           userFolderService,
+                                           employeeService,
+                                           UserFolder,
+                                           ResolveDefer,
+                                           viewTrackingSheetService,
+                                           correspondenceService) {
         'ngInject';
         var self = this;
-
-        self.controllerName = 'userInboxCtrl';
-
+        self.controllerName = 'folderCtrl';
+        self.workItems = [];
+        self.selectedWorkItems = [];
+        self.folders = folders;
         self.progress = null;
-        contextHelpService.setHelpTo('user-inbox');
-        var timeoutRefresh = false;
+        self.sidebarStatus = false;
+        // to display the user Inbox folder
+        self.inboxFolders = [new UserFolder({
+            arName: langService.getKey('menu_item_user_inbox', 'ar'),
+            enName: langService.getKey('menu_item_user_inbox', 'en'),
+            id: 0
+        }).setChildren(self.folders)];
 
-        self.langService = langService;
 
-        /**
-         * @description All user inboxes
-         * @type {*}
-         */
-        self.userInboxes = userInboxes;
-        self.userFolders = userFolders;
-
-        /**
-         * @description Contains methods for Star operations for user inbox items
-         */
-        self.starServices = {
-            'false': userInboxService.controllerMethod.userInboxStar,
-            'true': userInboxService.controllerMethod.userInboxUnStar,
-            'starBulk': correspondenceService.starBulkWorkItems,
-            'unStarBulk': correspondenceService.unStarBulkWorkItems
-        };
-
-        /**
-         * @description Contains the selected user inboxes
-         * @type {Array}
-         */
-        self.selectedUserInboxes = [];
-        self.globalSetting = rootEntity.returnRootEntity().settings;
-
-        function _getWorkflowName(model) {
-            return model.getInfo().documentClass;
-        }
-
-        /**
-         * @description Contains options for grid configuration
-         * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
-         */
         self.grid = {
             limit: 5, //self.globalSetting.searchAmount, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: [5, 10, 20, // limit options
                 {
-                    /*label: self.globalSetting.searchAmountLimit.toString(),
-                     value: function () {
-                     return (self.globalSetting.searchAmountLimit + 5)
-                     }*/
                     label: langService.get('all'),
                     value: function () {
-                        return (self.userInboxes.length + 21);
+                        return (self.workItems.length + 21);
                     }
                 }
             ]
         };
 
         /**
-         * @description Replaces the record in grid after update
-         * @param record
+         * @description toggle sidebar folders.
          */
-        self.replaceRecord = function (record) {
-            var index = _.findIndex(self.userInboxes, function (userInbox) {
-                return userInbox.generalStepElm.vsId === record.generalStepElm.vsId;
-            });
-            if (index > -1)
-                self.userInboxes.splice(index, 1, record);
-            mailNotificationService.loadMailNotifications(5);
+        self.toggleSidebarFolder = function () {
+            self.sidebarStatus = !self.sidebarStatus;
         };
-
         /**
-         * @description Reload the grid of user inboxes
-         * @param pageNumber
-         * @return {*|Promise<U>}
+         * @description get clicked folder content.
+         * @param folder
+         * @param $event
+         * @returns {*}
          */
-        self.reloadUserInboxes = function (pageNumber) {
+        self.getFolderContent = function (folder, $event) {
+            if (folder.id === 0)
+                return;
+            self.selectedFolder = folder;
+            return self.reloadFolders(self.grid.page);
+        };
+        /**
+         * @description reload current folder
+         * @param pageNumber
+         */
+        self.reloadFolders = function (pageNumber) {
             var defer = $q.defer();
             self.progress = defer.promise;
-            return userInboxService
-                .loadUserInboxes()
-                .then(function (result) {
+            return correspondenceService
+                .loadUserInboxByFolder(self.selectedFolder)
+                .then(function (workItems) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(5);
-                    self.userInboxes = result;
-                    // self.starredUserInboxes = _.filter(self.userInboxes, 'generalStepElm.starred');
-                    self.selectedUserInboxes = [];
+                    self.workItems = workItems;
+                    self.selectedWorkItems = [];
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
-                    return result;
+                    return self.workItems;
                 });
         };
+
+        self.moveToFolder = function (workItem, $event, defer) {
+            workItem
+                .addToFolder(self.folders, $event, true)
+                .then(function () {
+                    self.reloadFolders(self.grid.page);
+                });
+        };
+        /**
+         * @description move bulk to folder
+         * @param $event
+         */
+        self.moveToFolderUserInboxBulk = function ($event) {
+            return correspondenceService
+                .showAddBulkWorkItemsToFolder(self.selectedWorkItems, self.folders, $event, true)
+                .then(function () {
+                    self.reloadFolders(self.grid.page);
+                });
+        };
+
 
         /**
          * @description Terminate User inboxes Bulk
          * @param $event
          */
         self.terminateUserInboxBulk = function ($event) {
-            var numberOfRecordsToTerminate = angular.copy(self.selectedUserInboxes.length);
             correspondenceService
-                .terminateBulkWorkItem(self.selectedUserInboxes, $event)
+                .terminateBulkWorkItem(self.selectedWorkItems, $event)
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadFolders(self.grid.page);
                 });
         };
 
@@ -146,17 +118,17 @@ module.exports = function (app) {
          */
         self.forwardBulk = function ($event) {
             var itemsAlreadyBroadCasted = [];
-            _.filter(self.selectedUserInboxes, function (workItem) {
+            _.filter(self.selectedWorkItems, function (workItem) {
                 if (workItem.isBroadcasted())
                     itemsAlreadyBroadCasted.push(workItem.generalStepElm.vsId);
             });
-            var selectedItems = angular.copy(self.selectedUserInboxes);
+            var selectedItems = angular.copy(self.selectedWorkItems);
             if (itemsAlreadyBroadCasted && itemsAlreadyBroadCasted.length) {
                 dialog.confirmMessage(langService.get('some_items_are_broadcasted_skip_and_forward'), null, null, $event).then(function () {
-                    self.selectedUserInboxes = selectedItems = _.filter(self.selectedUserInboxes, function (workItem) {
+                    self.selectedWorkItems = selectedItems = _.filter(self.selectedWorkItems, function (workItem) {
                         return itemsAlreadyBroadCasted.indexOf(workItem.generalStepElm.vsId) === -1;
                     });
-                    if (self.selectedUserInboxes.length)
+                    if (self.selectedWorkItems.length)
                         forwardBulk(selectedItems, $event);
                 })
             }
@@ -169,7 +141,7 @@ module.exports = function (app) {
             return correspondenceService
                 .launchCorrespondenceWorkflow(selectedItems, $event, 'forward', 'favorites')
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadFolders(self.grid.page);
                 });
         }
 
@@ -180,9 +152,9 @@ module.exports = function (app) {
          */
         self.addToFolderUserInboxBulk = function ($event) {
             return correspondenceService
-                .showAddBulkWorkItemsToFolder(self.selectedUserInboxes, self.userFolders, $event, false)
+                .showAddBulkWorkItemsToFolder(self.selectedWorkItems, self.userFolders, $event, false)
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadFolders(self.grid.page);
                 });
         };
 
@@ -193,7 +165,7 @@ module.exports = function (app) {
          */
         self.changeUserInboxStar = function (userInbox, $event) {
             userInbox.toggleStar().then(function () {
-                self.reloadUserInboxes(self.grid.page);
+                self.reloadFolders(self.grid.page);
             });
         };
 
@@ -203,9 +175,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.changeUserInboxStarBulk = function (starUnStar, $event) {
-            self.starServices[starUnStar](self.selectedUserInboxes)
+            self.starServices[starUnStar](self.selectedWorkItems)
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadFolders(self.grid.page);
                 });
         };
 
@@ -220,19 +192,8 @@ module.exports = function (app) {
                 .terminate($event)
                 .then(function () {
                     new ResolveDefer(defer);
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadFolders(self.grid.page);
                 });
-        };
-
-        /**
-         * @description Add To Folder
-         * @param userInbox
-         * @param $event
-         */
-        self.addToFolder = function (userInbox, $event) {
-            userInbox.addToFolder(self.userFolders, $event, false).then(function () {
-                self.reloadUserInboxes(self.grid.page);
-            });
         };
 
         /**
@@ -242,7 +203,7 @@ module.exports = function (app) {
          */
         self.addToFavorite = function (userInbox, $event) {
             userInbox.addToFavorite().then(function () {
-                self.reloadUserInboxes(self.grid.page)
+                self.reloadFolders(self.grid.page)
             });
         };
 
@@ -267,7 +228,7 @@ module.exports = function (app) {
         self.forward = function (userInbox, $event, defer) {
             userInbox.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page)
+                    self.reloadFolders(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
                         });
@@ -283,7 +244,7 @@ module.exports = function (app) {
         self.reply = function (userInbox, $event, defer) {
             userInbox.launchWorkFlow($event, 'reply')
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page)
+                    self.reloadFolders(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
                         });
@@ -316,7 +277,7 @@ module.exports = function (app) {
          */
         self.sendWorkItemToReadyToExport = function (userInbox, $event, defer) {
             userInbox.sendToReadyToExport().then(function () {
-                self.reloadUserInboxes(self.grid.page)
+                self.reloadFolders(self.grid.page)
                     .then(function () {
                         toast.success(langService.get('export_success'));
                         new ResolveDefer(defer);
@@ -347,10 +308,10 @@ module.exports = function (app) {
             var info = userInbox.getInfo();
             managerService.manageDocumentTags(info.vsId, info.documentClass, userInbox.getTranslatedName(), $event)
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadFolders(self.grid.page);
                 })
                 .catch(function (error) {
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadFolders(self.grid.page);
                 });
         };
 
@@ -363,10 +324,10 @@ module.exports = function (app) {
             var info = userInbox.getInfo();
             userInbox.manageDocumentComments($event)
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadFolders(self.grid.page);
                 })
                 .catch(function (error) {
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadFolders(self.grid.page);
                 });
         };
 
@@ -397,10 +358,10 @@ module.exports = function (app) {
         self.manageLinkedDocuments = function (userInbox, $event) {
             userInbox.manageDocumentLinkedDocuments($event)
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadFolders(self.grid.page);
                 })
                 .catch(function (error) {
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadFolders(self.grid.page);
                 });
         };
 
@@ -536,7 +497,7 @@ module.exports = function (app) {
                 .userInboxSignaturePopup(userInbox, false, $event)
                 .then(function (result) {
                     if (result)
-                        self.reloadUserInboxes(self.grid.page)
+                        self.reloadFolders(self.grid.page)
                             .then(function () {
                                 toast.success(langService.get('sign_specific_success').change({name: userInbox.getTranslatedName()}));
                                 new ResolveDefer(defer);
@@ -578,7 +539,7 @@ module.exports = function (app) {
             managerService
                 .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
                 .finally(function () {
-                    self.reloadUserInboxes(self.grid.page)
+                    self.reloadFolders(self.grid.page)
                 });
         };
 
@@ -632,10 +593,10 @@ module.exports = function (app) {
 
             userInbox.view(userInbox, self.gridActions, checkIfEditPropertiesAllowed(userInbox, true), checkIfEditCorrespondenceSiteAllowed(userInbox, true))
                 .then(function () {
-                    return self.reloadUserInboxes(self.grid.page);
+                    return self.reloadFolders(self.grid.page);
                 })
                 .catch(function () {
-                    return self.reloadUserInboxes(self.grid.page);
+                    return self.reloadFolders(self.grid.page);
                 });
         };
 
@@ -678,7 +639,7 @@ module.exports = function (app) {
             userInbox
                 .correspondenceBroadcast()
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page)
+                    self.reloadFolders(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
                         })
@@ -725,10 +686,10 @@ module.exports = function (app) {
             // Add To Folder
             {
                 type: 'action',
-                icon: 'folder-plus',
-                text: 'grid_action_add_to_folder',
+                icon: 'folder-move',
+                text: 'grid_action_move_to_folder',
                 shortcut: false,
-                callback: self.addToFolder,
+                callback: self.moveToFolder,
                 class: "action-green",
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted();
@@ -1235,18 +1196,33 @@ module.exports = function (app) {
                 })
         };
 
-        self.refreshInbox = function (time) {
-            $timeout(function () {
-                $state.is('app.inbox.user-inbox') && self.reloadUserInboxes(self.grid.page);
-            }, time)
-                .then(function () {
-                    $state.is('app.inbox.user-inbox') && self.refreshInbox(time);
-                });
+        /**
+         * @description Replaces the record in grid after update
+         * @param record
+         */
+        self.replaceRecord = function (record) {
+            var index = _.findIndex(self.workItems, function (userInbox) {
+                return userInbox.generalStepElm.vsId === record.generalStepElm.vsId;
+            });
+            if (index > -1)
+                self.workItems.splice(index, 1, record);
+            mailNotificationService.loadMailNotifications(5);
         };
 
-        if (self.globalSetting.inboxRefreshInterval) {
-            var timer = (self.globalSetting.inboxRefreshInterval * 60 * 100 * 10);
-            self.refreshInbox(timer);
-        }
+        // self.refreshInbox = function (time) {
+        //     $timeout(function () {
+        //         $state.is('app.inbox.user-inbox') && self.reloadFolders(self.grid.page);
+        //     }, time)
+        //         .then(function () {
+        //             $state.is('app.inbox.user-inbox') && self.refreshInbox(time);
+        //         });
+        // };
+        //
+        // if (self.globalSetting.inboxRefreshInterval) {
+        //     var timer = (self.globalSetting.inboxRefreshInterval * 60 * 100 * 10);
+        //     self.refreshInbox(timer);
+        // }
+
+
     });
 };

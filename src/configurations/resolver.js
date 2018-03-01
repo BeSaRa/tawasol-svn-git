@@ -317,6 +317,12 @@ module.exports = function (app) {
                     return true;
                 }
             })
+            .bulkResolveToState('app.inbox.folders', {
+                folders: function (userFolderService) {
+                    'ngInject';
+                    return userFolderService.getUserFoldersForApplicationUser();
+                }
+            })
             .bulkResolveToState('app.inbox.group-inbox', {
                 workItems: function (correspondenceService) {
                     'ngInject';

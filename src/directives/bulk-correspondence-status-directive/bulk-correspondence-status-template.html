@@ -8,7 +8,7 @@
                 <div class="notify-list-wrapper" scroll-directive>
                     <md-menu-item ng-repeat="item in ctrl.items track by $index">
                         <div class="sign-status" layout="row">
-                            <span md-truncate flex>{{item.title}}</span>
+                            <span md-truncate flex>{{item.title ? item.title : item.getTranslatedName()}}</span>
                             <md-icon ng-click="ctrl.deleteCallback($index , $event)"
                                      md-svg-icon="delete"></md-icon>
                         </div>

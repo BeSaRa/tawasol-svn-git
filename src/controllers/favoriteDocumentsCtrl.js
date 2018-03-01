@@ -81,14 +81,10 @@ module.exports = function (app) {
          * @param defer
          */
         self.removeFavoriteDocument = function (favoriteDocument, $event, defer) {
-            return favoriteDocumentsService.controllerMethod.favoriteDocumentRemove(favoriteDocument, $event)
-                .then(function (result) {
-                    self.reloadFavoriteDocuments(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get("remove_from_favorite_specific_success").change({name: favoriteDocument.getNames()}));
-                            new ResolveDefer(defer);
-                        });
-                })
+            favoriteDocument.removeFromFavorite().then(function () {
+                self.reloadFavoriteDocuments(self.grid.page);
+                new ResolveDefer(defer);
+            });
         };
 
         /**
@@ -96,9 +92,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkFavoriteDocuments = function ($event) {
-            favoriteDocumentsService
-                .controllerMethod
-                .favoriteDocumentRemoveBulk(self.selectedFavoriteDocuments, $event)
+
+            correspondenceService
+                .deleteBulkCorrespondenceFromFavorite(self.selectedFavoriteDocuments)
                 .then(function () {
                     self.reloadFavoriteDocuments(self.grid.page);
                 });
@@ -244,7 +240,6 @@ module.exports = function (app) {
         };
 
 
-
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             var info = model.getInfo();
             var hasPermission = false;
@@ -370,7 +365,7 @@ module.exports = function (app) {
                     if (info.documentClass === "internal")
                         hasPermission = (employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT"));
                     else if (info.documentClass === "incoming")
-                        hasPermission = ( employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES")|| employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT"));
+                        hasPermission = (employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT"));
                     else if (info.documentClass === "outgoing")
                         hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
                     return self.checkToShowAction(action, model) && hasPermission && info.docStatus < 24;

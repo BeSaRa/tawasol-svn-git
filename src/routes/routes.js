@@ -1262,5 +1262,11 @@ module.exports = function (app) {
                 controller: 'groupInboxCtrl',
                 controllerAs: 'ctrl'
             })
+            .state('app.inbox.folders', {
+                url: '/folders?folder',
+                template: templateProvider.getView('folders'),
+                controller: 'folderCtrl',
+                controllerAs: 'ctrl'
+            })
     });
 };

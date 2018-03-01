@@ -1,17 +1,17 @@
 module.exports = function (app) {
     app.controller('addToUserFolderPopCtrl', function (lookupService,
-                                                        UserFolder,
-                                                        $q,
-                                                        langService,
-                                                        toast,
-                                                        validationService,
-                                                        userFolderService,
-                                                        generator,
-                                                        dialog,
-                                                        currentNode,
-                                                        itemsToAdd,
-                                                        allItemsToAdd,
-                                                        isBulkAdd) {
+                                                       UserFolder,
+                                                       $q,
+                                                       langService,
+                                                       toast,
+                                                       validationService,
+                                                       userFolderService,
+                                                       generator,
+                                                       dialog,
+                                                       currentNode,
+                                                       itemsToAdd,
+                                                       allItemsToAdd,
+                                                       isBulkAdd) {
         'ngInject';
         var self = this;
 

@@ -213,6 +213,7 @@ module.exports = function (app) {
             /**
              * @description Opens the popup to select signature
              * @param userInbox
+             * @param isRecursiveRequest
              * @param $event
              * @returns {promise}
              */

@@ -5,7 +5,10 @@ module.exports = function (app) {
         'ngInject';
 
         return function WorkItem(model) {
-            var self = this, correspondenceService = null;
+            var self = this,
+                correspondenceService = null,
+                managerService = null,
+                downloadService = null;
             self.generalStepElm = null;
             self.folder = null;
             self.mainClassification = null;
@@ -57,6 +60,15 @@ module.exports = function (app) {
 
             WorkItem.prototype.setCorrespondenceService = function (service) {
                 correspondenceService = service;
+                return this;
+            };
+            WorkItem.prototype.setManagerService = function (service) {
+                managerService = service;
+                return this;
+            };
+            WorkItem.prototype.setDownloadService = function (service) {
+                downloadService = service;
+                return this;
             };
             WorkItem.prototype.hasContent = function () {
                 // return correspondenceService.getContentSize(this);
@@ -174,6 +186,96 @@ module.exports = function (app) {
             WorkItem.prototype.launchWorkFlow = function ($event, action, tab) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
             };
+
+            WorkItem.prototype.setStar = function (value) {
+                this.generalStepElm.starred = value;
+                return this;
+            };
+
+            WorkItem.prototype.isStarred = function () {
+                return !!this.generalStepElm.starred;
+            };
+
+            WorkItem.prototype.toggleStar = function (ignoreMessage) {
+                return this.isStarred() ? this.unStar(ignoreMessage) : this.star(ignoreMessage);
+            };
+
+            WorkItem.prototype.star = function (ignoreMessage) {
+                return correspondenceService.starWorkItem(this, ignoreMessage);
+            };
+
+            WorkItem.prototype.unStar = function (ignoreMessage) {
+                return correspondenceService.unStarWorkItem(this, ignoreMessage);
+            };
+
+            WorkItem.prototype.terminate = function ($event, ignoreMessage) {
+                return correspondenceService.terminateWorkItem(this, $event, ignoreMessage);
+            };
+
+            WorkItem.prototype.addToFavorite = function (ignoreMessage) {
+                return correspondenceService.addCorrespondenceToFavorite(this, ignoreMessage);
+            };
+
+            WorkItem.prototype.removeFromFavorite = function (ignoreMessage) {
+                return correspondenceService.deleteCorrespondenceFromFavorite(this, ignoreMessage);
+            };
+
+            WorkItem.prototype.viewAsGroupInbox = function () {
+                return correspondenceService.viewCorrespondenceGroupMail.apply(correspondenceService, arguments);
+            };
+
+            WorkItem.prototype.view = function () {
+                return correspondenceService.viewCorrespondence.apply(correspondenceService, arguments);
+            };
+            WorkItem.prototype.manageDocumentComments = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentComments.apply(managerService, [info.vsId, info.title, $event]);
+            };
+            WorkItem.prototype.manageDocumentAttachments = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentAttachments.apply(managerService, [info.vsId, info.documentClass, info.title, $event]);
+            };
+            WorkItem.prototype.manageDocumentLinkedDocuments = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentLinkedDocuments.apply(managerService, [info.vsId, info.documentClass, info.title, $event]);
+            };
+            WorkItem.prototype.manageDocumentEntities = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentEntities.apply(managerService, [info.vsId, info.documentClass, info.title, $event]);
+            };
+            WorkItem.prototype.manageDocumentCorrespondence = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentCorrespondence.apply(managerService, [info.vsId, info.documentClass, info.title, $event]);
+            };
+            WorkItem.prototype.manageDocumentContent = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentContent.apply(managerService, [info.vsId, info.documentClass, info.title, $event])
+            };
+            WorkItem.prototype.mainDocumentDownload = function ($event) {
+                var info = this.getInfo();
+                return downloadService.controllerMethod
+                    .mainDocumentDownload(info.vsId, $event);
+            };
+            WorkItem.prototype.compositeDocumentDownload = function ($event) {
+                var info = this.getInfo();
+                return downloadService.controllerMethod
+                    .compositeDocumentDownload(info.vsId, $event);
+            };
+            WorkItem.prototype.addToFolder = function (folders, $event, showInbox) {
+                return correspondenceService
+                    .showAddWorkItemToFolder(this, folders, $event, showInbox)
+                    .then(function (result) {
+                        return result[0];
+                    });
+            };
+            WorkItem.prototype.getFolderId = function () {
+                return this.generalStepElm.folderId;
+            };
+            WorkItem.prototype.getFullSerial = function () {
+                var info = this.getInfo();
+                return info.isPaper || info.documentClass === 'incoming' || (info.documentClass === 'outgoing' && info.status >= 24) || (info.documentClass === 'internal' && info.status >= 24) ? info.docFullSerial : null;
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

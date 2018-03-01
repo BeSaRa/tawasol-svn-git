@@ -18,7 +18,7 @@ html {
 
 body, html, #main-view, #sub-view-wrapper {
   overflow: hidden !important;
-  position: relative;
+  position: relative !important;
   height: 100%;
   min-height: 100%;
 }
@@ -36,7 +36,7 @@ body, html, #main-view, #sub-view-wrapper {
 
 #main-view, .sub-view {
   top: 0;
-  position: absolute;
+  position: absolute; // it was absolute
   bottom: 0;
   right: 0;
   left: 0;
@@ -46,6 +46,7 @@ body, html, #main-view, #sub-view-wrapper {
   position: relative;
   height: 100%;
   min-height: 100%;
+  padding-top: 64px !important;
 }
 
 #page-loader {
@@ -151,6 +152,8 @@ body, html, #main-view, #sub-view-wrapper {
   border-bottom: 1px solid darken(#CCC, 10);
   z-index: 4 !important;
   min-height: 64px;
+  position: absolute;
+  top: 0;
   &.xs {
     min-height: 128px;
   }
@@ -751,7 +754,7 @@ md-tabs-canvas {
 }
 
 .card-overlay {
-  z-index: 3;
+  z-index: 2;
   position: relative;
   padding: 0;
   margin: 0;
@@ -1769,4 +1772,9 @@ table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child
   md-menu-item {
     height: auto !important;
   }
+}
+
+.z-index-3 {
+  //position: relative;
+  z-index: 3;
 }

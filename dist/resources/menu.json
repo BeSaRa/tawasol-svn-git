@@ -800,7 +800,7 @@
         "state": "app.inbox.folders",
         "icon_type": "font",
         "sort_order": 6,
-        "active": false,
+        "active": true,
         "sort_value": 0
     }
 ]

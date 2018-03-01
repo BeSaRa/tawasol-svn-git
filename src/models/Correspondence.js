@@ -16,8 +16,10 @@ module.exports = function (app) {
         return function Correspondence(model) {
             var self = this,
                 correspondenceService,
+                managerService,
                 attachmentService,
                 documentTagService,
+                downloadService,
                 documentCommentService;
 
             self.docSubject = null;
@@ -113,6 +115,14 @@ module.exports = function (app) {
             };
             Correspondence.prototype.setDocumentCommentService = function (service) {
                 documentCommentService = service;
+                return this;
+            };
+            Correspondence.prototype.setManagerService = function (service) {
+                managerService = service;
+                return this;
+            };
+            Correspondence.prototype.setDownloadService = function (service) {
+                downloadService = service;
                 return this;
             };
 
@@ -447,6 +457,51 @@ module.exports = function (app) {
             Correspondence.prototype.launchWorkFlow = function ($event, action, tab) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
             };
+            Correspondence.prototype.addToFavorite = function (ignoreMessage) {
+                return correspondenceService.addCorrespondenceToFavorite(this, ignoreMessage);
+            };
+
+            Correspondence.prototype.removeFromFavorite = function (ignoreMessage) {
+                return correspondenceService.deleteCorrespondenceFromFavorite(this, ignoreMessage);
+            };
+            Correspondence.prototype.view = function () {
+                return correspondenceService.viewCorrespondence.apply(correspondenceService, arguments);
+            };
+            Correspondence.prototype.manageDocumentComments = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentComments.apply(managerService, [info.vsId, info.title, $event]);
+            };
+            Correspondence.prototype.manageDocumentAttachments = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentAttachments.apply(managerService, [info.vsId, info.documentClass, info.title, $event]);
+            };
+            Correspondence.prototype.manageDocumentLinkedDocuments = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentLinkedDocuments.apply(managerService, [info.vsId, info.documentClass, info.title, $event]);
+            };
+            Correspondence.prototype.manageDocumentEntities = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentEntities.apply(managerService, [info.vsId, info.documentClass, info.title, $event]);
+            };
+            Correspondence.prototype.manageDocumentCorrespondence = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentCorrespondence.apply(managerService, [info.vsId, info.documentClass, info.title, $event]);
+            };
+            Correspondence.prototype.manageDocumentContent = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentContent.apply(managerService, [info.vsId, info.documentClass, info.title, $event])
+            };
+            Correspondence.prototype.mainDocumentDownload = function ($event) {
+                var info = this.getInfo();
+                return downloadService.controllerMethod
+                    .mainDocumentDownload(info.vsId, $event);
+            };
+            Correspondence.prototype.compositeDocumentDownload = function ($event) {
+                var info = this.getInfo();
+                return downloadService.controllerMethod
+                    .compositeDocumentDownload(info.vsId, $event);
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

@@ -172,6 +172,7 @@ module.exports = function (app) {
             /**
              * to check if the current user has permission
              * @param permissionKey
+             * @param debug
              * @return {boolean}
              */
             Employee.prototype.hasPermissionTo = function (permissionKey, debug) {

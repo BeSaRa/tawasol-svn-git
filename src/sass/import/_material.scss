@@ -39,6 +39,15 @@ table.md-table th.md-column md-icon:not(:last-child) {
 .md-datepicker-input-container {
   margin-left: 0 !important;
 }
-md-menu-item.selected > button:not([disabled]){
-  background-color: rgba(158,158,158,0.2);
+
+md-menu-item.selected > button:not([disabled]) {
+  background-color: rgba(158, 158, 158, 0.2);
+}
+
+.no-focus-bg md-menu-bar md-menu.md-open > button {
+  background-color: transparent !important;
+}
+
+.md-button.selected:not([disabled]) {
+  background-color: rgba(158, 158, 158, 0.2) !important;
 }
