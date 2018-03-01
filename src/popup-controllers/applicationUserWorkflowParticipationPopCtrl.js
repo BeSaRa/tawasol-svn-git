@@ -38,6 +38,9 @@ module.exports = function (app) {
 
         self.workFlowSecurities = self.workFlowSecurities = lookupService.returnLookups(lookupService.workflowSecurity);
 
+        self.ouApplicationUser.privateUsers = _.filter(self.ouApplicationUser.privateUsers, function (privateUser) {
+            return _.map(privateUsers, 'id').indexOf(privateUser.id) > -1;
+        });
 
         self.getSelectedPrivateUsersText = function () {
             if (self.ouApplicationUser.privateUsers && self.ouApplicationUser.privateUsers.length) {
@@ -51,6 +54,8 @@ module.exports = function (app) {
             return langService.get('private_users');
         };
 
+
+
         self.getSelectedManagersText = function () {
             if (self.ouApplicationUser.managers && self.ouApplicationUser.managers.length) {
                 var map = _.map(self.ouApplicationUser.managers, function (manager) {
@@ -62,8 +67,9 @@ module.exports = function (app) {
         };
 
         self.getSelectedPrivateUsersText();
-
         self.getSelectedManagersText();
+
+
 
         var requiredFields = [
             'sendToPrivateUsers',
