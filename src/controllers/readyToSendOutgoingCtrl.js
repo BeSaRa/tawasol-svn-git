@@ -427,7 +427,8 @@ module.exports = function (app) {
                 submenu: [
                     {
                         type: 'info',
-                        checkShow: self.checkToShowAction
+                        checkShow: self.checkToShowAction,
+                        gridName: 'outgoing-ready-to-send'
                     }
                 ],
                 class: "action-green",

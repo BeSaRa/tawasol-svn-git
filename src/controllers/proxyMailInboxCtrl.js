@@ -688,7 +688,8 @@ module.exports = function (app) {
                 submenu: [
                     {
                         type: 'info',
-                        checkShow: self.checkToShowAction
+                        checkShow: self.checkToShowAction,
+                        gridName: 'proxy-mail'
                     }
                 ],
                 class: "action-green",

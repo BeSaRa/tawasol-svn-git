@@ -47,7 +47,8 @@
                     </div>
                 </md-button>
                 <!-- Cascade(Sub) Menu -->
-                <md-menu md-position-mode="cascade" ng-if="gridAction.type==='action' && gridAction.submenu && gridAction.submenu.length">
+                <md-menu md-position-mode="cascade"
+                         ng-if="gridAction.type==='action' && gridAction.submenu && gridAction.submenu.length">
                     <md-button ng-click="$mdMenu.open()" aria-label="{{ctrl.getActionText(gridAction, true)}}">
                         <div layout="row" flex>
                             <md-icon ng-if="gridAction.icon"
@@ -129,7 +130,7 @@
                             <!-- Sub Menu Divider -->
                             <md-menu-divider ng-if="gridSubAction.type==='separator'" class="p0 m4_0"></md-menu-divider>
                             <!-- Document Info Table-->
-                            <md-table-container flex ng-if="gridSubAction.type=='info'">
+                            <md-table-container flex ng-if="gridSubAction.type=='info'" class="docInfoTable">
                                 <table md-table>
                                     <tbody md-body>
                                     <tr md-row>
@@ -174,6 +175,12 @@
                                         <td md-cell><b>{{$root.lang.comments}}</b></td>
                                         <td md-cell>
                                             {{ctrl.getDocumentInfo(ctrl.model, 'comments')}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="gridSubAction.gridName === 'user-inbox'">
+                                        <td md-cell><b>{{$root.lang.broadcasted}}</b></td>
+                                        <td md-cell>
+                                            {{ctrl.getDocumentInfo(ctrl.model, 'broadcasted')}}
                                         </td>
                                     </tr>
                                     </tbody>

@@ -466,7 +466,8 @@ module.exports = function (app) {
                     submenu: [
                         {
                             type: 'info',
-                            checkShow: self.checkToShowAction
+                            checkShow: self.checkToShowAction,
+                            gridName: 'internal-approved'
                         }
                     ],
                     class: "action-green",

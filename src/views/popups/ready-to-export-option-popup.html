@@ -91,7 +91,7 @@
                     </div>
                 </div>
                 <div layout="row">
-                    <md-button class="md-raised" ng-click="ctrl.exportWorkItem()">
+                    <md-button class="md-raised" ng-click="ctrl.exportWorkItem()" ng-disabled="!ctrl.correspondenceSites.length">
                         {{lang.export}}
                     </md-button>
                     <span ng-if="ctrl.hasExternalSite" flex></span>

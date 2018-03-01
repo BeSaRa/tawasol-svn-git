@@ -334,10 +334,11 @@ module.exports = function (app) {
                 submenu: [
                     {
                         type: 'info',
-                        checkShow: self.checkToShowAction
+                        checkShow: self.checkToShowAction,
+                        gridName: 'incoming-scan'
 
                     }],
-                class: "action-red"
+                class: "action-green"
             },
             {
                 type: 'separator',

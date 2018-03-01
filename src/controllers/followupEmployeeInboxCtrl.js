@@ -536,7 +536,8 @@ module.exports = function (app) {
                 submenu: [
                     {
                         type: 'info',
-                        checkShow: self.checkToShowAction
+                        checkShow: self.checkToShowAction,
+                        gridName: 'follow-up-employee-inbox'
                     }
                 ],
                 class: "action-green",

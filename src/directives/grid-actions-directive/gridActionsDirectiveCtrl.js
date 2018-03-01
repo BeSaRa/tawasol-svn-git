@@ -29,13 +29,13 @@ module.exports = function (app) {
         };
 
         /**
-        * @description Process the callback for the action button
-        * @param action
-        * @param model
-        * @param $event
-        */
+         * @description Process the callback for the action button
+         * @param action
+         * @param model
+         * @param $event
+         */
         self.processMenu = function (action, model, $event) {
-            if(action.hasOwnProperty('params') && action.params) {
+            if (action.hasOwnProperty('params') && action.params) {
                 action.callback(model, action.params, $event);
             }
             else {
@@ -52,17 +52,12 @@ module.exports = function (app) {
          * @returns {Array}
          */
         self.filterShortcuts = function (gridActions, direction, shortcut) {
-            /*return _.filter(gridActions, function (gridAction) {
-                    if (gridAction.type.toLowerCase() === "action" && gridAction.hasOwnProperty('shortcut') && !gridAction.hide) {
-                        return gridAction.shortcut.toString() === shortcut;
-                    }
-                    else if (gridAction.type.toLowerCase() === "separator" && !gridAction.hide)
-                        return true;
-                });*/
+            var mainAction, subAction;
             var shortcutActions = [];
+
             if (direction === "vertical" && shortcut === 'true') {
                 for (var i = 0; i < gridActions.length; i++) {
-                    var mainAction = gridActions[i];
+                    mainAction = gridActions[i];
                     if (mainAction.type.toLowerCase() === "action" && !mainAction.hide) {
                         if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
                             shortcutActions.push(mainAction);
@@ -71,23 +66,27 @@ module.exports = function (app) {
                             || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut && mainAction.hasOwnProperty('submenu'))
                         ) {
                             for (var j = 0; j < mainAction.submenu.length; j++) {
-                                var subAction = mainAction.submenu[j];
+                                subAction = mainAction.submenu[j];
                                 if (subAction.type.toLowerCase() === "action" && subAction.hasOwnProperty('shortcut') && subAction.shortcut && !subAction.hide) {
                                     shortcutActions.push(mainAction);
                                 }
                                 /*else if (subAction.type.toLowerCase() === "separator" && !subAction.hide)
-                                    shortcutActions.push(mainAction)*/
+                                 shortcutActions.push(mainAction)*/
                             }
                         }
                     }
-                    /*else if (mainAction.type.toLowerCase() === "separator" && !mainAction.hide) {
+                    else if (!mainAction.hasOwnProperty('shortcut') || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut)) {
                         shortcutActions.push(mainAction)
-                    }*/
+                    }
+                    else if (mainAction.type.toLowerCase() === "separator" && !mainAction.hide) {
+                        shortcutActions.push(mainAction)
+                    }
                 }
+                return shortcutActions;
             }
             else if (direction === "horizontal" && shortcut === 'true') {
                 for (var i = 0; i < gridActions.length; i++) {
-                    var mainAction = gridActions[i];
+                    mainAction = gridActions[i];
                     if (mainAction.type.toLowerCase() === "action" && !mainAction.hide) {
                         if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
                             shortcutActions.push(mainAction);
@@ -96,12 +95,12 @@ module.exports = function (app) {
                             || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut && mainAction.hasOwnProperty('submenu'))
                         ) {
                             for (var j = 0; j < mainAction.submenu.length; j++) {
-                                var subAction = mainAction.submenu[j];
+                                subAction = mainAction.submenu[j];
                                 if (subAction.type.toLowerCase() === "action" && subAction.hasOwnProperty('shortcut') && subAction.shortcut && !subAction.hide) {
                                     shortcutActions.push(subAction);
                                 }
                                 /*else if (subAction.type.toLowerCase() === "separator" && !subAction.hide)
-                                    shortcutActions.push(subAction)*/
+                                 shortcutActions.push(subAction)*/
                             }
                         }
                     }
@@ -109,8 +108,9 @@ module.exports = function (app) {
                         shortcutActions.push(mainAction)
                     }
                 }
+                return shortcutActions;
             }
-            return shortcutActions;
+            return gridActions;
         };
 
         /**
@@ -118,9 +118,9 @@ module.exports = function (app) {
          * @param gridActions
          * @returns {Array}
          */
-        self.filterContextMenuItems = function(gridActions){
-            return _.filter(gridActions, function(gridAction){
-               return !(gridAction.hasOwnProperty('onlyShortcut') && gridAction.onlyShortcut);
+        self.filterContextMenuItems = function (gridActions) {
+            return _.filter(gridActions, function (gridAction) {
+                return !(gridAction.hasOwnProperty('onlyShortcut') && gridAction.onlyShortcut);
             });
         };
 
@@ -159,6 +159,9 @@ module.exports = function (app) {
             }
             else if (property === 'comments') {
                 return model.getCommentsCount();
+            }
+            else if (property === 'broadcasted') {
+                return model.isBroadcasted() ? langService.get('yes') : langService.get('no');
             }
         }
     });

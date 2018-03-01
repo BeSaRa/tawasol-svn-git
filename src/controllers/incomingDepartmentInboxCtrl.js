@@ -334,7 +334,8 @@ module.exports = function (app) {
                 submenu: [
                     {
                         type: 'info',
-                        checkShow: self.checkToShowAction
+                        checkShow: self.checkToShowAction,
+                        gridName: 'department-incoming'
                     }
                 ],
                 class: "action-green",

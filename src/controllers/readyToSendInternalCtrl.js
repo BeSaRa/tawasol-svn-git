@@ -402,10 +402,11 @@ module.exports = function (app) {
                 submenu: [
                     {
                         type: 'info',
-                        checkShow: self.checkToShowAction
+                        checkShow: self.checkToShowAction,
+                        gridName: 'internal-ready-to-send'
                     }
                 ],
-                class: "action-red",
+                class: "action-green",
                 checkShow: self.checkToShowAction
             },
             {

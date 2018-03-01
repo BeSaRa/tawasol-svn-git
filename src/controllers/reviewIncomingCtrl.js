@@ -559,7 +559,8 @@ module.exports = function (app) {
                 submenu: [
                     {
                         type: 'info',
-                        checkShow: self.checkToShowAction
+                        checkShow: self.checkToShowAction,
+                        gridName: 'incoming-review'
                     }
                 ],
                 class: "action-green",

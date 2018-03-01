@@ -35,19 +35,20 @@
   height: auto !important;
   padding-left: 0 !important;
   padding-right: 0 !important;
-  md-table-container {
+  .docInfoTable {
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
-  md-table-container tr {
+  .docInfoTable tr {
     height: 32px !important;
   }
-  md-table-container tr td.md-cell {
+  .docInfoTable tr td.md-cell {
     border: none !important;
   }
 }
 
 .grid-action-menu {
+  padding: 0 !important;
   button {
     margin: 0 !important
   }
