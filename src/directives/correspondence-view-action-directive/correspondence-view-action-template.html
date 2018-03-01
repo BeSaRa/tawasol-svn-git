@@ -7,14 +7,14 @@
             <md-menu-item ng-repeat="action in ctrl.actions"
                           ng-if="ctrl.checkDisplayAction(action , ctrl.workItem , ctrl.correspondence) && !ctrl.hideFromView(action)">
                 <md-button ng-click="ctrl.runActionCallback(action , ctrl.workItem , ctrl.correspondence )"
-                           ng-if="!action.submenu.length && action.type ==='action'">
+                           ng-if="!action.subMenu.length && action.type ==='action'">
                     <div layout="row">
                         <md-icon md-svg-icon="{{::action.icon}}" class="{{action.class}}"></md-icon>
                         <span flex>{{lang.get(action.text)}}</span>
                     </div>
                 </md-button>
                 <md-divider ng-if="action.type==='separator'"></md-divider>
-                <md-menu ng-if="action.submenu.length">
+                <md-menu ng-if="action.subMenu.length">
                     <md-button ng-click="$mdMenu.open()">
                         <div layout="row">
                             <md-icon md-svg-icon="{{::action.icon}}"></md-icon>
@@ -22,11 +22,11 @@
                         </div>
                     </md-button>
                     <md-menu-content width="3">
-                        <md-menu-item ng-repeat="childAction in action.submenu"
+                        <md-menu-item ng-repeat="childAction in action.subMenu"
                                       ng-if="ctrl.checkDisplayAction(childAction , ctrl.workItem , ctrl.correspondence) && !ctrl.hideFromView(childAction)">
                             <md-button
                                     ng-click="ctrl.runActionCallback(childAction , ctrl.workItem , ctrl.correspondence )"
-                                    ng-if="!childAction.submenu.length && action.type ==='action'">
+                                    ng-if="!childAction.subMenu.length && action.type ==='action'">
                                 <div layout="row">
                                     <!--<md-icon md-svg-icon="{{::childAction.icon}}"></md-icon>-->
                                     <span flex class="{{childAction.class}}">{{lang.get(childAction.text)}}</span>

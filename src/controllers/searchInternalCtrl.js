@@ -712,7 +712,7 @@ module.exports = function (app) {
                 text: 'grid_action_document_info',
                 shortcut: false,
                 showInView: false,
-                submenu: [
+                subMenu: [
                     {
                         type: 'info',
                         checkShow: self.checkToShowAction,
@@ -810,7 +810,7 @@ module.exports = function (app) {
                 shortcut: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: self.checkToShowAction,
-                submenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
+                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
             },
             // Manage
             {
@@ -819,7 +819,7 @@ module.exports = function (app) {
                 text: 'grid_action_manage',
                 shortcut: false,
                 checkShow: self.checkToShowAction,
-                submenu: [
+                subMenu: [
                     // Tags
                     {
                         type: 'action',
@@ -891,7 +891,7 @@ module.exports = function (app) {
                 text: 'grid_action_download',
                 shortcut: false,
                 checkShow: self.checkToShowAction,
-                submenu: [
+                subMenu: [
                     // Main Document
                     {
                         type: 'action',
@@ -922,7 +922,7 @@ module.exports = function (app) {
                 shortcut: false,
                 hide: true,
                 checkShow: self.checkToShowAction,
-                submenu: [
+                subMenu: [
                     // Link To Document By Email
                     {
                         type: 'action',
@@ -1000,20 +1000,5 @@ module.exports = function (app) {
                 checkShow: self.checkToShowAction
             }
         ];
-
-        /*console.log('internal search grid main actions length', self.gridActions.length);
-         var actions = [];
-         for(var i=0; i < self.gridActions.length; i++){
-         if(self.gridActions[i].type === 'action')
-         actions.push(langService.getKey(self.gridActions[i].text, 'en'));
-         if(self.gridActions[i].hasOwnProperty('submenu')){
-         var submenus = self.gridActions[i].submenu;
-         for(var j=0; j< submenus.length; j++){
-         if(submenus[j].type === 'action')
-         actions.push(langService.getKey(submenus[j].text, 'en'));
-         }
-         }
-         }
-         console.log('internal search all grid actions', actions);*/
     });
 };

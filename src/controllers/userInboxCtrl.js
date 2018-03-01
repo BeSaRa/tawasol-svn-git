@@ -697,7 +697,7 @@ module.exports = function (app) {
                 text: 'grid_action_document_info',
                 shortcut: false,
                 showInView: false,
-                submenu: [
+                subMenu: [
                     {
                         type: 'info',
                         checkShow: self.checkToShowAction,
@@ -867,7 +867,7 @@ module.exports = function (app) {
                 shortcut: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: self.checkToShowAction,
-                submenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
+                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
             },
             // View Tracking Sheet (Quick Action Only)
             {
@@ -890,7 +890,7 @@ module.exports = function (app) {
                 shortcut: false,
                 checkShow: self.checkToShowAction,
                 showInView: false,
-                submenu: [
+                subMenu: [
                     // Tags
                     {
                         type: 'action',
@@ -977,7 +977,7 @@ module.exports = function (app) {
                 shortcut: false,
                 hide: true,
                 checkShow: self.checkToShowAction,
-                submenu: [
+                subMenu: [
                     // Direct Linked Documents
                     {
                         type: 'action',
@@ -1007,7 +1007,7 @@ module.exports = function (app) {
                 text: 'grid_action_download',
                 shortcut: false,
                 checkShow: self.checkToShowAction,
-                submenu: [
+                subMenu: [
                     // Main Document
                     {
                         type: 'action',
@@ -1040,7 +1040,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 },
-                submenu: [
+                subMenu: [
                     // Link To Document By Email
                     {
                         type: 'action',
@@ -1126,7 +1126,7 @@ module.exports = function (app) {
                         && model.needApprove()
                         && (employeeService.hasPermissionTo("ELECTRONIC_SIGNATURE") || employeeService.hasPermissionTo("DIGITAL_SIGNATURE"));
                 },
-                submenu: [
+                subMenu: [
                     // e-Signature
                     {
                         type: 'action',
@@ -1170,7 +1170,7 @@ module.exports = function (app) {
                         hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
                     return self.checkToShowAction(action, model) && hasPermission && !model.isBroadcasted();
                 },
-                submenu: [
+                subMenu: [
                     // Content
                     {
                         type: 'action',

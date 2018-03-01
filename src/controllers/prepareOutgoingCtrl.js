@@ -332,7 +332,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: self.checkToShowAction,
-                submenu: [
+                subMenu: [
                     {
                         type: 'info',
                         checkShow: self.checkToShowAction,
@@ -402,7 +402,7 @@ module.exports = function (app) {
                 shortcut: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: self.checkToShowAction,
-                submenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
+                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
             },
             // Manage
             {
@@ -412,7 +412,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: self.checkToShowAction,
-                submenu: [
+                subMenu: [
                     {
                         type: 'action',
                         icon: 'tag',

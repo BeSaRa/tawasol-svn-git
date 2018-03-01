@@ -158,13 +158,13 @@
                                 </div>
                             </md-button>
                             <md-menu-content width="1">
-                                <md-menu-item ng-repeat="submenu in button.subMenuOptions">
+                                <md-menu-item ng-repeat="subMenu in button.subMenuOptions">
                                     <md-button
-                                            ng-click="submenu.callback ? submenu.params ? ctrl.processButtonsCallback(submenu.callback, ctrl.outgoing, submenu.params, $event) : ctrl.processButtonsCallbackWithParams(submenu.callback, ctrl.outgoing, $event): ''"
+                                            ng-click="subMenu.callback ? subMenu.params ? ctrl.processButtonsCallback(subMenu.callback, ctrl.outgoing, subMenu.params, $event) : ctrl.processButtonsCallbackWithParams(subMenu.callback, ctrl.outgoing, $event): ''"
                                             flex>
                                         <div layout="row">
-                                            <md-icon md-svg-icon="{{submenu.icon}}"></md-icon>
-                                            <span flex>{{submenu.langKey}}</span>
+                                            <md-icon md-svg-icon="{{subMenu.icon}}"></md-icon>
+                                            <span flex>{{subMenu.langKey}}</span>
                                         </div>
                                     </md-button>
                                 </md-menu-item>

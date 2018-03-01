@@ -63,10 +63,10 @@ module.exports = function (app) {
                             shortcutActions.push(mainAction);
                         }
                         else if (!mainAction.hasOwnProperty('shortcut')
-                            || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut && mainAction.hasOwnProperty('submenu'))
+                            || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut && mainAction.hasOwnProperty('subMenu'))
                         ) {
-                            for (var j = 0; j < mainAction.submenu.length; j++) {
-                                subAction = mainAction.submenu[j];
+                            for (var j = 0; j < mainAction.subMenu.length; j++) {
+                                subAction = mainAction.subMenu[j];
                                 if (subAction.type.toLowerCase() === "action" && subAction.hasOwnProperty('shortcut') && subAction.shortcut && !subAction.hide) {
                                     shortcutActions.push(mainAction);
                                 }
@@ -92,10 +92,10 @@ module.exports = function (app) {
                             shortcutActions.push(mainAction);
                         }
                         else if (!mainAction.hasOwnProperty('shortcut')
-                            || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut && mainAction.hasOwnProperty('submenu'))
+                            || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut && mainAction.hasOwnProperty('subMenu'))
                         ) {
-                            for (var j = 0; j < mainAction.submenu.length; j++) {
-                                subAction = mainAction.submenu[j];
+                            for (var j = 0; j < mainAction.subMenu.length; j++) {
+                                subAction = mainAction.subMenu[j];
                                 if (subAction.type.toLowerCase() === "action" && subAction.hasOwnProperty('shortcut') && subAction.shortcut && !subAction.hide) {
                                     shortcutActions.push(subAction);
                                 }

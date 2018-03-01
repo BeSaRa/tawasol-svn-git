@@ -4,6 +4,7 @@ module.exports = function (app) {
                       applicationUserService,
                       organizationService,
                       langService,
+                      ApplicationUser,
                       _) {
         'ngInject';
 
@@ -32,7 +33,9 @@ module.exports = function (app) {
                     item = organizationService.getOrganizationById(item);
                     item = angular.extend(item, {display: item[langService.current + 'Name']});
                 } else {
-                    item = applicationUserService.getApplicationUserById(item);
+                    item = applicationUserService.getApplicationUserById(item) || item;
+                    if (typeof item === 'number')
+                        item = new ApplicationUser({id: item});
                     item = angular.extend(item, {display: item[langService.current + 'FullName']});
                 }
                 return item;
@@ -42,7 +45,9 @@ module.exports = function (app) {
                     item = organizationService.getOrganizationById(item);
                     item = angular.extend(item, {display: item[langService.current + 'Name']});
                 } else {
-                    item = applicationUserService.getApplicationUserById(item);
+                    item = applicationUserService.getApplicationUserById(item) || item;
+                    if (typeof item === 'number')
+                        item = new ApplicationUser({id: item});
                     item = angular.extend(item, {display: item[langService.current + 'FullName']});
                 }
                 return item;

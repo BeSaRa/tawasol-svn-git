@@ -480,7 +480,7 @@ module.exports = function (app) {
                     text: 'grid_action_document_info',
                     shortcut: false,
                     showInView: false,
-                    submenu: [
+                    subMenu: [
                         {
                             type: 'info',
                             checkShow: self.checkToShowAction,
@@ -538,7 +538,7 @@ module.exports = function (app) {
                         var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
                         return self.checkToShowAction(action, model) && hasPermission;
                     },
-                    submenu: [
+                    subMenu: [
                         // Content
                         {
                             type: 'action',
@@ -583,7 +583,7 @@ module.exports = function (app) {
                     shortcut: false,
                     permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                     checkShow: self.checkToShowAction,
-                    submenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
+                    subMenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
                 },
                 // Manage
                 {
@@ -593,7 +593,7 @@ module.exports = function (app) {
                     shortcut: false,
                     showInView: false,
                     checkShow: self.checkToShowAction,
-                    submenu: [
+                    subMenu: [
                         // Tags
                         {
                             type: 'action',

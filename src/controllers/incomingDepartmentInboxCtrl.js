@@ -331,7 +331,7 @@ module.exports = function (app) {
                 text: 'grid_action_document_info',
                 shortcut: false,
                 showInView: false,
-                submenu: [
+                subMenu: [
                     {
                         type: 'info',
                         checkShow: self.checkToShowAction,
@@ -402,7 +402,7 @@ module.exports = function (app) {
                 showInView: false,
                 hide: true,
                 checkShow: self.checkToShowAction,
-                submenu: [
+                subMenu: [
                     // Tags
                     {
                         type: 'action',
