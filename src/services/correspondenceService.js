@@ -1837,7 +1837,7 @@ module.exports = function (app) {
          */
         self.loadCentralArchiveWorkItems = function () {
             return $http
-                .get(urlService.departmentWF + 'ready-to-export-central-archive')
+                .get(urlService.departmentWF + '/ready-to-export-central-archive')
                 .then(function (result) {
                     return generator.generateCollection(result.data.rs, WorkItem);
                 });
