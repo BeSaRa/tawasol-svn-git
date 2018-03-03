@@ -195,16 +195,12 @@ module.exports = function (app) {
          * @param defer
          */
         self.exportReadyToExport = function (readyToExport, $event, defer) {
-            readyToExportService
-                .controllerMethod
-                .readyToExportOptions(readyToExport, $event)
-                .then(function (result) {
-                    self.reloadReadyToExports(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get('export_success'));
-                            new ResolveDefer(defer);
-                        });
-                })
+            readyToExport
+                .exportWorkItem($event, true)
+                .then(function () {
+                    self.reloadReadyToExports(self.grid.page);
+                    new ResolveDefer(defer);
+                });
         };
 
         /**
@@ -696,8 +692,8 @@ module.exports = function (app) {
             {
                 type: 'action',
                 icon: 'export',
-                text: employeeService.getEmployee().userOrganization.centralArchive ? 'grid_action_send_to_ready_to_export' : 'grid_action_export',
-                textCallback : function (model) {
+                text: 'grid_action_export',
+                textCallback: function (model) {
                     return model.exportViaArchive() ? 'grid_action_send_to_central_archive' : 'grid_action_export';
                 },
                 shortcut: true,

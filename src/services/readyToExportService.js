@@ -308,7 +308,7 @@ module.exports = function (app) {
             },
             /**
              * @description open popup for ready to export options
-             * @param readyToExport
+             * @param workItem
              * @param $event
              */
             readyToExportOptions: function (workItem, $event) {

@@ -187,7 +187,7 @@ module.exports = function (app) {
         function _getDocumentType(correspondence) {
             var docType = "";
             if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) { /*WorkItem */
-                docType = correspondence.generalStepElm.addMethod ;
+                docType = correspondence.generalStepElm.addMethod;
             }
             else if (correspondence.hasOwnProperty('addMethod')) { /* Correspondence */
                 docType = correspondence.addMethod;
@@ -1780,7 +1780,58 @@ module.exports = function (app) {
                 return _bulkMessages(result, workItems, ignoreMessage, 'inbox_failed_add_to_folder_selected', 'add_to_folder_success', 'add_to_folder_success_except_following');
             });
         }
-
+        /**
+         * @description open dialog for export workItem.
+         * @param workItem
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.openExportCorrespondenceDialog = function (workItem, $event) {
+            return dialog
+                .showDialog({
+                    targetEvent: $event,
+                    template: cmsTemplate.getPopup('ready-to-export-option'),
+                    controller: 'readyToExportOptionPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        readyToExport: workItem
+                    },
+                    resolve: {
+                        sites: function (correspondenceService) {
+                            'ngInject';
+                            return correspondenceService
+                                .loadCorrespondenceSites(workItem);
+                        }
+                    }
+                });
+        };
+        /**
+         * @description send the document to ready to export archive.
+         * @param workItem
+         * @param ignoreMessage
+         */
+        self.sendToCentralArchive = function (workItem, ignoreMessage) {
+            var info = workItem.getInfo();
+            return $http
+                .put(_createCorrespondenceWFSchema([info.documentClass, 'vsid', info.vsId, 'wob-num', info.wobNumber, 'to-ready-export-central-archive ']))
+                .then(function (result) {
+                    if (!ignoreMessage) {
+                        toast.success(langService.get('sent_to_the_central_archive_success'));
+                    }
+                    return workItem;
+                });
+        };
+        /**
+         * @description to export workItem
+         * @param workItem
+         * @param $event
+         * @param checkCentralArchive
+         * @param ignoreMessage
+         * @returns {promise|*}
+         */
+        self.exportCorrespondence = function (workItem, $event, checkCentralArchive , ignoreMessage) {
+            return checkCentralArchive ? (workItem.exportViaArchive() ? self.sendToCentralArchive(workItem , ignoreMessage) : self.openExportCorrespondenceDialog(workItem, event)) : self.openExportCorrespondenceDialog(workItem, event);
+        }
 
     });
 };

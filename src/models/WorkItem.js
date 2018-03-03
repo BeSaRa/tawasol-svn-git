@@ -24,6 +24,7 @@ module.exports = function (app) {
             self.fromRegOu = null;
             self.toRegOu = null;
             self.fromOuInfo = null;
+            self.exportViaCentralArchive = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -278,6 +279,10 @@ module.exports = function (app) {
 
             WorkItem.prototype.exportViaArchive = function () {
                 return this.generalStepElm.exportViaCentralArchive;
+            };
+
+            WorkItem.prototype.exportWorkItem = function ($event, checkArchive, ignoreMessage) {
+                return correspondenceService.exportCorrespondence(this, $event, checkArchive, ignoreMessage);
             };
 
 

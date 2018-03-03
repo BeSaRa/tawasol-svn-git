@@ -33,31 +33,14 @@ module.exports = function (app) {
         self.hasExternalSite = _.find(self.correspondenceSites, function (item) {
             return item.siteCategory === 2;
         });
-
-        // function _getSitesList() {
-        //     self.internalSites = _.filter(self.sites, function (item) {
-        //         return item.siteCategory === 1;
-        //     });
-        //     self.externalSites = _.filter(self.sites, function (item) {
-        //         return item.siteCategory === 2;
-        //     });
-        //     self.g2gSites = _.filter(self.sites, function (item) {
-        //         return item.siteCategory === 3;
-        //     });
-        //     self.privateSites = _.filter(self.sites, function (item) {
-        //         return item.siteCategory === 4;
-        //     });
-        // }
-        //
-        // _getSitesList();
-
         /**
          * @description export click
          */
-        self.exportWorkItem = function () {
+        self.exportCorrespondenceWorkItem = function () {
             readyToExportService
                 .exportReadyToExport(self.readyToExport, self.model)
                 .then(function (result) {
+                    toast.success(langService.get('export_success'));
                     dialog.hide(result);
                 })
                 .catch(function () {
@@ -73,6 +56,7 @@ module.exports = function (app) {
                         .controllerMethod
                         .mainDocumentDownload(self.readyToExport)
                         .then(function () {
+                            toast.success(langService.get('export_success'));
                             dialog.hide(result);
                         });
                 })
