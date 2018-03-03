@@ -64,4 +64,5 @@ module.exports = function (app) {
     require('./passwordEncryptCtrl')(app);
     require('./groupInboxCtrl')(app);
     require('./folderCtrl')(app);
+    require('./readyToExportArchiveCtrl')(app);
 };
