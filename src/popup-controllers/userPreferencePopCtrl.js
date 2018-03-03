@@ -92,7 +92,6 @@ module.exports = function (app) {
         self.selectedProxyUser = self.ouApplicationUser.getSelectedProxyId() ? _.find(availableProxies, function (item) {
             return item.id === self.ouApplicationUser.getSelectedProxyId();
         }) : null;
-        console.log(self.selectedProxyUser, self.ouApplicationUser);
         self.ouApplicationUserCopy = angular.copy(self.ouApplicationUser);
         self.notFound = {};
 
@@ -401,6 +400,7 @@ module.exports = function (app) {
                 self.ouApplicationUser.proxyAuthorityLevels = null;
                 self.ouApplicationUser.viewProxyMessage = false;
                 self.ouApplicationUser.proxyMessage = null;
+                self.selectedProxyUser = null;
                 ouApplicationUserService
                     .updateOUApplicationUser(self.ouApplicationUser)
                     .then(function (result) {

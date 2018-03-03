@@ -276,6 +276,7 @@ module.exports = function (app) {
          * @return {Promise|OUApplicationUser}
          */
         self.updateOUApplicationUser = function (ouApplicationUser) {
+            console.log("ASDAD");
             return $http
                 .put(urlService.ouApplicationUsers,
                     generator.interceptSendInstance('OUApplicationUser', ouApplicationUser))
@@ -283,6 +284,7 @@ module.exports = function (app) {
                     return generator.generateInstance(ouApplicationUser, OUApplicationUser, self._sharedMethods);
                 });
         };
+
         /**
          * @description update proxy user for given ouApplicationUser
          * @param ouApplicationUser
