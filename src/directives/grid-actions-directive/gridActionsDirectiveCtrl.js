@@ -13,13 +13,12 @@ module.exports = function (app) {
         /**
          * @description Get the text of action according to selected language
          * @param action
-         * @param model
          * @param isShortcutRequest
          */
-        self.getActionText = function (action, model, isShortcutRequest) {
+        self.getActionText = function (action, isShortcutRequest) {
             var langKey = "";
             if (action.hasOwnProperty('textCallback') && angular.isFunction(action.textCallback)) {
-                return action.textCallback(model);
+                return langService.get(action.textCallback(self.model));
             }
 
             if (angular.isFunction(action.text)) {
