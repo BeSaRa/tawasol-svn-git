@@ -13,9 +13,7 @@ module.exports = function (app) {
                                                                  toast,
                                                                  counterService,
                                                                  viewDocumentService,
-                                                                 userFolderService,
                                                                  managerService,
-                                                                 userFolders,
                                                                  contextHelpService,
                                                                  dialog,
                                                                  viewTrackingSheetService,
@@ -32,7 +30,6 @@ module.exports = function (app) {
         self.controllerName = 'readyToExportDepartmentInboxCtrl';
 
         self.progress = null;
-        self.userFolders = userFolders;
         contextHelpService.setHelpTo('department-inbox-ready-to-export');
 
         /**
@@ -225,19 +222,6 @@ module.exports = function (app) {
             console.log('exportReadyToExportBulk', self.selectedReadyToExports);
         };
 
-        /**
-         * @description Add To Folder Ready To Export Bulk
-         * @param $event
-         */
-        self.addToFolderReadyToExportBulk = function ($event) {
-            /*var itemsToAdd = _.map(self.selectedReadyToExports, 'generalStepElm.workObjectNumber');
-             userFolderService
-             .controllerMethod
-             .addToUserFolderBulk(itemsToAdd, self.selectedReadyToExports, $event)
-             .then(function (result) {
-             self.reloadReadyToExports(self.grid.page);
-             });*/
-        };
 
         /**
          * @description Change the starred for Ready To Export
@@ -322,31 +306,6 @@ module.exports = function (app) {
                 );
         };
 
-        /**
-         * @description Add To Folder
-         * @param readyToExport
-         * @param $event
-         */
-        self.addToFolderReadyToExport = function (readyToExport, $event) {
-            /*userFolderService
-             .controllerMethod
-             .addToUserFolder(readyToExport.generalStepElm.workObjectNumber, readyToExport.generalStepElm.folderId, readyToExport, $event)
-             .then(function (result) {
-             if (result === -1) {
-             toast.error(langService.get("inbox_failed_add_to_folder_selected"));
-             }
-             else {
-             self.reloadReadyToExports(self.grid.page)
-             .then(function () {
-             var currentFolder = _.find(userFolderService.allUserFolders, ['id', result]);
-             toast.success(langService.get("inbox_add_to_folder_specific_success").change({
-             name: readyToExport.getTranslatedName(),
-             folder: currentFolder.getTranslatedName()
-             }));
-             });
-             }
-             });*/
-        };
 
         /**
          * @description Download Main Document

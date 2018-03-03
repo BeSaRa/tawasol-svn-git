@@ -330,7 +330,7 @@ module.exports = function (app) {
                 }
             })
             .bulkResolveToState('app.central-archive.ready-to-export', {
-                workItmes: function (correspondenceService) {
+                workItems: function (correspondenceService) {
                     'ngInject';
                     return correspondenceService.loadCentralArchiveWorkItems();
                 }

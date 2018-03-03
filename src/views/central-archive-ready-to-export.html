@@ -17,28 +17,24 @@
                 <div class="page-padding">
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
                         <md-table-container flex scroll-directive>
-                            <table md-table md-row-select multiple ng-model="ctrl.selectedReadyToExports"
+                            <table md-table md-row-select multiple ng-model="ctrl.selectedWorkItems"
                                    md-progress="ctrl.progress">
                                 <thead md-head md-order="ctrl.grid.order">
                                 <tr md-row>
-                                    <th colspan="{{ctrl.selectedReadyToExports.length > 1 ? 9 : 10}}"
-                                        ng-if="ctrl.selectedReadyToExports.length" md-column>
+                                    <th colspan="{{ctrl.selectedWorkItems.length > 1 ? 9 : 10}}"
+                                        ng-if="ctrl.selectedWorkItems.length" md-column>
                                         <div layout="row" layout-align="start center">
-                                            <span>{{ctrl.selectedReadyToExports.length}} {{lang.items_selected}} </span>
+                                            <span>{{ctrl.selectedWorkItems.length}} {{lang.items_selected}} </span>
                                             <span flex></span>
-                                            <!--ng-if="ctrl.selectedReadyToExports.length > 1"-->
+                                            <!--ng-if="ctrl.selectedWorkItems.length > 1"-->
                                             <md-button class="md-icon-button"
                                                        aria-label="{{lang.grid_action_terminate}}"
                                                        tooltip="{{lang.grid_action_terminate}}"
                                                        ng-click="ctrl.terminateReadyToExportBulk($event)">
                                                 <md-icon md-svg-icon="stop" class="action-green"></md-icon>
                                             </md-button>
-                                            <!--<md-button class="md-icon-button" aria-label="{{lang.add_to_folder}}"
-                                                       tooltip="{{lang.add_to_folder}}"
-                                                       ng-click="ctrl.addToFolderReadyToExportBulk($event)">
-                                                <md-icon md-svg-icon="folder-plus" class="action-red"></md-icon>
-                                            </md-button>-->
-                                            <!--<md-button class="md-icon-button" aria-label="{{lang.add_to_folder}}"
+
+                                            <!--<md-button class="md-icon-button" aria-label="{{lang.inbox_export}}"
                                                        tooltip="{{lang.inbox_export}}"
                                                        ng-click="ctrl.exportReadyToExportBulk($event)">
                                                 <md-icon md-svg-icon="export" class="action-red"></md-icon>
@@ -55,117 +51,117 @@
                                             </md-button>-->
                                         </div>
                                     </th>
-                                    <!-- <th ng-if="!ctrl.selectedReadyToExports.length" md-column md-order-by="">
+                                    <!-- <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="">
 
                                      </th>-->
-                                    <!--<th ng-if="!ctrl.selectedReadyToExports.length" md-column
+                                    <!--<th ng-if="!ctrl.selectedWorkItems.length" md-column
                                         md-order-by="docSerial">
                                         <span>{{lang.label_serial}}</span>
                                     </th>-->
-                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column
+                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column
                                         md-order-by="docSubject">
                                         <span>{{lang.subject}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column
+                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column
                                         md-order-by="receivedDate">
                                         <span>{{lang.received_date}}</span>
                                     </th>
-                                    <!--<th ng-if="!ctrl.selectedReadyToExports.length" md-column-->
+                                    <!--<th ng-if="!ctrl.selectedWorkItems.length" md-column-->
                                     <!--md-order-by="action">-->
                                     <!--<span>{{lang.action}}</span>-->
                                     <!--</th>-->
-                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column
+                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column
                                         md-order-by="sender">
                                         <span>{{lang.sender}}</span>
                                     </th>
-                                    <!--<th ng-if="!ctrl.selectedReadyToExports.length" md-column
+                                    <!--<th ng-if="!ctrl.selectedWorkItems.length" md-column
                                         md-order-by="dueDate">
                                         <span>{{lang.due_date}}</span>
                                     </th>-->
-                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column
+                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column
                                         md-order-by="">
                                         <span>{{lang.correspondence_sites}}</span>
                                     </th>
-                                    <!--<th ng-if="!ctrl.selectedReadyToExports.length" md-column
+                                    <!--<th ng-if="!ctrl.selectedWorkItems.length" md-column
                                         md-order-by="subSite">
                                         <span>{{lang.inbox_sub_site}}</span>
                                     </th>-->
-                                    <!--<th ng-if="!ctrl.selectedReadyToExports.length" md-column
+                                    <!--<th ng-if="!ctrl.selectedWorkItems.length" md-column
                                         md-order-by="docType">
                                         <span>{{lang.type}}</span>
                                     </th>-->
-                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column
+                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column
                                         md-order-by="numberOfDays">
                                         <span>{{lang.number_of_days}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column>
+                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column>
                                         <span></span>
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody md-body>
-                                <tr md-row md-select="readyToExport"
-                                    grid-right-click-directive="readyToExport"
-                                    selected-length="{{ctrl.selectedReadyToExports.length ? ctrl.selectedReadyToExports.length : 0}}"
-                                    model="readyToExport"
-                                    ng-repeat="readyToExport in ctrl.readyToExports | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                <tr md-row md-select="workItem"
+                                    grid-right-click-directive="workItem"
+                                    selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
+                                    model="workItem"
+                                    ng-repeat="workItem in ctrl.workItems | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                                     <!--<td md-cell>
                                         <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
-                                                 ng-if="readyToExport.generalStepElm.starred && (!ctrl.selectedReadyToExports.length
-                                                 || ctrl.selectedReadyToExports.length===1 && ctrl.selectedReadyToExports[0].generalStepElm.workObjectNumber === readyToExport.generalStepElm.workObjectNumber)"
+                                                 ng-if="workItem.generalStepElm.starred && (!ctrl.selectedWorkItems.length
+                                                 || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber)"
                                                  md-svg-icon="star"
-                                                 tooltip="{{readyToExport.getTranslatedStarred()}}"
-                                                 ng-click="ctrl.changeReadyToExportStar(readyToExport, $event)"
+                                                 tooltip="{{workItem.getTranslatedStarred()}}"
+                                                 ng-click="ctrl.changeReadyToExportStar(workItem, $event)"
                                         ></md-icon>
                                         <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
-                                                 ng-if="readyToExport.generalStepElm.starred
-                                                 && ((ctrl.selectedReadyToExports.length === 1
-                                                 && ctrl.selectedReadyToExports[0].generalStepElm.workObjectNumber != readyToExport.generalStepElm.workObjectNumber)
-                                                    || ctrl.selectedReadyToExports.length > 1)"
+                                                 ng-if="workItem.generalStepElm.starred
+                                                 && ((ctrl.selectedWorkItems.length === 1
+                                                 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber != workItem.generalStepElm.workObjectNumber)
+                                                    || ctrl.selectedWorkItems.length > 1)"
                                                  md-svg-icon="star"
-                                                 tooltip="{{readyToExport.getTranslatedStarred()}}"
+                                                 tooltip="{{workItem.getTranslatedStarred()}}"
                                         ></md-icon>
                                         <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
-                                                 ng-if="!readyToExport.generalStepElm.starred && (!ctrl.selectedReadyToExports.length
-                                                  || ctrl.selectedReadyToExports.length===1 && ctrl.selectedReadyToExports[0].generalStepElm.workObjectNumber === readyToExport.generalStepElm.workObjectNumber)"
+                                                 ng-if="!workItem.generalStepElm.starred && (!ctrl.selectedWorkItems.length
+                                                  || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber)"
                                                  md-svg-icon="star-outline"
-                                                 tooltip="{{readyToExport.getTranslatedStarred()}}"
-                                                 ng-click="ctrl.changeReadyToExportStar(readyToExport, $event)"
+                                                 tooltip="{{workItem.getTranslatedStarred()}}"
+                                                 ng-click="ctrl.changeReadyToExportStar(workItem, $event)"
                                         ></md-icon>
                                         <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
-                                                 ng-if="!readyToExport.generalStepElm.starred
-                                                 && ((ctrl.selectedReadyToExports.length === 1
-                                                 && ctrl.selectedReadyToExports[0].generalStepElm.workObjectNumber != readyToExport.generalStepElm.workObjectNumber)
-                                                    || ctrl.selectedReadyToExports.length > 1)"
+                                                 ng-if="!workItem.generalStepElm.starred
+                                                 && ((ctrl.selectedWorkItems.length === 1
+                                                 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber != workItem.generalStepElm.workObjectNumber)
+                                                    || ctrl.selectedWorkItems.length > 1)"
                                                  md-svg-icon="star-outline"
-                                                 tooltip="{{readyToExport.getTranslatedStarred()}}"
+                                                 tooltip="{{workItem.getTranslatedStarred()}}"
                                         ></md-icon>
                                     </td>-->
 
-                                    <!--<td md-cell>{{readyToExport.generalStepElm.docSerial}}</td>-->
+                                    <!--<td md-cell>{{workItem.generalStepElm.docSerial}}</td>-->
                                     <td md-cell class="td-data">
-                                        <a href="" class="view-doc" ng-if="readyToExport.hasContent()"
-                                           ng-click="ctrl.viewDocument(readyToExport, $event)">{{readyToExport.generalStepElm.docSubject}}</a>
-                                        <span ng-if="!readyToExport.hasContent()">{{readyToExport.generalStepElm.docSubject}}</span>
+                                        <a href="" class="view-doc" ng-if="workItem.hasContent()"
+                                           ng-click="ctrl.viewDocument(workItem, $event)">{{workItem.generalStepElm.docSubject}}</a>
+                                        <span ng-if="!workItem.hasContent()">{{workItem.generalStepElm.docSubject}}</span>
                                     </td>
-                                    <td md-cell>{{readyToExport.generalStepElm.receivedDate}}</td>
-                                    <!--<td md-cell>{{readyToExport.action.getTranslatedName()}}</td>-->
+                                    <td md-cell>{{workItem.generalStepElm.receivedDate}}</td>
+                                    <!--<td md-cell>{{workItem.action.getTranslatedName()}}</td>-->
                                     <td md-cell class="td-data">
                                         <div layout="row">
-                                            <span flex>{{readyToExport.senderInfo.getTranslatedName()}}</span>
+                                            <span flex>{{workItem.senderInfo.getTranslatedName()}}</span>
                                         </div>
                                     </td>
-                                    <!--<td md-cell>{{readyToExport.generalStepElm.dueDate}}</td>-->
+                                    <!--<td md-cell>{{workItem.generalStepElm.dueDate}}</td>-->
                                     <td md-cell></td>
-                                    <!--<td md-cell>{{readyToExport.subCoreSite.getTranslatedName()}}</td>-->
-                                    <!--<td md-cell>{{readyToExport.generalStepElm.docType}}</td>-->
-                                    <td md-cell>{{readyToExport.generalStepElm.numberOfDays}}</td>
-                                    <td md-cell ng-if="ctrl.selectedReadyToExports.length < 2">
-                                        <div layout-align="start center" ng-if="!ctrl.selectedReadyToExports.length
-                                                  || ctrl.selectedReadyToExports.length===1 && ctrl.selectedReadyToExports[0].generalStepElm.workObjectNumber === readyToExport.generalStepElm.workObjectNumber">
+                                    <!--<td md-cell>{{workItem.subCoreSite.getTranslatedName()}}</td>-->
+                                    <!--<td md-cell>{{workItem.generalStepElm.docType}}</td>-->
+                                    <td md-cell>{{workItem.generalStepElm.numberOfDays}}</td>
+                                    <td md-cell ng-if="ctrl.selectedWorkItems.length < 2">
+                                        <div layout-align="start center" ng-if="!ctrl.selectedWorkItems.length
+                                                  || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber">
                                             <grid-actions-directive menu-direction="horizontal"
                                                                     grid-actions="ctrl.gridActions"
-                                                                    model="readyToExport"
+                                                                    model="workItem"
                                                                     shortcut="true">
                                             </grid-actions-directive>
                                         </div>
@@ -177,7 +173,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{ctrl.readyToExports.length}}"
+                                    md-total="{{ctrl.workItems.length}}"
                                     md-page-select>
                             </md-table-pagination>
                         </md-table-container>

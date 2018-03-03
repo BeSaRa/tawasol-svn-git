@@ -985,10 +985,6 @@ module.exports = function (app) {
                     readyToExports: function (readyToExportService) {
                         'ngInject';
                         return readyToExportService.loadReadyToExports();
-                    },
-                    userFolders: function (userFolderService) {
-                        'ngInject';
-                        return userFolderService.getUserFoldersForApplicationUser();
                     }
                 }
             })
@@ -1282,7 +1278,7 @@ module.exports = function (app) {
             })
             .state('app.central-archive.ready-to-export', {
                 url: '/ready-to-export',
-                template: templateProvider.getView('department-inbox-ready-to-export'),
+                template: templateProvider.getView('central-archive-ready-to-export'),
                 controller: 'readyToExportArchiveCtrl',
                 controllerAs: 'ctrl'
             })

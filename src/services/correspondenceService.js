@@ -227,8 +227,8 @@ module.exports = function (app) {
                 incomingVsId = correspondence.generalStepElm.incomingVSID;
             }
             /*else if (correspondence.hasOwnProperty('incomingVSID') && correspondence.incomingVSID) { /!* Event History *!/
-                incomingVsId = correspondence.incomingVSID;
-            }*/
+             incomingVsId = correspondence.incomingVSID;
+             }*/
             else {  /* Correspondence */
                 incomingVsId = correspondence.incomingVSID;
             }
@@ -273,8 +273,8 @@ module.exports = function (app) {
                 documentStatus = correspondence.docStatus;
             }
             /*else { // if notification Item
-                documentStatus = generator.getDocumentClassName(correspondence.docClassId);
-            }*/
+             documentStatus = generator.getDocumentClassName(correspondence.docClassId);
+             }*/
             return documentStatus;
         }
 
@@ -293,8 +293,8 @@ module.exports = function (app) {
                 docFullSerial = correspondence.docFullSerial;
             }
             /*else { // if notification Item
-                documentStatus = generator.getDocumentClassName(correspondence.docClassId);
-            }*/
+             documentStatus = generator.getDocumentClassName(correspondence.docClassId);
+             }*/
             return docFullSerial;
         }
 
@@ -1308,10 +1308,10 @@ module.exports = function (app) {
                                     return [];
                                 });
                         }, /*
-                        distUsers: function (distributionWFService) {
-                            'ngInject';
-                            return distributionWFService.loadWorkflowUsers();
-                        },*/
+                         distUsers: function (distributionWFService) {
+                         'ngInject';
+                         return distributionWFService.loadWorkflowUsers();
+                         },*/
                         comments: function (userCommentService) {
                             'ngInject';
                             return userCommentService.getUserComments()
@@ -1319,25 +1319,25 @@ module.exports = function (app) {
                                     return _.filter(result, 'status');
                                 });
                         }, /*
-                        privateUsers: function (distributionWFService) {
-                            'ngInject';
-                            return distributionWFService.loadDistWorkflowUsers('privates');
-                        },*//*
-                        managers: function (distributionWFService) {
-                            'ngInject';
-                            return distributionWFService.loadDistWorkflowUsers('managers');
-                        }*//*,
-                        governmentEntities: function (distributionWFService) {
-                            'ngInject';
-                            return distributionWFService.loadDistWorkflowUsers('heads');
-                        },*/
+                         privateUsers: function (distributionWFService) {
+                         'ngInject';
+                         return distributionWFService.loadDistWorkflowUsers('privates');
+                         },*//*
+                         managers: function (distributionWFService) {
+                         'ngInject';
+                         return distributionWFService.loadDistWorkflowUsers('managers');
+                         }*//*,
+                         governmentEntities: function (distributionWFService) {
+                         'ngInject';
+                         return distributionWFService.loadDistWorkflowUsers('heads');
+                         },*/
                         workflowActions: function (workflowActionService) {
                             'ngInject';
                             return workflowActionService.loadCurrentUserWorkflowActions();
                         }/*,
-                        workflowGroups: function (distributionWFService) {
-                            return distributionWFService.loadDistWorkflowGroups();
-                        }*/,
+                         workflowGroups: function (distributionWFService) {
+                         return distributionWFService.loadDistWorkflowGroups();
+                         }*/,
                         organizationGroups: function (distributionWFService) {
                             'ngInject';
                             return distributionWFService.loadDistWorkflowOrganizations('organizations')
@@ -1831,7 +1831,7 @@ module.exports = function (app) {
          */
         self.exportCorrespondence = function (workItem, $event, checkCentralArchive, ignoreMessage) {
             return checkCentralArchive ? (workItem.exportViaArchive() ? self.sendToCentralArchive(workItem, ignoreMessage) : self.openExportCorrespondenceDialog(workItem, event)) : self.openExportCorrespondenceDialog(workItem, event);
-        }
+        };
         /**
          * @description load central archive workItems
          */
@@ -1839,7 +1839,9 @@ module.exports = function (app) {
             return $http
                 .get(urlService.departmentWF + '/ready-to-export-central-archive')
                 .then(function (result) {
-                    return generator.generateCollection(result.data.rs, WorkItem);
+                    var items = generator.generateCollection(result.data.rs, WorkItem);
+                    items = generator.interceptReceivedCollection('WorkItem', items);
+                    return items;
                 });
         }
 

@@ -25,6 +25,7 @@ module.exports = function (app) {
             self.toRegOu = null;
             self.fromOuInfo = null;
             self.exportViaCentralArchive = null;
+            self.firstSiteInfo = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -57,6 +58,27 @@ module.exports = function (app) {
              */
             WorkItem.prototype.getTranslatedStarred = function () {
                 return this.generalStepElm.starred ? langService.get('starred') : langService.get('un_starred');
+            };
+
+            /**
+             * @description Get the translated first site info.
+             * @returns {string}
+             */
+            WorkItem.prototype.getTranslatedFirstSiteInfo = function () {
+                if (this.getInfo().documentClass === 'outgoing') {
+                    return this.firstSiteInfo
+                        ?  ( langService.current === 'en'
+                        ? this.firstSiteInfo.mainEnSiteText + (this.firstSiteInfo.subEnSiteText ? (' - ' + this.firstSiteInfo.subEnSiteText) : '')
+                        : (this.firstSiteInfo.subArSiteText ? this.firstSiteInfo.subArSiteText + ' - ' : '') + this.firstSiteInfo.mainArSiteText
+                    ): "";
+                }
+                else {
+                    return this.siteInfo
+                        ? ( langService.current === 'en'
+                            ? this.siteInfo.mainEnSiteText + (this.siteInfo.subEnSiteText ? (' - ' + this.siteInfo.subEnSiteText) : '')
+                            : (this.siteInfo.subArSiteText ? this.siteInfo.subArSiteText + ' - ' : '') + this.siteInfo.mainArSiteText
+                    ) : "";
+                }
             };
 
             WorkItem.prototype.setCorrespondenceService = function (service) {

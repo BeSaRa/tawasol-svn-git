@@ -681,7 +681,6 @@ module.exports = function (app) {
                 callback: self.viewDocument,
                 class: "action-green",
                 showInView: false,
-                //hide: true,
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button

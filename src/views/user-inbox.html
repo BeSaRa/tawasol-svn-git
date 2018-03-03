@@ -86,10 +86,10 @@
                                         md-order-by="generalStepElm.dueDate">
                                         <span>{{lang.due_date}}</span>
                                     </th>
-                                    <!--<th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="">
+                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="">
                                         <span>{{lang.correspondence_sites}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="docType">
+                                    <!--<th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="docType">
                                         <span>{{lang.type}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="numberOfDays">
@@ -241,8 +241,13 @@
                                                   tooltip="{{lang[userInbox.dueDateStatusIndicator.tooltip].change({due_date_status:lang[userInbox.dueDateStatusIndicator.text] })}}">
                                                 {{userInbox.generalStepElm.dueDate}}</span>
                                     </td>
-                                    <!--<td md-cell></td>
-                                    <td md-cell>{{userInbox.generalStepElm.docType}}</td>
+                                    <td md-cell>
+                                        <!--<span ng-if="userInbox.getInfo().documentClass!=='internal'">{{userInbox.getTranslatedFirstSiteInfo()}}</span>-->
+                                        <main-site-sub-site-directive item="userInbox"
+                                                                      ng-if="userInbox.getInfo().documentClass!=='internal'">
+                                        </main-site-sub-site-directive>
+                                    </td>
+                                    <!--<td md-cell>{{userInbox.generalStepElm.docType}}</td>
                                     <td md-cell>{{userInbox.generalStepElm.numberOfDays}}</td>-->
                                     <td md-cell class="p-r0" ng-if="ctrl.selectedUserInboxes.length < 2">
                                         <div layout-align="start center" flex ng-if="!ctrl.selectedUserInboxes.length

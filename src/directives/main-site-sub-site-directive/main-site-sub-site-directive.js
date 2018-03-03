@@ -8,8 +8,7 @@ module.exports = function (app) {
             controllerAs: 'ctrl',
             bindToController: true,
             scope: {
-                mainSiteInfo: '=',
-                subSiteInfo: '='
+                item: '='
             }
         }
     });
