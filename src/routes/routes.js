@@ -1284,14 +1284,7 @@ module.exports = function (app) {
                 url: '/ready-to-export',
                 template: templateProvider.getView('department-inbox-ready-to-export'),
                 controller: 'readyToExportArchiveCtrl',
-                controllerAs: 'ctrl',
-                resolve: {
-                    lookups: function (correspondenceService) {
-                        'ngInject';
-                        return correspondenceService
-                            .loadCorrespondenceLookups('common');
-                    }
-                }
+                controllerAs: 'ctrl'
             })
     });
 };

@@ -329,6 +329,12 @@ module.exports = function (app) {
                     return correspondenceService.loadGroupInbox();
                 }
             })
+            .bulkResolveToState('app.central-archive.ready-to-export', {
+                workItmes: function (correspondenceService) {
+                    'ngInject';
+                    return correspondenceService.loadCentralArchiveWorkItems();
+                }
+            })
             .registerResolver();
     });
 };

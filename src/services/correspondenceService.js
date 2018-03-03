@@ -1829,8 +1829,18 @@ module.exports = function (app) {
          * @param ignoreMessage
          * @returns {promise|*}
          */
-        self.exportCorrespondence = function (workItem, $event, checkCentralArchive , ignoreMessage) {
-            return checkCentralArchive ? (workItem.exportViaArchive() ? self.sendToCentralArchive(workItem , ignoreMessage) : self.openExportCorrespondenceDialog(workItem, event)) : self.openExportCorrespondenceDialog(workItem, event);
+        self.exportCorrespondence = function (workItem, $event, checkCentralArchive, ignoreMessage) {
+            return checkCentralArchive ? (workItem.exportViaArchive() ? self.sendToCentralArchive(workItem, ignoreMessage) : self.openExportCorrespondenceDialog(workItem, event)) : self.openExportCorrespondenceDialog(workItem, event);
+        }
+        /**
+         * @description load central archive workItems
+         */
+        self.loadCentralArchiveWorkItems = function () {
+            return $http
+                .get(urlService.departmentWF + 'ready-to-export-central-archive')
+                .then(function (result) {
+                    return generator.generateCollection(result.data.rs, WorkItem);
+                });
         }
 
     });
