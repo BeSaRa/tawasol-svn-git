@@ -1283,6 +1283,8 @@ module.exports = function (app) {
             .state('app.central-archive.ready-to-export', {
                 url: '/ready-to-export',
                 template: templateProvider.getView('department-inbox-ready-to-export'),
+                controller: 'readyToExportArchiveCtrl',
+                controllerAs: 'ctrl',
                 resolve: {
                     lookups: function (correspondenceService) {
                         'ngInject';
