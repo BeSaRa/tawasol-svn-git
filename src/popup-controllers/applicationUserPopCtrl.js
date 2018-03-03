@@ -840,6 +840,7 @@ module.exports = function (app) {
          */
         self.saveOUApplicationUserFromCtrl = function (ouApplicationUser) {
             if (ouApplicationUser.id) {
+                console.log(ouApplicationUser.getSelectedProxyId());
                 return ouApplicationUserService
                     .updateOUApplicationUser(ouApplicationUser)
                     .then(function () {
@@ -932,8 +933,10 @@ module.exports = function (app) {
         /**
          * @description Opens the dialog for Out Of Office Settings
          * @param ouApplicationUser
+         * @param $event
+         * @param $index
          */
-        self.openOutOfOfficeSettingsDialog = function (ouApplicationUser, $event) {
+        self.openOutOfOfficeSettingsDialog = function (ouApplicationUser, $event, $index) {
             //console.log('ou application user from grid - out of office: ', ouApplicationUser);
             return dialog
                 .showDialog({
@@ -943,13 +946,20 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     locals: {
                         ouApplicationUser: ouApplicationUser
+                    },
+                    resolve: {
+                        availableProxies: function (ouApplicationUserService) {
+                            return ouApplicationUserService
+                                .getAvailableProxies(ouApplicationUser.getRegistryOUID())
+                                .then(function (result) {
+                                    console.log(result);
+                                    return result
+                                })
+                        }
                     }
                 })
                 .then(function (result) {
-                    var indexOfUpdatedOUApplicationUser = _.findIndex(self.ouApplicationUsers, function (x) {
-                        return x.ouid.id === result.ouid.id;
-                    });
-                    self.ouApplicationUsers.splice(indexOfUpdatedOUApplicationUser, 1, result);
+                    self.ouApplicationUsers.splice($index, 1, result);
                 });
         };
 

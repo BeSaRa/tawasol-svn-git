@@ -34,13 +34,13 @@
                                     <md-select name="proxyUser" id="proxyUser"
                                                ng-required="ctrl.isOutOfOffice"
                                                ng-disabled="!ctrl.isOutOfOffice"
-                                               ng-model-options="{'trackBy':'$value.id'}"
-                                               ng-model="ctrl.ouApplicationUser.proxyUser">
+                                               ng-model-options="{trackBy:'$value.id'}"
+                                               ng-model="ctrl.selectedProxyUser">
                                         <md-option
-                                                ng-repeat="applicationUser in ctrl.applicationUsers track by $index"
-                                                ng-if="applicationUser.id != ctrl.model.applicationUser.id && applicationUser.id != ctrl.applicationUser.id"
-                                                ng-value="applicationUser">
-                                            {{applicationUser.getTranslatedName()}}
+                                                ng-if="!ctrl.currentUser(proxyUser)"
+                                                ng-repeat="proxyUser in ctrl.availableProxies track by $index"
+                                                ng-value="proxyUser">
+                                            {{proxyUser.getTranslatedName()}}
                                         </md-option>
                                     </md-select>
                                     <div ng-messages="outOfOfficeSettingsForm.proxyUser.$error">
@@ -230,17 +230,19 @@
                         </div>
                     </fieldset>-->
                 </div>
-                <div layout="row">
-                    <md-button class="md-raised" ng-disabled="outOfOfficeSettingsForm.$invalid"
-                               ng-click="ctrl.addApplicationUserOutOfOfficeSettingsFromCtrl()">
-                        {{lang.add}}
-                    </md-button>
-                    <span flex></span>
-                    <md-button class="md-raised" ng-click="ctrl.closeApplicationUserOutOfOfficeSettingPopupFromCtrl()">
-                        {{lang.close}}
-                    </md-button>
-                </div>
             </form>
         </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-disabled="outOfOfficeSettingsForm.$invalid"
+                           ng-click="ctrl.addApplicationUserOutOfOfficeSettingsFromCtrl()">
+                    {{lang.add}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeApplicationUserOutOfOfficeSettingPopupFromCtrl()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
     </div>
 </md-dialog>

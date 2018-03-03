@@ -92,8 +92,8 @@ module.exports = function (app) {
                 return !employee.isAdmin;
             })
             .addMenuPermissionGroup('menu_item_central_archive_mail')
-            .addMenuPermission('menu_item_central_archive_ready_to_export', function () {
-                return false;
+            .addMenuPermission('menu_item_central_archive_ready_to_export', function (employee) {
+                return employee.userOrganization && employee.userOrganization.centralArchive;
             })
 
     })

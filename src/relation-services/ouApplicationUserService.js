@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                       langService,
                                                       dialog,
                                                       $http,
+                                                      ProxyUser,
                                                       $q,
                                                       $timeout,
                                                       generator,
@@ -67,12 +68,12 @@ module.exports = function (app) {
             return self.ouApplicationUsers.length ? $q.when(self.ouApplicationUsers) : self.loadOUApplicationUsers();
         };
 
-        self.loadAllPrivateUsers = function(){
-          return $http.get(urlService.allPrivateUsers).then(function(result){
-                  self.allPrivateUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
-                  self.allPrivateUsers = generator.interceptReceivedCollection('OUApplicationUser', self.allPrivateUsers);
-                  return self.allPrivateUsers;
-              })
+        self.loadAllPrivateUsers = function () {
+            return $http.get(urlService.allPrivateUsers).then(function (result) {
+                self.allPrivateUsers = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
+                self.allPrivateUsers = generator.interceptReceivedCollection('OUApplicationUser', self.allPrivateUsers);
+                return self.allPrivateUsers;
+            })
         };
 
         /**
@@ -574,6 +575,28 @@ module.exports = function (app) {
                 .then(function (result) {
                     return generator.interceptReceivedCollection('OUApplicationUser', generator.generateCollection(result.data.rs, OUApplicationUser));
                 });
+        };
+
+        /**
+         * @description to map the proxy User
+         * @param collection
+         * @returns {Array}
+         * @private
+         */
+        function _mapProxyUser(collection) {
+            return _.map(collection, function (ouApplicationUser) {
+                return (new ProxyUser()).mapFromOUApplicationUser(ouApplicationUser);
+            })
+        }
+
+        /**
+         * @description get available proxy users for given registry organization.
+         * @param registryOuId
+         */
+        self.getAvailableProxies = function (registryOuId) {
+            return self.searchByCriteria({regOU: registryOuId}).then(function (result) {
+                return _mapProxyUser(result);
+            })
         }
 
 

@@ -129,4 +129,5 @@ module.exports = function (app) {
     require('./WFOrganization')(app);
     require('./WFGroup')(app);
     require('./ProxyInfo')(app);
+    require('./ProxyUser')(app);
 };

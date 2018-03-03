@@ -5,6 +5,7 @@ module.exports = function (app) {
                       roleService,
                       Information,
                       lookupService,
+                      ProxyUser,
                       langService,
                       applicationUserService,
                       moment,
@@ -53,8 +54,8 @@ module.exports = function (app) {
             if (model.proxyUser) {
                 // model.proxyUser = model.proxyUser.id;
                 getUnixTimeStamp(model, ["proxyStartDate", "proxyEndDate"]);
-                model.proxyOUId = model.ouid;
-                model.proxyUser = generator.interceptSendInstance('ApplicationUser', model.proxyUser);
+                model.proxyOUId = model.proxyUser instanceof ProxyUser ? model.proxyUser.organization.id : model.proxyOUId;
+                model.proxyUser = generator.interceptSendInstance('ApplicationUser', model.proxyUser instanceof ProxyUser ? model.proxyUser.applicationUser : model.proxyUser);
             }
 
             model.ouRegistryID = model.ouRegistryID.hasOwnProperty('id') ? model.ouRegistryID.id : model.ouRegistryID;

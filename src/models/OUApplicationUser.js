@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('OUApplicationUser', function (CMSModelInterceptor) {
+    app.factory('OUApplicationUser', function (CMSModelInterceptor, ProxyUser) {
         'ngInject';
         return function OUApplicationUser(model) {
             var self = this, langService;
@@ -140,6 +140,14 @@ module.exports = function (app) {
 
             OUApplicationUser.prototype.getOutOffOfficeTranslatedStatus = function (status) {
                 return langService.get('out_of_office_toggle_button').change({status: status ? langService.get('will') : langService.get('will_not')});
+            };
+
+            OUApplicationUser.prototype.getRegistryOUID = function () {
+                return this.ouRegistryID;
+            };
+
+            OUApplicationUser.prototype.getSelectedProxyId = function () {
+                return this.proxyUser ? Number(this.proxyUser instanceof ProxyUser ? this.proxyUser.applicationUser.id + '' + this.proxyUser.organization.id : this.proxyUser.id + '' + this.proxyOUId) : null;
             };
 
             // don't remove CMSModelInterceptor from last line

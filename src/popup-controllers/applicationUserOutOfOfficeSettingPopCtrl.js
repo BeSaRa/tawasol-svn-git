@@ -1,13 +1,16 @@
 module.exports = function (app) {
     app.controller('applicationUserOutOfOfficeSettingPopCtrl', function (dialog,
+                                                                         _,
                                                                          ouApplicationUser,
                                                                          applicationUserService,
                                                                          lookupService,
                                                                          employeeService,
                                                                          validationService,
                                                                          generator,
+                                                                         availableProxies,
                                                                          toast,
                                                                          langService,
+                                                                         ProxyUser,
                                                                          rootEntity,
                                                                          ouApplicationUserService) {
         'ngInject';
@@ -20,6 +23,10 @@ module.exports = function (app) {
         self.applicationUser = self.model.applicationUser;
         //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
         self.authorityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
+        self.availableProxies = availableProxies;
+        self.selectedProxyUser = ouApplicationUser.getSelectedProxyId() ? _.find(availableProxies, function (item) {
+            return item.id === ouApplicationUser.getSelectedProxyId();
+        }) : null;
         var currentDate = new Date();
         self.today = new Date(
             currentDate.getFullYear(),
@@ -130,6 +137,9 @@ module.exports = function (app) {
          * @description Add the Application User out of office settings in the ouApplicationUser model
          */
         self.addApplicationUserOutOfOfficeSettingsFromCtrl = function () {
+            if (self.selectedProxyUser) {
+                self.ouApplicationUser.proxyUser = self.selectedProxyUser;
+            }
             if (!self.isOutOfOffice) {
                 dialog.hide(self.ouApplicationUser);
             } else {
@@ -168,6 +178,14 @@ module.exports = function (app) {
         self.closeApplicationUserOutOfOfficeSettingPopupFromCtrl = function () {
             self.ouApplicationUser = self.model;
             dialog.cancel(self.ouApplicationUser);
+        };
+        /**
+         * @description to check if the current user selected.
+         * @param proxyUser
+         * @returns {boolean}
+         */
+        self.currentUser = function (proxyUser) {
+            return proxyUser.applicationUser.id === ouApplicationUser.applicationUser.id;
         }
     });
 };

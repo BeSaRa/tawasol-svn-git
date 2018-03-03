@@ -87,6 +87,7 @@ module.exports = function (app) {
              * @param permissions
              * @param ouApplicationUsers
              * @param userClassificationViewPermissions
+             * @param currentOrganization
              * @param $event
              */
             applicationUserEdit: function (applicationUser, jobTitles, organizations, classifications, themes, roles, permissions, ouApplicationUsers, userClassificationViewPermissions, currentOrganization, $event) {
@@ -123,7 +124,6 @@ module.exports = function (app) {
                                 'ngInject';
                                 return ouApplicationUserService.getOUApplicationUsersByUserId(applicationUser.id);
                             },
-
                             // by BeSaRa to resolve the signature if found
                             signature: function (applicationUserSignatureService, $q) {
                                 'ngInject';
@@ -239,6 +239,7 @@ module.exports = function (app) {
              */
             manageUserPreference: function (applicationUser, selectedTab, $event) {
                 applicationUser = applicationUser ? applicationUser : employeeService.getEmployee();
+                var ouApplicationUser = employeeService.getCurrentOUApplicationUser();
                 var resolveOuApplicationUsers = $q.defer();
                 return dialog
                     .showDialog({
@@ -324,7 +325,15 @@ module.exports = function (app) {
                                     .then(function (result) {
                                         return result;
                                     });
+                            },
+                            availableProxies: function (ouApplicationUserService) {
+                                return ouApplicationUserService
+                                    .getAvailableProxies(ouApplicationUser.getRegistryOUID())
+                                    .then(function (result) {
+                                        return result
+                                    })
                             }
+
                         }
                     });
             }

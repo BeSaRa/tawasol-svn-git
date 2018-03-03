@@ -29,6 +29,7 @@ module.exports = function (app) {
                                                       UserWorkflowGroup,
                                                       WorkflowGroup,
                                                       themeService,
+                                                      availableProxies,
                                                       userFolderService,
                                                       ApplicationUserSignature,
                                                       applicationUserSignatureService,
@@ -65,6 +66,7 @@ module.exports = function (app) {
         self.userFolderService = userFolderService;
         self.currentNode = null;
 
+
         //console.log(self.globalSetting.getSecurityLevels());
 
         var currentDate = new Date();
@@ -86,7 +88,11 @@ module.exports = function (app) {
          * @description Current ou application user
          */
         self.ouApplicationUser = generator.interceptReceivedInstance('OUApplicationUser', employeeService.getCurrentOUApplicationUser());
-
+        self.availableProxies = availableProxies;
+        self.selectedProxyUser = self.ouApplicationUser.getSelectedProxyId() ? _.find(availableProxies, function (item) {
+            return item.id === self.ouApplicationUser.getSelectedProxyId();
+        }) : null;
+        console.log(self.selectedProxyUser, self.ouApplicationUser);
         self.ouApplicationUserCopy = angular.copy(self.ouApplicationUser);
         self.notFound = {};
 
@@ -453,6 +459,9 @@ module.exports = function (app) {
          * @description Save the Application User out of office settings in the ouApplicationUser model
          */
         self.saveOutOfOfficeSettingsFromCtrl = function () {
+            if (self.selectedProxyUser) {
+                self.ouApplicationUser.proxyUser = self.selectedProxyUser;
+            }
             validationService
                 .createValidation('EDIT_OUT_OF_OFFICE_SETTINGS')
                 .addStep('check_required', true, self.checkRequiredFieldsOutOfOffice, self.ouApplicationUser, function (result) {
@@ -863,7 +872,7 @@ module.exports = function (app) {
          * @description Close the popup
          */
         self.closeUserPreferencePopupFromCtrl = function () {
-            if(self.requestForApprove)
+            if (self.requestForApprove)
                 dialog.hide(self.applicationUser.signature);
             dialog.cancel();
         };
@@ -1045,6 +1054,15 @@ module.exports = function (app) {
                     dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
                 });
         };
+
+        /**
+         * @description to check if the current user selected.
+         * @param proxyUser
+         * @returns {boolean}
+         */
+        self.currentUser = function (proxyUser) {
+            return proxyUser.applicationUser.id === self.ouApplicationUser.applicationUser.id;
+        }
 
     });
 };
