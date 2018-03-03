@@ -276,6 +276,10 @@ module.exports = function (app) {
                 return info.isPaper || info.documentClass === 'incoming' || (info.documentClass === 'outgoing' && info.status >= 24) || (info.documentClass === 'internal' && info.status >= 24) ? info.docFullSerial : null;
             };
 
+            WorkItem.prototype.exportViaArchive = function () {
+                return this.generalStepElm.exportViaCentralArchive;
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

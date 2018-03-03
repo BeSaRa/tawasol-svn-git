@@ -144,7 +144,6 @@ module.exports = function (app) {
              * @param $event
              */
             applicationUserDelete: function (applicationUser, $event) {
-                console.log(applicationUser, employeeService.getEmployee());
                 if (applicationUser.id === employeeService.getEmployee().id) {
                     toast.info(langService.get('can_not_delete_current_user'));
                     return false;

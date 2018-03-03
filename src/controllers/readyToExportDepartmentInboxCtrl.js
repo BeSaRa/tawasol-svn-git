@@ -697,6 +697,9 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'export',
                 text: employeeService.getEmployee().userOrganization.centralArchive ? 'grid_action_send_to_ready_to_export' : 'grid_action_export',
+                textCallback : function (model) {
+                    return model.exportViaArchive() ? 'grid_action_send_to_central_archive' : 'grid_action_export';
+                },
                 shortcut: true,
                 callback: self.exportReadyToExport,
                 class: "action-green",

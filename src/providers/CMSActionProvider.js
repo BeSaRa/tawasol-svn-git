@@ -31,6 +31,7 @@ module.exports = function (app) {
             this.class = null;
             this.checkShow = null;
             this.hide = null;
+            this.textCallback = null;
             if (model)
                 angular.extend(this, model);
         }
