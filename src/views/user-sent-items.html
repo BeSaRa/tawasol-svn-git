@@ -172,11 +172,10 @@
                                     <td md-cell>{{userSentItem.getTranslatedAction()}}</td>
                                     <td md-cell>{{userSentItem.getTranslatedUserFrom()}}</td>
                                     <td md-cell>{{userSentItem.dueDate}}</td>
-                                    <td md-cell> <!--class="td-data"-->
-                                        <!--<main-site-sub-site-directive
-                                                main-site-info="userSentItem.mainSiteInfo"
-                                                sub-site-info="userSentItem.subSiteInfo"
-                                        ></main-site-sub-site-directive>-->
+                                    <td md-cell>
+                                        <main-site-sub-site-directive item="userSentItem"
+                                                                      ng-if="userSentItem.getInfo().documentClass!=='internal'">
+                                        </main-site-sub-site-directive>
                                     </td>
 
                                     <td md-cell></td>

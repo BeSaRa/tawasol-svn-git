@@ -234,7 +234,11 @@
                                                       tooltip="{{lang[followupEmployeeInbox.dueDateStatusIndicator.tooltip].change({due_date_status:lang[followupEmployeeInbox.dueDateStatusIndicator.text] })}}">
                                                     {{followupEmployeeInbox.generalStepElm.dueDate}}</span>
                                     </td>
-                                    <td md-cell></td>
+                                    <td md-cell>
+                                        <main-site-sub-site-directive item="followupEmployeeInbox"
+                                                                      ng-if="userInbox.getInfo().documentClass!=='internal'">
+                                        </main-site-sub-site-directive>
+                                    </td>
                                     <!--<td md-cell>{{followupEmployeeInbox.subCoreSite.getTranslatedName()}}</td>-->
                                    <!-- <td md-cell>{{followupEmployeeInbox.generalStepElm.docType}}</td>-->
                                     <td md-cell>{{followupEmployeeInbox.generalStepElm.numberOfDays}}</td>

@@ -249,7 +249,11 @@ module.exports = function (app) {
                 });
             };
 
-
+            /**
+             * @description Returns the export via central archive indicator and description
+             * @returns {Indicator}
+             * @param exportViaCentralArchive
+             */
             Indicator.prototype.getExportViaCentralArchiveIndicator = function (exportViaCentralArchive) {
                 return exportViaCentralArchive ? new Indicator({
                     class: 'indicator',

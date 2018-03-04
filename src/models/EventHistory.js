@@ -3,6 +3,7 @@ module.exports = function (app) {
                                           langService,
                                           Indicator,
                                           correspondenceService,
+                                          Information,
                                           attachmentService) {
         'ngInject';
         return function EventHistory(model) {
@@ -70,6 +71,18 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Get the translated correspondence site info.
+             * @returns {string}
+             */
+            EventHistory.prototype.getTranslatedCorrespondenceSiteInfo = function () {
+                var mainSite = angular.isArray(this.mainSiteInfo) ? new Information(this.mainSiteInfo[0]) : new Information(this.mainSiteInfo);
+                var subSite = angular.isArray(this.subSiteInfo) ? new Information(this.subSiteInfo[0]) : new Information(this.subSiteInfo);
+                return langService.current === 'en'
+                    ? (mainSite.getTranslatedName() + ' - ' + subSite.getTranslatedName())
+                    : (subSite.getTranslatedName() + ' - ' + mainSite.getTranslatedName());
+            };
+
+            /**
              * @description to get documentClass,vsId.
              * @return {{documentClass: *, vsId: *}}
              */
@@ -83,13 +96,13 @@ module.exports = function (app) {
             };
 
             /*      EventHistory.prototype.loadDocumentAttachments = function (correspondence) {
-                      console.log(correspondence);
-                      var self = this;
-                      return attachmentService.loadDocumentAttachmentsByVsId(correspondence || this).then(function (attachments) {
-                          self.attachments = attachments;
-                          return self.attachments;
-                      });
-                  };*/
+             console.log(correspondence);
+             var self = this;
+             return attachmentService.loadDocumentAttachmentsByVsId(correspondence || this).then(function (attachments) {
+             self.attachments = attachments;
+             return self.attachments;
+             });
+             };*/
 
             var indicator = new Indicator();
             EventHistory.prototype.getSecurityLevelIndicator = function (securityLevel) {
@@ -109,12 +122,12 @@ module.exports = function (app) {
             };
 
             /*EventHistory.prototype.getFollowUpStatusIndicator = function(workItem){
-                return indicator.getFollowUpStatusIndicator(workItem);
-            };
+             return indicator.getFollowUpStatusIndicator(workItem);
+             };
 
-            EventHistory.prototype.getDueDateStatusIndicator = function(docClass, dueDate){
-                return indicator.getDueDateStatusIndicator(docClass, dueDate);
-            };*/
+             EventHistory.prototype.getDueDateStatusIndicator = function(docClass, dueDate){
+             return indicator.getDueDateStatusIndicator(docClass, dueDate);
+             };*/
 
             EventHistory.prototype.getTagsIndicator = function (tagsCount) {
                 return indicator.getTagsIndicator(tagsCount);

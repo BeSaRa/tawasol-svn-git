@@ -61,10 +61,10 @@ module.exports = function (app) {
             };
 
             /**
-             * @description Get the translated first site info.
+             * @description Get the translated correspondence site info.
              * @returns {string}
              */
-            WorkItem.prototype.getTranslatedFirstSiteInfo = function () {
+            WorkItem.prototype.getTranslatedCorrespondenceSiteInfo = function () {
                 if (this.getInfo().documentClass === 'outgoing') {
                     return this.firstSiteInfo
                         ? ( langService.current === 'en'
