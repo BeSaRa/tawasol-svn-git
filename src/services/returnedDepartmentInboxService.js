@@ -118,6 +118,7 @@ module.exports = function (app) {
              * @description Terminate returned department inbox
              * @param returnedDepartmentInbox
              * @param $event
+             * @param justReason
              */
             returnedDepartmentInboxTerminate: function (returnedDepartmentInbox, $event, justReason) {
                 /*return self.terminateReturnedDepartmentInbox(returnedDepartmentInbox)

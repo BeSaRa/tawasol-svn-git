@@ -131,7 +131,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.terminateUserInboxBulk = function ($event) {
-            var numberOfRecordsToTerminate = angular.copy(self.selectedUserInboxes.length);
+            //var numberOfRecordsToTerminate = angular.copy(self.selectedUserInboxes.length);
             correspondenceService
                 .terminateBulkWorkItem(self.selectedUserInboxes, $event)
                 .then(function () {

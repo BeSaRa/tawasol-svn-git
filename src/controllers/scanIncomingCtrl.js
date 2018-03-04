@@ -486,7 +486,7 @@ module.exports = function (app) {
             // Broadcast
             {
                 type: 'action',
-                icon: 'send',
+                icon: 'bullhorn',
                 text: 'grid_action_broadcast',
                 shortcut: false,
                 hide: true,

@@ -110,7 +110,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.returnIncomingDepartmentInbox = function (incomingDepartmentInbox, $event, defer) {
-            // console.log('Return the incoming department inbox item : ', incomingDepartmentInbox);
             incomingDepartmentInboxService
                 .controllerMethod
                 .incomingDepartmentInboxReturn(incomingDepartmentInbox, $event)

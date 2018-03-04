@@ -474,8 +474,8 @@ module.exports = function (app) {
          * @param reviewIncoming
          * @param $event
          */
-        self.broadcast = function (reviewIncoming, $event) {
-            broadcastService
+        self.broadcast = function (reviewIncoming, $event, defer) {
+            /*broadcastService
                 .controllerMethod
                 .broadcastSend(reviewIncoming, $event)
                 .then(function () {
@@ -483,7 +483,15 @@ module.exports = function (app) {
                 })
                 .catch(function () {
                     self.reloadReviewIncomings(self.grid.page);
-                });
+                });*/
+            reviewIncoming
+                .correspondenceBroadcast()
+                .then(function () {
+                    self.reloadReviewIncomings(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        })
+                })
         };
 
 
@@ -773,13 +781,13 @@ module.exports = function (app) {
             // Broadcast
             {
                 type: 'action',
-                icon: 'send',
+                icon: 'bullhorn',
                 text: 'grid_action_broadcast',
                 shortcut: false,
                 hide: true,
                 callback: self.broadcast,
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && (model.addMethod || model.approvers !== null);
+                    return self.checkToShowAction(action, model) && model.approvers !== null;
                 }
             }
         ];
