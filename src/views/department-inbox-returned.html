@@ -22,7 +22,7 @@
                                    md-progress="ctrl.progress">
                                 <thead md-head md-order="ctrl.grid.order">
                                 <tr md-row>
-                                    <th colspan="{{ctrl.selectedReturnedDepartmentInboxes.length > 1 ? 10 : 11}}"
+                                    <th colspan="{{ctrl.selectedReturnedDepartmentInboxes.length > 1 ? 11 : 12}}"
                                         ng-if="ctrl.selectedReturnedDepartmentInboxes.length" md-column>
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedReturnedDepartmentInboxes.length}} {{lang.items_selected}} </span>
@@ -71,6 +71,9 @@
                                     <th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column md-order-by="generalStepElm.docSerial">
                                         <span>{{lang.inbox_serial}}</span>
                                     </th>
+                                    <th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column md-order-by="">
+                                        <!-- Priority Level and Has Attachment Indicators -->
+                                    </th>
                                     <th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column md-order-by="generalStepElm.docSubject">
                                         <span>{{lang.subject}}</span>
                                     </th>
@@ -84,9 +87,6 @@
                                     <th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column
                                         md-order-by="sender">
                                         <span>{{lang.sender}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column md-order-by="generalStepElm.dueDate">
-                                        <span>{{lang.due_date}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column md-order-by="">
                                         <span>{{lang.correspondence_sites}}</span>
@@ -144,28 +144,13 @@
                                          ></md-icon>
                                      </td>-->
                                     <td md-cell class="indicator-td">
+                                        <!-- Security Level -->
                                         <span flex
                                               ng-class="{'indicator-content': returnedDepartmentInbox.securityLevelIndicator}">
                                             <md-icon ng-if="returnedDepartmentInbox.securityLevelIndicator"
                                                      class="{{returnedDepartmentInbox.securityLevelIndicator.class}}"
                                                      md-svg-icon="{{returnedDepartmentInbox.securityLevelIndicator.icon}}"
                                                      tooltip="{{lang[returnedDepartmentInbox.securityLevelIndicator.tooltip].change({name: returnedDepartmentInbox.securityLevelLookup.getTranslatedName()})}}"
-                                            ></md-icon>
-                                        </span>
-                                        <span flex
-                                              ng-class="{'indicator-content': returnedDepartmentInbox.priorityLevelIndicator}">
-                                            <md-icon ng-if="returnedDepartmentInbox.priorityLevelIndicator"
-                                                     class="{{returnedDepartmentInbox.priorityLevelIndicator.class}}"
-                                                     md-svg-icon="{{returnedDepartmentInbox.priorityLevelIndicator.icon}}"
-                                                     tooltip="{{lang[returnedDepartmentInbox.priorityLevelIndicator.tooltip].change({name: returnedDepartmentInbox.priorityLevelLookup.getTranslatedName()})}}"
-                                            ></md-icon>
-                                        </span>
-                                        <span flex
-                                              ng-class="{'indicator-content': returnedDepartmentInbox.attachmentsIndicator}">
-                                            <md-icon ng-if="returnedDepartmentInbox.attachmentsIndicator"
-                                                     class="{{returnedDepartmentInbox.attachmentsIndicator.class}}"
-                                                     md-svg-icon="{{returnedDepartmentInbox.attachmentsIndicator.icon}}"
-                                                     tooltip="{{lang[returnedDepartmentInbox.attachmentsIndicator.tooltip]}}"
                                             ></md-icon>
                                         </span>
                                         <span flex
@@ -191,8 +176,30 @@
                                        </span>-->
                                     </td>
                                     <td md-cell>{{returnedDepartmentInbox.generalStepElm.docFullSerial}}</td>
-                                    <td md-cell class="td-data">
+                                    <td md-cell class="indicator-td text-right"
+                                        style="padding-right:0 !important; padding-left:0 !important;">
+                                        <!-- Priority Level -->
+                                        <span flex
+                                              ng-class="{'indicator-content': returnedDepartmentInbox.priorityLevelIndicator}">
+                                            <md-icon ng-if="returnedDepartmentInbox.priorityLevelIndicator"
+                                                     class="{{returnedDepartmentInbox.priorityLevelIndicator.class}}"
+                                                     md-svg-icon="{{returnedDepartmentInbox.priorityLevelIndicator.icon}}"
+                                                     tooltip="{{lang[returnedDepartmentInbox.priorityLevelIndicator.tooltip].change({name: returnedDepartmentInbox.priorityLevelLookup.getTranslatedName()})}}"
+                                            ></md-icon>
+                                        </span>
+                                        <!-- Has Attachment -->
+                                        <span flex
+                                              ng-class="{'indicator-content': returnedDepartmentInbox.attachmentsIndicator}">
+                                            <md-icon ng-if="returnedDepartmentInbox.attachmentsIndicator"
+                                                     class="{{returnedDepartmentInbox.attachmentsIndicator.class}}"
+                                                     md-svg-icon="{{returnedDepartmentInbox.attachmentsIndicator.icon}}"
+                                                     tooltip="{{lang[returnedDepartmentInbox.attachmentsIndicator.tooltip]}}"
+                                            ></md-icon>
+                                        </span>
+                                    </td>
+                                    <td md-cell md-truncate class="subject">
                                         <a href="" class="view-doc" ng-if="returnedDepartmentInbox.hasContent()"
+                                           title="{{returnedDepartmentInbox.generalStepElm.docSubject}}"
                                            ng-click="ctrl.viewDocument(returnedDepartmentInbox, $event)">{{returnedDepartmentInbox.generalStepElm.docSubject}}</a>
                                         <span ng-if="!returnedDepartmentInbox.hasContent()">{{returnedDepartmentInbox.generalStepElm.docSubject}}</span>
                                     </td>
@@ -209,13 +216,12 @@
                                         "></md-icon>-->
                                         </div>
                                     </td>
-                                    <td md-cell>{{returnedDepartmentInbox.generalStepElm.dueDate}}</td>
                                     <td md-cell>
                                         <main-site-sub-site-directive item="returnedDepartmentInbox">
                                         </main-site-sub-site-directive>
                                     </td>
                                     <!--<td md-cell>{{returnedDepartmentInbox.subCoreSite.getTranslatedName()}}</td>-->
-                                    <td md-cell>{{returnedDepartmentInbox.generalStepElm.docType}}</td>
+                                    <td md-cell>{{returnedDepartmentInbox.type}}</td>
                                     <td md-cell>{{returnedDepartmentInbox.generalStepElm.numberOfDays}}</td>
                                     <td md-cell ng-if="ctrl.selectedReturnedDepartmentInboxes.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedReturnedDepartmentInboxes.length

@@ -94,7 +94,6 @@ module.exports = function (app) {
     require('./Site')(app);
     require('./SiteView')(app);
     require('./WorkItemType')(app);
-    require('./WorkItemDepartment')(app);
     require('./Incoming')(app);
     require('./QuickSearchCorrespondence')(app);
     require('./Internal')(app);

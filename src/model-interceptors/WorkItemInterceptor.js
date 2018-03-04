@@ -15,7 +15,6 @@ module.exports = function (app) {
                       Organization,
                       downloadService,
                       WorkItemType,
-                      WorkItemDepartment,
                       lookupService,
                       Information) {
         'ngInject';
@@ -79,7 +78,7 @@ module.exports = function (app) {
             model.type = model.generalStepElm.hasOwnProperty('orginality') ? (model.generalStepElm.orginality === 0 ? langService.get('original') : langService.get('copy')) : "";
             // model.department = model.fromRegOu ? model.fromRegOu[langService.current + "Name"] : "";
             //model.type = model.generalStepElm.hasOwnProperty('orginality') ? new WorkItemType(model.generalStepElm.orginality) : "";
-            model.department = model.fromRegOu ? new WorkItemDepartment(model.fromRegOu) : "";
+            model.department = model.fromRegOu ? new Information(model.fromRegOu) : "";
 
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.generalStepElm.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;

@@ -136,7 +136,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.sendToDraft = function (prepareInternal, $event, defer) {
+        /*self.sendToDraft = function (prepareInternal, $event, defer) {
             prepareInternalService
                 .sendToDraftPrepareInternal(prepareInternal)
                 .then(function (result) {
@@ -146,7 +146,7 @@ module.exports = function (app) {
                             new ResolveDefer(defer);
                         });
                 })
-        };
+        };*/
 
 
         /**
@@ -240,9 +240,10 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Add content to the prepare outgoing document
+         * @description Add content to the prepare internal document
          * @param prepareInternal
          * @param $event
+         * @param defer
          */
         self.createContent = function (prepareInternal, $event , defer) {
             managerService.manageDocumentContent(prepareInternal.vsId, prepareInternal.docClassName, prepareInternal.docSubject, $event)
@@ -340,11 +341,11 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
-            // Edit Incoming properties
+            // Edit Internal properties
             {
                 type: 'action',
                 icon: 'pencil',
-                text: 'grid_action_edit_incoming_properties',
+                text: 'grid_action_edit_internal_properties',
                 shortcut: true,
                 showInView: false,
                 permissionKey: "EDIT_INTERNAL_PROPERTIES",

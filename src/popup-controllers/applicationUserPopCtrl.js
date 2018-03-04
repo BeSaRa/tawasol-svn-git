@@ -856,6 +856,7 @@ module.exports = function (app) {
                     });
             }
             else {
+                ouApplicationUser.wfsecurity = self.globalSetting.wfsecurity;
                 return ouApplicationUserService
                     .addOUApplicationUser(ouApplicationUser)
                     .then(function () {

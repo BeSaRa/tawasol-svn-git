@@ -14,6 +14,8 @@ module.exports = function (app) {
                                                  employeeService,
                                                  favoriteDocumentsService,
                                                  toast,
+                                                 mailNotificationService,
+                                                 counterService,
                                                  correspondenceSiteService,
                                                  WorkItem,
                                                  ResolveDefer,
@@ -76,32 +78,14 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.userSentItems = result;
                     self.selectedUserSentItems = [];
+                    counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(5);
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
                     return result;
                 });
         };
-
-
-        /**
-         * @description this method to display the main correspondenceSites for given record
-         * @param correspondenceSites
-         * @param $event
-         */
-        self.openMainSiteDialog = function (correspondenceSites, $event) {
-
-        };
-
-        /**
-         * @description this method to display the sub correspondenceSites for given correspondenceSite
-         * @param subCorrespondenceSites
-         * @param $event
-         */
-        self.openSubSiteDialog = function (subCorrespondenceSites, $event) {
-
-        };
-
 
         /**
          * @description Recall Bulk User Sent Items

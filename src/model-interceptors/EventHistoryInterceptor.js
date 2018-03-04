@@ -26,41 +26,6 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-             /*model.mainSiteInfo = [
-                {
-                    "arName": "أحمد مصطفى",
-                    "enName": "789 Minister of Communications",
-                    "id": 1,
-                    "parent": null
-                },
-                 {
-                     "arName": "أحمد مصطفى",
-                     "enName": "123 Minister of Communications",
-                     "id": 3,
-                     "parent": null
-                 }
-            ];
-
-             model.subSiteInfo = [
-                 {
-                     "arName": "أحمد مصطفى",
-                     "enName": "456 Minister of Communications",
-                     "id": 2,
-                     "parent": 1
-                 },
-                 {
-                     "arName": "أحمد مصطفى",
-                     "enName": "123 Minister of Communications",
-                     "id": 4,
-                     "parent": 1
-                 }
-             ];*/
-
-            //model.mainSite = (model.mainSiteInfo.length) ? getBulkTypeCast(model.mainSiteInfo, Information) : new Array(new Information());
-            //model.subSite = (model.subSiteInfo.length) ? getBulkTypeCast(model.subSiteInfo, Information) : new Array(new Information());
-
-            //model.mainSubSites = separateParentChild(model.mainSite, model.subSite);
-
             (model.documentCreationDate_vts) = angular.copy(model.documentCreationDate);
             model.documentCreationDate_vts ? getDateFromUnixTimeStamp_Vts(model, ["documentCreationDate_vts"]) : "";
             (model.documentCreationDate) ? getDateFromUnixTimeStamp(model, ["documentCreationDate"]) : "";

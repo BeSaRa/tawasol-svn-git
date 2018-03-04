@@ -149,7 +149,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.sendToDraft = function (prepareOutgoing, $event, defer) {
+        /*self.sendToDraft = function (prepareOutgoing, $event, defer) {
             prepareOutgoingService
                 .sendToDraftPrepareOutgoing(prepareOutgoing)
                 .then(function (result) {
@@ -159,7 +159,7 @@ module.exports = function (app) {
                             new ResolveDefer(defer);
                         });
                 })
-        };
+        };*/
 
         /**
          * @description View Tracking Sheet

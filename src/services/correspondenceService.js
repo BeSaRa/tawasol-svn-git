@@ -1779,7 +1779,8 @@ module.exports = function (app) {
             return self.commonAddToFolder(workItems, folder).then(function (result) {
                 return _bulkMessages(result, workItems, ignoreMessage, 'inbox_failed_add_to_folder_selected', 'add_to_folder_success', 'add_to_folder_success_except_following');
             });
-        }
+        };
+
         /**
          * @description open dialog for export workItem.
          * @param workItem
@@ -1839,9 +1840,7 @@ module.exports = function (app) {
             return $http
                 .get(urlService.departmentWF + '/ready-to-export-central-archive')
                 .then(function (result) {
-                    var items = generator.generateCollection(result.data.rs, WorkItem);
-                    items = generator.interceptReceivedCollection('WorkItem', items);
-                    return items;
+                    return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
                 });
         }
 
