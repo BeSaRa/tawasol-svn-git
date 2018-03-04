@@ -167,7 +167,11 @@
                                         </div>
                                     </td>
                                     <td md-cell>{{proxyMailInbox.generalStepElm.dueDate}}</td>
-                                    <td md-cell></td>
+                                    <td md-cell>
+                                        <main-site-sub-site-directive item="proxyMailInbox"
+                                                                      ng-if="proxyMailInbox.getInfo().documentClass!=='internal'">
+                                        </main-site-sub-site-directive>
+                                    </td>
                                     <!--<td md-cell>{{proxyMailInbox.subCoreSite.getTranslatedName()}}</td>-->
                                     <td md-cell>{{proxyMailInbox.generalStepElm.docType}}</td>
                                     <td md-cell>{{proxyMailInbox.generalStepElm.numberOfDays}}</td>
