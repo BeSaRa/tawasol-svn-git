@@ -302,6 +302,9 @@ module.exports = function (app) {
                     },
                     sites: function (correspondenceService) {
                         'ngInject';
+                        if (documentClass.toLowerCase() === 'incoming') {
+                            return [];
+                        }
                         return defer.promise.then(function (correspondence) {
                             return correspondenceService
                                 .loadCorrespondenceSites(correspondence)

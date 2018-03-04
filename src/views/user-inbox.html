@@ -109,7 +109,6 @@
                                     ng-class="!userInbox.generalStepElm.isOpen? 'unread-row': 'read-row'"
                                     selected-length="{{ctrl.selectedUserInboxes.length ? ctrl.selectedUserInboxes.length : 0}}"
                                     ng-repeat="userInbox in ctrl.userInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
-
                                     <td md-cell class="indicator-td">
                                         <!-- Security Level -->
                                         <span flex
@@ -225,9 +224,9 @@
                                                 </span>
                                     </td>
                                     <td md-cell md-truncate class="subject">
-                                        <a href="" class="view-doc" md-truncate ng-if="userInbox.hasContent()"
+                                        <a href="" class="view-doc" md-truncate ng-if="userInbox.hasContent()" title="{{userInbox.generalStepElm.docSubject}}"
                                            ng-click="ctrl.viewDocument(userInbox, $event)">{{userInbox.generalStepElm.docSubject}}</a>
-                                        <span ng-if="!userInbox.hasContent()">{{userInbox.generalStepElm.docSubject}}</span>
+                                        <span ng-if="!userInbox.hasContent()" title="{{userInbox.generalStepElm.docSubject}}">{{userInbox.generalStepElm.docSubject}}</span>
                                     </td>
                                     <td md-cell>{{userInbox.getReceivedDate()}}</td>
                                     <td md-cell>{{userInbox.action.getTranslatedName()}}</td>
@@ -242,7 +241,6 @@
                                                 {{userInbox.generalStepElm.dueDate}}</span>
                                     </td>
                                     <td md-cell>
-                                        <!--<span ng-if="userInbox.getInfo().documentClass!=='internal'">{{userInbox.getTranslatedFirstSiteInfo()}}</span>-->
                                         <main-site-sub-site-directive item="userInbox"
                                                                       ng-if="userInbox.getInfo().documentClass!=='internal'">
                                         </main-site-sub-site-directive>

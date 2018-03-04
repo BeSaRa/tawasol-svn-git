@@ -100,6 +100,7 @@ module.exports = function (app) {
             model.isReassignedIndicator = model.getReassignedIndicator(model.generalStepElm.isReassigned);
             model.isOpenedIndicator = model.getOpenedIndicator(model.generalStepElm.isOpen);
             model.isPaperIndicator = model.getIsPaperIndicator(model.generalStepElm.addMethod);
+            model.exportViaCentralArchiveIndicator = model.getExportViaCentralArchiveIndicator(model.generalStepElm.exportViaCentralArchive);
 
             model.sender = new Information(model.senderInfo);
             return model;

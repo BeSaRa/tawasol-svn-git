@@ -34,8 +34,9 @@ module.exports = function (app) {
             icons['outgoing'] = 'arrow-up-bold-box';
             icons['incoming'] = 'arrow-down-bold-box';
             icons['internal'] = 'recycle';
-            icons['paper_document'] ='file-document';
+            icons['paper_document'] = 'file-document';
             icons['electronic_document'] = 'tablet';//cellphone-dock';
+            icons['export_via_central_archive'] = 'archive';
 
 
             /**
@@ -246,6 +247,16 @@ module.exports = function (app) {
                     icon: (isPaper ? icons['paper_document'] : icons['electronic_document']),
                     tooltip: (isPaper ? 'indicator_paper_document' : 'indicator_electronic_document')
                 });
+            };
+
+
+            Indicator.prototype.getExportViaCentralArchiveIndicator = function (exportViaCentralArchive) {
+                return exportViaCentralArchive ? new Indicator({
+                    class: 'indicator',
+                    text: 'export_via_central_archive',
+                    icon: icons['export_via_central_archive'],
+                    tooltip: 'export_via_central_archive'
+                }) : false;
             };
 
 

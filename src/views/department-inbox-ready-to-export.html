@@ -51,9 +51,9 @@
                                             </md-button>-->
                                         </div>
                                     </th>
-                                    <!-- <th ng-if="!ctrl.selectedReadyToExports.length" md-column md-order-by="">
+                                     <th ng-if="!ctrl.selectedReadyToExports.length" md-column md-order-by="">
 
-                                     </th>-->
+                                     </th>
                                     <!--<th ng-if="!ctrl.selectedReadyToExports.length" md-column
                                         md-order-by="docSerial">
                                         <span>{{lang.label_serial}}</span>
@@ -105,38 +105,17 @@
                                     selected-length="{{ctrl.selectedReadyToExports.length ? ctrl.selectedReadyToExports.length : 0}}"
                                     model="readyToExport"
                                     ng-repeat="readyToExport in ctrl.readyToExports | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
-                                    <!--<td md-cell>
-                                        <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
-                                                 ng-if="readyToExport.generalStepElm.starred && (!ctrl.selectedReadyToExports.length
-                                                 || ctrl.selectedReadyToExports.length===1 && ctrl.selectedReadyToExports[0].generalStepElm.workObjectNumber === readyToExport.generalStepElm.workObjectNumber)"
-                                                 md-svg-icon="star"
-                                                 tooltip="{{readyToExport.getTranslatedStarred()}}"
-                                                 ng-click="ctrl.changeReadyToExportStar(readyToExport, $event)"
-                                        ></md-icon>
-                                        <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
-                                                 ng-if="readyToExport.generalStepElm.starred
-                                                 && ((ctrl.selectedReadyToExports.length === 1
-                                                 && ctrl.selectedReadyToExports[0].generalStepElm.workObjectNumber != readyToExport.generalStepElm.workObjectNumber)
-                                                    || ctrl.selectedReadyToExports.length > 1)"
-                                                 md-svg-icon="star"
-                                                 tooltip="{{readyToExport.getTranslatedStarred()}}"
-                                        ></md-icon>
-                                        <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
-                                                 ng-if="!readyToExport.generalStepElm.starred && (!ctrl.selectedReadyToExports.length
-                                                  || ctrl.selectedReadyToExports.length===1 && ctrl.selectedReadyToExports[0].generalStepElm.workObjectNumber === readyToExport.generalStepElm.workObjectNumber)"
-                                                 md-svg-icon="star-outline"
-                                                 tooltip="{{readyToExport.getTranslatedStarred()}}"
-                                                 ng-click="ctrl.changeReadyToExportStar(readyToExport, $event)"
-                                        ></md-icon>
-                                        <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
-                                                 ng-if="!readyToExport.generalStepElm.starred
-                                                 && ((ctrl.selectedReadyToExports.length === 1
-                                                 && ctrl.selectedReadyToExports[0].generalStepElm.workObjectNumber != readyToExport.generalStepElm.workObjectNumber)
-                                                    || ctrl.selectedReadyToExports.length > 1)"
-                                                 md-svg-icon="star-outline"
-                                                 tooltip="{{readyToExport.getTranslatedStarred()}}"
-                                        ></md-icon>
-                                    </td>-->
+                                    <td md-cell class="indicator-td">
+                                        <!-- Central Archive Enabled -->
+                                        <span flex
+                                              ng-class="{'indicator-content': readyToExport.exportViaCentralArchiveIndicator}">
+                                            <md-icon ng-if="readyToExport.exportViaCentralArchiveIndicator"
+                                                     class="{{readyToExport.exportViaCentralArchiveIndicator.class}}"
+                                                     md-svg-icon="{{readyToExport.exportViaCentralArchiveIndicator.icon}}"
+                                                     tooltip="{{lang[readyToExport.exportViaCentralArchiveIndicator.tooltip]}}"
+                                            ></md-icon>
+                                        </span>
+                                    </td>
 
                                     <!--<td md-cell>{{readyToExport.generalStepElm.docSerial}}</td>-->
                                     <td md-cell class="td-data">
@@ -152,7 +131,10 @@
                                         </div>
                                     </td>
                                     <!--<td md-cell>{{readyToExport.generalStepElm.dueDate}}</td>-->
-                                    <td md-cell></td>
+                                    <td md-cell>
+                                        <main-site-sub-site-directive item="readyToExport">
+                                        </main-site-sub-site-directive>
+                                    </td>
                                     <!--<td md-cell>{{readyToExport.subCoreSite.getTranslatedName()}}</td>-->
                                     <!--<td md-cell>{{readyToExport.generalStepElm.docType}}</td>-->
                                     <td md-cell>{{readyToExport.generalStepElm.numberOfDays}}</td>

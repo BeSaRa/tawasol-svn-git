@@ -67,18 +67,16 @@ module.exports = function (app) {
             WorkItem.prototype.getTranslatedFirstSiteInfo = function () {
                 if (this.getInfo().documentClass === 'outgoing') {
                     return this.firstSiteInfo
-                        ?  ( langService.current === 'en'
-                        ? this.firstSiteInfo.mainEnSiteText + (this.firstSiteInfo.subEnSiteText ? (' - ' + this.firstSiteInfo.subEnSiteText) : '')
-                        : (this.firstSiteInfo.subArSiteText ? this.firstSiteInfo.subArSiteText + ' - ' : '') + this.firstSiteInfo.mainArSiteText
-                    ): "";
-                }
-                else {
-                    return this.siteInfo
                         ? ( langService.current === 'en'
-                            ? this.siteInfo.mainEnSiteText + (this.siteInfo.subEnSiteText ? (' - ' + this.siteInfo.subEnSiteText) : '')
-                            : (this.siteInfo.subArSiteText ? this.siteInfo.subArSiteText + ' - ' : '') + this.siteInfo.mainArSiteText
+                            ? this.firstSiteInfo.mainEnSiteText + (this.firstSiteInfo.subEnSiteText ? (' - ' + this.firstSiteInfo.subEnSiteText) : '')
+                            : (this.firstSiteInfo.subArSiteText ? this.firstSiteInfo.subArSiteText + ' - ' : '') + this.firstSiteInfo.mainArSiteText
                     ) : "";
                 }
+                return this.siteInfo
+                    ? ( langService.current === 'en'
+                        ? this.siteInfo.mainEnSiteText + (this.siteInfo.subEnSiteText ? (' - ' + this.siteInfo.subEnSiteText) : '')
+                        : (this.siteInfo.subArSiteText ? this.siteInfo.subArSiteText + ' - ' : '') + this.siteInfo.mainArSiteText
+                ) : "";
             };
 
             WorkItem.prototype.setCorrespondenceService = function (service) {
@@ -157,6 +155,10 @@ module.exports = function (app) {
 
             WorkItem.prototype.getIsPaperIndicator = function (isPaper) {
                 return indicator.getIsPaperIndicator(isPaper);
+            };
+
+            WorkItem.prototype.getExportViaCentralArchiveIndicator = function(exportViaCentralArchive){
+                return indicator.getExportViaCentralArchiveIndicator(exportViaCentralArchive);
             };
 
             WorkItem.prototype.getWobNumber = function () {
