@@ -267,7 +267,7 @@ module.exports = function (app) {
             };
 
             Employee.prototype.inRegistry = function () {
-                return this.userOrganization.hasRegistry;
+                return this.userOrganization && this.userOrganization.hasRegistry;
             };
 
 
