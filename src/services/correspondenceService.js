@@ -1743,8 +1743,9 @@ module.exports = function (app) {
         self.addWorkItemToFolder = function (workItems, folder, ignoreMessage) {
             return self.commonAddToFolder(workItems, folder)
                 .then(function (result) {
+                    debugger;
                     if (!ignoreMessage) {
-                        if (!result.data.rs[workItems[0].getInfo().wobNumber]) {
+                        if (result.data.rs[workItems[0].getInfo().wobNumber]) {
                             toast.success(langService.get('inbox_add_to_folder_specific_success'));
                         } else {
                             toast.success(langService.get('inbox_failed_add_to_folder_selected'));
