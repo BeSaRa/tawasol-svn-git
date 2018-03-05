@@ -17,9 +17,9 @@
                                            ng-model="ctrl.correspondence.docSubject">
                                 </md-input-container>
                                 <md-input-container flex>
-                                    <label for="docSerial">{{lang.linked_document_serial}}</label>
-                                    <input type="text" id="docSerial" name="docSerial"
-                                           ng-model="ctrl.correspondence.docSerial">
+                                    <label for="docFullSerial">{{lang.linked_document_serial}}</label>
+                                    <input type="text" id="docFullSerial" name="docFullSerial"
+                                           ng-model="ctrl.correspondence.docFullSerial">
                                 </md-input-container>
                                 <md-input-container flex>
                                     <label for="docType">{{lang.linked_document_type}}</label>
@@ -35,7 +35,7 @@
                                 <md-input-container flex>
                                     <label for="ou">{{lang.linked_document_organization}}</label>
                                     <md-select id="ou" name="ou" ng-model="ctrl.correspondence.ou">
-                                        <md-option ng-value="organization"
+                                        <md-option ng-value="organization.id"
                                                    ng-repeat="organization in ctrl.organizations">
                                             {{organization.getTranslatedName()}}
                                         </md-option>
@@ -45,7 +45,7 @@
                                     <label for="securityLevel">{{lang.linked_document_security_level}}</label>
                                     <md-select id="securityLevel" name="securityLevel"
                                                ng-model="ctrl.correspondence.securityLevel">
-                                        <md-option ng-value="securityLevel"
+                                        <md-option ng-value="securityLevel.lookupKey"
                                                    ng-repeat="securityLevel in ctrl.securityLevels">
                                             {{securityLevel.getTranslatedName()}}
                                         </md-option>

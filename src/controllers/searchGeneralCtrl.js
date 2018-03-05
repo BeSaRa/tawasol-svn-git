@@ -139,7 +139,7 @@ module.exports = function (app) {
 
         self.dynamicValidations = {
             'Integer': {type: 'number', message: langService.get('numberonly')},
-            'String': {type: 'ALL', message: ''}
+            'String': {type: 'ALL', message: langService.get('all_validation')}
         };
 
         /**

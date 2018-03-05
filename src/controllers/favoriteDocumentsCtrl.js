@@ -47,7 +47,7 @@ module.exports = function (app) {
                 {
                     label: langService.get('all'),
                     value: function () {
-                        return (self.favoriteDocuments.length + 21);
+                        return (favoriteDocumentsService.totalCount + 21);
                     }
                 }
             ]
@@ -137,19 +137,19 @@ module.exports = function (app) {
             }
 
             /*distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(favoriteDocument, false, false, null, favoriteDocument.classDescription.toLowerCase(), $event)
-                .then(function (result) {
-                    self.reloadFavoriteDocuments(self.grid.page)
-                        .then(function () {
-                            new ResolveDefer(defer);
-                        });
-                    //self.replaceRecord(result);
-                })
-                .catch(function (result) {
-                    self.reloadFavoriteDocuments(self.grid.page);
-                    //self.replaceRecord(result);
-                });*/
+             .controllerMethod
+             .distributionWorkflowSend(favoriteDocument, false, false, null, favoriteDocument.classDescription.toLowerCase(), $event)
+             .then(function (result) {
+             self.reloadFavoriteDocuments(self.grid.page)
+             .then(function () {
+             new ResolveDefer(defer);
+             });
+             //self.replaceRecord(result);
+             })
+             .catch(function (result) {
+             self.reloadFavoriteDocuments(self.grid.page);
+             //self.replaceRecord(result);
+             });*/
             favoriteDocument.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadFavoriteDocuments(self.grid.page)
@@ -291,8 +291,8 @@ module.exports = function (app) {
          */
         self.checkToShowAction = function (action, model) {
             /*if (action.hasOwnProperty('permissionKey'))
-                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-            return (!action.hide);*/
+             return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+             return (!action.hide);*/
 
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
@@ -307,8 +307,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                                return isPermission !== true;
+                            }));
                     }
                 }
             }
@@ -413,14 +413,14 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             /*var info = model.getInfo();
-                            var hasPermission = false;
-                            if (info.documentClass === "internal")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-                            else if (info.documentClass === "incoming")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
-                            else if (info.documentClass === "outgoing")
-                                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
-                            return self.checkToShowAction(action, model) && hasPermission;*/
+                             var hasPermission = false;
+                             if (info.documentClass === "internal")
+                             hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                             else if (info.documentClass === "incoming")
+                             hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+                             else if (info.documentClass === "outgoing")
+                             hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                             return self.checkToShowAction(action, model) && hasPermission;*/
                             return self.checkToShowAction(action, model) && checkIfEditPropertiesAllowed(model);
                         }
                     }
@@ -534,16 +534,16 @@ module.exports = function (app) {
                         checkShow: self.checkToShowAction
                     },
                     /*{
-                        type: 'action',
-                        icon: 'stop',
-                        text: 'grid_action_destinations',
-                        shortcut: false,
-                        callback: self.manageDestinations,
-                        permissionKey: "MANAGE_DESTINATIONS",
-                        class: "action-red",
-                        hide: true,
-                        checkShow: self.checkToShowAction
-                    }*/
+                     type: 'action',
+                     icon: 'stop',
+                     text: 'grid_action_destinations',
+                     shortcut: false,
+                     callback: self.manageDestinations,
+                     permissionKey: "MANAGE_DESTINATIONS",
+                     class: "action-red",
+                     hide: true,
+                     checkShow: self.checkToShowAction
+                     }*/
                 ]
             },
             // Open

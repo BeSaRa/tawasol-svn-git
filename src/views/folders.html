@@ -57,23 +57,23 @@
                                             </md-button>
                                             <md-button class="md-icon-button" aria-label="{{lang.inbox_terminate}}"
                                                        tooltip="{{lang.inbox_terminate}}"
-                                                       ng-click="ctrl.terminateUserInboxBulk($event)">
+                                                       ng-click="ctrl.terminateBulk($event)">
                                                 <md-icon md-svg-icon="stop" class="action-green"></md-icon>
                                             </md-button>
                                             <md-button class="md-icon-button"
                                                        aria-label="{{lang.grid_action_move_to_folder}}"
                                                        tooltip="{{lang.inbox_add_to_folder}}"
-                                                       ng-click="ctrl.moveToFolderUserInboxBulk($event)">
+                                                       ng-click="ctrl.moveToFolderBulk($event)">
                                                 <md-icon md-svg-icon="folder-move" class="action-green"></md-icon>
                                             </md-button>
                                             <md-button class="md-icon-button action-green" aria-label="{{lang.star}}"
                                                        tooltip="{{lang.star}}"
-                                                       ng-click="ctrl.changeUserInboxStarBulk('starBulk',$event)">
+                                                       ng-click="ctrl.changeStarBulk('starBulk',$event)">
                                                 <md-icon class="star-yellow" md-svg-icon="star"></md-icon>
                                             </md-button>
                                             <md-button class="md-icon-button action-green" aria-label="{{lang.un_star}}"
                                                        tooltip="{{lang.un_star}}"
-                                                       ng-click="ctrl.changeUserInboxStarBulk('unStarBulk' ,$event)">
+                                                       ng-click="ctrl.changeStarBulk('unStarBulk' ,$event)">
                                                 <md-icon class="star-yellow" md-svg-icon="star-outline"></md-icon>
                                             </md-button>
                                         </div>
@@ -200,7 +200,7 @@
                                                  ng-if="workItem.generalStepElm.starred && (!ctrl.selectedWorkItems.length
                                                          || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber)"
                                                  md-svg-icon="star"
-                                                 ng-click="ctrl.changeUserInboxStar(userInbox, $event)"
+                                                 ng-click="ctrl.changeStar(workItem, $event)"
                                         ></md-icon>
                                         <!--tooltip="{{workItem.getTranslatedStarred()}}"-->
                                         <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
@@ -215,7 +215,7 @@
                                                  ng-if="!workItem.generalStepElm.starred && (!ctrl.selectedWorkItems.length
                                                           || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber)"
                                                  md-svg-icon="star-outline"
-                                                 ng-click="ctrl.changeUserInboxStar(userInbox, $event)"
+                                                 ng-click="ctrl.changeStar(workItem, $event)"
                                         ></md-icon>
                                         <!--tooltip="{{workItem.getTranslatedStarred()}}"-->
                                         <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
@@ -249,7 +249,7 @@
                                     </td>
                                     <td md-cell md-truncate class="subject">
                                         <a href="" class="view-doc" md-truncate ng-if="workItem.hasContent()"
-                                           ng-click="ctrl.viewDocument(userInbox, $event)">{{workItem.generalStepElm.docSubject}}</a>
+                                           ng-click="ctrl.viewDocument(workItem, $event)">{{workItem.generalStepElm.docSubject}}</a>
                                         <span ng-if="!workItem.hasContent()">{{workItem.generalStepElm.docSubject}}</span>
                                     </td>
                                     <td md-cell>{{workItem.getReceivedDate()}}</td>
@@ -280,7 +280,7 @@
                                     <td md-cell class="read-td">
                                         <div class="cursor-pointer status"
                                              ng-class="workItem.generalStepElm.isOpen===true? 'read' : 'unread'"
-                                             ng-click="ctrl.markAsReadUnread(userInbox, $event)"
+                                             ng-click="ctrl.markAsReadUnread(workItem, $event)"
                                              ng-if="!ctrl.selectedWorkItems.length
                                                           || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber"
                                              tooltip="{{workItem.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"

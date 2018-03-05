@@ -18,12 +18,20 @@ module.exports = function (app) {
         self.documentClasses = lookupService.returnLookups(lookupService.documentClass);
         // the search criteria for correspondence
         self.correspondence = new Correspondence({
-            year: new Date().getFullYear()
+            year: new Date().getFullYear(),
+            registryOU: employeeService.getCurrentOUApplicationUser().ouRegistryID
         });
+
         // all security levels
-        self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
+
         // all organization organizations -> pop resolve.
-        self.organizations = organizationService.organizations;
+        //self.organizations = organizationService.organizations;
+        self.organizations = _.filter(organizationService.organizations, function (organization) {
+            return organization.hasRegistry;
+        });
+
         // all main classifications -> pop resolve.
         self.classifications = classificationService.getMainClassifications(classificationService.classifications);
         // all document Files ->pop resolve.
@@ -51,9 +59,9 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, // limit options
                 {
                     /*label: self.globalSetting.searchAmountLimit.toString(),
-                    value: function () {
-                        return self.globalSetting.searchAmountLimit
-                    }*/
+                     value: function () {
+                     return self.globalSetting.searchAmountLimit
+                     }*/
                     label: langService.get('all'),
                     value: function () {
                         return (self.correspondences.length + 21);
@@ -95,7 +103,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewCorrespondence = function (correspondence, $event) {
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }

@@ -1,6 +1,5 @@
 module.exports = function (app) {
     app.controller('outgoingCtrl', function (Outgoing,
-                                             // classifications,
                                              $state,
                                              $stateParams,
                                              outgoingService,

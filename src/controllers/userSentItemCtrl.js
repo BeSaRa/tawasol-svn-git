@@ -59,7 +59,7 @@ module.exports = function (app) {
                     }*/
                     label: langService.get('all'),
                     value: function () {
-                        return (self.userSentItems.length + 21);
+                        return (userSentItemService.totalCount + 21);
                     }
                 }
             ]

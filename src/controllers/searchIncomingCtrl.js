@@ -135,7 +135,7 @@ module.exports = function (app) {
 
         self.dynamicValidations = {
             'Integer': {type: 'number', message: langService.get('numberonly')},
-            'String': {type: 'ALL', message: ''}
+            'String': {type: 'ALL', message: langService.get('all_validation')}
         };
 
         /**
@@ -660,11 +660,11 @@ module.exports = function (app) {
 
         /**
          * @description Create Reply
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.createReply = function (userInbox, $event) {
-            var info = userInbox.getInfo();
+        self.createReply = function (workItem, $event) {
+            var info = workItem.getInfo();
             dialog.hide();
             $state.go('app.outgoing.add', {vsId: info.vsId, action: 'reply'});
         };

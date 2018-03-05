@@ -163,7 +163,7 @@ module.exports = function (app) {
         self.organizationsForAppUser = _.map(self.ouApplicationUsers, 'ouid');
 
         self.securityLevels = rootEntity.getGlobalSettings().securityLevels;
-        console.log('self.securityLevels', self.securityLevels);
+        //console.log('self.securityLevels', self.securityLevels);
         /**
          * @description Model for binding the fields in other organizations tab
          * @type {*}
@@ -903,6 +903,7 @@ module.exports = function (app) {
          */
         self.openWorkflowParticipationDialog = function (ouApplicationUser, $event) {
             //console.log('ou application user from grid - workflow participation: ', ouApplicationUser);
+            ouApplicationUser.wfsecurity =  ouApplicationUser.wfsecurity || self.globalSetting.wfsecurity;
             return dialog
                 .showDialog({
                     targetEvent: $event,

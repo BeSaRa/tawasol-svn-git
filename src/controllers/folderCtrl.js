@@ -2,6 +2,8 @@ module.exports = function (app) {
     app.controller('folderCtrl', function (langService,
                                            folders,
                                            $q,
+                                           toast,
+                                           managerService,
                                            mailNotificationService,
                                            counterService,
                                            userFolderService,
@@ -9,7 +11,9 @@ module.exports = function (app) {
                                            UserFolder,
                                            ResolveDefer,
                                            viewTrackingSheetService,
-                                           correspondenceService) {
+                                           correspondenceService,
+                                           userInboxService,
+                                           errorCode) {
         'ngInject';
         var self = this;
         self.controllerName = 'folderCtrl';
@@ -90,7 +94,7 @@ module.exports = function (app) {
          * @description move bulk to folder
          * @param $event
          */
-        self.moveToFolderUserInboxBulk = function ($event) {
+        self.moveToFolderBulk = function ($event) {
             return correspondenceService
                 .showAddBulkWorkItemsToFolder(self.selectedWorkItems, self.folders, $event, true)
                 .then(function () {
@@ -100,10 +104,10 @@ module.exports = function (app) {
 
 
         /**
-         * @description Terminate User inboxes Bulk
+         * @description Terminate folder items Bulk
          * @param $event
          */
-        self.terminateUserInboxBulk = function ($event) {
+        self.terminateBulk = function ($event) {
             correspondenceService
                 .terminateBulkWorkItem(self.selectedWorkItems, $event)
                 .then(function () {
@@ -145,26 +149,13 @@ module.exports = function (app) {
                 });
         }
 
-
-        /**
-         * @description Add To Folder User inboxes Bulk
-         * @param $event
-         */
-        self.addToFolderUserInboxBulk = function ($event) {
-            return correspondenceService
-                .showAddBulkWorkItemsToFolder(self.selectedWorkItems, self.userFolders, $event, false)
-                .then(function () {
-                    self.reloadFolders(self.grid.page);
-                });
-        };
-
         /**
          * @description Change the starred for user inbox
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.changeUserInboxStar = function (userInbox, $event) {
-            userInbox.toggleStar().then(function () {
+        self.changeStar = function (workItem, $event) {
+            workItem.toggleStar().then(function () {
                 self.reloadFolders(self.grid.page);
             });
         };
@@ -174,7 +165,7 @@ module.exports = function (app) {
          * @param starUnStar
          * @param $event
          */
-        self.changeUserInboxStarBulk = function (starUnStar, $event) {
+        self.changeStarBulk = function (starUnStar, $event) {
             self.starServices[starUnStar](self.selectedWorkItems)
                 .then(function () {
                     self.reloadFolders(self.grid.page);
@@ -183,12 +174,12 @@ module.exports = function (app) {
 
         /**
          * @description Terminate User Inbox Item
-         * @param userInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.terminate = function (userInbox, $event, defer) {
-            userInbox
+        self.terminate = function (workItem, $event, defer) {
+            workItem
                 .terminate($event)
                 .then(function () {
                     new ResolveDefer(defer);
@@ -198,35 +189,34 @@ module.exports = function (app) {
 
         /**
          * @description add an item to the favorite documents
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.addToFavorite = function (userInbox, $event) {
-            userInbox.addToFavorite().then(function () {
+        self.addToFavorite = function (workItem, $event) {
+            workItem.addToFavorite().then(function () {
                 self.reloadFolders(self.grid.page)
             });
         };
 
         /**
          * @description Create Reply
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.createReplyIncoming = function (userInbox, $event) {
-            //console.log("createReplyIncoming" , userInbox);
-            var info = userInbox.getInfo();
+        self.createReplyIncoming = function (workItem, $event) {
+            var info = workItem.getInfo();
             dialog.hide();
             $state.go('app.outgoing.add', {workItem: info.wobNumber, action: 'reply'});
         };
 
         /**
          * @description Forward
-         * @param userInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.forward = function (userInbox, $event, defer) {
-            userInbox.launchWorkFlow($event, 'forward', 'favorites')
+        self.forward = function (workItem, $event, defer) {
+            workItem.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadFolders(self.grid.page)
                         .then(function () {
@@ -237,12 +227,12 @@ module.exports = function (app) {
 
         /**
          * @description Reply user inbox
-         * @param userInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.reply = function (userInbox, $event, defer) {
-            userInbox.launchWorkFlow($event, 'reply')
+        self.reply = function (workItem, $event, defer) {
+            workItem.launchWorkFlow($event, 'reply')
                 .then(function () {
                     self.reloadFolders(self.grid.page)
                         .then(function () {
@@ -253,30 +243,30 @@ module.exports = function (app) {
 
         /**
          * @description Get the link of user inbox
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.getLink = function (userInbox, $event) {
-            console.log('getUserInboxLink', userInbox);
+        self.getLink = function (workItem, $event) {
+            console.log('getLink', workItem);
         };
 
         /**
          * @description Subscribe
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.subscribe = function (userInbox, $event) {
-            console.log('subscribeUserInbox', userInbox);
+        self.subscribe = function (workItem, $event) {
+            console.log('subscribe', workItem);
         };
 
         /**
          * @description Export user inbox (export to ready to export)
-         * @param userInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.sendWorkItemToReadyToExport = function (userInbox, $event, defer) {
-            userInbox.sendToReadyToExport().then(function () {
+        self.sendWorkItemToReadyToExport = function (workItem, $event, defer) {
+            workItem.sendToReadyToExport().then(function () {
                 self.reloadFolders(self.grid.page)
                     .then(function () {
                         toast.success(langService.get('export_success'));
@@ -287,26 +277,26 @@ module.exports = function (app) {
 
         /**
          * @description View Tracking Sheet
-         * @param userInbox
+         * @param workItem
          * @param params
          * @param $event
          */
-        self.viewTrackingSheet = function (userInbox, params, $event) {
+        self.viewTrackingSheet = function (workItem, params, $event) {
             viewTrackingSheetService
                 .controllerMethod
-                .viewTrackingSheetPopup(userInbox, params, $event).then(function (result) {
+                .viewTrackingSheetPopup(workItem, params, $event).then(function (result) {
 
             });
         };
 
         /**
          * @description Manage Tags
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.manageTags = function (userInbox, $event) {
-            var info = userInbox.getInfo();
-            managerService.manageDocumentTags(info.vsId, info.documentClass, userInbox.getTranslatedName(), $event)
+        self.manageTags = function (workItem, $event) {
+            var info = workItem.getInfo();
+            managerService.manageDocumentTags(info.vsId, info.documentClass, workItem.getTranslatedName(), $event)
                 .then(function () {
                     self.reloadFolders(self.grid.page);
                 })
@@ -317,12 +307,12 @@ module.exports = function (app) {
 
         /**
          * @description Manage Comments
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.manageComments = function (userInbox, $event) {
-            var info = userInbox.getInfo();
-            userInbox.manageDocumentComments($event)
+        self.manageComments = function (workItem, $event) {
+            var info = workItem.getInfo();
+            workItem.manageDocumentComments($event)
                 .then(function () {
                     self.reloadFolders(self.grid.page);
                 })
@@ -333,30 +323,30 @@ module.exports = function (app) {
 
         /**
          * @description Manage Tasks
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.manageTasks = function (userInbox, $event) {
-            console.log('manageUserInboxTasks : ', userInbox);
+        self.manageTasks = function (workItem, $event) {
+            console.log('manageTasks : ', workItem);
         };
 
         /**
          * @description Manage Attachments
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.manageAttachments = function (userInbox, $event) {
-            userInbox.manageDocumentAttachments($event);
+        self.manageAttachments = function (workItem, $event) {
+            workItem.manageDocumentAttachments($event);
         };
 
 
         /**
          * @description Manage Linked Documents
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.manageLinkedDocuments = function (userInbox, $event) {
-            userInbox.manageDocumentLinkedDocuments($event)
+        self.manageLinkedDocuments = function (workItem, $event) {
+            workItem.manageDocumentLinkedDocuments($event)
                 .then(function () {
                     self.reloadFolders(self.grid.page);
                 })
@@ -367,139 +357,139 @@ module.exports = function (app) {
 
         /**
          * @description Manage Linked Entities
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.manageLinkedEntities = function (userInbox, $event) {
-            userInbox
+        self.manageLinkedEntities = function (workItem, $event) {
+            workItem
                 .manageDocumentEntities($event);
         };
 
         /**
          * @description Destinations
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.manageDestinations = function (userInbox, $event) {
-            userInbox.manageDocumentCorrespondence($event)
+        self.manageDestinations = function (workItem, $event) {
+            workItem.manageDocumentCorrespondence($event)
         };
 
         /**
          * @description View Direct Linked Documents
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.viewDirectLinkedDocuments = function (userInbox, $event) {
-            console.log('viewUserInboxDirectLinkedDocuments : ', userInbox);
+        self.viewDirectLinkedDocuments = function (workItem, $event) {
+            console.log('viewDirectLinkedDocuments : ', workItem);
         };
 
         /**
          * @description View Complete Linked Documents
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.viewCompleteLinkedDocuments = function (userInbox, $event) {
-            console.log('viewUserInboxCompleteLinkedDocuments : ', userInbox);
+        self.viewCompleteLinkedDocuments = function (workItem, $event) {
+            console.log('viewCompleteLinkedDocuments : ', workItem);
         };
 
         /**
          * @description Download Main Document
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.downloadMainDocument = function (userInbox, $event) {
-            userInbox
+        self.downloadMainDocument = function (workItem, $event) {
+            workItem
                 .mainDocumentDownload($event);
         };
 
         /**
          * @description Download Composite Document
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.downloadCompositeDocument = function (userInbox, $event) {
-            userInbox
+        self.downloadCompositeDocument = function (workItem, $event) {
+            workItem
                 .compositeDocumentDownload($event);
         };
 
         /**
          * @description Send Link To Document By Email
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.sendLinkToDocumentByEmail = function (userInbox, $event) {
-            console.log('sendUserInboxLinkToDocumentByEmail : ', userInbox);
+        self.sendLinkToDocumentByEmail = function (workItem, $event) {
+            console.log('sendLinkToDocumentByEmail : ', workItem);
         };
 
         /**
          * @description Send Composite Document As Attachment
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.sendCompositeDocumentAsAttachment = function (userInbox, $event) {
-            console.log('sendUserInboxCompositeDocumentAsAttachment : ', userInbox);
+        self.sendCompositeDocumentAsAttachment = function (workItem, $event) {
+            console.log('sendCompositeDocumentAsAttachment : ', workItem);
         };
 
         /**
          * @description Send Composite Document As Attachment By Email
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.sendCompositeDocumentAsAttachmentByEmail = function (userInbox, $event) {
-            console.log('sendUserInboxCompositeDocumentAsAttachmentByEmail : ', userInbox);
+        self.sendCompositeDocumentAsAttachmentByEmail = function (workItem, $event) {
+            console.log('sendCompositeDocumentAsAttachmentByEmail : ', workItem);
         };
 
         /**
          * @description Send Main Document Fax
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.sendMainDocumentFax = function (userInbox, $event) {
-            console.log('sendUserInboxMainDocumentFax : ', userInbox);
+        self.sendMainDocumentFax = function (workItem, $event) {
+            console.log('sendMainDocumentFax : ', workItem);
         };
 
         /**
          * @description Send SMS
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.sendSMS = function (userInbox, $event) {
-            console.log('sendUserInboxSMS : ', userInbox);
+        self.sendSMS = function (workItem, $event) {
+            console.log('sendSMS : ', workItem);
         };
 
         /**
          * @description Send Main Document As Attachment
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.sendMainDocumentAsAttachment = function (userInbox, $event) {
-            console.log('sendUserInboxMainDocumentAsAttachment : ', userInbox);
+        self.sendMainDocumentAsAttachment = function (workItem, $event) {
+            console.log('sendMainDocumentAsAttachment : ', workItem);
         };
 
         /**
          * @description Send Link
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.sendLink = function (userInbox, $event) {
-            console.log('sendUserInboxLink : ', userInbox);
+        self.sendLink = function (workItem, $event) {
+            console.log('sendLink : ', workItem);
         };
 
         /**
          * @description Sign e-Signature
-         * @param userInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.signESignature = function (userInbox, $event, defer) {
+        self.signESignature = function (workItem, $event, defer) {
             userInboxService
                 .controllerMethod
-                .userInboxSignaturePopup(userInbox, false, $event)
+                .userInboxSignaturePopup(workItem, false, $event)
                 .then(function (result) {
                     if (result)
                         self.reloadFolders(self.grid.page)
                             .then(function () {
-                                toast.success(langService.get('sign_specific_success').change({name: userInbox.getTranslatedName()}));
+                                toast.success(langService.get('sign_specific_success').change({name: workItem.getTranslatedName()}));
                                 new ResolveDefer(defer);
                             });
                 })
@@ -512,30 +502,30 @@ module.exports = function (app) {
 
         /**
          * @description Sign Digital Signature
-         * @param userInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.signDigitalSignature = function (userInbox, $event, defer) {
-            console.log('signUserInboxDigitalSignature : ', userInbox);
+        self.signDigitalSignature = function (workItem, $event, defer) {
+            console.log('signDigitalSignature : ', workItem);
         };
 
         /**
          * @description Edit Content
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.editContent = function (userInbox, $event) {
-            userInbox.manageDocumentContent($event);
+        self.editContent = function (workItem, $event) {
+            workItem.manageDocumentContent($event);
         };
 
         /**
          * @description Edit Properties
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.editProperties = function (userInbox, $event) {
-            var info = userInbox.getInfo();
+        self.editProperties = function (workItem, $event) {
+            var info = workItem.getInfo();
             managerService
                 .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
                 .finally(function () {
@@ -580,18 +570,16 @@ module.exports = function (app) {
 
         /**
          * @description View document
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.viewDocument = function (userInbox, $event) {
-            //console.log('userInbox', userInbox);
-
+        self.viewDocument = function (workItem, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
 
-            userInbox.view(userInbox, self.gridActions, checkIfEditPropertiesAllowed(userInbox, true), checkIfEditCorrespondenceSiteAllowed(userInbox, true))
+            workItem.view(workItem, self.gridActions, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
                 .then(function () {
                     return self.reloadFolders(self.grid.page);
                 })
@@ -635,8 +623,8 @@ module.exports = function (app) {
         /**
          * @description do broadcast for workItem.
          */
-        self.doBroadcast = function (userInbox, $event, defer) {
-            userInbox
+        self.doBroadcast = function (workItem, $event, defer) {
+            workItem
                 .correspondenceBroadcast()
                 .then(function () {
                     self.reloadFolders(self.grid.page)
@@ -1181,17 +1169,17 @@ module.exports = function (app) {
 
         /**
          * @description Mark item as read/unread
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.markAsReadUnread = function (userInbox, $event) {
+        self.markAsReadUnread = function (workItem, $event) {
             return userInboxService.controllerMethod
-                .userInboxMarkAsReadUnread(userInbox, $event)
+                .userInboxMarkAsReadUnread(workItem, $event)
                 .then(function (result) {
                     if (!result.generalStepElm.isOpen)
-                        toast.success(langService.get('mark_as_unread_success').change({name: userInbox.getTranslatedName()}));
+                        toast.success(langService.get('mark_as_unread_success').change({name: workItem.getTranslatedName()}));
                     else
-                        toast.success(langService.get('mark_as_read_success').change({name: userInbox.getTranslatedName()}));
+                        toast.success(langService.get('mark_as_read_success').change({name: workItem.getTranslatedName()}));
                     self.replaceRecord(result);
                 })
         };
@@ -1201,8 +1189,8 @@ module.exports = function (app) {
          * @param record
          */
         self.replaceRecord = function (record) {
-            var index = _.findIndex(self.workItems, function (userInbox) {
-                return userInbox.generalStepElm.vsId === record.generalStepElm.vsId;
+            var index = _.findIndex(self.workItems, function (workItem) {
+                return workItem.generalStepElm.vsId === record.generalStepElm.vsId;
             });
             if (index > -1)
                 self.workItems.splice(index, 1, record);

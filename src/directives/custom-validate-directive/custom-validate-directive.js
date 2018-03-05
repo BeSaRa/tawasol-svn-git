@@ -112,20 +112,6 @@ module.exports = function(app){
                      */
                     port: /^(([1-9]\d{0,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))$/
                 };
-
-                // N: '0123456789',
-                //     ND: '0123456789.',
-                //     AEN: ' -/0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZابتثجحخدذرزسشصضطظعغفقكلمنهوىيهءةأؤئلألإ',
-                //     AES: ' abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZابتثجحخدذرزسشصضطظعغفقكلمنهوىيهءةأؤئلألإ',
-                //     ANS: ' -/0123456789ابتثجحخدذرزسشصضطظعغفقكلمنهوىيهةءأؤئلألإ',
-                //     A: /لأىذضصثقفغعهخحجدشسيبلاتنمكئءؤرلاىةوزظأ/,
-                //     E: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ',
-                //     AE: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMOPQRSTUVWXYZابتثجحخدذرزسشصضطظعغفقكلمنهوىيهءةأؤئلألإ',
-                //     ALL: '0123456789./\\ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzاأبتثجحخدذرزسشظقكلمنهوي',
-                //     E_: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_',
-                //     NP: '+0123456789',
-                //     AN:' اـ_إبتثجحخدذرزسشصضطظعغفقكلمنهوىيهةءأؤئلألإ1234567890',
-                //     EN: '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMOPQRSTUVWXYZ '
                 ngModelCtrl.$asyncValidators[type] = function(modelValue, viewValue){
                     var defer = $q.defer();
                     var typesList = type.split('|');

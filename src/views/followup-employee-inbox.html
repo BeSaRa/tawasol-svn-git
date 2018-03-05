@@ -217,6 +217,7 @@
                                     <td md-cell md-truncate class="subject">
                                         <a href="" class="view-doc" md-truncate
                                            ng-if="followupEmployeeInbox.hasContent()"
+                                           title="{{followupEmployeeInbox.generalStepElm.docSubject}}"
                                            ng-click="ctrl.viewDocument(followupEmployeeInbox, $event)">
                                             {{followupEmployeeInbox.generalStepElm.docSubject}}
                                         </a>

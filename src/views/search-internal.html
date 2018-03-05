@@ -28,15 +28,15 @@
                                 </md-input-container>
                                 <!-- Serial -->
                                 <md-input-container flex>
-                                    <label for="docSerial">{{lang.search_module_serial}}</label>
-                                    <input name="docSerial" id="docSerial"
-                                           custom-validate-directive="{{ctrl.dynamicType('docSerial','type')}}"
-                                           ng-required="{{ctrl.dynamicRequired('docSerial','search_module_serial')}}"
-                                           ng-model="ctrl.searchInternal.docSerial">
-                                    <div ng-messages="searchInternalForm.docSerial.$error">
+                                    <label for="docFullSerial">{{lang.search_module_serial}}</label>
+                                    <input name="docFullSerial" id="docFullSerial"
+                                           custom-validate-directive="{{ctrl.dynamicType('docFullSerial','type')}}"
+                                           ng-required="{{ctrl.dynamicRequired('docFullSerial','search_module_serial')}}"
+                                           ng-model="ctrl.searchInternal.docFullSerial">
+                                    <div ng-messages="searchInternalForm.docFullSerial.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
-                                        <div ng-message="{{ctrl.dynamicType('docSerial','type')}}">
-                                            {{ctrl.dynamicType('docSerial','message')}}
+                                        <div ng-message="{{ctrl.dynamicType('docFullSerial','type')}}">
+                                            {{ctrl.dynamicType('docFullSerial','message')}}
                                         </div>
                                     </div>
                                 </md-input-container>
