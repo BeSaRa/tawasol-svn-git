@@ -39,8 +39,8 @@ module.exports = function (app) {
                 return this;
             };
             Localization.prototype.updateLocalization = function () {
-                return langService.updateGlobalLocalizationKey(this);
-                // return langService.updateLocalizationKey(this);
+                // return langService.updateGlobalLocalizationKey(this);
+                return langService.updateLocalizationKey(this);
             };
             Localization.prototype.addLocalization = function () {
                 return langService.addLocalizationKey(this);
@@ -50,8 +50,8 @@ module.exports = function (app) {
              * @return {*}
              */
             Localization.prototype.saveLocalizationKey = function () {
-                // return this.isOverrided ? this.updateLocalization() : this.addLocalization();
-                return this.updateLocalization();
+                return this.isOverrided ? this.updateLocalization() : this.addLocalization();
+                // return this.updateLocalization();
             };
             Localization.prototype.addGlobalLocalization = function () {
                 return langService.addGlobalLocalizationKey(this);

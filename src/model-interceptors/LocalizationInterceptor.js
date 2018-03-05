@@ -10,8 +10,8 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            // if (!model.isOverrided)
-            //     delete model.id;
+            if (!model.isOverrided)
+                delete model.id;
             return model;
         });
 
