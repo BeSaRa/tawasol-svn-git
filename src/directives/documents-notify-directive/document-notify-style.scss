@@ -43,9 +43,15 @@
     .tasks-date-icon {
       margin: 0 5px;
     }
+    &.unread{
+      font-weight: bold;
+    }
   }
 }
 
 .notification-subject{
   font-size: 0.83em;
+  &.unread{
+    font-weight: bold;
+  }
 }

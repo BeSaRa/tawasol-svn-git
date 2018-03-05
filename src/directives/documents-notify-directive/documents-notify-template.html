@@ -13,13 +13,14 @@
                     <li ng-repeat="item in ctrl.mailService.notifications track by $index" layout="row">
                         <div class="task-body" flex layout="column">
                             <div class="task-header" layout="row">
-                                <h5 md-truncate flex ng-if="!item.read">
+                                <!--<h5 md-truncate flex ng-if="!item.read">
                                     <a href="#" ng-click="ctrl.openNotificationItem(item,$event)">{{item.getNotificationSubject()}}</a>
-                                </h5>
-                                <a href="#" md-truncate flex ng-if="item.read" class="notification-subject" ng-click="ctrl.openNotificationItem(item,$event)">{{item.getNotificationSubject()}}</a>
+                                </h5>-->
+                                <a href="#" md-truncate flex ng-class="{'unread': !item.read}"
+                                   class="notification-subject" ng-click="ctrl.openNotificationItem(item,$event)">{{item.getNotificationSubject()}}</a>
                             </div>
                             <div layout="column">
-                                <div class="tasks-date-text">{{item.receivedDate}}
+                                <div class="tasks-date-text" ng-class="{'unread': !item.read}">{{item.receivedDate}}
                                     <md-icon class="tasks-date-icon" md-svg-icon="update"></md-icon>
                                 </div>
                             </div>
