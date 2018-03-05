@@ -1744,9 +1744,13 @@ module.exports = function (app) {
             return self.commonAddToFolder(workItems, folder)
                 .then(function (result) {
                     debugger;
+                    var info = workItems[0].getInfo();
                     if (!ignoreMessage) {
-                        if (result.data.rs[workItems[0].getInfo().wobNumber]) {
-                            toast.success(langService.get('inbox_add_to_folder_specific_success'));
+                        if (result.data.rs[info.wobNumber]) {
+                            toast.success(langService.get('inbox_add_to_folder_specific_success').change({
+                                name: info.title,
+                                folder: folder.getTranslatedName()
+                            }));
                         } else {
                             toast.success(langService.get('inbox_failed_add_to_folder_selected'));
                         }
