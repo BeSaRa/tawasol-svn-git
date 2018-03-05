@@ -178,7 +178,7 @@
                                         </main-site-sub-site-directive>
                                     </td>
 
-                                    <td md-cell></td>
+                                    <td md-cell>{{lang[userSentItem.docTypeIndicator.text]}}</td>
                                     <td md-cell ng-if="ctrl.selectedUserSentItems.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedUserSentItems.length
                                                   || ctrl.selectedUserSentItems.length===1 && ctrl.selectedUserSentItems[0].id === userSentItem.id">

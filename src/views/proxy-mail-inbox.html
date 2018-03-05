@@ -32,7 +32,7 @@
                                    md-progress="ctrl.progress">
                                 <thead md-head md-order="ctrl.grid.order">
                                 <tr md-row>
-                                    <th colspan="{{ctrl.selectedProxyMailInboxes.length > 1 ? 10 : 11}}"
+                                    <th colspan="{{ctrl.selectedProxyMailInboxes.length > 1 ? 11 : 12}}"
                                         ng-if="ctrl.selectedProxyMailInboxes.length" md-column>
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedProxyMailInboxes.length}} {{lang.items_selected}} </span>
@@ -62,17 +62,23 @@
                                         </div>
                                     </th>
                                     <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="">
-
+                                        <!-- Security Level, Document type, Tags, Re-assigned Indicators -->
                                     </th>
-                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="docSerial">
+                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="">
+                                        <!-- Star/unstar -->
+                                    </th>
+                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="generalStepElm.docFullSerial">
                                         <span>{{lang.inbox_serial}}</span>
                                     </th>
+                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="">
+                                        <!-- Priority Level and Has Attachment Indicators -->
+                                    </th>
                                     <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column
-                                        md-order-by="docSubject">
+                                        md-order-by="generalStepElm.docSubject">
                                         <span>{{lang.subject}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column
-                                        md-order-by="receivedDate">
+                                        md-order-by="generalStepElm.receivedDate">
                                         <span>{{lang.received_date}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="action">
@@ -87,18 +93,12 @@
                                     <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="">
                                         <span>{{lang.correspondence_sites}}</span>
                                     </th>
-                                    <!--<th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="subSite">
-                                        <span>{{lang.inbox_sub_site}}</span>
-                                    </th>-->
-                                    <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="docType">
-                                        <span>{{lang.type}}</span>
-                                    </th>
                                     <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column
                                         md-order-by="numberOfDays">
                                         <span>{{lang.number_of_days}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column>
-                                        <span></span>
+                                        <!-- Grid Actions -->
                                     </th>
                                 </tr>
                                 </thead>
@@ -107,6 +107,59 @@
                                     model="proxyMailInbox"
                                     selected-length="{{ctrl.selectedProxyMailInboxes.length ? ctrl.selectedProxyMailInboxes.length : 0}}"
                                     ng-repeat="proxyMailInbox in ctrl.proxyMailInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    <td md-cell class="indicator-td">
+                                        <!-- Security Level -->
+                                        <span flex
+                                              ng-class="{'indicator-content': proxyMailInbox.securityLevelIndicator}">
+                                            <md-icon ng-if="proxyMailInbox.securityLevelIndicator"
+                                                     class="{{proxyMailInbox.securityLevelIndicator.class}}"
+                                                     md-svg-icon="{{proxyMailInbox.securityLevelIndicator.icon}}"
+                                                     tooltip="{{lang[proxyMailInbox.securityLevelIndicator.tooltip].change({name: proxyMailInbox.securityLevelLookup.getTranslatedName()})}}"
+                                            ></md-icon>
+                                        </span>
+                                        <!-- Doc Type -->
+                                        <span flex ng-class="{'indicator-content': proxyMailInbox.docTypeIndicator}">
+                                                    <md-icon ng-if="proxyMailInbox.docTypeIndicator"
+                                                             class="{{proxyMailInbox.docTypeIndicator.class}}"
+                                                             md-svg-icon="{{proxyMailInbox.docTypeIndicator.icon}}"
+                                                             tooltip="{{lang[proxyMailInbox.docTypeIndicator.tooltip]}}"
+                                                    ></md-icon>
+                                                </span>
+                                        <!-- Electronic/Paper Document -->
+                                        <span flex
+                                              ng-class="{'indicator-content': proxyMailInbox.isPaperIndicator}">
+                                             <md-icon ng-if="proxyMailInbox.isPaperIndicator"
+                                                      class="{{proxyMailInbox.isPaperIndicator.class}}"
+                                                      md-svg-icon="{{proxyMailInbox.isPaperIndicator.icon}}"
+                                                      tooltip="{{lang[proxyMailInbox.isPaperIndicator.tooltip]}}"
+                                             ></md-icon>
+                                         </span>
+                                        <!-- Is Reassigned -->
+                                        <span flex ng-class="{'indicator-content': proxyMailInbox.isReassignedIndicator}">
+                                            <md-icon ng-if="proxyMailInbox.isReassignedIndicator"
+                                                     class="{{proxyMailInbox.isReassignedIndicator.class}}"
+                                                     md-svg-icon="{{proxyMailInbox.isReassignedIndicator.icon}}"
+                                                     tooltip="{{lang[proxyMailInbox.isReassignedIndicator.tooltip]}}"
+                                            ></md-icon>
+                                        </span>
+                                        <!-- Linked Documents -->
+                                        <span flex ng-class="{'indicator-content': proxyMailInbox.linkedDocsIndicator}">
+                                                   <md-icon ng-if="proxyMailInbox.linkedDocsIndicator"
+                                                            class="{{proxyMailInbox.linkedDocsIndicator.class}}"
+                                                            md-svg-icon="{{proxyMailInbox.linkedDocsIndicator.icon}}"
+                                                            tooltip="{{lang[proxyMailInbox.linkedDocsIndicator.tooltip]}}"
+                                                   ></md-icon>
+                                               </span>
+                                        <!-- Follow up Status -->
+                                        <span flex
+                                              ng-class="{'indicator-content': proxyMailInbox.followUpStatusIndicator}">
+                                            <md-icon ng-if="proxyMailInbox.followUpStatusIndicator"
+                                                     class="{{proxyMailInbox.followUpStatusIndicator.class}}"
+                                                     md-svg-icon="{{proxyMailInbox.followUpStatusIndicator.icon}}"
+                                                     tooltip="{{lang[proxyMailInbox.followUpStatusIndicator.tooltip].change({name: proxyMailInbox.followupStatusLookup.getTranslatedName()})}}"
+                                            ></md-icon>
+                                        </span>
+                                    </td>
                                     <td md-cell>
                                         <md-button class="md-icon-button"
                                                    ng-if="proxyMailInbox.generalStepElm.starred && (!ctrl.selectedProxyMailInboxes.length
@@ -147,33 +200,49 @@
                                             ></md-icon>
                                         </md-button>
                                     </td>
-                                    <td md-cell>{{proxyMailInbox.generalStepElm.docSerial}}</td>
-                                    <td md-cell md-truncate class="subject">
-                                        <a href="" class="view-doc" ng-if="proxyMailInbox.hasContent()"
-                                           ng-click="ctrl.viewDocument(proxyMailInbox, $event)">{{proxyMailInbox.generalStepElm.docSubject}}</a>
-                                        <span ng-if="!proxyMailInbox.hasContent()">{{proxyMailInbox.generalStepElm.docSubject}}</span>
+                                    <td md-cell>{{proxyMailInbox.generalStepElm.docFullSerial}}</td>
+                                    <td md-cell class="indicator-td text-right"
+                                        style="padding-right:0 !important; padding-left:0 !important;">
+                                        <!-- Priority Level -->
+                                        <span ng-class="{'indicator-content': proxyMailInbox.priorityLevelIndicator}">
+                                                    <md-icon ng-if="proxyMailInbox.priorityLevelIndicator"
+                                                             class="{{proxyMailInbox.priorityLevelIndicator.class}}"
+                                                             md-svg-icon="{{proxyMailInbox.priorityLevelIndicator.icon}}"
+                                                             tooltip="{{lang[proxyMailInbox.priorityLevelIndicator.tooltip].change({name: proxyMailInbox.priorityLevelLookup.getTranslatedName()})}}"
+                                                    ></md-icon>
+                                                </span>
+                                        <!-- Has Attachment -->
+                                        <span class="float-right"
+                                              ng-class="{'indicator-content': proxyMailInbox.attachmentsIndicator}">
+                                                    <md-icon ng-if="proxyMailInbox.attachmentsIndicator"
+                                                             class="{{proxyMailInbox.attachmentsIndicator.class}}"
+                                                             md-svg-icon="{{proxyMailInbox.attachmentsIndicator.icon}}"
+                                                             tooltip="{{lang[proxyMailInbox.attachmentsIndicator.tooltip]}}"
+                                                    ></md-icon>
+                                                </span>
                                     </td>
-                                    <td md-cell>{{proxyMailInbox.generalStepElm.receivedDate}}</td>
+                                    <td md-cell md-truncate class="subject">
+                                        <a href="" class="view-doc" ng-if="proxyMailInbox.hasContent()" title="{{proxyMailInbox.generalStepElm.docSubject}}"
+                                           ng-click="ctrl.viewDocument(proxyMailInbox, $event)">{{proxyMailInbox.generalStepElm.docSubject}}</a>
+                                        <span ng-if="!proxyMailInbox.hasContent()" title="{{proxyMailInbox.generalStepElm.docSubject}}">{{proxyMailInbox.generalStepElm.docSubject}}</span>
+                                    </td>
+                                    <td md-cell>{{proxyMailInbox.getReceivedDate()}}</td>
                                     <td md-cell>{{proxyMailInbox.action.getTranslatedName()}}</td>
                                     <td md-cell class="td-data">
                                         <div layout="row">
                                             <span flex>{{proxyMailInbox.senderInfo.getTranslatedName()}}</span>
-                                            <!--<md-icon aria-label="{{lang.sender}}"
-                                                     md-svg-icon="information-variant"
-                                                     tooltip="<p><span>{{lang.get('rank')}}: </span><span>{{proxyMailInbox.sender.rank}}</span></p>
-                                        <p><span>{{lang.get('email')}}: </span><span>{{proxyMailInbox.sender.email}}</span></p>
-                                        <p><span>{{lang.get('mobile')}}: </span><span>{{proxyMailInbox.sender.mobile}}</span></p>
-                                        "></md-icon>-->
                                         </div>
                                     </td>
-                                    <td md-cell>{{proxyMailInbox.generalStepElm.dueDate}}</td>
+                                    <td md-cell class="td-data">
+                                            <span class="{{proxyMailInbox.dueDateStatusIndicator.class}}"
+                                                  tooltip="{{lang[proxyMailInbox.dueDateStatusIndicator.tooltip].change({due_date_status:lang[proxyMailInbox.dueDateStatusIndicator.text] })}}">
+                                                {{proxyMailInbox.generalStepElm.dueDate}}</span>
+                                    </td>
                                     <td md-cell>
                                         <main-site-sub-site-directive item="proxyMailInbox"
                                                                       ng-if="proxyMailInbox.getInfo().documentClass!=='internal'">
                                         </main-site-sub-site-directive>
                                     </td>
-                                    <!--<td md-cell>{{proxyMailInbox.subCoreSite.getTranslatedName()}}</td>-->
-                                    <td md-cell>{{proxyMailInbox.generalStepElm.docType}}</td>
                                     <td md-cell>{{proxyMailInbox.generalStepElm.numberOfDays}}</td>
                                     <td md-cell ng-if="ctrl.selectedProxyMailInboxes.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedProxyMailInboxes.length

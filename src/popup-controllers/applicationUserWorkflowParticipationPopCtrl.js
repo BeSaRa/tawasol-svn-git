@@ -156,7 +156,7 @@ module.exports = function (app) {
          */
         self.closeApplicationUserWorkflowParticipationPopupFromCtrl = function () {
             //self.ouApplicationUser = self.model;
-            dialog.cancel(self.model);
+            dialog.cancel();
         }
     });
 };

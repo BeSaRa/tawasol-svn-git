@@ -51,9 +51,9 @@
                                             </md-button>-->
                                         </div>
                                     </th>
-                                     <th ng-if="!ctrl.selectedReadyToExports.length" md-column md-order-by="">
-
-                                     </th>
+                                     <!--<th ng-if="!ctrl.selectedReadyToExports.length" md-column md-order-by="">
+                                         &lt;!&ndash; Indicators&ndash;&gt;
+                                     </th>-->
                                     <!--<th ng-if="!ctrl.selectedReadyToExports.length" md-column
                                         md-order-by="docSerial">
                                         <span>{{lang.label_serial}}</span>
@@ -105,9 +105,9 @@
                                     selected-length="{{ctrl.selectedReadyToExports.length ? ctrl.selectedReadyToExports.length : 0}}"
                                     model="readyToExport"
                                     ng-repeat="readyToExport in ctrl.readyToExports | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
-                                    <td md-cell class="indicator-td text-right"
+                                    <!--<td md-cell class="indicator-td text-right"
                                         style="padding-right:0 !important; padding-left:0 !important;">
-                                        <!-- Central Archive Enabled -->
+                                        &lt;!&ndash; Central Archive Enabled &ndash;&gt;
                                         <span flex
                                               ng-class="{'indicator-content': readyToExport.exportViaCentralArchiveIndicator}">
                                             <md-icon ng-if="readyToExport.exportViaCentralArchiveIndicator"
@@ -116,7 +116,7 @@
                                                      tooltip="{{lang[readyToExport.exportViaCentralArchiveIndicator.tooltip]}}"
                                             ></md-icon>
                                         </span>
-                                    </td>
+                                    </td>-->
 
                                     <!--<td md-cell>{{readyToExport.generalStepElm.docSerial}}</td>-->
                                     <td md-cell class="td-data">
