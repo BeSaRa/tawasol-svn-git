@@ -30,9 +30,10 @@
                                 <md-input-container flex>
                                     <label for="docFullSerial">{{lang.search_module_serial}}</label>
                                     <input name="docFullSerial" id="docFullSerial"
-                                           custom-validate-directive="{{ctrl.dynamicType('docFullSerial','type')}}"
+
                                            ng-required="{{ctrl.dynamicRequired('docFullSerial','search_module_serial')}}"
                                            ng-model="ctrl.searchOutgoing.docFullSerial">
+                                    <!--custom-validate-directive="{{ctrl.dynamicType('docFullSerial','type')}}"-->
                                     <div ng-messages="searchOutgoingForm.docFullSerial.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
                                         <div ng-message="{{ctrl.dynamicType('docFullSerial','type')}}">

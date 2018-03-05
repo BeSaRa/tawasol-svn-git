@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                correspondenceService,
                                                $state,
                                                toast,
+                                               errorCode,
                                                dialog,
                                                rootEntity,
                                                counterService,
@@ -120,37 +121,7 @@ module.exports = function (app) {
                     });
             };
 
-            /**
-             * @description Check if action will be shown on grid or not
-             * @param action
-             * @param model
-             * @returns {boolean}
-             */
-            self.checkToShowAction = function (action, model) {
-                /*if (action.hasOwnProperty('permissionKey'))
-                    return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-                return (!action.hide);*/
 
-                if (action.hasOwnProperty('permissionKey')) {
-                    if (typeof action.permissionKey === 'string') {
-                        return (!action.hide) && employeeService.hasPermissionTo(action.permissionKey);
-                    }
-                    else if (angular.isArray(action.permissionKey)) {
-                        if (!action.permissionKey.length) {
-                            return (!action.hide);
-                        }
-                        else {
-                            var hasPermissions = _.map(action.permissionKey, function (key) {
-                                return employeeService.hasPermissionTo(key);
-                            });
-                            return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
-                        }
-                    }
-                }
-                return (!action.hide);
-            };
             /**
              * @description reload group Inbox grid
              */
@@ -174,8 +145,25 @@ module.exports = function (app) {
              * @description terminate bulk group inbox
              */
             self.terminateBulkGroupInbox = function () {
-
+                correspondenceService
+                    .terminateBulkWorkItem(self.selectedWorkItems, $event)
+                    .then(function () {
+                        self.reloadGroupInbox(self.grid.page);
+                    });
             };
+
+            /**
+             * @description Create Reply
+             * @param workItem
+             * @param $event
+             */
+            self.createReplyIncoming = function (workItem, $event) {
+                //console.log("createReplyIncoming" , userInbox);
+                var info = workItem.getInfo();
+                dialog.hide();
+                $state.go('app.outgoing.add', {workItem: info.wobNumber, action: 'reply'});
+            };
+
             /**
              * @description Forward
              * @param workItem
@@ -388,6 +376,116 @@ module.exports = function (app) {
                 })
             };
 
+            /**
+             * @description Download Main Document
+             * @param workItem
+             * @param $event
+             */
+            self.downloadMainDocument = function (workItem, $event) {
+                workItem
+                    .mainDocumentDownload($event);
+            };
+
+            /**
+             * @description Download Composite Document
+             * @param workItem
+             * @param $event
+             */
+            self.downloadCompositeDocument = function (workItem, $event) {
+                workItem
+                    .compositeDocumentDownload($event);
+            };
+
+            /**
+             * @description Sign e-Signature
+             * @param workItem
+             * @param $event
+             * @param defer
+             */
+            self.signESignature = function (workItem, $event, defer) {
+                userInboxService
+                    .controllerMethod
+                    .userInboxSignaturePopup(workItem, false, $event)
+                    .then(function (result) {
+                        if (result)
+                            self.reloadGroupInbox(self.grid.page)
+                                .then(function () {
+                                    toast.success(langService.get('sign_specific_success').change({name: workItem.getTranslatedName()}));
+                                    new ResolveDefer(defer);
+                                });
+                    })
+                    .catch(function (error) {
+                        errorCode.checkIf(error, 'AUTHORIZE_FAILED', function () {
+                            dialog.errorMessage(langService.get('authorize_failed'))
+                        })
+                    });
+            };
+
+            /**
+             * @description Sign Digital Signature
+             * @param workItem
+             * @param $event
+             * @param defer
+             */
+            self.signDigitalSignature = function (workItem, $event, defer) {
+                console.log('signDigitalSignature : ', workItem);
+            };
+
+            /**
+             * @description Edit Content
+             * @param workItem
+             * @param $event
+             */
+            self.editContent = function (workItem, $event) {
+                workItem.manageDocumentContent($event);
+            };
+
+            /**
+             * @description Edit Properties
+             * @param workItem
+             * @param $event
+             */
+            self.editProperties = function (workItem, $event) {
+                var info = workItem.getInfo();
+                managerService
+                    .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
+                    .finally(function () {
+                        self.reloadGroupInbox(self.grid.page)
+                    });
+            };
+
+
+            /**
+             * @description Check if action will be shown on grid or not
+             * @param action
+             * @param model
+             * @returns {boolean}
+             */
+            self.checkToShowAction = function (action, model) {
+                /*if (action.hasOwnProperty('permissionKey'))
+                 return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+                 return (!action.hide);*/
+
+                if (action.hasOwnProperty('permissionKey')) {
+                    if (typeof action.permissionKey === 'string') {
+                        return (!action.hide) && employeeService.hasPermissionTo(action.permissionKey);
+                    }
+                    else if (angular.isArray(action.permissionKey)) {
+                        if (!action.permissionKey.length) {
+                            return (!action.hide);
+                        }
+                        else {
+                            var hasPermissions = _.map(action.permissionKey, function (key) {
+                                return employeeService.hasPermissionTo(key);
+                            });
+                            return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
+                                    return isPermission !== true;
+                                }));
+                        }
+                    }
+                }
+                return (!action.hide);
+            };
 
             self.gridActions = [
                 // Document Information
@@ -806,7 +904,7 @@ module.exports = function (app) {
 
                         /*If document is unapproved or partially approved, show the button. If fully approved, hide the button.
                          docStatus = 24 is approved
-                        */
+                         */
                         var info = model.getInfo();
                         return self.checkToShowAction(action, model)
                             && !info.isPaper
