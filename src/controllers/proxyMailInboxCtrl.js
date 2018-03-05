@@ -719,6 +719,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.addToFolderProxyMailInbox,
                 class: "action-green",
+                hide: true,
                 checkShow: self.checkToShowAction
             },
             // Create Reply (Incoming Only)
