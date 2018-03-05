@@ -1743,7 +1743,6 @@ module.exports = function (app) {
         self.addWorkItemToFolder = function (workItems, folder, ignoreMessage) {
             return self.commonAddToFolder(workItems, folder)
                 .then(function (result) {
-                    debugger;
                     var info = workItems[0].getInfo();
                     if (!ignoreMessage) {
                         if (result.data.rs[info.wobNumber]) {

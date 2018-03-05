@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                 validationService,
                                                 attachmentService,
                                                 $scope,
+                                                rootEntity,
                                                 $timeout,
                                                 errorCode,
                                                 $q) {
@@ -38,6 +39,8 @@ module.exports = function (app) {
         self.successFilesUploaded = [];
         // the failed uploaded.
         self.failsFilesUploaded = [];
+        // get inherit Security for attachment from GlobalSettings
+        self.inheritSecurity = rootEntity.getGlobalSettings().attachmentInheritSecurity;
 
         self.icons = {
             pdf: new FileIcon({

@@ -479,8 +479,8 @@ module.exports = function (app) {
                                 return employeeService.hasPermissionTo(key);
                             });
                             return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                    return isPermission !== true;
-                                }));
+                                return isPermission !== true;
+                            }));
                         }
                     }
                 }
@@ -626,7 +626,7 @@ module.exports = function (app) {
                         var info = model.getInfo();
                         // If internal book, no export is allowed
                         // If incoming book, no addMethod will be available. So check workFlowName(if incoming) and show export button
-                        return self.checkToShowAction(action, model) && info.isPaper && info.documentClass === 'outgoing'
+                        return self.checkToShowAction(action, model) && info.isPaper && info.documentClass === 'outgoing' /*&& (info.docStatus !== 28)*/;
                         // (model.generalStepElm.addMethod && model.generalStepElm.workFlowName.toLowerCase() !== 'internal')
                         // || model.generalStepElm.workFlowName.toLowerCase() === 'incoming';
 
