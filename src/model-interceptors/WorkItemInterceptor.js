@@ -98,7 +98,7 @@ module.exports = function (app) {
             model.docTypeIndicator = model.generalStepElm.workFlowName ? model.getDocTypeIndicator(model.generalStepElm.workFlowName) : null;
             model.isReassignedIndicator = model.getReassignedIndicator(model.generalStepElm.isReassigned);
             model.isOpenedIndicator = model.getOpenedIndicator(model.generalStepElm.isOpen);
-            model.isPaperIndicator = model.getIsPaperIndicator(model.generalStepElm.addMethod);
+            model.isPaperIndicator = model.getIsPaperIndicator(model.generalStepElm.hasOwnProperty('addMethod') ? model.generalStepElm.addMethod : 1);
             model.exportViaCentralArchiveIndicator = model.getExportViaCentralArchiveIndicator(model.generalStepElm.exportViaCentralArchive);
 
             model.sender = new Information(model.senderInfo);
