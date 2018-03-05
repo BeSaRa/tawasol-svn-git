@@ -12,6 +12,8 @@ module.exports = function (app) {
 
         self.disableSelected = _checkDisable();
 
+        self.showInbox = showInbox;
+
         function _checkDisable() {
             return self.selectedWorkItems.length === 1 ? self.selectedWorkItems[0].getFolderId() : false;
         }
