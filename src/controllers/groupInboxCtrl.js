@@ -372,6 +372,22 @@ module.exports = function (app) {
                 managerService.manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
             };
 
+            /**
+             * @description Export user inbox (export to ready to export)
+             * @param workItem
+             * @param $event
+             * @param defer
+             */
+            self.sendWorkItemToReadyToExport = function (workItem, $event, defer) {
+                workItem.sendToReadyToExport().then(function () {
+                    self.reloadUserInboxes(self.grid.page)
+                        .then(function () {
+                            toast.success(langService.get('export_success'));
+                            new ResolveDefer(defer);
+                        });
+                })
+            };
+
 
             self.gridActions = [
                 // Document Information
