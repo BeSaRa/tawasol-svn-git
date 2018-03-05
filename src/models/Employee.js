@@ -266,6 +266,10 @@ module.exports = function (app) {
                 return this.organization ? this.organization.proxyUser : false;
             };
 
+            Employee.prototype.inRegistry = function () {
+                return this.userOrganization.hasRegistry;
+            };
+
 
             CMSModelInterceptor.runEvent('Employee', 'init', this);
 

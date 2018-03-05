@@ -326,6 +326,7 @@ module.exports = function (app) {
                                     });
                             },
                             availableProxies: function (ouApplicationUserService) {
+                                'ngInject';
                                 return ouApplicationUserService
                                     .getAvailableProxies(ouApplicationUser.getRegistryOUID())
                                     .then(function (result) {
