@@ -1318,19 +1318,7 @@ module.exports = function (app) {
                                 .then(function (result) {
                                     return _.filter(result, 'status');
                                 });
-                        }, /*
-                         privateUsers: function (distributionWFService) {
-                         'ngInject';
-                         return distributionWFService.loadDistWorkflowUsers('privates');
-                         },*//*
-                         managers: function (distributionWFService) {
-                         'ngInject';
-                         return distributionWFService.loadDistWorkflowUsers('managers');
-                         }*//*,
-                         governmentEntities: function (distributionWFService) {
-                         'ngInject';
-                         return distributionWFService.loadDistWorkflowUsers('heads');
-                         },*/
+                        },
                         workflowActions: function (workflowActionService) {
                             'ngInject';
                             return workflowActionService.loadCurrentUserWorkflowActions();
@@ -1351,7 +1339,6 @@ module.exports = function (app) {
                             }
                             return distributionWFService.loadSenderUserForWorkItem(correspondence)
                         }
-
                     }
                 });
         };

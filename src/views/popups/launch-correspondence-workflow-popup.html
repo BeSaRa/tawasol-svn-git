@@ -29,7 +29,7 @@
                         md-component-id="correspondence-workflow-popup" id="sidebar-correspondence-workflow-popup">
                 <div scroll-directive>
                     <ul class="workflow-list">
-                        <li layout="row" ng-class="{'selected-tab':ctrl.isSelectedTab(tab)}"
+                        <li layout="row" ng-if="model.show" ng-class="{'selected-tab':ctrl.isSelectedTab(tab)}"
                             ng-repeat="(tab , model) in ctrl.workflowTabs track by $index">
                             <md-button flex ng-disabled="model.disabled" ng-click="ctrl.selectTab(tab)">
                                 <div layout="row" layout-align="start center">

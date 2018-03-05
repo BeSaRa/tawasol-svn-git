@@ -39,7 +39,7 @@
                                                    ng-disabled="true" required name="parent"
                                                    ng-model="ctrl.parentOrganization">
                                             <md-option md-truncate ng-value="organization"
-                                                       ng-repeat="organization in ctrl.availableParents track by $index">
+                                                       ng-repeat="organization in ctrl.organizations track by $index">
                                                 {{organization.getTranslatedName()}}
                                             </md-option>
                                         </md-select>

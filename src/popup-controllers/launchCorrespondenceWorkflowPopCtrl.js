@@ -243,6 +243,10 @@ module.exports = function (app) {
         // to display alert to inform the user this document not approved and will not send it to many users.
         _justForYourInformationDialog(self.multiStatus);
 
+        function _checkPermission(permission) {
+            return employeeService.hasPermissionTo(permission);
+        }
+
         // workflow tabs
         self.workflowTabs = {
             favorites: {
@@ -255,35 +259,35 @@ module.exports = function (app) {
             users: {
                 lang: 'workflow_menu_item_users',
                 icon: 'account',
-                show: true,
+                show: _checkPermission('SEND_TO_USERS_'),
                 disabled: false,
                 modelName: 'users'
             },
             private_users: {
                 lang: 'workflow_menu_item_private_users',
                 icon: 'account-star',
-                show: true,
+                show: _checkPermission('SEND_TO_PRIVATE_USERS') && employeeService.getEmployee().canSendToPrivate(),
                 disabled: false,
                 modelName: 'privateUsers'
             },
             manager_users: {
                 lang: 'workflow_menu_item_managers',
                 icon: 'account-check',
-                show: true,
+                show: _checkPermission('SEND_TO_MANAGERS') && employeeService.getEmployee().canSendToManagers(),
                 disabled: false,
                 modelName: 'managerUsers'
             },
             heads_of_government_entities: {
                 lang: 'workflow_menu_item_heads_of_governments',
                 icon: 'security-account',
-                show: true,
+                show: _checkPermission('SEND_TO_HEAD_OF_GOVERNMENT_ENTITY'),
                 disabled: false,
                 modelName: 'governmentEntitiesHeads'
             },
             workflow_groups: {
                 lang: 'workflow_menu_item_workflow_groups',
                 icon: 'account-group',
-                show: true,
+                show: _checkPermission('SEND_TO_GROUPS_'),
                 disabled: _getApprovedStatus(),
                 modelName: 'workflowGroups'
             }, /*,
@@ -298,7 +302,7 @@ module.exports = function (app) {
             registry_organizations: {
                 lang: 'workflow_menu_item_registry_organizations',
                 icon: 'bank',
-                show: true,
+                show: _checkPermission('SEND_TO_ELECTRONIC_INCOMING_QUEUES'),
                 disabled: _getApprovedStatus(),
                 modelName: 'registryOrganizations'
             }

@@ -49,7 +49,7 @@ module.exports = function (app) {
                     return item;
                 });
             }
-            delete model.ldapPrefix;
+            // delete model.ldapPrefix;
             delete model.children;
             delete model.parentId;
             delete model.updatedByInfo;

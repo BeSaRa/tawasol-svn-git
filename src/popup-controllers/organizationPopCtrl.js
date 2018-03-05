@@ -54,8 +54,6 @@ module.exports = function (app) {
         self.editMode = editMode;
         // to check add root mode.
         self.rootMode = rootMode;
-
-        self.organizations = organizations;
         // correspondence sites types
         self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
         // get permissions
@@ -88,7 +86,7 @@ module.exports = function (app) {
         // list parents hasCentralArchive
         self.listParentsHasCentralArchive = organizationService.getAllCentralArchive(self.editMode ? organization : false);
         // all available parents
-        self.availableParents = organizationService.getAllAvailableParents(organization, organization);
+        // self.availableParents = organizationService.getAllAvailableParents(organization, organization);
         // all organizations
         self.organizations = organizationService.organizations;
         // all organization Types
@@ -228,9 +226,9 @@ module.exports = function (app) {
             self.listParentsHasRegistry = organizationService.getAllParentsHasRegistry(organization);
             // list parents hasCentralArchive
             self.listParentsHasCentralArchive = organizationService.getAllParentsHasCentralArchive(organization);
-            // all available parents
-            self.availableParents = organizationService.getAllAvailableParents(organization, organization);
-
+            // // all available parents
+            // self.availableParents = organizationService.getAllAvailableParents(organization, organization);
+            // console.log(self.availableParents, 'Parents');
         };
 
         // TODO: need to add organization Type from here.
@@ -284,12 +282,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.selectUser = function (property, $event) {
-            /*applicationUserService
-                .controllerMethod
-                .selectApplicationUser(self.organization[property], self.selectUserLabels[property], $event)
-                .then(function (applicationUser) {
-                    self.organization[property] = applicationUser;
-                });*/
             ouApplicationUserService
                 .controllerMethod
                 .selectOUApplicationUserSingle(self.organization, property, self.selectUserLabels[property], $event)
@@ -326,12 +318,12 @@ module.exports = function (app) {
                         langService.get('basic_info')
                     )
                 })
-                .addStep('check_valid', true, self.organization, function (result) {
-                    return !(!result.hasRegistry && result.centralArchive)
-                })
-                .notifyFailure(function () {
-                    dialog.errorMessage(langService.get('archive_and_has_registry'));
-                })
+                // .addStep('check_valid', true, self.organization, function (result) {
+                //     return !(!result.hasRegistry && result.centralArchive)
+                // })
+                // .notifyFailure(function () {
+                //     dialog.errorMessage(langService.get('archive_and_has_registry'));
+                // })
                 // .addStep('check_reference_plan', true, self.organization, function (result) {
                 //     return (result.hasRegistry && result.referenceNumberPlanId) || (!result.hasRegistry && !result.referenceNumberPlanId);
                 // })
@@ -402,7 +394,6 @@ module.exports = function (app) {
                     if (self.rootMode) {
                         self.organization.parent = null;
                     }
-
 
                     organizationService
                         .updateOrganization(self.organization)

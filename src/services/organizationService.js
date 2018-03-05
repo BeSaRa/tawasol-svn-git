@@ -93,6 +93,7 @@ module.exports = function (app) {
                 .post((urlService.organizations + '/add-ou'), generator.interceptSendInstance('Organization', organization))
                 .then(function (result) {
                     organization = generator.interceptReceivedInstance('Organization', generator.generateInstance(result.data.rs, Organization, self._sahredMethods));
+                    console.log(organization);
                     self.organizations.push(organization);
                     return organization;
                 });
