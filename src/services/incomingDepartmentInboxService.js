@@ -23,7 +23,7 @@ module.exports = function (app) {
             return $http.get(urlService.departmentInboxes + "/all-mails").then(function (result) {
                 self.incomingDepartmentInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
                 self.incomingDepartmentInboxes = generator.interceptReceivedCollection('WorkItem', self.incomingDepartmentInboxes);
-
+                console.log(_.map(self.incomingDepartmentInboxes, 'generalStepElm.incomingVSID'));
                 return self.incomingDepartmentInboxes;
             });
         };

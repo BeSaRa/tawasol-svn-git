@@ -154,6 +154,22 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Launch distribution workflow for department incoming item
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.launchDistributionWorkflow = function (workItem, $event, defer) {
+            workItem.launchWorkFlow($event, 'forward', 'favorites')
+                .then(function () {
+                    self.reloadIncomingDepartmentInboxes(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
+        };
+
         var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
             /*var info = model.getInfo();
             var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
@@ -369,7 +385,10 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.returnIncomingDepartmentInbox,
                 class: "action-green",
-                checkShow: self.checkToShowAction
+                checkShow: function(action, model){
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && !!info.incomingVsId;
+                }
             },
             // Receive
             {
@@ -379,7 +398,10 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.receiveIncomingDepartmentInbox,
                 class: "action-green",
-                checkShow: self.checkToShowAction
+                checkShow: function(action, model){
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && !!info.incomingVsId;
+                }
             },
             // Quick Receive
             {
@@ -390,7 +412,24 @@ module.exports = function (app) {
                 hide: false,
                 callback: self.quickReceiveIncomingDepartmentInbox,
                 class: "action-green",
-                checkShow: self.checkToShowAction
+                checkShow: function(action, model){
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && !!info.incomingVsId;
+                }
+            },
+            //Launch Distribution Workflow
+            {
+                type: 'action',
+                icon: 'sitemap',
+                text: 'grid_action_launch_distribution_workflow',
+                shortcut: true,
+                callback: self.launchDistributionWorkflow,
+                class: "action-green",
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                checkShow: function(action, model){
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && !info.incomingVsId;
+                }
             },
             // Manage (Not in SRS)
             /*{
