@@ -634,6 +634,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.terminateReadyToExport,
                 class: "action-green",
+                hide: true,
                 checkShow: self.checkToShowAction
             },
             // Add To Favorite
@@ -645,6 +646,7 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.addToFavorite,
                 class: "action-green",
+                hide: true,
                 checkShow: self.checkToShowAction
             },
             // Export
@@ -669,10 +671,7 @@ module.exports = function (app) {
                 callback: self.printBarcode,
                 permissionKey: "PRINT_BARCODE",
                 class: "action-green",
-                checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && (info.documentClass === "incoming" || (info.documentClass === "outgoing" && info.isPaper))
-                }
+                checkShow: self.checkToShowAction
             },
             // Open
             {
@@ -684,10 +683,7 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: false,
                 permissionKey: 'VIEW_DOCUMENT',
-                checkShow: function (action, model) {
-                    //If no content or no view document permission, hide the button
-                    return self.checkToShowAction(action, model) && model.hasContent();
-                }
+                checkShow: self.checkToShowAction
             },
             // Edit After Approve (Only electronic only)
             {
@@ -698,6 +694,7 @@ module.exports = function (app) {
                 callback: self.editAfterApprove,
                 class: "action-green",
                 showInView: false,
+                hide: true,
                 permissionKey: "EDIT_OUTGOING_CONTENT", //TODO: Apply correct permission when added to database.
                 checkShow: function (action, model) {
                     var info = model.getInfo();
@@ -710,6 +707,7 @@ module.exports = function (app) {
                 icon: 'eye',
                 text: 'view_tracking_sheet',
                 shortcut: false,
+                hide: true,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: self.checkToShowAction,
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
@@ -721,6 +719,7 @@ module.exports = function (app) {
                 text: 'grid_action_manage',
                 shortcut: false,
                 showInView: false,
+                hide: true,
                 checkShow: self.checkToShowAction,
                 subMenu: [
                     // Tags
@@ -867,6 +866,7 @@ module.exports = function (app) {
                 text: 'grid_action_edit',
                 shortcut: false,
                 showInView: false,
+                hide: true,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
