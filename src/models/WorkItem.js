@@ -310,7 +310,7 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.returnWorkItem = function ($event, ignoreMessage) {
-                return correspondenceService.terminateWorkItem(this, $event, ignoreMessage);
+                return correspondenceService.returnWorkItem(this, $event, ignoreMessage);
             };
 
 

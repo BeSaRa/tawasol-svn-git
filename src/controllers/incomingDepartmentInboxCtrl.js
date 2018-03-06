@@ -80,28 +80,41 @@ module.exports = function (app) {
          * @description Return the bulk incoming department inbox items
          * @param $event
          */
-        self.returnIncomingDepartmentInboxBulk = function ($event) {
-            incomingDepartmentInboxService
+        self.returnWorkItemsBulk = function ($event) {
+            /*incomingDepartmentInboxService
                 .controllerMethod.incomingDepartmentInboxesReturnBulk(self.selectedIncomingDepartmentInboxes, $event)
                 .then(function () {
                     self.reloadIncomingDepartmentInboxes(self.grid.page);
+                })*/
+
+            var itemsWithoutReturn = [], info= {};
+            _.filter(self.selectedIncomingDepartmentInboxes, function (workItem) {
+                info = workItem.getInfo();
+                if (!info.incomingVsId)
+                    itemsWithoutReturn.push(info.vsId);
+            });
+            var selectedItems = angular.copy(self.selectedIncomingDepartmentInboxes);
+            if (itemsWithoutReturn && itemsWithoutReturn.length) {
+                dialog.confirmMessage(langService.get('some_items_cannot_return_skip_and_return'), null, null, $event).then(function () {
+                    self.selectedIncomingDepartmentInboxes = selectedItems = _.filter(self.selectedIncomingDepartmentInboxes, function (workItem) {
+                        return itemsWithoutReturn.indexOf(workItem.generalStepElm.vsId) === -1;
+                    });
+                    if (self.selectedIncomingDepartmentInboxes.length)
+                        returnBulk(selectedItems, $event);
                 })
-        };
-
-        /**
-         * @description Opens the incoming department inbox document
-         * @param incomingDepartmentInbox
-         * @param $event
-         */
-        self.openIncomingDepartmentInbox = function (incomingDepartmentInbox, $event) {
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
             }
-
-            correspondenceService.viewCorrespondence(incomingDepartmentInbox, self.gridActions, true);
-            return;
+            else {
+                returnBulk(selectedItems, $event);
+            }
         };
+
+        function returnBulk(selectedItems, $event) {
+            correspondenceService
+                .returnBulkWorkItem(selectedItems, $event)
+                .then(function () {
+                    self.reloadIncomingDepartmentInboxes(self.grid.page);
+                });
+        }
 
         /**
          * @description Return the incoming department inbox item
@@ -109,8 +122,8 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.returnIncomingDepartmentInbox = function (incomingDepartmentInbox, $event, defer) {
-            incomingDepartmentInboxService
+        self.returnWorkItem = function (incomingDepartmentInbox, $event, defer) {
+            /*incomingDepartmentInboxService
                 .controllerMethod
                 .incomingDepartmentInboxReturn(incomingDepartmentInbox, $event)
                 .then(function () {
@@ -118,7 +131,13 @@ module.exports = function (app) {
                         .then(function () {
                             new ResolveDefer(defer);
                         });
-                })
+                })*/
+            incomingDepartmentInbox
+                .returnWorkItem($event)
+                .then(function () {
+                    new ResolveDefer(defer);
+                    self.reloadIncomingDepartmentInboxes(self.grid.page);
+                });
         };
 
         /**
@@ -126,8 +145,7 @@ module.exports = function (app) {
          * @param incomingDepartmentInbox
          * @param $event
          */
-        self.receiveIncomingDepartmentInbox = function (incomingDepartmentInbox, $event, defer) {
-            //console.log('Receive the incoming department inbox item : ', incomingDepartmentInbox);
+        self.receiveWorkItem = function (incomingDepartmentInbox, $event, defer) {
             var info = incomingDepartmentInbox.getInfo();
             dialog.hide();
             $state.go('app.incoming.add', {action: 'receive', workItem: info.wobNumber});
@@ -139,11 +157,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.quickReceiveIncomingDepartmentInbox = function (incomingDepartmentInbox, $event, defer) {
-            // console.log('Quick accept the incoming department inbox item : ', incomingDepartmentInbox);
-            /* incomingDepartmentInboxService.quickReceiveIncomingDepartmentInbox(incomingDepartmentInbox.generalStepElm.workObjectNumber).then(function () {
-                 self.reloadIncomingDepartmentInboxes(self.grid.page);
-             });*/
+        self.quickReceiveWorkItem = function (incomingDepartmentInbox, $event, defer) {
             incomingDepartmentInboxService.controllerMethod
                 .incomingDepartmentInboxQuickReceive(incomingDepartmentInbox, $event)
                 .then(function () {
@@ -383,7 +397,7 @@ module.exports = function (app) {
                 icon: 'undo-variant',
                 text: 'grid_action_return',
                 shortcut: true,
-                callback: self.returnIncomingDepartmentInbox,
+                callback: self.returnWorkItem,
                 class: "action-green",
                 checkShow: function(action, model){
                     var info = model.getInfo();
@@ -396,7 +410,7 @@ module.exports = function (app) {
                 icon: 'check',
                 text: 'grid_action_receive',
                 shortcut: true,
-                callback: self.receiveIncomingDepartmentInbox,
+                callback: self.receiveWorkItem,
                 class: "action-green",
                 checkShow: function(action, model){
                     var info = model.getInfo();
@@ -410,7 +424,7 @@ module.exports = function (app) {
                 text: 'grid_action_quick_receive',
                 shortcut: true,
                 hide: false,
-                callback: self.quickReceiveIncomingDepartmentInbox,
+                callback: self.quickReceiveWorkItem,
                 class: "action-green",
                 checkShow: function(action, model){
                     var info = model.getInfo();

@@ -24,8 +24,8 @@ module.exports = function (app) {
                 id: null,
                 arName: langService.getKey('not_found', 'ar'),
                 enName: langService.getKey('not_found', 'en')
-            }))
-            console.log('disableProperties', self.disableProperties);
+            }));
+            //console.log('disableProperties', self.disableProperties);
         });
 
         // model to search on correspondence sites type

@@ -23,7 +23,7 @@ module.exports = function (app) {
             return $http.get(urlService.departmentInboxes + "/all-mails").then(function (result) {
                 self.incomingDepartmentInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
                 self.incomingDepartmentInboxes = generator.interceptReceivedCollection('WorkItem', self.incomingDepartmentInboxes);
-                console.log(_.map(self.incomingDepartmentInboxes, 'generalStepElm.incomingVSID'));
+                //console.log(_.map(self.incomingDepartmentInboxes, 'generalStepElm.incomingVSID'));
                 return self.incomingDepartmentInboxes;
             });
         };
@@ -120,7 +120,7 @@ module.exports = function (app) {
          * @param incomingDepartmentInboxes
          */
         self.returnBulkIncomingDepartmentInboxes = function (incomingDepartmentInboxes) {
-            var pairToReturn = _.map(incomingDepartmentInboxes, function (incomingDepartmentInbox) {
+            /*var pairToReturn = _.map(incomingDepartmentInboxes, function (incomingDepartmentInbox) {
                 return {
                     first: incomingDepartmentInbox.hasOwnProperty('generalStepElm')
                         ? (incomingDepartmentInbox.generalStepElm.hasOwnProperty('vsId') ? incomingDepartmentInbox.generalStepElm.vsId : incomingDepartmentInbox.generalStepElm) : (incomingDepartmentInbox.hasOwnProperty('vsId') ? incomingDepartmentInbox.vsId : incomingDepartmentInbox),
@@ -128,6 +128,13 @@ module.exports = function (app) {
                         ? (incomingDepartmentInbox.generalStepElm.hasOwnProperty('workObjectNumber') ? incomingDepartmentInbox.generalStepElm.workObjectNumber : incomingDepartmentInbox.generalStepElm)
                         : (incomingDepartmentInbox.hasOwnProperty('workObjectNumber') ? incomingDepartmentInbox.workObjectNumber : incomingDepartmentInbox),
 
+                }
+            });*/
+            var pairToReturn = _.map(incomingDepartmentInboxes, function (incomingDepartmentInbox) {
+                var info = incomingDepartmentInbox.getInfo();
+                return {
+                    first: info.vsId,
+                    second: info.wobNumber
                 }
             });
             return $http

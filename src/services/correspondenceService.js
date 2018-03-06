@@ -1546,6 +1546,63 @@ module.exports = function (app) {
                         });
                 })
         };
+
+
+        /**
+         * @description Return work item.
+         * @param workItem
+         * @param $event
+         * @param ignoreMessage
+         */
+        self.returnWorkItem = function (workItem, $event, ignoreMessage) {
+            var info = workItem.getInfo();
+            return self.showReasonDialog($event)
+                .then(function (reason) {
+                    return $http
+                        .put(urlService.departmentInboxes + "/return", {
+                            workObjectNumber: info.wobNumber,
+                            comment: reason,
+                            vsId: info.vsId
+                        })
+                        .then(function (result) {
+                            if (!ignoreMessage) {
+                                toast.success(langService.get("return_specific_success").change({name: workItem.getNames()}));
+                            }
+                            return workItem;
+                        });
+                });
+
+        };
+        /**
+         * @description return bulk workItems.
+         * @param workItems
+         * @param $event
+         * @param ignoreMessage
+         * @returns {*}
+         */
+        self.returnBulkWorkItem = function (workItems, $event, ignoreMessage) {
+            // if the selected workItem has just one record.
+            if (workItems.length === 1)
+                return self.returnWorkItem(workItems[0], $event);
+            return self
+                .showReasonBulkDialog(workItems, $event)
+                .then(function (workItems) {
+                    var items = _.map(workItems, function (workItem) {
+                        var info = workItem.getInfo();
+                        return {
+                            workObjectNumber: info.wobNumber,
+                            comment: workItem.reason,
+                            vsId: info.vsId
+                        };
+                    });
+
+                    return $http
+                        .put((urlService.departmentInboxes + '/return/bulk'), items)
+                        .then(function (result) {
+                            return _bulkMessages(result, correspondences, ignoreMessage, 'failed_return_selected', 'selected_return_success', 'return_success_except_following');
+                        });
+                })
+        };
         /**
          * @description  open reason dialog
          * @returns {promise|*}
