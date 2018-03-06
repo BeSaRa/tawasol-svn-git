@@ -732,7 +732,7 @@ module.exports = function (app) {
                 callback: self.addToFolder,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model);
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 }
             },
             // Add To Favorite
@@ -745,7 +745,7 @@ module.exports = function (app) {
                 callback: self.addToFavorite,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                    return self.checkToShowAction(action, model);
                 }
             },
             // Create Reply
