@@ -80,7 +80,7 @@ module.exports = function (app) {
                 return !employee.inRegistry();
             })
             .addMenuPermission('menu_item_proxy_mail_inbox', function (employee) {
-                return !employee.isAdmin && employee.isProxyUser() && _.map(employee.proxyUsers, 'proxyUserOU').indexOf(employee.organization.ouid) > -1;
+                return !employee.isAdmin && employee.isProxyUser();// && _.map(employee.proxyUsers, 'proxyUserOU').indexOf(employee.organization.ouid) > -1;
             })
             .addMenuPermission('menu_item_user_favorite_documents', 'MANAGE_FAVORITE')
             .end()
