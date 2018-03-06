@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('WFOrganization', function (CMSModelInterceptor) {
+    app.factory('WFOrganization', function (CMSModelInterceptor, langService) {
         'ngInject';
         return function WFOrganization(model) {
             var self = this;
@@ -22,6 +22,10 @@ module.exports = function (app) {
              */
             WFOrganization.prototype.getRequiredFields = function () {
                 return requiredFields;
+            };
+
+            WFOrganization.prototype.getTranslatedName = function () {
+                return this[langService.current + 'Name'];
             };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

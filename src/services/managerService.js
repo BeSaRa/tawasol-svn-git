@@ -229,6 +229,10 @@ module.exports = function (app) {
                                 qDefer.resolve(angular.copy(document));
                             });
                             return qDefer.promise;
+                        },
+                        centralArchives: function (organizationService, employeeService) {
+                            'ngInject';
+                            return employeeService.isCentralArchive() && documentClass.toLowerCase() === 'incoming' ? organizationService.centralArchiveOrganizations() : false
                         }
                     }
                 });

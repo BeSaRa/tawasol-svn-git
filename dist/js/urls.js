@@ -142,7 +142,7 @@
                 // to get workflow dist users
                 .addToAllWithBase('distributionWF', '/cms-entity/admin/ou-application-user/dist')
                 // get all government users
-                .addToAllWithBase('distributionWFEUsers' , '/cms-entity/admin/application-user/dist/ge-heads')
+                .addToAllWithBase('distributionWFEUsers', '/cms-entity/admin/application-user/dist/ge-heads')
                 // current user workflow actions
                 .addToAllWithBase('distributionWFActions', '/cms-entity/admin/wf-action/wf')
                 // private users for distribution workflow
@@ -280,7 +280,9 @@
                 //export to pdf
                 .addToAllWithBase('exportToPdf', 'common/export/pdf')
                 //all private users
-                .addToAllWithBase('allPrivateUsers', 'cms-entity/admin/ou-application-user/dist/all-private-users');
+                .addToAllWithBase('allPrivateUsers', 'cms-entity/admin/ou-application-user/dist/all-private-users')
+                // all available organization for central archive
+                .addToAllWithBase('availableCentralArchive', 'cms-entity/admin/ou/ou-with-central-archive');
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

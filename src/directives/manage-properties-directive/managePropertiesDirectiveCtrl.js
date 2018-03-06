@@ -18,14 +18,17 @@ module.exports = function (app) {
         LangWatcher($scope);
         self.document = null;
         self.maxCreateDate = new Date();
-        // all system organizations
-        self.organizations = organizationService.organizations;
+
         // all security level
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
         self.documentFiles = [];
         self.classifications = [];
 
         $timeout(function () {
+            // all system organizations
+            self.organizations = self.centralArchives ? self.centralArchives : organizationService.organizations;
+
+            console.log(self.centralArchives);
             // all document types
             self.documentTypes = correspondenceService.getLookup(self.document.docClassName, 'docTypes');
             self.securityLevels = correspondenceService.getLookup(self.document.docClassName, 'securityLevels');

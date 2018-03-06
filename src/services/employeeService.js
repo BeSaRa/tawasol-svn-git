@@ -56,7 +56,7 @@ module.exports = function (app) {
                 employee = generator.interceptReceivedInstance('ApplicationUser', new Employee(result.userInfo));
             }
             // set globalSetting for root entity
-            if(result.hasOwnProperty('globalSetting') && result.globalSetting)
+            if (result.hasOwnProperty('globalSetting') && result.globalSetting)
                 rootEntity.setFileTypesHashMap(result.globalSetting.fileTypesMap);
             // var date = (new Date());
             // date.setYear(date.getFullYear() + 1);
@@ -171,6 +171,13 @@ module.exports = function (app) {
         self.setRootEntityService = function (entity) {
             rootEntity = entity;
             return self;
+        };
+        /**
+         * @description to check from employee service if the current logged in user in central archive or not.
+         * @returns {*}
+         */
+        self.isCentralArchive = function () {
+            return employee && employee.inCentralArchive();
         }
 
 

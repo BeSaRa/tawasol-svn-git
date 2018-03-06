@@ -227,7 +227,7 @@ module.exports = function (app) {
             };
 
             Employee.prototype.inCentralArchive = function () {
-                return false;
+                return this.userOrganization && this.userOrganization.centralArchive;
             };
 
             Employee.prototype.mapSend = function () {

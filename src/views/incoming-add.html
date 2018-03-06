@@ -29,6 +29,7 @@
                             </accordion-title>
                             <accordion-content>
                                 <manage-properties-directive
+                                        central-archives="ctrl.centralArchives"
                                         source-model="ctrl.model"
                                         source-form="ctrl.document_properties"
                                         document="ctrl.incoming"></manage-properties-directive>
@@ -112,7 +113,8 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.incoming.documentComments.length" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS') && ctrl.employeeService.hasPermissionTo('ADD_DOCUMENT_COMMENT')">
+                        <accordion-item pass-when="!!ctrl.incoming.documentComments.length"
+                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS') && ctrl.employeeService.hasPermissionTo('ADD_DOCUMENT_COMMENT')">
                             <accordion-title>
                                 <md-icon md-svg-icon="comment"></md-icon>
                                 <span>{{lang.incoming_manage_comments}}</span>
@@ -145,9 +147,10 @@
                     </accordion-directive>
                     <div layout="row">
                         <div>
-                            <md-button ng-disabled="ctrl.document_properties.$invalid || !ctrl.incoming.site || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.incoming.contentFile))"
-                                       ng-click="ctrl.saveCorrespondence()" class="md-raised"
-                                       ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
+                            <md-button
+                                    ng-disabled="ctrl.document_properties.$invalid || !ctrl.incoming.site || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.incoming.contentFile))"
+                                    ng-click="ctrl.saveCorrespondence()" class="md-raised"
+                                    ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                 {{lang.incoming_save}}
                             </md-button>
                         </div>

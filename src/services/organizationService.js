@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                  $http,
                                                  cmsTemplate,
                                                  langService,
+                                                 WFOrganization,
                                                  $rootScope,
                                                  _,
                                                  organizationTypeService,
@@ -540,6 +541,13 @@ module.exports = function (app) {
         self.getRegistryOrganizationId = function (organization) {
             var ouId = organization.hasOwnProperty('registryParentId') ? organization.id : organization;
             return self.getOrganizationById(ouId);
+        };
+
+        self.centralArchiveOrganizations = function () {
+            return $http.get(urlService.availableCentralArchive)
+                .then(function (result) {
+                    return generator.generateCollection(result.data.rs, WFOrganization);
+                });
         }
 
     });

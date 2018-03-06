@@ -20,6 +20,7 @@ module.exports = function (app) {
                                              $timeout,
                                              // templates,
                                              lookupService,
+                                             centralArchives,
                                              contextHelpService,
                                              organizations,
                                              cmsTemplate,
@@ -50,20 +51,23 @@ module.exports = function (app) {
 
         self.maxCreateDate = new Date();
         // all system organizations
-        self.organizations = organizations;
+        self.organizations = centralArchives ? centralArchives : organizations;
 
         self.templates = lookups.templates;
 
         self.documentInformation = null;
 
+        self.centralArchives = centralArchives;
+
+
         // incoming document
         self.incoming = /*demoOutgoing;*/
             new Incoming({
-                ou: self.employee.getOUID(),
+                ou: centralArchives ? centralArchives[0].id : self.employee.getOUID(),
                 addMethod: 1,//Paper document
                 createdOn: new Date(),
                 docDate: new Date(),
-                registryOU: self.employee.getRegistryOUID(),
+                registryOU: centralArchives ? centralArchives[0].id : self.employee.getRegistryOUID(),
                 securityLevel: lookups.securityLevels[0]
             });
 
@@ -236,13 +240,13 @@ module.exports = function (app) {
                 return;
             }
 
-           /* distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(self.incoming, false, false, null, "incoming", $event)
-                .then(function () {
-                    counterService.loadCounters();
-                    self.resetAddCorrespondence();
-                });*/
+            /* distributionWorkflowService
+                 .controllerMethod
+                 .distributionWorkflowSend(self.incoming, false, false, null, "incoming", $event)
+                 .then(function () {
+                     counterService.loadCounters();
+                     self.resetAddCorrespondence();
+                 });*/
             document.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     counterService.loadCounters();
@@ -332,7 +336,7 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model, index) {
                     //Show if content is uploaded
-                    isVisible = self.checkToShowAction(action, model) &&  (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    isVisible = self.checkToShowAction(action, model) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
                     self.setAvailability(index, isVisible);
                     return isVisible;
                     //return self.checkToShowAction(action, model) && (self.documentInformation || (self.incoming.contentFile && self.incoming.hasContent()));
@@ -366,8 +370,8 @@ module.exports = function (app) {
             }
         ];
 
-        self.setAvailability = function(index, isVisible){
-            if(index === 0)
+        self.setAvailability = function (index, isVisible) {
+            if (index === 0)
                 self.visibilityArray = [];
             self.visibilityArray.push(isVisible);
             if (index + 1 === self.documentActions.length) {
@@ -382,11 +386,11 @@ module.exports = function (app) {
          */
         self.resetAddCorrespondence = function ($event) {
             self.incoming = new Incoming({
-                ou: self.employee.getOUID(),
+                ou: centralArchives ? centralArchives[0].id : self.employee.getOUID(),
                 addMethod: 1,
                 createdOn: new Date(),
                 docDate: new Date(),
-                registryOU: self.employee.getRegistryOUID(),
+                registryOU: centralArchives ? centralArchives[0].id : self.employee.getRegistryOUID(),
                 securityLevel: lookups.securityLevels[0],
                 site: null
             });

@@ -14,7 +14,8 @@ module.exports = function (app) {
                 documentFiles: '=?',
                 sourceForm: '=?',
                 fromDialog: '=',
-                disableProperties: '='
+                disableProperties: '=',
+                centralArchives: '='
             }
         }
     })
