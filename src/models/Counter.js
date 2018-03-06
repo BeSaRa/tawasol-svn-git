@@ -1,5 +1,6 @@
 module.exports = function (app) {
-    app.factory('Counter', function (CMSModelInterceptor, 
+    app.factory('Counter', function (CMSModelInterceptor,
+                                     employeeService,
                                      _) {
         'ngInject';
         return function Counter(model) {
@@ -73,7 +74,11 @@ module.exports = function (app) {
                     ],
                     menu_item_inbox: [
                         'userInbox',
-                        'userFavouriteDocument'
+                        'userFavouriteDocument',
+                        function (currentValue, counter, employee) {
+                            currentValue = employee.inRegistry() ? currentValue : (counter.groupMail + currentValue);
+                            return currentValue;
+                        }
                     ],
                     menu_item_user_inbox: [
                         'userInbox'
@@ -98,6 +103,9 @@ module.exports = function (app) {
                     ],
                     menu_item_user_favorite_documents: [
                         'userFavouriteDocument'
+                    ],
+                    menu_item_group_inbox: [
+                        'groupMail'
                     ]
                 };
             /*User Inbox*/
@@ -131,6 +139,8 @@ module.exports = function (app) {
 
             self.userFavouriteDocument = null;
 
+            self.groupMail = null;
+
             self.maped = {};
 
             // every model has required fields
@@ -156,7 +166,7 @@ module.exports = function (app) {
                 var self = this;
                 _.map(maps, function (items, property) {
                     self.maped[property] = _.reduce(items, function (oldValue, currentValue) {
-                        return (oldValue + self[currentValue]);
+                        return typeof currentValue === 'function' ? currentValue(oldValue, self, employeeService.getEmployee()) : (oldValue + self[currentValue]);
                     }, 0);
                 });
             };

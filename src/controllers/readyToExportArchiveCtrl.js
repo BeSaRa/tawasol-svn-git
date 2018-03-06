@@ -193,7 +193,7 @@ module.exports = function (app) {
          */
         self.exportReadyToExport = function (readyToExport, $event, defer) {
             readyToExport
-                .exportWorkItem($event, true)
+                .exportWorkItem($event)
                 .then(function () {
                     self.reloadReadyToExports(self.grid.page);
                     new ResolveDefer(defer);
@@ -590,12 +590,35 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }
             return (!action.hide);
+        };
+        /**
+         * @description return from ready to central archive ready to export.
+         * @param readyToExport
+         * @param $event
+         */
+        self.returnWorkItemFromCentral = function (readyToExport, $event) {
+            return readyToExport
+                .returnWorkItemFromCentralArchive($event)
+                .then(function () {
+                    self.reloadReadyToExports();
+                })
+        };
+        /**
+         * @description return bulk from central archive
+         * @param $event
+         */
+        self.returnBulkWorkItemsFromCentral = function ($event) {
+            correspondenceService
+                .centralArchiveReturnBulk(self.selectedWorkItems, $event)
+                .then(function () {
+                    self.reloadReadyToExports();
+                })
         };
 
         /**
@@ -654,9 +677,6 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'export',
                 text: 'grid_action_export',
-                textCallback: function (model) {
-                    return model.exportViaArchive() ? 'grid_action_send_to_central_archive' : 'grid_action_export';
-                },
                 shortcut: true,
                 callback: self.exportReadyToExport,
                 class: "action-green",
@@ -691,12 +711,9 @@ module.exports = function (app) {
                 icon: 'undo-variant',
                 text: 'grid_action_return',
                 shortcut: true,
-                callback: self.returnWorkItem,
+                callback: self.returnWorkItemFromCentral,
                 class: "action-green",
-                checkShow: function(action, model){
-                    var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && !!info.incomingVsId;
-                }
+                checkShow: self.checkToShowAction
             },
             // Edit After Approve (Only electronic only)
             {

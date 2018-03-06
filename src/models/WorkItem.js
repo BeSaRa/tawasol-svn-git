@@ -67,16 +67,16 @@ module.exports = function (app) {
             WorkItem.prototype.getTranslatedCorrespondenceSiteInfo = function () {
                 if (this.getInfo().documentClass === 'outgoing') {
                     return this.firstSiteInfo
-                        ? ( langService.current === 'en'
-                            ? this.firstSiteInfo.mainEnSiteText + (this.firstSiteInfo.subEnSiteText ? (' - ' + this.firstSiteInfo.subEnSiteText) : '')
-                            : (this.firstSiteInfo.subArSiteText ? this.firstSiteInfo.subArSiteText + ' - ' : '') + this.firstSiteInfo.mainArSiteText
-                    ) : "";
+                        ? (langService.current === 'en'
+                                ? this.firstSiteInfo.mainEnSiteText + (this.firstSiteInfo.subEnSiteText ? (' - ' + this.firstSiteInfo.subEnSiteText) : '')
+                                : (this.firstSiteInfo.subArSiteText ? this.firstSiteInfo.subArSiteText + ' - ' : '') + this.firstSiteInfo.mainArSiteText
+                        ) : "";
                 }
                 return this.siteInfo
-                    ? ( langService.current === 'en'
-                        ? this.siteInfo.mainEnSiteText + (this.siteInfo.subEnSiteText ? (' - ' + this.siteInfo.subEnSiteText) : '')
-                        : (this.siteInfo.subArSiteText ? this.siteInfo.subArSiteText + ' - ' : '') + this.siteInfo.mainArSiteText
-                ) : "";
+                    ? (langService.current === 'en'
+                            ? this.siteInfo.mainEnSiteText + (this.siteInfo.subEnSiteText ? (' - ' + this.siteInfo.subEnSiteText) : '')
+                            : (this.siteInfo.subArSiteText ? this.siteInfo.subArSiteText + ' - ' : '') + this.siteInfo.mainArSiteText
+                    ) : "";
             };
 
             WorkItem.prototype.setCorrespondenceService = function (service) {
@@ -157,7 +157,7 @@ module.exports = function (app) {
                 return indicator.getIsPaperIndicator(isPaper);
             };
 
-            WorkItem.prototype.getExportViaCentralArchiveIndicator = function(exportViaCentralArchive){
+            WorkItem.prototype.getExportViaCentralArchiveIndicator = function (exportViaCentralArchive) {
                 return indicator.getExportViaCentralArchiveIndicator(exportViaCentralArchive);
             };
 
@@ -311,6 +311,10 @@ module.exports = function (app) {
 
             WorkItem.prototype.returnWorkItem = function ($event, ignoreMessage) {
                 return correspondenceService.returnWorkItem(this, $event, ignoreMessage);
+            };
+
+            WorkItem.prototype.returnWorkItemFromCentralArchive = function ($event, ignoreMessage) {
+                return correspondenceService.centralArchiveReturn(this, $event, ignoreMessage)
             };
 
 

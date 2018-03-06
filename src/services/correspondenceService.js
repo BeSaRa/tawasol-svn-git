@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.service('correspondenceService', function (urlService,
                                                    $http,
                                                    cmsTemplate,
+                                                   CommentModel,
                                                    employeeService,
                                                    langService,
                                                    CorrespondenceInfo,
@@ -319,8 +320,8 @@ module.exports = function (app) {
                 if (failureCollection.length === collection.length) {
                     toast.error(langService.get(errorMessage));
                 } else if (failureCollection.length) {
-                    generator.generateFailedBulkActionRecords(failureSomeMessage, _.map(failureCollection, function (workItem) {
-                        return workItem.getTranslatedName();
+                    generator.generateFailedBulkActionRecords(failureSomeMessage, _.map(failureCollection, function (item) {
+                        return item.getTranslatedName();
                     }));
                 } else {
                     toast.success(langService.get(successMessage));
@@ -1526,23 +1527,7 @@ module.exports = function (app) {
                     return $http
                         .put((urlService.userInboxActions + "/" + wfName.toLowerCase() + "/terminate/bulk"), items)
                         .then(function (result) {
-                            var failureCollection = [];
-                            _.map(result.data.rs, function (value, index) {
-                                if (!value)
-                                    failureCollection.push(workItems[index]);
-                            });
-                            if (!ignoreMessage) {
-                                if (failureCollection.length === workItems.length) {
-                                    toast.error(langService.get("failed_terminate_selected"));
-                                } else if (failureCollection.length) {
-                                    generator.generateFailedBulkActionRecords('following_records_failed_to_terminate', _.map(failureCollection, function (workItem) {
-                                        return workItem.getTranslatedName();
-                                    }));
-                                } else {
-                                    toast.success(langService.get("selected_terminate_success"));
-                                }
-                            }
-                            return workItems;
+                            return _bulkMessages(result, workItems, ignoreMessage, 'failed_terminate_selected', 'selected_terminate_success', 'following_records_failed_to_terminate');
                         });
                 })
         };
@@ -1896,6 +1881,61 @@ module.exports = function (app) {
                 .get(urlService.departmentWF + '/ready-to-export-central-archive')
                 .then(function (result) {
                     return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
+                });
+        };
+        /**
+         * @description return from central archive to actual organization.
+         * @param workItem
+         * @param $event
+         * @param ignoreMessage
+         */
+        self.centralArchiveReturn = function (workItem, $event, ignoreMessage) {
+            var info = workItem.getInfo();
+            return self
+                .showReasonDialog($event)
+                .then(function (comment) {
+                    return $http
+                        .put(_createCorrespondenceWFSchema(['outgoing/return/to-ready-export-central-archive']), new CommentModel({
+                            vsid: info.vsId,
+                            wobNum: info.wobNumber,
+                            comments: comment
+                        }))
+                        .then(function (result) {
+                            if (!ignoreMessage) {
+                                if (result.data.rs) {
+                                    toast.success(langService.get("return_specific_success").change({name: workItem.getTranslatedName()}));
+                                } else {
+                                    toast.error(langService.get("failed_return_selected"));
+                                }
+                            }
+                            return workItem;
+                        });
+                });
+        };
+        /**
+         * @description return bulk from central archive
+         * @param workItems
+         * @param $event
+         * @param ignoreMessage
+         */
+        self.centralArchiveReturnBulk = function (workItems, $event, ignoreMessage) {
+            if (workItems.length === 1)
+                return self.centralArchiveReturn(workItems[0], $event, ignoreMessage);
+            return self
+                .showReasonBulkDialog(workItems, $event)
+                .then(function (workItems) {
+                    return $http
+                        .put(_createCorrespondenceWFSchema(['outgoing/bulk/return/to-ready-export-central-archive']), _.map(workItems, function (item) {
+                            var info = item.getInfo();
+                            return (new CommentModel({
+                                vsid: info.vsId,
+                                wobNum: info.wobNumber,
+                                comments: item.reason
+                            }))
+                        }))
+                        .then(function (result) {
+                            return _bulkMessages(result, workItems, ignoreMessage, 'failed_return_selected', 'selected_return_success', 'return_success_except_following');
+                        });
                 });
         }
 
