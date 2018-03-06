@@ -309,6 +309,10 @@ module.exports = function (app) {
                 return correspondenceService.exportCorrespondence(this, $event, checkArchive, ignoreMessage);
             };
 
+            WorkItem.prototype.returnWorkItem = function ($event, ignoreMessage) {
+                return correspondenceService.terminateWorkItem(this, $event, ignoreMessage);
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

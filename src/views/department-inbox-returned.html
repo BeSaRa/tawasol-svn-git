@@ -204,7 +204,7 @@
                                         <span ng-if="!returnedDepartmentInbox.hasContent()">{{returnedDepartmentInbox.generalStepElm.docSubject}}</span>
                                     </td>
                                     <td md-cell>{{returnedDepartmentInbox.generalStepElm.receivedDate}}</td>
-                                    <td md-cell>{{returnedDepartmentInbox.department.getTranslatedName()}}</td>
+                                    <td md-cell>{{returnedDepartmentInbox.toOU.getTranslatedName()}}</td>
                                     <td md-cell class="td-data">
                                         <div layout="row">
                                             <span flex>{{returnedDepartmentInbox.senderInfo.getTranslatedName()}}</span>
@@ -217,8 +217,9 @@
                                         </div>
                                     </td>
                                     <td md-cell>
-                                        <main-site-sub-site-directive item="returnedDepartmentInbox">
-                                        </main-site-sub-site-directive>
+                                        {{returnedDepartmentInbox.fromOU.getTranslatedName()}}
+                                        <!--<main-site-sub-site-directive item="returnedDepartmentInbox">
+                                        </main-site-sub-site-directive>-->
                                     </td>
                                     <!--<td md-cell>{{returnedDepartmentInbox.subCoreSite.getTranslatedName()}}</td>-->
                                     <td md-cell>{{returnedDepartmentInbox.type}}</td>

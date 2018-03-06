@@ -59,6 +59,8 @@ module.exports = function (app) {
             delete model.isReassignedIndicator;
             delete model.isOpenedIndicator;
             delete model.isPaperIndicator;
+            delete model.toOU;
+            delete model.fromOU;
             return model;
         });
 
@@ -78,8 +80,10 @@ module.exports = function (app) {
             model.type = model.generalStepElm.hasOwnProperty('orginality') ? (model.generalStepElm.orginality === 0 ? langService.get('original') : langService.get('copy')) : "";
             // model.department = model.fromRegOu ? model.fromRegOu[langService.current + "Name"] : "";
             //model.type = model.generalStepElm.hasOwnProperty('orginality') ? new WorkItemType(model.generalStepElm.orginality) : "";
-            model.department = model.fromRegOu ? new Information(model.fromRegOu) : "";
 
+            //model.department = model.fromRegOu ? new Information(model.fromRegOu) : "";
+            model.toOU = model.toRegOu ? new Information(model.toRegOu) : new Information();
+            model.fromOU = model.fromRegOu ? new Information(model.fromRegOu) : new Information();
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.generalStepElm.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
 
