@@ -685,6 +685,19 @@ module.exports = function (app) {
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: self.checkToShowAction
             },
+            // Return
+            {
+                type: 'action',
+                icon: 'undo-variant',
+                text: 'grid_action_return',
+                shortcut: true,
+                callback: self.returnWorkItem,
+                class: "action-green",
+                checkShow: function(action, model){
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && !!info.incomingVsId;
+                }
+            },
             // Edit After Approve (Only electronic only)
             {
                 type: 'action',
