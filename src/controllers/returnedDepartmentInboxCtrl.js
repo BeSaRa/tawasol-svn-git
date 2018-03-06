@@ -639,9 +639,7 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.addToFavorite,
                 class: "action-green",
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
-                }
+                checkShow: self.checkToShowAction
             },
             // Terminate
             {

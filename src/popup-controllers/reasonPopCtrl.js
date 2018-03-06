@@ -6,12 +6,7 @@ module.exports = function (app) {
         self.reason = '';
         self.comments = comments;
         self.selectedComment = null;
-        /**
-         * @description close terminate reason.
-         */
-        self.closeTerminateReason = function () {
-            dialog.cancel();
-        };
+
         /**
          * @description to set reason when user select it from comments.
          */
@@ -23,6 +18,13 @@ module.exports = function (app) {
          */
         self.sendReason = function () {
             dialog.hide(self.reason);
-        }
+        };
+
+        /**
+         * @description close reason reason.
+         */
+        self.closeReasonPopup = function () {
+            dialog.cancel();
+        };
     });
 };

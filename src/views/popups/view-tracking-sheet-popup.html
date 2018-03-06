@@ -402,7 +402,7 @@
                             </div>
                         </md-content>
                     </div>-->
-                    <!-- Outgoing Delivery Reports -->
+                    <!-- Outgoing Delivery Reports / Messaging History -->
                     <div ng-if="ctrl.heading === 'view_tracking_sheet_outgoing_delivery_reports'">
                         <md-content>
                             <div layout="column" class="p20">
@@ -419,6 +419,7 @@
                                                 <th md-column md-order-by="receivedByIdInfo"><span>{{lang.view_tracking_sheet_received_by}}</span></th>
                                                 <th md-column md-order-by="mainSiteToIdInfo"><span>{{lang.view_tracking_sheet_main_site_to}}</span></th>
                                                 <th md-column md-order-by="subSiteToIdInfo"><span>{{lang.view_tracking_sheet_sub_site_to}}</span></th>
+                                                <th md-column md-order-by="comment"><span>{{lang.view_tracking_sheet_comments}}</span></th>
                                             </tr>
                                             </thead>
                                             <tbody md-body>
@@ -432,6 +433,7 @@
                                                 <td md-cell>{{outgoingDeliveryReportRecord.receivedByIdInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.mainSiteToIdInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.subSiteToIdInfo.getTranslatedName()}}</td>
+                                                <td md-cell>{{outgoingDeliveryReportRecord.comment}}</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -909,7 +911,7 @@
                             </div>
                         </md-content>
                     </md-tab>-->
-                    <!-- Outgoing Delivery Reports -->
+                    <!-- Outgoing Delivery Reports / Messaging History -->
                     <md-tab label="{{lang.view_tracking_sheet_outgoing_delivery_reports}}"
                             ng-if="ctrl.showTab('view_tracking_sheet_outgoing_delivery_reports')"
                             md-on-select="ctrl.setCurrentTab('view_tracking_sheet_outgoing_delivery_reports')">
@@ -928,6 +930,7 @@
                                                 <th md-column md-order-by="followupDate"><span>{{lang.view_tracking_sheet_received_by}}</span></th>
                                                 <th md-column md-order-by="followupDate"><span>{{lang.view_tracking_sheet_main_site_to}}</span></th>
                                                 <th md-column md-order-by="followupDate"><span>{{lang.view_tracking_sheet_sub_site_to}}</span></th>
+                                                <th md-column md-order-by="comment"><span>{{lang.view_tracking_sheet_comments}}</span></th>
                                             </tr>
                                             </thead>
                                             <tbody md-body>
@@ -941,6 +944,7 @@
                                                 <td md-cell>{{outgoingDeliveryReportRecord.receivedByIdInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.mainSiteToIdInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.subSiteToIdInfo.getTranslatedName()}}</td>
+                                                <td md-cell>{{outgoingDeliveryReportRecord.comment}}</td>
                                             </tr>
                                             </tbody>
                                         </table>

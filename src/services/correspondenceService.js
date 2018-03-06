@@ -1486,7 +1486,7 @@ module.exports = function (app) {
          */
         self.terminateWorkItem = function (workItem, $event, ignoreMessage) {
             var info = workItem.getInfo();
-            return self.showReasonDialog($event)
+            return self.showReasonDialog('terminate_reason', $event)
                 .then(function (reason) {
                     return $http
                         .put(urlService.userInboxActions + "/" + info.documentClass + "/terminate/wob-num", {
@@ -1514,7 +1514,7 @@ module.exports = function (app) {
             if (workItems.length === 1)
                 return self.terminateWorkItem(workItems[0], $event);
             return self
-                .showReasonBulkDialog(workItems, $event)
+                .showReasonBulkDialog('terminate_reason', workItems, $event)
                 .then(function (workItems) {
                     var items = _.map(workItems, function (workItem) {
                         return {
@@ -1556,7 +1556,7 @@ module.exports = function (app) {
          */
         self.returnWorkItem = function (workItem, $event, ignoreMessage) {
             var info = workItem.getInfo();
-            return self.showReasonDialog($event)
+            return self.showReasonDialog('return_reason', $event)
                 .then(function (reason) {
                     return $http
                         .put(urlService.departmentInboxes + "/return", {
@@ -1585,7 +1585,7 @@ module.exports = function (app) {
             if (workItems.length === 1)
                 return self.returnWorkItem(workItems[0], $event);
             return self
-                .showReasonBulkDialog(workItems, $event)
+                .showReasonBulkDialog('return_reason', workItems, $event)
                 .then(function (workItems) {
                     var items = _.map(workItems, function (workItem) {
                         var info = workItem.getInfo();
@@ -1599,15 +1599,17 @@ module.exports = function (app) {
                     return $http
                         .put((urlService.departmentInboxes + '/return/bulk'), items)
                         .then(function (result) {
-                            return _bulkMessages(result, correspondences, ignoreMessage, 'failed_return_selected', 'selected_return_success', 'return_success_except_following');
+                            return _bulkMessages(result, workItems, ignoreMessage, 'failed_return_selected', 'selected_return_success', 'return_success_except_following');
                         });
                 })
         };
         /**
          * @description  open reason dialog
+         * @param dialogTitle
+         * @param $event
          * @returns {promise|*}
          */
-        self.showReasonDialog = function ($event) {
+        self.showReasonDialog = function (dialogTitle, $event) {
             return dialog
                 .showDialog({
                     template: cmsTemplate.getPopup('reason'),
@@ -1615,6 +1617,9 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     bindToController: true,
                     targetEvent: $event,
+                    locals:{
+                        title: dialogTitle
+                    },
                     resolve: {
                         comments: function (userCommentService) {
                             'ngInject';
@@ -1628,10 +1633,11 @@ module.exports = function (app) {
         };
         /**
          * @description open bulk reason.
+         * @param dialogTitle
          * @param workItems
          * @param $event
          */
-        self.showReasonBulkDialog = function (workItems, $event) {
+        self.showReasonBulkDialog = function (dialogTitle, workItems, $event) {
             return dialog
                 .showDialog({
                     template: cmsTemplate.getPopup('reason-bulk'),
@@ -1639,7 +1645,8 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     bindToController: true,
                     locals: {
-                        workItems: workItems
+                        workItems: workItems,
+                        title: dialogTitle
                     },
                     resolve: {
                         comments: function (userCommentService) {

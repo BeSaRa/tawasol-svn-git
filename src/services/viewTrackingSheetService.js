@@ -767,6 +767,7 @@ module.exports = function (app) {
                         }
                     }
                 }*/
+                // Outgoing Delivery Reports / Messaging History
                 else if (heading === 'view_tracking_sheet_outgoing_delivery_reports') {
                     if (self.outgoingDeliveryReports.length) {
                         headerNames = [
@@ -777,7 +778,8 @@ module.exports = function (app) {
                             langService.get('view_tracking_sheet_message_status'),
                             langService.get('view_tracking_sheet_received_by'),
                             langService.get('view_tracking_sheet_main_site_to'),
-                            langService.get('view_tracking_sheet_sub_site_to')
+                            langService.get('view_tracking_sheet_sub_site_to'),
+                            langService.get('view_tracking_sheet_comments')
                         ];
                         for (i = 0; i < self.outgoingDeliveryReports.length; i++) {
                             record = self.outgoingDeliveryReports[i];
@@ -789,7 +791,8 @@ module.exports = function (app) {
                                 record.messageStatusInfo.getTranslatedName(),
                                 record.receivedByIdInfo.getTranslatedName(),
                                 record.mainSiteToIdInfo.getTranslatedName(),
-                                record.subSiteToIdInfo.getTranslatedName()
+                                record.subSiteToIdInfo.getTranslatedName(),
+                                record.comment
                             ]);
                         }
                     }

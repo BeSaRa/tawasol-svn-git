@@ -48,7 +48,14 @@ module.exports = function (app) {
             return _.some(self.workItems, function (workItem) {
                 return !workItem.reason;
             });
-        }
+        };
+
+        /**
+         * @description close bulk reason reason.
+         */
+        self.closeBulkReasonPopup = function () {
+            dialog.cancel();
+        };
 
     });
 };
