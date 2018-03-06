@@ -502,6 +502,10 @@ module.exports = function (app) {
                     .compositeDocumentDownload(info.vsId, $event);
             };
 
+            Correspondence.prototype.rejectDocument = function ($event, ignoreMessage) {
+                return correspondenceService.rejectCorrespondence(this, $event, ignoreMessage);
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

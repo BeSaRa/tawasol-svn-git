@@ -1588,6 +1588,60 @@ module.exports = function (app) {
                         });
                 })
         };
+
+        /**
+         * @description Reject Correspondence.
+         * @param correspondence
+         * @param $event
+         * @param ignoreMessage
+         */
+        self.rejectCorrespondence = function (correspondence, $event, ignoreMessage) {
+            var info = correspondence.getInfo();
+            return self.showReasonDialog('reject_reason', $event)
+                .then(function (reason) {
+                    return $http
+                        .put(urlService.outgoings + '/reject', {
+                            first: info.vsId,
+                            second: reason
+                        })
+                        .then(function (result) {
+                            if (!ignoreMessage) {
+                                toast.success(langService.get("reject_specific_success").change({name: correspondence.getNames()}));
+                            }
+                            return correspondence;
+                        });
+                });
+        };
+        /**
+         * @description reject bulk correspondence.
+         * @param correspondences
+         * @param $event
+         * @param ignoreMessage
+         * @returns {*}
+         */
+        self.returnBulkCorrespondences = function (correspondences, $event, ignoreMessage) {
+            // if the selected correspondences has just one record.
+            if (correspondences.length === 1)
+                return self.rejectCorrespondence(correspondences[0], $event);
+            return self
+                .showReasonBulkDialog('reject_reason', correspondences, $event)
+                .then(function (correspondences) {
+                    var items = _.map(correspondences, function (correspondence) {
+                        var info = correspondence.getInfo();
+                        return {
+                            first: info.vsId,
+                            second: correspondence.reason
+                        };
+                    });
+
+                    return $http
+                        .put((urlService.outgoings + '/reject/bulk'), items)
+                        .then(function (result) {
+                            return _bulkMessages(result, correspondences, ignoreMessage, 'failed_reject_selected', 'reject_success', 'reject_success_except_following');
+                        });
+                })
+        };
+
         /**
          * @description  open reason dialog
          * @param dialogTitle
@@ -1602,7 +1656,7 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     bindToController: true,
                     targetEvent: $event,
-                    locals:{
+                    locals: {
                         title: dialogTitle
                     },
                     resolve: {

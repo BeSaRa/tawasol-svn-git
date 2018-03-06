@@ -99,7 +99,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.removeReviewInternal = function (reviewInternal, $event, defer) {
-            console.log('remove review internal mail : ', reviewInternal);
+            //console.log('remove review internal mail : ', reviewInternal);
             reviewInternalService
                 .controllerMethod
                 .reviewInternalRemove(reviewInternal, $event)
@@ -116,7 +116,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkReviewInternals = function ($event) {
-            console.log('remove review internal mails bulk : ', self.selectedReviewInternals);
+            //console.log('remove review internal mails bulk : ', self.selectedReviewInternals);
             reviewInternalService
                 .controllerMethod
                 .reviewInternalRemoveBulk(self.selectedReviewInternals, $event)
@@ -159,7 +159,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.acceptInternalBulk = function ($event) {
-            console.log('accept review internal mails bulk : ', self.selectedReviewInternals);
+            //console.log('accept review internal mails bulk : ', self.selectedReviewInternals);
             reviewInternalService
                 .controllerMethod
                 .reviewInternalAcceptBulk(self.selectedReviewInternals, $event)
@@ -173,8 +173,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.rejectInternalBulk = function ($event) {
-            console.log('reject review internal mails bulk : ', self.selectedReviewInternals);
-            reviewInternalService
+            //console.log('reject review internal mails bulk : ', self.selectedReviewInternals);
+            /*reviewInternalService
                 .controllerMethod
                 .reviewInternalRejectBulk(self.selectedReviewInternals, $event)
                 .then(function (result) {
@@ -184,6 +184,11 @@ module.exports = function (app) {
                 .catch(function (result) {
                     self.reloadReviewInternals(self.grid.page);
                     //self.replaceRecord(result);
+                });*/
+            correspondenceService
+                .returnBulkCorrespondences(self.selectedReviewInternals, $event)
+                .then(function () {
+                    self.reloadReviewInternals(self.grid.page);
                 });
         };
 
@@ -267,8 +272,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.rejectInternal = function (reviewInternal, $event, defer) {
-            console.log('reject internal : ', reviewInternal);
-            reviewInternalService
+            /*reviewInternalService
                 .controllerMethod
                 .reviewInternalReject(reviewInternal, $event)
                 .then(function (result) {
@@ -281,6 +285,11 @@ module.exports = function (app) {
                 .catch(function (result) {
                     self.reloadReviewInternals(self.grid.page);
                     //self.replaceRecord(result);
+                });*/
+            reviewInternal.rejectDocument($event)
+                .then(function () {
+                    new ResolveDefer(defer);
+                    self.reloadReviewInternals(self.grid.page);
                 });
         };
 

@@ -174,17 +174,22 @@ module.exports = function (app) {
          * @param $event
          */
         self.rejectOutgoingBulk = function ($event) {
-            console.log('reject review outgoing mails bulk : ', self.selectedReviewOutgoings);
-            reviewOutgoingService
-                .controllerMethod
-                .reviewOutgoingRejectBulk(self.selectedReviewOutgoings, $event)
+
+            /*reviewOutgoingService
+             .controllerMethod
+             .reviewOutgoingRejectBulk(self.selectedReviewOutgoings, $event)
+             .then(function () {
+             self.reloadReviewOutgoings(self.grid.page);
+             //self.replaceRecord(result);
+             })
+             .catch(function () {
+             self.reloadReviewOutgoings(self.grid.page);
+             //self.replaceRecord(result);
+             });*/
+            correspondenceService
+                .returnBulkCorrespondences(self.selectedReviewOutgoings, $event)
                 .then(function () {
                     self.reloadReviewOutgoings(self.grid.page);
-                    //self.replaceRecord(result);
-                })
-                .catch(function () {
-                    self.reloadReviewOutgoings(self.grid.page);
-                    //self.replaceRecord(result);
                 });
         };
 
@@ -199,7 +204,7 @@ module.exports = function (app) {
                 'sitesInfoTo',
                 'sitesInfoCC'
             ];
-            console.log(reviewOutgoing);
+            //console.log(reviewOutgoing);
             managerService
                 .manageDocumentProperties(reviewOutgoing.vsId, reviewOutgoing.docClassName, reviewOutgoing.docSubject, $event)
                 .then(function (document) {
@@ -234,21 +239,21 @@ module.exports = function (app) {
             }
 
             /*distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(reviewOutgoing, false, false, null, "outgoing", $event)
-                .then(function (result) {
-                    self.reloadReviewOutgoings(self.grid.page)
-                        .then(function () {
-                            new ResolveDefer(defer);
-                        });
-                    //self.replaceRecord(result);
-                })
-                .catch(function (result) {
-                    self.reloadReviewOutgoings(self.grid.page).then(function () {
-                        new ResolveDefer(defer);
-                    });
-                    //self.replaceRecord(result);
-                });*/
+             .controllerMethod
+             .distributionWorkflowSend(reviewOutgoing, false, false, null, "outgoing", $event)
+             .then(function (result) {
+             self.reloadReviewOutgoings(self.grid.page)
+             .then(function () {
+             new ResolveDefer(defer);
+             });
+             //self.replaceRecord(result);
+             })
+             .catch(function (result) {
+             self.reloadReviewOutgoings(self.grid.page).then(function () {
+             new ResolveDefer(defer);
+             });
+             //self.replaceRecord(result);
+             });*/
 
             reviewOutgoing.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
@@ -265,20 +270,22 @@ module.exports = function (app) {
          * @param defer
          */
         self.rejectOutgoing = function (reviewOutgoing, $event, defer) {
-            //console.log('reject outgoing');
-            reviewOutgoingService
-                .controllerMethod
-                .reviewOutgoingReject(reviewOutgoing, $event)
-                .then(function (result) {
-                    self.reloadReviewOutgoings(self.grid.page)
-                        .then(function () {
-                            new ResolveDefer(defer);
-                        });
-                    //self.replaceRecord(result);
-                })
-                .catch(function (result) {
+            /*reviewOutgoingService
+             .controllerMethod
+             .reviewOutgoingReject(reviewOutgoing, $event)
+             .then(function (result) {
+             self.reloadReviewOutgoings(self.grid.page)
+             .then(function () {
+             new ResolveDefer(defer);
+             });
+             })
+             .catch(function (result) {
+             self.reloadReviewOutgoings(self.grid.page);
+             });*/
+            reviewOutgoing.rejectDocument($event)
+                .then(function () {
+                    new ResolveDefer(defer);
                     self.reloadReviewOutgoings(self.grid.page);
-                    //self.replaceRecord(result);
                 });
         };
 
@@ -410,14 +417,14 @@ module.exports = function (app) {
          */
         self.broadcast = function (reviewOutgoing, $event, defer) {
             /*broadcastService
-                .controllerMethod
-                .broadcastSend(reviewOutgoing, $event)
-                .then(function () {
-                    self.reloadReviewOutgoings(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadReviewOutgoings(self.grid.page);
-                });*/
+             .controllerMethod
+             .broadcastSend(reviewOutgoing, $event)
+             .then(function () {
+             self.reloadReviewOutgoings(self.grid.page);
+             })
+             .catch(function () {
+             self.reloadReviewOutgoings(self.grid.page);
+             });*/
             reviewOutgoing
                 .correspondenceBroadcast()
                 .then(function () {
@@ -488,8 +495,8 @@ module.exports = function (app) {
          */
         self.checkToShowAction = function (action, model) {
             /*if (action.hasOwnProperty('permissionKey'))
-                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-            return (!action.hide);*/
+             return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+             return (!action.hide);*/
 
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
@@ -504,8 +511,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                                return isPermission !== true;
+                            }));
                     }
                 }
             }

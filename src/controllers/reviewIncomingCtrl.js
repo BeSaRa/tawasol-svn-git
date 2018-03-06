@@ -244,7 +244,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.rejectIncomingBulk = function ($event) {
-            reviewIncomingService
+            /*reviewIncomingService
                 .controllerMethod
                 .reviewIncomingRejectBulk(self.selectedReviewIncomings, $event)
                 .then(function (result) {
@@ -254,6 +254,11 @@ module.exports = function (app) {
                 .catch(function (result) {
                     self.reloadReviewIncomings(self.grid.page);
                     //self.replaceRecord(result);
+                });*/
+            correspondenceService
+                .returnBulkCorrespondences(self.selectedReviewIncomings, $event)
+                .then(function () {
+                    self.reloadReviewIncomings(self.grid.page);
                 });
         };
 
@@ -332,8 +337,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.rejectIncoming = function (reviewIncoming, $event, defer) {
-            //console.log('reject incoming');
-            reviewIncomingService
+            /*reviewIncomingService
                 .controllerMethod
                 .reviewIncomingReject(reviewIncoming, $event)
                 .then(function (result) {
@@ -346,6 +350,11 @@ module.exports = function (app) {
                 .catch(function (result) {
                     self.reloadReviewIncomings(self.grid.page);
                     //self.replaceRecord(result);
+                });*/
+            reviewIncoming.rejectDocument($event)
+                .then(function () {
+                    new ResolveDefer(defer);
+                    self.reloadReviewIncomings(self.grid.page);
                 });
         };
 
