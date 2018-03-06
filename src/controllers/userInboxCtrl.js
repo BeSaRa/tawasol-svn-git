@@ -731,9 +731,7 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.addToFolder,
                 class: "action-green",
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model);
-                }
+                checkShow: self.checkToShowAction
             },
             // Add To Favorite
             {
@@ -744,9 +742,7 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.addToFavorite,
                 class: "action-green",
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model);
-                }
+                checkShow: self.checkToShowAction
             },
             // Create Reply
             {
