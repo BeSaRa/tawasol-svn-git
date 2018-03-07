@@ -252,7 +252,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.createReplyIncoming = function (userInbox, $event) {
-            //console.log("createReplyIncoming" , userInbox);
             var info = userInbox.getInfo();
             dialog.hide();
             $state.go('app.outgoing.add', {workItem: info.wobNumber, action: 'reply'});
@@ -626,8 +625,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewDocument = function (userInbox, $event) {
-            //console.log('userInbox', userInbox);
-
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;

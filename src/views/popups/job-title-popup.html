@@ -6,7 +6,7 @@
             <close-dialog-directive></close-dialog-directive>
         </md-toolbar>
         <md-content scroll-directive>
-            <form name="doc" autocomplete="off">
+            <form name="jobTitleForm" autocomplete="off">
                 <div layout="column" class="p20">
                     <div layout="row">
                         <md-input-container flex>
@@ -14,7 +14,7 @@
                             <input name="arName" id="arName" required minlength="4" ng-model="ctrl.jobTitle.arName"
                                    maxlength="80"
                                    custom-validate-directive="A1NS">
-                            <div ng-messages="doc.arName.$error">
+                            <div ng-messages="jobTitleForm.arName.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                                 <div ng-message="minlength">{{lang.short}}</div>
                                 <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
@@ -26,7 +26,7 @@
                             <input name="enName" id="enName" required minlength="3" ng-model="ctrl.jobTitle.enName"
                                    maxlength="80"
                                    custom-validate-directive="E1NS">
-                            <div ng-messages="doc.enName.$error">
+                            <div ng-messages="jobTitleForm.enName.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                                 <div ng-message="minlength">{{lang.short}}</div>
                                 <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
@@ -42,7 +42,7 @@
                                    ng-model="ctrl.jobTitle.lookupStrKey"
                                    custom-validate-directive="EN_"
                                    maxlength="80">
-                            <div ng-messages="doc.lookupStrKey.$error">
+                            <div ng-messages="jobTitleForm.lookupStrKey.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                                 <div ng-message="EN_">{{lang.english_number_under_score}}</div>
                                 <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
@@ -52,7 +52,7 @@
                             <label for="itemOrder">{{lang.item_order}}</label>
                             <input name="itemOrder" id="itemOrder" required ng-model="ctrl.jobTitle.itemOrder"
                                    custom-validate-directive="number" maxlength="5">
-                            <div ng-messages="doc.itemOrder.$error">
+                            <div ng-messages="jobTitleForm.itemOrder.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                                 <div ng-message="minlength">{{lang.short}}</div>
                                 <div ng-message="number">{{lang.numberonly}}</div>
@@ -72,7 +72,7 @@
         </md-content>
         <div>
             <div layout="row">
-                <md-button class="md-raised" ng-disabled="doc.$invalid" ng-if="!ctrl.editMode"
+                <md-button class="md-raised" ng-disabled="jobTitleForm.$invalid" ng-if="!ctrl.editMode"
                            ng-click="ctrl.addJobTitleFromCtrl(ctrl.jobTitle)">{{lang.add}}
                 </md-button>
                 <md-button class="md-raised" ng-if="ctrl.editMode"

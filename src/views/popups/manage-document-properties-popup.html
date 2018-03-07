@@ -15,7 +15,7 @@
         </md-content>
         <div>
             <div layout="row">
-                <md-button class="md-raised" ng-click="ctrl.saveProperties()">{{lang.properties_save}}
+                <md-button ng-disabled="ctrl.document_properties.$invalid" class="md-raised" ng-click="ctrl.saveProperties()">{{lang.properties_save}}
                 </md-button>
                 <span flex></span>
                 <md-button class="md-raised" ng-click="ctrl.closeDocumentProperties()">{{lang.properties_close}}
