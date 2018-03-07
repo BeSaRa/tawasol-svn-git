@@ -171,9 +171,9 @@ module.exports = function (app) {
          * @return {promise}
          */
         self.manageDocumentProperties = function (vsId, documentClass, documentSubject, $event) {
-            var defer = $q.defer();
+            var defer = $q.defer(), deferCorrespondence = $q.defer();
             var document = null;
-            var firstDefer = $q.defer();
+            //var firstDefer = $q.defer();
             documentClass = _checkDocumentClass(documentClass);
             return dialog
                 .showDialog({
@@ -189,28 +189,27 @@ module.exports = function (app) {
                     resolve: {
                         documentProperties: function () {
                             'ngInject';
-                            return correspondenceService
-                                .loadCorrespondenceByVsIdClass(vsId, documentClass)
-                                .then(function (result) {
-                                    document = result;
-                                    firstDefer.resolve(document);
-                                    return result
-                                });
+                            return deferCorrespondence.promise.then(function () {
+                                return correspondenceService
+                                    .loadCorrespondenceByVsIdClass(vsId, documentClass)
+                                    .then(function (result) {
+                                        document = result;
+                                        defer.resolve(document);
+                                        return result
+                                    });
+                            })
                         },
                         resolveAll: function (generator,
                                               organizationService,
                                               correspondenceService) {
                             'ngInject';
                             var qDefer = $q.defer();
-                            firstDefer.promise.then(function () {
-                                var organizations = organizationService.loadOrganizations();
-                                var lookups = correspondenceService.loadCorrespondenceLookups(document.docClassName);
-                                return $q.all([organizations, lookups]).then(function (result) {
-                                    document = generator.interceptReceivedInstance(['Correspondence', document.docClassName], document);
-                                    defer.resolve(document);
-                                    qDefer.resolve(true);
-                                    return result;
-                                });
+                            var organizations = organizationService.loadOrganizations();
+                            var lookups = correspondenceService.loadCorrespondenceLookups(documentClass);
+                            return $q.all([organizations, lookups]).then(function (result) {
+                                deferCorrespondence.resolve(true);
+                                qDefer.resolve(true);
+                                return result;
                             });
                             return qDefer.promise;
                         },
@@ -235,6 +234,8 @@ module.exports = function (app) {
                             return employeeService.isCentralArchive() && documentClass.toLowerCase() === 'incoming' ? organizationService.centralArchiveOrganizations() : false
                         }
                     }
+                }).catch(function (e) {
+                    console.log(e);
                 });
         };
 

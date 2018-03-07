@@ -421,6 +421,9 @@ module.exports = function (app) {
          */
         self.manageDestinations = function (userInbox, $event) {
             userInbox.manageDocumentCorrespondence($event)
+                .then(function(){
+                    self.reloadUserInboxes(self.grid.page);
+                });
         };
 
         /**
@@ -577,7 +580,7 @@ module.exports = function (app) {
             var info = userInbox.getInfo();
             managerService
                 .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
-                .finally(function () {
+                .finally(function (e) {
                     self.reloadUserInboxes(self.grid.page)
                 });
         };
