@@ -300,6 +300,26 @@ module.exports = function (app) {
         }
 
         /**
+         * @description get document type from given correspondence whatever if Correspondence or WorkItem.
+         * @param correspondence
+         * @return {*}
+         * @private
+         */
+        function _getDocType(correspondence) {
+            var docType = null;
+            if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) {
+                docType = correspondence.generalStepElm.docType;
+            }
+            else if (correspondence.hasOwnProperty('docType') && correspondence.docType) {
+                docType = correspondence.docType;
+            }
+            /*else { // if notification Item
+             docType = generator.getDocumentClassName(correspondence.docType);
+             }*/
+            return docType;
+        }
+
+        /**
          * @description bulk message for any bulk actions.
          * @param result
          * @param collection
@@ -377,7 +397,8 @@ module.exports = function (app) {
                 isPaper: _getDocumentType(correspondence),
                 docStatus: _getDocumentStatus(correspondence),
                 docFullSerial: _getDocFullSerial(correspondence),
-                incomingVsId: _getIncomingVsId(correspondence)
+                incomingVsId: _getIncomingVsId(correspondence),
+                docType: _getDocType(correspondence)
             });
         };
         /**
@@ -1020,7 +1041,7 @@ module.exports = function (app) {
 
             //if (incomingWithIncomingVsId)
             //    workItem = false;
-            if (workItem && !incomingWithIncomingVsId)
+            if (workItem && !incomingWithIncomingVsId && info.docType !== 1)
                 return self.viewCorrespondenceWorkItem(info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming);
 
             return $http.get(_createUrlSchema(incomingWithIncomingVsId ? info.incomingVsId : info.vsId, incomingWithIncomingVsId ? 'incoming' : info.documentClass, 'with-content'))
