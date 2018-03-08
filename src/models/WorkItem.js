@@ -316,7 +316,9 @@ module.exports = function (app) {
             WorkItem.prototype.returnWorkItemFromCentralArchive = function ($event, ignoreMessage) {
                 return correspondenceService.centralArchiveReturn(this, $event, ignoreMessage)
             };
-
+            WorkItem.prototype.approveWorkItem = function ($event, ignoreMessage) {
+                return correspondenceService.showApprovedDialog(this, $event, ignoreMessage);
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

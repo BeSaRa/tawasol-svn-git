@@ -2,6 +2,8 @@ module.exports = function (app) {
     app.controller('folderCtrl', function (langService,
                                            folders,
                                            $q,
+                                           $state,
+                                           dialog,
                                            toast,
                                            managerService,
                                            mailNotificationService,

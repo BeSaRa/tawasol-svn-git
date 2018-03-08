@@ -420,7 +420,7 @@ module.exports = function (app) {
          */
         self.manageDestinations = function (userInbox, $event) {
             userInbox.manageDocumentCorrespondence($event)
-                .then(function(){
+                .then(function () {
                     self.reloadUserInboxes(self.grid.page);
                 });
         };
@@ -533,21 +533,10 @@ module.exports = function (app) {
          * @param defer
          */
         self.signESignature = function (userInbox, $event, defer) {
-            userInboxService
-                .controllerMethod
-                .userInboxSignaturePopup(userInbox, false, $event)
-                .then(function (result) {
-                    if (result)
-                        self.reloadUserInboxes(self.grid.page)
-                            .then(function () {
-                                toast.success(langService.get('sign_specific_success').change({name: userInbox.getTranslatedName()}));
-                                new ResolveDefer(defer);
-                            });
-                })
-                .catch(function (error) {
-                    errorCode.checkIf(error, 'AUTHORIZE_FAILED', function () {
-                        dialog.errorMessage(langService.get('authorize_failed'))
-                    })
+            userInbox
+                .approveWorkItem($event)
+                .then(function () {
+                    self.reloadUserInboxes(self.grid.page);
                 });
         };
 
@@ -834,7 +823,7 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     // If internal book, no export is allowed
                     // If incoming book, no addMethod will be available. So check workFlowName(if incoming) and show export button
-                    return self.checkToShowAction(action, model) && info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted() /*&& (info.docStatus !== 28)*/;
+                    return self.checkToShowAction(action, model) && info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted() && (info.docStatus <= 22);
                     // (model.generalStepElm.addMethod && model.generalStepElm.workFlowName.toLowerCase() !== 'internal')
                     // || model.generalStepElm.workFlowName.toLowerCase() === 'incoming';
 

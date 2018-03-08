@@ -12,6 +12,9 @@ module.exports = function (app) {
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             if (!model.isOverrided)
                 delete model.id;
+
+            delete model.adminResult;
+            delete model.cacheKeys;
             return model;
         });
 

@@ -1,0 +1,54 @@
+module.exports = function (app) {
+    app.factory('SignDocumentModel', function (CMSModelInterceptor) {
+        'ngInject';
+        return function SignDocumentModel(model) {
+            var self = this;
+            self.bookVsid = null;
+            self.signatureVsid = null;
+            self.wobNum = null;
+            // every model has required fields
+            // if you don't need to make any required fields leave it as an empty array
+            var requiredFields = [];
+
+            if (model)
+                angular.extend(this, model);
+
+            /**
+             * get all required fields
+             * @return {Array|requiredFields}
+             */
+            SignDocumentModel.prototype.getRequiredFields = function () {
+                return requiredFields;
+            };
+            /**
+             * @description set signature for
+             * @param workItem
+             * @param signature
+             * @returns {*}
+             */
+            SignDocumentModel.prototype.setSignature = function (workItem, signature) {
+                var info = workItem.getInfo();
+                return this
+                    .setBookVsid(info.vsId)
+                    .setWobNum(info.wobNumber)
+                    .setSignatureVsid(signature);
+            };
+
+            SignDocumentModel.prototype.setBookVsid = function (bookVsid) {
+                this.bookVsid = bookVsid;
+                return this;
+            };
+            SignDocumentModel.prototype.setSignatureVsid = function (signatureVsid) {
+                this.signatureVsid = signatureVsid.hasOwnProperty('vsId') ? signatureVsid.vsId : signatureVsid;
+                return this;
+            };
+            SignDocumentModel.prototype.setWobNum = function (wobNum) {
+                this.wobNum = wobNum;
+                return this;
+            };
+            // don't remove CMSModelInterceptor from last line
+            // should be always at last thing after all methods and properties.
+            CMSModelInterceptor.runEvent('SignDocumentModel', 'init', this);
+        }
+    })
+};

@@ -30,6 +30,8 @@ module.exports = function (app) {
                                                    GeneralStepElementView,
                                                    WorkItem,
                                                    toast,
+                                                   SignDocumentModel,
+                                                   applicationUserSignatureService,
                                                    General,
                                                    errorCode,
                                                    DistributionWF, // just for make the inheritance
@@ -2011,6 +2013,67 @@ module.exports = function (app) {
                         .then(function (result) {
                             return _bulkMessages(result, workItems, ignoreMessage, 'failed_return_selected', 'selected_return_success', 'return_success_except_following');
                         });
+                });
+        }
+        /**
+         * @description approv
+         * @param workItem
+         * @param signature
+         * @param ignoreMessage
+         */
+        self.approveCorrespondence = function (workItem, signature, ignoreMessage) {
+            var info = workItem.getInfo();
+            var sign = (new SignDocumentModel()).setSignature(workItem, signature);
+            return $http
+                .put(_createUrlSchema(null, info.documentClass, 'authorize'), sign)
+                .then(function (result) {
+                    if (!ignoreMessage) {
+                        if (result.data.rs) {
+                            toast.success(langService.get('sign_specific_success').change({name: workItem.getTranslatedName()}));
+                        } else {
+                            toast.error(langService.get('something_happened_when_sign'));
+                        }
+                    }
+                    return workItem;
+                })
+                .catch(function (error) {
+                    errorCode.checkIf(error, 'AUTHORIZE_FAILED', function () {
+                        dialog.errorMessage(langService.get('authorize_failed'))
+                    })
+                })
+        };
+        /**
+         * @description to display dialog to select signature .
+         * @param workItem
+         * @param $event
+         * @param ignoreMessage
+         * @returns {Promise<any>}
+         */
+        self.showApprovedDialog = function (workItem, $event, ignoreMessage) {
+            return applicationUserSignatureService
+                .getApplicationUserSignatures(employeeService.getEmployee().id)
+                .then(function (signatures) {
+                    if (signatures && signatures.length === 1) {
+                        return self.approveCorrespondence(workItem, signatures[0], ignoreMessage);
+                    } else if (signatures && signatures.length > 1) {
+                        return dialog
+                            .showDialog({
+                                targetEvent: $event,
+                                template: cmsTemplate.getPopup('signature'),
+                                controller: 'signaturePopCtrl',
+                                controllerAs: 'ctrl',
+                                locals: {
+                                    userInbox: workItem,
+                                    signatures: signatures
+                                }
+                            })
+                            .then(function () {
+                                return $q.resolve(false);
+                            });
+                    } else {
+                        dialog.alertMessage(langService.get('no_signature_available'));
+                        return $q.reject(langService.get('no_signature_available'));
+                    }
                 });
         }
 

@@ -130,4 +130,5 @@ module.exports = function (app) {
     require('./ProxyInfo')(app);
     require('./ProxyUser')(app);
     require('./CommentModel')(app);
+    require('./SignDocumentModel')(app);
 };

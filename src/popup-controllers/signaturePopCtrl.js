@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('signaturePopCtrl', function (lookupService,
                                                  userInboxService,
                                                  $q,
+                                                 correspondenceService,
                                                  langService,
                                                  toast,
                                                  dialog,
@@ -59,14 +60,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.signDocumentFromCtrl = function($event){
-          userInboxService
-              .signDocument(userInbox, self.selectedSignature)
-              .then(function(result){
-                  if(result)
-                      dialog.hide(true);
-                  else
-                      toast.error(langService.get('something_happened_when_sign'));
-              });
+          correspondenceService
+              .approveCorrespondence(userInbox , self.selectedSignature)
+              .then(function () {
+                  dialog.hide(userInbox);
+              })
         };
 
         /**
