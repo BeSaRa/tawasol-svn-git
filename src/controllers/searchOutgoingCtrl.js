@@ -404,12 +404,12 @@ module.exports = function (app) {
                 });
         };
 
-        /**
+       /* /!**
          * @description Export searched outgoing document
          * @param searchedOutgoingDocument
          * @param $event
          * @type {[*]}
-         */
+         *!/
         self.exportSearchOutgoingDocument = function (searchedOutgoingDocument, $event) {
             //console.log('export searched outgoing document : ', searchedOutgoingDocument);
             searchOutgoingService
@@ -420,7 +420,7 @@ module.exports = function (app) {
                             toast.success(langService.get('export_success'));
                         });
                 });
-        };
+        };*/
 
         /**
          * @description Launch distribution workflow for outgoing item
@@ -746,8 +746,8 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && info.docStatus >= 22;
                 }
             },
-            // Export
-            {
+            // Export /*NOT NEEDED AS DISCUSSED WITH HUSSAM*/
+            /* {
                 type: 'action',
                 icon: 'export',
                 text: 'grid_action_export',
@@ -758,7 +758,7 @@ module.exports = function (app) {
                     //If document is paper outgoing and unapproved/partially approved, show the button.
                     return self.checkToShowAction(action, model) && model.docStatus < 24 && model.addMethod === 1;
                 }
-            },
+            },*/
             //Open
             {
                 type: 'action',

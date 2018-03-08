@@ -405,12 +405,12 @@ module.exports = function (app) {
         };
 
 
-        /**
+       /* /!**
          * @description Export searched internal document
          * @param searchedInternalDocument
          * @param $event
          * @type {[*]}
-         */
+         *!/
         self.exportSearchInternalDocument = function (searchedInternalDocument, $event) {
             searchInternalService
                 .exportSearchInternal(searchedInternalDocument, $event)
@@ -420,7 +420,7 @@ module.exports = function (app) {
                             toast.success(langService.get('export_success'));
                         });
                 });
-        };
+        };*/
 
         /**
          * @description Launch distribution workflow for internal item
@@ -741,8 +741,8 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && info.docStatus >= 22;
                 }
             },
-            // Export
-            {
+            // Export /*NOT NEEDED AS DISCUSSED WITH HUSSAM*/
+            /* {
                 type: 'action',
                 icon: 'export',
                 text: 'grid_action_export',
@@ -751,7 +751,7 @@ module.exports = function (app) {
                 hide: true,
                 class: "action-yellow",
                 checkShow: self.checkToShowAction
-            },
+            },*/
             //Open
             {
                 type: 'action',

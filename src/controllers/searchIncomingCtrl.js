@@ -770,8 +770,8 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && info.docStatus >= 22;
                 }
             },
-            /*  // Export
-             {
+            // Export /*NOT NEEDED AS DISCUSSED WITH HUSSAM*/
+            /* {
              type: 'action',
              icon: 'export',
              text: 'grid_action_export',

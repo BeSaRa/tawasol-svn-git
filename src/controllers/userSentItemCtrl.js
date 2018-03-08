@@ -51,18 +51,19 @@ module.exports = function (app) {
             limit: 5, //self.globalSetting.searchAmount, //5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
+            limitOptions: [5, 10, 20, 100, 200]
+            /*limitOptions: [5, 10, 20, // limit options
                 {
-                    /*label: self.globalSetting.searchAmountLimit.toString(),
+                    /!*label: self.globalSetting.searchAmountLimit.toString(),
                     value: function () {
                         return self.globalSetting.searchAmountLimit
-                    }*/
+                    }*!/
                     label: langService.get('all'),
                     value: function () {
                         return (userSentItemService.totalCount + 21);
                     }
                 }
-            ]
+            ]*/
         };
 
         /**

@@ -98,12 +98,12 @@ module.exports = function (app) {
                 });
         };
 
-        /**
+       /* /!**
          * @description Export quick searched Correspondence document
          * @param searchedCorrespondenceDocument
          * @param $event
          * @type {[*]}
-         */
+         *!/
         self.exportQuickSearchCorrespondence = function (searchedCorrespondenceDocument, $event) {
             quickSearchCorrespondenceService
                 .exportQuickSearchCorrespondence(searchedCorrespondenceDocument, $event)
@@ -113,7 +113,7 @@ module.exports = function (app) {
                             toast.success(langService.get('export_success'));
                         });
                 });
-        };
+        };*/
 
         /**
          * @description view tracking sheet for searched Correspondence document
@@ -392,8 +392,8 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && info.docStatus >= 22;
                 }
             },
-            // Export
-            {
+           // Export /*NOT NEEDED AS DISCUSSED WITH HUSSAM*/
+           /* {
                 type: 'action',
                 icon: 'export',
                 text: 'grid_action_export',
@@ -405,7 +405,7 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model) && model.docStatus < 24 && info.isPaper && info.documentClass === "outgoing";
                 }
-            },
+            },*/
             //Open
             {
                 type: 'action',
