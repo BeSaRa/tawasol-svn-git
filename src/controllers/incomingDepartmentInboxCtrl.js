@@ -151,6 +151,7 @@ module.exports = function (app) {
          * @description Accept the incoming department inbox item
          * @param incomingDepartmentInbox
          * @param $event
+         * @param defer
          */
         self.receiveWorkItem = function (incomingDepartmentInbox, $event, defer) {
             var info = incomingDepartmentInbox.getInfo();

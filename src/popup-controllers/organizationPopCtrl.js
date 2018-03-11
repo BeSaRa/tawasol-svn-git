@@ -266,6 +266,7 @@ module.exports = function (app) {
             } else {
                 self.organization.referencePlanItemStartSerialList = [];
                 self.organization.referenceNumberPlanId = null;
+                self.organization.centralArchiveUnitId = null;
             }
         };
         /**

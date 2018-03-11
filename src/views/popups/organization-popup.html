@@ -228,7 +228,7 @@
                                     </md-switch>
                                     <span class="p20"></span>
                                     <md-input-container class="input-container-no-top-margin"
-                                                        ng-if="!ctrl.organization.centralArchive"
+                                                        ng-if="!ctrl.organization.centralArchive && ctrl.organization.hasRegistry"
                                                         flex>
                                         <label for="centralArchiveUnitId">{{lang.select_central_archive_if_found}}</label>
                                         <md-select
