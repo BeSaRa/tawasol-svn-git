@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('correspondenceViewActionDirectiveCtrl', function (LangWatcher, dialog, $q, $scope) {
+    app.controller('correspondenceViewActionDirectiveCtrl', function (LangWatcher, langService, dialog, $q, $scope) {
         'ngInject';
         var self = this;
         self.controllerName = 'correspondenceViewActionDirectiveCtrl';
@@ -9,6 +9,7 @@ module.exports = function (app) {
          * @param action
          * @param workItem
          * @param correspondence
+         * @param $event
          */
         self.runActionCallback = function (action, workItem, correspondence, $event) {
             var defer = $q.defer();
@@ -38,6 +39,29 @@ module.exports = function (app) {
          */
         self.hideFromView = function (action) {
             return action.hasOwnProperty('showInView') && !action.showInView;
+        };
+        /**
+         * @description get action text for grid actions.
+         * @param action
+         * @param workItem
+         * @param correspondence
+         */
+        self.getActionText = function (action, workItem, correspondence) {
+            var langKey = "";
+            if (action.hasOwnProperty('textCallback') && angular.isFunction(action.textCallback)) {
+                return langService.get(action.textCallback((workItem || correspondence)));
+            }
+
+            if (angular.isFunction(action.text)) {
+                if (isShortcutRequest)
+                    langKey = action.text().shortcutText;
+                else
+                    langKey = action.text().contextText;
+            }
+            else {
+                langKey = action.text;
+            }
+            return langService.get(langKey);
         }
     });
 };

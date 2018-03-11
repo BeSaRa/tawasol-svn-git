@@ -10,7 +10,7 @@
                            ng-if="!action.subMenu.length && action.type ==='action'">
                     <div layout="row">
                         <md-icon md-svg-icon="{{::action.icon}}" class="{{action.class}}"></md-icon>
-                        <span flex>{{lang.get(action.text)}}</span>
+                        <span flex>{{ctrl.getActionText(action , ctrl.workItem , ctrl.correspondence)}}</span>
                     </div>
                 </md-button>
                 <md-divider ng-if="action.type==='separator'"></md-divider>
@@ -18,7 +18,7 @@
                     <md-button ng-click="$mdMenu.open()">
                         <div layout="row">
                             <md-icon md-svg-icon="{{::action.icon}}"></md-icon>
-                            <span flex>{{lang.get(action.text)}}</span>
+                            <span flex>{{ctrl.getActionText(action , ctrl.workItem , ctrl.correspondence)}}</span>
                         </div>
                     </md-button>
                     <md-menu-content width="3">
@@ -29,7 +29,8 @@
                                     ng-if="!childAction.subMenu.length && action.type ==='action'">
                                 <div layout="row">
                                     <!--<md-icon md-svg-icon="{{::childAction.icon}}"></md-icon>-->
-                                    <span flex class="{{childAction.class}}">{{lang.get(childAction.text)}}</span>
+                                    <span flex
+                                          class="{{childAction.class}}">{{ctrl.getActionText(childAction , ctrl.workItem , ctrl.correspondence )}}</span>
                                 </div>
                             </md-button>
                             <md-divider ng-if="action.type==='separator'"></md-divider>
