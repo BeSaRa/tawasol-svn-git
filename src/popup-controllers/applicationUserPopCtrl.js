@@ -840,7 +840,7 @@ module.exports = function (app) {
          */
         self.saveOUApplicationUserFromCtrl = function (ouApplicationUser) {
             if (ouApplicationUser.id) {
-                console.log(ouApplicationUser.getSelectedProxyId());
+                //console.log(ouApplicationUser.getSelectedProxyId());
                 return ouApplicationUserService
                     .updateOUApplicationUser(ouApplicationUser)
                     .then(function () {
@@ -856,7 +856,7 @@ module.exports = function (app) {
                     });
             }
             else {
-                ouApplicationUser.wfsecurity = self.globalSetting.wfsecurity;
+                //ouApplicationUser.wfsecurity = self.globalSetting.wfsecurity;
                 return ouApplicationUserService
                     .addOUApplicationUser(ouApplicationUser)
                     .then(function () {
