@@ -205,16 +205,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.terminateReadyToExportBulk = function ($event) {
-            var numberOfRecordsToTerminate = angular.copy(self.selectedWorkItems.length);
-            readyToExportService
-                .controllerMethod
-                .readyToExportTerminateBulk(self.selectedWorkItems)
+            correspondenceService
+                .terminateBulkWorkItem(self.selectedWorkItems, $event)
                 .then(function () {
-                    self.reloadReadyToExports(self.grid.page)
-                        .then(function () {
-                            if (numberOfRecordsToTerminate === 1)
-                                toast.success(langService.get("selected_terminate_success"));
-                        });
+                    self.reloadReadyToExports(self.grid.page);
                 });
         };
 
@@ -269,15 +263,11 @@ module.exports = function (app) {
          * @param defer
          */
         self.terminateReadyToExport = function (readyToExport, $event, defer) {
-            readyToExportService
-                .controllerMethod
-                .readyToExportTerminate(readyToExport, $event)
+            readyToExport
+                .terminate($event)
                 .then(function () {
-                    self.reloadReadyToExports(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get("terminate_specific_success").change({name: readyToExport.getTranslatedName()}));
-                            new ResolveDefer(defer);
-                        });
+                    new ResolveDefer(defer);
+                    self.reloadReadyToExports(self.grid.page);
                 });
         };
 
@@ -657,7 +647,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.terminateReadyToExport,
                 class: "action-green",
-                hide: true,
+                hide: false,
                 checkShow: self.checkToShowAction
             },
             // Add To Favorite
