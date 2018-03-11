@@ -150,6 +150,16 @@ module.exports = function (app) {
                 return this.proxyUser ? Number(this.proxyUser instanceof ProxyUser ? this.proxyUser.applicationUser.id + '' + this.proxyUser.organization.id : this.proxyUser.id + '' + this.proxyOUId) : null;
             };
 
+            OUApplicationUser.prototype.emptyOutOfOffice = function () {
+                this.proxyUser = null;
+                this.proxyEndDate = null;
+                this.proxyStartDate = null;
+                this.proxyMessage = null;
+                this.proxyOUId = null;
+                this.proxyAuthorityLevels = null;
+                return this;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('OUApplicationUser', 'init', this);

@@ -76,6 +76,8 @@ module.exports = function (app) {
             currentDate.getMonth(),
             currentDate.getDate()
         );
+        // tomorrow
+        self.tomorrow = (new Date()).setDate(self.today.getDate() + 1);
 
         self.rootEntity = rootEntity;
 
@@ -94,6 +96,21 @@ module.exports = function (app) {
         }) : null;
         self.ouApplicationUserCopy = angular.copy(self.ouApplicationUser);
         self.notFound = {};
+
+        /**
+         * @description to check if the current user has valid proxy or not.
+         * @param ouApplicationUser
+         * @private
+         */
+        function _checkProxyDate(ouApplicationUser) {
+            if (ouApplicationUser.proxyEndDate && ouApplicationUser.proxyEndDate.valueOf() < (new Date()).valueOf()) {
+                self.isOutOfOffice = false;
+                self.applicationUser.outOfOffice = false;
+                self.selectedProxyUser = null;
+                ouApplicationUser.emptyOutOfOffice();
+            }
+        }
+
 
         /**
          * @description Contains the labels for the fields for validation purpose
@@ -378,6 +395,8 @@ module.exports = function (app) {
          * @type {boolean}
          */
         self.isOutOfOffice = self.ouApplicationUser.proxyUser != null;
+
+        _checkProxyDate(self.ouApplicationUser);
 
         /**
          * @description Returns out of office value as Yes/No instead of true/false
