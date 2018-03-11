@@ -368,7 +368,7 @@ module.exports = function (app) {
              */
             self.sendWorkItemToReadyToExport = function (workItem, $event, defer) {
                 workItem.sendToReadyToExport().then(function () {
-                    self.reloadUserInboxes(self.grid.page)
+                    self.reloadGroupInbox(self.grid.page)
                         .then(function () {
                             toast.success(langService.get('export_success'));
                             new ResolveDefer(defer);

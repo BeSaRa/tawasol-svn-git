@@ -1242,7 +1242,7 @@ module.exports = function (app) {
                     favoriteDocuments: function (favoriteDocumentsService, rootEntity) {
                         'ngInject';
                         var globalSetting = rootEntity.returnRootEntity().settings;
-                        return favoriteDocumentsService.getFavoriteDocuments(1, globalSetting.searchAmount);
+                        return favoriteDocumentsService.loadFavoriteDocuments(1, globalSetting.searchAmount);
                     }
                 }
             })

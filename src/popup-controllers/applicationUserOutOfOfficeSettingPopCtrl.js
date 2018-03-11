@@ -33,7 +33,8 @@ module.exports = function (app) {
             currentDate.getMonth(),
             currentDate.getDate()
         );
-
+        // tomorrow
+        self.tomorrow = (new Date()).setDate(self.today.getDate() + 1);
         self.requiredFields = [
             'proxyUser',
             'proxyAuthorityLevels',
@@ -51,6 +52,21 @@ module.exports = function (app) {
             //proxyMessage: 'out_of_office_message'
         };
 
+        /**
+         * @description to check if the current user has valid proxy or not.
+         * @param ouApplicationUser
+         * @private
+         */
+        function _checkProxyDate(ouApplicationUser) {
+            if (ouApplicationUser.proxyEndDate && ouApplicationUser.proxyEndDate.valueOf() < (new Date()).valueOf()) {
+                self.isOutOfOffice = false;
+                self.applicationUser.outOfOffice = false;
+                self.selectedProxyUser = null;
+                ouApplicationUser.emptyOutOfOffice();
+            }
+        }
+
+        _checkProxyDate(self.ouApplicationUser);
 
         /**
          * @description Describes if user is out of office

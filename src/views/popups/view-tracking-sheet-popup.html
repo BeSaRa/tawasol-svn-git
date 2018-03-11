@@ -1011,11 +1011,11 @@
         </md-content>
         <div>
             <div layout="row">
-                <md-button class="md-raised" ng-click="ctrl.exportToExcel($event)">
+                <md-button class="md-raised" ng-click="ctrl.exportToExcel($event)" ng-disabled="ctrl.checkDisabled($event)">
                     {{lang.export_to_excel}}
                 </md-button>
                 <span flex></span>
-                <md-button class="md-raised" ng-click="ctrl.printSheet($event)">
+                <md-button class="md-raised" ng-click="ctrl.printSheet($event)" ng-disabled="ctrl.checkDisabled($event)">
                     {{lang.print}}
                 </md-button>
                 <span flex></span>

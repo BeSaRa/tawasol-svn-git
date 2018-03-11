@@ -76,21 +76,28 @@ module.exports = function (app) {
                 });
         };
 
+        self.checkIfReturnBulkAvailable = function(){
+            var itemsWithoutReturn = [], info= {};
+            _.filter(self.selectedIncomingDepartmentInboxes, function (workItem) {
+                if (workItem.generalStepElm.isReassigned)
+                    itemsWithoutReturn.push(info.vsId);
+            });
+            if (itemsWithoutReturn && itemsWithoutReturn.length) {
+                return false;
+            }
+            return true;
+        };
+
         /**
          * @description Return the bulk incoming department inbox items
          * @param $event
          */
         self.returnWorkItemsBulk = function ($event) {
-            /*incomingDepartmentInboxService
-                .controllerMethod.incomingDepartmentInboxesReturnBulk(self.selectedIncomingDepartmentInboxes, $event)
-                .then(function () {
-                    self.reloadIncomingDepartmentInboxes(self.grid.page);
-                })*/
-
-            var itemsWithoutReturn = [], info= {};
+             var itemsWithoutReturn = [], info= {};
             _.filter(self.selectedIncomingDepartmentInboxes, function (workItem) {
-                info = workItem.getInfo();
-                if (!info.incomingVsId)
+                //info = workItem.getInfo();
+                //if (!info.incomingVsId)
+                if(workItem.generalStepElm.isReassigned)
                     itemsWithoutReturn.push(info.vsId);
             });
             var selectedItems = angular.copy(self.selectedIncomingDepartmentInboxes);
@@ -401,7 +408,7 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function(action, model){
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && !!info.incomingVsId;
+                    return self.checkToShowAction(action, model) &&  !model.generalStepElm.isReassigned;//!!info.incomingVsId;
                 }
             },
             // Receive
@@ -414,7 +421,7 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function(action, model){
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && !!info.incomingVsId;
+                    return self.checkToShowAction(action, model) &&  !model.generalStepElm.isReassigned;//!!info.incomingVsId;
                 }
             },
             // Quick Receive
@@ -428,7 +435,7 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function(action, model){
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && !!info.incomingVsId;
+                    return self.checkToShowAction(action, model) && !model.generalStepElm.isReassigned;//!!info.incomingVsId;
                 }
             },
             //Launch Distribution Workflow
@@ -442,7 +449,7 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function(action, model){
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && !info.incomingVsId;
+                    return self.checkToShowAction(action, model) && model.generalStepElm.isReassigned;//!info.incomingVsId;
                 }
             },
             // Manage (Not in SRS)

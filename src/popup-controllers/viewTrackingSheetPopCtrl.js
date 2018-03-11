@@ -273,6 +273,24 @@ module.exports = function (app) {
             }
         };
 
+        self.gridNameRecordCountMap = {
+            'view_tracking_sheet_work_flow_history' : self.workflowHistoryRecords.length,
+            'view_tracking_sheet_linked_documents_history' : self.linkedDocumentsHistoryRecords.length,
+            'view_tracking_sheet_attachments_history' : self.attachmentsHistoryRecords.length,
+            'view_tracking_sheet_merged_linked_document_history' : self.mergedLinkedDocumentHistoryRecords.length,
+            'view_tracking_sheet_linked_entities_history' : self.linkedEntitiesHistoryRecords.length,
+            'view_tracking_sheet_destination_history' : self.destinationHistoryRecords.length,
+            'view_tracking_sheet_content_view_history' : self.contentViewHistoryRecords.length,
+            //'view_tracking_sheet_sms_logs' : self.smsLogRecords.length,
+            'view_tracking_sheet_outgoing_delivery_reports' : self.outgoingDeliveryReportRecords.length,
+            'view_tracking_sheet_full_history' : self.fullHistoryRecords.length
+        };
+
+        self.checkDisabled = function($event){
+            debugger;
+            return !(!!self.gridNameRecordCountMap[self.selectedTab]);
+        };
+
         /**
          * @description Export Tracking Sheet To Excel
          * @param $event

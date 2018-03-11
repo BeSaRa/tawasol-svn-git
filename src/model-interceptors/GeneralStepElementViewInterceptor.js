@@ -15,7 +15,6 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.mapReceived();
-            console.log(model);
             return model;
         });
 
