@@ -419,8 +419,8 @@ module.exports = function (app) {
         self.requiredFieldsOutOfOffice = [
             'proxyUser',
             'proxyAuthorityLevels',
-            'proxyStartDate',
-            'proxyEndDate',
+            // 'proxyStartDate',
+            // 'proxyEndDate',
             'viewProxyMessage'//,
             //'proxyMessage'
         ];

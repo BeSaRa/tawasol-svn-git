@@ -633,7 +633,6 @@
                                                 <md-input-container flex>
                                                     <label for="proxyStartDate">{{lang.start_date}}</label>
                                                     <md-datepicker id="proxyStartDate" name="proxyStartDate"
-                                                                   ng-required="ctrl.isOutOfOffice && ctrl.applicationUser.outOfOffice"
                                                                    md-min-date="ctrl.today"
                                                                    ng-model="ctrl.ouApplicationUser.proxyStartDate"
                                                                    md-max-date="ctrl.ouApplicationUser.proxyEndDate"
@@ -649,7 +648,6 @@
                                                 <md-input-container flex>
                                                     <label for="proxyEndDate">{{lang.end_date}}</label>
                                                     <md-datepicker id="proxyEndDate" name="proxyEndDate"
-                                                                   ng-required="ctrl.isOutOfOffice && ctrl.applicationUser.outOfOffice"
                                                                    ng-model="ctrl.ouApplicationUser.proxyEndDate"
                                                                    md-min-date="ctrl.ouApplicationUser.proxyStartDate"
                                                                    ng-change="ctrl.onEndDateChange()"

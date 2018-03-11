@@ -229,7 +229,9 @@ module.exports = function (app) {
                 "enName": "Departmental"
             }];
 
-
+        self.checkCentralDisabled = function (documentClass) {
+            return self.employee.inCentralArchive() && self.document && documentClass.indexOf(self.document.docClassName.toLowerCase()) !== -1;
+        };
         /**
          * @description Check if the document is approved. If yes, don't allow to change properties and correspondence sites
          * @param document
