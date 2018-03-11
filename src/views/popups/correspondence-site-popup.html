@@ -1,5 +1,9 @@
 <md-dialog class="dialog-extend"
-           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_correspondencesite : ctrl.model.getTranslatedName()}}">
+           ng-attr-aria-label="{{(!ctrl.editMode  && !ctrl.disableParent)
+                                    ? lang.add_new_correspondencesite
+                                    : (!ctrl.editMode && ctrl.disableParent)
+                                        ? lang.add_new_sub_correspondence_site
+                                        :ctrl.model.getTranslatedName()}}">
     <div layout="column">
         <md-toolbar>
             <span class="p20" ng-if="!ctrl.editMode && !ctrl.disableParent">{{lang.add_new_correspondencesite}}</span>

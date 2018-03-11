@@ -15,10 +15,13 @@ module.exports = function (app) {
                                            viewTrackingSheetService,
                                            correspondenceService,
                                            userInboxService,
-                                           errorCode) {
+                                           errorCode,
+                                           contextHelpService) {
         'ngInject';
         var self = this;
         self.controllerName = 'folderCtrl';
+        contextHelpService.setHelpTo('folders');
+
         self.workItems = [];
         self.selectedWorkItems = [];
         self.folders = folders;

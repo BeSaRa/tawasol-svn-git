@@ -1,4 +1,4 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.add_new_correspondence_site_type}}">
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_correspondence_site_type : ctrl.model.getNames()}}">
     <div layout="column">
         <md-toolbar>
             <span ng-if="!ctrl.editMode" class="p20">{{lang.add_new_correspondence_site_type}}</span>

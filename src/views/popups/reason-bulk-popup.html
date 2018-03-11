@@ -1,4 +1,4 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.terminate_reason}}">
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{ctrl.title ? lang.get(ctrl.title) : lang.terminate_reason}}">
     <div layout="column">
         <md-toolbar>
             <span class="p20">{{ctrl.title ? lang.get(ctrl.title) : lang.terminate_reason}}</span>

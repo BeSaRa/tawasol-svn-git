@@ -1,5 +1,5 @@
 <md-dialog class="dialog-extend"
-           ng-attr-aria-label="{{ctrl.model.getLocalizationKey()}}">
+           ng-attr-aria-label="{{!ctrl.newLocalizationKey ? lang.add_new_localization : ctrl.model.getLocalizationKey()}}">
     <div layout="column">
         <md-toolbar>
             <span ng-if="!ctrl.newLocalizationKey"

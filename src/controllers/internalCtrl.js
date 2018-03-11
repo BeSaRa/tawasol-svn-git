@@ -32,7 +32,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'internalCtrl';
-        contextHelpService.setHelpTo('internal-add');
+        contextHelpService.setHelpTo('add-internal');
         self.employeeService = employeeService;
         // current employee
         self.employee = employeeService.getEmployee();

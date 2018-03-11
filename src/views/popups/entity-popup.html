@@ -1,4 +1,4 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_entity: ctrl.model.getNames()}}">
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_entity: ctrl.model.getTranslatedName()}}">
     <div layout="column">
         <md-toolbar layout="row" layout-align="start center">
             <span class="p20" ng-if="!ctrl.editMode">{{lang.add_new_entity}}</span>
