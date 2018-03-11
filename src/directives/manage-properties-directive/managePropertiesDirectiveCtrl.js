@@ -27,8 +27,6 @@ module.exports = function (app) {
         $timeout(function () {
             // all system organizations
             self.organizations = self.centralArchives ? self.centralArchives : organizationService.organizations;
-
-            console.log(self.centralArchives);
             // all document types
             self.documentTypes = correspondenceService.getLookup(self.document.docClassName, 'docTypes');
             self.securityLevels = correspondenceService.getLookup(self.document.docClassName, 'securityLevels');
@@ -231,6 +229,10 @@ module.exports = function (app) {
 
         self.checkCentralDisabled = function (documentClass) {
             return self.employee.inCentralArchive() && self.document && documentClass.indexOf(self.document.docClassName.toLowerCase()) !== -1;
+        };
+
+        self.isNormalOrganization = function () {
+            return !self.employee.inCentralArchive() && self.document;
         };
         /**
          * @description Check if the document is approved. If yes, don't allow to change properties and correspondence sites

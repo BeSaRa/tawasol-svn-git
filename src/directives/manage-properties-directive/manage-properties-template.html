@@ -6,7 +6,7 @@
                     <label for="ou">{{lang.organization_unit}}</label>
                     <md-select name="ou"
                                id="ou"
-                               ng-disabled="!!ctrl.disableProperties || ctrl.checkCentralDisabled(['outgoing','internal'])"
+                               ng-disabled="!!ctrl.disableProperties || ctrl.document.hasVsId() || ctrl.isNormalOrganization() || ctrl.checkCentralDisabled(['outgoing','internal'])"
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-model="ctrl.document.ou"
                                required>

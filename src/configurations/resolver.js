@@ -242,7 +242,6 @@ module.exports = function (app) {
 
                     return correspondenceService.receiveIncoming(workItem)
                         .catch(function (error) {
-                            console.log("CATCH", error);
                             return $timeout(function () {
                                 return false;
                             });

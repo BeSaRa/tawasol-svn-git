@@ -206,7 +206,7 @@ module.exports = function (app) {
                             var qDefer = $q.defer();
                             var organizations = organizationService.loadOrganizations();
                             var lookups = correspondenceService.loadCorrespondenceLookups(documentClass);
-                            return $q.all([organizations, lookups]).then(function (result) {
+                            $q.all([organizations, lookups]).then(function (result) {
                                 deferCorrespondence.resolve(true);
                                 qDefer.resolve(true);
                                 return result;
