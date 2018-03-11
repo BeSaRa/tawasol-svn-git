@@ -32,7 +32,8 @@ module.exports = function (app) {
             outgoing: [],
             incoming: [],
             internal: [],
-            correspondence: [] // private key for global search
+            correspondence: [], // private key for global search,
+            attachment: []
         };
 
         self.setHttpService = function (http) {
@@ -155,6 +156,7 @@ module.exports = function (app) {
             self.propertyConfigurations.incoming = [];
             self.propertyConfigurations.internal = [];
             self.propertyConfigurations.correspondence = [];
+            self.propertyConfigurations.attachment = [];
 
             _.map(propertyConfigurations, function (property) {
                 var lookup = self.lookups.documentClass[property.documentClass] || 'correspondence';
