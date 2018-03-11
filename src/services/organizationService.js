@@ -546,7 +546,8 @@ module.exports = function (app) {
         self.centralArchiveOrganizations = function () {
             return $http.get(urlService.availableCentralArchive)
                 .then(function (result) {
-                    return generator.generateCollection(result.data.rs, WFOrganization);
+                    var organizations = generator.generateCollection(result.data.rs, WFOrganization);
+                    return organizations.length ? organizations : false;
                 });
         }
 
