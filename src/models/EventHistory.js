@@ -3,8 +3,7 @@ module.exports = function (app) {
                                           langService,
                                           Indicator,
                                           correspondenceService,
-                                          Information,
-                                          attachmentService) {
+                                          Information) {
         'ngInject';
         return function EventHistory(model) {
             var self = this;
@@ -75,8 +74,8 @@ module.exports = function (app) {
              * @returns {string}
              */
             EventHistory.prototype.getTranslatedCorrespondenceSiteInfo = function () {
-                var mainSite = angular.isArray(this.mainSiteInfo) ? new Information(this.mainSiteInfo[0]) : new Information(this.mainSiteInfo);
-                var subSite = angular.isArray(this.subSiteInfo) ? new Information(this.subSiteInfo[0]) : new Information(this.subSiteInfo);
+                var mainSite = angular.isArray(this.mainSiteInfo) && this.mainSiteInfo.length > 0 ? new Information(this.mainSiteInfo[0]) : new Information();
+                var subSite = angular.isArray(this.subSiteInfo) && this.subSiteInfo.length > 0 ? new Information(this.subSiteInfo[0]) : new Information();
                 return langService.current === 'en'
                     ? (mainSite.getTranslatedName() + ' - ' + subSite.getTranslatedName())
                     : (subSite.getTranslatedName() + ' - ' + mainSite.getTranslatedName());

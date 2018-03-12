@@ -1228,7 +1228,7 @@ module.exports = function (app) {
                     userSentItems: function (userSentItemService, rootEntity) {
                         'ngInject';
                         var globalSetting = rootEntity.returnRootEntity().settings;
-                        return userSentItemService.getUserSentItems(1, globalSetting.searchAmount);
+                        return userSentItemService.loadUserSentItems(1, globalSetting.searchAmount);
                     }
                 }
             })
