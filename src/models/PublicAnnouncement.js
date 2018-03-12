@@ -3,7 +3,7 @@ module.exports = function (app) {
                                                 langService,
                                                 _,
                                                 moment,
-    employeeService) {
+                                                employeeService) {
         'ngInject';
         return function PublicAnnouncement(model) {
             var self = this;

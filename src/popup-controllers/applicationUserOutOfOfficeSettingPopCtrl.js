@@ -85,9 +85,11 @@ module.exports = function (app) {
         self.checkRequiredFieldsAppUserOutOfOffice = function (model) {
             var required = self.requiredFields, result = [];
             if (!self.applicationUser.outOfOffice) {
-                required = _.filter(required, function (property) {
-                    return property !== 'proxyStartDate' && property !== 'proxyEndDate';
-                })
+                if (!self.ouApplicationUser.proxyStartDate && !self.ouApplicationUser.proxyEndDate) {
+                    required = _.filter(required, function (property) {
+                        return property !== 'proxyStartDate' && property !== 'proxyEndDate';
+                    })
+                }
             }
             _.map(required, function (property) {
                 if (!generator.validRequired(model[property]))
