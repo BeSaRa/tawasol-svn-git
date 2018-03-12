@@ -774,7 +774,6 @@ module.exports = function (app) {
                     self.selectedTab = tab;
                 })
                 .catch(function (error) {
-                    console.log("Error", error);
                     console.log(error);
                 });
 
