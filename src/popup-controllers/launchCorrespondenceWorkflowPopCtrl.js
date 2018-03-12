@@ -731,7 +731,7 @@ module.exports = function (app) {
         }
 
         function _filterWFDepartmentsGroup(item) {
-            return item.gridName === 'OUGorup';
+            return item.gridName === 'OUGroup';
         }
 
         /**
