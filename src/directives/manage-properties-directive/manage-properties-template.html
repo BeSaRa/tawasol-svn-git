@@ -2,11 +2,29 @@
     <fieldset class="field-set-hidden">
         <div layout="column">
             <div layout="row">
+                <!--<md-input-container flex>-->
+                    <!--<label for="registryOU">{{lang.organization_unit}}</label>-->
+                    <!--<md-select name="registryOU"-->
+                               <!--id="registryOU"-->
+                               <!--ng-change="ctrl.onRegistryChange(ctrl.document.registryOU)"-->
+                               <!--ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"-->
+                               <!--ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"-->
+                               <!--ng-model="ctrl.document.registryOU"-->
+                               <!--required>-->
+                        <!--<md-option ng-value="organization.id"-->
+                                   <!--ng-repeat="organization in ctrl.registryOrganizations">-->
+                            <!--{{organization.getTranslatedName()}}-->
+                        <!--</md-option>-->
+                    <!--</md-select>-->
+                    <!--<div ng-messages="outgoing_properties.ou.$error">-->
+                        <!--<div ng-message="required">{{lang.field_required}}</div>-->
+                    <!--</div>-->
+                <!--</md-input-container>-->
                 <md-input-container flex>
                     <label for="ou">{{lang.organization_unit}}</label>
                     <md-select name="ou"
                                id="ou"
-                               ng-disabled="!!ctrl.disableProperties || ctrl.document.hasVsId() || ctrl.isNormalOrganization() || ctrl.checkCentralDisabled(['outgoing','internal'])"
+                               ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-model="ctrl.document.ou"
                                required>

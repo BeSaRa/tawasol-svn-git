@@ -231,7 +231,7 @@ module.exports = function (app) {
                         },
                         centralArchives: function (organizationService, employeeService) {
                             'ngInject';
-                            return employeeService.isCentralArchive() && documentClass.toLowerCase() === 'incoming' ? organizationService.centralArchiveOrganizations() : false
+                            return employeeService.isCentralArchive() && (documentClass.toLowerCase() === 'incoming' || documentClass.toLowerCase() === 'outgoing') ? organizationService.centralArchiveOrganizations() : false
                         }
                     }
                 }).catch(function (e) {

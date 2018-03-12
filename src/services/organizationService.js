@@ -328,11 +328,12 @@ module.exports = function (app) {
         /**
          * load children organization for given organization.
          * @param organization
+         * @param type
          */
-        self.loadOrganizationChildren = function (organization) {
+        self.loadOrganizationChildren = function (organization, type) {
             var id = organization.hasOwnProperty('id') ? organization.id : organization;
             return $http
-                .get((urlService.organizations + '/' + id + '/childs'))
+                .get((urlService.organizations + '/' + id + '/childs' + (type ? '/type=1' : '')))
                 .then(function (result) {
                     var children = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
                     return generator.interceptReceivedCollection('Organization', children);

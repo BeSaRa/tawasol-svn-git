@@ -30,6 +30,7 @@ module.exports = function (app) {
                                              replyTo,
                                              editAfterApproved,
                                              editAfterExport,
+                                             centralArchives,
                                              lookups, // new injector for all lookups can user access
                                              correspondenceService) {
         'ngInject';
@@ -59,7 +60,9 @@ module.exports = function (app) {
 
         self.maxCreateDate = new Date();
         // all system organizations
-        self.organizations = organizations;
+        self.organizations = angular.copy(organizations);
+        // in case of central archive.
+        self.registryOrganizations = [];
 
         // all shortcut for the screen
         self.templates = lookups.templates;
@@ -73,7 +76,6 @@ module.exports = function (app) {
                 addMethod: 0,
                 createdOn: new Date(),
                 docDate: new Date(),
-                // registryOU: organizationService.getRegistryOrganizationId(self.employee.organization.ouid).id,
                 registryOU: self.employee.getRegistryOUID(),
                 securityLevel: lookups.securityLevels[0],
                 linkedDocs: replyTo ? [replyTo] : []
@@ -97,7 +99,16 @@ module.exports = function (app) {
             $event.stopPropagation();
         };
 
+        self.checkCentralArchive = function () {
+            // if employee in central archive and the outgoing is paper base
+            // if (employeeService.isCentralArchive() && self.outgoing.addMethod && centralArchives.length) {
+            //     self.registryOrganizations = centralArchives;
+            //     self.outgoing.emptyOrganizations();
+            // }
+        };
+
         self.checkChangeOutgoingType = function () {
+            self.checkCentralArchive();
             if (self.documentInformation || self.outgoing.contentFile) {
                 return dialog
                     .confirmMessage(langService.get('content_will_remove_confirm'))
@@ -279,7 +290,7 @@ module.exports = function (app) {
             //console.log('send to review', document);
             draftOutgoingService.controllerMethod
                 .draftOutgoingSendToReview(self.outgoing, $event)
-                .then(function(){
+                .then(function () {
                     counterService.loadCounters();
                     self.resetAddCorrespondence();
                 });

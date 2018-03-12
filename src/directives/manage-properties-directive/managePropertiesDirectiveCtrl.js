@@ -234,6 +234,30 @@ module.exports = function (app) {
         self.isNormalOrganization = function () {
             return !self.employee.inCentralArchive() && self.document;
         };
+
+        self.checkOrganizationDisabled = function () {
+            // if no document provided or still the controller prepare the instance.
+            if (!self.document)
+                return false;
+            // disable organization when edit mode for any case || if in add mode and the current employee not in central archive organization.
+            if (self.document.hasVsId() || !self.employee.inCentralArchive()) {
+                return true;
+            }
+            // if this document new and internal or outgoing electronic disable the select organization.
+            return !!(self.document.hasDocumentClass('internal') || (self.document.hasDocumentClass('outgoing') && !self.document.addMethod));
+
+        };
+        /**
+         * @description on registry change.
+         * @param organizationId
+         */
+        self.onRegistryChange = function (organizationId) {
+            organizationService
+                .loadOrganizationChildren(organizationId, true)
+                .then(function (result) {
+                    self.organizations = result;
+                });
+        };
         /**
          * @description Check if the document is approved. If yes, don't allow to change properties and correspondence sites
          * @param document

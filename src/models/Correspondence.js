@@ -506,6 +506,12 @@ module.exports = function (app) {
                 return correspondenceService.rejectCorrespondence(this, $event, ignoreMessage);
             };
 
+            Correspondence.prototype.emptyOrganizations = function () {
+                this.registryOU = null;
+                this.ou = null;
+                return this;
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

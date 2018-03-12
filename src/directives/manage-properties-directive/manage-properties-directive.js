@@ -15,7 +15,8 @@ module.exports = function (app) {
                 sourceForm: '=?',
                 fromDialog: '=',
                 disableProperties: '=',
-                centralArchives: '='
+                centralArchives: '=',
+                registryOrganizations: '=?'
             }
         }
     })
