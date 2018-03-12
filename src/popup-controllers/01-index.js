@@ -81,7 +81,7 @@ module.exports = function (app) {
     require('./startSerialPopCtrl')(app);
     require('./viewAttachmentsOnlyPopCtrl')(app);
     require('./localizationPopCtrl')(app);
-    require('./contentViewHistoryEventsPopCtrl')(app);
+    require('./contentViewHistoryViewersPopCtrl')(app);
     require('./selectOUApplicationUsersSinglePopCtrl')(app);
     require('./launchCorrespondenceWorkflowPopCtrl')(app);
     require('./workflowItemSettingPopCtrl')(app);

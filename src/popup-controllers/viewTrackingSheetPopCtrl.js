@@ -221,9 +221,9 @@ module.exports = function (app) {
          * @param contentViewHistory
          * @param $event
          */
-        self.viewContentViewHistoryEvents = function(contentViewHistory, $event){
+        self.viewContentViewHistoryViewers = function(contentViewHistory, $event){
             viewTrackingSheetService.controllerMethod
-                .viewContentViewHistoryEvents(contentViewHistory, $event);
+                .viewContentViewHistoryViewers(contentViewHistory, $event);
         };
 
         /**
@@ -287,7 +287,6 @@ module.exports = function (app) {
         };
 
         self.checkDisabled = function($event){
-            debugger;
             return !(!!self.gridNameRecordCountMap[self.selectedTab]);
         };
 
