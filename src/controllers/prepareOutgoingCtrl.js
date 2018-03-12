@@ -15,8 +15,7 @@ module.exports = function (app) {
                                                     contextHelpService,
                                                     viewTrackingSheetService,
                                                     broadcastService,
-                                                    ResolveDefer,
-                                                    correspondenceService) {
+                                                    ResolveDefer) {
         'ngInject';
         var self = this;
 
@@ -497,21 +496,6 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && !model.hasContent();
                 }
             },
-            // Open (not needed as documents will always be without content in this grid)
-            /*{
-                type: 'action',
-                icon: 'book-open-variant',
-                text: 'grid_action_open',
-                shortcut: false,
-                callback: self.viewDocument,
-                showInView: false,
-                class: "action-green",
-                permissionKey: 'VIEW_DOCUMENT',
-                checkShow: function (action, model) {
-                    //If no content or no view document permission, hide the button
-                    return self.checkToShowAction(action, model) && model.hasContent();
-                }
-            },*/
             // Broadcast
             {
                 type: 'action',

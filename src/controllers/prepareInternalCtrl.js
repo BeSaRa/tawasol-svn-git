@@ -12,7 +12,6 @@ module.exports = function (app) {
                                                     managerService,
                                                     broadcastService,
                                                     counterService,
-                                                    correspondenceService,
                                                     ResolveDefer) {
         'ngInject';
         var self = this;
@@ -80,7 +79,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.removePrepareInternal = function (prepareInternal, $event, defer) {
-            console.log('remove prepare internal mail : ', prepareInternal);
             prepareInternalService
                 .controllerMethod
                 .prepareInternalRemove(prepareInternal, $event)
@@ -98,7 +96,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulk = function ($event) {
-            console.log('remove prepare internal mails bulk : ', self.selectedPrepareInternals);
             prepareInternalService
                 .controllerMethod
                 .prepareInternalRemoveBulk(self.selectedPrepareInternals, $event)
@@ -464,21 +461,6 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && !model.hasContent();
                 }
             },
-            // Open (not needed as documents will always be without content in this grid)
-            /*{
-                type: 'action',
-                icon: 'book-open-variant',
-                text: 'grid_action_open',
-                shortcut: false,
-                showInView: false,
-                callback: self.viewDocument,
-                class: "action-green",
-                permissionKey: 'VIEW_DOCUMENT',
-                checkShow: function (action, model) {
-                    //If no content or no view document permission, hide the button
-                    return self.checkToShowAction(action, model) && model.hasContent();
-                }
-            },*/
             // Broadcast
             {
                 type: 'action',

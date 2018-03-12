@@ -12,8 +12,7 @@ module.exports = function (app) {
                                                  broadcastService,
                                                  generator,
                                                  contextHelpService,
-                                                 ResolveDefer,
-                                                 correspondenceService) {
+                                                 ResolveDefer) {
         'ngInject';
         var self = this;
 
@@ -468,21 +467,6 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && !model.hasContent();
                 }
             },
-            // Open
-            /*{
-                type: 'action',
-                icon: 'book-open-variant',
-                text: 'grid_action_open',
-                shortcut: false,
-                callback: self.viewDocument,
-                showInView: false,
-                class: "action-red",
-                permissionKey: 'VIEW_DOCUMENT',
-                checkShow: function (action, model) {
-                    //If no content or no view document permission, hide the button
-                    return self.checkToShowAction(action, model) && model.hasContent();
-                }
-            },*/
             // Broadcast
             {
                 type: 'action',
