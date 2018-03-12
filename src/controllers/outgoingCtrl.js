@@ -98,13 +98,20 @@ module.exports = function (app) {
         self.preventPropagation = function ($event) {
             $event.stopPropagation();
         };
-
+        /**
+         * @description to check central archive
+         */
         self.checkCentralArchive = function () {
             // if employee in central archive and the outgoing is paper base
-            // if (employeeService.isCentralArchive() && self.outgoing.addMethod && centralArchives.length) {
-            //     self.registryOrganizations = centralArchives;
-            //     self.outgoing.emptyOrganizations();
-            // }
+            if (employeeService.isCentralArchive() && self.outgoing.addMethod && centralArchives.length) {
+                self.registryOrganizations = centralArchives;
+                self.outgoing.emptyOrganizations();
+            } else {
+                var reg = employeeService.getEmployee().getRegistryOUID();
+                self.organizations = organizationService.organizations;
+                self.outgoing.ou = employeeService.getEmployee().getOUID();
+                self.outgoing.registryOU = reg.hasOwnProperty('id') ? reg.id : reg;
+            }
         };
 
         self.checkChangeOutgoingType = function () {

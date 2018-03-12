@@ -35,6 +35,8 @@ module.exports = function (app) {
         });
         // current employee
         self.employee = employeeService.getEmployee();
+        // for sub organizations
+        self.subOrganizations = [];
 
         /**
          * @description to check if the given securityLevel included or not.
@@ -252,11 +254,17 @@ module.exports = function (app) {
          * @param organizationId
          */
         self.onRegistryChange = function (organizationId) {
+            self.subOrganizations = [];
             organizationService
                 .loadOrganizationChildren(organizationId, true)
                 .then(function (result) {
-                    self.organizations = result;
+                    // self.organizations = result;
+                    self.subOrganizations = result;
                 });
+        };
+
+        self.showRegistryUnit = function () {
+            return self.registryOrganizations && self.registryOrganizations.length && employeeService.isCentralArchive() && self.document && self.document.addMethod && self.document.classDescription.toLowerCase() === 'outgoing';
         };
         /**
          * @description Check if the document is approved. If yes, don't allow to change properties and correspondence sites
