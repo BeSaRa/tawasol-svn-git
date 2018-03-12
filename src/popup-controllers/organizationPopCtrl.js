@@ -382,12 +382,12 @@ module.exports = function (app) {
                         langService.get('basic_info')
                     )
                 })
-                .addStep('check_valid', true, self.organization, function (result) {
-                    return !(!result.hasRegistry && result.centralArchive)
-                })
-                .notifyFailure(function () {
-                    dialog.errorMessage(langService.get('archive_and_has_registry'));
-                })
+                // .addStep('check_valid', true, self.organization, function (result) {
+                //     return !(!result.hasRegistry && result.centralArchive)
+                // })
+                // .notifyFailure(function () {
+                //     dialog.errorMessage(langService.get('archive_and_has_registry'));
+                // })
                 .validate()
                 .then(function () {
                     self.organization.parent = self.parentOrganization;
