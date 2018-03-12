@@ -43,7 +43,7 @@ module.exports = function (app) {
         self.showAdvancedSearch = false;
 
         self.searchOutgoing = new DocumentSearch({'reqType': 0});
-        self.searchOutgoing.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
+        //self.searchOutgoing.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
         self.searchOutgoingModel = angular.copy(self.searchOutgoing);
 
         self.organizations = organizations;
@@ -324,7 +324,7 @@ module.exports = function (app) {
          */
         self.resetFilters = function (form) {
             self.searchOutgoing = new DocumentSearch({"reqType": 0});
-            self.searchOutgoing.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
+            //self.searchOutgoing.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
             self.searchOutgoingModel = angular.copy(self.searchOutgoing);
             self.mainCorrespondenceSites = self.subCorrespondenceSites = self.subClassifications = [];
             self.maxDocDate = self.maxDateForTo = self.minDocDate = self.minDateForFrom = null;

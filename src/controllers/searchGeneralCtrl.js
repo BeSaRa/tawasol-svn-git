@@ -42,7 +42,7 @@ module.exports = function (app) {
         self.progress = null;
         self.showAdvancedSearch = false;
         self.searchGeneral = new DocumentSearch({"reqType": 3});
-        self.searchGeneral.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
+        //self.searchGeneral.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
         self.searchGeneralModel = angular.copy(self.searchGeneral);
 
         self.organizations = organizations;
@@ -324,7 +324,7 @@ module.exports = function (app) {
          */
         self.resetFilters = function (form) {
             self.searchGeneral = new DocumentSearch({"reqType": 3});
-            self.searchGeneral.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
+            //self.searchGeneral.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
             self.searchGeneralModel = angular.copy(self.searchGeneral);
             self.mainCorrespondenceSites = self.subCorrespondenceSites = self.subClassifications = [];
             form.$setUntouched();
