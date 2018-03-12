@@ -120,7 +120,7 @@ module.exports = function (app) {
         // favorite Users
         self.favoriteUsers = _mapWFUser(distributionWFService.favoriteUsers);
         // favorite Organizations
-        self.favoriteOrganizations = _mapWFOrganization(distributionWFService.favoriteOrganizations);
+        self.favoriteOrganizations = _mapOrganizationByType(distributionWFService.favoriteOrganizations);
         // all private users
         self.privateUsers = _mapWFUser(distributionWFService.privateUsers);
         // all managers users
@@ -727,11 +727,11 @@ module.exports = function (app) {
         }
 
         function _filterWFRegDepartments(item) {
-            return item.hasRegistry;
+            return item.gridName === 'OUReg';
         }
 
         function _filterWFDepartmentsGroup(item) {
-            return !item.hasRegistry;
+            return item.gridName === 'OUGorup';
         }
 
         /**
@@ -770,7 +770,6 @@ module.exports = function (app) {
 
                     if (result.onDemand) {
                         self[result.property] = self.tabMapper[result.property](result.data, gridName);
-                        console.log(console.log('self.registryOrganizations', result.data, result.property, self.registryOrganizations));
                     }
                     self.selectedTab = tab;
                 })
