@@ -2,14 +2,15 @@ module.exports = function (app) {
     app.factory('PublicAnnouncement', function (CMSModelInterceptor,
                                                 langService,
                                                 _,
-                                                moment) {
+                                                moment,
+    employeeService) {
         'ngInject';
         return function PublicAnnouncement(model) {
             var self = this;
 
             //region Public Announcement properties
             self.id = null;
-            self.creator = "1";
+            self.creator = employeeService.getEmployee().id; //"1";
             self.startDate = null;
             self.endDate = null;
             self.status = true;

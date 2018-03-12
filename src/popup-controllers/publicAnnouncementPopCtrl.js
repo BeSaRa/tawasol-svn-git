@@ -59,7 +59,7 @@ module.exports = function (app) {
          * @description Add new public announcement
          */
         self.addPublicAnnouncementFromCtrl = function () {
-            console.log(self.publicAnnouncement);
+            //console.log(self.publicAnnouncement);
             validationService
                 .createValidation('ADD_PUBLIC_ANNOUNCEMENT')
                 .addStep('check_required', true, generator.checkRequiredFields, self.publicAnnouncement, function (result) {
