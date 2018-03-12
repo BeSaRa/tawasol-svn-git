@@ -167,7 +167,7 @@ module.exports = function (app) {
                 return this.canSendTo('AllRegistryOUUsers');
             };
             Employee.prototype.canSendToManagers = function () {
-                return this.canSendTo('AllRegistryOUUsers');
+                return this.canSendTo('Managers');
             };
             /**
              * to check if the current user has permission

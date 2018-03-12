@@ -120,7 +120,7 @@ module.exports = function (app) {
         // favorite Users
         self.favoriteUsers = _mapWFUser(distributionWFService.favoriteUsers);
         // favorite Organizations
-        self.favoriteOrganizations = distributionWFService.favoriteOrganizations;
+        self.favoriteOrganizations = _mapWFOrganization(distributionWFService.favoriteOrganizations);
         // all private users
         self.privateUsers = _mapWFUser(distributionWFService.privateUsers);
         // all managers users
@@ -727,11 +727,11 @@ module.exports = function (app) {
         }
 
         function _filterWFRegDepartments(item) {
-            return item.gridName === 'OUReg';
+            return item.hasRegistry;
         }
 
         function _filterWFDepartmentsGroup(item) {
-            return item.gridName === 'OUGroup';
+            return !item.hasRegistry;
         }
 
         /**
