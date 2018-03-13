@@ -847,7 +847,6 @@ module.exports = function (app) {
                         //if (!self.currentOrganization) {
                         toast.success(langService.get('edited_successfully'));
                         //}
-debugger;
                         if (employeeService.isCurrentEmployee(self.applicationUser)) {
 
                             employeeService.setCurrentOUApplicationUser(ouApplicationUser);
@@ -955,7 +954,7 @@ debugger;
                             return ouApplicationUserService
                                 .getAvailableProxies(ouApplicationUser.getRegistryOUID())
                                 .then(function (result) {
-                                    console.log(result);
+                                    //console.log(result);
                                     return result
                                 })
                         }

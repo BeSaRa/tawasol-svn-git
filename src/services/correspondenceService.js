@@ -1747,6 +1747,28 @@ module.exports = function (app) {
                     return correspondence;
                 })
         };
+
+        /**
+         * @description add bulk documents to favorites.
+         * @param correspondences
+         * @param ignoreMessage
+         */
+        self.addBulkCorrespondenceToFavorite = function (correspondences, ignoreMessage) {
+            /*if (correspondences.length === 1)
+                return self.addCorrespondenceToFavorite(correspondences[0], ignoreMessage);
+            return $http
+                .post((urlService.favoriteDocuments + '/bulk'), _.map(correspondences, function (item) {
+                    var info = item.getInfo();
+                    return {
+                        documentVSId: info.vsId,
+                        applicationUserId: employeeService.getEmployee().id
+                    }
+                }))
+                .then(function (result) {
+                    return _bulkMessages(result, correspondences, ignoreMessage, 'failed_add_selected_to_favorite', 'add_to_favorite_documents_success', 'add_to_favorite_documents_success_except_following');
+                });*/
+        };
+
         /**
          * @description remove correspondence from favorites.
          * @param correspondence
@@ -1762,25 +1784,7 @@ module.exports = function (app) {
                     return correspondence;
                 });
         };
-        /**
-         * @description add bulk documents to favorites.
-         * @param correspondences
-         * @param ignoreMessage
-         */
-        self.addBulkCorrespondenceToFavorite = function (correspondences, ignoreMessage) {
-            var employeeId = employeeService.getEmployee().id;
-            return $http
-                .post((urlService.favoriteDocuments + '/bulk'), _.map(correspondences, function (item) {
-                    var info = item.getInfo();
-                    return {
-                        documentVSId: info.vsId,
-                        applicationUserId: employeeId
-                    }
-                }))
-                .then(function (result) {
-                    return _bulkMessages(result, correspondences, ignoreMessage, 'failed_add_selected_to_favorite', 'add_to_favorite_documents_success', 'add_to_favorite_documents_success_except_following');
-                });
-        };
+
         /**
          * @description delete bulk correspondence from favorites.
          * @param correspondences
