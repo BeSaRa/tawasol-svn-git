@@ -1,26 +1,26 @@
 module.exports = function (app) {
-    app.controller('jobTitlePopCtrl', function (lookupService,
-                                                jobTitleService,
-                                                jobTitle,
+    app.controller('rankPopCtrl', function (lookupService,
+                                                rankService,
+                                                rank,
                                                 $q,
                                                 langService,
                                                 toast,
                                                 dialog,
                                                 editMode,
-                                                JobTitle, 
-                                                validationService, 
+                                                Rank,
+                                                validationService,
                                                 generator) {
         'ngInject';
         var self = this;
-        self.controllerName = 'jobTitlePopCtrl';
+        self.controllerName = 'rankPopCtrl';
         self.editMode = editMode;
-        self.jobTitle = jobTitle;
-        self.model = angular.copy(self.jobTitle);
-        self.lookupStrKey = angular.copy(self.jobTitle.lookupStrKey);
+        self.rank = rank;
+        self.model = angular.copy(self.rank);
+        self.lookupStrKey = angular.copy(self.rank.lookupStrKey);
         /**
          *@description All s
          */
-        self.jobTitlePops = jobTitle;
+        self.rankPops = rank;
         self.validateLabels = {
             arName: 'arabic_name',
             enName: 'english_name',
@@ -28,11 +28,11 @@ module.exports = function (app) {
         };
         self.promise = null;
         self.selecteds = [];
-        self.addJobTitleFromCtrl = function () {
-            self.jobTitle.lookupStrkey = self.lookupStrKey;
+        self.addRankFromCtrl = function () {
+            self.rank.lookupStrkey = self.lookupStrKey;
             validationService
-                .createValidation('ADD_JOB_TITLE')
-                .addStep('check_required', true, generator.checkRequiredFields, self.jobTitle, function (result) {
+                .createValidation('ADD_RANK')
+                .addStep('check_required', true, generator.checkRequiredFields, self.rank, function (result) {
                     return !result.length;
                 })
                 .notifyFailure(function (step, result) {
@@ -41,7 +41,7 @@ module.exports = function (app) {
                     });
                     generator.generateErrorFields('check_this_fields', labels);
                 })
-                .addStep('check_duplicate', true, jobTitleService.checkDuplicateJobTitle, [self.jobTitle, false], function (result) {
+                .addStep('check_duplicate', true, rankService.checkDuplicateRank, [self.rank, false], function (result) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {
@@ -49,8 +49,8 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-                    jobTitleService.addJobTitle(self.jobTitle).then(function () {
-                        dialog.hide(self.jobTitle);
+                    rankService.addRank(self.rank).then(function () {
+                        dialog.hide(self.rank);
                     });
                 })
                 .catch(function () {
@@ -60,10 +60,10 @@ module.exports = function (app) {
         /**
          *
          */
-        self.editJobTitleFromCtrl = function () {
+        self.editRankFromCtrl = function () {
             validationService
-                .createValidation('EDIT_JOB_TITLE')
-                .addStep('check_required', true, generator.checkRequiredFields, self.jobTitle, function (result) {
+                .createValidation('EDIT_RANK')
+                .addStep('check_required', true, generator.checkRequiredFields, self.rank, function (result) {
                     return !result.length;
                 })
                 .notifyFailure(function (step, result) {
@@ -72,7 +72,7 @@ module.exports = function (app) {
                     });
                     generator.generateErrorFields('check_this_fields', labels);
                 })
-                .addStep('check_duplicate', true, jobTitleService.checkDuplicateJobTitle, [self.jobTitle, true], function (result) {
+                .addStep('check_duplicate', true, rankService.checkDuplicateRank, [self.rank, true], function (result) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {
@@ -80,8 +80,8 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-                    jobTitleService.updateJobTitle(self.jobTitle).then(function () {
-                        dialog.hide(self.jobTitle);
+                    rankService.updateRank(self.rank).then(function () {
+                        dialog.hide(self.rank);
                     });
                 })
                 .catch(function () {

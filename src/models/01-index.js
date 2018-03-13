@@ -131,4 +131,5 @@ module.exports = function (app) {
     require('./ProxyUser')(app);
     require('./CommentModel')(app);
     require('./SignDocumentModel')(app);
+    require('./Rank')(app);
 };

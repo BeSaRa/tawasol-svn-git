@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                       applicationUserService,
                                                       lookupService,
                                                       jobTitles,
+                                                      ranks,
                                                       themes,
                                                       organizations,
                                                       roles,
@@ -53,6 +54,7 @@ module.exports = function (app) {
         self.authorityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
 
         self.jobTitles = jobTitles;
+        self.ranks = ranks;
         self.themes = themes;
         self.roles = roles;
         self.organizations = organizations;
@@ -124,6 +126,7 @@ module.exports = function (app) {
             employeeNo: 'employee_number',
             qid: 'qid',
             jobTitle: 'job_title',
+            rank: 'rank',
             mobile: 'mobile',
             email: 'email',
             defaultOUID: 'organization_unit',
@@ -190,6 +193,7 @@ module.exports = function (app) {
             'employeeNo',
             'qid',
             'jobTitle',
+            'rank',
             'domainName'//,
             // 'searchAmountLimit'
         ];

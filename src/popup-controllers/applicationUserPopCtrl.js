@@ -12,6 +12,8 @@ module.exports = function (app) {
                                                        langService,
                                                        applicationUser,
                                                        jobTitles,
+                                                       ranks,
+                                                       rankService,
                                                        organizations,
                                                        classifications,
                                                        lookupService,
@@ -63,6 +65,7 @@ module.exports = function (app) {
             employeeNo: 'employee_number',
             qid: 'qid',
             jobTitle: 'job_title',
+            rank: 'rank',
             mobile: 'mobile',
             email: 'email',
             defaultOUID: 'organization_unit',
@@ -96,6 +99,7 @@ module.exports = function (app) {
         self.genders = lookupService.returnLookups(lookupService.gender);
         self.languages = lookupService.returnLookups(lookupService.language);
         self.jobTitles = jobTitles;
+        self.ranks = ranks;
         self.themes = themes;
         self.roles = roles;
         self.organizations = organizations;
@@ -977,6 +981,21 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.applicationUser.jobTitle = result;
                     self.jobTitles.unshift(result);
+                });
+        };
+
+
+        /**
+         * @description Opens dialog for add new rank
+         * @param $event
+         */
+        self.openAddRankDialog = function ($event) {
+            rankService
+                .controllerMethod
+                .rankAdd($event)
+                .then(function (result) {
+                    self.applicationUser.rank = result;
+                    self.ranks.unshift(result);
                 });
         };
 

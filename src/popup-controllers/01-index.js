@@ -87,4 +87,5 @@ module.exports = function (app) {
     require('./workflowItemSettingPopCtrl')(app);
     require('./manageIncomingDocumentCorrespondencePopCtrl')(app);
     require('./folderTreePopCtrl')(app);
+    require('./rankPopCtrl')(app);
 };

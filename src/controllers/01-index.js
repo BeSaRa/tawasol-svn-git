@@ -65,4 +65,5 @@ module.exports = function (app) {
     require('./groupInboxCtrl')(app);
     require('./folderCtrl')(app);
     require('./readyToExportArchiveCtrl')(app);
+    require('./rankCtrl')(app);
 };

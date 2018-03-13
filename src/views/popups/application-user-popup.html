@@ -135,6 +135,30 @@
                                     </div>
                                 </div>
                                 <div layout="row" flex>
+                                    <!-- Rank -->
+                                    <div flex layout="row">
+                                        <md-input-container flex>
+                                            <label for="rank">{{lang.rank}}</label>
+                                            <md-select id="rank" name="rank" required
+                                                       ng-model="ctrl.applicationUser.rank">
+                                                <md-option ng-if="rank.status" ng-value="rank.lookupKey"
+                                                           ng-repeat="rank in ctrl.ranks track by $index">
+                                                    {{rank.getTranslatedName()}}
+                                                </md-option>
+                                            </md-select>
+                                            <div ng-messages="applicationUserForm.rank.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container>
+                                            <md-button
+                                                    tooltip="{{lang.add_new_rank}}"
+                                                    ng-click="ctrl.openAddRankDialog($event)"
+                                                    class="md-icon-button">
+                                                <md-icon md-svg-icon="plus"></md-icon>
+                                            </md-button>
+                                        </md-input-container>
+                                    </div>
                                     <!-- Mobile Number -->
                                     <md-input-container flex>
                                         <label for="mobile">{{lang.mobile_number}}</label>
@@ -151,7 +175,7 @@
                                         </div>
                                     </md-input-container>
                                     <!-- Registered Mobile Number for OTP -->
-                                    <md-input-container flex> <!--class=not-found-->
+                                    <!--<md-input-container flex> &lt;!&ndash;class=not-found&ndash;&gt;
                                         <label for="mobileOTP">{{lang.mobile_number_otp}}</label>
                                         <input name="mobileOTP" id="mobileOTP"
                                                placeholder="+974xxxxxxxx"
@@ -163,7 +187,7 @@
                                             </div>
                                             <div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>
                                         </div>
-                                    </md-input-container>
+                                    </md-input-container>-->
                                 </div>
                                 <div layout="row" flex>
                                     <!-- Email -->
@@ -977,14 +1001,14 @@
                                                                             {{lang.grid_action_out_of_office_settings}}
                                                                         </md-button>
                                                                     </md-menu-item>
-                                                                    <md-menu-divider></md-menu-divider><!--ng-if="!ctrl.currentOrganization"-->
-                                                                    <md-menu-item><!-- ng-if="!ctrl.currentOrganization"-->
+                                                                    <md-menu-divider ng-if="!ctrl.currentOrganization"></md-menu-divider>
+                                                                    <md-menu-item ng-if="!ctrl.currentOrganization">
                                                                         <md-button
                                                                                 ng-click="ctrl.editOUApplicationUserFromCtrl(ouApplicationUser, $event)">
                                                                             {{lang.edit}}
                                                                         </md-button>
                                                                     </md-menu-item>
-                                                                    <md-menu-item><!-- ng-if="!ctrl.currentOrganization"-->
+                                                                    <md-menu-item ng-if="!ctrl.currentOrganization">
                                                                         <md-button
                                                                                 ng-click="ctrl.removeOUApplicationUserFromCtrl(ouApplicationUser, $event)">
                                                                             {{lang.delete}}

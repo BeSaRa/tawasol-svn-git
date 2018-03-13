@@ -53,7 +53,7 @@ module.exports = function (app) {
              * @param userClassificationViewPermissions
              * @param $event
              */
-            applicationUserAdd: function (jobTitles, organizations, classifications, themes, roles, permissions, ouApplicationUsers, userClassificationViewPermissions, currentOrganization, $event) {
+            applicationUserAdd: function (jobTitles, ranks, organizations, classifications, themes, roles, permissions, ouApplicationUsers, userClassificationViewPermissions, currentOrganization, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -65,6 +65,7 @@ module.exports = function (app) {
                             applicationUser: currentOrganization ? new ApplicationUser({defaultOUID: currentOrganization}) : new ApplicationUser(),
                             applicationUsers: self.applicationUsers,
                             jobTitles: jobTitles,
+                            ranks: ranks,
                             organizations: organizations,
                             classifications: classifications,
                             themes: themes,
@@ -90,7 +91,7 @@ module.exports = function (app) {
              * @param currentOrganization
              * @param $event
              */
-            applicationUserEdit: function (applicationUser, jobTitles, organizations, classifications, themes, roles, permissions, ouApplicationUsers, userClassificationViewPermissions, currentOrganization, $event) {
+            applicationUserEdit: function (applicationUser, jobTitles, ranks, organizations, classifications, themes, roles, permissions, ouApplicationUsers, userClassificationViewPermissions, currentOrganization, $event) {
                 var userClassificationViewPermissionsByUserId = _.filter(userClassificationViewPermissions, function (userClassificationViewPermission) {
                     return Number(userClassificationViewPermission.userId) === Number(applicationUser.id);
                 });
@@ -110,6 +111,7 @@ module.exports = function (app) {
                             applicationUser: applicationUser,
                             applicationUsers: self.applicationUsers,
                             jobTitles: jobTitles,
+                            ranks: ranks,
                             organizations: organizations,
                             classifications: classifications,
                             themes: themes,
@@ -255,6 +257,10 @@ module.exports = function (app) {
                                 'ngInject';
                                 return jobTitleService.getJobTitles();
                             },
+                            ranks: function (rankService) {
+                                'ngInject';
+                                return rankService.getRanks();
+                            },
                             themes: function (themeService) {
                                 'ngInject';
                                 return themeService.getThemes();
@@ -360,6 +366,7 @@ module.exports = function (app) {
          * @return {Promise|ApplicationUser}
          */
         self.updateApplicationUser = function (applicationUser) {
+            console.log(applicationUser);
             return $http
                 .put(urlService.applicationUsers,
                     generator.interceptSendInstance('ApplicationUser', applicationUser))

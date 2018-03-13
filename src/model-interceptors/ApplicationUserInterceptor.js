@@ -18,6 +18,11 @@ module.exports = function (app) {
                 delete model.signature;
             }
             model.mapSend();
+            delete model.permissions;
+            delete model.ouList;
+            delete model.organization;
+            delete model.signature;
+            
             return model;
         });
 

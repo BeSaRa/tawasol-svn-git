@@ -292,6 +292,19 @@ module.exports = function (app) {
                     }
                 }
             })
+            // rank
+            .state('app.administration.ranks', {
+                url: '/ranks',
+                template: templateProvider.getView('rank'),
+                controller: 'rankCtrl',
+                controllerAs: 'ctrl',
+                resolve: {
+                    ranks: function (rankService) {
+                        'ngInject';
+                        return rankService.loadRanks();
+                    }
+                }
+            })
             // theme
             .state('app.administration.themes', {
                 url: '/themes',
@@ -416,6 +429,10 @@ module.exports = function (app) {
                         'ngInject';
                         return jobTitleService.loadJobTitles();
                     },
+                    ranks: function (rankService) {
+                        'ngInject';
+                        return rankService.loadRanks();
+                    },
                     themes: function (themeService) {
                         'ngInject';
                         return themeService.loadThemes();
@@ -442,7 +459,7 @@ module.exports = function (app) {
                         'ngInject';
                         return userClassificationViewPermissionService.loadUserClassificationViewPermissions();
                     },
-                    applicationUsers: function (applicationUserService, jobTitles, themes, organizations, classifications, permissions, userClassificationViewPermissions) {
+                    applicationUsers: function (applicationUserService, jobTitles, themes, organizations, classifications, permissions, userClassificationViewPermissions, ranks) {
                         'ngInject';
                         return applicationUserService.loadApplicationUsers();
                     },

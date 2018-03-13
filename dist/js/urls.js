@@ -51,6 +51,8 @@
                 .addToAllWithBase('workflowGroups', 'cms-entity/admin/wf-group')
                 // job title
                 .addToAllWithBase('jobTitles', 'cms-entity/admin/job-title')
+                // ranks
+                .addToAllWithBase('ranks', 'cms-entity/admin/rank')
                 // entity type
                 .addToAllWithBase('entityTypes', 'cms-entity/admin/entity-type')
                 //sms templates

@@ -240,6 +240,18 @@
         "state": "app.administration.job-titles"
     },
     {
+        "ID": 11,
+        "lang_key": "menu_item_ranks",
+        "icon": "seal",
+        "parent": 8,
+        "link": "#ranks",
+        "icon_type": "font",
+        "sort_order": 4,
+        "active": true,
+        "sort_value": 0,
+        "state": "app.administration.ranks"
+    },
+    {
         "ID": 30,
         "lang_key": "menu_item_document_status",
         "icon": "barrel",
@@ -456,7 +468,7 @@
         "state": "app.search.general"
     },
     {
-        "ID": 51,
+        "ID": 85,
         "lang_key": "menu_item_document_templates",
         "icon": "arrow-up-box",
         "parent": 8,
@@ -744,7 +756,7 @@
         "sort_value": 0
     },
     {
-        "ID": 77,
+        "ID": 81,
         "lang_key": "menu_item_approved_internal_queue",
         "icon": "recycle",
         "parent": 66,
@@ -768,7 +780,7 @@
         "sort_value": 0
     },
     {
-        "ID": 79,
+        "ID": 83,
         "lang_key": "menu_item_localization",
         "icon": "android",
         "parent": 8,
@@ -780,7 +792,7 @@
         "sort_value": 0
     },
     {
-        "ID": 78,
+        "ID": 82,
         "lang_key": "menu_item_group_inbox",
         "icon": "inbox",
         "parent": 53,
@@ -816,7 +828,7 @@
         "sort_value": 0
     },
     {
-        "ID": 80,
+        "ID": 84,
         "lang_key": "menu_item_central_archive_ready_to_export",
         "icon": "archive",
         "parent": 80,
