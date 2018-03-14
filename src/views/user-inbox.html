@@ -260,7 +260,7 @@
                                     <td md-cell class="read-td">
                                         <div class="cursor-pointer status"
                                              ng-class="userInbox.generalStepElm.isOpen===true? 'read' : 'unread'"
-                                             ng-click="ctrl.markAsReadUnread(userInbox, false, $event)"
+                                             ng-click="ctrl.markAsReadUnread(userInbox, $event)"
                                              ng-if="!ctrl.selectedUserInboxes.length
                                                           || ctrl.selectedUserInboxes.length===1 && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber"
                                              tooltip="{{userInbox.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"

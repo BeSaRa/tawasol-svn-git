@@ -469,15 +469,12 @@ module.exports = function (app) {
             /**
              * @description Mark item as read/unread
              * @param workItem
-             * @param ignoreMessage
              * @param $event
              */
-            self.markAsReadUnread = function (workItem, ignoreMessage, $event) {
-                return workItem.markAsReadUnread($event, ignoreMessage, true)
+            self.markAsReadUnread = function (workItem, $event) {
+                return workItem.markAsReadUnread($event, true)
                     .then(function (result) {
-                        if (!ignoreMessage) {
-                            self.replaceRecord(result);
-                        }
+                        self.replaceRecord(result);
                     })
             };
 
@@ -505,8 +502,8 @@ module.exports = function (app) {
                                 return employeeService.hasPermissionTo(key);
                             });
                             return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                    return isPermission !== true;
-                                }));
+                                return isPermission !== true;
+                            }));
                         }
                     }
                 }

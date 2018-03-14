@@ -1207,26 +1207,12 @@ module.exports = function (app) {
         /**
          * @description Mark item as read/unread
          * @param userInbox
-         * @param ignoreMessage
          * @param $event
          */
-        self.markAsReadUnread = function (userInbox, ignoreMessage, $event) {
-            /*return userInboxService.controllerMethod
-             .userInboxMarkAsReadUnread(userInbox, $event)
-             .then(function (result) {
-             if (!ignoreMessage) {
-             if (!result.generalStepElm.isOpen)
-             toast.success(langService.get('mark_as_unread_success').change({name: userInbox.getTranslatedName()}));
-             else
-             toast.success(langService.get('mark_as_read_success').change({name: userInbox.getTranslatedName()}));
-             self.replaceRecord(result);
-             }
-             })*/
-            return userInbox.markAsReadUnread($event, ignoreMessage)
+        self.markAsReadUnread = function (userInbox, $event) {
+            return userInbox.markAsReadUnread($event)
                 .then(function (result) {
-                    if (!ignoreMessage) {
-                        self.replaceRecord(result);
-                    }
+                    self.replaceRecord(result);
                 })
         };
 

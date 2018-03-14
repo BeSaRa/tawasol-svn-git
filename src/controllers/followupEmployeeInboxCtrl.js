@@ -451,16 +451,16 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(followupEmployeeInbox, self.gridActions, checkIfEditPropertiesAllowed(followupEmployeeInbox, true), true)
+            correspondenceService.viewInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(followupEmployeeInbox, true), true)
                 .then(function () {
-                    if (followupEmployeeInbox.getInfo().documentClass === 'incoming' && !followupEmployeeInbox.generalStepElm.isOpen) {
-                        self.markAsReadUnread(followupEmployeeInbox, true)
-                            .then(function () {
-                                return self.reloadFollowupEmployeeInboxes(self.grid.page);
-                            })
-                    }
-                    else
-                        return self.reloadFollowupEmployeeInboxes(self.grid.page);
+                    // if (followupEmployeeInbox.getInfo().documentClass === 'incoming' && !followupEmployeeInbox.generalStepElm.isOpen) {
+                    //     self.markAsReadUnread(followupEmployeeInbox, true)
+                    //         .then(function () {
+                    //             return self.reloadFollowupEmployeeInboxes(self.grid.page);
+                    //         })
+                    // }
+                    // else
+                    return self.reloadFollowupEmployeeInboxes(self.grid.page);
                 })
                 .catch(function () {
                     return self.reloadFollowupEmployeeInboxes(self.grid.page);
@@ -491,8 +491,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }
@@ -807,27 +807,12 @@ module.exports = function (app) {
         /**
          * @description Mark item as read/unread
          * @param workItem
-         * @param ignoreMessage
          * @param $event
          */
-        self.markAsReadUnread = function (workItem, ignoreMessage, $event) {
-            /*return followupEmployeeInboxService.controllerMethod
-                .followupInboxMarkAsReadUnread(workItem, $event)
+        self.markAsReadUnread = function (workItem, $event) {
+            return workItem.markAsReadUnread($event)
                 .then(function (result) {
-                    if (!ignoreMessage) {
-                        if (result.generalStepElm.isOpen)
-                            toast.success(langService.get('mark_as_unread_success').change({name: workItem.generalStepElm.docSubject}));
-                        else
-                            toast.success(langService.get('mark_as_read_success').change({name: workItem.generalStepElm.docSubject}));
-
-                        self.replaceRecord(result);
-                    }
-                })*/
-            return workItem.markAsReadUnread($event, ignoreMessage)
-                .then(function (result) {
-                    if (!ignoreMessage) {
-                        self.replaceRecord(result);
-                    }
+                    self.replaceRecord(result);
                 })
         }
     });

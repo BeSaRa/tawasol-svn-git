@@ -586,16 +586,9 @@ module.exports = function (app) {
                 return;
             }
 
-            workItem.view(workItem, self.gridActions, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
+            workItem.viewInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
                 .then(function () {
-                    if (workItem.getInfo().documentClass === 'incoming' && !workItem.generalStepElm.isOpen) {
-                        self.markAsReadUnread(workItem, true)
-                            .then(function () {
-                                return self.reloadFolders(self.grid.page);
-                            })
-                    }
-                    else
-                        return self.reloadFolders(self.grid.page);
+                    return self.reloadFolders(self.grid.page);
                 })
                 .catch(function () {
                     return self.reloadFolders(self.grid.page);
@@ -626,8 +619,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }
@@ -1184,26 +1177,12 @@ module.exports = function (app) {
         /**
          * @description Mark item as read/unread
          * @param workItem
-         * @param ignoreMessage
          * @param $event
          */
-        self.markAsReadUnread = function (workItem, ignoreMessage, $event) {
-            /*return userInboxService.controllerMethod
-                .userInboxMarkAsReadUnread(workItem, $event)
+        self.markAsReadUnread = function (workItem, $event) {
+            return workItem.markAsReadUnread($event)
                 .then(function (result) {
-                    if (showMessage) {
-                        if (!result.generalStepElm.isOpen)
-                            toast.success(langService.get('mark_as_unread_success').change({name: workItem.getTranslatedName()}));
-                        else
-                            toast.success(langService.get('mark_as_read_success').change({name: workItem.getTranslatedName()}));
-                        self.replaceRecord(result);
-                    }
-                })*/
-            return workItem.markAsReadUnread($event, ignoreMessage)
-                .then(function (result) {
-                    if (!ignoreMessage) {
-                        self.replaceRecord(result);
-                    }
+                    self.replaceRecord(result);
                 })
         };
 
