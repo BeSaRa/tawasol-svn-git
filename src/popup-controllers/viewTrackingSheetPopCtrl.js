@@ -256,8 +256,9 @@ module.exports = function (app) {
             return (self.tabsToShow.indexOf(tabName) > -1);
         };
 
-        self.selectedTab = "view_tracking_sheet_work_flow_history";
-        self.setCurrentTab = function (tabName) {
+        //self.selectedTab = "view_tracking_sheet_work_flow_history";
+        self.selectedTab = '';
+            self.setCurrentTab = function (tabName) {
             self.selectedTab = tabName;
             self.heading = tabName;
 
@@ -287,7 +288,10 @@ module.exports = function (app) {
         };
 
         self.checkDisabled = function($event){
-            return !(!!self.gridNameRecordCountMap[self.selectedTab]);
+            debugger;
+            var gridOrTab = self.selectedTab || self.heading;
+
+            return !(!!self.gridNameRecordCountMap[gridOrTab]);
         };
 
         /**

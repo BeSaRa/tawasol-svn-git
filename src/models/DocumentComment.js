@@ -101,6 +101,10 @@ module.exports = function (app) {
             DocumentComment.prototype.update = function () {
                 return documentCommentService.updateDocumentComment(this);
             };
+
+            DocumentComment.prototype.delete = function () {
+                return documentCommentService.deleteDocumentComment(this);
+            };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('DocumentComment', 'init', this);

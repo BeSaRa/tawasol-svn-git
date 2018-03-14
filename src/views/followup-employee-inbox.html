@@ -256,7 +256,7 @@
                                     <td md-cell class="read-td">
                                         <div class="cursor-pointer status"
                                              ng-class="followupEmployeeInbox.generalStepElm.isOpen===true? 'read' : 'unread'"
-                                             ng-click="ctrl.markAsReadUnread(followupEmployeeInbox, $event)"
+                                             ng-click="ctrl.markAsReadUnread(followupEmployeeInbox, false, $event)"
                                              ng-if="!ctrl.selectedFollowupEmployeeInboxes.length
                                                           || ctrl.selectedFollowupEmployeeInboxes.length===1 && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber === followupEmployeeInbox.generalStepElm.workObjectNumber"
                                              tooltip="{{followupEmployeeInbox.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"

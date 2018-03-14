@@ -807,7 +807,8 @@ module.exports = function (app) {
                 permissionKey: 'PRINT_BARCODE',
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && model.barcodeReady() && (info.documentClass === "incoming" || (info.documentClass === "outgoing" && info.isPaper));
+                    return self.checkToShowAction(action, model) && model.barcodeReady()
+                        && (info.documentClass === "incoming" || ((info.documentClass === "outgoing" || info.documentClass==='internal') && info.isPaper));
                 }
             },
             // View Tracking Sheet

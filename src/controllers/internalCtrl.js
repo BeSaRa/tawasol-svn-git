@@ -355,7 +355,7 @@ module.exports = function (app) {
                 permissionKey: "PRINT_BARCODE",
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = self.checkToShowAction(action, model) && info.isPaper !== 0; //Don't show if its electronic internal
+                    isVisible = self.checkToShowAction(action, model) && info.isPaper; //Don't show if its electronic internal
                     self.setAvailability(index, isVisible);
                     return isVisible;
                     //return self.checkToShowAction(action, model) && info.isPaper;

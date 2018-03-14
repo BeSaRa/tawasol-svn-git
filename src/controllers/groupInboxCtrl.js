@@ -454,6 +454,32 @@ module.exports = function (app) {
                     });
             };
 
+            /**
+             * @description Replaces the record in grid after update
+             * @param record
+             */
+            self.replaceRecord = function (record) {
+                var index = _.findIndex(self.workItems, function (workItem) {
+                    return workItem.generalStepElm.vsId === record.generalStepElm.vsId;
+                });
+                if (index > -1)
+                    self.workItems.splice(index, 1, record);
+                mailNotificationService.loadMailNotifications(5);
+            };
+            /**
+             * @description Mark item as read/unread
+             * @param workItem
+             * @param ignoreMessage
+             * @param $event
+             */
+            self.markAsReadUnread = function (workItem, ignoreMessage, $event) {
+                return workItem.markAsReadUnread($event, ignoreMessage, true)
+                    .then(function (result) {
+                        if (!ignoreMessage) {
+                            self.replaceRecord(result);
+                        }
+                    })
+            };
 
             /**
              * @description Check if action will be shown on grid or not
@@ -479,8 +505,8 @@ module.exports = function (app) {
                                 return employeeService.hasPermissionTo(key);
                             });
                             return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                                    return isPermission !== true;
+                                }));
                         }
                     }
                 }

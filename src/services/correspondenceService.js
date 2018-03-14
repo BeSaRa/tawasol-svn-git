@@ -1399,6 +1399,52 @@ module.exports = function (app) {
                     return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
                 });
         };
+
+        /**
+         * @description Mark workItem as read/unread
+         * @param workItem
+         * @param $event
+         * @param ignoreMessage
+         * @param isGroupMail
+         * @returns {*}
+         */
+        self.workItemMarkAsReadUnreadSingle = function (workItem, $event, ignoreMessage, isGroupMail) {
+            var isOpen = workItem.hasOwnProperty('generalStepElm')
+                ? (workItem.generalStepElm.hasOwnProperty('isOpen') ? workItem.generalStepElm.isOpen : workItem.generalStepElm)
+                : (workItem.hasOwnProperty('isOpen') ? workItem.isOpen : workItem);
+            var wob = workItem.getInfo().wobNumber;
+            var readUnread = isOpen ? '/un-read' : '/read';
+            var url = urlService.userInbox + readUnread;
+            var defer = $q.defer();
+            if (isGroupMail) {
+                url = urlService.correspondenceWF.replace('wf', 'ou-queue') + readUnread + '/' + wob;
+                $http
+                    .put(url,null,{headers: {
+                        'Content-Type': 'application/json'
+                    }})
+                    .then(function () {
+                        defer.resolve(true);
+                    });
+            }
+            else {
+                $http
+                    .put(url, new Array(wob))
+                    .then(function () {
+                        defer.resolve(true);
+                    });
+            }
+            return defer.promise.then(function () {
+                workItem.generalStepElm.isOpen = !workItem.generalStepElm.isOpen;
+                if (!ignoreMessage) {
+                    if (!workItem.generalStepElm.isOpen)
+                        toast.success(langService.get('mark_as_unread_success').change({name: workItem.getTranslatedName()}));
+                    else
+                        toast.success(langService.get('mark_as_read_success').change({name: workItem.getTranslatedName()}));
+                }
+                return workItem;
+            })
+        };
+
         /**
          * @description star workItem.
          * @param workItem
@@ -1755,18 +1801,18 @@ module.exports = function (app) {
          */
         self.addBulkCorrespondenceToFavorite = function (correspondences, ignoreMessage) {
             /*if (correspondences.length === 1)
-                return self.addCorrespondenceToFavorite(correspondences[0], ignoreMessage);
-            return $http
-                .post((urlService.favoriteDocuments + '/bulk'), _.map(correspondences, function (item) {
-                    var info = item.getInfo();
-                    return {
-                        documentVSId: info.vsId,
-                        applicationUserId: employeeService.getEmployee().id
-                    }
-                }))
-                .then(function (result) {
-                    return _bulkMessages(result, correspondences, ignoreMessage, 'failed_add_selected_to_favorite', 'add_to_favorite_documents_success', 'add_to_favorite_documents_success_except_following');
-                });*/
+             return self.addCorrespondenceToFavorite(correspondences[0], ignoreMessage);
+             return $http
+             .post((urlService.favoriteDocuments + '/bulk'), _.map(correspondences, function (item) {
+             var info = item.getInfo();
+             return {
+             documentVSId: info.vsId,
+             applicationUserId: employeeService.getEmployee().id
+             }
+             }))
+             .then(function (result) {
+             return _bulkMessages(result, correspondences, ignoreMessage, 'failed_add_selected_to_favorite', 'add_to_favorite_documents_success', 'add_to_favorite_documents_success_except_following');
+             });*/
         };
 
         /**
@@ -2019,7 +2065,7 @@ module.exports = function (app) {
                             return _bulkMessages(result, workItems, ignoreMessage, 'failed_return_selected', 'selected_return_success', 'return_success_except_following');
                         });
                 });
-        }
+        };
         /**
          * @description approv
          * @param workItem

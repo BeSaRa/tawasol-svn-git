@@ -236,6 +236,10 @@ module.exports = function (app) {
                         'ngInject';
                         return jobTitleService.loadJobTitles();
                     },
+                    ranks: function(rankService){
+                        'ngInject';
+                        return rankService.loadRanks();
+                    },
                     themes: function (themeService) {
                         'ngInject';
                         return themeService.loadThemes();
@@ -459,7 +463,7 @@ module.exports = function (app) {
                         'ngInject';
                         return userClassificationViewPermissionService.loadUserClassificationViewPermissions();
                     },
-                    applicationUsers: function (applicationUserService, jobTitles, themes, organizations, classifications, permissions, userClassificationViewPermissions, ranks) {
+                    applicationUsers: function (applicationUserService, jobTitles, ranks, themes, organizations, classifications, permissions, userClassificationViewPermissions) {
                         'ngInject';
                         return applicationUserService.loadApplicationUsers();
                     },

@@ -799,7 +799,8 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'PRINT_BARCODE',
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && model.barcodeReady();
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && model.barcodeReady() && info.isPaper;
                 }
             },
             // View Tracking Sheet

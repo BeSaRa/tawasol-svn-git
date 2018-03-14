@@ -273,14 +273,14 @@ module.exports = function (app) {
             },
             /**
              * @description Mark the item as read/unread
-             * @param userInbox
+             * @param workItem
              * @param $event
              */
-            userInboxMarkAsReadUnread: function (userInbox, $event) {
-                return self.markAsReadUnread(userInbox)
+            userInboxMarkAsReadUnread: function (workItem, $event) {
+                return self.markAsReadUnread(workItem)
                     .then(function (result) {
-                        userInbox.generalStepElm.isOpen = !userInbox.generalStepElm.isOpen;
-                        return userInbox;
+                        workItem.generalStepElm.isOpen = !workItem.generalStepElm.isOpen;
+                        return workItem;
                     });
             }
         };
@@ -537,15 +537,15 @@ module.exports = function (app) {
 
         /**
          * @description Mark the item as read/unread
-         * @param userInbox
+         * @param workItem
          */
-        self.markAsReadUnread = function (userInbox) {
-            var isOpen = userInbox.hasOwnProperty('generalStepElm')
-                ? (userInbox.generalStepElm.hasOwnProperty('isOpen') ? userInbox.generalStepElm.isOpen : userInbox.generalStepElm)
-                : (userInbox.hasOwnProperty('isOpen') ? userInbox.isOpen : userInbox);
-            var wob = userInbox.hasOwnProperty('generalStepElm')
-                ? (userInbox.generalStepElm.hasOwnProperty('workObjectNumber') ? userInbox.generalStepElm.workObjectNumber : userInbox.generalStepElm)
-                : (userInbox.hasOwnProperty('workObjectNumber') ? userInbox.workObjectNumber : userInbox);
+        self.markAsReadUnread = function (workItem) {
+            var isOpen = workItem.hasOwnProperty('generalStepElm')
+                ? (workItem.generalStepElm.hasOwnProperty('isOpen') ? workItem.generalStepElm.isOpen : workItem.generalStepElm)
+                : (workItem.hasOwnProperty('isOpen') ? workItem.isOpen : workItem);
+            var wob = workItem.hasOwnProperty('generalStepElm')
+                ? (workItem.generalStepElm.hasOwnProperty('workObjectNumber') ? workItem.generalStepElm.workObjectNumber : workItem.generalStepElm)
+                : (workItem.hasOwnProperty('workObjectNumber') ? workItem.workObjectNumber : workItem);
             var readUnread = isOpen ? '/un-read' : '/read';
             return $http
                 .put((urlService.userInbox + readUnread), new Array(wob))

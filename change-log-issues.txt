@@ -1,0 +1,13 @@
+General:
+1. Fix - Mark incoming workItem as read after opening it.
+2. Moved - Mark as read/unread to WorkItem model and correspondenceService instead of individual controllers and services.
+3. Fix - User folder should be active by default.
+4. Fix - Enable/Disable the print and export buttons in view tracking sheet.
+
+Bugs:
+12291: Fix - user cannot delete others comments (user has permission to delete all comments)
+11757: Fix - Business : Review Internal Document : "Print barcode" action for internal paper doesn't exist from review/search pages
+11714: Fix - Manage Private Announcement : cannot add new Private Announcement
+
+
+

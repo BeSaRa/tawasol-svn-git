@@ -143,25 +143,25 @@ module.exports = function (app) {
                 });
         };
 
-       /* /!**
+        /* /!**
          * @description Terminate followup employee inbox Bulk
          * @param $event
          *!/
-        self.terminateFollowupEmployeeInboxBulk = function ($event) {
-            var numberOfRecordsToTerminate = angular.copy(self.selectedFollowupEmployeeInboxes.length);
-            followupEmployeeInboxService
-                .controllerMethod
-                .followupEmployeeInboxTerminateBulk(self.selectedFollowupEmployeeInboxes, $event)
-                .then(function () {
-                    $timeout(function () {
-                        self.reloadFollowupEmployeeInboxes(self.grid.page)
-                            .then(function () {
-                                if (numberOfRecordsToTerminate === 1)
-                                    toast.success(langService.get("selected_terminate_success"));
-                            });
-                    }, 100);
-                });
-        };*/
+         self.terminateFollowupEmployeeInboxBulk = function ($event) {
+         var numberOfRecordsToTerminate = angular.copy(self.selectedFollowupEmployeeInboxes.length);
+         followupEmployeeInboxService
+         .controllerMethod
+         .followupEmployeeInboxTerminateBulk(self.selectedFollowupEmployeeInboxes, $event)
+         .then(function () {
+         $timeout(function () {
+         self.reloadFollowupEmployeeInboxes(self.grid.page)
+         .then(function () {
+         if (numberOfRecordsToTerminate === 1)
+         toast.success(langService.get("selected_terminate_success"));
+         });
+         }, 100);
+         });
+         };*/
 
         /**
          * @description Change the starred for followup employee inbox
@@ -225,24 +225,24 @@ module.exports = function (app) {
                 });
         };
 
-       /* /!**
+        /* /!**
          * @description Terminate followup employee Item
          * @param followupEmployeeInbox
          * @param $event
          * @param defer
          *!/
-        self.terminateFollowupEmployeeInbox = function (followupEmployeeInbox, $event, defer) {
-            followupEmployeeInboxService
-                .controllerMethod
-                .followupEmployeeInboxTerminate(followupEmployeeInbox, $event)
-                .then(function () {
-                    self.reloadFollowupEmployeeInboxes(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get("terminate_specific_success").change({name: followupEmployeeInbox.getTranslatedName()}));
-                            new ResolveDefer(defer);
-                        });
-                });
-        };*/
+         self.terminateFollowupEmployeeInbox = function (followupEmployeeInbox, $event, defer) {
+         followupEmployeeInboxService
+         .controllerMethod
+         .followupEmployeeInboxTerminate(followupEmployeeInbox, $event)
+         .then(function () {
+         self.reloadFollowupEmployeeInboxes(self.grid.page)
+         .then(function () {
+         toast.success(langService.get("terminate_specific_success").change({name: followupEmployeeInbox.getTranslatedName()}));
+         new ResolveDefer(defer);
+         });
+         });
+         };*/
 
         /**
          * @description Get the link of followup employee inbox
@@ -453,7 +453,14 @@ module.exports = function (app) {
             }
             correspondenceService.viewCorrespondence(followupEmployeeInbox, self.gridActions, checkIfEditPropertiesAllowed(followupEmployeeInbox, true), true)
                 .then(function () {
-                    return self.reloadFollowupEmployeeInboxes(self.grid.page);
+                    if (followupEmployeeInbox.getInfo().documentClass === 'incoming' && !followupEmployeeInbox.generalStepElm.isOpen) {
+                        self.markAsReadUnread(followupEmployeeInbox, true)
+                            .then(function () {
+                                return self.reloadFollowupEmployeeInboxes(self.grid.page);
+                            })
+                    }
+                    else
+                        return self.reloadFollowupEmployeeInboxes(self.grid.page);
                 })
                 .catch(function () {
                     return self.reloadFollowupEmployeeInboxes(self.grid.page);
@@ -799,19 +806,28 @@ module.exports = function (app) {
 
         /**
          * @description Mark item as read/unread
-         * @param followupEmployeeInbox
+         * @param workItem
+         * @param ignoreMessage
          * @param $event
          */
-        self.markAsReadUnread = function (followupEmployeeInbox, $event) {
-            return followupEmployeeInboxService.controllerMethod
-                .followupInboxMarkAsReadUnread(followupEmployeeInbox, $event)
+        self.markAsReadUnread = function (workItem, ignoreMessage, $event) {
+            /*return followupEmployeeInboxService.controllerMethod
+                .followupInboxMarkAsReadUnread(workItem, $event)
                 .then(function (result) {
-                    if (result.generalStepElm.isOpen)
-                        toast.success(langService.get('mark_as_unread_success').change({name: followupEmployeeInbox.generalStepElm.docSubject}));
-                    else
-                        toast.success(langService.get('mark_as_read_success').change({name: followupEmployeeInbox.generalStepElm.docSubject}));
+                    if (!ignoreMessage) {
+                        if (result.generalStepElm.isOpen)
+                            toast.success(langService.get('mark_as_unread_success').change({name: workItem.generalStepElm.docSubject}));
+                        else
+                            toast.success(langService.get('mark_as_read_success').change({name: workItem.generalStepElm.docSubject}));
 
-                    self.replaceRecord(result);
+                        self.replaceRecord(result);
+                    }
+                })*/
+            return workItem.markAsReadUnread($event, ignoreMessage)
+                .then(function (result) {
+                    if (!ignoreMessage) {
+                        self.replaceRecord(result);
+                    }
                 })
         }
     });

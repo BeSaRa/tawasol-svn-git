@@ -621,7 +621,14 @@ module.exports = function (app) {
 
             userInbox.view(userInbox, self.gridActions, checkIfEditPropertiesAllowed(userInbox, true), checkIfEditCorrespondenceSiteAllowed(userInbox, true))
                 .then(function () {
-                    return self.reloadUserInboxes(self.grid.page);
+                    if (userInbox.getInfo().documentClass === 'incoming' && !userInbox.generalStepElm.isOpen) {
+                        self.markAsReadUnread(userInbox, true)
+                            .then(function () {
+                                return self.reloadUserInboxes(self.grid.page);
+                            })
+                    }
+                    else
+                        return self.reloadUserInboxes(self.grid.page);
                 })
                 .catch(function () {
                     return self.reloadUserInboxes(self.grid.page);
@@ -652,8 +659,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                                return isPermission !== true;
+                            }));
                     }
                 }
             }
@@ -1207,17 +1214,26 @@ module.exports = function (app) {
         /**
          * @description Mark item as read/unread
          * @param userInbox
+         * @param ignoreMessage
          * @param $event
          */
-        self.markAsReadUnread = function (userInbox, $event) {
-            return userInboxService.controllerMethod
-                .userInboxMarkAsReadUnread(userInbox, $event)
+        self.markAsReadUnread = function (userInbox, ignoreMessage, $event) {
+            /*return userInboxService.controllerMethod
+             .userInboxMarkAsReadUnread(userInbox, $event)
+             .then(function (result) {
+             if (!ignoreMessage) {
+             if (!result.generalStepElm.isOpen)
+             toast.success(langService.get('mark_as_unread_success').change({name: userInbox.getTranslatedName()}));
+             else
+             toast.success(langService.get('mark_as_read_success').change({name: userInbox.getTranslatedName()}));
+             self.replaceRecord(result);
+             }
+             })*/
+            return userInbox.markAsReadUnread($event, ignoreMessage)
                 .then(function (result) {
-                    if (!result.generalStepElm.isOpen)
-                        toast.success(langService.get('mark_as_unread_success').change({name: userInbox.getTranslatedName()}));
-                    else
-                        toast.success(langService.get('mark_as_read_success').change({name: userInbox.getTranslatedName()}));
-                    self.replaceRecord(result);
+                    if (!ignoreMessage) {
+                        self.replaceRecord(result);
+                    }
                 })
         };
 

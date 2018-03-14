@@ -366,7 +366,7 @@ module.exports = function (app) {
          * @return {Promise|ApplicationUser}
          */
         self.updateApplicationUser = function (applicationUser) {
-            console.log(applicationUser);
+            //console.log(applicationUser);
             return $http
                 .put(urlService.applicationUsers,
                     generator.interceptSendInstance('ApplicationUser', applicationUser))

@@ -330,6 +330,17 @@ module.exports = function (app) {
                         });
                 });
         };
+
+        /**
+         * print Barcode
+         * @param model
+         * @param $event
+         */
+        self.printBarcode = function (model, $event) {
+            model.barcodePrint(model, $event);
+        };
+
+
         /**
          * @description Reject the incoming mail
          * @param reviewIncoming
@@ -567,6 +578,7 @@ module.exports = function (app) {
          * @type {[*]}
          */
         self.gridActions = [
+            // Document Information
             {
                 type: 'action',
                 icon: 'information-variant',
@@ -583,6 +595,7 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
+            // Separator
             {
                 type: 'separator',
                 checkShow: self.checkToShowAction,
@@ -608,6 +621,19 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: self.checkToShowAction
+            },
+            // Print Barcode
+            {
+                type: 'action',
+                icon: 'barcode-scan',
+                text: 'content_action_print_barcode',
+                shortcut: true,
+                callback: self.printBarcode,
+                class: "action-green",
+                permissionKey: "PRINT_BARCODE",
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model);
+                }
             },
             // Reject
             {

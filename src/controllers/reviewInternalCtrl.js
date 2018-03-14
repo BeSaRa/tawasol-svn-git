@@ -236,7 +236,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.acceptAndLaunchDistributionWorkflow = function (reviewInternal, $event, defer) {
-            console.log('accept and launch distribution workflow', reviewInternal);
+            //console.log('accept and launch distribution workflow', reviewInternal);
 
             if (!reviewInternal.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
@@ -300,7 +300,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.acceptInternal = function (reviewInternal, $event, defer) {
-            console.log('accept internal : ', reviewInternal);
+            //console.log('accept internal : ', reviewInternal);
             reviewInternalService.controllerMethod
                 .reviewInternalAccept(reviewInternal, $event)
                 .then(function (result) {
@@ -323,6 +323,16 @@ module.exports = function (app) {
                 .viewTrackingSheetPopup(reviewInternal, params, $event).then(function (result) {
 
             });
+        };
+
+
+        /**
+         * print Barcode
+         * @param model
+         * @param $event
+         */
+        self.printBarcode = function (model, $event) {
+            model.barcodePrint(model, $event);
         };
 
         /**
@@ -526,6 +536,20 @@ module.exports = function (app) {
                 callback: self.removeReviewInternal,
                 class: "action-green",
                 checkShow: self.checkToShowAction
+            },
+            // Print Barcode
+            {
+                type: 'action',
+                icon: 'barcode-scan',
+                text: 'content_action_print_barcode',
+                shortcut: true,
+                callback: self.printBarcode,
+                class: "action-green",
+                permissionKey: "PRINT_BARCODE",
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && (info.isPaper);
+                }
             },
             // Edit
             {

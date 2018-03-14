@@ -32,6 +32,7 @@ module.exports = function (app) {
                                                     propertyConfigurationService,
                                                     $q,
                                                     jobTitleService,
+                                                    rankService,
                                                     themeService,
                                                     roleService,
                                                     unAssignedUsers,
@@ -69,6 +70,8 @@ module.exports = function (app) {
         self.selectedDocumentClass = null;
         // get job titles
         self.jobTitles = jobTitleService.jobTitles;
+        //get ranks
+        self.ranks = rankService.ranks;
         // get themes
         self.themes = themeService.themes;
         // get roles
@@ -402,7 +405,7 @@ module.exports = function (app) {
                             self.model = angular.copy(self.organization);
                             toast.success(langService.get('edit_success').change({name: self.organization.getNames()}));
 
-                            employeeService.loadOrganization();
+                            employeeService.getEmployee().loadOrganization();
                             dialog.hide(self.model);
                         })
                 })
@@ -1124,7 +1127,7 @@ module.exports = function (app) {
             var currentOrganization = self.organization.hasOwnProperty('id') ? self.organization.id : self.organization;
             applicationUserService
                 .controllerMethod
-                .applicationUserAdd(self.jobTitles, organizations, classifications, self.themes, self.roles, self.permissions, null, null, currentOrganization, $event)
+                .applicationUserAdd(self.jobTitles, self.ranks, organizations, classifications, self.themes, self.roles, self.permissions, null, null, currentOrganization, $event)
                 .then(function () {
                     self.reloadOuApplicationUsers(self.appUserGrid.page);
                 })
@@ -1160,7 +1163,7 @@ module.exports = function (app) {
                 .then(function () {
                     applicationUserService
                         .controllerMethod
-                        .applicationUserEdit(new ApplicationUser(applicationUser), self.jobTitles, organizations, classifications, self.themes, self.roles, self.permissions, self.ouApplicationUsers, self.userClassificationViewPermissions, currentOrganization, $event)
+                        .applicationUserEdit(new ApplicationUser(applicationUser), self.jobTitles, self.ranks, organizations, classifications, self.themes, self.roles, self.permissions, self.ouApplicationUsers, self.userClassificationViewPermissions, currentOrganization, $event)
                         .then(function () {
                             self.reloadOuApplicationUsers(self.appUserGrid.page);
                         });

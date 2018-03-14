@@ -52,7 +52,7 @@ module.exports = function (app) {
          */
         self.hasCorrespondenceSite = function () {
             var className = self.correspondence.docClassName.toLowerCase();
-            console.log(self.correspondence);
+            //console.log(self.correspondence);
             return className === 'incoming' || className === 'outgoing';
         };
         /**

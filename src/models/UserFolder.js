@@ -12,7 +12,7 @@ module.exports = function (app) {
             self.arName = null;
             self.enName = null;
             self.itemOrder = null;
-            self.status = false;
+            self.status = true;
             self.children = [];
 
             // every model has required fields
