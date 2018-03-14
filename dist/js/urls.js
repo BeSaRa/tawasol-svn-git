@@ -153,7 +153,8 @@
                 // search managers distribution workflow
                 .addToAllWithBase('distributionWFManagers', '/cms-entity/admin/ou-application-user/dist/managers')
                 // workflow groups for distribution workflow.
-                .addToAllWithBase('distributionWFGroups', 'cms-entity/admin/user-wf-group/user/active')
+                // .addToAllWithBase('distributionWFGroups', 'cms-entity/admin/user-wf-group/user/active')
+                .addToAllWithBase('distributionWFGroups', '/cms-entity/admin/user-wf-group/user')
                 // dist workflow reg ou
                 .addToAllWithBase('distributionWFREGOrganization', '/cms-entity/admin/ou/dist/reg-ous')
                 // dist workflow normal ou
