@@ -106,6 +106,12 @@ module.exports = function (app) {
                     ],
                     menu_item_group_inbox: [
                         'groupMail'
+                    ],
+                    menu_item_central_archive_mail: [
+                        'readyToExportCentralArchive'
+                    ],
+                    menu_item_central_archive_ready_to_export: [
+                        'readyToExportCentralArchive'
                     ]
                 };
             /*User Inbox*/
