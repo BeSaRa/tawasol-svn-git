@@ -1024,6 +1024,7 @@ module.exports = function (app) {
                     second: generator.interceptSendCollection('Site', correspondence.sitesInfoCC)
                 });
         };
+
         /**
          * @description view correspondence
          * @param correspondence
@@ -1040,7 +1041,6 @@ module.exports = function (app) {
 
             var workItem = info.isWorkItem() ? correspondence : false;
             var incomingWithIncomingVsId = departmentIncoming && info.incomingVsId;
-
             //if (incomingWithIncomingVsId)
             //    workItem = false;
             if (workItem && !incomingWithIncomingVsId && info.docType !== 1)
@@ -1419,9 +1419,11 @@ module.exports = function (app) {
             if (isGroupMail) {
                 url = urlService.correspondenceWF.replace('wf', 'ou-queue') + readUnread + '/' + wob;
                 $http
-                    .put(url,null,{headers: {
-                        'Content-Type': 'application/json'
-                    }})
+                    .put(url, null, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
                     .then(function () {
                         defer.resolve(true);
                     });

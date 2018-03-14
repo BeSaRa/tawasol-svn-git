@@ -97,7 +97,7 @@ module.exports = function (app) {
             };
 
             Site.prototype.getTranslatedSiteType = function () {
-                return this.siteType ? this.siteType.getTranslatedName() : '';
+                return this.siteType && this.siteType.hasOwnProperty('id') ? this.siteType.getTranslatedName() : '';
             };
 
             Site.prototype.getSiteToIncoming = function (model) {

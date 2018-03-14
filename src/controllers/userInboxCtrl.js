@@ -619,16 +619,9 @@ module.exports = function (app) {
                 return;
             }
 
-            userInbox.view(userInbox, self.gridActions, checkIfEditPropertiesAllowed(userInbox, true), checkIfEditCorrespondenceSiteAllowed(userInbox, true))
+            userInbox.viewInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(userInbox, true), checkIfEditCorrespondenceSiteAllowed(userInbox, true))
                 .then(function () {
-                    if (userInbox.getInfo().documentClass === 'incoming' && !userInbox.generalStepElm.isOpen) {
-                        self.markAsReadUnread(userInbox, true)
-                            .then(function () {
-                                return self.reloadUserInboxes(self.grid.page);
-                            })
-                    }
-                    else
-                        return self.reloadUserInboxes(self.grid.page);
+                    return self.reloadUserInboxes(self.grid.page);
                 })
                 .catch(function () {
                     return self.reloadUserInboxes(self.grid.page);
@@ -659,8 +652,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }
