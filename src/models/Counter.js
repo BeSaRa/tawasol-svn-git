@@ -75,6 +75,7 @@ module.exports = function (app) {
                     menu_item_inbox: [
                         'userInbox',
                         'userFavouriteDocument',
+                        'foldersCount',
                         function (currentValue, counter, employee) {
                             currentValue = employee.inRegistry() ? currentValue : (counter.groupMail + currentValue);
                             return currentValue;
@@ -112,6 +113,9 @@ module.exports = function (app) {
                     ],
                     menu_item_central_archive_ready_to_export: [
                         'readyToExportCentralArchive'
+                    ],
+                    menu_item_folders: [
+                        'foldersCount'
                     ]
                 };
             /*User Inbox*/
@@ -146,6 +150,8 @@ module.exports = function (app) {
             self.userFavouriteDocument = null;
 
             self.groupMail = null;
+            // this property not related to the actual model
+            self.foldersCount = null;
 
             self.maped = {};
 

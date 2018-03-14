@@ -72,6 +72,8 @@ module.exports = function (app) {
          * @param pageNumber
          */
         self.reloadFolders = function (pageNumber) {
+            if (!self.selectedFolder)
+                return;
             var defer = $q.defer();
             self.progress = defer.promise;
             return correspondenceService

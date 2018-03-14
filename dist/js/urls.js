@@ -284,6 +284,8 @@
                 .addToAllWithBase('exportToPdf', 'common/export/pdf')
                 //all private users
                 .addToAllWithBase('allPrivateUsers', 'cms-entity/admin/ou-application-user/dist/all-private-users')
+                // all folder count
+                .addToAllWithBase('folderCount', '/cms-entity/user/inbox/all-folders-count')
                 // all available organization for central archive
                 .addToAllWithBase('availableCentralArchive', 'cms-entity/admin/ou/ou-with-central-archive');
         })
