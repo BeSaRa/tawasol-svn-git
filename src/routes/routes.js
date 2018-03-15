@@ -1309,7 +1309,7 @@ module.exports = function (app) {
                 template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
                 controller: function ($sce) {
                     var self = this;
-                    self.url = $sce.trustAsResourceUrl('http://100.100.3.228/Reports/report/Reports/Follow-up-04');
+                    self.url = $sce.trustAsResourceUrl('http://100.100.3.228/Reports/report/Reports/Follow-up-04?rs:embed=true');
                 },
                 controllerAs: 'ctrl'
             })
