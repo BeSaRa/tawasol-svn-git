@@ -236,7 +236,7 @@ module.exports = function (app) {
                         'ngInject';
                         return jobTitleService.loadJobTitles();
                     },
-                    ranks: function(rankService){
+                    ranks: function (rankService) {
                         'ngInject';
                         return rankService.loadRanks();
                     },
@@ -1301,6 +1301,16 @@ module.exports = function (app) {
                 url: '/ready-to-export',
                 template: templateProvider.getView('central-archive-ready-to-export'),
                 controller: 'readyToExportArchiveCtrl',
+                controllerAs: 'ctrl'
+            })
+            // temporary route for reports
+            .state('app.reports', {
+                url: '/reports',
+                template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
+                controller: function ($sce) {
+                    var self = this;
+                    self.url = $sce.trustAsResourceUrl('http://100.100.3.228/Reports/report/Reports/Follow-up-04');
+                },
                 controllerAs: 'ctrl'
             })
     });
