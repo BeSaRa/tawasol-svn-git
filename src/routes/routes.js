@@ -1303,6 +1303,7 @@ module.exports = function (app) {
                 controller: 'readyToExportArchiveCtrl',
                 controllerAs: 'ctrl'
             })
+
             // temporary route for reports
             .state('app.reports', {
                 url: '/reports',
