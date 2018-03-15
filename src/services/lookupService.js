@@ -33,7 +33,7 @@ module.exports = function (app) {
             incoming: [],
             internal: [],
             correspondence: [], // private key for global search,
-            attachment: []
+            tawasolattachment: []
         };
 
         self.setHttpService = function (http) {
@@ -156,7 +156,7 @@ module.exports = function (app) {
             self.propertyConfigurations.incoming = [];
             self.propertyConfigurations.internal = [];
             self.propertyConfigurations.correspondence = [];
-            self.propertyConfigurations.attachment = [];
+            self.propertyConfigurations.tawasalattachment = [];
 
             _.map(propertyConfigurations, function (property) {
                 var lookup = self.lookups.documentClass[property.documentClass] || 'correspondence';

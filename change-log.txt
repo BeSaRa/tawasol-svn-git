@@ -2,3 +2,4 @@ features :
 01- added Rank for user.
 02- added counter for Folders.
 03- added counter for Central Archive.
+04 - change attachment global lookup to tawasol attachment.
