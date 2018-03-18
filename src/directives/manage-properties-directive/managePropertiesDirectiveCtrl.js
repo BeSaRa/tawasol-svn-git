@@ -256,7 +256,7 @@ module.exports = function (app) {
         self.onRegistryChange = function (organizationId) {
             self.subOrganizations = [];
             organizationService
-                .loadOrganizationChildren(organizationId, true)
+                .loadChildrenOrganizations(organizationId)
                 .then(function (result) {
                     // self.organizations = result;
                     self.subOrganizations = result;
@@ -264,7 +264,7 @@ module.exports = function (app) {
         };
 
         self.showRegistryUnit = function () {
-            return self.registryOrganizations && self.registryOrganizations.length && employeeService.isCentralArchive() && self.document && self.document.addMethod && self.document.classDescription.toLowerCase() === 'outgoing';
+            return self.registryOrganizations && self.registryOrganizations.length && employeeService.isCentralArchive() && self.document && self.document.addMethod && (self.document.classDescription.toLowerCase() === 'outgoing' || self.document.classDescription.toLowerCase() === 'incoming');
         };
         /**
          * @description Check if the document is approved. If yes, don't allow to change properties and correspondence sites

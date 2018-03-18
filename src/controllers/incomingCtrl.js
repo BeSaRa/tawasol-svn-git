@@ -51,23 +51,23 @@ module.exports = function (app) {
 
         self.maxCreateDate = new Date();
         // all system organizations
-        self.organizations = centralArchives ? centralArchives : organizations;
+        self.organizations = angular.copy(organizations);
+        // in case of central archive.
+        self.registryOrganizations = centralArchives;
 
         self.templates = lookups.templates;
 
         self.documentInformation = null;
 
-        self.centralArchives = centralArchives;
-
 
         // incoming document
         self.incoming = /*demoOutgoing;*/
             new Incoming({
-                ou: centralArchives ? centralArchives[0].id : self.employee.getOUID(),
+                ou: centralArchives ? null : self.employee.getOUID(),
                 addMethod: 1,//Paper document
                 createdOn: new Date(),
                 docDate: new Date(),
-                registryOU: centralArchives ? centralArchives[0].id : self.employee.getRegistryOUID(),
+                registryOU: centralArchives ? null : self.employee.getRegistryOUID(),
                 securityLevel: lookups.securityLevels[0]
             });
 
@@ -386,11 +386,11 @@ module.exports = function (app) {
          */
         self.resetAddCorrespondence = function ($event) {
             self.incoming = new Incoming({
-                ou: centralArchives ? centralArchives[0].id : self.employee.getOUID(),
+                ou: centralArchives ? null : self.employee.getOUID(),
                 addMethod: 1,
                 createdOn: new Date(),
                 docDate: new Date(),
-                registryOU: centralArchives ? centralArchives[0].id : self.employee.getRegistryOUID(),
+                registryOU: centralArchives ? null : self.employee.getRegistryOUID(),
                 securityLevel: lookups.securityLevels[0],
                 site: null
             });

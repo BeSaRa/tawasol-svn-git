@@ -188,6 +188,8 @@ module.exports = function (app) {
                 return correspondenceService.updateCorrespondence(this);
             };
             Correspondence.prototype.createDocument = function () {
+                if (!this.ou && this.registryOU)
+                    this.ou = this.registryOU;
                 return correspondenceService.createCorrespondence(this);
             };
             Correspondence.prototype.saveDocument = function (status) {

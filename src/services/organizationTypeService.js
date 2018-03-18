@@ -206,10 +206,10 @@ module.exports = function (app) {
          * @returns {OrganizationType|undefined} return OrganizationType Model or undefined if not found.
          */
         self.getOrganizationTypeByLookupKey = function (lookupKey) {
-            lookupKey = lookupKey.hasOwnProperty('id') ? lookupKey.lookupKey : lookupKey;
+            lookupKey = lookupKey && lookupKey.hasOwnProperty('id') ? lookupKey.lookupKey : lookupKey;
             return _.find(self.organizationTypes, function (item) {
                 return Number(lookupKey) === Number(item.lookupKey);
-            });
+            }) || lookupKey;
         };
 
         /**

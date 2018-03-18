@@ -341,6 +341,21 @@ module.exports = function (app) {
                     console.log(reason);
                 });
         };
+        /**
+         * @description load children  for Central archive
+         * @param organization
+         */
+        self.loadChildrenOrganizations = function (organization) {
+            var id = organization.hasOwnProperty('id') ? organization.id : organization;
+            return $http
+                .get(urlService.organizations + '/' + id + '/childs-reg-parent')
+                .then(function (result) {
+                    var children = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
+                    return generator.interceptReceivedCollection('Organization', children);
+                }).catch(function (reason) {
+                    console.log(reason);
+                });
+        };
 
 
         self.controllerMethod = {
