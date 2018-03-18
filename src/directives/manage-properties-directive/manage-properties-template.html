@@ -43,8 +43,7 @@
                                id="ou"
                                ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
-                               ng-model="ctrl.document.ou"
-                               required>
+                               ng-model="ctrl.document.ou">
                         <md-option ng-value="organization.id"
                                    ng-repeat="organization in ctrl.subOrganizations">
                             {{organization.getTranslatedName()}}

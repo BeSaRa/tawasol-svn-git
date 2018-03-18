@@ -188,6 +188,7 @@ module.exports = function (app) {
                 return correspondenceService.updateCorrespondence(this);
             };
             Correspondence.prototype.createDocument = function () {
+                // in case if no ou and has registryOU set the ou as registryOU for document
                 if (!this.ou && this.registryOU)
                     this.ou = this.registryOU;
                 return correspondenceService.createCorrespondence(this);
