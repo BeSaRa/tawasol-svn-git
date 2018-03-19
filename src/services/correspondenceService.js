@@ -2001,7 +2001,7 @@ module.exports = function (app) {
          * @returns {promise|*}
          */
         self.exportCorrespondence = function (workItem, $event, checkCentralArchive, ignoreMessage) {
-            return checkCentralArchive ? (workItem.exportViaArchive() ? self.sendToCentralArchive(workItem, ignoreMessage) : self.openExportCorrespondenceDialog(workItem, event)) : self.openExportCorrespondenceDialog(workItem, event);
+            return checkCentralArchive ? (workItem.exportViaArchive() ? self.sendToCentralArchive(workItem, ignoreMessage) : self.openExportCorrespondenceDialog(workItem, $event)) : self.openExportCorrespondenceDialog(workItem, $event);
         };
         /**
          * @description load central archive workItems
