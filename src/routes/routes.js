@@ -1306,11 +1306,13 @@ module.exports = function (app) {
 
             // temporary route for reports
             .state('app.reports', {
-                url: '/reports',
+                url: '/reports/:reportName',
                 template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
-                controller: function ($sce) {
+                controller: function ($sce, $stateParams, employeeService) {
+                    'ngInject';
                     var self = this;
-                    self.url = $sce.trustAsResourceUrl('http://100.100.3.228/Reports/report/Reports/Follow-up-04?rs:embed=true');
+                    var reportName = $stateParams.reportName;
+                    self.url = $sce.trustAsResourceUrl(('http://100.100.3.228/Reports/report/Reports/{{reportName}}?rs:embed=true&userid={{currentUserID}}'.replace('{{reportName}}', reportName)).replace('{{currentUserID}}', employeeService.getEmployee().id));
                 },
                 controllerAs: 'ctrl'
             })

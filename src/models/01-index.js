@@ -124,6 +124,8 @@ module.exports = function (app) {
     require('./DistributionUserWFItem')(app);
     require('./DistributionGroupWFItem')(app);
     require('./DistributionOUWFItem')(app);
+    require('./DistributionBulkItem')(app);
+    require('./DistributionBulk')(app);
     require('./WFUser')(app);
     require('./WFOrganization')(app);
     require('./WFGroup')(app);

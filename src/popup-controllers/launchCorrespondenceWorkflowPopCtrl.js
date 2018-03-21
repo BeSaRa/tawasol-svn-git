@@ -65,8 +65,9 @@ module.exports = function (app) {
                     return item.status
                 }) : approvedStatus,
                 message = self.multi ? langService.get('selected_document_has_not_approved_document') : langService.get('cannot_send_to_multi');
-            self.multi ? _.map(self.info, function (item) {
-                message = message.addLineBreak(item.title);
+            self.multi ? _.map(multiStatus, function (item) {
+                if (item.status)
+                    message = message.addLineBreak(item.title);
             }) : null;
             result && !ignoreMessage ? $timeout(function () {
                 dialog.infoMessage(message)

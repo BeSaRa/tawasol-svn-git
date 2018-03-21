@@ -3,6 +3,7 @@ module.exports = function (app) {
                       rootEntity,
                       employeeService,
                       $stateParams,
+                      loginDialogService,
                       stateHelperService,
                       $transitions,
                       $timeout,
@@ -26,6 +27,9 @@ module.exports = function (app) {
             if (url === urlService.login) {
                 dialog
                     .errorMessage(langService.get('access_denied'))
+            } else {
+                return loginDialogService
+                    .displaySessionMessage();
             }
         });
 
@@ -75,20 +79,20 @@ module.exports = function (app) {
                         .getLanguages()
                         .then(function (lang) {
                             $rootScope.lang = lang;*/
-                            return authenticationService
-                                .logout()
-                                .then(function () {
-                                    return rootEntity
-                                        .loadInformation(rootEntityIdentifier)
-                                        .catch(function (error) {
-                                            $rootScope.lang = langService.getCurrentTranslate();
-                                            return errorCode.checkIf(error, 'ROOT_ENTITY_NOT_FOUND', function () {
-                                                dialog.errorMessage(langService.get('root_entity_not_found'));
-                                                return $q.reject();
-                                            });
-                                        })
-                                });
-                        // });
+                    return authenticationService
+                        .logout()
+                        .then(function () {
+                            return rootEntity
+                                .loadInformation(rootEntityIdentifier)
+                                .catch(function (error) {
+                                    $rootScope.lang = langService.getCurrentTranslate();
+                                    return errorCode.checkIf(error, 'ROOT_ENTITY_NOT_FOUND', function () {
+                                        dialog.errorMessage(langService.get('root_entity_not_found'));
+                                        return $q.reject();
+                                    });
+                                })
+                        });
+                    // });
                 });
         });
 

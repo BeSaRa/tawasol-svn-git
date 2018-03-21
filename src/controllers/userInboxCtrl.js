@@ -314,6 +314,9 @@ module.exports = function (app) {
          * @param defer
          */
         self.sendWorkItemToReadyToExport = function (userInbox, $event, defer) {
+            if (userInbox.exportViaArchive()) {
+                return userInbox.exportWorkItem($event, true);
+            }
             userInbox.sendToReadyToExport().then(function () {
                 self.reloadUserInboxes(self.grid.page)
                     .then(function () {
@@ -814,6 +817,9 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'export',
                 text: 'grid_action_send_to_ready_to_export',
+                textCallback: function (model) {
+                    return model.exportViaArchive() ? 'grid_action_send_to_central_archive' : 'grid_action_send_to_ready_to_export';
+                },
                 shortcut: true,
                 callback: self.sendWorkItemToReadyToExport,
                 class: "action-green",

@@ -1,5 +1,14 @@
 module.exports = function (app) {
-    app.service('distributionWFService', function (urlService, WFUser, WFOrganization, WFGroup, $timeout, $http, $q, generator, _) {
+    app.service('distributionWFService', function (urlService,
+                                                   WFUser,
+                                                   WFOrganization,
+                                                   WFGroup,
+                                                   $timeout,
+                                                   DistributionBulk,
+                                                   $http,
+                                                   $q,
+                                                   generator,
+                                                   _) {
         'ngInject';
         var self = this;
         self.serviceName = 'distributionWFService';
@@ -308,16 +317,12 @@ module.exports = function (app) {
         self.startLaunchWorkflowBulk = function (distributionWF, correspondences) {
             var info = _.map(correspondences, function (item) {
                     return item.getInfo();
-                }), workItem = info[0].isWorkItem(), documentClass = info[0].documentClass,
-                workItemUrl = [urlService.correspondenceWF, documentClass, 'forward', 'bulk'],
-                correspondenceUrl = [urlService.correspondenceWF, documentClass, 'bulk'];
+                }), workItem = info[0].isWorkItem(),
+                workItemUrl = [urlService.correspondenceWF, 'forward', 'bulk'],
+                correspondenceUrl = [urlService.correspondenceWF, 'bulk'],
 
-            return $http.post(workItem ? workItemUrl.join('/') : correspondenceUrl.join('/'), {
-                first: _.map(info, function (item) {
-                    return workItem ? {first: item.vsId, second: item.wobNumber} : item.vsId;
-                }),
-                second: generator.interceptSendInstance('DistributionWF', distributionWF)
-            }).then(function (result) {
+                distBulk = (new DistributionBulk()).setDistributionBulk(correspondences, generator.interceptSendInstance('DistributionWF',distributionWF));
+            return $http.post(workItem ? workItemUrl.join('/') : correspondenceUrl.join('/'), distBulk).then(function (result) {
                 _emptyDistributionWFData();
                 return result.data.rs;
             });

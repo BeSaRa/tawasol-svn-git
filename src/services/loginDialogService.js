@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.service('loginDialogService', function (dialog, $q, cmsTemplate, $rootScope) {
+    app.service('loginDialogService', function (dialog, $q, langService, cmsTemplate, $rootScope) {
         'ngInject';
         var self = this;
         // service name
@@ -9,6 +9,9 @@ module.exports = function (app) {
         // variable to catch the current login dialog status if it is true then dialog opend.
         self.openStatus = false;
         self.locationPath = null;
+
+        self.sessionMessage = false;
+
         /**
          * @description method to open login dialog
          * @returns {promise}
@@ -48,6 +51,15 @@ module.exports = function (app) {
                 // openState to be false after resolve the promise
                 self.openStatus = false;
             })
+        };
+
+        self.displaySessionMessage = function () {
+            if (!self.sessionMessage) {
+                dialog.errorMessage(langService.get('session_expired')).then(function () {
+                    self.sessionMessage = false;
+                });
+                self.sessionMessage = true;
+            }
         }
     });
 };
