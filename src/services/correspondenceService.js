@@ -1032,13 +1032,12 @@ module.exports = function (app) {
          * @param disableProperties
          * @param disableCorrespondence
          * @param department
-         * @param readyToExport true if the view from readyToExport department.
+         * @param readyToExport(true if the view from readyToExport department.)
          * @param approvedQueue
          * @param departmentIncoming
          */
         self.viewCorrespondence = function (correspondence, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming) {
             var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : _createInstance(correspondence).getInfo();
-
             var workItem = info.isWorkItem() ? correspondence : false;
             var incomingWithIncomingVsId = departmentIncoming && info.incomingVsId;
             //if (incomingWithIncomingVsId)
@@ -1184,14 +1183,43 @@ module.exports = function (app) {
                 .then(function (attachment) {
                     attachment.content.viewURL = $sce.trustAsResourceUrl(attachment.content.viewURL);
                     return dialog.showDialog({
-                        template: cmsTemplate.getPopup('view-attachments-only'),
-                        controller: 'viewAttachmentsOnlyPopCtrl',
+                        template: cmsTemplate.getPopup('view-document-readonly'),
+                        controller: 'viewDocumentReadOnlyPopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,
                         escapeToCancel: false,
                         locals: {
-                            attachment: attachment.metaData,
+                            document: attachment.metaData,
                             content: attachment.content
+                        }
+                    });
+                });
+        };
+
+        /**
+         * @description view attachment
+         * @param correspondence
+         */
+        self.viewLinkedDocument = function(correspondence){
+            var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : _createInstance(correspondence).getInfo();
+            debugger;
+            return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
+                .then(function (result) {
+                    var documentClass = result.data.rs.metaData.classDescription;
+                    result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                    return result.data.rs;
+                })
+                .then(function (result) {
+                    result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                    return dialog.showDialog({
+                        template: cmsTemplate.getPopup('view-document-readonly'),
+                        controller: 'viewDocumentReadOnlyPopCtrl',
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        escapeToCancel: false,
+                        locals: {
+                            document: result.metaData,
+                            content: result.content
                         }
                     });
                 });

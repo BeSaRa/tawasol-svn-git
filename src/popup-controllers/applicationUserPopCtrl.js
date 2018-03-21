@@ -955,10 +955,19 @@ module.exports = function (app) {
                     },
                     resolve: {
                         availableProxies: function (ouApplicationUserService) {
+                            'ngInject';
                             return ouApplicationUserService
                                 .getAvailableProxies(ouApplicationUser.getRegistryOUID())
                                 .then(function (result) {
                                     //console.log(result);
+                                    return result
+                                })
+                        },
+                        usersWhoSetYouAsProxy: function(ouApplicationUserService){
+                            'ngInject';
+                            return ouApplicationUserService
+                                .getUsersWhoSetYouAsProxy(ouApplicationUser.applicationUser.id)
+                                .then(function (result) {
                                     return result
                                 })
                         }

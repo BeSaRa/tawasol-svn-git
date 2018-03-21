@@ -270,7 +270,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.userFolders + '/' + 'bulk',
+                url: urlService.userFolders + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;

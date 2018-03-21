@@ -515,7 +515,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService['favoriteUserDW'] + '/' + 'bulk',
+                url: urlService['favoriteUserDW'] + '/bulk',
                 data: bulkOUIds
             }).then(function (result) {
                 return result;
@@ -532,7 +532,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService['favoriteUserDW'] + '/' + 'bulk',
+                url: urlService['favoriteUserDW'] + '/bulk',
                 data: bulkUserIds
             }).then(function (result) {
                 return result;

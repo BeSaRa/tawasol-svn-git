@@ -79,7 +79,7 @@ module.exports = function (app) {
     require('./viewCorrespondencePopCtrl')(app);
     require('./referencePlanItemPopCtrl')(app);
     require('./startSerialPopCtrl')(app);
-    require('./viewAttachmentsOnlyPopCtrl')(app);
+    require('./viewDocumentReadOnlyPopCtrl')(app);
     require('./localizationPopCtrl')(app);
     require('./contentViewHistoryViewersPopCtrl')(app);
     require('./selectOUApplicationUsersSinglePopCtrl')(app);

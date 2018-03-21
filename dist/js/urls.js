@@ -288,7 +288,9 @@
                 // all folder count
                 .addToAllWithBase('folderCount', '/cms-entity/user/inbox/all-folders-count')
                 // all available organization for central archive
-                .addToAllWithBase('availableCentralArchive', 'cms-entity/admin/ou/ou-with-central-archive');
+                .addToAllWithBase('availableCentralArchive', 'cms-entity/admin/ou/ou-with-central-archive')
+                // all users who set this user as proxy
+                .addToAllWithBase('usersWhoSetYouAsProxy', 'cms-entity/admin/ou-application-user/proxy/');
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

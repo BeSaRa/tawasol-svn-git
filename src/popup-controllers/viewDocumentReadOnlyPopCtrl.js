@@ -1,8 +1,8 @@
 module.exports = function (app) {
-    app.controller('viewAttachmentsOnlyPopCtrl', function ($mdSidenav, dialog, $element) {
+    app.controller('viewDocumentReadOnlyPopCtrl', function ($mdSidenav, dialog, $element) {
         'ngInject';
         var self = this;
-        self.controllerName = 'viewAttachmentsOnlyPopCtrl';
+        self.controllerName = 'viewDocumentReadOnlyPopCtrl';
         self.fullScreen = false;
 
         /**
@@ -11,7 +11,7 @@ module.exports = function (app) {
         self.toggleFullScreen = function () {
             self.fullScreen = !self.fullScreen;
         };
-        self.closeViewAttachmentsOnlyDialog = function () {
+        self.closeDocumentReadOnlyDialog = function () {
             dialog.hide();
         };
 

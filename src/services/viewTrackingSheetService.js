@@ -772,11 +772,14 @@ module.exports = function (app) {
                             langService.get('view_tracking_sheet_sent_by'),
                             langService.get('view_tracking_sheet_main_site_from'),
                             langService.get('view_tracking_sheet_sub_site_from'),
-                            langService.get('view_tracking_sheet_priority_level'),
+                            //langService.get('view_tracking_sheet_priority_level'),
                             langService.get('view_tracking_sheet_message_status'),
                             langService.get('view_tracking_sheet_received_by'),
                             langService.get('view_tracking_sheet_main_site_to'),
                             langService.get('view_tracking_sheet_sub_site_to'),
+                            langService.get('view_tracking_sheet_action_date'),
+                            langService.get('view_tracking_sheet_delivery_date'),
+                            langService.get('view_tracking_sheet_message_status'),
                             langService.get('view_tracking_sheet_comments')
                         ];
                         for (i = 0; i < self.outgoingDeliveryReports.length; i++) {
@@ -785,11 +788,14 @@ module.exports = function (app) {
                                 record.sentByIdInfo.getTranslatedName(),
                                 record.mainSiteFromIdInfo.getTranslatedName(),
                                 record.subSiteFromIdInfo.getTranslatedName(),
-                                record.priorityLevelInfo.getTranslatedName(),
+                                //record.priorityLevelInfo.getTranslatedName(),
                                 record.messageStatusInfo.getTranslatedName(),
                                 record.receivedByIdInfo.getTranslatedName(),
                                 record.mainSiteToIdInfo.getTranslatedName(),
                                 record.subSiteToIdInfo.getTranslatedName(),
+                                record.actionDate_vts,
+                                record.deliveryDate_vts,
+                                record.messageStatus,
                                 record.comment
                             ]);
                         }

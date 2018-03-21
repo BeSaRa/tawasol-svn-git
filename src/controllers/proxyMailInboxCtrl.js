@@ -632,7 +632,8 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(proxyMailInbox, self.gridActions, checkIfEditPropertiesAllowed(proxyMailInbox, true), checkIfEditCorrespondenceSiteAllowed(proxyMailInbox, true))
+            //correspondenceService.viewCorrespondence(proxyMailInbox, self.gridActions, checkIfEditPropertiesAllowed(proxyMailInbox, true), checkIfEditCorrespondenceSiteAllowed(proxyMailInbox, true))
+            proxyMailInbox.viewInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(proxyMailInbox, true), checkIfEditCorrespondenceSiteAllowed(proxyMailInbox, true))
                 .then(function () {
                     return self.reloadProxyMailInboxes(self.grid.page);
                 })

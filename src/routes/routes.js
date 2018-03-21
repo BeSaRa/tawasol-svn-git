@@ -176,10 +176,6 @@ module.exports = function (app) {
                         'ngInject';
                         return workflowGroupService.loadWorkflowGroups();
                     }
-                    /* ,
-                     userWorkflowGroups: function (userWorkflowGroupService) {
-                     return userWorkflowGroupService.loadUserWorkflowGroups();
-                     }*/
                 }
             })
             // sms templates

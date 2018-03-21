@@ -309,7 +309,7 @@ module.exports = function (app) {
                             },
                             userWorkflowGroups: function (userWorkflowGroupService) {
                                 'ngInject';
-                                return userWorkflowGroupService.getUserWorkflowGroupByUserId();
+                                return userWorkflowGroupService.loadUserWorkflowGroups();
                             },
                             // by BeSaRa to resolve the signature if found
                             signature: function (applicationUserSignatureService, $q) {
@@ -397,7 +397,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.applicationUsers + '/' + 'bulk',
+                url: urlService.applicationUsers + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;

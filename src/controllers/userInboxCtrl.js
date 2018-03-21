@@ -140,21 +140,29 @@ module.exports = function (app) {
         };
 
 
+        self.checkIfForwardBulkAvailable = function () {
+            self.itemsAlreadyBroadCasted = [];
+            _.map(self.selectedUserInboxes, function (workItem) {
+                if (workItem.isBroadcasted())
+                    self.itemsAlreadyBroadCasted.push(workItem.generalStepElm.vsId);
+            });
+            return !(self.itemsAlreadyBroadCasted && self.itemsAlreadyBroadCasted.length);
+        };
+
         /**
          * @description Launch distribution workflow for selected review outgoing mails
          * @param $event
          */
         self.forwardBulk = function ($event) {
-            var itemsAlreadyBroadCasted = [];
-            _.filter(self.selectedUserInboxes, function (workItem) {
-                if (workItem.isBroadcasted())
-                    itemsAlreadyBroadCasted.push(workItem.generalStepElm.vsId);
-            });
             var selectedItems = angular.copy(self.selectedUserInboxes);
-            if (itemsAlreadyBroadCasted && itemsAlreadyBroadCasted.length) {
+            if (!self.checkIfForwardBulkAvailable()) {
+                if (self.itemsAlreadyBroadCasted.length === selectedItems.length) {
+                    dialog.alertMessage(langService.get('selected_items_are_broadcasted_can_not_forward'));
+                    return false;
+                }
                 dialog.confirmMessage(langService.get('some_items_are_broadcasted_skip_and_forward'), null, null, $event).then(function () {
                     self.selectedUserInboxes = selectedItems = _.filter(self.selectedUserInboxes, function (workItem) {
-                        return itemsAlreadyBroadCasted.indexOf(workItem.generalStepElm.vsId) === -1;
+                        return self.itemsAlreadyBroadCasted.indexOf(workItem.generalStepElm.vsId) === -1;
                     });
                     if (self.selectedUserInboxes.length)
                         forwardBulk(selectedItems, $event);
@@ -655,8 +663,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                                return isPermission !== true;
+                            }));
                     }
                 }
             }

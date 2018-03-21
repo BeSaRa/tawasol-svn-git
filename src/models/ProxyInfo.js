@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('ProxyInfo', function (CMSModelInterceptor, moment) {
+    app.factory('ProxyInfo', function (CMSModelInterceptor, moment, langService) {
         'ngInject';
         return function ProxyInfo(model) {
             var self = this;
@@ -28,6 +28,14 @@ module.exports = function (app) {
              */
             ProxyInfo.prototype.getRequiredFields = function () {
                 return requiredFields;
+            };
+            /**
+             * @description Get the translated true/false as active/inactive or yes/no
+             * @param fieldName
+             * * @returns {*}
+             */
+            ProxyInfo.prototype.getTranslatedYesNo = function (fieldName) {
+                return this[fieldName] ? langService.get('yes') : langService.get('no');
             };
             ProxyInfo.prototype.getFullName = function (separator) {
                 return this.arName + (separator ? separator : '-') + this.enName;

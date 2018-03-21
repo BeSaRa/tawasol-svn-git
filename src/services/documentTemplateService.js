@@ -228,7 +228,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.documentTemplates + '/' + 'bulk',
+                url: urlService.documentTemplates + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;

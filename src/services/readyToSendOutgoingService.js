@@ -210,7 +210,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.readyToSendOutgoings + '/' + 'bulk',
+                url: urlService.readyToSendOutgoings + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;

@@ -193,7 +193,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.workflowActions + '/' + 'bulk',
+                url: urlService.workflowActions + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;
@@ -332,7 +332,7 @@ module.exports = function (app) {
                 }
             }
             return $http
-                .delete((urlService.userWorkflowActions + '/' + 'bulk'), releatedUsers).then(function (result) {
+                .delete((urlService.userWorkflowActions + '/bulk'), releatedUsers).then(function (result) {
                     return result;
                 })
         };
@@ -343,7 +343,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.userWorkflowActions + '/' + 'bulk',
+                url: urlService.userWorkflowActions + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;

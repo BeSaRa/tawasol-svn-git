@@ -259,7 +259,7 @@ module.exports = function (app) {
          * @param scanIncoming
          * @param $event
          */
-        self.createContent = function (scanIncoming, $event) {
+        self.createContent = function (scanIncoming, $event, defer) {
             managerService.manageDocumentContent(scanIncoming.vsId, scanIncoming.docClassName, scanIncoming.docSubject, $event)
                 .then(function () {
                     self.reloadScanIncomings(self.grid.page)

@@ -2,12 +2,34 @@ General:
 1. Fix - Mark incoming workItem as read after opening it.
 2. Moved - Mark as read/unread to WorkItem model and correspondenceService instead of individual controllers and services.
 3. Fix - User folder should be active by default.
-4. Fix - Enable/Disable the print and export buttons in view tracking sheet.
+4. Fix - Create content in scan incoming.
+5. Added - Show alert if all selected records can't be forwarded/returned.
+6. Added - New localization keys
+7. Fix - Don't show bulk action button if not available for all selected items.
 
 Bugs:
-12291: Fix - user cannot delete others comments (user has permission to delete all comments)
+12291: Fix - Business : user cannot delete others comments (user has permission to delete all comments)
 11757: Fix - Business : Review Internal Document : "Print barcode" action for internal paper doesn't exist from review/search pages
-11714: Fix - Manage Private Announcement : cannot add new Private Announcement
+11714: Fix - Admin : Manage Private Announcement : cannot add new Private Announcement
+11715: Fix - Admin : Public Announcement : Add New Public Announcement throws an Internal Server Exception
+12478: Fix - Business : User Inbox - Export and print button are enabled only in Work Flow History in View Tracking Sheet
+11306: Fix - Business : Open Department’s Ready to Export Queue : There is no any confirmation message after click on remove
+10934: Fix - Business : Open Department’s Sent Document Queue : User can't sort items by sender
+10932: Fix - Business : Open Department’s Sent Document Queue : User can't sort items security level
+11721: Fix - Business : sent item : Attachment tab is empty
+11911: Fix - Business : Manage Tags : A help comment should be added in the manage tags window that user should click on enter button once tag is added if not tag will not be stored/saved.
+10265: Fix - Admin : Modify Entity : User can't save the data after editing
+12286: Fix - Admin : Distribution list :Must Reload Distribution lists page to show the New one.
+11634: Fix - Admin : Activate/Deactivate Government Entities after selecting one or more and changing from "Select a status" Dropdown Menu selections don't work.
+12441: Fix - Business: Linked document - Cannot open the details(hamburger) menu for the linked documents when document is opened.
+12253: Fix - Business: User preferences - When user deactivate a private WF group, it disappears from the list and user cannot enable it again
+12413: Fix - Business: View Tracking Sheet - outgoing delivery report - Added Action Date, Delivery Date, Message status. Removed Priority Level.
+
+
+
+
+
+
 
 
 

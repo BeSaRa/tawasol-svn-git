@@ -100,7 +100,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.ouDistributionLists + '/' + 'bulk',
+                url: urlService.ouDistributionLists + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 self.ouDistributionLists = _.filter(self.ouDistributionLists, function (ouDistributionList) {

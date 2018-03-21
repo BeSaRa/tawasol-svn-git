@@ -152,7 +152,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.ranks + '/' + 'bulk',
+                url: urlService.ranks + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;

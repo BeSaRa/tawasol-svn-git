@@ -72,6 +72,9 @@ module.exports = function (app) {
                     .then(function () {
                         self.reloadDistributionLists(self.grid.page);
                     })
+                    .catch(function(){
+                        self.reloadDistributionLists(self.grid.page);
+                    })
             };
 
             /**

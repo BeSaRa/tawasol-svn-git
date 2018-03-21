@@ -89,9 +89,9 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-                    entityService.addEntity(self.entity).then(function () {
-                        toast.success(langService.get('add_success').change({name: self.entity.getNames()}));
-                        dialog.hide();
+                    entityService.addEntity(self.entity).then(function (result) {
+                        //toast.success(langService.get('add_success').change({name: self.entity.getNames()}));
+                        dialog.hide(result);
                     });
                 })
                 .catch(function () {
@@ -140,16 +140,15 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-                    entityService.updateEntity(self.entity).then(function () {
-                        rootEntity.loadInformation().then(function () {
-                            toast.success(langService.get('edit_success').change({name: self.entity.getNames()}));
-                            dialog.hide();
+                    entityService.updateEntity(self.entity).then(function (result) {
+                        rootEntity.loadInformationWithoutCancelDialog().then(function () {
+                            dialog.hide(result);
                         });
                     });
-                })
-                .catch(function () {
-
                 });
+                /*.catch(function () {
+
+                });*/
         };
 
         /**

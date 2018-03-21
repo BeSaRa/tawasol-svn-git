@@ -207,7 +207,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.privateAnnouncements + '/' + 'bulk',
+                url: urlService.privateAnnouncements + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;

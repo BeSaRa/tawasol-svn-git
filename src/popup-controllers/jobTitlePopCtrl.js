@@ -17,9 +17,7 @@ module.exports = function (app) {
         self.jobTitle = jobTitle;
         self.model = angular.copy(self.jobTitle);
         self.lookupStrKey = angular.copy(self.jobTitle.lookupStrKey);
-        /**
-         *@description All s
-         */
+
         self.jobTitlePops = jobTitle;
         self.validateLabels = {
             arName: 'arabic_name',

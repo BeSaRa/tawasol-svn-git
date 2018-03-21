@@ -13,7 +13,8 @@ module.exports = function (app) {
                                                             contextHelpService,
                                                             counterService,
                                                             employeeService,
-                                                            ResolveDefer) {
+                                                            ResolveDefer,
+                                                            Information) {
         'ngInject';
         var self = this;
 
@@ -76,16 +77,16 @@ module.exports = function (app) {
                 });
         };
 
-        self.checkIfReturnBulkAvailable = function(){
-            var itemsWithoutReturn = [], info= {};
-            _.filter(self.selectedIncomingDepartmentInboxes, function (workItem) {
+
+        self.checkIfReturnBulkAvailable = function () {
+            self.itemsWithoutReturn = [];
+            _.map(self.selectedIncomingDepartmentInboxes, function (workItem) {
+                //info = workItem.getInfo();
+                //if (!info.incomingVsId)
                 if (workItem.generalStepElm.isReassigned)
-                    itemsWithoutReturn.push(info.vsId);
+                    self.itemsWithoutReturn.push(workItem.generalStepElm.vsId);
             });
-            if (itemsWithoutReturn && itemsWithoutReturn.length) {
-                return false;
-            }
-            return true;
+            return !(self.itemsWithoutReturn && self.itemsWithoutReturn.length);
         };
 
         /**
@@ -93,18 +94,15 @@ module.exports = function (app) {
          * @param $event
          */
         self.returnWorkItemsBulk = function ($event) {
-             var itemsWithoutReturn = [], info= {};
-            _.filter(self.selectedIncomingDepartmentInboxes, function (workItem) {
-                //info = workItem.getInfo();
-                //if (!info.incomingVsId)
-                if(workItem.generalStepElm.isReassigned)
-                    itemsWithoutReturn.push(info.vsId);
-            });
             var selectedItems = angular.copy(self.selectedIncomingDepartmentInboxes);
-            if (itemsWithoutReturn && itemsWithoutReturn.length) {
+            if (!self.checkIfReturnBulkAvailable()) {
+                if (self.itemsWithoutReturn.length === selectedItems.length) {
+                    dialog.alertMessage(langService.get('selected_items_can_not_be_returned'));
+                    return false;
+                }
                 dialog.confirmMessage(langService.get('some_items_cannot_return_skip_and_return'), null, null, $event).then(function () {
                     self.selectedIncomingDepartmentInboxes = selectedItems = _.filter(self.selectedIncomingDepartmentInboxes, function (workItem) {
-                        return itemsWithoutReturn.indexOf(workItem.generalStepElm.vsId) === -1;
+                        return self.itemsWithoutReturn.indexOf(workItem.generalStepElm.vsId) === -1;
                     });
                     if (self.selectedIncomingDepartmentInboxes.length)
                         returnBulk(selectedItems, $event);
@@ -131,14 +129,14 @@ module.exports = function (app) {
          */
         self.returnWorkItem = function (incomingDepartmentInbox, $event, defer) {
             /*incomingDepartmentInboxService
-                .controllerMethod
-                .incomingDepartmentInboxReturn(incomingDepartmentInbox, $event)
-                .then(function () {
-                    self.reloadIncomingDepartmentInboxes(self.grid.page)
-                        .then(function () {
-                            new ResolveDefer(defer);
-                        });
-                })*/
+             .controllerMethod
+             .incomingDepartmentInboxReturn(incomingDepartmentInbox, $event)
+             .then(function () {
+             self.reloadIncomingDepartmentInboxes(self.grid.page)
+             .then(function () {
+             new ResolveDefer(defer);
+             });
+             })*/
             incomingDepartmentInbox
                 .returnWorkItem($event)
                 .then(function () {
@@ -194,11 +192,11 @@ module.exports = function (app) {
 
         var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
             /*var info = model.getInfo();
-            var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
-            var allowed = (hasPermission && info.documentClass !== "internal");
-            if (checkForViewPopup)
-                return !(allowed);
-            return allowed;*/
+             var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+             var allowed = (hasPermission && info.documentClass !== "internal");
+             if (checkForViewPopup)
+             return !(allowed);
+             return allowed;*/
             if (checkForViewPopup)
                 return true;
             return false;
@@ -226,8 +224,8 @@ module.exports = function (app) {
          */
         self.checkToShowAction = function (action, model) {
             /*if (action.hasOwnProperty('permissionKey'))
-                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-            return (!action.hide);*/
+             return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
+             return (!action.hide);*/
 
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
@@ -242,119 +240,119 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                                return isPermission !== true;
+                            }));
                     }
                 }
             }
             return (!action.hide);
         };
 
-/*
+        /*
 
-        /!**
+         /!**
          * @description Manage Tags
          * @param incomingDepartmentInbox
          * @param $event
          *!/
-        self.manageTags = function (incomingDepartmentInbox, $event) {
-            var vsId = incomingDepartmentInbox.hasOwnProperty('generalStepElm')
-                ? (incomingDepartmentInbox.generalStepElm.hasOwnProperty('vsId') ? incomingDepartmentInbox.generalStepElm.vsId : incomingDepartmentInbox.generalStepElm)
-                : (incomingDepartmentInbox.hasOwnProperty('vsId') ? incomingDepartmentInbox.vsId : incomingDepartmentInbox);
-            var wfName = _getWorkflowName(incomingDepartmentInbox);
-            //var wfName = 'outgoing';
-            managerService.manageDocumentTags(vsId, wfName.toLowerCase(), incomingDepartmentInbox.getTranslatedName(), $event)
-                .then(function () {
-                    self.reloadIncomingDepartmentInboxes(self.grid.page);
-                })
-                .catch(function (error) {
-                    self.reloadIncomingDepartmentInboxes(self.grid.page);
-                });
-        };
+         self.manageTags = function (incomingDepartmentInbox, $event) {
+         var vsId = incomingDepartmentInbox.hasOwnProperty('generalStepElm')
+         ? (incomingDepartmentInbox.generalStepElm.hasOwnProperty('vsId') ? incomingDepartmentInbox.generalStepElm.vsId : incomingDepartmentInbox.generalStepElm)
+         : (incomingDepartmentInbox.hasOwnProperty('vsId') ? incomingDepartmentInbox.vsId : incomingDepartmentInbox);
+         var wfName = _getWorkflowName(incomingDepartmentInbox);
+         //var wfName = 'outgoing';
+         managerService.manageDocumentTags(vsId, wfName.toLowerCase(), incomingDepartmentInbox.getTranslatedName(), $event)
+         .then(function () {
+         self.reloadIncomingDepartmentInboxes(self.grid.page);
+         })
+         .catch(function (error) {
+         self.reloadIncomingDepartmentInboxes(self.grid.page);
+         });
+         };
 
-        /!**
+         /!**
          * @description Manage Comments
          * @param incomingDepartmentInbox
          * @param $event
          *!/
-        self.manageComments = function (incomingDepartmentInbox, $event) {
-            //console.log('manageUserInboxComments : ', incomingDepartmentInbox);
-            var vsId = incomingDepartmentInbox.hasOwnProperty('generalStepElm')
-                ? (incomingDepartmentInbox.generalStepElm.hasOwnProperty('vsId') ? incomingDepartmentInbox.generalStepElm.vsId : incomingDepartmentInbox.generalStepElm)
-                : (incomingDepartmentInbox.hasOwnProperty('vsId') ? incomingDepartmentInbox.vsId : incomingDepartmentInbox);
-            var wfName = _getWorkflowName(incomingDepartmentInbox);
-            //var wfName = 'outgoing';
-            managerService.manageDocumentComments(vsId, wfName.toLowerCase(), $event)
-                .then(function () {
-                    self.reloadIncomingDepartmentInboxes(self.grid.page);
-                })
-                .catch(function (error) {
-                    self.reloadIncomingDepartmentInboxes(self.grid.page);
-                });
-        };
+         self.manageComments = function (incomingDepartmentInbox, $event) {
+         //console.log('manageUserInboxComments : ', incomingDepartmentInbox);
+         var vsId = incomingDepartmentInbox.hasOwnProperty('generalStepElm')
+         ? (incomingDepartmentInbox.generalStepElm.hasOwnProperty('vsId') ? incomingDepartmentInbox.generalStepElm.vsId : incomingDepartmentInbox.generalStepElm)
+         : (incomingDepartmentInbox.hasOwnProperty('vsId') ? incomingDepartmentInbox.vsId : incomingDepartmentInbox);
+         var wfName = _getWorkflowName(incomingDepartmentInbox);
+         //var wfName = 'outgoing';
+         managerService.manageDocumentComments(vsId, wfName.toLowerCase(), $event)
+         .then(function () {
+         self.reloadIncomingDepartmentInboxes(self.grid.page);
+         })
+         .catch(function (error) {
+         self.reloadIncomingDepartmentInboxes(self.grid.page);
+         });
+         };
 
-        /!**
+         /!**
          * @description Manage Tasks
          * @param incomingDepartmentInbox
          * @param $event
          *!/
-        self.manageTasks = function (incomingDepartmentInbox, $event) {
-            console.log('manageUserInboxTasks : ', incomingDepartmentInbox);
-        };
+         self.manageTasks = function (incomingDepartmentInbox, $event) {
+         console.log('manageUserInboxTasks : ', incomingDepartmentInbox);
+         };
 
-        /!**
+         /!**
          * @description Manage Attachments
          * @param incomingDepartmentInbox
          * @param $event
          *!/
-        self.manageAttachments = function (incomingDepartmentInbox, $event) {
-            //console.log('manageUserInboxAttachments : ', incomingDepartmentInbox);
-            var vsId = incomingDepartmentInbox.hasOwnProperty('generalStepElm')
-                ? (incomingDepartmentInbox.generalStepElm.hasOwnProperty('vsId') ? incomingDepartmentInbox.generalStepElm.vsId : incomingDepartmentInbox.generalStepElm)
-                : (incomingDepartmentInbox.hasOwnProperty('vsId') ? incomingDepartmentInbox.vsId : incomingDepartmentInbox);
-            var wfName = _getWorkflowName(incomingDepartmentInbox);
-            //var wfName = 'outgoing';
-            managerService.manageDocumentAttachments(vsId, wfName.toLowerCase(), incomingDepartmentInbox.getTranslatedName(), $event);
-        };
+         self.manageAttachments = function (incomingDepartmentInbox, $event) {
+         //console.log('manageUserInboxAttachments : ', incomingDepartmentInbox);
+         var vsId = incomingDepartmentInbox.hasOwnProperty('generalStepElm')
+         ? (incomingDepartmentInbox.generalStepElm.hasOwnProperty('vsId') ? incomingDepartmentInbox.generalStepElm.vsId : incomingDepartmentInbox.generalStepElm)
+         : (incomingDepartmentInbox.hasOwnProperty('vsId') ? incomingDepartmentInbox.vsId : incomingDepartmentInbox);
+         var wfName = _getWorkflowName(incomingDepartmentInbox);
+         //var wfName = 'outgoing';
+         managerService.manageDocumentAttachments(vsId, wfName.toLowerCase(), incomingDepartmentInbox.getTranslatedName(), $event);
+         };
 
 
-        /!**
+         /!**
          * @description Manage Linked Documents
          * @param incomingDepartmentInbox
          * @param $event
          *!/
-        self.manageLinkedDocuments = function (incomingDepartmentInbox, $event) {
-            //console.log('manageUserInboxLinkedDocuments : ', incomingDepartmentInbox);
-            var info = incomingDepartmentInbox.getInfo();
-            managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass, "welcome");
-        };
+         self.manageLinkedDocuments = function (incomingDepartmentInbox, $event) {
+         //console.log('manageUserInboxLinkedDocuments : ', incomingDepartmentInbox);
+         var info = incomingDepartmentInbox.getInfo();
+         managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass, "welcome");
+         };
 
-        /!**
+         /!**
          * @description Manage Linked Entities
          * @param incomingDepartmentInbox
          * @param $event
          *!/
-        self.manageLinkedEntities = function (incomingDepartmentInbox, $event) {
-            //console.log('manageUserInboxLinkedEntities : ', incomingDepartmentInbox);
-            //var wfName = 'outgoing';
-            var wfName = _getWorkflowName(incomingDepartmentInbox);
-            managerService
-                .manageDocumentEntities(incomingDepartmentInbox.generalStepElm.vsId, wfName.toLowerCase(), incomingDepartmentInbox.generalStepElm.docSubject, $event);
-        };
+         self.manageLinkedEntities = function (incomingDepartmentInbox, $event) {
+         //console.log('manageUserInboxLinkedEntities : ', incomingDepartmentInbox);
+         //var wfName = 'outgoing';
+         var wfName = _getWorkflowName(incomingDepartmentInbox);
+         managerService
+         .manageDocumentEntities(incomingDepartmentInbox.generalStepElm.vsId, wfName.toLowerCase(), incomingDepartmentInbox.generalStepElm.docSubject, $event);
+         };
 
-        /!**
+         /!**
          * @description Destinations
          * @param incomingDepartmentInbox
          * @param $event
          *!/
-        self.manageDestinations = function (incomingDepartmentInbox, $event) {
-            //console.log('manage destinations : ', incomingDepartmentInbox);
+         self.manageDestinations = function (incomingDepartmentInbox, $event) {
+         //console.log('manage destinations : ', incomingDepartmentInbox);
 
-            var wfName = _getWorkflowName(incomingDepartmentInbox);
+         var wfName = _getWorkflowName(incomingDepartmentInbox);
 
-            managerService.manageDocumentCorrespondence(incomingDepartmentInbox.generalStepElm.vsId, wfName.toLowerCase(), incomingDepartmentInbox.generalStepElm.docSubject, $event)
-        };
-*/
+         managerService.manageDocumentCorrespondence(incomingDepartmentInbox.generalStepElm.vsId, wfName.toLowerCase(), incomingDepartmentInbox.generalStepElm.docSubject, $event)
+         };
+         */
 
         /**
          * @description Array of actions that can be performed on grid
@@ -407,9 +405,9 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.returnWorkItem,
                 class: "action-green",
-                checkShow: function(action, model){
+                checkShow: function (action, model) {
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) &&  !model.generalStepElm.isReassigned;//!!info.incomingVsId;
+                    return self.checkToShowAction(action, model) && !model.generalStepElm.isReassigned;//!!info.incomingVsId;
                 }
             },
             // Receive
@@ -420,9 +418,9 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.receiveWorkItem,
                 class: "action-green",
-                checkShow: function(action, model){
+                checkShow: function (action, model) {
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) &&  !model.generalStepElm.isReassigned;//!!info.incomingVsId;
+                    return self.checkToShowAction(action, model) && !model.generalStepElm.isReassigned;//!!info.incomingVsId;
                 }
             },
             // Quick Receive
@@ -434,7 +432,7 @@ module.exports = function (app) {
                 hide: false,
                 callback: self.quickReceiveWorkItem,
                 class: "action-green",
-                checkShow: function(action, model){
+                checkShow: function (action, model) {
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model) && !model.generalStepElm.isReassigned;//!!info.incomingVsId;
                 }
@@ -448,100 +446,100 @@ module.exports = function (app) {
                 callback: self.launchDistributionWorkflow,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
-                checkShow: function(action, model){
+                checkShow: function (action, model) {
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model) && model.generalStepElm.isReassigned;//!info.incomingVsId;
                 }
             },
             // Manage (Not in SRS)
             /*{
-                type: 'action',
-                icon: 'settings',
-                text: 'grid_action_manage',
-                shortcut: false,
-                showInView: false,
-                hide: true,
-                checkShow: self.checkToShowAction,
-                subMenu: [
-                    // Tags
-                    {
-                        type: 'action',
-                        icon: 'tag',
-                        text: 'grid_action_tags',
-                        shortcut: false,
-                        callback: self.manageTags,
-                        class: "action-green",
-                        checkShow: self.checkToShowAction
-                    },
-                    // Comments
-                    {
-                        type: 'action',
-                        icon: 'comment',
-                        text: 'grid_action_comments',
-                        shortcut: false,
-                        permissionKey: "MANAGE_DOCUMENT’S_COMMENTS",
-                        callback: self.manageComments,
-                        class: "action-green",
-                        checkShow: self.checkToShowAction
-                    },
-                    // Tasks
-                    {
-                        type: 'action',
-                        icon: 'note-multiple',
-                        text: 'grid_action_tasks',
-                        shortcut: false,
-                        callback: self.manageTasks,
-                        class: "action-red",
-                        hide: true,
-                        checkShow: self.checkToShowAction
-                    },
-                    // Attachments
-                    {
-                        type: 'action',
-                        icon: 'attachment',
-                        text: 'grid_action_attachments',
-                        shortcut: false,
-                        callback: self.manageAttachments,
-                        class: "action-green",
-                        checkShow: self.checkToShowAction
-                    },
-                    // Linked Documents
-                    {
-                        type: 'action',
-                        icon: 'file-document',
-                        text: 'grid_action_linked_documents',
-                        shortcut: false,
-                        callback: self.manageLinkedDocuments,
-                        class: "action-green",
-                        checkShow: self.checkToShowAction
-                    },
-                    // Linked Entities
-                    {
-                        type: 'action',
-                        icon: 'link-variant',
-                        text: 'grid_action_linked_entities',
-                        shortcut: false,
-                        callback: self.manageLinkedEntities,
-                        class: "action-green",
-                        checkShow: self.checkToShowAction
-                    },
-                    // Destinations
-                    {
-                        type: 'action',
-                        icon: 'stop',
-                        text: 'grid_action_destinations',
-                        shortcut: false,
-                        callback: self.manageDestinations,
-                        permissionKey: "MANAGE_DESTINATIONS",
-                        hide: true,
-                        class: "action-yellow",
-                        checkShow: function (action, model) {
-                            var info = model.getInfo();
-                            return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
-                        }
-                    }
-                ]
-            }*/
+             type: 'action',
+             icon: 'settings',
+             text: 'grid_action_manage',
+             shortcut: false,
+             showInView: false,
+             hide: true,
+             checkShow: self.checkToShowAction,
+             subMenu: [
+             // Tags
+             {
+             type: 'action',
+             icon: 'tag',
+             text: 'grid_action_tags',
+             shortcut: false,
+             callback: self.manageTags,
+             class: "action-green",
+             checkShow: self.checkToShowAction
+             },
+             // Comments
+             {
+             type: 'action',
+             icon: 'comment',
+             text: 'grid_action_comments',
+             shortcut: false,
+             permissionKey: "MANAGE_DOCUMENT’S_COMMENTS",
+             callback: self.manageComments,
+             class: "action-green",
+             checkShow: self.checkToShowAction
+             },
+             // Tasks
+             {
+             type: 'action',
+             icon: 'note-multiple',
+             text: 'grid_action_tasks',
+             shortcut: false,
+             callback: self.manageTasks,
+             class: "action-red",
+             hide: true,
+             checkShow: self.checkToShowAction
+             },
+             // Attachments
+             {
+             type: 'action',
+             icon: 'attachment',
+             text: 'grid_action_attachments',
+             shortcut: false,
+             callback: self.manageAttachments,
+             class: "action-green",
+             checkShow: self.checkToShowAction
+             },
+             // Linked Documents
+             {
+             type: 'action',
+             icon: 'file-document',
+             text: 'grid_action_linked_documents',
+             shortcut: false,
+             callback: self.manageLinkedDocuments,
+             class: "action-green",
+             checkShow: self.checkToShowAction
+             },
+             // Linked Entities
+             {
+             type: 'action',
+             icon: 'link-variant',
+             text: 'grid_action_linked_entities',
+             shortcut: false,
+             callback: self.manageLinkedEntities,
+             class: "action-green",
+             checkShow: self.checkToShowAction
+             },
+             // Destinations
+             {
+             type: 'action',
+             icon: 'stop',
+             text: 'grid_action_destinations',
+             shortcut: false,
+             callback: self.manageDestinations,
+             permissionKey: "MANAGE_DESTINATIONS",
+             hide: true,
+             class: "action-yellow",
+             checkShow: function (action, model) {
+             var info = model.getInfo();
+             return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
+             }
+             }
+             ]
+             }*/
         ];
     });
 };

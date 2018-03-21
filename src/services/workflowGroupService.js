@@ -20,7 +20,7 @@ module.exports = function (app) {
          * @returns {Promise|workflowGroups}
          */
         self.loadWorkflowGroups = function () {
-            return $http.get(urlService.workflowGroups).then(function (result) {
+            return $http.get(urlService.workflowGroups+'/all-global').then(function (result) {
                 self.workflowGroups = generator.generateCollection(result.data.rs, WorkflowGroup, self._sharedMethods);
                 self.workflowGroups = generator.interceptReceivedCollection('WorkflowGroup', self.workflowGroups);
                 return self.workflowGroups;
@@ -168,7 +168,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.workflowGroups + '/' + 'bulk',
+                url: urlService.workflowGroups + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;

@@ -108,7 +108,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.ouClassifications + '/' + 'bulk',
+                url: urlService.ouClassifications + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 self.ouClassifications = _.filter(self.ouClassifications, function (ouClassification) {

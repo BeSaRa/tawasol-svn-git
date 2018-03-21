@@ -135,6 +135,10 @@ module.exports = function (app) {
             });
             var selectedItems = angular.copy(self.selectedWorkItems);
             if (itemsAlreadyBroadCasted && itemsAlreadyBroadCasted.length) {
+                if(itemsAlreadyBroadCasted.length === selectedItems.length){
+                    dialog.alertMessage(langService.get('selected_items_are_broadcasted_can_not_forward'));
+                    return false;
+                }
                 dialog.confirmMessage(langService.get('some_items_are_broadcasted_skip_and_forward'), null, null, $event).then(function () {
                     self.selectedWorkItems = selectedItems = _.filter(self.selectedWorkItems, function (workItem) {
                         return itemsAlreadyBroadCasted.indexOf(workItem.generalStepElm.vsId) === -1;

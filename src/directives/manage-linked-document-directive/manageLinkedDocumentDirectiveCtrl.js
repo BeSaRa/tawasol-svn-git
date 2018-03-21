@@ -28,9 +28,9 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, // limit options
                 {
                     /*label: self.globalSetting.searchAmountLimit.toString(),
-                    value: function () {
-                        return self.globalSetting.searchAmountLimit
-                    }*/
+                     value: function () {
+                     return self.globalSetting.searchAmountLimit
+                     }*/
                     label: langService.get('all'),
                     value: function () {
                         return (self.linkedDocs.length + 21);
@@ -52,12 +52,12 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewCorrespondence = function (correspondence, $event) {
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService
-                .viewCorrespondence(correspondence , [], true, true);
+            //correspondenceService.viewCorrespondence(correspondence, [], true, true);
+            correspondenceService.viewLinkedDocument(correspondence);
         };
         /**
          * @description open search dialog
@@ -85,12 +85,13 @@ module.exports = function (app) {
          * @param linkedDocument
          */
         self.deleteLinkedDocument = function (linkedDocument) {
-            var vsId = linkedDocument.getInfo().vsId;
-            self.linkedDocs = _.filter(self.linkedDocs, function (correspondence) {
-                return vsId !== correspondence.getInfo().vsId;
-            });
-        }
-
-
+            dialog.confirmMessage(langService.get('confirm_delete').change({name: linkedDocument.getTranslatedName()}))
+                .then(function () {
+                    var vsId = linkedDocument.getInfo().vsId;
+                    self.linkedDocs = _.filter(self.linkedDocs, function (correspondence) {
+                        return vsId !== correspondence.getInfo().vsId;
+                    });
+                });
+        };
     });
 };

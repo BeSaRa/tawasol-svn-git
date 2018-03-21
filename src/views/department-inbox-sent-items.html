@@ -40,8 +40,9 @@
                                             </md-button>-->
                                         </div>
                                     </th>
-                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column md-order-by="">
-                                        <!-- Security Level, Document type, Tags, Re-assigned Indicators -->
+                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
+                                        md-order-by="{{ctrl.getSortingKey('securityLevelLookup', 'Lookup')}}">
+                                        <!-- Security Level, Document type, Re-assigned Indicators -->
                                     </th>
                                     <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
                                         md-order-by="docSerial">
@@ -59,23 +60,23 @@
                                         <span>{{lang.type}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="sender">
+                                        md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'Information')}}">
                                         <span>{{lang.sender}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="mainSiteFromIdInfo">
+                                        md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'Information')}}">
                                         <span>{{lang.main_site_from}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="mainSiteToIdInfo">
+                                        md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'Information')}}">
                                         <span>{{lang.main_site_to}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="subSiteFromIdInfo">
+                                        md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'Information')}}">
                                         <span>{{lang.sub_site_from}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="subSiteToIdInfo">
+                                        md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'Information')}}">
                                         <span>{{lang.sub_site_to}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column

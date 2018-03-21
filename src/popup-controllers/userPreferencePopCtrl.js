@@ -2,7 +2,9 @@ module.exports = function (app) {
     app.controller('userPreferencePopCtrl', function (_,
                                                       toast,
                                                       validationService,
+                                                      LangWatcher,
                                                       generator,
+                                                      $timeout,
                                                       dialog,
                                                       langService,
                                                       applicationUser,
@@ -36,9 +38,15 @@ module.exports = function (app) {
                                                       applicationUserSignatureService,
                                                       attachmentService,
                                                       $scope,
+                                                      $rootScope,
                                                       $q,
                                                       signature,
-                                                      selectedTab) {
+                                                      selectedTab,
+                                                      cmsTemplate,
+                                                      ProxyInfo,
+                                                      $compile,
+                                                      $sce,
+                                                      listGeneratorService) {
         'ngInject';
         var self = this;
         self.controllerName = 'userPreferencePopCtrl';
@@ -93,6 +101,7 @@ module.exports = function (app) {
          */
         self.ouApplicationUser = generator.interceptReceivedInstance('OUApplicationUser', employeeService.getCurrentOUApplicationUser());
         self.availableProxies = availableProxies;
+        //debugger;
         self.selectedProxyUser = self.ouApplicationUser.getSelectedProxyId() ? _.find(availableProxies, function (item) {
             return item.id === self.ouApplicationUser.getSelectedProxyId();
         }) : null;
@@ -416,27 +425,56 @@ module.exports = function (app) {
          * @param form
          */
         self.changeOutOfOffice = function (form) {
-            if (!self.isOutOfOffice && self.ouApplicationUserCopy.proxyUser) {
-                self.ouApplicationUser.proxyUser = null;
-                self.ouApplicationUser.proxyStartDate = null;
-                self.ouApplicationUser.proxyEndDate = null;
-                self.ouApplicationUser.proxyAuthorityLevels = null;
-                self.ouApplicationUser.viewProxyMessage = false;
-                self.ouApplicationUser.proxyMessage = null;
-                self.selectedProxyUser = null;
-                ouApplicationUserService
-                    .updateOUApplicationUser(self.ouApplicationUser)
-                    .then(function (result) {
-                        employeeService.setCurrentOUApplicationUser(result);
-                        self.ouApplicationUserCopy = angular.copy(result);
-                        toast.success(langService.get('out_of_office_success'));
-                    });
+            if (!self.isOutOfOffice) {
+                if(self.ouApplicationUserCopy.proxyUser) {
+                    self.ouApplicationUser.proxyUser = null;
+                    self.ouApplicationUser.proxyStartDate = null;
+                    self.ouApplicationUser.proxyEndDate = null;
+                    self.ouApplicationUser.proxyAuthorityLevels = null;
+                    self.ouApplicationUser.viewProxyMessage = false;
+                    self.ouApplicationUser.proxyMessage = null;
+                    self.selectedProxyUser = null;
+                    ouApplicationUserService
+                        .updateOUApplicationUser(self.ouApplicationUser)
+                        .then(function (result) {
+                            employeeService.setCurrentOUApplicationUser(result);
+                            self.ouApplicationUserCopy = angular.copy(result);
+                            toast.success(langService.get('out_of_office_success'));
+                        });
+                }
             } else {
-                form.$setUntouched();
+                if (self.currentEmployee.proxyUsers && self.currentEmployee.proxyUsers.length) {
+                    var scope = $rootScope.$new();
+
+                    var outOfOfficeUsers = generator.generateCollection(self.currentEmployee.proxyUsers, ProxyInfo);
+                    var html = cmsTemplate.getPopup('delegated-by-users-message');
+                    scope.ctrl = {
+                        outOfOfficeUsers: outOfOfficeUsers
+                    };
+                    LangWatcher(scope);
+                    html = $compile(angular.element(html))(scope);
+
+                    $timeout(function () {
+                        dialog.confirmMessage(html[0].innerHTML)
+                            .then(function (result) {
+                                form.$setUntouched();
+                            })
+                            .catch(function () {
+                                self.isOutOfOffice = !self.isOutOfOffice;
+                            });
+                    });
+
+                }
+                else
+                    form.$setUntouched();
             }
             if (!self.isOutOfOffice)
                 self.applicationUser.outOfOffice = false;
             employeeService.setCurrentEmployee(self.applicationUser);
+        };
+
+        self.getSelectedDelegatedUserText = function () {
+
         };
 
         self.requiredFieldsOutOfOffice = [
@@ -852,8 +890,7 @@ module.exports = function (app) {
             self.userWorkflowProgress = defer.promise;
 
             return userWorkflowGroupService
-            //.getUserWorkflowGroupByUserId(applicationUser.id, $event)
-                .getUserWorkflowGroupByUserId($event)
+                .loadUserWorkflowGroups($event)
                 .then(function (result) {
                     self.userWorkflowGroups = result;
                     self.selectedUserWorkflowGroups = [];

@@ -88,7 +88,9 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{ctrl.favoriteDocumentsService.totalCount}}" md-page-select md-on-paginate="ctrl.reloadFavoriteDocuments">
+                                    md-total="{{ctrl.favoriteDocumentsService.totalCount}}"
+                                    md-page-select
+                                    md-on-paginate="ctrl.reloadFavoriteDocuments">
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

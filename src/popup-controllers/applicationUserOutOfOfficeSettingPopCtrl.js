@@ -9,9 +9,16 @@ module.exports = function (app) {
                                                                          generator,
                                                                          availableProxies,
                                                                          toast,
+                                                                         $rootScope,
+                                                                         cmsTemplate,
+                                                                         LangWatcher,
                                                                          langService,
                                                                          ProxyUser,
                                                                          rootEntity,
+                                                                         ProxyInfo,
+                                                                         $timeout,
+                                                                         $compile,
+                                                                         usersWhoSetYouAsProxy,
                                                                          ouApplicationUserService) {
         'ngInject';
         var self = this;
@@ -137,15 +144,40 @@ module.exports = function (app) {
          * @param form
          */
         self.changeOutOfOffice = function (form) {
-            if (!self.isOutOfOffice && self.model.proxyUser) {
-                self.ouApplicationUser.proxyUser = null;
-                self.ouApplicationUser.proxyStartDate = null;
-                self.ouApplicationUser.proxyEndDate = null;
-                self.ouApplicationUser.proxyAuthorityLevels = null;
-                self.ouApplicationUser.viewProxyMessage = false;
-                self.ouApplicationUser.proxyMessage = null;
+            if (!self.isOutOfOffice) {
+                if(self.model.proxyUser) {
+                    self.ouApplicationUser.proxyUser = null;
+                    self.ouApplicationUser.proxyStartDate = null;
+                    self.ouApplicationUser.proxyEndDate = null;
+                    self.ouApplicationUser.proxyAuthorityLevels = null;
+                    self.ouApplicationUser.viewProxyMessage = false;
+                    self.ouApplicationUser.proxyMessage = null;
+                }
             } else {
-                form.$setUntouched();
+                if (usersWhoSetYouAsProxy && usersWhoSetYouAsProxy.length) {
+                    var scope = $rootScope.$new();
+
+                    var outOfOfficeUsers = generator.generateCollection(usersWhoSetYouAsProxy, ProxyInfo);
+                    var html = cmsTemplate.getPopup('delegated-by-users-message');
+                    scope.ctrl = {
+                        outOfOfficeUsers: outOfOfficeUsers
+                    };
+                    LangWatcher(scope);
+                    html = $compile(angular.element(html))(scope);
+
+                    $timeout(function () {
+                        dialog.confirmMessage(html[0].innerHTML)
+                            .then(function (result) {
+                                form.$setUntouched();
+                            })
+                            .catch(function () {
+                                self.isOutOfOffice = !self.isOutOfOffice;
+                            });
+                    });
+
+                }
+                else
+                    form.$setUntouched();
             }
             if (!self.isOutOfOffice)
                 self.ouApplicationUser.applicationUser.outOfOffice = false;

@@ -83,7 +83,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.roles + '/' + 'bulk',
+                url: urlService.roles + '/bulk',
                 data: roles
             }).then(function (result) {
                 return result.data.rs;

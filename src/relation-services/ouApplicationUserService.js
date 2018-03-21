@@ -12,7 +12,8 @@ module.exports = function (app) {
                                                       OUApplicationUser,
                                                       _,
                                                       UserOuPermission,
-                                                      ApplicationUser) {
+                                                      ApplicationUser,
+                                                      ProxyInfo) {
         'ngInject';
         var self = this;
         self.serviceName = 'ouApplicationUserService';
@@ -171,41 +172,41 @@ module.exports = function (app) {
          * @return {*|Promise<U>}
          */
         /*self.findUsersByText = function (searchText, searchKey) {
-            // service-request: need service to return collection of users from backend-team based on search text.
-            searchText = searchText.toLowerCase().trim();
-            return self.loadOUApplicationUsers().then(function (result) {
-                return _.filter(result, function (ouApplicationUser) {
-                        var properties = [
-                            'arFullName',
-                            'domainName',
-                            'enFullName',
-                            'employeeNo',
-                            'email',
-                            'loginName',
-                            'mobile',
-                            'qid'];
+         // service-request: need service to return collection of users from backend-team based on search text.
+         searchText = searchText.toLowerCase().trim();
+         return self.loadOUApplicationUsers().then(function (result) {
+         return _.filter(result, function (ouApplicationUser) {
+         var properties = [
+         'arFullName',
+         'domainName',
+         'enFullName',
+         'employeeNo',
+         'email',
+         'loginName',
+         'mobile',
+         'qid'];
 
-                        if (!searchKey) {
-                            var found = false;
-                            var value = "";
-                            for (var i = 0; i < properties.length; i++) {
-                                value = ouApplicationUser.applicationUser[properties[i]].toString().toLowerCase().trim();
-                                if (value.indexOf(searchText) !== -1) {
-                                    found = true;
-                                    break;
-                                }
-                            }
-                            return found;
-                        }
+         if (!searchKey) {
+         var found = false;
+         var value = "";
+         for (var i = 0; i < properties.length; i++) {
+         value = ouApplicationUser.applicationUser[properties[i]].toString().toLowerCase().trim();
+         if (value.indexOf(searchText) !== -1) {
+         found = true;
+         break;
+         }
+         }
+         return found;
+         }
 
-                        if (searchKey.key !== 'employeeNo')
-                            return ouApplicationUser.applicationUser[searchKey.key].toLowerCase().indexOf(searchText) !== -1;
-                        else
-                            return (Number(ouApplicationUser.applicationUser[searchKey.key]) === Number(searchText));
-                    }
-                );
-            });
-        };*/
+         if (searchKey.key !== 'employeeNo')
+         return ouApplicationUser.applicationUser[searchKey.key].toLowerCase().indexOf(searchText) !== -1;
+         else
+         return (Number(ouApplicationUser.applicationUser[searchKey.key]) === Number(searchText));
+         }
+         );
+         });
+         };*/
 
         /**
          * @description Find OU application users by search text and search key
@@ -237,11 +238,11 @@ module.exports = function (app) {
             }
 
             /*var config = {
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8',
-                    'Access-Control-Allow-Headers': 'Accept, Content-Type'
-                }
-            };*/
+             headers: {
+             'Content-Type': 'application/json;charset=UTF-8',
+             'Access-Control-Allow-Headers': 'Accept, Content-Type'
+             }
+             };*/
 
             return $http.post(urlService.searchOUApplicationUser + '/search', {
                 ou: organizationUnit,
@@ -276,7 +277,7 @@ module.exports = function (app) {
          * @return {Promise|OUApplicationUser}
          */
         self.updateOUApplicationUser = function (ouApplicationUser) {
-            console.log("ASDAD");
+
             return $http
                 .put(urlService.ouApplicationUsers,
                     generator.interceptSendInstance('OUApplicationUser', ouApplicationUser))
@@ -327,7 +328,7 @@ module.exports = function (app) {
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        url: urlService.ouApplicationUsers + '/' + 'bulk',
+                        url: urlService.ouApplicationUsers + '/bulk',
                         data: bulkIds
                     }).then(function (result) {
                         result = result.data.rs;
@@ -376,6 +377,15 @@ module.exports = function (app) {
                         return ouApplicationUser.ouid;
                 });
             });
+        };
+
+        self.getUsersWhoSetYouAsProxy = function (applicationUserId) {
+            applicationUserId = applicationUserId instanceof ApplicationUser ? applicationUserId.id : applicationUserId;
+            return $http.get(urlService.usersWhoSetYouAsProxy + applicationUserId)
+                .then(function (result) {
+                    result = generator.generateCollection(result.data.rs, ProxyInfo, self._sharedMethods);
+                    return result;
+                });
         };
 
         /**
@@ -597,10 +607,15 @@ module.exports = function (app) {
          */
         self.getAvailableProxies = function (registryOuId) {
             return self.searchByCriteria({regOU: registryOuId}).then(function (result) {
+                /*result = _.filter(result, function (ouAppUser) {
+                 return !ouAppUser.applicationUser.outOfOffice;
+                 });*/
                 return _mapProxyUser(result);
             })
         }
 
 
-    });
-};
+    })
+    ;
+}
+;

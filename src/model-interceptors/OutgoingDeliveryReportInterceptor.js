@@ -28,6 +28,11 @@ module.exports = function (app) {
             model.receivedByIdInfo = new Information(model.receivedByIdInfo);
             model.mainSiteToIdInfo = new Information(model.mainSiteToIdInfo);
             model.subSiteToIdInfo = new Information(model.subSiteToIdInfo);
+            model.actionDate_vts = angular.copy(model.sentDate);
+            getDateFromUnixTimeStamp_Vts(model, ['actionDate_vts']);
+            model.deliveryDate_vts = angular.copy(model.deliveryDate);
+            getDateFromUnixTimeStamp_Vts(model, ['deliveryDate_vts']);
+            model.messageStatus = model.messageStatus ? new Information(model.messageStatus) : new Information();
             return model;
         });
         /**
@@ -63,5 +68,19 @@ module.exports = function (app) {
             }
             return model;
         };
+
+        /**
+         * convert unix timestamp to Original Date Format (YYYY-MM-DD hh:mm:ss A)
+         * @param model
+         * @param modelProperties
+         * @returns {*}
+         */
+        var getDateFromUnixTimeStamp_Vts = function (model, modelProperties) {
+            for (var i = 0; i < modelProperties.length; i++) {
+                model[modelProperties[i]] = model[modelProperties[i]] ? moment(model[modelProperties[i]]).format('YYYY-MM-DD hh:mm:ss A') : null;
+            }
+            return model;
+        };
+
     })
 };

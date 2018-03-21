@@ -269,7 +269,7 @@
                                                 </th>
                                                 <!--<th md-column md-order-by="operation"><span>{{lang.view_tracking_sheet_destination_identitfier}}</span>
                                                 </th>-->
-                                                <th md-column md-order-by="operation"><span>{{lang.view_tracking_sheet_destination_full_name}}</span>
+                                                <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_destination_full_name}}</span>
                                                 </th>
                                             </tr>
                                             </thead>
@@ -411,28 +411,34 @@
                                         <table md-table>
                                             <thead md-head md-order="ctrl.outgoingDeliveryReportGrid.order">
                                             <tr md-row>
-                                                <th md-column md-order-by="sentByIdInfo"><span>{{lang.view_tracking_sheet_sent_by}}</span></th>
-                                                <th md-column md-order-by="mainSiteFromIdInfo"><span>{{lang.view_tracking_sheet_main_site_from}}</span></th>
-                                                <th md-column md-order-by="subSiteFromIdInfo"><span>{{lang.view_tracking_sheet_sub_site_from}}</span></th>
-                                                <th md-column md-order-by="priorityLevelInfo"><span>{{lang.view_tracking_sheet_priority_level}}</span></th>
-                                                <th md-column md-order-by="messageStatusInfo"><span>{{lang.view_tracking_sheet_message_status}}</span></th>
-                                                <th md-column md-order-by="receivedByIdInfo"><span>{{lang.view_tracking_sheet_received_by}}</span></th>
-                                                <th md-column md-order-by="mainSiteToIdInfo"><span>{{lang.view_tracking_sheet_main_site_to}}</span></th>
-                                                <th md-column md-order-by="subSiteToIdInfo"><span>{{lang.view_tracking_sheet_sub_site_to}}</span></th>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_sent_by}}</span></th>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_main_site_from}}</span></th>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_main_sub_site_from}}</span></th>
+                                                <!--<th md-column md-order-by="priorityLevelInfo"><span>{{lang.view_tracking_sheet_priority_level}}</span></th>-->
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('messageStatusInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_message_status}}</span></th>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('receivedByIdInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_received_by}}</span></th>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_main_site_to}}</span></th>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_sub_site_to}}</span></th>
+                                                <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span></th>
+                                                <th md-column md-order-by="deliveryDate_vts"><span>{{lang.view_tracking_sheet_delivery_date}}</span></th>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('messageStatus','Information')}}"><span>{{lang.view_tracking_sheet_message_status}}</span></th>
                                                 <th md-column md-order-by="comment"><span>{{lang.view_tracking_sheet_comments}}</span></th>
                                             </tr>
                                             </thead>
                                             <tbody md-body>
-                                            <tr md-select="outgoingDeliveryReportRecord" md-row
+                                            <tr md-row
                                                 ng-repeat="outgoingDeliveryReportRecord in ctrl.outgoingDeliveryReportRecords | filter:ctrl.searchModelOutgoingDeliveryReports | limitTo: ctrl.outgoingDeliveryReportGrid.limit: ((ctrl.outgoingDeliveryReportGrid.page - 1) * ctrl.outgoingDeliveryReportGrid.limit) |orderBy:ctrl.outgoingDeliveryReportGrid.order  track by $index">
                                                 <td md-cell>{{outgoingDeliveryReportRecord.sentByIdInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.mainSiteFromIdInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.subSiteFromIdInfo.getTranslatedName()}}</td>
-                                                <td md-cell>{{outgoingDeliveryReportRecord.priorityLevelInfo.getTranslatedName()}}</td>
+                                                <!--<td md-cell>{{outgoingDeliveryReportRecord.priorityLevelInfo.getTranslatedName()}}</td>-->
                                                 <td md-cell>{{outgoingDeliveryReportRecord.messageStatusInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.receivedByIdInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.mainSiteToIdInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.subSiteToIdInfo.getTranslatedName()}}</td>
+                                                <td md-cell>{{outgoingDeliveryReportRecord.actionDate_vts}}</td>
+                                                <td md-cell>{{outgoingDeliveryReportRecord.deliveryDate_vts}}</td>
+                                                <td md-cell>{{outgoingDeliveryReportRecord.messageStatus.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.comment}}</td>
                                             </tr>
                                             </tbody>
@@ -922,14 +928,17 @@
                                         <table md-table>
                                             <thead md-head md-order="ctrl.outgoingDeliveryReportGrid.order">
                                             <tr md-row>
-                                                <th md-column md-order-by="sentByIdInfo"><span>{{lang.view_tracking_sheet_sent_by}}</span></th>
-                                                <th md-column md-order-by="receivedById"><span>{{lang.view_tracking_sheet_main_site_from}}</span></th>
-                                                <th md-column md-order-by="comment"><span>{{lang.view_tracking_sheet_main_sub_site_from}}</span></th>
-                                                <th md-column md-order-by="sentDate"><span>{{lang.view_tracking_sheet_priority_level}}</span></th>
-                                                <th md-column md-order-by="deliveryDate"><span>{{lang.view_tracking_sheet_message_status}}</span></th>
-                                                <th md-column md-order-by="followupDate"><span>{{lang.view_tracking_sheet_received_by}}</span></th>
-                                                <th md-column md-order-by="followupDate"><span>{{lang.view_tracking_sheet_main_site_to}}</span></th>
-                                                <th md-column md-order-by="followupDate"><span>{{lang.view_tracking_sheet_sub_site_to}}</span></th>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_sent_by}}</span></th>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_main_site_from}}</span></th>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_main_sub_site_from}}</span></th>
+                                                <!--<th md-column md-order-by="priorityLevelInfo"><span>{{lang.view_tracking_sheet_priority_level}}</span></th>-->
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('messageStatusInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_message_status}}</span></th>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('receivedByIdInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_received_by}}</span></th>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_main_site_to}}</span></th>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_sub_site_to}}</span></th>
+                                                <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span></th>
+                                                <th md-column md-order-by="deliveryDate_vts"><span>{{lang.view_tracking_sheet_delivery_date}}</span></th>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('messageStatus','Information')}}"><span>{{lang.view_tracking_sheet_message_status}}</span></th>
                                                 <th md-column md-order-by="comment"><span>{{lang.view_tracking_sheet_comments}}</span></th>
                                             </tr>
                                             </thead>
@@ -939,11 +948,14 @@
                                                 <td md-cell>{{outgoingDeliveryReportRecord.sentByIdInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.mainSiteFromIdInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.subSiteFromIdInfo.getTranslatedName()}}</td>
-                                                <td md-cell>{{outgoingDeliveryReportRecord.priorityLevelInfo.getTranslatedName()}}</td>
+                                                <!--<td md-cell>{{outgoingDeliveryReportRecord.priorityLevelInfo.getTranslatedName()}}</td>-->
                                                 <td md-cell>{{outgoingDeliveryReportRecord.messageStatusInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.receivedByIdInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.mainSiteToIdInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.subSiteToIdInfo.getTranslatedName()}}</td>
+                                                <td md-cell>{{outgoingDeliveryReportRecord.actionDate_vts}}</td>
+                                                <td md-cell>{{outgoingDeliveryReportRecord.deliveryDate_vts}}</td>
+                                                <td md-cell>{{outgoingDeliveryReportRecord.messageStatus.getTranslatedName()}}</td>
                                                 <td md-cell>{{outgoingDeliveryReportRecord.comment}}</td>
                                             </tr>
                                             </tbody>

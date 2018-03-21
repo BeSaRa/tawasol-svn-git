@@ -688,7 +688,8 @@
                                                         {{ctrl.ouApplicationUser.getTranslatedViewMessageToSender()}}</label>
                                                 </md-switch>
                                                 <!-- Out of office Message -->
-                                                <md-input-container flex>
+                                                <md-input-container flex
+                                                                    ng-if="ctrl.ouApplicationUser.viewProxyMessage">
                                                     <label>{{lang.out_of_office_message}}</label>
                                                     <textarea ng-model="ctrl.ouApplicationUser.proxyMessage"
                                                               name="proxyMessage" id="proxyMessage" minlength="4"

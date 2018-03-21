@@ -190,7 +190,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.smsTemplates + '/' + 'bulk',
+                url: urlService.smsTemplates + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;

@@ -67,8 +67,12 @@ module.exports = function (app) {
             entityService
                 .controllerMethod
                 .entityAdd($event)
-                .then(function () {
-                    self.reloadEntities();
+                .then(function (result) {
+                    self.reloadEntities(self.grid.page).then(function () {
+                        toast.success(langService.get('add_success').change({name: result.getNames()}));
+                    });
+                })
+                .catch(function(error){
                 })
         };
 
@@ -81,8 +85,12 @@ module.exports = function (app) {
             entityService
                 .controllerMethod
                 .entityEdit(entity, $event)
-                .then(function () {
-                    self.reloadEntities();
+                .then(function (result) {
+                    self.reloadEntities(self.grid.page).then(function () {
+                        toast.success(langService.get('edit_success').change({name: result.getNames()}));
+                    });
+                })
+                .catch(function (error) {
                 });
         };
 
@@ -116,7 +124,7 @@ module.exports = function (app) {
                 .controllerMethod
                 .entityDelete(entity, $event)
                 .then(function () {
-                    self.reloadEntities();
+                    self.reloadEntities(self.grid.page);
                 });
         };
 
@@ -129,7 +137,7 @@ module.exports = function (app) {
                 .controllerMethod
                 .entityDeleteBulk(self.selectedEntities, $event)
                 .then(function () {
-                    self.reloadEntities();
+                    self.reloadEntities(self.grid.page);
                 });
         };
 

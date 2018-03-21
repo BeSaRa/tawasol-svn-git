@@ -213,7 +213,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.referencePlanNumbers + '/' + 'bulk',
+                url: urlService.referencePlanNumbers + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;

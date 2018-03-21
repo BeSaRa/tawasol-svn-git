@@ -26,7 +26,12 @@ module.exports = function (app) {
                 self.userWorkflowGroups = generator.generateCollection(result.data.rs, UserWorkflowGroup, self._sharedMethods);
                 self.userWorkflowGroups = generator.interceptReceivedCollection('UserWorkflowGroup', self.userWorkflowGroups);
                 return self.userWorkflowGroups;
-            });
+            })
+                .catch(function (error) {
+                    return errorCode.checkIf(error, 'EMPTY_RESULT', function () {
+                        return $q.resolve([]);
+                    })
+                });
         };
 
         /**
@@ -187,7 +192,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.userWorkflowGroups + '/' + 'bulk',
+                url: urlService.userWorkflowGroups + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;
@@ -222,7 +227,7 @@ module.exports = function (app) {
          */
         self.activateUserWorkflowGroup = function (userWorkflowGroup) {
             return $http
-                .put((urlService.userWorkflowGroups + '/activate/' + userWorkflowGroup.id))
+                .put(urlService.userWorkflowGroups + '/activate/' + userWorkflowGroup.id)
                 .then(function () {
                     return userWorkflowGroup;
                 });
@@ -234,7 +239,7 @@ module.exports = function (app) {
          */
         self.deactivateUserWorkflowGroup = function (userWorkflowGroup) {
             return $http
-                .put((urlService.userWorkflowGroups + '/deactivate/' + userWorkflowGroup.id))
+                .put(urlService.userWorkflowGroups + '/deactivate/' + userWorkflowGroup.id)
                 .then(function () {
                     return userWorkflowGroup;
                 });
@@ -271,8 +276,8 @@ module.exports = function (app) {
          //* @param userId
          * @param $event
          */
-        self.getUserWorkflowGroupByUserId = function ($event) {
-            return $http.get(urlService.userWorkflowGroups + '/user')
+        self.getUserWorkflowGroups = function ($event) {
+            return $http.get(urlService.userWorkflowGroups + '/user/all')
                 .then(function (result) {
                     self.userWorkflowGroups = generator.generateCollection(result.data.rs, UserWorkflowGroup, self._sharedMethods);
                     self.userWorkflowGroups = generator.interceptReceivedCollection('UserWorkflowGroup', self.userWorkflowGroups);

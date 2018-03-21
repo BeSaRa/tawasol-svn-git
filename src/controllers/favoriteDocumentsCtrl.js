@@ -42,7 +42,7 @@ module.exports = function (app) {
         self.grid = {
             limit: 5, // default limit
             page: 1, // first page
-            order: 'arName', // default sorting order
+            order: '', // default sorting order
             limitOptions: [5, 10, 20, // limit options
                 {
                     label: langService.get('all'),

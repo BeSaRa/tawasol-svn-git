@@ -18,7 +18,9 @@ module.exports = function (app) {
                                                             employeeService,
                                                             correspondenceService,
                                                             ResolveDefer,
-                                                            favoriteDocumentsService) {
+                                                            favoriteDocumentsService,
+                                                            Information,
+                                                            Lookup) {
         'ngInject';
         var self = this;
 
@@ -69,11 +71,31 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function (property, modelType) {
+            /*if (modelType instanceof Information)
+                return property + '.' + (langService.current === 'ar' ? 'arName' : 'enName');
+            else if (modelType instanceof Lookup)
+                return property + '.' + (langService.current === 'ar' ? 'defaultArName' : 'defaultEnName');
+            return property;*/
+            if (modelType.toLowerCase() === 'information')
+                return property + '.' + (langService.current === 'ar' ? 'arName' : 'enName');
+            else if (modelType.toLowerCase() === 'lookup')
+                return property + '.' + (langService.current === 'ar' ? 'defaultArName' : 'defaultEnName');
+            return property;
+        };
+
+        /**
          * @description Opens the popup to get the month and year for sent items
          * @type {null}
          */
-        self.selectedYear = null;
-        self.selectedMonth = null;
+        var today = new Date();
+        self.selectedYear = today.getFullYear();
+        self.selectedMonth = today.getMonth() + 1;
         self.getMonthYearForSentItems = function ($event) {
             sentItemDepartmentInboxService
                 .controllerMethod

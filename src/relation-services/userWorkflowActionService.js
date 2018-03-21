@@ -84,7 +84,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.userWorkflowActions + '/' + 'bulk',
+                url: urlService.userWorkflowActions + '/bulk',
                 data: bulkIds
             }).then(function (result) {
 

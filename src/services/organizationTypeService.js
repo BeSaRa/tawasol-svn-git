@@ -174,7 +174,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.organizationTypes + '/' + 'bulk',
+                url: urlService.organizationTypes + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;

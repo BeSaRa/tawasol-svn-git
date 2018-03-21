@@ -94,6 +94,7 @@ module.exports = function (app) {
              * @param $event
              */
             entityEdit: function (entity, $event) {
+
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -201,7 +202,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.entities + '/' + 'bulk',
+                url: urlService.entities + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;

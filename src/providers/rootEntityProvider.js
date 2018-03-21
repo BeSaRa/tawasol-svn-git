@@ -51,6 +51,24 @@ module.exports = function (app) {
                         })
 
                 },
+                loadInformationWithoutCancelDialog: function (rootIdentifier) {
+                    if (rootIdentifier) // to set root entity Identifier
+                        self.setRootEntityIdentifier(rootIdentifier);
+
+                    return $http
+                        .get(urlService.information, {
+                            headers: {
+                                'tawasol-entity-Id': self.getRootEntityIdentifier()
+                            }
+                        })
+                        .then(function (result) {
+                            $cookies.put(privateKey, rootIdentifier);
+                            //dialog.cancel();
+                            self.setRootEntity(new RootEntity(result.data.rs));
+                            return self.getRootEntity();
+                        })
+
+                },
                 checkRootEntityIdentifier: function (identifier) {
                     return rootEntity && rootEntity.identifierEqual(identifier) ? $q.when({
                         identifier: identifier,

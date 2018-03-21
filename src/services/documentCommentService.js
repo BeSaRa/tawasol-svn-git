@@ -106,7 +106,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.documentComments + '/' + 'bulk',
+                url: urlService.documentComments + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;

@@ -551,7 +551,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.readyToExports + '/' + 'bulk',
+                url: urlService.readyToExports + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;

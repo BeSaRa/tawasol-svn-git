@@ -196,17 +196,17 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.documentTypes + '/' + 'bulk',
+                url: urlService.documentTypes + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 result = result.data.rs;
-                var failedDocumentTypes = [];
+                var failureCollection = [];
                 _.map(result, function (value, key) {
                     if (!value)
-                        failedDocumentTypes.push(key);
+                        failureCollection.push(Number(key));
                 });
                 return _.filter(documentTypes, function (documentType) {
-                    return (failedDocumentTypes.indexOf(documentType.id) > -1);
+                    return (failureCollection.indexOf(documentType.id) > -1);
                 });
             });
         };

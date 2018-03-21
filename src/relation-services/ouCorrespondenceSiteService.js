@@ -105,7 +105,7 @@ module.exports = function (app) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                url: urlService.ouCorrespondenceSites + '/' + 'bulk',
+                url: urlService.ouCorrespondenceSites + '/bulk',
                 data: bulkIds
             }).then(function (result) {
                 self.ouCorrespondenceSites = _.filter(self.ouCorrespondenceSites, function (ouCorrespondenceSite) {
