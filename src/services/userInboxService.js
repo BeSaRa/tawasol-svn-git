@@ -34,7 +34,6 @@ module.exports = function (app) {
                 self.userInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
                 //self.userInboxes = _.sortBy(self.userInboxes, 'generalStepElm.starred').reverse();
                 self.userInboxes = generator.interceptReceivedCollection('WorkItem', self.userInboxes);
-                self.userInboxes[0].generalStepElm.isBrodcasted = 1;
                 return self.userInboxes;
             });
         };
