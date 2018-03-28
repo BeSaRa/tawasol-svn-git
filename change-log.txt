@@ -11,3 +11,17 @@ Fixed issues :
 12310: Delegation - End date is expired still the Out of Office functionality toggle is enabled and functionality too.
 
 
+
+
+Anter:
+dialog = >
+        successMessage
+        errorMessage
+        confirmMessage
+        infoMessage
+
+toast
+    error
+    success
+    info
+    warning
