@@ -28,6 +28,10 @@ module.exports = function (app) {
         };
 
         self.querySearch = function (query) {
+            //tagsService.searchFor('welcome').then(function(result){
+                // array -> result.filter(createFilterFor(query))
+            // })
+
             return query ? self.loadedTags.filter(createFilterFor(query)) : [];
         };
 
