@@ -184,6 +184,7 @@ module.exports = function (app) {
                                         outgoing.docDate = new Date();
                                         outgoing.createdOn = new Date();
                                         outgoing.addMethod = 0;
+                                        outgoing.sitesInfoTo = [result.site];
                                         return outgoing
                                     });
                             });

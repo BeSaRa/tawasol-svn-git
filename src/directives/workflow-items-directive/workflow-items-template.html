@@ -108,7 +108,7 @@
                         </div>
                     </td>
                 </tr>
-                <tr ng-if="!ctrl.excludeSelected" ng-class="{'default-theme':!ctrl.runItemNotExists(workflowItem)}"
+                <tr ng-if="!ctrl.excludeSelected" ng-class="{'background-warning':!ctrl.runItemNotExists(workflowItem)}"
                     md-row
                     md-select="workflowItem"
                     ng-repeat="workflowItem in ctrl.workflowItems |limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">

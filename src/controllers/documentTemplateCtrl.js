@@ -9,7 +9,7 @@ module.exports = function (app) {
                                                      organizations,
                                                      contextHelpService,
                                                      Organization,
-                                                     currentEmployee) {
+                                                     selectedRegOU) {
         'ngInject';
         var self = this;
 
@@ -32,7 +32,7 @@ module.exports = function (app) {
          * @description Contains the selected organization unit to filter grid
          * @type {null}
          */
-        self.selectedOrganization = currentEmployee.defaultOUID;
+        self.selectedOrganization = selectedRegOU;
 
         /**
          * @description Contains the selected document templates

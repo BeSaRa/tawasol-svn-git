@@ -63,8 +63,17 @@ module.exports = function (app) {
             );
         };
 
+        self.defaultDocumentClasses = ['outgoing', 'incoming', 'internal'];
+
         self.returnLookups = function (lookupName) {
-            return self.lookups.hasOwnProperty(lookupName) ? self.lookups[lookupName] : [];
+            var lookups = self.lookups.hasOwnProperty(lookupName) ? self.lookups[lookupName] : [];
+            if (lookups.length && lookupName === self.documentClass) {
+                lookups = _.filter(lookups, function (lookup) {
+                    return self.defaultDocumentClasses.indexOf(lookup.lookupStrKey.toLowerCase()) > -1;
+                });
+            }
+            return lookups;
+            //return self.lookups.hasOwnProperty(lookupName) ? self.lookups[lookupName] : [];
         };
         /**
          * @description add new lookup to service
@@ -156,7 +165,7 @@ module.exports = function (app) {
             self.propertyConfigurations.incoming = [];
             self.propertyConfigurations.internal = [];
             self.propertyConfigurations.correspondence = [];
-            self.propertyConfigurations.tawasalattachment = [];
+            self.propertyConfigurations.tawasolattachment = [];
 
             _.map(propertyConfigurations, function (property) {
                 var lookup = self.lookups.documentClass[property.documentClass] || 'correspondence';
@@ -170,6 +179,7 @@ module.exports = function (app) {
          * @return {*}
          */
         self.getPropertyConfigurations = function (documentClass) {
+            documentClass = documentClass.toLowerCase();
             if (documentClass && self.propertyConfigurations.hasOwnProperty(documentClass))
                 return self.propertyConfigurations[documentClass];
             return self.propertyConfigurations;

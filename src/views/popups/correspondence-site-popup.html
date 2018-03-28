@@ -117,8 +117,9 @@
                                         </md-switch>
                                     </div>
                                     <div flex>
-                                        <md-switch ng-change="ctrl.changeGlobalFromEdit()" ng-disabled="!ctrl.editMode"
-                                                   ng-readonly="!ctrl.editMode"
+                                        <md-switch ng-change="ctrl.changeGlobalFromEdit()"
+                                                   ng-disabled="ctrl.editMode && ctrl.correspondenceSite.isGlobal"
+                                                   ng-readonly="ctrl.editMode && ctrl.correspondenceSite.isGlobal"
                                                    ng-model="ctrl.correspondenceSite.isGlobal"
                                                    aria-label="{{lang.global}}">
                                             <label>{{lang.global}} :
@@ -129,7 +130,7 @@
                             </div>
                         </md-content>
                     </md-tab>
-                    <md-tab ng-disabled="!ctrl.editMode || ctrl.correspondenceSite.isGlobal"
+                    <md-tab ng-disabled="ctrl.correspondenceSite.isGlobal"
                             label="{{lang.organization_units}}">
                         <md-content>
                             <div layout="column" class="p20">
@@ -151,7 +152,58 @@
                                         </md-button>
                                     </div>
                                 </div>
-                                <md-card ng-if="ctrl.correspondenceSite.relatedOus.length" layout="column"
+                                <md-card ng-if="!ctrl.editMode && ctrl.correspondenceSite.relatedOus.length" layout="column"
+                                         class="card-overlay">
+                                    <md-table-container flex>
+                                        <table md-table
+                                               md-row-select multiple ng-model="ctrl.selectedOUCorrespondenceSites"
+                                               md-progress="ctrl.progress">
+                                            <thead md-head>
+                                            <tr md-row>
+                                                <th ng-if="ctrl.selectedOUCorrespondenceSites.length" colspan="3"
+                                                    md-column>
+                                                    <div layout="row" layout-align="start center">
+                                                        <span>{{ctrl.selectedOUCorrespondenceSites.length}} {{lang.items_selected}} </span>
+                                                        <span flex></span>
+                                                        <div>
+                                                            <md-button class="md-icon-button"
+                                                                       ng-click="ctrl.removeBulkOUCorrespondenceSites($event)">
+                                                                <md-icon md-svg-icon="delete"></md-icon>
+                                                            </md-button>
+                                                        </div>
+                                                    </div>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
+                                                    <span>{{lang.arabic_name}}</span>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
+                                                    <span>{{lang.english_name}}</span>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
+                                                    <span>{{lang.actions}}</span>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody md-body>
+                                            <tr md-row md-select="ouCorrespondenceSite"
+                                                ng-repeat="ouCorrespondenceSite in ctrl.correspondenceSite.relatedOus|orderBy:'itemOrder' track by $index">
+                                                <td md-cell>{{ouCorrespondenceSite.arName}}</td>
+                                                <td md-cell>{{ouCorrespondenceSite.enName}}</td>
+                                                <td md-cell>
+                                                    <div layout="row" layout-align="start center">
+                                                        <md-button
+                                                                ng-click="ctrl.deleteOUCorrespondenceSiteFromCtrl(ouCorrespondenceSite)"
+                                                                class="md-icon-button">
+                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                        </md-button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </md-table-container>
+                                </md-card>
+                                <md-card ng-if="ctrl.editMode && ctrl.correspondenceSite.relatedOus.length" layout="column"
                                          class="card-overlay">
                                     <md-table-container flex>
                                         <table md-table
@@ -277,6 +329,8 @@
                                             <td md-cell>
                                                 <md-switch aria-label="{{lang.global}}"
                                                            tooltip="{{correspondenceSite.getTranslatedGlobal()}}"
+                                                           ng-disabled="correspondenceSite.isGlobal"
+                                                           ng-readonly="correspondenceSite.isGlobal"
                                                            ng-change="ctrl.changeGlobalFromFromGrid(correspondenceSite)"
                                                            ng-model="correspondenceSite.isGlobal"></md-switch>
                                             </td>
@@ -310,7 +364,7 @@
         </md-content>
         <div>
             <div layout="row" layout-align="start center">
-                <md-button class="md-raised" ng-disabled="correspondenceSiteForm.$invalid" ng-if="!ctrl.editMode"
+                <md-button class="md-raised" ng-disabled="correspondenceSiteForm.$invalid || (!ctrl.correspondenceSite.isGlobal && !ctrl.correspondenceSite.relatedOus.length)" ng-if="!ctrl.editMode"
                            ng-click="ctrl.saveCorrespondenceSite()">
                     {{lang.add}}
                 </md-button>

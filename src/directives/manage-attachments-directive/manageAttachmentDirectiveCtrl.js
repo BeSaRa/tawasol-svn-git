@@ -203,7 +203,7 @@ module.exports = function (app) {
          * to upload the files
          * @param files
          */
-        self.uploadAttachmentFile = function (files) {
+        self.uploadAttachmentFile = function (files, element) {
             attachmentService
                 .validateBeforeUpload('attachmentUpload', files[0])
                 .then(function (file) {

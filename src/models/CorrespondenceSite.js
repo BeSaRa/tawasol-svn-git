@@ -113,7 +113,7 @@ module.exports = function (app) {
 
             CorrespondenceSite.prototype.deleteAllOUCorrespondenceSites = function () {
                 var self = this;
-                console.log(self);
+                //console.log(self);
                 return ouCorrespondenceSiteService
                     .deleteBulkOUCorrespondenceSites(this.getRelatedOus())
                     .then(function () {
@@ -129,7 +129,7 @@ module.exports = function (app) {
                     .addOUCorrespondenceSite((new OUCorrespondenceSite()).setOuId(organization).setCorrespondenceSite(this))
                     .then(function (ouCorrespondenceSite) {
                         self.relatedOus.push(ouCorrespondenceSite);
-                        ouCorrespondenceSite;
+                        return ouCorrespondenceSite;
                     });
             };
             CorrespondenceSite.prototype.addBulkToOUCorrespondenceSites = function (organizations) {
@@ -153,7 +153,7 @@ module.exports = function (app) {
                     });
             };
 
-            CorrespondenceSite.prototype.opendDialogToSelectOrganizations = function () {
+            CorrespondenceSite.prototype.openDialogToSelectOrganizations = function () {
                 var self = this;
                 return organizationService
                     .controllerMethod

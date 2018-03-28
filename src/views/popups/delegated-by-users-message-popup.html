@@ -8,18 +8,21 @@
                     <th md-column>{{lang.arabic_name}}</th>
                     <th md-column>{{lang.english_name}}</th>
                     <th md-column>{{lang.domain_name}}</th>
-                    <th md-column>{{lang.out_of_office}}</th>
+                    <th md-column>{{lang.organization_unit}}</th>
+                    <!--<th md-column>{{lang.out_of_office}}</th>-->
                     <th md-column>{{lang.start_date}}</th>
                     <th md-column>{{lang.end_date}}</th>
                     <th md-column>{{lang.message}}</th>
                 </tr>
                 </thead>
                 <tbody md-body>
-                <tr md-row ng-repeat="user in ctrl.outOfOfficeUsers track by $index">
+                <tr md-row ng-repeat="user in ctrl.outOfOfficeUsers track by $index"
+                    ng-class="{'background-danger': user.outOfOffice}">
                     <td md-cell>{{user.arName}}</td>
                     <td md-cell>{{user.enName}}</td>
                     <td md-cell>{{user.proxyDomain}}</td>
-                    <td md-cell>{{user.getTranslatedYesNo('outOfOffice')}}</td>
+                    <td md-cell>{{user.getTranslatedProxyOUName()}}</td>
+                    <!--<td md-cell>{{user.getTranslatedYesNo('outOfOffice')}}</td>-->
                     <td md-cell>{{user.getProxyStartDate()}}</td>
                     <td md-cell>{{user.getProxyEndDate()}}</td>
                     <td md-cell>{{user.proxyMessage}}</td>

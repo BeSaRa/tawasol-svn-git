@@ -47,8 +47,7 @@
                                     <th ng-if="!ctrl.selectedCorrespondenceSites.length" md-column md-order-by="status">
                                         <span>{{lang.status}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedCorrespondenceSites.length" md-column
-                                        md-order-by="global">
+                                    <th ng-if="!ctrl.selectedCorrespondenceSites.length" md-column md-order-by="isGlobal">
                                         <span>{{lang.global}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedCorrespondenceSites.length" md-column>
@@ -72,16 +71,19 @@
                                     </td>
                                     <td md-cell>
                                         <md-switch aria-label="{{lang.global}}"
+                                                   ng-disabled="correspondenceSite.isGlobal"
+                                                   ng-readonly="correspondenceSite.isGlobal"
                                                    tooltip="{{correspondenceSite.getTranslatedGlobal()}}"
                                                    ng-change="ctrl.changeGlobalFromFromGrid(correspondenceSite)"
                                                    ng-model="correspondenceSite.isGlobal"></md-switch>
                                     </td>
                                     <td md-cell>
-                                        <md-button ng-click="ctrl.openSubCorrespondenceSiteDialog(correspondenceSite , $event)"
-                                                   class="md-icon-button"
-                                                   tooltip="{{correspondenceSite.children.length + ' ' + lang.sub_correspondence_site}}"
-                                                   ng-class="{'md-raised':correspondenceSite.children.length}"
-                                                   ng-disabled="!correspondenceSite.children.length">
+                                        <md-button
+                                                ng-click="ctrl.openSubCorrespondenceSiteDialog(correspondenceSite , $event)"
+                                                class="md-icon-button"
+                                                tooltip="{{correspondenceSite.children.length + ' ' + lang.sub_correspondence_site}}"
+                                                ng-class="{'md-raised':correspondenceSite.children.length}"
+                                                ng-disabled="!correspondenceSite.children.length">
                                             <md-icon md-svg-icon="coins"></md-icon>
                                         </md-button>
                                     </td>
@@ -100,12 +102,13 @@
                                 </tr>
                                 </tbody>
                             </table>
-                        <md-table-pagination
-                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                                md-limit-options="ctrl.grid.limitOptions"
-                                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                md-total="{{ctrl.correspondenceSites.length}}" md-page-select>
-                        </md-table-pagination>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.correspondenceSites.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
                     </md-card>
                 </div>
             </div>

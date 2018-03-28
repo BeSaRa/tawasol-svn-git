@@ -109,7 +109,7 @@ module.exports = function (app) {
 
         self.openSelectOUClassificationDialog = function (classification) {
             return classification
-                .opendDialogToSelectOrganizations()
+                .openDialogToSelectOrganizations()
                 .then(function () {
                     return classification;
                 });

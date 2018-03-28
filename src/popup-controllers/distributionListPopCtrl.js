@@ -19,7 +19,26 @@ module.exports = function (app) {
         self.editMode = editMode;
         self.distributionList = angular.copy(distributionList);
         self.model = angular.copy(distributionList);
-        self.mainCorrespondenceSites = mainCorrespondenceSites;
+        self.mainCorrespondenceSitesCopy = angular.copy(mainCorrespondenceSites);
+
+        self.filterMembers = function(){
+            mainCorrespondenceSites =  angular.copy(self.mainCorrespondenceSitesCopy);
+            self.members = _.map(self.distributionList.distributionListMembers, 'id');
+
+            _.map(mainCorrespondenceSites, function (correspondenceSite) {
+                var children = correspondenceSite.children;
+                var childrenNew = [];
+                for (var i = 0; i < children.length; i++) {
+                    if (self.members.indexOf(children[i].id) < 0)
+                        childrenNew.push(children[i]);
+                }
+                correspondenceSite.children = childrenNew;
+            });
+            self.mainCorrespondenceSites = mainCorrespondenceSites;
+        };
+
+        self.filterMembers();
+
         self.organizations = organizations;
         self.validateLabels = {
             arName: 'arabic_name',
@@ -28,6 +47,7 @@ module.exports = function (app) {
 
         self.resetModel = function () {
             generator.resetFields(self.distributionList, self.model);
+            self.filterMembers();
         };
 
         /**
@@ -59,6 +79,7 @@ module.exports = function (app) {
                         self.editMode = true;
                         self.distributionList = angular.copy(result);
                         self.model = angular.copy(self.distributionList);
+                        self.filterMembers();
                     });
                 })
                 .catch(function () {
@@ -90,6 +111,7 @@ module.exports = function (app) {
                 .validate()
                 .then(function () {
                     distributionListService.updateDistributionList(self.distributionList).then(function () {
+                        self.filterMembers();
                         dialog.hide(self.distributionList);
                     });
                 })
@@ -142,7 +164,7 @@ module.exports = function (app) {
 
         self.openSelectOUDistributionListDialog = function (distributionList) {
             return distributionList
-                .opendDialogToSelectOrganizations()
+                .openDialogToSelectOrganizations()
                 .then(function () {
                     return distributionList;
                 });
@@ -203,12 +225,14 @@ module.exports = function (app) {
         self.addDistributionListMemberToList = function () {
             self.distributionList.distributionListMembers.push(self.selectMembersDistributionLists);
             self.selectMembersDistributionLists = null;
+            self.filterMembers();
         };
 
         self.deleteMemberDistributionListFromCtrl = function (correspondenceSite) {
             var index = self.distributionList.distributionListMembers.indexOf(correspondenceSite);
             self.distributionList.distributionListMembers.splice(index, 1);
             self.distributionListMembers = self.distributionList.distributionListMembers;
+            self.filterMembers();
         };
 
         /*self.excludeSubCorrespondenceSiteIfExists = function (organization) {

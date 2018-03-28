@@ -34,6 +34,7 @@
                                     <md-select name="proxyUser" id="proxyUser"
                                                ng-required="ctrl.isOutOfOffice"
                                                ng-disabled="!ctrl.isOutOfOffice"
+                                               md-selected-text="ctrl.getSelectedDelegatedUserText()"
                                                ng-model-options="{trackBy:'$value.id'}"
                                                ng-model="ctrl.selectedProxyUser">
                                         <md-option

@@ -87,7 +87,7 @@ module.exports = function (app) {
                     {
                         label: langService.get('all'),
                         value: function () {
-                            return (self.documentComments.length + 2)
+                            return (self.documentComments.length + 21)
                         }
                     }
                 ]

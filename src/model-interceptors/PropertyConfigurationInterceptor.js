@@ -9,10 +9,10 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-
             if (model.dataType === "Date") {
                 model['defaultValue'] = model['defaultValue'] ? moment(model['defaultValue'], "YYYY-MM-DD").valueOf() : null;
             }
+            //delete model.localization;
             return model;
         });
 

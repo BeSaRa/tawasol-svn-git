@@ -44,7 +44,7 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, {
                 label: langService.get('all'),
                 value: function () {
-                    return self.correspondenceSite.children.length;
+                    return (self.correspondenceSite.children.length + 21);
                 }
             }]
         };
@@ -62,7 +62,7 @@ module.exports = function (app) {
 
         self.saveCorrespondenceSite = function () {
             validationService
-                .createValidation('CLASSIFICATION_VALIDATION')
+                .createValidation('SAVE_CORRESPONDENCE_SITE_VALIDATION')
                 .addStep('check_required', true, generator.checkRequiredFields, self.correspondenceSite, function (result) {
                     return !result.length;
                 })
@@ -86,17 +86,48 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
+                    var relatedOus = angular.copy(self.correspondenceSite.relatedOus);
+                    self.correspondenceSite.relatedOus = [];
                     self.correspondenceSite.save().then(function (correspondenceSite) {
                         self.correspondenceSite = correspondenceSite;
-                        self.model = angular.copy(self.correspondenceSite);
-                        self.disableParent = false;
-                        if (self.editMode) {
-                            dialog.hide(self.correspondenceSite);
-
-                        } else {
-                            self.editMode = true;
-                            toast.success(langService.get('add_success').change({name: self.correspondenceSite.getNames()}));
+                        if (!self.editMode) {
+                            if (!self.correspondenceSite.isGlobal && relatedOus.length) {
+                                self.correspondenceSite
+                                    .addBulkToOUCorrespondenceSites(relatedOus)
+                                    .then(function (ouCorrespondenceSites) {
+                                        self.selectedOrganization = null;
+                                        //self.correspondenceSite = correspondenceSite;
+                                        self.correspondenceSite.relatedOus = ouCorrespondenceSites;
+                                        self.model = angular.copy(self.correspondenceSite);
+                                        self.disableParent = false;
+                                        self.editMode = true;
+                                        toast.success(langService.get('add_success').change({name: self.correspondenceSite.getNames()}));
+                                    });
+                            }
+                            else {
+                                self.model = angular.copy(self.correspondenceSite);
+                                self.disableParent = false;
+                                self.editMode = true;
+                                toast.success(langService.get('add_success').change({name: self.correspondenceSite.getNames()}));
+                            }
                         }
+                        else {
+                            self.model = angular.copy(self.correspondenceSite);
+                            self.disableParent = false;
+                            dialog.hide(self.correspondenceSite);
+                        }
+
+
+                        /*self.correspondenceSite = correspondenceSite;
+                         self.model = angular.copy(self.correspondenceSite);
+                         self.disableParent = false;
+                         if (self.editMode) {
+                         dialog.hide(self.correspondenceSite);
+
+                         } else {
+                         self.editMode = true;
+                         toast.success(langService.get('add_success').change({name: self.correspondenceSite.getNames()}));
+                         }*/
                     })
                 });
         };
@@ -115,19 +146,26 @@ module.exports = function (app) {
 
         self.openSelectOUCorrespondenceSiteDialog = function (correspondenceSite) {
             return correspondenceSite
-                .opendDialogToSelectOrganizations()
+                .openDialogToSelectOrganizations()
                 .then(function () {
                     return correspondenceSite;
                 });
         };
 
         self.excludeOrganizationIfExists = function (organization) {
-            return _.find(self.correspondenceSite.relatedOus, function (ou) {
-                return ou.ouid.id === organization.id;
-            });
+            if (!self.editMode) {
+                return _.find(self.correspondenceSite.relatedOus, function (ou) {
+                    return ou.id === organization.id;
+                });
+            }
+            else {
+                return _.find(self.correspondenceSite.relatedOus, function (ou) {
+                    return ou.ouid.id === organization.id;
+                });
+            }
         };
 
-        self.includeIfEnabled = function(correspondenceSite){
+        self.includeIfEnabled = function (correspondenceSite) {
             return correspondenceSite.status;
         };
 
@@ -141,6 +179,12 @@ module.exports = function (app) {
          * @param correspondenceSite
          */
         self.changeGlobalFromFromGrid = function (correspondenceSite) {
+            //If not global after change, its not allowed. Show alert to user
+            if (!correspondenceSite.isGlobal) {
+                correspondenceSite.isGlobal = true;
+                dialog.alertMessage(langService.get('can_not_change_global_to_private').change({type: langService.get('correspondence_site')}));
+                return;
+            }
             // if correspondenceSite global and has organizations.
             if (correspondenceSite.isGlobal && correspondenceSite.hasOrganizations()) {
                 dialog.confirmMessage(langService.get('related_organization_confirm'))
@@ -233,32 +277,47 @@ module.exports = function (app) {
         };
 
         self.addOrganizationToCorrespondenceSite = function () {
-            self.correspondenceSite
-                .addToOUCorrespondenceSites(self.selectedOrganization)
-                .then(function () {
-                    toast.success(langService.get('add_success').change({name: self.selectedOrganization.getTranslatedName()}));
-                    self.selectedOrganization = null;
-                });
-
+            if (!self.editMode) {
+                self.correspondenceSite.relatedOus.push(self.selectedOrganization);
+                self.selectedOrganization = null;
+            }
+            else {
+                self.correspondenceSite
+                    .addToOUCorrespondenceSites(self.selectedOrganization)
+                    .then(function () {
+                        toast.success(langService.get('add_success').change({name: self.selectedOrganization.getTranslatedName()}));
+                        self.selectedOrganization = null;
+                    });
+            }
         };
         self.deleteOUCorrespondenceSiteFromCtrl = function (ouCorrespondenceSite) {
-            if (self.correspondenceSite.relatedOus.length === 1) {
-                return dialog
-                    .confirmMessage(langService.get('last_organization_delete').change({name: self.correspondenceSite.getTranslatedName()}))
-                    .then(function () {
-                        return self
-                            .deleteOUCorrespondenceSiteConfirmed(ouCorrespondenceSite)
-                            .then(function () {
-                                return self.correspondenceSite
-                                    .setIsGlobal(true)
-                                    .update()
-                                    .then(function () {
-                                        self.model = angular.copy(self.correspondenceSite);
-                                    });
-                            });
-                    })
+            if (!self.editMode) {
+                var index = _.findIndex(self.correspondenceSite.relatedOus, function (ou) {
+                    return ou.id === ouCorrespondenceSite.id;
+                });
+                if (index > -1)
+                    self.correspondenceSite.relatedOus.splice(index, 1);
             }
-            return self.deleteOUCorrespondenceSiteConfirmed(ouCorrespondenceSite);
+            else {
+
+                if (self.correspondenceSite.relatedOus.length === 1) {
+                    return dialog
+                        .confirmMessage(langService.get('last_organization_delete').change({name: self.correspondenceSite.getTranslatedName()}))
+                        .then(function () {
+                            return self
+                                .deleteOUCorrespondenceSiteConfirmed(ouCorrespondenceSite)
+                                .then(function () {
+                                    return self.correspondenceSite
+                                        .setIsGlobal(true)
+                                        .update()
+                                        .then(function () {
+                                            self.model = angular.copy(self.correspondenceSite);
+                                        });
+                                });
+                        })
+                }
+                return self.deleteOUCorrespondenceSiteConfirmed(ouCorrespondenceSite);
+            }
         };
 
         self.deleteOUCorrespondenceSiteConfirmed = function (ouCorrespondenceSite) {
@@ -270,12 +329,31 @@ module.exports = function (app) {
         };
 
         self.removeBulkOUCorrespondenceSites = function () {
-            self.correspondenceSite
-                .deleteBulkFromOUCorrespondenceSites(self.selectedOUCorrespondenceSites)
-                .then(function () {
-                    self.selectedOUCorrespondenceSites = [];
-                    toast.success(langService.get('related_organizations_deleted_success'));
-                });
+            if (!self.editMode) {
+                var selected = angular.copy(self.selectedOUCorrespondenceSites);
+                for (var i = 0; i < selected.length; i++) {
+                    var ouCorrespondenceSite = selected[i];
+                    var index = _.findIndex(self.correspondenceSite.relatedOus, function (ou) {
+                        return ou.id === ouCorrespondenceSite.id;
+                    });
+                    if (index > -1)
+                        self.correspondenceSite.relatedOus.splice(index, 1);
+
+                    var indexSelected = _.findIndex(self.selectedOUCorrespondenceSites, function (ou) {
+                        return ou.id === ouCorrespondenceSite.id;
+                    });
+                    if (indexSelected > -1)
+                        self.selectedOUCorrespondenceSites.splice(indexSelected, 1);
+                }
+            }
+            else {
+                self.correspondenceSite
+                    .deleteBulkFromOUCorrespondenceSites(self.selectedOUCorrespondenceSites)
+                    .then(function () {
+                        self.selectedOUCorrespondenceSites = [];
+                        toast.success(langService.get('related_organizations_deleted_success'));
+                    });
+            }
         };
 
         /**
@@ -292,12 +370,18 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkCorrespondenceSites = function ($event) {
-            correspondenceSiteService
-                .controllerMethod
-                .correspondenceSiteDeleteBulk(self.selectedSubCorrespondenceSites, $event)
-                .then(function () {
-                    self.reloadCorrespondenceSites(self.grid.page);
-                });
+
+            if (self.selectedSubCorrespondenceSites.length === self.correspondenceSite.children.length) {
+                dialog.alertMessage(langService.get('can_not_delete_all_records'))
+            }
+            else {
+                correspondenceSiteService
+                    .controllerMethod
+                    .correspondenceSiteDeleteBulk(self.selectedSubCorrespondenceSites, $event)
+                    .then(function () {
+                        self.reloadCorrespondenceSites(self.grid.page);
+                    });
+            }
         };
 
         /**
@@ -329,29 +413,34 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeCorrespondenceSite = function (correspondenceSite, $event) {
-            if (correspondenceSite.hasOrganizations()) {
-                dialog
-                    .confirmMessage(langService.get('related_organization_confirm'), null, null, $event)
-                    .then(function () {
-                        correspondenceSite.deleteAllOUCorrespondenceSites()
-                            .then(function () {
-                                correspondenceSite.delete().then(function () {
-                                    toast.success(langService.get('delete_specific_success').change({name: correspondenceSite.getNames()}));
-                                    self.reloadCorrespondenceSites(self.grid.page);
-                                });
-                            })
-                    })
-                    .catch(function () {
-                        correspondenceSite.setIsGlobal(false);
-                    })
+            if (self.correspondenceSite.children.length === 1) {
+                dialog.alertMessage(langService.get('can_not_delete_last_sub_correspondence_site'))
+            }
+            else {
+                if (correspondenceSite.hasOrganizations()) {
+                    dialog
+                        .confirmMessage(langService.get('related_organization_confirm'), null, null, $event)
+                        .then(function () {
+                            correspondenceSite.deleteAllOUCorrespondenceSites()
+                                .then(function () {
+                                    correspondenceSite.delete().then(function () {
+                                        toast.success(langService.get('delete_specific_success').change({name: correspondenceSite.getNames()}));
+                                        self.reloadCorrespondenceSites(self.grid.page);
+                                    });
+                                })
+                        })
+                        .catch(function () {
+                            correspondenceSite.setIsGlobal(false);
+                        })
 
-            } else {
-                correspondenceSiteService
-                    .controllerMethod
-                    .correspondenceSiteDelete(correspondenceSite, $event)
-                    .then(function () {
-                        self.reloadCorrespondenceSites(self.grid.page);
-                    });
+                } else {
+                    correspondenceSiteService
+                        .controllerMethod
+                        .correspondenceSiteDelete(correspondenceSite, $event)
+                        .then(function () {
+                            self.reloadCorrespondenceSites(self.grid.page);
+                        });
+                }
             }
         };
 

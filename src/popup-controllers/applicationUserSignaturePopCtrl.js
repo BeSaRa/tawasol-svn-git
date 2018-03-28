@@ -11,7 +11,8 @@ module.exports = function (app) {
                                                                 applicationUserSignature,
                                                                 applicationUserSignatures,
                                                                 $scope,
-                                                                attachmentService) {
+                                                                attachmentService,
+                                                                $timeout) {
         'ngInject';
         var self = this;
         self.controllerName = 'applicationUserSignaturePopCtrl';
@@ -34,29 +35,52 @@ module.exports = function (app) {
          * @description Contains the names of disabled fields
          */
         self.disabledFields = [];
-
+        self.imageDimensionsInfo = langService.get('image_dimensions_info').change({height: 50, width: 50});
         self.selectedExtension = ['png'];
         self.selectedFile = null;
-        self.fileUrl = self.applicationUserSignature.contentElementUrl ? self.applicationUserSignature.contentElementUrl : null;
-        self.viewImage = function (files) {
+        self.fileUrlCopy = self.fileUrl = angular.copy(self.applicationUserSignature.contentElementUrl ? self.applicationUserSignature.contentElementUrl : null);
+        self.viewImage = function (files, element) {
             attachmentService
                 .validateBeforeUpload('userSignature', files[0])
                 .then(function (file) {
-                    var image;
+                    /*var image;
+                     self.selectedFile = file;
+                     self.fileUrl = window.URL.createObjectURL(file);
+                     var reader = new FileReader();
+                     reader.onload = function () {
+                     image = new Blob([reader.result], {type: file.type});
+                     if (!$scope.$$phase)
+                     $scope.$apply();
+                     };
+                     reader.readAsArrayBuffer(file);
+                     self.enableAdd = true;*/
+
                     self.selectedFile = file;
-                    self.fileUrl = window.URL.createObjectURL(file);
-                    var reader = new FileReader();
-                    reader.onload = function () {
-                        image = new Blob([reader.result], {type: file.type});
-                        if (!$scope.$$phase)
-                            $scope.$apply();
+                    var url = window.URL || window.webkitURL;
+                    var img = new Image();
+                    img.src = self.fileUrl = url.createObjectURL(file);
+
+                    img.onload = function () {
+                        if (element[0].name === 'upload-sign') {
+                            var width = this.naturalWidth || this.width;
+                            var height = this.naturalHeight || this.height;
+                            if (width > 50 && height > 50) {
+                                toast.error(langService.get('image_dimension_greater').change({width: 50, height: 50}));
+                                self.fileUrl = self.fileUrlCopy;
+                                self.selectedFile = null;
+                                self.enableAdd = false;
+                                return false;
+                            }
+                        }
+                        $timeout(function () {
+                            self.enableAdd = true;
+                        })
                     };
-                    reader.readAsArrayBuffer(file);
-                    self.enableAdd = true;
                 })
                 .catch(function (availableExtensions) {
-                    self.fileUrl = null;
+                    self.fileUrl = self.fileUrlCopy;
                     self.selectedFile = null;
+                    self.enableAdd = false;
                     dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
                 });
         };
@@ -65,11 +89,11 @@ module.exports = function (app) {
          * @return {Array}
          */
         /*self.checkRequiredFile = function () {
-            var result = [];
-            if (!self.fileUrl)
-                result.push('fileUrl');
-            return result;
-        };*/
+         var result = [];
+         if (!self.fileUrl)
+         result.push('fileUrl');
+         return result;
+         };*/
         self.checkRequiredFile = function () {
             return self.selectedFile;
         };
@@ -172,7 +196,7 @@ module.exports = function (app) {
                                 dialog.hide(self.applicationUserSignature);
                             });
 
-                    })
+                    });
                 /* .catch(function () {
 
                  });*/

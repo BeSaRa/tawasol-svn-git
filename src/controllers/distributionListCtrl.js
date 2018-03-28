@@ -249,7 +249,7 @@ module.exports = function (app) {
 
             self.openSelectOUDistributionListDialog = function (distributionList) {
                 return distributionList
-                    .opendDialogToSelectOrganizations()
+                    .openDialogToSelectOrganizations()
                     .then(function () {
                         return distributionList;
                     });

@@ -139,8 +139,8 @@
                                     <div flex layout="row">
                                         <md-input-container flex>
                                             <label for="rank">{{lang.rank}}</label>
-                                            <md-select id="rank" name="rank" required
-                                                       ng-model="ctrl.applicationUser.rank">
+                                            <md-select id="rank" name="rank"
+                                                       ng-model="ctrl.applicationUser.rank"><!-- required-->
                                                 <md-option ng-if="rank.status" ng-value="rank.lookupKey"
                                                            ng-repeat="rank in ctrl.ranks track by $index">
                                                     {{rank.getTranslatedName()}}
@@ -589,7 +589,7 @@
                                     <div layout="column" class="p20" flex>
                                         <div layout="row">
                                             <div flex>
-                                                <label for="upload-attachment-file"
+                                                <label for="upload-sign-app-user"
                                                        class="md-button md-raised alongside-input">
                                             <span layout="row" layout-align="start center">
                                                 <md-icon md-svg-icon="upload"></md-icon>
@@ -598,7 +598,7 @@
                                                     <input reset-after-change="true"
                                                            catch-upload-file-directive="ctrl.viewImage"
                                                            class="hide-import-file" type="file"
-                                                           id="upload-attachment-file" name="upload-attachment-file">
+                                                           id="upload-sign-app-user" name="upload-sign-app-user">
                                                 </label></div>
                                             <md-input-container flex ng-if="ctrl.enableAdd">
                                                 <label for="docSubject">{{lang.subject}}</label>

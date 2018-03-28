@@ -16,6 +16,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'managePropertiesDirectiveCtrl';
         LangWatcher($scope);
+        var properties = [];
         self.document = null;
         self.maxCreateDate = new Date();
 
@@ -23,6 +24,7 @@ module.exports = function (app) {
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
         self.documentFiles = [];
         self.classifications = [];
+        var required = {};
 
         $timeout(function () {
             // all system organizations
@@ -30,6 +32,7 @@ module.exports = function (app) {
             // all document types
             self.documentTypes = correspondenceService.getLookup(self.document.docClassName, 'docTypes');
             self.securityLevels = correspondenceService.getLookup(self.document.docClassName, 'securityLevels');
+            properties = lookupService.getPropertyConfigurations(self.document.docClassName);
             _getClassifications(false);
             _getDocumentFiles(false);
         });
@@ -37,6 +40,18 @@ module.exports = function (app) {
         self.employee = employeeService.getEmployee();
         // for sub organizations
         self.subOrganizations = [];
+        // required fields for the current document class
+        self.required = {};
+        // need  timeout here to start init each property mandatory.
+        $timeout(function () {
+            _.map(properties, function (item) {
+                self.required[item.symbolicName.toLowerCase()] = item.isMandatory;
+            });
+        });
+
+        self.checkMandatory = function (fieldName) {
+            return self.required[fieldName.toLowerCase()];
+        };
 
         /**
          * @description to check if the given securityLevel included or not.
@@ -45,7 +60,7 @@ module.exports = function (app) {
          * @private
          */
         function _securityLevelExist(securityLevel, securityLevels) {
-            var Id = securityLevel.hasOwnProperty('id') ? securityLevel.id : securityLevel;
+            var Id = securityLevel && securityLevel.hasOwnProperty('id') ? securityLevel.id : securityLevel;
             return _.find(securityLevels, function (item) {
                 return item.id === Id;
             });
@@ -178,7 +193,7 @@ module.exports = function (app) {
 
         self.onFileChange = function (file) {
             var ouDocumentFile = _.find(self.documentFiles, function (ouDocumentFile) {
-                return ouDocumentFile.file.id === file.id;
+                return file && ouDocumentFile.file.id === file.id;
             });
             if (ouDocumentFile) {
                 self.document.fileCode = ouDocumentFile.code || self.document.fileCode;

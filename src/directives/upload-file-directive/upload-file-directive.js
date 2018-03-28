@@ -8,14 +8,14 @@ module.exports = function (app) {
         'ngInject';
         return {
             restrict: 'E',
-            template: '<input id="fileInput" type="file" class="ng-hide"> <md-button id="uploadButton" class="md-raised md-primary" aria-label="attach_file">{{buttonLabel}}</md-button><md-input-container  md-no-float>    <input style="display: none" id="textInput" ng-model="fileName" type="text" placeholder="No file chosen" ng-readonly="true"></md-input-container>',
+            template: '<input id="fileInput" type="file" class="ng-hide" name="{{modelName}}"> <md-button id="uploadButton" class="md-raised md-primary" aria-label="attach_file">{{buttonLabel}}</md-button><md-input-container  md-no-float>    <input style="display: none" id="textInput" ng-model="fileName" type="text" placeholder="No file chosen" ng-readonly="true"></md-input-container>',
             link: apsUploadFileLink,
             scope: {
                 callBack: '=',
                 modelName: '@',
                 buttonLabel: '@',
                 selectedFile: '=',
-                modelObj :'=',
+                modelObj: '=',
                 selectedFileExtension: '='
             }
         };
@@ -41,38 +41,44 @@ module.exports = function (app) {
                 var img = new Image();
                 img.src = _URL.createObjectURL(file);
                 img.onload = function () {
-                    var width  = this.naturalWidth  || this.width;
-                    var height = this.naturalHeight || this.height;
-                    if(width > 283 && height > 283){
-                        toast.error(langService.get('image_dimension_greater'));
-                        input.val('');
+                    var name = input[0].name;
+                    if (name === 'loginLogo' || name === 'bannerLogo') {
+                        var width = this.naturalWidth || this.width;
+                        var height = this.naturalHeight || this.height;
+                        if ((name === 'loginLogo' || name === 'bannerLogo') && width > 283 && height > 283) {
+                            toast.error(langService.get('image_dimension_greater').change({width: 283, height: 283}));
+                            input.val('');
+                            return false;
+                        }
+                        else if (name === 'signatureImage' && width > 50 && height > 50) {
+                            toast.error(langService.get('image_dimension_greater')).change({width: 50, height: 50});
+                            input.val('');
+                            return false;
+                        }
                     }
-                    else{
-                        if (file) {
+                    if (file) {
+                        if (scope.selectedFileExtension) {
+                            if (scope.selectedFileExtension.length > 0) {
+                                var fileExt = file.name.split('.').pop();
 
-                            if (scope.selectedFileExtension) {
-                                if (scope.selectedFileExtension.length > 0) {
-                                    var fileExt = file.name.split('.').pop();
+                                var isValidFileExtension = scope.selectedFileExtension.filter(function (validExt) {
+                                    return validExt === fileExt;
+                                })[0];
 
-                                    var isValidFileExtension = scope.selectedFileExtension.filter(function (validExt) {
-                                        return validExt === fileExt;
-                                    })[0];
-
-                                    if (!isValidFileExtension) {
-                                        //toastService.error(langService.lang.invalid_file_upload);
-                                        return false;
-                                    }
+                                if (!isValidFileExtension) {
+                                    //toastService.error(langService.lang.invalid_file_upload);
+                                    return false;
                                 }
                             }
-                            if(scope.modelObj){
-                                scope.selectedFile = scope.modelObj;
-                            }
-                            else{
-                                scope.selectedFile = file;
-                            }
-
-                            scope.callBack(file, scope.modelName);
                         }
+                        if (scope.modelObj) {
+                            scope.selectedFile = scope.modelObj;
+                        }
+                        else {
+                            scope.selectedFile = file;
+                        }
+
+                        scope.callBack(file, scope.modelName);
                     }
                 };
             });

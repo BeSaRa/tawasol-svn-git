@@ -55,7 +55,8 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.isDefaultTheme = function (theme, $event) {
-            return (self.globalSettings.theme.id === theme.id);
+            var globalTheme = self.globalSettings.theme;
+            return globalTheme.hasOwnProperty('id') ? (globalTheme.id === theme.id) : (globalTheme === theme.id);
         };
 
         /**

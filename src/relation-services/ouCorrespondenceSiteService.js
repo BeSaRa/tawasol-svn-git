@@ -115,7 +115,7 @@ module.exports = function (app) {
                 var failedOUCorrespondenceSites = [];
                 _.map(result, function (value, key) {
                     if (!value)
-                        failedOUCorrespondenceSites.push(key);
+                        failedOUCorrespondenceSites.push(Number(key));
                 });
                 return _.filter(ouCorrespondenceSites, function (correspondenceSite) {
                     return (failedOUCorrespondenceSites.indexOf(correspondenceSite.id) > -1);
@@ -154,7 +154,6 @@ module.exports = function (app) {
          * @return {Array}
          */
         self.createListOUCorrespondenceSites = function (organizations, correspondenceSite, insert) {
-
             var ouCorrespondenceSites = _.map(organizations, function (organization) {
                 var ouCorrespondenceSite = new OUCorrespondenceSite();
                 return ouCorrespondenceSite.setOuId(organization).setCorrespondenceSite(correspondenceSite);

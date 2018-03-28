@@ -783,7 +783,7 @@ module.exports = function (app) {
         self.onStopScanClick = function () {
             CCToolkit.stopScanning(stopScanningCallback);
         };
-        self.onImportFileClick = function (files) {
+        self.onImportFileClick = function (files, element) {
             updateUIForScanning(true);
             cleanUpDetailsPanel();
             if (!window.FileReader) {

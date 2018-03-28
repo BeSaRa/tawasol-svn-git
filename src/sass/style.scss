@@ -1630,19 +1630,20 @@ tr.unread-row {
   width: 50% !important;
 }
 
-div.default-theme {
+.background-warning,
+.background-warning:hover{
   background: #ffeb8061 !important;
-  div:after {
+  div.sidebar:after {
     content: " *";
     color: red;
   }
+  td {
+    background: #ffeb8061 !important;
+  }
 }
 
-tr.default-theme,
-tr.default-theme:hover {
-  td {
-    background: #ffeb8061 !important; /*#ffeb80*/
-  }
+.background-danger {
+  background: #ffbcbc;
 }
 
 #correspondence-dialog, #attachmentsOnly-dialog {

@@ -6,6 +6,10 @@ General:
 5. Added - Show alert if all selected records can't be forwarded/returned.
 6. Added - New localization keys
 7. Fix - Don't show bulk action button if not available for all selected items.
+8. Fix - Show only basic document classes in dropdowns (Outgoing, Incoming, Internal).
+9. Fix - Binding of correspondence sites in grids.
+10. Fix - Signature dimensions should not be more than 50px X 50px.
+11. Fix - New Correspondence Site can be global/private. Global correspondence site can not be set to private.
 
 Bugs:
 12291: Fix - Business : user cannot delete others comments (user has permission to delete all comments)
@@ -21,11 +25,14 @@ Bugs:
 10265: Fix - Admin : Modify Entity : User can't save the data after editing
 12286: Fix - Admin : Distribution list :Must Reload Distribution lists page to show the New one.
 11634: Fix - Admin : Activate/Deactivate Government Entities after selecting one or more and changing from "Select a status" Dropdown Menu selections don't work.
-12441: Fix - Business: Linked document - Cannot open the details(hamburger) menu for the linked documents when document is opened.
+12441: Fix - Business: Linked document - Cannot open the details sidebar for the linked documents when document is opened.
 12253: Fix - Business: User preferences - When user deactivate a private WF group, it disappears from the list and user cannot enable it again
 12413: Fix - Business: View Tracking Sheet - outgoing delivery report - Added Action Date, Delivery Date, Message status. Removed Priority Level.
-
-
+12359: Fix - Business: Create reply - the correspondence site should be filled with the Correspondence site already in the incoming document.
+11709: Fix - Admin: Add new document template - the template donot appear in the list if the user added it is not in an OU with Registery
+12275: Fix - Admin: Distribution List - User is able to add same group members more than once.
+12644: Fix - central archive - while adding a paper outgoing and send to ready to export, the document appear in ready to export for the selected OU from archive.
+10905: Fix - Business: Manage Preferences: OOF-Proxy Mail Inbox: Some Actions must be removed from Proxy Mailbox.
 
 
 

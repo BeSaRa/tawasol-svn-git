@@ -29,7 +29,7 @@ module.exports = function (app) {
                     {
                         label: langService.get('all'),
                         value: function () {
-                            return self.documentFileRelatedOUs.length
+                            return (self.documentFileRelatedOUs.length + 21)
                         }
                     }
                 ]

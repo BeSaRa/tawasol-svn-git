@@ -51,7 +51,7 @@
                                 </tr>
                                 </thead>
                                 <tbody md-body>
-                                <tr md-select="theme" md-row ng-class="{'default-theme': ctrl.isDefaultTheme(theme, $event)}"
+                                <tr md-select="theme" md-row ng-class="{'background-warning': ctrl.isDefaultTheme(theme, $event)}"
                                     ng-repeat="theme in ctrl.themes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                                     <td md-cell>{{theme.arName}}</td>
                                     <td md-cell>{{theme.enName}}</td>

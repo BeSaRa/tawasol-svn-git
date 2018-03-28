@@ -773,7 +773,6 @@ module.exports = function (app) {
                             langService.get('view_tracking_sheet_main_site_from'),
                             langService.get('view_tracking_sheet_sub_site_from'),
                             //langService.get('view_tracking_sheet_priority_level'),
-                            langService.get('view_tracking_sheet_message_status'),
                             langService.get('view_tracking_sheet_received_by'),
                             langService.get('view_tracking_sheet_main_site_to'),
                             langService.get('view_tracking_sheet_sub_site_to'),
@@ -789,13 +788,12 @@ module.exports = function (app) {
                                 record.mainSiteFromIdInfo.getTranslatedName(),
                                 record.subSiteFromIdInfo.getTranslatedName(),
                                 //record.priorityLevelInfo.getTranslatedName(),
-                                record.messageStatusInfo.getTranslatedName(),
                                 record.receivedByIdInfo.getTranslatedName(),
                                 record.mainSiteToIdInfo.getTranslatedName(),
                                 record.subSiteToIdInfo.getTranslatedName(),
                                 record.actionDate_vts,
                                 record.deliveryDate_vts,
-                                record.messageStatus,
+                                record.messageStatus.getTranslatedName(),
                                 record.comment
                             ]);
                         }
@@ -843,8 +841,8 @@ module.exports = function (app) {
                     toast.info(langService.get('no_data_to_export'));
                 }
                 else {
-                    $http.post(urlService.exportToExcel,
-                        {headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
+                    $http.post(urlService.exportToExcel, exportData)
+                        //{headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
                         .then(function (result) {
                             var path = result.data.rs;
                             if (!path)
@@ -870,8 +868,8 @@ module.exports = function (app) {
                     toast.info(langService.get('no_data_to_print'));
                 }
                 else {
-                    return $http.post(urlService.exportToPdf,
-                        {headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
+                    return $http.post(urlService.exportToPdf, exportData)
+                        //{headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
                         .then(function (result) {
                             var path = result.data.rs;
                             if (!path)

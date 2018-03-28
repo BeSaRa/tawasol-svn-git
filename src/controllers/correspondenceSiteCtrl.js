@@ -35,7 +35,7 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, {
                 label: langService.get('all'),
                 value: function () {
-                    return self.correspondenceSites.length;
+                    return (self.correspondenceSites.length + 21);
                 }
             }]
         };
@@ -56,12 +56,14 @@ module.exports = function (app) {
                 .controllerMethod
                 .correspondenceSiteAdd(null, false, $event)
                 .then(function (correspondenceSite) {
-                    self.behindScene(correspondenceSite)
+                    /*self.behindScene(correspondenceSite)
                         .then(function () {
                             self.reloadCorrespondenceSites(self.grid.page);
-                        });
+                        });*/
+                    self.reloadCorrespondenceSites(self.grid.page);
                 })
                 .catch(function (correspondenceSite) {
+                    self.reloadCorrespondenceSites(self.grid.page);
                     if (!correspondenceSite.id)
                         return;
 
@@ -82,12 +84,15 @@ module.exports = function (app) {
                 .controllerMethod
                 .correspondenceSiteEdit(correspondenceSite, $event)
                 .then(function (correspondenceSite) {
-                    self.behindScene(correspondenceSite)
+                    /*self.behindScene(correspondenceSite)
                         .then(function (correspondenceSite) {
                             self.reloadCorrespondenceSites(self.grid.page).then(function () {
                                 toast.success(langService.get('edit_success').change({name: correspondenceSite.getTranslatedName()}));
                             });
-                        });
+                        });*/
+                    self.reloadCorrespondenceSites(self.grid.page).then(function () {
+                        toast.success(langService.get('edit_success').change({name: correspondenceSite.getTranslatedName()}));
+                    });
                 })
                 .catch(function (correspondenceSite) {
                     self.replaceRecordFromGrid(correspondenceSite);
@@ -188,7 +193,7 @@ module.exports = function (app) {
 
         self.openSelectOUCorrespondenceSiteDialog = function (correspondenceSite) {
             return correspondenceSite
-                .opendDialogToSelectOrganizations()
+                .openDialogToSelectOrganizations()
                 .then(function () {
                     return correspondenceSite;
                 })
@@ -201,8 +206,13 @@ module.exports = function (app) {
          * @param correspondenceSite
          */
         self.changeGlobalFromFromGrid = function (correspondenceSite) {
-            // if correspondenceSite global and has organizations.
-
+            //If not global after change, its not allowed. Show alert to user
+            if (!correspondenceSite.isGlobal) {
+                correspondenceSite.isGlobal = true;
+                dialog.alertMessage(langService.get('can_not_change_global_to_private').change({type: langService.get('correspondence_site')}));
+                return;
+            }
+            // if correspondenceSite global(after change) and has organizations.
             if (correspondenceSite.isGlobal && correspondenceSite.hasOrganizations()) {
                 dialog.confirmMessage(langService.get('related_organization_confirm'))
                     .then(function () {

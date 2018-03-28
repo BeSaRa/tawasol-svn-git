@@ -606,10 +606,10 @@ module.exports = function (app) {
          * @param registryOuId
          */
         self.getAvailableProxies = function (registryOuId) {
-            return self.searchByCriteria({regOU: registryOuId}).then(function (result) {
-                /*result = _.filter(result, function (ouAppUser) {
-                 return !ouAppUser.applicationUser.outOfOffice;
-                 });*/
+            return self.searchByCriteria({regOu: registryOuId}).then(function (result) {
+                result = _.filter(result, function (ouAppUser) {
+                    return !ouAppUser.applicationUser.outOfOffice;
+                });
                 return _mapProxyUser(result);
             })
         }

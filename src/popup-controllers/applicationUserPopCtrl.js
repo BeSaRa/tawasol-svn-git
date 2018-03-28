@@ -38,7 +38,8 @@ module.exports = function (app) {
                                                        attachmentService,
                                                        currentOrganization,
                                                        organizationService,
-                                                       $q) {
+                                                       $q,
+                                                       $timeout) {
         'ngInject';
         var self = this;
         self.controllerName = 'applicationUserPopCtrl';
@@ -556,7 +557,7 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, {
                 label: langService.get('all'),
                 value: function () {
-                    return self.applicationUser.signature.length;
+                    return (self.applicationUser.signature.length + 21);
                 }
             }]
         };
@@ -564,11 +565,11 @@ module.exports = function (app) {
         self.selectedFile = null;
         self.fileUrl = null;
 
-        self.viewImage = function (files) {
+        self.viewImage = function (files, element) {
             attachmentService
                 .validateBeforeUpload('userSignature', files[0])
                 .then(function (file) {
-                    var image;
+                    /*var image;
                     self.selectedFile = file;
                     self.fileUrl = window.URL.createObjectURL(file);
                     var reader = new FileReader();
@@ -578,11 +579,34 @@ module.exports = function (app) {
                             $scope.$apply();
                     };
                     reader.readAsArrayBuffer(file);
-                    self.enableAdd = true;
+                    self.enableAdd = true;*/
+
+
+                    self.selectedFile = file;
+                    var url = window.URL || window.webkitURL;
+                    var img = new Image();
+                    img.src = self.fileUrl = url.createObjectURL(file);
+
+                    img.onload = function () {
+                        if (element[0].name === 'upload-sign-app-user') {
+                            var width = this.naturalWidth || this.width;
+                            var height = this.naturalHeight || this.height;
+                            if (width > 50 && height > 50) {
+                                toast.error(langService.get('image_dimension_greater').change({width: 50, height: 50}));
+                                self.enableAdd = false;
+                                return false;
+                            }
+                        }
+                        $timeout(function () {
+                            self.enableAdd = true;
+                        })
+                    };
                 })
                 .catch(function (availableExtensions) {
                     self.fileUrl = null;
                     self.selectedFile = null;
+                    self.enableAdd = false;
+
                     dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
                 });
         };
@@ -943,7 +967,6 @@ module.exports = function (app) {
          * @param $index
          */
         self.openOutOfOfficeSettingsDialog = function (ouApplicationUser, $event, $index) {
-            //console.log('ou application user from grid - out of office: ', ouApplicationUser);
             return dialog
                 .showDialog({
                     targetEvent: $event,

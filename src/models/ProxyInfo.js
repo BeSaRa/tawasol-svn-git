@@ -43,6 +43,9 @@ module.exports = function (app) {
             ProxyInfo.prototype.getFullNameByKey = function (langKey) {
                 return this[langKey + 'Name'];
             };
+            ProxyInfo.prototype.getTranslatedProxyOUName = function () {
+                return this.proxyUserOUInfo[langService.current + 'Name'];
+            };
             ProxyInfo.prototype.getProxyStartDate = function () {
                 return moment(this.proxyStartDate).format('YYYY-MM-DD');
             };

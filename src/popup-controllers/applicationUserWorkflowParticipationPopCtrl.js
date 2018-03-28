@@ -13,7 +13,7 @@ module.exports = function (app) {
         self.controllerName = 'applicationUserWorkflowParticipationPopCtrl';
         self.ouApplicationUser = angular.copy(ouApplicationUser);
         self.model = angular.copy(ouApplicationUser);
-
+        debugger;
         self.applicationUsers = applicationUserService.applicationUsers;
 
         self.ouWithManagersList = _.filter(organizations, 'managerId');

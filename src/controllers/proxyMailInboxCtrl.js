@@ -302,8 +302,8 @@ module.exports = function (app) {
          * @param proxyMailInbox
          * @param $event
          */
-        self.getProxyMailInboxLink = function (proxyMailInbox, $event) {
-            console.log('getProxyMailInboxLink', proxyMailInbox);
+        self.getLink = function (proxyMailInbox, $event) {
+            console.log('getLink', proxyMailInbox);
         };
 
         /**
@@ -762,7 +762,7 @@ module.exports = function (app) {
                 icon: 'link',
                 text: 'grid_action_get_link',
                 shortcut: false,
-                callback: self.getProxyMailInboxLink,
+                callback: self.getLink,
                 class: "action-red",
                 hide: true,
                 checkShow: self.checkToShowAction
@@ -959,6 +959,7 @@ module.exports = function (app) {
                 icon: 'send',
                 text: 'grid_action_send',
                 shortcut: false,
+                hide: true,
                 checkShow: self.checkToShowAction,
                 subMenu: [
                     // Link To Document By Email

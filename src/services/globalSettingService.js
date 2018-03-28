@@ -78,6 +78,7 @@ module.exports = function (app) {
 
         /**
          * @param globalSetting,file,Url(banner-logo/login-logo)
+         * @param file
          * @param modelName
          * @returns {GlobalSetting}
          */

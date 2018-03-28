@@ -152,7 +152,7 @@ module.exports = function (app) {
                     });
             };
 
-            Classification.prototype.opendDialogToSelectOrganizations = function () {
+            Classification.prototype.openDialogToSelectOrganizations = function () {
                 var self = this;
                 return organizationService
                     .controllerMethod

@@ -15,10 +15,10 @@ module.exports = function (app) {
                                                                          langService,
                                                                          ProxyUser,
                                                                          rootEntity,
-                                                                         ProxyInfo,
                                                                          $timeout,
                                                                          $compile,
                                                                          usersWhoSetYouAsProxy,
+                                                                         organizationService,
                                                                          ouApplicationUserService) {
         'ngInject';
         var self = this;
@@ -111,33 +111,27 @@ module.exports = function (app) {
                 result.push(property);
             return result;
         };
-        /*
-         /!**
-         * @description Saves the ou application user data when not out of office
-         * @param form
-         *!/
-         self.changeOutOfOffice = function (form) {
 
-         if (!self.isOutOfOffice && self.model.proxyUser) {
-         self.ouApplicationUser.proxyUser = null;
-         self.ouApplicationUser.proxyStartDate = null;
-         self.ouApplicationUser.proxyEndDate = null;
-         self.ouApplicationUser.proxyAuthorityLevels = null;
-         self.ouApplicationUser.viewProxyMessage = false;
-         self.ouApplicationUser.proxyMessage = null;
-         ouApplicationUserService
-         .updateOUApplicationUser(self.ouApplicationUser)
-         .then(function (result) {
-         employeeService.setCurrentOUApplicationUser(result);
-         self.model = angular.copy(result);
-         toast.success(langService.get('out_of_office_success'));
-         });
-         }
-         else {
-         form.$setUntouched();
-         }
-         };*/
+        self.getSelectedDelegatedUserText = function () {
+            if (!self.selectedProxyUser) {
+                if (self.ouApplicationUser.applicationUser.outOfOffice) {
+                    var proxyOU = _.find(organizationService.organizations, {id : self.ouApplicationUser.proxyOUId});
+                    if(self.ouApplicationUser.proxyUser) {
+                        if (langService.current === 'en')
+                            return self.ouApplicationUser.proxyUser.getTranslatedName() + ' - ' + proxyOU.getTranslatedName();
+                        return proxyOU.getTranslatedName() + ' - ' + self.ouApplicationUser.proxyUser.getTranslatedName();
+                    }
+                }
+                return langService.get('user_on_behalf');
+            }
+            else {
+                if (langService.current === 'en')
+                    return self.selectedProxyUser.applicationUser.getTranslatedName() + ' - ' + self.selectedProxyUser.organization.getTranslatedName();
+                return self.selectedProxyUser.organization.getTranslatedName() + ' - ' + self.selectedProxyUser.applicationUser.getTranslatedName();
+            }
+        };
 
+        //self.getSelectedDelegatedUserText();
 
         /**
          * @description Saves the ou application user data when not out of office
@@ -146,7 +140,7 @@ module.exports = function (app) {
         self.changeOutOfOffice = function (form) {
             if (!self.isOutOfOffice) {
                 if(self.model.proxyUser) {
-                    self.ouApplicationUser.proxyUser = null;
+                    self.ouApplicationUser.proxyUser = self.selectedProxyUser = null;
                     self.ouApplicationUser.proxyStartDate = null;
                     self.ouApplicationUser.proxyEndDate = null;
                     self.ouApplicationUser.proxyAuthorityLevels = null;
@@ -157,10 +151,9 @@ module.exports = function (app) {
                 if (usersWhoSetYouAsProxy && usersWhoSetYouAsProxy.length) {
                     var scope = $rootScope.$new();
 
-                    var outOfOfficeUsers = generator.generateCollection(usersWhoSetYouAsProxy, ProxyInfo);
                     var html = cmsTemplate.getPopup('delegated-by-users-message');
                     scope.ctrl = {
-                        outOfOfficeUsers: outOfOfficeUsers
+                        outOfOfficeUsers: usersWhoSetYouAsProxy
                     };
                     LangWatcher(scope);
                     html = $compile(angular.element(html))(scope);
@@ -227,7 +220,7 @@ module.exports = function (app) {
          */
         self.closeApplicationUserOutOfOfficeSettingPopupFromCtrl = function () {
             self.ouApplicationUser = self.model;
-            dialog.cancel(self.ouApplicationUser);
+            dialog.hide(self.ouApplicationUser);
         };
         /**
          * @description to check if the current user selected.

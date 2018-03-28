@@ -11,7 +11,7 @@ module.exports = function (app) {
                     var self = this;
                     if (this.files.length && typeof callback === 'function') {
                         scope.$apply(function () {
-                            callback(self.files);
+                            callback(self.files, element);
                         });
 
                         if (reset) {
@@ -20,7 +20,7 @@ module.exports = function (app) {
 
                     } else if (!this.files.length && typeof callback === 'function') {
                         scope.$apply(function () {
-                            callback([]);
+                            callback([], element);
                         });
                     }
                 });

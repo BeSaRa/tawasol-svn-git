@@ -915,13 +915,18 @@ module.exports = function (app) {
                                 })
                             });
                     },
-                    currentEmployee: function (employeeService) {
+                    /*currentEmployee: function (employeeService) {
                         'ngInject';
                         return employeeService.getEmployee();
-                    },
-                    documentTemplates: function (documentTemplateService, currentEmployee) {
+                    },*/
+                    documentTemplates: function (documentTemplateService, selectedRegOU) {
                         'ngInject';
-                        return documentTemplateService.loadDocumentTemplates(currentEmployee.defaultOUID || -1);
+                        //return documentTemplateService.loadDocumentTemplates(currentEmployee.defaultOUID || -1);
+                        return documentTemplateService.loadDocumentTemplates(selectedRegOU || -1);
+                    },
+                    selectedRegOU: function(employeeService){
+                        'ngInject';
+                        return employeeService.getEmployee().organization.ouRegistryID;
                     }
                 }
             })

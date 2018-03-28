@@ -805,8 +805,8 @@ module.exports = function (app) {
                 class: "action-green",
                 //hide: true, //TODO: Need service from Issawi
                 checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    return self.checkToShowAction(action, model) //&& info.wobNumber;
+                    //var info = model.getInfo();
+                    return self.checkToShowAction(action, model); //&& info.wobNumber;
                 }
             },
             // Launch Distribution Workflow

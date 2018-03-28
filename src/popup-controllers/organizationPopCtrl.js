@@ -872,7 +872,7 @@ module.exports = function (app) {
                 {
                     label: langService.get('all'),
                     value: function () {
-                        return self.documentTemplates.length
+                        return (self.documentTemplates.length + 21)
                     }
                 }
             ]
@@ -988,7 +988,7 @@ module.exports = function (app) {
                 {
                     label: langService.get('all'),
                     value: function () {
-                        return self.propertyConfigurations.length
+                        return (self.propertyConfigurations.length + 21)
                     }
                 }
             ]
@@ -1083,7 +1083,7 @@ module.exports = function (app) {
                 {
                     label: langService.get('all'),
                     value: function () {
-                        return self.ouAssignedUsers.length
+                        return (self.ouAssignedUsers.length + 21)
                     }
                 }
             ],

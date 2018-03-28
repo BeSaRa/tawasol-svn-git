@@ -28,7 +28,7 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, {
                 label: langService.get('all'),
                 value: function () {
-                    return (self.correspondenceSites.length + 10 );
+                    return (self.correspondenceSites.length + 21 );
                 }
             }]
         };
@@ -195,7 +195,7 @@ module.exports = function (app) {
 
         self.openSelectOUCorrespondenceSiteDialog = function (correspondenceSite) {
             return correspondenceSite
-                .opendDialogToSelectOrganizations()
+                .openDialogToSelectOrganizations()
                 .then(function () {
                     return correspondenceSite;
                 });

@@ -514,6 +514,12 @@ module.exports = function (app) {
                 this.ou = null;
                 return this;
             };
+            Correspondence.prototype.fromCentralArchive = function () {
+                return !!this.centralArchiveId;
+            };
+            Correspondence.prototype.sendToCentralArchive = function (ignoreMessage) {
+                return correspondenceService.sendToCentralArchiveReadyToExport(this , ignoreMessage);
+            };
 
 
             // don't remove CMSModelInterceptor from last line

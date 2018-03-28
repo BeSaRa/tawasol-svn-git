@@ -936,6 +936,24 @@ module.exports = function (app) {
                 });
         };
         /**
+         * @description send correspondence to central archive from review.
+         * @param correspondence
+         * @param ignoreMessage
+         */
+        self.sendToCentralArchiveReadyToExport = function (correspondence, ignoreMessage) {
+            var info = correspondence.getInfo();
+            return $http
+                .put(_createUrlSchema(null, info.documentClass, ['vsid', info.vsId, 'to-ready-export-central-archive'].join('/')))
+                .then(function (result) {
+                    if (!ignoreMessage) {
+                        var success = result.data.rs, method = success ? 'success' : 'error',
+                            message = success ? 'sent_to_the_central_archive_success' : 'internal_server_error';
+                        toast[method](langService.get(message));
+                    }
+                    return correspondence;
+                });
+        };
+        /**
          * create reply from workItem.
          * @param documentClass
          * @param wobNumber
@@ -1200,7 +1218,7 @@ module.exports = function (app) {
          * @description view attachment
          * @param correspondence
          */
-        self.viewLinkedDocument = function(correspondence){
+        self.viewLinkedDocument = function (correspondence) {
             var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : _createInstance(correspondence).getInfo();
             debugger;
             return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))

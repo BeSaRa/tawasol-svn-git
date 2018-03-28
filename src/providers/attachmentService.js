@@ -314,6 +314,7 @@ module.exports = function (app) {
              * validate before upload extensions
              * @param groupName
              * @param file
+             * @param getResult
              */
             self.validateBeforeUpload = function (groupName, file, getResult) {
                 var allowedExtensions = provider.getExtensionGroup(groupName), result = false;
@@ -338,6 +339,7 @@ module.exports = function (app) {
             };
             /**
              * @description open drag and drop dialog to upload files with drag&drop.
+             * @param correspondence
              * @param $event
              * @return {promise}
              */

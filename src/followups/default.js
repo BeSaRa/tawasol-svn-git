@@ -28,8 +28,8 @@ module.exports = function (app) {
                 dialog
                     .errorMessage(langService.get('access_denied'))
             } else {
-                return loginDialogService
-                    .displaySessionMessage();
+                // return loginDialogService
+                //     .displaySessionMessage();
             }
         });
 

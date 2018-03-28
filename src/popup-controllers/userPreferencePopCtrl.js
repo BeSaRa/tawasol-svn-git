@@ -45,6 +45,7 @@ module.exports = function (app) {
                                                       cmsTemplate,
                                                       ProxyInfo,
                                                       $compile,
+                                                      organizationService,
                                                       $sce,
                                                       listGeneratorService) {
         'ngInject';
@@ -101,7 +102,7 @@ module.exports = function (app) {
          */
         self.ouApplicationUser = generator.interceptReceivedInstance('OUApplicationUser', employeeService.getCurrentOUApplicationUser());
         self.availableProxies = availableProxies;
-        //debugger;
+
         self.selectedProxyUser = self.ouApplicationUser.getSelectedProxyId() ? _.find(availableProxies, function (item) {
             return item.id === self.ouApplicationUser.getSelectedProxyId();
         }) : null;
@@ -426,14 +427,13 @@ module.exports = function (app) {
          */
         self.changeOutOfOffice = function (form) {
             if (!self.isOutOfOffice) {
-                if(self.ouApplicationUserCopy.proxyUser) {
-                    self.ouApplicationUser.proxyUser = null;
+                if (self.ouApplicationUserCopy.proxyUser) {
+                    self.ouApplicationUser.proxyUser = self.selectedProxyUser = null;
                     self.ouApplicationUser.proxyStartDate = null;
                     self.ouApplicationUser.proxyEndDate = null;
                     self.ouApplicationUser.proxyAuthorityLevels = null;
                     self.ouApplicationUser.viewProxyMessage = false;
                     self.ouApplicationUser.proxyMessage = null;
-                    self.selectedProxyUser = null;
                     ouApplicationUserService
                         .updateOUApplicationUser(self.ouApplicationUser)
                         .then(function (result) {
@@ -474,7 +474,22 @@ module.exports = function (app) {
         };
 
         self.getSelectedDelegatedUserText = function () {
-
+            if (!self.selectedProxyUser) {
+                if (self.ouApplicationUser.applicationUser.outOfOffice) {
+                    var proxyOU = _.find(organizationService.organizations, {id: self.ouApplicationUser.proxyOUId});
+                    if (self.ouApplicationUser.proxyUser) {
+                        if (langService.current === 'en')
+                            return self.ouApplicationUser.proxyUser.getTranslatedName() + ' - ' + proxyOU.getTranslatedName();
+                        return proxyOU.getTranslatedName() + ' - ' + self.ouApplicationUser.proxyUser.getTranslatedName();
+                    }
+                }
+                return langService.get('user_on_behalf');
+            }
+            else {
+                if (langService.current === 'en')
+                    return self.selectedProxyUser.applicationUser.getTranslatedName() + ' - ' + self.selectedProxyUser.organization.getTranslatedName();
+                return self.selectedProxyUser.organization.getTranslatedName() + ' - ' + self.selectedProxyUser.applicationUser.getTranslatedName();
+            }
         };
 
         self.requiredFieldsOutOfOffice = [
@@ -959,6 +974,7 @@ module.exports = function (app) {
         self.signature = new ApplicationUserSignature();
         self.signature.appUserId = self.applicationUser.id;
         self.enableAdd = false;
+        self.imageDimensionsInfo = langService.get('image_dimensions_info').change({height: 50, width: 50});
 
         /**
          * check validation of required fields
@@ -1086,7 +1102,7 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, {
                 label: langService.get('all'),
                 value: function () {
-                    return self.applicationUser.signature.length;
+                    return (self.applicationUser.signature.length + 21);
                 }
             }]
         };
@@ -1094,25 +1110,46 @@ module.exports = function (app) {
         self.selectedFile = null;
         self.fileUrl = null;
 
-        self.viewImage = function (files) {
+        self.viewImage = function (files, element) {
             attachmentService
                 .validateBeforeUpload('userSignature', files[0])
                 .then(function (file) {
-                    var image;
+                    /* //var image;
+                     self.selectedFile = file;
+                     self.fileUrl = window.URL.createObjectURL(file);
+                     var reader = new FileReader();
+                     reader.onload = function () {
+                     //image = new Blob([reader.result], {type: file.type});
+                     if (!$scope.$$phase)
+                     $scope.$apply();
+                     };
+                     reader.readAsArrayBuffer(file);
+                     self.enableAdd = true;*/
+
                     self.selectedFile = file;
-                    self.fileUrl = window.URL.createObjectURL(file);
-                    var reader = new FileReader();
-                    reader.onload = function () {
-                        image = new Blob([reader.result], {type: file.type});
-                        if (!$scope.$$phase)
-                            $scope.$apply();
+                    var url = window.URL || window.webkitURL;
+                    var img = new Image();
+                    img.src = self.fileUrl = url.createObjectURL(file);
+
+                    img.onload = function () {
+                        if (element[0].name === 'add-sign') {
+                            var width = this.naturalWidth || this.width;
+                            var height = this.naturalHeight || this.height;
+                            if (width > 50 && height > 50) {
+                                toast.error(langService.get('image_dimension_greater').change({width: 50, height: 50}));
+                                self.enableAdd = false;
+                                return false;
+                            }
+                        }
+                        $timeout(function () {
+                            self.enableAdd = true;
+                        })
                     };
-                    reader.readAsArrayBuffer(file);
-                    self.enableAdd = true;
                 })
                 .catch(function (availableExtensions) {
                     self.fileUrl = null;
                     self.selectedFile = null;
+                    self.enableAdd = false;
                     dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
                 });
         };

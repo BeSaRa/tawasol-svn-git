@@ -414,6 +414,7 @@ module.exports = function (app) {
          * @description broadcast selected organization and workflow group
          * @param reviewOutgoing
          * @param $event
+         * @param defer
          */
         self.broadcast = function (reviewOutgoing, $event, defer) {
             /*broadcastService
@@ -442,6 +443,12 @@ module.exports = function (app) {
          * @param defer
          */
         self.sendToReadyToExport = function (model, $event, defer) {
+            if (model.fromCentralArchive())
+                return model.sendToCentralArchive().then(function () {
+                    self.reloadReviewOutgoings(self.grid.page);
+                    new ResolveDefer(defer);
+                });
+
             model.sendToReadyToExport()
                 .then(function () {
                     self.reloadReviewOutgoings(self.grid.page)
@@ -511,8 +518,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }
@@ -553,6 +560,9 @@ module.exports = function (app) {
                 text: 'grid_action_send_to_ready_to_export',
                 shortcut: true,
                 callback: self.sendToReadyToExport,
+                textCallback: function (model) {
+                    return model.fromCentralArchive() ? 'grid_action_send_to_central_archive' : 'grid_action_send_to_ready_to_export';
+                },
                 class: "action-green",
                 checkShow: function (action, model) {
                     var info = model.getInfo();

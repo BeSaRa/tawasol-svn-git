@@ -146,9 +146,9 @@
                                     <div flex layout="row">
                                         <md-input-container flex>
                                             <label for="rank">{{lang.rank}}</label>
-                                            <md-select id="rank" name="rank" required
-                                                       ng-disabled="true" ng-readonly="true"
+                                            <md-select id="rank" name="rank"
                                                        ng-model="ctrl.applicationUser.rank">
+                                                <!--required ng-disabled="true" ng-readonly="true"-->
                                                 <md-option ng-value="rank.lookupKey"
                                                            ng-repeat="rank in ctrl.ranks track by $index">
                                                     {{rank.getTranslatedName()}}
@@ -615,6 +615,7 @@
                                                     <md-select name="proxyUser" id="proxyUser"
                                                                ng-required="ctrl.isOutOfOffice"
                                                                ng-disabled="!ctrl.isOutOfOffice"
+                                                               md-selected-text="ctrl.getSelectedDelegatedUserText()"
                                                                ng-model-options="{trackBy:'$value.id'}"
                                                                ng-model="ctrl.selectedProxyUser">
                                                         <md-option
@@ -1019,17 +1020,18 @@
                                     <div layout="column" flex><!--class="p20"-->
                                         <div layout="row">
                                             <div>
-                                                <label for="upload-attachment-file"
-                                                       class="md-button md-raised alongside-input">
-                                            <span layout="row" layout-align="start center">
-                                                <md-icon md-svg-icon="upload"></md-icon>
-                                                <span>{{lang.upload_signature}}</span>
-                                            </span>
-                                                    <input reset-after-change="true"
-                                                           catch-upload-file-directive="ctrl.viewImage"
-                                                           class="hide-import-file" type="file"
-                                                           id="upload-attachment-file" name="upload-attachment-file">
-                                                </label></div>
+                                                <label for="add-sign" class="md-button md-raised alongside-input">
+                                                        <span layout="row" layout-align="start center">
+                                                            <md-icon md-svg-icon="upload"></md-icon>
+                                                            <span>{{lang.upload_signature}}</span>
+                                                        </span>
+                                                        <input reset-after-change="true"
+                                                               catch-upload-file-directive="ctrl.viewImage"
+                                                               class="hide-import-file" type="file"
+                                                               id="add-sign" name="add-sign">
+                                                </label>
+                                                <div class="help-text-div">{{ctrl.imageDimensionsInfo}}</div>
+                                            </div>
                                             <md-input-container flex ng-if="ctrl.enableAdd">
                                                 <label for="docSubject">{{lang.subject}}</label>
                                                 <input name="docSubject" id="docSubject" minlength="4"

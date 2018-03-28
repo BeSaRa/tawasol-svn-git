@@ -69,7 +69,7 @@ module.exports = function (app) {
          */
         self.isDocFileAttached = false;
         self.docTemplateFile = null;
-        self.checkFile = function (docTemplateFiles) {
+        self.checkFile = function (docTemplateFiles, element) {
             if (docTemplateFiles.length) {
                 attachmentService
                     .validateBeforeUpload('wordDocument', docTemplateFiles[0])

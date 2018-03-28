@@ -197,6 +197,8 @@ module.exports = function (app) {
             self.selectedTabName = tabName;
         };
 
+        self.imageDimensionsInfo = langService.get('image_dimensions_info').change({height: 283, width: 283});
+
         /**
          * Save Uploaded Image File (add or edit)
          * @param modelName

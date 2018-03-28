@@ -1,4 +1,4 @@
-<ng-form name="outgoing_properties">
+<form name="outgoing_properties">
     <fieldset class="field-set-hidden">
         <div layout="column">
             <div layout="row">
@@ -10,7 +10,7 @@
                                ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-model="ctrl.document.registryOU"
-                               required>
+                               ng-required="ctrl.checkMandatory('registryOU')">
                         <md-option ng-value="organization.id"
                                    ng-repeat="organization in ctrl.registryOrganizations">
                             {{organization.getTranslatedName()}}
@@ -27,7 +27,7 @@
                                ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-model="ctrl.document.ou"
-                               required>
+                               ng-required="ctrl.checkMandatory('ou')">
                         <md-option ng-value="organization.id"
                                    ng-repeat="organization in ctrl.organizations">
                             {{organization.getTranslatedName()}}
@@ -43,7 +43,8 @@
                                id="ou"
                                ng-disabled="!!ctrl.disableProperties || ctrl.checkOrganizationDisabled()"
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
-                               ng-model="ctrl.document.ou">
+                               ng-model="ctrl.document.ou"
+                               ng-required="ctrl.checkMandatory('ou')">
                         <md-option ng-value="organization.id"
                                    ng-repeat="organization in ctrl.subOrganizations">
                             {{organization.getTranslatedName()}}
@@ -55,7 +56,7 @@
                 </md-input-container>
                 <md-input-container ng-if="ctrl.document.hasVsId()" flex>
                     <label for="securityLevel">{{lang.security_level}}</label>
-                    <input name="securityLevel"
+                    <input id="securityLevel" name="securityLevel"
                            ng-disabled="true"
                            ng-value="ctrl.sourceModel.securityLevel.getTranslatedName()">
                 </md-input-container>
@@ -67,7 +68,7 @@
                                ng-disabled="!!ctrl.disableProperties"
                                ng-model="ctrl.document.securityLevel"
                                ng-model-options="{trackBy: '$value.id'}"
-                               required>
+                               ng-required="ctrl.checkMandatory('securityLevel')">
                         <md-option ng-value="level"
                                    ng-repeat="level in ctrl.securityLevels">
                             {{level.getTranslatedName()}}
@@ -81,6 +82,7 @@
                 <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "incoming"'>
                     <label for="refDocNumber">{{lang.document_number}}</label>
                     <input name="refDocNumber" id="refDocNumber"
+                           ng-required="ctrl.checkMandatory('refDocNumber')"
                            ng-disabled="!!ctrl.disableProperties"
                            ng-model="ctrl.document.refDocNumber">
                     <!--custom-validate-directive="number"-->
@@ -93,7 +95,9 @@
                     <label for="type">{{lang.type}}</label>
                     <md-select name="type" id="type"
                                ng-disabled="!!ctrl.disableProperties"
-                               ng-model="ctrl.document.internalDocType" required>
+                               ng-model="ctrl.document.internalDocType"
+                               ng-required="ctrl.checkMandatory('internalDocType')"
+                               required>
                         <md-option ng-value="type.id"
                                    ng-repeat="type in ctrl.typeOptions track by $index">
                             {{lang.current==="en"? type.enName:type.arName}}
@@ -110,6 +114,7 @@
                                    ng-disabled="!!ctrl.disableProperties"
                                    ng-model="ctrl.document.docDate"
                                    md-max-date="ctrl.maxCreateDate"
+                                   ng-required="ctrl.checkMandatory('docDate')"
                                    md-open-on-focus></md-datepicker>
                     <!--md-placeholder="{{lang.document_date}}"-->
                     <div ng-messages="outgoing_properties.docDate.$error">
@@ -125,7 +130,7 @@
                                ng-disabled="!!ctrl.disableProperties"
                                ng-model="ctrl.document.mainClassification"
                                ng-model-options="{trackBy: '$value.id'}"
-                               required>
+                               ng-required="ctrl.checkMandatory('mainClassification')">
                         <md-option ng-value="classification.classification"
                                    ng-repeat="classification in ctrl.classifications">
                             {{classification.classification.getTranslatedName()}}
@@ -143,7 +148,7 @@
                             id="subClassification"
                             ng-model-options="{trackBy: '$value.id'}"
                             ng-model="ctrl.document.subClassification"
-                            required>
+                            ng-required="ctrl.checkMandatory('subClassification')">
                         <md-option ng-value="classification"
                                    ng-repeat="classification in ctrl.document.mainClassification.children">
                             {{classification.getTranslatedName()}}
@@ -160,7 +165,7 @@
                            ng-disabled="!!ctrl.disableProperties"
                            custom-validate-directive="AEN"
                            ng-model="ctrl.document.docSubject"
-                           required>
+                           ng-required="ctrl.checkMandatory('docSubject')">
                     <div ng-messages="outgoing_properties.docSubject.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                         <div ng-message="AEN">{{lang.arabic_english_number}}</div>
@@ -175,7 +180,7 @@
                                ng-disabled="!!ctrl.disableProperties"
                                ng-model="ctrl.document.priorityLevel"
                                ng-model-options="{trackBy: '$value.id'}"
-                               required>
+                               ng-required="ctrl.checkMandatory('priorityLevel')">
                         <md-option ng-value="priorityLevel"
                                    ng-repeat="priorityLevel in ctrl.priorityLevels">
                             {{priorityLevel.getTranslatedName()}}
@@ -192,7 +197,7 @@
                                ng-disabled="!!ctrl.disableProperties"
                                ng-model="ctrl.document.docType"
                                ng-model-options="{trackBy: '$value.id'}"
-                               required>
+                               ng-required="ctrl.checkMandatory('docType')">
                         <md-option ng-value="documentType"
                                    ng-repeat="documentType in ctrl.documentTypes">
                             {{documentType.getTranslatedName()}}
@@ -219,7 +224,7 @@
                                ng-model="ctrl.document.fileId"
                                ng-disabled="!!ctrl.disableProperties"
                                ng-model-options="{trackBy: '$value.id'}"
-                               required>
+                               ng-required="ctrl.checkMandatory('fileId')">
                         <md-option ng-value="file.file"
                                    ng-repeat="file in ctrl.documentFiles">
                             {{file.file.getTranslatedName()}}
@@ -245,7 +250,7 @@
                            ng-disabled="!!ctrl.disableProperties"
                            ng-enter="ctrl.onFileCodeChanged()"
                            ng-model="ctrl.document.fileCode"
-                           required>
+                           ng-required="ctrl.checkMandatory('fileCode')">
                     <div ng-messages="outgoing_properties.fileCode.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
@@ -256,7 +261,7 @@
                            id="fileSerial"
                            ng-disabled="!!ctrl.disableProperties"
                            ng-model="ctrl.document.fileSerial"
-                           required>
+                           ng-required="ctrl.checkMandatory('fileSerial')">
                     <div ng-messages="outgoing_properties.fileSerial.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                         <div ng-message="number">{{lang.numberonly}}</div>
@@ -266,10 +271,11 @@
             <div layout="row">
                 <md-input-container flex>
                     <label for="docNotes">{{lang.properties_notes}}</label>
-                    <textarea name="docNotes" id="docNotes" ng-model="ctrl.document.docNotes" rows="5"
+                    <textarea ng-required="ctrl.checkMandatory('docNotes')" name="docNotes" id="docNotes"
+                              ng-model="ctrl.document.docNotes" rows="5"
                               ng-disabled="!!ctrl.disableProperties"></textarea>
                 </md-input-container>
             </div>
         </div>
     </fieldset>
-</ng-form>
+</form>

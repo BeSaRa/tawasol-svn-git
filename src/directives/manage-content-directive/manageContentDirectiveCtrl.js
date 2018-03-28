@@ -109,7 +109,7 @@ module.exports = function (app) {
          * @description Checks the file for the allowed file formats
          * @param contentFiles
          */
-        self.checkContentFile = function (contentFiles) {
+        self.checkContentFile = function (contentFiles, element) {
             if (contentFiles.length) {
                 var info = self.document.getInfo();
                 //Electronic Document - only word document is allowed

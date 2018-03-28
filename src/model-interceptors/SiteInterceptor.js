@@ -40,6 +40,10 @@ module.exports = function (app) {
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.siteType = correspondenceService.getLookup(model.docClassName, 'siteTypes', model.siteType) || model.siteType;
             model.followupStatus = lookupService.getLookupByLookupKey(lookupService.followupStatus, model.followupStatus);
+            model.mainEnSiteText = model.mainSite.enName;
+            model.mainArSiteText = model.mainSite.arName;
+            model.subArSiteText = model.subSite.arName;
+            model.subEnSiteText = model.subSite.enName;
             delete model.docClassName;
             return model;
         });

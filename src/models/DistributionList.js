@@ -164,7 +164,7 @@ module.exports = function (app) {
                 return this;
             };
 
-            DistributionList.prototype.opendDialogToSelectOrganizations = function () {
+            DistributionList.prototype.openDialogToSelectOrganizations = function () {
                 var self = this;
                 return organizationService
                     .controllerMethod
