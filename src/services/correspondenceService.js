@@ -335,7 +335,7 @@ module.exports = function (app) {
         function _bulkMessages(result, collection, ignoreMessage, errorMessage, successMessage, failureSomeMessage) {
             var failureCollection = [];
             var currentIndex = 0;
-            _.map(result.data.rs, function (value, index) {
+            _.map(result.data.rs, function (value) {
                 if (!value)
                     failureCollection.push(collection[currentIndex]);
                 currentIndex++;
