@@ -289,6 +289,8 @@
                 .addToAllWithBase('folderCount', '/cms-entity/user/inbox/all-folders-count')
                 // all available organization for central archive
                 .addToAllWithBase('availableCentralArchive', 'cms-entity/admin/ou/ou-with-central-archive')
+                // user filters.
+                .addToAllWithBase('userFilters', '/cms-entity/user/user-inbox-filter')
                 // all users who set this user as proxy
                 .addToAllWithBase('usersWhoSetYouAsProxy', 'cms-entity/admin/ou-application-user/proxy/');
         })

@@ -100,4 +100,5 @@ module.exports = function (app) {
     require('./distributionWFService')(app);
     require('./correspondenceStorageService')(app);
     require('./rankService')(app);
+    require('./userFilterService')(app);
 };
