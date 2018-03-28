@@ -334,9 +334,11 @@ module.exports = function (app) {
          */
         function _bulkMessages(result, collection, ignoreMessage, errorMessage, successMessage, failureSomeMessage) {
             var failureCollection = [];
+            var currentIndex = 0;
             _.map(result.data.rs, function (value, index) {
                 if (!value)
-                    failureCollection.push(collection[index]);
+                    failureCollection.push(collection[currentIndex]);
+                currentIndex++;
             });
             if (!ignoreMessage) {
                 if (failureCollection.length === collection.length) {
