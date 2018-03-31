@@ -59,6 +59,7 @@ module.exports = function (app) {
          * @return {*|Promise<U>}
          */
         self.reloadFavoriteDocuments = function (pageNumber) {
+            console.log(pageNumber, self.grid.limit);
             var defer = $q.defer();
             self.progress = defer.promise;
             return favoriteDocumentsService
@@ -66,6 +67,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     counterService.loadCounters();
                     self.favoriteDocuments = result;
+                    console.log('self.favoriteDocuments', pageNumber, self.favoriteDocuments);
                     self.selectedFavoriteDocuments = [];
                     defer.resolve(true);
                     if (pageNumber)
@@ -307,8 +309,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }

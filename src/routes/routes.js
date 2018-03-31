@@ -924,7 +924,7 @@ module.exports = function (app) {
                         //return documentTemplateService.loadDocumentTemplates(currentEmployee.defaultOUID || -1);
                         return documentTemplateService.loadDocumentTemplates(selectedRegOU || -1);
                     },
-                    selectedRegOU: function(employeeService){
+                    selectedRegOU: function (employeeService) {
                         'ngInject';
                         return employeeService.getEmployee().organization.ouRegistryID;
                     }
@@ -956,6 +956,10 @@ module.exports = function (app) {
                     userFolders: function (userFolderService) {
                         'ngInject';
                         return userFolderService.getUserFoldersForApplicationUser();
+                    },
+                    userFilters: function (userFilterService) {
+                        'ngInject';
+                        return userFilterService.loadUserFilters();
                     }
                 }
             })
@@ -1316,6 +1320,18 @@ module.exports = function (app) {
                     self.url = $sce.trustAsResourceUrl(('http://100.100.3.228/Reports/report/Reports/{{reportName}}?rs:embed=true&userid={{currentUserID}}'.replace('{{reportName}}', reportName)).replace('{{currentUserID}}', employeeService.getEmployee().id));
                 },
                 controllerAs: 'ctrl'
+            })
+            .state('app.g2g', {
+                abstract: true,
+                url: '/g2g',
+                template: '<div id="sub-view-wrapper"><ui-view flex layout="column" class="sub-view" /></div>'
+            })
+            .state('app.g2g.inbox', {
+                url: '/inbox',
+                template: cmsTemplateProvider.getView('g2g'),
+                controller: function () {
+
+                }
             })
     });
 };

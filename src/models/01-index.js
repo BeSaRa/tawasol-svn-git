@@ -134,4 +134,5 @@ module.exports = function (app) {
     require('./CommentModel')(app);
     require('./SignDocumentModel')(app);
     require('./Rank')(app);
+    require('./UserFilter')(app);
 };

@@ -1234,11 +1234,12 @@ module.exports = function (app) {
         /**
          * @description to catch reference plan changes.
          */
-        self.referencePlanChanged = function () {
+        self.referencePlanChanged = function (firstTime) {
             if (!self.organization.referenceNumberPlanId)
                 return;
 
             var referenceId = self.organization.referenceNumberPlanId.id;
+
             self.organization.referencePlanItemStartSerialList = _.map(self.organization.referenceNumberPlanId.referencePlanItems, function (item) {
                 return item.perOu ? new ReferencePlanItemStartSerial({
                     referencePlanId: referenceId,
@@ -1280,6 +1281,6 @@ module.exports = function (app) {
             );
         };
 
-        self.referencePlanChanged();
+        self.referencePlanChanged(true);
     });
 };

@@ -838,5 +838,29 @@
         "sort_order": 6,
         "active": true,
         "sort_value": 0
+    },
+    {
+        "ID": 85,
+        "lang_key": "menu_item_government_inbox",
+        "icon": "inbox-multiple",
+        "parent": null,
+        "link": "#",
+        "state": "app.g2g",
+        "icon_type": "font",
+        "sort_order": 6,
+        "active": true,
+        "sort_value": 0
+    },
+    {
+        "ID": 86,
+        "lang_key": "menu_item_government_inbox",
+        "icon": "inbox-multiple",
+        "parent": 85,
+        "link": "inbox",
+        "state": "app.g2g.inbox",
+        "icon_type": "font",
+        "sort_order": 6,
+        "active": true,
+        "sort_value": 0
     }
 ]

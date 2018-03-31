@@ -90,6 +90,11 @@ module.exports = function (app) {
             ]
         };
 
+        self.userFilters = [1, 2, 3, 4, 5, 6];
+
+        self.selectFilter = function (selected) {
+            console.log(selected);
+        };
         /**
          * @description Replaces the record in grid after update
          * @param record
@@ -663,8 +668,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }

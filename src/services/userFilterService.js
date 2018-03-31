@@ -11,7 +11,7 @@ module.exports = function (app) {
          * @returns {Promise|userFilters}
          */
         self.loadUserFilters = function () {
-            return $http.get(urlService.userFilters).then(function (result) {
+            return $http.get(urlService.userFilters + '/user-filters').then(function (result) {
                 self.userFilters = generator.generateCollection(result.data.rs, UserFilter, self._sharedMethods);
                 self.userFilters = generator.interceptReceivedCollection('UserFilter', self.userFilters);
                 return self.userFilters;

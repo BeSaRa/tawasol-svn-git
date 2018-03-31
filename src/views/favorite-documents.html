@@ -1,5 +1,5 @@
 <!-- start of view -->
-<div background-directive="tall"  class="page-content" flex="">
+<div background-directive="tall" class="page-content" flex="">
     <div layout="column" class="content">
         <!-- page-header start -->
         <div layout="row" layout-align="start center" class="page-header padding-header small">
@@ -23,7 +23,8 @@
                         <md-table-container flex scroll-directive>
                             <table md-table md-row-select multiple ng-model="ctrl.selectedFavoriteDocuments"
                                    md-progress="ctrl.progress">
-                                <thead md-head md-order="ctrl.grid.order"><!-- md-on-reorder="ctrl.reloadFavoriteDocuments"-->
+                                <thead md-head md-order="ctrl.grid.order">
+                                <!-- md-on-reorder="ctrl.reloadFavoriteDocuments"-->
                                 <tr md-row>
                                     <th colspan="6" ng-if="ctrl.selectedFavoriteDocuments.length" md-column>
                                         <div layout="row" layout-align="start center">
@@ -37,19 +38,24 @@
                                             </md-button>
                                         </div>
                                     </th>
-                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column md-order-by="docSubject">
+                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column
+                                        md-order-by="docSubject">
                                         <span>{{lang.document_subject}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column md-order-by="docTypeInfo">
+                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column
+                                        md-order-by="docTypeInfo">
                                         <span>{{lang.label_document_type}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column md-order-by="securityLevelInfo">
+                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column
+                                        md-order-by="securityLevelInfo">
                                         <span>{{lang.security_level}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column md-order-by="priorityLevelInfo">
+                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column
+                                        md-order-by="priorityLevelInfo">
                                         <span>{{lang.priority_level}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column md-order-by="createdOn">
+                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column
+                                        md-order-by="createdOn">
                                         <span>{{lang.document_date}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column>
@@ -61,7 +67,7 @@
                                 <tr md-row md-select="favoriteDocument" grid-right-click-directive="favoriteDocument"
                                     model="favoriteDocument"
                                     selected-length="{{ctrl.selectedFavoriteDocuments.length ? ctrl.selectedFavoriteDocuments.length : 0}}"
-                                    ng-repeat="favoriteDocument in ctrl.favoriteDocuments  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    ng-repeat="favoriteDocument in ctrl.favoriteDocuments  | filter:ctrl.searchModel |orderBy:ctrl.grid.order  track by $index">
                                     <td md-cell class="td-data">
                                         <a href="" ng-if="favoriteDocument.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(favoriteDocument, $event)">{{favoriteDocument.docSubject}}</a>
