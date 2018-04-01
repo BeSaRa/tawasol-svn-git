@@ -129,7 +129,7 @@
                 // attachment types
                 .addToAllWithBase('attachmentTypes', 'cms-entity/admin/attachment-type')
                 // search for tags
-                .addToAllWithBase('documentTags', '/cms-entity/correspondence/tags/tagsearch?tag={{tag}}')
+                .addToAllWithBase('documentTags', '/cms-entity/correspondence/tag/search?criteria={{tag}}')
                 //add signature for application user
                 .addToAllWithBase('applicationUserSignatures', '/cms-entity/user/signature')
                 // attachments urls
