@@ -11,12 +11,17 @@ module.exports = function (app) {
         self.fromDialog = false;
 
         LangWatcher($scope);
-        self.loadedTags = [
-            'CMS_PACKAGING',
-            'MOTC',
-            'User_Interface',
-            'New_Deign'
-        ];
+
+        ////  load all document tags rom server //////////////////////
+        self.loadedTags = [];
+        documentTagService.searchForTag('').then(function (allDocTags){
+            angular.forEach(allDocTags, function (tag) {
+                self.loadedTags.push(tag.tagValue);
+            });
+
+        });
+
+
         // TODO: add search when tag selected
         // documentTagService.loadDocumentTags('ahmed').then(function (value) {
         //     console.log(value);
@@ -28,10 +33,6 @@ module.exports = function (app) {
         };
 
         self.querySearch = function (query) {
-            //tagsService.searchFor('welcome').then(function(result){
-                // array -> result.filter(createFilterFor(query))
-            // })
-
             return query ? self.loadedTags.filter(createFilterFor(query)) : [];
         };
 
