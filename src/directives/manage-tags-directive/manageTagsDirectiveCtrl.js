@@ -12,7 +12,7 @@ module.exports = function (app) {
 
         LangWatcher($scope);
 
-        ////  load all document tags rom server //////////////////////
+        ////  load all document tags from server //////////////////////
         self.loadedTags = [];
         documentTagService.searchForTag('').then(function (allDocTags){
             angular.forEach(allDocTags, function (tag) {
@@ -22,18 +22,24 @@ module.exports = function (app) {
         });
 
 
-        // TODO: add search when tag selected
-        // documentTagService.loadDocumentTags('ahmed').then(function (value) {
-        //     console.log(value);
-        // });
         self.searchText = '';
 
         self.addTagToDocument = function () {
             // outgoingService.saveTags(self.document, self.tags);
         };
 
+        // search for tag -- calling the search service if tags more than 100, unless filter the current tags on client side
         self.querySearch = function (query) {
-            return query ? self.loadedTags.filter(createFilterFor(query)) : [];
+            if(query && self.loadedTags.length > 100){
+                documentTagService.searchForTag(query).then(function (allDocTags) {
+                    self.loadedTags = [];
+                    angular.forEach(allDocTags, function (tag) {
+                        self.loadedTags.push(tag.tagValue);
+                    });
+
+                });
+                return self.loadedTags;
+            }else return query ? self.loadedTags.filter(createFilterFor(query)) : [];
         };
 
         /**
