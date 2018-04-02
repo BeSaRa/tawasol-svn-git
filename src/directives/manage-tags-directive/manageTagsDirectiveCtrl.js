@@ -12,13 +12,19 @@ module.exports = function (app) {
 
         LangWatcher($scope);
 
-        ////  load all document tags from server //////////////////////
+        //// loading 100 document tags from server and check if there are more tags //////////////////////
         self.loadedTags = [];
+        self.moreThan100Tags = false;
         documentTagService.searchForTag('').then(function (allDocTags){
-            angular.forEach(allDocTags, function (tag) {
-                self.loadedTags.push(tag.tagValue);
-            });
-
+            if(allDocTags != undefined && allDocTags.length > 0){
+                for(var i = 0; i < allDocTags.length; i++){
+                    if(i === 100){
+                        self.moreThan100Tags = true;
+                        break;
+                    }
+                    self.loadedTags.push(allDocTags[i].tagValue);
+                }
+            }
         });
 
 
@@ -30,13 +36,14 @@ module.exports = function (app) {
 
         // search for tag -- calling the search service if tags more than 100, unless filter the current tags on client side
         self.querySearch = function (query) {
-            if(query && self.loadedTags.length > 100){
+            if(self.moreThan100Tags){
                 documentTagService.searchForTag(query).then(function (allDocTags) {
                     self.loadedTags = [];
-                    angular.forEach(allDocTags, function (tag) {
-                        self.loadedTags.push(tag.tagValue);
-                    });
-
+                    if(allDocTags != undefined && allDocTags.length > 0){
+                        angular.forEach(allDocTags, function (tag) {
+                            self.loadedTags.push(tag.tagValue);
+                        });
+                    }
                 });
                 return self.loadedTags;
             }else return query ? self.loadedTags.filter(createFilterFor(query)) : [];
