@@ -66,6 +66,9 @@ module.exports = function (app) {
             securitySchema: lookupService.getLookupByLookupKey(lookupService.securitySchema, rootEntity.getGlobalSettings().securitySchema)
         }) : angular.copy(organization);
 
+        /////////////////////////// capture the current workflow security level before update //////////////////////////
+        self.initialWFSecurity = self.organization.wfsecurity;
+
         self.model = new Organization(organization);
         self.selectedDocumentClass = null;
         // get job titles
@@ -399,15 +402,31 @@ module.exports = function (app) {
                         self.organization.parent = null;
                     }
 
-                    organizationService
-                        .updateOrganization(self.organization)
-                        .then(function () {
-                            self.model = angular.copy(self.organization);
-                            toast.success(langService.get('edit_success').change({name: self.organization.getNames()}));
+                    /////////////////////////// validate workflow security level before update /////////////////////////
 
-                            employeeService.getEmployee().loadOrganization();
-                            dialog.hide(self.model);
-                        })
+                    var initialWFSecurityKey = parseInt(self.initialWFSecurity.lookupKey);
+
+                    var selectedWFSecurityKey = parseInt(self.organization.wfsecurity.lookupKey);
+
+                    var isValidWFSecurityLevel = true;
+
+                    if(selectedWFSecurityKey > initialWFSecurityKey){
+                        isValidWFSecurityLevel = false;
+                        dialog.errorMessage(langService.get('error_setting_workflow_security_to_lower_level'));
+                    }
+                    
+                    //////////////////////// if workflow security level is valid , then update /////////////////////////
+                    if(isValidWFSecurityLevel){
+                        organizationService
+                            .updateOrganization(self.organization)
+                            .then(function () {
+                                self.model = angular.copy(self.organization);
+                                toast.success(langService.get('edit_success').change({name: self.organization.getNames()}));
+
+                                employeeService.getEmployee().loadOrganization();
+                                dialog.hide(self.model);
+                            })
+                    }
                 })
         };
         /**
