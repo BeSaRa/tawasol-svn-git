@@ -414,7 +414,7 @@ module.exports = function (app) {
                         isValidWFSecurityLevel = false;
                         dialog.errorMessage(langService.get('error_setting_workflow_security_to_lower_level'));
                     }
-                    
+
                     //////////////////////// if workflow security level is valid , then update /////////////////////////
                     if(isValidWFSecurityLevel){
                         organizationService
