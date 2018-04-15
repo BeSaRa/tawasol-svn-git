@@ -47,10 +47,10 @@ module.exports = function (app) {
                 return this.proxyUserOUInfo[langService.current + 'Name'];
             };
             ProxyInfo.prototype.getProxyStartDate = function () {
-                return moment(this.proxyStartDate).format('YYYY-MM-DD');
+                return this.proxyStartDate ? moment(this.proxyStartDate).format('YYYY-MM-DD') : '';
             };
             ProxyInfo.prototype.getProxyEndDate = function () {
-                return moment(this.proxyEndDate).format('YYYY-MM-DD');
+                return this.proxyEndDate ? moment(this.proxyEndDate).format('YYYY-MM-DD'): '';
             };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

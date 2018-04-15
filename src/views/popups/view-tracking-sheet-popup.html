@@ -276,11 +276,11 @@
                                             <tbody md-body>
                                             <tr md-select="destinationHistoryRecord" md-row
                                                 ng-repeat="destinationHistoryRecord in ctrl.destinationHistoryRecords | filter:ctrl.searchModelDestinationHistory | limitTo: ctrl.destinationHistoryGrid.limit: ((ctrl.destinationHistoryGrid.page - 1) * ctrl.destinationHistoryGrid.limit) |orderBy:ctrl.destinationHistoryGrid.order  track by $index">
-                                                <td md-cell>{{destinationHistoryRecord.getTranslatedActionBy()}}</td>
+                                                <td md-cell>{{destinationHistoryRecord.actionByInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{destinationHistoryRecord.actionDate}}</td>
-                                                <td md-cell>{{destinationHistoryRecord.getTranslatedAction()}}</td>
+                                                <td md-cell>{{destinationHistoryRecord.eventTypeInfo.getTranslatedName()}}</td>
                                                 <!--<td md-cell></td>-->
-                                                <td md-cell>{{destinationHistoryRecord.itemName}}</td>
+                                                <td md-cell>{{destinationHistoryRecord.itemInfo.getTranslatedName()}}</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -464,13 +464,13 @@
                                             <tr md-row>
                                                 <!--<th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                                 </th>-->
-                                                <th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('actionByInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_action_by}}</span>
                                                 </th>
                                                 <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
                                                 </th>
-                                                <th md-column md-order-by="updateByInfo"><span>{{lang.view_tracking_sheet_action_by_department}}</span>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('actionByOUInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_action_by_department}}</span>
                                                 </th>
-                                                <th md-column md-order-by="updatedOn"><span>{{lang.view_tracking_sheet_action_type}}</span>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('actionTypeInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_action_type}}</span>
                                                 </th>
                                             </tr>
                                             </thead>
@@ -785,11 +785,11 @@
                                             <tbody md-body>
                                             <tr md-select="destinationHistoryRecord" md-row
                                                 ng-repeat="destinationHistoryRecord in ctrl.destinationHistoryRecords | filter:ctrl.searchModelDestinationHistory | limitTo: ctrl.destinationHistoryGrid.limit: ((ctrl.destinationHistoryGrid.page - 1) * ctrl.destinationHistoryGrid.limit) |orderBy:ctrl.destinationHistoryGrid.order  track by $index">
-                                                <td md-cell>{{destinationHistoryRecord.getTranslatedActionBy()}}</td>
+                                                <td md-cell>{{destinationHistoryRecord.actionByInfo.getTranslatedName()}}</td>
                                                 <td md-cell>{{destinationHistoryRecord.actionDate}}</td>
-                                                <td md-cell>{{destinationHistoryRecord.getTranslatedAction()}}</td>
+                                                <td md-cell>{{destinationHistoryRecord.eventTypeInfo.getTranslatedName()}}</td>
                                                 <!--<td md-cell></td>-->
-                                                <td md-cell>{{destinationHistoryRecord.itemName}}</td>
+                                                <td md-cell>{{destinationHistoryRecord.itemInfo.getTranslatedName()}}</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -981,13 +981,13 @@
                                             <tr md-row>
                                                 <!--<th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                                 </th>-->
-                                                <th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('actionByInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_action_by}}</span>
                                                 </th>
                                                 <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
                                                 </th>
-                                                <th md-column md-order-by="updateByInfo"><span>{{lang.view_tracking_sheet_action_by_department}}</span>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('actionByOUInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_action_by_department}}</span>
                                                 </th>
-                                                <th md-column md-order-by="updatedOn"><span>{{lang.view_tracking_sheet_action_type}}</span>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('actionTypeInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_action_type}}</span>
                                                 </th>
                                             </tr>
                                             </thead>

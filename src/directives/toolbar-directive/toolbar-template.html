@@ -31,8 +31,12 @@
             <span flex hide-gt-xs></span>
             <user-menu-directive hide-xs></user-menu-directive>
             <!--<div class="separator"></div>
-            <tasks-notify-directive></tasks-notify-directive>-->
+            <!--<tasks-notify-directive></tasks-notify-directive>&ndash;&gt;-->
             <div class="separator"></div>
+            <md-button fixed-position="true" tooltip="{{lang.logout}}" class="md-icon-button"
+                       ng-click="toolbar.logoutEmployee($event)">
+                <md-icon md-svg-icon="logout"></md-icon>
+            </md-button>
             <documents-notify-directive></documents-notify-directive>
 
             <private-announcement-directive></private-announcement-directive>
@@ -44,7 +48,7 @@
             <div hide-xs class="separator"></div>
             <language-switcher-directive></language-switcher-directive>
             <div ng-if="toolbar.themeService.themes.length" class="separator"></div>
-            <md-button ng-if="toolbar.themeService.themes.length" ng-click="toolbar.toggleSidebar('theme-sidebar')"
+            <md-button ng-click="toolbar.toggleSidebar('right-sidebar')"
                        class="md-icon-button m015">
                 <md-icon md-svg-icon="format-list-bulleted"></md-icon>
             </md-button>

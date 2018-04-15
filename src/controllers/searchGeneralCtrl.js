@@ -31,7 +31,9 @@ module.exports = function (app) {
                                                   distributionWorkflowService,
                                                   correspondenceService,
                                                   dialog,
-                                                  favoriteDocumentsService) {
+                                                  favoriteDocumentsService//,
+                                                  //centralArchives
+    ) {
         'ngInject';
 
         var self = this;
@@ -49,16 +51,7 @@ module.exports = function (app) {
         //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
         self.propertyConfigurations = propertyConfigurations;
-        /*self.docStatuses = [
-         {text: 'Receive', 'value': 1},
-         {text: 'Meta Data', 'value': 2},
-         {text: 'Draft', 'value': 3},
-         {text: 'Completed', 'value': 4},
-         {text: 'Rejected', 'value': 7},
-         {text: 'Ready For Sent', 'value': 8},
-         {text: 'Removed', 'value': 9},
-         {text: 'Archived', 'value': 21}
-         ];*/
+
         self.docStatuses = documentStatuses;
         self.docStatuses.unshift(new DocumentStatus({arName: 'الكل', enName: 'All'}));
         self.followupStatuses = lookupService.returnLookups(lookupService.followupStatus);
@@ -87,13 +80,49 @@ module.exports = function (app) {
                 return propertyConfiguration.isMandatory;
             }), 'symbolicName');
             requiredFields.push('year');
+            requiredFields.push('year');
             return requiredFields;
         };
 
         self.requiredFieldsSearchGeneral = self.getSearchGeneralRequiredFields();
 
         self.validateLabelsSearchGeneral = {};
+        /*
+                // in case of central archive.
+                self.registryOrganizations = centralArchives;
 
+                self.isSearchByRegOU = true;
+                self.getTranslatedYesNo = function (fieldName) {
+                    return self[fieldName] ? langService.get('yes') : langService.get('no');
+                };
+
+                self.ouToggleDefaultDisabled = false;
+                self.regOuToggleDefaultDisabled = false;
+
+                self.checkRegOuToggleDisabled = function () {
+                    if (employeeService.isCentralArchive()) {
+                        return self.searchGeneral.ou;
+                    }
+                    return false;
+                };
+
+                self.checkOuToggleDisabled = function () {
+                    if (employeeService.isCentralArchive()) {
+                        return self.isSearchByRegOU;
+                    }
+                    return false;
+                };
+
+                self.changeRegOuToggle = function () {
+                    if (!self.isSearchByRegOU) {
+                        self.searchGeneral.regOu = null;
+                    }
+                };
+
+                self.changeOuToggle = function () {
+                    /!*self.isSearchByRegOU = false;
+                     self.searchGeneral.regOu = null;*!/
+                };*/
 
         /**
          * @description Checks if the field is mandatory
@@ -162,6 +191,7 @@ module.exports = function (app) {
 
         /**
          * @description Set the selected year on changing the value
+         * @param searchForm
          * @param $event
          */
         self.setSelectedYear = function (searchForm, $event) {
@@ -287,6 +317,15 @@ module.exports = function (app) {
          * @description Search the document on basis of search criteria
          */
         self.search = function () {
+            /*if(self.isSearchByRegOU){
+                if(!employeeService.isCentralArchive()){
+                    self.searchGeneral.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
+                }
+            }
+            else{
+                self.searchGeneral.registryOU = null;
+            }*/
+
             validationService
                 .createValidation('SEARCH_GENERAL')
                 .addStep('check_required', true, self.checkRequiredFieldsSearchGeneral, self.searchGeneral, function (result) {
@@ -367,7 +406,7 @@ module.exports = function (app) {
          * @param pageNumber
          * @return {*|Promise<U>}
          */
-        self.reloadSearchedGeneralDocument = function (pageNumber) {
+        self.reloadSearchedGeneralDocuments = function (pageNumber) {
             var defer = $q.defer();
             self.progress = defer.promise;
             return searchGeneralService
@@ -380,6 +419,18 @@ module.exports = function (app) {
                     if (pageNumber)
                         self.grid.page = pageNumber;
                     return result;
+                });
+        };
+
+        /**
+         * @description add selected items to the favorite documents
+         * @param $event
+         */
+        self.addToFavoriteBulk = function ($event) {
+            favoriteDocumentsService.controllerMethod
+                .favoriteDocumentAddBulk(self.selectedSearchedGeneralDocuments, $event)
+                .then(function (result) {
+                    self.reloadSearchedGeneralDocuments(self.grid.page);
                 });
         };
 
@@ -403,23 +454,23 @@ module.exports = function (app) {
                 });
         };
 
-       /* /!**
+        /* /!**
          * @description Export searched general document
          * @param searchedGeneralDocument
          * @param $event
          * @type {[*]}
          *!/
-        self.exportSearchGeneralDocument = function (searchedGeneralDocument, $event) {
-            //console.log('export searched general document : ', searchedGeneralDocument);
-            searchGeneralService
-                .exportSearchGeneral(searchedGeneralDocument, $event)
-                .then(function (result) {
-                    self.reloadSearchedGeneralDocument(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get('export_success'));
-                        });
-                });
-        };*/
+         self.exportSearchGeneralDocument = function (searchedGeneralDocument, $event) {
+         //console.log('export searched general document : ', searchedGeneralDocument);
+         searchGeneralService
+         .exportSearchGeneral(searchedGeneralDocument, $event)
+         .then(function (result) {
+         self.reloadSearchedGeneralDocuments(self.grid.page)
+         .then(function () {
+         toast.success(langService.get('export_success'));
+         });
+         });
+         };*/
 
         /**
          * @description Launch distribution workflow for internal item
@@ -433,22 +484,26 @@ module.exports = function (app) {
                 return;
             }
 
-            return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
+            searchedGeneralDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
-                    /*distributionWorkflowService
-                     .controllerMethod
-                     .distributionWorkflowSend(searchedGeneralDocument, false, false, null, "internal", $event)
-                     .then(function (result) {
-                     self.reloadSearchedGeneralDocument(self.grid.page);
-                     })
-                     .catch(function (result) {
-                     self.reloadSearchedGeneralDocument(self.grid.page);
-                     });*/
-                    searchedGeneralDocument.launchWorkFlow($event, 'forward', 'favorites')
-                        .then(function () {
-                            self.reloadSearchedGeneralDocument(self.grid.page);
-                        });
+                    self.reloadSearchedGeneralDocuments(self.grid.page);
                 });
+            // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
+            //     .then(function () {
+            //         /*distributionWorkflowService
+            //          .controllerMethod
+            //          .distributionWorkflowSend(searchedGeneralDocument, false, false, null, "internal", $event)
+            //          .then(function (result) {
+            //          self.reloadSearchedGeneralDocuments(self.grid.page);
+            //          })
+            //          .catch(function (result) {
+            //          self.reloadSearchedGeneralDocuments(self.grid.page);
+            //          });*/
+            //         searchedGeneralDocument.launchWorkFlow($event, 'forward', 'favorites')
+            //             .then(function () {
+            //                 self.reloadSearchedGeneralDocuments(self.grid.page);
+            //             });
+            //     });
         };
 
         /**
@@ -555,6 +610,17 @@ module.exports = function (app) {
                 .manageDocumentEntities(searchedGeneralDocument.vsId, searchedGeneralDocument.docClassName, searchedGeneralDocument.docSubject, $event);
         };
 
+
+        var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
+            var info = model.getInfo();
+            var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+            var allowedByDocClass = (info.documentClass === 'outgoing') ? (info.docStatus < 25) : (info.documentClass === 'incoming');
+            var allowed = (hasPermission && info.documentClass !== "internal") && allowedByDocClass;
+            if (checkForViewPopup)
+                return !(allowed);
+            return allowed;
+        };
+
         /**
          * @description download main document for searched general document
          * @param searchedGeneralDocument
@@ -659,7 +725,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(searchedGeneralDocument, self.gridActions, true, true);
+            correspondenceService.viewCorrespondence(searchedGeneralDocument, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(searchedGeneralDocument, true));
             return;
         };
 
@@ -687,8 +753,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }
@@ -698,11 +764,11 @@ module.exports = function (app) {
         /**
          * @description do broadcast for correspondence.
          */
-        self.doBroadcast = function (correspondence, $event, defer) {
+        self.broadcast = function (correspondence, $event, defer) {
             correspondence
                 .correspondenceBroadcast()
                 .then(function () {
-                    self.reloadSearchedGeneralDocument(self.grid.page)
+                    self.reloadSearchedGeneralDocuments(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
                         })
@@ -747,18 +813,18 @@ module.exports = function (app) {
             },
             // Export /*NOT NEEDED AS DISCUSSED WITH HUSSAM*/
             /* {
-                type: 'action',
-                icon: 'export',
-                text: 'grid_action_export',
-                shortcut: true,
-                callback: self.exportSearchGeneralDocument,
-                class: "action-yellow",
-                checkShow: function (action, model) {
-                    //If document is paper outgoing and unapproved/partially approved, show the button.
-                    var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && model.docStatus < 24 && info.isPaper && info.documentClass === "outgoing";
-                }
-            },*/
+             type: 'action',
+             icon: 'export',
+             text: 'grid_action_export',
+             shortcut: true,
+             callback: self.exportSearchGeneralDocument,
+             class: "action-yellow",
+             checkShow: function (action, model) {
+             //If document is paper outgoing and unapproved/partially approved, show the button.
+             var info = model.getInfo();
+             return self.checkToShowAction(action, model) && model.docStatus < 24 && info.isPaper && info.documentClass === "outgoing";
+             }
+             },*/
             //Open
             {
                 type: 'action',
@@ -791,7 +857,7 @@ module.exports = function (app) {
                 text: 'grid_action_broadcast',
                 shortcut: false,
                 hide: false,
-                callback: self.doBroadcast,
+                callback: self.broadcast,
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.needApprove() || model.hasDocumentClass('incoming');
                 }
@@ -808,7 +874,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model) && model.barcodeReady()
-                        && (info.documentClass === "incoming" || ((info.documentClass === "outgoing" || info.documentClass==='internal') && info.isPaper));
+                        && (info.documentClass === "incoming" || ((info.documentClass === "outgoing" || info.documentClass === 'internal') && info.isPaper));
                 }
             },
             // View Tracking Sheet
@@ -890,6 +956,19 @@ module.exports = function (app) {
                         callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
+                    },
+                    // Destinations
+                    {
+                        type: 'action',
+                        icon: 'stop',
+                        text: 'grid_action_destinations',
+                        shortcut: false,
+                        callback: self.manageDestinations,
+                        permissionKey: "MANAGE_DESTINATIONS",
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
+                        }
                     }
                 ]
             },

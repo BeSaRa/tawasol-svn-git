@@ -3,6 +3,7 @@ module.exports = function (app) {
                       organizationService,
                       applicationUserService,
                       moment,
+                      Information,
                       lookupService) {
         'ngInject';
 
@@ -18,6 +19,9 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             (model.actionDate) ? getDateFromUnixTimeStamp(model, ["actionDate"]) : "";
+            model.itemInfo = new Information(model.itemInfo);
+            model.eventTypeInfo = new Information(model.eventTypeInfo);
+            model.actionByInfo = new Information(model.actionByInfo);
             return model;
         });
 

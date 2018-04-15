@@ -123,45 +123,22 @@
                                     selected-length="{{ctrl.selectedFollowupEmployeeInboxes.length ? ctrl.selectedFollowupEmployeeInboxes.length : 0}}"
                                     ng-repeat="followupEmployeeInbox in ctrl.followupEmployeeInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                                     <td md-cell class="indicator-td">
-                                        <span flex
-                                              ng-class="{'indicator-content': followupEmployeeInbox.securityLevelIndicator}">
-                                            <md-icon ng-if="followupEmployeeInbox.securityLevelIndicator"
-                                                     class="{{followupEmployeeInbox.securityLevelIndicator.class}}"
-                                                     md-svg-icon="{{followupEmployeeInbox.securityLevelIndicator.icon}}"
-                                                     tooltip="{{lang[followupEmployeeInbox.securityLevelIndicator.tooltip].change({name: followupEmployeeInbox.securityLevelLookup.getTranslatedName()})}}"
-                                            ></md-icon>
-                                        </span>
-                                        <!--<span flex ng-class="{'indicator-content': followupEmployeeInbox.isOpenedIndicator}">
-                                            <md-icon ng-if="followupEmployeeInbox.isOpenedIndicator"
-                                                     class="{{followupEmployeeInbox.isOpenedIndicator.class}}"
-                                                     md-svg-icon="{{followupEmployeeInbox.isOpenedIndicator.icon}}"
-                                                     tooltip="{{lang[followupEmployeeInbox.isOpenedIndicator.tooltip]}}"
-                                            ></md-icon>
-                                        </span>-->
-                                        <span flex
-                                              ng-class="{'indicator-content': followupEmployeeInbox.docTypeIndicator}">
-                                                    <md-icon ng-if="followupEmployeeInbox.docTypeIndicator"
-                                                             class="{{followupEmployeeInbox.docTypeIndicator.class}}"
-                                                             md-svg-icon="{{followupEmployeeInbox.docTypeIndicator.icon}}"
-                                                             tooltip="{{lang[followupEmployeeInbox.docTypeIndicator.tooltip]}}"
-                                                    ></md-icon>
-                                                </span>
-                                        <span flex
-                                              ng-class="{'indicator-content': followupEmployeeInbox.linkedDocsIndicator}">
-                                           <md-icon ng-if="followupEmployeeInbox.linkedDocsIndicator"
-                                                    class="{{followupEmployeeInbox.linkedDocsIndicator.class}}"
-                                                    md-svg-icon="{{followupEmployeeInbox.linkedDocsIndicator.icon}}"
-                                                    tooltip="{{lang[followupEmployeeInbox.linkedDocsIndicator.tooltip]}}"
-                                           ></md-icon>
-                                       </span>
-                                        <span flex
-                                              ng-class="{'indicator-content': followupEmployeeInbox.followUpStatusIndicator}">
-                                            <md-icon ng-if="followupEmployeeInbox.followUpStatusIndicator"
-                                                     class="{{followupEmployeeInbox.followUpStatusIndicator.class}}"
-                                                     md-svg-icon="{{followupEmployeeInbox.followUpStatusIndicator.icon}}"
-                                                     tooltip="{{lang[followupEmployeeInbox.followUpStatusIndicator.tooltip].change({name: followupEmployeeInbox.followupStatusLookup.getTranslatedName()})}}"
-                                            ></md-icon>
-                                        </span>
+                                        <!-- Security Level -->
+                                        <grid-indicator-directive record="followupEmployeeInbox"
+                                                                  indicator-type="securityLevel"
+                                                                  record-type="workItem"></grid-indicator-directive>
+                                        <!-- Doc Type -->
+                                        <grid-indicator-directive record="followupEmployeeInbox"
+                                                                  indicator-type="docType"
+                                                                  record-type="workItem"></grid-indicator-directive>
+                                        <!-- Linked Documents -->
+                                        <grid-indicator-directive record="followupEmployeeInbox"
+                                                                  indicator-type="hasLinkedDocuments"
+                                                                  record-type="workItem"></grid-indicator-directive>
+                                        <!-- Follow up Status -->
+                                        <grid-indicator-directive record="followupEmployeeInbox"
+                                                                  indicator-type="followupStatus"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                     </td>
                                     <td md-cell>
                                         <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
@@ -198,21 +175,14 @@
                                     <td md-cell>{{followupEmployeeInbox.generalStepElm.docFullSerial}}</td>
                                     <td md-cell class="indicator-td text-right"
                                         style="padding-right:0 !important; padding-left:0px !important;">
-                                                <span ng-class="{'indicator-content': followupEmployeeInbox.priorityLevelIndicator}">
-                                                    <md-icon ng-if="followupEmployeeInbox.priorityLevelIndicator"
-                                                             class="{{followupEmployeeInbox.priorityLevelIndicator.class}}"
-                                                             md-svg-icon="{{followupEmployeeInbox.priorityLevelIndicator.icon}}"
-                                                             tooltip="{{lang[followupEmployeeInbox.priorityLevelIndicator.tooltip].change({name: followupEmployeeInbox.priorityLevelLookup.getTranslatedName()})}}"
-                                                    ></md-icon>
-                                                </span>
-                                        <span class="float-right"
-                                              ng-class="{'indicator-content': followupEmployeeInbox.attachmentsIndicator}">
-                                                    <md-icon ng-if="followupEmployeeInbox.attachmentsIndicator"
-                                                             class="{{followupEmployeeInbox.attachmentsIndicator.class}}"
-                                                             md-svg-icon="{{followupEmployeeInbox.attachmentsIndicator.icon}}"
-                                                             tooltip="{{lang[followupEmployeeInbox.attachmentsIndicator.tooltip]}}"
-                                                    ></md-icon>
-                                                </span>
+                                        <!-- Priority Level -->
+                                        <grid-indicator-directive record="followupEmployeeInbox"
+                                                                  indicator-type="priorityLevel"
+                                                                  record-type="workItem"></grid-indicator-directive>
+                                        <!-- Has Attachments -->
+                                        <grid-indicator-directive record="followupEmployeeInbox" span-class="float-right"
+                                                                  indicator-type="hasAttachment"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                     </td>
                                     <td md-cell md-truncate class="subject">
                                         <a href="" class="view-doc" md-truncate
@@ -231,13 +201,17 @@
                                         </div>
                                     </td>
                                     <td md-cell class="td-data">
-                                                <span class="{{followupEmployeeInbox.dueDateStatusIndicator.class}}"
+                                        <grid-indicator-directive record="followupEmployeeInbox"
+                                                                  indicator-type="dueDate"
+                                                                  record-type="workItem"></grid-indicator-directive>
+                                                <!--<span class="{{followupEmployeeInbox.dueDateStatusIndicator.class}}"
                                                       tooltip="{{lang[followupEmployeeInbox.dueDateStatusIndicator.tooltip].change({due_date_status:lang[followupEmployeeInbox.dueDateStatusIndicator.text] })}}">
-                                                    {{followupEmployeeInbox.generalStepElm.dueDate}}</span>
+                                                    {{followupEmployeeInbox.generalStepElm.dueDate}}</span>-->
+
                                     </td>
                                     <td md-cell>
                                         <main-site-sub-site-directive item="followupEmployeeInbox"
-                                                                      ng-if="userInbox.getInfo().documentClass!=='internal'">
+                                                                      ng-if="followupEmployeeInbox.getInfo().documentClass!=='internal'">
                                         </main-site-sub-site-directive>
                                     </td>
                                     <!--<td md-cell>{{followupEmployeeInbox.subCoreSite.getTranslatedName()}}</td>-->

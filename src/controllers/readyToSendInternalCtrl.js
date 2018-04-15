@@ -351,7 +351,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(readyToSendInternal, self.gridActions, checkIfEditPropertiesAllowed(readyToSendInternal, true), true);
+            correspondenceService.viewCorrespondence(readyToSendInternal, self.gridActions, checkIfEditPropertiesAllowed(readyToSendInternal, true), false);
             return;
         };
 
@@ -610,10 +610,9 @@ module.exports = function (app) {
                 icon: 'bullhorn',
                 text: 'grid_action_broadcast',
                 shortcut: false,
-                hide: true,
                 callback: self.broadcast,
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && (model.addMethod || model.approvers !== null);
+                    return self.checkToShowAction(action, model) && (!!model.addMethod || model.hasOwnProperty('approvers') && model.approvers !== null);
                 }
             }
         ];

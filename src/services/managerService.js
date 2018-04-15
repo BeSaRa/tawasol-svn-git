@@ -5,7 +5,8 @@ module.exports = function (app) {
                                             _,
                                             generator,
                                             correspondenceService,
-                                            outgoingService) {
+                                            outgoingService,
+                                            Attachment) {
         'ngInject';
         var self = this;
         self.serviceName = 'managerService';
@@ -83,6 +84,7 @@ module.exports = function (app) {
          */
         self.manageDocumentAttachments = function (vsId, documentClass, documentSubject, $event) {
             var defer = $q.defer();
+            var deferDoc = $q.defer();
             documentClass = _checkDocumentClass(documentClass);
             return dialog.showDialog({
                 template: cmsTemplate.getPopup('manage-document-attachments'),
@@ -100,14 +102,26 @@ module.exports = function (app) {
                 resolve: {
                     document: function () {
                         'ngInject';
-                        return correspondenceService.loadCorrespondenceByVsIdClass(vsId, documentClass);
+                        return correspondenceService.loadCorrespondenceByVsIdClass(vsId, documentClass)
+                            .then(function (result) {
+                                deferDoc.resolve(result);
+                                return result;
+                            });
                     },
                     attachments: function (attachmentService) {
                         'ngInject';
-                        return attachmentService.loadDocumentAttachments(vsId, documentClass).then(function (attachments) {
-                            defer.resolve(attachments);
-                            return attachments;
+                        return deferDoc.promise.then(function (document) {
+                            return attachmentService.loadDocumentAttachments(vsId, documentClass).then(function (attachments) {
+                                if (document.linkedExportedDocsList.length) {
+                                    document.linkedExportedDocsList = generator.generateCollection(document.linkedExportedDocsList, Attachment, self._sharedMethods);
+                                    document.linkedExportedDocsList = generator.interceptReceivedCollection('Attachment', document.linkedExportedDocsList);
+                                    attachments = attachments.concat(document.linkedExportedDocsList);
+                                }
+                                defer.resolve(attachments);
+                                return attachments;
+                            });
                         });
+
                     },
                     model: function () {
                         'ngInject';
@@ -116,6 +130,10 @@ module.exports = function (app) {
                             qDefer.resolve(angular.copy(attachments));
                         });
                         return qDefer.promise;
+                    },
+                    attachmentTypes: function (attachmentTypeService, employeeService) {
+                        'ngInject';
+                        return !employeeService.isCloudUser() ? attachmentTypeService.getAttachmentTypes() : [];
                     }
                 }
             })

@@ -1,5 +1,6 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, 
+    app.run(function (CMSModelInterceptor,
+                      correspondenceService,
                       entityTypeService) {
         'ngInject';
 
@@ -16,7 +17,13 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            model.typeId = entityTypeService.getLinkedType(model.typeId);
+            var entityTypes = correspondenceService.getLookup(model.documentClass, 'entityTypes');
+            if (model && model.hasOwnProperty('documentClass')) {
+                model.typeId = entityTypeService.getLinkedType(model.typeId, entityTypes);
+            } else {
+                model.typeId = entityTypeService.getLinkedType(model.typeId);
+            }
+            delete model.documentClass;
             return model;
         });
 

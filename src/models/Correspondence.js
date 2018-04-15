@@ -6,6 +6,7 @@ module.exports = function (app) {
                                             langService,
                                             queueStatusService,
                                             $q,
+                                            dialog,
                                             LinkedObject,
                                             Attachment,
                                             DocumentComment,
@@ -87,6 +88,7 @@ module.exports = function (app) {
             self.linkedCommentsList = [];
             self.linkedDocList = [];
             self.linkedAttachmenstList = [];
+            self.linkedExportedDocsList = [];
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -436,14 +438,16 @@ module.exports = function (app) {
             };
 
             Correspondence.prototype.prepareReceivedCorrespondence = function () {
+                var documentClass = this.getInfo().documentClass;
                 this.documentComments = _.map(this.linkedCommentsList, function (item) {
                     return generator.interceptReceivedInstance('DocumentComment', new DocumentComment(item));
                 });
-                this.attachments = _.map([].concat(this.linkedAttachmentList || [], this.linkedAttachmenstList || []), function (item) {
+                this.attachments = _.map([].concat(this.linkedAttachmentList || [], this.linkedAttachmenstList || [], this.linkedExportedDocsList || []), function (item) {
                     return generator.interceptReceivedInstance('Attachment', new Attachment(item))
                 });
                 this.linkedDocs = correspondenceService.interceptReceivedCollectionBasedOnEachDocumentClass(this.linkedDocList);
                 this.linkedEntities = _.map(this.linkedEntitiesList, function (item) {
+                    item.documentClass = documentClass;
                     return generator.interceptReceivedInstance('LinkedObject', new LinkedObject(item));
                 });
                 return this;
@@ -457,9 +461,21 @@ module.exports = function (app) {
             Correspondence.prototype.hasDocumentClass = function (documentClass) {
                 return this.getInfo().documentClass.toLowerCase() === documentClass.toLowerCase();
             };
-            Correspondence.prototype.launchWorkFlow = function ($event, action, tab) {
-                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
+            Correspondence.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming);
             };
+
+            Correspondence.prototype.launchWorkFlowAndCheckExists = function ($event, action, tab, isDeptIncoming) {
+                var info = this.getInfo();
+                var self = this;
+                return correspondenceService.checkWorkFlowForVsId(info.vsId).then(function (result) {
+                    return result ? dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
+                        .then(function () {
+                            correspondenceService.launchCorrespondenceWorkflow(self, $event, action, tab, isDeptIncoming);
+                        }) : correspondenceService.launchCorrespondenceWorkflow(self, $event, action, tab, isDeptIncoming);
+                })
+            };
+
             Correspondence.prototype.addToFavorite = function (ignoreMessage) {
                 return correspondenceService.addCorrespondenceToFavorite(this, ignoreMessage);
             };
@@ -518,7 +534,22 @@ module.exports = function (app) {
                 return !!this.centralArchiveId;
             };
             Correspondence.prototype.sendToCentralArchive = function (ignoreMessage) {
-                return correspondenceService.sendToCentralArchiveReadyToExport(this , ignoreMessage);
+                return correspondenceService.sendToCentralArchiveReadyToExport(this, ignoreMessage);
+            };
+            Correspondence.prototype.getMainProperties = function () {
+                return [
+                    'ou',
+                    'securityLevel',
+                    'docDate',
+                    'mainClassification',
+                    'subClassification',
+                    'docSubject',
+                    'priorityLevel',
+                    'docType',
+                    'fileId',
+                    'fileCode',
+                    'fileSerial'
+                ];
             };
 
 

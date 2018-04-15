@@ -1,13 +1,14 @@
 <md-dialog aria-label="dialog scanner" ng-class="{'full-screen':ctrl.fullscreen}" id="scanner-dialog">
-    <fieldset class="transparent-fieldset" ng-disabled="!ctrl.sessionCreated">
-        <div class="p20" flex>
-            <div layout="row" id="selected-scanner" layout-align="start center" flex>
+    <div flex class="dialog-container" layout="column">
+        <div class="absolute-toolbar">
+            <div flex layout="row" layout-align="start center" id="selected-scanner">
                 <div>
                     <!--<md-button ng-click="ctrl.selectScanner()" class="md-raised md-primary">-->
                     <!--{{ctrl.selectedScanner ? lang.change_selected_scanner : lang.select_scanner}}-->
                     <!--</md-button>-->
-                    <md-button tooltip="{{ctrl.selectedScanner ? lang.change_selected_scanner : lang.select_scanner}}"
-                               ng-click="ctrl.selectScanner()" class="md-icon-button">
+                    <md-button
+                            tooltip="{{ctrl.selectedScanner ? lang.change_selected_scanner : lang.select_scanner}}"
+                            ng-click="ctrl.selectScanner()" class="md-icon-button">
                         <md-icon md-svg-icon="scanner"></md-icon>
                     </md-button>
                 </div>
@@ -16,7 +17,8 @@
                            class="md-button md-icon-button"
                            for="upload-file-scanner">
                         <md-icon md-svg-icon="download"></md-icon>
-                        <input reset-after-change="true" id="upload-file-scanner" class="hide-import-file" type="file"
+                        <input reset-after-change="true" id="upload-file-scanner" class="hide-import-file"
+                               type="file"
                                catch-upload-file-directive="ctrl.onImportFileClick" reset-after-change="true"/>
                     </label>
                 </div>
@@ -40,8 +42,10 @@
                     </md-button>
                 </div>
             </div>
-            <div id="scanner-layout" layout="row">
-                <div scroll-directive id="scanner-settings" layout="column">
+        </div>
+        <div layout="row" class="p20" flex>
+            <div id="scanner-settings" layout="column">
+                <div scroll-directive>
                     <div layout="column" id="scanner-properties">
                         <md-input-container>
                             <label>{{lang.color_format}}</label>
@@ -96,10 +100,10 @@
                             </div>
                         </div>
                     </div>
-                    <div>
-                    </div>
                 </div>
-                <div scroll-directive id="scanner-pages">
+            </div>
+            <div id="scanner-pages" layout="column">
+                <div scroll-directive>
                     <div class="scanner-page-link"
                          ng-repeat="page in ctrl.cc.getDocument().pages track by $index">
                         <div class="page-arrows" flex layout="column">
@@ -126,103 +130,103 @@
                              ng-src="{{page.getThumbnail()}}"/>
                     </div>
                 </div>
-                <div flex id="scanner-workspace" layout="column">
-                    <div layout="row" ng-if="ctrl.currentPage" id="workspace-tools">
-                        <md-input-container>
-                            <label>{{lang.color_format}}</label>
-                            <md-select aria-label="color format" ng-change="ctrl.processPage()"
-                                       ng-model="ctrl.convertMode">
-                                <md-option ng-value="$index" ng-repeat="color in ctrl.listSelColorFormat">{{color}}
-                                </md-option>
-                            </md-select>
-                        </md-input-container>
-                        <md-input-container>
-                            <label>{{lang.brightness}}</label>
-                            <input ng-model="ctrl.brightness" ng-keypress="$event.keyCode == 13 && ctrl.onBrightness()">
-                        </md-input-container>
-                        <md-input-container>
-                            <label>{{lang.contrast}}</label>
-                            <input ng-model="ctrl.contrast" ng-keypress="$event.keyCode == 13 && ctrl.onContrast()">
-                        </md-input-container>
-                        <md-input-container>
-                            <md-button tooltip="{{lang.copy}}" class="md-icon-button" ng-click="ctrl.onCloneImage()">
-                                <md-icon md-svg-icon="content-copy"></md-icon>
-                            </md-button>
-                        </md-input-container>
-                        <md-input-container>
-                            <md-button tooltip="{{lang.rotate_left}}" class="md-icon-button"
-                                       ng-click="ctrl.rotateLeft(ctrl.currentPage)">
-                                <md-icon md-svg-icon="rotate-left"></md-icon>
-                            </md-button>
-                        </md-input-container>
-                        <md-input-container>
-                            <md-button tooltip="{{lang.rotate_right}}" class="md-icon-button"
-                                       ng-click="ctrl.rotateRight(ctrl.currentPage)">
-                                <md-icon md-svg-icon="rotate-right"></md-icon>
-                            </md-button>
-                        </md-input-container>
-                        <md-input-container>
-                            <md-button tooltip="{{lang.auto_rotate}}" class="md-icon-button"
-                                       ng-click="ctrl.processPage('checkautorotation')">
-                                <md-icon md-svg-icon="rotate-3d"></md-icon>
-                            </md-button>
-                        </md-input-container>
-                        <md-input-container>
-                            <md-button tooltip="{{lang.deskew}}" class="md-icon-button"
-                                       ng-click="ctrl.processPage('checkdeskew')">
-                                <md-icon md-svg-icon="bandcamp"></md-icon>
-                            </md-button>
-                        </md-input-container>
-                        <md-input-container>
-                            <md-button tooltip="{{lang.line_removal}}" class="md-icon-button"
-                                       ng-click="ctrl.processPage('checklineremoval')">
-                                <md-icon md-svg-icon="playlist-remove"></md-icon>
-                            </md-button>
-                        </md-input-container>
-                        <md-input-container>
-                            <md-button tooltip="{{lang.despeckle}}" class="md-icon-button"
-                                       ng-click="ctrl.processPage('checkdespeckle')">
-                                <md-icon md-svg-icon="blur"></md-icon>
-                            </md-button>
-                        </md-input-container>
-                        <md-input-container>
-                            <md-button tooltip="{{lang.auto_crop}}" class="md-icon-button"
-                                       ng-click="ctrl.processPage('checkautocrop')">
-                                <md-icon md-svg-icon="crop"></md-icon>
-                            </md-button>
-                        </md-input-container>
-                        <md-input-container>
-                            <md-button tooltip="{{lang.overscan_removal}}" class="md-icon-button"
-                                       ng-click="ctrl.processPage('checkoverscanremoval')">
-                                <md-icon md-svg-icon="border-outside"></md-icon>
-                            </md-button>
-                        </md-input-container>
-                        <md-input-container>
-                            <md-button tooltip="{{lang.blank_pages}}" class="md-icon-button"
-                                       ng-click="ctrl.processPage('checkblank')">
-                                <md-icon md-svg-icon="checkbox-blank-outline"></md-icon>
-                            </md-button>
-                        </md-input-container>
-                    </div>
-                    <div id="scanner-image-viewer" scroll-directive>
-                        <div layout="column" layout-align="center center">
-                            <img ng-if="ctrl.currentPage"
-                                 ng-src="{{ctrl.currentPage.getCurrent(ctrl.width , ctrl.height)}}"/>
-                        </div>
+            </div>
+            <div flex id="scanner-workspace" layout="column">
+                <div layout="row" ng-if="ctrl.currentPage" id="workspace-tools">
+                    <md-input-container>
+                        <label>{{lang.color_format}}</label>
+                        <md-select aria-label="color format" ng-change="ctrl.processPage()"
+                                   ng-model="ctrl.convertMode">
+                            <md-option ng-value="$index" ng-repeat="color in ctrl.listSelColorFormat">{{color}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>{{lang.brightness}}</label>
+                        <input ng-model="ctrl.brightness" ng-keypress="$event.keyCode == 13 && ctrl.onBrightness()">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>{{lang.contrast}}</label>
+                        <input ng-model="ctrl.contrast" ng-keypress="$event.keyCode == 13 && ctrl.onContrast()">
+                    </md-input-container>
+                    <md-input-container>
+                        <md-button tooltip="{{lang.copy}}" class="md-icon-button" ng-click="ctrl.onCloneImage()">
+                            <md-icon md-svg-icon="content-copy"></md-icon>
+                        </md-button>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-button tooltip="{{lang.rotate_left}}" class="md-icon-button"
+                                   ng-click="ctrl.rotateLeft(ctrl.currentPage)">
+                            <md-icon md-svg-icon="rotate-left"></md-icon>
+                        </md-button>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-button tooltip="{{lang.rotate_right}}" class="md-icon-button"
+                                   ng-click="ctrl.rotateRight(ctrl.currentPage)">
+                            <md-icon md-svg-icon="rotate-right"></md-icon>
+                        </md-button>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-button tooltip="{{lang.auto_rotate}}" class="md-icon-button"
+                                   ng-click="ctrl.processPage('checkautorotation')">
+                            <md-icon md-svg-icon="rotate-3d"></md-icon>
+                        </md-button>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-button tooltip="{{lang.deskew}}" class="md-icon-button"
+                                   ng-click="ctrl.processPage('checkdeskew')">
+                            <md-icon md-svg-icon="bandcamp"></md-icon>
+                        </md-button>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-button tooltip="{{lang.line_removal}}" class="md-icon-button"
+                                   ng-click="ctrl.processPage('checklineremoval')">
+                            <md-icon md-svg-icon="playlist-remove"></md-icon>
+                        </md-button>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-button tooltip="{{lang.despeckle}}" class="md-icon-button"
+                                   ng-click="ctrl.processPage('checkdespeckle')">
+                            <md-icon md-svg-icon="blur"></md-icon>
+                        </md-button>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-button tooltip="{{lang.auto_crop}}" class="md-icon-button"
+                                   ng-click="ctrl.processPage('checkautocrop')">
+                            <md-icon md-svg-icon="crop"></md-icon>
+                        </md-button>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-button tooltip="{{lang.overscan_removal}}" class="md-icon-button"
+                                   ng-click="ctrl.processPage('checkoverscanremoval')">
+                            <md-icon md-svg-icon="border-outside"></md-icon>
+                        </md-button>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-button tooltip="{{lang.blank_pages}}" class="md-icon-button"
+                                   ng-click="ctrl.processPage('checkblank')">
+                            <md-icon md-svg-icon="checkbox-blank-outline"></md-icon>
+                        </md-button>
+                    </md-input-container>
+                </div>
+                <div id="scanner-image-viewer" scroll-directive>
+                    <div layout="column" layout-align="center center">
+                        <img ng-if="ctrl.currentPage"
+                             ng-src="{{ctrl.currentPage.getCurrent(ctrl.width , ctrl.height)}}"/>
                     </div>
                 </div>
-            </div><!-- dialog-->
-            <div id="scanner-actions">
-                <div layout="row">
-                    <md-button ng-click="ctrl.sendDocument()" class="md-raised">
-                        {{lang.send}}
-                    </md-button>
-                    <span flex></span>
-                    <md-button ng-click="ctrl.closeScanner()" class="md-raised">
-                        {{lang.close}}
-                    </md-button>
-                </div>
-            </div><!-- scanner-actions -->
+            </div>
         </div>
-    </fieldset>
+        <div id="scanner-actions">
+            <div layout="row">
+                <md-button ng-click="ctrl.sendDocument()" class="md-raised">
+                    {{lang.send}}
+                </md-button>
+                <span flex></span>
+                <md-button ng-click="ctrl.closeScanner()" class="md-raised">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div><!-- scanner-actions -->
+    </div>
 </md-dialog>

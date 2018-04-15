@@ -135,7 +135,7 @@ module.exports = function (app) {
             });
             var selectedItems = angular.copy(self.selectedWorkItems);
             if (itemsAlreadyBroadCasted && itemsAlreadyBroadCasted.length) {
-                if(itemsAlreadyBroadCasted.length === selectedItems.length){
+                if (itemsAlreadyBroadCasted.length === selectedItems.length) {
                     dialog.alertMessage(langService.get('selected_items_are_broadcasted_can_not_forward'));
                     return false;
                 }
@@ -493,21 +493,10 @@ module.exports = function (app) {
          * @param defer
          */
         self.signESignature = function (workItem, $event, defer) {
-            userInboxService
-                .controllerMethod
-                .userInboxSignaturePopup(workItem, false, $event)
+            workItem
+                .approveWorkItem($event, defer)
                 .then(function (result) {
-                    if (result)
-                        self.reloadFolders(self.grid.page)
-                            .then(function () {
-                                toast.success(langService.get('sign_specific_success').change({name: workItem.getTranslatedName()}));
-                                new ResolveDefer(defer);
-                            });
-                })
-                .catch(function (error) {
-                    errorCode.checkIf(error, 'AUTHORIZE_FAILED', function () {
-                        dialog.errorMessage(langService.get('authorize_failed'))
-                    })
+                    self.reloadFolders(self.grid.page);
                 });
         };
 
@@ -634,7 +623,7 @@ module.exports = function (app) {
         /**
          * @description do broadcast for workItem.
          */
-        self.doBroadcast = function (workItem, $event, defer) {
+        self.broadcast = function (workItem, $event, defer) {
             workItem
                 .correspondenceBroadcast()
                 .then(function () {
@@ -740,7 +729,7 @@ module.exports = function (app) {
                 text: 'grid_action_broadcast',
                 shortcut: false,
                 hide: false,
-                callback: self.doBroadcast,
+                callback: self.broadcast,
                 checkShow: function (action, model) {
                     return self.checkToShowAction && (!model.needApprove() || model.hasDocumentClass('incoming')) && !model.isBroadcasted();
                 }

@@ -273,41 +273,45 @@ module.exports = function (app) {
         /**
          * @description get entity Type by index From default Values
          * @param index
+         * @param lookups
          * @returns {*}
          */
-        self.getEntityTypeByIndex = function (index) {
-            return self.getEntityTypeByLookupString(defaultValues[index]);
+        self.getEntityTypeByIndex = function (index, lookups) {
+            return self.getEntityTypeByLookupString(defaultValues[index], lookups);
         };
         /**
          * @description get entity byLookupStringKey
          * @param string
+         * @param lookups
          */
-        self.getEntityTypeByLookupString = function (string) {
+        self.getEntityTypeByLookupString = function (string, lookups) {
             string = string && string.hasOwnProperty('id') ? string.lookupStrKey : string;
             if (!string)
                 return null;
 
-            return _.find(self.entityTypes, function (item) {
+            return _.find(lookups || self.entityTypes, function (item) {
                 return (item.lookupStrKey + "").toLowerCase() === string.toLowerCase();
             });
         };
         /**
          * @description get entity type by lookup Key.
          * @param lookupKey
+         * @param lookups
          */
-        self.getEntityTypeByLookupKey = function (lookupKey) {
-            return _.find(self.entityTypes, function (item) {
+        self.getEntityTypeByLookupKey = function (lookupKey, lookups) {
+            return _.find(lookups || self.entityTypes, function (item) {
                 return Number(item.lookupKey) === Number(lookupKey);
             });
         };
         /**
          * @description used for linkedObject inside interceptor
          * @param type
+         * @param lookups
          * @returns {EntityType}
          */
-        self.getLinkedType = function (type) {
+        self.getLinkedType = function (type, lookups) {
             type = type.hasOwnProperty('id') ? type.lookupKey : type;
-            return type > 2 ? self.getEntityTypeByLookupKey(type) : self.getEntityTypeByIndex(type);
+            return type > 2 ? self.getEntityTypeByLookupKey(type, lookups) : self.getEntityTypeByIndex(type, lookups);
         };
         /**
          * @description set linked type used in linkedObject interceptor.

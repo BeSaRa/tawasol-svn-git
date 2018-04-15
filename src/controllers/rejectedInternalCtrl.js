@@ -14,7 +14,6 @@ module.exports = function (app) {
                                                      employeeService,
                                                      viewTrackingSheetService,
                                                      distributionWorkflowService,
-                                                     broadcastService,
                                                      contextHelpService,
                                                      correspondenceService,
                                                      ResolveDefer) {
@@ -381,23 +380,6 @@ module.exports = function (app) {
             console.log('security : ', rejectedInternal);
         };
 
-        /**
-         * @description broadcast selected organization and workflow group
-         * @param rejectedInternal
-         * @param $event
-         */
-        self.broadcast = function (rejectedInternal, $event) {
-            broadcastService
-                .controllerMethod
-                .broadcastSend(rejectedInternal, $event)
-                .then(function () {
-                    self.reloadRejectedInternals(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadRejectedInternals(self.grid.page);
-                });
-        };
-
 
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             var isEditAllowed = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
@@ -669,18 +651,6 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
-                }
-            },
-            // Broadcast
-            {
-                type: 'action',
-                icon: 'bullhorn',
-                text: 'grid_action_broadcast',
-                shortcut: false,
-                hide: true,
-                callback: self.broadcast,
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && (model.addMethod || model.approvers !== null);
                 }
             }
         ];

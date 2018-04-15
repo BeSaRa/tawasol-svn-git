@@ -103,6 +103,10 @@ module.exports = function (app) {
         self.getEmployee = function () {
             return employee ? employee : _getEmployeeFromCookies();
         };
+
+        self.getTranslatedName = function () {
+            return employee ? employee.getTranslatedName() : null;
+        };
         /**
          * destroy current employee data
          */

@@ -13,9 +13,9 @@
                                 <div layout="row" flex>
                                     <md-input-container flex>
                                         <label>{{lang.organizations}}</label>
-                                        <md-select ng-model-options="{trackBy: '$value.id'}" required
+                                        <md-select ng-model-options="{trackBy: '$value.id'}" ng-required="!ctrl.allSelectedWorkflowGroups.length"
                                                    name="ouBroadcast" ng-model="ctrl.ouBroadcast">
-                                            <md-option ng-if="ctrl.organizationNotExists(organization)" md-truncate ng-value="organization"
+                                            <md-option ng-if="ctrl.organizationNotExists(organization) && organization.status" md-truncate ng-value="organization"
                                                        ng-repeat="organization in ctrl.organizations track by $index">
                                                 {{organization.getTranslatedName()}}
                                             </md-option>
@@ -57,6 +57,9 @@
                                                     {{lang.english_name}}
                                                 </th>
                                                 <th ng-if="!ctrl.selectedOrganizationBroadcast.length" md-column>
+                                                    {{lang.with_sub}}
+                                                </th>
+                                                <th ng-if="!ctrl.selectedOrganizationBroadcast.length" md-column>
                                                     {{lang.action}}
                                                 </th>
                                             </tr>
@@ -70,6 +73,9 @@
                                                 </td>
                                                 <td md-cell>
                                                     {{organization.enName}}
+                                                </td>
+                                                <td md-cell>
+                                                    <md-checkbox ng-model="organization.withSub"></md-checkbox>
                                                 </td>
                                                 <td md-cell>
                                                     <div flex layout="row" layout-align="start center">
@@ -102,7 +108,7 @@
                                 <div layout="row" flex>
                                     <md-input-container flex>
                                         <label>{{lang.workflow_groups}}</label>
-                                        <md-select ng-model-options="{trackBy: '$value.id'}" required
+                                        <md-select ng-model-options="{trackBy: '$value.id'}" ng-required="!ctrl.organizationsBroadcast.length"
                                                    name="workflowGroupBroadcast" ng-model="ctrl.workflowGroupBroadcast">
                                             <md-option md-truncate ng-value="workflowGroup"
                                                        ng-repeat="workflowGroup in ctrl.workflowGroups track by $index">

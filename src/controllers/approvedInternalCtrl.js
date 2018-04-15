@@ -408,7 +408,7 @@ module.exports = function (app) {
             /**
              * @description do broadcast for workItem.
              */
-            self.doBroadcast = function (workItem, $event, defer) {
+            self.broadcast = function (workItem, $event, defer) {
                 workItem
                     .correspondenceBroadcast()
                     .then(function () {
@@ -538,7 +538,7 @@ module.exports = function (app) {
                     text: 'grid_action_broadcast',
                     shortcut: false,
                     hide: false,
-                    callback: self.doBroadcast,
+                    callback: self.broadcast,
                     checkShow: function (action, model) {
                         return self.checkToShowAction(action, model) && !model.isBroadcasted();
                     }

@@ -37,6 +37,7 @@ module.exports = function (app) {
         /**
          * @description Search the outgoing document
          * @param model
+         * @param properties
          * @return {Promise|searchOutgoings}
          */
         self.searchOutgoingDocuments = function (model, properties) {

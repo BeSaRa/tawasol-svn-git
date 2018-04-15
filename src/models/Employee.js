@@ -2,10 +2,11 @@ module.exports = function (app) {
     app.factory('Employee', function (CMSModelInterceptor,
                                       lookupService,
                                       generator,
+                                      $q,
                                       OUApplicationUser) {
         'ngInject';
         return function Employee(model) {
-            var self = this, organizationService, Organization, workflowActionService;
+            var self = this, organizationService, Organization, workflowActionService, applicationUserService;
             self.arFullName = null;
             self.deadlineEmailNotify = null;
             self.deadlineEmailPriority = null;
@@ -72,6 +73,11 @@ module.exports = function (app) {
 
             Employee.prototype.setOrganizationModel = function (model) {
                 Organization = model;
+                return this;
+            };
+
+            Employee.prototype.setApplicationUSerService = function (service) {
+                applicationUserService = service;
                 return this;
             };
 
@@ -268,6 +274,13 @@ module.exports = function (app) {
 
             Employee.prototype.inRegistry = function () {
                 return this.userOrganization && this.userOrganization.hasRegistry;
+            };
+
+            Employee.prototype.updateLanguage = function (language) {
+                var self = this;
+                return this.defaultDisplayLang !== language.lookupKey ? applicationUserService.updateCurrentLanguage(language).then(function () {
+                    self.defaultDisplayLang = language.lookupKey;
+                }) : $q.resolve(true);
             };
 
 

@@ -4,7 +4,6 @@ module.exports = function (app) {
         var modelName = 'Localization';
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
-
             model.setLangService(langService);
             return model;
         });
@@ -12,6 +11,9 @@ module.exports = function (app) {
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             if (!model.isOverrided)
                 delete model.id;
+
+            // model.localizationKey = 'pc_' + (model.localizationKey.toLowerCase());
+            // model.module = 13;
 
             delete model.adminResult;
             delete model.cacheKeys;

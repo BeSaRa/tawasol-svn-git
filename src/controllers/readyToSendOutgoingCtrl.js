@@ -614,7 +614,6 @@ module.exports = function (app) {
                         callback: self.manageDestinations,
                         permissionKey: "MANAGE_DESTINATIONS",
                         class: "action-yellow",
-                        hide: false,
                         checkShow: self.checkToShowAction
                     }
                 ]
@@ -654,7 +653,7 @@ module.exports = function (app) {
                 hide: true,
                 callback: self.broadcast,
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && (model.addMethod || model.approvers !== null);
+                    return self.checkToShowAction(action, model) && (!!model.addMethod || (model.hasOwnProperty('approvers') && model.approvers !== null));
                 }
             }
         ];

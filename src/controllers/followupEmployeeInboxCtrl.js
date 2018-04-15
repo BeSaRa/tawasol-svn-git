@@ -100,7 +100,7 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.progress = defer.promise;
             return followupEmployeeInboxService
-                .loadFollowupEmployeeInboxes(self.selectedEmployeeForFollowUpEmployeeInbox, self.selectedOrganizationForFollowUpEmployeeInbox)
+                .loadFollowupEmployeeInboxes(self.selectedUserForFollowUpEmployeeInbox, self.selectedOrganizationForFollowUpEmployeeInbox)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(5);
@@ -114,14 +114,14 @@ module.exports = function (app) {
         };
 
         self.selectedOrganizationForFollowUpEmployeeInbox = null;
-        self.selectedEmployeeForFollowUpEmployeeInbox = null;
+        self.selectedUserForFollowUpEmployeeInbox = null;
         self.getEmployeeForFollowupEmployeeInbox = function ($event) {
             followupEmployeeInboxService
                 .controllerMethod
-                .openOrganizationAndUserDialog(self.selectedOrganizationForFollowUpEmployeeInbox, self.selectedEmployeeForFollowUpEmployeeInbox, $event)
+                .openOrganizationAndUserDialog(self.selectedOrganizationForFollowUpEmployeeInbox, self.selectedUserForFollowUpEmployeeInbox, $event)
                 .then(function (result) {
                     self.selectedOrganizationForFollowUpEmployeeInbox = result.organization;
-                    self.selectedEmployeeForFollowUpEmployeeInbox = result.applicationUser.domainName;
+                    self.selectedUserForFollowUpEmployeeInbox = result.applicationUser.domainName;
                     self.currentSelectedUser = result.applicationUser;
                     self.reloadFollowupEmployeeInboxes(self.grid.page);
                 });
@@ -451,7 +451,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(followupEmployeeInbox, true), true)
+            followupEmployeeInbox.viewInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(followupEmployeeInbox, true), true)
                 .then(function () {
                     // if (followupEmployeeInbox.getInfo().documentClass === 'incoming' && !followupEmployeeInbox.generalStepElm.isOpen) {
                     //     self.markAsReadUnread(followupEmployeeInbox, true)
@@ -507,7 +507,7 @@ module.exports = function (app) {
          */
         self.transferToAnotherEmployee = function (workItem, $event, defer) {
             correspondenceService
-                .openTransferDialog(workItem, $event)
+                .openTransferDialog(workItem, self.currentSelectedUser ,  $event)
                 .then(function () {
                     self.reloadFollowupEmployeeInboxes(self.grid.page)
                         .then(function () {

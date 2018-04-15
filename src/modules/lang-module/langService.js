@@ -13,13 +13,15 @@ module.exports = function (app) {
                 id: 1,
                 title: 'Arabic',
                 code: 'ar',
-                image: 'qa'
+                image: 'qa',
+                lookupKey: 1
             }),
             new Language({
                 id: 2,
                 title: 'English',
                 code: 'en',
-                image: 'uk'
+                image: 'uk',
+                lookupKey: 2
             })
         ];
         /*
@@ -384,7 +386,7 @@ module.exports = function (app) {
          */
         self.addGlobalLocalizationKey = function (local) {
             return $http
-                .post(urlService.globalLocalizationLookups, local)
+                .post(urlService.globalLocalizationLookups, generator.interceptSendInstance('Localization', local))
                 .then(function (result) {
                     local.id = result.data.rs;
                     return generator.interceptReceivedInstance('Localization', generator.generateInstance(local, Localization));

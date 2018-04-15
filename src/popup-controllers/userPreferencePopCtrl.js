@@ -14,7 +14,6 @@ module.exports = function (app) {
                                                       jobTitles,
                                                       ranks,
                                                       themes,
-                                                      organizations,
                                                       roles,
                                                       permissions,
                                                       ouApplicationUsers,
@@ -46,6 +45,7 @@ module.exports = function (app) {
                                                       ProxyInfo,
                                                       $compile,
                                                       organizationService,
+                                                      moment,
                                                       $sce,
                                                       listGeneratorService) {
         'ngInject';
@@ -66,7 +66,6 @@ module.exports = function (app) {
         self.ranks = ranks;
         self.themes = themes;
         self.roles = roles;
-        self.organizations = organizations;
         self.permissions = permissions;
         self.applicationUsers = applicationUsers;
         self.globalSetting = rootEntity.returnRootEntity().settings;
@@ -90,24 +89,52 @@ module.exports = function (app) {
         // tomorrow
         self.tomorrow = (new Date()).setDate(self.today.getDate() + 1);
 
+
         self.rootEntity = rootEntity;
 
         /**
          * @description List of ou application users
          */
         self.ouApplicationUsers = ouApplicationUsers;
-        self.organizationsForAppUser = _.map(self.ouApplicationUsers, 'ouid');
+        //self.organizationsForAppUser = _.map(self.ouApplicationUsers, 'ouid');
+        self.getOrganizationsForAppUser = function (ouAppUser) {
+            self.organizationsForAppUser = _.map(self.ouApplicationUsers, function (ouAppUser) {
+                return {
+                    ou: ouAppUser.ouid,
+                    status: (ouAppUser ? ouAppUser.status : ouAppUser.status),
+                    id: ouAppUser.id
+                }
+            });
+        };
+
+        self.getOrganizationsForAppUser();
         /**
          * @description Current ou application user
          */
-        self.ouApplicationUser = generator.interceptReceivedInstance('OUApplicationUser', employeeService.getCurrentOUApplicationUser());
-        self.availableProxies = availableProxies;
 
+        self.ouApplicationUser = generator.interceptReceivedInstance('OUApplicationUser', employeeService.getCurrentOUApplicationUser());
+        // security levels for current OUApplicationUser
+        self.securityLevels = self.ouApplicationUser.getSecurityLevels();
+        self.availableProxies = availableProxies;
         self.selectedProxyUser = self.ouApplicationUser.getSelectedProxyId() ? _.find(availableProxies, function (item) {
             return item.id === self.ouApplicationUser.getSelectedProxyId();
         }) : null;
         self.ouApplicationUserCopy = angular.copy(self.ouApplicationUser);
         self.notFound = {};
+
+
+        self.getMaxProxyStartDate = function () {
+            var endDate = new Date(self.ouApplicationUser.proxyEndDate);
+            self.calculatedMaxProxyStartDate = endDate ? new Date(endDate.setDate(endDate.getDate() - 1)) : null;
+        };
+        self.calculatedMaxProxyStartDate = self.ouApplicationUser.proxyStartDate ? self.ouApplicationUser.proxyStartDate : self.getMaxProxyStartDate();
+
+        self.getMinProxyEndDate = function () {
+            var startDate = new Date(self.ouApplicationUser.proxyStartDate);
+            self.calculatedMinProxyEndDate = startDate ? new Date(startDate.setDate(startDate.getDate() + 1)) : null;
+        };
+        self.calculatedMinProxyEndDate = self.ouApplicationUser.proxyEndDate ? self.ouApplicationUser.proxyEndDate : self.getMinProxyEndDate();
+
 
         /**
          * @description to check if the current user has valid proxy or not.
@@ -122,6 +149,15 @@ module.exports = function (app) {
                 ouApplicationUser.emptyOutOfOffice();
             }
         }
+
+        /**
+         * @description to check if the security level included for selected proxyUser.
+         * @param securityLevel
+         * @returns {*|boolean}
+         */
+        self.isSecurityLevelInclude = function (securityLevel) {
+            return self.selectedProxyUser && !!(self.selectedProxyUser.securityLevels & securityLevel.lookupKey);
+        };
 
 
         /**
@@ -974,7 +1010,7 @@ module.exports = function (app) {
         self.signature = new ApplicationUserSignature();
         self.signature.appUserId = self.applicationUser.id;
         self.enableAdd = false;
-        self.imageDimensionsInfo = langService.get('image_dimensions_info').change({height: 50, width: 50});
+        self.imageDimensionsInfo = langService.get('image_dimensions_info').change({height: 283, width: 283});
 
         /**
          * check validation of required fields
@@ -1135,8 +1171,8 @@ module.exports = function (app) {
                         if (element[0].name === 'add-sign') {
                             var width = this.naturalWidth || this.width;
                             var height = this.naturalHeight || this.height;
-                            if (width > 50 && height > 50) {
-                                toast.error(langService.get('image_dimension_greater').change({width: 50, height: 50}));
+                            if (width > 283 && height > 283) {
+                                toast.error(langService.get('image_dimensions_info').change({width: 283, height: 283}));
                                 self.enableAdd = false;
                                 return false;
                             }

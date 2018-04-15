@@ -18,7 +18,8 @@ module.exports = function (app) {
                 allowScanner: '=?',
                 allowUpload: '=?',
                 displayGrid: '=?',
-                disableEverything: '=?'
+                disableEverything: '=?',
+                linkedExportedAttachments: '=?'
             }
         }
     });

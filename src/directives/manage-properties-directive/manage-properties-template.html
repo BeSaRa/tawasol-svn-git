@@ -86,9 +86,10 @@
                            ng-disabled="!!ctrl.disableProperties"
                            ng-model="ctrl.document.refDocNumber">
                     <!--custom-validate-directive="number"-->
-                    <!--<div ng-messages="outgoing_properties.refDocNumber.$error">
-                        <div ng-message="number">{{lang.numberonly}}</div>
-                    </div>-->
+                    <div ng-messages="outgoing_properties.refDocNumber.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                        <!--<div ng-message="number">{{lang.numberonly}}</div>-->
+                    </div>
                 </md-input-container>
 
                 <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "internal"'>

@@ -23,9 +23,9 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            model.mainSiteId = model.mainSiteId.hasOwnProperty('id') ? model.mainSiteId.id : model.mainSiteId;
-            model.subSiteId = model.subSiteId.hasOwnProperty('id') ? model.subSiteId.id : model.subSiteId;
-            model.siteType = model.siteType.hasOwnProperty('id') ? model.siteType.lookupKey : model.siteType;
+            model.mainSiteId = model.mainSiteId && model.mainSiteId.hasOwnProperty('id') ? model.mainSiteId.id : model.mainSiteId;
+            model.subSiteId = model.subSiteId && model.subSiteId.hasOwnProperty('id') ? model.subSiteId.id : model.subSiteId;
+            model.siteType = model.siteType && model.siteType.hasOwnProperty('id') ? model.siteType.lookupKey : model.siteType;
             model.followupStatus = model.followupStatus.hasOwnProperty('id') ? model.followupStatus.lookupKey : model.followupStatus;
             model.followupDate = _getDate(model.followupDate);
             delete model.mainEnSiteText;

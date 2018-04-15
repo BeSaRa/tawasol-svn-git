@@ -26,7 +26,7 @@
                                    md-progress="ctrl.progress">
                                 <thead md-head md-order="ctrl.grid.order">
                                 <tr md-row>
-                                    <th colspan="{{ctrl.selectedReviewOutgoings.length > 1 ? 6 : 7}}"
+                                    <th colspan="{{ctrl.selectedReviewOutgoings.length > 1 ? 7 : 8}}"
                                         ng-if="ctrl.selectedReviewOutgoings.length" md-column>
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedReviewOutgoings.length}} {{lang.items_selected}} </span>
@@ -55,6 +55,9 @@
                                             </md-button>
                                         </div>
                                     </th>
+                                    <!--<th ng-if="!ctrl.selectedReviewOutgoings.length" md-column md-order-by="">
+                                        &lt;!&ndash; Paper/Electronic Indicators &ndash;&gt;
+                                    </th>-->
                                     <th ng-if="!ctrl.selectedReviewOutgoings.length" md-column
                                         md-order-by="docSubject">
                                         <span>{{lang.subject}}</span>
@@ -85,6 +88,12 @@
                                 <tr md-row md-select="reviewOutgoing" grid-right-click-directive model="reviewOutgoing"
                                     selected-length="{{ctrl.selectedReviewOutgoings.length ? ctrl.selectedReviewOutgoings.length : 0}}"
                                     ng-repeat="reviewOutgoing in ctrl.reviewOutgoings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    <!--<td md-cell class="indicator-td">
+                                        &lt;!&ndash; Electronic/Paper Document &ndash;&gt;
+                                        <grid-indicator-directive record="reviewOutgoing"
+                                                                  indicator-type="paperElectronic"
+                                                                  record-type="outgoing"></grid-indicator-directive>
+                                    </td>-->
                                     <td md-cell class="td-data">
                                         <a href="" ng-if="reviewOutgoing.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(reviewOutgoing, $event)">{{reviewOutgoing.docSubject}}</a>

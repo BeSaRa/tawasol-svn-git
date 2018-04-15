@@ -173,13 +173,23 @@ module.exports = function (app) {
                 self.propertyConfigurations[documentClass].push(property);
             });
         };
+
+        /**
+         * @description set propertyConfigurations for documentClass
+         * @param propertyConfigurations
+         * @param documentClass
+         */
+        self.replacePropertyConfigurationsByDocumentClass = function (propertyConfigurations, documentClass) {
+            self.propertyConfigurations[documentClass.toLowerCase()] = propertyConfigurations;
+        };
+
         /**
          * @description get propertyConfigurations for specific documentClass or all
          * @param documentClass
          * @return {*}
          */
         self.getPropertyConfigurations = function (documentClass) {
-            documentClass = documentClass.toLowerCase();
+            documentClass = documentClass ? documentClass.toLowerCase() : '';
             if (documentClass && self.propertyConfigurations.hasOwnProperty(documentClass))
                 return self.propertyConfigurations[documentClass];
             return self.propertyConfigurations;

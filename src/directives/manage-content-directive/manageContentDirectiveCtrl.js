@@ -1,8 +1,10 @@
 module.exports = function (app) {
     app.controller('manageContentDirectiveCtrl', function (officeWebAppService,
                                                            $scope,
+                                                           _,
                                                            $q,
                                                            LangWatcher,
+                                                           lookupService,
                                                            generator,
                                                            outgoingService,
                                                            langService,
@@ -25,15 +27,35 @@ module.exports = function (app) {
 
         self.document = null;
         self.editContent = false;
+        self.propertyConfigurations = [];
+
+        self.required = {};
 
         LangWatcher($scope);
+
+        function _isMandatory(propertyName) {
+            return self.required[propertyName.toLowerCase()];
+        }
 
 
         self.checkRequired = function ($event) {
             var method = 'resolve';
-            if (!self.document.docSubject || !self.document.mainClassification || !self.document.subClassification) {
-                dialog.errorMessage(langService.get('fill_required_data_to_prepare'), null, null, $event);
-                method = 'reject';
+            var properties = self.document.getMainProperties();
+            self.propertyConfigurations = lookupService.getPropertyConfigurations(self.document.docClassName);
+
+            _.map(self.propertyConfigurations, function (item) {
+                self.required[item.symbolicName.toLowerCase()] = item.isMandatory;
+            });
+
+
+            _.map(properties, function (item) {
+                if (_isMandatory(item) && !self.document[item]) {
+                    method = 'reject';
+                }
+            });
+
+            if (method === 'reject') {
+                dialog.errorMessage(langService.get('some_properties_required'), null, null, $event);
             }
             return $q[method](true);
         };

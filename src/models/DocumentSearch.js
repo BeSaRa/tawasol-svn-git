@@ -3,7 +3,8 @@ module.exports = function (app) {
                                             Outgoing,
                                             Incoming,
                                             Internal,
-                                            General) {
+                                            General,
+                                            langService) {
         'ngInject';
         return function DocumentSearch(model) {
             var self = this;
@@ -34,6 +35,10 @@ module.exports = function (app) {
 
             //delete self.props.docStatus;
             delete model.contentSize;
+
+            self.getTranslatedYesNo = function (fieldName) {
+                return self[fieldName] ? langService.get('yes') : langService.get('no');
+            };
 
             if (model)
                 angular.extend(this, model);

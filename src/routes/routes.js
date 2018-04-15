@@ -644,7 +644,7 @@ module.exports = function (app) {
                         'ngInject';
                         var ouId = employeeService.getEmployee().organization.ouid;
                         return propertyConfigurationService
-                            .loadPropertyConfigurationsByDocumentClass('outgoing', ouId);
+                            .loadPropertyConfigurationsByDocumentClassAndOU('outgoing', ouId);
                     },
                     correspondenceSiteTypes: function (correspondenceSiteTypeService) {
                         'ngInject';
@@ -673,7 +673,11 @@ module.exports = function (app) {
                     documentStatuses: function (documentStatusService) {
                         'ngInject';
                         return documentStatusService.getDocumentStatuses();
-                    }
+                    }/*,
+                    centralArchives: function ($q, organizations, employeeService, organizationService) {
+                        'ngInject';
+                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+                    }*/
                 }
             })
             //Incoming Search
@@ -700,7 +704,7 @@ module.exports = function (app) {
                         'ngInject';
                         var ouId = employeeService.getEmployee().organization.ouid;
                         return propertyConfigurationService
-                            .loadPropertyConfigurationsByDocumentClass('incoming', ouId);
+                            .loadPropertyConfigurationsByDocumentClassAndOU('incoming', ouId);
                     },
                     documentFiles: function (documentFileService) {
                         'ngInject';
@@ -719,7 +723,11 @@ module.exports = function (app) {
                     documentStatuses: function (documentStatusService) {
                         'ngInject';
                         return documentStatusService.getDocumentStatuses();
-                    }
+                    }/*,
+                    centralArchives: function ($q, organizations, employeeService, organizationService) {
+                        'ngInject';
+                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+                    }*/
                 }
             })
             // Internal Search
@@ -746,7 +754,7 @@ module.exports = function (app) {
                         'ngInject';
                         var ouId = employeeService.getEmployee().organization.ouid;
                         return propertyConfigurationService
-                            .loadPropertyConfigurationsByDocumentClass('internal', ouId);
+                            .loadPropertyConfigurationsByDocumentClassAndOU('internal', ouId);
                     },
                     documentFiles: function (documentFileService) {
                         'ngInject';
@@ -765,7 +773,11 @@ module.exports = function (app) {
                     documentStatuses: function (documentStatusService) {
                         'ngInject';
                         return documentStatusService.getDocumentStatuses();
-                    }
+                    }/*,
+                    centralArchives: function ($q, organizations, employeeService, organizationService) {
+                        'ngInject';
+                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+                    }*/
                 }
             })
             //General Search
@@ -792,7 +804,7 @@ module.exports = function (app) {
                         'ngInject';
                         var ouId = employeeService.getEmployee().organization.ouid;
                         return propertyConfigurationService
-                            .loadPropertyConfigurationsByDocumentClass('general', ouId);
+                            .loadPropertyConfigurationsByDocumentClassAndOU('general', ouId);
                     },
                     documentFiles: function (documentFileService) {
                         'ngInject';
@@ -811,7 +823,11 @@ module.exports = function (app) {
                     documentStatuses: function (documentStatusService) {
                         'ngInject';
                         return documentStatusService.getDocumentStatuses();
-                    }
+                    }/*,
+                    centralArchives: function ($q, organizations, employeeService, organizationService) {
+                        'ngInject';
+                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+                    }*/
                 }
             })
             // outgoing
@@ -824,6 +840,10 @@ module.exports = function (app) {
                         'ngInject';
                         return correspondenceService
                             .loadCorrespondenceLookups('outgoing')
+                    },
+                    attachmentTypes: function (attachmentTypeService, employeeService) {
+                        'ngInject';
+                        return !employeeService.isCloudUser() ? attachmentTypeService.getAttachmentTypes() : [];
                     }
                 }
             })
@@ -1049,6 +1069,10 @@ module.exports = function (app) {
                         'ngInject';
                         return correspondenceService
                             .loadCorrespondenceLookups('incoming')
+                    },
+                    attachmentTypes: function (attachmentTypeService, employeeService) {
+                        'ngInject';
+                        return !employeeService.isCloudUser() ? attachmentTypeService.getAttachmentTypes() : [];
                     }
                 }
             })
@@ -1121,6 +1145,10 @@ module.exports = function (app) {
                         'ngInject';
                         return correspondenceService
                             .loadCorrespondenceLookups('internal')
+                    },
+                    attachmentTypes: function (attachmentTypeService, employeeService) {
+                        'ngInject';
+                        return !employeeService.isCloudUser() ? attachmentTypeService.getAttachmentTypes() : [];
                     }
                 }
             })
@@ -1317,7 +1345,8 @@ module.exports = function (app) {
                     'ngInject';
                     var self = this;
                     var reportName = $stateParams.reportName;
-                    self.url = $sce.trustAsResourceUrl(('http://100.100.3.228/Reports/report/Reports/{{reportName}}?rs:embed=true&userid={{currentUserID}}'.replace('{{reportName}}', reportName)).replace('{{currentUserID}}', employeeService.getEmployee().id));
+                    // self.url = $sce.trustAsResourceUrl(('http://100.100.3.228/Reports/report/Reports/Follow-up-04?rs:embed=true'));
+                    self.url = $sce.trustAsResourceUrl(('http://100.100.11.81:8030/ReportServer_MSSQLSERVER1?rs:embed=true'));
                 },
                 controllerAs: 'ctrl'
             })

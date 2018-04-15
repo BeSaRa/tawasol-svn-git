@@ -2,7 +2,7 @@
     <div layout="column" class="content">
         <div layout="row" layout-align="start center" class="page-header nmb padding-header small">
             <span>{{lang.menu_item_search_module_general}}</span>
-            <md-button ng-if="ctrl.selectedTab===1" ng-click="ctrl.reloadSearchedGeneralDocument()"
+            <md-button ng-if="ctrl.selectedTab===1" ng-click="ctrl.reloadSearchedGeneralDocuments()"
                        class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
@@ -86,7 +86,7 @@
                                     </div>
                                 </md-input-container>
                                 <!-- Main Organization Units -->
-                                <md-input-container flex>
+                                <!--<md-input-container flex>
                                     <label for="ou">{{lang.search_module_main_organization_units}}</label>
                                     <md-select name="ou" id="ou" ng-model="ctrl.searchGeneral.ou"
                                                ng-required="ctrl.dynamicRequired('ou','search_module_main_organization_units')">
@@ -96,6 +96,21 @@
                                         </md-option>
                                     </md-select>
                                     <div ng-messages="searchGeneralForm.ou.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>-->
+                                <!-- Priority Levels -->
+                                <md-input-container flex>
+                                    <label for="priorityLevel">{{lang.priority_level}}</label>
+                                    <md-select name="priorityLevel" id="priorityLevel"
+                                               ng-required="ctrl.dynamicRequired('priorityLevel','priority_level')"
+                                               ng-model="ctrl.searchGeneral.priorityLevel">
+                                        <md-option ng-value="priorityLevel.lookupKey"
+                                                   ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
+                                            {{priorityLevel.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="searchGeneralForm.priorityLevel.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
@@ -154,6 +169,41 @@
                                     </div>
                                 </fieldset>
                             </div>
+                            <!--<div layout="row" flex class="p020">
+                                &lt;!&ndash; Search within RegOU &ndash;&gt;
+                                <md-switch flex ng-model="ctrl.isSearchByRegOU"
+                                           ng-change="ctrl.changeRegOuToggle()"
+                                           ng-disabled="ctrl.checkRegOuToggleDisabled()"
+                                           aria-label="{{lang.search_module_search_by_reg_ou}}">
+                                    <label>{{lang.search_module_search_by_reg_ou}} :
+                                        {{ctrl.getTranslatedYesNo('isSearchByRegOU')}}</label>
+                                </md-switch>
+                                &lt;!&ndash; Search within OU &ndash;&gt;
+                                <md-switch flex ng-model="ctrl.searchGeneral.ou"
+                                           ng-change="ctrl.changeOuToggle()"
+                                           ng-disabled="ctrl.checkOuToggleDisabled()"
+                                           ng-true-value="{{ctrl.employeeService.getEmployee().getOUID()}}" ng-false-value="null"
+                                           aria-label="{{lang.search_module_search_by_ou}}">
+                                    <label>{{lang.search_module_search_by_ou}} :
+                                        {{ctrl.searchGeneral.getTranslatedYesNo('ou')}}</label>
+                                </md-switch>
+                                &lt;!&ndash; Reg OU List &ndash;&gt;
+                                <md-input-container flex>
+                                    <label for="registryOU" ng-if="ctrl.isSearchByRegOU && ctrl.employeeService.isCentralArchive()">{{lang.organization_unit}}</label>
+                                    <md-select name="registryOU" id="registryOU"
+                                               ng-disabled="ctrl.searchGeneral.ou"
+                                               required="true" ng-if="ctrl.isSearchByRegOU && ctrl.employeeService.isCentralArchive()"
+                                               ng-model="ctrl.searchGeneral.registryOU">
+                                        <md-option ng-value="organization.id"
+                                                   ng-repeat="organization in ctrl.registryOrganizations track by $index">
+                                            {{organization.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="searchGeneralForm.registryOU.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
+                            </div>-->
                             <!--<div layout="row" flex class="p020">
                                 &lt;!&ndash; Main Correspondence Sites &ndash;&gt;
                                 <md-input-container flex>
@@ -265,7 +315,7 @@
                                                 <md-select name="fileId" id="fileId"
                                                            ng-required="ctrl.dynamicRequired('fileId','document_file')"
                                                            ng-model="ctrl.searchGeneral.fileId">
-                                                    <md-option ng-value="documentFile.lookupKey"
+                                                    <md-option ng-value="documentFile.id"
                                                                ng-repeat="documentFile in ctrl.documentFiles track by $index">
                                                         {{documentFile.getTranslatedName()}}
                                                     </md-option>
@@ -311,21 +361,6 @@
                                                        ng-required="{{ctrl.dynamicRequired('comments', 'comments')}}"
                                                        ng-model="ctrl.searchGeneral.docNotes">
                                                 <div ng-messages="searchGeneralForm.docNotes.$error">
-                                                    <div ng-message="required">{{lang.field_required}}</div>
-                                                </div>
-                                            </md-input-container>
-                                            <!-- Priority Levels -->
-                                            <md-input-container flex>
-                                                <label for="priorityLevel">{{lang.priority_level}}</label>
-                                                <md-select name="priorityLevel" id="priorityLevel"
-                                                           ng-required="ctrl.dynamicRequired('priorityLevel','priority_level')"
-                                                           ng-model="ctrl.searchGeneral.priorityLevel">
-                                                    <md-option ng-value="priorityLevel.lookupKey"
-                                                               ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
-                                                        {{priorityLevel.getTranslatedName()}}
-                                                    </md-option>
-                                                </md-select>
-                                                <div ng-messages="searchGeneralForm.priorityLevel.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                 </div>
                                             </md-input-container>
@@ -562,6 +597,13 @@
                                                    ng-click="ctrl.archiveGeneralBulk($event)">
                                             <md-icon md-svg-icon="stop"></md-icon>
                                         </md-button>-->
+                                        <!-- Add to Favorite -->
+                                        <md-button class="md-icon-button" class="action-green"
+                                                   tooltip="{{lang.grid_action_add_to_favorite}}"
+                                                   ng-if="ctrl.selectedSearchedGeneralDocuments.length"
+                                                   ng-click="ctrl.addToFavoriteBulk($event)">
+                                            <md-icon md-svg-icon="star"></md-icon>
+                                        </md-button>
                                     </div>
                                 </th>
                                 <th md-column>
@@ -603,38 +645,26 @@
                                 selected-length="{{ctrl.selectedSearchedGeneralDocuments.length ? ctrl.selectedSearchedGeneralDocuments.length : 0}}"
                                 ng-repeat="searchedGeneralDocument in ctrl.searchedGeneralDocuments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                                 <td md-cell class="indicator-td">
-                                    <span flex
-                                          ng-class="{'indicator-content': searchedGeneralDocument.securityLevelIndicator}">
-                                        <md-icon ng-if="searchedGeneralDocument.securityLevelIndicator"
-                                                 class="{{searchedGeneralDocument.securityLevelIndicator.class}}"
-                                                 md-svg-icon="{{searchedGeneralDocument.securityLevelIndicator.icon}}"
-                                                 tooltip="{{lang[searchedGeneralDocument.securityLevelIndicator.tooltip].change({name: searchedGeneralDocument.securityLevel.getTranslatedName()})}}"
-                                        ></md-icon>
-                                    </span>
-                                    <span flex
-                                          ng-class="{'indicator-content': searchedGeneralDocument.priorityLevelIndicator}">
-                                        <md-icon ng-if="searchedGeneralDocument.priorityLevelIndicator"
-                                                 class="{{searchedGeneralDocument.priorityLevelIndicator.class}}"
-                                                 md-svg-icon="{{searchedGeneralDocument.priorityLevelIndicator.icon}}"
-                                                 tooltip="{{lang[searchedGeneralDocument.priorityLevelIndicator.tooltip].change({name: searchedGeneralDocument.priorityLevel.getTranslatedName()})}}"
-                                        ></md-icon>
-                                    </span>
-                                    <span flex
-                                          ng-class="{'indicator-content': searchedGeneralDocument.attachmentsIndicator}">
-                                        <md-icon ng-if="searchedGeneralDocument.attachmentsIndicator"
-                                                 class="{{searchedGeneralDocument.attachmentsIndicator.class}}"
-                                                 md-svg-icon="{{searchedGeneralDocument.attachmentsIndicator.icon}}"
-                                                 tooltip="{{lang[searchedGeneralDocument.attachmentsIndicator.tooltip]}}"
-                                        ></md-icon>
-                                    </span>
-                                    <span flex
-                                          ng-class="{'indicator-content': searchedGeneralDocument.linkedDocsIndicator}">
-                                        <md-icon ng-if="searchedGeneralDocument.linkedDocsIndicator"
-                                                 class="{{searchedGeneralDocument.linkedDocsIndicator.class}}"
-                                                 md-svg-icon="{{searchedGeneralDocument.linkedDocsIndicator.icon}}"
-                                                 tooltip="{{lang[searchedGeneralDocument.linkedDocsIndicator.tooltip]}}"
-                                        ></md-icon>
-                                    </span>
+                                    <!-- Security Level -->
+                                    <grid-indicator-directive record="searchedGeneralDocument"
+                                                              indicator-type="securityLevel"
+                                                              record-type="correspondence"></grid-indicator-directive>
+                                    <!-- Priority Level -->
+                                    <grid-indicator-directive record="searchedGeneralDocument"
+                                                              indicator-type="priorityLevel"
+                                                              record-type="correspondence"></grid-indicator-directive>
+                                    <!-- Has Attachments -->
+                                    <grid-indicator-directive record="searchedGeneralDocument"
+                                                              indicator-type="hasAttachment"
+                                                              record-type="correspondence"></grid-indicator-directive>
+                                    <!-- Linked Documents -->
+                                    <grid-indicator-directive record="searchedGeneralDocument"
+                                                              indicator-type="hasLinkedDocuments"
+                                                              record-type="correspondence"></grid-indicator-directive>
+                                    <!-- Follow up Status -->
+                                    <!--<grid-indicator-directive record="searchedGeneralDocument"
+                                                              indicator-type="followupStatus"
+                                                              record-type="correspondence"></grid-indicator-directive>-->
                                     <span flex ng-class="{'indicator-content': searchedGeneralDocument.followUpStatusIndicator}">
                                         <md-icon ng-if="searchedGeneralDocument.followUpStatusIndicator"
                                                  class="{{searchedGeneralDocument.followUpStatusIndicator.class}}"
@@ -642,21 +672,6 @@
                                                  tooltip="{{lang[searchedGeneralDocument.followUpStatusIndicator.tooltip].change({name: searchedGeneralDocument.followupStatusLookup.getTranslatedName()})}}"
                                         ></md-icon>
                                     </span>
-                                    <!--<span flex ng-class="{'indicator-content': searchedGeneralDocument.dueDateStatusIndicator}">
-                                        <md-icon ng-if="searchedGeneralDocument.dueDateStatusIndicator"
-                                                 class="{{searchedGeneralDocument.dueDateStatusIndicator.class}}"
-                                                 md-svg-icon="{{searchedGeneralDocument.dueDateStatusIndicator.icon}}"
-                                                 tooltip="{{lang[searchedGeneralDocument.dueDateStatusIndicator.tooltip]}}"
-                                        ></md-icon>
-                                    </span>-->
-                                    <!--<span flex class="indicator-badge"
-                                          ng-class="{'indicator-content': searchedGeneralDocument.tagsIndicator}">
-                                        <span ng-if="searchedGeneralDocument.tagsIndicator"
-                                              tooltip="{{lang[searchedGeneralDocument.tagsIndicator.tooltip]}}"
-                                              class="{{searchedGeneralDocument.tagsIndicator.class}}">
-                                            {{searchedGeneralDocument.tagsIndicator.text}}
-                                        </span>
-                                    </span>-->
                                 </td>
                                 <td md-cell class="td-data">
                                     <a href="" ng-if="searchedGeneralDocument.hasContent()" class="view-doc"

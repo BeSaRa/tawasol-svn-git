@@ -160,17 +160,26 @@ module.exports = function (app) {
         };
 
         self.deleteDocumentAttachment = function (attachment, $event) {
+            var linkedExportedAttachments = [];
             dialog
                 .confirmMessage(langService.get('confirm_delete').change({name: attachment.documentTitle}), null, null, $event)
                 .then(function () {
                     var attachments = angular.copy(self.attachments);
+                    linkedExportedAttachments = angular.copy(self.linkedExportedAttachments);
                     attachments.splice(self.attachments.indexOf(attachment), 1);
+                    if(attachment.refVSID) {
+                        var index = _.findIndex(linkedExportedAttachments, function(linkedExportedAttachment){
+                            return linkedExportedAttachment.vsId === attachment.vsId;
+                        });
+                        linkedExportedAttachments.splice(index, 1);
+                    }
                     attachmentService
                         .deleteAttachment(self.vsId, self.documentClass, attachment).then(function () {
                         return attachments;
                     }).then(function (attachments) {
                         toast.success(langService.get('delete_success'));
                         self.attachments = attachments;
+                        self.linkedExportedAttachments = linkedExportedAttachments;
                         self.model = angular.copy(self.attachments);
                     });
                 });
@@ -185,12 +194,16 @@ module.exports = function (app) {
                     var attachments = _.filter(self.attachments, function (attachment) {
                         return ids.indexOf(attachment.vsId) === -1;
                     });
+                    var linkedExportedAttachments = _.filter(self.linkedExportedAttachments, function (attachment) {
+                        return ids.indexOf(attachment.vsId) === -1;
+                    });
 
                     attachmentService
                         .deleteBulkAttachments(self.vsId, self.documentClass, self.selectedAttachments)
                         .then(function () {
                             toast.success(langService.get('delete_success'));
                             self.attachments = attachments;
+                            self.linkedExportedAttachments = linkedExportedAttachments;
                             self.model = angular.copy(self.attachments);
                         });
                 });

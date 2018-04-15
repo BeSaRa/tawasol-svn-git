@@ -56,8 +56,8 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            //correspondenceService.viewCorrespondence(correspondence, [], true, true);
-            correspondenceService.viewLinkedDocument(correspondence);
+            correspondenceService.viewCorrespondence(correspondence, [], true, true);
+            //correspondenceService.viewLinkedDocument(correspondence);
         };
         /**
          * @description open search dialog

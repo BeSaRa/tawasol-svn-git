@@ -29,7 +29,7 @@
                                        ng-disabled="!ctrl.selectedOrganization"
                                        aria-label="{{lang.app_users}}"
                                        ng-model="ctrl.selectedApplicationUser">
-                                <md-option ng-value="user.applicationUser" ng-repeat="user in ctrl.applicationUsers track by $index">
+                                <md-option ng-value="user.applicationUser" ng-repeat="user in ctrl.ouApplicationUsers track by $index">
                                     {{user.getTranslatedApplicationUserName()}}
                                 </md-option>
                             </md-select>

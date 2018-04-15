@@ -28,6 +28,7 @@
     </div>
     <div flex layout="column">
         <md-card ng-if="ctrl.subSearchResult.length" md-whiteframe="3" layout="column" class="card-overlay">
+            <!-- Close search results -->
             <md-toolbar class="md-table-toolbar md-default" ng-class="{'selected':ctrl.subSearchSelected.length}">
                 <div class="md-toolbar-tools">
                     <div layout="row" flex>
@@ -47,6 +48,7 @@
                     </div>
                 </div>
             </md-toolbar>
+            <!-- Search results -->
             <md-table-container flex scroll-directive>
                 <table md-table md-progress="ctrl.progress">
                     <thead md-head md-order="ctrl.grid.subSearchResult.order">
@@ -132,8 +134,50 @@
         </md-card>
     </div>
     <br/>
+    <!-- Added incoming site after search / from database -->
     <div flex layout="column">
         <md-card ng-if="ctrl.site && ctrl.site.subSiteId" md-whiteframe="3" layout="column" class="card-overlay">
+            <!-- Incoming site toolbar -->
+            <md-toolbar class="md-table-toolbar md-default selected" ng-if="!ctrl.disableCorrespondence">
+                <div class="md-toolbar-tools">
+                    <div layout="row" flex layout-align="start center">
+                        <span flex></span>
+                        <div layout="row" ng-if="!ctrl.disableCorrespondence">
+                            <div>
+                                <md-menu-bar class="follow-up-menu-bar">
+                                    <md-menu>
+                                        <md-button ng-click="$mdMenu.open()" >
+                                            {{ctrl.site.followupStatus.getTranslatedName() || lang.sites_follow_up_status}}
+                                        </md-button>
+                                        <md-menu-content width="3">
+                                            <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
+                                                <md-button ng-click="ctrl.onSiteFollowupStatusChange(status)">
+                                                    {{status.getTranslatedName()}}
+                                                </md-button>
+                                            </md-menu-item>
+                                        </md-menu-content>
+                                    </md-menu>
+                                </md-menu-bar>
+                            </div>
+                            <div>
+                                <md-datepicker ng-if="!ctrl.disableCorrespondence && ctrl.needReply(ctrl.site.followupStatus)"
+                                               name="sitesInfoToFollowupStatus"
+                                               ng-model="ctrl.site.followupDate"
+                                               md-placeholder="{{lang.sites_follow_up_status_date}}"
+                                               md-min-date="ctrl.minDate"
+                                               md-open-on-focus></md-datepicker>
+                            </div>
+                            <!--<div layout="row" layout-align="start center">
+                                <md-button class="md-icon-button"  ng-if="!ctrl.disableCorrespondence" ng-click="ctrl.deleteSite()">
+                                    <md-icon md-svg-icon="delete"></md-icon>
+                                </md-button>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </md-toolbar>
+
+            <!-- Incoming site table -->
             <md-table-container flex scroll-directive>
                 <table md-table md-progress="ctrl.progress">
                     <thead md-head md-order="ctrl.grid.sitesInfoTo.order">
@@ -150,7 +194,7 @@
                         <th md-column>
                             <span>{{lang.sites_follow_up_status}}</span>
                         </th>
-                        <th md-column>
+                        <th md-column ng-if="!ctrl.disableCorrespondence">
                             <span>{{lang.sites_follow_up_date}}</span>
                         </th>
                     </tr>

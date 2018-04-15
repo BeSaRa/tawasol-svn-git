@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('OUApplicationUser', function (CMSModelInterceptor, ProxyUser) {
+    app.factory('OUApplicationUser', function (CMSModelInterceptor, generator, lookupService, ProxyUser) {
         'ngInject';
         return function OUApplicationUser(model) {
             var self = this, langService;
@@ -158,6 +158,20 @@ module.exports = function (app) {
                 this.proxyOUId = null;
                 this.proxyAuthorityLevels = null;
                 return this;
+            };
+            OUApplicationUser.prototype.getSecurityAsLookup = function () {
+                return angular.isArray(this.securityLevels) ? this.securityLevels : generator.getSelectedCollectionFromResult(lookupService.returnLookups(lookupService.securityLevel), this.securityLevels, 'lookupKey');
+            };
+            OUApplicationUser.prototype.getSecurityAsNumber = function () {
+                return angular.isArray(this.securityLevels) ? generator.getResultFromSelectedCollection(this.securityLevels, 'lookupKey') : this.securityLevels;
+            };
+            /**
+             * @description to get security levels as lookup or Number
+             * @param justResult
+             * @returns {null}
+             */
+            OUApplicationUser.prototype.getSecurityLevels = function (justResult) {
+                return justResult ? (angular.isArray(this.securityLevels) ? this.getSecurityAsNumber() : this.securityLevels) : this.getSecurityAsLookup();
             };
 
             // don't remove CMSModelInterceptor from last line

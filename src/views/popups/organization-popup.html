@@ -1083,7 +1083,7 @@
                                         <md-input-container flex>
                                             <label for="documentClass">{{lang.label_document_class}}</label>
                                             <md-select name="documentClass" id="documentClass"
-                                                       ng-change="ctrl.getPropertyConfigurationsForOU()"
+                                                       ng-change="ctrl.filterPropertyConfigurationsForOUByDocumentClass()"
                                                        ng-model="ctrl.selectedDocumentClass">
                                                 <md-option ng-value="dc"
                                                            ng-repeat="dc in ctrl.documentClasses track by $index">
@@ -1107,7 +1107,7 @@
                                         </md-button>
                                         <span flex></span>
                                         <search-filter-directive
-                                                model="ctrl.searchModelPropertyConfigurations"></search-filter-directive>
+                                                model="ctrl.searchModelPropertyConfigurations.symbolicName"></search-filter-directive>
                                     </div>
                                 </div>
                                 <div layout="column" flex>

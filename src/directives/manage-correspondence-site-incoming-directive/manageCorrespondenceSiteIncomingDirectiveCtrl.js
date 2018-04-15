@@ -429,6 +429,18 @@ module.exports = function (app) {
             }
 
         };
+
+        self.onSiteFollowupStatusChange = function (status) {
+            if (!self.needReply(status)) {
+                self.site.followupDate = null;
+            }
+            else {
+                if (self.site.followupStatus.lookupStrKey !== 'NEED_REPLY')
+                    self.site.followupStatus = null;
+            }
+            self.site.followupStatus = status;
+        };
+
         /**
          * @description delete bulk sites
          * @param type

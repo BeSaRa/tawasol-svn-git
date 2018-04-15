@@ -348,14 +348,14 @@ module.exports = function (app) {
             console.log('security : ', readyToSendIncoming);
         };
 
-       /* /!**
+        /**
          * @description Destinations
          * @param readyToSendIncoming
          * @param $event
-         *!/
+         */
         self.manageDestinations = function (readyToSendIncoming, $event) {
             managerService.manageDocumentCorrespondence(readyToSendIncoming.vsId, readyToSendIncoming.docClassName, readyToSendIncoming.docSubject, $event)
-        };*/
+        };
 
         /**
          * @description broadcast selected organization and workflow group
@@ -396,7 +396,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(readyToSendIncoming, self.gridActions, checkIfEditPropertiesAllowed(readyToSendIncoming, true), true);
+            correspondenceService.viewCorrespondence(readyToSendIncoming, self.gridActions, checkIfEditPropertiesAllowed(readyToSendIncoming, true), false);
             return;
         };
 
@@ -598,7 +598,7 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
-                    /*// Destinations
+                    // Destinations
                     {
                         type: 'action',
                         icon: 'stop',
@@ -606,10 +606,9 @@ module.exports = function (app) {
                         shortcut: false,
                         callback: self.manageDestinations,
                         permissionKey: "MANAGE_DESTINATIONS",
-                        hide: false,
                         class: "action-yellow",
                         checkShow: self.checkToShowAction
-                    }*/
+                    }
                 ]
             },
             // Security
@@ -644,11 +643,10 @@ module.exports = function (app) {
                 icon: 'bullhorn',
                 text: 'grid_action_broadcast',
                 shortcut: false,
-                hide: true,
                 class: "action-green",
                 callback: self.broadcast,
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && (model.addMethod || model.approvers !== null);
+                    return self.checkToShowAction(action, model);
                 }
             }
         ];

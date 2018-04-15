@@ -2,7 +2,7 @@
     <div layout="column" class="content">
         <div layout="row" layout-align="start center" class="page-header nmb padding-header small">
             <span>{{lang.menu_item_search_module_internal}}</span>
-            <md-button ng-if="ctrl.selectedTab===1" ng-click="ctrl.reloadSearchedInternalDocument()"
+            <md-button ng-if="ctrl.selectedTab===1" ng-click="ctrl.reloadSearchedInternalDocuments()"
                        class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
@@ -75,7 +75,7 @@
                                     </div>
                                 </md-input-container>
                                 <!-- Main Organization Units -->
-                                <md-input-container flex>
+                                <!--<md-input-container flex>
                                     <label for="ou">{{lang.search_module_main_organization_units}}</label>
                                     <md-select name="ou" id="ou" ng-model="ctrl.searchInternal.ou"
                                                ng-required="ctrl.dynamicRequired('ou','search_module_main_organization_units')">
@@ -87,55 +87,19 @@
                                     <div ng-messages="searchInternalForm.ou.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
-                                </md-input-container>
-                                <!-- Correspondence Site Type -->
+                                </md-input-container>-->
+                                <!-- Priority Levels -->
                                 <md-input-container flex>
-                                    <label for="siteType">{{lang.search_module_correspondence_site_types}}</label>
-                                    <md-select name="siteType" id="siteType"
-                                               ng-required="ctrl.dynamicRequired('siteType','search_module_correspondence_site_types')"
-                                               ng-change="ctrl.getMainCorrespondenceSites($event)"
-                                               ng-model="ctrl.searchInternal.siteType">
-                                        <md-option ng-value="correspondenceSiteType.id"
-                                                   ng-repeat="correspondenceSiteType in ctrl.correspondenceSiteTypes track by $index">
-                                            {{correspondenceSiteType.getTranslatedName()}}
+                                    <label for="priorityLevel">{{lang.priority_level}}</label>
+                                    <md-select name="priorityLevel" id="priorityLevel"
+                                               ng-required="ctrl.dynamicRequired('priorityLevel','priority_level')"
+                                               ng-model="ctrl.searchInternal.priorityLevel">
+                                        <md-option ng-value="priorityLevel.lookupKey"
+                                                   ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
+                                            {{priorityLevel.getTranslatedName()}}
                                         </md-option>
                                     </md-select>
-                                    <div ng-messages="searchInternalForm.siteType.$error">
-                                        <div ng-message="required">{{lang.field_required}}</div>
-                                    </div>
-                                </md-input-container>
-                            </div>
-                            <div layout="row" flex class="p020">
-                                <!-- Main Correspondence Sites -->
-                                <md-input-container flex>
-                                    <label for="mainSiteId">{{lang.search_module_main_correspondence_sites}}</label>
-                                    <md-select name="mainSiteId" id="mainSiteId"
-                                               ng-required="ctrl.dynamicRequired('mainSiteId','search_module_main_correspondence_sites')"
-                                               ng-change="ctrl.getSubCorrespondenceSites($event)"
-                                               ng-disabled="!ctrl.searchInternal.siteType"
-                                               ng-model="ctrl.searchInternal.mainSiteId">
-                                        <md-option ng-value="mainCorrespondenceSite"
-                                                   ng-repeat="mainCorrespondenceSite in ctrl.mainCorrespondenceSites track by $index">
-                                            {{mainCorrespondenceSite.getTranslatedName()}}
-                                        </md-option>
-                                    </md-select>
-                                    <div ng-messages="searchInternalForm.mainSiteId.$error">
-                                        <div ng-message="required">{{lang.field_required}}</div>
-                                    </div>
-                                </md-input-container>
-                                <!-- Sub Correspondence Sites -->
-                                <md-input-container flex>
-                                    <label for="subSiteId">{{lang.search_module_sub_correspondence_sites}}</label>
-                                    <md-select name="subSiteId" id="subSiteId"
-                                               ng-required="ctrl.dynamicRequired('subSiteId','search_module_sub_correspondence_sites')"
-                                               ng-disabled="!ctrl.searchInternal.siteType || !ctrl.searchInternal.mainSiteId"
-                                               ng-model="ctrl.searchInternal.subSiteId">
-                                        <md-option ng-value="subCorrespondenceSite"
-                                                   ng-repeat="subCorrespondenceSite in ctrl.subCorrespondenceSites track by $index">
-                                            {{subCorrespondenceSite.getTranslatedName()}}
-                                        </md-option>
-                                    </md-select>
-                                    <div ng-messages="searchInternalForm.subSiteId.$error">
+                                    <div ng-messages="searchInternalForm.priorityLevel.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
@@ -178,6 +142,41 @@
                                     </div>
                                 </fieldset>
                             </div>
+                            <!--<div layout="row" flex class="p020">
+                                &lt;!&ndash; Search within RegOU &ndash;&gt;
+                                <md-switch flex ng-model="ctrl.isSearchByRegOU"
+                                           ng-change="ctrl.changeRegOuToggle()"
+                                           ng-disabled="ctrl.checkRegOuToggleDisabled()"
+                                           aria-label="{{lang.search_module_search_by_reg_ou}}">
+                                    <label>{{lang.search_module_search_by_reg_ou}} :
+                                        {{ctrl.getTranslatedYesNo('isSearchByRegOU')}}</label>
+                                </md-switch>
+                                &lt;!&ndash; Search within OU &ndash;&gt;
+                                <md-switch flex ng-model="ctrl.searchInternal.ou"
+                                           ng-change="ctrl.changeOuToggle()"
+                                           ng-disabled="ctrl.checkOuToggleDisabled()"
+                                           ng-true-value="{{ctrl.employeeService.getEmployee().getOUID()}}" ng-false-value="null"
+                                           aria-label="{{lang.search_module_search_by_ou}}">
+                                    <label>{{lang.search_module_search_by_ou}} :
+                                        {{ctrl.searchInternal.getTranslatedYesNo('ou')}}</label>
+                                </md-switch>
+                                &lt;!&ndash; Reg OU List &ndash;&gt;
+                                <md-input-container flex>
+                                    <label for="registryOU" ng-if="ctrl.isSearchByRegOU && ctrl.employeeService.isCentralArchive()">{{lang.organization_unit}}</label>
+                                    <md-select name="registryOU" id="registryOU"
+                                               ng-disabled="ctrl.searchInternal.ou"
+                                               required="true" ng-if="ctrl.isSearchByRegOU && ctrl.employeeService.isCentralArchive()"
+                                               ng-model="ctrl.searchInternal.registryOU">
+                                        <md-option ng-value="organization.id"
+                                                   ng-repeat="organization in ctrl.registryOrganizations track by $index">
+                                            {{organization.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="searchInternalForm.registryOU.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
+                            </div>-->
                             <div layout="column" id="advanceSearch" flex class="box-shadow-raised">
                             <span layout="row" id="span_toggleAdvanceSearch" class="cursor-pointer" flex
                                   ng-click="ctrl.toggleAdvancedSearch()">
@@ -224,7 +223,7 @@
                                                 <md-select name="fileId" id="fileId"
                                                            ng-required="ctrl.dynamicRequired('fileId','document_file')"
                                                            ng-model="ctrl.searchInternal.fileId">
-                                                    <md-option ng-value="documentFile.lookupKey"
+                                                    <md-option ng-value="documentFile.id"
                                                                ng-repeat="documentFile in ctrl.documentFiles track by $index">
                                                         {{documentFile.getTranslatedName()}}
                                                     </md-option>
@@ -270,21 +269,6 @@
                                                        ng-required="{{ctrl.dynamicRequired('comments', 'comments')}}"
                                                        ng-model="ctrl.searchInternal.docNotes">
                                                 <div ng-messages="searchInternalForm.docNotes.$error">
-                                                    <div ng-message="required">{{lang.field_required}}</div>
-                                                </div>
-                                            </md-input-container>
-                                            <!-- Priority Levels -->
-                                            <md-input-container flex>
-                                                <label for="priorityLevel">{{lang.priority_level}}</label>
-                                                <md-select name="priorityLevel" id="priorityLevel"
-                                                           ng-required="ctrl.dynamicRequired('priorityLevel','priority_level')"
-                                                           ng-model="ctrl.searchInternal.priorityLevel">
-                                                    <md-option ng-value="priorityLevel.lookupKey"
-                                                               ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
-                                                        {{priorityLevel.getTranslatedName()}}
-                                                    </md-option>
-                                                </md-select>
-                                                <div ng-messages="searchInternalForm.priorityLevel.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                 </div>
                                             </md-input-container>
@@ -448,6 +432,13 @@
                                     <div layout="row" layout-align="start center">
                                         <span>{{ctrl.selectedSearchedInternalDocuments.length}} {{lang.items_selected}} </span>
                                         <span flex></span>
+                                        <!-- Add to Favorite -->
+                                        <md-button class="md-icon-button" class="action-green"
+                                                   tooltip="{{lang.grid_action_add_to_favorite}}"
+                                                   ng-if="ctrl.selectedSearchedInternalDocuments.length"
+                                                   ng-click="ctrl.addToFavoriteBulk($event)">
+                                            <md-icon md-svg-icon="star"></md-icon>
+                                        </md-button>
                                     </div>
                                 </th>
                                 <th md-column>
@@ -489,46 +480,22 @@
                                 selected-length="{{ctrl.selectedSearchedInternalDocuments.length ? ctrl.selectedSearchedInternalDocuments.length : 0}}"
                                 ng-repeat="searchedInternalDocument in ctrl.searchedInternalDocuments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                                 <td md-cell class="indicator-td">
-                                    <span flex
-                                          ng-class="{'indicator-content': searchedInternalDocument.securityLevelIndicator}">
-                                        <md-icon ng-if="searchedInternalDocument.securityLevelIndicator"
-                                                 class="{{searchedInternalDocument.securityLevelIndicator.class}}"
-                                                 md-svg-icon="{{searchedInternalDocument.securityLevelIndicator.icon}}"
-                                                 tooltip="{{lang[searchedInternalDocument.securityLevelIndicator.tooltip].change({name: searchedInternalDocument.securityLevel.getTranslatedName()})}}"
-                                        ></md-icon>
-                                    </span>
-                                    <span flex
-                                          ng-class="{'indicator-content': searchedInternalDocument.priorityLevelIndicator}">
-                                        <md-icon ng-if="searchedInternalDocument.priorityLevelIndicator"
-                                                 class="{{searchedInternalDocument.priorityLevelIndicator.class}}"
-                                                 md-svg-icon="{{searchedInternalDocument.priorityLevelIndicator.icon}}"
-                                                 tooltip="{{lang[searchedInternalDocument.priorityLevelIndicator.tooltip].change({name: searchedInternalDocument.priorityLevel.getTranslatedName()})}}"
-                                        ></md-icon>
-                                    </span>
-                                    <span flex
-                                          ng-class="{'indicator-content': searchedInternalDocument.attachmentsIndicator}">
-                                        <md-icon ng-if="searchedInternalDocument.attachmentsIndicator"
-                                                 class="{{searchedInternalDocument.attachmentsIndicator.class}}"
-                                                 md-svg-icon="{{searchedInternalDocument.attachmentsIndicator.icon}}"
-                                                 tooltip="{{lang[searchedInternalDocument.attachmentsIndicator.tooltip]}}"
-                                        ></md-icon>
-                                    </span>
-                                    <span flex
-                                          ng-class="{'indicator-content': searchedInternalDocument.linkedDocsIndicator}">
-                                        <md-icon ng-if="searchedInternalDocument.linkedDocsIndicator"
-                                                 class="{{searchedInternalDocument.linkedDocsIndicator.class}}"
-                                                 md-svg-icon="{{searchedInternalDocument.linkedDocsIndicator.icon}}"
-                                                 tooltip="{{lang[searchedInternalDocument.linkedDocsIndicator.tooltip]}}"
-                                        ></md-icon>
-                                    </span>
-                                    <!--<span flex class="indicator-badge"
-                                          ng-class="{'indicator-content': searchedInternalDocument.tagsIndicator}">
-                                        <span ng-if="searchedInternalDocument.tagsIndicator"
-                                              tooltip="{{lang[searchedInternalDocument.tagsIndicator.tooltip]}}"
-                                              class="{{searchedInternalDocument.tagsIndicator.class}}">
-                                            {{searchedInternalDocument.tagsIndicator.text}}
-                                        </span>
-                                    </span>-->
+                                    <!-- Security Level -->
+                                    <grid-indicator-directive record="searchedInternalDocument"
+                                                              indicator-type="securityLevel"
+                                                              record-type="correspondence"></grid-indicator-directive>
+                                    <!-- Priority Level -->
+                                    <grid-indicator-directive record="searchedInternalDocument"
+                                                              indicator-type="priorityLevel"
+                                                              record-type="correspondence"></grid-indicator-directive>
+                                    <!-- Has Attachments -->
+                                    <grid-indicator-directive record="searchedInternalDocument"
+                                                              indicator-type="hasAttachment"
+                                                              record-type="correspondence"></grid-indicator-directive>
+                                    <!-- Linked Documents -->
+                                    <grid-indicator-directive record="searchedInternalDocument"
+                                                              indicator-type="hasLinkedDocuments"
+                                                              record-type="correspondence"></grid-indicator-directive>
                                 </td>
                                 <td md-cell class="td-data">
                                     <a href="" ng-if="searchedInternalDocument.hasContent()" class="view-doc"

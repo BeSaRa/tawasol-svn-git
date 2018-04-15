@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                           toast,
                                                           langService,
                                                           $timeout,
+                                                          popupNumber,
                                                           employeeService,
                                                           generator) {
         'ngInject';
@@ -19,11 +20,15 @@ module.exports = function (app) {
             self.model = angular.copy(self.correspondence);
         }, 100);
 
+        //var mainInfo = self.correspondence.getInfo();
+        //self.sideNavId = "correspondence-details_" + mainInfo.vsId;
+        self.sideNavId = "correspondence-details_" + popupNumber;
         /**
          * @description toggle correspondence details sidebar
          */
         self.toggleCorrespondenceDetails = function () {
-            $mdSidenav('correspondence-details').toggle();
+            // $mdSidenav('correspondence-details').toggle();
+            $mdSidenav(self.sideNavId).toggle();
         };
         /**
          * @description toggle fullScreen dialog
@@ -66,11 +71,11 @@ module.exports = function (app) {
             console.log(self.actions);
         };
 
-        self.checkDisabled = function(){
-            if(self.correspondence.docClassName == 'Incoming'){
+        self.checkDisabled = function () {
+            if (self.correspondence.docClassName === 'Incoming') {
                 return !self.correspondence.site;
             }
-            else if(self.correspondence.docClassName == 'Outgoing'){
+            else if (self.correspondence.docClassName === 'Outgoing') {
                 return !(self.correspondence.sitesInfoTo && self.correspondence.sitesInfoTo.length);
             }
             return false;

@@ -10,7 +10,10 @@ module.exports = function (app) {
                                                  $q,
                                                  Organization,
                                                  dialog,
-                                                 generator) {
+                                                 generator,
+                                                 lookupService,
+                                                 PropertyConfiguration,
+                                                 employeeService) {
         'ngInject';
         var self = this;
         self.serviceName = 'organizationService';
@@ -224,6 +227,7 @@ module.exports = function (app) {
         /**
          * @description get all parents which has registry
          * @param organization
+         * @param excludeMe
          * @return {Array}
          */
         self.getAllParentsHasRegistry = function (organization, excludeMe) {
@@ -238,6 +242,7 @@ module.exports = function (app) {
         /**
          * @description get all parents which has central archive
          * @param organization
+         * @param excludeMe
          * @return {Array}
          */
         self.getAllParentsHasCentralArchive = function (organization, excludeMe) {
@@ -420,16 +425,16 @@ module.exports = function (app) {
                         },
                         correspondenceSites: function (correspondenceSiteService) {
                             'ngInject';
-                            return correspondenceSiteService.getCorrespondenceSites();
+                            return correspondenceSiteService.loadCorrespondenceSites();
                         },
                         documentTemplates: function (documentTemplateService) {
                             'ngInject';
                             // return documentTemplateService.loadDocumentTemplates(organization.id);
                             return [];
                         }/*,
-                        organizations: function(organizationService){
-                            return organizationService.getOrganizations()
-                        }*/
+                         organizations: function(organizationService){
+                         return organizationService.getOrganizations()
+                         }*/
                     }
                 });
             },
@@ -471,7 +476,7 @@ module.exports = function (app) {
                         },
                         correspondenceSites: function (correspondenceSiteService) {
                             'ngInject';
-                            return correspondenceSiteService.getCorrespondenceSites();
+                            return correspondenceSiteService.loadCorrespondenceSites();
                         },
                         documentTemplates: function (documentTemplateService) {
                             'ngInject';
@@ -479,14 +484,34 @@ module.exports = function (app) {
                         },
                         allPropertyConfigurations: function (propertyConfigurationService, $q) {
                             'ngInject';
+                            var currentUserOrg = employeeService.getEmployee().userOrganization;
+                            var loggedInOuId = currentUserOrg && currentUserOrg.hasOwnProperty('id') ? currentUserOrg.id : currentUserOrg;
+                            if (organization.id === loggedInOuId) {
+                                //return lookupService.getPropertyConfigurations();
+                                var propConfigs = lookupService.getPropertyConfigurations();
+                                _.map(propConfigs, function (index, key) {
+                                    propConfigs[key] = _.map(propConfigs[key], function (propConfig) {
+                                        return new PropertyConfiguration(propConfig);
+                                    });
+                                    return propConfigs;
+                                });
+                                return propConfigs;
+                            }
+
                             //return propertyConfigurationService.loadPropertyConfigurations();
                             return $q.all([
-                                propertyConfigurationService.loadPropertyConfigurationsByDocumentClass('outgoing', organization.id),
-                                propertyConfigurationService.loadPropertyConfigurationsByDocumentClass('incoming', organization.id),
-                                propertyConfigurationService.loadPropertyConfigurationsByDocumentClass('internal', organization.id)
+                                propertyConfigurationService.loadPropertyConfigurationsByDocumentClassAndOU('outgoing', organization.id),
+                                propertyConfigurationService.loadPropertyConfigurationsByDocumentClassAndOU('incoming', organization.id),
+                                propertyConfigurationService.loadPropertyConfigurationsByDocumentClassAndOU('internal', organization.id)
                             ]).then(function (result) {
-                                return result[0].concat(result[1]).concat(result[2]);
+                                //return result[0].concat(result[1]).concat(result[2]);
+                                return {
+                                    'outgoing': result[0],
+                                    'incoming': result[1],
+                                    'internal': result[2]
+                                };
                             });
+
                         },
                         unAssignedUsers: function (ouApplicationUserService) {
                             'ngInject';
@@ -497,9 +522,9 @@ module.exports = function (app) {
                             'ngInject';
                             return ouApplicationUserService.loadRelatedOUApplicationUsers(organization.id);
                         }/*,
-                        organizations: function(organizationService){
-                            return organizationService.getOrganizations()
-                        }*/
+                         organizations: function(organizationService){
+                         return organizationService.getOrganizations()
+                         }*/
                     }
                 });
             },
@@ -557,6 +582,17 @@ module.exports = function (app) {
         self.getRegistryOrganizationId = function (organization) {
             var ouId = organization.hasOwnProperty('registryParentId') ? organization.id : organization;
             return self.getOrganizationById(ouId);
+        };
+
+        self.getOrganizationsByRegOU = function (regOUId) {
+            regOUId = regOUId.hasOwnProperty('id') ? regOUId.id : regOUId;
+            return $http
+                .get(urlService.organizations + '/' + regOUId + '/childs')
+                .then(function (result) {
+                    var organizations = generator.generateCollection(result.data.rs, Organization, self._sharedMethods);
+                    organizations = generator.interceptReceivedCollection('Organization', organizations);
+                    return organizations;
+                });
         };
 
         self.centralArchiveOrganizations = function () {

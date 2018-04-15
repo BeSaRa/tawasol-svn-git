@@ -15,6 +15,7 @@ module.exports = function (app) {
                                                   correspondenceService,
                                                   $location,
                                                   $cookies,
+                                                  $http,
                                                   cmsTemplate,
                                                   $mdMedia,
                                                   $scope) {
@@ -80,5 +81,9 @@ module.exports = function (app) {
         });
 
         $scope.bundleVersion = '2.0.1';
+
+        // $http.get('http://100.100.11.81:8030/ReportServer_MSSQLSERVER1?rs:embed=true').then(function (result) {
+        //     console.log(result);
+        // })
     });
 };

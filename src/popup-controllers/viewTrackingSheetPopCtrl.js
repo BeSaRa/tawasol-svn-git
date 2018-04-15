@@ -251,7 +251,7 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.showTab = function (tabName) {
-            if (tabName === 'view_tracking_sheet_outgoing_delivery_reports')
+            if (tabName === 'view_tracking_sheet_outgoing_delivery_reports' || tabName === 'view_tracking_sheet_destination_history')
                 return (self.tabsToShow.indexOf(tabName) > -1 && info.documentClass === 'outgoing');
             return (self.tabsToShow.indexOf(tabName) > -1);
         };

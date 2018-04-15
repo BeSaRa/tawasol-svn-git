@@ -118,6 +118,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    console.log(result);
                     return result;
                 });
         };
@@ -354,14 +355,14 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTags = function (proxyMailInbox, $event) {
-            var vsId = proxyMailInbox.hasOwnProperty('generalStepElm')
-                ? (proxyMailInbox.generalStepElm.hasOwnProperty('vsId') ? proxyMailInbox.generalStepElm.vsId : proxyMailInbox.generalStepElm)
-                : (proxyMailInbox.hasOwnProperty('vsId') ? proxyMailInbox.vsId : proxyMailInbox);
-            var wfName = proxyMailInbox.hasOwnProperty('generalStepElm')
-                ? (proxyMailInbox.generalStepElm.hasOwnProperty('workFlowName') ? proxyMailInbox.generalStepElm.workFlowName : proxyMailInbox.generalStepElm)
-                : (proxyMailInbox.hasOwnProperty('workFlowName') ? proxyMailInbox.workFlowName : proxyMailInbox);
-            //var wfName = 'outgoing';
-            managerService.manageDocumentTags(vsId, wfName.toLowerCase(), proxyMailInbox.getTranslatedName(), $event);
+            var info = proxyMailInbox.getInfo();
+            managerService.manageDocumentTags(info.vsId, info.documentClass, proxyMailInbox.getTranslatedName(), $event)
+                .then(function () {
+                    self.reloadProxyMailInboxes(self.grid.page);
+                })
+                .catch(function (error) {
+                    self.reloadProxyMailInboxes(self.grid.page);
+                });
         };
 
         /**
@@ -370,7 +371,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (proxyMailInbox, $event) {
-            var vsId = proxyMailInbox.hasOwnProperty('generalStepElm')
+            /*var vsId = proxyMailInbox.hasOwnProperty('generalStepElm')
                 ? (proxyMailInbox.generalStepElm.hasOwnProperty('vsId') ? proxyMailInbox.generalStepElm.vsId : proxyMailInbox.generalStepElm)
                 : (proxyMailInbox.hasOwnProperty('vsId') ? proxyMailInbox.vsId : proxyMailInbox);
             var wfName = proxyMailInbox.hasOwnProperty('generalStepElm')
@@ -378,7 +379,16 @@ module.exports = function (app) {
                 : (proxyMailInbox.hasOwnProperty('workFlowName') ? proxyMailInbox.workFlowName : proxyMailInbox);
 
             //var wfName = 'outgoing';
-            managerService.manageDocumentComments(vsId, wfName.toLowerCase(), $event);
+            managerService.manageDocumentComments(vsId, wfName.toLowerCase(), $event);*/
+
+
+            proxyMailInbox.manageDocumentComments($event)
+                .then(function () {
+                    self.reloadProxyMailInboxes(self.grid.page);
+                })
+                .catch(function (error) {
+                    self.reloadProxyMailInboxes(self.grid.page);
+                });
         };
 
         /**
@@ -396,14 +406,22 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (proxyMailInbox, $event) {
-            var vsId = proxyMailInbox.hasOwnProperty('generalStepElm')
+            /*var vsId = proxyMailInbox.hasOwnProperty('generalStepElm')
                 ? (proxyMailInbox.generalStepElm.hasOwnProperty('vsId') ? proxyMailInbox.generalStepElm.vsId : proxyMailInbox.generalStepElm)
                 : (proxyMailInbox.hasOwnProperty('vsId') ? proxyMailInbox.vsId : proxyMailInbox);
             var wfName = proxyMailInbox.hasOwnProperty('generalStepElm')
                 ? (proxyMailInbox.generalStepElm.hasOwnProperty('workFlowName') ? proxyMailInbox.generalStepElm.workFlowName : proxyMailInbox.generalStepElm)
                 : (proxyMailInbox.hasOwnProperty('workFlowName') ? proxyMailInbox.workFlowName : proxyMailInbox);
             //var wfName = 'outgoing';
-            managerService.manageDocumentAttachments(vsId, wfName.toLowerCase(), proxyMailInbox.getTranslatedName(), $event);
+            managerService.manageDocumentAttachments(vsId, wfName.toLowerCase(), proxyMailInbox.getTranslatedName(), $event);*/
+
+            proxyMailInbox.manageDocumentAttachments($event)
+                .then(function () {
+                    self.reloadProxyMailInboxes(self.grid.page);
+                })
+                .catch(function (error) {
+                    self.reloadProxyMailInboxes(self.grid.page);
+                });
         };
 
 
@@ -413,7 +431,14 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedDocuments = function (proxyMailInbox, $event) {
-            console.log('manageProxyMailInboxLinkedDocuments : ', proxyMailInbox);
+            //console.log('manageProxyMailInboxLinkedDocuments : ', proxyMailInbox);
+            proxyMailInbox.manageDocumentLinkedDocuments($event)
+                .then(function () {
+                    self.reloadProxyMailInboxes(self.grid.page);
+                })
+                .catch(function (error) {
+                    self.reloadProxyMailInboxes(self.grid.page);
+                });
         };
 
         /**
@@ -428,6 +453,19 @@ module.exports = function (app) {
                 : (proxyMailInbox.hasOwnProperty('workFlowName') ? proxyMailInbox.workFlowName : proxyMailInbox);
             managerService
                 .manageDocumentEntities(proxyMailInbox.generalStepElm.vsId, wfName.toLowerCase(), proxyMailInbox.generalStepElm.docSubject, $event);
+        };
+
+
+        /**
+         * @description Destinations
+         * @param proxyMailInbox
+         * @param $event
+         */
+        self.manageDestinations = function (proxyMailInbox, $event) {
+            proxyMailInbox.manageDocumentCorrespondence($event)
+                .then(function () {
+                    self.reloadProxyMailInboxes(self.grid.page);
+                });
         };
 
         /**
@@ -877,7 +915,7 @@ module.exports = function (app) {
                         text: 'grid_action_linked_documents',
                         shortcut: false,
                         callback: self.manageLinkedDocuments,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: self.checkToShowAction
                     },
                     // Linked Entities
@@ -889,6 +927,19 @@ module.exports = function (app) {
                         callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
+                    },
+                    // Destinations
+                    {
+                        type: 'action',
+                        icon: 'stop',
+                        text: 'grid_action_destinations',
+                        shortcut: false,
+                        callback: self.manageDestinations,
+                        permissionKey: "MANAGE_DESTINATIONS",
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
+                        }
                     }
                 ]
             },

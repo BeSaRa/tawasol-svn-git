@@ -125,9 +125,11 @@ html.rtl {
     }
   }
   .read-td {
-    padding-left: 0px !important;
+    padding-left: 0 !important;
     .status {
       float: left;
+      left: 0;
+      right: auto;
     }
   }
 
@@ -150,10 +152,10 @@ html.rtl {
       padding-left: 0 !important;
     }
   }
-  .text-left{
+  .text-left {
     text-align: right !important;
   }
-  .text-right{
+  .text-right {
     text-align: left !important;
   }
 }

@@ -6,10 +6,31 @@ General:
 5. Added - Show alert if all selected records can't be forwarded/returned.
 6. Added - New localization keys
 7. Fix - Don't show bulk action button if not available for all selected items.
-8. Fix - Show only basic document classes in dropdowns (Outgoing, Incoming, Internal).
+8. Fix - Show only basic document classes in drop downs (Outgoing, Incoming, Internal).
 9. Fix - Binding of correspondence sites in grids.
-10. Fix - Signature dimensions should not be more than 50px X 50px.
+10. Fix - Signature dimensions should not be more than 283px X 283px.
 11. Fix - New Correspondence Site can be global/private. Global correspondence site can not be set to private.
+12. Fix - Hide the delete correspondence site buttons
+13. Fix - Bulk actions - response handling in correspondenceService and added in generator.
+14. Fix - Hide barcode tab in global settings.
+15. Added - Show confirmation to forward for workItem with multiple approval. If item is partially approved, don't allow to edit content.
+16. Fix - Allow to add comment if not excluding someone and comment is not private and not global.
+17. Change - Allow manage destination in search outgoing, incoming and general search (outgoing => status < 25) and incoming is always allowed.
+18. Fix - Receive from department incoming: linked documents should be received as attachment.
+19. Changed - Grid indicators to reflect from grid indicator directive.
+20. Fix - Update the organization list on changing ouApplicationUser status in application user popup. Disable the organization in drop down if ouApplication user is inactive. Disable the change status for default organization in application user popup(other organizations tab).
+21. Fix - Can not login to inactive ouApplicationUser (change ou from user menu).
+22. Fix - Incoming document - Correspondence site followup status is not showing in the manage destinations.
+23. Fix - Broadcast - show message if users list is empty(ou has no users or workflow group has no users).
+24. Fix - Handle error while deleting lookup.
+25. Fix - Property configuration update and to be searched by symbolic name.
+26. Fix - Don't show the comments in document information if correspondence queue(outgoing | incoming | internal)
+27. Change - Removed the search by OU and search by Reg OU in central archive from search screens.
+28. Fix - Main site - sub site information in grids(arabic).
+29. Added - Add to favorite bulk in search screens(outgoing|incoming|internal|general)
+30. Fix - Saving OU data on update. Separated the application user popup for organization structure and application users grid.
+
+
 
 Bugs:
 12291: Fix - Business : user cannot delete others comments (user has permission to delete all comments)
@@ -25,7 +46,6 @@ Bugs:
 10265: Fix - Admin : Modify Entity : User can't save the data after editing
 12286: Fix - Admin : Distribution list :Must Reload Distribution lists page to show the New one.
 11634: Fix - Admin : Activate/Deactivate Government Entities after selecting one or more and changing from "Select a status" Dropdown Menu selections don't work.
-12441: Fix - Business: Linked document - Cannot open the details sidebar for the linked documents when document is opened.
 12253: Fix - Business: User preferences - When user deactivate a private WF group, it disappears from the list and user cannot enable it again
 12413: Fix - Business: View Tracking Sheet - outgoing delivery report - Added Action Date, Delivery Date, Message status. Removed Priority Level.
 12359: Fix - Business: Create reply - the correspondence site should be filled with the Correspondence site already in the incoming document.
@@ -33,10 +53,38 @@ Bugs:
 12275: Fix - Admin: Distribution List - User is able to add same group members more than once.
 12644: Fix - central archive - while adding a paper outgoing and send to ready to export, the document appear in ready to export for the selected OU from archive.
 10905: Fix - Business: Manage Preferences: OOF-Proxy Mail Inbox: Some Actions must be removed from Proxy Mailbox.
+11391: Fix - Admin: Inactive & Not Global correspondence site doesn't appear when adding it to an OU in the Organization Structure.
+11384: Fix - Admin: Active Sub Correspondence Site doesn't appear when adding it to an OU in the Organization Structure.
+12268: Fix - User preferences - add comment - only the user's OUs should be displayed in the list while adding a new comment.
+12444: Fix - Business: Favorite Documents - pagination - when click on next > it skips and go to empty page.
+11366: Fix - Business: Open Department's Incoming Queue: after receiving an outgoing then Checking for its linked documents Not Linked documents appear when searching.
+12285: Fix - System Administration : Distribution list : Add New Distribution list with only numbers in Arabic name field.
 
 
+12678: Fix - Follow up Employee Inbox - all the ous appeared in followup list for all users.
+12702: Fix - Global search - document file field,by default it takes only one value irrespective of what user choose from dropdown and search is not performed based on selected value.
+12687: Fix - Business - Proxy Mail Inbox - Send action appears in Proxy Mail Inbox
+12686: Fix - Launch distribution WF - from department incoming mail launch internal or outgoing document shows a warning that this is a not approved document
+12691: Fix - Tracking sheet - destination history : The full name is displayed in Arabic in the English UI. Also fixed for action by and action type.
+12489: Fix - Incoming document - Edit follow up status once correspondence site added while creating the document.
+12742: Fix - export - while export an outgoing document and enable export with linked document toggle, the document donot appear before and after receiving the document
+12768: Fix - Business - Incoming Mail - Ready To Send Queue - can't be able to edit Correspondence site inside document
+12771: Fix - Terminated Document : view tracking sheet : can't sort action in full history by Action Type or Action By Department
+12772: Fix - Group Mail - Single and Multiple select of documents,Terminate throws an error message.
+12808: Fix - Broadcast - deactivate the OU from organization structure,the OU name shouldn't be appeared in broadcasting drop down while broadcasting.
+12809: Fix - Approving the document from step processor,inside the document.
+12650: Fix - Admin: Manage Preference: When Out Of Office Start date = End Date = Current Date, The Delegation didn't save.
+12239: Fix - Broadcast option should be enabled for any outgoing/Incoming and Internal document from the review phase.
+12441: Fix - linked document - cannot open the burger menu for the linked documents after sending
+12663: Fix - User Preferences - Workflow Groups tab - Edit icon appear in Global Workflow Groups from User Preferences. (showing active workflow groups in broadcast)
+11655: Fix - Business : Open Tracking Sheet : Destinations history is empty
 
-
-
-
-
+11728: Fix - Business: Launch and Distribution WF is not working from Returned Mail Queue in Department inbox. (Ahmed Mostafa Ebrahem Mohamed Ali)
+12740: Fix - property configuration - warning appeared while adding the content to enter the main and sub classification although they are not mandatory (Ahmed Mostafa Ebrahem Mohamed Ali)
+12817: Fix - property configuration - editing any item in the list, is duplicated after save. (Ahmed Mostafa Ebrahem Mohamed Ali)
+12818: Fix - property configuration - after editing any item in the list of incoming it disappear from the outgoing and internal document classes and the opposite as well. (Ahmed Mostafa Ebrahem Mohamed Ali)
+11289: Fix - Business: Favorite Page: There is no indicators for the Document Added to favorite.
+11671: Fix - Business : There are some information are missing in document information screen. (Don't show comments count if outgoing | Internal | Incoming | favorite documents | user sent items | department sent items queues).
+12825: Fix - Subject field for any document should accept "."
+12822: Fix - Preferences - warning appeared when try to delegate a user for yourself and already another user is delegating you, but not all the data is displayed.
+12834: Fix - Outgoing search - filter by year documents and right click and click on broadcast throws an error

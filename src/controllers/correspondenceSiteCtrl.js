@@ -267,7 +267,7 @@ module.exports = function (app) {
 
             self.statusServices[status](self.selectedCorrespondenceSites).then(function () {
                 self.reloadCorrespondenceSites(self.grid.page).then(function () {
-                    toast.success(langService.get('selected_status_updated'));
+                    //toast.success(langService.get('selected_status_updated'));
                 });
             });
         };

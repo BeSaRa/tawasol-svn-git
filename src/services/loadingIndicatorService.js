@@ -11,6 +11,18 @@ module.exports = function (app) {
                 self.loading = true;
         };
         /**
+         * @description force start loading
+         */
+        self.forceStartLoading = function () {
+            self.loading = true;
+        };
+        /**
+         * force end loading
+         */
+        self.forceEndLoading = function () {
+            self.loading = false;
+        };
+        /**
          * to end loading status
          */
         self.endLoading = function () {

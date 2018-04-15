@@ -2,7 +2,10 @@ module.exports = function (app) {
     app.factory('WorkItem', function (CMSModelInterceptor,
                                       langService,
                                       Indicator,
-                                      Information) {
+                                      Information,
+                                      ResolveDefer,
+                                      $q,
+                                      dialog) {
         'ngInject';
 
         return function WorkItem(model) {
@@ -88,19 +91,15 @@ module.exports = function (app) {
                     mainSite = new Information(this.firstSiteInfo.mainSite);
                     subSite = (this.firstSiteInfo.subSite) ? new Information(this.firstSiteInfo.subSite) : new Information();
                     return this.firstSiteInfo
-                        ? (langService.current === 'en'
-                                ? mainSite.getTranslatedName() + (subSite.getTranslatedName() ? (' - ' + subSite.getTranslatedName()) : '')
-                                : (subSite.getTranslatedName() ? (' - ' + subSite.getTranslatedName()) : '') + mainSite.getTranslatedName()
-                        ) : "";
+                        ? mainSite.getTranslatedName() + (subSite.getTranslatedName() ? (' - ' + subSite.getTranslatedName()) : '')
+                        : "";
                 }
 
                 mainSite = new Information(this.siteInfo.mainSite);
                 subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : new Information();
                 return this.siteInfo
-                    ? (langService.current === 'en'
-                            ? mainSite.getTranslatedName() + (subSite.getTranslatedName() ? (' - ' + subSite.getTranslatedName()) : '')
-                            : (subSite.getTranslatedName() ? (' - ' + subSite.getTranslatedName()) : '') + mainSite.getTranslatedName()
-                    ) : "";
+                    ? mainSite.getTranslatedName() + (subSite.getTranslatedName() ? (' - ' + subSite.getTranslatedName()) : '')
+                    : "";
             };
 
             WorkItem.prototype.setCorrespondenceService = function (service) {
@@ -125,6 +124,11 @@ module.exports = function (app) {
              */
             WorkItem.prototype.getInfo = function () {
                 return correspondenceService.getCorrespondenceInformation(this);
+            };
+
+            /*Its used */
+            WorkItem.prototype.getDueDate = function () {
+                return this.generalStepElm.dueDate;
             };
 
             /**
@@ -157,8 +161,8 @@ module.exports = function (app) {
                 return indicator.getFollowUpStatusIndicator(followupStatus);
             };
 
-            WorkItem.prototype.getDueDateStatusIndicator = function (docClass, dueDate) {
-                return indicator.getDueDateStatusIndicator(docClass, dueDate);
+            WorkItem.prototype.getDueDateStatusIndicator = function (dueDate) {
+                return indicator.getDueDateStatusIndicator(dueDate);
             };
 
             WorkItem.prototype.getTagsIndicator = function (tagsCount) {
@@ -183,6 +187,10 @@ module.exports = function (app) {
 
             WorkItem.prototype.getExportViaCentralArchiveIndicator = function (exportViaCentralArchive) {
                 return indicator.getExportViaCentralArchiveIndicator(exportViaCentralArchive);
+            };
+
+            WorkItem.prototype.getOriginalCopyIndicator = function () {
+                new indicator.getOriginalCopyIndicator(this.generalStepElm.orginality);
             };
 
             WorkItem.prototype.getWobNumber = function () {
@@ -229,10 +237,22 @@ module.exports = function (app) {
              * @param $event
              * @param action
              * @param tab
+             * @param isDeptIncoming
              * @returns {promise|*}
              */
-            WorkItem.prototype.launchWorkFlow = function ($event, action, tab) {
-                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
+            WorkItem.prototype.launchWorkFlow = function ($event, action, tab, isDeptIncoming) {
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming);
+            };
+
+            WorkItem.prototype.launchWorkFlowCondition = function ($event, action, tab, isDeptIncoming, callback, confirmationMessage) {
+                if (!callback)
+                    return $q.reject(callback());
+
+                if (callback(this)) {
+                    return confirmationMessage ? dialog.confirmMessage(confirmationMessage) :
+                        correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, isDeptIncoming);
+                }
+                return $q.reject(callback());
             };
 
             WorkItem.prototype.setStar = function (value) {
@@ -343,8 +363,18 @@ module.exports = function (app) {
             WorkItem.prototype.returnWorkItemFromCentralArchive = function ($event, ignoreMessage) {
                 return correspondenceService.centralArchiveReturn(this, $event, ignoreMessage)
             };
-            WorkItem.prototype.approveWorkItem = function ($event, ignoreMessage) {
-                return correspondenceService.showApprovedDialog(this, $event, ignoreMessage);
+            WorkItem.prototype.approveWorkItem = function ($event, defer, ignoreMessage) {
+                var workItem = this;
+                return correspondenceService.showApprovedDialog(this, $event, ignoreMessage).then(function (result) {
+                    new ResolveDefer(defer);
+                    if (result === 'PARIALLY_AUTHORIZED') {
+                        return dialog.confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: workItem.getTranslatedName()}))
+                            .then(function () {
+                                return workItem.launchWorkFlow($event, 'forward', 'favorites');
+                            });
+                    }
+                    return result;
+                });
             };
             WorkItem.prototype.markAsReadUnread = function ($event, ignoreMessage, isGroupMail) {
                 return correspondenceService.workItemMarkAsReadUnreadSingle(this, $event, ignoreMessage, isGroupMail);

@@ -27,7 +27,8 @@ module.exports = function (app) {
                                                                     langService,
                                                                     selectedTab,
                                                                     dialog,
-                                                                    correspondence) {
+                                                                    correspondence,
+                                                                    isDeptIncoming) {
         'ngInject';
         var self = this;
         self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
@@ -242,7 +243,12 @@ module.exports = function (app) {
         };
 
         // to display alert to inform the user this document not approved and will not send it to many users.
-        _justForYourInformationDialog(self.multiStatus);
+        if(!isDeptIncoming) {
+            _justForYourInformationDialog(self.multiStatus);
+        }
+        else{
+            approvedStatus = false;
+        }
 
         function _checkPermission(permission) {
             return employeeService.hasPermissionTo(permission);

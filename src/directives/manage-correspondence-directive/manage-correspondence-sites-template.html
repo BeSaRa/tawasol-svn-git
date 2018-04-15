@@ -43,6 +43,7 @@
         <md-card ng-if="ctrl.subSearchResult.length" md-whiteframe="3" layout="column" class="card-overlay">
             <md-toolbar class="md-table-toolbar md-default" ng-class="{'selected':ctrl.subSearchSelected.length}">
                 <div class="md-toolbar-tools">
+                    <!-- Close search results -->
                     <div layout="row" ng-if="!ctrl.subSearchSelected.length" flex>
                         <div flex>{{lang.sites_search_results}}</div>
                         <div>
@@ -52,6 +53,7 @@
                             </md-button>
                         </div>
                     </div>
+                    <!-- Change status for multiple selected search results -->
                     <div ng-if="ctrl.subSearchSelected.length" layout="row" flex layout-align="start center">
                         <div>{{ctrl.subSearchSelected.length}} {{lang.items_selected}}</div>
                         <span flex></span>
@@ -105,6 +107,7 @@
                     </div>
                 </div>
             </md-toolbar>
+            <!-- Search results -->
             <md-table-container flex scroll-directive>
                 <table md-table md-row-select multiple ng-model="ctrl.subSearchSelected"
                        md-progress="ctrl.progress">
@@ -205,8 +208,10 @@
         </md-card>
     </div>
     <br/>
+    <!-- Added Original sites after searching / from database -->
     <div flex layout="column">
         <md-card ng-if="ctrl.sitesInfoTo.length" md-whiteframe="3" layout="column" class="card-overlay">
+            <!-- Original sites toolbar -->
             <md-toolbar class="md-table-toolbar md-default" ng-class="{'selected':ctrl.sitesInfoToSelected.length}">
                 <div class="md-toolbar-tools">
                     <div ng-if="!ctrl.sitesInfoToSelected.length" flex>{{lang.sites_original}}</div>
@@ -241,7 +246,7 @@
                                                md-open-on-focus></md-datepicker>
                             </div>
                             <div layout="row" layout-align="start center">
-                                <md-button class="md-icon-button" ng-click="ctrl.onSitesInfoDeleteBulk( 'To' ,$event)">
+                                <md-button class="md-icon-button"  ng-if="!ctrl.disableCorrespondence" ng-click="ctrl.onSitesInfoDeleteBulk( 'To' ,$event)">
                                     <md-icon md-svg-icon="delete"></md-icon>
                                 </md-button>
                             </div>
@@ -249,6 +254,7 @@
                     </div>
                 </div>
             </md-toolbar>
+            <!-- Original sites table -->
             <md-table-container flex scroll-directive>
                 <table md-table md-row-select multiple ng-model="ctrl.sitesInfoToSelected"
                        md-progress="ctrl.progress">
@@ -318,15 +324,17 @@
         </md-card>
     </div>
     <br/>
+    <!-- Added Copy sites after searching / from database -->
     <div flex layout="column">
         <md-card ng-if="ctrl.sitesInfoCC.length" md-whiteframe="3" layout="column" class="card-overlay">
+            <!-- Copy sites toolbar -->
             <md-toolbar class="md-table-toolbar md-default" ng-class="{'selected':ctrl.sitesInfoCCSelected.length}">
                 <div class="md-toolbar-tools">
                     <div ng-if="!ctrl.sitesInfoCCSelected.length" flex>{{lang.sites_copy}}</div>
                     <div ng-if="ctrl.sitesInfoCCSelected.length" layout="row" flex layout-align="start center">
                         <div>{{ctrl.sitesInfoCCSelected.length}} {{lang.items_selected}}</div>
                         <span flex></span>
-                        <div layout="row" ng-if="!!ctrl.disableCorrespondence">
+                        <div layout="row" ng-if="!ctrl.disableCorrespondence">
                             <div>
                                 <md-menu-bar class="follow-up-menu-bar">
                                     <md-menu>
@@ -362,6 +370,7 @@
                     </div>
                 </div>
             </md-toolbar>
+            <!-- Copy sites table -->
             <md-table-container flex scroll-directive>
                 <table md-table md-row-select multiple ng-model="ctrl.sitesInfoCCSelected"
                        md-progress="ctrl.progress">

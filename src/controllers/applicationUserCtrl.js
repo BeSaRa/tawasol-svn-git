@@ -77,7 +77,7 @@ module.exports = function (app) {
         self.openAddApplicationUserDialog = function ($event) {
             applicationUserService
                 .controllerMethod
-                .applicationUserAdd(jobTitles, ranks, organizations, classifications, themes, roles, permissions, ouApplicationUsers, userClassificationViewPermissions, null, $event)
+                .applicationUserAdd(jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, null, $event)
                 .then(function () {
                     self.reloadApplicationUsers(self.grid.page);
                 })
@@ -94,7 +94,7 @@ module.exports = function (app) {
         self.openEditApplicationUserDialog = function (applicationUser, $event) {
             applicationUserService
                 .controllerMethod
-                .applicationUserEdit(applicationUser, jobTitles, ranks, organizations, classifications, themes, roles, permissions, ouApplicationUsers, userClassificationViewPermissions, null, $event)
+                .applicationUserEdit(applicationUser, jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, null, $event)
                 .then(function (result) {
                     self.reloadApplicationUsers(self.grid.page)
                         .then(function () {

@@ -79,11 +79,11 @@
             </div>
             <div layout="column">
                 <div layout="row">
-                    <md-checkbox aria-label="Remember Me">
+                    <md-checkbox ng-disabled="login.loginStatus" aria-label="Remember Me">
                         {{lang.remember_me}}
                     </md-checkbox>
                     <span flex></span>
-                    <a id="forget-password-link" href="#">{{lang.forget_password}}</a>
+                    <a id="forget-password-link" ng-disabled="login.loginStatus" href="#">{{lang.forget_password}}</a>
                 </div>
                 <br/>
                 <br/>

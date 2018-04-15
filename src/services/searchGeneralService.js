@@ -39,6 +39,7 @@ module.exports = function (app) {
         /**
          * @description Search the general document
          * @param model
+         * @param properties
          * @return {Promise|searchGenerals}
          */
         self.searchGeneralDocuments = function (model, properties) {

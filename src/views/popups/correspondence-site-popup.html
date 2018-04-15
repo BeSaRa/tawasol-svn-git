@@ -130,7 +130,7 @@
                             </div>
                         </md-content>
                     </md-tab>
-                    <md-tab ng-disabled="ctrl.correspondenceSite.isGlobal"
+                    <md-tab ng-disabled="ctrl.correspondenceSite.isGlobal || !ctrl.correspondenceSite.status"
                             label="{{lang.organization_units}}">
                         <md-content>
                             <div layout="column" class="p20">
@@ -296,7 +296,7 @@
                                             </th>
                                             <th ng-class="{'hide-table-header':ctrl.selectedSubCorrespondenceSites.length}"
                                                 md-column
-                                                md-order-by="global">
+                                                md-order-by="isGlobal">
                                                 <span>{{lang.global}}</span>
                                             </th>
                                             <th ng-if="!ctrl.selectedSubCorrespondenceSites.length" md-column>
@@ -307,10 +307,10 @@
                                                 <div layout="row" layout-align="start center">
                                                     <table-status-directive
                                                             when-close="ctrl.changeBulkStatusCorrespondenceSites"></table-status-directive>
-                                                    <md-button class="md-icon-button"
+                                                    <!--<md-button class="md-icon-button"
                                                                ng-click="ctrl.removeBulkCorrespondenceSites($event)">
                                                         <md-icon md-svg-icon="delete"></md-icon>
-                                                    </md-button>
+                                                    </md-button>-->
                                                 </div>
                                             </th>
                                         </tr>
@@ -336,10 +336,10 @@
                                             </td>
                                             <td md-cell>
                                                 <div flex layout="row" layout-align="start center">
-                                                    <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                    <!--<md-button class="md-icon-button" title="{{lang.delete}}"
                                                                ng-click="ctrl.removeCorrespondenceSite(correspondenceSite, $event)">
                                                         <md-icon md-svg-icon="delete"></md-icon>
-                                                    </md-button>
+                                                    </md-button>-->
                                                     <md-button class="md-icon-button" title="{{lang.edit}}"
                                                                ng-click="ctrl.editSubCorrespondenceSite(correspondenceSite, $event)">
                                                         <md-icon md-svg-icon="pencil"></md-icon>

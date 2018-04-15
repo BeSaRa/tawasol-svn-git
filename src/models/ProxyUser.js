@@ -1,11 +1,12 @@
 module.exports = function (app) {
-    app.factory('ProxyUser', function (CMSModelInterceptor) {
+    app.factory('ProxyUser', function (CMSModelInterceptor, generator) {
         'ngInject';
         return function ProxyUser(model) {
             var self = this;
             self.id = null;
             self.applicationUser = null;
             self.organization = null;
+            self.securityLevels = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -24,6 +25,7 @@ module.exports = function (app) {
             ProxyUser.prototype.mapFromOUApplicationUser = function (ouApplicationUser) {
                 return this.setApplicationUser(ouApplicationUser.applicationUser)
                     .setOrganization(ouApplicationUser.ouInfo)
+                    .setSecurityLevels(ouApplicationUser.securityLevels)
                     .setId(ouApplicationUser);
             };
 
@@ -40,6 +42,10 @@ module.exports = function (app) {
             };
             ProxyUser.prototype.setOrganization = function (organization) {
                 this.organization = organization;
+                return this;
+            };
+            ProxyUser.prototype.setSecurityLevels = function (securityLevels) {
+                this.securityLevels = angular.isArray(securityLevels) ? generator.getResultFromSelectedCollection(securityLevels, 'lookupKey') : securityLevels;
                 return this;
             };
 

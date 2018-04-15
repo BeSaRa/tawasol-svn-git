@@ -109,56 +109,33 @@
                                     ng-repeat="proxyMailInbox in ctrl.proxyMailInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                                     <td md-cell class="indicator-td">
                                         <!-- Security Level -->
-                                        <span flex
-                                              ng-class="{'indicator-content': proxyMailInbox.securityLevelIndicator}">
-                                            <md-icon ng-if="proxyMailInbox.securityLevelIndicator"
-                                                     class="{{proxyMailInbox.securityLevelIndicator.class}}"
-                                                     md-svg-icon="{{proxyMailInbox.securityLevelIndicator.icon}}"
-                                                     tooltip="{{lang[proxyMailInbox.securityLevelIndicator.tooltip].change({name: proxyMailInbox.securityLevelLookup.getTranslatedName()})}}"
-                                            ></md-icon>
-                                        </span>
+                                        <grid-indicator-directive record="proxyMailInbox"
+                                                                  indicator-type="securityLevel"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                         <!-- Doc Type -->
-                                        <span flex ng-class="{'indicator-content': proxyMailInbox.docTypeIndicator}">
-                                                    <md-icon ng-if="proxyMailInbox.docTypeIndicator"
-                                                             class="{{proxyMailInbox.docTypeIndicator.class}}"
-                                                             md-svg-icon="{{proxyMailInbox.docTypeIndicator.icon}}"
-                                                             tooltip="{{lang[proxyMailInbox.docTypeIndicator.tooltip]}}"
-                                                    ></md-icon>
-                                                </span>
+                                        <grid-indicator-directive record="proxyMailInbox"
+                                                                  indicator-type="docType"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                         <!-- Electronic/Paper Document -->
-                                        <span flex
-                                              ng-class="{'indicator-content': proxyMailInbox.isPaperIndicator}">
-                                             <md-icon ng-if="proxyMailInbox.isPaperIndicator"
-                                                      class="{{proxyMailInbox.isPaperIndicator.class}}"
-                                                      md-svg-icon="{{proxyMailInbox.isPaperIndicator.icon}}"
-                                                      tooltip="{{lang[proxyMailInbox.isPaperIndicator.tooltip]}}"
-                                             ></md-icon>
-                                         </span>
+                                        <grid-indicator-directive record="proxyMailInbox"
+                                                                  indicator-type="paperElectronic"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                         <!-- Is Reassigned -->
-                                        <span flex ng-class="{'indicator-content': proxyMailInbox.isReassignedIndicator}">
-                                            <md-icon ng-if="proxyMailInbox.isReassignedIndicator"
-                                                     class="{{proxyMailInbox.isReassignedIndicator.class}}"
-                                                     md-svg-icon="{{proxyMailInbox.isReassignedIndicator.icon}}"
-                                                     tooltip="{{lang[proxyMailInbox.isReassignedIndicator.tooltip]}}"
-                                            ></md-icon>
-                                        </span>
+                                        <grid-indicator-directive record="proxyMailInbox"
+                                                                  indicator-type="isReassigned"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                         <!-- Linked Documents -->
-                                        <span flex ng-class="{'indicator-content': proxyMailInbox.linkedDocsIndicator}">
-                                                   <md-icon ng-if="proxyMailInbox.linkedDocsIndicator"
-                                                            class="{{proxyMailInbox.linkedDocsIndicator.class}}"
-                                                            md-svg-icon="{{proxyMailInbox.linkedDocsIndicator.icon}}"
-                                                            tooltip="{{lang[proxyMailInbox.linkedDocsIndicator.tooltip]}}"
-                                                   ></md-icon>
-                                               </span>
+                                        <grid-indicator-directive record="proxyMailInbox"
+                                                                  indicator-type="hasLinkedDocuments"
+                                                                  record-type="workItem"></grid-indicator-directive>
+                                        <!-- Tags -->
+                                        <!--<grid-indicator-directive record="proxyMailInbox"
+                                                                  type="tags"
+                                                                  record-type="workItem"></grid-indicator-directive>-->
                                         <!-- Follow up Status -->
-                                        <span flex
-                                              ng-class="{'indicator-content': proxyMailInbox.followUpStatusIndicator}">
-                                            <md-icon ng-if="proxyMailInbox.followUpStatusIndicator"
-                                                     class="{{proxyMailInbox.followUpStatusIndicator.class}}"
-                                                     md-svg-icon="{{proxyMailInbox.followUpStatusIndicator.icon}}"
-                                                     tooltip="{{lang[proxyMailInbox.followUpStatusIndicator.tooltip].change({name: proxyMailInbox.followupStatusLookup.getTranslatedName()})}}"
-                                            ></md-icon>
-                                        </span>
+                                        <grid-indicator-directive record="proxyMailInbox"
+                                                                  indicator-type="followupStatus"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                     </td>
                                     <td md-cell>
                                         <md-button class="md-icon-button"
@@ -204,22 +181,13 @@
                                     <td md-cell class="indicator-td text-right"
                                         style="padding-right:0 !important; padding-left:0 !important;">
                                         <!-- Priority Level -->
-                                        <span ng-class="{'indicator-content': proxyMailInbox.priorityLevelIndicator}">
-                                                    <md-icon ng-if="proxyMailInbox.priorityLevelIndicator"
-                                                             class="{{proxyMailInbox.priorityLevelIndicator.class}}"
-                                                             md-svg-icon="{{proxyMailInbox.priorityLevelIndicator.icon}}"
-                                                             tooltip="{{lang[proxyMailInbox.priorityLevelIndicator.tooltip].change({name: proxyMailInbox.priorityLevelLookup.getTranslatedName()})}}"
-                                                    ></md-icon>
-                                                </span>
-                                        <!-- Has Attachment -->
-                                        <span class="float-right"
-                                              ng-class="{'indicator-content': proxyMailInbox.attachmentsIndicator}">
-                                                    <md-icon ng-if="proxyMailInbox.attachmentsIndicator"
-                                                             class="{{proxyMailInbox.attachmentsIndicator.class}}"
-                                                             md-svg-icon="{{proxyMailInbox.attachmentsIndicator.icon}}"
-                                                             tooltip="{{lang[proxyMailInbox.attachmentsIndicator.tooltip]}}"
-                                                    ></md-icon>
-                                                </span>
+                                        <grid-indicator-directive record="proxyMailInbox"
+                                                                  indicator-type="priorityLevel"
+                                                                  record-type="workItem"></grid-indicator-directive>
+                                        <!-- Has Attachments -->
+                                        <grid-indicator-directive record="proxyMailInbox" span-class="float-right"
+                                                                  indicator-type="hasAttachment"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                     </td>
                                     <td md-cell md-truncate class="subject">
                                         <a href="" class="view-doc" ng-if="proxyMailInbox.hasContent()" title="{{proxyMailInbox.generalStepElm.docSubject}}"
@@ -234,9 +202,12 @@
                                         </div>
                                     </td>
                                     <td md-cell class="td-data">
-                                            <span class="{{proxyMailInbox.dueDateStatusIndicator.class}}"
+                                        <grid-indicator-directive record="proxyMailInbox"
+                                                                  indicator-type="dueDate"
+                                                                  record-type="workItem"></grid-indicator-directive>
+                                            <!--<span class="{{proxyMailInbox.dueDateStatusIndicator.class}}"
                                                   tooltip="{{lang[proxyMailInbox.dueDateStatusIndicator.tooltip].change({due_date_status:lang[proxyMailInbox.dueDateStatusIndicator.text] })}}">
-                                                {{proxyMailInbox.generalStepElm.dueDate}}</span>
+                                                {{proxyMailInbox.generalStepElm.dueDate}}</span>-->
                                     </td>
                                     <td md-cell>
                                         <main-site-sub-site-directive item="proxyMailInbox"

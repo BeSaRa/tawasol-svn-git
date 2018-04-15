@@ -11,7 +11,7 @@
                     <label>{{lang.select_correspondenceSite}}</label>
                     <md-select multiple ng-model="ctrl.correspondenceSite">
                         <md-option
-                                ng-if="ctrl.excludeIfExists(correspondenceSite) && correspondenceSite.status && !correspondenceSite.isGlobal"
+                                ng-if="ctrl.excludeIfExists(correspondenceSite) && !correspondenceSite.isGlobal && correspondenceSite.status"
                                 ng-value="correspondenceSite"
                                 ng-repeat="correspondenceSite in ctrl.correspondenceSites track by $index">
                             {{correspondenceSite.getTranslatedName()}}

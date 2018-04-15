@@ -42,6 +42,21 @@ module.exports = function (app) {
 
         self.langService = langService;
 
+        self.bySender = false;
+
+
+        self.changeCriteria = function () {
+            var local = angular.copy(self.searchModel);
+
+            if (self.bySender) {
+                self.searchModel = {
+                    senderInfo: {}
+                };
+                self.searchModel.senderInfo[langService.current + 'Name'] = local;
+            } else {
+                self.searchModel = local.hasOwnProperty('senderInfo') ? local.senderInfo[langService.current + 'Name'] : local;
+            }
+        };
         /**
          * @description All user inboxes
          * @type {*}
@@ -338,7 +353,10 @@ module.exports = function (app) {
          */
         self.sendWorkItemToReadyToExport = function (userInbox, $event, defer) {
             if (userInbox.exportViaArchive()) {
-                return userInbox.exportWorkItem($event, true);
+                return userInbox.exportWorkItem($event, true).then(function () {
+                    self.reloadUserInboxes(self.grid.page);
+                    new ResolveDefer(defer);
+                });
             }
             userInbox.sendToReadyToExport().then(function () {
                 self.reloadUserInboxes(self.grid.page)
@@ -385,7 +403,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (userInbox, $event) {
-            var info = userInbox.getInfo();
+            //var info = userInbox.getInfo();
             userInbox.manageDocumentComments($event)
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page);
@@ -410,7 +428,13 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (userInbox, $event) {
-            userInbox.manageDocumentAttachments($event);
+            userInbox.manageDocumentAttachments($event)
+                .then(function () {
+                    self.reloadUserInboxes(self.grid.page);
+                })
+                .catch(function (error) {
+                    self.reloadUserInboxes(self.grid.page);
+                });
         };
 
 
@@ -560,8 +584,15 @@ module.exports = function (app) {
          */
         self.signESignature = function (userInbox, $event, defer) {
             userInbox
-                .approveWorkItem($event)
-                .then(function () {
+                .approveWorkItem($event, defer)
+                .then(function (result) {
+                    userInbox
+                        .launchWorkFlowCondition($event, 'reply', null, true, function () {
+                            return result === 'INTERNAL_PERSONAL'
+                        })
+                        .then(function () {
+                            self.reloadUserInboxes(self.grid.page);
+                        });
                     self.reloadUserInboxes(self.grid.page);
                 });
         };
@@ -689,7 +720,7 @@ module.exports = function (app) {
         /**
          * @description do broadcast for workItem.
          */
-        self.doBroadcast = function (userInbox, $event, defer) {
+        self.broadcast = function (userInbox, $event, defer) {
             userInbox
                 .correspondenceBroadcast()
                 .then(function () {
@@ -782,7 +813,7 @@ module.exports = function (app) {
                 callback: self.forward,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                    return self.checkToShowAction(action, model) /*&& !model.isBroadcasted()*/ // remove the this cond. after talk  with ;
                 }
             },
             // Broadcast
@@ -792,7 +823,7 @@ module.exports = function (app) {
                 text: 'grid_action_broadcast',
                 shortcut: false,
                 hide: false,
-                callback: self.doBroadcast,
+                callback: self.broadcast,
                 checkShow: function (action, model) {
                     return self.checkToShowAction && (!model.needApprove() || model.hasDocumentClass('incoming')) && !model.isBroadcasted();
                 }
@@ -975,7 +1006,6 @@ module.exports = function (app) {
                         shortcut: false,
                         callback: self.manageDestinations,
                         permissionKey: "MANAGE_DESTINATIONS",
-                        hide: false,
                         class: "action-green",
                         checkShow: function (action, model) {
                             return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
@@ -1177,11 +1207,14 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     var hasPermission = false;
                     if (info.documentClass === "internal")
-                        hasPermission = (employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT"));
+                        hasPermission = ((employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") && checkIfEditPropertiesAllowed(model))
+                            || (employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT") && info.docStatus < 23));
                     else if (info.documentClass === "incoming")
-                        hasPermission = (employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT"));
+                        hasPermission = ((employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES") && checkIfEditPropertiesAllowed(model))
+                            || (employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT") && info.docStatus < 23));
                     else if (info.documentClass === "outgoing")
-                        hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                        hasPermission = ((employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") && checkIfEditPropertiesAllowed(model))
+                            || (employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT") && info.docStatus < 23));
                     return self.checkToShowAction(action, model) && hasPermission && !model.isBroadcasted();
                 },
                 subMenu: [
@@ -1201,6 +1234,9 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
+                            /*If partially approved, don't show edit content*/
+                            if (info.docStatus === 23)
+                                return false;
                             var hasPermission = false;
                             if (info.documentClass === "internal")
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
@@ -1208,7 +1244,8 @@ module.exports = function (app) {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
                             else if (info.documentClass === "outgoing")
                                 hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
-                            return self.checkToShowAction(action, model) && hasPermission && info.docStatus < 24;
+                            return self.checkToShowAction(action, model) && hasPermission && info.docStatus < 23;
+                            /*If partially or fully approved, don't show edit content*/
                         }
                     },
                     // Properties

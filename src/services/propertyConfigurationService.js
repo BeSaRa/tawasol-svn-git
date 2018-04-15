@@ -31,7 +31,7 @@ module.exports = function (app) {
          * @param documentClass
          * @param ouId
          */
-        self.loadPropertyConfigurationsByDocumentClass = function (documentClass, ouId) {
+        self.loadPropertyConfigurationsByDocumentClassAndOU = function (documentClass, ouId) {
             ouId = ouId.hasOwnProperty('id') ? ouId.id : ouId;
             return $http.get(urlService.propertyConfigurations + '/ou/' + ouId + '/' + documentClass).then(function (result) {
                 var collection = generator.generateCollection(result.data.rs, PropertyConfiguration, self._sharedMethods);
@@ -53,6 +53,8 @@ module.exports = function (app) {
         self.controllerMethod = {
             /**
              * @description Opens popup to add new property configuration
+             * @param ouId
+             * @param selectedDocumentClass
              * @param $event
              */
             propertyConfigurationAdd: function (ouId, selectedDocumentClass, $event) {
@@ -143,7 +145,10 @@ module.exports = function (app) {
                 .post(urlService.propertyConfigurations,
                     generator.interceptSendInstance('PropertyConfiguration', propertyConfiguration))
                 .then(function (result) {
-                    return generator.interceptReceivedInstance('PropertyConfiguration', generator.generateInstance(result.data.rs, PropertyConfiguration, self._sharedMethods));
+                    return true;
+                })
+                .catch(function(error){
+                    return false;
                 });
         };
 
@@ -156,8 +161,11 @@ module.exports = function (app) {
             return $http
                 .put(urlService.propertyConfigurations,
                     generator.interceptSendInstance('PropertyConfiguration', propertyConfiguration))
-                .then(function () {
-                    return generator.interceptReceivedInstance('PropertyConfiguration', generator.generateInstance(propertyConfiguration, PropertyConfiguration, self._sharedMethods));
+                .then(function (result) {
+                    return true;
+                })
+                .catch(function(error){
+                    return false;
                 });
         };
 

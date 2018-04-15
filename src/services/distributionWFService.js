@@ -192,7 +192,9 @@ module.exports = function (app) {
          * @param favoritesName
          */
         self.loadFavorites = function (favoritesName) {
-            return $http.get(urlService.favoritesDWF + '/' + self.favoriteUrlMap[favoritesName].url)
+            return $http.get(urlService.favoritesDWF + '/' + self.favoriteUrlMap[favoritesName].url, {
+                loading: false
+            })
                 .then(function (result) {
                     self[self.favoriteUrlMap[favoritesName].property] = generator.generateCollection(result.data.rs, self.favoriteUrlMap[favoritesName].model);
                     return self[self.favoriteUrlMap[favoritesName].property];
@@ -321,7 +323,7 @@ module.exports = function (app) {
                 workItemUrl = [urlService.correspondenceWF, 'forward', 'bulk'],
                 correspondenceUrl = [urlService.correspondenceWF, 'bulk'],
 
-                distBulk = (new DistributionBulk()).setDistributionBulk(correspondences, generator.interceptSendInstance('DistributionWF',distributionWF));
+                distBulk = (new DistributionBulk()).setDistributionBulk(correspondences, generator.interceptSendInstance('DistributionWF', distributionWF));
             return $http.post(workItem ? workItemUrl.join('/') : correspondenceUrl.join('/'), distBulk).then(function (result) {
                 _emptyDistributionWFData();
                 return result.data.rs;

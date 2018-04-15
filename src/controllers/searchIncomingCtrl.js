@@ -32,13 +32,18 @@ module.exports = function (app) {
                                                    correspondenceService,
                                                    $state,
                                                    dialog,
-                                                   favoriteDocumentsService) {
+                                                   favoriteDocumentsService//,
+                                                   //centralArchives
+    ) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchIncomingCtrl';
         contextHelpService.setHelpTo('search-incoming');
         self.progress = null;
         self.showAdvancedSearch = false;
+        // employee service to check the permission in html
+        self.employeeService = employeeService;
+
         self.searchIncoming = new DocumentSearch({"reqType": 1});
         //self.searchIncoming.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
         self.searchIncomingModel = angular.copy(self.searchIncoming);
@@ -46,17 +51,8 @@ module.exports = function (app) {
         //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
         self.propertyConfigurations = propertyConfigurations;
-        /*self.docStatuses = [
-         {text: 'Receive', 'value': 1},
-         {text: 'Meta Data', 'value': 2},
-         {text: 'Draft', 'value': 3},
-         {text: 'Completed', 'value': 4},
-         {text: 'Rejected', 'value': 7},
-         {text: 'Ready For Sent', 'value': 8},
-         {text: 'Removed', 'value': 9},
-         {text: 'Archived', 'value': 21}
-         ];*/
-        self.docStatuses = documentStatuses;
+
+        self.docStatuses = angular.copy(documentStatuses);
         self.docStatuses.unshift(new DocumentStatus({arName: 'الكل', enName: 'All'}));
         self.followupStatuses = lookupService.returnLookups(lookupService.followupStatus);
         self.approvers = [];
@@ -109,7 +105,42 @@ module.exports = function (app) {
             }
             return false;
         };
+        /*
+                // in case of central archive.
+                self.registryOrganizations = centralArchives;
 
+                self.isSearchByRegOU = true;
+                self.getTranslatedYesNo = function (fieldName) {
+                    return self[fieldName] ? langService.get('yes') : langService.get('no');
+                };
+
+                self.ouToggleDefaultDisabled = false;
+                self.regOuToggleDefaultDisabled = false;
+
+                self.checkRegOuToggleDisabled = function () {
+                    if (employeeService.isCentralArchive()) {
+                        return self.searchIncoming.ou;
+                    }
+                    return false;
+                };
+
+                self.checkOuToggleDisabled = function () {
+                    if (employeeService.isCentralArchive()) {
+                        return self.isSearchByRegOU;
+                    }
+                    return false;
+                };
+
+                self.changeRegOuToggle = function () {
+                    if (!self.isSearchByRegOU) {
+                        self.searchIncoming.regOu = null;
+                    }
+                };
+
+                self.changeOuToggle = function () {
+                    /!*self.isSearchByRegOU = false;
+                     self.searchIncoming.regOu = null;*!/
+                };*/
 
         /**
          * @description Checks the required fields validation
@@ -290,6 +321,15 @@ module.exports = function (app) {
          * @description Search the document on basis of search criteria
          */
         self.search = function ($event) {
+            /*if(self.isSearchByRegOU){
+                if(!employeeService.isCentralArchive()){
+                    self.searchIncoming.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
+                }
+            }
+            else{
+                self.searchIncoming.registryOU = null;
+            }*/
+
             validationService
                 .createValidation('SEARCH_INCOMING')
                 .addStep('check_required', true, self.checkRequiredFieldsSearchIncoming, self.searchIncoming, function (result) {
@@ -390,6 +430,18 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description add selected items to the favorite documents
+         * @param $event
+         */
+        self.addToFavoriteBulk = function ($event) {
+            favoriteDocumentsService.controllerMethod
+                .favoriteDocumentAddBulk(self.selectedSearchedIncomingDocuments, $event)
+                .then(function (result) {
+                    self.reloadSearchedIncomingDocument(self.grid.page);
+                });
+        };
+
 
         /**
          * @description add an item to the favorite documents
@@ -441,25 +493,28 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-
-            return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
+            searchedIncomingDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
-                    /*distributionWorkflowService
-                     .controllerMethod
-                     .distributionWorkflowSend(searchedIncomingDocument, false, false, null, "incoming", $event)
-                     .then(function (result) {
-                     self.reloadSearchedIncomingDocument(self.grid.page);
-                     //self.replaceRecord(result);
-                     })
-                     .catch(function (result) {
-                     self.reloadSearchedIncomingDocument(self.grid.page);
-                     //self.replaceRecord(result);
-                     });*/
-                    searchedIncomingDocument.launchWorkFlow($event, 'forward', 'favorites')
-                        .then(function () {
-                            self.reloadSearchedIncomingDocument(self.grid.page);
-                        });
-                });
+                    self.reloadSearchedIncomingDocument(self.grid.page);
+                })
+            // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
+            //     .then(function () {
+            //         /*distributionWorkflowService
+            //          .controllerMethod
+            //          .distributionWorkflowSend(searchedIncomingDocument, false, false, null, "incoming", $event)
+            //          .then(function (result) {
+            //          self.reloadSearchedIncomingDocument(self.grid.page);
+            //          //self.replaceRecord(result);
+            //          })
+            //          .catch(function (result) {
+            //          self.reloadSearchedIncomingDocument(self.grid.page);
+            //          //self.replaceRecord(result);
+            //          });*/
+            //         searchedIncomingDocument.launchWorkFlow($event, 'forward', 'favorites')
+            //             .then(function () {
+            //                 self.reloadSearchedIncomingDocument(self.grid.page);
+            //             });
+            //     });
         };
 
         /**
@@ -562,6 +617,15 @@ module.exports = function (app) {
             //console.log('manage linked entities for searched incoming document : ', searchedIncomingDocument);
             managerService
                 .manageDocumentEntities(searchedIncomingDocument.vsId, searchedIncomingDocument.docClassName, searchedIncomingDocument.docSubject, $event);
+        };
+
+        /**
+         * @description Destinations
+         * @param searchedIncomingDocument
+         * @param $event
+         */
+        self.manageDestinations = function (searchedIncomingDocument, $event) {
+            managerService.manageDocumentCorrespondence(searchedIncomingDocument.vsId, searchedIncomingDocument.docClassName, searchedIncomingDocument.docSubject, $event)
         };
 
         /**
@@ -684,7 +748,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(searchedIncomingDocument, self.gridActions, true, true);
+            correspondenceService.viewCorrespondence(searchedIncomingDocument, self.gridActions, true, false);
             return;
         };
 
@@ -712,8 +776,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }
@@ -723,7 +787,7 @@ module.exports = function (app) {
         /**
          * @description do broadcast for correspondence.
          */
-        self.doBroadcast = function (correspondence, $event, defer) {
+        self.broadcast = function (correspondence, $event, defer) {
             correspondence
                 .correspondenceBroadcast()
                 .then(function () {
@@ -827,7 +891,7 @@ module.exports = function (app) {
                 text: 'grid_action_broadcast',
                 shortcut: false,
                 hide: false,
-                callback: self.doBroadcast,
+                callback: self.broadcast,
                 checkShow: self.checkToShowAction
             },
             // Print Barcode
@@ -922,6 +986,17 @@ module.exports = function (app) {
                         shortcut: false,
                         callback: self.manageLinkedEntities,
                         class: "action-green",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Destinations
+                    {
+                        type: 'action',
+                        icon: 'stop',
+                        text: 'grid_action_destinations',
+                        shortcut: false,
+                        callback: self.manageDestinations,
+                        permissionKey: "MANAGE_DESTINATIONS",
+                        class: "action-yellow",
                         checkShow: self.checkToShowAction
                     }
                 ]

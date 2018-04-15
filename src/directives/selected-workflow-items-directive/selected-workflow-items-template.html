@@ -3,7 +3,7 @@
         <md-table-container>
             <table md-table multiple ng-model="ctrl.selectedWorkflowItems"
                    md-row-select="true">
-                <thead md-head md-order="ctrl.gridSelected.users.order">
+                <thead md-head md-order="ctrl.grid.order">
                 <tr md-row>
                     <th colspan="4" ng-if="ctrl.selectedWorkflowItems.length" md-column>
                         <span>{{ctrl.selectedWorkflowItems.length}} {{lang.items_selected}} </span>
@@ -48,7 +48,7 @@
                 </thead>
                 <tbody md-body>
                 <tr md-row md-select="workflowItem"
-                    ng-repeat="workflowItem in ctrl.workflowItems |limitTo: ctrl.gridSelected.users.limit: ((ctrl.gridSelected.users.page - 1) * ctrl.gridSelected.users.limit) |orderBy:ctrl.gridSelected.users.order track by $index">
+                    ng-repeat="workflowItem in ctrl.workflowItems |limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
                     <td md-cell>
                         <span>{{workflowItem.getTranslatedName()}}</span>
                     </td>
@@ -75,8 +75,8 @@
                     <td md-cell>
                         <md-menu-bar class="no-padding">
                             <md-menu>
-                                <md-button class="normal-case m0" ng-click="$mdMenu.open()">
-                                    <span>{{workflowItem.comments ? workflowItem.comments : workflowItem.getCommentMessage()}}</span>
+                                <md-button class="normal-case max-width-200 m0" ng-click="$mdMenu.open()">
+                                    <span md-truncate>{{workflowItem.comments ? workflowItem.comments : workflowItem.getCommentMessage()}}</span>
                                 </md-button>
                                 <md-menu-content>
                                     <md-menu-item ng-repeat="comment in ctrl.workflowComments track by $index">
@@ -116,9 +116,9 @@
             </table>
             <md-table-pagination
                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
-                    md-limit-options="ctrl.gridSelected.users.limitOptions"
-                    md-limit="ctrl.gridSelected.users.limit"
-                    md-page="ctrl.gridSelected.users.page"
+                    md-limit-options="ctrl.grid.limitOptions"
+                    md-limit="ctrl.grid.limit"
+                    md-page="ctrl.grid.page"
                     md-total="{{ctrl.workflowItems.length}}" md-page-select>
             </md-table-pagination>
         </md-table-container>

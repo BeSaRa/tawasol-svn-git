@@ -80,7 +80,10 @@ module.exports = function (app) {
             } else {
                 model.linkedDocs = angular.toJson([]);
             }
-
+            //Remove the Linked Exported documents from attachments list
+            model.attachments = _.filter(model.attachments, function (attachment) {
+                return !attachment.refVSID;
+            });
             if (angular.isArray(model.attachments) && model.attachments.length && model.attachments[0]) {
                 model.attachments = (model.attachments[0].hasOwnProperty('vsId')) ? angular.toJson(_.map(model.attachments, 'vsId')) : angular.toJson(model.attachments);
             } else {
@@ -118,7 +121,9 @@ module.exports = function (app) {
 
             delete model.documentComments;
             delete model.securityLevelIndicator;
+            delete model.securityLevelLookup;
             delete model.priorityLevelIndicator;
+            delete model.priorityLevelLookup;
             delete model.attachmentsIndicator;
             delete model.linkedDocsIndicator;
             delete model.tagsIndicator;
@@ -145,7 +150,8 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            var documentClass = model.getInfo().documentClass;
+            var documentClass = model.getInfo().documentClass,
+                entityTypes = correspondenceService.getLookup(documentClass, 'entityTypes');
 
             if (!angular.isArray(model.attachments))
                 model.attachments = (model.attachments && model.attachments.length) ? Array.prototype.slice.call(JSON.parse(model.attachments)) : [];
@@ -163,12 +169,15 @@ module.exports = function (app) {
             model.subClassification = correspondenceService.getCorrespondenceLookupById(documentClass, 'classifications', model.subClassification) || model.subClassification;
 
             model.docTypeForSearchGrid = _.find(documentTypeService.documentTypes, {lookupKey: model.docType});
+            //debugger;
+            //console.log('model.docType check type', model.docType);
             model.docType = correspondenceService.getLookup(documentClass, 'docTypes', model.docType) || model.docType;
+
 
             model.fileId = correspondenceService.getCorrespondenceLookupById(documentClass, 'documentFiles', model.fileId) || model.fileId; // not lookup
 
-            model.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
-            model.priorityLevel = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
+            model.securityLevel = model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
+            model.priorityLevel = model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
 
             if (!angular.isDate(model.docDate)) {
                 model.docDate = moment(model.docDate).format('YYYY-MM-DD');
@@ -182,7 +191,7 @@ module.exports = function (app) {
 
             if (model.linkedEntities && !angular.isArray(model.linkedEntities)) {
                 model.linkedEntities = _.map(JSON.parse(model.linkedEntities), function (entity) {
-                    entity.typeId = entity.typeId === null ? entityTypeService.getLinkedType(0) : entityTypeService.getLinkedType(entity.typeId);
+                    entity.typeId = entity.typeId === null ? entityTypeService.getLinkedType(0, entityTypes) : entityTypeService.getLinkedType(entity.typeId, entityTypes);
                     return new LinkedObject(entity);
                 });
             } else {

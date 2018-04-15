@@ -113,7 +113,10 @@ module.exports = function (app) {
                         callback: callback,
                         params: ['view_tracking_sheet_destination_history', 'grid'], /* params[0] is used to give heading to popup and params[1] showing that there is only a grid only*/
                         class: "action-green",
-                        checkShow: checkToShowAction
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            return checkToShowAction(action, model) && info.documentClass === "outgoing";
+                        }
                     },
                     // Content View History
                     {
@@ -701,11 +704,11 @@ module.exports = function (app) {
                         for (i = 0; i < self.destinationHistory.length; i++) {
                             record = self.destinationHistory[i];
                             data.push([
-                                record.getTranslatedActionBy(),
+                                record.actionByInfo.getTranslatedName(),
                                 record.actionDate,
-                                record.getTranslatedAction(),
+                                record.eventTypeInfo.getTranslatedName(),
                                 //'',
-                                record.itemName
+                                record.itemInfo.getTranslatedName()
                             ]);
                         }
                     }

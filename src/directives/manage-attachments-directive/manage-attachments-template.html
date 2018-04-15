@@ -110,6 +110,9 @@
                                 </md-button>
                             </div>
                         </th>
+                        <th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="">
+                            <!-- linked exported doc(attachment with refVSID) Indicators -->
+                        </th>
                         <th ng-if="!ctrl.selectedAttachments.length" md-column md-order-by="documentTitle">
                             <span>{{lang.attachment_document_title}}</span>
                         </th>
@@ -128,7 +131,22 @@
                     <tr md-row md-select="attachment"
                         ng-disabled="ctrl.disableEverything"
                         ng-repeat="attachment in ctrl.attachments  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
-                        <td md-cell>{{attachment.documentTitle}}</td>
+                        <td md-cell class="indicator-td">
+                            <!-- Linked Exported Doc -->
+                            <grid-indicator-directive record="attachment"
+                                                      indicator-type="isLinkedExportedDoc"
+                                                      record-type="Attachment"></grid-indicator-directive>
+
+                            <!--<span flex
+                                  ng-class="{'indicator-content': attachment.isLinkedExportedDocIndicator}">
+                                            <md-icon ng-if="attachment.isLinkedExportedDocIndicator"
+                                                     class="{{attachment.isLinkedExportedDocIndicator.class}}"
+                                                     md-svg-icon="{{attachment.isLinkedExportedDocIndicator.icon}}"
+                                                     tooltip="{{lang[attachment.isLinkedExportedDocIndicator.tooltip]}}"
+                                            ></md-icon>
+                                        </span>-->
+                        </td>
+                        <td md-cell>{{attachment.getTranslatedName()}}</td>
                         <td md-cell>{{attachment.attachmentType.getTranslatedName()}}</td>
                         <td md-cell>{{attachment.getSecurityLevels()}}</td>
                         <td md-cell>
@@ -142,7 +160,7 @@
                                 <!--<md-icon md-svg-icon="pencil"></md-icon>-->
                                 <!--</md-button>-->
                                 <md-button class="md-icon-button" title="{{lang.attachment_delete}}"
-                                           ng-if="!ctrl.disableEverything"
+                                           ng-if="!ctrl.disableEverything && !attachment.refVSID"
                                            ng-click="ctrl.deleteDocumentAttachment(attachment, $event)">
                                     <md-icon md-svg-icon="delete"></md-icon>
                                 </md-button>

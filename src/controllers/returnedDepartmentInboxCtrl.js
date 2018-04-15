@@ -707,7 +707,7 @@ module.exports = function (app) {
                 callback: self.launchNewDistributionWorkflow,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
-                hide: true, /*To be discussed with Mr. Ahmed Abu Al Nassr*/
+                hide: false, /*As discussed with Mr. Ahmed Abu Al Nassr*/
                 checkShow: self.checkToShowAction
             },
             // View Tracking Sheet

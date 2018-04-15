@@ -781,7 +781,6 @@ module.exports = function (app) {
                         shortcut: false,
                         callback: self.manageDestinations,
                         permissionKey: "MANAGE_DESTINATIONS",
-                        hide: false,
                         class: "action-yellow",
                         checkShow: self.checkToShowAction
                     }
@@ -819,10 +818,9 @@ module.exports = function (app) {
                 icon: 'bullhorn',
                 text: 'grid_action_broadcast',
                 shortcut: false,
-                hide: true,
                 callback: self.broadcast,
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && model.approvers !== null;
+                    return self.checkToShowAction(action, model);
                 }
             }
         ];

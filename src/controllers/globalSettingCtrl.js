@@ -131,13 +131,13 @@ module.exports = function (app) {
                 });
         };
 
-        self.disableSecurityLevel= function(securityLevel){
+        self.disableSecurityLevel = function (securityLevel) {
             return !!self.globalSettingCopy.id && !!_.find(self.globalSettingCopy.securityLevels, function (globalSecurityLevel) {
-                return globalSecurityLevel.lookupKey === securityLevel.lookupKey;
-            });
+                    return globalSecurityLevel.lookupKey === securityLevel.lookupKey;
+                });
         };
 
-        self.checkMinimumSecurityLevel = function(globalSetting){
+        self.checkMinimumSecurityLevel = function (globalSetting) {
             return generator.getResultFromSelectedCollection(globalSetting.securityLevels, 'lookupKey') >= generator.getResultFromSelectedCollection(self.globalSettingCopy.securityLevels, 'lookupKey');
         };
 
@@ -181,6 +181,21 @@ module.exports = function (app) {
                 .catch(function () {
 
                 });
+        };
+
+        self.tabsToShow = [
+            'basic',
+            'appearance',
+            'auditlog',
+            'docsecurity',
+            'workflowsecurity',
+            'workflownotification',
+            'upload',
+            //'barcodeSettings'
+        ];
+
+        self.showTab = function (tabName) {
+            return self.tabsToShow.indexOf(tabName) > -1;
         };
 
         /**

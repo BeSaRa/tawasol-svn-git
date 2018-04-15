@@ -29,7 +29,6 @@ module.exports = function (app) {
         // the excluded must be CorrespondenceSite Instance.
         self.excluded = _.map(excluded, 'id');
 
-
         self.excludeIfExists = function (correspondenceSite) {
             return self.excluded.indexOf(correspondenceSite.id) === -1;
         };

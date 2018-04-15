@@ -2,7 +2,8 @@ module.exports = function (app) {
     app.factory('Outgoing', function (CMSModelInterceptor,
                                       generator,
                                       Site,
-                                      Correspondence) {
+                                      Correspondence,
+                                      Indicator) {
         'ngInject';
         return function Outgoing(model) {
             var self = this, correspondenceService;
@@ -46,6 +47,24 @@ module.exports = function (app) {
             Outgoing.prototype.hasSiteCC = function () {
                 return this.sitesInfoCC && this.sitesInfoCC.length;
             };
+
+            var indicator = new Indicator();
+            Outgoing.prototype.getIsPaperIndicator = function ($event) {
+                return indicator.getIsPaperIndicator(this.addMethod);
+            };
+
+            Outgoing.prototype.getSecurityLevelIndicator = function (securityLevel) {
+                return indicator.getSecurityLevelIndicator(securityLevel);
+            };
+
+            Outgoing.prototype.getDocTypeIndicator = function () {
+                return indicator.getDocTypeIndicator('outgoing');
+            };
+
+            Outgoing.prototype.getPriorityLevelIndicator = function (priorityLevel) {
+                return indicator.getPriorityLevelIndicator(priorityLevel);
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

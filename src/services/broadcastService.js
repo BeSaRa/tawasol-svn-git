@@ -70,7 +70,7 @@ module.exports = function (app) {
          * @description load workflow group from server
          */
         self.loadWorkflowGroups = function () {
-            return $http.get(urlService.workflowGroupDistributionWorkflow).then(function (result) {
+            return $http.get(urlService.distributionWFGroups).then(function (result) {
                 var workflowGroups = _.map(result.data.rs, function (workflowGroup) {
                     return workflowGroup.wfgroup;
                 });

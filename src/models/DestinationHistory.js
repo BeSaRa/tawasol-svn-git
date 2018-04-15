@@ -15,6 +15,7 @@ module.exports = function (app) {
             self.itemName = null;
             self.itemId = null;
             self.itemType = null;
+            self.itemInfo = null;
             self.itemFullSerial = null;
             self.comments = null;
             self.ouId = null;
@@ -31,11 +32,11 @@ module.exports = function (app) {
             if (model)
                 angular.extend(this, model);
 
-            DestinationHistory.prototype.getTranslatedActionBy = function (reverse) {
+            /*DestinationHistory.prototype.getTranslatedActionBy = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.actionByInfo.enName : this.actionByInfo.arName) : (reverse ? this.actionByInfo.arName : this.actionByInfo.enName);
-            };
+            };*/
 
-            DestinationHistory.prototype.allActions = function () {
+            /*DestinationHistory.prototype.allActions = function () {
                 return [
                     {id: 0, enName: 'Add', arName: 'Add'},
                     {id: 1, enName: 'Edit', arName: 'Edit'},
@@ -50,7 +51,7 @@ module.exports = function (app) {
                     return action.id === operation;
                 });
                 return langService.current === 'ar' ? (reverse ? objAction.enName : objAction.arName) : (reverse ? objAction.arName : objAction.enName);
-            };
+            };*/
 
             CMSModelInterceptor.runEvent('DestinationHistory', 'init', this);
         }

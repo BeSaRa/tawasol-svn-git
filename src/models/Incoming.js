@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('Incoming', function (CMSModelInterceptor, Correspondence, Site) {
+    app.factory('Incoming', function (CMSModelInterceptor, Correspondence, Site, Information, Indicator) {
         'ngInject';
         return function Incoming(model) {
             var self = this, correspondenceService;
@@ -40,7 +40,7 @@ module.exports = function (app) {
                 self.site = self.subSiteId ? new Site({
                     mainSiteId: self.mainSiteId,
                     subSiteId: self.subSiteId,
-                    followupStatus: self.followupStatus,
+                    followupStatus: new Information(self.followupStatusInfo),
                     followupDate: self.followupDate,
                     mainEnSiteText: self.mainSiteInfo.enName,
                     mainArSiteText: self.mainSiteInfo.arName,
@@ -49,6 +49,23 @@ module.exports = function (app) {
                     siteType: correspondenceService.getLookup('incoming', 'siteTypes', model.siteType)
                 }) : null;
 
+            };
+
+            var indicator = new Indicator();
+            Incoming.prototype.getSecurityLevelIndicator = function (securityLevel) {
+                return indicator.getSecurityLevelIndicator(securityLevel);
+            };
+
+            Incoming.prototype.getDocTypeIndicator = function () {
+                return indicator.getDocTypeIndicator('incoming');
+            };
+
+            Incoming.prototype.getPriorityLevelIndicator = function (priorityLevel) {
+                return indicator.getPriorityLevelIndicator(priorityLevel);
+            };
+            Incoming.prototype.receiveDocument = function (wobNumber) {
+                correspondenceService = this.getCorrespondenceService();
+                return correspondenceService.receiveIncoming(this, wobNumber);
             };
 
             // don't remove CMSModelInterceptor from last line

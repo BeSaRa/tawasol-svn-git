@@ -17,13 +17,13 @@
                             <input name="localizationKey"
                                    lang-key-exists-directive
                                    id="localizationKey"
-                                   custom-validate-directive="E_" required
+                                   custom-validate-directive="EN_" required
                                    minlength="1" maxlength="200"
                                    ng-model="ctrl.localization.localizationKey">
                             <div ng-messages="localization_form.localizationKey.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                                 <div ng-message="minlength">{{lang.short}}</div>
-                                <div ng-message="E_">{{lang.arabic_number_space}}</div>
+                                <div ng-message="EN_">{{lang.english_number_under_score}}</div>
                                 <div ng-message="lang_key_exists">{{lang.lang_key_exists}}</div>
                             </div>
                         </md-input-container>

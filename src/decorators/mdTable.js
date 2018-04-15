@@ -85,7 +85,7 @@ module.exports = function (app) {
                 }
 
                 function _checkIfInsideWorkflowUserDirective() {
-                    return $scope.$parent && $scope.$parent.ctrl && $scope.$parent.ctrl.controllerName && $scope.$parent.ctrl.controllerName === 'workflowUsersDirectiveCtrl';
+                    return $scope.$parent && $scope.$parent.ctrl && $scope.$parent.ctrl.controllerName && ($scope.$parent.ctrl.controllerName === 'workflowUsersDirectiveCtrl' || $scope.$parent.ctrl.controllerName === 'workflowItemsDirectiveCtrl');
                 }
 
                 self.columnCount = function () {

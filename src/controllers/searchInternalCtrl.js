@@ -30,11 +30,16 @@ module.exports = function (app) {
                                                    employeeService,
                                                    correspondenceService,
                                                    dialog,
-                                                   favoriteDocumentsService) {
+                                                   favoriteDocumentsService//,
+                                                   //centralArchives
+    ) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchInternalCtrl';
         contextHelpService.setHelpTo('search-internal');
+
+        // employee service to check the permission in html
+        self.employeeService = employeeService;
 
         self.progress = null;
         self.showAdvancedSearch = false;
@@ -45,17 +50,8 @@ module.exports = function (app) {
         //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
         self.propertyConfigurations = propertyConfigurations;
-        /*self.docStatuses = [
-         {text: 'Receive', 'value': 1},
-         {text: 'Meta Data', 'value': 2},
-         {text: 'Draft', 'value': 3},
-         {text: 'Completed', 'value': 4},
-         {text: 'Rejected', 'value': 7},
-         {text: 'Ready For Sent', 'value': 8},
-         {text: 'Removed', 'value': 9},
-         {text: 'Archived', 'value': 21}
-         ];*/
-        self.docStatuses = documentStatuses;
+
+        self.docStatuses = angular.copy(documentStatuses);
         self.docStatuses.unshift(new DocumentStatus({arName: 'الكل', enName: 'All'}));
         self.followupStatuses = lookupService.returnLookups(lookupService.followupStatus);
         self.approvers = [];
@@ -89,7 +85,42 @@ module.exports = function (app) {
         self.requiredFieldsSearchInternal = self.getSearchInternalRequiredFields();
 
         self.validateLabelsSearchInternal = {};
+        /*
+                // in case of central archive.
+                self.registryOrganizations = centralArchives;
 
+                self.isSearchByRegOU = true;
+                self.getTranslatedYesNo = function (fieldName) {
+                    return self[fieldName] ? langService.get('yes') : langService.get('no');
+                };
+
+                self.ouToggleDefaultDisabled = false;
+                self.regOuToggleDefaultDisabled = false;
+
+                self.checkRegOuToggleDisabled = function () {
+                    if (employeeService.isCentralArchive()) {
+                        return self.searchInternal.ou;
+                    }
+                    return false;
+                };
+
+                self.checkOuToggleDisabled = function () {
+                    if (employeeService.isCentralArchive()) {
+                        return self.isSearchByRegOU;
+                    }
+                    return false;
+                };
+
+                self.changeRegOuToggle = function () {
+                    if (!self.isSearchByRegOU) {
+                        self.searchInternal.regOu = null;
+                    }
+                };
+
+                self.changeOuToggle = function () {
+                    /!*self.isSearchByRegOU = false;
+                     self.searchInternal.regOu = null;*!/
+                };*/
 
         /**
          * @description Checks if the field is mandatory
@@ -287,6 +318,15 @@ module.exports = function (app) {
          * @description Search the document on basis of search criteria
          */
         self.search = function () {
+            /*if(self.isSearchByRegOU){
+                if(!employeeService.isCentralArchive()){
+                    self.searchInternal.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
+                }
+            }
+            else{
+                self.searchInternal.registryOU = null;
+            }*/
+
             validationService
                 .createValidation('SEARCH_INTERNAL')
                 .addStep('check_required', true, self.checkRequiredFieldsSearchInternal, self.searchInternal, function (result) {
@@ -367,7 +407,7 @@ module.exports = function (app) {
          * @param pageNumber
          * @return {*|Promise<U>}
          */
-        self.reloadSearchedInternalDocument = function (pageNumber) {
+        self.reloadSearchedInternalDocuments = function (pageNumber) {
             var defer = $q.defer();
             self.progress = defer.promise;
             return searchInternalService
@@ -383,6 +423,18 @@ module.exports = function (app) {
                 });
         };
 
+
+        /**
+         * @description add selected items to the favorite documents
+         * @param $event
+         */
+        self.addToFavoriteBulk = function ($event) {
+            favoriteDocumentsService.controllerMethod
+                .favoriteDocumentAddBulk(self.selectedSearchedInternalDocuments, $event)
+                .then(function (result) {
+                    self.reloadSearchedInternalDocuments(self.grid.page);
+                });
+        };
 
         /**
          * @description add an item to the favorite documents
@@ -405,22 +457,22 @@ module.exports = function (app) {
         };
 
 
-       /* /!**
+        /* /!**
          * @description Export searched internal document
          * @param searchedInternalDocument
          * @param $event
          * @type {[*]}
          *!/
-        self.exportSearchInternalDocument = function (searchedInternalDocument, $event) {
-            searchInternalService
-                .exportSearchInternal(searchedInternalDocument, $event)
-                .then(function (result) {
-                    self.reloadSearchedInternalDocument(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get('export_success'));
-                        });
-                });
-        };*/
+         self.exportSearchInternalDocument = function (searchedInternalDocument, $event) {
+         searchInternalService
+         .exportSearchInternal(searchedInternalDocument, $event)
+         .then(function (result) {
+         self.reloadSearchedInternalDocuments(self.grid.page)
+         .then(function () {
+         toast.success(langService.get('export_success'));
+         });
+         });
+         };*/
 
         /**
          * @description Launch distribution workflow for internal item
@@ -433,22 +485,27 @@ module.exports = function (app) {
                 return;
             }
 
-            return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
+            searchedInternalDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
-                    /*distributionWorkflowService
-                     .controllerMethod
-                     .distributionWorkflowSend(searchedInternalDocument, false, false, null, "internal", $event)
-                     .then(function (result) {
-                     self.reloadSearchedInternalDocument(self.grid.page);
-                     })
-                     .catch(function (result) {
-                     self.reloadSearchedInternalDocument(self.grid.page);
-                     });*/
-                    searchedInternalDocument.launchWorkFlow($event, 'forward', 'favorites')
-                        .then(function () {
-                            self.reloadSearchedInternalDocument(self.grid.page);
-                        });
+                    self.reloadSearchedInternalDocuments(self.grid.page);
                 });
+
+            // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
+            //     .then(function () {
+            //         /*distributionWorkflowService
+            //          .controllerMethod
+            //          .distributionWorkflowSend(searchedInternalDocument, false, false, null, "internal", $event)
+            //          .then(function (result) {
+            //          self.reloadSearchedInternalDocuments(self.grid.page);
+            //          })
+            //          .catch(function (result) {
+            //          self.reloadSearchedInternalDocuments(self.grid.page);
+            //          });*/
+            //         searchedInternalDocument.launchWorkFlow($event, 'forward', 'favorites')
+            //             .then(function () {
+            //                 self.reloadSearchedInternalDocuments(self.grid.page);
+            //             });
+            //     });
         };
 
         /**
@@ -683,8 +740,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }
@@ -694,11 +751,11 @@ module.exports = function (app) {
         /**
          * @description do broadcast for correspondence.
          */
-        self.doBroadcast = function (correspondence, $event, defer) {
+        self.broadcast = function (correspondence, $event, defer) {
             correspondence
                 .correspondenceBroadcast()
                 .then(function () {
-                    self.reloadSearchedInternalDocument(self.grid.page)
+                    self.reloadSearchedInternalDocuments(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
                         })
@@ -743,15 +800,15 @@ module.exports = function (app) {
             },
             // Export /*NOT NEEDED AS DISCUSSED WITH HUSSAM*/
             /* {
-                type: 'action',
-                icon: 'export',
-                text: 'grid_action_export',
-                shortcut: true,
-                callback: self.exportSearchInternalDocument,
-                hide: true,
-                class: "action-yellow",
-                checkShow: self.checkToShowAction
-            },*/
+             type: 'action',
+             icon: 'export',
+             text: 'grid_action_export',
+             shortcut: true,
+             callback: self.exportSearchInternalDocument,
+             hide: true,
+             class: "action-yellow",
+             checkShow: self.checkToShowAction
+             },*/
             //Open
             {
                 type: 'action',
@@ -784,7 +841,7 @@ module.exports = function (app) {
                 text: 'grid_action_broadcast',
                 shortcut: false,
                 hide: false,
-                callback: self.doBroadcast,
+                callback: self.broadcast,
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.needApprove();
                 }

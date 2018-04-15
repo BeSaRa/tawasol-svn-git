@@ -20,8 +20,6 @@ module.exports = function (app) {
             delete model.documentCreationDate_vts;
             delete model.securityLevelLookup;
             delete model.securityLevelIndicator;
-            delete model.commentsIndicator;
-            delete model.followupStatusLookup;
             return model;
         });
 
@@ -40,20 +38,9 @@ module.exports = function (app) {
              model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
              model.priorityLevelIndicator = (model.priorityLevelLookup && model.priorityLevelLookup.lookupKey != 0)? model.getPriorityLevelIndicator(model.priorityLevelLookup) : null;
 
-            /*model.attachmentsIndicator = model.generalStepElm.attachementsNO ? model.getAttachmentsIndicator() : null;
-            model.linkedDocsIndicator = model.generalStepElm.linkedDocsNO ? model.getLinkedDocumentsIndicator() : null;*/
+            model.dueDateStatusIndicator = model.dueDate ? model.getDueDateStatusIndicator(model.dueDate) : null;
 
-            /*model.followupStatusLookup = lookupService.getLookupByLookupKey(lookupService.followupStatus, model.generalStepElm.followupStatus);
-            model.followUpStatusIndicator = model.generalStepElm.followupStatus ? model.getFollowUpStatusIndicator(model.followupStatusLookup) : null;*/
-
-            // model.followUpStatusIndicator =  model.getFollowUpStatusIndicator(model);
-            /*model.dueDateStatusIndicator = model.generalStepElm.dueDate ? model.getDueDateStatusIndicator(model.generalStepElm.workFlowName,model.generalStepElm.dueDate) : null;*/
-
-            /*model.tagsIndicator = model.generalStepElm.tagsNO ? model.getTagsIndicator(model.generalStepElm.tagsNO) : null;*/
             model.docTypeIndicator = model.docClassName ? model.getDocTypeIndicator(model.docClassName) : null;
-
-            //model.commentsIndicator = model.comments ? model.getCommentsIndicator(model.comments.length) : null;
-
             return model;
         });
 

@@ -1,7 +1,8 @@
 module.exports = function (app) {
     app.factory('Attachment', function (CMSModelInterceptor, 
                                         _, 
-                                        langService) {
+                                        langService,
+    Indicator) {
         'ngInject';
         return function Attachment(model) {
             var self = this;
@@ -21,6 +22,7 @@ module.exports = function (app) {
             self.isCurrent = null;
             self.attachmentType = null;
             self.securityLevel = null;
+            self.refVSID = null;//This is for the linked Exported Documents
             // will removed when send to backend.
             self.file = null;
             self.progress = 0;
@@ -51,6 +53,13 @@ module.exports = function (app) {
             Attachment.prototype.getTranslatedName = function () {
                 return this.docSubject;
             };
+
+            var indicator = new Indicator();
+            Attachment.prototype.getIsLinkedExportedDocIndicator = function (refVSID) {
+                return indicator.getIsLinkedExportedDocIndicator(refVSID);
+            };
+
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Attachment', 'init', this);

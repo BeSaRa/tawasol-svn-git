@@ -15,7 +15,6 @@ module.exports = function (app) {
                                                      viewTrackingSheetService,
                                                      contextHelpService,
                                                      distributionWorkflowService,
-                                                     broadcastService,
                                                      correspondenceService,
                                                      ResolveDefer) {
         'ngInject';
@@ -410,27 +409,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageDestinations = function (rejectedOutgoing, $event) {
-            console.log('destinations : ', rejectedOutgoing);
             managerService.manageDocumentCorrespondence(rejectedOutgoing.vsId, rejectedOutgoing.docClassName, rejectedOutgoing.docSubject, $event)
         };
-
-        /**
-         * @description broadcast selected organization and workflow group
-         * @param rejectedOutgoing
-         * @param $event
-         */
-        self.broadcast = function (rejectedOutgoing, $event) {
-            broadcastService
-                .controllerMethod
-                .broadcastSend(rejectedOutgoing, $event)
-                .then(function () {
-                    self.reloadRejectedOutgoings(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadRejectedOutgoings(self.grid.page);
-                });
-        };
-
 
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             var isEditAllowed = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
@@ -709,7 +689,6 @@ module.exports = function (app) {
                         shortcut: false,
                         callback: self.manageDestinations,
                         permissionKey: "MANAGE_DESTINATIONS",
-                        hide: false,
                         class: "action-yellow",
                         checkShow: self.checkToShowAction
                     }
@@ -739,19 +718,6 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
-                }
-            },
-            // Broadcast
-            {
-                type: 'action',
-                icon: 'bullhorn',
-                text: 'grid_action_broadcast',
-                shortcut: false,
-                hide: true,
-                class: 'action-green',
-                callback: self.broadcast,
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && (model.addMethod || model.approvers !== null);
                 }
             }
         ];

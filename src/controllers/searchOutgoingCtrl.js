@@ -31,7 +31,9 @@ module.exports = function (app) {
                                                    dialog,
                                                    counterService,
                                                    correspondenceService,
-                                                   favoriteDocumentsService) {
+                                                   favoriteDocumentsService
+                                                   //centralArchives
+    ) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchOutgoingCtrl';
@@ -42,25 +44,18 @@ module.exports = function (app) {
         self.progress = null;
         self.showAdvancedSearch = false;
 
-        self.searchOutgoing = new DocumentSearch({'reqType': 0});
+        self.searchOutgoing = new DocumentSearch({
+            reqType: 0
+        });
         //self.searchOutgoing.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
         self.searchOutgoingModel = angular.copy(self.searchOutgoing);
 
         self.organizations = organizations;
-        //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
         self.propertyConfigurations = propertyConfigurations;
-        /*self.docStatuses = [
-         {text: 'Receive', 'value': 1},
-         {text: 'Meta Data', 'value': 2},
-         {text: 'Draft', 'value': 3},
-         {text: 'Completed', 'value': 4},
-         {text: 'Rejected', 'value': 7},
-         {text: 'Ready For Sent', 'value': 8},
-         {text: 'Removed', 'value': 9},
-         {text: 'Archived', 'value': 21}
-         ];*/
-        self.docStatuses = documentStatuses;
+
+        self.docStatuses = angular.copy(documentStatuses);
         self.docStatuses.unshift(new DocumentStatus({arName: 'الكل', enName: 'All'}));
         self.followupStatuses = lookupService.returnLookups(lookupService.followupStatus);
         self.approvers = [];
@@ -94,7 +89,42 @@ module.exports = function (app) {
         self.requiredFieldsSearchOutgoing = self.getSearchOutgoingRequiredFields();
 
         self.validateLabelsSearchOutgoing = {};
+        /*
+                // in case of central archive.
+                self.registryOrganizations = centralArchives;
 
+                self.isSearchByRegOU = true;
+                self.getTranslatedYesNo = function (fieldName) {
+                    return self[fieldName] ? langService.get('yes') : langService.get('no');
+                };
+
+                self.ouToggleDefaultDisabled = false;
+                self.regOuToggleDefaultDisabled = false;
+
+                self.checkRegOuToggleDisabled = function () {
+                    if (employeeService.isCentralArchive()) {
+                        return self.searchOutgoing.ou;
+                    }
+                    return false;
+                };
+
+                self.checkOuToggleDisabled = function () {
+                    if (employeeService.isCentralArchive()) {
+                        return self.isSearchByRegOU;
+                    }
+                    return false;
+                };
+
+                self.changeRegOuToggle = function () {
+                    if (!self.isSearchByRegOU) {
+                        self.searchOutgoing.regOu = null;
+                    }
+                };
+
+                self.changeOuToggle = function () {
+                    /!*self.isSearchByRegOU = false;
+                     self.searchOutgoing.regOu = null;*!/
+                };*/
 
         /**
          * @description Checks if the field is mandatory
@@ -162,6 +192,7 @@ module.exports = function (app) {
 
         /**
          * @description Set the selected year on changing the value
+         * @param searchForm
          * @param $event
          */
         self.setSelectedYear = function (searchForm, $event) {
@@ -287,6 +318,15 @@ module.exports = function (app) {
          * @description Search the document on basis of search criteria
          */
         self.search = function () {
+            /*if(self.isSearchByRegOU){
+                if(!employeeService.isCentralArchive()){
+                    self.searchOutgoing.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
+                }
+            }
+            else{
+                self.searchOutgoing.registryOU = null;
+            }*/
+
             validationService
                 .createValidation('SEARCH_OUTGOING')
                 .addStep('check_required', true, self.checkRequiredFieldsSearchOutgoing, self.searchOutgoing, function (result) {
@@ -385,6 +425,18 @@ module.exports = function (app) {
         };
 
         /**
+         * @description add selected items to the favorite documents
+         * @param $event
+         */
+        self.addToFavoriteBulk = function ($event) {
+            favoriteDocumentsService.controllerMethod
+                .favoriteDocumentAddBulk(self.selectedSearchedOutgoingDocuments, $event)
+                .then(function (result) {
+                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                });
+        };
+
+        /**
          * @description add an item to the favorite documents
          * @param searchedOutgoingDocument
          * @param $event
@@ -404,23 +456,23 @@ module.exports = function (app) {
                 });
         };
 
-       /* /!**
+        /* /!**
          * @description Export searched outgoing document
          * @param searchedOutgoingDocument
          * @param $event
          * @type {[*]}
          *!/
-        self.exportSearchOutgoingDocument = function (searchedOutgoingDocument, $event) {
-            //console.log('export searched outgoing document : ', searchedOutgoingDocument);
-            searchOutgoingService
-                .exportSearchOutgoing(searchedOutgoingDocument, $event)
-                .then(function (result) {
-                    self.reloadSearchedOutgoingDocument(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get('export_success'));
-                        });
-                });
-        };*/
+         self.exportSearchOutgoingDocument = function (searchedOutgoingDocument, $event) {
+         //console.log('export searched outgoing document : ', searchedOutgoingDocument);
+         searchOutgoingService
+         .exportSearchOutgoing(searchedOutgoingDocument, $event)
+         .then(function (result) {
+         self.reloadSearchedOutgoingDocument(self.grid.page)
+         .then(function () {
+         toast.success(langService.get('export_success'));
+         });
+         });
+         };*/
 
         /**
          * @description Launch distribution workflow for outgoing item
@@ -428,29 +480,34 @@ module.exports = function (app) {
          * @param $event
          */
         self.launchDistributionWorkflow = function (searchedOutgoingDocument, $event) {
+
+
             if (!searchedOutgoingDocument.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-
-            return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
+            searchedOutgoingDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
-                    /*distributionWorkflowService
-                     .controllerMethod
-                     .distributionWorkflowSend(searchedOutgoingDocument, false, false, null, "outgoing", $event)
-                     .then(function (result) {
-                     self.reloadSearchedOutgoingDocument(self.grid.page);
-                     //self.replaceRecord(result);
-                     })
-                     .catch(function (result) {
-                     self.reloadSearchedOutgoingDocument(self.grid.page);
-                     //self.replaceRecord(result);
-                     });*/
-                    searchedOutgoingDocument.launchWorkFlow($event, 'forward', 'favorites')
-                        .then(function () {
-                            self.reloadSearchedOutgoingDocument(self.grid.page);
-                        });
+                    self.reloadSearchedOutgoingDocument(self.grid.page);
                 });
+            // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
+            //     .then(function () {
+            //         /*distributionWorkflowService
+            //          .controllerMethod
+            //          .distributionWorkflowSend(searchedOutgoingDocument, false, false, null, "outgoing", $event)
+            //          .then(function (result) {
+            //          self.reloadSearchedOutgoingDocument(self.grid.page);
+            //          //self.replaceRecord(result);
+            //          })
+            //          .catch(function (result) {
+            //          self.reloadSearchedOutgoingDocument(self.grid.page);
+            //          //self.replaceRecord(result);
+            //          });*/
+            //         searchedOutgoingDocument.launchWorkFlow($event, 'forward', 'favorites')
+            //             .then(function () {
+            //                 self.reloadSearchedOutgoingDocument(self.grid.page);
+            //             });
+            //     });
         };
 
         /**
@@ -557,6 +614,19 @@ module.exports = function (app) {
                 .manageDocumentEntities(searchedOutgoingDocument.vsId, searchedOutgoingDocument.docClassName, searchedOutgoingDocument.docSubject, $event);
         };
 
+
+        /**
+         * @description Destinations
+         * @param searchedOutgoingDocument
+         * @param $event
+         */
+        self.manageDestinations = function (searchedOutgoingDocument, $event) {
+            searchedOutgoingDocument.manageDocumentCorrespondence($event)
+                .then(function () {
+                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                });
+        };
+
         /**
          * @description download main document for searched outgoing document
          * @param searchedOutgoingDocument
@@ -651,6 +721,16 @@ module.exports = function (app) {
             console.log('create copy for searched outgoing document : ', searchedOutgoingDocument);
         };
 
+
+        var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
+            var info = model.getInfo();
+            var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+            var allowed = (hasPermission && info.documentClass !== "internal") && info.docStatus < 25;
+            if (checkForViewPopup)
+                return !(allowed);
+            return allowed;
+        };
+
         self.viewDocument = function (searchedOutgoingDocument, $event) {
             if (!searchedOutgoingDocument.hasContent()) {
                 dialog.alertMessage(langService.get('content_not_found'));
@@ -660,7 +740,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(searchedOutgoingDocument, self.gridActions, true, true);
+            correspondenceService.viewCorrespondence(searchedOutgoingDocument, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(searchedOutgoingDocument, true));
             return;
         };
 
@@ -688,8 +768,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }
@@ -699,7 +779,7 @@ module.exports = function (app) {
         /**
          * @description do broadcast for workItem.
          */
-        self.doBroadcast = function (correspondence, $event, defer) {
+        self.broadcast = function (correspondence, $event, defer) {
             correspondence
                 .correspondenceBroadcast()
                 .then(function () {
@@ -748,17 +828,17 @@ module.exports = function (app) {
             },
             // Export /*NOT NEEDED AS DISCUSSED WITH HUSSAM*/
             /* {
-                type: 'action',
-                icon: 'export',
-                text: 'grid_action_export',
-                shortcut: true,
-                callback: self.exportSearchOutgoingDocument,
-                class: "action-yellow",
-                checkShow: function (action, model) {
-                    //If document is paper outgoing and unapproved/partially approved, show the button.
-                    return self.checkToShowAction(action, model) && model.docStatus < 24 && model.addMethod === 1;
-                }
-            },*/
+             type: 'action',
+             icon: 'export',
+             text: 'grid_action_export',
+             shortcut: true,
+             callback: self.exportSearchOutgoingDocument,
+             class: "action-yellow",
+             checkShow: function (action, model) {
+             //If document is paper outgoing and unapproved/partially approved, show the button.
+             return self.checkToShowAction(action, model) && model.docStatus < 24 && model.addMethod === 1;
+             }
+             },*/
             //Open
             {
                 type: 'action',
@@ -791,7 +871,7 @@ module.exports = function (app) {
                 text: 'grid_action_broadcast',
                 shortcut: false,
                 hide: false,
-                callback: self.doBroadcast,
+                callback: self.broadcast,
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.needApprove();
                 }
@@ -890,6 +970,19 @@ module.exports = function (app) {
                         callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
+                    },
+                    // Destinations
+                    {
+                        type: 'action',
+                        icon: 'stop',
+                        text: 'grid_action_destinations',
+                        shortcut: false,
+                        callback: self.manageDestinations,
+                        permissionKey: "MANAGE_DESTINATIONS",
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
+                        }
                     }
                 ]
             },

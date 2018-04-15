@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('languageSwitcherDirectiveCtrl', function (langService) {
+    app.controller('languageSwitcherDirectiveCtrl', function (langService, employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'languageSwitcherDirectiveCtrl';
@@ -8,6 +8,13 @@ module.exports = function (app) {
 
         self.selectLanguage = function (language) {
             langService.setSelectedLanguage(language);
+
+            if (employeeService.isAdminUser() || employeeService.isCloudUser())
+                return;
+
+            employeeService
+                .getEmployee()
+                .updateLanguage(language);
         }
 
 

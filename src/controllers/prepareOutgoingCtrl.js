@@ -466,7 +466,6 @@ module.exports = function (app) {
                         shortcut: false,
                         callback: self.manageDestinations,
                         permissionKey: "MANAGE_DESTINATIONS",
-                        hide: false,
                         class: "action-yellow",
                         checkShow: self.checkToShowAction
                     }

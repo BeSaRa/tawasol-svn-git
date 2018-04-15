@@ -4,8 +4,12 @@ module.exports = function (app) {
                                                      loadingIndicatorService,
                                                      employeeService,
                                                      sidebarService,
+                                                     langService,
                                                      themeService,
+                                                     rootEntity,
                                                      $mdMedia,
+                                                     authenticationService,
+                                                     $state,
                                                      dialog,
                                                      contextHelpService) {
         'ngInject';
@@ -18,6 +22,9 @@ module.exports = function (app) {
 
         self.toggleSidebar = function (sidebarId) {
             $mdSidenav(sidebarId).toggle();
+            if (sidebarId === 'right-sidebar' && !self.themeService.themes.length) {
+                self.themeService.getThemes();
+            }
         };
 
         self.toggleSidebarLocked = function (sidebarCode) {
@@ -33,6 +40,19 @@ module.exports = function (app) {
          */
         self.openHelp = function () {
             contextHelpService.openContextHelp();
+        };
+
+        /**
+         * logout employee
+         */
+        self.logoutEmployee = function ($event) {
+            dialog
+                .confirmMessage(langService.get('confirm_logout'), null, null, $event)
+                .then(function () {
+                    authenticationService.logout().then(function () {
+                        $state.go('login', {identifier: rootEntity.getRootEntityIdentifier()});
+                    });
+                });
         };
 
     });

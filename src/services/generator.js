@@ -4,7 +4,7 @@ module.exports = function (app) {
                                        tableGeneratorService,
                                        listGeneratorService) {
         'ngInject';
-        var self = this, dialog, langService;
+        var self = this, dialog, langService, toast;
         var documentClassMap = {
             OUTGOING: 1,
             INCOMING: 2,
@@ -16,6 +16,9 @@ module.exports = function (app) {
 
         self.setLangService = function (langPass) {
             langService = langPass;
+        };
+        self.setToast = function (toastPass) {
+            toast = toastPass;
         };
 
         /**
@@ -286,22 +289,22 @@ module.exports = function (app) {
             dialog.errorMessage(titleTemplate.html());
         };
         /*
-        /!**
+         /!**
          * @description Displays error messages for failed bulk delete records
          * @param title
          * @param records
          *!/
-        self.generateFailedToDeletedRecords = function (title, records) {
-            var list = listGeneratorService.createList('ul', 'error-list');
-            _.map(records, function (record) {
-                list.addItemToList(record);
-            });
+         self.generateFailedToDeletedRecords = function (title, records) {
+         var list = listGeneratorService.createList('ul', 'error-list');
+         _.map(records, function (record) {
+         list.addItemToList(record);
+         });
 
 
-            var titleTemplate = angular.element('<div><span class="validation-title">' + langService.get(title) + '</span></div>');
-            titleTemplate.append(list.getList());
-            dialog.errorMessage(titleTemplate.html());
-        };*/
+         var titleTemplate = angular.element('<div><span class="validation-title">' + langService.get(title) + '</span></div>');
+         titleTemplate.append(list.getList());
+         dialog.errorMessage(titleTemplate.html());
+         };*/
 
         /**
          * @description Displays error messages for failed bulk action
@@ -318,6 +321,41 @@ module.exports = function (app) {
             var titleTemplate = angular.element('<div><span class="validation-title">' + langService.get(title) + '</span></div>');
             titleTemplate.append(list.getList());
             dialog.errorMessage(titleTemplate.html());
+        };
+
+        /**
+         * @description Shows the response of bulk action.
+         * @param  {Array.<*>} resultCollection
+         * @param {Array.<*>} selectedItems
+         * @param  {boolean} ignoreMessage
+         * @param  {string} errorMessage
+         * @param {string} successMessage
+         * @param {string} failureSomeMessage
+         * @param {string} keyProperty
+         * @returns {*}
+         */
+        self.getBulkActionResponse = function (resultCollection, selectedItems, ignoreMessage, errorMessage, successMessage, failureSomeMessage) {
+            resultCollection = resultCollection.hasOwnProperty('data') ? resultCollection.data.rs : resultCollection;
+            var failureCollection = [];
+            var currentIndex = 0;
+            _.map(resultCollection, function (value) {
+                if (!value)
+                    failureCollection.push(selectedItems[currentIndex]);
+                currentIndex++;
+            });
+
+            if (!ignoreMessage) {
+                if (failureCollection.length === selectedItems.length) {
+                    toast.error(langService.get(errorMessage));
+                } else if (failureCollection.length) {
+                    self.generateFailedBulkActionRecords(failureSomeMessage, _.map(failureCollection, function (item) {
+                        return item.getTranslatedName();
+                    }));
+                } else {
+                    toast.success(langService.get(successMessage));
+                }
+            }
+            return selectedItems;
         };
 
         /**

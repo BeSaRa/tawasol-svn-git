@@ -2,8 +2,9 @@ module.exports = function (app) {
     app.factory('Internal', function (CMSModelInterceptor,
                                       langService,
                                       generator,
-                                      Correspondence) {
-        'ngInject';
+                                      Correspondence,
+                                      Indicator) {
+            'ngInject';
             return function Internal(model) {
                 var self = this;
                 Correspondence.call(this);
@@ -18,6 +19,24 @@ module.exports = function (app) {
                 // every model has required fields
                 // if you don't need to make any required fields leave it as an empty array
                 var requiredFields = [];
+
+                var indicator = new Indicator();
+                Internal.prototype.getIsPaperIndicator = function () {
+                    return indicator.getIsPaperIndicator(this.addMethod);
+                };
+
+                Internal.prototype.getSecurityLevelIndicator = function (securityLevel) {
+                    return indicator.getSecurityLevelIndicator(securityLevel);
+                };
+
+                Internal.prototype.getDocTypeIndicator = function () {
+                    return indicator.getDocTypeIndicator('internal');
+                };
+
+                Internal.prototype.getPriorityLevelIndicator = function (priorityLevel) {
+                    return indicator.getPriorityLevelIndicator(priorityLevel);
+                };
+
 
                 if (model)
                     angular.extend(this, model);

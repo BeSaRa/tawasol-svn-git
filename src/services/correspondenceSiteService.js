@@ -86,15 +86,16 @@ module.exports = function (app) {
                 url: urlService.correspondenceSites + '/bulk',
                 data: bulkIds
             }).then(function (result) {
-                result = result.data.rs;
+                /*result = result.data.rs;
                 var failedCorrespondenceSites = [];
                 _.map(result, function (value, key) {
                     if (!value)
-                        failedCorrespondenceSites.push(key);
+                        failedCorrespondenceSites.push(Number(key));
                 });
                 return _.filter(correspondenceSites, function (correspondenceSite) {
                     return (failedCorrespondenceSites.indexOf(correspondenceSite.id) > -1);
-                });
+                });*/
+                return generator.getBulkActionResponse(result, correspondenceSites, false, 'failed_delete_selected', 'delete_success', 'delete_success_except_following');
             });
         };
         /**
@@ -208,8 +209,9 @@ module.exports = function (app) {
             var bulkIds = correspondenceSites[0].hasOwnProperty('id') ? _.map(correspondenceSites, 'id') : correspondenceSites;
             return $http
                 .put((urlService.correspondenceSites + '/activate/bulk'), bulkIds)
-                .then(function () {
-                    return correspondenceSites;
+                .then(function (result) {
+                    //return correspondenceSites;
+                    return generator.getBulkActionResponse(result, correspondenceSites, false, 'failed_activate_selected', 'success_activate_selected', 'success_activate_selected_except_following');
                 });
         };
 
@@ -221,8 +223,9 @@ module.exports = function (app) {
             var bulkIds = correspondenceSites[0].hasOwnProperty('id') ? _.map(correspondenceSites, 'id') : correspondenceSites;
             return $http
                 .put((urlService.correspondenceSites + '/deactivate/bulk'), bulkIds)
-                .then(function () {
-                    return correspondenceSites;
+                .then(function (result) {
+                    //return correspondenceSites;
+                    return generator.getBulkActionResponse(result, correspondenceSites, false, 'failed_deactivate_selected', 'success_deactivate_selected', 'success_deactivate_selected_except_following');
                 });
         };
         /**
@@ -383,8 +386,8 @@ module.exports = function (app) {
                 return dialog
                     .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event || null)
                     .then(function () {
-                        return self.deleteBulkCorrespondenceSites(correspondenceSites)
-                            .then(function (result) {
+                        return self.deleteBulkCorrespondenceSites(correspondenceSites);
+                            /*.then(function (result) {
                                 var response = false;
                                 if (result.length === correspondenceSites.length) {
                                     toast.error(langService.get("failed_delete_selected"));
@@ -399,7 +402,7 @@ module.exports = function (app) {
                                     response = true;
                                 }
                                 return response;
-                            });
+                            });*/
                     });
             },
             /**

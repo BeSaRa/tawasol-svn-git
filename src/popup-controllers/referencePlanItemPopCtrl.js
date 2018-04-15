@@ -37,7 +37,6 @@ module.exports = function (app) {
             lookupKey: null,
             lookupStrKey: ''
         });
-        console.log('self.securityLevels',self.securityLevels);
 
         self.documentTypes.unshift(
             new DocumentType({
@@ -72,6 +71,12 @@ module.exports = function (app) {
                 })
                 .notifyFailure(function () {
                     dialog.errorMessage(langService.get('reference_plan_item_duplicated'));
+                })
+                .addStep('check_serial_required',true, self.referencePlanItem,function (result) {
+                    return result.hasSerialComponent();
+                })
+                .notifyFailure(function () {
+                    dialog.errorMessage(langService.get('serial_required_to_save_reference_item'));
                 })
                 .validate()
                 .then(function () {

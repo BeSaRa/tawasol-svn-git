@@ -11,7 +11,10 @@ module.exports = function (app) {
             ROOT_ENTITY_NOT_FOUND: 1001,
             FILE_NOT_ALLOWED: 2041,
             SIZE_EXTENSION_NOT_ALLOWED: 2006,
-            DUPLICATE_ENTRY: 1008
+            DUPLICATE_ENTRY: 1008,
+            INACTIVE_USER_ENTITY: 9016,
+            PASSWORD_EMPTY: 9017,
+            NO_USER_TO_BROADCAST: 3018
         };
 
         return {

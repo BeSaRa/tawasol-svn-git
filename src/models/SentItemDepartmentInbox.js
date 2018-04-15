@@ -77,12 +77,16 @@ module.exports = function (app) {
                 return indicator.getLinkedDocumentsIndicator();
             };
 
+            SentItemDepartmentInbox.prototype.getOriginalCopyIndicator = function () {
+                return indicator.getOriginalCopyIndicator(this.type);
+            };
+
             /*SentItemDepartmentInbox.prototype.getFollowUpStatusIndicator = function(sentItemDepartmentInbox){
                 return indicator.getFollowUpStatusIndicator(sentItemDepartmentInbox);
             };*/
 
-            /*SentItemDepartmentInbox.prototype.getDueDateStatusIndicator = function (docClass, dueDate) {
-                return indicator.getDueDateStatusIndicator(docClass, dueDate);
+            /*SentItemDepartmentInbox.prototype.getDueDateStatusIndicator = function (dueDate) {
+                return indicator.getDueDateStatusIndicator(dueDate);
             };*/
 
             /*  SentItemDepartmentInbox.prototype.getTagsIndicator = function (tagsCount) {

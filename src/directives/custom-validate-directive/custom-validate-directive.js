@@ -3,16 +3,16 @@
  * @param app
  */
 
-module.exports = function(app){
+module.exports = function (app) {
     /**
      * @description Validates input with user defined validations delimited by |
      */
-    app.directive('customValidateDirective', function($q){
+    app.directive('customValidateDirective', function ($q) {
         'ngInject';
         return {
             restrict: 'A',
             require: 'ngModel',
-            link: function($scope, $element, attrs, ngModelCtrl){
+            link: function ($scope, $element, attrs, ngModelCtrl) {
                 var type = attrs.customValidateDirective;
                 var regex = {
                     /**
@@ -30,7 +30,8 @@ module.exports = function(app){
                     /**
                      * @description Allows integer numbers only
                      */
-                    number: /^\d+$/,
+                    // number: /^\d+$/,
+                    number: /^[0-9\u0660-\u0669]+$/g,
                     /**
                      * @description Allows phone/mobile number starting with +974 followed by 8 digits
                      */
@@ -89,7 +90,8 @@ module.exports = function(app){
                     /**
                      * @description Allows Arabic, english, digits, hyphen, forward slash
                      */
-                    AEN: /^[0-9ء-يA-Za-z]?([ \/-]?[0-9ء-يA-Za-z]+)+$/,
+                    // AEN: /^[0-9ء-يA-Za-z.]?([ \/-]?[0-9ء-يA-Za-z]+)+$/,
+                    AEN: /^[0-9ء-يA-Za-z.]?([ \-]?[0-9ء-يA-Za-z.]+)+$/,
                     /**
                      * @description Allows Arabic, english, space(not in end of string and no 2 consecutive spaces)
                      */
@@ -112,18 +114,25 @@ module.exports = function(app){
                      */
                     port: /^(([1-9]\d{0,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))$/
                 };
-                ngModelCtrl.$asyncValidators[type] = function(modelValue, viewValue){
+                ngModelCtrl.$asyncValidators[type] = function (modelValue, viewValue) {
                     var defer = $q.defer();
                     var typesList = type.split('|');
                     var validationPassed = false;
-                    for(var i = 0; i < typesList.length; i++){
-                        if(viewValue){
-                            if(regex[typesList[i]].test(viewValue)){
-                                validationPassed = true;
-                                break;
+                    for (var i = 0; i < typesList.length; i++) {
+                        if (viewValue) {
+                            if (typesList[i] !== 'number') {
+                                if (regex[typesList[i]].test(viewValue)) {
+                                    validationPassed = true;
+                                    break;
+                                }
+                            } else {
+                                if ((/^[0-9\u0660-\u0669]+$/g).test(viewValue)) {
+                                    validationPassed = true;
+                                    break;
+                                }
                             }
                         }
-                        else{
+                        else {
                             validationPassed = true;
                         }
                     }

@@ -524,7 +524,8 @@ module.exports = function (app) {
                     return true;
                 }
                 else {
-                    return (self.documentComment.includedIDs.length && self.documentComment.excludedIDs.length);
+                    return !!self.documentComment.includedIDs.length;
+                    //return (self.documentComment.includedIDs.length && self.documentComment.excludedIDs.length);
                 }
             }
         };

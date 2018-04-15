@@ -9,6 +9,7 @@ module.exports = function (app) {
                                              officeWebAppService,
                                              counterService,
                                              generator,
+                                             $stateParams,
                                              // documentFiles,
                                              managerService,
                                              documentFileService,
@@ -76,6 +77,7 @@ module.exports = function (app) {
             self.incoming = receive.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = receive.content;
+            console.log(self.incoming.linkedEntities);
         }
 
         self.preventPropagation = function ($event) {
@@ -90,9 +92,12 @@ module.exports = function (app) {
             }
             var promise = null;
             //var isDocHasVsId = angular.copy(self.incoming).hasVsId();
-
-            promise = self.incoming
-                .saveDocument(status);
+            if (self.receive) {
+                promise = self.incoming.receiveDocument($stateParams.workItem);
+            } else {
+                promise = self.incoming
+                    .saveDocument(status);
+            }
 
             promise.then(function (result) {
                 self.incoming = result;

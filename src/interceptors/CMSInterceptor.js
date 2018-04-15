@@ -14,13 +14,14 @@ module.exports = function (app) {
             },
             // when request has an error while send process.
             requestError: function (reason) {
-                console.log("ASDAD", reason);
+                //console.log("ASDAD", reason);
                 exception.requestError(reason);
                 loadingIndicatorService.endLoading();
                 return $q.reject(reason);
             },
             // after getting response
             response: function (result) {
+                // console.log("RESULT", result);
                 exception.response(result);
                 loadingIndicatorService.endLoading();
                 return result;

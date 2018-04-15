@@ -62,8 +62,8 @@ module.exports = function (app) {
         self.signDocumentFromCtrl = function($event){
           correspondenceService
               .approveCorrespondence(userInbox , self.selectedSignature)
-              .then(function () {
-                  dialog.hide(userInbox);
+              .then(function (result) {
+                  dialog.hide(result);
               })
         };
 

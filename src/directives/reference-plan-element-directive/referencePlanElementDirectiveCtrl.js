@@ -83,6 +83,7 @@ module.exports = function (app) {
         self.removeReferenceElement = function (elementItem, $event) {
             angular.element($event.target).parents('.component-element').remove();
             self.referenceItem.components.splice(self.referenceItem.components.indexOf(elementItem), 1);
+            self.renderElementItems();
         };
 
         self.editStaticTextOn = function (element) {

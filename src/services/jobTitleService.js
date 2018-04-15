@@ -80,24 +80,25 @@ module.exports = function (app) {
             jobTitleDeleteBulk: function (jobTitles, $event) {
                 return dialog.confirmMessage(langService.get('confirm_delete_selected_multiple'))
                     .then(function (result) {
-                        return self.deleteBulkJobTitles(jobTitles).then(function (result) {
-                            var response = false;
-                            if (result.length === jobTitles.length) {
-                                toast.error(langService.get("failed_delete_selected"));
-                                response = false;
-                            }
-                            else if (result.length) {
-                                generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (jobTitle) {
-                                    return jobTitle.getNames();
-                                }));
-                                response = true;
-                            }
-                            else {
-                                toast.success(langService.get("delete_success"));
-                                response = true;
-                            }
-                            return response;
-                        });
+                        return self.deleteBulkJobTitles(jobTitles);
+                        /*return self.deleteBulkJobTitles(jobTitles).then(function (result) {
+                         var response = false;
+                         if (result.length === jobTitles.length) {
+                         toast.error(langService.get("failed_delete_selected"));
+                         response = false;
+                         }
+                         else if (result.length) {
+                         generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (jobTitle) {
+                         return jobTitle.getNames();
+                         }));
+                         response = true;
+                         }
+                         else {
+                         toast.success(langService.get("delete_success"));
+                         response = true;
+                         }
+                         return response;
+                         });*/
                     });
             }
         };
@@ -135,7 +136,7 @@ module.exports = function (app) {
          */
         self.deleteJobTitle = function (jobTitle) {
             var id = jobTitle.hasOwnProperty('id') ? jobTitle.id : jobTitle;
-            return $http.delete(urlService.jobTitles + '/' + id).then(function(result){
+            return $http.delete(urlService.jobTitles + '/' + id).then(function (result) {
                 return result;
             });
         };
@@ -155,15 +156,16 @@ module.exports = function (app) {
                 url: urlService.jobTitles + '/bulk',
                 data: bulkIds
             }).then(function (result) {
-                result = result.data.rs;
+                /*result = result.data.rs;
                 var failedJobTitles = [];
-                _.map(result, function (value, key) {
-                    if (!value)
-                        failedJobTitles.push(key);
-                });
-                return _.filter(jobTitles, function (jobTitle) {
-                    return (failedJobTitles.indexOf(jobTitle.id) > -1);
-                });
+                 _.map(result, function (value, key) {
+                 if (!value)
+                 failedJobTitles.push(key);
+                 });
+                 return _.filter(jobTitles, function (jobTitle) {
+                 return (failedJobTitles.indexOf(jobTitle.id) > -1);
+                 });*/
+                return generator.getBulkActionResponse(result, jobTitles, false, 'failed_delete_selected', 'delete_success', 'delete_success_except_following');
             });
         };
 
@@ -210,8 +212,9 @@ module.exports = function (app) {
         self.activateBulkJobTitles = function (jobTitles) {
             return $http
                 .put((urlService.jobTitles + '/activate/bulk'), _.map(jobTitles, 'id'))
-                .then(function () {
-                    return jobTitles;
+                .then(function (result) {
+                    return generator.getBulkActionResponse(result, jobTitles, false, 'failed_activate_selected', 'success_activate_selected', 'success_activate_selected_except_following');
+                    //return jobTitles;
                 });
         };
 
@@ -223,7 +226,8 @@ module.exports = function (app) {
             return $http
                 .put((urlService.jobTitles + '/deactivate/bulk'), _.map(jobTitles, 'id'))
                 .then(function () {
-                    return jobTitles;
+                    return generator.getBulkActionResponse(result, jobTitles, false, 'failed_deactivate_selected', 'success_deactivate_selected', 'success_deactivate_selected_except_following');
+                //    return jobTitles;
                 });
         };
 

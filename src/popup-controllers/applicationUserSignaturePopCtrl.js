@@ -35,7 +35,7 @@ module.exports = function (app) {
          * @description Contains the names of disabled fields
          */
         self.disabledFields = [];
-        self.imageDimensionsInfo = langService.get('image_dimensions_info').change({height: 50, width: 50});
+        self.imageDimensionsInfo = langService.get('image_dimensions_info').change({height: 283, width: 283});
         self.selectedExtension = ['png'];
         self.selectedFile = null;
         self.fileUrlCopy = self.fileUrl = angular.copy(self.applicationUserSignature.contentElementUrl ? self.applicationUserSignature.contentElementUrl : null);
@@ -64,8 +64,8 @@ module.exports = function (app) {
                         if (element[0].name === 'upload-sign') {
                             var width = this.naturalWidth || this.width;
                             var height = this.naturalHeight || this.height;
-                            if (width > 50 && height > 50) {
-                                toast.error(langService.get('image_dimension_greater').change({width: 50, height: 50}));
+                            if (width > 283 && height > 283) {
+                                toast.error(langService.get('image_dimensions_info').change({width: 283, height: 283}));
                                 self.fileUrl = self.fileUrlCopy;
                                 self.selectedFile = null;
                                 self.enableAdd = false;

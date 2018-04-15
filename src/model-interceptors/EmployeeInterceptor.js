@@ -4,6 +4,7 @@ module.exports = function (app) {
                       langService,
                       workflowActionService,
                       Information,
+                      applicationUserService,
                       Organization) {
         'ngInject';
 
@@ -13,6 +14,7 @@ module.exports = function (app) {
             model.setOrganizationService(organizationService);
             model.setOrganizationModel(Organization);
             model.setWorkflowActionService(workflowActionService);
+            model.setApplicationUSerService(applicationUserService);
             // langService.setSelectedLanguageById(model.defaultDisplayLang);
             return model;
         });

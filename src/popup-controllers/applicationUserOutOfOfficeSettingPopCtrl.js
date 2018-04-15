@@ -28,12 +28,16 @@ module.exports = function (app) {
         self.model = angular.copy(ouApplicationUser);
         //self.currentEmployee = employeeService.getEmployee();
         self.applicationUser = self.model.applicationUser;
-        //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
         self.authorityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
+        //proxy security levels for current ouApplication Users
+        self.securityLevels = self.ouApplicationUser.getSecurityLevels();
+
         self.availableProxies = availableProxies;
+
         self.selectedProxyUser = ouApplicationUser.getSelectedProxyId() ? _.find(availableProxies, function (item) {
             return item.id === ouApplicationUser.getSelectedProxyId();
         }) : null;
+
         var currentDate = new Date();
         self.today = new Date(
             currentDate.getFullYear(),
@@ -42,6 +46,22 @@ module.exports = function (app) {
         );
         // tomorrow
         self.tomorrow = (new Date()).setDate(self.today.getDate() + 1);
+
+
+        self.getMaxProxyStartDate = function(){
+            var endDate = new Date(self.ouApplicationUser.proxyEndDate);
+            self.calculatedMaxProxyStartDate = endDate ? new Date(endDate.setDate(endDate.getDate() -1)) : null;
+        };
+        self.calculatedMaxProxyStartDate = self.ouApplicationUser.proxyStartDate ? self.ouApplicationUser.proxyStartDate : self.getMaxProxyStartDate();
+
+        self.getMinProxyEndDate = function () {
+            var startDate = new Date(self.ouApplicationUser.proxyStartDate);
+            self.calculatedMinProxyEndDate = startDate ? new Date(startDate.setDate(startDate.getDate() + 1)) : null;
+        };
+        self.calculatedMinProxyEndDate = self.ouApplicationUser.proxyEndDate ? self.ouApplicationUser.proxyEndDate : self.getMinProxyEndDate();
+
+
+
         self.requiredFields = [
             'proxyUser',
             'proxyAuthorityLevels',
@@ -82,6 +102,15 @@ module.exports = function (app) {
         self.isOutOfOffice = self.ouApplicationUser.proxyUser != null;
 
         /**
+         * @description to check if the security level included for selected proxyUser.
+         * @param securityLevel
+         * @returns {*|boolean}
+         */
+        self.isSecurityLevelInclude = function (securityLevel) {
+            return self.selectedProxyUser && !!(self.selectedProxyUser.securityLevels & securityLevel.lookupKey);
+        };
+
+        /**
          * @description Returns out of office value as Yes/No instead of true/false
          * @returns {*}
          */
@@ -115,8 +144,8 @@ module.exports = function (app) {
         self.getSelectedDelegatedUserText = function () {
             if (!self.selectedProxyUser) {
                 if (self.ouApplicationUser.applicationUser.outOfOffice) {
-                    var proxyOU = _.find(organizationService.organizations, {id : self.ouApplicationUser.proxyOUId});
-                    if(self.ouApplicationUser.proxyUser) {
+                    var proxyOU = _.find(organizationService.organizations, {id: self.ouApplicationUser.proxyOUId});
+                    if (self.ouApplicationUser.proxyUser) {
                         if (langService.current === 'en')
                             return self.ouApplicationUser.proxyUser.getTranslatedName() + ' - ' + proxyOU.getTranslatedName();
                         return proxyOU.getTranslatedName() + ' - ' + self.ouApplicationUser.proxyUser.getTranslatedName();
@@ -139,7 +168,7 @@ module.exports = function (app) {
          */
         self.changeOutOfOffice = function (form) {
             if (!self.isOutOfOffice) {
-                if(self.model.proxyUser) {
+                if (self.model.proxyUser) {
                     self.ouApplicationUser.proxyUser = self.selectedProxyUser = null;
                     self.ouApplicationUser.proxyStartDate = null;
                     self.ouApplicationUser.proxyEndDate = null;

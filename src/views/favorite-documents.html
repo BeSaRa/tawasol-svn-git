@@ -1,12 +1,9 @@
 <!-- start of view -->
-<div background-directive="tall" class="page-content" flex="">
+<div background-directive="tall"  class="page-content" flex="">
     <div layout="column" class="content">
         <!-- page-header start -->
         <div layout="row" layout-align="start center" class="page-header padding-header small">
             <span>{{lang.menu_item_user_favorite_documents}}</span>
-            <!--<md-button ng-click="ctrl.openAddFavoriteDocumentDialog($event)" class="md-icon-button" tooltip="{{lang.add}}">
-                <md-icon md-svg-icon="plus"></md-icon>
-            </md-button>-->
             <md-button ng-click="ctrl.reloadFavoriteDocuments()" class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
@@ -38,6 +35,9 @@
                                             </md-button>
                                         </div>
                                     </th>
+                                    <th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="">
+                                        <!-- Security Level, Document type Indicators -->
+                                    </th>
                                     <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column
                                         md-order-by="docSubject">
                                         <span>{{lang.document_subject}}</span>
@@ -67,7 +67,22 @@
                                 <tr md-row md-select="favoriteDocument" grid-right-click-directive="favoriteDocument"
                                     model="favoriteDocument"
                                     selected-length="{{ctrl.selectedFavoriteDocuments.length ? ctrl.selectedFavoriteDocuments.length : 0}}"
-                                    ng-repeat="favoriteDocument in ctrl.favoriteDocuments  | filter:ctrl.searchModel |orderBy:ctrl.grid.order  track by $index">
+                                    ng-repeat="favoriteDocument in ctrl.favoriteDocuments  | filter:ctrl.searchModel | orderBy:ctrl.grid.order track by $index">
+                                    <!-- | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) -->
+                                    <td md-cell class="indicator-td">
+                                        <!-- Security Level -->
+                                        <grid-indicator-directive record="favoriteDocument"
+                                                                  indicator-type="securityLevel"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Doc Type -->
+                                        <grid-indicator-directive record="favoriteDocument"
+                                                                  indicator-type="docType"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Priority Level -->
+                                        <grid-indicator-directive record="favoriteDocument"
+                                                                  indicator-type="priorityLevel"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                    </td>
                                     <td md-cell class="td-data">
                                         <a href="" ng-if="favoriteDocument.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(favoriteDocument, $event)">{{favoriteDocument.docSubject}}</a>

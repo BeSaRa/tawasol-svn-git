@@ -165,7 +165,18 @@ module.exports = function (app) {
             return ouAppUser.applicationUser.defaultOUID === self.currentOrganization;
         })) : ouApplicationUsers;
 
-        self.organizationsForAppUser = _.map(self.ouApplicationUsers, 'ouid');
+        //self.organizationsForAppUser = _.map(self.ouApplicationUsers, 'ouid');
+
+        self.getOrganizationsForAppUser = function (ouAppUser) {
+            self.organizationsForAppUser = _.map(self.ouApplicationUsers, function (ouAppUser) {
+                return {
+                    ou: ouAppUser.ouid,
+                    status: (ouAppUser ? ouAppUser.status : ouAppUser.status),
+                    id: ouAppUser.id
+                }
+            });
+        };
+        self.getOrganizationsForAppUser();
 
         self.securityLevels = rootEntity.getGlobalSettings().securityLevels;
         //console.log('self.securityLevels', self.securityLevels);
@@ -591,8 +602,8 @@ module.exports = function (app) {
                         if (element[0].name === 'upload-sign-app-user') {
                             var width = this.naturalWidth || this.width;
                             var height = this.naturalHeight || this.height;
-                            if (width > 50 && height > 50) {
-                                toast.error(langService.get('image_dimension_greater').change({width: 50, height: 50}));
+                            if (width > 283 && height > 283) {
+                                toast.error(langService.get('image_dimensions_info').change({width: 283, height: 283}));
                                 self.enableAdd = false;
                                 return false;
                             }
@@ -779,7 +790,8 @@ module.exports = function (app) {
                         }
                         self.ouApplicationUsers.push(result);
 
-                        self.organizationsForAppUser = _.map(self.ouApplicationUsers, 'ouid');
+                        self.getOrganizationsForAppUser();
+
                         self.excludedOrganizations = self.excludedOrganizations.concat(result.ouid.id);
 
                         var userOuPermissions = [];
@@ -853,7 +865,9 @@ module.exports = function (app) {
                         return x.ouid.id === ouApplicationUser.ouid.id;
                     });
                     self.ouApplicationUsers.splice(indexOfUpdatedOUApplicationUser, 1);
-                    self.organizationsForAppUser = _.map(self.ouApplicationUsers, 'ouid');
+                    self.getOrganizationsForAppUser();
+
+
                     self.excludedOrganizations = _.filter(self.excludedOrganizations, function (id) {
                         return ouApplicationUser.ouid.id !== id;
                     });
@@ -880,6 +894,9 @@ module.exports = function (app) {
                             employeeService.setCurrentOUApplicationUser(ouApplicationUser);
                             employeeService.setCurrentEmployee(self.ouApplicationUser.applicationUser);
                         }
+
+                        self.getOrganizationsForAppUser(ouApplicationUser);
+
                         return true;
                     });
             }
@@ -892,6 +909,7 @@ module.exports = function (app) {
                             return x.ouid.id === ouApplicationUser.ouid.id;
                         });
                         self.ouApplicationUsers.splice(indexOfUpdatedOUApplicationUser, 1, ouApplicationUser);
+                        self.getOrganizationsForAppUser();
                         toast.success(langService.get('save_success'));
                         return true;
                     });
@@ -931,7 +949,7 @@ module.exports = function (app) {
          */
         self.openWorkflowParticipationDialog = function (ouApplicationUser, $event) {
             //console.log('ou application user from grid - workflow participation: ', ouApplicationUser);
-            ouApplicationUser.wfsecurity =  ouApplicationUser.wfsecurity || self.globalSetting.wfsecurity;
+            ouApplicationUser.wfsecurity = ouApplicationUser.wfsecurity || self.globalSetting.wfsecurity;
             return dialog
                 .showDialog({
                     targetEvent: $event,
@@ -982,11 +1000,10 @@ module.exports = function (app) {
                             return ouApplicationUserService
                                 .getAvailableProxies(ouApplicationUser.getRegistryOUID())
                                 .then(function (result) {
-                                    //console.log(result);
                                     return result
                                 })
                         },
-                        usersWhoSetYouAsProxy: function(ouApplicationUserService){
+                        usersWhoSetYouAsProxy: function (ouApplicationUserService) {
                             'ngInject';
                             return ouApplicationUserService
                                 .getUsersWhoSetYouAsProxy(ouApplicationUser.applicationUser.id)
@@ -1157,6 +1174,14 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         *@description Check if status switch will be disabled for default organization of current user.
+         * @param ouApplicationUser
+         * @returns {boolean}
+         */
+        self.disableOUApplicationUserStatus = function (ouApplicationUser) {
+            return self.applicationUser.defaultOUID === ouApplicationUser.ouid.id && employeeService.isCurrentEmployee(self.applicationUser.id);
+        };
 
         /**
          * @description Array of actions that can be performed on grid
@@ -1205,6 +1230,5 @@ module.exports = function (app) {
         self.closeApplicationUserPopupFromCtrl = function () {
             dialog.cancel();
         };
-
     });
 };

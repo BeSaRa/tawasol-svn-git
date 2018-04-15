@@ -1013,6 +1013,10 @@ module.exports = function (app) {
             ]
         };
 
+        self.searchModelPropertyConfigurations = {
+            symbolicName: ''
+        };
+
         /**
          * to enable/disable add/reload button if document class select box is selected
          * @returns {boolean}
@@ -1024,32 +1028,33 @@ module.exports = function (app) {
             return true;
         };
 
+        self.propertyConfigurationProgress = null;
         self.reloadPropertyConfigurations = function (pageNumber) {
             var defer = $q.defer();
             self.propertyConfigurationProgress = defer.promise;
 
+            var docClass = (self.selectedDocumentClass.hasOwnProperty('lookupKey') ? self.selectedDocumentClass.lookupStrKey : self.selectedDocumentClass);
             return propertyConfigurationService
-                .loadPropertyConfigurations()
+                .loadPropertyConfigurationsByDocumentClassAndOU(docClass.toLowerCase(), self.organization.id)
                 .then(function (result) {
-                    self.allPropertyConfigurations = result;
+                    self.allPropertyConfigurations[docClass.toLowerCase()] = result;
+                    self.propertyConfigurations = result;
+                    var currentUserOrg = employeeService.getEmployee().userOrganization;
+                    var loggedInOuId = currentUserOrg.hasOwnProperty('id') ? currentUserOrg.id : currentUserOrg;
+                    if (self.organization.id === loggedInOuId) {
+                        return lookupService.replacePropertyConfigurationsByDocumentClass(result, docClass.toLowerCase());
+                    }
                     self.selectedPropertyConfigurations = [];
                     defer.resolve(true);
                     if (pageNumber)
-                        self.grid.page = pageNumber;
+                        self.propertyConfigurationGrid.page = pageNumber;
                     return result;
-                });
+                })
         };
 
-        self.getPropertyConfigurationsForOU = function () {
-            self.propertyConfigurations = [];
-            var matchedPropertyConfiguration = _.filter(self.allPropertyConfigurations, function (propertyConfiguration) {
-                return (propertyConfiguration.ouId === self.organization.id) && (propertyConfiguration.documentClass === self.selectedDocumentClass.lookupKey);
-            });
-            if (matchedPropertyConfiguration.length) {
-                for (var i = 0; i < matchedPropertyConfiguration.length; i++) {
-                    self.propertyConfigurations.push(matchedPropertyConfiguration[i]);
-                }
-            }
+        self.filterPropertyConfigurationsForOUByDocumentClass = function () {
+            var docClass = (self.selectedDocumentClass.hasOwnProperty('lookupKey') ? self.selectedDocumentClass.lookupStrKey : self.selectedDocumentClass);
+            self.propertyConfigurations = self.allPropertyConfigurations[docClass.toLowerCase()];
         };
 
         self.openAddPropertyConfigurationsDialog = function ($event) {
@@ -1057,11 +1062,13 @@ module.exports = function (app) {
                 .controllerMethod
                 .propertyConfigurationAdd(self.organization.id, self.selectedDocumentClass.lookupKey, $event)
                 .then(function (result) {
-                    self.reloadPropertyConfigurations(self.propertyConfigurationGrid.page)
-                        .then(function (result) {
-                            self.getPropertyConfigurationsForOU();
-                            toast.success(langService.get('save_success'));
-                        });
+                    if(result) {
+                        self.reloadPropertyConfigurations(self.propertyConfigurationGrid.page)
+                            .then(function () {
+                                self.filterPropertyConfigurationsForOUByDocumentClass();
+                                toast.success(langService.get('save_success'));
+                            });
+                    }
                 });
         };
 
@@ -1070,11 +1077,13 @@ module.exports = function (app) {
                 .controllerMethod
                 .propertyConfigurationEdit(propertyConfiguration, $event)
                 .then(function (result) {
-                    self.reloadPropertyConfigurations(self.propertyConfigurationGrid.page)
-                        .then(function (result) {
-                            self.getPropertyConfigurationsForOU();
-                            toast.success(langService.get('edited_successfully'));
-                        });
+                    if(result) {
+                        self.reloadPropertyConfigurations(self.propertyConfigurationGrid.page)
+                            .then(function () {
+                                self.filterPropertyConfigurationsForOUByDocumentClass();
+                                toast.success(langService.get('edited_successfully'));
+                            });
+                    }
                 });
         };
 
@@ -1143,10 +1152,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.openAddApplicationUserDialog = function ($event) {
-            var currentOrganization = self.organization.hasOwnProperty('id') ? self.organization.id : self.organization;
+            //var ouId = self.organization.hasOwnProperty('id') ? self.organization.id : self.organization;
             applicationUserService
                 .controllerMethod
-                .applicationUserAdd(self.jobTitles, self.ranks, organizations, classifications, self.themes, self.roles, self.permissions, null, null, currentOrganization, $event)
+                .applicationUserFromOuAdd(self.jobTitles, self.ranks, organizations, classifications, self.themes, self.roles, self.permissions, null, self.organization, $event)
                 .then(function () {
                     self.reloadOuApplicationUsers(self.appUserGrid.page);
                 })
@@ -1161,17 +1170,10 @@ module.exports = function (app) {
          * @param {ApplicationUser} applicationUser
          */
         self.openEditApplicationUserDialog = function (applicationUser, $event) {
-            var currentOrganization = self.organization.hasOwnProperty('id') ? self.organization.id : self.organization;
+            var ouId = self.organization.hasOwnProperty('id') ? self.organization.id : self.organization;
             validationService
-                .createValidation('GET_RELATED_UNRELATED_APP_USERS')
-                .addStep('get_ou_appUsers', true, ouApplicationUserService.loadRelatedOUApplicationUsers, currentOrganization, function (result) {
-                    self.ouApplicationUsers = result;
-                    return result;
-                })
-                .notifyFailure(function (step, result) {
-
-                })
-                .addStep('get_user_classification', true, userClassificationViewPermissionService.loadUserClassificationViewPermissions, currentOrganization, function (result) {
+                .createValidation('LOAD_USER_CLASSIFICATION_VIEW_PERMISSIONS')
+                .addStep('load_user_classification', true, userClassificationViewPermissionService.loadUserClassificationViewPermissions, ouId, function (result) {
                     self.userClassificationViewPermissions = result;
                     return result;
                 })
@@ -1182,7 +1184,7 @@ module.exports = function (app) {
                 .then(function () {
                     applicationUserService
                         .controllerMethod
-                        .applicationUserEdit(new ApplicationUser(applicationUser), self.jobTitles, self.ranks, organizations, classifications, self.themes, self.roles, self.permissions, self.ouApplicationUsers, self.userClassificationViewPermissions, currentOrganization, $event)
+                        .applicationUserFromOuEdit(new ApplicationUser(applicationUser), self.jobTitles, self.ranks, organizations, classifications, self.themes, self.roles, self.permissions, self.userClassificationViewPermissions, self.organization, $event)
                         .then(function () {
                             self.reloadOuApplicationUsers(self.appUserGrid.page);
                         });
@@ -1193,7 +1195,7 @@ module.exports = function (app) {
         };
         //console.log('self.organization.centralArchiveUnitId', self.organization.centralArchiveUnitId, self.organization.registryParentId);
         /**
-         * @description Assigns the unassigned user to organization
+         * @description Open the popup to assign/add the selected unassigned user to organization
          * @param $event
          */
         self.assignUserToOU = function ($event) {

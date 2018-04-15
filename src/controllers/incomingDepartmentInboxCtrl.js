@@ -181,7 +181,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.launchDistributionWorkflow = function (workItem, $event, defer) {
-            workItem.launchWorkFlow($event, 'forward', 'favorites')
+            workItem.launchWorkFlow($event, 'forward', 'favorites', true)
                 .then(function () {
                     self.reloadIncomingDepartmentInboxes(self.grid.page)
                         .then(function () {

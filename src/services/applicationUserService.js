@@ -44,16 +44,17 @@ module.exports = function (app) {
             /**
              * @description Opens popup to add new application user
              * @param jobTitles
+             * @param ranks
              * @param organizations
              * @param classifications
              * @param themes
              * @param roles
              * @param permissions
-             * @param ouApplicationUsers
              * @param userClassificationViewPermissions
+             * @param currentOrganization
              * @param $event
              */
-            applicationUserAdd: function (jobTitles, ranks, organizations, classifications, themes, roles, permissions, ouApplicationUsers, userClassificationViewPermissions, currentOrganization, $event) {
+            applicationUserAdd: function (jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, currentOrganization, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -81,23 +82,21 @@ module.exports = function (app) {
              * @description Opens popup to edit application user
              * @param applicationUser
              * @param jobTitles
+             * @param ranks
              * @param organizations
              * @param classifications
              * @param themes
              * @param roles
              * @param permissions
-             * @param ouApplicationUsers
              * @param userClassificationViewPermissions
              * @param currentOrganization
              * @param $event
              */
-            applicationUserEdit: function (applicationUser, jobTitles, ranks, organizations, classifications, themes, roles, permissions, ouApplicationUsers, userClassificationViewPermissions, currentOrganization, $event) {
+            applicationUserEdit: function (applicationUser, jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, currentOrganization, $event) {
                 var userClassificationViewPermissionsByUserId = _.filter(userClassificationViewPermissions, function (userClassificationViewPermission) {
                     return Number(userClassificationViewPermission.userId) === Number(applicationUser.id);
                 });
-                /*var ouApplicationUsersByUserId = _.filter(ouApplicationUsers, function (ouApplicationUser) {
-                    return Number(ouApplicationUser.applicationUser.id) === Number(applicationUser.id);
-                });*/
+
                 applicationUser = generator.interceptReceivedInstance('ApplicationUser', applicationUser);
 
                 return dialog
@@ -118,7 +117,6 @@ module.exports = function (app) {
                             userClassificationViewPermissions: userClassificationViewPermissionsByUserId,
                             roles: roles,
                             permissions: permissions,
-                            //ouApplicationUsers: ouApplicationUsersByUserId,
                             currentOrganization: currentOrganization
                         },
                         resolve: {
@@ -140,6 +138,105 @@ module.exports = function (app) {
                         }
                     });
             },
+
+            /**
+             * @description Opens popup to add new application user
+             * @param jobTitles
+             * @param ranks
+             * @param organizations
+             * @param classifications
+             * @param themes
+             * @param roles
+             * @param permissions
+             * @param userClassificationViewPermissions
+             * @param organization
+             * @param $event
+             */
+            applicationUserFromOuAdd: function (jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, organization, $event) {
+                var ouId = organization.hasOwnProperty('id') ? organization.id : organization;
+                return dialog
+                    .showDialog({
+                        targetEvent: $event,
+                        template: cmsTemplate.getPopup('application-user-from-ou'),
+                        controller: 'applicationUserFromOuPopCtrl',
+                        controllerAs: 'ctrl',
+                        locals: {
+                            editMode: false,
+                            applicationUser: !!ouId ? new ApplicationUser({defaultOUID: ouId}) : new ApplicationUser(),
+                            applicationUsers: self.applicationUsers,
+                            jobTitles: jobTitles,
+                            ranks: ranks,
+                            organizations: organizations,
+                            classifications: classifications,
+                            themes: themes,
+                            userClassificationViewPermissions: userClassificationViewPermissions,
+                            roles: roles,
+                            permissions: permissions,
+                            ouApplicationUsers: [],
+                            currentOrganization: organization
+                        }
+                    });
+            },
+            /**
+             * @description Opens popup to edit application user
+             * @param applicationUser
+             * @param jobTitles
+             * @param ranks
+             * @param organizations
+             * @param classifications
+             * @param themes
+             * @param roles
+             * @param permissions
+             * @param userClassificationViewPermissions
+             * @param organization
+             * @param $event
+             */
+            applicationUserFromOuEdit: function (applicationUser, jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, organization, $event) {
+                applicationUser = generator.interceptReceivedInstance('ApplicationUser', applicationUser);
+                //var ouId = organization.hasOwnProperty('id') ? organization.id : organization;
+                var userClassificationViewPermissionsByUserId = _.filter(userClassificationViewPermissions, function (userClassificationViewPermission) {
+                    return Number(userClassificationViewPermission.userId) === Number(applicationUser.id);
+                });
+
+                return dialog
+                    .showDialog({
+                        targetEvent: $event,
+                        template: cmsTemplate.getPopup('application-user-from-ou'),
+                        controller: 'applicationUserFromOuPopCtrl',
+                        controllerAs: 'ctrl',
+                        locals: {
+                            editMode: true,
+                            applicationUser: applicationUser,
+                            applicationUsers: self.applicationUsers,
+                            jobTitles: jobTitles,
+                            ranks: ranks,
+                            organizations: organizations,
+                            classifications: classifications,
+                            themes: themes,
+                            userClassificationViewPermissions: userClassificationViewPermissionsByUserId,
+                            roles: roles,
+                            permissions: permissions,
+                            currentOrganization: organization
+                        },
+                        resolve: {
+                            ouApplicationUsers: function (ouApplicationUserService) {
+                                'ngInject';
+                                return ouApplicationUserService.getOUApplicationUsersByUserId(applicationUser.id);
+                            },
+                            // by BeSaRa to resolve the signature if found
+                            signature: function (applicationUserSignatureService, $q) {
+                                'ngInject';
+                                if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
+                                    return $q.when(applicationUser.signature);
+
+                                return applicationUserSignatureService.loadApplicationUserSignatures(applicationUser.id).then(function (result) {
+                                    applicationUser.signature = result;
+                                });
+                            }
+                        }
+                    });
+            },
+
             /**
              * @description Show confirm box and delete application user
              * @param applicationUser
@@ -574,6 +671,15 @@ module.exports = function (app) {
                 .then(function (result) {
                     return generator.interceptReceivedCollection('ApplicationUserInfo', generator.generateCollection(result.data.rs, ApplicationUserInfo));
                 });
+        };
+
+        self.updateCurrentLanguage = function (language) {
+            var languageId = language.hasOwnProperty('id') ? language.lookupKey : language;
+            return $http
+                .put(urlService.applicationUsers + '/change-lang/' + languageId)
+                .then(function (result) {
+                    return result.data.rs;
+                })
         };
 
         /**

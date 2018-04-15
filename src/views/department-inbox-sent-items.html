@@ -97,54 +97,35 @@
                                     ng-repeat="sentItemDepartmentInbox in ctrl.sentItemDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
 
                                     <td md-cell class="indicator-td">
-                                        <span flex
-                                              ng-class="{'indicator-content': sentItemDepartmentInbox.securityLevelIndicator}">
-                                                    <md-icon ng-if="sentItemDepartmentInbox.securityLevelIndicator"
-                                                             class="{{sentItemDepartmentInbox.securityLevelIndicator.class}}"
-                                                             md-svg-icon="{{sentItemDepartmentInbox.securityLevelIndicator.icon}}"
-                                                             tooltip="{{lang[sentItemDepartmentInbox.securityLevelIndicator.tooltip].change({name: sentItemDepartmentInbox.securityLevelLookup.getTranslatedName()})}}"></md-icon></span>
-                                         <span flex
-                                               ng-class="{'indicator-content': sentItemDepartmentInbox.linkedDocsIndicator}">
-                                                    <md-icon ng-if="sentItemDepartmentInbox.linkedDocsIndicator"
-                                                             class="{{sentItemDepartmentInbox.linkedDocsIndicator.class}}"
-                                                             md-svg-icon="{{sentItemDepartmentInbox.linkedDocsIndicator.icon}}"
-                                                             tooltip="{{lang[sentItemDepartmentInbox.linkedDocsIndicator.tooltip]}}"
-                                                    ></md-icon>
-                                                </span>
+                                        <!-- Security Level -->
+                                        <grid-indicator-directive record="sentItemDepartmentInbox"
+                                                                  indicator-type="securityLevel"
+                                                                  record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                        </span>
+                                        <!-- Linked Documents -->
+                                        <grid-indicator-directive record="sentItemDepartmentInbox"
+                                                                  indicator-type="hasLinkedDocuments"
+                                                                  record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                        <!-- Follow up Status -->
+                                        <grid-indicator-directive record="sentItemDepartmentInbox"
+                                                                  indicator-type="followupStatus"
+                                                                  record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                        <!-- Original/Copy -->
+                                        <grid-indicator-directive record="sentItemDepartmentInbox"
+                                                                  indicator-type="originalCopy"
+                                                                  record-type="SentItemDepartmentInbox"></grid-indicator-directive>
                                     </td>
                                     <td md-cell>{{sentItemDepartmentInbox.docFullSerial}}</td>
                                     <td md-cell class="indicator-td text-right"
                                         style="padding-right:0 !important; padding-left:0px !important;">
-                                                <span ng-class="{'indicator-content': sentItemDepartmentInbox.priorityLevelIndicator}">
-                                                    <md-icon ng-if="sentItemDepartmentInbox.priorityLevelIndicator"
-                                                             class="{{sentItemDepartmentInbox.priorityLevelIndicator.class}}"
-                                                             md-svg-icon="{{sentItemDepartmentInbox.priorityLevelIndicator.icon}}"
-                                                             tooltip="{{lang[sentItemDepartmentInbox.priorityLevelIndicator.tooltip].change({name: sentItemDepartmentInbox.priorityLevelLookup.getTranslatedName()})}}"
-                                                    ></md-icon>
-                                                </span>
-                                        <span class="float-right"
-                                              ng-class="{'indicator-content': sentItemDepartmentInbox.attachmentsIndicator}">
-                                                    <md-icon ng-if="sentItemDepartmentInbox.attachmentsIndicator"
-                                                             class="{{sentItemDepartmentInbox.attachmentsIndicator.class}}"
-                                                             md-svg-icon="{{sentItemDepartmentInbox.attachmentsIndicator.icon}}"
-                                                             tooltip="{{lang[sentItemDepartmentInbox.attachmentsIndicator.tooltip]}}"
-                                                    ></md-icon>
-                                                </span>
-                                        <!--<span flex class="indicator"
-                                              ng-class="{'indicator-content': sentItemDepartmentInbox.tagsIndicator}">
-                                                 <span ng-if="sentItemDepartmentInbox.tagsIndicator"
-                                                       tooltip="{{lang[userInbox.tagsIndicator.tooltip]}}"
-                                                       class="{{sentItemDepartmentInbox.tagsIndicator.class}}">
-                                                     {{sentItemDepartmentInbox.tagsIndicator.text}}
-                                                 </span>
-                                             </span>-->
-                                        <span flex ng-class="{'indicator-content': sentItemDepartmentInbox.followUpStatusIndicator}">
-                                            <md-icon ng-if="sentItemDepartmentInbox.followUpStatusIndicator"
-                                                     class="{{sentItemDepartmentInbox.followUpStatusIndicator.class}}"
-                                                     md-svg-icon="{{sentItemDepartmentInbox.followUpStatusIndicator.icon}}"
-                                                     tooltip="{{lang[sentItemDepartmentInbox.followUpStatusIndicator.tooltip].change({name: sentItemDepartmentInbox.followupStatusLookup.getTranslatedName()})}}"
-                                            ></md-icon>
-                                        </span>
+                                        <!-- Priority Level -->
+                                        <grid-indicator-directive record="sentItemDepartmentInbox"
+                                                                  indicator-type="priorityLevel"
+                                                                  record-type="SentItemDepartmentInbox"></grid-indicator-directive>
+                                        <!-- Has Attachments -->
+                                        <grid-indicator-directive record="sentItemDepartmentInbox" span-class="float-right"
+                                                                  indicator-type="hasAttachment"
+                                                                  record-type="SentItemDepartmentInbox"></grid-indicator-directive>
                                     </td>
                                     <td md-cell md-truncate class="subject">
                                         <a href="" class="view-doc" md-truncate

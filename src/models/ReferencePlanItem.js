@@ -133,6 +133,12 @@ module.exports = function (app) {
                 return this;
             };
 
+            ReferencePlanItem.prototype.hasSerialComponent = function () {
+                return _.some(this.components, function (item) {
+                    return item.lookupStrKey && item.lookupStrKey === 'SERIAL';
+                });
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('ReferencePlanItem', 'init', this);

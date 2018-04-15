@@ -246,6 +246,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Destinations
+         * @param scanIncoming
+         * @param $event
+         */
+        self.manageDestinations = function (scanIncoming, $event) {
+            managerService.manageDocumentCorrespondence(scanIncoming.vsId, scanIncoming.docClassName, scanIncoming.docSubject, $event)
+        };
+
+        /**
          * @description document security for scan incoming
          * @param scanIncoming
          * @param $event
@@ -439,6 +448,17 @@ module.exports = function (app) {
                         shortcut: false,
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Destinations
+                    {
+                        type: 'action',
+                        icon: 'stop',
+                        text: 'grid_action_destinations',
+                        shortcut: false,
+                        callback: self.manageDestinations,
+                        permissionKey: "MANAGE_DESTINATIONS",
+                        class: "action-yellow",
                         checkShow: self.checkToShowAction
                     }
                 ]

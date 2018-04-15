@@ -65,6 +65,31 @@ module.exports = function (app) {
                     });
             },
             /**
+             * @description Add selected items to favorite documents
+             * @param selectedItems
+             * @param $event
+             */
+            favoriteDocumentAddBulk: function (selectedItems, $event) {
+                if(selectedItems.length === 1){
+                    var info = selectedItems[0].getInfo();
+                    return self.addToFavoriteDocuments(info.vsId)
+                        .then(function (result) {
+                            if (result.status) {
+                                toast.success(langService.get("add_to_favorite_specific_success").change({
+                                    name: selectedItems[0].getTranslatedName()
+                                }));
+                            }
+                            else {
+                                dialog.alertMessage(langService.get(result.message));
+                            }
+                        });
+                }
+                return self.addToFavoriteDocumentsBulk(selectedItems)
+                    .then(function (result) {
+                        return result;
+                    });
+            },
+            /**
              * @description Show confirm box and remove document from favorite documents
              * @param favoriteDocument
              * @param $event
@@ -139,6 +164,28 @@ module.exports = function (app) {
                 })
         };
 
+
+        /**
+         * @description Add an item to favorite documents
+         * @param selectedItems
+         */
+        self.addToFavoriteDocumentsBulk = function (selectedItems) {
+            var data = _.map(selectedItems, function(item){
+                return  {
+                    documentVSId: item.getInfo().vsId,
+                    applicationUserId: employeeService.getEmployee().id
+                };
+            });
+            return $http
+                .post((urlService.favoriteDocuments+'/bulk'), data)
+                .then(function (result) {
+                    /*if (result.data.hasOwnProperty('ec') && errorCode.checkIf(result, 'DUPLICATE_ENTRY'))
+                        return {status: false, message: "add_to_favorite_duplicate_record"};
+                    return {status: true, message: "success"};*/
+                    return self.bulkAddToFavoriteResponse(result, selectedItems, false, 'add_to_favorite_duplicate_record', 'add_to_favorite_success', 'add_to_favorite_success_except');
+                })
+        };
+
         /**
          * @description Remove an item from favorite documents
          * @param favoriteDocument
@@ -176,6 +223,31 @@ module.exports = function (app) {
                     return (failedFavoriteDocuments.indexOf(favoriteDocument.vsId) > -1);
                 });
             });
+        };
+
+
+        self.bulkAddToFavoriteResponse = function(resultCollection, selectedItems, ignoreMessage, errorMessage, successMessage, failureSomeMessage){
+            resultCollection = resultCollection.hasOwnProperty('data') ? resultCollection.data.rs : resultCollection;
+            var failureCollection = [];
+            var currentIndex = 0;
+            _.map(resultCollection, function (value) {
+                if (value === -1)
+                    failureCollection.push(selectedItems[currentIndex]);
+                currentIndex++;
+            });
+
+            if (!ignoreMessage) {
+                if (failureCollection.length === selectedItems.length) {
+                    toast.error(langService.get(errorMessage));
+                } else if (failureCollection.length) {
+                    generator.generateFailedBulkActionRecords(failureSomeMessage, _.map(failureCollection, function (item) {
+                        return item.getTranslatedName();
+                    }));
+                } else {
+                    toast.success(langService.get(successMessage));
+                }
+            }
+            return selectedItems;
         };
 
         /**

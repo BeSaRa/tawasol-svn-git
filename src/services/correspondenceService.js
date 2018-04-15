@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                    cmsTemplate,
                                                    CommentModel,
                                                    employeeService,
+                                                   loadingIndicatorService,
                                                    langService,
                                                    CorrespondenceInfo,
                                                    Site,
@@ -489,7 +490,7 @@ module.exports = function (app) {
                 )
                 .then(function (result) {
                     correspondence.vsId = result.data.rs;
-                    return generator.generateInstance(correspondence, _getModel(correspondence.docClassName), self._sharedMethods);
+                    return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
                 });
         };
         /**
@@ -742,7 +743,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.getLookup = function (documentClass, lookupName, lookupKey) {
-            return !(lookupKey) ? self.screenLookups[documentClass.toLowerCase()][lookupName] : _.find(self.screenLookups[documentClass.toLowerCase()][lookupName], function (item) {
+            return (typeof lookupKey === 'undefined') ? self.screenLookups[documentClass.toLowerCase()][lookupName] : _.find(self.screenLookups[documentClass.toLowerCase()][lookupName], function (item) {
                 return Number(item.lookupKey) === Number(lookupKey);
             });
         };
@@ -863,10 +864,17 @@ module.exports = function (app) {
         /**
          * @description open transfer dialog to select user to transfer.
          * @param workItems
+         * @param applicationUser
          * @param $event
          */
-        self.openTransferDialog = function (workItems, $event) {
+        self.openTransferDialog = function (workItems, applicationUser, $event) {
             var isArray = angular.isArray(workItems);
+
+            function _filterApplicationUSer(user) {
+                console.log(applicationUser.domainName !== user.domainName, applicationUser.domainName, user);
+                return applicationUser.domainName !== user.domainName;
+            }
+
             return dialog
                 .showDialog({
                     template: cmsTemplate.getPopup('transfer-mail'),
@@ -885,9 +893,13 @@ module.exports = function (app) {
                                     return _.filter(result, 'status');
                                 });
                         },
-                        applicationUsers: function (applicationUserService) {
+                        applicationUsers: function (ouApplicationUserService, employeeService) {
                             'ngInject';
-                            return applicationUserService.loadApplicationUsers();
+                            return ouApplicationUserService
+                                .searchByCriteria({ou: employeeService.getEmployee().getRegistryOUID()})
+                                .then(function (result) {
+                                    return _.filter(_.map(result, 'applicationUser'), _filterApplicationUSer);
+                                });
                         }
                     }
                 })
@@ -1034,7 +1046,7 @@ module.exports = function (app) {
         /**
          * @description update correspondence site for document
          * @param correspondence
-         * @returns {Promise}
+         * @returns {HttpPromise}
          */
         self.updateCorrespondenceSites = function (correspondence) {
             var info = correspondence.getInfo();
@@ -1056,6 +1068,7 @@ module.exports = function (app) {
          * @param approvedQueue
          * @param departmentIncoming
          */
+        self.popupNumber = 0;
         self.viewCorrespondence = function (correspondence, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming) {
             var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : _createInstance(correspondence).getInfo();
             var workItem = info.isWorkItem() ? correspondence : false;
@@ -1073,6 +1086,7 @@ module.exports = function (app) {
                 })
                 .then(function (result) {
                     result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                    self.popupNumber += 1;
                     return dialog.showDialog({
                         template: cmsTemplate.getPopup('view-correspondence'),
                         controller: 'viewCorrespondencePopCtrl',
@@ -1085,7 +1099,8 @@ module.exports = function (app) {
                             actions: actions,
                             workItem: info.workFlow === 'internal' ? correspondence : workItem,
                             disableProperties: disableProperties,
-                            disableCorrespondence: disableCorrespondence
+                            disableCorrespondence: disableCorrespondence,
+                            popupNumber: self.popupNumber
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1097,7 +1112,15 @@ module.exports = function (app) {
                                 return correspondenceService.loadCorrespondenceLookups(info.documentClass);
                             }
                         }
-                    });
+                    })
+                        .then(function () {
+                            self.popupNumber -= 1;
+                            return true;
+                        })
+                        .catch(function () {
+                            self.popupNumber -= 1;
+                            return false;
+                        });
                 });
         };
         /**
@@ -1107,12 +1130,13 @@ module.exports = function (app) {
          */
         self.viewCorrespondenceGroupMail = function (correspondence, actions) {
             var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : _createInstance(correspondence).getInfo();
-            var workItem = info.isWorkItem() ? correspondence : false;
+            // var workItem = info.isWorkItem() ? correspondence : false;
             return $http.get([urlService.correspondence, 'ou-queue', 'wob-num', info.wobNumber].join('/'))
                 .then(function (result) {
                     return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                 })
                 .then(function (generalStepElementView) {
+                    self.popupNumber += 1;
                     return dialog.showDialog({
                         template: cmsTemplate.getPopup('view-correspondence'),
                         controller: 'viewCorrespondencePopCtrl',
@@ -1127,7 +1151,8 @@ module.exports = function (app) {
                             readyToExport: false,
                             disableProperties: true,
                             disableCorrespondence: true,
-                            disableEverything: true
+                            disableEverything: true,
+                            popupNumber: self.popupNumber
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1139,7 +1164,16 @@ module.exports = function (app) {
                                 return correspondenceService.loadCorrespondenceLookups(info.documentClass);
                             }
                         }
-                    });
+                    })
+                        .then(function () {
+                            self.popupNumber -= 1;
+
+                            return true;
+                        })
+                        .catch(function () {
+                            self.popupNumber -= 1;
+                            return false;
+                        });
                 });
         };
         /**
@@ -1151,6 +1185,7 @@ module.exports = function (app) {
                     return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                 })
                 .then(function (generalStepElementView) {
+                    self.popupNumber += 1;
                     return dialog.showDialog({
                         template: cmsTemplate.getPopup('view-correspondence'),
                         controller: 'viewCorrespondencePopCtrl',
@@ -1165,7 +1200,8 @@ module.exports = function (app) {
                             readyToExport: readyToExport,
                             disableProperties: disableProperties,
                             disableCorrespondence: disableCorrespondence,
-                            disableEverything: departmentIncoming
+                            disableEverything: departmentIncoming,
+                            popupNumber: self.popupNumber
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1177,8 +1213,15 @@ module.exports = function (app) {
                                 return correspondenceService.loadCorrespondenceLookups(info.documentClass);
                             }
                         }
-
-                    });
+                    })
+                        .then(function () {
+                            self.popupNumber -= 1;
+                            return true;
+                        })
+                        .catch(function () {
+                            self.popupNumber -= 1;
+                            return false;
+                        });
                 })
                 .catch(function (error) {
                     return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
@@ -1217,12 +1260,12 @@ module.exports = function (app) {
         };
 
         /**
-         * @description view attachment
+         * @description view linked document
          * @param correspondence
          */
         self.viewLinkedDocument = function (correspondence) {
             var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : _createInstance(correspondence).getInfo();
-            debugger;
+
             return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
                 .then(function (result) {
                     var documentClass = result.data.rs.metaData.classDescription;
@@ -1259,21 +1302,35 @@ module.exports = function (app) {
                 escapeToCancel: false,
                 locals: {
                     correspondence: false,
-                    content: information
+                    content: information,
+                    popupNumber: self.popupNumber
                 }
-            })
+            });
         };
         /**
          * @description receive incoming workItem.
          * @param wobNumber
          */
-        self.receiveIncoming = function (wobNumber) {
+        self.prepareReceiveIncoming = function (wobNumber) {
             return $http
-                .put((urlService.departmentWF + '/' + wobNumber + '/receive'))
+                .put((urlService.departmentWF + '/' + wobNumber + '/prepare/receive'))
                 .then(function (result) {
                     result = result.data.rs;
                     result.metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming', 'ViewIncoming'], new Incoming(result.metaData));
                     return result;
+                });
+        };
+        /**
+         * @description receive incoming document
+         * @param correspondence
+         * @param wobNumber
+         */
+        self.receiveIncoming = function (correspondence, wobNumber) {
+            return $http
+                .put((urlService.departmentWF + '/' + wobNumber + '/receive'), generator.interceptSendInstance(['Correspondence', _getModelName(correspondence.docClassName)], correspondence))
+                .then(function (result) {
+                    correspondence.vsId = result.data.rs;
+                    return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
                 });
         };
         /**
@@ -1345,9 +1402,12 @@ module.exports = function (app) {
          * @param action
          * @param tab
          * @param $event
+         * @param isDeptIncoming
          * @returns {promise|*}
          */
-        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab) {
+        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming) {
+            loadingIndicatorService.forceStartLoading();
+            var defer = $q.defer(), defer2 = $q.defer(), defer3 = $q.defer(), defer4 = $q.defer(), defer5 = $q.defer();
             var multi = angular.isArray(correspondence) && correspondence.length > 1;
             action = action || 'forward';
             var errorMessage = [];
@@ -1362,24 +1422,37 @@ module.exports = function (app) {
                         correspondence: multi ? correspondence : (angular.isArray(correspondence) ? correspondence[0] : correspondence),
                         selectedTab: tab,
                         actionKey: action,
-                        errorMessage: errorMessage
+                        errorMessage: errorMessage,
+                        isDeptIncoming: isDeptIncoming
                     },
                     resolve: {
                         favoritesUsers: function (distributionWFService) {
                             'ngInject';
                             return distributionWFService.loadFavorites('users')
+                                .then(function (result) {
+                                    defer.resolve(true);
+                                    return result;
+                                })
                                 .catch(function () {
                                     errorMessage.push('users');
+                                    defer.resolve(false);
                                     return []
                                 });
                         },
                         favoritesOrganizations: function (distributionWFService) {
                             'ngInject';
-                            return distributionWFService.loadFavorites('organizations')
-                                .catch(function () {
-                                    errorMessage.push('organizations');
-                                    return [];
-                                });
+                            return defer.promise.then(function () {
+                                return distributionWFService.loadFavorites('organizations')
+                                    .then(function (result) {
+                                        defer2.resolve(true);
+                                        return result;
+                                    })
+                                    .catch(function () {
+                                        defer2.resolve(false);
+                                        errorMessage.push('organizations');
+                                        return [];
+                                    });
+                            })
                         }, /*
                          distUsers: function (distributionWFService) {
                          'ngInject';
@@ -1387,30 +1460,56 @@ module.exports = function (app) {
                          },*/
                         comments: function (userCommentService) {
                             'ngInject';
-                            return userCommentService.getUserComments()
-                                .then(function (result) {
-                                    return _.filter(result, 'status');
-                                });
+                            return defer2.promise.then(function () {
+                                return userCommentService
+                                    .getUserComments()
+                                    .then(function (result) {
+                                        defer3.resolve(true);
+                                        return _.filter(result, 'status');
+                                    });
+                            })
                         },
                         workflowActions: function (workflowActionService) {
                             'ngInject';
-                            return workflowActionService.loadCurrentUserWorkflowActions();
+                            return defer3.promise.then(function () {
+                                return workflowActionService.loadCurrentUserWorkflowActions()
+                                    .then(function (result) {
+                                        defer4.resolve(true);
+                                        return result;
+                                    });
+                            })
                         }/*,
                          workflowGroups: function (distributionWFService) {
                          return distributionWFService.loadDistWorkflowGroups();
                          }*/,
                         organizationGroups: function (distributionWFService) {
                             'ngInject';
-                            return distributionWFService.loadDistWorkflowOrganizations('organizations')
+                            return defer4.promise.then(function () {
+                                return distributionWFService
+                                    .loadDistWorkflowOrganizations('organizations')
+                                    .then(function (result) {
+                                        defer5.resolve(true);
+                                        return result;
+                                    })
+                            });
                         },
                         replyOn: function (distributionWFService, $timeout) {
                             'ngInject';
                             if (angular.isArray(correspondence) || !correspondence.getInfo().isWorkItem() || action !== 'reply') {
                                 return $timeout(function () {
+                                    loadingIndicatorService.forceEndLoading();
                                     return false;
                                 })
                             }
-                            return distributionWFService.loadSenderUserForWorkItem(correspondence)
+                            return defer5.promise.then(function () {
+                                return distributionWFService
+                                    .loadSenderUserForWorkItem(correspondence)
+                                    .then(function (result) {
+                                        loadingIndicatorService.forceEndLoading();
+                                        return result;
+                                    });
+                            });
+
                         }
                     }
                 });
@@ -2135,7 +2234,7 @@ module.exports = function (app) {
                             toast.error(langService.get('something_happened_when_sign'));
                         }
                     }
-                    return workItem;
+                    return result.data.rs;
                 })
                 .catch(function (error) {
                     errorCode.checkIf(error, 'AUTHORIZE_FAILED', function () {
@@ -2167,15 +2266,21 @@ module.exports = function (app) {
                                     userInbox: workItem,
                                     signatures: signatures
                                 }
-                            })
-                            .then(function () {
-                                return $q.resolve(false);
                             });
                     } else {
                         dialog.alertMessage(langService.get('no_signature_available'));
                         return $q.reject(langService.get('no_signature_available'));
                     }
                 });
+        };
+        /**
+         * @description to check if the correspondence has already workItem or before launch again.
+         * @param vsId
+         */
+        self.checkWorkFlowForVsId = function (vsId) {
+            return $http.get(_createUrlSchema(null, null, ['common/check-active-tasks/vsid', vsId].join('/'))).then(function (result) {
+                return result.data.rs;
+            });
         }
 
     });

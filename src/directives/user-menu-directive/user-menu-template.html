@@ -10,7 +10,7 @@
                     <md-icon class="profile-status" ng-class="userMenu.selectedStatus.class"
                              md-svg-icon="{{userMenu.selectedStatus.icon}}"></md-icon>
                 </div>
-                <span flex class="user-name">{{userMenu.employee.getTranslatedName()}}</span>
+                <span flex class="user-name">{{userMenu.employeeService.getTranslatedName()}}</span>
                 <md-icon md-svg-icon="chevron-down"></md-icon>
             </div>
         </md-button>
@@ -79,7 +79,7 @@
             </md-menu-item>
             <md-menu-divider></md-menu-divider>
             <md-menu-item>
-                <md-button ng-click="userMenu.logoutEmployee()">
+                <md-button ng-click="userMenu.logoutEmployee($event)">
                     <div layout="row" layout-align="start center">
                         <md-icon md-svg-icon="logout"></md-icon>
                         <span>{{lang.logout}}</span>

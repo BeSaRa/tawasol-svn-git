@@ -653,7 +653,6 @@ module.exports = function (app) {
                             callback: self.manageDestinations,
                             permissionKey: "MANAGE_DESTINATIONS",
                             class: "action-yellow",
-                            hide: false,
                             checkShow: self.checkToShowAction
                         }
                     ]

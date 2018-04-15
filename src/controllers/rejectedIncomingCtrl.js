@@ -15,7 +15,6 @@ module.exports = function (app) {
                                                      viewTrackingSheetService,
                                                      contextHelpService,
                                                      distributionWorkflowService,
-                                                     broadcastService,
                                                      correspondenceService,
                                                      ResolveDefer) {
         'ngInject';
@@ -451,30 +450,13 @@ module.exports = function (app) {
             console.log('manage security : ', rejectedIncoming);
         };
 
-       /* /!**
+        /**
          * @description Destinations
          * @param rejectedIncoming
          * @param $event
-         *!/
+         */
         self.manageDestinations = function (rejectedIncoming, $event) {
             managerService.manageDocumentCorrespondence(rejectedIncoming.vsId, rejectedIncoming.docClassName, rejectedIncoming.docSubject, $event)
-        };*/
-
-        /**
-         * @description broadcast selected organization and workflow group
-         * @param rejectedIncoming
-         * @param $event
-         */
-        self.broadcast = function (rejectedIncoming, $event) {
-            broadcastService
-                .controllerMethod
-                .broadcastSend(rejectedIncoming, $event)
-                .then(function () {
-                    self.reloadRejectedIncomings(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadRejectedIncomings(self.grid.page);
-                });
         };
 
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
@@ -721,7 +703,7 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
-                    /*// Destinations
+                    // Destinations
                     {
                         type: 'action',
                         icon: 'stop',
@@ -732,7 +714,7 @@ module.exports = function (app) {
                         hide: false,
                         class: "action-yellow",
                         checkShow: self.checkToShowAction
-                    }*/
+                    }
                 ]
             },
             // Security
@@ -759,18 +741,6 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
-                }
-            },
-            // Broadcast
-            {
-                type: 'action',
-                icon: 'bullhorn',
-                text: 'grid_action_broadcast',
-                shortcut: false,
-                hide: true,
-                callback: self.broadcast,
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && (model.addMethod || model.approvers !== null);
                 }
             }
         ];

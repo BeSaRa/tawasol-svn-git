@@ -11,6 +11,7 @@ module.exports = function (app) {
             self.enName = null;
             self.parent = null;
             self.relationId = null;
+            self.withSub = false;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -42,7 +43,7 @@ module.exports = function (app) {
              * @returns {string}
              */
             OUBroadcast.prototype.getTranslatedName = function (reverse) {
-                return langService.current === 'ar' ? (reverse ? this.enName : this.arName ) : (reverse ? this.arName : this.enName);
+                return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
 
             /**

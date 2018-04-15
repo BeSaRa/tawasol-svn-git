@@ -136,64 +136,34 @@
 
                                     <td md-cell class="indicator-td">
                                         <!-- Security Level -->
-                                        <span flex
-                                              ng-class="{'indicator-content': workItem.securityLevelIndicator}">
-                                            <md-icon ng-if="workItem.securityLevelIndicator"
-                                                     class="{{workItem.securityLevelIndicator.class}}"
-                                                     md-svg-icon="{{workItem.securityLevelIndicator.icon}}"
-                                                     tooltip="{{lang[workItem.securityLevelIndicator.tooltip].change({name: workItem.securityLevelLookup.getTranslatedName()})}}"
-                                            ></md-icon>
-                                        </span>
+                                        <grid-indicator-directive record="workItem"
+                                                                  indicator-type="securityLevel"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                         <!-- Doc Type -->
-                                        <span flex ng-class="{'indicator-content': workItem.docTypeIndicator}">
-                                                    <md-icon ng-if="workItem.docTypeIndicator"
-                                                             class="{{workItem.docTypeIndicator.class}}"
-                                                             md-svg-icon="{{workItem.docTypeIndicator.icon}}"
-                                                             tooltip="{{lang[workItem.docTypeIndicator.tooltip]}}"
-                                                    ></md-icon>
-                                                </span>
-                                        <!-- Paper Document -->
-                                        <span flex
-                                              ng-class="{'indicator-content': workItem.isPaperIndicator}">
-                                             <md-icon ng-if="workItem.isPaperIndicator"
-                                                      class="{{workItem.isPaperIndicator.class}}"
-                                                      md-svg-icon="{{workItem.isPaperIndicator.icon}}"
-                                                      tooltip="{{lang[workItem.isPaperIndicator.tooltip]}}"
-                                             ></md-icon>
-                                         </span>
+                                        <grid-indicator-directive record="workItem"
+                                                                  indicator-type="docType"
+                                                                  record-type="workItem"></grid-indicator-directive>
+
+                                        <!-- Electronic/Paper Document -->
+                                        <grid-indicator-directive record="workItem"
+                                                                  indicator-type="paperElectronic"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                         <!-- Is Reassigned -->
-                                        <span flex ng-class="{'indicator-content': workItem.isReassignedIndicator}">
-                                            <md-icon ng-if="workItem.isReassignedIndicator"
-                                                     class="{{workItem.isReassignedIndicator.class}}"
-                                                     md-svg-icon="{{workItem.isReassignedIndicator.icon}}"
-                                                     tooltip="{{lang[workItem.isReassignedIndicator.tooltip]}}"
-                                            ></md-icon>
-                                        </span>
+                                        <grid-indicator-directive record="workItem"
+                                                                  indicator-type="isReassigned"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                         <!-- Linked Documents -->
-                                        <span flex ng-class="{'indicator-content': workItem.linkedDocsIndicator}">
-                                                   <md-icon ng-if="workItem.linkedDocsIndicator"
-                                                            class="{{workItem.linkedDocsIndicator.class}}"
-                                                            md-svg-icon="{{workItem.linkedDocsIndicator.icon}}"
-                                                            tooltip="{{lang[workItem.linkedDocsIndicator.tooltip]}}"
-                                                   ></md-icon>
-                                               </span>
-                                        <!--<span flex class="indicator"
-                                              ng-class="{'indicator-content': workItem.tagsIndicator}">
-                                                 <span ng-if="workItem.tagsIndicator"
-                                                       tooltip="{{lang[workItem.tagsIndicator.tooltip]}}"
-                                                       class="{{workItem.tagsIndicator.class}}">
-                                                     {{workItem.tagsIndicator.text}}
-                                                 </span>
-                                             </span>-->
+                                        <grid-indicator-directive record="workItem"
+                                                                  indicator-type="hasLinkedDocuments"
+                                                                  record-type="workItem"></grid-indicator-directive>
+                                        <!-- Tags -->
+                                        <!--<grid-indicator-directive record="workItem"
+                                                                  type="tags"
+                                                                  record-type="workItem"></grid-indicator-directive>-->
                                         <!-- Follow up Status -->
-                                        <span flex
-                                              ng-class="{'indicator-content': workItem.followUpStatusIndicator}">
-                                            <md-icon ng-if="workItem.followUpStatusIndicator"
-                                                     class="{{workItem.followUpStatusIndicator.class}}"
-                                                     md-svg-icon="{{workItem.followUpStatusIndicator.icon}}"
-                                                     tooltip="{{lang[workItem.followUpStatusIndicator.tooltip].change({name: workItem.followupStatusLookup.getTranslatedName()})}}"
-                                            ></md-icon>
-                                        </span>
+                                        <grid-indicator-directive record="workItem"
+                                                                  indicator-type="followupStatus"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                     </td>
                                     <td md-cell>
                                         <!--tooltip="{{workItem.getTranslatedStarred()}}"-->
@@ -231,22 +201,13 @@
                                     <td md-cell class="indicator-td text-right"
                                         style="padding-right:0 !important; padding-left:0 !important;">
                                         <!-- Priority Level -->
-                                        <span ng-class="{'indicator-content': workItem.priorityLevelIndicator}">
-                                                    <md-icon ng-if="workItem.priorityLevelIndicator"
-                                                             class="{{workItem.priorityLevelIndicator.class}}"
-                                                             md-svg-icon="{{workItem.priorityLevelIndicator.icon}}"
-                                                             tooltip="{{lang[workItem.priorityLevelIndicator.tooltip].change({name: workItem.priorityLevelLookup.getTranslatedName()})}}"
-                                                    ></md-icon>
-                                                </span>
-                                        <!-- Has Attachment -->
-                                        <span class="float-right"
-                                              ng-class="{'indicator-content': workItem.attachmentsIndicator}">
-                                                    <md-icon ng-if="workItem.attachmentsIndicator"
-                                                             class="{{workItem.attachmentsIndicator.class}}"
-                                                             md-svg-icon="{{workItem.attachmentsIndicator.icon}}"
-                                                             tooltip="{{lang[workItem.attachmentsIndicator.tooltip]}}"
-                                                    ></md-icon>
-                                                </span>
+                                        <grid-indicator-directive record="workItem"
+                                                                  indicator-type="priorityLevel"
+                                                                  record-type="workItem"></grid-indicator-directive>
+                                        <!-- Has Attachments -->
+                                        <grid-indicator-directive record="workItem" span-class="float-right"
+                                                                  indicator-type="hasAttachment"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                     </td>
                                     <td md-cell md-truncate class="subject">
                                         <a href="" class="view-doc" md-truncate ng-if="workItem.hasContent()"
@@ -261,9 +222,12 @@
                                         </div>
                                     </td>
                                     <td md-cell class="td-data">
-                                            <span class="{{workItem.dueDateStatusIndicator.class}}"
+                                        <grid-indicator-directive record="workItem"
+                                                                  indicator-type="dueDate"
+                                                                  record-type="workItem"></grid-indicator-directive>
+                                            <!--<span class="{{workItem.dueDateStatusIndicator.class}}"
                                                   tooltip="{{lang[workItem.dueDateStatusIndicator.tooltip].change({due_date_status:lang[workItem.dueDateStatusIndicator.text] })}}">
-                                                {{workItem.generalStepElm.dueDate}}</span>
+                                                {{workItem.generalStepElm.dueDate}}</span>-->
                                     </td>
                                     <!--<td md-cell></td>
                                     <td md-cell>{{workItem.generalStepElm.docType}}</td>

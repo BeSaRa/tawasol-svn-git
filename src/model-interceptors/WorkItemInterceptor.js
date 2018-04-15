@@ -59,6 +59,7 @@ module.exports = function (app) {
             delete model.isReassignedIndicator;
             delete model.isOpenedIndicator;
             delete model.isPaperIndicator;
+            delete model.originalCopyIndicator;
             delete model.toOU;
             delete model.fromOU;
             return model;
@@ -96,15 +97,15 @@ module.exports = function (app) {
             model.followupStatusLookup = lookupService.getLookupByLookupKey(lookupService.followupStatus, model.generalStepElm.followupStatus);
             model.followUpStatusIndicator = model.generalStepElm.followupStatus ? model.getFollowUpStatusIndicator(model.followupStatusLookup) : null;
 
-            model.dueDateStatusIndicator = model.dueDateOriginal ? model.getDueDateStatusIndicator(model.generalStepElm.workFlowName, model.dueDateOriginal) : null;
+            model.dueDateStatusIndicator = model.dueDateOriginal ? model.getDueDateStatusIndicator(model.dueDateOriginal) : null;
 
-            model.tagsIndicator = model.generalStepElm.tagsNO ? model.getTagsIndicator(model.generalStepElm.tagsNO) : null;
+            // model.tagsIndicator = model.generalStepElm.tagsNO ? model.getTagsIndicator(model.generalStepElm.tagsNO) : null;
             model.docTypeIndicator = model.generalStepElm.workFlowName ? model.getDocTypeIndicator(model.generalStepElm.workFlowName) : null;
             model.isReassignedIndicator = model.getReassignedIndicator(model.generalStepElm.isReassigned);
             model.isOpenedIndicator = model.getOpenedIndicator(model.generalStepElm.isOpen);
             model.isPaperIndicator = model.getIsPaperIndicator(model.generalStepElm.hasOwnProperty('addMethod') ? model.generalStepElm.addMethod : 1);
             model.exportViaCentralArchiveIndicator = model.getExportViaCentralArchiveIndicator(model.generalStepElm.exportViaCentralArchive);
-
+            model.originalCopyIndicator = model.generalStepElm.hasOwnProperty('orginality') ? model.getOriginalCopyIndicator() : null;
             model.sender = new Information(model.senderInfo);
             return model;
         });

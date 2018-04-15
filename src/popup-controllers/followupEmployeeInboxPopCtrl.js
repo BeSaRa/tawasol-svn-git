@@ -7,10 +7,11 @@ module.exports = function (app) {
                                                              langService,
                                                              Organization,
                                                              ApplicationUser,
-                                                             currentOrganization,
-                                                             currentEmployee,
+                                                             selectedOrganization,
+                                                             selectedUser,
                                                              organizations,
-                                                             applicationUsers) {
+                                                             ouApplicationUsers,
+                                                             employeeService) {
             'ngInject';
             var self = this;
             self.controllerName = 'followupEmployeeInboxPopCtrl';
@@ -18,13 +19,13 @@ module.exports = function (app) {
             self.validateLabels = {};
 
             self.organizations = organizations;
-            self.applicationUsers = applicationUsers;
+            self.ouApplicationUsers = ouApplicationUsers;
 
-            self.selectedOrganizationCopy = angular.copy(currentOrganization);
-            self.selectedApplicationUserCopy = angular.copy(currentEmployee);
+            self.selectedOrganizationCopy = angular.copy(selectedOrganization);
+            self.selectedApplicationUserCopy = angular.copy(selectedUser);
 
-            self.selectedOrganization = currentOrganization || null;
-            self.selectedApplicationUser = currentEmployee || null;
+            self.selectedOrganization = selectedOrganization || null;
+            self.selectedApplicationUser = selectedUser || null;
 
             /**
              * @description Get the Application Users for the selected Organization
@@ -33,13 +34,16 @@ module.exports = function (app) {
                 self.selectedApplicationUser = null;
                 return ouApplicationUserService.loadRelatedOUApplicationUsers(self.selectedOrganization)
                     .then(function (result) {
-                        self.applicationUsers = result;
+                        result = _.filter(result, function (ouApplicationUser) {
+                            return ouApplicationUser.applicationUser.id != employeeService.getEmployee().id;
+                        });
+                        self.ouApplicationUsers = result;
                         return result;
                     });
             };
 
             /**
-             * @description Get Applicaiton
+             * @description Close the popup and get inbox according to selected ou and user
              * @param $event
              * @returns {*|Promise<any>}
              */

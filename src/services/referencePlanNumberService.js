@@ -8,7 +8,8 @@ module.exports = function (app) {
                                                         dialog,
                                                         langService,
                                                         toast,
-                                                        cmsTemplate) {
+                                                        cmsTemplate,
+                                                        errorCode) {
         'ngInject';
         var self = this;
         self.serviceName = 'referencePlanNumberService';
@@ -111,6 +112,14 @@ module.exports = function (app) {
                         return self.deleteReferencePlanNumber(referencePlanNumber).then(function () {
                             toast.success(langService.get("delete_specific_success").change({name: referencePlanNumber.getNames()}));
                             return true;
+                        })
+                    })
+                    .catch(function(error){
+                        errorCode.checkIf(error, 'CAN_NOT_DELETE_LOOKUP', function(){
+                            dialog.errorMessage(langService.get('cannot_delete_lookup').change({
+                                lookup: langService.get('reference_number_plan'),
+                                used: langService.get('other_organizations')
+                            }), null, null, $event);
                         })
                     });
             },

@@ -12,7 +12,7 @@ module.exports = function (app) {
             model.ouList = _.map(model.ouList, function (ou) {
                 return {
                     first: ou.id,
-                    second: true
+                    second: ou.hasOwnProperty('withSub') ? ou.withSub : false
                 };
             });
 

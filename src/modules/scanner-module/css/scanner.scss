@@ -1,7 +1,7 @@
 md-dialog#scanner-dialog {
   width: 99%;
   height: 99%;
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 md-dialog.full-screen {
@@ -16,7 +16,6 @@ md-dialog.full-screen {
 }
 
 #scanner-properties {
-
   button, label {
     margin-right: 0;
     margin-left: 0;
@@ -25,7 +24,7 @@ md-dialog.full-screen {
 
 #scanner-properties {
   min-height: 300px;
-  max-width:150px;
+  max-width: 150px;
 }
 
 .transparent-fieldset {
@@ -60,7 +59,7 @@ md-dialog.full-screen {
   max-height: 100%;
   height: 100%;
   box-sizing: border-box;
-  position: fixed;
+  position: relative;
   left: 20px;
   right: 20px;
   top: 40px;
@@ -70,25 +69,37 @@ md-dialog.full-screen {
 #scanner-pages {
   max-height: inherit;
   max-width: 180px;
-  position: fixed !important;
-  top: 50px;
-  bottom: 50px;
-  left: 190px;
-  overflow: hidden;
+  //position: relative !important;
+  //top: 50px;
+  //bottom: 50px;
+  //left: 190px;
+  overflow: hidden !important;
   width: 150px;
 }
+
+.absolute-toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 40px;
+}
+
+.dialog-container {
+  padding-top: 20px;
+  max-height: 100%;
+}
+
 html.rtl {
   #scanner-pages {
-    left: auto;
-    right: 190px;
+    //left: auto;
+    //right: 190px;
   }
 }
 
 #scanner-actions {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
+
 }
 
 .scanner-page-link {
@@ -135,6 +146,7 @@ html.rtl {
     }
   }
 }
+
 html.rtl {
   .page-arrows {
     left: 5px;
@@ -161,12 +173,12 @@ html.rtl {
 }
 
 #scanner-workspace {
-  position: fixed;
-  left: 345px;
-  right: 20px;
-  bottom: 50px;
-  top: 40px;
+  //left: 345px;
+  //right: 20px;
+  //bottom: 50px;
+  //top: 40px;
 }
+
 html.rtl {
   #scanner-workspace {
     right: 345px;

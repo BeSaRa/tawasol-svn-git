@@ -4,12 +4,13 @@
         .config(function (urlServiceProvider, rootEntityProvider, cmsTemplateProvider) {
             'ngInject';
             urlServiceProvider
-                .setEnvironment('stage')
+                .setEnvironment('demo')
                 .setBaseUrl('dev', 'http://localhost:9080/CMSServices/service')
                 .setBaseUrl('stage', 'http://100.100.3.220:9080/CMSServices/service')
                 .setBaseUrl('test', 'http://eblaepm.no-ip.org:9080/CMSServices/service')
                 .setBaseUrl('demo', 'http://eblaepm.no-ip.org:9081/CMSServices/service')
-                .setBaseUrl('training', 'http://100.100.3.142:9080/CMSServices/service');
+                .setBaseUrl('training', 'http://100.100.3.142:9080/CMSServices/service')
+                .setBaseUrl('manohar', 'http://100.100.12.25:9080/CMSServices/service');
 
             urlServiceProvider
             // to load languages
@@ -80,6 +81,8 @@
                 .addToAllWithBase('userClassificationViewPermissions', 'cms-entity/admin/user-classification-permission')
                 //organization unit application users
                 .addToAllWithBase('ouApplicationUsers', 'cms-entity/admin/ou-application-user')
+                //ou application users by application id
+                .addToAllWithBase('ouApplicationUsersByUserId', 'cms-entity/admin/ou-application-user/userid/:userId')
                 // related application user
                 .addToAllWithBase('relatedApplicationUsersByOUId', 'cms-entity/admin/ou-application-user/ouid/:OUId')
                 // Unrelated application user

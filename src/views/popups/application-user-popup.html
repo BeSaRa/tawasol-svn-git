@@ -312,9 +312,11 @@
                                         <label for="defaultOUID">{{lang.organization_unit}}</label>
                                         <md-select id="defaultOUID" name="defaultOUID" required
                                                    ng-model="ctrl.applicationUser.defaultOUID">
-                                            <md-option ng-value="organization.id"
+                                            <md-option ng-value="organization.ou.id"
+                                                       ng-disabled="!organization.status"
+                                                       tooltip="{{(!organization.status) ? lang.inactive_organization : ''}}"
                                                        ng-repeat="organization in ctrl.organizationsForAppUser track by $index">
-                                                {{organization.getTranslatedName()}}
+                                                {{organization.ou.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
                                         <div ng-messages="applicationUserForm.defaultOUID.$error">
@@ -958,6 +960,7 @@
                                                     </td>
                                                     <td md-cell>
                                                         <md-switch ng-model="ouApplicationUser.status"
+                                                                   ng-disabled="ctrl.disableOUApplicationUserStatus(ouApplicationUser)"
                                                                    title="{{ouApplicationUser.getTranslatedStatus()}}"
                                                                    aria-label="{{ouApplicationUser.getTranslatedStatus()}}">
                                                         </md-switch>

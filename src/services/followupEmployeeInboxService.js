@@ -59,9 +59,11 @@ module.exports = function (app) {
         self.controllerMethod = {
             /**
              * @description Opens the dialog to select the organization and the user to get the data in the grid
+             * @param selectedOrganization
+             * @param selectedUser
              * @param $event
              */
-            openOrganizationAndUserDialog: function (currentOrganization, currentEmployee, $event) {
+            openOrganizationAndUserDialog: function (selectedOrganization, selectedUser, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -69,18 +71,18 @@ module.exports = function (app) {
                         controller: 'followupEmployeeInboxPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
-                            currentOrganization: currentOrganization,
-                            currentEmployee: currentEmployee
+                            selectedOrganization: selectedOrganization,
+                            selectedUser: selectedUser
                         },
                         resolve: {
                             organizations: function (organizationService) {
                                 'ngInject';
-                                return organizationService.loadOrganizations();
+                                return organizationService.getOrganizationsByRegOU(employeeService.getEmployee().getRegistryOUID());
                             },
-                            applicationUsers: function (ouApplicationUserService) {
+                            ouApplicationUsers: function (ouApplicationUserService) {
                                 'ngInject';
-                                return currentOrganization ?
-                                    ouApplicationUserService.loadRelatedOUApplicationUsers(currentOrganization)
+                                return selectedOrganization ?
+                                    ouApplicationUserService.loadRelatedOUApplicationUsers(selectedOrganization)
                                         .then(function (result) {
                                             return result;
                                         }) : [];

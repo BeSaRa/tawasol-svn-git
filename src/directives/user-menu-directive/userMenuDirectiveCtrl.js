@@ -9,7 +9,8 @@ module.exports = function (app) {
                                                       applicationUserService,
                                                       moveToFolderService,
                                                       toast,
-                                                      langService) {
+                                                      langService,
+                                                      errorCode) {
         'ngInject';
         var self = this;
         self.controllerName = 'userMenuDirectiveCtrl';
@@ -102,6 +103,11 @@ module.exports = function (app) {
                 .selectDepartmentToLogin(organization)
                 .then(function () {
                     $state.reload();
+                })
+                .catch(function (error) {
+                    errorCode.checkIf(error, 'INACTIVE_USER_ENTITY', function () {
+                        toast.error(langService.get('can_not_login_with_inactive_user_or_entity'));
+                    });
                 });
         };
         /**
@@ -128,10 +134,14 @@ module.exports = function (app) {
         /**
          * logout employee
          */
-        self.logoutEmployee = function () {
-            authenticationService.logout().then(function () {
-                $state.go('login', {identifier: rootEntity.getRootEntityIdentifier()});
-            });
+        self.logoutEmployee = function ($event) {
+            dialog
+                .confirmMessage(langService.get('confirm_logout'), null, null, $event)
+                .then(function () {
+                    authenticationService.logout().then(function () {
+                        $state.go('login', {identifier: rootEntity.getRootEntityIdentifier()});
+                    });
+                });
         };
 
         self.openUserMenu = function ($mdMenu) {

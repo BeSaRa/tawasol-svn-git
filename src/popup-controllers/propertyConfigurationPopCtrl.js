@@ -7,8 +7,7 @@ module.exports = function (app) {
                                                              toast,
                                                              dialog,
                                                              generator,
-                                                             moment,
-                                                             langService) {
+                                                             moment) {
         'ngInject';
         var self = this;
         self.controllerName = 'propertyConfigurationPopCtrl';
@@ -43,14 +42,14 @@ module.exports = function (app) {
         self.defaultOperators = [
             {
                 text: "Like",
-                value: "like",
+                value: "Like",
                 display: function (type) {
                     return type === 'String';
                 }
             },
             {
                 text: "=",
-                value: "=",
+                value: "Equal",
                 display: function (type) {
                     return type === 'Integer' || type === 'Date' || type === 'String';
                 }
@@ -88,13 +87,11 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-                    propertyConfigurationService.addPropertyConfiguration(self.propertyConfiguration).then(function () {
-                        //toast.success(langService.get('add_success'));
-                    });
-                    dialog.hide();
-                })
-                .catch(function () {
-
+                    propertyConfigurationService
+                        .addPropertyConfiguration(self.propertyConfiguration)
+                        .then(function (result) {
+                            dialog.hide(true);
+                        })
                 });
         };
 
@@ -115,13 +112,11 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-                    propertyConfigurationService.updatePropertyConfiguration(self.propertyConfiguration).then(function (result) {
-                        //toast.success(langService.get('edit_success'));
-                    });
-                    dialog.hide();
-                })
-                .catch(function () {
-
+                    propertyConfigurationService
+                        .updatePropertyConfiguration(self.propertyConfiguration)
+                        .then(function (result) {
+                            dialog.hide(true);
+                        });
                 });
         };
 

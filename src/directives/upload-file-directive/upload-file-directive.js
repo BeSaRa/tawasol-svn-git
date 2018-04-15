@@ -46,12 +46,12 @@ module.exports = function (app) {
                         var width = this.naturalWidth || this.width;
                         var height = this.naturalHeight || this.height;
                         if ((name === 'loginLogo' || name === 'bannerLogo') && width > 283 && height > 283) {
-                            toast.error(langService.get('image_dimension_greater').change({width: 283, height: 283}));
+                            toast.error(langService.get('image_dimensions_info').change({width: 283, height: 283}));
                             input.val('');
                             return false;
                         }
-                        else if (name === 'signatureImage' && width > 50 && height > 50) {
-                            toast.error(langService.get('image_dimension_greater')).change({width: 50, height: 50});
+                        else if (name === 'signatureImage' && width > 283 && height > 283) {
+                            toast.error(langService.get('image_dimensions_info')).change({width: 283, height: 283});
                             input.val('');
                             return false;
                         }

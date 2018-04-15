@@ -144,7 +144,7 @@ module.exports = function (app) {
             /**
              * @description terminate bulk group inbox
              */
-            self.terminateBulkGroupInbox = function () {
+            self.terminateBulkGroupInbox = function ($event) {
                 correspondenceService
                     .terminateBulkWorkItem(self.selectedWorkItems, $event)
                     .then(function () {
@@ -199,7 +199,7 @@ module.exports = function (app) {
             /**
              * @description do broadcast for workItem.
              */
-            self.doBroadcast = function (workItem, $event, defer) {
+            self.broadcast = function (workItem, $event, defer) {
                 workItem
                     .correspondenceBroadcast()
                     .then(function () {
@@ -597,7 +597,7 @@ module.exports = function (app) {
                     text: 'grid_action_broadcast',
                     shortcut: false,
                     hide: false,
-                    callback: self.doBroadcast,
+                    callback: self.broadcast,
                     checkShow: function (action, model) {
                         return (!model.needApprove() || model.hasDocumentClass('incoming')) && !model.isBroadcasted();
                     }

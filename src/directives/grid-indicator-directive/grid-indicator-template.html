@@ -1,0 +1,111 @@
+<!-- Security Level -->
+<span ng-if="ctrl.indicatorType === 'securityLevel'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.securityLevelIndicator}">
+    <md-icon ng-if="ctrl.record.securityLevelIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.securityLevelIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.securityLevelIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.securityLevelIndicator.tooltip)
+                                .change({name: ctrl.record.securityLevelIndicator.value.getTranslatedName()})}}"
+             <!--.change({name: ctrl.record.securityLevelLookup.getTranslatedName()})}}"-->
+    ></md-icon>
+</span>
+<!-- Doc Type -->
+<span ng-if="ctrl.indicatorType === 'docType'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.docTypeIndicator}">
+    <md-icon ng-if="ctrl.record.docTypeIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.docTypeIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.docTypeIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.docTypeIndicator.tooltip)}}"
+    ></md-icon>
+</span>
+<!-- Paper/Electronic -->
+<span ng-if="ctrl.indicatorType === 'paperElectronic'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.isPaperIndicator}">
+    <md-icon ng-if="ctrl.record.isPaperIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.isPaperIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.isPaperIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.isPaperIndicator.tooltip)}}"
+    ></md-icon>
+</span>
+<!-- Is Reassigned -->
+<span ng-if="ctrl.indicatorType === 'isReassigned'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.isReassignedIndicator}">
+    <md-icon ng-if="ctrl.record.isReassignedIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.isReassignedIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.isReassignedIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.isReassignedIndicator.tooltip)}}"
+    ></md-icon>
+</span>
+<!-- Has Linked Documents -->
+<span ng-if="ctrl.indicatorType === 'hasLinkedDocuments'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.linkedDocsIndicator}">
+    <md-icon ng-if="ctrl.record.linkedDocsIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.linkedDocsIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.linkedDocsIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.linkedDocsIndicator.tooltip)}}"
+    ></md-icon>
+</span>
+<!-- Tags Badge -->
+<span ng-if="ctrl.indicatorType === 'tags'" class="indicator {{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.tagsIndicator}">
+     <span ng-if="ctrl.record.tagsIndicator && ctrl.isShowIndicator()"
+           tooltip="{{ctrl.langService.get(ctrl.record.tagsIndicator.tooltip)}}"
+           class="{{ctrl.record.tagsIndicator.class}} {{ctrl.iconClass}}">
+         {{ctrl.record.tagsIndicator.text}}
+     </span>
+ </span>
+<!-- Follow up Status -->
+<span ng-if="ctrl.indicatorType === 'followupStatus'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.followUpStatusIndicator}">
+    <md-icon ng-if="ctrl.record.followUpStatusIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.followUpStatusIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.followUpStatusIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.followUpStatusIndicator.tooltip)
+                               .change({name: ctrl.record.followUpStatusIndicator.value.getTranslatedName()})}}"
+    ></md-icon>
+    <!-- .change({name: ctrl.record.followupStatusLookup.getTranslatedName()})}}" -->
+</span>
+<!-- Priority Level -->
+<span ng-if="ctrl.indicatorType === 'priorityLevel'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.priorityLevelIndicator}">
+    <md-icon ng-if="ctrl.record.priorityLevelIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.priorityLevelIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.priorityLevelIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.priorityLevelIndicator.tooltip)
+                                    .change({name: ctrl.record.priorityLevelIndicator.value.getTranslatedName()})}}"
+    ></md-icon>
+    <!-- .change({name: ctrl.record.priorityLevelLookup.getTranslatedName()})}}" -->
+</span>
+<!-- Has Attachment -->
+<span ng-if="ctrl.indicatorType === 'hasAttachment'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.attachmentsIndicator}">
+    <md-icon ng-if="ctrl.record.attachmentsIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.attachmentsIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.attachmentsIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.attachmentsIndicator.tooltip)}}"
+    ></md-icon>
+</span>
+<!-- Due Date -->
+<span ng-if="ctrl.indicatorType === 'dueDate'" class="{{ctrl.record.dueDateStatusIndicator.class}} {{ctrl.spanClass}}"
+      tooltip="{{ctrl.langService.get(ctrl.record.dueDateStatusIndicator.tooltip)
+                        .change({due_date_status:ctrl.langService.get(ctrl.record.dueDateStatusIndicator.text) })}}">
+        {{ctrl.record.getDueDate()}}
+</span>
+<!-- Linked Exported Doc -->
+<span ng-if="ctrl.indicatorType === 'isLinkedExportedDoc'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.isLinkedExportedDocIndicator}">
+    <md-icon ng-if="ctrl.record.isLinkedExportedDocIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.isLinkedExportedDocIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.isLinkedExportedDocIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.isLinkedExportedDocIndicator.tooltip)}}"
+    ></md-icon>
+</span>
+<!-- Original / Copy -->
+<span ng-if="ctrl.indicatorType === 'originalCopy'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.originalCopyIndicator}">
+    <md-icon ng-if="ctrl.record.originalCopyIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.originalCopyIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.originalCopyIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.originalCopyIndicator.tooltip)}}"
+    ></md-icon>
+</span>

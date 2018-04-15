@@ -3,14 +3,7 @@ module.exports = function (app) {
                                                  $http,
                                                  $q,
                                                  generator,
-                                                 EventHistory,
-                                                 _,
-                                                 tokenService,
-                                                 $timeout,
-                                                 dialog,
-                                                 langService,
-                                                 toast,
-                                                 cmsTemplate) {
+                                                 EventHistory) {
         'ngInject';
         var self = this;
         self.serviceName = 'userSentItemService';

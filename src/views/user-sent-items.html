@@ -88,81 +88,33 @@
                                     <!-- | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) -->
                                     <td md-cell class="indicator-td">
                                         <!-- Security Level -->
-                                        <span flex
-                                              ng-class="{'indicator-content': userSentItem.securityLevelIndicator}">
-                                            <md-icon ng-if="userSentItem.securityLevelIndicator"
-                                                     class="{{userSentItem.securityLevelIndicator.class}}"
-                                                     md-svg-icon="{{userSentItem.securityLevelIndicator.icon}}"
-                                                     tooltip="{{lang[userSentItem.securityLevelIndicator.tooltip].change({name: userSentItem.securityLevelLookup.getTranslatedName()})}}"
-                                            ></md-icon>
-                                        </span>
+                                        <grid-indicator-directive record="userSentItem"
+                                                                  indicator-type="securityLevel"
+                                                                  record-type="EventHistory"></grid-indicator-directive>
                                         <!-- Doc Type -->
-                                        <span flex ng-class="{'indicator-content': userSentItem.docTypeIndicator}">
-                                                    <md-icon ng-if="userSentItem.docTypeIndicator"
-                                                             class="{{userSentItem.docTypeIndicator.class}}"
-                                                             md-svg-icon="{{userSentItem.docTypeIndicator.icon}}"
-                                                             tooltip="{{lang[userSentItem.docTypeIndicator.tooltip]}}"
-                                                    ></md-icon>
-                                                </span>
+                                        <grid-indicator-directive record="userSentItem"
+                                                                  indicator-type="docType"
+                                                                  record-type="EventHistory"></grid-indicator-directive>
                                         <!-- Linked Documents -->
-                                        <span flex ng-class="{'indicator-content': userSentItem.linkedDocsIndicator}">
-                                           <md-icon ng-if="userSentItem.linkedDocsIndicator"
-                                                    class="{{userSentItem.linkedDocsIndicator.class}}"
-                                                    md-svg-icon="{{userSentItem.linkedDocsIndicator.icon}}"
-                                                    tooltip="{{lang[userSentItem.linkedDocsIndicator.tooltip]}}"
-                                           ></md-icon>
-                                       </span>
+                                        <!--<grid-indicator-directive record="userSentItem"
+                                                                  indicator-type="hasLinkedDocs"
+                                                                  record-type="EventHistory"></grid-indicator-directive>-->
                                         <!-- Follow up Status -->
-                                        <span flex
-                                              ng-class="{'indicator-content': userSentItem.followUpStatusIndicator}">
-                                            <md-icon ng-if="userSentItem.followUpStatusIndicator"
-                                                     class="{{userSentItem.followUpStatusIndicator.class}}"
-                                                     md-svg-icon="{{userSentItem.followUpStatusIndicator.icon}}"
-                                                     tooltip="{{lang[userSentItem.followUpStatusIndicator.tooltip].change({name: userSentItem.followupStatusLookup.getTranslatedName()})}}"
-                                            ></md-icon>
-                                        </span>
-                                        <!--<span flex ng-class="{'indicator-content': userSentItem.dueDateStatusIndicator}">
-                                            <md-icon ng-if="userSentItem.dueDateStatusIndicator"
-                                                     class="{{userSentItem.dueDateStatusIndicator.class}}"
-                                                     md-svg-icon="{{userSentItem.dueDateStatusIndicator.icon}}"
-                                                     tooltip="{{lang[userSentItem.dueDateStatusIndicator.tooltip].change({date:userSentItem.generalStepElm.dueDate, status:lang[userSentItem.dueDateStatusIndicator.text] })}}"
-                                            ></md-icon>
-                                        </span>-->
-                                        <!--<span flex class="indicator-badge" ng-class="{'indicator-content': userSentItem.tagsIndicator}">
-                                            <span ng-if="userSentItem.tagsIndicator"
-                                                  tooltip="{{lang[userSentItem.tagsIndicator.tooltip]}}"
-                                                  class="{{userSentItem.tagsIndicator.class}}">
-                                                {{userSentItem.tagsIndicator.text}}
-                                            </span>
-                                        </span>-->
-                                        <!--<span flex class="indicator-badge" ng-class="{'indicator-content': userInbox.commentsIndicator}">
-                                            <span ng-if="userSentItem.commentsIndicator"
-                                                  tooltip="{{lang[userSentItem.commentsIndicator.tooltip]}}"
-                                                  class="{{userSentItem.commentsIndicator.class}}">
-                                                {{userSentItem.commentsIndicator.text}}
-                                            </span>
-                                        </span>-->
+                                        <!--<grid-indicator-directive record="userSentItem"
+                                                                  indicator-type="followupStatus"
+                                                                  record-type="EventHistory"></grid-indicator-directive>-->
                                     </td>
                                     <td md-cell>{{userSentItem.docFullSerial}}</td>
                                     <td md-cell class="indicator-td text-right"
                                         style="padding-right:0 !important; padding-left:0 !important;">
                                         <!-- Priority Level -->
-                                        <span ng-class="{'indicator-content': userSentItem.priorityLevelIndicator}">
-                                                    <md-icon ng-if="userSentItem.priorityLevelIndicator"
-                                                             class="{{userSentItem.priorityLevelIndicator.class}}"
-                                                             md-svg-icon="{{userSentItem.priorityLevelIndicator.icon}}"
-                                                             tooltip="{{lang[userSentItem.priorityLevelIndicator.tooltip].change({name: userSentItem.priorityLevelLookup.getTranslatedName()})}}"
-                                                    ></md-icon>
-                                                </span>
-                                        <!-- Has Attachment -->
-                                        <span class="float-right"
-                                              ng-class="{'indicator-content': userSentItem.attachmentsIndicator}">
-                                                    <md-icon ng-if="userSentItem.attachmentsIndicator"
-                                                             class="{{userSentItem.attachmentsIndicator.class}}"
-                                                             md-svg-icon="{{userSentItem.attachmentsIndicator.icon}}"
-                                                             tooltip="{{lang[userSentItem.attachmentsIndicator.tooltip]}}"
-                                                    ></md-icon>
-                                                </span>
+                                        <grid-indicator-directive record="userSentItem"
+                                                                  indicator-type="priorityLevel"
+                                                                  record-type="EventHistory"></grid-indicator-directive>
+                                        <!-- Has Attachments -->
+                                        <grid-indicator-directive record="userSentItem" span-class="float-right"
+                                                                  indicator-type="hasAttachment"
+                                                                  record-type="EventHistory"></grid-indicator-directive>
                                     </td>
                                     <td md-cell md-truncate class="subject">
                                         <a href="" class="view-doc"
@@ -171,7 +123,12 @@
                                     <td md-cell>{{userSentItem.actionDate}}</td>
                                     <td md-cell>{{userSentItem.getTranslatedAction()}}</td>
                                     <td md-cell>{{userSentItem.getTranslatedUserFrom()}}</td>
-                                    <td md-cell>{{userSentItem.dueDate}}</td>
+                                    <td md-cell class="td-data">
+                                        <!--{{userSentItem.dueDate}}-->
+                                        <grid-indicator-directive record="userSentItem"
+                                                                  indicator-type="dueDate"
+                                                                  record-type="EventHistory"></grid-indicator-directive>
+                                    </td>
                                     <td md-cell>
                                         <main-site-sub-site-directive item="userSentItem"
                                                                       ng-if="userSentItem.getInfo().documentClass!=='internal'">

@@ -68,5 +68,7 @@ module.exports = function (app) {
     require('./workflow-items-directive/01-index')(app);
     require('./bulk-correspondence-status-directive/01-index')(app);
     require('./folders-tree-structure-directive/01-index')(app);
+    require('./grid-indicator-directive/01-index')(app);
+    require('./wrapper-directive/wrapper-directive')(app);
     require('./workitem-inbox-directive/01-index')(app);
 };

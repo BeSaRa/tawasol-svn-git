@@ -12,7 +12,8 @@ module.exports = function (app) {
                                                  OUBroadcast,
                                                  correspondenceService,
                                                  WorkflowGroup,
-                                                 Broadcast) {
+                                                 Broadcast,
+                                                 errorCode) {
         'ngInject';
         var self = this;
 
@@ -161,6 +162,11 @@ module.exports = function (app) {
                 .then(function (result) {
                     toast.success(langService.get('correspondence_broadcasted_successfully'));
                     dialog.hide(result);
+                })
+                .catch(function (error) {
+                    errorCode.checkIf(error, 'NO_USER_TO_BROADCAST', function () {
+                        dialog.errorMessage(langService.get('no_user_to_broadcast'));
+                    })
                 });
 
         };

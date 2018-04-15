@@ -4,7 +4,12 @@ module.exports = function (app) {
                                                          langService,
                                                          _,
                                                          Lookup,
-                                                         lookupService) {
+                                                         lookupService,
+                                                         Outgoing,
+                                                         Incoming,
+                                                         Internal,
+                                                         EventHistory,
+                                                         SentItemDepartmentInbox) {
         'ngInject';
         var self = this;
         self.controllerName = 'gridActionsDirectiveCtrl';
@@ -127,6 +132,20 @@ module.exports = function (app) {
             return _.filter(gridActions, function (gridAction) {
                 return !(gridAction.hasOwnProperty('onlyShortcut') && gridAction.onlyShortcut);
             });
+        };
+
+        /**
+         * @description Checks if comments information can be shown or not. It will not show for Outgoing | Incoming | Internal documents
+         * @param model
+         * @returns {boolean}
+         */
+        self.showCommentsInfo = function (model) {
+            return !(model instanceof Outgoing
+                || model instanceof Incoming
+                || model instanceof Internal
+                || model instanceof EventHistory
+                || model instanceof SentItemDepartmentInbox
+            );
         };
 
         /**

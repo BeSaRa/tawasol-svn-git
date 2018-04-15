@@ -41,6 +41,7 @@ module.exports = function (app) {
             delete model.securityLevelLookup;
             delete model.securityLevelIndicator;
             delete model.docClassName;
+            delete model.originalCopyIndicator;
 
             return model;
         });
@@ -77,7 +78,7 @@ module.exports = function (app) {
 
             model.followupStatusLookup = lookupService.getLookupByLookupKey(lookupService.followupStatus, model.followupStatus);
             model.followUpStatusIndicator = model.followupStatus ? model.getFollowUpStatusIndicator(model.followupStatusLookup) : null;
-
+            model.originalCopyIndicator = model.getOriginalCopyIndicator();
 
             return model;
         });

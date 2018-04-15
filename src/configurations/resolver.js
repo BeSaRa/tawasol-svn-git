@@ -22,6 +22,7 @@ module.exports = function (app) {
                 langService.setRequireServices(dialog, toast);
                 generator.setDialog(dialog);
                 generator.setLangService(langService);
+                generator.setToast(toast);
                 // first get the rootEntity information.
                 $timeout(function () {
                     rootEntity
@@ -170,6 +171,7 @@ module.exports = function (app) {
                                         outgoing.docDate = new Date();
                                         outgoing.createdOn = new Date();
                                         outgoing.addMethod = 0;
+                                        outgoing.classDescription = 'Outgoing';
                                         return outgoing
                                     });
                             })
@@ -185,6 +187,7 @@ module.exports = function (app) {
                                         outgoing.createdOn = new Date();
                                         outgoing.addMethod = 0;
                                         outgoing.sitesInfoTo = [result.site];
+                                        outgoing.classDescription = 'Outgoing';
                                         return outgoing
                                     });
                             });
@@ -244,7 +247,7 @@ module.exports = function (app) {
                             return false;
                         });
 
-                    return correspondenceService.receiveIncoming(workItem)
+                    return correspondenceService.prepareReceiveIncoming(workItem)
                         .catch(function (error) {
                             return $timeout(function () {
                                 return false;
@@ -291,15 +294,15 @@ module.exports = function (app) {
                     return layoutService.loadWidgets();
                 }
             })
-            .bulkResolveToState('app', {
+            .bulkResolveToState('app', {/*
                 themes: function (themeService, employeeService) {
                     'ngInject';
                     return !employeeService.isCloudUser() ? themeService.getThemes() : [];
-                },
-                attachmentTypes: function (attachmentTypeService, employeeService) {
+                },*/
+                /*attachmentTypes: function (attachmentTypeService, employeeService) {
                     'ngInject';
                     return !employeeService.isCloudUser() ? attachmentTypeService.getAttachmentTypes() : [];
-                },
+                },*/
                 counters: function (counterService, employeeService) {
                     'ngInject';
                     return !employeeService.isAdminUser() ? counterService.loadCounters() : [];
@@ -307,11 +310,11 @@ module.exports = function (app) {
                 loadMenus: function (sidebarService) {
                     'ngInject';
                     return sidebarService.loadMenuItems();
-                },
+                },/*
                 entityTypes: function (entityTypeService, employeeService) {
                     'ngInject';
                     return !employeeService.isCloudUser() ? entityTypeService.getEntityTypes() : [];
-                },
+                },*/
                 organizations: function (organizationService, employeeService) {
                     'ngInject';
                     return !employeeService.isCloudUser() ? organizationService.getOrganizations() : [];

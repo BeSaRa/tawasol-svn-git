@@ -145,57 +145,26 @@
                                      </td>-->
                                     <td md-cell class="indicator-td">
                                         <!-- Security Level -->
-                                        <span flex
-                                              ng-class="{'indicator-content': returnedDepartmentInbox.securityLevelIndicator}">
-                                            <md-icon ng-if="returnedDepartmentInbox.securityLevelIndicator"
-                                                     class="{{returnedDepartmentInbox.securityLevelIndicator.class}}"
-                                                     md-svg-icon="{{returnedDepartmentInbox.securityLevelIndicator.icon}}"
-                                                     tooltip="{{lang[returnedDepartmentInbox.securityLevelIndicator.tooltip].change({name: returnedDepartmentInbox.securityLevelLookup.getTranslatedName()})}}"
-                                            ></md-icon>
+                                        <grid-indicator-directive record="returnedDepartmentInbox"
+                                                                  indicator-type="securityLevel"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                         </span>
-                                        <span flex
-                                              ng-class="{'indicator-content': returnedDepartmentInbox.linkedDocsIndicator}">
-                                           <md-icon ng-if="returnedDepartmentInbox.linkedDocsIndicator"
-                                                    class="{{returnedDepartmentInbox.linkedDocsIndicator.class}}"
-                                                    md-svg-icon="{{returnedDepartmentInbox.linkedDocsIndicator.icon}}"
-                                                    tooltip="{{lang[returnedDepartmentInbox.linkedDocsIndicator.tooltip]}}"
-                                           ></md-icon>
-                                       </span>
-                                        <!--<span flex class="indicator-badge" ng-if="returnedDepartmentInbox.tagsIndicator"
-                                              tooltip="{{lang[returnedDepartmentInbox.tagsIndicator.tooltip]}}"
-                                              class="{{returnedDepartmentInbox.tagsIndicator.class}}">
-                                                {{returnedDepartmentInbox.tagsIndicator.text}}
-                                            </span>
-                                        </span>-->
-                                        <!--<span flex ng-class="{'indicator-content': returnedDepartmentInbox.followUpStatusIndicator}">
-                                           <md-icon ng-if="returnedDepartmentInbox.followUpStatusIndicator"
-                                                    class="{{returnedDepartmentInbox.followUpStatusIndicator.class}}"
-                                                    md-svg-icon="{{returnedDepartmentInbox.followUpStatusIndicator.icon}}"
-                                                    tooltip="{{lang[returnedDepartmentInbox.followUpStatusIndicator.tooltip].change({name: returnedDepartmentInbox.followupStatusLookup.getTranslatedName()})}}"
-                                           ></md-icon>
-                                       </span>-->
+                                        <!-- Linked Documents -->
+                                        <grid-indicator-directive record="returnedDepartmentInbox"
+                                                                  indicator-type="hasLinkedDocuments"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                     </td>
                                     <td md-cell>{{returnedDepartmentInbox.generalStepElm.docFullSerial}}</td>
                                     <td md-cell class="indicator-td text-right"
                                         style="padding-right:0 !important; padding-left:0 !important;">
                                         <!-- Priority Level -->
-                                        <span flex
-                                              ng-class="{'indicator-content': returnedDepartmentInbox.priorityLevelIndicator}">
-                                            <md-icon ng-if="returnedDepartmentInbox.priorityLevelIndicator"
-                                                     class="{{returnedDepartmentInbox.priorityLevelIndicator.class}}"
-                                                     md-svg-icon="{{returnedDepartmentInbox.priorityLevelIndicator.icon}}"
-                                                     tooltip="{{lang[returnedDepartmentInbox.priorityLevelIndicator.tooltip].change({name: returnedDepartmentInbox.priorityLevelLookup.getTranslatedName()})}}"
-                                            ></md-icon>
-                                        </span>
-                                        <!-- Has Attachment -->
-                                        <span flex
-                                              ng-class="{'indicator-content': returnedDepartmentInbox.attachmentsIndicator}">
-                                            <md-icon ng-if="returnedDepartmentInbox.attachmentsIndicator"
-                                                     class="{{returnedDepartmentInbox.attachmentsIndicator.class}}"
-                                                     md-svg-icon="{{returnedDepartmentInbox.attachmentsIndicator.icon}}"
-                                                     tooltip="{{lang[returnedDepartmentInbox.attachmentsIndicator.tooltip]}}"
-                                            ></md-icon>
-                                        </span>
+                                        <grid-indicator-directive record="returnedDepartmentInbox"
+                                                                  indicator-type="priorityLevel"
+                                                                  record-type="workItem"></grid-indicator-directive>
+                                        <!-- Has Attachments -->
+                                        <grid-indicator-directive record="returnedDepartmentInbox" span-class="float-right"
+                                                                  indicator-type="hasAttachment"
+                                                                  record-type="workItem"></grid-indicator-directive>
                                     </td>
                                     <td md-cell md-truncate class="subject">
                                         <a href="" class="view-doc" ng-if="returnedDepartmentInbox.hasContent()"

@@ -76,9 +76,7 @@ module.exports = function (app) {
             EventHistory.prototype.getTranslatedCorrespondenceSiteInfo = function () {
                 var mainSite = angular.isArray(this.mainSiteInfo) && this.mainSiteInfo.length > 0 ? new Information(this.mainSiteInfo[0]) : new Information();
                 var subSite = angular.isArray(this.subSiteInfo) && this.subSiteInfo.length > 0 ? new Information(this.subSiteInfo[0]) : new Information();
-                return langService.current === 'en'
-                    ? (mainSite.getTranslatedName() + ' - ' + subSite.getTranslatedName())
-                    : (subSite.getTranslatedName() + ' - ' + mainSite.getTranslatedName());
+                return mainSite.getTranslatedName() + ' - ' + subSite.getTranslatedName();
             };
 
             /**
@@ -92,6 +90,11 @@ module.exports = function (app) {
             EventHistory.prototype.hasContent = function () {
                 return true;
                 // return this.contentSize;
+            };
+
+            /*This is used by due date indicator*/
+            EventHistory.prototype.getDueDate = function(){
+                return this.dueDate;
             };
 
             /*      EventHistory.prototype.loadDocumentAttachments = function (correspondence) {
@@ -122,11 +125,11 @@ module.exports = function (app) {
 
             /*EventHistory.prototype.getFollowUpStatusIndicator = function(workItem){
              return indicator.getFollowUpStatusIndicator(workItem);
-             };
-
-             EventHistory.prototype.getDueDateStatusIndicator = function(docClass, dueDate){
-             return indicator.getDueDateStatusIndicator(docClass, dueDate);
              };*/
+
+             EventHistory.prototype.getDueDateStatusIndicator = function(dueDate){
+             return indicator.getDueDateStatusIndicator(dueDate);
+             };
 
             EventHistory.prototype.getTagsIndicator = function (tagsCount) {
                 return indicator.getTagsIndicator(tagsCount);

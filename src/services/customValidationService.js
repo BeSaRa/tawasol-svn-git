@@ -22,7 +22,8 @@ module.exports = function (app) {
             /**
              * @description Allows integer numbers only
              */
-            number: /^\d+$/,
+            // number: /^\d+$/,
+            number: /^[0-9\u0660-\u0669]+$/g,
             /**
              * @description Allows phone/mobile number starting with +974 followed by 8 digits
              */
@@ -34,8 +35,8 @@ module.exports = function (app) {
             /**
              * @description Allows arabic, space(not in end of string and no 2 consecutive spaces)
              */
-            //A: /^[ء-ي]?( ?[ء-ي]+)+$/,
-            A:  /^[0-9ء-يA-Za-z]?([ \/-]?[0-9ء-يA-Za-z]+)+$/, //(Arabic fields acceptiing arabic, english, number always)
+            A: /^[ء-ي]?( ?[ء-ي]+)+$/,
+            //A:  /^[0-9ء-يA-Za-z]?([ \/-]?[0-9ء-يA-Za-z]+)+$/, //(Arabic fields acceptiing arabic, english, number always)
             /**
              * @description Allows english, space(not in end of string and no 2 consecutive spaces)
              */
@@ -43,8 +44,8 @@ module.exports = function (app) {
             /**
              * @description Allows arabic, digits
              */
-            //AN: /^[0-9ء-ي]+$/,
-            AN: /^[0-9ء-يA-Za-z]?([ \/-]?[0-9ء-يA-Za-z]+)+$/, //(Arabic fields acceptiing arabic, english, number always)
+            AN: /^[0-9ء-ي]+$/,
+            //AN: /^[0-9ء-يA-Za-z]?([ \/-]?[0-9ء-يA-Za-z]+)+$/, //(Arabic fields acceptiing arabic, english, number always)
             /**
              * @description Allows english, digits
              */
@@ -56,8 +57,8 @@ module.exports = function (app) {
             /**
              * @description Allows arabic, digits, space(not in end of string and no 2 consecutive spaces)
              */
-            //ANS: /^[0-9ء-ي]?( ?[0-9ء-ي]+)+$/,
-            ANS: /^[0-9ء-يA-Za-z]?([ \/-]?[0-9ء-يA-Za-z]+)+$/, //(Arabic fields accepting arabic, english, number always)
+            ANS: /^[0-9ء-ي]?( ?[0-9ء-ي]+)+$/,
+            //ANS: /^[0-9ء-يA-Za-z]?([ \/-]?[0-9ء-يA-Za-z]+)+$/, //(Arabic fields accepting arabic, english, number always)
 
             /**
              * @description Allows at least 1 english character and can contain digits, space(not in end of string and no 2 consecutive spaces)
@@ -81,7 +82,7 @@ module.exports = function (app) {
             /**
              * @description Allows Arabic, english, digits, hyphen, forward slash
              */
-            AEN: /^[0-9ء-يA-Za-z]?([ \/-]?[0-9ء-يA-Za-z]+)+$/,
+            AEN: /^[0-9ء-يA-Za-z.]?([ \-]?[0-9ء-يA-Za-z.]+)+$/,
             /**
              * @description Allows Arabic, english, space(not in end of string and no 2 consecutive spaces)
              */
@@ -89,8 +90,8 @@ module.exports = function (app) {
             /**
              * @description Allows arabic, underscore(not end of string and no 2 consecutive underscores)
              */
-            //A_: /^[ء-ي]?(_?[ء-ي]+)+$/,
-            A_:  /^[ء-ي]?(_?[ء-يA-Za-z]+)+$/, //(Arabic fields accepting arabic, english, underscore always)
+            A_: /^[ء-ي]?(_?[ء-ي]+)+$/,
+            //A_:  /^[ء-ي]?(_?[ء-يA-Za-z]+)+$/, //(Arabic fields accepting arabic, english, underscore always)
             /**
              * @description Allows english, underscore(not in end of string and no 2 consecutive underscores)
              */
@@ -107,15 +108,19 @@ module.exports = function (app) {
 
         /**
          * @description validate input fields on click of add/save button.
-         * InputType = url, ip, email, number, phone_mobile, ND, A, E, AN, EN, ANS, ENS, AE, AEN, AES, A_, E_, ALL, port
          * @param inputValueToValidate
-         * @param inputType
+         * @param inputType = url, ip, email, number, phone_mobile, ND, A, E, AN, EN, ANS, ENS, AE, AEN, AES, A_, E_, ALL, port
          * @returns {boolean}
          */
         self.validateInput = function (inputValueToValidate, inputType) {
             if (inputValueToValidate) {
-                if (!self.regex[inputType].test(inputValueToValidate)) {
+                /*if (!self.regex[inputType].test(inputValueToValidate)) {
                     return false;
+                }*/
+                if (inputType !== 'number') {
+                    return self.regex[inputType].test(inputValueToValidate);
+                } else {
+                    return (/^[0-9\u0660-\u0669]+$/g).test(inputValueToValidate);
                 }
             }
             return true;

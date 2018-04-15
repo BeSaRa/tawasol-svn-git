@@ -12,9 +12,19 @@ module.exports = function (app) {
             self.text = null;
             self.icon = null;
             self.tooltip = null;
+            self.value = null;
 
             if (model)
                 angular.extend(this, model);
+
+            self.recordTypes = {
+                Correspondence: 'Correspondence',
+                Outgoing: 'Outgoing',
+                Incoming: 'Incoming',
+                Internal: 'Internal',
+                WorkItem: 'WorkItem',
+                EventHistory: 'EventHistory'
+            };
 
             /**
              * @description Contains the icons for the indicators
@@ -22,10 +32,10 @@ module.exports = function (app) {
              */
             var icons = {};
             icons[lookupService.securityLevel] = 'security';
-            icons[lookupService.priorityLevel + '_prior0'] = '';//arrow-down // Normal Priority
+            icons[lookupService.priorityLevel + '_prior0'] = '';//(not showing any icon for normal priority) //arrow-down // Normal Priority
             icons[lookupService.priorityLevel + '_prior1'] = 'arrow-up'; // Urgent Priority
             icons[lookupService.priorityLevel + '_prior2'] = 'exclamation';// Top Urgent Priority
-            icons['followupStatus'] = 'reply';
+            icons['followupStatus0'] = 'reply';
             icons['attachment'] = 'paperclip';
             icons['linkedDocs'] = 'link-variant';
             icons['reassigned'] = 'transfer';
@@ -37,6 +47,9 @@ module.exports = function (app) {
             icons['paper_document'] = 'file-document';
             icons['electronic_document'] = 'tablet';//cellphone-dock';
             icons['export_via_central_archive'] = 'archive';
+            icons['linked_exported_doc'] = 'link';
+            icons['due_date'] = 'calendar';
+            icons['copy'] = 'content-copy';
 
 
             /**
@@ -56,7 +69,7 @@ module.exports = function (app) {
              * @returns {Indicator}
              */
             Indicator.prototype.getSecurityLevelIndicator = function (securityLevel) {
-                var icon = icons[lookupService.securityLevel];
+                var icon = self.getIndicatorIcons(lookupService.securityLevel);
                 var securityLevels = lookupService.returnLookups(lookupService.securityLevel);
                 var securityLevelMap = _.find(_.map(securityLevels, function (lookup, index) {
                     return {
@@ -64,8 +77,9 @@ module.exports = function (app) {
                         //class: 'indicator secure' + (index + 1),
                         class: 'indicator secure' + (lookup.lookupKey),
                         text: 'indicator_security_level',
-                        icon: icon,
-                        tooltip: 'indicator_security_level'
+                        icon: self.getIndicatorIcons(lookupService.securityLevel),
+                        tooltip: 'indicator_security_level',
+                        value: lookup
                     }
                 }), ['key', securityLevel.lookupKey]);
                 return new Indicator(securityLevelMap);
@@ -77,15 +91,15 @@ module.exports = function (app) {
              * @returns {Indicator}
              */
             Indicator.prototype.getPriorityLevelIndicator = function (priorityLevel) {
-                var icon = icons[lookupService.priorityLevel + '_prior' + priorityLevel.lookupKey];
                 var priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
                 var priorityLevelMap = _.find(_.map(priorityLevels, function (lookup, index) {
                     return {
                         key: lookup.lookupKey,
                         class: 'indicator prior' + (lookup.lookupKey),
                         text: 'indicator_priority_level',
-                        icon: icon,
-                        tooltip: 'indicator_priority_level'
+                        icon: self.getIndicatorIcons(lookupService.priorityLevel + '_prior' + priorityLevel.lookupKey),
+                        tooltip: 'indicator_priority_level',
+                        value: lookup
                     }
                 }), ['key', priorityLevel.lookupKey]);
                 return new Indicator(priorityLevelMap);
@@ -99,7 +113,7 @@ module.exports = function (app) {
                 return new Indicator({
                     class: 'indicator',
                     text: 'indicator_doc_has_attachment',
-                    icon: icons['attachment'],
+                    icon: self.getIndicatorIcons('attachment'),
                     tooltip: 'indicator_doc_has_attachment'
                 });
             };
@@ -112,7 +126,7 @@ module.exports = function (app) {
                 return new Indicator({
                     class: 'indicator',
                     text: 'indicator_doc_has_linked_doc',
-                    icon: icons['linkedDocs'],
+                    icon: self.getIndicatorIcons('linkedDocs'),
                     tooltip: 'indicator_doc_has_linked_doc'
                 });
             };
@@ -123,45 +137,40 @@ module.exports = function (app) {
              * @returns {Indicator}
              */
             Indicator.prototype.getFollowUpStatusIndicator = function (followupStatus) {
-                //var icon = icons[lookupService.priorityLevel + '_prior' + priorityLevel.lookupKey];
-                var icon = icons['followupStatus'];
                 var followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
-
                 var followupStatusMap = _.find(_.map(followUpStatuses, function (lookup, index) {
                     return {
                         key: lookup.lookupKey,
                         class: 'indicator f-status' + (lookup.lookupKey),
                         text: 'indicator_followup_status',
-                        icon: icon,
-                        tooltip: 'indicator_followup_status'
+                        icon: self.getIndicatorIcons('followupStatus' + lookup.lookupKey),
+                        tooltip: 'indicator_followup_status',
+                        value: lookup
                     }
                 }), ['key', followupStatus.lookupKey]);
                 return new Indicator(followupStatusMap);
             };
 
             /**
-             * @description Returns the due date indicator and description
-             * @param docClass
+             * @description Returns the due date status(passed/today/coming) indicator and description
              * @param dueDate
              * @returns {Indicator}
              */
-            Indicator.prototype.getDueDateStatusIndicator = function (docClass, dueDate) {
-                docClass = docClass.toLowerCase();
+            Indicator.prototype.getDueDateStatusIndicator = function (dueDate) {
                 var today = moment(new Date()).startOf('day');
                 var recordDueDate = moment(dueDate).startOf('day');
                 var diff = recordDueDate.diff(today, 'days');
-                //var diff = recordDueDate.isBefore(today);
                 var dueDateStatus = (diff < 0) ? 'past' : (diff === 0 ? 'today' : 'future');
                 return new Indicator({
                     class: 'indicator date-' + dueDateStatus,
                     text: diff < 0 ? 'indicator_date_passed' : (diff === 0 ? 'indicator_date_today' : 'indicator_date_coming'),
-                    icon: 'calendar',
+                    icon: self.getIndicatorIcons('due_date'),
                     tooltip: 'indicator_due_date'
                 });
             };
 
             /**
-             * @description Returns the tags count indicator and description
+             * @description Returns the tags count indicator(badge) and description
              * @param tagsCount
              * @returns {Indicator}
              */
@@ -181,6 +190,15 @@ module.exports = function (app) {
              */
             Indicator.prototype.getDocTypeIndicator = function (docType) {
                 docType = docType.toLowerCase();
+                return new Indicator({
+                    class: 'indicator ' + docType,
+                    text: 'indicator_' + docType,
+                    icon: self.getIndicatorIcons(docType),
+                    tooltip: 'indicator_' + docType
+                });
+
+
+                /*docType = docType.toLowerCase();
                 var docClass = 'indicator ' + (docType === 'incoming' ? 'inc' : (docType === 'outgoing' ? 'out' : 'int'));
                 var text = (docType === 'incoming' ? 'indicator_incoming' : (docType === 'outgoing' ? 'indicator_outgoing' : 'indicator_internal'));
                 var icon = (docType === 'incoming' ? icons['incoming'] : (docType === 'outgoing' ? icons['outgoing'] : icons['internal']));
@@ -189,7 +207,7 @@ module.exports = function (app) {
                     text: text,
                     icon: icon,
                     tooltip: text
-                });
+                });*/
             };
 
             /**
@@ -201,7 +219,7 @@ module.exports = function (app) {
                 return reassigned ? new Indicator({
                     class: 'indicator ' + (reassigned ? 'reassigned' : 'no-reassigned'),
                     text: (reassigned ? 'indicator_reassigned' : 'indicator_not_reassigned'),
-                    icon: icons['reassigned'],
+                    icon: self.getIndicatorIcons('reassigned'),
                     tooltip: (reassigned ? 'indicator_reassigned' : 'indicator_not_reassigned')
                 }) : false;
             };
@@ -215,13 +233,13 @@ module.exports = function (app) {
                 return new Indicator({
                     class: 'indicator ' + (opened ? 'open' : 'close'),
                     text: (opened ? 'indicator_opened' : 'indicator_not_opened'),
-                    icon: (opened ? icons['email_opened'] : icons['email_close']),
+                    icon: (opened ? self.getIndicatorIcons('email_opened') : self.getIndicatorIcons('email_close')),
                     tooltip: (opened ? 'indicator_opened' : 'indicator_not_opened')
                 });
             };
 
             /**
-             * @description Returns the comments indicator and description
+             * @description Returns the comments count indicator(badge) and description
              * @param commentsCount
              * @returns {Indicator}
              */
@@ -242,9 +260,9 @@ module.exports = function (app) {
              */
             Indicator.prototype.getIsPaperIndicator = function (isPaper) {
                 return new Indicator({
-                    class: 'indicator', //(isPaper ? 'indicator' : 'indicator'),
+                    class: 'indicator',
                     text: (isPaper ? 'indicator_paper_document' : 'indicator_electronic_document'),
-                    icon: (isPaper ? icons['paper_document'] : icons['electronic_document']),
+                    icon: (isPaper ? self.getIndicatorIcons('paper_document') : self.getIndicatorIcons('electronic_document')),
                     tooltip: (isPaper ? 'indicator_paper_document' : 'indicator_electronic_document')
                 });
             };
@@ -258,8 +276,36 @@ module.exports = function (app) {
                 return exportViaCentralArchive ? new Indicator({
                     class: 'indicator',
                     text: 'export_via_central_archive',
-                    icon: icons['export_via_central_archive'],
+                    icon: self.getIndicatorIcons('export_via_central_archive'),
                     tooltip: 'export_via_central_archive'
+                }) : false;
+            };
+
+            /**
+             * @description Returns the is linked exported document(linked document as attachment) indicator and description
+             * @returns {Indicator}
+             * @param isLinkedExportedDoc
+             */
+            Indicator.prototype.getIsLinkedExportedDocIndicator = function (isLinkedExportedDoc) {
+                return isLinkedExportedDoc ? new Indicator({
+                    class: 'indicator',
+                    text: 'indicator_linked_exported_doc',
+                    icon: self.getIndicatorIcons('linked_exported_doc'),
+                    tooltip: 'indicator_linked_exported_doc'
+                }) : false;
+            };
+
+            /**
+             * @description Returns the type(Original/Copy) indicator and description
+             * @returns {Indicator}
+             * @param originalOrCopy
+             */
+            Indicator.prototype.getOriginalCopyIndicator = function (originalOrCopy) {
+                return originalOrCopy !== 0 ? new Indicator({
+                    class: 'indicator',
+                    text: 'indicator_copy',
+                    icon: self.getIndicatorIcons('copy'),
+                    tooltip: 'indicator_copy'
                 }) : false;
             };
 

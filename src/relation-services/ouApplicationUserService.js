@@ -364,11 +364,39 @@ module.exports = function (app) {
             });
         };
 
+
+        self.ouApplicationUsersByUserId = [];
+
         /**
+         * @description get ouApplicationUser by applicationUserId
+         * @param applicationUserId
+         * @returns {OUApplicationUser|undefined} return OUApplicationUser Model or undefined if not found.
+         */
+        self.loadOUApplicationUsersByUserId = function (applicationUserId) {
+            applicationUserId = applicationUserId instanceof ApplicationUser ? applicationUserId.id : applicationUserId;
+            return $http.get(urlService.ouApplicationUsersByUserId.change({userId: applicationUserId})).then(function (result) {
+                self.ouApplicationUsersByUserId = generator.generateCollection(result.data.rs, OUApplicationUser, self._sharedMethods);
+                self.ouApplicationUsersByUserId = generator.interceptReceivedCollection('OUApplicationUser', self.ouApplicationUsersByUserId);
+                return self.ouApplicationUsersByUserId;
+            });
+        };
+
+        /**
+         * @description get ouApplicationUsers from self.ouApplicationUsers if found and if not load it from server again.
+         * @returns {Promise|ouApplicationUsers}
+         */
+        self.getOUApplicationUsersByUserId = function (applicationUserId) {
+            applicationUserId = applicationUserId instanceof ApplicationUser ? applicationUserId.id : applicationUserId;
+            return (self.ouApplicationUsersByUserId.length
+                && self.ouApplicationUsersByUserId[0].applicationUser.id === applicationUserId)
+                ? $q.when(self.ouApplicationUsersByUserId)
+                : self.loadOUApplicationUsersByUserId(applicationUserId);
+        };
+       /* /!**
          * @description Get Organizations by Application User
          * @param applicationUserId
          * @returns {*|Promise<any>}
-         */
+         *!/
         self.getOUApplicationUsersByUserId = function (applicationUserId) {
             applicationUserId = applicationUserId instanceof ApplicationUser ? applicationUserId.id : applicationUserId;
             return self.loadOUApplicationUsers().then(function (ouApplicationUsers) {
@@ -377,7 +405,7 @@ module.exports = function (app) {
                         return ouApplicationUser.ouid;
                 });
             });
-        };
+        };*/
 
         self.getUsersWhoSetYouAsProxy = function (applicationUserId) {
             applicationUserId = applicationUserId instanceof ApplicationUser ? applicationUserId.id : applicationUserId;

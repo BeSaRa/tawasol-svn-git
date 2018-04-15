@@ -11,6 +11,20 @@ module.exports = function (app) {
 
         self.defaultWorkflowItemsSettings = new DistributionWFItem();
 
+        self.grid = {
+            limit: 5, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, // limit options
+                {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.workflowItems.length + 21);
+                    }
+                }
+            ]
+        };
+
         /**
          * @description to check all items has actions
          * @param items

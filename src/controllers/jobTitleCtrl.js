@@ -7,7 +7,8 @@ module.exports = function (app) {
                                              langService,
                                              toast,
                                              contextHelpService,
-                                             dialog) {
+                                             dialog,
+                                             generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'jobTitleCtrl';
@@ -153,9 +154,14 @@ module.exports = function (app) {
          * @param status
          */
         self.changeStatusBulkJobTitles = function (status) {
+            var statusCheck = (status === 'activate');
+            if (!generator.checkCollectionStatus(self.selectedJobTitles, statusCheck)) {
+                toast.error(langService.get('the_status_already_changed'));
+                return;
+            }
             self.statusServices[status](self.selectedJobTitles).then(function () {
                 self.reloadJobTitles(self.grid.page).then(function () {
-                    toast.success(langService.get('selected_status_updated'));
+                    //toast.success(langService.get('selected_status_updated'));
                 });
             });
         };

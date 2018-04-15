@@ -31,7 +31,7 @@ body, html, #main-view, #sub-view-wrapper {
   left: 0;
   //background-color: rgba(0, 0, 0, .5);
   background-color: transparent;
-  z-index: 10;
+  z-index: 100;
 }
 
 #main-view, .sub-view {
@@ -1569,12 +1569,15 @@ tr.unread-row {
 
 .read-td {
   padding-right: 0 !important;
+  position: relative;
   .status {
-    height: 47px;
     content: '';
-    float: right;
     width: 6px;
-
+    position: absolute;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    right: 0;
     &.read {
       visibility: hidden;
       background: #B1D6F0;
@@ -1631,7 +1634,7 @@ tr.unread-row {
 }
 
 .background-warning,
-.background-warning:hover{
+.background-warning:hover {
   background: #ffeb8061 !important;
   div.sidebar:after {
     content: " *";
@@ -1778,4 +1781,8 @@ table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child
 .z-index-3 {
   //position: relative;
   z-index: 3;
+}
+
+.max-width-200 {
+  max-width: 200px !important;
 }

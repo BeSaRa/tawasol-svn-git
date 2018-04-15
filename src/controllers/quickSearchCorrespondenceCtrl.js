@@ -98,22 +98,22 @@ module.exports = function (app) {
                 });
         };
 
-       /* /!**
-         * @description Export quick searched Correspondence document
-         * @param searchedCorrespondenceDocument
-         * @param $event
-         * @type {[*]}
-         *!/
-        self.exportQuickSearchCorrespondence = function (searchedCorrespondenceDocument, $event) {
-            quickSearchCorrespondenceService
-                .exportQuickSearchCorrespondence(searchedCorrespondenceDocument, $event)
-                .then(function (result) {
-                    self.reloadQuickSearchCorrespondence(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get('export_success'));
-                        });
-                });
-        };*/
+        /* /!**
+          * @description Export quick searched Correspondence document
+          * @param searchedCorrespondenceDocument
+          * @param $event
+          * @type {[*]}
+          *!/
+         self.exportQuickSearchCorrespondence = function (searchedCorrespondenceDocument, $event) {
+             quickSearchCorrespondenceService
+                 .exportQuickSearchCorrespondence(searchedCorrespondenceDocument, $event)
+                 .then(function (result) {
+                     self.reloadQuickSearchCorrespondence(self.grid.page)
+                         .then(function () {
+                             toast.success(langService.get('export_success'));
+                         });
+                 });
+         };*/
 
         /**
          * @description view tracking sheet for searched Correspondence document
@@ -345,7 +345,7 @@ module.exports = function (app) {
         /**
          * @description do broadcast for correspondence.
          */
-        self.doBroadcast = function (correspondence, $event, defer) {
+        self.broadcast = function (correspondence, $event, defer) {
             correspondence
                 .correspondenceBroadcast()
                 .then(function () {
@@ -354,6 +354,37 @@ module.exports = function (app) {
                             new ResolveDefer(defer);
                         })
                 })
+        };
+
+        self.launchDistributionWorkflow = function (correspondence, $event, defer) {
+            if (!correspondence.hasContent()) {
+                dialog.alertMessage(langService.get("content_not_found"));
+                return;
+            }
+
+            correspondence.launchWorkFlowAndCheckExists($event, null, 'favorites')
+                .then(function () {
+                    self.reloadQuickSearchCorrespondence(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        });
+                });
+            // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
+            //     .then(function () {
+            //         /*distributionWorkflowService
+            //          .controllerMethod
+            //          .distributionWorkflowSend(searchedGeneralDocument, false, false, null, "internal", $event)
+            //          .then(function (result) {
+            //          self.reloadSearchedGeneralDocuments(self.grid.page);
+            //          })
+            //          .catch(function (result) {
+            //          self.reloadSearchedGeneralDocuments(self.grid.page);
+            //          });*/
+            //         searchedGeneralDocument.launchWorkFlow($event, 'forward', 'favorites')
+            //             .then(function () {
+            //                 self.reloadSearchedGeneralDocuments(self.grid.page);
+            //             });
+            //     });
         };
 
         self.gridActions = [
@@ -392,21 +423,32 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && info.docStatus >= 22;
                 }
             },
-           // Export /*NOT NEEDED AS DISCUSSED WITH HUSSAM*/
-           /* {
-                type: 'action',
-                icon: 'export',
-                text: 'grid_action_export',
-                shortcut: true,
-                callback: self.exportQuickSearchCorrespondence,
-                class: "action-yellow",
-                checkShow: function (action, model) {
-                    //If document is paper outgoing and unapproved/partially approved, show the button.
-                    var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && model.docStatus < 24 && info.isPaper && info.documentClass === "outgoing";
-                }
-            },*/
+            // Export /*NOT NEEDED AS DISCUSSED WITH HUSSAM*/
+            /* {
+                 type: 'action',
+                 icon: 'export',
+                 text: 'grid_action_export',
+                 shortcut: true,
+                 callback: self.exportQuickSearchCorrespondence,
+                 class: "action-yellow",
+                 checkShow: function (action, model) {
+                     //If document is paper outgoing and unapproved/partially approved, show the button.
+                     var info = model.getInfo();
+                     return self.checkToShowAction(action, model) && model.docStatus < 24 && info.isPaper && info.documentClass === "outgoing";
+                 }
+             },*/
             //Open
+            // Launch Distribution Workflow
+            {
+                type: 'action',
+                icon: 'sitemap',
+                text: 'grid_action_launch_distribution_workflow',
+                shortcut: true,
+                callback: self.launchDistributionWorkflow,
+                class: "action-green",
+                permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                checkShow: self.checkToShowAction
+            },
             {
                 type: 'action',
                 icon: 'book-open-variant',
@@ -428,7 +470,7 @@ module.exports = function (app) {
                 text: 'grid_action_broadcast',
                 shortcut: false,
                 hide: false,
-                callback: self.doBroadcast,
+                callback: self.broadcast,
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.needApprove() || model.hasDocumentClass('incoming');
                 }
