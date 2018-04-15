@@ -108,6 +108,7 @@ module.exports = function (app) {
         /**
          * @description Checks the file for the allowed file formats
          * @param contentFiles
+         * @param element
          */
         self.checkContentFile = function (contentFiles, element) {
             if (contentFiles.length) {

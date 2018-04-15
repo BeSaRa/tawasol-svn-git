@@ -14,7 +14,8 @@ module.exports = function (app) {
 
         angular.extend(this, $controller('userInboxCtrl', {
             userInboxes: [],
-            userFolders: []
+            userFolders: [],
+            userFilters: []
         }));
 
         self.openNotificationMenu = function ($mdMenu) {

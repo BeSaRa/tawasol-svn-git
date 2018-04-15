@@ -13,6 +13,7 @@ module.exports = function (app) {
             delete model.file;
             delete model.source;
             delete model.progress;
+            delete model.refVSID;
             return model;
         });
 

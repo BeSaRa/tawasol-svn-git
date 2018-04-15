@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.service('userFilterService', function (urlService, $http , $q , generator, UserFilter , _) {
+    app.service('userFilterService', function (urlService, employeeService, $http, $q, dialog, cmsTemplate, generator, UserFilter, _) {
         'ngInject';
         var self = this;
         self.serviceName = 'userFilterService';
@@ -78,6 +78,59 @@ module.exports = function (app) {
                 return Number(userFilter.id) === Number(userFilterId)
             });
         };
+        /**
+         * @description to show create filter dialog.
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.createUserFilterDialog = function ($event) {
+            return dialog
+                .showDialog({
+                    template: cmsTemplate.getPopup('filters'),
+                    controller: 'filterPopCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event,
+                    resolve: {
+                        senders: function (ouApplicationUserService, employeeService) {
+                            'ngInject';
+                            return ouApplicationUserService
+                                .searchByCriteria({regOu: employeeService.getEmployee().getRegistryOUID()})
+                                .then(function (result) {
+                                    return _.map(result, 'applicationUser');
+                                });
+                        },
+                        actions: function (workflowActionService) {
+                            'ngInject';
+                            return workflowActionService.loadCurrentUserWorkflowActions();
+                        }
+                    },
+                    locals: {
+                        filter: new UserFilter({
+                            userId: employeeService.getEmployee().id,
+                            ouId: employeeService.getEmployee().getOUID()
+                        }),
+                        editMode: false
+                    }
+                });
+        };
+
+        self.editUserFilterDialog = function ($event, filter) {
+            return dialog
+                .showDialog({
+                    template: cmsTemplate.getPopup('filters'),
+                    controller: 'filterPopCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event,
+                    resolve: {},
+                    locals: {
+                        filter: new UserFilter({
+                            userId: employeeService.getEmployee().id,
+                            ouId: employeeService.getEmployee().getOUID()
+                        }),
+                        editMode: false
+                    }
+                });
+        }
 
     });
 };

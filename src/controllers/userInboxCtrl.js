@@ -6,6 +6,7 @@ module.exports = function (app) {
                                               $timeout,
                                               ResolveDefer,
                                               generator,
+                                              userFilterService,
                                               correspondenceService,
                                               $state,
                                               counterService,
@@ -19,6 +20,7 @@ module.exports = function (app) {
                                               distributionWorkflowService,
                                               userFolders,
                                               $window,
+                                              // welcome,
                                               tokenService,
                                               contextHelpService,
                                               userFolderService,
@@ -90,7 +92,15 @@ module.exports = function (app) {
             ]
         };
 
-        self.userFilters = [1, 2, 3, 4, 5, 6];
+        self.openSidebarFilter = function () {
+            self.sidebarFilter = !self.sidebarFilter;
+        };
+
+        self.filterGrid = {};
+
+        self.createUserFilter = function ($event) {
+            return userFilterService.createUserFilterDialog($event);
+        };
 
         self.selectFilter = function (selected) {
             console.log(selected);

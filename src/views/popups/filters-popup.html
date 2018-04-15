@@ -1,0 +1,51 @@
+<md-dialog class="dialog-extend">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20" ng-if="!ctrl.editMode">{{ lang.create_filter }}</span>
+            <span class="p20" ng-if="ctrl.editMode">{{ ctrl.model.getTranslatedName() }}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <div class="p20">
+                <div layout="row">
+                    <md-input-container flex>
+                        <label for="docType">{{lang.linked_document_type}}</label>
+                        <md-select name="docType" id="docType"
+                                   ng-model="ctrl.filter.ui.key_2.value">
+                            <md-option ng-value="docType.lookupKey" ng-repeat="docType in ctrl.documentTypes">
+                                {{docType.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label for="docSubject">{{lang.document_subject_contains}}</label>
+                        <input id="docSubject" name="docSubject" ng-model="ctrl.filter.ui.key_3.value">
+                    </md-input-container>
+                </div>
+                <div layout="row">
+                    <md-input-container flex>
+                        <label for="sender">{{lang.sender}}</label>
+                        <md-select name="sender" id="sender"
+                                   ng-model="ctrl.filter.ui.key_9.value">
+                            <md-option ng-value="sender.domainName" ng-repeat="sender in ctrl.senders">
+                                {{sender.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label for="action">{{lang.action}}</label>
+                        <md-select name="action" id="action"
+                                   ng-model="ctrl.filter.ui.key_9.value">
+                            <md-option ng-value="action.id" ng-repeat="action in ctrl.actions">
+                                {{action.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+        </md-content>
+        <div>
+            <md-button ng-click="ctrl.saveUserFilterFromCtrl()">Filter</md-button>
+        </div>
+    </div>
+</md-dialog>

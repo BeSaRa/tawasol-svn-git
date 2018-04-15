@@ -13,7 +13,8 @@ module.exports = function (app) {
                 folders: '=',
                 clickCallback: '=',
                 disableSelected: '=',
-                highlightSelected: '='
+                highlightSelected: '=',
+                icon: '@?'
             }
         }
     })

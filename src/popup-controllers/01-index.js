@@ -88,4 +88,5 @@ module.exports = function (app) {
     require('./manageIncomingDocumentCorrespondencePopCtrl')(app);
     require('./folderTreePopCtrl')(app);
     require('./rankPopCtrl')(app);
+    require('./filterPopCtrl')(app);
 };

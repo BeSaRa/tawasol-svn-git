@@ -3,16 +3,34 @@
     <div layout="column" class="content">
         <!-- page-header start -->
         <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <md-button ng-click="ctrl.openSidebarFilter()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="menu"></md-icon>
+            </md-button>
             <span>{{lang.menu_item_user_inbox}}</span>
             <md-button ng-click="ctrl.reloadUserInboxes()" class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
+            <md-button ng-click="ctrl.createUserFilter($event)" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="filter-variant"></md-icon>
+            </md-button>
             <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
         <div layout="column" flex>
+            <div class="z-index-3">
+                <md-sidenav id="sidebar-folder-structure" md-is-open="ctrl.sidebarFilter"
+                            ng-class="{'md-sidenav-right':lang.current === 'ar'}">
+                    <div class="p20 first-folder-list" layout="column">
+                        <p>{{lang.user_filters}}</p>
+                        <folders-tree-structure-directive icon="filter-variant" disable-selected="0"
+                                                          highlight-selected="ctrl.selectedFolder"
+                                                          click-callback="ctrl.getFolderContent"
+                                                          folders="ctrl.inboxFolders"></folders-tree-structure-directive>
+                    </div>
+                </md-sidenav>
+            </div>
             <div scroll-directive>
                 <div class="page-padding">
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
