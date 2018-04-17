@@ -3,6 +3,7 @@ features :
 02- added counter for Folders.
 03- added counter for Central Archive.
 04 - change attachment global lookup to tawasol attachment.
+05- Added - Quick Receive With Launch WF
 
 
 Fixed issues :
