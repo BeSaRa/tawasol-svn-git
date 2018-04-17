@@ -169,16 +169,15 @@ module.exports = function (app) {
             model.subClassification = correspondenceService.getCorrespondenceLookupById(documentClass, 'classifications', model.subClassification) || model.subClassification;
 
             model.docTypeForSearchGrid = _.find(documentTypeService.documentTypes, {lookupKey: model.docType});
-            //debugger;
-            //console.log('model.docType check type', model.docType);
-            model.docType = correspondenceService.getLookup(documentClass, 'docTypes', model.docType) || model.docType;
 
+            model.docType = correspondenceService.getLookup(documentClass, 'docTypes', model.docType) || model.docType;
 
             model.fileId = correspondenceService.getCorrespondenceLookupById(documentClass, 'documentFiles', model.fileId) || model.fileId; // not lookup
 
             model.securityLevel = model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.priorityLevel = model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
 
+            model.creatorInfo =  model.creatorInfo ? new Information(model.creatorInfo) : new Information();
             if (!angular.isDate(model.docDate)) {
                 model.docDate = moment(model.docDate).format('YYYY-MM-DD');
                 model.createdOn = angular.copy(model.docDate);

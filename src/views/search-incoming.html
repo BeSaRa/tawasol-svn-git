@@ -553,19 +553,19 @@
                                     <span>{{lang.subject}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
-                                    md-order-by="priorityLevel">
+                                    md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                     <span>{{lang.priority_level}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
-                                    md-order-by="securityLevel">
+                                    md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
                                     <span>{{lang.security_level}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
-                                    md-order-by="docType">
+                                    md-order-by="{{ctrl.getSortingKey('docTypeForSearchGrid', 'DocumentType')}}">
                                     <span>{{lang.label_document_type}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
-                                    md-order-by="createdBy">
+                                    md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
                                     <span>{{lang.creator}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
@@ -608,8 +608,9 @@
                                 </td>
                                 <td md-cell>{{searchedIncomingDocument.priorityLevel.getTranslatedName()}}</td>
                                 <td md-cell>{{searchedIncomingDocument.securityLevel.getTranslatedName()}}</td>
-                                <td md-cell>{{lang[searchedIncomingDocument.getInfo().documentClass +"_document_class"]}}</td>
-                                <td md-cell>{{searchedIncomingDocument.getTranslatedCreator()}}</td>
+                                <!--<td md-cell>{{lang[searchedIncomingDocument.getInfo().documentClass +"_document_class"]}}</td>-->
+                                <td md-cell>{{searchedIncomingDocument.docTypeForSearchGrid.getTranslatedName()}}</td>
+                                <td md-cell>{{searchedIncomingDocument.creatorInfo.getTranslatedName()}}</td>
                                 <td md-cell>{{searchedIncomingDocument.createdOn}}</td>
                                 <td md-cell ng-if="ctrl.selectedSearchedIncomingDocuments.length < 2">
                                     <div layout-align="start center" ng-if="!ctrl.selectedSearchedIncomingDocuments.length

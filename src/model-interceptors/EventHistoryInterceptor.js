@@ -2,6 +2,8 @@ module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
                       moment,
                       lookupService,
+                      WorkflowAction,
+                      DocumentStatus,
                       Information) {
         'ngInject';
 
@@ -15,6 +17,7 @@ module.exports = function (app) {
             delete model.mainSite;
             delete model.subSite;
             delete model.mainSubSites;
+            delete model.action;
 
             delete model.actionDate_vts;
             delete model.documentCreationDate_vts;
@@ -31,16 +34,18 @@ module.exports = function (app) {
             model.actionDate_vts ? getDateFromUnixTimeStamp_Vts(model, ["actionDate_vts"]) : "";
             (model.actionDate) ? getDateFromUnixTimeStamp(model, ["actionDate"]) : "";
             (model.dueDate) ? getDateFromUnixTimeStamp(model, ["dueDate"]) : "";
+            model.action = (model.workflowActionId) ? new WorkflowAction(model.workflowActionInfo) : (model.documentStatusInfo ? new DocumentStatus(model.documentStatusInfo) : '');
+            model.userFromInfo = model.userFromInfo ? new Information(model.userFromInfo) : new Information();
 
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
 
-             model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
-             model.priorityLevelIndicator = (model.priorityLevelLookup && model.priorityLevelLookup.lookupKey != 0)? model.getPriorityLevelIndicator(model.priorityLevelLookup) : null;
+            model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
+            model.priorityLevelIndicator = (model.priorityLevelLookup && model.priorityLevelLookup.lookupKey !== 0) ? model.getPriorityLevelIndicator(model.priorityLevelLookup) : null;
 
             model.dueDateStatusIndicator = model.dueDate ? model.getDueDateStatusIndicator(model.dueDate) : null;
 
-            model.docTypeIndicator = model.docClassName ? model.getDocTypeIndicator(model.docClassName) : null;
+            model.docClassIndicator = model.docClassName ? model.getDocClassIndicator(model.docClassName) : null;
             return model;
         });
 

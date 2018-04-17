@@ -38,24 +38,19 @@
                                     <th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="">
                                         <!-- Security Level, Document type Indicators -->
                                     </th>
-                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column
-                                        md-order-by="docSubject">
+                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column md-order-by="docSubject">
                                         <span>{{lang.document_subject}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column
-                                        md-order-by="docTypeInfo">
+                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column md-order-by="{{ctrl.getSortingKey('docTypeInfo','Information')}}">
                                         <span>{{lang.label_document_type}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column
-                                        md-order-by="securityLevelInfo">
+                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column md-order-by="{{ctrl.getSortingKey('securityLevelInfo','Information')}}">
                                         <span>{{lang.security_level}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column
-                                        md-order-by="priorityLevelInfo">
+                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column md-order-by="{{ctrl.getSortingKey('priorityLevelInfo','Information')}}">
                                         <span>{{lang.priority_level}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column
-                                        md-order-by="createdOn">
+                                    <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column md-order-by="createdOn">
                                         <span>{{lang.document_date}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column>
@@ -76,7 +71,7 @@
                                                                   record-type="correspondence"></grid-indicator-directive>
                                         <!-- Doc Type -->
                                         <grid-indicator-directive record="favoriteDocument"
-                                                                  indicator-type="docType"
+                                                                  indicator-type="docClass"
                                                                   record-type="correspondence"></grid-indicator-directive>
                                         <!-- Priority Level -->
                                         <grid-indicator-directive record="favoriteDocument"

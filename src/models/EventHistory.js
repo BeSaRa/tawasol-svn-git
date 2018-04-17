@@ -135,8 +135,8 @@ module.exports = function (app) {
                 return indicator.getTagsIndicator(tagsCount);
             };
 
-            EventHistory.prototype.getDocTypeIndicator = function (docType) {
-                return indicator.getDocTypeIndicator(docType);
+            EventHistory.prototype.getDocClassIndicator = function (docType) {
+                return indicator.getDocClassIndicator(docType);
             };
 
             EventHistory.prototype.getCommentsIndicator = function (commentsCounts) {

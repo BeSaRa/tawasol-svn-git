@@ -31,7 +31,6 @@ module.exports = function (app) {
             model.referencePlanItemStartSerialList = _.map(model.referencePlanItemStartSerialList, function (item) {
                 return new ReferencePlanItemStartSerial(item);
             });
-
             return model;
         });
 

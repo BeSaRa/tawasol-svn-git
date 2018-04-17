@@ -57,8 +57,8 @@ module.exports = function (app) {
                 return indicator.getSecurityLevelIndicator(securityLevel);
             };
 
-            Outgoing.prototype.getDocTypeIndicator = function () {
-                return indicator.getDocTypeIndicator('outgoing');
+            Outgoing.prototype.getDocClassIndicator = function () {
+                return indicator.getDocClassIndicator('outgoing');
             };
 
             Outgoing.prototype.getPriorityLevelIndicator = function (priorityLevel) {

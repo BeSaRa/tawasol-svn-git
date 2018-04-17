@@ -36,32 +36,25 @@
                                                 </md-button>
                                             </div>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
-                                            md-order-by="docSerial">
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="generalStepElm.docFullSerial">
                                             <span>{{lang.inbox_serial}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
-                                            md-order-by="docSubject">
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="generalStepElm.docSubject">
                                             <span>{{lang.subject}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
-                                            md-order-by="receivedDate">
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="generalStepElm.receivedDate">
                                             <span>{{lang.received_date}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
-                                            md-order-by="type">
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="type">
                                             <span>{{lang.type}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
-                                            md-order-by="department">
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="{{ctrl.getSortingKey('fromOU','Information')}}">
                                             <span>{{lang.department}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
-                                            md-order-by="numberOfDays">
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="generalStepElm.numberOfDays">
                                             <span>{{lang.number_of_days}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
-                                            md-order-by="sender">
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="{{ctrl.getSortingKey('sender', 'Information')}}">
                                             <span>{{lang.sender}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column>

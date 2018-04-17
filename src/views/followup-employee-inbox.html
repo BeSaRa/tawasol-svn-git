@@ -67,44 +67,31 @@
                                         <!-- Star/Unstar -->
                                     </th>
                                     <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
-                                        md-order-by="docSerial">
+                                        md-order-by="generalStepElm.docFullSerial">
                                         <span>{{lang.inbox_serial}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column md-order-by="">
                                         <!-- Priority Level and Has Attachment Indicators -->
                                     </th>
-                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
-                                        md-order-by="docSubject">
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column md-order-by="generalStepElm.docSubject">
                                         <span>{{lang.subject}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
-                                        md-order-by="receivedDate">
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column md-order-by="generalStepElm.receivedDate">
                                         <span>{{lang.received_date}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
-                                        md-order-by="action">
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column md-order-by="{{ctrl.getSortingKey('action', 'WorkflowAction')}}">
                                         <span>{{lang.action}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
-                                        md-order-by="sender">
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column md-order-by="{{ctrl.getSortingKey('senderInfo', 'Information')}}">
                                         <span>{{lang.sender}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
-                                        md-order-by="dueDate">
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column md-order-by="generalStepElm.dueDate">
                                         <span>{{lang.due_date}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column md-order-by="">
                                         <span>{{lang.correspondence_sites}}</span>
                                     </th>
-                                    <!--<th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column md-order-by="subSite">
-                                        <span>{{lang.inbox_sub_site}}</span>
-                                    </th>-->
-                                   <!-- <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
-                                        md-order-by="docType">
-                                        <span>{{lang.type}}</span>
-                                    </th>-->
-                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column
-                                        md-order-by="numberOfDays">
+                                    <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column md-order-by="generalStepElm.numberOfDays">
                                         <span>{{lang.number_of_days}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedFollowupEmployeeInboxes.length" md-column>
@@ -129,7 +116,7 @@
                                                                   record-type="workItem"></grid-indicator-directive>
                                         <!-- Doc Type -->
                                         <grid-indicator-directive record="followupEmployeeInbox"
-                                                                  indicator-type="docType"
+                                                                  indicator-type="docClass"
                                                                   record-type="workItem"></grid-indicator-directive>
                                         <!-- Linked Documents -->
                                         <grid-indicator-directive record="followupEmployeeInbox"
@@ -214,8 +201,6 @@
                                                                       ng-if="followupEmployeeInbox.getInfo().documentClass!=='internal'">
                                         </main-site-sub-site-directive>
                                     </td>
-                                    <!--<td md-cell>{{followupEmployeeInbox.subCoreSite.getTranslatedName()}}</td>-->
-                                   <!-- <td md-cell>{{followupEmployeeInbox.generalStepElm.docType}}</td>-->
                                     <td md-cell>{{followupEmployeeInbox.generalStepElm.numberOfDays}}</td>
                                     <td md-cell ng-if="ctrl.selectedFollowupEmployeeInboxes.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedFollowupEmployeeInboxes.length

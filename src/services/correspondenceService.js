@@ -439,7 +439,10 @@ module.exports = function (app) {
             return $http
                 .get(_createUrlSchema(correspondence.vsId, correspondence.docClassName, 'linked-objects'))
                 .then(function (result) {
-                    return generator.interceptReceivedCollection('LinkedObject', generator.generateCollection(result.data.rs, LinkedObject));
+                    return generator.interceptReceivedCollection('LinkedObject', _.map(generator.generateCollection(result.data.rs, LinkedObject), function (item) {
+                        item.documentClass = correspondence.docClassName;
+                        return item;
+                    }));
                 });
         };
 
@@ -865,13 +868,13 @@ module.exports = function (app) {
          * @description open transfer dialog to select user to transfer.
          * @param workItems
          * @param applicationUser
+         * @param availableUsers
          * @param $event
          */
-        self.openTransferDialog = function (workItems, applicationUser, $event) {
+        self.openTransferDialog = function (workItems, applicationUser, availableUsers, $event) {
             var isArray = angular.isArray(workItems);
 
             function _filterApplicationUSer(user) {
-                console.log(applicationUser.domainName !== user.domainName, applicationUser.domainName, user);
                 return applicationUser.domainName !== user.domainName;
             }
 
@@ -893,13 +896,14 @@ module.exports = function (app) {
                                     return _.filter(result, 'status');
                                 });
                         },
-                        applicationUsers: function (ouApplicationUserService, employeeService) {
+                        applicationUsers: function () {
                             'ngInject';
-                            return ouApplicationUserService
-                                .searchByCriteria({ou: employeeService.getEmployee().getRegistryOUID()})
-                                .then(function (result) {
-                                    return _.filter(_.map(result, 'applicationUser'), _filterApplicationUSer);
-                                });
+                            return _.filter(_.map(availableUsers, 'applicationUser'), _filterApplicationUSer);
+                            // return ouApplicationUserService
+                            //     .searchByCriteria({ou: employeeService.getEmployee().getRegistryOUID()})
+                            //     .then(function (result) {
+                            //         return _.filter(_.map(result, 'applicationUser'), _filterApplicationUSer);
+                            //     });
                         }
                     }
                 })

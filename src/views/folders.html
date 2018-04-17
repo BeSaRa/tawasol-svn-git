@@ -85,29 +85,25 @@
                                     <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="">
                                         <!-- Star/unstar -->
                                     </th>
-                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column
-                                        md-order-by="generalStepElm.docFullSerial">
+                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="generalStepElm.docFullSerial">
                                         <span>{{lang.inbox_serial}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="">
                                         <!-- Priority Level and Has Attachment Indicators -->
                                     </th>
-                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column
-                                        md-order-by="generalStepElm.docSubject">
+                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="generalStepElm.docSubject">
                                         <span>{{lang.subject}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column
-                                        md-order-by="generalStepElm.receivedDate">
+                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="generalStepElm.receivedDate">
                                         <span>{{lang.received_date}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="action">
+                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="{{ctrl.getSortingKey('action', 'WorkflowAction')}}">
                                         <span>{{lang.action}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="sender">
+                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="{{ctrl.getSortingKey('senderInfo', 'Information')}}">
                                         <span>{{lang.sender}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column
-                                        md-order-by="generalStepElm.dueDate">
+                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="generalStepElm.dueDate">
                                         <span>{{lang.due_date}}</span>
                                     </th>
                                     <!--<th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="">
@@ -116,7 +112,7 @@
                                     <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="docType">
                                         <span>{{lang.type}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="numberOfDays">
+                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="generalStepElm.numberOfDays">
                                         <span>{{lang.number_of_days}}</span>
                                     </th>-->
                                     <th ng-if="!ctrl.selectedWorkItems.length" md-column>
@@ -141,7 +137,7 @@
                                                                   record-type="workItem"></grid-indicator-directive>
                                         <!-- Doc Type -->
                                         <grid-indicator-directive record="workItem"
-                                                                  indicator-type="docType"
+                                                                  indicator-type="docClass"
                                                                   record-type="workItem"></grid-indicator-directive>
 
                                         <!-- Electronic/Paper Document -->

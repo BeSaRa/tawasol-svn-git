@@ -34,9 +34,6 @@ module.exports = function (app) {
                 self.selectedApplicationUser = null;
                 return ouApplicationUserService.loadRelatedOUApplicationUsers(self.selectedOrganization)
                     .then(function (result) {
-                        result = _.filter(result, function (ouApplicationUser) {
-                            return ouApplicationUser.applicationUser.id != employeeService.getEmployee().id;
-                        });
                         self.ouApplicationUsers = result;
                         return result;
                     });
@@ -51,7 +48,8 @@ module.exports = function (app) {
                 dialog.hide(
                     {
                         organization: self.selectedOrganization,
-                        applicationUser: self.selectedApplicationUser
+                        applicationUser: self.selectedApplicationUser,
+                        availableUsers: self.ouApplicationUsers
                     }
                 );
             };
@@ -61,6 +59,10 @@ module.exports = function (app) {
              */
             self.closeFollowupEmployeeInboxPopupFromCtrl = function () {
                 dialog.cancel();
+            };
+
+            self.notCurrentUser = function (user) {
+                return employeeService.getEmployee().id === user.id;
             }
         }
     )

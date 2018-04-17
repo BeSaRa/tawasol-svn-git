@@ -614,19 +614,19 @@
                                     <span>{{lang.subject}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedSearchedGeneralDocuments.length" md-column
-                                    md-order-by="priorityLevel">
+                                    md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                     <span>{{lang.priority_level}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedSearchedGeneralDocuments.length" md-column
-                                    md-order-by="securityLevel">
+                                    md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
                                     <span>{{lang.security_level}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedSearchedGeneralDocuments.length" md-column
-                                    md-order-by="docType">
+                                    md-order-by="{{ctrl.getSortingKey('docTypeForSearchGrid', 'DocumentType')}}">
                                     <span>{{lang.label_document_type}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedSearchedGeneralDocuments.length" md-column
-                                    md-order-by="createdBy">
+                                    md-order-by="{{ctrl.getSortingKey('creatorInfo', 'DocumentType')}}">
                                     <span>{{lang.creator}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedSearchedGeneralDocuments.length" md-column
@@ -648,6 +648,10 @@
                                     <!-- Security Level -->
                                     <grid-indicator-directive record="searchedGeneralDocument"
                                                               indicator-type="securityLevel"
+                                                              record-type="correspondence"></grid-indicator-directive>
+                                    <!-- Document Class (Outgoing/Incoming/Internal) -->
+                                    <grid-indicator-directive record="searchedGeneralDocument"
+                                                              indicator-type="docClass"
                                                               record-type="correspondence"></grid-indicator-directive>
                                     <!-- Priority Level -->
                                     <grid-indicator-directive record="searchedGeneralDocument"
@@ -680,8 +684,9 @@
                                 </td>
                                 <td md-cell>{{searchedGeneralDocument.priorityLevel.getTranslatedName()}}</td>
                                 <td md-cell>{{searchedGeneralDocument.securityLevel.getTranslatedName()}}</td>
-                                <td md-cell>{{lang[searchedGeneralDocument.getInfo().documentClass +"_document_class"]}}</td>
-                                <td md-cell>{{searchedGeneralDocument.getTranslatedCreator()}}</td>
+                                <!--<td md-cell>{{lang[searchedGeneralDocument.getInfo().documentClass +"_document_class"]}}</td>-->
+                                <td md-cell>{{searchedGeneralDocument.docTypeForSearchGrid.getTranslatedName()}}</td>
+                                <td md-cell>{{searchedGeneralDocument.creatorInfo.getTranslatedName()}}</td>
                                 <td md-cell>{{searchedGeneralDocument.createdOn}}</td>
                                 <td md-cell ng-if="ctrl.selectedSearchedGeneralDocuments.length < 2">
                                     <div layout-align="start center" ng-if="!ctrl.selectedSearchedGeneralDocuments.length

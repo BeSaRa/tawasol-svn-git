@@ -27,21 +27,23 @@
                                             <span>{{ctrl.selectedQuickSearchCorrespondence.length}} {{lang.items_selected}} </span>
                                         </div>
                                     </th>
-
+                                    <th md-column>
+                                        <!-- Indicators -->
+                                    </th>
                                     <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
                                         md-order-by="docSubject">
                                         <span>{{lang.document_subject}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
-                                        md-order-by="priorityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                         <span>{{lang.priority_level}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
-                                        md-order-by="securityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
                                         <span>{{lang.security_level}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
-                                        md-order-by="docType">
+                                        md-order-by="{{ctrl.getSortingKey('docType', 'DocumentType')}}">
                                         <span>{{lang.label_document_type}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
@@ -60,12 +62,18 @@
                                     grid-right-click-directive model="quickSearch" selected-length="{{ctrl.selectedQuickSearchCorrespondence.length ? ctrl.selectedQuickSearchCorrespondence.length : 0}}"
                                     md-select="quickSearch"
                                     ng-repeat="quickSearch in ctrl.quickSearchCorrespondence  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
-                                    <td md-cell><a href="" class="view-doc"
-                                                   ng-click="ctrl.viewDocument(quickSearch, $event)">{{quickSearch.docSubject}}</a>
+                                    <td md-cell class="indicator-td">
+                                        <!-- Security Level -->
+                                        <grid-indicator-directive record="quickSearch"
+                                                                  indicator-type="docClass"
+                                                                  record-type="correspondence"></grid-indicator-directive>
                                     </td>
+                                    <td md-cell><a href="" class="view-doc"
+                                                   ng-click="ctrl.viewDocument(quickSearch, $event)">{{quickSearch.docSubject}}</a></td>
                                     <td md-cell>{{quickSearch.priorityLevel.getTranslatedName()}}</td>
                                     <td md-cell>{{quickSearch.securityLevel.getTranslatedName()}}</td>
-                                    <td md-cell>{{lang[quickSearch.getInfo().documentClass +"_document_class"]}}</td>
+                                    <!--<td md-cell>{{lang[quickSearch.getInfo().documentClass +"_document_class"]}}</td>-->
+                                    <td md-cell>{{quickSearch.docType.getTranslatedName()}}</td>
                                     <td md-cell>{{quickSearch.createdBy}}</td>
                                     <td md-cell>{{quickSearch.createdOn}}</td>
                                     <td md-cell ng-if="ctrl.selectedQuickSearchCorrespondence.length < 2">

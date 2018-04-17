@@ -444,7 +444,7 @@ module.exports = function (app) {
          * @description Describes if user is out of office
          * @type {boolean}
          */
-        self.isOutOfOffice = self.ouApplicationUser.proxyUser != null;
+        self.isOutOfOffice = self.ouApplicationUser.proxyUser !== null;
 
         _checkProxyDate(self.ouApplicationUser);
 
@@ -462,6 +462,7 @@ module.exports = function (app) {
          * @param form
          */
         self.changeOutOfOffice = function (form) {
+            var defer = $q.defer();
             if (!self.isOutOfOffice) {
                 if (self.ouApplicationUserCopy.proxyUser) {
                     self.ouApplicationUser.proxyUser = self.selectedProxyUser = null;
@@ -476,6 +477,7 @@ module.exports = function (app) {
                             employeeService.setCurrentOUApplicationUser(result);
                             self.ouApplicationUserCopy = angular.copy(result);
                             toast.success(langService.get('out_of_office_success'));
+                            defer.resolve(true);
                         });
                 }
             } else {
@@ -494,6 +496,7 @@ module.exports = function (app) {
                         dialog.confirmMessage(html[0].innerHTML)
                             .then(function (result) {
                                 form.$setUntouched();
+                                defer.resolve(true);
                             })
                             .catch(function () {
                                 self.isOutOfOffice = !self.isOutOfOffice;
@@ -501,12 +504,16 @@ module.exports = function (app) {
                     });
 
                 }
-                else
+                else {
                     form.$setUntouched();
+                    defer.resolve(true);
+                }
             }
-            if (!self.isOutOfOffice)
-                self.applicationUser.outOfOffice = false;
-            employeeService.setCurrentEmployee(self.applicationUser);
+            defer.promise.then(function(response){
+                if (!self.isOutOfOffice)
+                    self.applicationUser.outOfOffice = false;
+                employeeService.setCurrentEmployee(self.applicationUser);
+            });
         };
 
         self.getSelectedDelegatedUserText = function () {

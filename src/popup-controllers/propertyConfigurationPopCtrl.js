@@ -99,6 +99,7 @@ module.exports = function (app) {
          * Edit Property Configuration
          */
         self.editPropertyConfigurationFromCtrl = function () {
+
             validationService
                 .createValidation('EDIT_PROPERTY_CONFIGURATION')
                 .addStep('check_required', true, generator.checkRequiredFields, self.propertyConfiguration, function (result) {

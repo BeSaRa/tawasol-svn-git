@@ -61,9 +61,10 @@ module.exports = function (app) {
              * @description Opens the dialog to select the organization and the user to get the data in the grid
              * @param selectedOrganization
              * @param selectedUser
+             * @param availableUsers
              * @param $event
              */
-            openOrganizationAndUserDialog: function (selectedOrganization, selectedUser, $event) {
+            openOrganizationAndUserDialog: function (selectedOrganization, selectedUser, availableUsers, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -82,10 +83,7 @@ module.exports = function (app) {
                             ouApplicationUsers: function (ouApplicationUserService) {
                                 'ngInject';
                                 return selectedOrganization ?
-                                    ouApplicationUserService.loadRelatedOUApplicationUsers(selectedOrganization)
-                                        .then(function (result) {
-                                            return result;
-                                        }) : [];
+                                    ouApplicationUserService.loadRelatedOUApplicationUsers(selectedOrganization) : [];
                             }
                         }
                     });
@@ -377,6 +375,7 @@ module.exports = function (app) {
         /**
          * @description Terminate followup employee inbox item
          * @param {WorkItem} followupEmployeeInbox
+         * @param reason
          */
         self.terminateFollowupEmployeeInbox = function (followupEmployeeInbox, reason) {
             var info = followupEmployeeInbox.getInfo();
@@ -488,7 +487,6 @@ module.exports = function (app) {
         /**
          * @description Mark the item as read/unread
          * @param followupEmployeeInbox
-         * @param $event
          */
         self.markAsReadUnread = function (followupEmployeeInbox) {
             var isOpen = followupEmployeeInbox.hasOwnProperty('generalStepElm')

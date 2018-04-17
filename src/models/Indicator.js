@@ -184,21 +184,21 @@ module.exports = function (app) {
             };
 
             /**
-             * @description Returns the document type indicator and description
-             * @param docType
+             * @description Returns the document class(Outgoing/Incoming/Internal) indicator and description
+             * @param docClass
              * @returns {Indicator}
              */
-            Indicator.prototype.getDocTypeIndicator = function (docType) {
-                docType = docType.toLowerCase();
+            Indicator.prototype.getDocClassIndicator = function (docClass) {
+                docClass = docClass.toLowerCase();
                 return new Indicator({
-                    class: 'indicator ' + docType,
-                    text: 'indicator_' + docType,
-                    icon: self.getIndicatorIcons(docType),
-                    tooltip: 'indicator_' + docType
+                    class: 'indicator ' + docClass,
+                    text: 'indicator_' + docClass,
+                    icon: self.getIndicatorIcons(docClass),
+                    tooltip: 'indicator_' + docClass
                 });
 
 
-                /*docType = docType.toLowerCase();
+                /*docClass = docClass.toLowerCase();
                 var docClass = 'indicator ' + (docType === 'incoming' ? 'inc' : (docType === 'outgoing' ? 'out' : 'int'));
                 var text = (docType === 'incoming' ? 'indicator_incoming' : (docType === 'outgoing' ? 'indicator_outgoing' : 'indicator_internal'));
                 var icon = (docType === 'incoming' ? icons['incoming'] : (docType === 'outgoing' ? icons['outgoing'] : icons['internal']));

@@ -9,13 +9,13 @@
              <!--.change({name: ctrl.record.securityLevelLookup.getTranslatedName()})}}"-->
     ></md-icon>
 </span>
-<!-- Doc Type -->
-<span ng-if="ctrl.indicatorType === 'docType'" class="{{ctrl.spanClass}}"
-      ng-class="{'indicator-content': ctrl.record.docTypeIndicator}">
-    <md-icon ng-if="ctrl.record.docTypeIndicator && ctrl.isShowIndicator()"
-             class="{{ctrl.record.docTypeIndicator.class}} {{ctrl.iconClass}}"
-             md-svg-icon="{{ctrl.record.docTypeIndicator.icon}}"
-             tooltip="{{ctrl.langService.get(ctrl.record.docTypeIndicator.tooltip)}}"
+<!-- Doc Class (Outgoing / Incoming / Internal) -->
+<span ng-if="ctrl.indicatorType === 'docClass'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.docClassIndicator}">
+    <md-icon ng-if="ctrl.record.docClassIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.docClassIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.docClassIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.docClassIndicator.tooltip)}}"
     ></md-icon>
 </span>
 <!-- Paper/Electronic -->

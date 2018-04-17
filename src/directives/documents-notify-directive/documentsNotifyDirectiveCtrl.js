@@ -94,8 +94,10 @@ module.exports = function (app) {
             // reload notifications
             self.mailService.loadMailNotifications(5);
 
-            $interval(function () {
-                self.mailService.loadMailNotifications(5);
+            var interval = $interval(function () {
+                self.mailService.loadMailNotifications(5).catch(function () {
+                    $interval.cancel(interval);
+                });
             }, employeeService.getEmployee().getIntervalMin());
         }
 

@@ -37,6 +37,7 @@ module.exports = function (app) {
             }
             model.linkedDocs = "[]";
 
+            delete model.typeOriginalCopy;
             delete model.documentComments;
             delete model.securityLevelLookup;
             delete model.securityLevelIndicator;
@@ -49,6 +50,7 @@ module.exports = function (app) {
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.docClassName = 'outgoing';
             model.deliveryDate ? getDateFromUnixTimeStamp(model, ['deliveryDate']) : "";
+            model.typeOriginalCopy = (model.type === 0 ? langService.get('original') : langService.get('copy'));
 
             if (!angular.isArray(model.tags))
                 model.tags = (model.tags && model.tags.length) ? Array.prototype.slice.call(JSON.parse(model.tags)) : [];

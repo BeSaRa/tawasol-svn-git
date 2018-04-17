@@ -28,6 +28,10 @@ module.exports = function (app) {
             ReferencePlanItemStartSerial.prototype.getRequiredFields = function () {
                 return requiredFields;
             };
+            /**
+             * @param item
+             * @returns {ReferencePlanItemStartSerial}
+             */
             ReferencePlanItemStartSerial.prototype.setReferencePlanItemId = function (item) {
                 this.referencePlanItemId = item;
                 return this;

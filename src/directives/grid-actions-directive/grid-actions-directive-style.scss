@@ -66,3 +66,16 @@
 .action-green {
   color: green;
 }
+
+
+.md-open-menu-container vertical-divider-directive {
+  margin-left: 4px;
+  margin-right: 4px;
+  width: 1px;
+  min-width: 1px;
+  max-width: 1px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.11);
+  padding-right: 0px;
+  padding-left: 0px;
+}

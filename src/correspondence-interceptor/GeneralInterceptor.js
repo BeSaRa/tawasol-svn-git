@@ -72,6 +72,7 @@ module.exports = function (app) {
             delete model.tagsIndicator;
             delete model.followUpStatusIndicator;
             delete model.dueDateStatusIndicator;
+            delete model.docClassIndicator;
             delete model.cbrEnabled;
 
             /*If Document has vsId(update document), we will not remove the content file.
@@ -105,6 +106,7 @@ module.exports = function (app) {
                 linkedDocs = Array.prototype.slice.call(JSON.parse(model.linkedDocs));
             model.linkedDocsIndicator = linkedDocs.length ? model.getLinkedDocumentsIndicator() : null;
 
+            model.docClassIndicator = model.getDocClassIndicator(model.getInfo().documentClass);
             model.tagsIndicator = model.tags.length ? model.getTagsIndicator(model.tags.length) : null;
 
             return model;

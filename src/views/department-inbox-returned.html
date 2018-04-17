@@ -80,12 +80,10 @@
                                     <th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column md-order-by="generalStepElm.receivedDate">
                                         <span>{{lang.received_date}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column
-                                        md-order-by="department">
+                                    <th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column md-order-by="{{ctrl.getSortingKey('toOU','Information')}}">
                                         <span>{{lang.department}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column
-                                        md-order-by="sender">
+                                    <th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column md-order-by="{{ctrl.getSortingKey('senderInfo', 'SenderInfo')}}">
                                         <span>{{lang.sender}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column md-order-by="">
@@ -174,17 +172,7 @@
                                     </td>
                                     <td md-cell>{{returnedDepartmentInbox.generalStepElm.receivedDate}}</td>
                                     <td md-cell>{{returnedDepartmentInbox.toOU.getTranslatedName()}}</td>
-                                    <td md-cell class="td-data">
-                                        <div layout="row">
-                                            <span flex>{{returnedDepartmentInbox.senderInfo.getTranslatedName()}}</span>
-                                            <!--<md-icon aria-label="{{lang.sender}}"
-                                                     md-svg-icon="information-variant"
-                                                     tooltip="<p><span>{{lang.get('rank')}}: </span><span>{{returnedDepartmentInbox.sender.rank}}</span></p>
-                                        <p><span>{{lang.get('email')}}: </span><span>{{returnedDepartmentInbox.sender.email}}</span></p>
-                                        <p><span>{{lang.get('mobile')}}: </span><span>{{returnedDepartmentInbox.sender.mobile}}</span></p>
-                                        "></md-icon>-->
-                                        </div>
-                                    </td>
+                                    <td md-cell>{{returnedDepartmentInbox.senderInfo.getTranslatedName()}}</td>
                                     <td md-cell>
                                         {{returnedDepartmentInbox.fromOU.getTranslatedName()}}
                                         <!--<main-site-sub-site-directive item="returnedDepartmentInbox">

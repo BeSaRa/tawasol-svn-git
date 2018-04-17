@@ -93,8 +93,8 @@ module.exports = function (app) {
                   return indicator.getTagsIndicator(tagsCount);
               };*/
 
-            /*SentItemDepartmentInbox.prototype.getDocTypeIndicator = function (docType) {
-                return indicator.getDocTypeIndicator(docType);
+            /*SentItemDepartmentInbox.prototype.getDocClassIndicator = function (docType) {
+                return indicator.getDocClassIndicator(docType);
             };*/
 
             /*   SentItemDepartmentInbox.prototype.getReassignedIndicator = function (reassigned) {

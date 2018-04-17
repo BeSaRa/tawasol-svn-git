@@ -50,7 +50,6 @@ module.exports = function (app) {
             /**
              * @description Get the translated arabic or english name according to current language for reference plan number. If reverse is passed, it will return the name in language other than current language
              * @param reverse
-             * @returns {string}
              */
             ReferencePlanNumber.prototype.getTranslatedName = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
@@ -126,6 +125,29 @@ module.exports = function (app) {
                 return _.find(this.referencePlanItems, function (referencePlanItem) {
                     return Number(referencePlanItem.id) === id;
                 });
+            };
+
+            ReferencePlanNumber.prototype.getID = function () {
+                return this.id;
+            };
+            ReferencePlanNumber.prototype.getStartSerialByCriteria = function (regOUId, itemId) {
+                return _.find(this.referencePlanItemStartSerialList, function (itemStartSerial) {
+                    return itemStartSerial.regOUID === regOUId && itemId === itemStartSerial.referencePlanItemId
+                });
+            };
+            ReferencePlanNumber.prototype.findReferenceItemStartSerial = function (organizationId, itemId) {
+                var found = this.getStartSerialByCriteria(organizationId, itemId);
+                return found ? found.startSerial : 1;
+            };
+
+            ReferencePlanNumber.prototype.getStartSerialByOU = function (organizationId, itemId) {
+                return organizationId ? this.findReferenceItemStartSerial(organizationId, itemId) : 1;
+            };
+
+            ReferencePlanNumber.prototype.getStartSerialByCriteriaORNull = function (regOUId, itemId) {
+                var startSerial = this.getStartSerialByCriteria(regOUId, itemId);
+                console.log('startSerial ', startSerial);
+                return startSerial ? startSerial.id : null;
             };
 
             // don't remove CMSModelInterceptor from last line

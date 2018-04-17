@@ -29,7 +29,7 @@ General:
 28. Fix - Main site - sub site information in grids(arabic).
 29. Added - Add to favorite bulk in search screens(outgoing|incoming|internal|general)
 30. Fix - Saving OU data on update. Separated the application user popup for organization structure and application users grid.
-
+31. Fix - Sorting for all user and department grids.
 
 
 Bugs:
@@ -88,3 +88,6 @@ Bugs:
 12825: Fix - Subject field for any document should accept "."
 12822: Fix - Preferences - warning appeared when try to delegate a user for yourself and already another user is delegating you, but not all the data is displayed.
 12834: Fix - Outgoing search - filter by year documents and right click and click on broadcast throws an error
+12853: Fix - Search: outgoing search : sort result by security level didn't work
+12854: Fix - followup date - follow up date should not accept to be in the past while adding new/ editing a document or in manage destinations
+12857: Fix - user inbox : sent items : sort by security level option didn't work

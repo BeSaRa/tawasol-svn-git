@@ -46,7 +46,7 @@ module.exports = function (app) {
             model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
             model.priorityLevelIndicator = (model.priorityLevelLookup && model.priorityLevelLookup.lookupKey !== 0) ? model.getPriorityLevelIndicator(model.priorityLevelLookup) : null;
 
-            model.docTypeIndicator = model.getDocTypeIndicator();
+            model.docClassIndicator = model.getDocClassIndicator();
 
             return model;
         });

@@ -23,7 +23,8 @@ module.exports = function (app) {
                                                           ResolveDefer,
                                                           mailNotificationService,
                                                           $timeout,
-                                                          favoriteDocumentsService) {
+                                                          favoriteDocumentsService,
+                                                          generator) {
         'ngInject';
         var self = this;
 
@@ -81,6 +82,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function(property, modelType){
+            return generator.getColumnSortingKey(property, modelType);
+        };
+        /**
          * @description Replaces the record in grid after update
          * @param record
          */
@@ -115,14 +125,17 @@ module.exports = function (app) {
 
         self.selectedOrganizationForFollowUpEmployeeInbox = null;
         self.selectedUserForFollowUpEmployeeInbox = null;
+        self.availableUsers = [];
+
         self.getEmployeeForFollowupEmployeeInbox = function ($event) {
             followupEmployeeInboxService
                 .controllerMethod
-                .openOrganizationAndUserDialog(self.selectedOrganizationForFollowUpEmployeeInbox, self.selectedUserForFollowUpEmployeeInbox, $event)
+                .openOrganizationAndUserDialog(self.selectedOrganizationForFollowUpEmployeeInbox, self.selectedUserForFollowUpEmployeeInbox, self.availableUsers, $event)
                 .then(function (result) {
                     self.selectedOrganizationForFollowUpEmployeeInbox = result.organization;
                     self.selectedUserForFollowUpEmployeeInbox = result.applicationUser.domainName;
                     self.currentSelectedUser = result.applicationUser;
+                    self.availableUsers = result.availableUsers;
                     self.reloadFollowupEmployeeInboxes(self.grid.page);
                 });
         };
@@ -507,7 +520,7 @@ module.exports = function (app) {
          */
         self.transferToAnotherEmployee = function (workItem, $event, defer) {
             correspondenceService
-                .openTransferDialog(workItem, self.currentSelectedUser ,  $event)
+                .openTransferDialog(workItem, self.currentSelectedUser, self.availableUsers, $event)
                 .then(function () {
                     self.reloadFollowupEmployeeInboxes(self.grid.page)
                         .then(function () {

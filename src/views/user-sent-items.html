@@ -42,7 +42,7 @@
                                         </div>
                                     </th>
                                     <th ng-if="!ctrl.selectedUserSentItems.length" md-column
-                                        md-order-by="priorityLevelIndicator.text">
+                                        md-order-by="{{ctrl.getSortingKey('securityLevelIndicator.value', 'Lookup')}}">
                                         <!-- Indicators -->
                                     </th>
                                     <th ng-if="!ctrl.selectedUserSentItems.length" md-column
@@ -58,21 +58,19 @@
                                     <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="actionDate">
                                         <span>{{lang.sent_items_receive_date}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column
-                                        md-order-by="workflowActionId">
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="{{ctrl.getSortingKey('action', 'WorkflowAction')}}">
                                         <span>{{lang.sent_items_action}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="userFromInfo">
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="{{ctrl.getSortingKey('userFromInfo', 'Information')}}">
                                         <span>{{lang.sent_items_sender}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column
-                                        md-order-by="workflowActionInfo">
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="dueDate">
                                         <span>{{lang.sent_items_due_date}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="">
                                         <span>{{lang.sent_items_correspondence_site}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="">
+                                    <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="docClassIndicator.text">
                                         <span>{{lang.sent_items_type}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedUserSentItems.length" md-column>
@@ -93,7 +91,7 @@
                                                                   record-type="EventHistory"></grid-indicator-directive>
                                         <!-- Doc Type -->
                                         <grid-indicator-directive record="userSentItem"
-                                                                  indicator-type="docType"
+                                                                  indicator-type="docClass"
                                                                   record-type="EventHistory"></grid-indicator-directive>
                                         <!-- Linked Documents -->
                                         <!--<grid-indicator-directive record="userSentItem"
@@ -121,10 +119,10 @@
                                            ng-click="ctrl.viewDocument(userSentItem, $event)">{{userSentItem.docSubject}}</a>
                                     </td>
                                     <td md-cell>{{userSentItem.actionDate}}</td>
-                                    <td md-cell>{{userSentItem.getTranslatedAction()}}</td>
-                                    <td md-cell>{{userSentItem.getTranslatedUserFrom()}}</td>
+                                    <!--<td md-cell>{{userSentItem.getTranslatedAction()}}</td>-->
+                                    <td md-cell>{{userSentItem.action.getTranslatedName()}}</td>
+                                    <td md-cell>{{userSentItem.userFromInfo.getTranslatedName()}}</td>
                                     <td md-cell class="td-data">
-                                        <!--{{userSentItem.dueDate}}-->
                                         <grid-indicator-directive record="userSentItem"
                                                                   indicator-type="dueDate"
                                                                   record-type="EventHistory"></grid-indicator-directive>
@@ -134,7 +132,7 @@
                                                                       ng-if="userSentItem.getInfo().documentClass!=='internal'">
                                         </main-site-sub-site-directive>
                                     </td>
-                                    <td md-cell>{{lang[userSentItem.docTypeIndicator.text]}}</td>
+                                    <td md-cell>{{lang[userSentItem.docClassIndicator.text]}}</td>
                                     <td md-cell ng-if="ctrl.selectedUserSentItems.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedUserSentItems.length
                                                   || ctrl.selectedUserSentItems.length===1 && ctrl.selectedUserSentItems[0].id === userSentItem.id">

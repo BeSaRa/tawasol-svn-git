@@ -449,19 +449,19 @@
                                     <span>{{lang.subject}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
-                                    md-order-by="priorityLevel">
+                                    md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                     <span>{{lang.priority_level}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
-                                    md-order-by="securityLevel">
+                                    md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
                                     <span>{{lang.security_level}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
-                                    md-order-by="docType">
+                                    md-order-by="{{ctrl.getSortingKey('docTypeForSearchGrid', 'DocumentType')}}">
                                     <span>{{lang.label_document_type}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
-                                    md-order-by="createdBy">
+                                    md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
                                     <span>{{lang.creator}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
@@ -504,8 +504,9 @@
                                 </td>
                                 <td md-cell>{{searchedInternalDocument.priorityLevel.getTranslatedName()}}</td>
                                 <td md-cell>{{searchedInternalDocument.securityLevel.getTranslatedName()}}</td>
-                                <td md-cell>{{lang[searchedInternalDocument.getInfo().documentClass +"_document_class"]}}</td>
-                                <td md-cell>{{searchedInternalDocument.getTranslatedCreator()}}</td>
+                                <!--<td md-cell>{{lang[searchedInternalDocument.getInfo().documentClass +"_document_class"]}}</td>-->
+                                <td md-cell>{{searchedInternalDocument.docTypeForSearchGrid.getTranslatedName()}}</td>
+                                <td md-cell>{{searchedInternalDocument.creatorInfo.getTranslatedName()}}</td>
                                 <td md-cell>{{searchedInternalDocument.createdOn}}</td>
                                 <td md-cell ng-if="ctrl.selectedSearchedInternalDocuments.length < 2">
                                     <div layout-align="start center" ng-if="!ctrl.selectedSearchedInternalDocuments.length

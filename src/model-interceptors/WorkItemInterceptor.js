@@ -55,7 +55,7 @@ module.exports = function (app) {
             delete model.followUpStatusIndicator;
             delete model.dueDateStatusIndicator;
             delete model.dueDateOriginal;
-            delete model.docTypeIndicator;
+            delete model.docClassIndicator;
             delete model.isReassignedIndicator;
             delete model.isOpenedIndicator;
             delete model.isPaperIndicator;
@@ -100,7 +100,7 @@ module.exports = function (app) {
             model.dueDateStatusIndicator = model.dueDateOriginal ? model.getDueDateStatusIndicator(model.dueDateOriginal) : null;
 
             // model.tagsIndicator = model.generalStepElm.tagsNO ? model.getTagsIndicator(model.generalStepElm.tagsNO) : null;
-            model.docTypeIndicator = model.generalStepElm.workFlowName ? model.getDocTypeIndicator(model.generalStepElm.workFlowName) : null;
+            model.docClassIndicator = model.generalStepElm.workFlowName ? model.getDocClassIndicator(model.generalStepElm.workFlowName) : null;
             model.isReassignedIndicator = model.getReassignedIndicator(model.generalStepElm.isReassigned);
             model.isOpenedIndicator = model.getOpenedIndicator(model.generalStepElm.isOpen);
             model.isPaperIndicator = model.getIsPaperIndicator(model.generalStepElm.hasOwnProperty('addMethod') ? model.generalStepElm.addMethod : 1);

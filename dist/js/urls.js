@@ -10,6 +10,7 @@
                 .setBaseUrl('test', 'http://eblaepm.no-ip.org:9080/CMSServices/service')
                 .setBaseUrl('demo', 'http://eblaepm.no-ip.org:9081/CMSServices/service')
                 .setBaseUrl('training', 'http://100.100.3.142:9080/CMSServices/service')
+                .setBaseUrl('ibm', 'http://100.100.3.107:9080/CMSServices/service')
                 .setBaseUrl('manohar', 'http://100.100.12.25:9080/CMSServices/service');
 
             urlServiceProvider

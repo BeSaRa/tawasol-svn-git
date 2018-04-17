@@ -473,6 +473,22 @@ module.exports = function (app) {
             return documentClass[Number(docType)];
         };
 
+
+        /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getColumnSortingKey = function (property, modelType) {
+            modelType = modelType.toLowerCase();
+            if (modelType === 'information' || modelType === 'documenttype' || modelType === 'workflowaction' || modelType === 'senderinfo')
+                return property + '.' + (langService.current === 'ar' ? 'arName' : 'enName');
+            else if (modelType === 'lookup')
+                return property + '.' + (langService.current === 'ar' ? 'defaultArName' : 'defaultEnName');
+            return property;
+        };
+
         self.documentStatusAndGridMap = {
             UNDER_RECEIVE: 1,
             /**

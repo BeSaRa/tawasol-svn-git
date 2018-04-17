@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('General', function (CMSModelInterceptor, 
-                                     Correspondence) {
+                                     Correspondence,
+                                     Indicator) {
         'ngInject';
         return function General(model) {
             var self = this;
@@ -11,6 +12,11 @@ module.exports = function (app) {
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
+
+            var indicator = new Indicator();
+            General.prototype.getDocClassIndicator = function (docClass) {
+                return indicator.getDocClassIndicator(docClass);
+            };
 
             if (model)
                 angular.extend(this, model);

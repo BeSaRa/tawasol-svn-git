@@ -40,50 +40,39 @@
                                             </md-button>-->
                                         </div>
                                     </th>
-                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="{{ctrl.getSortingKey('securityLevelLookup', 'Lookup')}}">
+                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column md-order-by="{{ctrl.getSortingKey('securityLevelLookup', 'Lookup')}}">
                                         <!-- Security Level, Document type, Re-assigned Indicators -->
                                     </th>
-                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="docSerial">
+                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column md-order-by="docFullSerial">
                                         <span>{{lang.department_sent_items_serial}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column>
                                         <!-- Priority Level, Has Attachment Indicators -->
                                     </th>
-                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="docSubject">
+                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column md-order-by="docSubject">
                                         <span>{{lang.subject}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="type">
+                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column md-order-by="typeOriginalCopy">
                                         <span>{{lang.type}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'Information')}}">
+                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'Information')}}">
                                         <span>{{lang.sender}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'Information')}}">
+                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column md-order-by="{{ctrl.getSortingKey('mainSiteFromIdInfo', 'Information')}}">
                                         <span>{{lang.main_site_from}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'Information')}}">
+                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column md-order-by="{{ctrl.getSortingKey('mainSiteToIdInfo', 'Information')}}">
                                         <span>{{lang.main_site_to}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'Information')}}">
+                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column md-order-by="{{ctrl.getSortingKey('subSiteFromIdInfo', 'Information')}}">
                                         <span>{{lang.sub_site_from}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'Information')}}">
+                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column md-order-by="{{ctrl.getSortingKey('subSiteToIdInfo', 'Information')}}">
                                         <span>{{lang.sub_site_to}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
-                                        md-order-by="receivedDate">
+                                    <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column md-order-by="deliveryDate">
                                         <span>{{lang.received_date}}</span>
                                     </th>
-
                                     <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column>
                                         <!-- Grid Actions -->
                                     </th>
@@ -134,7 +123,7 @@
                                             {{sentItemDepartmentInbox.docSubject}}
                                         </a>
                                     </td>
-                                    <td md-cell>{{sentItemDepartmentInbox.getTranslatedType()}}</td>
+                                    <td md-cell>{{sentItemDepartmentInbox.typeOriginalCopy}}</td>
                                     <td md-cell class="td-data">
                                         <div layout="row">
                                             <span flex>{{sentItemDepartmentInbox.sentByIdInfo.getTranslatedName()}}</span>

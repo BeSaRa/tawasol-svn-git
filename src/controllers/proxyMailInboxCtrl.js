@@ -21,6 +21,7 @@ module.exports = function (app) {
                                                    downloadService,
                                                    employeeService,
                                                    ResolveDefer,
+                                                   generator,
                                                    correspondenceService) {
         'ngInject';
         var self = this;
@@ -75,6 +76,16 @@ module.exports = function (app) {
                     }
                 }
             ]
+        };
+
+        /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function(property, modelType){
+            return generator.getColumnSortingKey(property, modelType);
         };
 
         /**

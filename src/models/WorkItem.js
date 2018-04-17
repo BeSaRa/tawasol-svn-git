@@ -169,8 +169,8 @@ module.exports = function (app) {
                 return indicator.getTagsIndicator(tagsCount);
             };
 
-            WorkItem.prototype.getDocTypeIndicator = function (docType) {
-                return indicator.getDocTypeIndicator(docType);
+            WorkItem.prototype.getDocClassIndicator = function (docType) {
+                return indicator.getDocClassIndicator(docType);
             };
 
             WorkItem.prototype.getReassignedIndicator = function (reassigned) {

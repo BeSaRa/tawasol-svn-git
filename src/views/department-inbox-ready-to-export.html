@@ -58,28 +58,24 @@
                                         md-order-by="docSerial">
                                         <span>{{lang.label_serial}}</span>
                                     </th>-->
-                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column
-                                        md-order-by="docSubject">
+                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column md-order-by="generalStepElm.docSubject">
                                         <span>{{lang.subject}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column
-                                        md-order-by="receivedDate">
+                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column md-order-by="generalStepElm.receivedDate">
                                         <span>{{lang.received_date}}</span>
                                     </th>
                                     <!--<th ng-if="!ctrl.selectedReadyToExports.length" md-column-->
                                     <!--md-order-by="action">-->
                                     <!--<span>{{lang.action}}</span>-->
                                     <!--</th>-->
-                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column
-                                        md-order-by="sender">
+                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column md-order-by="{{ctrl.getSortingKey('senderInfo', 'SenderInfo')}}">
                                         <span>{{lang.sender}}</span>
                                     </th>
                                     <!--<th ng-if="!ctrl.selectedReadyToExports.length" md-column
                                         md-order-by="dueDate">
                                         <span>{{lang.due_date}}</span>
                                     </th>-->
-                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column
-                                        md-order-by="">
+                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column md-order-by="">
                                         <span>{{lang.correspondence_sites}}</span>
                                     </th>
                                     <!--<th ng-if="!ctrl.selectedReadyToExports.length" md-column
@@ -90,8 +86,7 @@
                                         md-order-by="docType">
                                         <span>{{lang.type}}</span>
                                     </th>-->
-                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column
-                                        md-order-by="numberOfDays">
+                                    <th ng-if="!ctrl.selectedReadyToExports.length" md-column md-order-by="generalStepElm.numberOfDays">
                                         <span>{{lang.number_of_days}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReadyToExports.length" md-column>

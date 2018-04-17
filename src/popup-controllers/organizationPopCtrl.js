@@ -1062,7 +1062,7 @@ module.exports = function (app) {
                 .controllerMethod
                 .propertyConfigurationAdd(self.organization.id, self.selectedDocumentClass.lookupKey, $event)
                 .then(function (result) {
-                    if(result) {
+                    if (result) {
                         self.reloadPropertyConfigurations(self.propertyConfigurationGrid.page)
                             .then(function () {
                                 self.filterPropertyConfigurationsForOUByDocumentClass();
@@ -1077,7 +1077,7 @@ module.exports = function (app) {
                 .controllerMethod
                 .propertyConfigurationEdit(propertyConfiguration, $event)
                 .then(function (result) {
-                    if(result) {
+                    if (result) {
                         self.reloadPropertyConfigurations(self.propertyConfigurationGrid.page)
                             .then(function () {
                                 self.filterPropertyConfigurationsForOUByDocumentClass();
@@ -1256,19 +1256,22 @@ module.exports = function (app) {
          * @description to catch reference plan changes.
          */
         self.referencePlanChanged = function (firstTime) {
-            if (!self.organization.referenceNumberPlanId)
+            if (!self.organization.referenceNumberPlanId && !self.organization.hasRegistry)
                 return;
 
-            var referenceId = self.organization.referenceNumberPlanId.id;
+
+            var referencePlan = self.organization.referenceNumberPlanId;
+
 
             self.organization.referencePlanItemStartSerialList = _.map(self.organization.referenceNumberPlanId.referencePlanItems, function (item) {
                 return item.perOu ? new ReferencePlanItemStartSerial({
-                    referencePlanId: referenceId,
+                    id: self.organization.id ? referencePlan.getStartSerialByCriteriaORNull(self.organization.id, item.id) : null,
+                    referencePlanId: referencePlan.getID(),
                     regOUID: self.organization.id,
-                    startSerial: 1,
+                    startSerial: referencePlan.getStartSerialByOU(self.organization.id, item.id),
                     referencePlanItemId: item
                 }) : self.organization.referenceNumberPlanId.getItemSerial(item) ? self.organization.referenceNumberPlanId.getItemSerial(item) : new ReferencePlanItemStartSerial({
-                    referencePlanId: referenceId,
+                    referencePlanId: referencePlan.getID(),
                     regOUID: -1,
                     startSerial: 1,
                     referencePlanItemId: item

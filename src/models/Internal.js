@@ -29,8 +29,8 @@ module.exports = function (app) {
                     return indicator.getSecurityLevelIndicator(securityLevel);
                 };
 
-                Internal.prototype.getDocTypeIndicator = function () {
-                    return indicator.getDocTypeIndicator('internal');
+                Internal.prototype.getDocClassIndicator = function () {
+                    return indicator.getDocClassIndicator('internal');
                 };
 
                 Internal.prototype.getPriorityLevelIndicator = function (priorityLevel) {

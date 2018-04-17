@@ -41,6 +41,8 @@ module.exports = function (app) {
             model.securitySchema = model.securitySchema && model.securitySchema.hasOwnProperty('id') ? model.securitySchema.lookupKey : model.securitySchema;
             model.wfsecurity = model.wfsecurity && model.wfsecurity.hasOwnProperty('id') ? model.wfsecurity.lookupKey : model.wfsecurity;
             model.escalationProcess = model.escalationProcess && model.escalationProcess.hasOwnProperty('id') ? model.escalationProcess.lookupKey : model.escalationProcess;
+            // to send just in case of the current organization is registry ou.
+            model.referencePlanItemStartSerialList = model.hasRegistry ? model.referencePlanItemStartSerialList : [];
 
             if (model.referencePlanItemStartSerialList && angular.isArray(model.referencePlanItemStartSerialList)) {
                 model.referencePlanItemStartSerialList = _.map(model.referencePlanItemStartSerialList, function (item) {
@@ -73,7 +75,7 @@ module.exports = function (app) {
             model.registryParentId = organizationService.getOrganizationById(model.registryParentId) || model.registryParentId;
             model.centralArchiveUnitId = organizationService.getOrganizationById(model.centralArchiveUnitId) || model.centralArchiveUnitId;
             // to check if the organization has reference plan Items.
-            if (model.hasOwnProperty('referencePlanItemStartSerialList')) {
+            if (model.hasOwnProperty('referencePlanItemStartSerialList') && angular.isArray(model.referencePlanItemStartSerialList)) {
                 model.referencePlanItemStartSerialList = _.map(model.referencePlanItemStartSerialList, function (item) {
                     return generator.interceptReceivedInstance('ReferencePlanItemStartSerial', (new ReferencePlanItemStartSerial(item)).getReferencePlanItem());
                 });

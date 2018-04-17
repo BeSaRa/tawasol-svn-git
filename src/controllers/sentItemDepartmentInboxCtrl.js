@@ -19,8 +19,7 @@ module.exports = function (app) {
                                                             correspondenceService,
                                                             ResolveDefer,
                                                             favoriteDocumentsService,
-                                                            Information,
-                                                            Lookup) {
+                                                            generator) {
         'ngInject';
         var self = this;
 
@@ -77,16 +76,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.getSortingKey = function (property, modelType) {
-            /*if (modelType instanceof Information)
-                return property + '.' + (langService.current === 'ar' ? 'arName' : 'enName');
-            else if (modelType instanceof Lookup)
-                return property + '.' + (langService.current === 'ar' ? 'defaultArName' : 'defaultEnName');
-            return property;*/
-            if (modelType.toLowerCase() === 'information')
-                return property + '.' + (langService.current === 'ar' ? 'arName' : 'enName');
-            else if (modelType.toLowerCase() === 'lookup')
-                return property + '.' + (langService.current === 'ar' ? 'defaultArName' : 'defaultEnName');
-            return property;
+            return generator.getColumnSortingKey(property, modelType);
         };
 
         /**
