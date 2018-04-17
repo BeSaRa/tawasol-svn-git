@@ -11,8 +11,8 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
-            <md-button ng-click="ctrl.createUserFilter($event)" class="md-icon-button" tooltip="{{lang.reload}}">
-                <md-icon md-svg-icon="filter-variant"></md-icon>
+            <md-button ng-click="ctrl.createUserFilter($event)" class="md-icon-button" tooltip="{{lang.create_filter}}">
+                <md-icon md-svg-icon="eye-plus"></md-icon>
             </md-button>
             <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
         </div>
@@ -25,9 +25,9 @@
                     <div class="p20 first-folder-list" layout="column">
                         <p>{{lang.user_filters}}</p>
                         <folders-tree-structure-directive icon="filter-variant" disable-selected="0"
-                                                          highlight-selected="ctrl.selectedFolder"
+                                                          highlight-selected="ctrl.selectedFilter"
                                                           click-callback="ctrl.getFolderContent"
-                                                          folders="ctrl.inboxFolders"></folders-tree-structure-directive>
+                                                          folders="ctrl.userFilters"></folders-tree-structure-directive>
                     </div>
                 </md-sidenav>
             </div>

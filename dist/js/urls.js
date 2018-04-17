@@ -4,7 +4,7 @@
         .config(function (urlServiceProvider, rootEntityProvider, cmsTemplateProvider) {
             'ngInject';
             urlServiceProvider
-                .setEnvironment('demo')
+                .setEnvironment('stage')
                 .setBaseUrl('dev', 'http://localhost:9080/CMSServices/service')
                 .setBaseUrl('stage', 'http://100.100.3.220:9080/CMSServices/service')
                 .setBaseUrl('test', 'http://eblaepm.no-ip.org:9080/CMSServices/service')

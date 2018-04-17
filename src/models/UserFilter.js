@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('UserFilter', function (CMSModelInterceptor, _) {
+    app.factory('UserFilter', function (CMSModelInterceptor, langService, _) {
         'ngInject';
         return function UserFilter(model) {
             var self = this, userFilterService;
@@ -97,8 +97,13 @@ module.exports = function (app) {
                 return this;
 
             };
+
             UserFilter.prototype.prepareReceivedUserFilter = function () {
 
+            };
+
+            UserFilter.prototype.getTranslatedName = function () {
+                return langService.current === 'ar' ? this.arName : this.enName;
             };
 
             // don't remove CMSModelInterceptor from last line

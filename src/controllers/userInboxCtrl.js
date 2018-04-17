@@ -8,6 +8,7 @@ module.exports = function (app) {
                                               generator,
                                               userFilterService,
                                               correspondenceService,
+                                              userFilters,
                                               $state,
                                               counterService,
                                               $q,
@@ -112,6 +113,8 @@ module.exports = function (app) {
         };
 
         self.filterGrid = {};
+
+        self.userFilters = userFilters;
 
         self.createUserFilter = function ($event) {
             return userFilterService.createUserFilterDialog($event);
@@ -813,7 +816,8 @@ module.exports = function (app) {
                 callback: self.forward,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) /*&& !model.isBroadcasted()*/ // remove the this cond. after talk  with ;
+                    return self.checkToShowAction(action, model)
+                    /*&& !model.isBroadcasted()*/ // remove the this cond. after talk  with ;
                 }
             },
             // Broadcast
