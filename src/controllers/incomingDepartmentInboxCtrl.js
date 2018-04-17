@@ -15,7 +15,8 @@ module.exports = function (app) {
                                                             employeeService,
                                                             ResolveDefer,
                                                             generator,
-                                                            Information) {
+                                                            listGeneratorService,
+                                                            Incoming) {
         'ngInject';
         var self = this;
 
@@ -176,13 +177,38 @@ module.exports = function (app) {
          * @param defer
          */
         self.quickReceiveWorkItem = function (incomingDepartmentInbox, $event, defer) {
+            var documentName = angular.copy(incomingDepartmentInbox.generalStepElm.docSubject);
             incomingDepartmentInboxService.controllerMethod
                 .incomingDepartmentInboxQuickReceive(incomingDepartmentInbox, $event)
-                .then(function () {
-                    self.reloadIncomingDepartmentInboxes(self.grid.page)
+                .then(function (result) {
+                    var list = listGeneratorService.createUnOrderList(),
+                        langKeys = ['quick_received_success', 'not_launched_book_will_go_to_review', 'confirm_launch_distribution_workflow'];
+                    _.map(langKeys, function (item) {
+                        list.addItemToList(langService.get(item));
+                    });
+
+                    dialog.confirmMessage(list.getList(), null, null, $event)
                         .then(function () {
-                            new ResolveDefer(defer);
+                            var correspondence = new Incoming({
+                                vsId: result,
+                                docSubject: documentName
+                            });
+                            /* isDeptIncoming is sent true to avoid alert message */
+                            correspondence.launchWorkFlow($event, 'forward', 'favorites', true)
+                                .then(function () {
+                                    self.reloadIncomingDepartmentInboxes(self.grid.page)
+                                        .then(function () {
+                                            new ResolveDefer(defer);
+                                        });
+                                });
+                        })
+                        .catch(function(){
+                            self.reloadIncomingDepartmentInboxes(self.grid.page)
+                                .then(function () {
+                                    new ResolveDefer(defer);
+                                });
                         });
+
                 });
         };
 

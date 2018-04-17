@@ -81,7 +81,7 @@ module.exports = function (app) {
                 return self.quickReceiveIncomingDepartmentInbox(incomingDepartmentInbox)
                     .then(function(result){
                         toast.success(langService.get("quick_receive_specific_success").change({name: incomingDepartmentInbox.getNames()}));
-                        return true;
+                        return result.data.rs;
                     });
             }
         };
