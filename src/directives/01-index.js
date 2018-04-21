@@ -71,4 +71,5 @@ module.exports = function (app) {
     require('./grid-indicator-directive/01-index')(app);
     require('./wrapper-directive/wrapper-directive')(app);
     require('./workitem-inbox-directive/01-index')(app);
+    require('./filter-button/filter-button')(app);
 };

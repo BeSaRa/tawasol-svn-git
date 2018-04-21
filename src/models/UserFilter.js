@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('UserFilter', function (CMSModelInterceptor, langService, _) {
+    app.factory('UserFilter', function (CMSModelInterceptor, toast, dialog, langService, _) {
         'ngInject';
         return function UserFilter(model) {
             var self = this, userFilterService;
@@ -9,9 +9,9 @@ module.exports = function (app) {
             self.ouId = null;
             self.expression = null;
             self.parsedExpression = null;
-            self.arName = 'Ahmed Filter';
-            self.enName = 'أحمد فلتر';
-            self.sortOptionId = 1;
+            self.arName = null;
+            self.enName = null;
+            self.sortOptionId = null;
             self.status = true;
             self.filterCriteria = {};
             // not related to the model.
@@ -62,6 +62,21 @@ module.exports = function (app) {
             if (model)
                 angular.extend(this, model);
 
+
+            /**
+             * @description function to get the correct type for the given value.
+             * @param value
+             * @returns {Number|String}
+             * @private
+             */
+            function _getCorrectValue(value) {
+                return !value.length || isNaN(Number(value)) ? value : Number(value);
+            }
+
+            UserFilter.prototype.getTranslatedStatus = function () {
+                return this.status ? langService.get('active') : langService.get('inactive');
+            };
+
             /**
              * get all required fields
              * @return {Array|requiredFields}
@@ -73,14 +88,14 @@ module.exports = function (app) {
                 userFilterService = service;
                 return this;
             };
-            UserFilter.prototype.saveUserFilter = function () {
-                return this.id ? this.modelUpdateUserFilter() : this.modelCreateUserFilter();
+            UserFilter.prototype.saveUserFilter = function (ignoreMessage) {
+                return this.id ? this.modelUpdateUserFilter(ignoreMessage) : this.modelCreateUserFilter(ignoreMessage);
             };
-            UserFilter.prototype.modelUpdateUserFilter = function () {
-                return userFilterService.updateUserFilter(this);
+            UserFilter.prototype.modelUpdateUserFilter = function (ignoreMessage) {
+                return userFilterService.updateUserFilter(this, ignoreMessage);
             };
-            UserFilter.prototype.modelCreateUserFilter = function () {
-                return userFilterService.addUserFilter(this);
+            UserFilter.prototype.modelCreateUserFilter = function (ignoreMessage) {
+                return userFilterService.addUserFilter(this, ignoreMessage);
             };
             UserFilter.prototype.prepareSendUserFilter = function () {
                 var self = this;
@@ -98,12 +113,29 @@ module.exports = function (app) {
 
             };
 
-            UserFilter.prototype.prepareReceivedUserFilter = function () {
 
+            UserFilter.prototype.prepareReceivedUserFilter = function () {
+                var criteria = angular.fromJson(this.parsedExpression), self = this;
+                _.map(criteria, function (value, key) {
+                    var count = Object.keys(self.ui['key_' + key]); // to get field count
+                    if (count > 1) {
+                        self.ui['key_' + key].value1 = _getCorrectValue(value.split(',').shift());
+                        self.ui['key_' + key].value2 = _getCorrectValue(value.split(',').pop());
+                    } else {
+                        self.ui['key_' + key].value = _getCorrectValue(value);
+                    }
+                });
             };
 
             UserFilter.prototype.getTranslatedName = function () {
                 return langService.current === 'ar' ? this.arName : this.enName;
+            };
+
+            UserFilter.prototype.deleteFilter = function ($event, ignoreMessage) {
+                var self = this;
+                return dialog.confirmMessage(langService.get('confirm_remove').change({name: this.getTranslatedName()}), null, null, $event).then(function () {
+                    return userFilterService.deleteUserFilter(self, ignoreMessage);
+                });
             };
 
             // don't remove CMSModelInterceptor from last line

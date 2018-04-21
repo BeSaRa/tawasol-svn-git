@@ -6,7 +6,6 @@ module.exports = function (app) {
             controller: 'workItemInboxDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,
-            replace: true,
             template: require('./work-item-inbox-template.html'),
             scope: {
                 selectedWorkItems: '=',

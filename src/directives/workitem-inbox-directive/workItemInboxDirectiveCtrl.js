@@ -5,5 +5,6 @@ module.exports = function (app) {
         self.controllerName = 'workItemInboxDirectiveCtrl';
         LangWatcher($scope);
 
+        // console.log("HELLO");
     });
 };

@@ -394,7 +394,7 @@ module.exports = function (app) {
             return newer;
         };
         /**
-         * to reset the model after making any changes
+         * @description Reset the model after making any changes
          * @param model
          * @param defaultModel
          */
@@ -402,7 +402,7 @@ module.exports = function (app) {
             _.map(model, function (value, key) {
                 model[key] = defaultModel[key];
             });
-            console.log("RESET MODEL");
+            //console.log("RESET MODEL");
         };
         /**
          * @description upper case first letter.

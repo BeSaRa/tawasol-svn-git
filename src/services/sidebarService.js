@@ -1,12 +1,12 @@
 module.exports = function (app) {
-    app.service('sidebarService', function (_, 
-                                            $rootScope, 
-                                            Sidebar, 
-                                            generator, 
-                                            urlService, 
-                                            employeeService, 
-                                            MenuItem, 
-                                            $q, 
+    app.service('sidebarService', function (_,
+                                            $rootScope,
+                                            Sidebar,
+                                            generator,
+                                            urlService,
+                                            employeeService,
+                                            MenuItem,
+                                            $q,
                                             $http) {
         'ngInject';
         var self = this;
@@ -15,7 +15,7 @@ module.exports = function (app) {
             new Sidebar({
                 id: 1,
                 code: 'main-sidebar',
-                isLockedOpen: true,
+                isLockedOpen: false,
                 isOpen: true
             })
         ];

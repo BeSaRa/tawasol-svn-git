@@ -69,7 +69,7 @@ module.exports = function (app) {
                     //ANS: /^[0-9ء-يA-Za-z]?([ \/-]?[0-9ء-يA-Za-z]+)+$/, //(Arabic fields accepting arabic, english, number always)
 
                     /**
-                     * @description Allows at least 1 english character and can contain digits, space(not in end of string and no 2 consecutive spaces)
+                     * @description Allows at least 1 arabic character and can contain digits, space(not in end of string and no 2 consecutive spaces)
                      */
                     A1NS: /^(?=.*[ء-ي])[0-9ء-ي]?( ?[0-9ء-ي]+)+$/,
 

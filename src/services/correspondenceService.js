@@ -2285,6 +2285,18 @@ module.exports = function (app) {
             return $http.get(_createUrlSchema(null, null, ['common/check-active-tasks/vsid', vsId].join('/'))).then(function (result) {
                 return result.data.rs;
             });
+        };
+        /**
+         * @description load workItems By filter Id.
+         * @param filter
+         */
+        self.loadWorkItemsByFilterID = function (filter) {
+            var id = filter.hasOwnProperty('id') ? filter.id : filter;
+            return $http
+                .get([urlService.inboxWF, 'filtered-mails', id].join('/'))
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
+                });
         }
 
     });

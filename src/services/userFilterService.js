@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.service('userFilterService', function (urlService, employeeService, $http, $q, dialog, cmsTemplate, generator, UserFilter, _) {
+    app.service('userFilterService', function (urlService, langService, toast, employeeService, $http, $q, dialog, cmsTemplate, generator, UserFilter, _) {
         'ngInject';
         var self = this;
         self.serviceName = 'userFilterService';
@@ -12,7 +12,7 @@ module.exports = function (app) {
          */
         self.loadUserFilters = function () {
             return $http.get(urlService.userFilters + '/user-filters').then(function (result) {
-                self.userFilters = generator.generateCollection(result.data.rs, UserFilter, self._sharedMethods);
+                self.userFilters = generator.generateCollection(result.data.rs, UserFilter);
                 self.userFilters = generator.interceptReceivedCollection('UserFilter', self.userFilters);
                 return self.userFilters;
             });
@@ -27,45 +27,60 @@ module.exports = function (app) {
         /**
          * @description add new userFilter to service
          * @param userFilter
+         * @param ignoreMessage
          * @return {Promise|UserFilter}
          */
-        self.addUserFilter = function (userFilter) {
+        self.addUserFilter = function (userFilter, ignoreMessage) {
             return $http
                 .post(urlService.userFilters,
                     generator.interceptSendInstance('UserFilter', userFilter))
-                .then(function () {
+                .then(function (result) {
+                    var method = result.data.rs ? 'success' : 'error',
+                        message = result.data.rs ? langService.get('add_success').change({name: userFilter.getTranslatedName()}) : langService.get('error_messages');
+                    ignoreMessage ? null : toast[method](message);
+                    return userFilter;
+                }).catch(function () {
+                    toast.error(langService.get('error_messages'));
                     return userFilter;
                 });
         };
         /**
          * @description make an update for given userFilter.
          * @param userFilter
+         * @param ignoreMessage
          * @return {Promise|UserFilter}
          */
-        self.updateUserFilter = function (userFilter) {
+        self.updateUserFilter = function (userFilter, ignoreMessage) {
             return $http
                 .put(urlService.userFilters,
                     generator.interceptSendInstance('UserFilter', userFilter))
-                .then(function () {
+                .then(function (result) {
+                    var method = result.data.rs ? 'success' : 'error',
+                        message = result.data.rs ? langService.get('update_success').change({name: userFilter.getTranslatedName()}) : langService.get('error_messages');
+                    ignoreMessage ? null : toast[method];
+                    return userFilter;
+                }).catch(function () {
+                    toast.error(langService.get('error_messages'));
                     return userFilter;
                 });
         };
         /**
          * @description delete given classification.
          * @param userFilter
+         * @param ignoreMessage
          * @return {Promise}
          */
-        self.deleteUserFilter = function (userFilter) {
+        self.deleteUserFilter = function (userFilter, ignoreMessage) {
             var id = userFilter.hasOwnProperty('id') ? userFilter.id : userFilter;
             return $http
-                .delete((urlService.userFilters + '/' + id));
+                .delete((urlService.userFilters + '/' + id))
+                .then(function (result) {
+                    if (!ignoreMessage) {
+                        result.data.rs ? toast.success(langService.get('delete_specific_success').change({name: userFilter.getTranslatedName()})) : toast.error(langService.get('error_messages'));
+                    }
+                    return userFilter;
+                });
         };
-        /**
-         * @description create the shred method to the model.
-         * @type {{delete: generator.delete, update: generator.update}}
-         * @private
-         */
-        self._sharedMethods = generator.generateSharedMethods(self.deleteUserFilter, self.updateUserFilter);
 
         /**
          * @description get userFilter by userFilterId
@@ -86,7 +101,7 @@ module.exports = function (app) {
         self.createUserFilterDialog = function ($event) {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('filters'),
+                    template: cmsTemplate.getPopup('user-filters'),
                     controller: 'filterPopCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event,
@@ -114,20 +129,30 @@ module.exports = function (app) {
                 });
         };
 
-        self.editUserFilterDialog = function ($event, filter) {
+        self.editUserFilterDialog = function (filter, $event) {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('filters'),
+                    template: cmsTemplate.getPopup('user-filters'),
                     controller: 'filterPopCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event,
-                    resolve: {},
+                    resolve: {
+                        senders: function (ouApplicationUserService, employeeService) {
+                            'ngInject';
+                            return ouApplicationUserService
+                                .searchByCriteria({regOu: employeeService.getEmployee().getRegistryOUID()})
+                                .then(function (result) {
+                                    return _.map(result, 'applicationUser');
+                                });
+                        },
+                        actions: function (workflowActionService) {
+                            'ngInject';
+                            return workflowActionService.loadCurrentUserWorkflowActions();
+                        }
+                    },
                     locals: {
-                        filter: new UserFilter({
-                            userId: employeeService.getEmployee().id,
-                            ouId: employeeService.getEmployee().getOUID()
-                        }),
-                        editMode: false
+                        filter: filter,
+                        editMode: true
                     }
                 });
         }

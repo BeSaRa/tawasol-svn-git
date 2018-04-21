@@ -92,7 +92,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -126,12 +126,62 @@ module.exports = function (app) {
 
         self.userFilters = userFilters;
 
-        self.createUserFilter = function ($event) {
-            return userFilterService.createUserFilterDialog($event);
-        };
+        self.workItemsFilters = [];
 
-        self.selectFilter = function (selected) {
-            console.log(selected);
+        self.selectedFilter = null;
+
+        // just for start
+        function _prepareFilters() {
+            self.workItemsFilters = new Array(userFilters.length);
+        }
+
+        /**
+         * @description create filter
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.userFilterCreate = function ($event) {
+            return userFilterService
+                .createUserFilterDialog($event)
+                .then(function () {
+                    userFilterService.loadUserFilters().then(function (result) {
+                        self.userFilters = result;
+                    })
+                });
+        };
+        /**
+         * @description edit filter.
+         * @param filter
+         * @param $event
+         * @returns {*}
+         */
+        self.userFilterEdit = function (filter, $event) {
+            return userFilterService.editUserFilterDialog(filter, $event)
+        };
+        /**
+         * @description delete filter
+         * @param filter
+         * @param $index
+         * @param $event
+         */
+        self.userFilterDelete = function (filter, $index, $event) {
+            return filter.deleteFilter($event).then(function () {
+                self.userFilters.splice($index, 1)
+            });
+        };
+        /**
+         * @description load filter content
+         * @param filter
+         * @param $index
+         */
+        self.selectFilter = function (filter, $index) {
+            self.selectedFilter = {
+                index: $index,
+                filter: angular.copy(filter)
+            };
+            correspondenceService.loadWorkItemsByFilterID(filter).then(function (workItems) {
+                self.workItemsFilters[$index] = workItems;
+            });
         };
         /**
          * @description Replaces the record in grid after update
@@ -154,6 +204,10 @@ module.exports = function (app) {
         self.reloadUserInboxes = function (pageNumber) {
             var defer = $q.defer();
             self.progress = defer.promise;
+            if (self.selectedFilter) {
+                self.selectFilter(self.selectedFilter.filter, self.selectedFilter.index);
+            }
+
             return userInboxService
                 .loadUserInboxes()
                 .then(function (result) {

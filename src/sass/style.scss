@@ -1786,3 +1786,21 @@ table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child
 .max-width-200 {
   max-width: 200px !important;
 }
+
+.filter-tabs > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not(:first-child) {
+  padding: 12px 20px 12px 30px;
+}
+
+.filter-absolute {
+  position: absolute;
+  left: 0;
+  top: 3px;
+  right: auto;
+  md-menu-bar {
+    padding: 0;
+    & > md-menu > button {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+  }
+}
