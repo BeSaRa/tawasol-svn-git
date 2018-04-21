@@ -324,7 +324,7 @@
                                             <md-input-container flex>
                                                 <label for="securitySchema">{{lang.security_schema}}</label>
                                                 <md-select ng-model-options="{trackBy: '$value.lookupKey'}" required
-                                                           id="securitySchema"
+                                                           id="securitySchema" ng-change="ctrl.confirmChangeSecuritySchema($event)"
                                                            ng-model="ctrl.organization.securitySchema">
                                                     <md-option tooltip="{{schema.getTranslatedName(true)}}"
                                                                ng-value="schema"

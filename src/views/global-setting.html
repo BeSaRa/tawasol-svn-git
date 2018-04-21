@@ -388,7 +388,7 @@
                                             {{securitySchema.getTranslatedName()}}
                                         </md-option>
                                     </md-select>-->
-                                    <md-select required name="securitySchema"
+                                    <md-select required name="securitySchema" ng-change="ctrl.confirmChangeSecuritySchema($event)"
                                                ng-model="ctrl.globalSetting.securitySchema">
                                         <md-option
                                                 ng-repeat="securitySchema in ctrl.documentSecuritySchemas track by $index"

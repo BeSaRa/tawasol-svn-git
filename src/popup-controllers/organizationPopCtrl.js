@@ -410,13 +410,13 @@ module.exports = function (app) {
 
                     var isValidWFSecurityLevel = true;
 
-                    if(selectedWFSecurityKey > initialWFSecurityKey){
+                    if (selectedWFSecurityKey > initialWFSecurityKey) {
                         isValidWFSecurityLevel = false;
                         dialog.errorMessage(langService.get('error_setting_workflow_security_to_lower_level'));
                     }
 
                     //////////////////////// if workflow security level is valid , then update /////////////////////////
-                    if(isValidWFSecurityLevel){
+                    if (isValidWFSecurityLevel) {
                         organizationService
                             .updateOrganization(self.organization)
                             .then(function () {
@@ -479,6 +479,28 @@ module.exports = function (app) {
         self.createDefaultOURelations = function () {
             self.selectedOUClassification = new OUClassification({ouid: self.organization.id});
             self.selectedOUCorrespondenceSite = new OUCorrespondenceSite({ouid: self.organization.id});
+        };
+
+
+        self.confirmChangeSecuritySchema = function ($event) {
+            var defer = $q.defer();
+            if (self.organization.securitySchema.lookupKey === 1) {
+                dialog.confirmMessage(langService.get('confirm_document_security_schema_change'))
+                    .then(function (result) {
+                        defer.resolve(true);
+                    }).catch(function (result) {
+                    defer.reject(false);
+                })
+            }
+            else {
+                defer.resolve(true);
+            }
+            defer.promise.then(function (response) {
+
+            })
+                .catch(function (error) {
+                    self.organization.securitySchema =  lookupService.getLookupByLookupKey(lookupService.securitySchema, 0);
+                })
         };
 
         self.classificationExists = function (classification) {

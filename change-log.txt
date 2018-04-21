@@ -3,7 +3,8 @@ features :
 02- added counter for Folders.
 03- added counter for Central Archive.
 04 - change attachment global lookup to tawasol attachment.
-05- Added - Quick Receive With Launch WF
+05 - Added - Quick Receive With Launch WF
+06 - Added - Confirm the change of document security schema if changed to limited scope.
 
 
 Fixed issues :

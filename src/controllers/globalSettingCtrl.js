@@ -14,7 +14,8 @@ module.exports = function (app) {
                                                   validationService,
                                                   generator,
                                                   contextHelpService,
-                                                  rootEntity) {
+                                                  rootEntity,
+                                                  dialog) {
         'ngInject';
         var self = this;
 
@@ -139,6 +140,27 @@ module.exports = function (app) {
 
         self.checkMinimumSecurityLevel = function (globalSetting) {
             return generator.getResultFromSelectedCollection(globalSetting.securityLevels, 'lookupKey') >= generator.getResultFromSelectedCollection(self.globalSettingCopy.securityLevels, 'lookupKey');
+        };
+
+        self.confirmChangeSecuritySchema = function($event){
+            var defer = $q.defer();
+            if(self.globalSetting.securitySchema === 1){
+                dialog.confirmMessage(langService.get('confirm_document_security_schema_change'))
+                    .then(function(result){
+                        defer.resolve(true);
+                    }).catch(function(result){
+                        defer.reject(false);
+                })
+            }
+            else{
+                defer.resolve(true);
+            }
+            defer.promise.then(function(response){
+
+            })
+                .catch(function (error) {
+                    self.globalSetting.securitySchema = 0;
+                })
         };
 
         /**
