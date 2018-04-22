@@ -151,68 +151,31 @@
                                                         selected-length="{{ctrl.selectedUserInboxes.length ? ctrl.selectedUserInboxes.length : 0}}"
                                                         ng-repeat="userInbox in ctrl.userInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                                                         <td md-cell class="indicator-td">
+                                                            <!-- Doc class -->
+                                                            <grid-indicator-directive record-type="WorkItem"
+                                                                                      record="userInbox"
+                                                                                      indicator-type="docClass">
+                                                            </grid-indicator-directive>
                                                             <!-- Security Level -->
-                                                            <span flex
-                                                                  ng-class="{'indicator-content': userInbox.securityLevelIndicator}">
-                                            <md-icon ng-if="userInbox.securityLevelIndicator"
-                                                     class="{{userInbox.securityLevelIndicator.class}}"
-                                                     md-svg-icon="{{userInbox.securityLevelIndicator.icon}}"
-                                                     tooltip="{{lang[userInbox.securityLevelIndicator.tooltip].change({name: userInbox.securityLevelLookup.getTranslatedName()})}}"
-                                            ></md-icon>
-                                        </span>
-                                                            <!-- Doc Type -->
-                                                            <span flex
-                                                                  ng-class="{'indicator-content': userInbox.docTypeIndicator}">
-                                                    <md-icon ng-if="userInbox.docTypeIndicator"
-                                                             class="{{userInbox.docTypeIndicator.class}}"
-                                                             md-svg-icon="{{userInbox.docTypeIndicator.icon}}"
-                                                             tooltip="{{lang[userInbox.docTypeIndicator.tooltip]}}"
-                                                    ></md-icon>
-                                                </span>
+                                                            <grid-indicator-directive record="userInbox"
+                                                                                      indicator-type="securityLevel"
+                                                                                      record-type="workItem"></grid-indicator-directive>
                                                             <!-- Electronic/Paper Document -->
-                                                            <span flex
-                                                                  ng-class="{'indicator-content': userInbox.isPaperIndicator}">
-                                             <md-icon ng-if="userInbox.isPaperIndicator"
-                                                      class="{{userInbox.isPaperIndicator.class}}"
-                                                      md-svg-icon="{{userInbox.isPaperIndicator.icon}}"
-                                                      tooltip="{{lang[userInbox.isPaperIndicator.tooltip]}}"
-                                             ></md-icon>
-                                         </span>
+                                                            <grid-indicator-directive record="userInbox"
+                                                                                      indicator-type="paperElectronic"
+                                                                                      record-type="workItem"></grid-indicator-directive>
                                                             <!-- Is Reassigned -->
-                                                            <span flex
-                                                                  ng-class="{'indicator-content': userInbox.isReassignedIndicator}">
-                                            <md-icon ng-if="userInbox.isReassignedIndicator"
-                                                     class="{{userInbox.isReassignedIndicator.class}}"
-                                                     md-svg-icon="{{userInbox.isReassignedIndicator.icon}}"
-                                                     tooltip="{{lang[userInbox.isReassignedIndicator.tooltip]}}"
-                                            ></md-icon>
-                                        </span>
+                                                            <grid-indicator-directive record="userInbox"
+                                                                                      indicator-type="isReassigned"
+                                                                                      record-type="workItem"></grid-indicator-directive>
                                                             <!-- Linked Documents -->
-                                                            <span flex
-                                                                  ng-class="{'indicator-content': userInbox.linkedDocsIndicator}">
-                                                   <md-icon ng-if="userInbox.linkedDocsIndicator"
-                                                            class="{{userInbox.linkedDocsIndicator.class}}"
-                                                            md-svg-icon="{{userInbox.linkedDocsIndicator.icon}}"
-                                                            tooltip="{{lang[userInbox.linkedDocsIndicator.tooltip]}}"
-                                                   ></md-icon>
-                                               </span>
-                                                            <!--<span flex class="indicator"
-                                                                  ng-class="{'indicator-content': userInbox.tagsIndicator}">
-                                                                     <span ng-if="userInbox.tagsIndicator"
-                                                                           tooltip="{{lang[userInbox.tagsIndicator.tooltip]}}"
-                                                                           class="{{userInbox.tagsIndicator.class}}">
-                                                                         {{userInbox.tagsIndicator.text}}
-                                                                     </span>
-                                                                 </span>-->
+                                                            <grid-indicator-directive record="userInbox"
+                                                                                      indicator-type="hasLinkedDocuments"
+                                                                                      record-type="workItem"></grid-indicator-directive>
                                                             <!-- Follow up Status -->
-                                                            <span flex
-                                                                  ng-class="{'indicator-content': userInbox.followUpStatusIndicator}">
-                                            <md-icon ng-if="userInbox.followUpStatusIndicator"
-                                                     class="{{userInbox.followUpStatusIndicator.class}}"
-                                                     md-svg-icon="{{userInbox.followUpStatusIndicator.icon}}"
-                                                     tooltip="{{lang[userInbox.followUpStatusIndicator.tooltip].change({name: userInbox.followupStatusLookup.getTranslatedName()})}}"
-                                            ></md-icon>
-                                        </span>
+                                                            <grid-indicator-directive record="userInbox"
+                                                                                      indicator-type="followupStatus"
+                                                                                      record-type="workItem"></grid-indicator-directive>
                                                         </td>
                                                         <td md-cell>
                                                             <!--tooltip="{{userInbox.getTranslatedStarred()}}"-->
@@ -254,22 +217,13 @@
                                                         <td md-cell class="indicator-td text-right"
                                                             style="padding-right:0 !important; padding-left:0 !important;">
                                                             <!-- Priority Level -->
-                                                            <span ng-class="{'indicator-content': userInbox.priorityLevelIndicator}">
-                                                    <md-icon ng-if="userInbox.priorityLevelIndicator"
-                                                             class="{{userInbox.priorityLevelIndicator.class}}"
-                                                             md-svg-icon="{{userInbox.priorityLevelIndicator.icon}}"
-                                                             tooltip="{{lang[userInbox.priorityLevelIndicator.tooltip].change({name: userInbox.priorityLevelLookup.getTranslatedName()})}}"
-                                                    ></md-icon>
-                                                </span>
-                                                            <!-- Has Attachment -->
-                                                            <span class="float-right"
-                                                                  ng-class="{'indicator-content': userInbox.attachmentsIndicator}">
-                                                    <md-icon ng-if="userInbox.attachmentsIndicator"
-                                                             class="{{userInbox.attachmentsIndicator.class}}"
-                                                             md-svg-icon="{{userInbox.attachmentsIndicator.icon}}"
-                                                             tooltip="{{lang[userInbox.attachmentsIndicator.tooltip]}}"
-                                                    ></md-icon>
-                                                </span>
+                                                            <grid-indicator-directive record="userInbox"
+                                                                                      indicator-type="priorityLevel"
+                                                                                      record-type="workItem"></grid-indicator-directive>
+                                                            <!-- Has Attachments -->
+                                                            <grid-indicator-directive record="userInbox" span-class="float-right"
+                                                                                      indicator-type="hasAttachment"
+                                                                                      record-type="workItem"></grid-indicator-directive>
                                                         </td>
                                                         <td md-cell md-truncate class="subject">
                                                             <a href="" class="view-doc" md-truncate
