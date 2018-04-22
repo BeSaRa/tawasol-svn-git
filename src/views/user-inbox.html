@@ -35,7 +35,8 @@
                 <div class="page-padding">
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
                         <div>
-                            <md-tabs class="filter-tabs" md-dynamic-height>
+                            <md-tabs md-selected="ctrl.selectedTab" class="filter-tabs"
+                                     md-dynamic-height>
                                 <md-tab label="{{lang.inbox}}">
                                     <md-content class="white-bg">
                                         <md-table-container>
@@ -309,7 +310,7 @@
                                                         <md-menu-content width="2">
                                                             <md-menu-item>
                                                                 <md-button
-                                                                        ng-click="ctrl.userFilterEdit(filter , $event)">
+                                                                        ng-click="ctrl.userFilterEdit(filter , $index , $event)">
                                                                     <div layout="row">
                                                                         <md-icon md-svg-icon="pencil"></md-icon>
                                                                         <span flex>{{lang.edit_filter}}</span>

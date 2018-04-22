@@ -92,7 +92,10 @@ module.exports = function (app) {
                 return this.id ? this.modelUpdateUserFilter(ignoreMessage) : this.modelCreateUserFilter(ignoreMessage);
             };
             UserFilter.prototype.modelUpdateUserFilter = function (ignoreMessage) {
-                return userFilterService.updateUserFilter(this, ignoreMessage);
+                var self = this;
+                return userFilterService.updateUserFilter(this, ignoreMessage).then(function (filter) {
+                    return self.prepareReceivedUserFilter();
+                });
             };
             UserFilter.prototype.modelCreateUserFilter = function (ignoreMessage) {
                 return userFilterService.addUserFilter(this, ignoreMessage);
@@ -110,14 +113,14 @@ module.exports = function (app) {
                     }
                 });
                 return this;
-
             };
 
 
             UserFilter.prototype.prepareReceivedUserFilter = function () {
-                var criteria = angular.fromJson(this.parsedExpression), self = this;
+                var criteria = angular.fromJson(this.parsedExpression),
+                    self = this;
                 _.map(criteria, function (value, key) {
-                    var count = Object.keys(self.ui['key_' + key]); // to get field count
+                    var count = Object.keys(self.ui['key_' + key]).length; // to get field count
                     if (count > 1) {
                         self.ui['key_' + key].value1 = _getCorrectValue(value.split(',').shift());
                         self.ui['key_' + key].value2 = _getCorrectValue(value.split(',').pop());
@@ -125,6 +128,7 @@ module.exports = function (app) {
                         self.ui['key_' + key].value = _getCorrectValue(value);
                     }
                 });
+                return this;
             };
 
             UserFilter.prototype.getTranslatedName = function () {

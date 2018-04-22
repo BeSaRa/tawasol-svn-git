@@ -23,14 +23,17 @@ module.exports = function (app) {
          * @param $event
          */
         self.saveUserFilterFromCtrl = function ($event) {
-            self.filter.saveUserFilter().then(function () {
-                dialog.hide(self.filter);
+            self.filter.saveUserFilter().then(function (filter) {
+                self.filter = angular.copy(self.filter);
+                dialog.hide(filter);
             })
         };
 
         self.checkDisabled = function (form) {
             var hasCriteria = false;
             for (var key in self.filter.ui) {
+                if (!self.filter.ui.hasOwnProperty(key))
+                    continue;
                 if (typeof self.filter.ui[key].value === 'string')
                     self.filter.ui[key].value = self.filter.ui[key].value.trim();
 

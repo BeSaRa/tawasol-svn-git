@@ -45,6 +45,7 @@ module.exports = function (app) {
 
         self.bySender = false;
 
+        self.selectedTab = 0;
 
         self.changeCriteria = function () {
             var local = angular.copy(self.searchModel);
@@ -152,11 +153,16 @@ module.exports = function (app) {
         /**
          * @description edit filter.
          * @param filter
+         * @param $index
          * @param $event
          * @returns {*}
          */
-        self.userFilterEdit = function (filter, $event) {
-            return userFilterService.editUserFilterDialog(filter, $event)
+        self.userFilterEdit = function (filter, $index, $event) {
+            return userFilterService.editUserFilterDialog(filter, $event).then(function (result) {
+                self.userFilters[$index] = angular.extend(self.userFilters[$index], result);
+                if (self.selectedFilter)
+                    self.selectFilter(self.selectedFilter.filter, self.selectedFilter.index)
+            });
         };
         /**
          * @description delete filter
@@ -175,6 +181,7 @@ module.exports = function (app) {
          * @param $index
          */
         self.selectFilter = function (filter, $index) {
+            self.selectedTab = ($index + 1);
             self.selectedFilter = {
                 index: $index,
                 filter: angular.copy(filter)

@@ -51,17 +51,18 @@ module.exports = function (app) {
          * @return {Promise|UserFilter}
          */
         self.updateUserFilter = function (userFilter, ignoreMessage) {
+            var filter = generator.interceptSendInstance('UserFilter', userFilter);
             return $http
-                .put(urlService.userFilters,
-                    generator.interceptSendInstance('UserFilter', userFilter))
+                .put(urlService.userFilters, filter)
                 .then(function (result) {
                     var method = result.data.rs ? 'success' : 'error',
                         message = result.data.rs ? langService.get('update_success').change({name: userFilter.getTranslatedName()}) : langService.get('error_messages');
                     ignoreMessage ? null : toast[method];
+                    userFilter.parsedExpression = angular.toJson(filter.filterCriteria);
                     return userFilter;
                 }).catch(function () {
                     toast.error(langService.get('error_messages'));
-                    return userFilter;
+                    return filter;
                 });
         };
         /**
