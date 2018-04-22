@@ -162,14 +162,20 @@
                                                                   record-type="workItem"></grid-indicator-directive>
                                     </td>
                                     <td md-cell>
-                                        <!--tooltip="{{workItem.getTranslatedStarred()}}"-->
+                                        <star-unstar-directive record="workItem"
+                                                               record-type="WorkItem"
+                                                               callback="ctrl.changeStar"
+                                                               selected-records="ctrl.selectedWorkItems"
+                                        ></star-unstar-directive>
+<!--
+                                        &lt;!&ndash;tooltip="{{workItem.getTranslatedStarred()}}"&ndash;&gt;
                                         <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
                                                  ng-if="workItem.generalStepElm.starred && (!ctrl.selectedWorkItems.length
                                                          || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber)"
                                                  md-svg-icon="star"
                                                  ng-click="ctrl.changeStar(workItem, $event)"
                                         ></md-icon>
-                                        <!--tooltip="{{workItem.getTranslatedStarred()}}"-->
+                                        &lt;!&ndash;tooltip="{{workItem.getTranslatedStarred()}}"&ndash;&gt;
                                         <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
                                                  ng-if="workItem.generalStepElm.starred
                                                          && ((ctrl.selectedWorkItems.length === 1
@@ -177,21 +183,21 @@
                                                             || ctrl.selectedWorkItems.length > 1)"
                                                  md-svg-icon="star"
                                         ></md-icon>
-                                        <!--tooltip="{{workItem.getTranslatedStarred()}}"-->
+                                        &lt;!&ndash;tooltip="{{workItem.getTranslatedStarred()}}"&ndash;&gt;
                                         <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
                                                  ng-if="!workItem.generalStepElm.starred && (!ctrl.selectedWorkItems.length
                                                           || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber)"
                                                  md-svg-icon="star-outline"
                                                  ng-click="ctrl.changeStar(workItem, $event)"
                                         ></md-icon>
-                                        <!--tooltip="{{workItem.getTranslatedStarred()}}"-->
+                                        &lt;!&ndash;tooltip="{{workItem.getTranslatedStarred()}}"&ndash;&gt;
                                         <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
                                                  ng-if="!workItem.generalStepElm.starred
                                                          && ((ctrl.selectedWorkItems.length === 1
                                                          && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber != workItem.generalStepElm.workObjectNumber)
                                                             || ctrl.selectedWorkItems.length > 1)"
                                                  md-svg-icon="star-outline"
-                                        ></md-icon>
+                                        ></md-icon>-->
                                     </td>
                                     <td md-cell>{{workItem.generalStepElm.docFullSerial}}</td>
                                     <td md-cell class="indicator-td text-right"

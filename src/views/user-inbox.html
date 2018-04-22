@@ -178,40 +178,47 @@
                                                                                       record-type="workItem"></grid-indicator-directive>
                                                         </td>
                                                         <td md-cell>
-                                                            <!--tooltip="{{userInbox.getTranslatedStarred()}}"-->
-                                                            <md-icon class="star-yellow cursor-pointer"
-                                                                     aria-label="{{lang.starred}}"
-                                                                     ng-if="userInbox.generalStepElm.starred && (!ctrl.selectedUserInboxes.length
-                                                         || ctrl.selectedUserInboxes.length===1 && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber)"
-                                                                     md-svg-icon="star"
-                                                                     ng-click="ctrl.changeUserInboxStar(userInbox, $event)"
-                                                            ></md-icon>
-                                                            <!--tooltip="{{userInbox.getTranslatedStarred()}}"-->
-                                                            <md-icon class="star-yellow disabled"
-                                                                     aria-label="{{lang.starred}}"
-                                                                     ng-if="userInbox.generalStepElm.starred
-                                                         && ((ctrl.selectedUserInboxes.length === 1
-                                                         && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber != userInbox.generalStepElm.workObjectNumber)
-                                                            || ctrl.selectedUserInboxes.length > 1)"
-                                                                     md-svg-icon="star"
-                                                            ></md-icon>
-                                                            <!--tooltip="{{userInbox.getTranslatedStarred()}}"-->
-                                                            <md-icon class="star-yellow cursor-pointer"
-                                                                     aria-label="{{lang.starred}}"
-                                                                     ng-if="!userInbox.generalStepElm.starred && (!ctrl.selectedUserInboxes.length
-                                                          || ctrl.selectedUserInboxes.length===1 && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber)"
-                                                                     md-svg-icon="star-outline"
-                                                                     ng-click="ctrl.changeUserInboxStar(userInbox, $event)"
-                                                            ></md-icon>
-                                                            <!--tooltip="{{userInbox.getTranslatedStarred()}}"-->
-                                                            <md-icon class="star-yellow disabled"
-                                                                     aria-label="{{lang.starred}}"
-                                                                     ng-if="!userInbox.generalStepElm.starred
-                                                         && ((ctrl.selectedUserInboxes.length === 1
-                                                         && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber != userInbox.generalStepElm.workObjectNumber)
-                                                            || ctrl.selectedUserInboxes.length > 1)"
-                                                                     md-svg-icon="star-outline"
-                                                            ></md-icon>
+                                                            <star-unstar-directive record="userInbox"
+                                                                                   record-type="WorkItem"
+                                                                                   callback="ctrl.changeUserInboxStar"
+                                                                                   selected-records="ctrl.selectedUserInboxes"
+                                                            ></star-unstar-directive>
+
+                                                            <!--
+                                                                                                                        &lt;!&ndash;tooltip="{{userInbox.getTranslatedStarred()}}"&ndash;&gt;
+                                                                                                                        <md-icon class="star-yellow cursor-pointer"
+                                                                                                                                 aria-label="{{lang.starred}}"
+                                                                                                                                 ng-if="userInbox.generalStepElm.starred && (!ctrl.selectedUserInboxes.length
+                                                                                                                     || ctrl.selectedUserInboxes.length===1 && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber)"
+                                                                                                                                 md-svg-icon="star"
+                                                                                                                                 ng-click="ctrl.changeUserInboxStar(userInbox, $event)"
+                                                                                                                        ></md-icon>
+                                                                                                                        &lt;!&ndash;tooltip="{{userInbox.getTranslatedStarred()}}"&ndash;&gt;
+                                                                                                                        <md-icon class="star-yellow disabled"
+                                                                                                                                 aria-label="{{lang.starred}}"
+                                                                                                                                 ng-if="userInbox.generalStepElm.starred
+                                                                                                                     && ((ctrl.selectedUserInboxes.length === 1
+                                                                                                                     && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber != userInbox.generalStepElm.workObjectNumber)
+                                                                                                                        || ctrl.selectedUserInboxes.length > 1)"
+                                                                                                                                 md-svg-icon="star"
+                                                                                                                        ></md-icon>
+                                                                                                                        &lt;!&ndash;tooltip="{{userInbox.getTranslatedStarred()}}"&ndash;&gt;
+                                                                                                                        <md-icon class="star-yellow cursor-pointer"
+                                                                                                                                 aria-label="{{lang.starred}}"
+                                                                                                                                 ng-if="!userInbox.generalStepElm.starred && (!ctrl.selectedUserInboxes.length
+                                                                                                                      || ctrl.selectedUserInboxes.length===1 && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber)"
+                                                                                                                                 md-svg-icon="star-outline"
+                                                                                                                                 ng-click="ctrl.changeUserInboxStar(userInbox, $event)"
+                                                                                                                        ></md-icon>
+                                                                                                                        &lt;!&ndash;tooltip="{{userInbox.getTranslatedStarred()}}"&ndash;&gt;
+                                                                                                                        <md-icon class="star-yellow disabled"
+                                                                                                                                 aria-label="{{lang.starred}}"
+                                                                                                                                 ng-if="!userInbox.generalStepElm.starred
+                                                                                                                     && ((ctrl.selectedUserInboxes.length === 1
+                                                                                                                     && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber != userInbox.generalStepElm.workObjectNumber)
+                                                                                                                        || ctrl.selectedUserInboxes.length > 1)"
+                                                                                                                                 md-svg-icon="star-outline"
+                                                                                                                        ></md-icon>-->
                                                         </td>
                                                         <td md-cell>{{userInbox.generalStepElm.docFullSerial}}</td>
                                                         <td md-cell class="indicator-td text-right"
@@ -221,7 +228,8 @@
                                                                                       indicator-type="priorityLevel"
                                                                                       record-type="workItem"></grid-indicator-directive>
                                                             <!-- Has Attachments -->
-                                                            <grid-indicator-directive record="userInbox" span-class="float-right"
+                                                            <grid-indicator-directive record="userInbox"
+                                                                                      span-class="float-right"
                                                                                       indicator-type="hasAttachment"
                                                                                       record-type="workItem"></grid-indicator-directive>
                                                         </td>

@@ -215,7 +215,10 @@ module.exports = function (app) {
              * @param workItem
              * @param $event
              */
-            self.changeUserInboxStar = function (workItem, $event) {
+            self.changeStar = function (workItem, $event) {
+                /*workItem.toggleStar().then(function () {
+                    self.reloadGroupInbox(self.grid.page);
+                });*/
                 self.starServices[workItem.generalStepElm.starred](workItem)
                     .then(function (result) {
                         if (result) {

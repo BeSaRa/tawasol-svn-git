@@ -72,4 +72,5 @@ module.exports = function (app) {
     require('./wrapper-directive/wrapper-directive')(app);
     require('./workitem-inbox-directive/01-index')(app);
     require('./filter-button/filter-button')(app);
+    require('./star-unstar-directive/01-index')(app);
 };

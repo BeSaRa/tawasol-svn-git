@@ -105,36 +105,11 @@
                                     model="workItem"
                                     ng-repeat="workItem in ctrl.workItems | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                                     <!--<td md-cell>
-                                        <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
-                                                 ng-if="workItem.generalStepElm.starred && (!ctrl.selectedWorkItems.length
-                                                 || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber)"
-                                                 md-svg-icon="star"
-                                                 tooltip="{{workItem.getTranslatedStarred()}}"
-                                                 ng-click="ctrl.changeReadyToExportStar(workItem, $event)"
-                                        ></md-icon>
-                                        <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
-                                                 ng-if="workItem.generalStepElm.starred
-                                                 && ((ctrl.selectedWorkItems.length === 1
-                                                 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber != workItem.generalStepElm.workObjectNumber)
-                                                    || ctrl.selectedWorkItems.length > 1)"
-                                                 md-svg-icon="star"
-                                                 tooltip="{{workItem.getTranslatedStarred()}}"
-                                        ></md-icon>
-                                        <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
-                                                 ng-if="!workItem.generalStepElm.starred && (!ctrl.selectedWorkItems.length
-                                                  || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber)"
-                                                 md-svg-icon="star-outline"
-                                                 tooltip="{{workItem.getTranslatedStarred()}}"
-                                                 ng-click="ctrl.changeReadyToExportStar(workItem, $event)"
-                                        ></md-icon>
-                                        <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
-                                                 ng-if="!workItem.generalStepElm.starred
-                                                 && ((ctrl.selectedWorkItems.length === 1
-                                                 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber != workItem.generalStepElm.workObjectNumber)
-                                                    || ctrl.selectedWorkItems.length > 1)"
-                                                 md-svg-icon="star-outline"
-                                                 tooltip="{{workItem.getTranslatedStarred()}}"
-                                        ></md-icon>
+                                        <star-unstar-directive record="workItem"
+                                                               record-type="WorkItem"
+                                                               callback="ctrl.changeReadyToExportStar"
+                                                               selected-records="ctrl.selectedWorkItems"
+                                        ></star-unstar-directive>
                                     </td>-->
 
                                     <!--<td md-cell>{{workItem.generalStepElm.docSerial}}</td>-->

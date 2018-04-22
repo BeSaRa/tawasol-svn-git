@@ -5,7 +5,8 @@ features :
 04 - change attachment global lookup to tawasol attachment.
 05 - Added - Quick Receive With Launch WF
 06 - Added - Confirm the change of document security schema if changed to limited scope.
-
+07 - Moved star unstar into directive
+08 - Fixed - grid indicators for user inbox and filtered inboxes.
 
 Fixed issues :
 12504: central archive - in central archive OU while adding a paper outgoing or incoming document there is two fields in paper outgoing while only one in incoming <check attached>

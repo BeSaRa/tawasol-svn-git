@@ -37,8 +37,8 @@ module.exports = function (app) {
                     self.proxyMailInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
                     self.proxyMailInboxes = generator.interceptReceivedCollection('WorkItem', self.proxyMailInboxes);
                 }
-
-                return _.sortBy(self.proxyMailInboxes, 'generalStepElm.starred').reverse();
+                return self.proxyMailInboxes;
+                //return _.sortBy(self.proxyMailInboxes, 'generalStepElm.starred').reverse();
             }).catch(function (e) {
                 return [];
             });

@@ -128,13 +128,18 @@
                                                                   record-type="workItem"></grid-indicator-directive>
                                     </td>
                                     <td md-cell>
-                                        <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
+                                        <star-unstar-directive record="followupEmployeeInbox"
+                                                               record-type="WorkItem"
+                                                               callback="ctrl.changeFollowupEmployeeInboxStar"
+                                                               selected-records="ctrl.selectedFollowupEmployeeInboxes"
+                                        ></star-unstar-directive>
+                                        <!--<md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
                                                  ng-if="followupEmployeeInbox.generalStepElm.starred && (!ctrl.selectedFollowupEmployeeInboxes.length
                                                  || ctrl.selectedFollowupEmployeeInboxes.length===1 && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber === followupEmployeeInbox.generalStepElm.workObjectNumber)"
                                                  md-svg-icon="star"
                                                  ng-click="ctrl.changeFollowupEmployeeInboxStar(followupEmployeeInbox, $event)"
                                         ></md-icon>
-                                        <!--tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"-->
+                                        &lt;!&ndash;tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"&ndash;&gt;
                                         <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
                                                  ng-if="followupEmployeeInbox.generalStepElm.starred
                                                  && ((ctrl.selectedFollowupEmployeeInboxes.length === 1
@@ -142,14 +147,14 @@
                                                     || ctrl.selectedFollowupEmployeeInboxes.length > 1)"
                                                  md-svg-icon="star"
                                         ></md-icon>
-                                        <!--tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"-->
+                                        &lt;!&ndash;tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"&ndash;&gt;
                                         <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
                                                  ng-if="!followupEmployeeInbox.generalStepElm.starred && (!ctrl.selectedFollowupEmployeeInboxes.length
                                                   || ctrl.selectedFollowupEmployeeInboxes.length===1 && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber === followupEmployeeInbox.generalStepElm.workObjectNumber)"
                                                  md-svg-icon="star-outline"
                                                  ng-click="ctrl.changeFollowupEmployeeInboxStar(followupEmployeeInbox, $event)"
                                         ></md-icon>
-                                        <!--tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"-->
+                                        &lt;!&ndash;tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"&ndash;&gt;
                                         <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
                                                  ng-if="!followupEmployeeInbox.generalStepElm.starred
                                                  && ((ctrl.selectedFollowupEmployeeInboxes.length === 1
@@ -157,7 +162,7 @@
                                                     || ctrl.selectedFollowupEmployeeInboxes.length > 1)"
                                                  md-svg-icon="star-outline"
                                         ></md-icon>
-                                        <!--tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"-->
+                                        &lt;!&ndash;tooltip="{{followupEmployeeInbox.getTranslatedStarred()}}"&ndash;&gt; -->
                                     </td>
                                     <td md-cell>{{followupEmployeeInbox.generalStepElm.docFullSerial}}</td>
                                     <td md-cell class="indicator-td text-right"

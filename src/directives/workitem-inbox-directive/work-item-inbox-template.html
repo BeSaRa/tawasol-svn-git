@@ -138,7 +138,13 @@
                                               record-type="workItem"></grid-indicator-directive>
                 </td>
                 <td md-cell>
-                    <!--tooltip="{{userInbox.getTranslatedStarred()}}"-->
+                    <star-unstar-directive record="userInbox"
+                                           record-type="WorkItem"
+                                           callback="ctrl.changeUserInboxStar"
+                                           selected-records="ctrl.selectedWorkItems"
+                    ></star-unstar-directive>
+<!--
+                    &lt;!&ndash;tooltip="{{userInbox.getTranslatedStarred()}}"&ndash;&gt;
                     <md-icon class="star-yellow cursor-pointer"
                              aria-label="{{lang.starred}}"
                              ng-if="userInbox.generalStepElm.starred && (!ctrl.selectedWorkItems.length
@@ -146,7 +152,7 @@
                              md-svg-icon="star"
                              ng-click="ctrl.changeUserInboxStar(userInbox, $event)"
                     ></md-icon>
-                    <!--tooltip="{{userInbox.getTranslatedStarred()}}"-->
+                    &lt;!&ndash;tooltip="{{userInbox.getTranslatedStarred()}}"&ndash;&gt;
                     <md-icon class="star-yellow disabled"
                              aria-label="{{lang.starred}}"
                              ng-if="userInbox.generalStepElm.starred
@@ -155,7 +161,7 @@
                                                             || ctrl.selectedWorkItems.length > 1)"
                              md-svg-icon="star"
                     ></md-icon>
-                    <!--tooltip="{{userInbox.getTranslatedStarred()}}"-->
+                    &lt;!&ndash;tooltip="{{userInbox.getTranslatedStarred()}}"&ndash;&gt;
                     <md-icon class="star-yellow cursor-pointer"
                              aria-label="{{lang.starred}}"
                              ng-if="!userInbox.generalStepElm.starred && (!ctrl.selectedWorkItems.length
@@ -163,7 +169,7 @@
                              md-svg-icon="star-outline"
                              ng-click="ctrl.changeUserInboxStar(userInbox, $event)"
                     ></md-icon>
-                    <!--tooltip="{{userInbox.getTranslatedStarred()}}"-->
+                    &lt;!&ndash;tooltip="{{userInbox.getTranslatedStarred()}}"&ndash;&gt;
                     <md-icon class="star-yellow disabled"
                              aria-label="{{lang.starred}}"
                              ng-if="!userInbox.generalStepElm.starred
@@ -171,7 +177,7 @@
                                                          && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber != userInbox.generalStepElm.workObjectNumber)
                                                             || ctrl.selectedWorkItems.length > 1)"
                              md-svg-icon="star-outline"
-                    ></md-icon>
+                    ></md-icon>-->
                 </td>
                 <td md-cell>{{userInbox.generalStepElm.docFullSerial}}</td>
                 <td md-cell class="indicator-td text-right"

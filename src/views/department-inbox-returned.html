@@ -34,7 +34,7 @@
                                                        ng-click="ctrl.resendBulkReturnedDepartmentInbox($event)">
                                                 <md-icon md-svg-icon="send" class="action-green"></md-icon>
                                             </md-button>
-                                            <!--ng-if="ctrl.selectedUserInboxes.length > 1"-->
+                                            <!--ng-if="ctrl.selectedReturnedDepartmentInboxes.length > 1"-->
                                             <md-button class="md-icon-button" aria-label="{{lang.inbox_terminate}}"
                                                        tooltip="{{lang.inbox_terminate}}"
                                                        ng-click="ctrl.terminateBulk($event)">
@@ -44,11 +44,6 @@
                                                        tooltip="{{lang.grid_action_launch_distribution_workflow}}"
                                                        ng-click="ctrl.launchDistributionWorkflowBulk($event)">
                                                 <md-icon md-svg-icon="sitemap" class="action-green"></md-icon>
-                                            </md-button>-->
-                                            <!--  <md-button class="md-icon-button" aria-label="{{lang.inbox_add_to_folder}}"
-                                                       tooltip="{{lang.inbox_add_to_folder}}"
-                                                       ng-click="ctrl.addToFolderUserInboxBulk($event)">
-                                                <md-icon md-svg-icon="folder-plus" class="action-green"></md-icon>
                                             </md-button>-->
                                             <!--<md-button class="md-icon-button action-green" aria-label="{{lang.star}}"
                                                        tooltip="{{lang.star}}"
@@ -110,36 +105,11 @@
                                     selected-length="{{ctrl.selectedReturnedDepartmentInboxes.length ? ctrl.selectedReturnedDepartmentInboxes.length : 0}}"
                                     ng-repeat="returnedDepartmentInbox in ctrl.returnedDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                                     <!-- <td md-cell>
-                                         <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
-                                                  ng-if="returnedDepartmentInbox.generalStepElm.starred && (!ctrl.selectedReturnedDepartmentInboxes.length
-                                                  || ctrl.selectedReturnedDepartmentInboxes.length===1 && ctrl.selectedReturnedDepartmentInboxes[0].generalStepElm.workObjectNumber === returnedDepartmentInbox.generalStepElm.workObjectNumber)"
-                                                  md-svg-icon="star"
-                                                  tooltip="{{returnedDepartmentInbox.getTranslatedStarred()}}"
-                                                  ng-click="ctrl.changeStar(userInbox, $event)"
-                                         ></md-icon>
-                                         <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
-                                                  ng-if="returnedDepartmentInbox.generalStepElm.starred
-                                                  && ((ctrl.selectedReturnedDepartmentInboxes.length === 1
-                                                  && ctrl.selectedReturnedDepartmentInboxes[0].generalStepElm.workObjectNumber != returnedDepartmentInbox.generalStepElm.workObjectNumber)
-                                                     || ctrl.selectedReturnedDepartmentInboxes.length > 1)"
-                                                  md-svg-icon="star"
-                                                  tooltip="{{returnedDepartmentInbox.getTranslatedStarred()}}"
-                                         ></md-icon>
-                                         <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
-                                                  ng-if="!userInbox.generalStepElm.starred && (!ctrl.selectedReturnedDepartmentInboxes.length
-                                                   || ctrl.selectedReturnedDepartmentInboxes.length===1 && ctrl.selectedReturnedDepartmentInboxes[0].generalStepElm.workObjectNumber === returnedDepartmentInbox.generalStepElm.workObjectNumber)"
-                                                  md-svg-icon="star-outline"
-                                                  tooltip="{{returnedDepartmentInbox.getTranslatedStarred()}}"
-                                                  ng-click="ctrl.changeStar(returnedDepartmentInbox, $event)"
-                                         ></md-icon>
-                                         <md-icon class="star-yellow disabled" aria-label="{{lang.starred}}"
-                                                  ng-if="!returnedDepartmentInbox.generalStepElm.starred
-                                                  && ((ctrl.selectedReturnedDepartmentInboxes.length === 1
-                                                  && ctrl.selectedReturnedDepartmentInboxes[0].generalStepElm.workObjectNumber != returnedDepartmentInbox.generalStepElm.workObjectNumber)
-                                                     || ctrl.selectedReturnedDepartmentInboxes.length > 1)"
-                                                  md-svg-icon="star-outline"
-                                                  tooltip="{{returnedDepartmentInbox.getTranslatedStarred()}}"
-                                         ></md-icon>
+                                        <star-unstar-directive record="returnedDepartmentInbox"
+                                                               record-type="WorkItem"
+                                                               callback="ctrl.changeStar"
+                                                               selected-records="ctrl.selectedReturnedDepartmentInboxes"
+                                        ></star-unstar-directive>
                                      </td>-->
                                     <td md-cell class="indicator-td">
                                         <!-- Security Level -->

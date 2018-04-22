@@ -135,7 +135,12 @@
                                                                   record-type="workItem"></grid-indicator-directive>
                                     </td>
                                     <td md-cell>
-                                        <md-button class="md-icon-button"
+                                        <star-unstar-directive record="proxyMailInbox"
+                                                               record-type="WorkItem"
+                                                               callback="ctrl.changeProxyMailInboxStar"
+                                                               selected-records="ctrl.selectedProxyMailInboxes"
+                                        ></star-unstar-directive>
+                                        <!--<md-button class="md-icon-button"
                                                    ng-if="proxyMailInbox.generalStepElm.starred && (!ctrl.selectedProxyMailInboxes.length
                                                  || ctrl.selectedProxyMailInboxes.length===1 && ctrl.selectedProxyMailInboxes[0].generalStepElm.workObjectNumber === proxyMailInbox.generalStepElm.workObjectNumber)"
                                                    ng-click="ctrl.changeProxyMailInboxStar(proxyMailInbox, $event)">
@@ -172,7 +177,7 @@
                                                      md-svg-icon="star-outline"
                                                      tooltip="{{proxyMailInbox.getTranslatedStarred()}}"
                                             ></md-icon>
-                                        </md-button>
+                                        </md-button>-->
                                     </td>
                                     <td md-cell>{{proxyMailInbox.generalStepElm.docFullSerial}}</td>
                                     <td md-cell class="indicator-td text-right"
