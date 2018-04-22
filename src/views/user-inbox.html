@@ -39,7 +39,22 @@
                                      md-dynamic-height>
                                 <md-tab label="{{lang.inbox}}">
                                     <md-content class="white-bg">
-                                        <md-table-container>
+                                        <work-item-inbox-directive
+                                                grid="ctrl.grid"
+                                                change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
+                                                work-items="ctrl.userInboxes"
+                                                view-document="ctrl.viewDocument"
+                                                grid-actions="ctrl.gridActions"
+                                                change-user-inbox-star="ctrl.changeUserInboxStar"
+                                                forward-bulk="ctrl.forwardBulk"
+                                                add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
+                                                terminate-user-inbox-bulk="ctrl.terminateUserInboxBulk"
+                                                mark-as-read-unread="ctrl.markAsReadUnread"
+                                                check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
+                                                selected-work-items="ctrl.selectedUserInboxes">
+                                        </work-item-inbox-directive>
+
+                                        <!--<md-table-container>
                                             <div flex scroll-directive>
                                                 <table md-table md-row-select multiple
                                                        ng-model="ctrl.selectedUserInboxes"
@@ -52,7 +67,7 @@
                                                                 <span>{{ctrl.selectedUserInboxes.length}} {{lang.items_selected}} </span>
                                                                 <span flex></span>
 
-                                                                <!--ng-if="ctrl.selectedUserInboxes.length > 1"-->
+                                                                &lt;!&ndash;ng-if="ctrl.selectedUserInboxes.length > 1"&ndash;&gt;
                                                                 <md-button class="md-icon-button"
                                                                            tooltip="{{lang.grid_action_forward}}"
                                                                            ng-if="ctrl.checkIfForwardBulkAvailable()"
@@ -92,11 +107,11 @@
                                                         </th>
                                                         <th ng-if="!ctrl.selectedUserInboxes.length" md-column
                                                             md-order-by="">
-                                                            <!-- Security Level, Document type, Tags, Re-assigned Indicators -->
+                                                            &lt;!&ndash; Security Level, Document type, Tags, Re-assigned Indicators &ndash;&gt;
                                                         </th>
                                                         <th ng-if="!ctrl.selectedUserInboxes.length" md-column
                                                             md-order-by="">
-                                                            <!-- Star/unstar -->
+                                                            &lt;!&ndash; Star/unstar &ndash;&gt;
                                                         </th>
                                                         <th ng-if="!ctrl.selectedUserInboxes.length" md-column
                                                             md-order-by="generalStepElm.docFullSerial">
@@ -104,7 +119,7 @@
                                                         </th>
                                                         <th ng-if="!ctrl.selectedUserInboxes.length" md-column
                                                             md-order-by="">
-                                                            <!-- Priority Level and Has Attachment Indicators -->
+                                                            &lt;!&ndash; Priority Level and Has Attachment Indicators &ndash;&gt;
                                                         </th>
                                                         <th ng-if="!ctrl.selectedUserInboxes.length" md-column
                                                             md-order-by="generalStepElm.docSubject">
@@ -130,17 +145,17 @@
                                                             md-order-by="">
                                                             <span>{{lang.correspondence_sites}}</span>
                                                         </th>
-                                                        <!--<th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="docType">
+                                                        &lt;!&ndash;<th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="docType">
                                                             <span>{{lang.type}}</span>
                                                         </th>
                                                         <th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="numberOfDays">
                                                             <span>{{lang.number_of_days}}</span>
-                                                        </th>-->
+                                                        </th>&ndash;&gt;
                                                         <th ng-if="!ctrl.selectedUserInboxes.length" md-column>
-                                                            <!-- Grid Actions -->
+                                                            &lt;!&ndash; Grid Actions &ndash;&gt;
                                                         </th>
                                                         <th ng-if="!ctrl.selectedUserInboxes.length" md-column>
-                                                            <!-- Read/Unread Indicator -->
+                                                            &lt;!&ndash; Read/Unread Indicator &ndash;&gt;
                                                         </th>
                                                     </tr>
                                                     </thead>
@@ -152,28 +167,28 @@
                                                         selected-length="{{ctrl.selectedUserInboxes.length ? ctrl.selectedUserInboxes.length : 0}}"
                                                         ng-repeat="userInbox in ctrl.userInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                                                         <td md-cell class="indicator-td">
-                                                            <!-- Doc class -->
+                                                            &lt;!&ndash; Doc class &ndash;&gt;
                                                             <grid-indicator-directive record-type="WorkItem"
                                                                                       record="userInbox"
                                                                                       indicator-type="docClass">
                                                             </grid-indicator-directive>
-                                                            <!-- Security Level -->
+                                                            &lt;!&ndash; Security Level &ndash;&gt;
                                                             <grid-indicator-directive record="userInbox"
                                                                                       indicator-type="securityLevel"
                                                                                       record-type="workItem"></grid-indicator-directive>
-                                                            <!-- Electronic/Paper Document -->
+                                                            &lt;!&ndash; Electronic/Paper Document &ndash;&gt;
                                                             <grid-indicator-directive record="userInbox"
                                                                                       indicator-type="paperElectronic"
                                                                                       record-type="workItem"></grid-indicator-directive>
-                                                            <!-- Is Reassigned -->
+                                                            &lt;!&ndash; Is Reassigned &ndash;&gt;
                                                             <grid-indicator-directive record="userInbox"
                                                                                       indicator-type="isReassigned"
                                                                                       record-type="workItem"></grid-indicator-directive>
-                                                            <!-- Linked Documents -->
+                                                            &lt;!&ndash; Linked Documents &ndash;&gt;
                                                             <grid-indicator-directive record="userInbox"
                                                                                       indicator-type="hasLinkedDocuments"
                                                                                       record-type="workItem"></grid-indicator-directive>
-                                                            <!-- Follow up Status -->
+                                                            &lt;!&ndash; Follow up Status &ndash;&gt;
                                                             <grid-indicator-directive record="userInbox"
                                                                                       indicator-type="followupStatus"
                                                                                       record-type="workItem"></grid-indicator-directive>
@@ -185,7 +200,7 @@
                                                                                    selected-records="ctrl.selectedUserInboxes"
                                                             ></star-unstar-directive>
 
-                                                            <!--
+                                                            &lt;!&ndash;
                                                                                                                         &lt;!&ndash;tooltip="{{userInbox.getTranslatedStarred()}}"&ndash;&gt;
                                                                                                                         <md-icon class="star-yellow cursor-pointer"
                                                                                                                                  aria-label="{{lang.starred}}"
@@ -219,16 +234,16 @@
                                                                                                                      && ctrl.selectedUserInboxes[0].generalStepElm.workObjectNumber != userInbox.generalStepElm.workObjectNumber)
                                                                                                                         || ctrl.selectedUserInboxes.length > 1)"
                                                                                                                                  md-svg-icon="star-outline"
-                                                                                                                        ></md-icon>-->
+                                                                                                                        ></md-icon>&ndash;&gt;
                                                         </td>
                                                         <td md-cell>{{userInbox.generalStepElm.docFullSerial}}</td>
                                                         <td md-cell class="indicator-td text-right"
                                                             style="padding-right:0 !important; padding-left:0 !important;">
-                                                            <!-- Priority Level -->
+                                                            &lt;!&ndash; Priority Level &ndash;&gt;
                                                             <grid-indicator-directive record="userInbox"
                                                                                       indicator-type="priorityLevel"
                                                                                       record-type="workItem"></grid-indicator-directive>
-                                                            <!-- Has Attachments -->
+                                                            &lt;!&ndash; Has Attachments &ndash;&gt;
                                                             <grid-indicator-directive record="userInbox"
                                                                                       span-class="float-right"
                                                                                       indicator-type="hasAttachment"
@@ -259,8 +274,8 @@
                                                                                           ng-if="userInbox.getInfo().documentClass!=='internal'">
                                                             </main-site-sub-site-directive>
                                                         </td>
-                                                        <!--<td md-cell>{{userInbox.generalStepElm.docType}}</td>
-                                                        <td md-cell>{{userInbox.generalStepElm.numberOfDays}}</td>-->
+                                                        &lt;!&ndash;<td md-cell>{{userInbox.generalStepElm.docType}}</td>
+                                                        <td md-cell>{{userInbox.generalStepElm.numberOfDays}}</td>&ndash;&gt;
                                                         <td md-cell class="p-r0"
                                                             ng-if="ctrl.selectedUserInboxes.length < 2">
                                                             <div layout-align="start center" flex ng-if="!ctrl.selectedUserInboxes.length
@@ -292,7 +307,7 @@
                                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
                                                     md-total="{{ctrl.userInboxes.length}}" md-page-select>
                                             </md-table-pagination>
-                                        </md-table-container>
+                                        </md-table-container>-->
                                     </md-content>
                                 </md-tab>
                                 <md-tab ng-repeat="filter in ctrl.userFilters"
@@ -335,7 +350,7 @@
                                     <md-tab-body>
                                         <md-content class="white-bg">
                                             <work-item-inbox-directive
-                                                    grid="ctrl.grid"
+                                                    grid="ctrl.filterGrid[$index]"
                                                     change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
                                                     work-items="ctrl.workItemsFilters[$index]"
                                                     view-document="ctrl.viewDocument"

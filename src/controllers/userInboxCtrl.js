@@ -107,10 +107,6 @@ module.exports = function (app) {
             order: '', // default sorting order
             limitOptions: [5, 10, 20, // limit options
                 {
-                    /*label: self.globalSetting.searchAmountLimit.toString(),
-                     value: function () {
-                     return (self.globalSetting.searchAmountLimit + 5)
-                     }*/
                     label: langService.get('all'),
                     value: function () {
                         return (self.userInboxes.length + 21);
@@ -123,7 +119,7 @@ module.exports = function (app) {
             self.sidebarFilter = !self.sidebarFilter;
         };
 
-        self.filterGrid = {};
+        self.filterGrid = [];
 
         self.userFilters = userFilters;
 
@@ -134,7 +130,16 @@ module.exports = function (app) {
         // just for start
         function _prepareFilters() {
             self.workItemsFilters = new Array(userFilters.length);
+            for(var i =0; i<userFilters.length; i++){
+                self.filterGrid.push({
+                    limit: 5, //self.globalSetting.searchAmount, // default limit
+                    page: 1, // first page
+                    order: '', // default sorting order
+                    limitOptions: [5, 10, 20, 200]
+                })
+            }
         }
+        _prepareFilters();
 
         /**
          * @description create filter
@@ -172,7 +177,8 @@ module.exports = function (app) {
          */
         self.userFilterDelete = function (filter, $index, $event) {
             return filter.deleteFilter($event).then(function () {
-                self.userFilters.splice($index, 1)
+                self.userFilters.splice($index, 1);
+                self.filterGrid.splice($index, 1);
             });
         };
         /**
@@ -186,6 +192,7 @@ module.exports = function (app) {
                 index: $index,
                 filter: angular.copy(filter)
             };
+            _prepareFilters();
             correspondenceService.loadWorkItemsByFilterID(filter).then(function (workItems) {
                 self.workItemsFilters[$index] = workItems;
             });
