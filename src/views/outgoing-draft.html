@@ -24,19 +24,20 @@
                                    md-progress="ctrl.progress">
                                 <thead md-head md-order="ctrl.grid.order">
                                 <tr md-row>
-                                    <th colspan="{{ctrl.selectedDraftOutgoings.length > 1 ? 5 : 6}}"
+                                    <th colspan="{{ctrl.selectedDraftOutgoings.length > 1 ? 6 : 7}}"
                                         ng-if="ctrl.selectedDraftOutgoings.length" md-column>
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedDraftOutgoings.length}} {{lang.items_selected}} </span>
                                             <span flex></span>
 
-                                           <!-- ng-if="ctrl.selectedDraftOutgoings.length > 1"-->
+                                            <!-- ng-if="ctrl.selectedDraftOutgoings.length > 1"-->
                                             <md-button class="md-icon-button"
                                                        tooltip="{{lang.remove}}"
                                                        ng-click="ctrl.removeBulkDraftOutgoings($event)">
                                                 <md-icon md-svg-icon="delete" class="action-green"></md-icon>
                                             </md-button>
-                                            <md-button class="md-icon-button" ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
+                                            <md-button class="md-icon-button"
+                                                       ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
                                                        tooltip="{{lang.grid_action_launch_distribution_workflow}}"
                                                        ng-click="ctrl.launchDistributionWorkflowBulk($event)">
                                                 <md-icon md-svg-icon="sitemap" class="action-green"></md-icon>
@@ -48,20 +49,23 @@
                                             </md-button>
                                         </div>
                                     </th>
+                                    <th ng-if="!ctrl.selectedPrepareOutgoings.length" md-column md-order-by="">
+                                        <!-- Is Paper / Electronic Indicators -->
+                                    </th>
                                     <th ng-if="!ctrl.selectedDraftOutgoings.length" md-column
                                         md-order-by="docSubject">
                                         <span>{{lang.subject}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedDraftOutgoings.length" md-column
-                                        md-order-by="priorityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                         <span>{{lang.priority_level}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedDraftOutgoings.length" md-column
-                                        md-order-by="securityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
                                         <span>{{lang.security_level}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedDraftOutgoings.length" md-column
-                                        md-order-by="createdBy">
+                                        md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
                                         <span>{{lang.creator}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedDraftOutgoings.length" md-column
@@ -79,14 +83,20 @@
                                     model="draftOutgoing"
                                     selected-length="{{ctrl.selectedDraftOutgoings.length ? ctrl.selectedDraftOutgoings.length : 0}}"
                                     ng-repeat="draftOutgoing in searchResults = (ctrl.draftOutgoings | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order)  track by $index">
+                                    <td md-cell class="indicator-td">
+                                        <!-- Electronic/Paper Document -->
+                                        <grid-indicator-directive record="draftOutgoing"
+                                                                  indicator-type="paperElectronic"
+                                                                  record-type="outgoing"></grid-indicator-directive>
+                                    </td>
                                     <td md-cell class="td-data">
                                         <a href="" class="view-doc" ng-if="draftOutgoing.hasContent()"
-                                                   ng-click="ctrl.viewDocument(draftOutgoing, $event)">{{draftOutgoing.docSubject}}</a>
+                                           ng-click="ctrl.viewDocument(draftOutgoing, $event)">{{draftOutgoing.docSubject}}</a>
                                         <span ng-if="!draftOutgoing.hasContent()">{{draftOutgoing.docSubject}}</span>
                                     </td>
                                     <td md-cell>{{draftOutgoing.priorityLevel.getTranslatedName()}}</td>
                                     <td md-cell>{{draftOutgoing.securityLevel.getTranslatedName()}}</td>
-                                    <td md-cell>{{draftOutgoing.getTranslatedCreator()}}</td>
+                                    <td md-cell>{{draftOutgoing.creatorInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{draftOutgoing.createdOn}}</td>
                                     <td md-cell ng-if="ctrl.selectedDraftOutgoings.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedDraftOutgoings.length
@@ -99,15 +109,22 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr md-row ng-if="!ctrl.draftOutgoings.length"><td md-cell colspan="6" class="red-text text-center">{{lang.no_records_found}}</td></tr>
-                                <tr md-row ng-if="ctrl.draftOutgoings.length && !searchResults.length"><td md-cell colspan="6" class="red-text text-center">{{lang.no_records_found_matching_search}}</td></tr>
+                                <tr md-row ng-if="!ctrl.draftOutgoings.length">
+                                    <td md-cell colspan="7" class="red-text text-center">{{lang.no_records_found}}</td>
+                                </tr>
+                                <tr md-row ng-if="ctrl.draftOutgoings.length && !searchResults.length">
+                                    <td md-cell colspan="7" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{ctrl.draftOutgoings.length}}" md-page-select>
+                                    md-total="{{(ctrl.draftOutgoings | filter:ctrl.searchModel).length}}"
+                                    md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

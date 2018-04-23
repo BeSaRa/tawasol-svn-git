@@ -53,8 +53,16 @@
                     </md-tab>
                     <md-tab label="{{lang.group_members}}">
                         <md-content>
-                            <md-button tooltip="{{lang.group_members}}" class="md-icon-button"
+                            <!--<md-button ng-if="!ctrl.isUserPreference" tooltip="{{lang.group_members}}" class="md-icon-button"
                                        ng-click="ctrl.selectGroupMember($event)">
+                                <md-icon md-svg-icon="plus"></md-icon>
+                            </md-button>
+                            <md-button ng-if="ctrl.isUserPreference" tooltip="{{lang.group_members}}" class="md-icon-button"
+                                       ng-click="ctrl.selectGroupMemberUserWorkflowGroup($event)">
+                                <md-icon md-svg-icon="plus"></md-icon>
+                            </md-button>-->
+                            <md-button tooltip="{{lang.group_members}}" class="md-icon-button"
+                                       ng-click="ctrl.selectGroupMemberUserWorkflowGroup($event)">
                                 <md-icon md-svg-icon="plus"></md-icon>
                             </md-button>
 

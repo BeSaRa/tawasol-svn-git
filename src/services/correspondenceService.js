@@ -1411,7 +1411,6 @@ module.exports = function (app) {
          */
         self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming) {
             loadingIndicatorService.forceStartLoading();
-            var defer = $q.defer(), defer2 = $q.defer(), defer3 = $q.defer(), defer4 = $q.defer(), defer5 = $q.defer();
             var multi = angular.isArray(correspondence) && correspondence.length > 1;
             action = action || 'forward';
             var errorMessage = [];
@@ -1433,30 +1432,18 @@ module.exports = function (app) {
                         favoritesUsers: function (distributionWFService) {
                             'ngInject';
                             return distributionWFService.loadFavorites('users')
-                                .then(function (result) {
-                                    defer.resolve(true);
-                                    return result;
-                                })
                                 .catch(function () {
                                     errorMessage.push('users');
-                                    defer.resolve(false);
                                     return []
                                 });
                         },
                         favoritesOrganizations: function (distributionWFService) {
                             'ngInject';
-                            return defer.promise.then(function () {
-                                return distributionWFService.loadFavorites('organizations')
-                                    .then(function (result) {
-                                        defer2.resolve(true);
-                                        return result;
-                                    })
-                                    .catch(function () {
-                                        defer2.resolve(false);
-                                        errorMessage.push('organizations');
-                                        return [];
-                                    });
-                            })
+                            return distributionWFService.loadFavorites('organizations')
+                                .catch(function () {
+                                    errorMessage.push('organizations');
+                                    return [];
+                                });
                         }, /*
                          distUsers: function (distributionWFService) {
                          'ngInject';
@@ -1464,55 +1451,33 @@ module.exports = function (app) {
                          },*/
                         comments: function (userCommentService) {
                             'ngInject';
-                            return defer2.promise.then(function () {
-                                return userCommentService
-                                    .getUserComments()
-                                    .then(function (result) {
-                                        defer3.resolve(true);
-                                        return _.filter(result, 'status');
-                                    });
-                            })
+                            return userCommentService
+                                .getUserComments()
+                                .then(function (result) {
+                                    return _.filter(result, 'status');
+                                });
                         },
                         workflowActions: function (workflowActionService) {
                             'ngInject';
-                            return defer3.promise.then(function () {
-                                return workflowActionService.loadCurrentUserWorkflowActions()
-                                    .then(function (result) {
-                                        defer4.resolve(true);
-                                        return result;
-                                    });
-                            })
+                            return workflowActionService.loadCurrentUserWorkflowActions()
                         }/*,
                          workflowGroups: function (distributionWFService) {
                          return distributionWFService.loadDistWorkflowGroups();
                          }*/,
                         organizationGroups: function (distributionWFService) {
                             'ngInject';
-                            return defer4.promise.then(function () {
-                                return distributionWFService
-                                    .loadDistWorkflowOrganizations('organizations')
-                                    .then(function (result) {
-                                        defer5.resolve(true);
-                                        return result;
-                                    })
-                            });
+                            return distributionWFService
+                                .loadDistWorkflowOrganizations('organizations')
                         },
                         replyOn: function (distributionWFService, $timeout) {
                             'ngInject';
                             if (angular.isArray(correspondence) || !correspondence.getInfo().isWorkItem() || action !== 'reply') {
                                 return $timeout(function () {
-                                    loadingIndicatorService.forceEndLoading();
                                     return false;
                                 })
                             }
-                            return defer5.promise.then(function () {
-                                return distributionWFService
-                                    .loadSenderUserForWorkItem(correspondence)
-                                    .then(function (result) {
-                                        loadingIndicatorService.forceEndLoading();
-                                        return result;
-                                    });
-                            });
+                            return distributionWFService
+                                .loadSenderUserForWorkItem(correspondence);
 
                         }
                     }

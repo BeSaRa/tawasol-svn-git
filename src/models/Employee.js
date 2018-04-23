@@ -265,7 +265,7 @@ module.exports = function (app) {
             };
 
             Employee.prototype.getIntervalMin = function () {
-                return (60 * 100 * 10) * (this.inboxRefreshInterval || 1);
+                return (60 * 100 ) * (this.inboxRefreshInterval || 1);
             };
 
             Employee.prototype.hasProxy = function () {

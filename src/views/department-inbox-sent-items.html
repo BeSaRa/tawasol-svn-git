@@ -83,7 +83,7 @@
                                     grid-right-click-directive="sentItemDepartmentInbox"
                                     model="sentItemDepartmentInbox"
                                     selected-length="{{ctrl.selectedSentItemDepartmentInboxes.length ? ctrl.selectedSentItemDepartmentInboxes.length : 0}}"
-                                    ng-repeat="sentItemDepartmentInbox in ctrl.sentItemDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    ng-repeat="sentItemDepartmentInbox in searchResults = (ctrl.sentItemDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
 
                                     <td md-cell class="indicator-td">
                                         <!-- Security Level -->
@@ -161,13 +161,21 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr md-row ng-if="!ctrl.sentItemDepartmentInboxes.length">
+                                    <td md-cell colspan="12" class="red-text text-center">{{lang.no_records_found}}</td>
+                                </tr>
+                                <tr md-row ng-if="ctrl.sentItemDepartmentInboxes.length && !searchResults.length">
+                                    <td md-cell colspan="12" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{ctrl.sentItemDepartmentInboxes.length}}" md-page-select>
+                                    md-total="{{(ctrl.sentItemDepartmentInboxes | filter:ctrl.searchModel).length}}" md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

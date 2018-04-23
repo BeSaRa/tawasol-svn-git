@@ -29,8 +29,12 @@ General:
 28. Fix - Main site - sub site information in grids(arabic).
 29. Added - Add to favorite bulk in search screens(outgoing|incoming|internal|general)
 30. Fix - Saving OU data on update. Separated the application user popup for organization structure and application users grid.
-31. Fix - Sorting for all user and department grids.
-
+31. Fix - Sorting for all correspondence, user, department grids.
+32. Fix - Paging after search in grid.
+33. Fix - Changed the author info in context menu to show user/ou name.
+34. Added - Indicator for outgoing and internal grids.
+35. Fix - Show move to folder in shortcut in folders grid.
+36. Fix - Add private workflow group in user preferences.
 
 Bugs:
 12291: Fix - Business : user cannot delete others comments (user has permission to delete all comments)
@@ -91,3 +95,4 @@ Bugs:
 12853: Fix - Search: outgoing search : sort result by security level didn't work
 12854: Fix - followup date - follow up date should not accept to be in the past while adding new/ editing a document or in manage destinations
 12857: Fix - user inbox : sent items : sort by security level option didn't work
+12856: Fix - User inbox : sent items : cannot sort item by type

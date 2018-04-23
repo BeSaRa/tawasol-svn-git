@@ -128,7 +128,7 @@
                                     model="workItem"
                                     ng-class="!workItem.generalStepElm.isOpen? 'unread-row': 'read-row'"
                                     selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
-                                    ng-repeat="workItem in ctrl.workItems| filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    ng-repeat="workItem in searchResults = (ctrl.workItems| filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
 
                                     <td md-cell class="indicator-td">
                                         <!-- Security Level -->
@@ -255,13 +255,21 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr md-row ng-if="!ctrl.workItems.length && ctrl.selectedFolder">
+                                    <td md-cell colspan="11" class="red-text text-center">{{lang.no_records_found}}</td>
+                                </tr>
+                                <tr md-row ng-if="ctrl.workItems.length && !searchResults.length && ctrl.selectedFolder">
+                                    <td md-cell colspan="11" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{ctrl.workItems.length}}" md-page-select>
+                                    md-total="{{(ctrl.workItems | filter:ctrl.searchModel).length}}" md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

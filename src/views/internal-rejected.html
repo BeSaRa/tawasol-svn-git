@@ -22,7 +22,7 @@
                                    md-progress="ctrl.progress">
                                 <thead md-head md-order="ctrl.grid.order">
                                 <tr md-row>
-                                    <th colspan="{{ctrl.selectedRejectedInternals.length > 1 ? 5 : 6}}"
+                                    <th colspan="{{ctrl.selectedRejectedInternals.length > 1 ? 6 : 7}}"
                                         ng-if="ctrl.selectedRejectedInternals.length" md-column>
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedRejectedInternals.length}} {{lang.items_selected}} </span>
@@ -51,20 +51,23 @@
                                             </md-button>
                                         </div>
                                     </th>
+                                    <th ng-if="!ctrl.selectedRejectedInternals.length" md-column md-order-by="">
+                                        <!-- Paper/Electronic Indicators -->
+                                    </th>
                                     <th ng-if="!ctrl.selectedRejectedInternals.length" md-column
                                         md-order-by="docSubject">
                                         <span>{{lang.subject}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedRejectedInternals.length" md-column
-                                        md-order-by="priorityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                         <span>{{lang.priority_level}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedRejectedInternals.length" md-column
-                                        md-order-by="securityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
                                         <span>{{lang.security_level}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedRejectedInternals.length" md-column
-                                        md-order-by="createdBy">
+                                        md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
                                         <span>{{lang.creator}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedRejectedInternals.length" md-column
@@ -81,7 +84,13 @@
                                 <tr md-row md-select="rejectedInternal" grid-right-click-directive
                                     model="rejectedInternal"
                                     selected-length="{{ctrl.selectedRejectedInternals.length ? ctrl.selectedRejectedInternals.length : 0}}"
-                                    ng-repeat="rejectedInternal in ctrl.rejectedInternals  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    ng-repeat="rejectedInternal in searchResults = (ctrl.rejectedInternals  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
+                                    <td md-cell class="indicator-td">
+                                        <!-- Electronic/Paper Document -->
+                                        <grid-indicator-directive record="rejectedInternal"
+                                                                  indicator-type="paperElectronic"
+                                                                  record-type="internal"></grid-indicator-directive>
+                                    </td>
                                     <td md-cell class="td-data">
                                         <a href="" ng-if="rejectedInternal.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(rejectedInternal, $event)">{{rejectedInternal.docSubject}}</a>
@@ -89,7 +98,7 @@
                                     </td>
                                     <td md-cell>{{rejectedInternal.priorityLevel.getTranslatedName()}}</td>
                                     <td md-cell>{{rejectedInternal.securityLevel.getTranslatedName()}}</td>
-                                    <td md-cell>{{rejectedInternal.getTranslatedCreator()}}</td>
+                                    <td md-cell>{{rejectedInternal.creatorInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{rejectedInternal.createdOn}}</td>
                                     <td md-cell ng-if="ctrl.selectedRejectedInternals.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedRejectedInternals.length
@@ -102,13 +111,21 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr md-row ng-if="!ctrl.rejectedInternals.length">
+                                    <td md-cell colspan="7" class="red-text text-center">{{lang.no_records_found}}</td>
+                                </tr>
+                                <tr md-row ng-if="ctrl.rejectedInternals.length && !searchResults.length">
+                                    <td md-cell colspan="7" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{ctrl.rejectedInternals.length}}" md-page-select>
+                                    md-total="{{(ctrl.rejectedInternals  | filter:ctrl.searchModel).length}}" md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

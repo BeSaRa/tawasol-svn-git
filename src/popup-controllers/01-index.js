@@ -89,5 +89,6 @@ module.exports = function (app) {
     require('./folderTreePopCtrl')(app);
     require('./rankPopCtrl')(app);
     require('./applicationUserFromOuPopCtrl')(app);
+    require('./addUserToWorkflowGroupPopCtrl')(app);
     require('./filterPopCtrl')(app);
 };

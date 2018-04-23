@@ -162,6 +162,38 @@ module.exports = function (app) {
                             }
                         }
                     });
+            },
+            /**
+             * @description Opens the popup to search and select the users to be added as group members for workflow group
+             * @param groupMembers
+             * @param isUserPreference
+             * @param $event
+             * @returns {promise}
+             */
+            selectUsersForUserWFGroup: function (groupMembers, isUserPreference, $event) {
+                return dialog
+                    .showDialog({
+                        template: cmsTemplate.getPopup('add-user-to-workflow-group'),
+                        targetEvent: $event,
+                        controller: 'addUserToWorkflowGroupPopCtrl',
+                        controllerAs: 'ctrl',
+                        locals: {
+                            groupMembers: !groupMembers ? [] : groupMembers,
+                            isUserPreference: isUserPreference
+                        },
+                        resolve: {
+                            organizations: function (organizationService) {
+                                'ngInject';
+                                return organizationService.getOrganizations();
+                            },
+                            organizationGroups: function (distributionWFService) {
+                                'ngInject';
+                                return distributionWFService
+                                    .loadDistWorkflowOrganizations('organizations')
+                            }
+
+                        }
+                    });
             }
         };
 
@@ -212,6 +244,7 @@ module.exports = function (app) {
          * @description Find OU application users by search text and search key
          * @param searchText
          * @param searchKey
+         * @param organizationUnit
          * @return {*|Promise<U>}
          */
         self.findUsersByText = function (searchText, searchKey, organizationUnit) {
@@ -392,20 +425,20 @@ module.exports = function (app) {
                 ? $q.when(self.ouApplicationUsersByUserId)
                 : self.loadOUApplicationUsersByUserId(applicationUserId);
         };
-       /* /!**
-         * @description Get Organizations by Application User
-         * @param applicationUserId
-         * @returns {*|Promise<any>}
-         *!/
-        self.getOUApplicationUsersByUserId = function (applicationUserId) {
-            applicationUserId = applicationUserId instanceof ApplicationUser ? applicationUserId.id : applicationUserId;
-            return self.loadOUApplicationUsers().then(function (ouApplicationUsers) {
-                return _.filter(ouApplicationUsers, function (ouApplicationUser) {
-                    if (Number(ouApplicationUser.applicationUser.id) === Number(applicationUserId))
-                        return ouApplicationUser.ouid;
-                });
-            });
-        };*/
+        /* /!**
+          * @description Get Organizations by Application User
+          * @param applicationUserId
+          * @returns {*|Promise<any>}
+          *!/
+         self.getOUApplicationUsersByUserId = function (applicationUserId) {
+             applicationUserId = applicationUserId instanceof ApplicationUser ? applicationUserId.id : applicationUserId;
+             return self.loadOUApplicationUsers().then(function (ouApplicationUsers) {
+                 return _.filter(ouApplicationUsers, function (ouApplicationUser) {
+                     if (Number(ouApplicationUser.applicationUser.id) === Number(applicationUserId))
+                         return ouApplicationUser.ouid;
+                 });
+             });
+         };*/
 
         self.getUsersWhoSetYouAsProxy = function (applicationUserId) {
             applicationUserId = applicationUserId instanceof ApplicationUser ? applicationUserId.id : applicationUserId;

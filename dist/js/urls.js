@@ -1,7 +1,7 @@
 (function () {
     angular
         .module('app')
-        .config(function (urlServiceProvider, rootEntityProvider, cmsTemplateProvider) {
+        .config(function (urlServiceProvider) {
             'ngInject';
             urlServiceProvider
                 .setEnvironment('stage')

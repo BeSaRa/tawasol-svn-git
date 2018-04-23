@@ -21,7 +21,7 @@
                                    md-progress="ctrl.progress">
                                 <thead md-head md-order="ctrl.grid.order">
                                 <tr md-row>
-                                    <th colspan="5" class="table-selector-header"
+                                    <th colspan="{{ctrl.selectedQuickSearchCorrespondence.length > 1 ? 7 : 8}}" class="table-selector-header"
                                         ng-if="ctrl.selectedQuickSearchCorrespondence.length" md-column>
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedQuickSearchCorrespondence.length}} {{lang.items_selected}} </span>
@@ -61,7 +61,7 @@
                                 <tr md-row
                                     grid-right-click-directive model="quickSearch" selected-length="{{ctrl.selectedQuickSearchCorrespondence.length ? ctrl.selectedQuickSearchCorrespondence.length : 0}}"
                                     md-select="quickSearch"
-                                    ng-repeat="quickSearch in ctrl.quickSearchCorrespondence  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
+                                    ng-repeat="quickSearch in searchResults = (ctrl.quickSearchCorrespondence  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
                                     <td md-cell class="indicator-td">
                                         <!-- Security Level -->
                                         <grid-indicator-directive record="quickSearch"
@@ -87,13 +87,21 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr md-row ng-if="!ctrl.quickSearchCorrespondence.length">
+                                    <td md-cell colspan="8" class="red-text text-center">{{lang.no_records_found}}</td>
+                                </tr>
+                                <tr md-row ng-if="ctrl.quickSearchCorrespondence.length && !searchResults.length">
+                                    <td md-cell colspan="8" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{ctrl.quickSearchCorrespondence.length}}" md-page-select>
+                                    md-total="{{(ctrl.quickSearchCorrespondence  | filter:ctrl.searchModel).length}}" md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

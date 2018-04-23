@@ -4,10 +4,6 @@
         <!-- page-header start -->
         <div layout="row" layout-align="start center" class="page-header padding-header small">
             <span>{{lang.menu_item_incoming_review}}</span>
-            <!--<md-button ng-click="ctrl.openAddReviewIncomingDialog($event)" class="md-icon-button"
-                       tooltip="{{lang.add}}">
-                <md-icon md-svg-icon="plus"></md-icon>
-            </md-button>-->
             <md-button ng-click="ctrl.reloadReviewIncomings()" class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
@@ -61,18 +57,19 @@
                                         <span>{{lang.subject}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
-                                        md-order-by="priorityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                         <span>{{lang.priority_level}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
-                                        md-order-by="securityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
                                         <span>{{lang.security_level}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedReviewIncomings.length"  md-order-by="mainSiteId" md-column="">
+                                    <th ng-if="!ctrl.selectedReviewIncomings.length" md-order-by="{{ctrl.getSortingKey('mainsite', 'Site')}}"
+                                        md-column="">
                                         <span>{{lang.main_site}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
-                                        md-order-by="subSiteId">
+                                        md-order-by="{{ctrl.getSortingKey('subsite', 'Site')}}">
                                         <span>{{lang.sub_site}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
@@ -88,7 +85,7 @@
                                 <tbody md-body>
                                 <tr md-row md-select="reviewIncoming" grid-right-click-directive model="reviewIncoming"
                                     selected-length="{{ctrl.selectedReviewIncomings.length ? ctrl.selectedReviewIncomings.length : 0}}"
-                                    ng-repeat="reviewIncoming in ctrl.reviewIncomings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    ng-repeat="reviewIncoming in searchResults = (ctrl.reviewIncomings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order)  track by $index">
                                     <td md-cell class="td-data">
                                         <a href="" ng-if="reviewIncoming.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(reviewIncoming, $event)">{{reviewIncoming.docSubject}}</a>
@@ -110,13 +107,22 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr md-row ng-if="!ctrl.reviewIncomings.length">
+                                    <td md-cell colspan="6" class="red-text text-center">{{lang.no_records_found}}</td>
+                                </tr>
+                                <tr md-row ng-if="ctrl.reviewIncomings.length && !searchResults.length">
+                                    <td md-cell colspan="6" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{ctrl.reviewIncomings.length}}" md-page-select>
+                                    md-total="{{(ctrl.reviewIncomings  | filter:ctrl.searchModel).length}}"
+                                    md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

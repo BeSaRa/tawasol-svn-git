@@ -21,7 +21,7 @@
                                    md-progress="ctrl.progress">
                                 <thead md-head md-order="ctrl.grid.order">
                                 <tr md-row>
-                                    <th colspan="{{ctrl.selectedReadyToSendInternals.length > 1 ? 5 : 6}}"
+                                    <th colspan="{{ctrl.selectedReadyToSendInternals.length > 1 ? 6 : 7}}"
                                         ng-if="ctrl.selectedReadyToSendInternals.length" md-column>
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedReadyToSendInternals.length}} {{lang.items_selected}} </span>
@@ -40,20 +40,23 @@
                                             </md-button>
                                         </div>
                                     </th>
+                                    <th ng-if="!ctrl.selectedReadyToSendInternals.length" md-column md-order-by="">
+                                        <!-- Paper/Electronic Indicators -->
+                                    </th>
                                     <th ng-if="!ctrl.selectedReadyToSendInternals.length" md-column
                                         md-order-by="docSubject">
                                         <span>{{lang.subject}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReadyToSendInternals.length" md-column
-                                        md-order-by="priorityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                         <span>{{lang.priority_level}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReadyToSendInternals.length" md-column
-                                        md-order-by="securityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
                                         <span>{{lang.security_level}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReadyToSendInternals.length" md-column
-                                        md-order-by="createdBy">
+                                        md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
                                         <span>{{lang.creator}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReadyToSendInternals.length" md-column
@@ -68,7 +71,13 @@
                                 </thead>
                                 <tbody md-body>
                                 <tr md-row md-select="readyToSendInternal" grid-right-click-directive model="readyToSendInternal" selected-length="{{ctrl.selectedReadyToSendInternals.length ? ctrl.selectedReadyToSendInternals.length : 0}}"
-                                    ng-repeat="readyToSendInternal in ctrl.readyToSendInternals | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    ng-repeat="readyToSendInternal in searchResults = (ctrl.readyToSendInternals | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
+                                    <td md-cell class="indicator-td">
+                                        <!-- Electronic/Paper Document -->
+                                        <grid-indicator-directive record="readyToSendInternal"
+                                                                  indicator-type="paperElectronic"
+                                                                  record-type="internal"></grid-indicator-directive>
+                                    </td>
                                     <td md-cell class="td-data">
                                         <a href="" ng-if="readyToSendInternal.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(readyToSendInternal, $event)">{{readyToSendInternal.docSubject}}</a>
@@ -76,7 +85,7 @@
                                     </td>
                                     <td md-cell>{{readyToSendInternal.priorityLevel.getTranslatedName()}}</td>
                                     <td md-cell>{{readyToSendInternal.securityLevel.getTranslatedName()}}</td>
-                                    <td md-cell>{{readyToSendInternal.getTranslatedCreator()}}</td>
+                                    <td md-cell>{{readyToSendInternal.creatorInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{readyToSendInternal.createdOn}}</td>
                                     <td md-cell ng-if="ctrl.selectedReadyToSendInternals.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedReadyToSendInternals.length
@@ -89,13 +98,21 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr md-row ng-if="!ctrl.readyToSendInternals.length">
+                                    <td md-cell colspan="7" class="red-text text-center">{{lang.no_records_found}}</td>
+                                </tr>
+                                <tr md-row ng-if="ctrl.readyToSendInternals.length && !searchResults.length">
+                                    <td md-cell colspan="7" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{ctrl.readyToSendInternals.length}}" md-page-select>
+                                    md-total="{{(ctrl.readyToSendInternals | filter:ctrl.searchModel).length}}" md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

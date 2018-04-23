@@ -59,6 +59,16 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function(property, modelType){
+            return generator.getColumnSortingKey(property, modelType);
+        };
+
+        /**
          * @description Replaces the record in grid after update
          * @param record
          */
@@ -361,17 +371,17 @@ module.exports = function (app) {
          * @description broadcast selected organization and workflow group
          * @param readyToSendIncoming
          * @param $event
+         * @param defer
          */
-        self.broadcast = function (readyToSendIncoming, $event) {
-            broadcastService
-                .controllerMethod
-                .broadcastSend(readyToSendIncoming, $event)
+        self.broadcast = function (readyToSendIncoming, $event , defer) {
+            readyToSendIncoming
+                .correspondenceBroadcast($event)
                 .then(function () {
-                    self.reloadReadyToSendIncomings(self.grid.page);
+                    self.reloadReadyToSendIncomings(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        })
                 })
-                .catch(function () {
-                    self.reloadReadyToSendIncomings(self.grid.page);
-                });
         };
 
 

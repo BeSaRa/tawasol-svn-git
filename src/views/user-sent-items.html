@@ -82,7 +82,7 @@
                                 <tr md-row md-select="userSentItem" model="userSentItem"
                                     grid-right-click-directive="userSentItem"
                                     selected-length="{{ctrl.selectedUserSentItems.length ? ctrl.selectedUserSentItems.length : 0}}"
-                                    ng-repeat="userSentItem in ctrl.userSentItems  | filter:ctrl.searchModel |orderBy:ctrl.grid.order  track by $index">
+                                    ng-repeat="userSentItem in searchResults = (ctrl.userSentItems  | filter:ctrl.searchModel |orderBy:ctrl.grid.order) track by $index">
                                     <!-- | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) -->
                                     <td md-cell class="indicator-td">
                                         <!-- Security Level -->
@@ -142,6 +142,14 @@
                                                                     shortcut="true">
                                             </grid-actions-directive>
                                         </div>
+                                    </td>
+                                </tr>
+                                <tr md-row ng-if="!ctrl.userSentItems.length">
+                                    <td md-cell colspan="10" class="red-text text-center">{{lang.no_records_found}}</td>
+                                </tr>
+                                <tr md-row ng-if="ctrl.userSentItems.length && !searchResults.length">
+                                    <td md-cell colspan="10" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
                                     </td>
                                 </tr>
                                 </tbody>

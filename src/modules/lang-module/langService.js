@@ -179,6 +179,7 @@ module.exports = function (app) {
                 expires: expiry
             });
             self.current = langKey;
+            self.currentLangTitleCase = _.startCase(_.toLower(langKey));
             return self.current;
         };
 

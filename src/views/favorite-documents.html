@@ -23,7 +23,7 @@
                                 <thead md-head md-order="ctrl.grid.order">
                                 <!-- md-on-reorder="ctrl.reloadFavoriteDocuments"-->
                                 <tr md-row>
-                                    <th colspan="6" ng-if="ctrl.selectedFavoriteDocuments.length" md-column>
+                                    <th colspan="{{ctrl.selectedFavoriteDocuments.length > 1 ? 6 : 7}}" ng-if="ctrl.selectedFavoriteDocuments.length" md-column>
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedFavoriteDocuments.length}} {{lang.items_selected}} </span>
                                             <span flex></span>
@@ -62,7 +62,7 @@
                                 <tr md-row md-select="favoriteDocument" grid-right-click-directive="favoriteDocument"
                                     model="favoriteDocument"
                                     selected-length="{{ctrl.selectedFavoriteDocuments.length ? ctrl.selectedFavoriteDocuments.length : 0}}"
-                                    ng-repeat="favoriteDocument in ctrl.favoriteDocuments  | filter:ctrl.searchModel | orderBy:ctrl.grid.order track by $index">
+                                    ng-repeat="favoriteDocument in searchResults = (ctrl.favoriteDocuments  | filter:ctrl.searchModel | orderBy:ctrl.grid.order) track by $index">
                                     <!-- | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) -->
                                     <td md-cell class="indicator-td">
                                         <!-- Security Level -->
@@ -96,6 +96,14 @@
                                                                     shortcut="true">
                                             </grid-actions-directive>
                                         </div>
+                                    </td>
+                                </tr>
+                                <tr md-row ng-if="!ctrl.favoriteDocuments.length">
+                                    <td md-cell colspan="7" class="red-text text-center">{{lang.no_records_found}}</td>
+                                </tr>
+                                <tr md-row ng-if="ctrl.favoriteDocuments.length && !searchResults.length">
+                                    <td md-cell colspan="7" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
                                     </td>
                                 </tr>
                                 </tbody>

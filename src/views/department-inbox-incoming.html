@@ -66,7 +66,7 @@
                                     <tr md-row md-select="incomingDepartmentInbox"
                                         grid-right-click-directive="incomingDepartmentInbox" model="incomingDepartmentInbox"
                                         selected-length="{{ctrl.selectedIncomingDepartmentInboxes.length ? ctrl.selectedIncomingDepartmentInboxes.length : 0}}"
-                                        ng-repeat="incomingDepartmentInbox in ctrl.incomingDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                        ng-repeat="incomingDepartmentInbox in searchResults = (ctrl.incomingDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
                                         <td md-cell>{{incomingDepartmentInbox.generalStepElm.docFullSerial}}</td>
                                         <td md-cell><a href="" class="view-doc"
                                                        ng-click="ctrl.viewDocument(incomingDepartmentInbox, $event)">{{incomingDepartmentInbox.generalStepElm.docSubject}}</a>
@@ -87,13 +87,21 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr md-row ng-if="!ctrl.incomingDepartmentInboxes.length">
+                                        <td md-cell colspan="8" class="red-text text-center">{{lang.no_records_found}}</td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.incomingDepartmentInboxes.length && !searchResults.length">
+                                        <td md-cell colspan="8" class="red-text text-center">
+                                            {{lang.no_records_found_matching_search}}
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{ctrl.incomingDepartmentInboxes.length}}" md-page-select>
+                                    md-total="{{(ctrl.incomingDepartmentInboxes | filter:ctrl.searchModel).length}}" md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

@@ -8,9 +8,9 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            if (model.ou.hasOwnProperty('id')) {
+            if (model.ou && model.ou.hasOwnProperty('id')) {
                 model.ou = model.ou.id;
-            } else if (model.ou.hasOwnProperty('toOUId')) {
+            } else if (model.ou && model.ou.hasOwnProperty('toOUId')) {
                 model.ou = model.ou.toOUId;
             }
             return model;

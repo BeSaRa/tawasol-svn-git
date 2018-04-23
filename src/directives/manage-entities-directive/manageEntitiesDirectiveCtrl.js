@@ -62,16 +62,23 @@ module.exports = function (app) {
 
         self.labels = {
             name: 'entities_name',
-            // description: 'entities_description',
+            description: 'entities_description',
             mobileNumber: 'entities_mobile_number',
             qid: 'entities_qid',
             employeeNum: 'entities_employee_number',
-            crNumber: 'entities_registration_number'
+            crNumber: 'entities_registration_number',
+            email: 'entities_email',
+            address: 'entities_address',
+            fullNameAr: 'entities_full_arabic_name',
+            fullNameEn: 'entities_full_english_name',
+            nationality: 'entities_nationality'
         };
 
         function _currentFields(entityType) {
-            self.currentFields = _.chunk(_.filter(self.entity.getLinkedTypeFields(entityType), function (field) {
-                return ['typeId'].indexOf(field) === -1;
+            self.currentFields = _.chunk(_.filter(_.map(self.entity.getLinkedTypeFields(entityType), function (field, key) {
+                return angular.extend({}, field, {label: key})
+            }), function (field) {
+                return ['typeId'].indexOf(field.label) === -1;
             }), 3);
         }
 

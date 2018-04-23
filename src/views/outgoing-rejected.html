@@ -32,7 +32,8 @@
                                             <span flex></span>
 
                                             <!--ng-if="ctrl.selectedRejectedOutgoings.length > 1"-->
-                                            <md-button class="md-icon-button" ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
+                                            <md-button class="md-icon-button"
+                                                       ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
                                                        tooltip="{{lang.grid_action_launch_distribution_workflow}}"
                                                        ng-click="ctrl.launchDistributionWorkflowBulk($event)">
                                                 <md-icon md-svg-icon="sitemap" class="action-green"></md-icon>
@@ -54,20 +55,23 @@
                                             </md-button>
                                         </div>
                                     </th>
+                                    <th ng-if="!ctrl.selectedRejectedOutgoings.length" md-column md-order-by="">
+                                        <!-- Paper/Electronic Indicators -->
+                                    </th>
                                     <th ng-if="!ctrl.selectedRejectedOutgoings.length" md-column
                                         md-order-by="docSubject">
                                         <span>{{lang.subject}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedRejectedOutgoings.length" md-column
-                                        md-order-by="priorityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                         <span>{{lang.priority_level}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedRejectedOutgoings.length" md-column
-                                        md-order-by="securityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
                                         <span>{{lang.security_level}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedRejectedOutgoings.length" md-column
-                                        md-order-by="createdBy">
+                                        md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
                                         <span>{{lang.creator}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedRejectedOutgoings.length" md-column
@@ -84,7 +88,13 @@
                                 <tr md-row md-select="rejectedOutgoing" grid-right-click-directive
                                     model="rejectedOutgoing"
                                     selected-length="{{ctrl.selectedRejectedOutgoings.length ? ctrl.selectedRejectedOutgoings.length : 0}}"
-                                    ng-repeat="rejectedOutgoing in ctrl.rejectedOutgoings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    ng-repeat="rejectedOutgoing in searchResults = (ctrl.rejectedOutgoings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order)  track by $index">
+                                    <td md-cell class="indicator-td">
+                                        <!-- Electronic/Paper Document -->
+                                        <grid-indicator-directive record="rejectedOutgoing"
+                                                                  indicator-type="paperElectronic"
+                                                                  record-type="outgoing"></grid-indicator-directive>
+                                    </td>
                                     <td md-cell class="td-data">
                                         <a href="" class="view-doc" ng-if="rejectedOutgoing.hasContent()"
                                            ng-click="ctrl.viewDocument(rejectedOutgoing, $event)">{{rejectedOutgoing.docSubject}}</a>
@@ -92,7 +102,7 @@
                                     </td>
                                     <td md-cell>{{rejectedOutgoing.priorityLevel.getTranslatedName()}}</td>
                                     <td md-cell>{{rejectedOutgoing.securityLevel.getTranslatedName()}}</td>
-                                    <td md-cell>{{rejectedOutgoing.getTranslatedCreator()}}</td>
+                                    <td md-cell>{{rejectedOutgoing.creatorInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{rejectedOutgoing.createdOn}}</td>
                                     <td md-cell ng-if="ctrl.selectedRejectedOutgoings.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedRejectedOutgoings.length
@@ -105,13 +115,22 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr md-row ng-if="!ctrl.rejectedOutgoings.length">
+                                    <td md-cell colspan="7" class="red-text text-center">{{lang.no_records_found}}</td>
+                                </tr>
+                                <tr md-row ng-if="ctrl.rejectedOutgoings.length && !searchResults.length">
+                                    <td md-cell colspan="7" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{ctrl.rejectedOutgoings.length}}" md-page-select>
+                                    md-total="{{(ctrl.rejectedOutgoings  | filter:ctrl.searchModel).length}}"
+                                    md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

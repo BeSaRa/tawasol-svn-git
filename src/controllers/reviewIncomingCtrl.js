@@ -61,6 +61,23 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function(property, modelType){
+            var currentLang = langService.current === 'en' ? 'En' : 'Ar';
+            if(property === 'mainsite'){
+                return 'main'+ currentLang + 'SiteText';
+            }
+            else if (property === 'subsite'){
+                return 'sub'+ currentLang + 'SiteText';
+            }
+            return generator.getColumnSortingKey(property, modelType);
+        };
+
+        /**
          * @description Contains methods for CRUD operations for review incoming emails
          */
         self.statusServices = {
@@ -505,7 +522,7 @@ module.exports = function (app) {
                     self.reloadReviewIncomings(self.grid.page);
                 });*/
             reviewIncoming
-                .correspondenceBroadcast()
+                .correspondenceBroadcast($event)
                 .then(function () {
                     self.reloadReviewIncomings(self.grid.page)
                         .then(function () {

@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                              employeeService,
                                                              $controller,
                                                              $interval,
+                                                             $http,
                                                              correspondenceService,
                                                              userInboxService,
                                                              followupEmployeeInboxService) {
@@ -93,11 +94,11 @@ module.exports = function (app) {
         if (!employeeService.isAdminUser()) {
             // reload notifications
             self.mailService.loadMailNotifications(5);
-
             var interval = $interval(function () {
-                self.mailService.loadMailNotifications(5).catch(function () {
-                    $interval.cancel(interval);
-                });
+                self.mailService.loadMailNotifications(5)
+                    .catch(function () {
+                        $interval.cancel(interval);
+                    });
             }, employeeService.getEmployee().getIntervalMin());
         }
 

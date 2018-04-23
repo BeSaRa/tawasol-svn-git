@@ -6,6 +6,7 @@ module.exports = function (app) {
                       SenderInfo,
                       entityTypeService,
                       LinkedObject,
+                      langService,
                       moment) {
         'ngInject';
 

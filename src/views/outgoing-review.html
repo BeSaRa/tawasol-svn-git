@@ -26,14 +26,15 @@
                                    md-progress="ctrl.progress">
                                 <thead md-head md-order="ctrl.grid.order">
                                 <tr md-row>
-                                    <th colspan="{{ctrl.selectedReviewOutgoings.length > 1 ? 7 : 8}}"
+                                    <th colspan="{{ctrl.selectedReviewOutgoings.length > 1 ? 6 : 7}}"
                                         ng-if="ctrl.selectedReviewOutgoings.length" md-column>
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedReviewOutgoings.length}} {{lang.items_selected}} </span>
                                             <span flex></span>
 
                                             <!--ng-if="ctrl.selectedReviewOutgoings.length > 1"-->
-                                            <md-button class="md-icon-button" ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
+                                            <md-button class="md-icon-button"
+                                                       ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
                                                        tooltip="{{lang.grid_action_launch_distribution_workflow}}"
                                                        ng-click="ctrl.acceptAndLaunchDistributionWorkflowBulk($event)">
                                                 <md-icon md-svg-icon="sitemap" class="action-green"></md-icon>
@@ -55,23 +56,23 @@
                                             </md-button>
                                         </div>
                                     </th>
-                                    <!--<th ng-if="!ctrl.selectedReviewOutgoings.length" md-column md-order-by="">
-                                        &lt;!&ndash; Paper/Electronic Indicators &ndash;&gt;
-                                    </th>-->
+                                    <th ng-if="!ctrl.selectedReviewOutgoings.length" md-column md-order-by="">
+                                        <!-- Paper/Electronic Indicators -->
+                                    </th>
                                     <th ng-if="!ctrl.selectedReviewOutgoings.length" md-column
                                         md-order-by="docSubject">
                                         <span>{{lang.subject}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReviewOutgoings.length" md-column
-                                        md-order-by="priorityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                         <span>{{lang.priority_level}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReviewOutgoings.length" md-column
-                                        md-order-by="securityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
                                         <span>{{lang.security_level}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReviewOutgoings.length" md-column
-                                        md-order-by="createdBy">
+                                        md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
                                         <span>{{lang.creator}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReviewOutgoings.length" md-column
@@ -87,13 +88,13 @@
                                 <tbody md-body>
                                 <tr md-row md-select="reviewOutgoing" grid-right-click-directive model="reviewOutgoing"
                                     selected-length="{{ctrl.selectedReviewOutgoings.length ? ctrl.selectedReviewOutgoings.length : 0}}"
-                                    ng-repeat="reviewOutgoing in ctrl.reviewOutgoings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
-                                    <!--<td md-cell class="indicator-td">
-                                        &lt;!&ndash; Electronic/Paper Document &ndash;&gt;
+                                    ng-repeat="reviewOutgoing in searchResults = (ctrl.reviewOutgoings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order)  track by $index">
+                                    <td md-cell class="indicator-td">
+                                        <!-- Electronic/Paper Document -->
                                         <grid-indicator-directive record="reviewOutgoing"
                                                                   indicator-type="paperElectronic"
                                                                   record-type="outgoing"></grid-indicator-directive>
-                                    </td>-->
+                                    </td>
                                     <td md-cell class="td-data">
                                         <a href="" ng-if="reviewOutgoing.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(reviewOutgoing, $event)">{{reviewOutgoing.docSubject}}</a>
@@ -101,7 +102,7 @@
                                     </td>
                                     <td md-cell>{{reviewOutgoing.priorityLevel.getTranslatedName()}}</td>
                                     <td md-cell>{{reviewOutgoing.securityLevel.getTranslatedName()}}</td>
-                                    <td md-cell>{{reviewOutgoing.getTranslatedCreator()}}</td>
+                                    <td md-cell>{{reviewOutgoing.creatorInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{reviewOutgoing.createdOn}}</td>
                                     <td md-cell ng-if="ctrl.selectedReviewOutgoings.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedReviewOutgoings.length
@@ -114,13 +115,22 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr md-row ng-if="!ctrl.reviewOutgoings.length">
+                                    <td md-cell colspan="7" class="red-text text-center">{{lang.no_records_found}}</td>
+                                </tr>
+                                <tr md-row ng-if="ctrl.reviewOutgoings.length && !searchResults.length">
+                                    <td md-cell colspan="7" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{ctrl.reviewOutgoings.length}}" md-page-select>
+                                    md-total="{{(ctrl.reviewOutgoings  | filter:ctrl.searchModel).length}}"
+                                    md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

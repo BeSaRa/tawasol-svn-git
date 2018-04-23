@@ -42,9 +42,14 @@
     <form ng-if="ctrl.showEntityFrom" layout="column" name="entityForm">
         <div ng-repeat="fields in ctrl.currentFields track by $index" layout="row">
             <md-input-container flex ng-repeat="field in fields track by $index">
-                <label for="{{field}}">{{lang[ctrl.labels[field]]}}</label>
-                <input name="{{field}}" id="{{field}}" ng-model="ctrl.entity[field]" required/>
+                <label for="{{field.label}}">{{lang[ctrl.labels[field.label]]}}</label>
+                <input name="{{field.label}}" id="{{field.label}}" ng-model="ctrl.entity[field.label]"
+                       ng-required="field.required"/>
+                <div ng-messages="entityForm[field.label].$error">
+                    <div ng-message="required">{{lang.field_required}}</div>
+                </div>
             </md-input-container>
+
         </div>
         <div layout="row">
             <div>
@@ -74,12 +79,10 @@
                                 <span>{{ctrl.selectedEntities.length}} {{lang.items_selected}} </span>
                             </div>
                         </th>
-                        <th ng-if="!ctrl.selectedEntities.length" md-column
-                            md-order-by="arName">
+                        <th ng-if="!ctrl.selectedEntities.length" md-column>
                             <span>{{lang.entities_name}}</span>
                         </th>
-                        <th md-column
-                            md-order-by="arName">
+                        <th md-column>
                             <span>{{lang.entities_type}}</span>
                         </th>
                         <th md-column ng-if="!ctrl.disableEverything">
@@ -96,7 +99,7 @@
                         ng-disabled="ctrl.disableEverything"
                         ng-repeat="entity in ctrl.linkedEntities  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                         <td md-cell>
-                            {{entity.name}}
+                            {{entity.getTranslatedName()}}
                         </td>
                         <td md-cell>
                             {{entity.typeId.getTranslatedName()}}

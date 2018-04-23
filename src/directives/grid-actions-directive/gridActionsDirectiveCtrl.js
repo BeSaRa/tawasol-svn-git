@@ -5,11 +5,13 @@ module.exports = function (app) {
                                                          _,
                                                          Lookup,
                                                          lookupService,
+                                                         employeeService,
                                                          Outgoing,
                                                          Incoming,
                                                          Internal,
                                                          EventHistory,
-                                                         SentItemDepartmentInbox) {
+                                                         SentItemDepartmentInbox,
+                                                         Information) {
         'ngInject';
         var self = this;
         self.controllerName = 'gridActionsDirectiveCtrl';
@@ -137,9 +139,10 @@ module.exports = function (app) {
         /**
          * @description Checks if comments information can be shown or not. It will not show for Outgoing | Incoming | Internal documents
          * @param model
+         * @param gridName
          * @returns {boolean}
          */
-        self.showCommentsInfo = function (model) {
+        self.showCommentsInfo = function (model, gridName) {
             return !(model instanceof Outgoing
                 || model instanceof Incoming
                 || model instanceof Internal
@@ -149,12 +152,23 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Checks if comments information can be shown or not. It will not show for Outgoing | Incoming | Internal documents
+         * @param model
+         * @param gridName
+         * @returns {boolean}
+         */
+        self.showAuthorInfo = function (model, gridName) {
+            return !(model instanceof EventHistory);
+        };
+
+        /**
          * @description Get the document information for context menu
          * @param model
          * @param property
+         * @param gridName
          * @returns {*}
          */
-        self.getDocumentInfo = function (model, property) {
+        self.getDocumentInfo = function (model, property, gridName) {
             if (property === 'securityLevel') {
                 var securityLevel = model.hasOwnProperty('generalStepElm')
                     ? (model.generalStepElm.hasOwnProperty('securityLevel') ? model.generalStepElm.securityLevel : null)
@@ -174,9 +188,12 @@ module.exports = function (app) {
                     return lookupService.getLookupByLookupKey(lookupService.priorityLevel, priorityLevel).getTranslatedName();
             }
             else if (property === 'author') {
-                return model.hasOwnProperty('createdBy')
+                return model.hasOwnProperty('creatorInfo')
+                    ? new Information(model.creatorInfo).getTranslatedName()
+                    : (model.hasOwnProperty('creatorOuInfo') ? new Information(model.creatorOuInfo).getTranslatedName() : '');
+                /*return model.hasOwnProperty('createdBy')
                     ? model.createdBy
-                    : (model.hasOwnProperty('creatorOu') ? model.creatorOu[langService.current + 'Name'] : '');
+                    : (model.hasOwnProperty('creatorOu') ? model.creatorOu[langService.current + 'Name'] : '');*/
             }
             else if (property === 'tags') {
                 return model.getTagsCount();

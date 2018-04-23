@@ -60,6 +60,16 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function(property, modelType){
+            return generator.getColumnSortingKey(property, modelType);
+        };
+
+        /**
          * @description Replaces the record in grid after update
          * @param record
          */
@@ -104,15 +114,15 @@ module.exports = function (app) {
                 return;
             }
 
-           /* distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSendBulk(self.selectedReadyToSendInternals, "internal", $event)
-                .then(function () {
-                    self.reloadReadyToSendInternals(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadReadyToSendInternals(self.grid.page);
-                });*/
+            /* distributionWorkflowService
+                 .controllerMethod
+                 .distributionWorkflowSendBulk(self.selectedReadyToSendInternals, "internal", $event)
+                 .then(function () {
+                     self.reloadReadyToSendInternals(self.grid.page);
+                 })
+                 .catch(function () {
+                     self.reloadReadyToSendInternals(self.grid.page);
+                 });*/
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedReadyToSendInternals, $event, 'forward', 'favorites')
                 .then(function () {
@@ -319,14 +329,13 @@ module.exports = function (app) {
          * @param $event
          */
         self.broadcast = function (readyToSendInternal, $event) {
-            broadcastService
-                .controllerMethod
-                .broadcastSend(readyToSendInternal, $event)
+            readyToSendInternal
+                .correspondenceBroadcast($event)
                 .then(function () {
-                    self.reloadReadyToSendInternals(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadReadyToSendInternals(self.grid.page);
+                    self.reloadReadyToSendInternals(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        })
                 });
         };
 
@@ -347,7 +356,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }

@@ -1,0 +1,115 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.group_members}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20" ng-if="!ctrl.model.id">{{lang.group_members}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="addToWorkflowGroupForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="row">
+                        <md-input-container flex ng-if="!ctrl.usersCriteria.hide">
+                            <label for="ou">{{lang.select_organization}}</label>
+                            <md-select id="ou" name="ou"
+                                       ng-change="ctrl.onSearchUsers()"
+                                       ng-model="ctrl.usersCriteria.ou">
+                                <md-option required ng-value="organization"
+                                           ng-repeat="organization in ctrl.organizationGroups">
+                                    {{organization.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="domain_name">{{lang.domain_name}}</label>
+                            <input id="domain_name" ng-model="ctrl.usersCriteria.domainName">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="arabic_name">{{lang.arabic_name}}</label>
+                            <input id="arabic_name" ng-model="ctrl.usersCriteria.arName">
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="english_name">{{lang.english_name}}</label>
+                            <input id="english_name" ng-model="ctrl.usersCriteria.enName">
+                        </md-input-container>
+                        <div>
+                            <md-button id="user_search" ng-disabled="ctrl.loadingIndicatorService.loading"
+                                       class="md-raised"
+                                       ng-click="ctrl.onSearchUsers()">
+                                {{lang.search}}
+                            </md-button>
+                        </div>
+                    </div>
+                </div>
+
+                <div layout="row" class="p20">
+                    <md-card layout="column" flex class="card-overlay">
+                        <md-table-container>
+                            <table md-table ng-model="ctrl.selectedUsers"
+                                   md-row-select="true"
+                                   multiple="true">
+                                <thead md-head md-order="ctrl.searchedUsersGrid.order">
+                                <tr md-row>
+                                    <th colspan="5" ng-if="ctrl.selectedUsers.length"
+                                        md-column>
+                                        <span>{{ctrl.selectedUsers.length}} {{lang.items_selected}} </span>
+                                    </th>
+                                    <th md-column ng-if="!ctrl.selectedUsers.length" md-order-by="toUserDomain">
+                                        {{lang.domain_name}}
+                                    </th>
+                                    <th md-column ng-if="!ctrl.selectedUsers.length" md-order-by="arName">
+                                        {{lang.arabic_name}}
+                                    </th>
+                                    <th md-column ng-if="!ctrl.selectedUsers.length" md-order-by="enName">
+                                        {{lang.english_name}}
+                                    </th>
+                                    <th md-column ng-if="!ctrl.selectedUsers.length" md-order-by="{{ctrl.getSortingKey('organization', 'DistributionWFUser')}}">
+                                        {{lang.organization_unit}}
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="user" ng-if="!ctrl.checkIfExist(user)"
+                                    ng-repeat="user in ctrl.users | filter:ctrl.searchModel |limitTo: ctrl.searchedUsersGrid.limit: ((ctrl.searchedUsersGrid.page - 1) * ctrl.searchedUsersGrid.limit) |orderBy:ctrl.searchedUsersGrid.order track by $index">
+                                    <td md-cell>
+                                        <span>{{user.toUserDomain}}</span>
+                                    </td>
+                                    <td md-cell>
+                                        <span>{{user.getFullNameByKey('ar')}}</span>
+                                    </td>
+                                    <td md-cell>
+                                        <span>{{user.getFullNameByKey('en')}}</span>
+                                    </td>
+                                    <td md-cell>
+                                        <span>{{user.getTranslatedOrganizationName()}}</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.searchedUsersGrid.limitOptions"
+                                    md-limit="ctrl.searchedUsersGrid.limit"
+                                    md-page="ctrl.searchedUsersGrid.page"
+                                    md-total="{{ctrl.users.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised"
+                           ng-disabled="!ctrl.selectedUsers.length"
+                           ng-click="ctrl.addToWorkflowGroup($event)">
+                    {{lang.add}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeAddToWorkflowGroupPopupFromCtrl()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

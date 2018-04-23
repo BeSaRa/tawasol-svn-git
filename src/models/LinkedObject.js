@@ -1,24 +1,121 @@
 module.exports = function (app) {
     app.factory('LinkedObject', function (CMSModelInterceptor,
+                                          langService,
                                           _) {
         'ngInject';
         return function LinkedObject(model) {
             var self = this;
             self.name = null;
             self.mobileNumber = null;
-            self.typeId = null;
+            self.description = null;
+            self.email = null;
+            self.address = null;
             self.qid = null;
+            self.fullNameAr = null;
+            self.fullNameEn = null;
+            self.nationality = null;
             self.employeeNum = null;
             self.crNumber = null;
 
+            self.typeId = null;
+            // ['name', 'mobileNumber', 'description', 'email', 'address', 'typeId'];
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [],
                 linkedTypes = {
-                    EXTERNAL_USER: ['typeId', 'name', 'mobileNumber'],
-                    EMPLOYEE: ['typeId', 'name', 'mobileNumber', 'qid', 'employeeNum'],
-                    COMPANY: ['typeId', 'name', 'mobileNumber', 'crNumber'],
-                    OTHER: ['typeId', 'name', 'mobileNumber']
+                    EXTERNAL_USER: {
+                        typeId: {
+                            required: true
+                        },
+                        fullNameAr: {
+                            required: true
+                        },
+                        fullNameEn: {
+                            required: true
+                        },
+                        qid: {
+                            required: true
+                        },
+                        mobileNumber: {
+                            required: true
+                        },
+                        description: {
+                            required: false
+                        },
+                        email: {
+                            required: false
+                        },
+                        address: {
+                            required: false
+                        }
+                    },
+                    EMPLOYEE: {
+                        typeId: {
+                            required: true
+                        },
+                        fullNameAr: {
+                            required: true
+                        },
+                        fullNameEn: {
+                            required: true
+                        },
+                        qid: {
+                            required: true
+                        },
+                        employeeNum: {
+                            required: true
+                        },
+                        mobileNumber: {
+                            required: true
+                        },
+                        description: {
+                            required: false
+                        },
+                        email: {
+                            required: false
+                        },
+                        address: {
+                            required: false
+                        }
+                    },
+                    COMPANY: {
+                        typeId: {
+                            required: true
+                        },
+                        name: {
+                            required: true
+                        },
+                        crNumber: {
+                            required: true
+                        },
+                        mobileNumber: {
+                            required: true
+                        },
+                        description: {
+                            required: true
+                        },
+                        email: {
+                            required: false
+                        },
+                        address: {
+                            required: false
+                        }
+                    },
+                    OTHER: {
+                        typeId: {
+                            required: true
+                        }, name: {
+                            required: true
+                        }, mobileNumber: {
+                            required: true
+                        }, description: {
+                            required: false
+                        }, email: {
+                            required: false
+                        }, address: {
+                            required: false
+                        }
+                    }
                 },
                 defaultTypes = [
                     'EXTERNAL_USER',
@@ -38,19 +135,40 @@ module.exports = function (app) {
             };
 
             LinkedObject.prototype.getLinkedTypeFields = function (linkedType) {
-                var type = linkedType.hasOwnProperty('lookupStrKey') ? linkedType.lookupStrKey : linkedType;
+                var type = this.getType(linkedType);
                 return defaultTypes.indexOf(type) === -1 ? linkedTypes.OTHER : linkedTypes[type];
             };
 
             LinkedObject.prototype.preparedType = function () {
                 var self = this;
                 var properties = this.getLinkedTypeFields(this.typeId);
+                var array = Object.keys(properties);
                 _.map(self, function (item, key) {
-                    if (properties.indexOf(key) === -1 && typeof self[key] !== 'function') {
+                    if (array.indexOf(key) === -1 && typeof self[key] !== 'function') {
                         delete self[key];
                     }
                 });
                 return this;
+            };
+
+            LinkedObject.prototype.getType = function (linkedType) {
+                return linkedType.hasOwnProperty('lookupStrKey') ? linkedType.lookupStrKey : linkedType;
+            };
+
+            LinkedObject.prototype.getTranslatedName = function () {
+                var position = defaultTypes.indexOf(this.getType(this.typeId));
+                var self = this;
+                var currentLang = langService.current === 'ar' ? 'Ar' : 'En', name = null;
+                switch (position) {
+                    case 0:
+                    case 1:
+                        name = self['fullName' + currentLang];
+                        break;
+                    default:
+                        name = self.name;
+                        break;
+                }
+                return name;
             };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

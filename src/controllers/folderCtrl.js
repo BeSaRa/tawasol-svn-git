@@ -683,16 +683,17 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
-            // Add To Folder
+            // Move To Folder
             {
                 type: 'action',
                 icon: 'folder-move',
                 text: 'grid_action_move_to_folder',
-                shortcut: false,
+                shortcut: true,
+                showInView: true,
                 callback: self.moveToFolder,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                    return self.checkToShowAction(action, model);
                 }
             },
             // Add To Favorite

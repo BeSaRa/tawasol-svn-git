@@ -28,7 +28,8 @@
                                             <span flex></span>
 
                                             <!--ng-if="ctrl.selectedReadyToSendIncomings.length > 1"-->
-                                            <md-button class="md-icon-button" ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
+                                            <md-button class="md-icon-button"
+                                                       ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
                                                        tooltip="{{lang.grid_action_launch_distribution_workflow}}"
                                                        ng-click="ctrl.launchDistributionWorkflowBulk($event)">
                                                 <md-icon md-svg-icon="sitemap" class="action-green"></md-icon>
@@ -45,15 +46,15 @@
                                         <span>{{lang.subject}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReadyToSendIncomings.length" md-column
-                                        md-order-by="priorityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                         <span>{{lang.priority_level}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReadyToSendIncomings.length" md-column
-                                        md-order-by="securityLevel">
+                                        md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
                                         <span>{{lang.security_level}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReadyToSendIncomings.length" md-column
-                                        md-order-by="createdBy">
+                                        md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
                                         <span>{{lang.creator}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedReadyToSendIncomings.length" md-column
@@ -67,8 +68,10 @@
                                 </tr>
                                 </thead>
                                 <tbody md-body>
-                                <tr md-row md-select="readyToSendIncoming" grid-right-click-directive model="readyToSendIncoming" selected-length="{{ctrl.selectedReadyToSendIncomings.length ? ctrl.selectedReadyToSendIncomings.length : 0}}"
-                                    ng-repeat="readyToSendIncoming in ctrl.readyToSendIncomings | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                <tr md-row md-select="readyToSendIncoming" grid-right-click-directive
+                                    model="readyToSendIncoming"
+                                    selected-length="{{ctrl.selectedReadyToSendIncomings.length ? ctrl.selectedReadyToSendIncomings.length : 0}}"
+                                    ng-repeat="readyToSendIncoming in searchResults = (ctrl.readyToSendIncomings | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
                                     <td md-cell class="td-data">
                                         <a href="" ng-if="readyToSendIncoming.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(readyToSendIncoming, $event)">{{readyToSendIncoming.docSubject}}</a>
@@ -76,7 +79,7 @@
                                     </td>
                                     <td md-cell>{{readyToSendIncoming.priorityLevel.getTranslatedName()}}</td>
                                     <td md-cell>{{readyToSendIncoming.securityLevel.getTranslatedName()}}</td>
-                                    <td md-cell>{{readyToSendIncoming.getTranslatedCreator()}}</td>
+                                    <td md-cell>{{readyToSendIncoming.creatorInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{readyToSendIncoming.createdOn}}</td>
                                     <td md-cell ng-if="ctrl.selectedReadyToSendIncomings.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedReadyToSendIncomings.length
@@ -89,13 +92,22 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr md-row ng-if="!ctrl.readyToSendIncomings.length">
+                                    <td md-cell colspan="6" class="red-text text-center">{{lang.no_records_found}}</td>
+                                </tr>
+                                <tr md-row ng-if="ctrl.readyToSendIncomings.length && !searchResults.length">
+                                    <td md-cell colspan="6" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{ctrl.readyToSendIncomings.length}}" md-page-select>
+                                    md-total="{{(ctrl.readyToSendIncomings | filter:ctrl.searchModel).length}}"
+                                    md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

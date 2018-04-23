@@ -52,6 +52,16 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function(property, modelType){
+            return generator.getColumnSortingKey(property, modelType);
+        };
+
+        /**
          * @description Reload the grid of prepare internal item
          * @param pageNumber
          * @return {*|Promise<U>}

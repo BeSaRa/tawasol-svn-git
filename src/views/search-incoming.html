@@ -582,7 +582,7 @@
                             <tr md-row md-select="searchedIncomingDocument" grid-right-click-directive
                                 model="searchedIncomingDocument"
                                 selected-length="{{ctrl.selectedSearchedIncomingDocuments.length ? ctrl.selectedSearchedIncomingDocuments.length : 0}}"
-                                ng-repeat="searchedIncomingDocument in ctrl.searchedIncomingDocuments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                ng-repeat="searchedIncomingDocument in searchResults = (ctrl.searchedIncomingDocuments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
                                 <td md-cell class="indicator-td">
                                     <!-- Security Level -->
                                     <grid-indicator-directive record="searchedIncomingDocument"
@@ -623,13 +623,21 @@
                                     </div>
                                 </td>
                             </tr>
+                            <tr md-row ng-if="!ctrl.searchedIncomingDocuments.length">
+                                <td md-cell colspan="8" class="red-text text-center">{{lang.no_records_found}}</td>
+                            </tr>
+                            <tr md-row ng-if="ctrl.searchedIncomingDocuments.length && !searchResults.length">
+                                <td md-cell colspan="8" class="red-text text-center">
+                                    {{lang.no_records_found_matching_search}}
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                         <md-table-pagination
                                 md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                 md-limit-options="ctrl.grid.limitOptions"
                                 md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                md-total="{{ctrl.searchedIncomingDocuments.length}}" md-page-select>
+                                md-total="{{(ctrl.searchedIncomingDocuments | filter:ctrl.searchModel).length}}" md-page-select>
                         </md-table-pagination>
                     </md-table-container>
                 </md-tab>

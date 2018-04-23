@@ -81,6 +81,16 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function (property, modelType) {
+            return generator.getColumnSortingKey(property, modelType);
+        };
+
+        /**
          * @description Launch distribution workflow for selected ready to send outgoing mails
          * @param $event
          */
@@ -312,22 +322,35 @@ module.exports = function (app) {
             managerService.manageDocumentCorrespondence(readyToSendOutgoing.vsId, readyToSendOutgoing.docClassName, readyToSendOutgoing.docSubject, $event)
         };
 
+
+        // self.broadcast = function (readyToSendOutgoing, $event) {
+        //     broadcastService
+        //         .controllerMethod
+        //         .broadcastSend(readyToSendOutgoing, $event)
+        //         .then(function () {
+        //             self.reloadReadyToSendOutgoings(self.grid.page);
+        //         })
+        //         .catch(function () {
+        //             self.reloadReadyToSendOutgoings(self.grid.page);
+        //         });
+        // };
         /**
          * @description broadcast selected organization and workflow group
          * @param readyToSendOutgoing
          * @param $event
+         * @param defer
          */
-        self.broadcast = function (readyToSendOutgoing, $event) {
-            broadcastService
-                .controllerMethod
-                .broadcastSend(readyToSendOutgoing, $event)
+        self.broadcast = function (readyToSendOutgoing, $event, defer) {
+            readyToSendOutgoing
+                .correspondenceBroadcast($event)
                 .then(function () {
-                    self.reloadReadyToSendOutgoings(self.grid.page);
+                    self.reloadReadyToSendOutgoings(self.grid.page)
+                        .then(function () {
+                            new ResolveDefer(defer);
+                        })
                 })
-                .catch(function () {
-                    self.reloadReadyToSendOutgoings(self.grid.page);
-                });
         };
+
 
         /**
          * @description send to ready to export
@@ -405,8 +428,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }
@@ -650,7 +673,7 @@ module.exports = function (app) {
                 icon: 'bullhorn',
                 text: 'grid_action_broadcast',
                 shortcut: false,
-                hide: true,
+                hide: false,
                 callback: self.broadcast,
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && (!!model.addMethod || (model.hasOwnProperty('approvers') && model.approvers !== null));

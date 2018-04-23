@@ -1278,7 +1278,7 @@ module.exports = function (app) {
          * @description to catch reference plan changes.
          */
         self.referencePlanChanged = function (firstTime) {
-            if (!self.organization.referenceNumberPlanId && !self.organization.hasRegistry)
+            if (!self.organization.referenceNumberPlanId || !self.organization.hasRegistry)
                 return;
 
 

@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('CMSInterceptor', function (tokenService, loadingIndicatorService, exception, $q) {
         'ngInject';
+        var countRequests = 0;
         return {
             // to adjust the request before sending.
             request: function (config) {
@@ -8,28 +9,43 @@ module.exports = function (app) {
                 if (config.hasOwnProperty('loading') && !config.loading) {
 
                 } else {
+                    countRequests += 1;
                     loadingIndicatorService.startLoading();
                 }
                 return tokenService.setTokenForHeader(config);
             },
             // when request has an error while send process.
             requestError: function (reason) {
-                //console.log("ASDAD", reason);
                 exception.requestError(reason);
-                loadingIndicatorService.endLoading();
+
+                if (reason.config.hasOwnProperty('loading') && !reason.config.loading) {
+
+                } else {
+                    countRequests -= 1;
+                }
+                !countRequests ? loadingIndicatorService.endLoading() : null;
                 return $q.reject(reason);
             },
             // after getting response
             response: function (result) {
-                // console.log("RESULT", result);
                 exception.response(result);
-                loadingIndicatorService.endLoading();
+                if (result.config.hasOwnProperty('loading') && !result.config.loading) {
+
+                } else {
+                    countRequests -= 1;
+                }
+                !countRequests ? loadingIndicatorService.endLoading() : null;
                 return result;
             },
             // when response has an error.
             responseError: function (rejection) {
                 exception.responseError(rejection);
-                loadingIndicatorService.endLoading();
+                if (rejection.config.hasOwnProperty('loading') && !rejection.config.loading) {
+
+                } else {
+                    countRequests -= 1;
+                }
+                !countRequests ? loadingIndicatorService.endLoading() : null;
                 return $q.reject(rejection);
             }
         }
