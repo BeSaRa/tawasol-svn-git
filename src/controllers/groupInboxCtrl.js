@@ -132,7 +132,7 @@ module.exports = function (app) {
                     .loadGroupInbox()
                     .then(function (workItems) {
                         counterService.loadCounters();
-                        mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                         self.workItems = workItems;
                         self.selectedWorkItems = [];
                         defer.resolve(true);
@@ -467,7 +467,7 @@ module.exports = function (app) {
                 });
                 if (index > -1)
                     self.workItems.splice(index, 1, record);
-                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
             };
             /**
              * @description Mark item as read/unread

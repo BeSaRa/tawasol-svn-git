@@ -63,7 +63,7 @@ module.exports = function (app) {
             var wobNumber = item.workObjectNumber;
             correspondenceService.viewCorrespondence(item, self.gridActions, checkIfEditPropertiesAllowed(item, true), checkIfEditCorrespondenceSiteAllowed(item, true))
                 .then(function () {
-                    self.mailService.loadMailNotifications(5);
+                    self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount);
                     _.map(userInboxService.userInboxes, function (workItem) {
                         if (workItem.generalStepElm.workObjectNumber === wobNumber)
                             workItem.generalStepElm.isOpen = true;
@@ -76,7 +76,7 @@ module.exports = function (app) {
                     });
                 })
                 .catch(function () {
-                    self.mailService.loadMailNotifications(5);
+                    self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount);
                     _.map(userInboxService.userInboxes, function (workItem) {
                         if (workItem.generalStepElm.workObjectNumber === wobNumber)
                             workItem.generalStepElm.isOpen = true;
@@ -94,11 +94,11 @@ module.exports = function (app) {
         if (!employeeService.isAdminUser()) {
             var stopNotification = false;
             // reload notifications
-            self.mailService.loadMailNotifications(5);
+            self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount);
             var interval = $interval(function () {
                 if (stopNotification)
                     return;
-                return self.mailService.loadMailNotifications(5)
+                return self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount)
                     .catch(function () {
                         $interval.cancel(interval);
                         stopNotification = true;

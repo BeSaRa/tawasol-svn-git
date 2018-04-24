@@ -130,7 +130,7 @@ module.exports = function (app) {
                 .loadReadyToExports()
                 .then(function (result) {
                     counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                     self.readyToExports = result;
                     self.selectedReadyToExports = [];
                     defer.resolve(true);

@@ -182,7 +182,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadRejectedOutgoings(self.grid.page)
                         .then(function(){
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                         });
                 });
         };
@@ -280,7 +280,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadRejectedOutgoings(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                             new ResolveDefer(defer);
                         });
                 });

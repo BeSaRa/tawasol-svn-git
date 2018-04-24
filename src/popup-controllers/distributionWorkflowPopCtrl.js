@@ -2273,7 +2273,7 @@ module.exports = function (app) {
             distributionWorkflowService.sendDistributionWorkflow(finalDistributionWorkflowUsers, self.vsId, self.classDescription).then(function (result) {
                 if (result) {
                     toast.success(langService.get('launch_success_distribution_workflow'));
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                     self.allSelectedDistributionWorkflows = [];
                 }
                 else
@@ -2319,7 +2319,7 @@ module.exports = function (app) {
             distributionWorkflowService.forwardDistributionWorkflow(finalDistributionWorkflowUsers, self.vsId, self.workObjectNumber, self.classDescription).then(function (result) {
                 if (result) {
                     toast.success(langService.get('launch_success_distribution_workflow'));
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                     self.allSelectedDistributionWorkflows = [];
                 }
                 else
@@ -2367,7 +2367,7 @@ module.exports = function (app) {
             distributionWorkflowService.forwardDistributionWorkflow(finalDistributionWorkflowUsers, self.vsId, self.workObjectNumber, self.classDescription).then(function (result) {
                 if (result) {
                     toast.success(langService.get('launch_success_distribution_workflow'));
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                     self.allSelectedDistributionWorkflows = [];
                 }
                 else
@@ -2431,7 +2431,7 @@ module.exports = function (app) {
                 } else {
                     toast.success(langService.get('launch_success_distribution_workflow'));
                 }
-                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
 
                 dialog.hide(result);
             });

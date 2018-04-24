@@ -499,7 +499,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadSearchedGeneralDocuments(self.grid.page)
                         .then(function(){
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                         });
                 });
             // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
@@ -784,7 +784,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadSearchedGeneralDocuments(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                             new ResolveDefer(defer);
                         })
                 })

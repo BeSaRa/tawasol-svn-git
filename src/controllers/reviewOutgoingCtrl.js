@@ -162,7 +162,7 @@ module.exports = function (app) {
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedReviewOutgoings, $event, 'forward', 'favorites')
                 .then(function () {
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                     self.reloadReviewOutgoings(self.grid.page);
                 });
         };
@@ -269,7 +269,7 @@ module.exports = function (app) {
 
             reviewOutgoing.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                     self.reloadReviewOutgoings(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
@@ -444,7 +444,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReviewOutgoings(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                             new ResolveDefer(defer);
                         })
                 })

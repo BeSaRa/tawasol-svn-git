@@ -98,7 +98,7 @@ module.exports = function (app) {
             var index = _.findIndex(self.followupEmployeeInboxes, {'id': record.id});
             if (index > -1)
                 self.followupEmployeeInboxes.splice(index, 1, record);
-            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
         };
 
         /**
@@ -113,7 +113,7 @@ module.exports = function (app) {
                 .loadFollowupEmployeeInboxes(self.selectedUserForFollowUpEmployeeInbox, self.selectedOrganizationForFollowUpEmployeeInbox)
                 .then(function (result) {
                     counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                     self.followupEmployeeInboxes = result;
                     self.selectedFollowupEmployeeInboxes = [];
                     defer.resolve(true);

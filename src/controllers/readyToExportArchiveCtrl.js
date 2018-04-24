@@ -130,7 +130,7 @@ module.exports = function (app) {
                 .loadCentralArchiveWorkItems()
                 .then(function (result) {
                     counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                     self.workItems = result;
                     self.selectedWorkItems = [];
                     defer.resolve(true);

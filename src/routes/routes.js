@@ -984,7 +984,7 @@ module.exports = function (app) {
                     // just to update notifications when opening user inbox
                     notifications: function(mailNotificationService){
                         'ngInject';
-                        return mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        return mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                     }
                 }
             })

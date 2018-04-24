@@ -161,7 +161,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadDraftInternals(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                         });
                 });
         };
@@ -263,7 +263,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadDraftInternals(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                             new ResolveDefer(defer);
                         });
                 });
@@ -381,7 +381,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadDraftInternals(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                             new ResolveDefer(defer);
                         })
                 })

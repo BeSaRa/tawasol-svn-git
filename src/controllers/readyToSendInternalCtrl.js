@@ -143,7 +143,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.reloadReadyToSendInternals(self.grid.page)
                         .then(function(){
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                         });
                 });
         };
@@ -213,7 +213,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReadyToSendInternals(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                             new ResolveDefer(defer);
                         });
                 });
@@ -340,7 +340,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReadyToSendInternals(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                             new ResolveDefer(defer);
                         })
                 });

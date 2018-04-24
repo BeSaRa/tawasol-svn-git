@@ -78,7 +78,7 @@ module.exports = function (app) {
                 .loadFavoriteDocuments(self.grid.page, self.grid.limit)
                 .then(function (result) {
                     counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                     self.favoriteDocuments = result;
 
                     self.selectedFavoriteDocuments = [];

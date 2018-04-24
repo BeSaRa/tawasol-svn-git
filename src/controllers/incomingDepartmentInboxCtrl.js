@@ -82,7 +82,7 @@ module.exports = function (app) {
                 .loadIncomingDepartmentInboxes()
                 .then(function (result) {
                     counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                     self.incomingDepartmentInboxes = result;
                     self.selectedIncomingDepartmentInboxes = [];
                     defer.resolve(true);

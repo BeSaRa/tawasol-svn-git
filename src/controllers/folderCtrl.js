@@ -92,7 +92,7 @@ module.exports = function (app) {
                 .loadUserInboxByFolder(self.selectedFolder)
                 .then(function (workItems) {
                     counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                     self.workItems = workItems;
                     self.selectedWorkItems = [];
                     defer.resolve(true);
@@ -1202,7 +1202,7 @@ module.exports = function (app) {
             });
             if (index > -1)
                 self.workItems.splice(index, 1, record);
-            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
         };
 
         // self.refreshInbox = function (time) {

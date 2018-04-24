@@ -125,7 +125,7 @@ module.exports = function (app) {
                 .loadProxyMailInboxes(userId, ouId)
                 .then(function (result) {
                     counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
                     self.proxyMailInboxes = result;
                     self.selectedProxyMailInboxes = [];
                     defer.resolve(true);
