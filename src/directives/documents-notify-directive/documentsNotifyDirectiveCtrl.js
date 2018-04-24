@@ -92,12 +92,16 @@ module.exports = function (app) {
         };
 
         if (!employeeService.isAdminUser()) {
+            var stopNotification = false;
             // reload notifications
             self.mailService.loadMailNotifications(5);
             var interval = $interval(function () {
-                self.mailService.loadMailNotifications(5)
+                if (stopNotification)
+                    return;
+                return self.mailService.loadMailNotifications(5)
                     .catch(function () {
                         $interval.cancel(interval);
+                        stopNotification = true;
                     });
             }, employeeService.getEmployee().getIntervalMin());
         }
