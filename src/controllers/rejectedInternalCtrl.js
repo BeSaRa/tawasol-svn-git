@@ -16,7 +16,8 @@ module.exports = function (app) {
                                                      distributionWorkflowService,
                                                      contextHelpService,
                                                      correspondenceService,
-                                                     ResolveDefer) {
+                                                     ResolveDefer,
+                                                     mailNotificationService) {
         'ngInject';
         var self = this;
 
@@ -64,7 +65,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -159,7 +160,10 @@ module.exports = function (app) {
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedRejectedInternals, $event, 'forward', 'favorites')
                 .then(function () {
-                    self.reloadRejectedInternals(self.grid.page);
+                    self.reloadRejectedInternals(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -254,6 +258,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadRejectedInternals(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });

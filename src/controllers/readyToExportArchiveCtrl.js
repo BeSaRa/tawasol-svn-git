@@ -21,7 +21,8 @@ module.exports = function (app) {
                                                          downloadService,
                                                          favoriteDocumentsService,
                                                          ResolveDefer,
-                                                         generator) {
+                                                         generator,
+                                                         mailNotificationService) {
         'ngInject';
         var self = this;
         self.controllerName = 'readyToExportArchiveCtrl';
@@ -129,6 +130,7 @@ module.exports = function (app) {
                 .loadCentralArchiveWorkItems()
                 .then(function (result) {
                     counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.workItems = result;
                     self.selectedWorkItems = [];
                     defer.resolve(true);

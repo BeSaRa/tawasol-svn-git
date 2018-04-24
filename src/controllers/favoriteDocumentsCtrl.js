@@ -15,7 +15,8 @@ module.exports = function (app) {
                                                       counterService,
                                                       ResolveDefer,
                                                       correspondenceService,
-                                                      generator) {
+                                                      generator,
+                                                      mailNotificationService) {
         'ngInject';
         var self = this;
 
@@ -71,15 +72,15 @@ module.exports = function (app) {
          * @return {*|Promise<U>}
          */
         self.reloadFavoriteDocuments = function (pageNumber) {
-            console.log(pageNumber, self.grid.limit);
             var defer = $q.defer();
             self.progress = defer.promise;
             return favoriteDocumentsService
                 .loadFavoriteDocuments(self.grid.page, self.grid.limit)
                 .then(function (result) {
                     counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.favoriteDocuments = result;
-                    console.log('self.favoriteDocuments', pageNumber, self.favoriteDocuments);
+
                     self.selectedFavoriteDocuments = [];
                     defer.resolve(true);
                     if (pageNumber)

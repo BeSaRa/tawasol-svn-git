@@ -20,7 +20,8 @@ module.exports = function (app) {
                                                    distributionWFService,
                                                    distributionWorkflowService,
                                                    broadcastService,
-                                                   ResolveDefer) {
+                                                   ResolveDefer,
+                                                   mailNotificationService) {
         'ngInject';
         var self = this;
 
@@ -161,6 +162,7 @@ module.exports = function (app) {
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedReviewOutgoings, $event, 'forward', 'favorites')
                 .then(function () {
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.reloadReviewOutgoings(self.grid.page);
                 });
         };
@@ -170,7 +172,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.acceptOutgoingBulk = function ($event) {
-            console.log('accept review outgoing mails bulk : ', self.selectedReviewOutgoings);
+            //console.log('accept review outgoing mails bulk : ', self.selectedReviewOutgoings);
             reviewOutgoingService
                 .controllerMethod
                 .reviewOutgoingAcceptBulk(self.selectedReviewOutgoings, $event)
@@ -267,6 +269,7 @@ module.exports = function (app) {
 
             reviewOutgoing.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.reloadReviewOutgoings(self.grid.page)
                         .then(function () {
                             new ResolveDefer(defer);
@@ -441,6 +444,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReviewOutgoings(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         })
                 })

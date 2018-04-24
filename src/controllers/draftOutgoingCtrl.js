@@ -19,7 +19,8 @@ module.exports = function (app) {
                                                   distributionWorkflowService,
                                                   broadcastService,
                                                   ResolveDefer,
-                                                  correspondenceService) {
+                                                  correspondenceService,
+                                                  mailNotificationService) {
             'ngInject';
             var self = this;
 
@@ -197,7 +198,10 @@ module.exports = function (app) {
                 return correspondenceService
                     .launchCorrespondenceWorkflow(self.selectedDraftOutgoings, $event, 'forward', 'favorites')
                     .then(function () {
-                        self.reloadDraftOutgoings(self.grid.page);
+                        self.reloadDraftOutgoings(self.grid.page)
+                            .then(function(){
+                                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            });
                     });
             };
 
@@ -300,6 +304,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadDraftOutgoings(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -402,21 +407,22 @@ module.exports = function (app) {
                 managerService.manageDocumentCorrespondence(draftOutgoing.vsId, draftOutgoing.docClassName, draftOutgoing.docSubject, $event)
             };
 
-            /**
-             * @description broadcast selected organizations and workflow groups
-             * @param readyToExport
-             * @param $event
-             */
-            self.broadcast = function (readyToExport, $event) {
-                broadcastService
-                    .controllerMethod
-                    .broadcastSend(readyToExport, $event)
+        /**
+         * @description broadcast selected organizations and workflow groups
+         * @param draftOutgoing
+         * @param $event
+         * @param defer
+         */
+            self.broadcast = function (draftOutgoing, $event, defer) {
+                draftOutgoing
+                    .correspondenceBroadcast($event)
                     .then(function () {
-                        self.reloadDraftOutgoings(self.grid.page);
+                        self.reloadDraftOutgoings(self.grid.page)
+                            .then(function () {
+                                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                                new ResolveDefer(defer);
+                            })
                     })
-                    .catch(function () {
-                        self.reloadDraftOutgoings(self.grid.page);
-                    });
             };
 
             var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {

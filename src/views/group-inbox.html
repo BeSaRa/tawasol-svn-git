@@ -53,9 +53,9 @@
                                     <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="">
                                         <!-- Security Level, Document type, Tags, Re-assigned Indicators -->
                                     </th>
-                                    <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="">
-                                        <!-- Star/unstar -->
-                                    </th>
+                                    <!--<th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="">
+                                        &lt;!&ndash; Star/unstar &ndash;&gt;
+                                    </th>-->
                                     <th ng-if="!ctrl.selectedWorkItems.length" md-column
                                         md-order-by="generalStepElm.docFullSerial">
                                         <span>{{lang.inbox_serial}}</span>
@@ -131,13 +131,13 @@
                                                                   indicator-type="followupStatus"
                                                                   record-type="workItem"></grid-indicator-directive>
                                     </td>
-                                    <td md-cell>
+                                   <!-- <td md-cell>
                                         <star-unstar-directive record="workItem"
                                                                record-type="WorkItem"
                                                                callback="ctrl.changeStar"
                                                                selected-records="ctrl.selectedWorkItems"
                                         ></star-unstar-directive>
-<!--
+&lt;!&ndash;
                                         &lt;!&ndash;tooltip="{{workItem.getTranslatedStarred()}}"&ndash;&gt;
                                         <md-icon class="star-yellow cursor-pointer" aria-label="{{lang.starred}}"
                                                  ng-if="workItem.generalStepElm.starred && (!ctrl.selectedWorkItems.length
@@ -167,8 +167,8 @@
                                                          && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber != workItem.generalStepElm.workObjectNumber)
                                                             || ctrl.selectedWorkItems.length > 1)"
                                                  md-svg-icon="star-outline"
-                                        ></md-icon>-->
-                                    </td>
+                                        ></md-icon>&ndash;&gt;
+                                    </td>-->
                                     <td md-cell>{{workItem.generalStepElm.docFullSerial}}</td>
                                     <td md-cell class="indicator-td text-right"
                                         style="padding-right:0 !important; padding-left:0 !important;">

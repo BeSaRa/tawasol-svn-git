@@ -31,7 +31,8 @@ module.exports = function (app) {
                                                    dialog,
                                                    counterService,
                                                    correspondenceService,
-                                                   favoriteDocumentsService
+                                                   favoriteDocumentsService,
+                                                   mailNotificationService
                                                    //centralArchives
     ) {
         'ngInject';
@@ -498,7 +499,10 @@ module.exports = function (app) {
             }
             searchedOutgoingDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                    self.reloadSearchedOutgoingDocument(self.grid.page)
+                        .then(function(){
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
             // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
             //     .then(function () {
@@ -795,6 +799,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadSearchedOutgoingDocument(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         })
                 })

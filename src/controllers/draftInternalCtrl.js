@@ -18,7 +18,8 @@ module.exports = function (app) {
                                                   distributionWorkflowService,
                                                   broadcastService,
                                                   correspondenceService,
-                                                  ResolveDefer) {
+                                                  ResolveDefer,
+                                                  mailNotificationService) {
         'ngInject';
         var self = this;
 
@@ -65,7 +66,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -158,7 +159,10 @@ module.exports = function (app) {
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedDraftInternals, $event, 'forward', 'favorites')
                 .then(function () {
-                    self.reloadDraftInternals(self.grid.page);
+                    self.reloadDraftInternals(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -181,7 +185,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.editProperties = function (draftInternal, $event) {
-            console.log('edit internal properties : ', draftInternal);
+            //console.log('edit internal properties : ', draftInternal);
             var properties = [
                 'attachments',
                 'linkedEntities',
@@ -259,6 +263,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadDraftInternals(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -359,9 +364,10 @@ module.exports = function (app) {
          * @description broadcast selected organization and workflow group
          * @param draftInternal
          * @param $event
+         * @param defer
          */
-        self.broadcast = function (draftInternal, $event) {
-            broadcastService
+        self.broadcast = function (draftInternal, $event, defer) {
+            /*broadcastService
                 .controllerMethod
                 .broadcastSend(draftInternal, $event)
                 .then(function () {
@@ -369,7 +375,16 @@ module.exports = function (app) {
                 })
                 .catch(function () {
                     self.reloadDraftInternals(self.grid.page);
-                });
+                });*/
+            draftInternal
+                .correspondenceBroadcast($event)
+                .then(function () {
+                    self.reloadDraftInternals(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        })
+                })
         };
 
 
@@ -467,30 +482,30 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
-           /* // Edit Properties
-            {
-                type: 'action',
-                icon: 'pencil',
-                text: 'grid_action_edit_internal_properties',
-                shortcut: true,
-                showInView: false,
-                permissionKey: "EDIT_INTERNAL_PROPERTIES",
-                callback: self.editProperties,
-                class: "action-green",
-                checkShow: self.checkToShowAction
-            },
-            // Edit Content
-            {
-                type: 'action',
-                icon: 'pencil-box',
-                text: 'grid_action_edit_internal_content',
-                shortcut: true,
-                showInView: false,
-                permissionKey: "EDIT_INTERNAL_CONTENT",
-                callback: self.editContent,
-                class: "action-green",
-                checkShow: self.checkToShowAction
-            },*/
+            /* // Edit Properties
+             {
+                 type: 'action',
+                 icon: 'pencil',
+                 text: 'grid_action_edit_internal_properties',
+                 shortcut: true,
+                 showInView: false,
+                 permissionKey: "EDIT_INTERNAL_PROPERTIES",
+                 callback: self.editProperties,
+                 class: "action-green",
+                 checkShow: self.checkToShowAction
+             },
+             // Edit Content
+             {
+                 type: 'action',
+                 icon: 'pencil-box',
+                 text: 'grid_action_edit_internal_content',
+                 shortcut: true,
+                 showInView: false,
+                 permissionKey: "EDIT_INTERNAL_CONTENT",
+                 callback: self.editContent,
+                 class: "action-green",
+                 checkShow: self.checkToShowAction
+             },*/
             // Send To Review
             {
                 type: 'action',

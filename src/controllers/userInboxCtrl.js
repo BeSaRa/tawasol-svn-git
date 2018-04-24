@@ -64,6 +64,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.userInboxes = userInboxes;
+        self.starredUserInboxes = _.filter(self.userInboxes, 'generalStepElm.starred');
         self.userFolders = userFolders;
 
         /**
@@ -114,6 +115,30 @@ module.exports = function (app) {
                 }
             ]
         };
+        self.starredGrid = {
+            limit: 5, //self.globalSetting.searchAmount, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: [5, 10, 20, // limit options
+                {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.starredUserInboxes.length + 21);
+                    }
+                }
+            ]
+        };
+
+        self.fixedTabsCount  = 1;
+        self.showStarredTab = function(isShow){
+            if(isShow){
+                self.fixedTabsCount  = 2;
+            }
+            else{
+                self.fixedTabsCount  = 1;
+            }
+            return isShow;
+        };
 
         self.openSidebarFilter = function () {
             self.sidebarFilter = !self.sidebarFilter;
@@ -130,7 +155,7 @@ module.exports = function (app) {
         // just for start
         function _prepareFilters() {
             self.workItemsFilters = new Array(userFilters.length);
-            for(var i =0; i<userFilters.length; i++){
+            for (var i = 0; i < userFilters.length; i++) {
                 self.filterGrid.push({
                     limit: 5, //self.globalSetting.searchAmount, // default limit
                     page: 1, // first page
@@ -139,6 +164,7 @@ module.exports = function (app) {
                 })
             }
         }
+
         _prepareFilters();
 
         /**
@@ -187,7 +213,7 @@ module.exports = function (app) {
          * @param $index
          */
         self.selectFilter = function (filter, $index) {
-            self.selectedTab = ($index + 1);
+            self.selectedTab = ($index + self.fixedTabsCount);
             self.selectedFilter = {
                 index: $index,
                 filter: angular.copy(filter)
@@ -207,7 +233,14 @@ module.exports = function (app) {
             });
             if (index > -1)
                 self.userInboxes.splice(index, 1, record);
-            mailNotificationService.loadMailNotifications(5);
+
+            var starredIndex = _.findIndex(self.starredUserInboxes, function (starredUserInbox) {
+                return starredUserInbox.generalStepElm.vsId === record.generalStepElm.vsId;
+            });
+            if (starredIndex > -1)
+                self.starredUserInboxes.splice(index, 1, record);
+
+            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
         };
 
         /**
@@ -226,9 +259,9 @@ module.exports = function (app) {
                 .loadUserInboxes()
                 .then(function (result) {
                     counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(5);
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.userInboxes = result;
-                    // self.starredUserInboxes = _.filter(self.userInboxes, 'generalStepElm.starred');
+                    self.starredUserInboxes = _.filter(self.userInboxes, 'generalStepElm.starred');
                     self.selectedUserInboxes = [];
                     defer.resolve(true);
                     if (pageNumber)

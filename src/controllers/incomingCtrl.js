@@ -28,6 +28,7 @@ module.exports = function (app) {
                                              lookups,
                                              dialog,
                                              receive, // available when the normal receive.
+                                             mailNotificationService,
                                              distributionWorkflowService,
                                              correspondenceService) {
         'ngInject';
@@ -128,6 +129,7 @@ module.exports = function (app) {
 
         self.requestCompleted = false;
         var saveCorrespondenceFinished = function (status, newId) {
+            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             counterService.loadCounters();
             if (status) {// || (self.incoming.contentFile)
                 toast.success(langService.get('save_success'));
@@ -145,7 +147,6 @@ module.exports = function (app) {
                     self.incoming.contentSize = self.incoming.contentFile.size;
                     successKey = 'save_success';
                 }
-                //counterService.loadCounters();
                 self.requestCompleted = true;
                 toast.success(langService.get(successKey));
             }
@@ -255,6 +256,7 @@ module.exports = function (app) {
             document.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.resetAddCorrespondence();
                 });
         };

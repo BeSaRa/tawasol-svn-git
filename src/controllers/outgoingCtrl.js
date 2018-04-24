@@ -31,6 +31,7 @@ module.exports = function (app) {
                                              editAfterApproved,
                                              editAfterExport,
                                              centralArchives,
+                                             mailNotificationService,
                                              lookups, // new injector for all lookups can user access
                                              correspondenceService) {
         'ngInject';
@@ -179,6 +180,7 @@ module.exports = function (app) {
 
         var saveCorrespondenceFinished = function (status, newId) {
             counterService.loadCounters();
+            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             if (status) {// || (self.outgoing.contentFile)
                 toast.success(langService.get('save_success'));
                 $timeout(function () {
@@ -195,9 +197,7 @@ module.exports = function (app) {
                     self.outgoing.contentSize = self.outgoing.contentFile.size;
                     successKey = 'save_success'
                 }
-
                 self.requestCompleted = true;
-                //counterService.loadCounters();
                 toast.success(langService.get(successKey));
             }
         };
@@ -288,6 +288,7 @@ module.exports = function (app) {
             document.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.resetAddCorrespondence();
                 });
         };

@@ -7,6 +7,8 @@ features :
 06 - Added - Confirm the change of document security schema if changed to limited scope.
 07 - Moved star unstar into directive
 08 - Fixed - grid indicators for user inbox and filtered inboxes.
+09 - Added - starred inbox tab and fixed mail notification update(It was not updating on launch workflow).
+10 - Removed - star/un-star from group mail.
 
 Fixed issues :
 12504: central archive - in central archive OU while adding a paper outgoing or incoming document there is two fields in paper outgoing while only one in incoming <check attached>

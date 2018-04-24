@@ -16,7 +16,8 @@ module.exports = function (app) {
                                                         contextHelpService,
                                                         broadcastService,
                                                         correspondenceService,
-                                                        ResolveDefer) {
+                                                        ResolveDefer,
+                                                        mailNotificationService) {
         'ngInject';
         var self = this;
 
@@ -140,7 +141,10 @@ module.exports = function (app) {
                 .controllerMethod
                 .readyToSendInternalArchiveBulk(self.selectedReadyToSendInternals, $event)
                 .then(function (result) {
-                    self.reloadReadyToSendInternals(self.grid.page);
+                    self.reloadReadyToSendInternals(self.grid.page)
+                        .then(function(){
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -209,6 +213,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReadyToSendInternals(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -327,13 +332,15 @@ module.exports = function (app) {
          * @description broadcast selected organization and workflow group
          * @param readyToSendInternal
          * @param $event
+         * @param defer
          */
-        self.broadcast = function (readyToSendInternal, $event) {
+        self.broadcast = function (readyToSendInternal, $event, defer) {
             readyToSendInternal
                 .correspondenceBroadcast($event)
                 .then(function () {
                     self.reloadReadyToSendInternals(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         })
                 });

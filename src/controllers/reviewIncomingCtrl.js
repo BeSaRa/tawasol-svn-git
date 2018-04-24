@@ -18,7 +18,8 @@ module.exports = function (app) {
                                                    distributionWorkflowService,
                                                    broadcastService,
                                                    correspondenceService,
-                                                   ResolveDefer) {
+                                                   ResolveDefer,
+                                                   mailNotificationService) {
         'ngInject';
         var self = this;
 
@@ -239,7 +240,10 @@ module.exports = function (app) {
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedReviewIncomings, $event, 'forward', 'favorites')
                 .then(function () {
-                    self.reloadReviewIncomings(self.grid.page);
+                    self.reloadReviewIncomings(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -343,6 +347,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReviewIncomings(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -510,22 +515,15 @@ module.exports = function (app) {
          * @description broadcast selected organization and workflow group
          * @param reviewIncoming
          * @param $event
+         * @param defer
          */
         self.broadcast = function (reviewIncoming, $event, defer) {
-            /*broadcastService
-                .controllerMethod
-                .broadcastSend(reviewIncoming, $event)
-                .then(function () {
-                    self.reloadReviewIncomings(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadReviewIncomings(self.grid.page);
-                });*/
             reviewIncoming
                 .correspondenceBroadcast($event)
                 .then(function () {
                     self.reloadReviewIncomings(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         })
                 })

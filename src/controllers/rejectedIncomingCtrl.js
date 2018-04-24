@@ -16,7 +16,8 @@ module.exports = function (app) {
                                                      contextHelpService,
                                                      distributionWorkflowService,
                                                      correspondenceService,
-                                                     ResolveDefer) {
+                                                     ResolveDefer,
+                                                     mailNotificationService) {
         'ngInject';
         var self = this;
 
@@ -230,7 +231,10 @@ module.exports = function (app) {
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedRejectedIncomings, $event, 'forward', 'favorites')
                 .then(function () {
-                    self.reloadRejectedIncomings(self.grid.page);
+                    self.reloadRejectedIncomings(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
 
         };
@@ -326,6 +330,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadRejectedIncomings(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });

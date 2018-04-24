@@ -16,7 +16,8 @@ module.exports = function (app) {
                                                             ResolveDefer,
                                                             generator,
                                                             listGeneratorService,
-                                                            Incoming) {
+                                                            Incoming,
+                                                            mailNotificationService) {
         'ngInject';
         var self = this;
 
@@ -81,6 +82,7 @@ module.exports = function (app) {
                 .loadIncomingDepartmentInboxes()
                 .then(function (result) {
                     counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.incomingDepartmentInboxes = result;
                     self.selectedIncomingDepartmentInboxes = [];
                     defer.resolve(true);

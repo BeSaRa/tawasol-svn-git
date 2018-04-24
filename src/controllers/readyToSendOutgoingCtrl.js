@@ -16,7 +16,8 @@ module.exports = function (app) {
                                                         distributionWorkflowService,
                                                         broadcastService,
                                                         correspondenceService,
-                                                        ResolveDefer) {
+                                                        ResolveDefer,
+                                                        mailNotificationService) {
         'ngInject';
         var self = this;
 
@@ -115,7 +116,10 @@ module.exports = function (app) {
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedReadyToSendOutgoings, $event, 'forward', 'favorites')
                 .then(function () {
-                    self.reloadReadyToSendOutgoings(self.grid.page);
+                    self.reloadReadyToSendOutgoings(self.grid.page)
+                        .then(function(){
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -197,6 +201,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReadyToSendOutgoings(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -346,6 +351,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReadyToSendOutgoings(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         })
                 })

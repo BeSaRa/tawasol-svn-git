@@ -32,6 +32,7 @@ module.exports = function (app) {
                                                    correspondenceService,
                                                    $state,
                                                    dialog,
+                                                   mailNotificationService,
                                                    favoriteDocumentsService//,
                                                    //centralArchives
     ) {
@@ -505,7 +506,10 @@ module.exports = function (app) {
             }
             searchedIncomingDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
-                    self.reloadSearchedIncomingDocument(self.grid.page);
+                    self.reloadSearchedIncomingDocument(self.grid.page)
+                        .then(function(){
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 })
             // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
             //     .then(function () {
@@ -803,6 +807,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadSearchedIncomingDocument(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         })
                 })

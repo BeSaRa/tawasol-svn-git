@@ -18,7 +18,8 @@ module.exports = function (app) {
                                                    broadcastService,
                                                    contextHelpService,
                                                    correspondenceService,
-                                                   ResolveDefer) {
+                                                   ResolveDefer,
+                                                   mailNotificationService) {
         'ngInject';
         var self = this;
 
@@ -67,7 +68,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -160,7 +161,10 @@ module.exports = function (app) {
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedReviewInternals, $event, 'forward', 'favorites')
                 .then(function () {
-                    self.reloadReviewInternals(self.grid.page);
+                    self.reloadReviewInternals(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -271,6 +275,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReviewInternals(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -400,8 +405,8 @@ module.exports = function (app) {
         self.manageEntities = function (reviewInternal, $event) {
             console.log('manage entities : ', reviewInternal);
             var info = reviewInternal.getInfo();
-             managerService
-                 .manageDocumentEntities(info.vsId, info.documentClass, info.title, $event);
+            managerService
+                .manageDocumentEntities(info.vsId, info.documentClass, info.title, $event);
         };
 
         /**
@@ -468,7 +473,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }

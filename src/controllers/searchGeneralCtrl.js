@@ -31,6 +31,7 @@ module.exports = function (app) {
                                                   distributionWorkflowService,
                                                   correspondenceService,
                                                   dialog,
+                                                  mailNotificationService,
                                                   favoriteDocumentsService//,
                                                   //centralArchives
     ) {
@@ -496,7 +497,10 @@ module.exports = function (app) {
 
             searchedGeneralDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
-                    self.reloadSearchedGeneralDocuments(self.grid.page);
+                    self.reloadSearchedGeneralDocuments(self.grid.page)
+                        .then(function(){
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
             // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
             //     .then(function () {
@@ -780,6 +784,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadSearchedGeneralDocuments(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         })
                 })

@@ -22,6 +22,7 @@ module.exports = function (app) {
                                                    employeeService,
                                                    ResolveDefer,
                                                    generator,
+                                                   mailNotificationService,
                                                    correspondenceService) {
         'ngInject';
         var self = this;
@@ -124,12 +125,13 @@ module.exports = function (app) {
                 .loadProxyMailInboxes(userId, ouId)
                 .then(function (result) {
                     counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.proxyMailInboxes = result;
                     self.selectedProxyMailInboxes = [];
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
-                    console.log(result);
+                    //console.log(result);
                     return result;
                 });
         };

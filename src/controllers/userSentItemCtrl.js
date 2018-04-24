@@ -92,7 +92,7 @@ module.exports = function (app) {
                     self.userSentItems = result;
                     self.selectedUserSentItems = [];
                     counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(5);
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;

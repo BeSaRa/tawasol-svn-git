@@ -23,7 +23,8 @@ module.exports = function (app) {
                                                             employeeService,
                                                             ResolveDefer,
                                                             correspondenceService,
-                                                            favoriteDocumentsService) {
+                                                            favoriteDocumentsService,
+                                                            mailNotificationService) {
         'ngInject';
         var self = this;
         /*
@@ -103,6 +104,7 @@ module.exports = function (app) {
                 .loadReturnedDepartmentInboxes()
                 .then(function (result) {
                     counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.returnedDepartmentInboxes = result;
                     self.selectedReturnedDepartmentInboxes = [];
                     defer.resolve(true);

@@ -331,7 +331,6 @@ module.exports = function (app) {
          * @param  {string} errorMessage
          * @param {string} successMessage
          * @param {string} failureSomeMessage
-         * @param {string} keyProperty
          * @returns {*}
          */
         self.getBulkActionResponse = function (resultCollection, selectedItems, ignoreMessage, errorMessage, successMessage, failureSomeMessage) {

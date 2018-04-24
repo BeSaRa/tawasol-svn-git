@@ -980,6 +980,11 @@ module.exports = function (app) {
                     userFilters: function (userFilterService) {
                         'ngInject';
                         return userFilterService.loadUserFilters();
+                    },
+                    // just to update notifications when opening user inbox
+                    notifications: function(mailNotificationService){
+                        'ngInject';
+                        return mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     }
                 }
             })

@@ -21,7 +21,8 @@ module.exports = function (app) {
                                                                  downloadService,
                                                                  favoriteDocumentsService,
                                                                  ResolveDefer,
-                                                                 generator) {
+                                                                 generator,
+                                                                 mailNotificationService) {
         'ngInject';
         var self = this;
         /*
@@ -129,6 +130,7 @@ module.exports = function (app) {
                 .loadReadyToExports()
                 .then(function (result) {
                     counterService.loadCounters();
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.readyToExports = result;
                     self.selectedReadyToExports = [];
                     defer.resolve(true);
