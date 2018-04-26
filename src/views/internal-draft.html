@@ -19,110 +19,115 @@
             <div scroll-directive>
                 <div class="page-padding">
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                        <md-table-container flex scroll-directive>
-                            <table md-table md-row-select multiple ng-model="ctrl.selectedDraftInternals"
-                                   md-progress="ctrl.progress">
-                                <thead md-head md-order="ctrl.grid.order">
-                                <tr md-row>
-                                    <th colspan="{{ctrl.selectedDraftInternals.length > 1 ? 6 : 7}}"
-                                        ng-if="ctrl.selectedDraftInternals.length" md-column>
-                                        <div layout="row" layout-align="start center">
-                                            <span>{{ctrl.selectedDraftInternals.length}} {{lang.items_selected}} </span>
-                                            <span flex></span>
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.selectedDraftInternals"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.order">
+                                    <tr md-row>
+                                        <th colspan="{{ctrl.selectedDraftInternals.length > 1 ? 6 : 7}}"
+                                            ng-if="ctrl.selectedDraftInternals.length" md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedDraftInternals.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
 
-                                            <!--ng-if="ctrl.selectedDraftInternals.length > 1"-->
-                                            <md-button class="md-icon-button"
-                                                       tooltip="{{lang.remove}}"
-                                                       ng-click="ctrl.removeBulkDraftInternals($event)">
-                                                <md-icon md-svg-icon="delete" class="action-green"></md-icon>
-                                            </md-button>
-                                            <md-button class="md-icon-button" ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
-                                                       tooltip="{{lang.grid_action_launch_distribution_workflow}}"
-                                                       ng-click="ctrl.launchDistributionWorkflowBulk($event)">
-                                                <md-icon md-svg-icon="sitemap" class="action-green"></md-icon>
-                                            </md-button>
-                                            <md-button class="md-icon-button"
-                                                       tooltip="{{lang.grid_action_send_to_review}}"
-                                                       ng-click="ctrl.sendToReviewBulk($event)">
-                                                <md-icon md-svg-icon="send" class="action-green"></md-icon>
-                                            </md-button>
-                                        </div>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedDraftInternals.length" md-column md-order-by="">
-                                        <!-- Paper/Electronic Indicators -->
-                                    </th>
-                                    <th ng-if="!ctrl.selectedDraftInternals.length" md-column
-                                        md-order-by="docSubject">
-                                        <span>{{lang.subject}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedDraftInternals.length" md-column
-                                        md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
-                                        <span>{{lang.priority_level}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedDraftInternals.length" md-column
-                                        md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
-                                        <span>{{lang.security_level}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedDraftInternals.length" md-column
-                                        md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
-                                        <span>{{lang.creator}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedDraftInternals.length" md-column
-                                        md-order-by="createdOn">
-                                        <span>{{lang.created_on}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedDraftInternals.length && ctrl.selectedDraftInternals.length < 2"
-                                        md-column>
-                                        <span></span>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody md-body>
-                                <tr md-row md-select="draftInternal" grid-right-click-directive="draftInternal"
-                                    model="draftInternal"
-                                    selected-length="{{ctrl.selectedDraftInternals.length ? ctrl.selectedDraftInternals.length : 0}}"
-                                    ng-repeat="draftInternal in searchResults = (ctrl.draftInternals | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
-                                    <td md-cell class="indicator-td">
-                                        <!-- Electronic/Paper Document -->
-                                        <grid-indicator-directive record="draftInternal"
-                                                                  indicator-type="paperElectronic"
-                                                                  record-type="internal"></grid-indicator-directive>
-                                    </td>
-                                    <td md-cell class="td-data">
-                                        <a href="" ng-if="draftInternal.hasContent()" class="view-doc"
-                                           ng-click="ctrl.viewDocument(draftInternal, $event)">{{draftInternal.docSubject}}</a>
-                                        <span ng-if="!draftInternal.hasContent()">{{draftInternal.docSubject}}</span>
-                                    </td>
-                                    <td md-cell>{{draftInternal.priorityLevel.getTranslatedName()}}</td>
-                                    <td md-cell>{{draftInternal.securityLevel.getTranslatedName()}}</td>
-                                    <td md-cell>{{draftInternal.creatorInfo.getTranslatedName()}}</td>
-                                    <td md-cell>{{draftInternal.createdOn}}</td>
-                                    <td md-cell ng-if="ctrl.selectedDraftInternals.length < 2">
-                                        <div layout-align="start center" ng-if="!ctrl.selectedDraftInternals.length
+                                                <!--ng-if="ctrl.selectedDraftInternals.length > 1"-->
+                                                <md-button class="md-icon-button"
+                                                           tooltip="{{lang.remove}}"
+                                                           ng-click="ctrl.removeBulkDraftInternals($event)">
+                                                    <md-icon md-svg-icon="delete" class="action-green"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
+                                                           tooltip="{{lang.grid_action_launch_distribution_workflow}}"
+                                                           ng-click="ctrl.launchDistributionWorkflowBulk($event)">
+                                                    <md-icon md-svg-icon="sitemap" class="action-green"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button"
+                                                           tooltip="{{lang.grid_action_send_to_review}}"
+                                                           ng-click="ctrl.sendToReviewBulk($event)">
+                                                    <md-icon md-svg-icon="send" class="action-green"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedDraftInternals.length" md-column md-order-by="">
+                                            <!-- Paper/Electronic Indicators -->
+                                        </th>
+                                        <th ng-if="!ctrl.selectedDraftInternals.length" md-column
+                                            md-order-by="docSubject">
+                                            <span>{{lang.subject}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedDraftInternals.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
+                                            <span>{{lang.priority_level}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedDraftInternals.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
+                                            <span>{{lang.security_level}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedDraftInternals.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
+                                            <span>{{lang.creator}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedDraftInternals.length" md-column
+                                            md-order-by="createdOn">
+                                            <span>{{lang.created_on}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedDraftInternals.length && ctrl.selectedDraftInternals.length < 2"
+                                            md-column>
+                                            <span></span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="draftInternal" grid-right-click-directive="draftInternal"
+                                        model="draftInternal"
+                                        selected-length="{{ctrl.selectedDraftInternals.length ? ctrl.selectedDraftInternals.length : 0}}"
+                                        ng-repeat="draftInternal in searchResults = (ctrl.draftInternals | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
+                                        <td md-cell class="indicator-td">
+                                            <!-- Electronic/Paper Document -->
+                                            <grid-indicator-directive record="draftInternal"
+                                                                      indicator-type="paperElectronic"
+                                                                      record-type="internal"></grid-indicator-directive>
+                                        </td>
+                                        <td md-cell class="td-data">
+                                            <a href="" ng-if="draftInternal.hasContent()" class="view-doc"
+                                               ng-click="ctrl.viewDocument(draftInternal, $event)">{{draftInternal.docSubject}}</a>
+                                            <span ng-if="!draftInternal.hasContent()">{{draftInternal.docSubject}}</span>
+                                        </td>
+                                        <td md-cell>{{draftInternal.priorityLevel.getTranslatedName()}}</td>
+                                        <td md-cell>{{draftInternal.securityLevel.getTranslatedName()}}</td>
+                                        <td md-cell>{{draftInternal.creatorInfo.getTranslatedName()}}</td>
+                                        <td md-cell>{{draftInternal.createdOn}}</td>
+                                        <td md-cell ng-if="ctrl.selectedDraftInternals.length < 2">
+                                            <div layout-align="start center" ng-if="!ctrl.selectedDraftInternals.length
                                                   || ctrl.selectedDraftInternals.length===1 && ctrl.selectedDraftInternals[0].id === draftInternal.id">
-                                            <grid-actions-directive menu-direction="horizontal"
-                                                                    grid-actions="ctrl.gridActions"
-                                                                    model="draftInternal"
-                                                                    shortcut="true">
-                                            </grid-actions-directive>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr md-row ng-if="!ctrl.draftInternals.length">
-                                    <td md-cell colspan="7" class="red-text text-center">{{lang.no_records_found}}</td>
-                                </tr>
-                                <tr md-row ng-if="ctrl.draftInternals.length && !searchResults.length">
-                                    <td md-cell colspan="7" class="red-text text-center">
-                                        {{lang.no_records_found_matching_search}}
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                                <grid-actions-directive menu-direction="horizontal"
+                                                                        grid-actions="ctrl.gridActions"
+                                                                        model="draftInternal"
+                                                                        shortcut="true">
+                                                </grid-actions-directive>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="!ctrl.draftInternals.length">
+                                        <td md-cell colspan="7" class="red-text text-center">{{lang.no_records_found}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.draftInternals.length && !searchResults.length">
+                                        <td md-cell colspan="7" class="red-text text-center">
+                                            {{lang.no_records_found_matching_search}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.draftInternals | filter:ctrl.searchModel).length}}" md-page-select>
+                                    md-total="{{(ctrl.draftInternals | filter:ctrl.searchModel).length}}"
+                                    md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

@@ -17,10 +17,11 @@
             <div scroll-directive>
                 <div class="page-padding">
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                        <md-table-container flex scroll-directive>
-                            <table md-table md-row-select multiple ng-model="ctrl.selectedIncomingDepartmentInboxes"
-                                   md-progress="ctrl.progress">
-                                <thead md-head md-order="ctrl.grid.order">
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.selectedIncomingDepartmentInboxes"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.order">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedIncomingDepartmentInboxes.length > 1 ? 7 : 8}}"
                                             ng-if="ctrl.selectedIncomingDepartmentInboxes.length" md-column>
@@ -28,7 +29,8 @@
                                                 <span>{{ctrl.selectedIncomingDepartmentInboxes.length}} {{lang.items_selected}} </span>
                                                 <span flex></span>
                                                 <!--ng-if="ctrl.selectedIncomingDepartmentInboxes.length > 1"-->
-                                                <md-button class="md-icon-button" aria-label="{{lang.grid_action_return}}"
+                                                <md-button class="md-icon-button"
+                                                           aria-label="{{lang.grid_action_return}}"
                                                            ng-if="ctrl.checkIfReturnBulkAvailable()"
                                                            tooltip="{{lang.grid_action_return}}"
                                                            ng-click="ctrl.returnWorkItemsBulk($event)">
@@ -36,35 +38,43 @@
                                                 </md-button>
                                             </div>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="generalStepElm.docFullSerial">
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="generalStepElm.docFullSerial">
                                             <span>{{lang.inbox_serial}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="generalStepElm.docSubject">
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="generalStepElm.docSubject">
                                             <span>{{lang.subject}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="generalStepElm.receivedDate">
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="generalStepElm.receivedDate">
                                             <span>{{lang.received_date}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="type">
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="type">
                                             <span>{{lang.type}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="{{ctrl.getSortingKey('fromOU','Information')}}">
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('fromOU','Information')}}">
                                             <span>{{lang.department}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="generalStepElm.numberOfDays">
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="generalStepElm.numberOfDays">
                                             <span>{{lang.number_of_days}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="{{ctrl.getSortingKey('sender', 'Information')}}">
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('sender', 'Information')}}">
                                             <span>{{lang.sender}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column>
                                             <span></span>
                                         </th>
                                     </tr>
-                                </thead>
-                                <tbody md-body>
+                                    </thead>
+                                    <tbody md-body>
                                     <tr md-row md-select="incomingDepartmentInbox"
-                                        grid-right-click-directive="incomingDepartmentInbox" model="incomingDepartmentInbox"
+                                        grid-right-click-directive="incomingDepartmentInbox"
+                                        model="incomingDepartmentInbox"
                                         selected-length="{{ctrl.selectedIncomingDepartmentInboxes.length ? ctrl.selectedIncomingDepartmentInboxes.length : 0}}"
                                         ng-repeat="incomingDepartmentInbox in searchResults = (ctrl.incomingDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
                                         <td md-cell>{{incomingDepartmentInbox.generalStepElm.docFullSerial}}</td>
@@ -88,20 +98,23 @@
                                         </td>
                                     </tr>
                                     <tr md-row ng-if="!ctrl.incomingDepartmentInboxes.length">
-                                        <td md-cell colspan="8" class="red-text text-center">{{lang.no_records_found}}</td>
+                                        <td md-cell colspan="8" class="red-text text-center">{{lang.no_records_found}}
+                                        </td>
                                     </tr>
                                     <tr md-row ng-if="ctrl.incomingDepartmentInboxes.length && !searchResults.length">
                                         <td md-cell colspan="8" class="red-text text-center">
                                             {{lang.no_records_found_matching_search}}
                                         </td>
                                     </tr>
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.incomingDepartmentInboxes | filter:ctrl.searchModel).length}}" md-page-select>
+                                    md-total="{{(ctrl.incomingDepartmentInboxes | filter:ctrl.searchModel).length}}"
+                                    md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

@@ -25,64 +25,65 @@
             <div scroll-directive>
                 <div class="page-padding">
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
-
-                        <md-table-container flex scroll-directive>
-                            <table md-table md-row-select="false" multiple ng-model="ctrl.selectedLocalizations"
-                                   md-progress="ctrl.progress">
-                                <thead md-head md-order="ctrl.grid.order">
-                                <tr md-row>
-                                    <th colspan="6" class="table-selector-header"
-                                        ng-if="ctrl.selectedLocalizations.length" md-column>
-                                        <div layout="row" layout-align="start center">
-                                            <span>{{ctrl.selectedLocalizations.length}} {{lang.items_selected}} </span>
-                                            <span flex></span>
-                                            <localization-module-converter-directive
-                                                    ng-if="false"
-                                                    callback="ctrl.reloadLocalizationModule"
-                                                    localization-keys="ctrl.selectedLocalizations"></localization-module-converter-directive>
-                                            <md-button class="md-icon-button"
-                                                       ng-click="ctrl.removeBulkDocumentTypes($event)">
-                                                <md-icon md-svg-icon="delete"></md-icon>
-                                            </md-button>
-                                        </div>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedLocalizations.length" md-column
-                                        md-order-by="localizationKey">
-                                        <span>{{lang.localization_localization_key}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedLocalizations.length" md-column md-order-by="arName">
-                                        <span>{{lang.localization_arabic_translate}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedLocalizations.length" md-column md-order-by="enName">
-                                        <span>{{lang.localization_english_translate}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedLocalizations.length" md-column>
-                                        <span>{{lang.actions}}</span>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody md-body>
-                                <tr md-row md-select="local" ng-class="{'background-warning':local.isOverrided}"
-                                    ng-repeat="local in ctrl.localizations  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
-                                    <td md-cell>{{local.localizationKey}}</td>
-                                    <td md-cell>{{local.arName}}</td>
-                                    <td md-cell>{{local.enName}}</td>
-                                    <td md-cell>
-                                        <div flex layout="row" layout-align="start center">
-                                            <md-button ng-if="local.isOverrided" class="md-icon-button"
-                                                       title="{{lang.delete}}"
-                                                       ng-click="ctrl.removeModifiedLocalization(local, $event)">
-                                                <md-icon md-svg-icon="delete"></md-icon>
-                                            </md-button>
-                                            <md-button class="md-icon-button" title="{{lang.edit}}"
-                                                       ng-click="ctrl.modifyLocalization(local, $event)">
-                                                <md-icon md-svg-icon="pencil"></md-icon>
-                                            </md-button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select="false" multiple ng-model="ctrl.selectedLocalizations"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.order">
+                                    <tr md-row>
+                                        <th colspan="6" class="table-selector-header"
+                                            ng-if="ctrl.selectedLocalizations.length" md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedLocalizations.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
+                                                <localization-module-converter-directive
+                                                        ng-if="false"
+                                                        callback="ctrl.reloadLocalizationModule"
+                                                        localization-keys="ctrl.selectedLocalizations"></localization-module-converter-directive>
+                                                <md-button class="md-icon-button"
+                                                           ng-click="ctrl.removeBulkDocumentTypes($event)">
+                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedLocalizations.length" md-column
+                                            md-order-by="localizationKey">
+                                            <span>{{lang.localization_localization_key}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedLocalizations.length" md-column md-order-by="arName">
+                                            <span>{{lang.localization_arabic_translate}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedLocalizations.length" md-column md-order-by="enName">
+                                            <span>{{lang.localization_english_translate}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedLocalizations.length" md-column>
+                                            <span>{{lang.actions}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="local" ng-class="{'background-warning':local.isOverrided}"
+                                        ng-repeat="local in ctrl.localizations  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                        <td md-cell>{{local.localizationKey}}</td>
+                                        <td md-cell>{{local.arName}}</td>
+                                        <td md-cell>{{local.enName}}</td>
+                                        <td md-cell>
+                                            <div flex layout="row" layout-align="start center">
+                                                <md-button ng-if="local.isOverrided" class="md-icon-button"
+                                                           title="{{lang.delete}}"
+                                                           ng-click="ctrl.removeModifiedLocalization(local, $event)">
+                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button" title="{{lang.edit}}"
+                                                           ng-click="ctrl.modifyLocalization(local, $event)">
+                                                    <md-icon md-svg-icon="pencil"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"

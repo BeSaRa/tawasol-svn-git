@@ -320,9 +320,9 @@
                                                     </md-option>
                                                 </md-select>-->
                                                 <md-select
-                                                           ng-required="ctrl.dynamicRequired('followupStatus','search_module_follow_up_status')"
-                                                           name="followupStatus" id="followupStatus"
-                                                           ng-model="ctrl.searchInternal.followupStatus">
+                                                        ng-required="ctrl.dynamicRequired('followupStatus','search_module_follow_up_status')"
+                                                        name="followupStatus" id="followupStatus"
+                                                        ng-model="ctrl.searchInternal.followupStatus">
                                                     <md-option ng-value="followupStatus.id"
                                                                ng-repeat="followupStatus in ctrl.followupStatuses track by $index">
                                                         {{followupStatus.getTranslatedName()}}
@@ -380,40 +380,40 @@
                                                 </div>
                                             </fieldset>
                                         </div>
-                                       <!-- <div layout="row" flex class="p020">
-                                            &lt;!&ndash; Creation Date &ndash;&gt;
-                                            <fieldset flex layout="column" class="search-fieldset">
-                                                <legend class="md-accent">{{lang.creation_date}}</legend>
-                                                <div layout="row">
-                                                    &lt;!&ndash; Creation Date From &ndash;&gt;
-                                                    <md-input-container flex>
-                                                        <label for="createdFrom">{{lang.search_module_start_date}}</label>
-                                                        <md-datepicker id="createdFrom" name="createdFrom"
-                                                                       ng-required="ctrl.dynamicRequired('createdFrom','search_module_creation_start_date')"
-                                                                       ng-model="ctrl.searchInternal.createdFrom"
-                                                                       md-max-date="ctrl.searchInternal.createdTo"
-                                                        ></md-datepicker>
-                                                        <div ng-messages="searchInternalForm.createdFrom.$error">
-                                                            <div ng-message="required">{{lang.field_required}}</div>
-                                                        </div>
-                                                    </md-input-container>
-                                                    &lt;!&ndash; Creation Date To &ndash;&gt;
-                                                    <md-input-container flex>
-                                                        <label for="createdTo">{{lang.search_module_end_date}}</label>
-                                                        <md-datepicker id="createdTo" name="createdTo"
-                                                                       ng-required="ctrl.dynamicRequired('createdTo','search_module_creation_end_date')"
-                                                                       ng-model="ctrl.searchInternal.createdTo"
-                                                                       md-min-date="ctrl.searchInternal.createdFrom"
-                                                        ></md-datepicker>
-                                                        <div ng-messages="searchInternalForm.createdTo.$error">
-                                                            <div ng-message="required">{{lang.field_required}}</div>
-                                                        </div>
-                                                    </md-input-container>
-                                                </div>
-                                            </fieldset>
-                                            <span flex></span>
-                                            <span flex></span>
-                                        </div>-->
+                                        <!-- <div layout="row" flex class="p020">
+                                             &lt;!&ndash; Creation Date &ndash;&gt;
+                                             <fieldset flex layout="column" class="search-fieldset">
+                                                 <legend class="md-accent">{{lang.creation_date}}</legend>
+                                                 <div layout="row">
+                                                     &lt;!&ndash; Creation Date From &ndash;&gt;
+                                                     <md-input-container flex>
+                                                         <label for="createdFrom">{{lang.search_module_start_date}}</label>
+                                                         <md-datepicker id="createdFrom" name="createdFrom"
+                                                                        ng-required="ctrl.dynamicRequired('createdFrom','search_module_creation_start_date')"
+                                                                        ng-model="ctrl.searchInternal.createdFrom"
+                                                                        md-max-date="ctrl.searchInternal.createdTo"
+                                                         ></md-datepicker>
+                                                         <div ng-messages="searchInternalForm.createdFrom.$error">
+                                                             <div ng-message="required">{{lang.field_required}}</div>
+                                                         </div>
+                                                     </md-input-container>
+                                                     &lt;!&ndash; Creation Date To &ndash;&gt;
+                                                     <md-input-container flex>
+                                                         <label for="createdTo">{{lang.search_module_end_date}}</label>
+                                                         <md-datepicker id="createdTo" name="createdTo"
+                                                                        ng-required="ctrl.dynamicRequired('createdTo','search_module_creation_end_date')"
+                                                                        ng-model="ctrl.searchInternal.createdTo"
+                                                                        md-min-date="ctrl.searchInternal.createdFrom"
+                                                         ></md-datepicker>
+                                                         <div ng-messages="searchInternalForm.createdTo.$error">
+                                                             <div ng-message="required">{{lang.field_required}}</div>
+                                                         </div>
+                                                     </md-input-container>
+                                                 </div>
+                                             </fieldset>
+                                             <span flex></span>
+                                             <span flex></span>
+                                         </div>-->
                                     </div>
                                 </div>
                             </div>
@@ -422,118 +422,122 @@
                 </md-tab>
                 <md-tab label="{{lang.search_module_search_results}}" ng-if="ctrl.showResults"
                         md-on-select="ctrl.setCurrentTab('sr')">
-                    <md-table-container flex scroll-directive>
-                        <table md-table md-row-select multiple ng-model="ctrl.selectedSearchedInternalDocuments"
-                               md-progress="ctrl.progress">
-                            <thead md-head md-order="ctrl.grid.order">
-                            <tr md-row>
-                                <th colspan="{{ctrl.selectedSearchedInternalDocuments.length > 1 ? 7 : 8}}"
-                                    ng-if="ctrl.selectedSearchedInternalDocuments.length" md-column>
-                                    <div layout="row" layout-align="start center">
-                                        <span>{{ctrl.selectedSearchedInternalDocuments.length}} {{lang.items_selected}} </span>
-                                        <span flex></span>
-                                        <!-- Add to Favorite -->
-                                        <md-button class="md-icon-button" class="action-green"
-                                                   tooltip="{{lang.grid_action_add_to_favorite}}"
-                                                   ng-if="ctrl.selectedSearchedInternalDocuments.length"
-                                                   ng-click="ctrl.addToFavoriteBulk($event)">
-                                            <md-icon md-svg-icon="star"></md-icon>
-                                        </md-button>
-                                    </div>
-                                </th>
-                                <th md-column>
-                                    <!-- Indicators -->
-                                </th>
-                                <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
-                                    md-order-by="docSubject">
-                                    <span>{{lang.subject}}</span>
-                                </th>
-                                <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
-                                    md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
-                                    <span>{{lang.priority_level}}</span>
-                                </th>
-                                <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
-                                    md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
-                                    <span>{{lang.security_level}}</span>
-                                </th>
-                                <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
-                                    md-order-by="{{ctrl.getSortingKey('docTypeForSearchGrid', 'DocumentType')}}">
-                                    <span>{{lang.label_document_type}}</span>
-                                </th>
-                                <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
-                                    md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
-                                    <span>{{lang.creator}}</span>
-                                </th>
-                                <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
-                                    md-order-by="createdOn">
-                                    <span>{{lang.created_on}}</span>
-                                </th>
-                                <th ng-if="!ctrl.selectedSearchedInternalDocuments.length && ctrl.selectedSearchedInternalDocuments.length < 2"
-                                    md-column>
-                                    <span></span>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody md-body>
-                            <tr md-row md-select="searchedInternalDocument" grid-right-click-directive
-                                model="searchedInternalDocument"
-                                selected-length="{{ctrl.selectedSearchedInternalDocuments.length ? ctrl.selectedSearchedInternalDocuments.length : 0}}"
-                                ng-repeat="searchedInternalDocument in searchResults = (ctrl.searchedInternalDocuments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
-                                <td md-cell class="indicator-td">
-                                    <!-- Security Level -->
-                                    <grid-indicator-directive record="searchedInternalDocument"
-                                                              indicator-type="securityLevel"
-                                                              record-type="correspondence"></grid-indicator-directive>
-                                    <!-- Priority Level -->
-                                    <grid-indicator-directive record="searchedInternalDocument"
-                                                              indicator-type="priorityLevel"
-                                                              record-type="correspondence"></grid-indicator-directive>
-                                    <!-- Has Attachments -->
-                                    <grid-indicator-directive record="searchedInternalDocument"
-                                                              indicator-type="hasAttachment"
-                                                              record-type="correspondence"></grid-indicator-directive>
-                                    <!-- Linked Documents -->
-                                    <grid-indicator-directive record="searchedInternalDocument"
-                                                              indicator-type="hasLinkedDocuments"
-                                                              record-type="correspondence"></grid-indicator-directive>
-                                </td>
-                                <td md-cell class="td-data">
-                                    <a href="" ng-if="searchedInternalDocument.hasContent()" class="view-doc"
-                                       ng-click="ctrl.viewDocument(searchedInternalDocument, $event)">{{searchedInternalDocument.docSubject}}</a>
-                                    <span ng-if="!searchedInternalDocument.hasContent()">{{searchedInternalDocument.docSubject}}</span>
-                                </td>
-                                <td md-cell>{{searchedInternalDocument.priorityLevel.getTranslatedName()}}</td>
-                                <td md-cell>{{searchedInternalDocument.securityLevel.getTranslatedName()}}</td>
-                                <!--<td md-cell>{{lang[searchedInternalDocument.getInfo().documentClass +"_document_class"]}}</td>-->
-                                <td md-cell>{{searchedInternalDocument.docTypeForSearchGrid.getTranslatedName()}}</td>
-                                <td md-cell>{{searchedInternalDocument.creatorInfo.getTranslatedName()}}</td>
-                                <td md-cell>{{searchedInternalDocument.createdOn}}</td>
-                                <td md-cell ng-if="ctrl.selectedSearchedInternalDocuments.length < 2">
-                                    <div layout-align="start center" ng-if="!ctrl.selectedSearchedInternalDocuments.length
+                    <md-table-container>
+                        <div flex scroll-directive>
+                            <table md-table md-row-select multiple ng-model="ctrl.selectedSearchedInternalDocuments"
+                                   md-progress="ctrl.progress">
+                                <thead md-head md-order="ctrl.grid.order">
+                                <tr md-row>
+                                    <th colspan="{{ctrl.selectedSearchedInternalDocuments.length > 1 ? 7 : 8}}"
+                                        ng-if="ctrl.selectedSearchedInternalDocuments.length" md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedSearchedInternalDocuments.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+                                            <!-- Add to Favorite -->
+                                            <md-button class="md-icon-button" class="action-green"
+                                                       tooltip="{{lang.grid_action_add_to_favorite}}"
+                                                       ng-if="ctrl.selectedSearchedInternalDocuments.length"
+                                                       ng-click="ctrl.addToFavoriteBulk($event)">
+                                                <md-icon md-svg-icon="star"></md-icon>
+                                            </md-button>
+                                        </div>
+                                    </th>
+                                    <th md-column>
+                                        <!-- Indicators -->
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
+                                        md-order-by="docSubject">
+                                        <span>{{lang.subject}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
+                                        md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
+                                        <span>{{lang.priority_level}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
+                                        md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
+                                        <span>{{lang.security_level}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
+                                        md-order-by="{{ctrl.getSortingKey('docTypeForSearchGrid', 'DocumentType')}}">
+                                        <span>{{lang.label_document_type}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
+                                        md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
+                                        <span>{{lang.creator}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSearchedInternalDocuments.length" md-column
+                                        md-order-by="createdOn">
+                                        <span>{{lang.created_on}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSearchedInternalDocuments.length && ctrl.selectedSearchedInternalDocuments.length < 2"
+                                        md-column>
+                                        <span></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="searchedInternalDocument" grid-right-click-directive
+                                    model="searchedInternalDocument"
+                                    selected-length="{{ctrl.selectedSearchedInternalDocuments.length ? ctrl.selectedSearchedInternalDocuments.length : 0}}"
+                                    ng-repeat="searchedInternalDocument in searchResults = (ctrl.searchedInternalDocuments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
+                                    <td md-cell class="indicator-td">
+                                        <!-- Security Level -->
+                                        <grid-indicator-directive record="searchedInternalDocument"
+                                                                  indicator-type="securityLevel"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Priority Level -->
+                                        <grid-indicator-directive record="searchedInternalDocument"
+                                                                  indicator-type="priorityLevel"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Has Attachments -->
+                                        <grid-indicator-directive record="searchedInternalDocument"
+                                                                  indicator-type="hasAttachment"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Linked Documents -->
+                                        <grid-indicator-directive record="searchedInternalDocument"
+                                                                  indicator-type="hasLinkedDocuments"
+                                                                  record-type="correspondence"></grid-indicator-directive>
+                                    </td>
+                                    <td md-cell class="td-data">
+                                        <a href="" ng-if="searchedInternalDocument.hasContent()" class="view-doc"
+                                           ng-click="ctrl.viewDocument(searchedInternalDocument, $event)">{{searchedInternalDocument.docSubject}}</a>
+                                        <span ng-if="!searchedInternalDocument.hasContent()">{{searchedInternalDocument.docSubject}}</span>
+                                    </td>
+                                    <td md-cell>{{searchedInternalDocument.priorityLevel.getTranslatedName()}}</td>
+                                    <td md-cell>{{searchedInternalDocument.securityLevel.getTranslatedName()}}</td>
+                                    <!--<td md-cell>{{lang[searchedInternalDocument.getInfo().documentClass +"_document_class"]}}</td>-->
+                                    <td md-cell>{{searchedInternalDocument.docTypeForSearchGrid.getTranslatedName()}}
+                                    </td>
+                                    <td md-cell>{{searchedInternalDocument.creatorInfo.getTranslatedName()}}</td>
+                                    <td md-cell>{{searchedInternalDocument.createdOn}}</td>
+                                    <td md-cell ng-if="ctrl.selectedSearchedInternalDocuments.length < 2">
+                                        <div layout-align="start center" ng-if="!ctrl.selectedSearchedInternalDocuments.length
                                                   || ctrl.selectedSearchedInternalDocuments.length===1 && ctrl.selectedSearchedInternalDocuments[0].id === searchedInternalDocument.id">
-                                        <grid-actions-directive menu-direction="horizontal"
-                                                                grid-actions="ctrl.gridActions"
-                                                                model="searchedInternalDocument"
-                                                                shortcut="true">
-                                        </grid-actions-directive>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr md-row ng-if="!ctrl.searchedInternalDocuments.length">
-                                <td md-cell colspan="8" class="red-text text-center">{{lang.no_records_found}}</td>
-                            </tr>
-                            <tr md-row ng-if="ctrl.searchedInternalDocuments.length && !searchResults.length">
-                                <td md-cell colspan="8" class="red-text text-center">
-                                    {{lang.no_records_found_matching_search}}
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                            <grid-actions-directive menu-direction="horizontal"
+                                                                    grid-actions="ctrl.gridActions"
+                                                                    model="searchedInternalDocument"
+                                                                    shortcut="true">
+                                            </grid-actions-directive>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr md-row ng-if="!ctrl.searchedInternalDocuments.length">
+                                    <td md-cell colspan="8" class="red-text text-center">{{lang.no_records_found}}</td>
+                                </tr>
+                                <tr md-row ng-if="ctrl.searchedInternalDocuments.length && !searchResults.length">
+                                    <td md-cell colspan="8" class="red-text text-center">
+                                        {{lang.no_records_found_matching_search}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <md-table-pagination
                                 md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                 md-limit-options="ctrl.grid.limitOptions"
                                 md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                md-total="{{(ctrl.searchedInternalDocuments | filter:ctrl.searchModel).length}}" md-page-select>
+                                md-total="{{(ctrl.searchedInternalDocuments | filter:ctrl.searchModel).length}}"
+                                md-page-select>
                         </md-table-pagination>
                     </md-table-container>
                 </md-tab>

@@ -16,107 +16,111 @@
             <div scroll-directive>
                 <div class="page-padding">
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.selectedReviewIncomings"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.order">
+                                    <tr md-row>
+                                        <th colspan="{{ctrl.selectedReviewIncomings.length > 1 ? 5 : 6}}"
+                                            ng-if="ctrl.selectedReviewIncomings.length" md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedReviewIncomings.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
 
-                        <md-table-container flex scroll-directive>
-                            <table md-table md-row-select multiple ng-model="ctrl.selectedReviewIncomings"
-                                   md-progress="ctrl.progress">
-                                <thead md-head md-order="ctrl.grid.order">
-                                <tr md-row>
-                                    <th colspan="{{ctrl.selectedReviewIncomings.length > 1 ? 5 : 6}}"
-                                        ng-if="ctrl.selectedReviewIncomings.length" md-column>
-                                        <div layout="row" layout-align="start center">
-                                            <span>{{ctrl.selectedReviewIncomings.length}} {{lang.items_selected}} </span>
-                                            <span flex></span>
-
-                                            <!--ng-if="ctrl.selectedReviewIncomings.length > 1"-->
-                                            <md-button class="md-icon-button"
-                                                       ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
-                                                       tooltip="{{lang.accept_launch_distribution_workflow}}"
-                                                       ng-click="ctrl.acceptAndLaunchDistributionWorkflowBulk($event)">
-                                                <md-icon md-svg-icon="sitemap" class="action-green"></md-icon>
-                                            </md-button>
-                                            <md-button class="md-icon-button"
-                                                       tooltip="{{lang.accept}}"
-                                                       ng-click="ctrl.acceptIncomingBulk($event)">
-                                                <md-icon md-svg-icon="check" class="action-green"></md-icon>
-                                            </md-button>
-                                            <md-button class="md-icon-button"
-                                                       tooltip="{{lang.reject}}"
-                                                       ng-click="ctrl.rejectIncomingBulk($event)">
-                                                <md-icon md-svg-icon="close" class="action-green"></md-icon>
-                                            </md-button>
-                                            <md-button class="md-icon-button"
-                                                       tooltip="{{lang.remove}}"
-                                                       ng-click="ctrl.removeBulkReviewIncomings($event)">
-                                                <md-icon md-svg-icon="delete" class="action-green"></md-icon>
-                                            </md-button>
-                                        </div>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
-                                        md-order-by="docSubject">
-                                        <span>{{lang.subject}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
-                                        md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
-                                        <span>{{lang.priority_level}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
-                                        md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
-                                        <span>{{lang.security_level}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedReviewIncomings.length" md-order-by="{{ctrl.getSortingKey('mainsite', 'Site')}}"
-                                        md-column="">
-                                        <span>{{lang.main_site}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
-                                        md-order-by="{{ctrl.getSortingKey('subsite', 'Site')}}">
-                                        <span>{{lang.sub_site}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
-                                        md-order-by="createdOn">
-                                        <span>{{lang.created_on}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedReviewIncomings.length && ctrl.selectedReviewIncomings.length < 2"
-                                        md-column>
-                                        <span></span>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody md-body>
-                                <tr md-row md-select="reviewIncoming" grid-right-click-directive model="reviewIncoming"
-                                    selected-length="{{ctrl.selectedReviewIncomings.length ? ctrl.selectedReviewIncomings.length : 0}}"
-                                    ng-repeat="reviewIncoming in searchResults = (ctrl.reviewIncomings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order)  track by $index">
-                                    <td md-cell class="td-data">
-                                        <a href="" ng-if="reviewIncoming.hasContent()" class="view-doc"
-                                           ng-click="ctrl.viewDocument(reviewIncoming, $event)">{{reviewIncoming.docSubject}}</a>
-                                        <span ng-if="!reviewIncoming.hasContent()">{{reviewIncoming.docSubject}}</span>
-                                    </td>
-                                    <td md-cell>{{reviewIncoming.priorityLevel.getTranslatedName()}}</td>
-                                    <td md-cell>{{reviewIncoming.securityLevel.getTranslatedName()}}</td>
-                                    <td md-cell>{{reviewIncoming.site.getTranslatedParentName()}}</td>
-                                    <td md-cell>{{reviewIncoming.site.getTranslatedName()}}</td>
-                                    <td md-cell>{{reviewIncoming.createdOn}}</td>
-                                    <td md-cell ng-if="ctrl.selectedReviewIncomings.length < 2">
-                                        <div layout-align="start center" ng-if="!ctrl.selectedReviewIncomings.length
+                                                <!--ng-if="ctrl.selectedReviewIncomings.length > 1"-->
+                                                <md-button class="md-icon-button"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
+                                                           tooltip="{{lang.accept_launch_distribution_workflow}}"
+                                                           ng-click="ctrl.acceptAndLaunchDistributionWorkflowBulk($event)">
+                                                    <md-icon md-svg-icon="sitemap" class="action-green"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button"
+                                                           tooltip="{{lang.accept}}"
+                                                           ng-click="ctrl.acceptIncomingBulk($event)">
+                                                    <md-icon md-svg-icon="check" class="action-green"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button"
+                                                           tooltip="{{lang.reject}}"
+                                                           ng-click="ctrl.rejectIncomingBulk($event)">
+                                                    <md-icon md-svg-icon="close" class="action-green"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button"
+                                                           tooltip="{{lang.remove}}"
+                                                           ng-click="ctrl.removeBulkReviewIncomings($event)">
+                                                    <md-icon md-svg-icon="delete" class="action-green"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
+                                            md-order-by="docSubject">
+                                            <span>{{lang.subject}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
+                                            <span>{{lang.priority_level}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
+                                            <span>{{lang.security_level}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedReviewIncomings.length"
+                                            md-order-by="{{ctrl.getSortingKey('mainsite', 'Site')}}"
+                                            md-column="">
+                                            <span>{{lang.main_site}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('subsite', 'Site')}}">
+                                            <span>{{lang.sub_site}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedReviewIncomings.length" md-column
+                                            md-order-by="createdOn">
+                                            <span>{{lang.created_on}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedReviewIncomings.length && ctrl.selectedReviewIncomings.length < 2"
+                                            md-column>
+                                            <span></span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="reviewIncoming" grid-right-click-directive
+                                        model="reviewIncoming"
+                                        selected-length="{{ctrl.selectedReviewIncomings.length ? ctrl.selectedReviewIncomings.length : 0}}"
+                                        ng-repeat="reviewIncoming in searchResults = (ctrl.reviewIncomings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order)  track by $index">
+                                        <td md-cell class="td-data">
+                                            <a href="" ng-if="reviewIncoming.hasContent()" class="view-doc"
+                                               ng-click="ctrl.viewDocument(reviewIncoming, $event)">{{reviewIncoming.docSubject}}</a>
+                                            <span ng-if="!reviewIncoming.hasContent()">{{reviewIncoming.docSubject}}</span>
+                                        </td>
+                                        <td md-cell>{{reviewIncoming.priorityLevel.getTranslatedName()}}</td>
+                                        <td md-cell>{{reviewIncoming.securityLevel.getTranslatedName()}}</td>
+                                        <td md-cell>{{reviewIncoming.site.getTranslatedParentName()}}</td>
+                                        <td md-cell>{{reviewIncoming.site.getTranslatedName()}}</td>
+                                        <td md-cell>{{reviewIncoming.createdOn}}</td>
+                                        <td md-cell ng-if="ctrl.selectedReviewIncomings.length < 2">
+                                            <div layout-align="start center" ng-if="!ctrl.selectedReviewIncomings.length
                                                   || ctrl.selectedReviewIncomings.length===1 && ctrl.selectedReviewIncomings[0].id === reviewIncoming.id">
-                                            <grid-actions-directive menu-direction="horizontal"
-                                                                    grid-actions="ctrl.gridActions"
-                                                                    model="reviewIncoming"
-                                                                    shortcut="true">
-                                            </grid-actions-directive>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr md-row ng-if="!ctrl.reviewIncomings.length">
-                                    <td md-cell colspan="6" class="red-text text-center">{{lang.no_records_found}}</td>
-                                </tr>
-                                <tr md-row ng-if="ctrl.reviewIncomings.length && !searchResults.length">
-                                    <td md-cell colspan="6" class="red-text text-center">
-                                        {{lang.no_records_found_matching_search}}
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                                <grid-actions-directive menu-direction="horizontal"
+                                                                        grid-actions="ctrl.gridActions"
+                                                                        model="reviewIncoming"
+                                                                        shortcut="true">
+                                                </grid-actions-directive>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="!ctrl.reviewIncomings.length">
+                                        <td md-cell colspan="6" class="red-text text-center">{{lang.no_records_found}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.reviewIncomings.length && !searchResults.length">
+                                        <td md-cell colspan="6" class="red-text text-center">
+                                            {{lang.no_records_found_matching_search}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"

@@ -16,97 +16,99 @@
             <div scroll-directive>
                 <div class="page-padding">
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table
+                                       md-row-select="true"
+                                       multiple="true"
+                                       ng-model="ctrl.selectedRoles"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.order">
+                                    <tr md-row>
+                                        <th colspan="6" class="table-selector-header"
+                                            ng-if="ctrl.selectedRoles.length" md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedRoles.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
+                                                <table-status-directive
+                                                        when-close="ctrl.changeBulkStatusRoles"></table-status-directive>
+                                                <md-button class="md-icon-button"
+                                                           ng-click="ctrl.removeRoles()">
+                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </th>
 
-                        <md-table-container flex scroll-directive>
-                            <table md-table
-                                   md-row-select="true"
-                                   multiple="true"
-                                   ng-model="ctrl.selectedRoles"
-                                   md-progress="ctrl.progress">
-                                <thead md-head md-order="ctrl.grid.order">
-                                <tr md-row>
-                                    <th colspan="6" class="table-selector-header"
-                                        ng-if="ctrl.selectedRoles.length" md-column>
-                                        <div layout="row" layout-align="start center">
-                                            <span>{{ctrl.selectedRoles.length}} {{lang.items_selected}} </span>
-                                            <span flex></span>
-                                            <table-status-directive
-                                                    when-close="ctrl.changeBulkStatusRoles"></table-status-directive>
-                                            <md-button class="md-icon-button"
-                                                       ng-click="ctrl.removeRoles()">
-                                                <md-icon md-svg-icon="delete"></md-icon>
-                                            </md-button>
-                                        </div>
-                                    </th>
-
-                                    <th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="arName">
-                                        <span>{{lang.arabic_name}}</span>
-                                    </th>
-                                    <th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="enName">
-                                        <span>{{lang.english_name}}</span></th>
-                                    <!--<th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="description">-->
-                                    <!--<span>{{lang.description}}</span></th>-->
-                                    <th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="status">
-                                        <span>{{lang.status}}</span></th>
-                                    <th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="updatedBy">
-                                        <span>{{lang.updated_by}}</span></th>
-                                    <th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="updatedOn">
-                                        <span>{{lang.updated_date}}</span></th>
-                                    <th ng-if="!ctrl.selectedRoles.length" md-column>{{lang.action}}</th>
-                                </tr>
-                                </thead>
-                                <tbody md-body>
-                                <tr md-row
-                                    md-select="role"
-                                    ng-repeat="role in ctrl.roles  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
-                                    <td md-cell>{{role.arName}}</td>
-                                    <td md-cell>{{role.enName}}</td>
-                                    <!--<td md-cell>{{role.description}}</td>-->
-                                    <td md-cell>
-                                        <md-switch aria-label="{{lang.status}}"
-                                                   title="{{role.getTranslatedStatus()}}"
-                                                   ng-model="role.status"
-                                                   ng-change="ctrl.changeStatusRole(role)"></md-switch>
-                                    </td>
-                                    <td md-cell>{{role.updatedByInfo.getTranslatedName()}}</td>
-                                    <td md-cell>{{role.updatedOn}}</td>
-                                    <!--<td md-cell
-                                        ng-if="role.customRolePermission.length===1 || role.customRolePermission.length===0">
-                                        &lt;!&ndash; {{role.customRolePermission[0].permission? role.getTranslatedPermissionName():
-                                         ""}}&ndash;&gt;
-                                        {{role.customRolePermission[0]? role.getTranslatedPermissionName():
-                                        ""}}
-                                    </td>-->
-                                    <td md-cell>
-                                        <div flex layout="row" layout-align="start center">
-                                            <md-button tooltip="{{(role.customRolePermission.length === 1)
+                                        <th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="arName">
+                                            <span>{{lang.arabic_name}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="enName">
+                                            <span>{{lang.english_name}}</span></th>
+                                        <!--<th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="description">-->
+                                        <!--<span>{{lang.description}}</span></th>-->
+                                        <th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="status">
+                                            <span>{{lang.status}}</span></th>
+                                        <th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="updatedBy">
+                                            <span>{{lang.updated_by}}</span></th>
+                                        <th ng-if="!ctrl.selectedRoles.length" md-column md-order-by="updatedOn">
+                                            <span>{{lang.updated_date}}</span></th>
+                                        <th ng-if="!ctrl.selectedRoles.length" md-column>{{lang.action}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row
+                                        md-select="role"
+                                        ng-repeat="role in ctrl.roles  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
+                                        <td md-cell>{{role.arName}}</td>
+                                        <td md-cell>{{role.enName}}</td>
+                                        <!--<td md-cell>{{role.description}}</td>-->
+                                        <td md-cell>
+                                            <md-switch aria-label="{{lang.status}}"
+                                                       title="{{role.getTranslatedStatus()}}"
+                                                       ng-model="role.status"
+                                                       ng-change="ctrl.changeStatusRole(role)"></md-switch>
+                                        </td>
+                                        <td md-cell>{{role.updatedByInfo.getTranslatedName()}}</td>
+                                        <td md-cell>{{role.updatedOn}}</td>
+                                        <!--<td md-cell
+                                            ng-if="role.customRolePermission.length===1 || role.customRolePermission.length===0">
+                                            &lt;!&ndash; {{role.customRolePermission[0].permission? role.getTranslatedPermissionName():
+                                             ""}}&ndash;&gt;
+                                            {{role.customRolePermission[0]? role.getTranslatedPermissionName():
+                                            ""}}
+                                        </td>-->
+                                        <td md-cell>
+                                            <div flex layout="row" layout-align="start center">
+                                                <md-button tooltip="{{(role.customRolePermission.length === 1)
                                                                                 ? lang.permission + ' - ' + role.customRolePermission[0].getTranslatedName()
                                                                                 : (role.customRolePermission.length + ' ' + lang.permissions)}}"
-                                                       ng-click="ctrl.openPopupForMultiplePermissions(role, $event )"
-                                                       aria-label="{{lang.permissions}}"
-                                                       class="md-icon-button">
-                                                <md-icon md-svg-icon="checkbox-multiple-marked"></md-icon>
-                                            </md-button>
-                                            <md-button
-                                                    tooltip="{{(!role.members.length ) ? lang.no_users_found_to_display : ( role.members.length + ' ' + lang.users)}}"
-                                                    ng-click="ctrl.openPopupForRoleMembers(role, $event )"
-                                                    aria-label="{{lang.view_members}}"
-                                                    class="md-icon-button" ng-class="{'md-raised':role.members.length}">
-                                                <md-icon md-svg-icon="coins"></md-icon>
-                                            </md-button>
-                                            <md-button class="md-icon-button" title="{{lang.edit}}"
-                                                       ng-click="ctrl.openEditRoleDialog(role, $event)">
-                                                <md-icon md-svg-icon="pencil"></md-icon>
-                                            </md-button>
-                                            <md-button class="md-icon-button" title="{{lang.delete}}"
-                                                       ng-click="ctrl.removeRole(role, $event)">
-                                                <md-icon md-svg-icon="delete"></md-icon>
-                                            </md-button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                                           ng-click="ctrl.openPopupForMultiplePermissions(role, $event )"
+                                                           aria-label="{{lang.permissions}}"
+                                                           class="md-icon-button">
+                                                    <md-icon md-svg-icon="checkbox-multiple-marked"></md-icon>
+                                                </md-button>
+                                                <md-button
+                                                        tooltip="{{(!role.members.length ) ? lang.no_users_found_to_display : ( role.members.length + ' ' + lang.users)}}"
+                                                        ng-click="ctrl.openPopupForRoleMembers(role, $event )"
+                                                        aria-label="{{lang.view_members}}"
+                                                        class="md-icon-button"
+                                                        ng-class="{'md-raised':role.members.length}">
+                                                    <md-icon md-svg-icon="coins"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button" title="{{lang.edit}}"
+                                                           ng-click="ctrl.openEditRoleDialog(role, $event)">
+                                                    <md-icon md-svg-icon="pencil"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                           ng-click="ctrl.removeRole(role, $event)">
+                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
