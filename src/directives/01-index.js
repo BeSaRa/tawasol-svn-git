@@ -73,4 +73,5 @@ module.exports = function (app) {
     require('./workitem-inbox-directive/01-index')(app);
     require('./filter-button/filter-button')(app);
     require('./star-unstar-directive/01-index')(app);
+    require('./magazine-indecator/01-index')(app);
 };

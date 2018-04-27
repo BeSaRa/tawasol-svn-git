@@ -1804,3 +1804,76 @@ table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child
     }
   }
 }
+
+/*********  magazine-item ***********/
+.magazine-item {
+  background-color: white;
+  margin-bottom: 8px;
+  padding: 8px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  & > div {
+    margin-right: 2.5px;
+    margin-left: 2.5px;
+  }
+  & > div > div:not(:last-child) {
+    padding-bottom: 5px;
+  }
+}
+
+.magazine-from, .magazine-serial, .magazine-sender, .magazine-date {
+  padding: 5px;
+}
+
+.magazine-title {
+  a {
+    position: relative;
+    display: block;
+    line-height: 20px;
+    padding: 5px 0 0 0;
+    //border-bottom: 1px solid #EEE;
+  }
+}
+
+.magazine-serial, .magazine-sender {
+  background: #EEE;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.magazine-sender {
+  background-color: #9499ff;
+}
+
+.magazine-date {
+  font-size: 12px;
+  font-weight: bold;
+  border-top: 1px solid #EEE;
+}
+
+.magazine-icon {
+
+}
+
+.magazine-image, .magazine-action {
+  border: 1px solid #EEE;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.font-12 {
+  font-size: 12px;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.small-icon {
+  min-height: auto;
+  min-width: auto;
+  height: 20px;
+}

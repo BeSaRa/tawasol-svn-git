@@ -107,6 +107,8 @@ module.exports = function (app) {
             model.exportViaCentralArchiveIndicator = model.getExportViaCentralArchiveIndicator(model.generalStepElm.exportViaCentralArchive);
             model.originalCopyIndicator = model.generalStepElm.hasOwnProperty('orginality') ? model.getOriginalCopyIndicator() : null;
             model.sender = new Information(model.senderInfo);
+            model.registeryOu = new Information(model.registeryOu);
+            model.fromOuInfo = new Information(model.fromOuInfo);
             return model;
         });
 

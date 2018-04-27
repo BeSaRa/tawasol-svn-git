@@ -59,6 +59,12 @@ module.exports = function (app) {
             WorkItem.prototype.getNames = function () {
                 return this.generalStepElm.docSubject;
             };
+            /**
+             * @description get subject for the workItem i made it to be more convention.
+             */
+            WorkItem.prototype.getSubject = function () {
+                return this.generalStepElm.docSubject;
+            };
 
             /**
              * @description Get the status of entity name as Active or Inactive instead of true or false.
@@ -345,7 +351,22 @@ module.exports = function (app) {
             };
             WorkItem.prototype.getFullSerial = function () {
                 var info = this.getInfo();
-                return info.isPaper || info.documentClass === 'incoming' || (info.documentClass === 'outgoing' && info.status >= 24) || (info.documentClass === 'internal' && info.status >= 24) ? info.docFullSerial : null;
+                console.log(info);
+                return info.isPaper || info.documentClass === 'incoming' || (info.documentClass === 'outgoing' && info.docStatus >= 24) || (info.documentClass === 'internal' && info.docStatus >= 24) ? info.docFullSerial : null;
+            };
+            WorkItem.prototype.getFullSerialText = function () {
+                console.log(this.getFullSerial());
+                return this.getFullSerial() ? this.getFullSerial() : langService.get('no_serial');
+            };
+
+            WorkItem.prototype.getFromOUDetails = function () {
+                if (this.registeryOu.id === this.fromOuInfo.id) {
+                    return this.registeryOu.getTranslatedName();
+                }
+                return this.fromOuInfo.getTranslatedName() + ' ' + langService.get('in') + ' ' + this.registeryOu.getTranslatedName();
+            };
+            WorkItem.prototype.getFromOU = function (ignoreFrom) {
+                return langService.get('from') + ' : ' + this.getFromOUDetails();
             };
 
             WorkItem.prototype.exportViaArchive = function () {

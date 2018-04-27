@@ -24,13 +24,27 @@ module.exports = function (app) {
         self.userInboxes = [];
 
         // self.currentUser = employeeService.getEmployee();
+        self.fakeUsersInboxForTest = function () {
+            var items = _.map(_.range(0, 20), function () {
+                return new WorkItem({
+                    generalStepElm: {
+                        docSubject: 'جولة وفد الدولة بمشاركة قيادات الوزارة واتحاد الغرف وغرفة التجارة والصناعة',
+                        docType: 0,
+                        workFlowName: 'Outgoing'
+                    }
+                })
+            });
 
+            console.log(items);
+
+            return $q.when(items);
+        };
         /**
          * @description Load the user inboxes from server.
          * @returns {Promise|userInboxes}
          */
-        self.loadUserInboxes = function () {
-            return $http.get(urlService.userInbox + '/all-mails').then(function (result) {
+        self.loadUserInboxes = function (fake) {
+            return fake ? self.fakeUsersInboxForTest() : $http.get(urlService.userInbox + '/all-mails').then(function (result) {
                 self.userInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
                 //self.userInboxes = _.sortBy(self.userInboxes, 'generalStepElm.starred').reverse();
                 self.userInboxes = generator.interceptReceivedCollection('WorkItem', self.userInboxes);

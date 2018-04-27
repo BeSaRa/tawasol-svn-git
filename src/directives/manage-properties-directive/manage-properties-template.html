@@ -125,6 +125,21 @@
             </div>
             <div layout="row">
                 <md-input-container flex>
+                    <label for="docSubject">{{lang.document_subject}}</label>
+                    <!--custom-validate-directive="AEN" -->
+                    <textarea name="docSubject"
+                              id="docSubject"
+                              ng-disabled="!!ctrl.disableProperties"
+                              ng-model="ctrl.document.docSubject"
+                              ng-required="ctrl.checkMandatory('docSubject')"></textarea>
+                    <div ng-messages="outgoing_properties.docSubject.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                        <div ng-message="AEN">{{lang.arabic_english_number}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <md-input-container flex>
                     <label for="mainClassification">{{lang.outgoing_main_classification}}</label>
                     <md-select name="mainClassification"
                                id="mainClassification"
@@ -157,19 +172,6 @@
                     </md-select>
                     <div ng-messages="outgoing_properties.subClassification.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
-                <md-input-container flex>
-                    <label for="docSubject">{{lang.document_subject}}</label>
-                    <input name="docSubject"
-                           id="docSubject"
-                           ng-disabled="!!ctrl.disableProperties"
-                           custom-validate-directive="AEN"
-                           ng-model="ctrl.document.docSubject"
-                           ng-required="ctrl.checkMandatory('docSubject')">
-                    <div ng-messages="outgoing_properties.docSubject.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                        <div ng-message="AEN">{{lang.arabic_english_number}}</div>
                     </div>
                 </md-input-container>
             </div>
