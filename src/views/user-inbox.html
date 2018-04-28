@@ -137,7 +137,7 @@
                              class="magazine-item">
                             <div class="magazine-image" layout="column">
                                 <div layout="row" flex class="magazine-icon">
-                                    <md-icon flex md-svg-icon="arrow-down-bold-box"></md-icon>
+                                    <md-icon flex md-svg-icon="{{workItem.getTypeIcon()}}"></md-icon>
                                 </div>
                                 <div class="magazine-date">
                                     <span>{{workItem.getReceivedDate()}}</span>
@@ -159,33 +159,35 @@
                                     </div>
                                 </div>
                                 <div layout="row" layout-align="start center" class="magazine-bottom">
-                                    <magazine-indicator icon="book-open-variant" color="red"
-                                                        model="workItem"></magazine-indicator>
-
-                                    <!--<div class="font-12 magazine-type" layout="row" layout-align="start center">-->
-                                    <!--<div class="magazine-icon">-->
-                                    <!--<md-icon class="small-icon" md-svg-icon="book-open-variant"></md-icon>-->
-                                    <!--</div>-->
-                                    <!--<div>-->
-                                    <!--نوع الكتاب : ورقي-->
-                                    <!--</div>-->
-                                    <!--</div>-->
-                                    <div class="font-12 magazine-priority" layout="row" layout-align="start center">
-                                        <div class="magazine-icon">
-                                            <md-icon class="small-icon" md-svg-icon="alert-circle"></md-icon>
-                                        </div>
-                                        <div>
-                                            درجة الأولوية : عادي
-                                        </div>
-                                    </div>
-                                    <div class="font-12 magazine-security" layout="row" layout-align="start center">
-                                        <div class="magazine-icon">
-                                            <md-icon class="small-icon" md-svg-icon="lock"></md-icon>
-                                        </div>
-                                        <div>
-                                            درجة السرية
-                                        </div>
-                                    </div>
+                                    <magazine-indicator
+                                            icon="book-open-variant"
+                                            color="#3498db"
+                                            callback="workItem.getIndicatorBookType"
+                                            model="workItem"></magazine-indicator>
+                                    <magazine-indicator
+                                            icon="alert-circle"
+                                            key="priority_level"
+                                            color-callback="workItem.getIndicatorPriorityLevelColor"
+                                            callback="workItem.getIndicatorPriorityLevel"
+                                            model="workItem"></magazine-indicator>
+                                    <magazine-indicator
+                                            icon="lock"
+                                            color="#f1c40f"
+                                            key="security_level"
+                                            callback="workItem.getIndicatorSecurityLevel"
+                                            model="workItem"></magazine-indicator>
+                                    <magazine-indicator
+                                            ng-if="workItem.isBroadcasted()"
+                                            icon="bullhorn"
+                                            color="#2c3e50"
+                                            callback="workItem.getBroadCastedText"
+                                            model="workItem"></magazine-indicator>
+                                    <magazine-indicator
+                                            ng-if="workItem.generalStepElm.isReassigned"
+                                            icon="transfer"
+                                            color="#8e44ad"
+                                            callback="workItem.getIndicatorTransfer"
+                                            model="workItem"></magazine-indicator>
 
                                 </div>
                             </div>

@@ -351,11 +351,10 @@ module.exports = function (app) {
             };
             WorkItem.prototype.getFullSerial = function () {
                 var info = this.getInfo();
-                console.log(info);
                 return info.isPaper || info.documentClass === 'incoming' || (info.documentClass === 'outgoing' && info.docStatus >= 24) || (info.documentClass === 'internal' && info.docStatus >= 24) ? info.docFullSerial : null;
             };
             WorkItem.prototype.getFullSerialText = function () {
-                console.log(this.getFullSerial());
+                console.log(this.generalStepElm.docFullSerial);
                 return this.getFullSerial() ? this.getFullSerial() : langService.get('no_serial');
             };
 
@@ -399,6 +398,34 @@ module.exports = function (app) {
             };
             WorkItem.prototype.markAsReadUnread = function ($event, ignoreMessage, isGroupMail) {
                 return correspondenceService.workItemMarkAsReadUnreadSingle(this, $event, ignoreMessage, isGroupMail);
+            };
+            /**
+             * @description magazine indicators docType [paper , electronic]
+             * @param model
+             * @return {*}
+             */
+            WorkItem.prototype.getIndicatorBookType = function (model) {
+                return model.generalStepElm.addMethod ? langService.get('paper') : langService.get('electronic');
+            };
+            WorkItem.prototype.getIndicatorPriorityLevel = function (model) {
+                return model.priorityLevel[langService.current + 'Name'];
+            };
+            WorkItem.prototype.getIndicatorPriorityLevelColor = function (model) {
+                var colors = ['#27ae60', '#e67e22', '#c0392b'];
+                return colors[model.priorityLevel.id];
+            };
+            WorkItem.prototype.getIndicatorSecurityLevel = function (model) {
+                return model.securityLevel[langService.current + 'Name'];
+            };
+            WorkItem.prototype.getIndicatorTransfer = function (model) {
+                return model.generalStepElm.isReassigned ? langService.get('reassigned') : null;
+            };
+            WorkItem.prototype.getBroadCastedText = function (model) {
+                return model.generalStepElm.isBrodcasted ? langService.get('broadcasted') : null;
+            };
+            WorkItem.prototype.getTypeIcon = function () {
+                var icons = ['arrow-up-bold-box', 'arrow-down-bold-box', 'recycle'];
+                return icons[this.generalStepElm.docType];
             };
 
 

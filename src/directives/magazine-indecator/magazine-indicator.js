@@ -7,15 +7,15 @@ module.exports = function (app) {
             controllerAs: 'ctrl',
             bindToController: true,
             replace: true,
-            template: require('./magazine-template.html'),
+            template: require('./magazine-indicator-template.html'),
             scope: {
                 model: '=',
+                key: '@?',
                 icon: '@',
                 showTooltip: '=',
                 callback: '=',
-                keyCallback: '=',
-                showKey: '=',
-                color: '@'
+                color: '@?',
+                colorCallback: '='
             }
         }
     })

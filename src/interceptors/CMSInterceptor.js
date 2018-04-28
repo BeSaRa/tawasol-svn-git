@@ -6,9 +6,7 @@ module.exports = function (app) {
             // to adjust the request before sending.
             request: function (config) {
                 exception.request(config);
-                if (config.hasOwnProperty('loading') && !config.loading) {
-
-                } else {
+                if (!config.hasOwnProperty('excludeLoading')) {
                     countRequests += 1;
                     loadingIndicatorService.startLoading();
                 }
@@ -17,10 +15,7 @@ module.exports = function (app) {
             // when request has an error while send process.
             requestError: function (reason) {
                 exception.requestError(reason);
-
-                if (reason.config.hasOwnProperty('loading') && !reason.config.loading) {
-
-                } else {
+                if (!reason.config.hasOwnProperty('excludeLoading')) {
                     countRequests -= 1;
                 }
                 !countRequests ? loadingIndicatorService.endLoading() : null;
@@ -29,20 +24,16 @@ module.exports = function (app) {
             // after getting response
             response: function (result) {
                 exception.response(result);
-                if (result.config.hasOwnProperty('loading') && !result.config.loading) {
-
-                } else {
+                if (!result.config.hasOwnProperty('excludeLoading')) {
                     countRequests -= 1;
                 }
                 !countRequests ? loadingIndicatorService.endLoading() : null;
                 return result;
             },
             // when response has an error.
-            responseError: function (rejection) {
-                exception.responseError(rejection);
-                if (rejection.config.hasOwnProperty('loading') && !rejection.config.loading) {
-
-                } else {
+            responseError: function (result) {
+                exception.responseError(result);
+                if (!result.config.hasOwnProperty('excludeLoading')) {
                     countRequests -= 1;
                 }
                 !countRequests ? loadingIndicatorService.endLoading() : null;

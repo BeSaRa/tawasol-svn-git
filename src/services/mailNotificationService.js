@@ -16,7 +16,7 @@ module.exports = function (app) {
             count = count ? count : self.notificationsRequestCount;
             return $http
                 .get(urlService.notifications.change({count: count}), {
-                    loading: false
+                    excludeLoading: true
                 })
                 .then(function (result) {
                     self.unreadNotificationsCount = _.filter(result.data.rs, {'read': false}).length;

@@ -1831,7 +1831,7 @@ table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child
     position: relative;
     display: block;
     line-height: 20px;
-    padding: 5px 0 0 0;
+    padding: 0;
     //border-bottom: 1px solid #EEE;
   }
 }
@@ -1876,4 +1876,8 @@ table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child
   min-height: auto;
   min-width: auto;
   height: 20px;
+}
+
+.magazine-indicator:not(:first-child) {
+  padding: 0 5px;
 }
