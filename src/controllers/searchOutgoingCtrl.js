@@ -678,7 +678,7 @@ module.exports = function (app) {
         self.sendLinkToDocumentByEmail = function (searchedOutgoingDocument, $event) {
             //console.log('send link to document for searched outgoing document : ', searchedOutgoingDocument);
             downloadService.getMainDocumentEmailContent(searchedOutgoingDocument.vsId).then(function (result) {
-                var msg = "<p>please use the (right click + save target as) option to download the message file from the below link ... </p><br><a href='"+result+"' download='Tawasol.msg' onclick='return false;'>"+"Download the message file"+"</a>";
+                var msg = "<p>please use the (right click + save link as) option to download the message file from the below link ... </p><br><a href='"+result+"' download='Tawasol.msg' onclick='return false;'>"+"Download the message file"+"</a>";
                 dialog.successMessage(msg);
                 return true;
             });
@@ -692,7 +692,7 @@ module.exports = function (app) {
         self.sendCompositeDocumentAsAttachmentByEmail = function (searchedOutgoingDocument, $event) {
             //console.log('send composite document as attachment for searched outgoing document : ', searchedOutgoingDocument);
             downloadService.getCompositeDocumentEmailContent(searchedOutgoingDocument.vsId).then(function (result) {
-                var msg = "<p>please use the (right click + save target as) option to download the message file from the below link ... </p><br><a href='"+result+"' download='Tawasol.msg' onclick='return false;'>"+"Download the message file"+"</a>";
+                var msg = "<p>please use the (right click + save link as) option to download the message file from the below link ... </p><br><a href='"+result+"' download='Tawasol.msg' onclick='return false;'>"+"Download the message file"+"</a>";
                 dialog.successMessage(msg);
                 return true;
             });
