@@ -31,15 +31,11 @@ module.exports = function (app) {
                                                    dialog,
                                                    counterService,
                                                    correspondenceService,
-<<<<<<< .mine
                                                    favoriteDocumentsService,
-                                                   $sce
-||||||| .r1881
-                                                   favoriteDocumentsService
-=======
+                                                   $sce,
+                                                   favoriteDocumentsService,
                                                    favoriteDocumentsService,
                                                    mailNotificationService
->>>>>>> .r1912
                                                    //centralArchives
     ) {
         'ngInject';
