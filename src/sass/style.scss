@@ -1844,7 +1844,7 @@ table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child
 }
 
 .magazine-sender {
-  background-color: #9499ff;
+  //background-color: #9499ff;
 }
 
 .magazine-date {
@@ -1880,4 +1880,32 @@ table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child
 
 .magazine-indicator:not(:first-child) {
   padding: 0 5px;
+}
+
+.priority-normal-indicator {
+  color: #27ae60;
+}
+
+.priority-urgent-indicator {
+  color: #e67e22;
+}
+
+.priority-top-urgent-indicator {
+  color: #c0392b;
+}
+
+.magazine-check-box {
+  md-checkbox {
+    margin-bottom: 0;
+    width: 20px;
+  }
+}
+
+.magazine-image {
+  & > div:first-child {
+    display: none !important;
+  }
+  &:hover > div:last-child {
+    display: none !important;
+  }
 }

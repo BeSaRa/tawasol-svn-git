@@ -136,6 +136,9 @@
                         <div layout="row" md-whiteframe="1" ng-repeat="workItem in ctrl.userInboxes track by $index"
                              class="magazine-item">
                             <div class="magazine-image" layout="column">
+                                <div flex layout="row" layout-align="center center" class="magazine-check-box">
+                                    <md-checkbox aria-label="select"></md-checkbox>
+                                </div>
                                 <div layout="row" flex class="magazine-icon">
                                     <md-icon flex md-svg-icon="{{workItem.getTypeIcon()}}"></md-icon>
                                 </div>
@@ -191,7 +194,7 @@
 
                                 </div>
                             </div>
-                            <div class="magazine-action" layout="column">
+                            <div ng-if="false" class="magazine-action" layout="column">
                                 <div layout="row" flex class="magazine-icon">
                                     <md-icon flex md-svg-icon="arrow-down-bold-box"></md-icon>
                                 </div>

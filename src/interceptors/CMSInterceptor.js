@@ -13,13 +13,13 @@ module.exports = function (app) {
                 return tokenService.setTokenForHeader(config);
             },
             // when request has an error while send process.
-            requestError: function (reason) {
-                exception.requestError(reason);
-                if (!reason.config.hasOwnProperty('excludeLoading')) {
+            requestError: function (result) {
+                exception.requestError(result);
+                if (!result.config.hasOwnProperty('excludeLoading')) {
                     countRequests -= 1;
                 }
                 !countRequests ? loadingIndicatorService.endLoading() : null;
-                return $q.reject(reason);
+                return $q.reject(result);
             },
             // after getting response
             response: function (result) {
@@ -37,7 +37,7 @@ module.exports = function (app) {
                     countRequests -= 1;
                 }
                 !countRequests ? loadingIndicatorService.endLoading() : null;
-                return $q.reject(rejection);
+                return $q.reject(result);
             }
         }
     })

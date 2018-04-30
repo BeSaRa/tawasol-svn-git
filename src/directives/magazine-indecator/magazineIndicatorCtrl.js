@@ -10,7 +10,6 @@ module.exports = function (app) {
         }, function (value) {
             if (value && typeof value === 'function')
                 self.color = self.colorCallback(self.model);
-            console.log(self.color, 'COLOR');
         });
 
     });

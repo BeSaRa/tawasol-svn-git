@@ -354,7 +354,6 @@ module.exports = function (app) {
                 return info.isPaper || info.documentClass === 'incoming' || (info.documentClass === 'outgoing' && info.docStatus >= 24) || (info.documentClass === 'internal' && info.docStatus >= 24) ? info.docFullSerial : null;
             };
             WorkItem.prototype.getFullSerialText = function () {
-                console.log(this.generalStepElm.docFullSerial);
                 return this.getFullSerial() ? this.getFullSerial() : langService.get('no_serial');
             };
 
@@ -412,7 +411,8 @@ module.exports = function (app) {
             };
             WorkItem.prototype.getIndicatorPriorityLevelColor = function (model) {
                 var colors = ['#27ae60', '#e67e22', '#c0392b'];
-                return colors[model.priorityLevel.id];
+                var classes = ['priority-normal-indicator', 'priority-urgent-indicator', 'priority-top-urgent-indicator'];
+                return classes[model.priorityLevel.id];
             };
             WorkItem.prototype.getIndicatorSecurityLevel = function (model) {
                 return model.securityLevel[langService.current + 'Name'];
