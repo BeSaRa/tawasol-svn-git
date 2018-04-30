@@ -225,6 +225,10 @@
                 .addToAllWithBase('downloadDocument', '/cms-entity/correspondence/download-document/vsid')
                 //download composite document
                 .addToAllWithBase('downloadDocumentComposite', '/cms-entity/correspondence/download-document/composite/vsid')
+                //get document email content
+                .addToAllWithBase('getDocumentEmailContent', '/cms-entity/correspondence/download-document/email/vsid')
+                //get composite document email content
+                .addToAllWithBase('getDocumentCompositeEmailContent', '/cms-entity/correspondence/download-document/composite/email/vsid')
                 // counters
                 .addToAllWithBase('counters', 'cms-entity/correspondence/outgoing/counters')
                 // prepare template
