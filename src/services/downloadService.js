@@ -66,5 +66,27 @@ module.exports = function (app) {
                 })
         };
 
+        /**
+         * @description get main document email content from server
+         */
+        self.getMainDocumentEmailContent = function (vsId) {
+            return $http
+                .get(urlService.getDocumentEmailContent + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
+                .then(function (result) {
+                    return result.data.rs;
+                })
+        };
+
+        /**
+         * @description get composite document email content from server
+         */
+        self.getCompositeDocumentEmailContent = function (vsId) {
+            return $http
+                .get(urlService.getDocumentCompositeEmailContent + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
+                .then(function (result) {
+                    return result.data.rs;
+                })
+        };
+
     });
 };
