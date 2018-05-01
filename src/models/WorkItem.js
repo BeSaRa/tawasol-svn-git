@@ -28,7 +28,7 @@ module.exports = function (app) {
             self.fromRegOu = null;
             self.toRegOu = null;
             self.fromOuInfo = null;
-            self.firstSiteInfo = null;
+            //self.firstSiteInfo = null;
 
             // not related to the workItem
 
@@ -79,27 +79,14 @@ module.exports = function (app) {
              * @returns {string}
              */
             WorkItem.prototype.getTranslatedCorrespondenceSiteInfo = function () {
-                /*if (this.getInfo().documentClass === 'outgoing') {
-                 return this.firstSiteInfo
-                 ? (langService.current === 'en'
-                 ? this.firstSiteInfo.mainEnSiteText + (this.firstSiteInfo.subEnSiteText ? (' - ' + this.firstSiteInfo.subEnSiteText) : '')
-                 : (this.firstSiteInfo.subArSiteText ? this.firstSiteInfo.subArSiteText + ' - ' : '') + this.firstSiteInfo.mainArSiteText
-                 ) : "";
-                 }
-                 return this.siteInfo
-                 ? (langService.current === 'en'
-                 ? this.siteInfo.mainEnSiteText + (this.siteInfo.subEnSiteText ? (' - ' + this.siteInfo.subEnSiteText) : '')
-                 : (this.siteInfo.subArSiteText ? this.siteInfo.subArSiteText + ' - ' : '') + this.siteInfo.mainArSiteText
-                 ) : "";*/
-
                 var mainSite, subSite;
-                if (this.getInfo().documentClass === 'outgoing') {
+                /*if (this.getInfo().documentClass === 'outgoing') {
                     mainSite = new Information(this.firstSiteInfo.mainSite);
                     subSite = (this.firstSiteInfo.subSite) ? new Information(this.firstSiteInfo.subSite) : new Information();
                     return this.firstSiteInfo
                         ? mainSite.getTranslatedName() + (subSite.getTranslatedName() ? (' - ' + subSite.getTranslatedName()) : '')
                         : "";
-                }
+                }*/
 
                 mainSite = new Information(this.siteInfo.mainSite);
                 subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : new Information();
