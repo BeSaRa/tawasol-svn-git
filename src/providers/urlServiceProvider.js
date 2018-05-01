@@ -164,6 +164,7 @@ module.exports = function (app) {
          * @param env
          */
         self.setEnvironment = function (env) {
+            env = env.toLowerCase();
             if (!environments.hasOwnProperty(env)) {
                 environments[env] = {};
             }
