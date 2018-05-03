@@ -1,11 +1,12 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, 
-                      ouDistributionListService, 
-                      organizationService, 
-                      distributionListService, 
+    app.run(function (CMSModelInterceptor,
+                      ouDistributionListService,
+                      organizationService,
+                      distributionListService,
                       OUDistributionList,
                       CorrespondenceSiteView,
-                      generator) {
+                      generator,
+                      _) {
         'ngInject';
 
         var modelName = 'DistributionList';
@@ -26,6 +27,14 @@ module.exports = function (app) {
                     }
                 })
             });*/
+
+            model.distributionListMembers = _.map(model.distributionListMembers, function (member) {
+                delete member.site.parentInfo;
+                delete member.site.correspondenceSiteType;
+                return member;
+            });
+
+
             model.relatedOus = _.map(model.relatedOus, function () {
                 return OUDistributionList();
             });
@@ -38,7 +47,7 @@ module.exports = function (app) {
 
             angular.forEach(model.distributionListMembers, function (value, key) {
                 var member = angular.copy(value);
-                member  = new CorrespondenceSiteView(member.site);
+                member = new CorrespondenceSiteView(member.site);
                 member = generator.interceptReceivedInstance('CorrespondenceSiteView', member);
                 value.site = member;
             });

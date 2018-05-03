@@ -207,7 +207,6 @@ module.exports = function (app) {
              */
             self.changeGlobalFromFromGrid = function (distributionList) {
                 // if distribution global and has organizations.
-                distributionList.distributionListMembers = generator.interceptSendCollection('CorrespondenceSiteView', distributionList.distributionListMembers);
                 if (distributionList.global && distributionList.hasOrganizations()) {
                     dialog.confirmMessage(langService.get('related_organization_confirm'))
                         .then(function () {
@@ -262,7 +261,6 @@ module.exports = function (app) {
              * @param distributionList
              */
             self.behindScene = function (distributionList) {
-                distributionList.distributionListMembers = generator.interceptSendCollection('CorrespondenceSiteView', distributionList.distributionListMembers);
                 return distributionList.repairGlobalStatus();
             }
         }

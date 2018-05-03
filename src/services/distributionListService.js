@@ -139,7 +139,8 @@ module.exports = function (app) {
                     generator.interceptSendInstance('DistributionList', distributionList))
                 .then(function (result) {
                     distributionList.id = result.data.rs;
-                    return generator.interceptReceivedInstance('DistributionList', generator.generateInstance(distributionList, DistributionList, self._sharedMethods));
+                    return distributionList;
+                    //return generator.interceptReceivedInstance('DistributionList', generator.generateInstance(distributionList, DistributionList, self._sharedMethods));
                 });
         };
 

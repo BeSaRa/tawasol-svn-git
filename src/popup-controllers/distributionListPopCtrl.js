@@ -22,8 +22,8 @@ module.exports = function (app) {
         self.model = angular.copy(distributionList);
         self.mainCorrespondenceSitesCopy = angular.copy(mainCorrespondenceSites);
 
-        self.filterMembers = function(){
-            mainCorrespondenceSites =  angular.copy(self.mainCorrespondenceSitesCopy);
+        self.filterMembers = function () {
+            mainCorrespondenceSites = angular.copy(self.mainCorrespondenceSitesCopy);
             self.members = _.map(self.distributionList.distributionListMembers, 'id');
 
             _.map(mainCorrespondenceSites, function (correspondenceSite) {
@@ -55,10 +55,6 @@ module.exports = function (app) {
          * @description Add new distribution List
          */
         self.addDistributionListFromCtrl = function () {
-            var parentInfos = _.map(self.distributionList.distributionListMembers, function (member) {
-                return member.site.parentInfo;
-            });
-            self.distributionList.distributionListMembers = generator.interceptSendCollection('CorrespondenceSiteView', self.distributionList.distributionListMembers);
             validationService
                 .createValidation('ADD_DISTRIBUTION_LIST')
                 .addStep('check_required', true, generator.checkRequiredFields, self.distributionList, function (result) {
@@ -80,13 +76,6 @@ module.exports = function (app) {
                 .then(function () {
                     distributionListService.addDistributionList(self.distributionList).then(function (result) {
                         toast.success(langService.get('add_success').change({name: self.distributionList.getNames()}));
-                        //dialog.hide();
-
-                        result.distributionListMembers = _.map(result.distributionListMembers, function (member, index) {
-                            member.site.parentInfo = new Information(parentInfos[index]);
-                            return member;
-                        });
-
                         self.editMode = true;
                         self.distributionList = angular.copy(result);
                         self.model = angular.copy(self.distributionList);
@@ -102,7 +91,6 @@ module.exports = function (app) {
          * @description Edit distribution List
          */
         self.editDistributionListFromCtrl = function () {
-            self.distributionList.distributionListMembers = generator.interceptSendCollection('CorrespondenceSiteView', self.distributionList.distributionListMembers);
             validationService
                 .createValidation('EDIT_DISTRIBUTION_LIST')
                 .addStep('check_required', true, generator.checkRequiredFields, self.distributionList, function (result) {

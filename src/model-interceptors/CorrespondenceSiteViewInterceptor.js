@@ -13,8 +13,6 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            delete model.site.parentInfo;
-            delete model.site.correspondenceSiteType;
             return model;
         });
 
