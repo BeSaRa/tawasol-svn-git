@@ -43,6 +43,7 @@ module.exports = function (app) {
             self.classificationPermisssions = null;
             self.actions = null;
             self.outOfOffice = false;
+            self.viewInboxAsGrid = true;
 
             var collectionResults = [
                 'reminderSmsPriority',
@@ -85,7 +86,8 @@ module.exports = function (app) {
                 'reminderSmsPriority',
                 'reminderEmailPriority',
                 'reminderSmsdays',
-                'reminderEmailDays'
+                'reminderEmailDays',
+                'viewInboxAsGrid'
             ];
 
             if (model)
@@ -164,6 +166,7 @@ module.exports = function (app) {
             ApplicationUser.prototype.getFullNameByKey = function (key) {
                 return this[key + 'FullName'] ? this[key + 'FullName'] : null;
             };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('ApplicationUser', 'init', this);

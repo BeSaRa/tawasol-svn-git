@@ -149,6 +149,19 @@
                             </div>
 
                             <div layout="row" flex class="p20">
+                                <!-- Correspondence Site Search Type -->
+                                <md-input-container flex>
+                                    <label>{{lang.correspondence_Site_search_type}}</label>
+                                    <md-select name="simpleCorsSiteSearch" required
+                                               ng-model="ctrl.globalSetting.simpleCorsSiteSearch">
+                                        <md-option ng-repeat="searchType in ctrl.correspondenceSiteSearchTypeOptions" ng-value="searchType.value">
+                                            {{lang[searchType.key]}}
+                                        </md-option>
+                                    </md-select>
+                                    <div ng-messages="globalSettingForm.simpleCorsSiteSearch.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
+                                </md-input-container>
                                 <!-- Enable Mobile Access -->
                                 <md-switch flex ng-model="ctrl.globalSetting.enableMobileAccess"
                                            aria-label="{{lang.enable_mobile_access}}">
@@ -161,8 +174,7 @@
                                     <span>{{lang.can_change_password}} : </span>{{
                                     ctrl.globalSetting.getTranslatedYesNo('canChangePassword')}}
                                 </md-switch>
-                                <!-- EMPTY CONTAINER -->
-                                <md-input-container flex></md-input-container>
+
                             </div>
                         </div>
                     </md-content>

@@ -44,6 +44,7 @@ module.exports = function (app) {
             self.enableEmailNotification = false;
             self.sla = null;
             self.escalationProcess = null;
+            self.simpleCorsSiteSearch = true;
             //required
             self.barcodeElements = "";
             self.deadlineReminderDays = null;
@@ -79,7 +80,8 @@ module.exports = function (app) {
                 'enableEmailNotification',
                 'enableEscalation',
                 'useCentralArchiveInternally',
-                'escalationProcess'
+                'escalationProcess',
+                'simpleCorsSiteSearch'
             ];
 
             if (model)

@@ -42,6 +42,16 @@ module.exports = function (app) {
         self.documentSecuritySchemas = lookupService.returnLookups(lookupService.securitySchema);
         self.workFlowSecurities = lookupService.returnLookups(lookupService.workflowSecurity);
         self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        self.correspondenceSiteSearchTypeOptions = [
+            {
+                key: 'search_type_simple',
+                value: false
+            },
+            {
+                key: 'search_type_advanced',
+                value: true
+            }
+        ];
 
         /**
          * @description Open the popup to select users to exclude from audit log
@@ -83,7 +93,8 @@ module.exports = function (app) {
             enableEmailNotification: 'enable_email_notification',
             enableEscalation: 'enable_escalation_process',
             useCentralArchiveInternally: 'use_central_archive_internally',
-            escalationProcess: 'choose_escalation_process'
+            escalationProcess: 'choose_escalation_process',
+            simpleCorsSiteSearch: 'correspondence_Site_search_type'
         };
 
         /**

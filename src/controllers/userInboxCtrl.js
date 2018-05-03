@@ -36,6 +36,7 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'userInboxCtrl';
+        self.employeeService = employeeService;
 
         self.progress = null;
         contextHelpService.setHelpTo('user-inbox');

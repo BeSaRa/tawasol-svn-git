@@ -75,7 +75,16 @@ module.exports = function (app) {
         self.userWorkflowGroups = userWorkflowGroups;
         self.userFolderService = userFolderService;
         self.currentNode = null;
-
+        self.viewInboxAsOptions = [
+            {
+                key: 'view_magazine',
+                value: false
+            },
+            {
+                key: 'view_grid',
+                value: true
+            }
+        ];
 
         //console.log(self.globalSetting.getSecurityLevels());
 
@@ -194,7 +203,8 @@ module.exports = function (app) {
             reminderSmsPriority: 'reminder_sms_priority',
             reminderEmailPriority: 'reminder_email_priority',
             reminderSmsdays: 'reminder_sms_days',
-            reminderEmailDays: 'reminder_email_days'
+            reminderEmailDays: 'reminder_email_days',
+            viewInboxAsGrid: 'view_inbox_as'
         };
 
         self.validateSignatureLabels = {
