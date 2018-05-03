@@ -149,6 +149,7 @@ module.exports = function (app) {
          * @return {Promise|DistributionList}
          */
         self.updateDistributionList = function (distributionList) {
+            debugger;
             return $http
                 .put(urlService.distributionLists,
                     generator.interceptSendInstance('DistributionList', distributionList))
@@ -164,7 +165,7 @@ module.exports = function (app) {
          */
         self.deleteDistributionList = function (distributionList) {
             var id = distributionList.hasOwnProperty('id') ? distributionList.id : distributionList;
-            return $http.delete((urlService.distributionLists + '/' + id)).then(function(result){
+            return $http.delete((urlService.distributionLists + '/' + id)).then(function (result) {
                 return result;
             });
         };

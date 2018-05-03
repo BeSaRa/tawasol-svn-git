@@ -1,0 +1,182 @@
+<div class="p20" layout="column">
+    <div layout="row" flex>
+        <md-input-container flex>
+            <label>{{lang.sites_select_site_type}}</label>
+            <md-select ng-model="ctrl.selectedType">
+                <md-option ng-value="type" ng-repeat="type in ctrl.correspondenceSiteTypes">
+                    {{type.getTranslatedName()}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <md-autocomplete
+                flex
+                md-autoselect
+                md-no-cache="true"
+                md-selected-item="ctrl.selectedMain"
+                md-search-text="ctrl.mainSearch"
+                md-selected-item-change="ctrl.onMainChange(item)"
+                md-items="item in ctrl.onMainSearch(ctrl.mainSearch)"
+                md-item-text="item.display"
+                md-min-length="3"
+                md-floating-label="{{lang.sites_select_main_site}}">
+            <span>{{item.getTranslatedName()}}</span>
+        </md-autocomplete>
+        <md-input-container flex>
+            <label for="subSearch">{{lang.sites_select_sub_site}}</label>
+            <input id="subSearch" ng-model="ctrl.subSearch" ng-enter="ctrl.onSubSearch()" ng-change="ctrl.onSubSearch($event)">
+        </md-input-container>
+    </div>
+    <!-- Search Results -->
+    <div flex layout="column">
+        <md-card ng-if="ctrl.subSearchResult.length" md-whiteframe="3" layout="column" class="card-overlay">
+            <md-toolbar class="md-table-toolbar md-default" ng-class="{'selected':ctrl.subSearchSelected.length}">
+                <div class="md-toolbar-tools">
+                    <!-- Close search results -->
+                    <div layout="row" ng-if="!ctrl.subSearchSelected.length" flex>
+                        <div flex>{{lang.sites_search_results}}</div>
+                        <div>
+                            <md-button tooltip="{{lang.sites_hide_search}}" class="md-icon-button close-search-button"
+                                       ng-click="ctrl.onCloseSearch()">
+                                <md-icon md-svg-icon="close"></md-icon>
+                            </md-button>
+                        </div>
+                    </div>
+                    <!-- Add multiple selected search results -->
+                    <div ng-if="ctrl.subSearchSelected.length" layout="row" flex layout-align="start center">
+                        <div>{{ctrl.subSearchSelected.length}} {{lang.items_selected}}</div>
+                        <span flex></span>
+                        <div>
+                            <md-button tooltip="{{lang.add}}" class="md-icon-button close-search-button"
+                                       ng-click="ctrl.addDistributionListMemberBulk($event)">
+                                <md-icon md-svg-icon="plus"></md-icon>
+                            </md-button>
+                        </div>
+                    </div>
+                </div>
+            </md-toolbar>
+            <!-- Search results -->
+            <md-table-container flex scroll-directive>
+                <table md-table md-row-select multiple ng-model="ctrl.subSearchSelected"
+                       md-progress="ctrl.progress">
+                    <thead md-head md-order="ctrl.grid.subSearchResult.order">
+                    <tr md-row>
+                        <th md-column md-order-by="mainEnSiteText">
+                            <span>{{lang.sites_main_site}}</span>
+                        </th>
+                        <th md-column md-order-by="mainArSiteText">
+                            <span>{{lang.sites_sub_site}}</span>
+                        </th>
+                        <th md-column md-order-by="mainArSiteText">
+                            <span>{{lang.sites_select_site_type}}</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody md-body>
+                    <tr md-row md-select="site"
+                        ng-repeat="site in ctrl.subSearchResult  | filter:ctrl.searchModel | limitTo: ctrl.grid.subSearchResult.limit: ((ctrl.grid.subSearchResult.page - 1) * ctrl.grid.subSearchResult.limit) |orderBy:ctrl.grid.subSearchResult.order  track by $index">
+                        <td md-cell>
+                            <div flex layout="column">
+                                <span class="span-column">{{site.parentInfo.getTranslatedName()}}</span>
+                            </div>
+                        </td>
+                        <td md-cell>
+                            <div flex layout="column">
+                                <span md-highlight-text="ctrl.subSearch" class="span-column">{{site.getTranslatedName()}}</span>
+                            </div>
+                        </td>
+                        <td md-cell>
+                            <div flex layout="column">
+                                <span class="span-column">{{site.correspondenceSiteType.getTranslatedName()}}</span>
+                            </div>
+                        </td>
+                        <td md-cell>
+                            <md-button class="md-icon-button" title="{{lang.add}}"
+                                       ng-click="ctrl.addDistributionListMember(site, $event)">
+                                <md-icon md-svg-icon="plus"></md-icon>
+                            </md-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <md-table-pagination
+                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                        md-limit-options="ctrl.grid.subSearchResult.limitOptions"
+                        md-limit="ctrl.grid.subSearchResult.limit" md-page="ctrl.grid.subSearchResult.page"
+                        md-total="{{ctrl.subSearchResult.length}}" md-page-select>
+                </md-table-pagination>
+            </md-table-container>
+        </md-card>
+    </div>
+    <br/>
+    <!-- Added sites after searching / from database -->
+    <div flex layout="column">
+        <md-card ng-if="ctrl.distributionListMembers.length" md-whiteframe="3" layout="column" class="card-overlay">
+            <!-- Sites toolbar -->
+            <md-toolbar class="md-table-toolbar md-default" ng-class="{'selected':ctrl.distributionListMembersSelected.length}">
+                <div class="md-toolbar-tools">
+                    <div ng-if="ctrl.distributionListMembersSelected.length" layout="row" flex layout-align="start center">
+                        <div>{{ctrl.distributionListMembersSelected.length}} {{lang.items_selected}}</div>
+                        <span flex></span>
+                        <div>
+                            <md-button tooltip="{{lang.remove}}" class="md-icon-button close-search-button"
+                                       ng-click="ctrl.deleteDistributionListMemberBulk($event)">
+                                <md-icon md-svg-icon="delete"></md-icon>
+                            </md-button>
+                        </div>
+                    </div>
+                </div>
+            </md-toolbar>
+            <!-- sites table -->
+            <md-table-container flex scroll-directive>
+                <table md-table md-row-select multiple ng-model="ctrl.distributionListMembersSelected"
+                       md-progress="ctrl.progress">
+                    <thead md-head md-order="ctrl.grid.distributionListMembers.order">
+                    <tr md-row>
+                        <th md-column md-order-by="mainEnSiteText">
+                            <span>{{lang.sites_main_site}}</span>
+                        </th>
+                        <th md-column md-order-by="mainArSiteText">
+                            <span>{{lang.sites_sub_site}}</span>
+                        </th>
+                        <th md-column md-order-by="siteType">
+                            <span>{{lang.sites_select_site_type}}</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody md-body>
+                    <tr md-row md-select="site"
+                        ng-repeat="site in ctrl.distributionListMembers  | filter:ctrl.searchModel | limitTo: ctrl.grid.distributionListMembersGrid.limit: ((ctrl.grid.distributionListMembersGrid.page - 1) * ctrl.grid.distributionListMembersGrid.limit) |orderBy:ctrl.grid.distributionListMembersGrid.order  track by $index">
+                        <td md-cell>
+                            <div flex layout="column">
+                                <span class="span-column">{{site.site.parentInfo.getTranslatedName()}}</span>
+                            </div>
+                        </td>
+                        <td md-cell>
+                            <div flex layout="column">
+                                <span class="span-column">{{site.site.getTranslatedName()}}</span>
+                            </div>
+                        </td>
+                        <td md-cell>
+                            <div flex layout="column">
+                                <span class="span-column">{{site.site.correspondenceSiteType.getTranslatedName()}}</span>
+                            </div>
+                        </td>
+                        <td md-cell>
+                            <md-button class="md-icon-button" title="{{lang.remove}}"
+                                       ng-click="ctrl.deleteDistributionListMember(site, $event)">
+                                <md-icon md-svg-icon="delete"></md-icon>
+                            </md-button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <md-table-pagination
+                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                        md-limit-options="ctrl.grid.distributionListMembersGrid.limitOptions"
+                        md-limit="ctrl.grid.distributionListMembersGrid.limit" md-page="ctrl.grid.distributionListMembersGrid.page"
+                        md-total="{{ctrl.distributionListMembers.length}}" md-page-select>
+                </md-table-pagination>
+            </md-table-container>
+        </md-card>
+    </div>
+</div>

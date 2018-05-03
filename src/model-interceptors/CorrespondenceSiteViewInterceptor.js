@@ -1,0 +1,29 @@
+module.exports = function (app) {
+    app.run(function (CMSModelInterceptor,
+                      correspondenceSiteTypeService,
+                      moment,
+                      Information,
+                      lookupService) {
+        'ngInject';
+
+        var modelName = 'CorrespondenceSiteView';
+
+        CMSModelInterceptor.whenInitModel(modelName, function (model) {
+            return model;
+        });
+
+        CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            delete model.site.parentInfo;
+            delete model.site.correspondenceSiteType;
+            return model;
+        });
+
+        CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
+            model.parentInfo = new Information(model.parentInfo);
+            model.correspondenceSiteType = _.find(correspondenceSiteTypeService.correspondenceSiteTypes, function (type) {
+                return model.correspondenceSiteTypeId === type.lookupKey;
+            });
+            return model;
+        });
+    })
+};

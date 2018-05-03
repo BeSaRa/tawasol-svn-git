@@ -62,8 +62,11 @@
 
                     <md-tab label="{{lang.group_members}}">
                         <md-content>
+                            <manage-distribution-list-directive
+                                    distribution-list-members="ctrl.distributionList.distributionListMembers"
+                            ></manage-distribution-list-directive>
 
-                            <div layout="column" class="p20">
+                            <!--<div layout="column" class="p20">
                                 <md-input-container flex>
                                     <label>{{lang.group_members}}</label>
                                     <md-select ng-model="ctrl.selectMembersDistributionLists">
@@ -137,7 +140,7 @@
                                     </md-table-container>
                                 </md-card>
 
-                            </div>
+                            </div>-->
 
                         </md-content>
                     </md-tab>

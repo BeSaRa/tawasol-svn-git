@@ -493,6 +493,10 @@ module.exports = function (app) {
                         return correspondenceSiteService.loadCorrespondenceSites().then(function (correspondenceSites) {
                             return correspondenceSiteService.getMainCorrespondenceSites(correspondenceSites);
                         });
+                    },
+                    correspondenceSiteTypes :function(correspondenceSiteTypeService){
+                        'ngInject';
+                        return correspondenceSiteTypeService.loadCorrespondenceSiteTypes();
                     }
                 }
             })

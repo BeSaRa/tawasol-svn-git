@@ -3,7 +3,8 @@ module.exports = function (app) {
                                                        $http, 
                                                        $q, 
                                                        generator, 
-                                                       SiteView, 
+                                                       SiteView,
+                                                       CorrespondenceSiteView,
                                                        _) {
         'ngInject';
         var self = this;
@@ -38,6 +39,15 @@ module.exports = function (app) {
                 return generator.interceptReceivedCollection('SiteView', siteViews);
             });
         };
+
+        self.correspondenceSiteSearchForDistributionList = function (searchType, details) {
+            var url = _createSearchUrl(searchType, details);
+            return $http.post(url , details).then(function (result) {
+                var correspondenceSiteViews = generator.generateCollection(result.data.rs, CorrespondenceSiteView, self._sharedMethods);
+                return generator.interceptReceivedCollection('CorrespondenceSiteView', correspondenceSiteViews);
+            });
+        };
+
         /**
          * @description load correspondenceViews from server.
          * @returns {Promise|correspondenceViews}

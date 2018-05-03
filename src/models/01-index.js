@@ -135,4 +135,5 @@ module.exports = function (app) {
     require('./SignDocumentModel')(app);
     require('./Rank')(app);
     require('./UserFilter')(app);
+    require('./CorrespondenceSiteView')(app);
 };

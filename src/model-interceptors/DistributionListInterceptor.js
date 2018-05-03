@@ -3,7 +3,9 @@ module.exports = function (app) {
                       ouDistributionListService, 
                       organizationService, 
                       distributionListService, 
-                      OUDistributionList) {
+                      OUDistributionList,
+                      CorrespondenceSiteView,
+                      generator) {
         'ngInject';
 
         var modelName = 'DistributionList';
@@ -14,7 +16,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            var distributionListMembers = model.distributionListMembers;
+            /*var distributionListMembers = model.distributionListMembers;
             model.distributionListMembers = [];
 
             angular.forEach(distributionListMembers, function (value, key) {
@@ -23,7 +25,7 @@ module.exports = function (app) {
                         "id": value.id
                     }
                 })
-            });
+            });*/
             model.relatedOus = _.map(model.relatedOus, function () {
                 return OUDistributionList();
             });
@@ -31,16 +33,15 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            var distributionListMembers = model.distributionListMembers;
-            model.distributionListMembers = [];
+            //var distributionListMembers = model.distributionListMembers;
+            //model.distributionListMembers = [];
 
-            angular.forEach(distributionListMembers, function (value, key) {
-                if (value.site)
-                    model.distributionListMembers.push(value.site);
-                else
-                    model.distributionListMembers.push(value);
+            angular.forEach(model.distributionListMembers, function (value, key) {
+                var member = angular.copy(value);
+                member  = new CorrespondenceSiteView(member.site);
+                member = generator.interceptReceivedInstance('CorrespondenceSiteView', member);
+                value.site = member;
             });
-
             var ouDistributionList = ouDistributionListService.ouDistributionLists;
             var selectedOUs = _.filter(ouDistributionList, function (ouDis) {
                 return ouDis.distributionList.id === model.id;

@@ -74,4 +74,5 @@ module.exports = function (app) {
     require('./filter-button/filter-button')(app);
     require('./star-unstar-directive/01-index')(app);
     require('./magazine-indecator/01-index')(app);
+    require('./manage-distribution-list-directive/01-index')(app);
 };
