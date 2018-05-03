@@ -1,7 +1,6 @@
 module.exports = function (app) {
     app.controller('distributionListCtrl', function (lookupService,
                                                      distributionListService,
-                                                     mainCorrespondenceSites,
                                                      organizations,
                                                      distributionLists,
                                                      $q,
@@ -9,13 +8,11 @@ module.exports = function (app) {
                                                      toast,
                                                      dialog,
                                                      contextHelpService,
-                                                     ouDistributionListService,
-                                                     generator) {
+                                                     ouDistributionListService) {
         'ngInject';
             var self = this;
 
             self.controllerName = 'distributionListCtrl';
-            self.mainCorrespondenceSites = mainCorrespondenceSites;
             self.organizations = organizations;
 
             self.progress = null;
@@ -69,7 +66,7 @@ module.exports = function (app) {
             self.openAddDistributionListDialog = function ($event) {
                 distributionListService
                     .controllerMethod
-                    .distributionListAdd(self.mainCorrespondenceSites, self.organizations, $event)
+                    .distributionListAdd(self.organizations, $event)
                     .then(function () {
                         self.reloadDistributionLists(self.grid.page);
                     })
@@ -86,7 +83,7 @@ module.exports = function (app) {
             self.openEditDistributionListDialog = function (distributionList, $event) {
                 distributionListService
                     .controllerMethod
-                    .distributionListEdit(distributionList, self.mainCorrespondenceSites, self.organizations, $event)
+                    .distributionListEdit(distributionList, self.organizations, $event)
                     .then(function (result) {
                         self.behindScene(result)
                             .then(function (result) {
@@ -181,25 +178,6 @@ module.exports = function (app) {
                     });
                 });
             };
-
-            /*/!**
-             * @description Change the globalization of Distribution List
-             * @param distributionList
-             *!/
-             self.changeGlobalDistributionList = function (distributionList) {
-             if (distributionList.global) {
-             /!* distributionListService.globalizeDistributionList(distributionList)
-             .then(function () {
-             toast.success(langService.get('globalization_success'));
-             })
-             .catch(function () {
-             distributionList.global = !distributionList.global;
-             dialog.errorMessage(langService.get('something_happened_when_update_global'));
-             });*!/
-             }
-             else {
-             }
-             };*/
 
             /**
              * check global status

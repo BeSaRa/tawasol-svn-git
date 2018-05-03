@@ -1,6 +1,7 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, 
-                      organizationService) {
+    app.run(function (CMSModelInterceptor,
+                      organizationService,
+                      generator) {
         'ngInject';
 
         var modelName = 'OUDistributionList';
@@ -11,7 +12,7 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             model.ouid = model.ouid.hasOwnProperty('id') ? model.ouid.id : model.ouid;
-
+            model.distributionList = generator.interceptSendInstance('DistributionList', model.distributionList);
             delete model.distributionList.relatedOus;
 
             return model;

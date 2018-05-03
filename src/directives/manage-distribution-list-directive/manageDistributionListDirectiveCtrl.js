@@ -37,13 +37,13 @@ module.exports = function (app) {
         self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
         // model to search on correspondence sites type
         self.typeSearch = '';
-        self.selectedType = null;
+        self.selectedSiteType = null;
         // model for search on main correspondence sites
-        self.mainSearch = '';
+        self.mainSiteSearchText = '';
         // selected mainCorrespondence sites
-        self.selectedMain = null;
+        self.selectedMainSite = null;
         // model for search on sub correspondence sites
-        self.subSearch = '';
+        self.subSiteSearchText = '';
         // sub Search result
         self.subSearchResult = [];
         // sub correspondence selected from result
@@ -211,12 +211,12 @@ module.exports = function (app) {
         /**
          * search in MainCorrespondenceSites and retrieve the filtered result.
          * @return {Array}
-         * @param mainSearch
+         * @param mainSiteSearchText
          */
-        self.onMainSearch = function (mainSearch) {
+        self.onMainSiteSearch = function (mainSiteSearchText) {
             if (!pendingSearch || !debounceSearch()) {
                 cancelSearch();
-                if (self.mainSearch.trim().length < 2)
+                if (self.mainSiteSearchText.trim().length < 2)
                     return [];
 
                 return pendingSearch = $q(function (resolve, reject) {
@@ -225,8 +225,8 @@ module.exports = function (app) {
                     $timeout(function () {
                         refreshDebounce();
                         correspondenceViewService.correspondenceSiteSearch('main', {
-                            type: self.selectedType ? self.selectedType.lookupKey : null,
-                            criteria: mainSearch,
+                            type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
+                            criteria: mainSiteSearchText,
                             excludeOuSites: true
                         }).then(function (result) {
                             resolve(_.map(result, _mapSite));
@@ -240,9 +240,9 @@ module.exports = function (app) {
          * @description set selected type when not selected after select main site.
          * @param main
          */
-        self.onMainChange = function (main) {
-            if (main && !self.selectedType)
-                self.selectedType = _mapTypes(_getTypeByLookupKey(main.correspondenceSiteTypeId));
+        self.onMainSiteChange = function (main) {
+            if (main && !self.selectedSiteType)
+                self.selectedSiteType = _mapTypes(_getTypeByLookupKey(main.correspondenceSiteTypeId));
         };
 
         /**
@@ -251,32 +251,15 @@ module.exports = function (app) {
         self.onCloseSearch = function () {
             self.subSearchResult = self.subSearchResultCopy = [];
             self.subSearchSelected = [];
-            self.subSearch = '';
+            self.subSiteSearchText = '';
         };
 
-        /*/!**
-         * @description delete bulk sites
-         * @param type
-         * @param $event
-         *!/
-        self.onSitesInfoDeleteBulk = function (type, $event) {
-            dialog.confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event)
-                .then(function () {
-                    // TODO: need to refactor .
-                    var ids = _.map(self['sitesInfo' + type + 'Selected'], 'subSiteId');
-                    self['sitesInfo' + type] = _.filter(self['sitesInfo' + type], function (site) {
-                        return ids.indexOf(site.subSiteId) === -1;
-                    });
-                    self['sitesInfo' + type + 'Selected'] = [];
-                    _concatCorrespondenceSites(false);
-                });
-        };*/
         /**
          * search in sub correspondence sites related to mainSites.
          * @return {*}
          */
         self.onSubSearch = function () {
-            if (self.subSearch.length < 3) {
+            if (self.subSiteSearchText.length < 3) {
                 self.subSearchResult = [];
                 return;
             }
@@ -290,21 +273,17 @@ module.exports = function (app) {
                     $timeout(function () {
                         refreshDebounce();
                         correspondenceViewService.correspondenceSiteSearchForDistributionList('sub', {
-                            type: self.selectedType ? self.selectedType.lookupKey : null,
-                            parent: self.selectedMain ? self.selectedMain.id : null,
-                            criteria: self.subSearch,
+                            type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
+                            parent: self.selectedMainSite ? self.selectedMainSite.id : null,
+                            criteria: self.subSiteSearchText,
                             excludeOuSites: true
                         }).then(function (result) {
-                            if (self.subSearch.length < 3) {
+                            if (self.subSiteSearchText.length < 3) {
                                 self.subSearchResult = [];
                                 return;
                             }
                             self.subSearchResultCopy = angular.copy(result);
                             filterSearchedSubSites();
-                            //self.subSearchResult = generator.interceptReceivedCollection('CorrespondenceSiteView', self.subSearchResult);
-                            //self.subSearchResult = self.subSearchResultCopy = generator.generateCollection(result, CorrespondenceSiteView);
-
-                            //self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSearchedSubSites);
                             resolve(self.subSearchResult);
                         });
                     }, 500);

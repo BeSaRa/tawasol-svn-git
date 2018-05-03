@@ -8,7 +8,20 @@ module.exports = function (app) {
             controllerAs: 'ctrl',
             bindToController: true,
             scope: {
-                distributionListMembers: '='
+                distributionListMembers: '=',
+                selectedSiteType: '=?',
+                selectedMainSite: '=?',
+                subSiteSearchText: '=?'
+            },
+            link: function ($scope, $element, attrs) {
+                $scope.$watch(function () {
+                        return $scope.ctrl.subSiteSearchText
+                    },
+                    function (newValue, oldValue) {
+                        if (!newValue) {
+                            $scope.ctrl.onCloseSearch()
+                        }
+                    });
             }
         }
     });

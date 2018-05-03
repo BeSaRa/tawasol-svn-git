@@ -41,11 +41,10 @@ module.exports = function (app) {
         self.controllerMethod = {
             /**
              * @description Opens popup to add new distribution List
-             * @param mainCorrespondenceSites
              * @param organizations
              * @param $event
              */
-            distributionListAdd: function (mainCorrespondenceSites, organizations, $event) {
+            distributionListAdd: function (organizations, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -56,7 +55,6 @@ module.exports = function (app) {
                             editMode: false,
                             distributionList: new DistributionList(),
                             distributionLists: self.distributionLists,
-                            mainCorrespondenceSites: mainCorrespondenceSites,
                             organizations: organizations
                         }
                     });
@@ -64,11 +62,10 @@ module.exports = function (app) {
             /**
              * @description Opens popup to edit distribution List
              * @param distributionList
-             * @param mainCorrespondenceSites
              * @param organizations
              * @param $event
              */
-            distributionListEdit: function (distributionList, mainCorrespondenceSites, organizations, $event) {
+            distributionListEdit: function (distributionList, organizations, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -79,7 +76,6 @@ module.exports = function (app) {
                             editMode: true,
                             distributionList: distributionList,
                             distributionLists: self.distributionLists,
-                            mainCorrespondenceSites: mainCorrespondenceSites,
                             organizations: organizations
                         }
                     });

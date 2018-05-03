@@ -2,7 +2,7 @@
     <div layout="row" flex>
         <md-input-container flex>
             <label>{{lang.sites_select_site_type}}</label>
-            <md-select ng-model="ctrl.selectedType">
+            <md-select ng-model="ctrl.selectedSiteType">
                 <md-option ng-value="type" ng-repeat="type in ctrl.correspondenceSiteTypes">
                     {{type.getTranslatedName()}}
                 </md-option>
@@ -12,18 +12,18 @@
                 flex
                 md-autoselect
                 md-no-cache="true"
-                md-selected-item="ctrl.selectedMain"
-                md-search-text="ctrl.mainSearch"
-                md-selected-item-change="ctrl.onMainChange(item)"
-                md-items="item in ctrl.onMainSearch(ctrl.mainSearch)"
+                md-selected-item="ctrl.selectedMainSite"
+                md-search-text="ctrl.mainSiteSearchText"
+                md-selected-item-change="ctrl.onMainSiteChange(item)"
+                md-items="item in ctrl.onMainSiteSearch(ctrl.mainSearch)"
                 md-item-text="item.display"
                 md-min-length="3"
                 md-floating-label="{{lang.sites_select_main_site}}">
             <span>{{item.getTranslatedName()}}</span>
         </md-autocomplete>
         <md-input-container flex>
-            <label for="subSearch">{{lang.sites_select_sub_site}}</label>
-            <input id="subSearch" ng-model="ctrl.subSearch" ng-enter="ctrl.onSubSearch()" ng-change="ctrl.onSubSearch($event)">
+            <label for="subSiteSearchText">{{lang.sites_select_sub_site}}</label>
+            <input id="subSiteSearchText" ng-model="ctrl.subSiteSearchText" ng-enter="ctrl.onSubSearch()" ng-change="ctrl.onSubSearch($event)">
         </md-input-container>
     </div>
     <!-- Search Results -->
@@ -81,7 +81,7 @@
                         </td>
                         <td md-cell>
                             <div flex layout="column">
-                                <span md-highlight-text="ctrl.subSearch" class="span-column">{{site.getTranslatedName()}}</span>
+                                <span md-highlight-text="ctrl.subSiteSearchText" class="span-column">{{site.getTranslatedName()}}</span>
                             </div>
                         </td>
                         <td md-cell>
