@@ -19,6 +19,7 @@
         <!-- end page-header -->
         <!-- page-content -->
         <div layout="column" flex>
+            <!-- User filters -->
             <div class="z-index-3">
                 <md-sidenav id="sidebar-folder-structure" md-is-open="ctrl.sidebarFilter"
                             ng-class="{'md-sidenav-right':lang.current === 'ar'}">
@@ -31,9 +32,10 @@
                     </div>
                 </md-sidenav>
             </div>
+            <!-- Grid/Magazine view -->
             <div scroll-directive>
                 <div class="page-padding">
-                    <md-card ng-if="false" md-whiteframe="3" layout="column" class="card-overlay">
+                    <md-card ng-if="ctrl.employeeService.getEmployee().viewInboxAsGrid" md-whiteframe="3" layout="column" class="card-overlay">
                         <div>
                             <md-tabs md-selected="ctrl.selectedTab" class="filter-tabs"
                                      md-dynamic-height>
@@ -132,7 +134,7 @@
                             </md-tabs>
                         </div>
                     </md-card>
-                    <div ng-if="true" layout="column" class="magazine-layout card-overlay">
+                    <div ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid" layout="column" class="magazine-layout card-overlay">
                         <div layout="row" md-whiteframe="1" ng-repeat="workItem in ctrl.userInboxes track by $index"
                              class="magazine-item">
                             <div class="magazine-image" layout="column">
