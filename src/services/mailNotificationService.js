@@ -23,9 +23,6 @@ module.exports = function (app) {
                     self.notifications = generator.interceptReceivedCollection('MailNotification', generator.generateCollection(result.data.rs, MailNotification));
                     return self.notifications;
                 })
-                .catch(function () {
-                    return [];
-                });
         };
     });
 };

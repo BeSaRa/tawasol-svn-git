@@ -155,7 +155,7 @@ module.exports = function (app) {
                         disableRowSelection();
                     }
                 });
-            }]
+            }];
             return $delegate;
         }])
     })

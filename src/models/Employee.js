@@ -3,10 +3,11 @@ module.exports = function (app) {
                                       lookupService,
                                       generator,
                                       $q,
+                                      urlService,
                                       OUApplicationUser) {
         'ngInject';
         return function Employee(model) {
-            var self = this, organizationService, Organization, workflowActionService, applicationUserService;
+            var self = this, organizationService, Organization, workflowActionService, applicationUserService, $http;
             self.arFullName = null;
             self.deadlineEmailNotify = null;
             self.deadlineEmailPriority = null;
@@ -40,6 +41,7 @@ module.exports = function (app) {
             self.searchAmountLimit = null;
             self.subscriptionEmailNotify = null;
             self.subscriptionsmsNotify = null;
+            self.viewInboxAsGrid = true;
             // extra fields
             self.permissions = [];
             // ouApplicationUser
@@ -61,6 +63,11 @@ module.exports = function (app) {
 
             if (model)
                 angular.extend(this, model);
+
+            Employee.prototype.setHttpService = function (service) {
+                $http = service;
+                return this;
+            };
             /**
              * @description to set organization service when create the Employee Model.
              * @param service
@@ -265,7 +272,7 @@ module.exports = function (app) {
             };
 
             Employee.prototype.getIntervalMin = function () {
-                return (60 * 100 ) * (this.inboxRefreshInterval || 1);
+                return (60 * 100) * (this.inboxRefreshInterval || 1);
             };
 
             Employee.prototype.hasProxy = function () {
@@ -281,6 +288,18 @@ module.exports = function (app) {
                 return this.defaultDisplayLang !== language.lookupKey ? applicationUserService.updateCurrentLanguage(language).then(function () {
                     self.defaultDisplayLang = language.lookupKey;
                 }) : $q.resolve(true);
+            };
+
+            Employee.prototype.toggleInboxView = function () {
+                var self = this;
+                return $http.put(urlService.applicationUsers + '/change-inbox-view/' + (self.viewInboxAsGrid ? 0 : 1))
+                    .then(function (value) {
+                        self.viewInboxAsGrid = !self.viewInboxAsGrid;
+                    })
+                    .catch(function (reason) {
+                        self.viewInboxAsGrid = !self.viewInboxAsGrid;
+                        return reason;
+                    })
             };
 
 

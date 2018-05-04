@@ -20,7 +20,7 @@
         <!-- page-content -->
         <div layout="column" flex>
             <!-- User filters -->
-            <div class="z-index-3">
+            <div class="z-index-4">
                 <md-sidenav id="sidebar-folder-structure" md-is-open="ctrl.sidebarFilter"
                             ng-class="{'md-sidenav-right':lang.current === 'ar'}">
                     <div class="p20 first-folder-list" layout="column">
@@ -35,7 +35,8 @@
             <!-- Grid/Magazine view -->
             <div scroll-directive>
                 <div class="page-padding">
-                    <md-card ng-if="ctrl.employeeService.getEmployee().viewInboxAsGrid" md-whiteframe="3" layout="column" class="card-overlay">
+                    <md-card ng-if="ctrl.employeeService.getEmployee().viewInboxAsGrid" md-whiteframe="3"
+                             layout="column" class="card-overlay">
                         <div>
                             <md-tabs md-selected="ctrl.selectedTab" class="filter-tabs"
                                      md-dynamic-height>
@@ -134,78 +135,19 @@
                             </md-tabs>
                         </div>
                     </md-card>
-                    <div ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid" layout="column" class="magazine-layout card-overlay">
-                        <div layout="row" md-whiteframe="1" ng-repeat="workItem in ctrl.userInboxes track by $index"
-                             class="magazine-item">
-                            <div class="magazine-image" layout="column">
-                                <div flex layout="row" layout-align="center center" class="magazine-check-box">
-                                    <md-checkbox aria-label="select"></md-checkbox>
-                                </div>
-                                <div layout="row" flex class="magazine-icon">
-                                    <md-icon flex md-svg-icon="{{workItem.getTypeIcon()}}"></md-icon>
-                                </div>
-                                <div class="magazine-date">
-                                    <span>{{workItem.getReceivedDate()}}</span>
-                                </div>
-                            </div>
-                            <div class="magazine-content" layout="column" flex>
-                                <div layout="row" class="magazine-top">
-                                    <div layout-align="center center" class="magazine-serial">
-                                        {{workItem.getFullSerialText()}}
-                                    </div>
-                                    <div flex class="magazine-from">{{workItem.getFromOU()}}</div>
-                                    <div class="magazine-sender">{{lang.sender }} -
-                                        {{workItem.senderInfo.getTranslatedName()}}
-                                    </div>
-                                </div>
-                                <div layout="column" class="magazine-middle">
-                                    <div layout="row" class="magazine-title">
-                                        <span md-truncate flex><a>{{workItem.getSubject()}}</a></span>
-                                    </div>
-                                </div>
-                                <div layout="row" layout-align="start center" class="magazine-bottom">
-                                    <magazine-indicator
-                                            icon="book-open-variant"
-                                            color="#3498db"
-                                            callback="workItem.getIndicatorBookType"
-                                            model="workItem"></magazine-indicator>
-                                    <magazine-indicator
-                                            icon="alert-circle"
-                                            key="priority_level"
-                                            color-callback="workItem.getIndicatorPriorityLevelColor"
-                                            callback="workItem.getIndicatorPriorityLevel"
-                                            model="workItem"></magazine-indicator>
-                                    <magazine-indicator
-                                            icon="lock"
-                                            color="#f1c40f"
-                                            key="security_level"
-                                            callback="workItem.getIndicatorSecurityLevel"
-                                            model="workItem"></magazine-indicator>
-                                    <magazine-indicator
-                                            ng-if="workItem.isBroadcasted()"
-                                            icon="bullhorn"
-                                            color="#2c3e50"
-                                            callback="workItem.getBroadCastedText"
-                                            model="workItem"></magazine-indicator>
-                                    <magazine-indicator
-                                            ng-if="workItem.generalStepElm.isReassigned"
-                                            icon="transfer"
-                                            color="#8e44ad"
-                                            callback="workItem.getIndicatorTransfer"
-                                            model="workItem"></magazine-indicator>
-
-                                </div>
-                            </div>
-                            <div ng-if="false" class="magazine-action" layout="column">
-                                <div layout="row" flex class="magazine-icon">
-                                    <md-icon flex md-svg-icon="arrow-down-bold-box"></md-icon>
-                                </div>
-                                <div class="magazine-date">
-                                    <span>{{workItem.getReceivedDate()}}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <magazine-layout-directive
+                            limit-options="ctrl.grid.limitOptions"
+                            page-limit="ctrl.grid.limit"
+                            page="ctrl.grid.page"
+                            ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid"
+                            forward-bulk="ctrl.forwardBulk"
+                            check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
+                            change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
+                            add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
+                            terminate-user-inbox-bulk="ctrl.terminateUserInboxBulk"
+                            allow-selection="true"
+                            selected-work-items="ctrl.selectedUserInboxes"
+                            work-items="ctrl.userInboxes"></magazine-layout-directive>
                 </div>
             </div>
         </div>

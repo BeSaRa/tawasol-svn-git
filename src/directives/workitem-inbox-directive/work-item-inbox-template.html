@@ -97,6 +97,11 @@
                 </th>-->
                 <th ng-if="!ctrl.selectedWorkItems.length" md-column>
                     <!-- Grid Actions -->
+                    <md-button tooltip="{{lang.view_magazine}}"
+                               ng-click="ctrl.employeeService.getEmployee().toggleInboxView()"
+                               class="md-icon-button">
+                        <md-icon md-svg-icon="view-list"></md-icon>
+                    </md-button>
                 </th>
                 <th ng-if="!ctrl.selectedWorkItems.length" md-column>
                     <!-- Read/Unread Indicator -->

@@ -75,4 +75,6 @@ module.exports = function (app) {
     require('./star-unstar-directive/01-index')(app);
     require('./magazine-indecator/01-index')(app);
     require('./manage-distribution-list-directive/01-index')(app);
+    require('./magazine-layout-directive/01-index')(app);
+    require('./magazine-item-directive/magazine-item-directive')(app);
 };

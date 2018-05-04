@@ -391,7 +391,8 @@ module.exports = function (app) {
              * @return {*}
              */
             WorkItem.prototype.getIndicatorBookType = function (model) {
-                return model.generalStepElm.addMethod ? langService.get('paper') : langService.get('electronic');
+                var types = [langService.get('electronic'), langService.get('paper')];
+                return types[typeof  model.generalStepElm.addMethod === 'undefined' ? 1 : model.generalStepElm.addMethod];
             };
             WorkItem.prototype.getIndicatorPriorityLevel = function (model) {
                 return model.priorityLevel[langService.current + 'Name'];
@@ -409,6 +410,10 @@ module.exports = function (app) {
             };
             WorkItem.prototype.getBroadCastedText = function (model) {
                 return model.generalStepElm.isBrodcasted ? langService.get('broadcasted') : null;
+            };
+            WorkItem.prototype.getIndicatorDocumentType = function (model) {
+                var icons = ['tablet', 'file-document'];
+                return icons[typeof  model.generalStepElm.addMethod === 'undefined' ? 1 : model.generalStepElm.addMethod];
             };
             WorkItem.prototype.getTypeIcon = function () {
                 var icons = ['arrow-up-bold-box', 'arrow-down-bold-box', 'recycle'];

@@ -9,7 +9,7 @@ module.exports = function (app) {
             return self.colorCallback;
         }, function (value) {
             if (value && typeof value === 'function')
-                self.color = self.colorCallback(self.model);
+                self.iconClass = self.colorCallback(self.model);
         });
 
     });

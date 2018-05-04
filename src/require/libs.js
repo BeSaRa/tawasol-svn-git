@@ -222,4 +222,5 @@ module.exports = (function () {
     require('trix/dist/trix.css');
     require('angular-trix');
     require('chart.js');
+    require('animate.css/animate.css');
 })();

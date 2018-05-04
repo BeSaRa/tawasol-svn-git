@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                     langService,
                                                     toast,
                                                     dialog,
+                                                    $scope,
                                                     generator,
                                                     counterService,
                                                     managerService,
@@ -35,6 +36,8 @@ module.exports = function (app) {
          * @type {Array}
          */
         self.selectedPrepareOutgoings = [];
+
+        // $scope.$watchCollection(self.selectedPrepareOutgoings)
 
         /**
          * @description Contains options for grid configuration

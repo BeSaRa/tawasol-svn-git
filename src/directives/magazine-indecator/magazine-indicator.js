@@ -21,8 +21,10 @@ module.exports = function (app) {
                 callback: '=',
                 // color of the icon
                 color: '@?',
-                // color callback to display the color for icon depend on some conditions it it takes the model as params.
-                colorCallback: '='
+                // color callback to display the color for icon depend on some conditions it  takes the model as params.
+                colorCallback: '=',
+                // icon callback to diplay the icon depend on some conditions it takes the model as params.
+                iconCallback: '='
             }
         }
     })

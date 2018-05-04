@@ -1,7 +1,7 @@
 <div class="font-12 magazine-indicator" layout="row" layout-align="start center">
     <div class="magazine-icon">
         <md-icon class="small-icon {{ctrl.iconClass}}" ng-style="{'color':ctrl.color}"
-                 md-svg-icon="{{ctrl.icon}}"></md-icon>
+                 md-svg-icon="{{ctrl.iconCallback ? ctrl.iconCallback(ctrl.model) : ctrl.icon}}"></md-icon>
     </div>
     <div class="magazine-indicator-data" layout="row">
         <span class="magazine-indicator-key" ng-if="ctrl.key">{{lang[ctrl.key]}}&nbsp;:&nbsp;</span>

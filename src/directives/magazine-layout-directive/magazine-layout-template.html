@@ -1,0 +1,144 @@
+<div>
+    <div class="z-index-3-relative static-bar-fixed"
+         ng-class="{'gt-small':ctrl.isGreatThanSmall(),'sidebar-opend':ctrl.sidebarOpend('main-sidebar')}"
+         md-whiteframe="2">
+        <div layout="row" class="top-bar-meta-data">
+            <div flex layout="row">
+                <!-- here we will display check/uncheck all -->
+                <div layout="row" layout-align="start center" ng-if="ctrl.selectedWorkItems.length">
+                    <span class="font-12">{{ctrl.selectedWorkItems.length}} {{lang.items_selected}} </span>
+                </div>
+                <div layout="row" layout-align="center center" class="magazine-pagination" flex>
+                    <div layout="row" class="page-list">
+                        <md-table-pagination
+                                class="magazine-table-pagination"
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.limitOptions"
+                                md-limit="ctrl.pageLimit" md-page="ctrl.page"
+                                md-total="{{ctrl.workItems.length}}" md-page-select>
+                        </md-table-pagination>
+                    </div>
+                </div>
+                <div layout="row">
+                    <div ng-if="ctrl.selectedWorkItems.length">
+                        <md-button class="md-icon-button"
+                                   tooltip="{{lang.grid_action_forward}}"
+                                   ng-if="ctrl.checkIfForwardBulkAvailable()"
+                                   ng-click="ctrl.forwardBulk($event)">
+                            <md-icon md-svg-icon="share"
+                                     class="action-green"></md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button"
+                                   aria-label="{{lang.inbox_terminate}}"
+                                   tooltip="{{lang.inbox_terminate}}"
+                                   ng-click="ctrl.terminateUserInboxBulk($event)">
+                            <md-icon md-svg-icon="stop"
+                                     class="action-green"></md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button"
+                                   aria-label="{{lang.inbox_add_to_folder}}"
+                                   tooltip="{{lang.inbox_add_to_folder}}"
+                                   ng-click="ctrl.addToFolderUserInboxBulk($event)">
+                            <md-icon md-svg-icon="folder-plus"
+                                     class="action-green"></md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button action-green"
+                                   aria-label="{{lang.star}}"
+                                   tooltip="{{lang.star}}"
+                                   ng-click="ctrl.changeUserInboxStarBulk('starBulk',$event)">
+                            <md-icon class="star-yellow"
+                                     md-svg-icon="star"></md-icon>
+                        </md-button>
+                        <md-button class="md-icon-button action-green"
+                                   aria-label="{{lang.un_star}}"
+                                   tooltip="{{lang.un_star}}"
+                                   ng-click="ctrl.changeUserInboxStarBulk('unStarBulk' ,$event)">
+                            <md-icon class="star-yellow"
+                                     md-svg-icon="star-outline"></md-icon>
+                        </md-button>
+                    </div>
+                    <div>
+                        <md-button tooltip="{{lang.view_grid}}"
+                                   ng-click="ctrl.employeeService.getEmployee().toggleInboxView()"
+                                   class="md-icon-button">
+                            <md-icon md-svg-icon="view-grid"></md-icon>
+                        </md-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div layout="column" class="magazine-layout card-overlay">
+        <div layout="row" ng-class="{'selected':ctrl.isWorkItemSelected(workItem)}"
+             magazine-item-directive="workItem" md-whiteframe="1"
+             ng-repeat="workItem in ctrl.workItems | limitTo:ctrl.pageLimit:( ( ctrl.page - 1) * ctrl.pageLimit) track by $index"
+             class="magazine-item">
+            <div class="magazine-image" layout="column">
+                <div flex layout="row" layout-align="center center" class="magazine-check-box">
+                    <!--<md-checkbox ng-checked="ctrl.toggleSelect()" aria-label="select"></md-checkbox>-->
+                </div>
+                <div layout="row" flex class="magazine-icon">
+                    <md-icon flex md-svg-icon="{{workItem.getTypeIcon()}}"></md-icon>
+                </div>
+                <div class="magazine-date">
+                    <span>{{workItem.getReceivedDate()}}</span>
+                </div>
+            </div>
+            <div class="magazine-content" layout="column" flex>
+                <div layout="row" class="magazine-top">
+                    <div layout-align="center center" class="magazine-serial">
+                        {{workItem.getFullSerialText()}}
+                    </div>
+                    <div flex class="magazine-from">{{workItem.getFromOU()}}</div>
+                    <div class="magazine-sender">{{lang.sender }} -
+                        {{workItem.senderInfo.getTranslatedName()}}
+                    </div>
+                </div>
+                <div layout="column" class="magazine-middle">
+                    <div layout="row" class="magazine-title">
+                        <span md-truncate flex><a>{{workItem.getSubject()}}</a></span>
+                    </div>
+                </div>
+                <div layout="row" layout-align="start center" class="magazine-bottom">
+                    <magazine-indicator
+                            icon-callback="workItem.getIndicatorDocumentType"
+                            color="#3498db"
+                            callback="workItem.getIndicatorBookType"
+                            model="workItem"></magazine-indicator>
+                    <magazine-indicator
+                            icon="alert-circle"
+                            key="priority_level"
+                            color-callback="workItem.getIndicatorPriorityLevelColor"
+                            callback="workItem.getIndicatorPriorityLevel"
+                            model="workItem"></magazine-indicator>
+                    <magazine-indicator
+                            icon="lock"
+                            color="#f1c40f"
+                            key="security_level"
+                            callback="workItem.getIndicatorSecurityLevel"
+                            model="workItem"></magazine-indicator>
+                    <magazine-indicator
+                            ng-if="workItem.isBroadcasted()"
+                            icon="bullhorn"
+                            color="#2c3e50"
+                            callback="workItem.getBroadCastedText"
+                            model="workItem"></magazine-indicator>
+                    <magazine-indicator
+                            ng-if="workItem.generalStepElm.isReassigned"
+                            icon="transfer"
+                            color="#8e44ad"
+                            callback="workItem.getIndicatorTransfer"
+                            model="workItem"></magazine-indicator>
+                </div>
+            </div>
+            <div ng-if="false" class="magazine-action" layout="column">
+                <div layout="row" flex class="magazine-icon">
+                    <md-icon flex md-svg-icon="arrow-down-bold-box"></md-icon>
+                </div>
+                <div class="magazine-date">
+                    <span>{{workItem.getReceivedDate()}}</span>
+                </div>
+            </div>
+        </div><!-- magazine-item-->
+    </div><!-- magazine-layout-->
+</div>

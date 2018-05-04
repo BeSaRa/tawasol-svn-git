@@ -4,6 +4,7 @@ module.exports = function (app) {
                                               userInboxes,
                                               errorCode,
                                               $timeout,
+                                              sidebarService,
                                               ResolveDefer,
                                               generator,
                                               userFilterService,
@@ -12,6 +13,7 @@ module.exports = function (app) {
                                               $state,
                                               counterService,
                                               $q,
+                                              $mdMedia,
                                               langService,
                                               toast,
                                               dialog,
@@ -68,6 +70,7 @@ module.exports = function (app) {
         self.starredUserInboxes = _.filter(self.userInboxes, 'generalStepElm.starred');
         self.userFolders = userFolders;
 
+
         /**
          * @description Contains methods for Star operations for user inbox items
          */
@@ -82,12 +85,16 @@ module.exports = function (app) {
          * @description Contains the selected user inboxes
          * @type {Array}
          */
+        // self.selectedUserInboxes = _.map(self.userInboxes, function (item) {
+        //     return item;
+        // });
         self.selectedUserInboxes = [];
         self.globalSetting = rootEntity.returnRootEntity().settings;
 
         function _getWorkflowName(model) {
             return model.getInfo().documentClass;
         }
+
 
         /**
          * @description Get the sorting key for information or lookup model
@@ -107,15 +114,9 @@ module.exports = function (app) {
             limit: 5, //self.globalSetting.searchAmount, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.userInboxes.length + 21);
-                    }
-                }
-            ]
+            limitOptions: [5, 10, 20, 50, 70, 90, 100, 200]
         };
+
         self.starredGrid = {
             limit: 5, //self.globalSetting.searchAmount, // default limit
             page: 1, // first page
@@ -130,13 +131,14 @@ module.exports = function (app) {
             ]
         };
 
-        self.fixedTabsCount  = 1;
-        self.showStarredTab = function(isShow){
-            if(isShow){
-                self.fixedTabsCount  = 2;
+        self.fixedTabsCount = 1;
+
+        self.showStarredTab = function (isShow) {
+            if (isShow) {
+                self.fixedTabsCount = 2;
             }
-            else{
-                self.fixedTabsCount  = 1;
+            else {
+                self.fixedTabsCount = 1;
             }
             return isShow;
         };

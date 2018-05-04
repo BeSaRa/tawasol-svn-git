@@ -90,14 +90,17 @@ module.exports = function (app) {
 
                 });
         };
+        var interval;
 
         if (!employeeService.isAdminUser()) {
             var stopNotification = false;
             // reload notifications
             self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount);
-            var interval = $interval(function () {
-                if (stopNotification)
+            interval = $interval(function () {
+                if (stopNotification) {
+                    $interval.cancel(interval);
                     return;
+                }
                 return self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount)
                     .catch(function () {
                         $interval.cancel(interval);
