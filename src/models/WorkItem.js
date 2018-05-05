@@ -4,6 +4,7 @@ module.exports = function (app) {
                                       Indicator,
                                       Information,
                                       ResolveDefer,
+                                      $sce,
                                       $q,
                                       dialog) {
         'ngInject';
@@ -350,10 +351,16 @@ module.exports = function (app) {
                 }
                 return this.fromOuInfo.getTranslatedName() + ' ' + langService.get('in') + ' ' + this.registeryOu.getTranslatedName();
             };
-            WorkItem.prototype.getFromOU = function (ignoreFrom) {
-                return langService.get('from') + ' : ' + this.getFromOUDetails();
+            WorkItem.prototype.isSameOU = function () {
+                return this.registeryOu.id === this.fromOuInfo.id;
             };
 
+            WorkItem.prototype.getRegistryOUTranslate = function () {
+                return this.registeryOu.getTranslatedName();
+            };
+            WorkItem.prototype.getOUTranslate = function () {
+                return  this.fromOuInfo.getTranslatedName();
+            };
             WorkItem.prototype.exportViaArchive = function () {
                 return this.generalStepElm.exportViaCentralArchive || this.generalStepElm.addedViaCentralArchive;
             };

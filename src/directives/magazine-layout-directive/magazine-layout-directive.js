@@ -21,7 +21,8 @@ module.exports = function (app) {
                 pageLimit: '=',
                 page: '=',
                 totalItems: '=',
-                limitOptions: '='
+                limitOptions: '=',
+                gridActions: '='
             }
         }
     })

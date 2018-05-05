@@ -69,8 +69,10 @@
         </div>
     </div>
     <div layout="column" class="magazine-layout card-overlay">
-        <div layout="row" ng-class="{'selected':ctrl.isWorkItemSelected(workItem)}"
-             magazine-item-directive="workItem" md-whiteframe="1"
+        <div magazine-right-click-directive layout="row"
+             model="workItem"
+             ng-class="{'selected':ctrl.isWorkItemSelected(workItem)}"
+             magazine-item-directive="workItem" selected-length="ctrl.selectedWorkItems.length" md-whiteframe="1"
              ng-repeat="workItem in ctrl.workItems | limitTo:ctrl.pageLimit:( ( ctrl.page - 1) * ctrl.pageLimit) track by $index"
              class="magazine-item">
             <div class="magazine-image" layout="column">
@@ -89,7 +91,16 @@
                     <div layout-align="center center" class="magazine-serial">
                         {{workItem.getFullSerialText()}}
                     </div>
-                    <div flex class="magazine-from">{{workItem.getFromOU()}}</div>
+                    <div flex class="magazine-from">
+                        <span class="font-12">
+                            <span>{{lang.from}}</span>
+                            <span class="magazine-serial">{{workItem.getOUTranslate()}}</span>
+                            <span ng-if="!workItem.isSameOU()">
+                                <span>{{lang.in}}</span>
+                                <span class="magazine-serial"> {{workItem.getRegistryOUTranslate()}}</span>
+                            </span>
+                        </span>
+                    </div>
                     <div class="magazine-sender">{{lang.sender }} -
                         {{workItem.senderInfo.getTranslatedName()}}
                     </div>
@@ -97,6 +108,11 @@
                 <div layout="column" class="magazine-middle">
                     <div layout="row" class="magazine-title">
                         <span md-truncate flex><a>{{workItem.getSubject()}}</a></span>
+                        <div>
+                            <main-site-sub-site-directive item="workItem"
+                                                          ng-if="workItem.getInfo().documentClass!=='internal'">
+                            </main-site-sub-site-directive>
+                        </div>
                     </div>
                 </div>
                 <div layout="row" layout-align="start center" class="magazine-bottom">
@@ -131,12 +147,12 @@
                             model="workItem"></magazine-indicator>
                 </div>
             </div>
-            <div ng-if="false" class="magazine-action" layout="column">
-                <div layout="row" flex class="magazine-icon">
-                    <md-icon flex md-svg-icon="arrow-down-bold-box"></md-icon>
-                </div>
-                <div class="magazine-date">
-                    <span>{{workItem.getReceivedDate()}}</span>
+            <div class="magazine-action" layout="column">
+                <div>
+                    <grid-actions-directive menu-direction="vertical"
+                                            grid-actions="ctrl.rightClickActions"
+                                            model="workItem">
+                    </grid-actions-directive>
                 </div>
             </div>
         </div><!-- magazine-item-->
