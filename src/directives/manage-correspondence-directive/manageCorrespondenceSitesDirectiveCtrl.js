@@ -40,7 +40,6 @@ module.exports = function (app) {
                 arName: langService.getKey('not_found', 'ar'),
                 enName: langService.getKey('not_found', 'en')
             }));
-            //console.log('disableProperties', self.disableProperties);
 
             self.distributionLists = angular.copy(correspondenceService.getLookup(self.documentClass, 'distributionList'));
         });
