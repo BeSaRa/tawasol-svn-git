@@ -48,6 +48,16 @@ module.exports = function (app) {
             });
         };
 
+
+
+        self.getCorrespondenceSitesByDistributionListId = function (distributionListId) {
+            distributionListId = distributionListId.hasOwnProperty('id') ? distributionListId.id : distributionListId;
+            return $http.get(urlService.distributionLists + '/get-core-sites/' + distributionListId).then(function (result) {
+                var siteViews = generator.generateCollection(result.data.rs, SiteView, self._sharedMethods);
+                return generator.interceptReceivedCollection('SiteView', siteViews);
+            });
+        };
+
         /**
          * @description load correspondenceViews from server.
          * @returns {Promise|correspondenceViews}

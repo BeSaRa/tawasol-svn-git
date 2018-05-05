@@ -41,7 +41,7 @@
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="securityLevels">{{lang.security_level}}</label>
-                                        <md-select name="securityLevels" id="securityLevels" multiple
+                                        <md-select name="securityLevels" ng-model-options="{trackBy:'$value.lookupKey'}" id="securityLevels" multiple
                                                    ng-model="ctrl.documentFile.securityLevels">
                                             <md-option ng-value="dc"
                                                        ng-repeat="dc in ctrl.securityLevels track by $index">

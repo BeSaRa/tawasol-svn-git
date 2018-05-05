@@ -11,6 +11,7 @@ features :
 10 - Removed - star/un-star from group mail.
 11 - Added - Fields for grid/magazine view of user inbox. Field for search type of correspondence site(advanced/simple).
 12 - Added - Advanced search feature for correspondence site in distribution list (Admin section).
+13 - Added - Distribution list in manage correspondence sites.
 
 Fixed issues :
 12504: central archive - in central archive OU while adding a paper outgoing or incoming document there is two fields in paper outgoing while only one in incoming <check attached>

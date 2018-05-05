@@ -166,6 +166,7 @@ module.exports = function (app) {
                 relatedOU.status = self.relatedOUStatus;
                 relatedOU.code = self.relatedOUCode;
                 relatedOU.itemOrder = self.relatedOUItemOrder;
+                relatedOU.serial = self.serial;
                 var allRelatedOUs = self.documentFile.relatedOus;
                 relatedOUDocumentFileService.addRelatedOUDocumentFile(relatedOU).then(function (result) {
 

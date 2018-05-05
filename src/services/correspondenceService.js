@@ -37,7 +37,9 @@ module.exports = function (app) {
                                                    errorCode,
                                                    DistributionWF, // just for make the inheritance
                                                    _,
-                                                   Attachment) {
+                                                   Attachment,
+                                                   DistributionList,
+                                                   OUDistributionList) {
         'ngInject';
         var self = this;
         self.serviceName = 'correspondenceService';
@@ -76,6 +78,11 @@ module.exports = function (app) {
                     model: OUDocumentFile,
                     merge: 'ouDocumentFiles',
                     property: 'file'
+                },
+                distributionList: {
+                    model: OUDistributionList,
+                    merge: 'ouDistributionList',
+                    property: 'distributionList'
                 }
             },
             defaultEntityTypes = ['COMPANY', 'EMPLOYEE', 'EXTERNAL_USER']; // default entity types.
@@ -695,6 +702,10 @@ module.exports = function (app) {
                 templates: {
                     model: DocumentTemplate,
                     modelName: 'DocumentTemplate'
+                },
+                distributionList: {
+                    model: DistributionList,
+                    modelName: 'DistributionList'
                 }
             };
             _.map(lookups, function (value, key) {
@@ -712,12 +723,13 @@ module.exports = function (app) {
         self.prepareLookupHierarchy = function (lookups) {
             // change model structure
             var children;
+
             _.map(merge, function (value, key) {
                 lookups[key + 'Flat'] = _.map(lookups[key], function (model) {
                     var mappedModel = {};
                     mappedModel[value.property] = model;
                     return new value.model(mappedModel)
-                }).concat(lookups[value.merge]);
+                }).concat(lookups[value.merge] || []);
 
                 lookups[key] = _.filter(lookups[key + 'Flat'], function (model) {
                     return !model[value.property].parent;

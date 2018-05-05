@@ -11,10 +11,25 @@ module.exports = function (app) {
                                                                        $timeout,
                                                                        $q,
                                                                        _,
-                                                                       correspondenceService) {
+                                                                       correspondenceService,
+                                                                       generator,
+                                                                       SiteView) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSitesDirectiveCtrl';
+
+        self.tabsToShow = [
+            'correspondenceSites',
+            'distributionLists'
+        ];
+        self.showTab = function (tabName) {
+            return self.tabsToShow.indexOf(tabName) > -1;
+        };
+        self.currentTab = 'correspondenceSites';
+        self.setCurrentTab = function (tabName) {
+            self.currentTab = tabName;
+        };
+
         // all correspondence site types
         // self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
         self.documentClass = null;
@@ -26,6 +41,8 @@ module.exports = function (app) {
                 enName: langService.getKey('not_found', 'en')
             }));
             //console.log('disableProperties', self.disableProperties);
+
+            self.distributionLists = angular.copy(correspondenceService.getLookup(self.documentClass, 'distributionList'));
         });
 
         // model to search on correspondence sites type
@@ -69,6 +86,17 @@ module.exports = function (app) {
         self.sitesInfoToFollowupStatusDate = null;
         // default sites info to followupStatusDate
         self.sitesInfoCCFollowupStatusDate = null;
+
+
+        // sub Search result for distribution list
+        self.subSearchResult_DL = [];
+        // sub correspondence selected from result for distribution list
+        self.subSearchSelected_DL = [];
+        // selected followup Status for distribution list
+        self.followupStatus_DL = null;
+        // get the main sites for selected correspondence site type
+        self.selectedDistributionList = null;
+
 
         /**
          * create current date + given days if provided.
@@ -142,6 +170,19 @@ module.exports = function (app) {
                         label: langService.get('all'),
                         value: function () {
                             return (self.sitesInfoCC.length + 21);
+                        }
+                    }
+                ]
+            },
+            subSearchResult_DL: {
+                limit: 5, // default limit
+                page: 1, // first page
+                order: 'arName', // default sorting order
+                limitOptions: [5, 10, 20, // limit options
+                    {
+                        label: langService.get('all'),
+                        value: function () {
+                            return (self.subSearchResult_DL.length + 21);
                         }
                     }
                 ]
@@ -277,6 +318,7 @@ module.exports = function (app) {
                     self.subSearchSelected = [];
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResult, _filterSubSites);
+                        self.subSearchResult_DL = _.filter(self.subSearchResult_DL, _filterSubSites);
                     });
                 })
         };
@@ -290,6 +332,7 @@ module.exports = function (app) {
                     self.subSearchSelected = [];
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResult, _filterSubSites);
+                        self.subSearchResult_DL = _.filter(self.subSearchResult_DL, _filterSubSites);
                     });
                 });
         };
@@ -297,8 +340,9 @@ module.exports = function (app) {
          * @description add all selected sites to To.
          * @param sites
          * @param $event
+         * @param isDistributionListRecord
          */
-        self.addSitesTo = function (sites, $event) {
+        self.addSitesTo = function (sites, $event, isDistributionListRecord) {
             if (self.needReply(self.followupStatus) && !self.followUpStatusDate) {
                 dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
                 return;
@@ -306,15 +350,24 @@ module.exports = function (app) {
             _.map(sites, function (site) {
                 self.addSiteTo(site);
             });
-            self.followUpStatusDate = null;
-            self.followupStatus = null;
-            self.subSearchSelected = [];
+            if(isDistributionListRecord){
+                self.followUpStatusDate_DL = null;
+                self.followupStatus_DL = null;
+                self.subSearchSelected_DL = [];
+            }
+            else {
+                self.followUpStatusDate = null;
+                self.followupStatus = null;
+                self.subSearchSelected = [];
+            }
         };
         /**
          * @description add all selected sites to CC.
          * @param sites
+         * @param $event
+         * @param isDistributionListRecord
          */
-        self.addSitesCC = function (sites) {
+        self.addSitesCC = function (sites, $event, isDistributionListRecord) {
             if (self.needReply(self.followupStatus) && !self.followUpStatusDate) {
                 dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
                 return;
@@ -322,9 +375,16 @@ module.exports = function (app) {
             _.map(sites, function (site) {
                 self.addSiteCC(site);
             });
-            self.followUpStatusDate = null;
-            self.followupStatus = null;
-            self.subSearchSelected = [];
+            if(isDistributionListRecord){
+                self.followUpStatusDate_DL = null;
+                self.followupStatus_DL = null;
+                self.subSearchSelected_DL = [];
+            }
+            else {
+                self.followUpStatusDate = null;
+                self.followupStatus = null;
+                self.subSearchSelected = [];
+            }
         };
         /**
          * @description change site from CC to To and else.
@@ -426,6 +486,22 @@ module.exports = function (app) {
         self.onFollowupDateChange = function () {
             _setSitesProperty(self.subSearchSelected, 'followupDate', self.followUpStatusDate);
         };
+
+        /**
+         * @description set all followupStatus for all subSearchResult.
+         */
+        self.onFollowupStatusChange_DL = function (status) {
+            self.followupStatus_DL = status;
+            _setSitesProperty(self.subSearchSelected_DL, 'followupStatus', status);
+        };
+        /**
+         * @description set all followupDate for all subSearchResult.
+         */
+        self.onFollowupDateChange_DL = function () {
+            _setSitesProperty(self.subSearchSelected_DL, 'followupDate', self.followUpStatusDate_DL);
+        };
+
+
         /**
          * single select to set follow up status for selected row.
          * @param site
@@ -437,6 +513,7 @@ module.exports = function (app) {
                 site.followupDate = null;
             }
         };
+
         /**
          * @description change date for selected sitesInfo.
          */
@@ -510,6 +587,32 @@ module.exports = function (app) {
             }
             return pendingSearch;
         };
+
+        self.getCorrespondenceSites_DL = function ($event) {
+            /*return correspondenceViewService.getCorrespondenceSitesByDistributionListId(self.selectedDistributionList)
+                .then(function (result) {
+                    self.subSearchResult_DL = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+                });*/
+
+            var sites = _.map(self.selectedDistributionList.distributionListMembers, function (member) {
+                return member.site;
+            });
+            var siteViews = generator.generateCollection(sites, SiteView, self._sharedMethods);
+            siteViews = generator.interceptReceivedCollection('SiteView', siteViews);
+
+            self.subSearchResult_DL = _.filter(_.map(siteViews, _mapSubSites), _filterSubSites);
+
+        };
+
+        /**
+         * @description empty the subSearch result and selected to hide the search result grid.
+         */
+        self.onCloseSearch_DL = function () {
+            self.subSearchResult_DL = [];
+            self.subSearchSelected_DL = [];
+            self.selectedDistributionList = null;
+        };
+
         /**
          * @description to check if the given site valid or not based on needReply Status and date.
          * @param site
@@ -534,5 +637,7 @@ module.exports = function (app) {
             }
         });
 
-    });
-};
+    })
+    ;
+}
+;

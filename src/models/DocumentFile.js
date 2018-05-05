@@ -1,6 +1,6 @@
 module.exports = function (app) {
-    app.factory('DocumentFile', function (CMSModelInterceptor, 
-                                          langService, 
+    app.factory('DocumentFile', function (CMSModelInterceptor,
+                                          langService,
                                           _) {
         'ngInject';
         return function DocumentFile(model) {
@@ -48,9 +48,8 @@ module.exports = function (app) {
                 return this.status ? langService.get('active') : langService.get('inactive');
             };
             DocumentFile.prototype.getSecurityLevels = function () {
-                return _.map(_.map(this.securityLevels, 'defaultEnName'), function (securityLevels) {
-                    return securityLevels;
-                }).join(' , ');
+                var x = ['defaultArName', 'defaultEnName'], property = langService.current === 'ar' ? x[0] : x[1];
+                return _.map(this.securityLevels, property).join(', ');
             };
             DocumentFile.prototype.getSelectedOU = function () {
                 return _.map(_.map(this.relatedOus, 'enName'), function (organizations) {

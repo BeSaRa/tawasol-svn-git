@@ -85,17 +85,17 @@ module.exports = function (app) {
                     .controllerMethod
                     .distributionListEdit(distributionList, self.organizations, $event)
                     .then(function (result) {
-                        self.behindScene(result)
-                            .then(function (result) {
+                        /*self.behindScene(result)
+                            .then(function (result) {*/
                                 self.reloadDistributionLists(self.grid.page).then(function () {
                                     toast.success(langService.get('edit_success').change({name: distributionList.getTranslatedName()}));
                                 });
-                            });
+                            // });
                     }).catch(function () {
-                    self.behindScene(distributionList)
-                        .then(function () {
+                    // self.behindScene(distributionList)
+                    //     .then(function () {
                             self.reloadDistributionLists(self.grid.page);
-                        });
+                    //    });
                 });
             };
 

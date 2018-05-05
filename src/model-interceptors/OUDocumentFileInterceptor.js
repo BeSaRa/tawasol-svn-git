@@ -1,13 +1,12 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, 
-                      DocumentFile, 
+    app.run(function (CMSModelInterceptor,
+                      DocumentFile,
                       generator) {
         'ngInject';
 
         var modelName = 'OUDocumentFile';
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
-            model.file = new DocumentFile(model.file);
             return model;
         });
 
@@ -16,6 +15,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
+            model.file = generator.interceptReceivedInstance('DocumentFile', new DocumentFile(model.file));
             return model;
         });
 
