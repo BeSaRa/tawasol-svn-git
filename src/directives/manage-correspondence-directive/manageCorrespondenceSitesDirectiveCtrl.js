@@ -36,7 +36,7 @@ module.exports = function (app) {
         // self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
         self.documentClass = null;
         $timeout(function () {
-            self.correspondenceSiteTypes = correspondenceService.getLookup(self.documentClass, 'siteTypes');
+            self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));
             self.correspondenceSiteTypes.push(new CorrespondenceSiteType({
                 id: null,
                 arName: langService.getKey('not_found', 'ar'),

@@ -776,7 +776,7 @@ module.exports = function (app) {
                             callback: self.manageDestinations,
                             permissionKey: "MANAGE_DESTINATIONS",
                             hide: false,
-                            class: "action-yellow",
+                            class: "action-green",
                             checkShow: function (action, model) {
                                 return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
                             }

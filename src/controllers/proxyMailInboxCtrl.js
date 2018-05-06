@@ -836,7 +836,7 @@ module.exports = function (app) {
                 text: 'grid_action_export',
                 shortcut: true,
                 callback: self.exportProxyMailInbox,
-                class: "action-yellow",
+                class: "action-green",
                 showInView: false,
                 checkShow: function (action, model) {
                     //addMethod = 0 (Electronic/Digital) - show the export button
@@ -1002,7 +1002,7 @@ module.exports = function (app) {
                         text: 'grid_action_main_document',
                         shortcut: false,
                         callback: self.downloadMainDocument,
-                        class: "action-yellow",
+                        class: "action-green",
                         checkShow: self.checkToShowAction
                     },
                     // Composite Document
@@ -1012,7 +1012,7 @@ module.exports = function (app) {
                         text: 'grid_action_composite_document',
                         shortcut: false,
                         callback: self.downloadCompositeDocument,
-                        class: "action-yellow",
+                        class: "action-green",
                         checkShow: self.checkToShowAction
                     }
                 ]

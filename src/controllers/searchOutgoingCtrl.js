@@ -859,7 +859,7 @@ module.exports = function (app) {
              text: 'grid_action_export',
              shortcut: true,
              callback: self.exportSearchOutgoingDocument,
-             class: "action-yellow",
+             class: "action-green",
              checkShow: function (action, model) {
              //If document is paper outgoing and unapproved/partially approved, show the button.
              return self.checkToShowAction(action, model) && model.docStatus < 24 && model.addMethod === 1;
