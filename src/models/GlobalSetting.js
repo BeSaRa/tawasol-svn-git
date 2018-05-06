@@ -44,7 +44,7 @@ module.exports = function (app) {
             self.enableEmailNotification = false;
             self.sla = null;
             self.escalationProcess = null;
-            self.simpleCorsSiteSearch = true;
+            self.simpleCorsSiteSearch = false;
             //required
             self.barcodeElements = "";
             self.deadlineReminderDays = null;

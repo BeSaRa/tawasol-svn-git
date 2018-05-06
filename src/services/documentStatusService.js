@@ -129,7 +129,6 @@ module.exports = function (app) {
                     });
             },
             documentStatusEdit: function ($event, documentStatus) {
-                // console.log(documentStatus);
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -226,10 +225,9 @@ module.exports = function (app) {
         };
         /**
          * activate bulk of role
-         * @param roles
+         * @param documentStatuses
          */
         self.activateBulkDocumentStatus = function (documentStatuses) {
-            console.log(_.map(documentStatuses, 'id'));
             return $http
                 .put((urlService.documentStatus + '/'+'activate'+'/'+'bulk'), _.map(documentStatuses, 'id'))
                 .then(function () {
@@ -238,10 +236,9 @@ module.exports = function (app) {
         };
         /**
          * deactivate bulk of role
-         * @param roles
+         * @param documentStatuses
          */
         self.deactivateBulkDocumentStatus = function (documentStatuses) {
-            console.log(_.map(documentStatuses, 'id'));
             return $http
                 .put((urlService.documentStatus + '/' + 'deactivate'+'/'+'bulk'), _.map(documentStatuses, 'id'))
                 .then(function () {

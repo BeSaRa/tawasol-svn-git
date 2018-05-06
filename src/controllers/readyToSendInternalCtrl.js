@@ -136,7 +136,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.archiveReadyToSendInternalBulk = function ($event) {
-            //console.log('archive ready to send internal mails bulk : ', self.selectedReadyToSendInternals);
             readyToSendInternalService
                 .controllerMethod
                 .readyToSendInternalArchiveBulk(self.selectedReadyToSendInternals, $event)
@@ -301,7 +300,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageEntities = function (readyToSendInternal, $event) {
-            console.log('manage entities : ', readyToSendInternal);
             var info = readyToSendInternal.getInfo();
             managerService
                 .manageDocumentEntities(info.vsId, info.documentClass, info.title, $event);
@@ -314,7 +312,6 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.manageLinkedDocuments = function (readyToSendInternal, $event) {
-            console.log('manage linked documents : ', readyToSendInternal);
             var info = readyToSendInternal.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
         };

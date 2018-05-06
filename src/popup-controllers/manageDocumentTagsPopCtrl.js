@@ -4,7 +4,6 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'manageDocumentTagsPopCtrl';
         self.saveTags = function () {
-            console.log(self.vsId);
             documentTagService
                 .saveDocumentTags(self.documentClass, self.vsId, self.tags)
                 .then(function (tags) {

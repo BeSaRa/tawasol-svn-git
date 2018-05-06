@@ -11,14 +11,15 @@ module.exports = function (app) {
                                                         distributionList,
                                                         organizations,
                                                         OUDistributionList,
-                                                        ouDistributionListService) {
+                                                        ouDistributionListService,
+                                                        rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'distributionListPopCtrl';
         self.editMode = editMode;
         self.distributionList = angular.copy(distributionList);
         self.model = angular.copy(distributionList);
-
+        self.isSimpleCorrespondenceSiteSearchType = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
 
         self.organizations = organizations;
         self.validateLabels = {
@@ -136,10 +137,8 @@ module.exports = function (app) {
             }
             // if distributionList not global and no organizations.
             if (!distributionList.global && !distributionList.hasOrganizations()) {
-                debugger;
                 self.openSelectOUDistributionListDialog(distributionList)
                     .then(function (distributionList) {
-                        debugger;
                         distributionList.update().then(self.displayDistributionListGlobalMessage);
                     })
                     .catch(function () {

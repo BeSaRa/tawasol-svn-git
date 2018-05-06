@@ -3,7 +3,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageDocumentAttachmentsPopCtrl';
-        console.log(document);
+
         self.closeDocumentAttachments = function () {
             dialog.cancel(self.model);
         };

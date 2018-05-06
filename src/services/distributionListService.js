@@ -146,7 +146,6 @@ module.exports = function (app) {
          * @return {Promise|DistributionList}
          */
         self.updateDistributionList = function (distributionList) {
-            debugger;
             return $http
                 .put(urlService.distributionLists,
                     generator.interceptSendInstance('DistributionList', distributionList))

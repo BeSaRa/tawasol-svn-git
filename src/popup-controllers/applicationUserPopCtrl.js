@@ -190,7 +190,7 @@ module.exports = function (app) {
         self.getOrganizationsForAppUser();
 
         self.securityLevels = rootEntity.getGlobalSettings().securityLevels;
-        //console.log('self.securityLevels', self.securityLevels);
+
         /**
          * @description Model for binding the fields in other organizations tab
          * @type {*}
@@ -893,7 +893,6 @@ module.exports = function (app) {
          */
         self.saveOUApplicationUserFromCtrl = function (ouApplicationUser) {
             if (ouApplicationUser.id) {
-                //console.log(ouApplicationUser.getSelectedProxyId());
                 return ouApplicationUserService
                     .updateOUApplicationUser(ouApplicationUser)
                     .then(function () {
@@ -959,7 +958,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.openWorkflowParticipationDialog = function (ouApplicationUser, $event) {
-            //console.log('ou application user from grid - workflow participation: ', ouApplicationUser);
             ouApplicationUser.wfsecurity = ouApplicationUser.wfsecurity || self.globalSetting.wfsecurity;
             return dialog
                 .showDialog({

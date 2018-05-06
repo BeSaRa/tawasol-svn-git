@@ -105,7 +105,6 @@ module.exports = function (app) {
             documentTemplateDelete: function (documentTemplate, $event) {
                 return dialog.confirmMessage(langService.get('confirm_delete').change({name: documentTemplate.getSubjectTitle()}), null, null, $event)
                     .then(function () {
-                        console.log('documentTemplate', documentTemplate);
                         return self.deleteDocumentTemplate(documentTemplate).then(function () {
                             toast.success(langService.get("delete_specific_success").change({name: documentTemplate.getSubjectTitle()}));
                             return true;

@@ -21,7 +21,6 @@ module.exports = function (app) {
         self.applicationUserSignature = angular.copy(applicationUserSignature);
         self.model = angular.copy(applicationUserSignature);
 
-        //console.log(self.applicationUserSignature);
         /**
          * @description Contains the labels for the fields for validation purpose
          */

@@ -11,7 +11,6 @@ module.exports = function (app) {
         self.selectedCorrespondenceSiteGrid = [];
 
         self.correspondenceSites = correspondenceSiteService.correspondenceSites;
-        console.log(self.correspondenceSites);
 
         self.grid = {
             limit: 10, // default limit

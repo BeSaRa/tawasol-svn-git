@@ -84,7 +84,6 @@ module.exports = function (app) {
                         }, 500);
                     })
                 }
-                console.log('pendingSearch', pendingSearch);
                 return pendingSearch;
             };
             /**

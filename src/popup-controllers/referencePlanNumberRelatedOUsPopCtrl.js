@@ -14,7 +14,6 @@ module.exports = function (app) {
         self.referencePlanNumber = referencePlanNumber;
         self.progress = null;
         self.organizations= organizations;
-        console.log(self.organizations);
         /**
          * @description All reference plan number related organization units
          * @type {*}

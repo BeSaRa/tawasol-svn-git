@@ -41,7 +41,6 @@ module.exports = function (app) {
         self.loadDocumentViewUrl = function (vsId) {
             return $http.get((urlService.officeWebApps).replace('{{vsId}}', vsId))
                 .then(function (result) {
-                    console.log('RESUTL', result);
                     return result.data.rs;
                 });
         };

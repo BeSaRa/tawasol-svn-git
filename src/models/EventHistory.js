@@ -98,7 +98,7 @@ module.exports = function (app) {
             };
 
             /*      EventHistory.prototype.loadDocumentAttachments = function (correspondence) {
-             console.log(correspondence);
+
              var self = this;
              return attachmentService.loadDocumentAttachmentsByVsId(correspondence || this).then(function (attachments) {
              self.attachments = attachments;

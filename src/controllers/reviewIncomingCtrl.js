@@ -159,7 +159,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.removeReviewIncoming = function (reviewIncoming, $event, defer) {
-            //console.log('remove review incoming mail : ', reviewIncoming);
             reviewIncomingService
                 .controllerMethod
                 .reviewIncomingRemove(reviewIncoming, $event)
@@ -176,7 +175,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkReviewIncomings = function ($event) {
-            //console.log('remove review incoming mails bulk : ', self.selectedReviewIncomings);
             reviewIncomingService
                 .controllerMethod
                 .reviewIncomingRemoveBulk(self.selectedReviewIncomings, $event)
@@ -398,7 +396,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.acceptIncoming = function (reviewIncoming, $event, defer) {
-            //console.log('accept incoming : ', reviewIncoming);
             reviewIncomingService.controllerMethod
                 .reviewIncomingAccept(reviewIncoming, $event)
                 .then(function (result) {
@@ -444,7 +441,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (reviewIncoming, $event) {
-            //console.log('manage comments');
             managerService.manageDocumentComments(reviewIncoming.vsId, reviewIncoming.docSubject, $event)
                 .then(function (documentComments) {
                     reviewIncoming.documentComments = documentComments;
@@ -460,7 +456,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (reviewIncoming, $event) {
-            //console.log('manage attachments');
             managerService.manageDocumentAttachments(reviewIncoming.vsId, reviewIncoming.docClassName, reviewIncoming.docSubject, $event)
                 .then(function (attachments) {
                     reviewIncoming.attachments = attachments;
@@ -476,7 +471,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageEntities = function (reviewIncoming, $event) {
-            //console.log('manage entities : ', reviewIncoming);
             managerService
                 .manageDocumentEntities(reviewIncoming.vsId, reviewIncoming.docClassName, reviewIncoming.docSubject, $event);
         };
@@ -487,7 +481,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedDocuments = function (reviewIncoming, $event) {
-            //console.log('manage linked documents : ', reviewIncoming);
             var info = reviewIncoming.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
         };
@@ -507,7 +500,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageDestinations = function (reviewIncoming, $event) {
-            //console.log('manage destinations : ', reviewIncoming);
             managerService.manageDocumentCorrespondence(reviewIncoming.vsId, reviewIncoming.docClassName, reviewIncoming.docSubject, $event)
         };
 

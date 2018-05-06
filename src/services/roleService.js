@@ -231,7 +231,6 @@ module.exports = function (app) {
          */
         self.getCustomRoleMembers = function (roleId) {
             return $http.get((urlService.roles + "/" + roleId + '/members')).then(function (result) {
-                console.log(result);
                 return result.data.rs;
             });
         };

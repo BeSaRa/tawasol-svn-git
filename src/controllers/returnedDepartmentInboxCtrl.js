@@ -308,15 +308,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTags = function (returnedDepartmentInbox, $event) {
-            //console.log('manageTagsReturnedDepartmentInbox', returnedDepartmentInbox);
-            var vsId = returnedDepartmentInbox.hasOwnProperty('generalStepElm')
-                ? (returnedDepartmentInbox.generalStepElm.hasOwnProperty('vsId') ? returnedDepartmentInbox.generalStepElm.vsId : returnedDepartmentInbox.generalStepElm)
-                : (returnedDepartmentInbox.hasOwnProperty('vsId') ? returnedDepartmentInbox.vsId : returnedDepartmentInbox);
-            /*var wfName = returnedDepartmentInbox.hasOwnProperty('generalStepElm')
-             ? (returnedDepartmentInbox.generalStepElm.hasOwnProperty('workFlowName') ? returnedDepartmentInbox.generalStepElm.workFlowName : returnedDepartmentInbox.generalStepElm)
-             : (returnedDepartmentInbox.hasOwnProperty('workFlowName') ? returnedDepartmentInbox.workFlowName : returnedDepartmentInbox);*/
+            var info = returnedDepartmentInbox.getInfo();
             var wfName = "outgoing";
-            managerService.manageDocumentTags(vsId, wfName.toLowerCase(), returnedDepartmentInbox.getTranslatedName(), $event)
+            managerService.manageDocumentTags(info.vsId, wfName.toLowerCase(), info.title, $event)
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page);
                 })
@@ -331,15 +325,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (returnedDepartmentInbox, $event) {
-            //console.log('manageCommentsReturnedDepartmentInbox', returnedDepartmentInbox);
-            var vsId = returnedDepartmentInbox.hasOwnProperty('generalStepElm')
-                ? (returnedDepartmentInbox.generalStepElm.hasOwnProperty('vsId') ? returnedDepartmentInbox.generalStepElm.vsId : returnedDepartmentInbox.generalStepElm)
-                : (returnedDepartmentInbox.hasOwnProperty('vsId') ? returnedDepartmentInbox.vsId : returnedDepartmentInbox);
-            /*var wfName = returnedDepartmentInbox.hasOwnProperty('generalStepElm')
-             ? (returnedDepartmentInbox.generalStepElm.hasOwnProperty('workFlowName') ? returnedDepartmentInbox.generalStepElm.workFlowName : returnedDepartmentInbox.generalStepElm)
-             : (returnedDepartmentInbox.hasOwnProperty('workFlowName') ? returnedDepartmentInbox.workFlowName : returnedDepartmentInbox);*/
             var wfName = 'outgoing';
-            managerService.manageDocumentComments(vsId, wfName, $event)
+            managerService.manageDocumentComments(returnedDepartmentInbox.getInfo().vsId, wfName, $event)
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page);
                 })
@@ -363,15 +350,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (returnedDepartmentInbox, $event) {
-            //console.log('manageAttachmentsReturnedDepartmentInbox', returnedDepartmentInbox);
-            var vsId = returnedDepartmentInbox.hasOwnProperty('generalStepElm')
-                ? (returnedDepartmentInbox.generalStepElm.hasOwnProperty('vsId') ? returnedDepartmentInbox.generalStepElm.vsId : returnedDepartmentInbox.generalStepElm)
-                : (returnedDepartmentInbox.hasOwnProperty('vsId') ? returnedDepartmentInbox.vsId : returnedDepartmentInbox);
-            /*var wfName = returnedDepartmentInbox.hasOwnProperty('generalStepElm')
-             ? (returnedDepartmentInbox.generalStepElm.hasOwnProperty('workFlowName') ? returnedDepartmentInbox.generalStepElm.workFlowName : returnedDepartmentInbox.generalStepElm)
-             : (returnedDepartmentInbox.hasOwnProperty('workFlowName') ? returnedDepartmentInbox.workFlowName : returnedDepartmentInbox);*/
+            var info = returnedDepartmentInbox.getInfo();
             var wfName = 'outgoing';
-            managerService.manageDocumentAttachments(vsId, wfName.toLowerCase(), returnedDepartmentInbox.getTranslatedName(), $event);
+            managerService.manageDocumentAttachments(info.vsId, wfName.toLowerCase(), info.title, $event);
         };
 
         /**
@@ -380,7 +361,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedDocuments = function (returnedDepartmentInbox, $event) {
-            console.log('manageLinkedDocumentsReturnedDepartmentInbox', returnedDepartmentInbox);
             var info = returnedDepartmentInbox.getInfo();
             managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass, "welcome");
         };
@@ -391,7 +371,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedEntities = function (returnedDepartmentInbox, $event) {
-            //console.log('manageLinkedEntitiesReturnedDepartmentInbox', returnedDepartmentInbox);
             var wfName = 'outgoing';
             managerService
                 .manageDocumentEntities(returnedDepartmentInbox.generalStepElm.vsId, wfName.toLowerCase(), returnedDepartmentInbox.generalStepElm.docSubject, $event);
@@ -403,7 +382,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadMainDocument = function (returnedDepartmentInbox, $event) {
-            //console.log('downloadMainDocumentReturnedDepartmentInbox', returnedDepartmentInbox);
             downloadService.controllerMethod
                 .mainDocumentDownload(returnedDepartmentInbox)
         };
@@ -414,7 +392,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadCompositeDocument = function (returnedDepartmentInbox, $event) {
-            //console.log('downloadCompositeDocumentReturnedDepartmentInbox', returnedDepartmentInbox);
             downloadService.controllerMethod
                 .compositeDocumentDownload(returnedDepartmentInbox);
         };

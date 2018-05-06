@@ -116,7 +116,6 @@ module.exports = function (app) {
          * @description Add the workflow participation changes to grid
          */
         self.addApplicationUserWorkflowParticipationPopupFromCtrl = function () {
-            console.log(self.ouApplicationUser.privateUsers);
             self.requiredFields = angular.copy(requiredFields);
 
             if (!self.ouApplicationUser.sendToPrivateUsers) {

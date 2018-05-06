@@ -97,7 +97,6 @@ module.exports = function (app) {
                 .post((urlService.organizations + '/add-ou'), generator.interceptSendInstance('Organization', organization))
                 .then(function (result) {
                     organization = generator.interceptReceivedInstance('Organization', generator.generateInstance(result.data.rs, Organization, self._sahredMethods));
-                    console.log(organization);
                     self.organizations.push(organization);
                     return organization;
                 });
@@ -515,7 +514,6 @@ module.exports = function (app) {
                         },
                         unAssignedUsers: function (ouApplicationUserService) {
                             'ngInject';
-                            //console.log('unassigned', organization.id);
                             return ouApplicationUserService.loadUnassignedOUApplicationUsers(organization.id);
                         },
                         ouAssignedUsers: function (ouApplicationUserService) {
@@ -573,7 +571,6 @@ module.exports = function (app) {
 
         self.validateExcelFile = function (url) {
             var urlToSend = JSON.stringify({"path": url});
-            console.log(urlToSend);
             return $http.post(urlService.organizations + "/validateExcel", urlToSend).then(function (result) {
                 return result.data.rs;
             });

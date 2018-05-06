@@ -71,7 +71,6 @@ module.exports = function (app) {
                     if (!self.hasCustomUser(workItem)) {
                         workItem.user = self.selectedUserDomain
                     }
-                    console.log(workItem);
                     return workItem;
                 }));
             }

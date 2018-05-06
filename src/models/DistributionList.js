@@ -97,7 +97,6 @@ module.exports = function (app) {
 
             DistributionList.prototype.addToOUDistributionLists = function (organization) {
                 var self = this;
-                debugger;
                 /*return ouDistributionListService
                  .updateOUDistributionList((new OUDistributionList()).setOuId(organization).setDistributionList(this))
                  .then(function (ouDistributionList) {
@@ -151,7 +150,6 @@ module.exports = function (app) {
             };
 
             DistributionList.prototype.repairGlobalStatus = function () {
-                debugger;
                 var self = this;
                 if (self.hasOrganizations() && self.global)
                     self.setIsGlobal(false);

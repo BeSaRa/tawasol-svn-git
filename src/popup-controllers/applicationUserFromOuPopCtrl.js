@@ -717,7 +717,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.openWorkflowParticipationDialog = function (ouApplicationUser, $event) {
-            //console.log('ou application user from grid - workflow participation: ', ouApplicationUser);
             ouApplicationUser.wfsecurity = ouApplicationUser.wfsecurity || self.globalSetting.wfsecurity;
             return dialog
                 .showDialog({

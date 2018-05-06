@@ -218,7 +218,6 @@ module.exports = function (app) {
                 var relatedUsers = self.workflowAction.relatedUsers;
                 userWorkflowActionService.addUserWorkflowAction(relateUsers).then(function (result) {
                     if (result) {
-                        console.log("related", result);
                         applicationUserService.loadApplicationUsers().then(function (orResult) {
                             _.filter(_.map(orResult, function (data) {
                                 if (data.id === result.userId) {
@@ -252,16 +251,10 @@ module.exports = function (app) {
          * @param applicationUser
          */
         self.removeUser = function (applicationUser) {
-            console.log("delete", applicationUser);
             workflowActionService.deleteSelectedUserWorkFlow(applicationUser.selectedUserId).then(function () {
                 var index = self.workflowAction.relatedUsers.indexOf(applicationUser);
                 self.workflowAction.relatedUsers.splice(index, 1);
-                if (self.workflowAction.relatedUsers.length > 0) {
-                    self.workflowAction.global = false;
-                }
-                else {
-                    self.workflowAction.global = true;
-                }
+                self.workflowAction.global = self.workflowAction.relatedUsers.length <= 0;
                 workflowActionService.updateWorkflowAction(self.workflowAction).then(function () {
                     toast.success(langService.get('delete_success'));
                 });

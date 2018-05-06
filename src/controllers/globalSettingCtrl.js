@@ -45,11 +45,11 @@ module.exports = function (app) {
         self.correspondenceSiteSearchTypeOptions = [
             {
                 key: 'search_type_simple',
-                value: false
+                value: true
             },
             {
                 key: 'search_type_advanced',
-                value: true
+                value: false
             }
         ];
 

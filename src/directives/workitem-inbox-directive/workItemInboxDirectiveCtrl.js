@@ -6,6 +6,5 @@ module.exports = function (app) {
         self.langService = langService;
         LangWatcher($scope);
         self.employeeService = employeeService;
-        // console.log("HELLO");
     });
 };

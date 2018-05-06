@@ -17,7 +17,6 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            debugger;
             model.distributionListMembers = _.map(model.distributionListMembers, function (member) {
                 delete member.site.parentInfo;
                 delete member.site.correspondenceSiteType;

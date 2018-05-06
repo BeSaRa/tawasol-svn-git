@@ -63,11 +63,11 @@ module.exports = function (app) {
         self.sitesInfoTo = [];
         // book vsId
         self.vsId = null;
-        // followup statues
+        // followup statuses
         self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
         // selected followup Status.
         self.followupStatus = null;
-        // current for need replay
+        // current for need reply
         self.minDate = _createCurrentDate(1);
         // all sub correspondence sites
         self.subRecords = _concatCorrespondenceSites(true);
