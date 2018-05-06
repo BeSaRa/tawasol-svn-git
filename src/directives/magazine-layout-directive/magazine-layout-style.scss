@@ -27,9 +27,9 @@
 .magazine-title {
   a {
     position: relative;
-    display: block;
+    display: inline-block;
     line-height: 20px;
-    padding: 0;
+    padding: 2.5px 0;
     //border-bottom: 1px solid #EEE;
   }
 }
@@ -138,12 +138,12 @@
 html.rtl {
   .static-bar-fixed {
     &.gt-small {
-      right: 64+25px;
-      left: 25px;
+      //right: 64+25px;
+      //left: 25px;
     }
     &.sidebar-opend.gt-small {
-      right: 240+25px;
-      left: 25px;
+      //right: 240+25px;
+      //left: 25px;
     }
   }
 }
@@ -152,14 +152,16 @@ html.rtl {
   background-color: white;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  right: 25px;
-  left: 25px;
+  //right: 25px;
+  //left: 25px;
+  right: 0;
+  left: 0;
   //transition: 0.2s ease-in all;
   &.gt-small {
-    left: 64+25px;
+    //left: 64+25px;
   }
   &.sidebar-opend.gt-small {
-    left: 240+25px;
+    //left: 240+25px;
   }
 }
 

@@ -78,4 +78,5 @@ module.exports = function (app) {
     require('./magazine-layout-directive/01-index')(app);
     require('./magazine-item-directive/magazine-item-directive')(app);
     require('./magazine-right-click-directive/magazine-right-click-directive')(app);
+    require('./filter-label-directive/01-index')(app);
 };

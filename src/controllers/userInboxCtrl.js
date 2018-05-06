@@ -137,8 +137,7 @@ module.exports = function (app) {
             //self.showStarred = !self.showStarred;
             if (self.showStarred) {
                 self.fixedTabsCount = 2;
-            }
-            else {
+            } else {
                 self.fixedTabsCount = 1;
             }
             return self.showStarred;
@@ -226,6 +225,11 @@ module.exports = function (app) {
             correspondenceService.loadWorkItemsByFilterID(filter).then(function (workItems) {
                 self.workItemsFilters[$index] = workItems;
             });
+        };
+
+        self.resetSelectedFilter = function ($index) {
+            self.selectedFilter = null;
+            self.selectedTab = $index;
         };
         /**
          * @description Replaces the record in grid after update

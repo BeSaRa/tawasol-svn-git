@@ -42,13 +42,12 @@
             <!-- Grid/Magazine view -->
             <div scroll-directive>
                 <div class="page-padding">
-
-                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                        <!-- Grid View -->
-                        <div ng-if="ctrl.employeeService.getEmployee().viewInboxAsGrid" >
+                    <md-card ng-if="ctrl.employeeService.getEmployee().viewInboxAsGrid" md-whiteframe="3"
+                             layout="column" class="card-overlay">
+                        <div>
                             <md-tabs md-selected="ctrl.selectedTab" class="filter-tabs"
                                      md-dynamic-height>
-                                <md-tab label="{{lang.inbox}}">
+                                <md-tab md-on-select="ctrl.resetSelectedFilter(0)" label="{{lang.inbox}}">
                                     <md-content class="white-bg">
                                         <work-item-inbox-directive
                                                 grid="ctrl.grid"
@@ -66,7 +65,8 @@
                                         </work-item-inbox-directive>
                                     </md-content>
                                 </md-tab>
-                                <md-tab label="{{lang.starred_tab}}" ng-if="ctrl.showStarred">
+                                <md-tab md-on-select="ctrl.resetSelectedFilter(1)" label="{{lang.starred_tab}}"
+                                        ng-if="ctrl.showStarred">
                                     <md-content class="white-bg">
                                         <work-item-inbox-directive
                                                 grid="ctrl.starredGrid"
@@ -142,149 +142,116 @@
                                 </md-tab>
                             </md-tabs>
                         </div>
-                        <div ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid">
-                            <md-tabs md-selected="ctrl.selectedTab" class="filter-tabs"
-                                     md-dynamic-height>
-                                <md-tab label="{{lang.inbox}}">
-                                    <md-content class="white-bg">
-                                        <magazine-layout-directive
-                                                mark-as-read-unread="ctrl.markAsReadUnread"
-                                                view-document="ctrl.viewDocument"
-                                                change-user-inbox-star="ctrl.changeUserInboxStar"
-                                                search-model="ctrl.searchModel"
-                                                grid-actions="ctrl.gridActions"
-                                                limit-options="ctrl.grid.limitOptions"
-                                                page-limit="ctrl.grid.limit"
-                                                page="ctrl.grid.page"
-                                                ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid"
-                                                forward-bulk="ctrl.forwardBulk"
-                                                check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
-                                                change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
-                                                add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
-                                                terminate-user-inbox-bulk="ctrl.terminateUserInboxBulk"
-                                                allow-selection="true"
-                                                selected-work-items="ctrl.selectedUserInboxes"
-                                                work-items="ctrl.userInboxes"></magazine-layout-directive>
-                                    </md-content>
-                                </md-tab>
-                                <md-tab label="{{lang.starred_tab}}" ng-if="ctrl.showStarred">
-                                    <md-content class="white-bg">
-                                        <magazine-layout-directive
-                                                mark-as-read-unread="ctrl.markAsReadUnread"
-                                                view-document="ctrl.viewDocument"
-                                                change-user-inbox-star="ctrl.changeUserInboxStar"
-                                                search-model="ctrl.searchModel"
-                                                grid-actions="ctrl.gridActions"
-                                                limit-options="ctrl.starredGrid.limitOptions"
-                                                page-limit="ctrl.starredGrid.limit"
-                                                page="ctrl.starredGrid.page"
-                                                forward-bulk="ctrl.forwardBulk"
-                                                check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
-                                                change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
-                                                add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
-                                                terminate-user-inbox-bulk="ctrl.terminateUserInboxBulk"
-                                                allow-selection="true"
-                                                selected-work-items="ctrl.selectedUserInboxes"
-                                                work-items="ctrl.starredUserInboxes"></magazine-layout-directive>
-                                    </md-content>
-                                </md-tab>
-                                <md-tab ng-repeat="filter in ctrl.userFilters"
-                                        md-on-select="ctrl.selectFilter(filter, $index)">
-                                    <md-tab-label>
-                                        <div layout="row" flex layout-align="start center">
-                                            <div flex class="tab-title">{{filter.getTranslatedName()}}</div>
-                                            <div class="filter-absolute">
-                                                <md-menu-bar class="filter-menu">
-                                                    <md-menu>
-                                                        <md-button ng-click="$mdMenu.open()"
-                                                                   class="md-icon-button filter-button">
-                                                            <md-icon md-svg-icon="dots-vertical"></md-icon>
-                                                        </md-button>
-                                                        <md-menu-content width="2">
-                                                            <md-menu-item>
-                                                                <md-button
-                                                                        ng-click="ctrl.userFilterEdit(filter , $index , $event)">
-                                                                    <div layout="row">
-                                                                        <md-icon md-svg-icon="pencil"></md-icon>
-                                                                        <span flex>{{lang.edit_filter}}</span>
-                                                                    </div>
-                                                                </md-button>
-                                                            </md-menu-item>
-                                                            <md-menu-item>
-                                                                <md-button
-                                                                        ng-click="ctrl.userFilterDelete(filter , $index ,  $event)">
-                                                                    <div layout="row">
-                                                                        <md-icon md-svg-icon="delete"></md-icon>
-                                                                        <span flex>{{lang.delete_filter}}</span>
-                                                                    </div>
-                                                                </md-button>
-                                                            </md-menu-item>
-                                                        </md-menu-content>
-                                                    </md-menu>
-                                                </md-menu-bar>
-                                            </div>
-                                        </div>
-                                    </md-tab-label>
-                                    <md-tab-body>
-                                        <md-content class="white-bg">
-                                            <!--<work-item-inbox-directive
-                                                    grid="ctrl.filterGrid[$index]"
-                                                    change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
-                                                    work-items="ctrl.workItemsFilters[$index]"
-                                                    view-document="ctrl.viewDocument"
-                                                    grid-actions="ctrl.gridActions"
-                                                    change-user-inbox-star="ctrl.changeUserInboxStar"
-                                                    forward-bulk="ctrl.forwardBulk"
-                                                    add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
-                                                    terminate-user-inbox-bulk="ctrl.terminateUserInboxBulk"
-                                                    mark-as-read-unread="ctrl.markAsReadUnread"
-                                                    check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
-                                                    selected-work-items="ctrl.selectedUserInboxes">
-                                            </work-item-inbox-directive>-->
-
-                                            <magazine-layout-directive
-                                                    mark-as-read-unread="ctrl.markAsReadUnread"
-                                                    view-document="ctrl.viewDocument"
-                                                    change-user-inbox-star="ctrl.changeUserInboxStar"
-                                                    search-model="ctrl.searchModel"
-                                                    grid-actions="ctrl.gridActions"
-                                                    limit-options="ctrl.filterGrid[$index].limitOptions"
-                                                    page-limit="ctrl.filterGrid[$index].limit"
-                                                    page="ctrl.filterGrid[$index].page"
-                                                    forward-bulk="ctrl.forwardBulk"
-                                                    check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
-                                                    change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
-                                                    add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
-                                                    terminate-user-inbox-bulk="ctrl.terminateUserInboxBulk"
-                                                    allow-selection="true"
-                                                    selected-work-items="ctrl.selectedUserInboxes"
-                                                    work-items="ctrl.workItemsFilters[$index]"></magazine-layout-directive>
-                                        </md-content>
-                                    </md-tab-body>
-                                </md-tab>
-                            </md-tabs>
-                        </div>
                     </md-card>
-
-                  <!--  &lt;!&ndash; Magazine View &ndash;&gt;
-                    <magazine-layout-directive
-                            mark-as-read-unread="ctrl.markAsReadUnread"
-                            view-document="ctrl.viewDocument"
-                            change-user-inbox-star="ctrl.changeUserInboxStar"
-                            search-model="ctrl.searchModel"
-                            grid-actions="ctrl.gridActions"
-                            limit-options="ctrl.grid.limitOptions"
-                            page-limit="ctrl.grid.limit"
-                            page="ctrl.grid.page"
-                            ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid"
-                            forward-bulk="ctrl.forwardBulk"
-                            check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
-                            change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
-                            add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
-                            terminate-user-inbox-bulk="ctrl.terminateUserInboxBulk"
-                            allow-selection="true"
-                            selected-work-items="ctrl.selectedUserInboxes"
-                            work-items="ctrl.userInboxes"></magazine-layout-directive>-->
+                    <md-tabs  ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid" md-selected="ctrl.selectedTab"
+                             class="z-index-4 filter-tabs"
+                             md-dynamic-height>
+                        <md-tab md-on-select="ctrl.resetSelectedFilter(0)" label="{{lang.inbox}}">
+                            <md-content class="transparent-bg">
+                                <magazine-layout-directive
+                                        mark-as-read-unread="ctrl.markAsReadUnread"
+                                        view-document="ctrl.viewDocument"
+                                        change-user-inbox-star="ctrl.changeUserInboxStar"
+                                        search-model="ctrl.searchModel"
+                                        grid-actions="ctrl.gridActions"
+                                        limit-options="ctrl.grid.limitOptions"
+                                        page-limit="ctrl.grid.limit"
+                                        page="ctrl.grid.page"
+                                        ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid"
+                                        forward-bulk="ctrl.forwardBulk"
+                                        check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
+                                        change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
+                                        add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
+                                        terminate-user-inbox-bulk="ctrl.terminateUserInboxBulk"
+                                        allow-selection="true"
+                                        selected-work-items="ctrl.selectedUserInboxes"
+                                        work-items="ctrl.userInboxes">
+                                </magazine-layout-directive>
+                            </md-content>
+                        </md-tab>
+                        <md-tab md-on-select="ctrl.resetSelectedFilter(1)" label="{{lang.starred_tab}}"
+                                ng-if="ctrl.showStarred">
+                            <md-content class="transparent-bg">
+                                <magazine-layout-directive
+                                        mark-as-read-unread="ctrl.markAsReadUnread"
+                                        view-document="ctrl.viewDocument"
+                                        change-user-inbox-star="ctrl.changeUserInboxStar"
+                                        search-model="ctrl.searchModel"
+                                        grid-actions="ctrl.gridActions"
+                                        limit-options="ctrl.starredGrid.limitOptions"
+                                        page-limit="ctrl.starredGrid.limit"
+                                        page="ctrl.starredGrid.page"
+                                        forward-bulk="ctrl.forwardBulk"
+                                        check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
+                                        change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
+                                        add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
+                                        terminate-user-inbox-bulk="ctrl.terminateUserInboxBulk"
+                                        allow-selection="true"
+                                        selected-work-items="ctrl.selectedUserInboxes"
+                                        work-items="ctrl.starredUserInboxes">
+                                </magazine-layout-directive>
+                            </md-content>
+                        </md-tab>
+                        <md-tab ng-repeat="filter in ctrl.userFilters"
+                                md-on-select="ctrl.selectFilter(filter, $index)">
+                            <md-tab-label>
+                                <div layout="row" flex layout-align="start center">
+                                    <div flex class="tab-title">{{filter.getTranslatedName()}}</div>
+                                    <div class="filter-absolute">
+                                        <md-menu-bar class="filter-menu">
+                                            <md-menu>
+                                                <md-button ng-click="$mdMenu.open()"
+                                                           class="md-icon-button filter-button">
+                                                    <md-icon md-svg-icon="dots-vertical"></md-icon>
+                                                </md-button>
+                                                <md-menu-content width="2">
+                                                    <md-menu-item>
+                                                        <md-button
+                                                                ng-click="ctrl.userFilterEdit(filter , $index , $event)">
+                                                            <div layout="row">
+                                                                <md-icon md-svg-icon="pencil"></md-icon>
+                                                                <span flex>{{lang.edit_filter}}</span>
+                                                            </div>
+                                                        </md-button>
+                                                    </md-menu-item>
+                                                    <md-menu-item>
+                                                        <md-button
+                                                                ng-click="ctrl.userFilterDelete(filter , $index ,  $event)">
+                                                            <div layout="row">
+                                                                <md-icon md-svg-icon="delete"></md-icon>
+                                                                <span flex>{{lang.delete_filter}}</span>
+                                                            </div>
+                                                        </md-button>
+                                                    </md-menu-item>
+                                                </md-menu-content>
+                                            </md-menu>
+                                        </md-menu-bar>
+                                    </div>
+                                </div>
+                            </md-tab-label>
+                            <md-tab-body>
+                                <md-content class="transparent-bg">
+                                    <magazine-layout-directive
+                                            mark-as-read-unread="ctrl.markAsReadUnread"
+                                            view-document="ctrl.viewDocument"
+                                            change-user-inbox-star="ctrl.changeUserInboxStar"
+                                            search-model="ctrl.searchModel"
+                                            grid-actions="ctrl.gridActions"
+                                            limit-options="ctrl.filterGrid[$index].limitOptions"
+                                            page-limit="ctrl.filterGrid[$index].limit"
+                                            page="ctrl.filterGrid[$index].page"
+                                            forward-bulk="ctrl.forwardBulk"
+                                            check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
+                                            change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
+                                            add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
+                                            terminate-user-inbox-bulk="ctrl.terminateUserInboxBulk"
+                                            allow-selection="true"
+                                            selected-work-items="ctrl.selectedUserInboxes"
+                                            work-items="ctrl.workItemsFilters[$index]"></magazine-layout-directive>
+                                </md-content>
+                            </md-tab-body>
+                        </md-tab>
+                    </md-tabs>
                 </div>
             </div>
         </div>
