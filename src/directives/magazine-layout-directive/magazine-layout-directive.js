@@ -25,7 +25,8 @@ module.exports = function (app) {
                 gridActions: '=',
                 searchModel: '=',
                 viewDocument: '=',
-                markAsReadUnread: '='
+                markAsReadUnread: '=',
+                changeUserInboxStar: '='
             }
         }
     })

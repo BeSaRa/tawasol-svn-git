@@ -1,4 +1,4 @@
-<span ng-if="ctrl.recordType === 'WorkItem' && ctrl.isShowStar()">
+<span ng-if="ctrl.recordType.toLowerCase() === 'workitem' && ctrl.isShowStar()">
     <!-- Starred Enabled -->
     <md-icon class="star-yellow cursor-pointer"
              aria-label="{{lang.starred}}"

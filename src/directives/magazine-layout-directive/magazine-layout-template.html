@@ -91,7 +91,8 @@
             </div>
             <div class="magazine-content" layout="column" flex>
                 <div layout="row" class="magazine-top">
-                    <star-unstar-directive record="workItem"></star-unstar-directive>
+                    <star-unstar-directive record="workItem" record-type="workItem" callback="ctrl.changeUserInboxStar"
+                                           selected-records="ctrl.selectedWorkItems"></star-unstar-directive>
                     <div layout-align="center center" class="magazine-serial">
                         {{workItem.getFullSerialText()}}
                     </div>
