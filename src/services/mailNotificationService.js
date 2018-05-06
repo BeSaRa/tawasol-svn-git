@@ -19,8 +19,9 @@ module.exports = function (app) {
                     excludeLoading: true
                 })
                 .then(function (result) {
-                    self.unreadNotificationsCount = _.filter(result.data.rs, {'read': false}).length;
-                    self.notifications = generator.interceptReceivedCollection('MailNotification', generator.generateCollection(result.data.rs, MailNotification));
+                    var notifications = result.data.rs.first;
+                    self.unreadNotificationsCount = _.filter(notifications, {'isOpen': false}).length;
+                    self.notifications = generator.interceptReceivedCollection('MailNotification', generator.generateCollection(notifications, MailNotification));
                     return self.notifications;
                 })
         };

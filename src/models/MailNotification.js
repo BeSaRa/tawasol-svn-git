@@ -4,13 +4,25 @@ module.exports = function (app) {
         'ngInject';
         return function MailNotification(model) {
             var self = this;
-            self.workObjectNumber = null;
+            /*self.workObjectNumber = null;
             self.docSubject = null;
             self.sender = null;
             self.receivedDate = null;
             self.bookFullSerial = null;
             self.docClassId = null;
-            self.read = null;
+            self.read = null;*/
+
+            self.action = null;
+            self.actionInfo = null;
+            self.bookFullSerial = null;
+            self.docSubject = null;
+            self.docType = null;
+            self.isOpen = null;
+            self.receivedDate = null;
+            self.sender = null;
+            self.senderInfo = null;
+            self.vsId = null;
+            self.workObjectNumber = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

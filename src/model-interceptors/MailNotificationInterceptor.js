@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
-                      moment) {
+                      moment,
+                      Information) {
         'ngInject';
         var modelName = 'MailNotification';
 
@@ -13,6 +14,8 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
+            model.actionInfo = new Information(model.actionInfo);
+            model.senderInfo = new Information(model.senderInfo);
             getDateFromUnixTimeStamp(model, ["receivedDate"]);
             return model;
         });
