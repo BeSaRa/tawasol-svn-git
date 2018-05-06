@@ -32,7 +32,6 @@ module.exports = function (app) {
                                                    counterService,
                                                    correspondenceService,
                                                    favoriteDocumentsService,
-                                                   $sce,
                                                    favoriteDocumentsService,
                                                    favoriteDocumentsService,
                                                    mailNotificationService
@@ -674,7 +673,7 @@ module.exports = function (app) {
         self.sendLinkToDocumentByEmail = function (searchedOutgoingDocument, $event) {
             //console.log('send link to document for searched outgoing document : ', searchedOutgoingDocument);
             downloadService.getMainDocumentEmailContent(searchedOutgoingDocument.vsId).then(function (result) {
-                var msg = "<p>please use the (right click + save link as) option to download the message file from the below link ... </p><br><a href='"+result+"' download='Tawasol.msg' onclick='return false;'>"+"Download the message file"+"</a>";
+                var msg = "<p>please use the (right click + save link as) option to download the message file from the below link ... </p><a href='"+result+"' download='Tawasol.msg' onclick='return false;'>"+"Download the message file"+"</a>";
                 dialog.successMessage(msg);
                 return true;
             });
@@ -688,7 +687,7 @@ module.exports = function (app) {
         self.sendCompositeDocumentAsAttachmentByEmail = function (searchedOutgoingDocument, $event) {
             //console.log('send composite document as attachment for searched outgoing document : ', searchedOutgoingDocument);
             downloadService.getCompositeDocumentEmailContent(searchedOutgoingDocument.vsId).then(function (result) {
-                var msg = "<p>please use the (right click + save link as) option to download the message file from the below link ... </p><br><a href='"+result+"' download='Tawasol.msg' onclick='return false;'>"+"Download the message file"+"</a>";
+                var msg = "<p>please use the (right click + save link as) option to download the message file from the below link ... </p><a href='"+result+"' download='Tawasol.msg' onclick='return false;'>"+"Download the message file"+"</a>";
                 dialog.successMessage(msg);
                 return true;
             });
@@ -720,12 +719,12 @@ module.exports = function (app) {
          * @param $event
          */
         self.getLink = function (searchedOutgoingDocument, $event) {
-            console.log('get link for searched outgoing document : ', searchedOutgoingDocument.vsId);
+            //console.log('get link for searched outgoing document : ', searchedOutgoingDocument.vsId);
             viewDocumentService.loadDocumentViewUrlWithOutEdit(searchedOutgoingDocument.vsId).then(function (result) {
-                dialog.successMessage($sce.trustAsResourceUrl(result));
+                var docLink = "<a target='_blank' href='"+result+"'>"+result+"</a>";
+                dialog.successMessage(docLink);
                 return true;
             });
-
         };
 
         /**
