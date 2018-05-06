@@ -134,7 +134,6 @@ module.exports = function (app) {
         self.fixedTabsCount = 1;
         self.showStarred = false;
         self.toggleStarredTab = function ($event) {
-            debugger;
             //self.showStarred = !self.showStarred;
             if (self.showStarred) {
                 self.fixedTabsCount = 2;

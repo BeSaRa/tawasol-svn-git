@@ -11,7 +11,7 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
-            <div>
+            <div ng-if="ctrl.employeeService.getEmployee().viewInboxAsGrid">
                 <div layout="row" tooltip="{{ctrl.showStarred ? lang.hide_starred: lang.show_starred}}"
                      layout-align="start center">
                     <md-checkbox class="m0" aria-label="show/hide starred grid" ng-model="ctrl.showStarred"
