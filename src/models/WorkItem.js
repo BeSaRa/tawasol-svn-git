@@ -6,7 +6,8 @@ module.exports = function (app) {
                                       ResolveDefer,
                                       $sce,
                                       $q,
-                                      dialog) {
+                                      dialog,
+                                      moment) {
         'ngInject';
 
         return function WorkItem(model) {
@@ -422,6 +423,13 @@ module.exports = function (app) {
                 var icons = ['tablet', 'file-document'];
                 return icons[typeof  model.generalStepElm.addMethod === 'undefined' ? 1 : model.generalStepElm.addMethod];
             };
+            WorkItem.prototype.getIndicatorHasLinkedDoc = function (model) {
+                return model.generalStepElm.linkedDocsNO ? langService.get('indicator_doc_has_linked_doc') : null;
+            };
+            WorkItem.prototype.getIndicatorHasAttachment = function (model) {
+                return model.generalStepElm.attachementsNO ? langService.get('indicator_doc_has_attachment') : null;
+            };
+
             WorkItem.prototype.getTypeIcon = function () {
                 var icons = ['arrow-up-bold-box', 'arrow-down-bold-box', 'recycle'];
                 return icons[this.generalStepElm.docType];
@@ -429,6 +437,19 @@ module.exports = function (app) {
 
             WorkItem.prototype.isRead = function () {
                 return this.generalStepElm.isOpen;
+            };
+
+            WorkItem.prototype.getIndicatorDueDate = function () {
+                var today = moment(new Date()).startOf('day');
+                var recordDueDate = moment(this.generalStepElm.dueDate).startOf('day');
+                var diff = recordDueDate.diff(today, 'days');
+                var dueDateStatus = (diff < 0) ? 'past' : (diff === 0 ? 'today' : 'future');
+                return new Indicator({
+                    class: dueDateStatus,
+                    tooltip: diff < 0 ? 'indicator_date_passed' : (diff === 0 ? 'indicator_date_today' : 'indicator_date_coming'),
+                    text: this.generalStepElm.dueDate
+                });
+
             };
 
 

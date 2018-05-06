@@ -39,6 +39,20 @@
   border-radius: 5px;
   font-size: 12px;
   font-weight: bold;
+  &.date {
+    &.passed {
+      color: #FFFFFF;
+      background: #FF0000;
+    }
+    &.today {
+      color: #FFFFFF;
+      background: #308DFC;
+    }
+    &.future {
+      color: #FFFFFF;
+      background: #32CD32;
+    }
+  }
 }
 
 .magazine-sender {

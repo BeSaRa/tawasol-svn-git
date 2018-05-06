@@ -86,7 +86,7 @@
                     <md-icon flex md-svg-icon="{{workItem.getTypeIcon()}}"></md-icon>
                 </div>
                 <div class="magazine-date">
-                    <span>{{workItem.getReceivedDate()}}</span>
+                    <span tooltip="{{lang.get('received_date')}}">{{workItem.getReceivedDate()}}</span>
                 </div>
             </div>
             <div class="magazine-content" layout="column" flex>
@@ -103,6 +103,10 @@
                             <span ng-if="!workItem.isSameOU()">
                                 <span>{{lang.in}}</span>
                                 <span class="magazine-serial"> {{workItem.getRegistryOUTranslate()}}</span>
+                                <span ng-if="workItem.generalStepElm.dueDate">{{lang.due_on}}</span>
+                                <span ng-if="workItem.generalStepElm.dueDate"
+                                      tooltip="{{lang[workItem.getIndicatorDueDate().tooltip]}}"
+                                      class="magazine-serial date {{workItem.getIndicatorDueDate().class}}">{{workItem.generalStepElm.dueDate}}</span>
                             </span>
                         </span>
                     </div>
@@ -146,6 +150,18 @@
                                 icon="transfer"
                                 color="#8e44ad"
                                 callback="workItem.getIndicatorTransfer"
+                                model="workItem"></magazine-indicator>
+                        <magazine-indicator
+                                ng-if="workItem.generalStepElm.attachementsNO"
+                                icon="paperclip"
+
+                                callback="workItem.getIndicatorHasAttachment"
+                                model="workItem"></magazine-indicator>
+                        <magazine-indicator
+                                ng-if="workItem.generalStepElm.linkedDocsNO"
+                                icon="link-variant"
+
+                                callback="workItem.getIndicatorHasLinkedDoc"
                                 model="workItem"></magazine-indicator>
                     </div>
                     <div>
