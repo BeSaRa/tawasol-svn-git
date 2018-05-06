@@ -7,6 +7,7 @@ module.exports = function (app) {
             controller: 'mainSiteSubSiteDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,
+            replace: true,
             scope: {
                 item: '='
             }

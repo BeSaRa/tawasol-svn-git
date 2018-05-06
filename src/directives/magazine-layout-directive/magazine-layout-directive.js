@@ -22,7 +22,10 @@ module.exports = function (app) {
                 page: '=',
                 totalItems: '=',
                 limitOptions: '=',
-                gridActions: '='
+                gridActions: '=',
+                searchModel: '=',
+                viewDocument: '=',
+                markAsReadUnread: '='
             }
         }
     })

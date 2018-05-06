@@ -359,7 +359,7 @@ module.exports = function (app) {
                 return this.registeryOu.getTranslatedName();
             };
             WorkItem.prototype.getOUTranslate = function () {
-                return  this.fromOuInfo.getTranslatedName();
+                return this.fromOuInfo.getTranslatedName();
             };
             WorkItem.prototype.exportViaArchive = function () {
                 return this.generalStepElm.exportViaCentralArchive || this.generalStepElm.addedViaCentralArchive;
@@ -425,6 +425,10 @@ module.exports = function (app) {
             WorkItem.prototype.getTypeIcon = function () {
                 var icons = ['arrow-up-bold-box', 'arrow-down-bold-box', 'recycle'];
                 return icons[this.generalStepElm.docType];
+            };
+
+            WorkItem.prototype.isRead = function () {
+                return this.generalStepElm.isOpen;
             };
 
 

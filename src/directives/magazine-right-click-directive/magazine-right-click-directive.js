@@ -9,6 +9,13 @@ module.exports = function (app) {
                     throw Error('PLEASE ADD MODEL ATTRIBUTE TO THE DIRECTIVE');
                 }
 
+                // if the selected length more than one item don't complete the process to open the menu.
+                var selected = scope.$eval(attrs.selectedLength);
+                if (selected > 1 || (selected === 1 && !element.hasClass('selected'))) {
+                    return;
+                }
+
+
                 // common variables
                 var
                     // parent wrapper.
@@ -35,9 +42,8 @@ module.exports = function (app) {
                         'shortcut': 'false',
                         'menu-direction': 'context'
                     });
+
                 // set the css for the wrapper.
-
-
                 wrapper.css(css);
                 // compile phase to bind the menu directive to DOM.
                 $compile(wrapper.append(menu))(scope);
