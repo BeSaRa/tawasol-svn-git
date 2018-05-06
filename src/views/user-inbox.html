@@ -11,6 +11,13 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
+            <div>
+                <div layout="row" tooltip="{{ctrl.showStarred ? lang.hide_starred: lang.show_starred}}"
+                     layout-align="start center">
+                    <md-checkbox class="m0" aria-label="show/hide starred grid" ng-model="ctrl.showStarred"
+                                 ng-change="ctrl.toggleStarredTab($event)"></md-checkbox>
+                </div>
+            </div>
             <md-button ng-click="ctrl.userFilterCreate($event)" class="md-icon-button" tooltip="{{lang.create_filter}}">
                 <md-icon md-svg-icon="filter"></md-icon>
             </md-button>
@@ -35,6 +42,7 @@
             <!-- Grid/Magazine view -->
             <div scroll-directive>
                 <div class="page-padding">
+                    <!-- Grid View -->
                     <md-card ng-if="ctrl.employeeService.getEmployee().viewInboxAsGrid" md-whiteframe="3"
                              layout="column" class="card-overlay">
                         <div>
@@ -58,7 +66,7 @@
                                         </work-item-inbox-directive>
                                     </md-content>
                                 </md-tab>
-                                <md-tab label="{{lang.starred_tab}}" ng-if="ctrl.showStarredTab(true)">
+                                <md-tab label="{{lang.starred_tab}}" ng-if="ctrl.showStarred">
                                     <md-content class="white-bg">
                                         <work-item-inbox-directive
                                                 grid="ctrl.starredGrid"
@@ -135,6 +143,8 @@
                             </md-tabs>
                         </div>
                     </md-card>
+
+                    <!-- Magazine View -->
                     <magazine-layout-directive
                             mark-as-read-unread="ctrl.markAsReadUnread"
                             view-document="ctrl.viewDocument"

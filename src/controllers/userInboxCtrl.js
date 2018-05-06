@@ -132,15 +132,17 @@ module.exports = function (app) {
         };
 
         self.fixedTabsCount = 1;
-
-        self.showStarredTab = function (isShow) {
-            if (isShow) {
+        self.showStarred = false;
+        self.toggleStarredTab = function ($event) {
+            debugger;
+            //self.showStarred = !self.showStarred;
+            if (self.showStarred) {
                 self.fixedTabsCount = 2;
             }
             else {
                 self.fixedTabsCount = 1;
             }
-            return isShow;
+            return self.showStarred;
         };
 
         self.openSidebarFilter = function () {
