@@ -18,7 +18,8 @@ module.exports = function (app) {
                 'arName',
                 'enName',
                 'status',
-                'itemOrder'
+                'itemOrder',
+                'lookupStrKey'
             ];
             if (model)
                 angular.extend(this, model);

@@ -22,7 +22,9 @@ module.exports = function (app) {
         self.validateLabels = {
             arName: 'arabic_name',
             enName: 'english_name',
-            itemOrder: 'item_order'
+            itemOrder: 'item_order',
+            status: 'status',
+            lookupStrKey: 'code'
         };
         self.promise = null;
         self.selecteds = [];
