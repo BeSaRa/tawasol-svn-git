@@ -14,26 +14,14 @@ module.exports = function (app) {
                                                                     generator,
                                                                     CorrespondenceSiteView,
                                                                     correspondenceSiteTypeService,
-                                                                    correspondenceService) {
+                                                                    rootEntity) {
 
         'ngInject';
         var self = this;
         self.controllerName = 'manageDistributionListDirectiveCtrl';
-        /*$timeout(function () {
-            var defer = $q.defer();
-            correspondenceSiteTypeService.getCorrespondenceSiteTypes()
-                .then(function (result) {
-                    self.correspondenceSiteTypes = result;
-                    defer.resolve(result);
-                });
-            defer.promise.then(function () {
-                self.correspondenceSiteTypes.push(new CorrespondenceSiteType({
-                    id: null,
-                    arName: langService.getKey('not_found', 'ar'),
-                    enName: langService.getKey('not_found', 'en')
-                }));
-            });
-        });*/
+
+        self.isSimpleCorrespondenceSiteSearchType = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
+
         self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
         // model to search on correspondence sites type
         self.typeSearch = '';
@@ -201,11 +189,38 @@ module.exports = function (app) {
             return defer.promise;
         };
         /**
-         * when selected type changed.
-         * @param type
+         * @description Get main correspondence sites on change of correspondence site type.
+         * @param $event
          */
-        self.onTypeChange = function (type) {
+        self.onSiteTypeChange = function ($event) {
+            if (self.selectedSiteType.id) {
+                correspondenceViewService.correspondenceSiteSearch('main', {
+                    type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
+                    criteria: null,
+                    excludeOuSites: true
+                }).then(function (result) {
+                    self.mainSites = result;
+                });
+            }
+            else {
+                self.mainSites = self.subSearchResult = self.subSearchResultCopy = [];
+            }
+        };
 
+        /**
+         * @description Get sub sites on change of main site
+         * @param $event
+         */
+        self.getSubSites = function ($event) {
+            correspondenceViewService.correspondenceSiteSearchForDistributionList('sub', {
+                type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
+                parent: self.selectedMainSite ? self.selectedMainSite.id : null,
+                criteria: null,
+                excludeOuSites: true
+            }).then(function (result) {
+                self.subSearchResultCopy = angular.copy(result);
+                filterSearchedSubSites();
+            });
         };
 
         /**

@@ -13,7 +13,8 @@ module.exports = function (app) {
                                                                        _,
                                                                        correspondenceService,
                                                                        generator,
-                                                                       SiteView) {
+                                                                       SiteView,
+                                                                       rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSitesDirectiveCtrl';
@@ -29,6 +30,7 @@ module.exports = function (app) {
         self.setCurrentTab = function (tabName) {
             self.currentTab = tabName;
         };
+        self.isSimpleCorrespondenceSiteSearchType = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
 
         // all correspondence site types
         // self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
@@ -349,7 +351,7 @@ module.exports = function (app) {
             _.map(sites, function (site) {
                 self.addSiteTo(site);
             });
-            if(isDistributionListRecord){
+            if (isDistributionListRecord) {
                 self.followUpStatusDate_DL = null;
                 self.followupStatus_DL = null;
                 self.subSearchSelected_DL = [];
@@ -374,7 +376,7 @@ module.exports = function (app) {
             _.map(sites, function (site) {
                 self.addSiteCC(site);
             });
-            if(isDistributionListRecord){
+            if (isDistributionListRecord) {
                 self.followUpStatusDate_DL = null;
                 self.followupStatus_DL = null;
                 self.subSearchSelected_DL = [];
@@ -415,11 +417,39 @@ module.exports = function (app) {
             return defer.promise;
         };
         /**
-         * when selected type changed.
-         * @param type
+         * @description Get main correspondence sites on change of correspondence site type.
+         * @param $event
          */
-        self.onTypeChange = function (type) {
+        self.onSiteTypeChange = function ($event) {
+            if (self.selectedSiteType.id) {
+                correspondenceViewService.correspondenceSiteSearch('main', {
+                    type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
+                    criteria: null,
+                    excludeOuSites: true
+                }).then(function (result) {
+                    self.mainSites = result;
+                });
+            }
+            else {
+                self.mainSites = self.subSearchResult = self.subSearchResultCopy = [];
+            }
+        };
 
+        /**
+         * @description Get sub sites on change of main site
+         * @param $event
+         */
+        self.selectedMainSite = null;
+        self.getSubSites = function ($event) {
+            correspondenceViewService.correspondenceSiteSearchForDistributionList('sub', {
+                type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
+                parent: self.selectedMainSite ? self.selectedMainSite.id : null,
+                criteria: null,
+                excludeOuSites: true
+            }).then(function (result) {
+                self.subSearchResultCopy = angular.copy(result);
+                self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+            });
         };
 
         /**

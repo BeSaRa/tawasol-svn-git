@@ -19,7 +19,7 @@ module.exports = function (app) {
                     },
                     function (newValue, oldValue) {
                         if (!newValue) {
-                            $scope.ctrl.onCloseSearch()
+                            $scope.ctrl.onCloseSearch();
                         }
                     });
             }

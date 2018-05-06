@@ -1,5 +1,27 @@
 <div class="p20" layout="column">
-    <div layout="row" flex>
+    <!-- Simple Search -->
+    <div layout="row" flex ng-if="ctrl.isSimpleCorrespondenceSiteSearchType">
+        <md-input-container flex>
+            <label>{{lang.sites_select_site_type}}</label>
+            <md-select ng-model="ctrl.selectedSiteType" ng-change="ctrl.onSiteTypeChange($event)">
+                <md-option ng-value="type" ng-repeat="type in ctrl.correspondenceSiteTypes">
+                    {{type.getTranslatedName()}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container flex>
+            <label>{{lang.main_site}}</label>
+            <md-select ng-model="ctrl.selectedMainSite" ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id"
+            ng-change="ctrl.getSubSites($event)">
+                <md-option ng-value="type" ng-repeat="type in ctrl.mainSites">
+                    {{type.getTranslatedName()}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+    <!-- Advanced Search -->
+    <div layout="row" flex ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType">
+        <!-- Correspondence Site Type -->
         <md-input-container flex>
             <label>{{lang.sites_select_site_type}}</label>
             <md-select ng-model="ctrl.selectedSiteType">
@@ -8,6 +30,7 @@
                 </md-option>
             </md-select>
         </md-input-container>
+        <!-- Main Site -->
         <md-autocomplete
                 flex
                 md-autoselect
@@ -21,11 +44,14 @@
                 md-floating-label="{{lang.sites_select_main_site}}">
             <span>{{item.getTranslatedName()}}</span>
         </md-autocomplete>
+        <!-- Sub Site -->
         <md-input-container flex>
             <label for="subSiteSearchText">{{lang.sites_select_sub_site}}</label>
-            <input id="subSiteSearchText" ng-model="ctrl.subSiteSearchText" ng-enter="ctrl.onSubSearch()" ng-change="ctrl.onSubSearch($event)">
+            <input id="subSiteSearchText" ng-model="ctrl.subSiteSearchText" ng-enter="ctrl.onSubSearch()"
+                   ng-change="ctrl.onSubSearch($event)">
         </md-input-container>
     </div>
+
     <!-- Search Results -->
     <div flex layout="column">
         <md-card ng-if="ctrl.subSearchResult.length" md-whiteframe="3" layout="column" class="card-overlay">
@@ -112,9 +138,11 @@
     <div flex layout="column">
         <md-card ng-if="ctrl.distributionListMembers.length" md-whiteframe="3" layout="column" class="card-overlay">
             <!-- Sites toolbar -->
-            <md-toolbar class="md-table-toolbar md-default" ng-class="{'selected':ctrl.distributionListMembersSelected.length}">
+            <md-toolbar class="md-table-toolbar md-default"
+                        ng-class="{'selected':ctrl.distributionListMembersSelected.length}">
                 <div class="md-toolbar-tools">
-                    <div ng-if="ctrl.distributionListMembersSelected.length" layout="row" flex layout-align="start center">
+                    <div ng-if="ctrl.distributionListMembersSelected.length" layout="row" flex
+                         layout-align="start center">
                         <div>{{ctrl.distributionListMembersSelected.length}} {{lang.items_selected}}</div>
                         <span flex></span>
                         <div>
@@ -173,7 +201,8 @@
                 <md-table-pagination
                         md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                         md-limit-options="ctrl.grid.distributionListMembersGrid.limitOptions"
-                        md-limit="ctrl.grid.distributionListMembersGrid.limit" md-page="ctrl.grid.distributionListMembersGrid.page"
+                        md-limit="ctrl.grid.distributionListMembersGrid.limit"
+                        md-page="ctrl.grid.distributionListMembersGrid.page"
                         md-total="{{ctrl.distributionListMembers.length}}" md-page-select>
                 </md-table-pagination>
             </md-table-container>

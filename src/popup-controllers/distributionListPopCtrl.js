@@ -11,15 +11,13 @@ module.exports = function (app) {
                                                         distributionList,
                                                         organizations,
                                                         OUDistributionList,
-                                                        ouDistributionListService,
-                                                        rootEntity) {
+                                                        ouDistributionListService) {
         'ngInject';
         var self = this;
         self.controllerName = 'distributionListPopCtrl';
         self.editMode = editMode;
         self.distributionList = angular.copy(distributionList);
         self.model = angular.copy(distributionList);
-        self.isSimpleCorrespondenceSiteSearchType = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
 
         self.organizations = organizations;
         self.validateLabels = {

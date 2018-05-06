@@ -455,21 +455,30 @@
             md-on-select="ctrl.setCurrentTab('correspondenceSites')">
         <md-content scroll-directive class="white-bg">
             <div class="p20" layout="column">
-                <!-- Search Box -->
-                <div layout="row" flex ng-if="!ctrl.disableCorrespondence">
-                    <!--<md-autocomplete
-                            flex
-                            md-autoselect
-                            md-no-cache="true"
-                            md-selected-item="ctrl.selectedType"
-                            md-search-text="ctrl.typeSearch"
-                            md-selected-item-change="ctrl.onTypeChange(item)"
-                            md-items="item in ctrl.onTypeSearch(ctrl.typeSearch)"
-                            md-item-text="item.display"
-                            md-min-length="2"
-                            md-floating-label="{{lang.sites_select_site_type}}">
-                        <span>{{item.getTranslatedName()}}</span>
-                    </md-autocomplete>-->
+
+                <!-- Simple Search Box -->
+                <div layout="row" flex ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
+                    <md-input-container flex>
+                        <label>{{lang.sites_select_site_type}}</label>
+                        <md-select ng-model="ctrl.selectedSiteType" ng-change="ctrl.onSiteTypeChange($event)">
+                            <md-option ng-value="type" ng-repeat="type in ctrl.correspondenceSiteTypes">
+                                {{type.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>{{lang.main_site}}</label>
+                        <md-select ng-model="ctrl.selectedMainSite" ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id"
+                                   ng-change="ctrl.getSubSites($event)">
+                            <md-option ng-value="type" ng-repeat="type in ctrl.mainSites">
+                                {{type.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+
+                <!-- Advanced Search Box -->
+                <div layout="row" flex ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
                     <!-- Correspondence Site Type -->
                     <md-input-container flex>
                         <label>{{lang.sites_select_site_type}}</label>
@@ -499,6 +508,8 @@
                         <input id="subSearch" ng-model="ctrl.subSearch" ng-change="ctrl.onSubSearch($event)">
                     </md-input-container>
                 </div>
+
+
                 <!-- Search Results -->
                 <div flex layout="column">
                     <md-card ng-if="ctrl.subSearchResult.length" md-whiteframe="3" layout="column" class="card-overlay">
