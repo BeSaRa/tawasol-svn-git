@@ -15,9 +15,13 @@ module.exports = function (app) {
         self.editMode = editMode;
         self.model = angular.copy(filter);
         self.filter = angular.copy(filter);
+
         self.senders = senders;
         self.actions = actions;
         self.documentTypes = lookupService.returnLookups(lookupService.documentClass);
+
+        console.log(lookupService.returnLookups(lookupService.inboxFilterKey));
+
         /**
          * @description save user filter
          * @param $event
@@ -29,15 +33,47 @@ module.exports = function (app) {
             })
         };
 
+
+        self.receivedDateFilterTypes = [
+            {
+                optionLangKey: 'not_found',
+                optionValue: null
+            },
+            {
+                optionLangKey: 'user_inbox_filter_recieve_date_greater_than',
+                optionValue: 4
+            },
+            {
+                optionLangKey: 'user_inbox_recieve_date_less_than',
+                optionValue: 6
+            },
+            {
+                optionLangKey: 'user_inbox_filter_recieved_date_between',
+                optionValue: 11
+            }
+        ];
+
+
+        self.changeReceivedDateType = function ($event) {
+            self.filter.ui['key_4'].value = null;
+            self.filter.ui['key_6'].value = null;
+            self.filter.ui['key_11'].value1 = null;
+            self.filter.ui['key_11'].value2 = null;
+        };
+
         self.checkDisabled = function (form) {
-            var hasCriteria = false;
+            var hasCriteria = false, record, typeOfRecord;
             for (var key in self.filter.ui) {
                 if (!self.filter.ui.hasOwnProperty(key))
                     continue;
-                if (typeof self.filter.ui[key].value === 'string')
-                    self.filter.ui[key].value = self.filter.ui[key].value.trim();
 
-                if (!!self.filter.ui[key].value) {
+                typeOfRecord = typeof self.filter.ui[key].value;
+                record = self.filter.ui[key];
+
+                if (typeOfRecord === 'string')
+                    record.value = record.value.trim();
+
+                if (typeOfRecord !== 'undefined' && record.value !== null) {
                     hasCriteria = true;
                     break;
                 }

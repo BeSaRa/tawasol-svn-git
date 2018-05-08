@@ -39,7 +39,7 @@
                                 </md-input-container>
                             </div>
                             <div layout="row" class="p20">
-                                <!-- Filter Item order -->
+                                <!-- Item order -->
                                 <md-input-container flex>
                                     <label for="sortOptionId">{{lang.item_order}}</label>
                                     <input name="sortOptionId" id="sortOptionId" required
@@ -49,8 +49,8 @@
                                     <div ng-messages="userFilter.sortOptionId.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
                                         <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
-                                        <div ng-message="number">{{lang.numberonly}}</div>
                                         <div ng-message="min">{{lang.min_number.change({number:0})}}</div>
+                                        <div ng-message="number">{{lang.numberonly}}</div>
                                     </div>
                                 </md-input-container>
                                 <!-- Status -->
@@ -66,8 +66,9 @@
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row">
+                                    <!-- Document Type -->
                                     <md-input-container flex>
-                                        <label for="docType">{{lang.linked_document_type}}</label>
+                                        <label for="docType">{{lang.user_inbox_filter_doc_type}}</label>
                                         <md-select name="docType" id="docType"
                                                    ng-model="ctrl.filter.ui.key_2.value">
                                             <md-option ng-value="docType.lookupKey"
@@ -76,14 +77,16 @@
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
+                                    <!-- Document Subject -->
                                     <md-input-container flex>
-                                        <label for="docSubject">{{lang.document_subject_contains}}</label>
+                                        <label for="docSubject">{{lang.user_inbox_filter_doc_subject}}</label>
                                         <input id="docSubject" name="docSubject" ng-model="ctrl.filter.ui.key_3.value">
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
+                                    <!-- Sender -->
                                     <md-input-container flex>
-                                        <label for="sender">{{lang.sender}}</label>
+                                        <label for="sender">{{lang.user_inbox_filter_sender}}</label>
                                         <md-select name="sender" id="sender"
                                                    ng-model="ctrl.filter.ui.key_9.value">
                                             <md-option ng-value="sender.domainName" ng-repeat="sender in ctrl.senders">
@@ -91,8 +94,9 @@
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
+                                    <!-- Action -->
                                     <md-input-container flex>
-                                        <label for="action">{{lang.action}}</label>
+                                        <label for="action">{{lang.user_inbox_filter_action}}</label>
                                         <md-select name="action" id="action"
                                                    ng-model="ctrl.filter.ui.key_7.value">
                                             <md-option ng-value="action.id" ng-repeat="action in ctrl.actions">
@@ -100,6 +104,48 @@
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="action">{{lang.user_inbox_filter_action}}</label>
+                                        <md-select ng-model="ctrl.filter.selectedReceivedDateFilterType"
+                                        ng-change="ctrl.changeReceivedDateType($event)">
+                                            <md-option ng-value="action.optionValue"
+                                                       ng-repeat="action in ctrl.receivedDateFilterTypes">
+                                                {{lang[action.optionLangKey]}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <!-- Received Date Greater Than -->
+                                    <md-input-container ng-if="ctrl.filter.selectedReceivedDateFilterType === 4" flex>
+                                        <label>{{lang.user_inbox_filter_recieve_date_greater_than}}</label>
+                                        <md-datepicker ng-model="ctrl.filter.ui.key_4.value"></md-datepicker>
+                                    </md-input-container>
+                                    <!-- Received Date Less Than -->
+                                    <md-input-container ng-if="ctrl.filter.selectedReceivedDateFilterType === 6" flex>
+                                        <label>{{lang.user_inbox_recieve_date_less_than}}</label>
+                                        <md-datepicker ng-model="ctrl.filter.ui.key_6.value"></md-datepicker>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row" ng-if="ctrl.filter.selectedReceivedDateFilterType === 11">
+                                    <!-- Received Date Greater Than -->
+                                    <md-input-container flex>
+                                        <label>{{lang.user_inbox_filter_recieve_date_greater_than}}</label>
+                                        <md-datepicker ng-model="ctrl.filter.ui.key_11.value1"></md-datepicker>
+                                    </md-input-container>
+                                    <!-- Received Date Less Than -->
+                                    <md-input-container flex>
+                                        <label>{{lang.user_inbox_recieve_date_less_than}}</label>
+                                        <md-datepicker ng-model="ctrl.filter.ui.key_11.value2"></md-datepicker>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!-- Due Date -->
+                                    <md-input-container flex>
+                                    <label>{{lang.user_inbox_filter_due_date_exists}}</label>
+                                        <md-datepicker ng-model="ctrl.filter.ui.key_8.value"></md-datepicker>
+                                    </md-input-container>
+
                                 </div>
                             </div>
                         </md-content>

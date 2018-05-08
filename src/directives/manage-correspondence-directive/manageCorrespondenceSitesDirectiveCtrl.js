@@ -425,7 +425,7 @@ module.exports = function (app) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                     criteria: null,
-                    excludeOuSites: true
+                    excludeOuSites: false
                 }).then(function (result) {
                     self.mainSites = result;
                 });

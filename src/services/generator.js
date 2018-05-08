@@ -2,7 +2,8 @@ module.exports = function (app) {
     app.service('generator', function (_,
                                        CMSModelInterceptor,
                                        tableGeneratorService,
-                                       listGeneratorService) {
+                                       listGeneratorService,
+                                       moment) {
         'ngInject';
         var self = this, dialog, langService, toast;
         var documentClassMap = {
@@ -486,6 +487,25 @@ module.exports = function (app) {
             else if (modelType === 'lookup')
                 return property + '.' + (langService.current === 'ar' ? 'defaultArName' : 'defaultEnName');
             return property;
+        };
+
+        self.defaultDateFormat = 'YYYY-MM-DD';
+        /**
+         * @description Gets the date in default format
+         * @param timestamp
+         * @returns {string | null}
+         */
+        self.getDateFromTimeStamp = function (timestamp) {
+            return timestamp ? moment(timestamp).format(self.defaultDateFormat) : null
+        };
+
+        /**
+         * @description Gets timestamp from the provided date
+         * @param date
+         * @returns {null}
+         */
+        self.getTimeStampFromDate = function (date) {
+            return date ? moment(date, self.defaultDateFormat).valueOf() : null;
         };
 
         self.documentStatusAndGridMap = {
