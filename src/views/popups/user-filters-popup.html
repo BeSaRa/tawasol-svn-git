@@ -135,12 +135,16 @@
                                         <md-input-container flex>
                                             <label>{{lang.search_module_start_date}}</label>
                                             <md-datepicker ng-model="ctrl.filter.ui.key_11.value1"
+                                                           ng-change="ctrl.getMinReceivedEndDate($event)"
+                                                           md-max-date="ctrl.calculatedMaxReceivedStartDate"
                                                            ng-required="ctrl.filter.ui.key_11.value2"></md-datepicker>
                                         </md-input-container>
                                         <!-- Received Date To -->
                                         <md-input-container flex>
                                             <label>{{lang.search_module_end_date}}</label>
                                             <md-datepicker ng-model="ctrl.filter.ui.key_11.value2"
+                                                           ng-change="ctrl.getMaxReceivedStartDate($event)"
+                                                           md-min-date="ctrl.calculatedMinReceivedEndDate"
                                                            ng-required="ctrl.filter.ui.key_11.value1"></md-datepicker>
                                         </md-input-container>
                                     </div>
@@ -153,12 +157,16 @@
                                         <md-input-container flex>
                                             <label>{{lang.search_module_start_date}}</label>
                                             <md-datepicker ng-model="ctrl.filter.ui.key_10.value1"
+                                                           ng-change="ctrl.getMinDueEndDate($event)"
+                                                           md-max-date="ctrl.calculatedMaxDueStartDate"
                                                            ng-required="ctrl.filter.ui.key_10.value2"></md-datepicker>
                                         </md-input-container>
                                         <!-- Due Date To -->
                                         <md-input-container flex>
                                             <label>{{lang.search_module_end_date}}</label>
                                             <md-datepicker ng-model="ctrl.filter.ui.key_10.value2"
+                                                           ng-change="ctrl.getMaxDueStartDate($event)"
+                                                           md-min-date="ctrl.calculatedMinDueEndDate"
                                                            ng-required="ctrl.filter.ui.key_10.value1"></md-datepicker>
                                         </md-input-container>
                                     </div>

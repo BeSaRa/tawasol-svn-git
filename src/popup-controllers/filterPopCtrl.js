@@ -61,19 +61,53 @@ module.exports = function (app) {
             self.filter.ui['key_11'].value2 = null;
         };
 
+        self.getMaxReceivedStartDate = function () {
+            var endDate = new Date(self.filter.ui.key_11.value2);
+            self.calculatedMaxReceivedStartDate = endDate ? new Date(endDate.setDate(endDate.getDate() - 1)) : null;
+        };
+        self.calculatedMaxReceivedStartDate = self.filter.ui.key_11.value1 ? self.filter.ui.key_11.value1 : self.getMaxReceivedStartDate();
+
+        self.getMinReceivedEndDate = function () {
+            var startDate = new Date(self.filter.ui.key_11.value1);
+            self.calculatedMinReceivedEndDate = startDate ? new Date(startDate.setDate(startDate.getDate() + 1)) : null;
+        };
+        self.calculatedMinReceivedEndDate = self.filter.ui.key_11.value2 ? self.filter.ui.key_11.value2 : self.getMinReceivedEndDate();
+
+        self.getMaxDueStartDate = function () {
+            var endDate = new Date(self.filter.ui.key_10.value2);
+            self.calculatedMaxDueStartDate = endDate ? new Date(endDate.setDate(endDate.getDate() - 1)) : null;
+        };
+        self.calculatedMaxDueStartDate = self.filter.ui.key_10.value1 ? self.filter.ui.key_10.value1 : self.getMaxDueStartDate();
+
+        self.getMinDueEndDate = function () {
+            var startDate = new Date(self.filter.ui.key_10.value1);
+            self.calculatedMinDueEndDate = startDate ? new Date(startDate.setDate(startDate.getDate() + 1)) : null;
+        };
+        self.calculatedMinDueEndDate = self.filter.ui.key_10.value2 ? self.filter.ui.key_10.value2 : self.getMinDueEndDate();
+
+
+
+
         self.checkDisabled = function (form) {
-            var hasCriteria = false, record, typeOfRecord;
+            var hasCriteria = false, record, typeOfRecord = 'undefined', recordValue;
             for (var key in self.filter.ui) {
                 if (!self.filter.ui.hasOwnProperty(key))
                     continue;
 
-                typeOfRecord = typeof self.filter.ui[key].value;
                 record = self.filter.ui[key];
+                if (record.hasOwnProperty('value') && record.value) {
+                    typeOfRecord = typeof record.value;
+                    recordValue = record.value;
+                }
+                else if (record.hasOwnProperty('value1') && record.value1) {
+                    typeOfRecord = typeof record.value1;
+                    recordValue = record.value1;
+                }
 
                 if (typeOfRecord === 'string')
                     record.value = record.value.trim();
 
-                if (typeOfRecord !== 'undefined' && record.value !== null) {
+                if (typeOfRecord !== 'undefined' && recordValue !== null) {
                     hasCriteria = true;
                     break;
                 }
