@@ -496,7 +496,12 @@ module.exports = function (app) {
          * @returns {string | null}
          */
         self.getDateFromTimeStamp = function (timestamp) {
-            return timestamp ? moment(timestamp).format(self.defaultDateFormat) : null
+            if (timestamp) {
+                // in case of long numbers, they will be having L at last. so remove L and change timestamp to moment date.
+                timestamp = Number(timestamp.toString().split('L')[0]);
+                return moment(timestamp).format(self.defaultDateFormat);
+            }
+            return null;
         };
 
         /**

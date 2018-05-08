@@ -5,41 +5,31 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
             model.setUserFilterService(userFilterService);
+            model.selectedReceivedDateFilterType = null;
             return model;
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             // Received date greater than
             if (model.ui['key_4'].value)
-                model.ui['key_4'].value = generator.getTimeStampFromDate(model.ui['key_4'].value);
+                model.ui['key_4'].value = generator.getTimeStampFromDate(model.ui['key_4'].value)+'L';
             // Received date less than
             else if (model.ui['key_6'].value)
-                model.ui['key_6'].value = generator.getTimeStampFromDate(model.ui['key_6'].value);
+                model.ui['key_6'].value = generator.getTimeStampFromDate(model.ui['key_6'].value)+'L';
             // Received date between
             else if (model.ui['key_11'].value1 && model.ui['key_11'].value2) {
-                model.ui['key_11'].value1 = generator.getTimeStampFromDate(model.ui['key_11'].value1);
-                model.ui['key_11'].value2 = generator.getTimeStampFromDate(model.ui['key_11'].value2);
+                model.ui['key_11'].value1 = generator.getTimeStampFromDate(model.ui['key_11'].value1)+'L';
+                model.ui['key_11'].value2 = generator.getTimeStampFromDate(model.ui['key_11'].value2)+'L';
             }
             // Due date between
             if (model.ui['key_10'].value1 && model.ui['key_10'].value2) {
-                model.ui['key_10'].value1 = generator.getTimeStampFromDate(model.ui['key_10'].value1);
-                model.ui['key_10'].value2 = generator.getTimeStampFromDate(model.ui['key_10'].value2);
+                model.ui['key_10'].value1 = generator.getTimeStampFromDate(model.ui['key_10'].value1)+'L';
+                model.ui['key_10'].value2 = generator.getTimeStampFromDate(model.ui['key_10'].value2)+'L';
             }
             // Due date exists
             model.ui['key_8'].value = model.ui['key_8'].value ? '-2000000000000L' : null;
 
             model.prepareSendUserFilter();
-
-            /*if (model.filterCriteria[4])
-                model.filterCriteria[4] = generator.getTimeStampFromDate(model.filterCriteria[4]);
-            if (model.filterCriteria[6])
-                model.filterCriteria[6] = generator.getTimeStampFromDate(model.filterCriteria[6]);
-            if (model.filterCriteria[11]) {
-                var from = model.filterCriteria[11].split(',')[0];
-                var to = model.filterCriteria[11].split(',')[1];
-                model.filterCriteria[6] = generator.getTimeStampFromDate(from) + ',' + generator.getTimeStampFromDate(to);
-            }*/
-
 
             delete model.selectedReceivedDateFilterType;
             return model;
@@ -64,7 +54,6 @@ module.exports = function (app) {
 
             // Due date exists
             model.ui['key_8'].value = (model.ui['key_8'].value === '-2000000000000L');
-
             return model;
         });
 

@@ -107,7 +107,7 @@
                                 </div>
                                 <div layout="row">
                                     <md-input-container flex>
-                                        <label for="action">{{lang.user_inbox_filter_action}}</label>
+                                        <label for="action">{{lang.user_inbox_filter_received_date}}</label>
                                         <md-select ng-model="ctrl.filter.selectedReceivedDateFilterType"
                                                    ng-change="ctrl.changeReceivedDateType($event)">
                                             <md-option ng-value="action.optionValue"
@@ -118,27 +118,15 @@
                                     </md-input-container>
                                     <!-- Received Date Greater Than -->
                                     <md-input-container ng-if="ctrl.filter.selectedReceivedDateFilterType === 4" flex>
-                                        <label>{{lang.user_inbox_filter_recieve_date_greater_than}}</label>
+                                        <label>{{lang.date}}</label>
                                         <md-datepicker ng-model="ctrl.filter.ui.key_4.value"></md-datepicker>
                                     </md-input-container>
                                     <!-- Received Date Less Than -->
                                     <md-input-container ng-if="ctrl.filter.selectedReceivedDateFilterType === 6" flex>
-                                        <label>{{lang.user_inbox_recieve_date_less_than}}</label>
+                                        <label>{{lang.date}}</label>
                                         <md-datepicker ng-model="ctrl.filter.ui.key_6.value"></md-datepicker>
                                     </md-input-container>
                                 </div>
-                                <!--<div layout="row" ng-if="ctrl.filter.selectedReceivedDateFilterType === 11">
-                                    &lt;!&ndash; Received Date Greater Than &ndash;&gt;
-                                    <md-input-container flex>
-                                        <label>{{lang.user_inbox_filter_recieve_date_greater_than}}</label>
-                                        <md-datepicker ng-model="ctrl.filter.ui.key_11.value1"></md-datepicker>
-                                    </md-input-container>
-                                    &lt;!&ndash; Received Date Less Than &ndash;&gt;
-                                    <md-input-container flex>
-                                        <label>{{lang.user_inbox_recieve_date_less_than}}</label>
-                                        <md-datepicker ng-model="ctrl.filter.ui.key_11.value2"></md-datepicker>
-                                    </md-input-container>
-                                </div>-->
                                 <fieldset flex layout="column" class="search-fieldset"
                                           ng-if="ctrl.filter.selectedReceivedDateFilterType === 11">
                                     <legend class="md-accent">{{lang.user_inbox_filter_recieved_date_between}}</legend>
@@ -177,12 +165,12 @@
                                 </fieldset>
 
                                 <div layout="row">
-                                    <!-- Due Date Exists -->
-                                    <md-switch ng-model="ctrl.filter.ui.key_8.value"
-                                               aria-label="{{lang.user_inbox_filter_due_date_exists}}">
-                                        <label>{{lang.user_inbox_filter_due_date_exists}} :
-                                            {{ctrl.filter.getTranslatedDueDate($event)}}</label>
-                                    </md-switch>
+                                    <!-- Due Date -->
+                                        <md-switch ng-model="ctrl.filter.ui.key_8.value"
+                                                   aria-label="{{lang.status}}">
+                                            <label>{{lang.user_inbox_filter_due_date_exists}} :
+                                                {{ctrl.filter.getTranslatedDueDate($event)}}</label>
+                                        </md-switch>
                                 </div>
                             </div>
                         </md-content>
