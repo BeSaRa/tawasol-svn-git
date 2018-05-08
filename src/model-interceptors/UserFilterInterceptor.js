@@ -12,19 +12,19 @@ module.exports = function (app) {
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             // Received date greater than
             if (model.ui['key_4'].value)
-                model.ui['key_4'].value = generator.getTimeStampFromDate(model.ui['key_4'].value)+'L';
+                model.ui['key_4'].value = generator.getTimeStampFromDate(model.ui['key_4'].value, true);
             // Received date less than
             else if (model.ui['key_6'].value)
-                model.ui['key_6'].value = generator.getTimeStampFromDate(model.ui['key_6'].value)+'L';
+                model.ui['key_6'].value = generator.getTimeStampFromDate(model.ui['key_6'].value, true);
             // Received date between
             else if (model.ui['key_11'].value1 && model.ui['key_11'].value2) {
-                model.ui['key_11'].value1 = generator.getTimeStampFromDate(model.ui['key_11'].value1)+'L';
-                model.ui['key_11'].value2 = generator.getTimeStampFromDate(model.ui['key_11'].value2)+'L';
+                model.ui['key_11'].value1 = generator.getTimeStampFromDate(model.ui['key_11'].value1, true);
+                model.ui['key_11'].value2 = generator.getTimeStampFromDate(model.ui['key_11'].value2, true);
             }
             // Due date between
             if (model.ui['key_10'].value1 && model.ui['key_10'].value2) {
-                model.ui['key_10'].value1 = generator.getTimeStampFromDate(model.ui['key_10'].value1)+'L';
-                model.ui['key_10'].value2 = generator.getTimeStampFromDate(model.ui['key_10'].value2)+'L';
+                model.ui['key_10'].value1 = generator.getTimeStampFromDate(model.ui['key_10'].value1, true);
+                model.ui['key_10'].value2 = generator.getTimeStampFromDate(model.ui['key_10'].value2, true);
             }
             // Due date exists
             model.ui['key_8'].value = model.ui['key_8'].value ? '-2000000000000L' : null;

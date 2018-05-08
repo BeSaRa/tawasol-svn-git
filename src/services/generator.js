@@ -507,10 +507,15 @@ module.exports = function (app) {
         /**
          * @description Gets timestamp from the provided date
          * @param date
-         * @returns {null}
+         * @param addL
+         * @returns {string | null}
          */
-        self.getTimeStampFromDate = function (date) {
-            return date ? moment(date, self.defaultDateFormat).valueOf() : null;
+        self.getTimeStampFromDate = function (date, addL) {
+            if (date) {
+                date = moment(date, self.defaultDateFormat).valueOf();
+                return addL ? date + 'L' : date;
+            }
+            return null;
         };
 
         self.documentStatusAndGridMap = {
