@@ -153,7 +153,6 @@ module.exports = function (app) {
                     }
                 });
 
-                self.selectedReceivedDateFilterType = null;
                 // Received date greater than
                 self.ui.key_4.value = generator.getDateFromTimeStamp(self.ui.key_4.value);
                 // Received date less than
@@ -161,7 +160,8 @@ module.exports = function (app) {
                 // Received date between
                 self.ui.key_11.value1 = generator.getDateFromTimeStamp(self.ui.key_11.value1);
                 self.ui.key_11.value2 = generator.getDateFromTimeStamp(self.ui.key_11.value2);
-                self.selectedReceivedDateFilterType = getSelectedDateType(['key_4', 'key_6', 'key_11']);
+
+                self.selectedReceivedDateFilterType = self.getSelectedDateType(['key_4', 'key_6', 'key_11']);
 
                 // Due date between
                 self.ui.key_10.value1 = generator.getDateFromTimeStamp(self.ui.key_10.value1);
@@ -184,8 +184,8 @@ module.exports = function (app) {
                 });
             };
 
-            var getSelectedDateType = function (dateKeys) {
-                var value, keyNo, selected;
+            UserFilter.prototype.getSelectedDateType = function (dateKeys) {
+                var value, keyNo, selected, self = this;
                 for (var key in self.ui) {
                     value = self.ui[key].hasOwnProperty('value') ? self.ui[key].value
                         : (self.ui[key].hasOwnProperty('value1') ? self.ui[key].value1 : null);
@@ -197,7 +197,7 @@ module.exports = function (app) {
                         break;
                     }
                 }
-                return selected;
+                return selected || null;
             };
 
             // don't remove CMSModelInterceptor from last line

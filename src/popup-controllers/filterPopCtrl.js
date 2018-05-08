@@ -105,7 +105,7 @@ module.exports = function (app) {
                 }
 
                 if (typeOfRecord === 'string')
-                    record.value = record.value.trim();
+                    recordValue = recordValue.trim();
 
                 if (typeOfRecord !== 'undefined' && recordValue !== null) {
                     hasCriteria = true;

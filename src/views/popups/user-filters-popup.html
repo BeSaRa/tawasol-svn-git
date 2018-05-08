@@ -135,17 +135,25 @@
                                         <md-input-container flex>
                                             <label>{{lang.search_module_start_date}}</label>
                                             <md-datepicker ng-model="ctrl.filter.ui.key_11.value1"
+                                                           name="receivedDateStart"
                                                            ng-change="ctrl.getMinReceivedEndDate($event)"
                                                            md-max-date="ctrl.calculatedMaxReceivedStartDate"
                                                            ng-required="ctrl.filter.ui.key_11.value2"></md-datepicker>
+                                            <div ng-messages="userFilter.receivedDateStart.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
                                         </md-input-container>
                                         <!-- Received Date To -->
                                         <md-input-container flex>
                                             <label>{{lang.search_module_end_date}}</label>
                                             <md-datepicker ng-model="ctrl.filter.ui.key_11.value2"
+                                                           name="receivedDateEnd"
                                                            ng-change="ctrl.getMaxReceivedStartDate($event)"
                                                            md-min-date="ctrl.calculatedMinReceivedEndDate"
                                                            ng-required="ctrl.filter.ui.key_11.value1"></md-datepicker>
+                                            <div ng-messages="userFilter.receivedDateEnd.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
                                         </md-input-container>
                                     </div>
                                 </fieldset>
@@ -157,17 +165,25 @@
                                         <md-input-container flex>
                                             <label>{{lang.search_module_start_date}}</label>
                                             <md-datepicker ng-model="ctrl.filter.ui.key_10.value1"
+                                                           name="dueDateStart"
                                                            ng-change="ctrl.getMinDueEndDate($event)"
                                                            md-max-date="ctrl.calculatedMaxDueStartDate"
                                                            ng-required="ctrl.filter.ui.key_10.value2"></md-datepicker>
+                                            <div ng-messages="userFilter.dueDateStart.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
                                         </md-input-container>
                                         <!-- Due Date To -->
                                         <md-input-container flex>
                                             <label>{{lang.search_module_end_date}}</label>
                                             <md-datepicker ng-model="ctrl.filter.ui.key_10.value2"
+                                                           name="dueDateEnd"
                                                            ng-change="ctrl.getMaxDueStartDate($event)"
                                                            md-min-date="ctrl.calculatedMinDueEndDate"
                                                            ng-required="ctrl.filter.ui.key_10.value1"></md-datepicker>
+                                            <div ng-messages="userFilter.dueDateEnd.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
                                         </md-input-container>
                                     </div>
                                 </fieldset>
