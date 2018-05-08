@@ -37,7 +37,8 @@ module.exports = function (app) {
                 .then(function (result) {
                     var method = result.data.rs ? 'success' : 'error',
                         message = result.data.rs ? langService.get('add_success').change({name: userFilter.getTranslatedName()}) : langService.get('error_messages');
-                    ignoreMessage ? null : toast[method](message);
+                    if (!ignoreMessage)
+                        toast[method](message);
                     return userFilter;
                 }).catch(function () {
                     toast.error(langService.get('error_messages'));
@@ -57,7 +58,8 @@ module.exports = function (app) {
                 .then(function (result) {
                     var method = result.data.rs ? 'success' : 'error',
                         message = result.data.rs ? langService.get('update_success').change({name: userFilter.getTranslatedName()}) : langService.get('error_messages');
-                    ignoreMessage ? null : toast[method];
+                    if (!ignoreMessage)
+                        toast[method](message);
                     userFilter.parsedExpression = angular.toJson(filter.filterCriteria);
                     return userFilter;
                 }).catch(function () {
