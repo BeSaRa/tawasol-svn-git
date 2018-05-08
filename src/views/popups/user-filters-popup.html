@@ -109,7 +109,7 @@
                                     <md-input-container flex>
                                         <label for="action">{{lang.user_inbox_filter_action}}</label>
                                         <md-select ng-model="ctrl.filter.selectedReceivedDateFilterType"
-                                        ng-change="ctrl.changeReceivedDateType($event)">
+                                                   ng-change="ctrl.changeReceivedDateType($event)">
                                             <md-option ng-value="action.optionValue"
                                                        ng-repeat="action in ctrl.receivedDateFilterTypes">
                                                 {{lang[action.optionLangKey]}}
@@ -127,25 +127,62 @@
                                         <md-datepicker ng-model="ctrl.filter.ui.key_6.value"></md-datepicker>
                                     </md-input-container>
                                 </div>
-                                <div layout="row" ng-if="ctrl.filter.selectedReceivedDateFilterType === 11">
-                                    <!-- Received Date Greater Than -->
+                                <!--<div layout="row" ng-if="ctrl.filter.selectedReceivedDateFilterType === 11">
+                                    &lt;!&ndash; Received Date Greater Than &ndash;&gt;
                                     <md-input-container flex>
                                         <label>{{lang.user_inbox_filter_recieve_date_greater_than}}</label>
                                         <md-datepicker ng-model="ctrl.filter.ui.key_11.value1"></md-datepicker>
                                     </md-input-container>
-                                    <!-- Received Date Less Than -->
+                                    &lt;!&ndash; Received Date Less Than &ndash;&gt;
                                     <md-input-container flex>
                                         <label>{{lang.user_inbox_recieve_date_less_than}}</label>
                                         <md-datepicker ng-model="ctrl.filter.ui.key_11.value2"></md-datepicker>
                                     </md-input-container>
-                                </div>
-                                <div layout="row">
-                                    <!-- Due Date -->
-                                    <md-input-container flex>
-                                    <label>{{lang.user_inbox_filter_due_date_exists}}</label>
-                                        <md-datepicker ng-model="ctrl.filter.ui.key_8.value"></md-datepicker>
-                                    </md-input-container>
+                                </div>-->
+                                <fieldset flex layout="column" class="search-fieldset"
+                                          ng-if="ctrl.filter.selectedReceivedDateFilterType === 11">
+                                    <legend class="md-accent">{{lang.user_inbox_filter_recieved_date_between}}</legend>
+                                    <div layout="row">
+                                        <!-- Received Date From -->
+                                        <md-input-container flex>
+                                            <label>{{lang.search_module_start_date}}</label>
+                                            <md-datepicker ng-model="ctrl.filter.ui.key_11.value1"
+                                                           ng-required="ctrl.filter.ui.key_11.value2"></md-datepicker>
+                                        </md-input-container>
+                                        <!-- Received Date To -->
+                                        <md-input-container flex>
+                                            <label>{{lang.search_module_end_date}}</label>
+                                            <md-datepicker ng-model="ctrl.filter.ui.key_11.value2"
+                                                           ng-required="ctrl.filter.ui.key_11.value1"></md-datepicker>
+                                        </md-input-container>
+                                    </div>
+                                </fieldset>
 
+                                <fieldset flex layout="column" class="search-fieldset">
+                                    <legend class="md-accent">{{lang.user_inbox_filter_due_date_between}}</legend>
+                                    <div layout="row">
+                                        <!-- Due Date From -->
+                                        <md-input-container flex>
+                                            <label>{{lang.search_module_start_date}}</label>
+                                            <md-datepicker ng-model="ctrl.filter.ui.key_10.value1"
+                                                           ng-required="ctrl.filter.ui.key_10.value2"></md-datepicker>
+                                        </md-input-container>
+                                        <!-- Due Date To -->
+                                        <md-input-container flex>
+                                            <label>{{lang.search_module_end_date}}</label>
+                                            <md-datepicker ng-model="ctrl.filter.ui.key_10.value2"
+                                                           ng-required="ctrl.filter.ui.key_10.value1"></md-datepicker>
+                                        </md-input-container>
+                                    </div>
+                                </fieldset>
+
+                                <div layout="row">
+                                    <!-- Due Date Exists -->
+                                    <md-switch ng-model="ctrl.filter.ui.key_8.value"
+                                               aria-label="{{lang.user_inbox_filter_due_date_exists}}">
+                                        <label>{{lang.user_inbox_filter_due_date_exists}} :
+                                            {{ctrl.filter.getTranslatedDueDate($event)}}</label>
+                                    </md-switch>
                                 </div>
                             </div>
                         </md-content>

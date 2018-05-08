@@ -88,6 +88,9 @@ module.exports = function (app) {
                 userFilterService = service;
                 return this;
             };
+            UserFilter.prototype.getTranslatedDueDate = function ($event) {
+                return this.ui.key_8.value ? langService.get('yes') : langService.get('no');
+            };
             UserFilter.prototype.saveUserFilter = function (ignoreMessage) {
                 return this.id ? this.modelUpdateUserFilter(ignoreMessage) : this.modelCreateUserFilter(ignoreMessage);
             };

@@ -36,7 +36,7 @@ module.exports = function (app) {
 
         self.receivedDateFilterTypes = [
             {
-                optionLangKey: 'not_found',
+                optionLangKey: 'none',
                 optionValue: null
             },
             {
