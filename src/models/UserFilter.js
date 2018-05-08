@@ -177,6 +177,10 @@ module.exports = function (app) {
                 return langService.current === 'ar' ? this.arName : this.enName;
             };
 
+            UserFilter.prototype.getNames = function (separator) {
+                return this.arName + ' ' + (separator ? separator : '-') + ' ' + this.enName;
+            };
+
             UserFilter.prototype.deleteFilter = function ($event, ignoreMessage) {
                 var self = this;
                 return dialog.confirmMessage(langService.get('confirm_remove').change({name: this.getTranslatedName()}), null, null, $event).then(function () {
