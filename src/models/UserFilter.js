@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('UserFilter', function (CMSModelInterceptor, toast, dialog, langService, _) {
+    app.factory('UserFilter', function (CMSModelInterceptor, toast, dialog, langService, _, generator) {
         'ngInject';
         return function UserFilter(model) {
             var self = this, userFilterService;
@@ -105,6 +105,27 @@ module.exports = function (app) {
             };
             UserFilter.prototype.prepareSendUserFilter = function () {
                 var self = this;
+
+                // Received date greater than
+                if (self.ui.key_4.value)
+                    self.ui.key_4.value = generator.getTimeStampFromDate(self.ui.key_4.value, true);
+                // Received date less than
+                else if (self.ui.key_6.value)
+                    self.ui.key_6.value = generator.getTimeStampFromDate(self.ui.key_6.value, true);
+                // Received date between
+                else if (self.ui.key_11.value1 && self.ui.key_11.value2) {
+                    self.ui.key_11.value1 = generator.getTimeStampFromDate(self.ui.key_11.value1, true);
+                    self.ui.key_11.value2 = generator.getTimeStampFromDate(self.ui.key_11.value2, true);
+                }
+                // Due date between
+                if (self.ui.key_10.value1 && self.ui.key_10.value2) {
+                    self.ui.key_10.value1 = generator.getTimeStampFromDate(self.ui.key_10.value1, true);
+                    self.ui.key_10.value2 = generator.getTimeStampFromDate(self.ui.key_10.value2, true);
+                }
+                // Due date exists
+                self.ui.key_8.value = self.ui.key_8.value ? '-2000000000000L' : null;
+
+
                 _.map(availableKeys, function (number) {
                     var two = Object.keys(self.ui['key_' + number]).length > 1;
                     self.filterCriteria[number] = two ? (self.ui['key_' + number]['value1'] + ',' + self.ui['key_' + number]['value2']) : self.ui['key_' + number].value;
@@ -131,6 +152,24 @@ module.exports = function (app) {
                         self.ui['key_' + key].value = _getCorrectValue(value);
                     }
                 });
+
+                self.selectedReceivedDateFilterType = null;
+                // Received date greater than
+                self.ui.key_4.value = generator.getDateFromTimeStamp(self.ui.key_4.value);
+                // Received date less than
+                self.ui.key_6.value = generator.getDateFromTimeStamp(self.ui.key_6.value);
+                // Received date between
+                self.ui.key_11.value1 = generator.getDateFromTimeStamp(self.ui.key_11.value1);
+                self.ui.key_11.value2 = generator.getDateFromTimeStamp(self.ui.key_11.value2);
+                self.selectedReceivedDateFilterType = getSelectedDateType(['key_4', 'key_6', 'key_11']);
+
+                // Due date between
+                self.ui.key_10.value1 = generator.getDateFromTimeStamp(self.ui.key_10.value1);
+                self.ui.key_10.value2 = generator.getDateFromTimeStamp(self.ui.key_10.value2);
+
+                // Due date exists
+                self.ui.key_8.value = (self.ui.key_8.value === '-2000000000000L');
+
                 return this;
             };
 
@@ -143,6 +182,22 @@ module.exports = function (app) {
                 return dialog.confirmMessage(langService.get('confirm_remove').change({name: this.getTranslatedName()}), null, null, $event).then(function () {
                     return userFilterService.deleteUserFilter(self, ignoreMessage);
                 });
+            };
+
+            var getSelectedDateType = function (dateKeys) {
+                var value, keyNo, selected;
+                for (var key in self.ui) {
+                    value = self.ui[key].hasOwnProperty('value') ? self.ui[key].value
+                        : (self.ui[key].hasOwnProperty('value1') ? self.ui[key].value1 : null);
+
+                    keyNo = Number(key.substr(key.indexOf('_') + 1));
+
+                    if (dateKeys.indexOf(key) > -1 && value) {
+                        selected = keyNo;
+                        break;
+                    }
+                }
+                return selected;
             };
 
             // don't remove CMSModelInterceptor from last line

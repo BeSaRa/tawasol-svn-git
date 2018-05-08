@@ -60,7 +60,9 @@ module.exports = function (app) {
                         message = result.data.rs ? langService.get('update_success').change({name: userFilter.getTranslatedName()}) : langService.get('error_messages');
                     if (!ignoreMessage)
                         toast[method](message);
+
                     userFilter.parsedExpression = angular.toJson(filter.filterCriteria);
+
                     return userFilter;
                 }).catch(function () {
                     toast.error(langService.get('error_messages'));
