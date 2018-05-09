@@ -122,12 +122,14 @@
                                     <!-- Received Date Greater Than -->
                                     <md-input-container ng-if="ctrl.filter.selectedReceivedDateFilterType === 4" flex>
                                         <label>{{lang.date}}</label>
-                                        <md-datepicker ng-model="ctrl.filter.ui.key_4.value"></md-datepicker>
+                                        <md-datepicker ng-model="ctrl.filter.ui.key_4.value"
+                                                       md-open-on-focus></md-datepicker>
                                     </md-input-container>
                                     <!-- Received Date Less Than -->
                                     <md-input-container ng-if="ctrl.filter.selectedReceivedDateFilterType === 6" flex>
                                         <label>{{lang.date}}</label>
-                                        <md-datepicker ng-model="ctrl.filter.ui.key_6.value"></md-datepicker>
+                                        <md-datepicker ng-model="ctrl.filter.ui.key_6.value"
+                                                       md-open-on-focus></md-datepicker>
                                     </md-input-container>
                                 </div>
                                 <fieldset flex layout="column" class="search-fieldset"
@@ -138,7 +140,7 @@
                                         <md-input-container flex>
                                             <label>{{lang.search_module_start_date}}</label>
                                             <md-datepicker ng-model="ctrl.filter.ui.key_11.value1"
-                                                           name="receivedDateStart"
+                                                           name="receivedDateStart" md-open-on-focus
                                                            ng-change="ctrl.getMinReceivedEndDate($event)"
                                                            md-max-date="ctrl.calculatedMaxReceivedStartDate"
                                                            ng-required="ctrl.filter.ui.key_11.value2"></md-datepicker>
@@ -150,7 +152,7 @@
                                         <md-input-container flex>
                                             <label>{{lang.search_module_end_date}}</label>
                                             <md-datepicker ng-model="ctrl.filter.ui.key_11.value2"
-                                                           name="receivedDateEnd"
+                                                           name="receivedDateEnd" md-open-on-focus
                                                            ng-change="ctrl.getMaxReceivedStartDate($event)"
                                                            md-min-date="ctrl.calculatedMinReceivedEndDate"
                                                            ng-required="ctrl.filter.ui.key_11.value1"></md-datepicker>
@@ -168,7 +170,7 @@
                                         <md-input-container flex>
                                             <label>{{lang.search_module_start_date}}</label>
                                             <md-datepicker ng-model="ctrl.filter.ui.key_10.value1"
-                                                           name="dueDateStart"
+                                                           name="dueDateStart" md-open-on-focus
                                                            ng-change="ctrl.getMinDueEndDate($event)"
                                                            md-max-date="ctrl.calculatedMaxDueStartDate"
                                                            ng-required="ctrl.filter.ui.key_10.value2"></md-datepicker>
@@ -180,7 +182,7 @@
                                         <md-input-container flex>
                                             <label>{{lang.search_module_end_date}}</label>
                                             <md-datepicker ng-model="ctrl.filter.ui.key_10.value2"
-                                                           name="dueDateEnd"
+                                                           name="dueDateEnd" md-open-on-focus
                                                            ng-change="ctrl.getMaxDueStartDate($event)"
                                                            md-min-date="ctrl.calculatedMinDueEndDate"
                                                            ng-required="ctrl.filter.ui.key_10.value1"></md-datepicker>
@@ -193,11 +195,11 @@
 
                                 <div layout="row">
                                     <!-- Due Date -->
-                                        <md-switch ng-model="ctrl.filter.ui.key_8.value"
-                                                   aria-label="{{lang.status}}">
-                                            <label>{{lang.user_inbox_filter_due_date_exists}} :
-                                                {{ctrl.filter.getTranslatedDueDate($event)}}</label>
-                                        </md-switch>
+                                    <md-switch ng-model="ctrl.filter.ui.key_8.value"
+                                               aria-label="{{lang.status}}">
+                                        <label>{{lang.user_inbox_filter_due_date_exists}} :
+                                            {{ctrl.filter.getTranslatedDueDate($event)}}</label>
+                                    </md-switch>
                                 </div>
                             </div>
                         </md-content>

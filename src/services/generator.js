@@ -513,8 +513,7 @@ module.exports = function (app) {
         self.getTimeStampFromDate = function (date, addL) {
             if (date) {
                 date = moment(date, self.defaultDateFormat).valueOf();
-                /*return addL ? date + 'L' : date;*/
-                return date;
+                return addL ? date + 'L' : date;
             }
             return null;
         };

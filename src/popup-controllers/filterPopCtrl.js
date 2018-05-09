@@ -95,10 +95,12 @@ module.exports = function (app) {
                     continue;
 
                 record = self.filter.ui[key];
-                if (record.hasOwnProperty('value') && record.value) {
+                // if single value key and key has value or key is for document type === 0 (outgoing)
+                if (record.hasOwnProperty('value') && (record.value || (record.value === 0 && key === 'key_2'))) {
                     typeOfRecord = typeof record.value;
                     recordValue = record.value;
                 }
+                // if double value key and has value
                 else if (record.hasOwnProperty('value1') && record.value1) {
                     typeOfRecord = typeof record.value1;
                     recordValue = record.value1;
