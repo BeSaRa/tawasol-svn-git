@@ -71,6 +71,7 @@
                                         <label for="docType">{{lang.user_inbox_filter_doc_type}}</label>
                                         <md-select name="docType" id="docType"
                                                    ng-model="ctrl.filter.ui.key_2.value">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option ng-value="docType.lookupKey"
                                                        ng-repeat="docType in ctrl.documentTypes">
                                                 {{docType.getTranslatedName()}}
@@ -89,6 +90,7 @@
                                         <label for="sender">{{lang.user_inbox_filter_sender}}</label>
                                         <md-select name="sender" id="sender"
                                                    ng-model="ctrl.filter.ui.key_9.value">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option ng-value="sender.domainName" ng-repeat="sender in ctrl.senders">
                                                 {{sender.getTranslatedName()}}
                                             </md-option>
@@ -99,6 +101,7 @@
                                         <label for="action">{{lang.user_inbox_filter_action}}</label>
                                         <md-select name="action" id="action"
                                                    ng-model="ctrl.filter.ui.key_7.value">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option ng-value="action.id" ng-repeat="action in ctrl.actions">
                                                 {{action.getTranslatedName()}}
                                             </md-option>

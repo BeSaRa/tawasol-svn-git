@@ -1,5 +1,15 @@
 module.exports = function (app) {
-    app.service('userFilterService', function (urlService, langService, toast, employeeService, $http, $q, dialog, cmsTemplate, generator, UserFilter, _) {
+    app.service('userFilterService', function (urlService,
+                                               langService,
+                                               toast,
+                                               employeeService,
+                                               $http,
+                                               $q,
+                                               dialog,
+                                               cmsTemplate,
+                                               generator,
+                                               UserFilter,
+                                               _) {
         'ngInject';
         var self = this;
         self.serviceName = 'userFilterService';
@@ -127,7 +137,8 @@ module.exports = function (app) {
                     locals: {
                         filter: new UserFilter({
                             userId: employeeService.getEmployee().id,
-                            ouId: employeeService.getEmployee().getOUID()
+                            ouId: employeeService.getEmployee().getOUID(),
+                            sortOptionId: generator.createNewID(self.userFilters, 'sortOptionId')
                         }),
                         editMode: false
                     }

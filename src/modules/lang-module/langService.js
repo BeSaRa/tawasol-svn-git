@@ -255,6 +255,7 @@ module.exports = function (app) {
         /**
          * @description prepare localization
          * @param localization
+         * @param prepare
          */
         self.prepareLocalization = function (localization, prepare) {
 
