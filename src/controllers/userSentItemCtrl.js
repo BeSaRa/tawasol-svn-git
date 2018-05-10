@@ -19,7 +19,9 @@ module.exports = function (app) {
                                                  correspondenceSiteService,
                                                  WorkItem,
                                                  ResolveDefer,
-                                                 generator) {
+                                                 generator,
+                                                 dialog,
+                                                 employeeService) {
         'ngInject';
         var self = this;
 
@@ -132,6 +134,16 @@ module.exports = function (app) {
          */
         self.recallSingle = function (userSentItem, $event) {
             console.log('recall single : ', userSentItem);
+               dialog.showPrompt($event,langService.get('transfer_reason')+'?','','').then(function (reason) {
+                   userSentItemService.recallSingleWorkItem(userSentItem.wfId, employeeService.getEmployee().domainName, reason).then(function (result) {
+                       if(result){
+                           toast.success(langService.get('transfer_mail_success'));
+                       }
+                   }).catch(function (error) {
+                       toast.error(langService.get('work_item_not_found').change({wobNumber: userSentItem.wfId}));
+                   });
+               });
+
         };
 
         /**
@@ -441,9 +453,10 @@ module.exports = function (app) {
                 icon: 'tag',
                 text: 'grid_action_recall',
                 shortcut: true,
+                showInView: false,
                 callback: self.recallSingle,
                 class: "action-red",
-                hide: true, /*In Phase 2*/
+                hide: false, /*In Phase 2*/
                 checkShow: self.checkToShowAction
             },
             // Reassign
