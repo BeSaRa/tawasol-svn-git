@@ -4,10 +4,12 @@ module.exports = function (app) {
             'ngInject';
             return function (scope, element, attrs, ctrl) {
                 var form = angular.element(element);
+                var formInScope = scope[attrs.name];
                 form.on('keydown', function (e) {
                     var code = e.keyCode || e.which;
-                    if (code === 13) {
+                    if (code === 13 && formInScope.$valid) {
                         e.preventDefault();
+                        console.log(scope[attrs.name]);
                         angular.element('#' + attrs.enterSubmitDirective).click();
                     }
                 });
