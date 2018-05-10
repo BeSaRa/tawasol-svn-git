@@ -165,5 +165,31 @@ module.exports = function (app) {
         }
 
 
+        /**
+         * show a prompt dialog
+         * @param event
+         * @param text
+         * @param event
+         * @param placeHolder
+         * @return user input
+         */
+        self.showPrompt = function(ev,title,text,placeHolder) {
+
+            var confirm = $mdDialog.prompt()
+                .title(title)
+                .textContent(text)
+                .placeholder(placeHolder)
+                .targetEvent(ev)
+                .required(true)
+                .ok('Ok')
+                .cancel('Cancel');
+
+            return $mdDialog.show(confirm).then(function (result) {
+                return result;
+            });
+
+        };
+
+
     });
 };
