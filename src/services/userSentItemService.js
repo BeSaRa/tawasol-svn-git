@@ -49,5 +49,23 @@ module.exports = function (app) {
          * @private
          */
         self._sharedMethods = generator.generateSharedMethods(self.deleteSentItem, self.updateSentItem);
+
+        /**
+         * @description recall single WorkItem again to user inbox.
+         * @returns WorkItem status
+         */
+
+        self.recallSingleWorkItem = function (wobNumber,user,comment) {
+            return $http
+                .put((urlService.userInbox + '/' + wobNumber + '/reassign'), {
+                    user: user,
+                    comment: comment
+                })
+                .then(function (result) {
+                    return result.data.rs;
+                });
+        };
+
+
     });
 };
