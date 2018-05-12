@@ -32,8 +32,6 @@ module.exports = function (app) {
                                                    counterService,
                                                    correspondenceService,
                                                    favoriteDocumentsService,
-                                                   favoriteDocumentsService,
-                                                   favoriteDocumentsService,
                                                    mailNotificationService
                                                    //centralArchives
     ) {
@@ -412,7 +410,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -502,8 +500,9 @@ module.exports = function (app) {
             searchedOutgoingDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
                     self.reloadSearchedOutgoingDocument(self.grid.page)
-                        .then(function(){
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            ;
                         });
                 });
             // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
@@ -649,8 +648,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadMainDocument = function (searchedOutgoingDocument, $event) {
-
-           downloadService.controllerMethod
+            downloadService.controllerMethod
                 .mainDocumentDownload(searchedOutgoingDocument.vsId);
         };
 
@@ -660,7 +658,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadCompositeDocument = function (searchedOutgoingDocument, $event) {
-            //console.log('download composite document for searched outgoing document : ', searchedOutgoingDocument);
             downloadService.controllerMethod
                 .compositeDocumentDownload(searchedOutgoingDocument.vsId);
         };
@@ -671,10 +668,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendLinkToDocumentByEmail = function (searchedOutgoingDocument, $event) {
-            //console.log('send link to document for searched outgoing document : ', searchedOutgoingDocument);
             downloadService.getMainDocumentEmailContent(searchedOutgoingDocument.vsId).then(function (result) {
-                var msg = "<p>please use the (right click + save link as) option to download the message file from the below link ... </p><a href='"+result+"' download='Tawasol.msg' onclick='return false;'>"+"Download the message file"+"</a>";
-                dialog.successMessage(msg);
+                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                    result: result,
+                    filename: 'Tawasol.msg'
+                }));
                 return true;
             });
         };
@@ -685,10 +683,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendCompositeDocumentAsAttachmentByEmail = function (searchedOutgoingDocument, $event) {
-            //console.log('send composite document as attachment for searched outgoing document : ', searchedOutgoingDocument);
             downloadService.getCompositeDocumentEmailContent(searchedOutgoingDocument.vsId).then(function (result) {
-                var msg = "<p>please use the (right click + save link as) option to download the message file from the below link ... </p><a href='"+result+"' download='Tawasol.msg' onclick='return false;'>"+"Download the message file"+"</a>";
-                dialog.successMessage(msg);
+                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                    result: result,
+                    filename: 'Tawasol.msg'
+                }));
                 return true;
             });
         };
@@ -719,10 +718,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.getLink = function (searchedOutgoingDocument, $event) {
-            //console.log('get link for searched outgoing document : ', searchedOutgoingDocument.vsId);
             viewDocumentService.loadDocumentViewUrlWithOutEdit(searchedOutgoingDocument.vsId).then(function (result) {
-                var docLink = "<a target='_blank' href='"+result+"'>"+result+"</a>";
-                dialog.successMessage(docLink);
+                //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
+                dialog.successMessage(langService.get('link_message').change({result: result}));
                 return true;
             });
         };
@@ -809,7 +807,8 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadSearchedOutgoingDocument(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            ;
                             new ResolveDefer(defer);
                         })
                 })
