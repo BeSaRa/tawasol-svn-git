@@ -301,7 +301,9 @@
                 // user filters.
                 .addToAllWithBase('userFilters', '/cms-entity/user/user-inbox-filter')
                 // all users who set this user as proxy
-                .addToAllWithBase('usersWhoSetYouAsProxy', 'cms-entity/admin/ou-application-user/proxy/');
+                .addToAllWithBase('usersWhoSetYouAsProxy', 'cms-entity/admin/ou-application-user/proxy/')
+                // G2G inbox
+                .addToAllWithBase('g2gInbox', '/g2g/getInboxByOU');
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

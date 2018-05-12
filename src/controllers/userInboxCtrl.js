@@ -95,7 +95,6 @@ module.exports = function (app) {
             return model.getInfo().documentClass;
         }
 
-
         /**
          * @description Get the sorting key for information or lookup model
          * @param property

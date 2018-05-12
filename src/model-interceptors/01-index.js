@@ -85,4 +85,5 @@ module.exports = function (app) {
     require('./UserCommentInterceptor')(app);
     require('./UserFilterInterceptor')(app);
     require('./CorrespondenceSiteViewInterceptor')(app);
+    require('./G2GInterceptor')(app);
 };

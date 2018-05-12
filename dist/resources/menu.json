@@ -862,5 +862,29 @@
         "sort_order": 6,
         "active": true,
         "sort_value": 0
+    },
+    {
+        "ID": 87,
+        "lang_key": "menu_item_government_returned_mail",
+        "icon": "inbox-arrow-down",
+        "parent": 85,
+        "link": "returned",
+        "state": "app.g2g.returned",
+        "icon_type": "font",
+        "sort_order": 6,
+        "active": true,
+        "sort_value": 0
+    },
+    {
+        "ID": 88,
+        "lang_key": "menu_item_government_sent_items",
+        "icon": "inbox-arrow-up",
+        "parent": 85,
+        "link": "sent-items",
+        "state": "app.g2g.sent-items",
+        "icon_type": "font",
+        "sort_order": 6,
+        "active": true,
+        "sort_value": 0
     }
 ]

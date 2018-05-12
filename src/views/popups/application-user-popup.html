@@ -115,8 +115,11 @@
                                             <label for="jobTitle">{{lang.job_title}}</label>
                                             <md-select id="jobTitle" name="jobTitle" required
                                                        ng-model="ctrl.applicationUser.jobTitle">
-                                                <md-option ng-if="jobTitle.status" ng-value="jobTitle.lookupKey"
+                                                <md-option ng-value="jobTitle.lookupKey"
+                                                           ng-disabled="!jobTitle.status"
+                                                           tooltip="{{(!jobTitle.status) ? lang.inactive : ''}}"
                                                            ng-repeat="jobTitle in ctrl.jobTitles track by $index">
+                                                    <!--ng-if="jobTitle.status"-->
                                                     {{jobTitle.getTranslatedName()}}
                                                 </md-option>
                                             </md-select>

@@ -488,7 +488,7 @@ module.exports = function (app) {
                         'ngInject';
                         return distributionListService.loadDistributionLists();
                     },
-                    correspondenceSiteTypes :function(correspondenceSiteTypeService){
+                    correspondenceSiteTypes: function (correspondenceSiteTypeService) {
                         'ngInject';
                         return correspondenceSiteTypeService.loadCorrespondenceSiteTypes();
                     }
@@ -1364,9 +1364,35 @@ module.exports = function (app) {
             })
             .state('app.g2g.inbox', {
                 url: '/inbox',
-                template: cmsTemplateProvider.getView('g2g'),
-                controller: function () {
-
+                template: cmsTemplateProvider.getView('g2g-inbox'),
+                controller: 'g2gInboxCtrl',
+                controllerAs: 'ctrl',
+                resolve: {
+                    g2gInboxes: function (g2gInboxService) {
+                        return g2gInboxService.loadG2gInboxes();
+                    }
+                }
+            })
+            .state('app.g2g.returned', {
+                url: '/returned',
+                template: cmsTemplateProvider.getView('g2g-returned'),
+                controller: 'g2gInboxCtrl',
+                controllerAs: 'ctrl',
+                resolve: {
+                    g2gInboxes: function (g2gInboxService) {
+                        return g2gInboxService.loadG2gInboxes();
+                    }
+                }
+            })
+            .state('app.g2g.sent-items', {
+                url: '/sent-items',
+                template: cmsTemplateProvider.getView('g2g-sent-items'),
+                controller: 'g2gInboxCtrl',
+                controllerAs: 'ctrl',
+                resolve: {
+                    g2gInboxes: function (g2gInboxService) {
+                        return g2gInboxService.loadG2gInboxes();
+                    }
                 }
             })
     });

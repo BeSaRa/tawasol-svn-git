@@ -1,0 +1,110 @@
+<!-- start of view -->
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_government_inbox}}</span>
+            <md-button ng-click="ctrl.reloadG2gInboxes()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple
+                                       ng-model="ctrl.selectedG2gInboxes"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.order">
+                                    <tr md-row>
+                                        <th colspan="{{ctrl.selectedG2gInboxes.length > 1 ? 11 : 12}}"
+                                            ng-if="ctrl.selectedG2gInboxes.length" md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedG2gInboxes.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
+                                            </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gInboxes.length" md-column
+                                            md-order-by="correspondence.docSubject">
+                                            <span>{{lang.subject}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gInboxes.length" md-column
+                                            md-order-by="correspondence.docType">
+                                            <span>{{lang.document_type}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gInboxes.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('securityLevel', 'Information')}}">
+                                            <span>{{lang.security_level}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gInboxes.length" md-column
+                                            md-order-by="correspondence.refDocNumber">
+                                            <span>{{lang.document_number}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gInboxes.length" md-column
+                                            md-order-by="correspondence.g2gRefNO">
+                                            <span>{{lang.g2g_book_number}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gInboxes.length" md-column
+                                            md-order-by="correspondence.lastModified">
+                                            <span>{{lang.received_date}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gInboxes.length" md-column>
+                                            <!-- Grid Actions -->
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="g2gInbox"
+                                        grid-right-click-directive="g2gInbox"
+                                        model="g2gInbox"
+                                        selected-length="{{ctrl.selectedG2gInboxes.length ? ctrl.selectedG2gInboxes.length : 0}}"
+                                        ng-repeat="g2gInbox in ctrl.g2gInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                        <td md-cell md-truncate class="subject">
+                                            <a href="" class="view-doc" md-truncate
+                                               ng-if="g2gInbox.hasContent()"
+                                               title="{{g2gInbox.correspondence.docSubject}}"
+                                               ng-click="ctrl.viewDocument(g2gInbox, $event)">{{g2gInbox.correspondence.docSubject}}</a>
+                                            <span ng-if="!g2gInbox.hasContent()"
+                                                  title="{{g2gInbox.correspondence.docSubject}}">{{g2gInbox.correspondence.docSubject}}</span>
+                                        </td>
+                                        <td md-cell>{{g2gInbox.correspondence.docType}}</td>
+                                        <td md-cell>{{g2gInbox.securityLevel.getTranslatedName()}}</td>
+                                        <td md-cell>{{g2gInbox.correspondence.refDocNumber}}</td>
+                                        <td md-cell>{{g2gInbox.correspondence.g2gRefNO}}</td>
+                                        <td md-cell>{{g2gInbox.correspondence.lastModified}}</td>
+                                        <td md-cell class="p-r0"
+                                            ng-if="ctrl.selectedG2gInboxes.length < 2">
+                                            <div layout-align="start center" flex ng-if="!ctrl.selectedG2gInboxes.length
+                                                          || ctrl.selectedG2gInboxes.length===1 && ctrl.selectedG2gInboxes[0].generalStepElm.workObjectNumber === g2gInbox.generalStepElm.workObjectNumber">
+                                                <grid-actions-directive menu-direction="horizontal"
+                                                                        grid-actions="ctrl.gridActions"
+                                                                        model="g2gInbox"
+                                                                        shortcut="true">
+                                                </grid-actions-directive>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.g2gInboxes.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>
+<!-- end of view -->

@@ -26,4 +26,5 @@ module.exports = function (app) {
     // require('./prepare-outgoing-e2e')(app);
     // require('./attachment-types-e2e')(app);
     //require('./manage-correspondence-sites-e2e')(app);
+    // require('./g-2-g-e2e')(app);
 };

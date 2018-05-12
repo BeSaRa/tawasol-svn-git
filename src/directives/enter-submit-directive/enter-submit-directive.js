@@ -4,13 +4,13 @@ module.exports = function (app) {
             'ngInject';
             return function (scope, element, attrs, ctrl) {
                 var form = angular.element(element);
-                var formInScope = scope[attrs.name];
                 form.on('keydown', function (e) {
                     var code = e.keyCode || e.which;
+                    var formInScope = scope[attrs.name];
                     if (code === 13 && formInScope.$valid) {
                         e.preventDefault();
                         console.log(scope[attrs.name]);
-                        angular.element('#' + attrs.enterSubmitDirective).click();
+                        angular.element('#' + attrs['enterSubmitDirective']).click();
                     }
                 });
             }
@@ -18,11 +18,11 @@ module.exports = function (app) {
         .directive('ngEnter', function () {
             'ngInject';
             return function (scope, element, attrs) {
-                element.on('keydown keypres', function (e) {
+                element.on('keydown keypress', function (e) {
                     var code = e.keyCode || e.which;
                     if (code === 13) {
                         scope.$apply(function () {
-                            scope.$eval(attrs.ngEnter);
+                            scope.$eval(attrs['ngEnter']);
                         });
                         e.preventDefault();
                     }

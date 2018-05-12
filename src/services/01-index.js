@@ -101,4 +101,5 @@ module.exports = function (app) {
     require('./correspondenceStorageService')(app);
     require('./rankService')(app);
     require('./userFilterService')(app);
+    require('./g2gInboxService')(app);
 };

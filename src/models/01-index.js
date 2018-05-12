@@ -136,4 +136,5 @@ module.exports = function (app) {
     require('./Rank')(app);
     require('./UserFilter')(app);
     require('./CorrespondenceSiteView')(app);
+    require('./G2G')(app);
 };

@@ -40,17 +40,17 @@
   font-size: 12px;
   font-weight: bold;
   &.date {
-    &.passed {
-      color: #FFFFFF;
-      background: #FF0000;
+    &.past {
+      color: #FFFFFF !important;
+      background: #FF0000 !important;
     }
     &.today {
-      color: #FFFFFF;
-      background: #308DFC;
+      color: #FFFFFF !important;
+      background: #308DFC !important;
     }
     &.future {
-      color: #FFFFFF;
-      background: #32CD32;
+      color: #FFFFFF !important;
+      background: #32CD32 !important;
     }
   }
 }

@@ -490,16 +490,18 @@ module.exports = function (app) {
         };
 
         self.defaultDateFormat = 'YYYY-MM-DD';
+        self.defaultDateTimeFormat = 'YYYY-MM-DD hh:mm:ss A';
         /**
          * @description Gets the date in default format
          * @param timestamp
+         * @param dateAndTime
          * @returns {string | null}
          */
-        self.getDateFromTimeStamp = function (timestamp) {
+        self.getDateFromTimeStamp = function (timestamp, dateAndTime) {
             if (timestamp) {
                 // in case of long numbers, they will be having L at last. so remove L and change timestamp to moment date.
                 timestamp = Number(timestamp.toString().split('L')[0]);
-                return moment(timestamp).format(self.defaultDateFormat);
+                return moment(timestamp).format(dateAndTime ? self.defaultDateTimeFormat : self.defaultDateFormat);
             }
             return null;
         };
