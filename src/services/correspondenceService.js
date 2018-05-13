@@ -2283,7 +2283,18 @@ module.exports = function (app) {
         };
 
         self.loadRelatedThingsForCorrespondence = function (correspondence) {
-            // return $http.get(urlService.)
+            var info = correspondence.getInfo();
+            return $http
+                .get(_createUrlSchema(null, info.documentClass, ['related-objects', info.vsId].join('/')))
+                .then(function (result) {
+                    result = result.data.rs;
+                    result.relatedDocs = self.interceptReceivedCollectionBasedOnEachDocumentClass(result.linkedDocs);
+                    return {
+                        ATTACHMENTS: generator.interceptReceivedCollection('Attachment', generator.generateCollection(result.linkedAttachments, Attachment)),
+                        RELATED_BOOKS: result.relatedDocs,
+                        RELATED_OBJECTS: generator.interceptReceivedCollection('linkedObject', generator.generateCollection(result.linkedObjects, LinkedObject))
+                    };
+                })
         };
         /**
          * @description display the PartialExport dialog to select the correspondence sites.
@@ -2316,7 +2327,7 @@ module.exports = function (app) {
                 details = partialExport.getDetails(),
                 url = _createUrlSchema(null, info.documentClass, ['book', info.vsId, details.url].join('/'));
             return $http
-                .put(url, generator.interceptSendInstance(['PartialExport',details.interceptor], partialExport))
+                .put(url, generator.interceptSendInstance(['PartialExport', details.interceptor], partialExport))
                 .then(function (result) {
                     if (!ignoreMessage) {
                         toast.success(langService.get('export_success'));

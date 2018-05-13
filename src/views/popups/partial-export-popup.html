@@ -29,7 +29,16 @@
                                 </div>
                             </div>
                             <div ng-if="ctrl.exportType !== 1" layout="row">
-
+                                <div flex ng-repeat="option in ctrl.exportOptions" layout="column">
+                                    <div>{{lang.get(ctrl.labels[$index])}}</div>
+                                    <br/>
+                                    <div ng-repeat="item in ctrl.loadRelatedThings[option]">
+                                        <md-checkbox aria-label="item"
+                                                     ng-click="ctrl.toggleSelectedItem(item , option)">
+                                            {{item.getTranslatedName()}}
+                                        </md-checkbox>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </md-content>

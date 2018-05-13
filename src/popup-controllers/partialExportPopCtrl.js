@@ -2,9 +2,11 @@ module.exports = function (app) {
     app.controller('partialExportPopCtrl', function (sites,
                                                      $timeout,
                                                      _,
+                                                     generator,
                                                      PartialExportCollection,
                                                      rootEntity,
                                                      langService,
+                                                     SiteView,
                                                      Site,
                                                      ignoreMessage,
                                                      dialog,
@@ -67,10 +69,40 @@ module.exports = function (app) {
             return label.toLowerCase();
         });
 
+        self.loadRelatedThings = null;
+
         self.onChangeExportType = function () {
             self.partialExportList = self.partialExportList.changeExportType();
             if (self.exportType === 2) {
+                correspondenceService
+                    .loadRelatedThingsForCorrespondence(self.correspondence)
+                    .then(function (result) {
+                        self.loadRelatedThings = result;
+                    });
+            }
+        };
 
+        function _selectedItemExists(item, option) {
+            return (_getItemPosition(item, option) !== -1);
+        }
+
+        function _getItemPosition(item, option) {
+            return self.partialExportList.exportItems[option].indexOf(item);
+        }
+
+        function _addItem(item, option) {
+            self.partialExportList.exportItems[option].push(item);
+        }
+
+        function _removeItem(item, option) {
+            self.partialExportList.exportItems[option].splice(_getItemPosition(item, option), 1);
+        }
+
+        self.toggleSelectedItem = function (item, option) {
+            if (_selectedItemExists(item, option)) {
+                _removeItem(item, option);
+            } else {
+                _addItem(item, option);
             }
         };
 
@@ -464,6 +496,31 @@ module.exports = function (app) {
                 .then(function () {
                     return dialog.hide(self.correspondence);
                 });
-        }
+        };
+
+        self.getCorrespondenceSites_DL = function ($event) {
+            /*return correspondenceViewService.getCorrespondenceSitesByDistributionListId(self.selectedDistributionList)
+                .then(function (result) {
+                    self.subSearchResult_DL = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+                });*/
+
+            var sites = _.map(self.selectedDistributionList.distributionListMembers, function (member) {
+                return member.site;
+            });
+            var siteViews = generator.generateCollection(sites, SiteView, self._sharedMethods);
+            siteViews = generator.interceptReceivedCollection('SiteView', siteViews);
+
+            self.subSearchResult_DL = _.filter(_.map(siteViews, _mapSubSites), _filterSubSites);
+
+        };
+
+        /**
+         * @description empty the subSearch result and selected to hide the search result grid.
+         */
+        self.onCloseSearch_DL = function () {
+            self.subSearchResult_DL = [];
+            self.subSearchSelected_DL = [];
+            self.selectedDistributionList = null;
+        };
     });
 };

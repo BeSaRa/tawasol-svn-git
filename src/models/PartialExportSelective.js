@@ -33,7 +33,7 @@ module.exports = function (app) {
             PartialExportSelective.prototype.getDetails = function () {
                 return {
                     url: 'selective-partial-export',
-                    interceptor: 'PartialExportCollection'
+                    interceptor: 'PartialExportSelective'
                 };
             };
 
@@ -44,6 +44,7 @@ module.exports = function (app) {
                         return item.hasOwnProperty('vsId') ? item.vsId : item;
                     });
                 });
+
                 return this;
             };
             // don't remove CMSModelInterceptor from last line

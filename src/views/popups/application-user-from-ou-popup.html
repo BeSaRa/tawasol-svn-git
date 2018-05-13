@@ -59,7 +59,7 @@
                                     <!-- Login Name -->
                                     <md-input-container flex>
                                         <label for="loginName">{{lang.login_name}}</label>
-                                        <input name="loginName" id="loginName" required minlength="4"
+                                        <input name="loginName" id="loginName" required minlength="2"
                                                ng-model="ctrl.applicationUser.loginName"
                                                no-space-directive custom-validate-directive="EN">
                                         <div ng-messages="applicationUserForm.loginName.$error">
@@ -99,7 +99,7 @@
                                     <!-- Domain Name -->
                                     <md-input-container flex>
                                         <label for="domainName">{{lang.domain_name}}</label>
-                                        <input name="domainName" id="domainName" required minlength="4"
+                                        <input name="domainName" id="domainName" required minlength="2"
                                                ng-model="ctrl.applicationUser.domainName" maxlength="20"
                                                no-space-directive custom-validate-directive="EN">
                                         <div ng-messages="applicationUserForm.domainName.$error">
