@@ -4,13 +4,13 @@ General:
 3. Fix - User folder should be active by default.
 4. Fix - Create content in scan incoming.
 5. Added - Show alert if all selected records can't be forwarded/returned.
-6. Added - New localization keys
+6. Added - New localization keys.
 7. Fix - Don't show bulk action button if not available for all selected items.
 8. Fix - Show only basic document classes in drop downs (Outgoing, Incoming, Internal).
 9. Fix - Binding of correspondence sites in grids.
 10. Fix - Signature dimensions should not be more than 283px X 283px.
 11. Fix - New Correspondence Site can be global/private. Global correspondence site can not be set to private.
-12. Fix - Hide the delete correspondence site buttons
+12. Fix - Hide the delete correspondence site buttons.
 13. Fix - Bulk actions - response handling in correspondenceService and added in generator.
 14. Fix - Hide barcode tab in global settings.
 15. Added - Show confirmation to forward for workItem with multiple approval. If item is partially approved, don't allow to edit content.

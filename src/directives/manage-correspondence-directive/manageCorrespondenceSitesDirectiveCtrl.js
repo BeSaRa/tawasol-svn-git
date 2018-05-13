@@ -666,7 +666,5 @@ module.exports = function (app) {
             }
         });
 
-    })
-    ;
-}
-;
+    });
+};

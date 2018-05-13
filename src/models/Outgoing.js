@@ -65,6 +65,11 @@ module.exports = function (app) {
                 return indicator.getPriorityLevelIndicator(priorityLevel);
             };
 
+            Outgoing.prototype.partialExport = function ($event, ignoreMessage) {
+                correspondenceService = this.getCorrespondenceService();
+                return correspondenceService.showPartialExportDialog(this, $event, ignoreMessage);
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

@@ -91,4 +91,5 @@ module.exports = function (app) {
     require('./applicationUserFromOuPopCtrl')(app);
     require('./addUserToWorkflowGroupPopCtrl')(app);
     require('./filterPopCtrl')(app);
+    require('./partialExportPopCtrl')(app);
 };

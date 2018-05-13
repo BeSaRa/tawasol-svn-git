@@ -37,6 +37,9 @@ module.exports = function (app) {
                                                    errorCode,
                                                    DistributionWF, // just for make the inheritance
                                                    _,
+                                                   PartialExport,
+                                                   PartialExportCollection,
+                                                   PartialExportSelective,
                                                    Attachment,
                                                    DistributionList,
                                                    OUDistributionList) {
@@ -49,6 +52,9 @@ module.exports = function (app) {
         util.inherits(Incoming, Correspondence);
         util.inherits(General, Correspondence);
         util.inherits(GeneralStepElementView, WorkItem);
+        // for partial export
+        util.inherits(PartialExportCollection, PartialExport);
+        util.inherits(PartialExportSelective, PartialExport);
 
         /**
          * the registered models for our CMS
@@ -1062,7 +1068,7 @@ module.exports = function (app) {
         /**
          * @description update correspondence site for document
          * @param correspondence
-         * @returns {HttpPromise}
+         * @returns {Promise}
          */
         self.updateCorrespondenceSites = function (correspondence) {
             var info = correspondence.getInfo();
@@ -2273,6 +2279,49 @@ module.exports = function (app) {
                 .get([urlService.inboxWF, 'filtered-mails', id].join('/'))
                 .then(function (result) {
                     return generator.interceptReceivedCollection('WorkItem', generator.generateCollection(result.data.rs, WorkItem));
+                });
+        };
+
+        self.loadRelatedThingsForCorrespondence = function (correspondence) {
+            // return $http.get(urlService.)
+        };
+        /**
+         * @description display the PartialExport dialog to select the correspondence sites.
+         * @param correspondence
+         * @param $event
+         * @param ignoreMessage
+         */
+        self.showPartialExportDialog = function (correspondence, $event, ignoreMessage) {
+            return dialog
+                .showDialog({
+                    template: cmsTemplate.getPopup('partial-export'),
+                    controller: 'partialExportPopCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event,
+                    locals: {
+                        correspondence: correspondence,
+                        ignoreMessage: ignoreMessage
+                    },
+                    resolve: {
+                        sites: function (correspondenceService) {
+                            'ngInject';
+                            return correspondenceService.loadCorrespondenceSites(correspondence);
+                        }
+                    }
+                });
+        };
+
+        self.partialExportCorrespondence = function (correspondence, partialExport, ignoreMessage) {
+            var info = correspondence.getInfo(),
+                details = partialExport.getDetails(),
+                url = _createUrlSchema(null, info.documentClass, ['book', info.vsId, details.url].join('/'));
+            return $http
+                .put(url, generator.interceptSendInstance(['PartialExport',details.interceptor], partialExport))
+                .then(function (result) {
+                    if (!ignoreMessage) {
+                        toast.success(langService.get('export_success'));
+                    }
+                    return correspondence;
                 });
         }
 

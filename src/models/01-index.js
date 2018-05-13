@@ -137,4 +137,7 @@ module.exports = function (app) {
     require('./UserFilter')(app);
     require('./CorrespondenceSiteView')(app);
     require('./G2G')(app);
+    require('./PartialExport')(app);
+    require('./PartialExportSelective')(app);
+    require('./PartialExportCollection')(app);
 };

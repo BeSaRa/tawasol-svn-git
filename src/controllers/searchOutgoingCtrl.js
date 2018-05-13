@@ -32,9 +32,7 @@ module.exports = function (app) {
                                                    counterService,
                                                    correspondenceService,
                                                    favoriteDocumentsService,
-                                                   mailNotificationService
-                                                   //centralArchives
-    ) {
+                                                   mailNotificationService) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchOutgoingCtrl';
@@ -763,7 +761,6 @@ module.exports = function (app) {
                 return;
             }
             correspondenceService.viewCorrespondence(searchedOutgoingDocument, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(searchedOutgoingDocument, true));
-            return;
         };
 
         /**
@@ -808,10 +805,21 @@ module.exports = function (app) {
                     self.reloadSearchedOutgoingDocument(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                            ;
                             new ResolveDefer(defer);
                         })
                 })
+        };
+
+        self.partialExportCallback = function (correspondence, $event, defer) {
+            correspondence
+                .partialExport($event)
+                .then(function () {
+                    self.reloadSearchedOutgoingDocument(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            new ResolveDefer(defer);
+                        })
+                });
         };
 
         self.gridActions = [
@@ -876,6 +884,19 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
+                }
+            },
+            {
+                type: 'action',
+                icon: 'backburger',
+                text: 'grid_action_partial_export',
+                shortcut: false,
+                callback: self.partialExportCallback,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    //If document is paper outgoing and unapproved/partially approved, show the button.
+                    return self.checkToShowAction(action, model) && (info.docStatus === 25 || info.docStatus === 26);
                 }
             },
             // Launch Distribution Workflow
