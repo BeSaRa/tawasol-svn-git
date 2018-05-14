@@ -670,7 +670,13 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendLinkToDocumentByEmail = function (searchedIncomingDocument, $event) {
-            console.log('send link to document for searched incoming document : ', searchedIncomingDocument);
+            downloadService.getMainDocumentEmailContent(searchedIncomingDocument.vsId).then(function (result) {
+                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                    result: result,
+                    filename: 'Tawasol.msg'
+                }));
+                return true;
+            });
         };
 
         /**
@@ -679,17 +685,16 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendCompositeDocumentAsAttachmentByEmail = function (searchedIncomingDocument, $event) {
-            console.log('send composite document as attachment for searched incoming document : ', searchedIncomingDocument);
+            downloadService.getCompositeDocumentEmailContent(searchedIncomingDocument.vsId).then(function (result) {
+                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                    result: result,
+                    filename: 'Tawasol.msg'
+                }));
+                return true;
+            });
         };
 
-        /**
-         * @description send composite document as attachment for searched incoming document
-         * @param searchedIncomingDocument
-         * @param $event
-         */
-        self.sendCompositeDocumentAsAttachmentByEmail = function (searchedIncomingDocument, $event) {
-            console.log('send composite document as attachment for searched incoming document : ', searchedIncomingDocument);
-        };
+
 
         /**
          * @description send main document fax for searched incoming document
@@ -715,7 +720,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.getLink = function (searchedIncomingDocument, $event) {
-            console.log('get link for searched incoming document : ', searchedIncomingDocument);
+            viewDocumentService.loadDocumentViewUrlWithOutEdit(searchedIncomingDocument.vsId).then(function (result) {
+                //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
+                dialog.successMessage(langService.get('link_message').change({result: result}));
+                return true;
+            });
         };
 
         /**
@@ -1052,7 +1061,7 @@ module.exports = function (app) {
                 icon: 'send',
                 text: 'grid_action_send',
                 shortcut: false,
-                hide: true,
+                hide: false,
                 checkShow: self.checkToShowAction,
                 subMenu: [
                     // Link To Document By Email
@@ -1062,7 +1071,7 @@ module.exports = function (app) {
                         text: 'grid_action_link_to_document_by_email',
                         shortcut: false,
                         callback: self.sendLinkToDocumentByEmail,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: self.checkToShowAction
                     },
                     // Composite Document As Attachment By Email
@@ -1072,7 +1081,7 @@ module.exports = function (app) {
                         text: 'grid_action_composite_document_as_attachment_by_email',
                         shortcut: false,
                         callback: self.sendCompositeDocumentAsAttachmentByEmail,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: self.checkToShowAction
                     },
                     // Main Document Fax
@@ -1105,8 +1114,8 @@ module.exports = function (app) {
                 text: 'grid_action_get_link',
                 shortcut: false,
                 callback: self.getLink,
-                class: "action-red",
-                hide: true,
+                class: "action-green",
+                hide: false,
                 checkShow: self.checkToShowAction
             },
             // Subscribe
