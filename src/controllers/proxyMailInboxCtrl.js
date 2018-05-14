@@ -317,7 +317,12 @@ module.exports = function (app) {
          * @param $event
          */
         self.getLink = function (proxyMailInbox, $event) {
-            console.log('getLink', proxyMailInbox);
+            var info = proxyMailInbox.getInfo();
+            viewDocumentService.loadDocumentViewUrlWithOutEdit(info.vsId).then(function (result) {
+                //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
+                dialog.successMessage(langService.get('link_message').change({result: result}));
+                return true;
+            });
         };
 
         /**
@@ -525,7 +530,14 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendProxyMailInboxLinkToDocumentByEmail = function (proxyMailInbox, $event) {
-            console.log('sendProxyMailInboxLinkToDocumentByEmail : ', proxyMailInbox);
+            var info = proxyMailInbox.getInfo();
+            downloadService.getMainDocumentEmailContent(info.vsId).then(function (result) {
+                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                    result: result,
+                    filename: 'Tawasol.msg'
+                }));
+                return true;
+            });
         };
 
         /**
@@ -543,7 +555,14 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendProxyMailInboxCompositeDocumentAsAttachmentByEmail = function (proxyMailInbox, $event) {
-            console.log('sendProxyMailInboxCompositeDocumentAsAttachmentByEmail : ', proxyMailInbox);
+            var info = proxyMailInbox.getInfo();
+            downloadService.getCompositeDocumentEmailContent(info.vsId).then(function (result) {
+                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                    result: result,
+                    filename: 'Tawasol.msg'
+                }));
+                return true;
+            });
         };
 
         /**
@@ -814,8 +833,8 @@ module.exports = function (app) {
                 text: 'grid_action_get_link',
                 shortcut: false,
                 callback: self.getLink,
-                class: "action-red",
-                hide: true,
+                class: "action-green",
+                hide: false,
                 checkShow: self.checkToShowAction
             },
             // Subscribe
@@ -1023,7 +1042,7 @@ module.exports = function (app) {
                 icon: 'send',
                 text: 'grid_action_send',
                 shortcut: false,
-                hide: true,
+                hide: false,
                 checkShow: self.checkToShowAction,
                 subMenu: [
                     // Link To Document By Email
@@ -1033,7 +1052,7 @@ module.exports = function (app) {
                         text: 'grid_action_link_to_document_by_email',
                         shortcut: false,
                         callback: self.sendProxyMailInboxLinkToDocumentByEmail,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: self.checkToShowAction
                     },
                     // Composite Document As Attachment By Email
@@ -1043,16 +1062,16 @@ module.exports = function (app) {
                         text: 'grid_action_composite_document_as_attachment_by_email',
                         shortcut: false,
                         callback: self.sendProxyMailInboxCompositeDocumentAsAttachmentByEmail,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: self.checkToShowAction
                     },
-                    // Composite Document
+                    // Send Document by Fax
                     {
                         type: 'action',
                         icon: 'attachment',
-                        text: 'grid_action_composite_document_as_attachment',
+                        text: 'grid_action_main_document_fax',
                         shortcut: false,
-                        callback: self.sendProxyMailInboxCompositeDocumentAsAttachment,
+                        callback: self.sendProxyMailInboxMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction
                     },
@@ -1064,26 +1083,6 @@ module.exports = function (app) {
                         shortcut: false,
                         permissionKey: "SEND_SMS",
                         callback: self.sendProxyMailInboxSMS,
-                        class: "action-red",
-                        checkShow: self.checkToShowAction
-                    },
-                    // Main Document As Attachment
-                    {
-                        type: 'action',
-                        icon: 'attachment',
-                        text: 'grid_action_main_document_as_attachment',
-                        shortcut: false,
-                        callback: self.sendProxyMailInboxMainDocumentAsAttachment,
-                        class: "action-red",
-                        checkShow: self.checkToShowAction
-                    },
-                    // Link
-                    {
-                        type: 'action',
-                        icon: 'link-variant',
-                        text: 'grid_action_send_link',
-                        shortcut: false,
-                        callback: self.sendProxyMailInboxLink,
                         class: "action-red",
                         checkShow: self.checkToShowAction
                     }
