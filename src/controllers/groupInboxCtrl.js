@@ -399,6 +399,72 @@ module.exports = function (app) {
                     .compositeDocumentDownload($event);
             };
 
+
+        /**
+         * @description Send Link To Document By Email
+         * @param userSentItem
+         * @param $event
+         */
+        self.sendLinkToDocumentByEmail = function (workItem, $event) {
+            var info = workItem.getInfo();
+            downloadService.getMainDocumentEmailContent(info.vsId).then(function (result) {
+                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                    result: result,
+                    filename: 'Tawasol.msg'
+                }));
+                return true;
+            });
+        };
+
+        /**
+         * @description Send Composite Document As Attachment By Email
+         * @param userSentItem
+         * @param $event
+         */
+        self.sendCompositeDocumentAsAttachmentByEmail = function (workItem, $event) {
+            var info = workItem.getInfo();
+            downloadService.getCompositeDocumentEmailContent(info.vsId).then(function (result) {
+                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                    result: result,
+                    filename: 'Tawasol.msg'
+                }));
+                return true;
+            });
+        };
+
+        /**
+         * @description Send SMS
+         * @param userSentItem
+         * @param $event
+         */
+        self.sendSMS = function (workItem, $event) {
+            console.log('sendSMS : ', workItem);
+        };
+
+        /**
+         * @description Send Main Document Fax
+         * @param userSentItem
+         * @param $event
+         */
+        self.sendMainDocumentFax = function (workItem, $event) {
+            console.log('sendMainDocumentFax : ', workItem);
+        };
+
+
+        /**
+         * @description Get Link
+         * @param userSentItem
+         * @param $event
+         */
+        self.getLink = function (workItem, $event) {
+            var info = workItem.getInfo();
+            viewDocumentService.loadDocumentViewUrlWithOutEdit(info.vsId).then(function (result) {
+                //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
+                dialog.successMessage(langService.get('link_message').change({result: result}));
+                return true;
+            });
+        };
+
             /**
              * @description Sign e-Signature
              * @param workItem
@@ -623,8 +689,8 @@ module.exports = function (app) {
                     text: 'grid_action_get_link',
                     shortcut: false,
                     callback: self.getLink,
-                    class: "action-red",
-                    hide: true,
+                    class: "action-green",
+                    hide: false,
                     checkShow: self.checkToShowAction
                 },
                 // Subscribe
@@ -850,7 +916,7 @@ module.exports = function (app) {
                     icon: 'send',
                     text: 'grid_action_send',
                     shortcut: false,
-                    hide: true,
+                    hide: false,
                     checkShow: self.checkToShowAction,
                     subMenu: [
                         // Link To Document By Email
@@ -860,7 +926,7 @@ module.exports = function (app) {
                             text: 'grid_action_link_to_document_by_email',
                             shortcut: false,
                             callback: self.sendLinkToDocumentByEmail,
-                            class: "action-red",
+                            class: "action-green",
                             checkShow: self.checkToShowAction
                         },
                         // Composite Document As Attachment By Email
@@ -870,16 +936,16 @@ module.exports = function (app) {
                             text: 'grid_action_composite_document_as_attachment_by_email',
                             shortcut: false,
                             callback: self.sendCompositeDocumentAsAttachmentByEmail,
-                            class: "action-red",
+                            class: "action-green",
                             checkShow: self.checkToShowAction
                         },
-                        // Composite Document
+                        // send Document by Fax
                         {
                             type: 'action',
                             icon: 'attachment',
-                            text: 'grid_action_composite_document_as_attachment',
+                            text: 'grid_action_main_document_fax',
                             shortcut: false,
-                            callback: self.sendCompositeDocumentAsAttachment,
+                            callback: self.sendMainDocumentFax,
                             class: "action-red",
                             checkShow: self.checkToShowAction
                         },
@@ -891,26 +957,6 @@ module.exports = function (app) {
                             shortcut: false,
                             permissionKey: "SEND_SMS",
                             callback: self.sendSMS,
-                            class: "action-red",
-                            checkShow: self.checkToShowAction
-                        },
-                        // Main Document As Attachment
-                        {
-                            type: 'action',
-                            icon: 'attachment',
-                            text: 'grid_action_main_document_as_attachment',
-                            shortcut: false,
-                            callback: self.sendMainDocumentAsAttachment,
-                            class: "action-red",
-                            checkShow: self.checkToShowAction
-                        },
-                        // Link
-                        {
-                            type: 'action',
-                            icon: 'link-variant',
-                            text: 'grid_action_send_link',
-                            shortcut: false,
-                            callback: self.sendLink,
                             class: "action-red",
                             checkShow: self.checkToShowAction
                         }
