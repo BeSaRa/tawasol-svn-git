@@ -33,6 +33,33 @@ module.exports = function (app) {
         };
 
         /**
+         * @description get workitem by vsid from server.
+         * @returns {wobNumber}
+         */
+        self.fetchDeptSentWorkitemByVsId = function (vsid) {
+            return $http.get(urlService.departmentInboxes + '/dept-sent-workitem-by-vsid/' + vsid).then(function (result) {
+                return result.data.rs;
+            });
+        };
+
+        /**
+         * @description recall single WorkItem again to user inbox.
+         * @returns WorkItem status
+         */
+
+        self.recallSingleWorkItem = function (wobNumber,user,comment) {
+            return $http
+                .put((urlService.userInbox + '/' + wobNumber + '/reassign'), {
+                    user: user,
+                    comment: comment
+                })
+                .then(function (result) {
+                    return result.data.rs;
+                });
+        };
+
+
+        /**
          * @description Get sent items from self.sentItemDepartmentInboxes if found and if not load it from server again.
          * @returns {Promise|sentItemDepartmentInboxes}
          */
