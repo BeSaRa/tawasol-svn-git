@@ -10,6 +10,8 @@ module.exports = function (app) {
                                            counterService,
                                            userFolderService,
                                            employeeService,
+                                           viewDocumentService,
+                                           downloadService,
                                            UserFolder,
                                            ResolveDefer,
                                            viewTrackingSheetService,
@@ -270,7 +272,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.getLink = function (workItem, $event) {
-            console.log('getLink', workItem);
+            viewDocumentService.loadDocumentViewUrlWithOutEdit(workItem.generalStepElm.vsId).then(function (result) {
+                //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
+                dialog.successMessage(langService.get('link_message').change({result: result}));
+                return true;
+            });
         };
 
         /**
@@ -441,7 +447,14 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendLinkToDocumentByEmail = function (workItem, $event) {
-            console.log('sendLinkToDocumentByEmail : ', workItem);
+            console.log(workItem);
+            downloadService.getMainDocumentEmailContent(workItem.generalStepElm.vsId).then(function (result) {
+                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                    result: result,
+                    filename: 'Tawasol.msg'
+                }));
+                return true;
+            });
         };
 
         /**
@@ -459,7 +472,13 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendCompositeDocumentAsAttachmentByEmail = function (workItem, $event) {
-            console.log('sendCompositeDocumentAsAttachmentByEmail : ', workItem);
+            downloadService.getCompositeDocumentEmailContent(workItem.generalStepElm.vsId).then(function (result) {
+                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                    result: result,
+                    filename: 'Tawasol.msg'
+                }));
+                return true;
+            });
         };
 
         /**
@@ -766,8 +785,8 @@ module.exports = function (app) {
                 text: 'grid_action_get_link',
                 shortcut: false,
                 callback: self.getLink,
-                class: "action-red",
-                hide: true,
+                class: "action-green",
+                hide: false,
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 }
@@ -997,7 +1016,7 @@ module.exports = function (app) {
                 icon: 'send',
                 text: 'grid_action_send',
                 shortcut: false,
-                hide: true,
+                hide: false,
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 },
@@ -1009,7 +1028,7 @@ module.exports = function (app) {
                         text: 'grid_action_link_to_document_by_email',
                         shortcut: false,
                         callback: self.sendLinkToDocumentByEmail,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: self.checkToShowAction
                     },
                     // Composite Document As Attachment By Email
@@ -1019,16 +1038,16 @@ module.exports = function (app) {
                         text: 'grid_action_composite_document_as_attachment_by_email',
                         shortcut: false,
                         callback: self.sendCompositeDocumentAsAttachmentByEmail,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: self.checkToShowAction
                     },
-                    // Composite Document
+                    // Main Document by Fax
                     {
                         type: 'action',
                         icon: 'attachment',
-                        text: 'grid_action_composite_document_as_attachment',
+                        text: 'grid_action_main_document_fax',
                         shortcut: false,
-                        callback: self.sendCompositeDocumentAsAttachment,
+                        callback: self.sendMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction
                     },
@@ -1040,26 +1059,6 @@ module.exports = function (app) {
                         shortcut: false,
                         permissionKey: "SEND_SMS",
                         callback: self.sendSMS,
-                        class: "action-red",
-                        checkShow: self.checkToShowAction
-                    },
-                    // Main Document As Attachment
-                    {
-                        type: 'action',
-                        icon: 'attachment',
-                        text: 'grid_action_main_document_as_attachment',
-                        shortcut: false,
-                        callback: self.sendMainDocumentAsAttachment,
-                        class: "action-red",
-                        checkShow: self.checkToShowAction
-                    },
-                    // Link
-                    {
-                        type: 'action',
-                        icon: 'link-variant',
-                        text: 'grid_action_send_link',
-                        shortcut: false,
-                        callback: self.sendLink,
                         class: "action-red",
                         checkShow: self.checkToShowAction
                     }
