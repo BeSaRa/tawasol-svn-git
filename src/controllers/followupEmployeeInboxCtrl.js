@@ -263,7 +263,12 @@ module.exports = function (app) {
          * @param $event
          */
         self.getFollowupEmployeeInboxLink = function (followupEmployeeInbox, $event) {
-            console.log('getFollowupEmployeeInboxLink', followupEmployeeInbox);
+            var info = followupEmployeeInbox.getInfo();
+            viewDocumentService.loadDocumentViewUrlWithOutEdit(info.vsId).then(function (result) {
+                //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
+                dialog.successMessage(langService.get('link_message').change({result: result}));
+                return true;
+            });
         };
 
         /**
@@ -385,7 +390,14 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendFollowupEmployeeInboxLinkToDocumentByEmail = function (followupEmployeeInbox, $event) {
-            console.log('sendFollowupEmployeeInboxLinkToDocumentByEmail : ', followupEmployeeInbox);
+            var info = followupEmployeeInbox.getInfo();
+            downloadService.getMainDocumentEmailContent(info.vsId).then(function (result) {
+                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                    result: result,
+                    filename: 'Tawasol.msg'
+                }));
+                return true;
+            });
         };
 
         /**
@@ -394,7 +406,14 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendFollowupEmployeeInboxCompositeDocumentAsAttachmentByEmail = function (followupEmployeeInbox, $event) {
-            console.log('sendFollowupEmployeeInboxCompositeDocumentAsAttachmentByEmail : ', followupEmployeeInbox);
+            var info = followupEmployeeInbox.getInfo();
+            downloadService.getCompositeDocumentEmailContent(info.vsId).then(function (result) {
+                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                    result: result,
+                    filename: 'Tawasol.msg'
+                }));
+                return true;
+            });
         };
 
         /**
@@ -691,7 +710,7 @@ module.exports = function (app) {
                 icon: 'send',
                 text: 'grid_action_send',
                 shortcut: false,
-                hide: true,
+                hide: false,
                 checkShow: self.checkToShowAction,
                 subMenu: [
                     // Link To Document By Email
@@ -701,7 +720,7 @@ module.exports = function (app) {
                         text: 'grid_action_link_to_document_by_email',
                         shortcut: false,
                         callback: self.sendFollowupEmployeeInboxLinkToDocumentByEmail,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: self.checkToShowAction
                     },
                     // Composite Document As Attachment By Email
@@ -711,7 +730,7 @@ module.exports = function (app) {
                         text: 'grid_action_composite_document_as_attachment_by_email',
                         shortcut: false,
                         callback: self.sendFollowupEmployeeInboxCompositeDocumentAsAttachmentByEmail,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: self.checkToShowAction
                     },
                     // Main Document Fax
@@ -721,16 +740,6 @@ module.exports = function (app) {
                         text: 'grid_action_main_document_fax',
                         shortcut: false,
                         callback: self.sendFollowupEmployeeInboxMainDocumentFax,
-                        class: "action-red",
-                        checkShow: self.checkToShowAction
-                    },
-                    // Composite Document Fax
-                    {
-                        type: 'action',
-                        icon: 'attachment',
-                        text: 'grid_action_send_composite_doc_by_fax',
-                        shortcut: false,
-                        callback: self.sendFollowupEmployeeInboxCompositeDocumentByFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction
                     },
@@ -801,8 +810,8 @@ module.exports = function (app) {
                 text: 'grid_action_get_link',
                 shortcut: false,
                 callback: self.getFollowupEmployeeInboxLink,
-                class: "action-red",
-                hide: true,
+                class: "action-green",
+                hide: false,
                 checkShow: self.checkToShowAction
             },
             // View Tracking Sheet
