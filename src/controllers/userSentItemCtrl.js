@@ -133,7 +133,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.recallSingle = function (userSentItem, $event) {
-            console.log('recall single : ', userSentItem);
+            //console.log('recall single : ', userSentItem);
                dialog.showPrompt($event,langService.get('transfer_reason')+'?','','').then(function (reason) {
                    userSentItemService.recallSingleWorkItem(userSentItem.wfId, employeeService.getEmployee().domainName, reason).then(function (result) {
                        if(result){
@@ -297,7 +297,13 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendLinkToDocumentByEmail = function (userSentItem, $event) {
-            console.log('sendLinkToDocumentByEmail : ', userSentItem);
+            downloadService.getMainDocumentEmailContent(userSentItem.documentVSID).then(function (result) {
+                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                    result: result,
+                    filename: 'Tawasol.msg'
+                }));
+                return true;
+            });
         };
 
         /**
@@ -306,7 +312,13 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendCompositeDocumentAsAttachmentByEmail = function (userSentItem, $event) {
-            console.log('sendCompositeDocumentAsAttachmentByEmail : ', userSentItem);
+            downloadService.getCompositeDocumentEmailContent(userSentItem.documentVSID).then(function (result) {
+                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                    result: result,
+                    filename: 'Tawasol.msg'
+                }));
+                return true;
+            });
         };
 
         /**
@@ -327,14 +339,6 @@ module.exports = function (app) {
             console.log('sendMainDocumentFax : ', userSentItem);
         };
 
-        /**
-         * @description Send Composite Document by Fax
-         * @param userSentItem
-         * @param $event
-         */
-        self.sendCompositeDocumentByFax = function (userSentItem, $event) {
-            console.log('sendCompositeDocumentByFax : ', userSentItem);
-        };
 
         /**
          * @description Get Link
@@ -342,7 +346,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.getLink = function (userSentItem, $event) {
-            console.log('get link : ', userSentItem);
+            viewDocumentService.loadDocumentViewUrlWithOutEdit(userSentItem.documentVSID).then(function (result) {
+                //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
+                dialog.successMessage(langService.get('link_message').change({result: result}));
+                return true;
+            });
         };
 
 
@@ -455,7 +463,7 @@ module.exports = function (app) {
                 shortcut: true,
                 showInView: false,
                 callback: self.recallSingle,
-                class: "action-red",
+                class: "action-green",
                 hide: false, /*In Phase 2*/
                 checkShow: self.checkToShowAction
             },
@@ -599,7 +607,7 @@ module.exports = function (app) {
                 icon: 'send',
                 text: 'grid_action_send',
                 shortcut: false,
-                hide: true,
+                hide: false,
                 checkShow: self.checkToShowAction,
                 subMenu: [
                     // Link To Document By Email
@@ -609,7 +617,7 @@ module.exports = function (app) {
                         text: 'grid_action_link_to_document_by_email',
                         shortcut: false,
                         callback: self.sendLinkToDocumentByEmail,
-                        class: "action-red",
+                        class: "action-green",
                         checkShow: self.checkToShowAction
                     },
                     // Composite Document As Attachment By Email
@@ -619,6 +627,16 @@ module.exports = function (app) {
                         text: 'grid_action_composite_document_as_attachment_by_email',
                         shortcut: false,
                         callback: self.sendCompositeDocumentAsAttachmentByEmail,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Main Document Fax
+                    {
+                        type: 'action',
+                        icon: 'attachment',
+                        text: 'grid_action_main_document_fax',
+                        shortcut: false,
+                        callback: self.sendMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction
                     },
@@ -632,26 +650,6 @@ module.exports = function (app) {
                         callback: self.sendSMS,
                         class: "action-red",
                         checkShow: self.checkToShowAction
-                    },
-                    // Main Document Fax
-                    {
-                        type: 'action',
-                        icon: 'attachment',
-                        text: 'grid_action_main_document_fax',
-                        shortcut: false,
-                        callback: self.sendMainDocumentFax,
-                        class: "action-red",
-                        checkShow: self.checkToShowAction
-                    },
-                    // Composite Document Fax
-                    {
-                        type: 'action',
-                        icon: 'attachment',
-                        text: 'grid_action_send_composite_doc_by_fax',
-                        shortcut: false,
-                        callback: self.sendCompositeDocumentByFax,
-                        class: "action-red",
-                        checkShow: self.checkToShowAction
                     }
                 ]
             },
@@ -662,8 +660,8 @@ module.exports = function (app) {
                 text: 'grid_action_get_link',
                 shortcut: false,
                 callback: self.getLink,
-                class: "action-red",
-                hide: true,
+                class: "action-green",
+                hide: false,
                 checkShow: self.checkToShowAction
             },
             // Open
