@@ -654,6 +654,11 @@
                                         <grid-indicator-directive record="searchedGeneralDocument"
                                                                   indicator-type="docClass"
                                                                   record-type="correspondence"></grid-indicator-directive>
+                                        <!-- Paper/Electronic-->
+                                        <grid-indicator-directive record="searchedGeneralDocument"
+                                                                  ng-if="searchedGeneralDocument.getInfo().documentClass !== 'incoming'"
+                                                                  indicator-type="paperElectronic"
+                                                                  record-type="correspondence"></grid-indicator-directive>
                                         <!-- Priority Level -->
                                         <grid-indicator-directive record="searchedGeneralDocument"
                                                                   indicator-type="priorityLevel"
