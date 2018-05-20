@@ -33,7 +33,8 @@ module.exports = function (app) {
                                                    correspondenceService,
                                                    favoriteDocumentsService,
                                                    mailNotificationService,
-                                                   OutgoingSearch) {
+                                                   OutgoingSearch,
+                                                   approvers) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchOutgoingCtrl';
@@ -57,7 +58,7 @@ module.exports = function (app) {
         self.docStatuses = angular.copy(documentStatuses);
         self.docStatuses.unshift(new DocumentStatus({arName: 'الكل', enName: 'All'}));
         self.followupStatuses = lookupService.returnLookups(lookupService.followupStatus);
-        self.approvers = [];
+        self.approvers = approvers;
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
         self.documentTypes = documentTypes;
         self.documentFiles = documentFiles;

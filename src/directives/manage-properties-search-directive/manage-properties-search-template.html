@@ -379,48 +379,46 @@
             </div>
 
             <!-- Approver -->
-            <!--<div layout="row">
-                &lt;!&ndash; Users drop down &ndash;&gt;
+            <div layout="row" ng-if="ctrl.document.docClassName.toLowerCase() !== 'incoming'">
+                <!-- Users drop down -->
                 <md-input-container flex>
-                    <label for="approvers">{{lang.linked_entity}}</label>
+                    <label for="approvers">{{lang.approver}}</label>
                     <md-select name="approvers"
                                id="approvers"
-                               ng-change="ctrl.openEntityTypePopup(true, $event)"
+                               ng-change="ctrl.onChangeApprover($event)"
                                ng-model="ctrl.document.approvers"
                                ng-required="ctrl.checkMandatory('approvers')">
                         <md-option ng-value="approver"
                                    ng-repeat="approver in ctrl.approvers">
-                            {{approver.getTranslatedName()}}
+                            {{approver.applicationUser.getTranslatedName()}} - {{approver.ouInfo.getTranslatedName()}}
                         </md-option>
                         <md-option ng-value="null">{{lang.none}}</md-option>
                     </md-select>
-                    <div ng-messages="docSearchForm.selectedEntityType.$error">
+                    <div ng-messages="docSearchForm.approvers.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-
-                &lt;!&ndash; Change Entity Type Values &ndash;&gt;
-                <md-input-container >
-                    <md-button class="md-icon-button" ng-if="!!ctrl.linkedEntityValueName"
-                               tooltip="{{lang.change_entity_type}}"
-                               tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}"
-                               ng-click="ctrl.openEntityTypePopup(false, $event)">
-                        <md-icon md-svg-icon="pencil"></md-icon>
-                    </md-button>
+                <!-- Date Label From -->
+                <md-input-container ng-if="ctrl.document.approvers">
+                    <label>{{lang.search_module_start_date}}</label>
+                    <md-datepicker id="approverFrom" name="approverFrom" md-open-on-focus
+                                   ng-change="ctrl.setMinMaxApproveDate('picker',$event)"
+                                   ng-required="ctrl.document.approveDateTo" md-open-on-focus
+                                   ng-model="ctrl.document.approveDateFrom"
+                                   md-max-date="ctrl.document.approveDateTo"
+                    ></md-datepicker>
                 </md-input-container>
-
-                &lt;!&ndash; Name of linked entity &ndash;&gt;
-                <md-input-container flex ng-if="!!ctrl.linkedEntityValueName">
-                    <label for="linkedEntityName">{{lang.name}}</label>
-                    <input name="linkedEntityName" id="linkedEntityName"
-                           ng-required="ctrl.checkMandatory('linkedEntities')"
-                           ng-model="ctrl.linkedEntityValueName"
-                           ng-disabled="true" ng-readonly="true">
-                    <div ng-messages="docSearchForm.linkedEntities.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
+                <!-- Date Label To -->
+                <md-input-container ng-if="ctrl.document.approvers">
+                    <label>{{lang.search_module_end_date}}</label>
+                    <md-datepicker id="approverTo" name="approverTo" md-open-on-focus
+                                   ng-change="ctrl.setMinMaxApproveDate('picker',$event)"
+                                   ng-required="ctrl.document.approveDateFrom" md-open-on-focus
+                                   ng-model="ctrl.document.approveDateTo"
+                                   md-min-date="ctrl.document.approveDateFrom"
+                    ></md-datepicker>
                 </md-input-container>
-            </div>-->
+            </div>
         </div>
     </form>
 </fieldset>

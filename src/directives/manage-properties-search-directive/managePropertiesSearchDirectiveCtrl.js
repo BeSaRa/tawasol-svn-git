@@ -75,6 +75,9 @@ module.exports = function (app) {
             self.entityTypes = correspondenceService.getCustomEntityTypesForDocumentClass(self.document.docClassName);
 
             self.entityTypesArray = self.defaultEntityTypes.concat(self.entityTypes);
+
+            self.document.approveDateFrom = null;
+            self.document.approveDateTo = null;
         });
         // current employee
         self.employee = employeeService.getEmployee();
@@ -404,7 +407,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.openEntityTypePopup = function (resetValues, $event) {
-            if(resetValues)
+            if (resetValues)
                 self.document.linkedEntities = null;
             if (self.selectedEntityType) {
                 return dialog
@@ -436,6 +439,13 @@ module.exports = function (app) {
                 self.linkedEntityValueName = '';
             }
         };
+
+
+        self.onChangeApprover = function ($event) {
+            self.document.approveDateFrom = null;
+            self.document.approveDateTo = null;
+        };
+
 
     });
 };

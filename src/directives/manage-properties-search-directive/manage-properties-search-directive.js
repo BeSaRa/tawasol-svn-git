@@ -14,7 +14,8 @@ module.exports = function (app) {
                 sourceForm: '=?',
                 centralArchives: '=',
                 registryOrganizations: '=?',
-                searchType: '@'
+                searchType: '@',
+                approvers: '=?'
             }
         }
     })
