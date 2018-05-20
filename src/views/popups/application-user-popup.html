@@ -61,11 +61,11 @@
                                         <label for="loginName">{{lang.login_name}}</label>
                                         <input name="loginName" id="loginName" required minlength="2"
                                                ng-model="ctrl.applicationUser.loginName"
-                                               no-space-directive custom-validate-directive="EN">
+                                               no-space-directive custom-validate-directive="EN_DOT">
                                         <div ng-messages="applicationUserForm.loginName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
-                                            <div ng-message="EN">{{lang.english_number}}</div>
+                                            <div ng-message="EN_DOT">{{lang.english_number}}</div>
                                         </div>
                                     </md-input-container>
                                 </div>
@@ -101,12 +101,12 @@
                                         <label for="domainName">{{lang.domain_name}}</label>
                                         <input name="domainName" id="domainName" required minlength="2"
                                                ng-model="ctrl.applicationUser.domainName" maxlength="20"
-                                               no-space-directive custom-validate-directive="EN">
+                                               no-space-directive custom-validate-directive="EN_DOT">
                                         <div ng-messages="applicationUserForm.domainName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
                                             <div ng-message="maxlength">{{lang.max_length.change({length:20})}}</div>
-                                            <div ng-message="EN">{{lang.english_number}}</div>
+                                            <div ng-message="EN_DOT">{{lang.english_number}}</div>
                                         </div>
                                     </md-input-container>
                                     <!-- Job Title -->
@@ -297,10 +297,13 @@
                                     <!-- Security Levels -->
                                     <md-input-container flex>
                                         <label for="ouSecurityLevel">{{lang.security_levels}}</label>
-                                        <md-select id="ouSecurityLevel" name="ouSecurityLevel" multiple required
+                                        <md-select id="ouSecurityLevel" name="ouSecurityLevel"
+                                                   multiple
+                                                   ng-model-options="{trackBy:'$value.lookupKey'}"
+                                                   required
                                                    ng-model="ctrl.ouApplicationUser.securityLevels">
                                             <md-option ng-value="securityLevel"
-                                                       ng-repeat="securityLevel in ctrl.securityLevels track by $index">
+                                                       ng-repeat="securityLevel in ctrl.securityLevels">
                                                 {{securityLevel.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
@@ -782,9 +785,10 @@
                                     <md-input-container flex>
                                         <label for="securityLevel">{{lang.security_levels}}</label>
                                         <md-select id="securityLevel" name="securityLevel" multiple
+                                                   ng-model-options="{trackBy:'$value.lookupKey'}"
                                                    ng-model="ctrl.classificationViewPermission.securityLevels">
                                             <md-option ng-value="securityLevel"
-                                                       ng-repeat="securityLevel in ctrl.classificationViewPermission.classificationId.securityLevels track by $index">
+                                                       ng-repeat="securityLevel in ctrl.classificationViewPermission.classificationId.securityLevels">
                                                 {{securityLevel.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
@@ -917,9 +921,10 @@
                                     <md-input-container flex>
                                         <label for="ouSecurityLevel">{{lang.security_levels}}</label>
                                         <md-select id="ouSecurityLevel" name="ouSecurityLevel" multiple
+                                                   ng-model-options="{trackBy:'$value.lookupKey'}"
                                                    ng-model="ctrl.ouApplicationUser.securityLevels">
                                             <md-option ng-value="securityLevel"
-                                                       ng-repeat="securityLevel in ctrl.securityLevels track by $index">
+                                                       ng-repeat="securityLevel in ctrl.securityLevels">
                                                 {{securityLevel.getTranslatedName()}}
                                             </md-option>
                                         </md-select>

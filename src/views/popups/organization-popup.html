@@ -11,7 +11,7 @@
             <form name="org_form" novalidate autocomplete="off">
                 <md-tabs md-dynamic-height>
                     <!-- Basic Info-->
-                    <md-tab label="{{lang.basic_info}}">
+                    <md-tab label="{{lang.basic_info}}" ng-if="ctrl.showTab('basic')" ng-click="ctrl.setCurrentTab('basic')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div ng-if="!ctrl.rootMode && !ctrl.editMode" layout="row">
@@ -178,7 +178,7 @@
                                     </div>
                                 </div><!-- row -->
                                 <div layout="row" layout-align="start center">
-                                    <md-switch ng-disabled="ctrl.rootMode"
+                                    <md-switch ng-disabled="ctrl.rootMode || ctrl.organization.id"
                                                ng-change="ctrl.hasRegistryChange(ctrl.organization.hasRegistry)"
                                                ng-model="ctrl.organization.hasRegistry">
                                         {{lang.has_registry}} : {{ctrl.organization.getHasRegistryTranslate()}}
@@ -314,7 +314,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Security Settings -->
-                    <md-tab label="{{lang.security_settings}}">
+                    <md-tab label="{{lang.security_settings}}" ng-if="ctrl.showTab('security_settings')" ng-click="ctrl.setCurrentTab('security_settings')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row">
@@ -360,7 +360,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Workflow Settings -->
-                    <md-tab label="{{lang.workflow_settings}}">
+                    <md-tab label="{{lang.workflow_settings}}" ng-if="ctrl.showTab('workflow_settings')" ng-click="ctrl.setCurrentTab('workflow_settings')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row">
@@ -432,7 +432,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Children -->
-                    <md-tab ng-if="ctrl.editMode" label="{{lang.childs}}">
+                    <md-tab label="{{lang.childs}}" ng-if="ctrl.editMode && ctrl.showTab('children')" ng-click="ctrl.setCurrentTab('children')">
                         <!--
 
                                                 <md-content>
@@ -533,7 +533,7 @@
                                                         </tr>
                                                         </thead>
                                                         <tbody md-body>
-                                                        <tr md-row
+                                                        <tr md-row ng-if="ctrl.model.id !== organization.id"
                                                             ng-repeat="organization in ctrl.organizationChildren   | filter:ctrl.childrenSearchModel  track by organization.id">
                                                             <td md-cell>
                                                                 <div layout="column">
@@ -593,7 +593,7 @@
 
                     </md-tab>
                     <!-- Classifications -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry" label="{{lang.classifications}}">
+                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('classifications')" label="{{lang.classifications}}" ng-click="ctrl.setCurrentTab('classifications')">
                         <md-content>
                             <div layout="column" class="content">
                                 <div ng-if="!ctrl.classificationEditMode" layout="row" layout-align="start center"
@@ -778,7 +778,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Correspondence Sites -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry" label="{{lang.correspondence_sites}}">
+                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('correspondence_sites')" label="{{lang.correspondence_sites}}" ng-click="ctrl.setCurrentTab('correspondence_sites')">
                         <md-content>
                             <div layout="column" class="content">
                                 <div ng-if="!ctrl.correspondenceSiteEditMode" layout="row" layout-align="start center"
@@ -973,7 +973,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Document Templates -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry" label="{{lang.document_templates}}">
+                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('document_templates')" label="{{lang.document_templates}}" ng-click="ctrl.setCurrentTab('document_templates')">
                         <md-content>
                             <div layout="column" class="content">
                                 <div layout="row" layout-align="start center" class="p25 small">
@@ -1075,7 +1075,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Property Configuration -->
-                    <md-tab ng-if="ctrl.editMode" label="{{lang.property_configuration}}">
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('property_config')" label="{{lang.property_configuration}}" ng-click="ctrl.setCurrentTab('property_config')">
                         <md-content>
                             <div layout="column" class="content">
                                 <div layout="column" flex class="p25">
@@ -1183,7 +1183,7 @@
                         </md-content>
                     </md-tab>
                     <!-- Users -->
-                    <md-tab ng-if="ctrl.editMode" label="{{lang.users}}">
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('users')" label="{{lang.users}}" ng-click="ctrl.setCurrentTab('users')">
                         <md-content>
                             <div layout="column" class="content">
                                 <div layout="row" layout-align="start center" class="p25 small">
@@ -1345,7 +1345,7 @@
         <div>
             <div layout="row">
                 <md-button class="md-raised" ng-disabled="org_form.$invalid" ng-click="ctrl.editOrganizationFromCtrl()"
-                           ng-if="ctrl.editMode">
+                           ng-if="ctrl.editMode && ctrl.showSaveButton()">
                     {{lang.save}}
                 </md-button>
                 <md-button ng-disabled="org_form.$invalid" class="md-raised" ng-click="ctrl.addOrganizationFromCtrl()"

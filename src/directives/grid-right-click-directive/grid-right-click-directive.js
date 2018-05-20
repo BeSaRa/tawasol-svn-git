@@ -3,9 +3,32 @@ module.exports = function (app) {
         'ngInject';
         return function (scope, element, attrs) {
             element.bind('contextmenu', function (event) {
-                if ((event.target.tagName.toLowerCase() === "td"
-                        || (event.target.tagName.toLowerCase() === 'span' && $(event.target).parents("td.td-data").length > 0)
-                    ) && Number(attrs.selectedLength < 2)) {//scope.$parent.ctrl.selectedPrepareOutgoings.length < 2){
+                var tagName = event.target.tagName.toLowerCase();
+                /*
+                * If right click on column
+                * OR
+                * If right click on span and span has a parent td with class "td-data"
+                * OR
+                * If right click on anchor and anchor has a parent td with class "subject"
+                *
+                * AND
+                *
+                * Selected records count should be less than 2
+                * */
+                if (// If right click on td
+                ( tagName === "td"
+                    // If right click on span and span has parent with class td-data
+                    || (tagName === 'span' && $(event.target).parents("td.td-data").length > 0)
+                    // If right click on anchor tag and it has class subject
+                    || (tagName === 'a' && $(event.target).parents("td.subject").length > 0)
+                )
+                // Selected records count should be less than 2
+                && Number(attrs.selectedLength < 2)
+                ) {//scope.$parent.ctrl.selectedPrepareOutgoings.length < 2){
+
+                    // If no record selected
+                    // OR
+                    // If 1 record is selected and right click on same element.
                     if (Number(attrs.selectedLength) === 0 || (Number(attrs.selectedLength) === 1 && event.target.parentElement.classList.contains('md-selected'))) {
                         scope.$apply(function () {
                             event.preventDefault();

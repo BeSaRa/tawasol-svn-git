@@ -95,4 +95,6 @@ Bugs:
 12853: Fix - Search: outgoing search : sort result by security level didn't work
 12854: Fix - followup date - follow up date should not accept to be in the past while adding new/ editing a document or in manage destinations
 12857: Fix - user inbox : sent items : sort by security level option didn't work
-12856: Fix - User inbox : sent items : cannot sort item by type
+12856: Fix - User inbox : sent items : cannot sort item by type.
+
+12829: Fix - Enhancement - search in correspondence should search by clicking enter as well

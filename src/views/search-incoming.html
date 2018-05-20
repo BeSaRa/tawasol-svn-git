@@ -327,8 +327,8 @@
                                                 <label for="refDocNumber">{{lang.search_module_document_number}}</label>
                                                 <input name="refDocNumber" id="refDocNumber"
                                                        custom-validate-directive="{{ctrl.dynamicType('refDocNumber','type')}}"
-                                                       ng-required="ctrl.dynamicRequired('fileCode','search_module_document_number')"
-                                                       ng-model="ctrl.searchIncoming.fileCode">
+                                                       ng-required="ctrl.dynamicRequired('refDocNumber','search_module_document_number')"
+                                                       ng-model="ctrl.searchIncoming.refDocNumber">
                                                 <div ng-messages="searchIncomingForm.refDocNumber.$error">
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                     <div ng-message="{{ctrl.dynamicType('refDocNumber','type')}}">

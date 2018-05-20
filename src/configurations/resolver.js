@@ -23,6 +23,7 @@ module.exports = function (app) {
                 generator.setDialog(dialog);
                 generator.setLangService(langService);
                 generator.setToast(toast);
+                generator.setRootEntityService(rootEntity);
                 // first get the rootEntity information.
                 $timeout(function () {
                     rootEntity

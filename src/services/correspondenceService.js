@@ -1134,23 +1134,24 @@ module.exports = function (app) {
                                 return correspondenceService.loadCorrespondenceLookups(info.documentClass);
                             }
                         }
-                    })
-                        .then(function () {
-                            self.popupNumber -= 1;
-                            return true;
-                        })
-                        .catch(function () {
-                            self.popupNumber -= 1;
-                            return false;
-                        });
+                    }).then(function () {
+                        self.popupNumber -= 1;
+                        return true;
+                    }).catch(function () {
+                        self.popupNumber -= 1;
+                        return false;
+                    });
                 });
         };
+
         /**
          * @description open group inbox
          * @param correspondence
          * @param actions
+         * @param disableProperties
+         * @param disableCorrespondence
          */
-        self.viewCorrespondenceGroupMail = function (correspondence, actions) {
+        self.viewCorrespondenceGroupMail = function (correspondence, actions, disableProperties, disableCorrespondence) {
             var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : _createInstance(correspondence).getInfo();
             // var workItem = info.isWorkItem() ? correspondence : false;
             return $http.get([urlService.correspondence, 'ou-queue', 'wob-num', info.wobNumber].join('/'))
@@ -1171,9 +1172,9 @@ module.exports = function (app) {
                             actions: actions,
                             workItem: generalStepElementView,
                             readyToExport: false,
-                            disableProperties: true,
-                            disableCorrespondence: true,
-                            disableEverything: true,
+                            disableProperties: disableProperties,
+                            disableCorrespondence: disableCorrespondence,
+                            disableEverything: false,
                             popupNumber: self.popupNumber
                         },
                         resolve: {

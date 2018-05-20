@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                             langService,
                                                             viewCallback,
                                                             dialog,
+                                                            excludeVsId,
                                                             viewDocumentService,
                                                             correspondenceService,
                                                             classificationService,
@@ -21,6 +22,8 @@ module.exports = function (app) {
             year: new Date().getFullYear(),
             registryOU: employeeService.getCurrentOUApplicationUser().ouRegistryID
         });
+
+        self.excludeVsId = excludeVsId;
 
         // all security levels
         //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
@@ -84,10 +87,13 @@ module.exports = function (app) {
          * @description start search after create your criteria.
          */
         self.searchLinkedDocuments = function () {
+            var vsIds = self.excludeVsId ? [self.excludeVsId] : [];
             correspondenceService
                 .correspondenceSearch(self.correspondence.setDocClassName(self.searchType.getStringKeyValue()))
                 .then(function (result) {
-                    self.correspondences = result;
+                    self.correspondences = _.filter(result, function (item) {
+                        return vsIds.indexOf(item.getInfo().vsId) === -1;
+                    });
                     if (self.correspondences.length) {
                         // go to result tab.
                         self.selectedIndex = true;

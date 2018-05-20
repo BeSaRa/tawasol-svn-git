@@ -107,6 +107,7 @@ module.exports = function (app) {
             model.linkedDocsIndicator = linkedDocs.length ? model.getLinkedDocumentsIndicator() : null;
 
             model.docClassIndicator = model.getDocClassIndicator(model.getInfo().documentClass);
+            model.isPaperIndicator = model.getIsPaperIndicator(model.addMethod);
             model.tagsIndicator = model.tags.length ? model.getTagsIndicator(model.tags.length) : null;
 
             return model;

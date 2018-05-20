@@ -365,6 +365,12 @@ module.exports = function (app) {
          * @param defer
          */
         self.sentToReadyToExport = function (model, $event, defer) {
+            if (model.fromCentralArchive())
+                return model.sendToCentralArchive().then(function () {
+                    self.reloadReadyToSendOutgoings(self.grid.page);
+                    new ResolveDefer(defer);
+                });
+
             model.sendToReadyToExport()
                 .then(function () {
                     self.reloadReadyToSendOutgoings(self.grid.page)
@@ -479,7 +485,7 @@ module.exports = function (app) {
                 permissionKey: "PRINT_BARCODE",
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && model.barcodeReady() && info.isPaper;
+                    return self.checkToShowAction(action, model) && info.isPaper;
                 }
             },
             // Send To Ready To Export
@@ -489,6 +495,9 @@ module.exports = function (app) {
                 text: 'grid_action_send_to_ready_to_export',
                 shortcut: true,
                 callback: self.sentToReadyToExport,
+                textCallback: function (model) {
+                    return model.fromCentralArchive() ? 'grid_action_send_to_central_archive' : 'grid_action_send_to_ready_to_export';
+                },
                 class: "action-green",
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && model.addMethod && model.hasContent();

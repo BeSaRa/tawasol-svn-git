@@ -9,10 +9,11 @@ module.exports = function (app) {
             require: 'ngModel',
             link: function ($scope, $element, attrs, ngModelCtrl) {
                 ngModelCtrl.$asyncValidators["min"] = function (modelValue, viewValue) {
-                    var minValue = Number($scope.$eval(attrs.min));
+                    var minValue = $scope.$eval(attrs.min);
                     var defer = $q.defer();
                     var validationPassed = true;
-                    if (minValue) {
+
+                    if (typeof minValue !== 'undefined') {
                         if (viewValue) {
                             if (Number(minValue) > Number(viewValue)) {
                                 validationPassed = false;

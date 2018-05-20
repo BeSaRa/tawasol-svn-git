@@ -2,14 +2,60 @@ module.exports = function (app) {
     app.service('generator', function (_,
                                        CMSModelInterceptor,
                                        tableGeneratorService,
-                                       listGeneratorService,
-                                       moment) {
+                                       listGeneratorService) {
         'ngInject';
-        var self = this, dialog, langService, toast;
+        var self = this, dialog, langService, toast, rootEntity;
         var documentClassMap = {
             OUTGOING: 1,
             INCOMING: 2,
             INTERNAL: 4
+        };
+
+        self.documentStatusAndGridMap = {
+            UNDER_RECEIVE: 1,
+            /**
+             * @description Status = 2; Prepare/Scan (Correspondence)
+             */
+            META_DATA_ONLY: 2,
+            /**
+             * @description Status = 3; Draft Outgoing/Internal (Correspondence)
+             */
+            DRAFT: 3,
+            COMPLETED: 4,
+            EDIT_AFTER_AUTHORIZED: 5,
+            EDIT_AFTER_EXPORTED: 6,
+            /**
+             * @description Status = 7; Rejected Outgoing/Incoming/Internal (Correspondence)
+             */
+            SENT_TO_RE_AUDIT: 7/* Rejected Books*/,
+            /**
+             * @description Status = 8; Ready To Send Outgoing/Incoming/Internal (Correspondence)
+             */
+            ACCEPTED: 8/*Ready for Sent*/,
+            REMOVED: 9,
+            CONTENT_ADDED: 10,
+            CONTENT_UPDATED: 11,
+            META_DATA_UPDATED: 12,
+            ARCHIVED: 21,
+            /**
+             * @description Status = 22; User inbox (WorkItem)
+             */
+            SENT: 22,
+            /**
+             * @description Status = 23; User inbox (WorkItem); Number of times signed is less than signature count
+             */
+            PARTIALLY_AUTHORIZED: 23,
+            /**
+             * @description Status = 24; Ready To Export (WorkItem)
+             */
+            FULLY_AUTHORIZED: 24,
+            /**
+             * @description Status = 25; Department Incoming/Returned (WorkItem)
+             */
+            EXPORTED: 25,
+            PARTIALLY_EXPORTED: 26,
+            REPLY_BOOK_CREATED: 27,
+            SENT_TO_READY_TO_EXPORT: 28
         };
         self.setDialog = function (dialogPass) {
             dialog = dialogPass;
@@ -289,23 +335,6 @@ module.exports = function (app) {
             titleTemplate.append(list.getList());
             dialog.errorMessage(titleTemplate.html());
         };
-        /*
-         /!**
-         * @description Displays error messages for failed bulk delete records
-         * @param title
-         * @param records
-         *!/
-         self.generateFailedToDeletedRecords = function (title, records) {
-         var list = listGeneratorService.createList('ul', 'error-list');
-         _.map(records, function (record) {
-         list.addItemToList(record);
-         });
-
-
-         var titleTemplate = angular.element('<div><span class="validation-title">' + langService.get(title) + '</span></div>');
-         titleTemplate.append(list.getList());
-         dialog.errorMessage(titleTemplate.html());
-         };*/
 
         /**
          * @description Displays error messages for failed bulk action
@@ -332,6 +361,7 @@ module.exports = function (app) {
          * @param  {string} errorMessage
          * @param {string} successMessage
          * @param {string} failureSomeMessage
+         * @param {string} keyProperty
          * @returns {*}
          */
         self.getBulkActionResponse = function (resultCollection, selectedItems, ignoreMessage, errorMessage, successMessage, failureSomeMessage) {
@@ -394,7 +424,7 @@ module.exports = function (app) {
             return newer;
         };
         /**
-         * @description Reset the model after making any changes
+         * to reset the model after making any changes
          * @param model
          * @param defaultModel
          */
@@ -402,7 +432,7 @@ module.exports = function (app) {
             _.map(model, function (value, key) {
                 model[key] = defaultModel[key];
             });
-            //console.log("RESET MODEL");
+            console.log("RESET MODEL");
         };
         /**
          * @description upper case first letter.
@@ -489,82 +519,15 @@ module.exports = function (app) {
             return property;
         };
 
-        self.defaultDateFormat = 'YYYY-MM-DD';
-        self.defaultDateTimeFormat = 'YYYY-MM-DD hh:mm:ss A';
-        /**
-         * @description Gets the date in default format
-         * @param timestamp
-         * @param dateAndTime
-         * @returns {string | null}
-         */
-        self.getDateFromTimeStamp = function (timestamp, dateAndTime) {
-            if (timestamp) {
-                // in case of long numbers, they will be having L at last. so remove L and change timestamp to moment date.
-                timestamp = Number(timestamp.toString().split('L')[0]);
-                return moment(timestamp).format(dateAndTime ? self.defaultDateTimeFormat : self.defaultDateFormat);
-            }
-            return null;
+        self.filterSecurityLevels = function (collection, available) {
+            var lookupKeys = available ? _.map(available, 'lookupKey') : _.map(rootEntity.getGlobalSettings().securityLevels, 'lookupKey');
+            return _.filter(collection, function (item) {
+                return lookupKeys.indexOf(item.lookupKey) !== -1;
+            });
         };
-
-        /**
-         * @description Gets timestamp from the provided date
-         * @param date
-         * @param addL
-         * @returns {string | null}
-         */
-        self.getTimeStampFromDate = function (date, addL) {
-            if (date) {
-                date = moment(date, self.defaultDateFormat).valueOf();
-                return addL ? date + 'L' : date;
-            }
-            return null;
-        };
-
-        self.documentStatusAndGridMap = {
-            UNDER_RECEIVE: 1,
-            /**
-             * @description Status = 2; Prepare/Scan (Correspondence)
-             */
-            META_DATA_ONLY: 2,
-            /**
-             * @description Status = 3; Draft Outgoing/Internal (Correspondence)
-             */
-            DRAFT: 3,
-            COMPLETED: 4,
-            EDIT_AFTER_AUTHORIZED: 5,
-            EDIT_AFTER_EXPORTED: 6,
-            /**
-             * @description Status = 7; Rejected Outgoing/Incoming/Internal (Correspondence)
-             */
-            SENT_TO_RE_AUDIT: 7/* Rejected Books*/,
-            /**
-             * @description Status = 8; Ready To Send Outgoing/Incoming/Internal (Correspondence)
-             */
-            ACCEPTED: 8/*Ready for Sent*/,
-            REMOVED: 9,
-            CONTENT_ADDED: 10,
-            CONTENT_UPDATED: 11,
-            META_DATA_UPDATED: 12,
-            ARCHIVED: 21,
-            /**
-             * @description Status = 22; User inbox (WorkItem)
-             */
-            SENT: 22,
-            /**
-             * @description Status = 23; User inbox (WorkItem); Number of times signed is less than signature count
-             */
-            PARTIALLY_AUTHORIZED: 23,
-            /**
-             * @description Status = 24; Ready To Export (WorkItem)
-             */
-            FULLY_AUTHORIZED: 24,
-            /**
-             * @description Status = 25; Department Incoming/Returned (WorkItem)
-             */
-            EXPORTED: 25,
-            PARTIALLY_EXPORTED: 26,
-            REPLY_BOOK_CREATED: 27,
-            SENT_TO_READY_TO_EXPORT: 28
+        self.setRootEntityService = function (service) {
+            rootEntity = service;
+            return this;
         };
     })
 };

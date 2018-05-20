@@ -36,6 +36,9 @@ module.exports = function (app) {
                         qid: {
                             required: true
                         },
+                        nationality: {
+                            required: false
+                        },
                         mobileNumber: {
                             required: true
                         },
@@ -63,16 +66,28 @@ module.exports = function (app) {
                             required: true
                         },
                         employeeNum: {
-                            required: true
+                            required: true,
+                            customValidation: {
+                                type: 'number',
+                                message: 'numberonly'
+                            }
                         },
                         mobileNumber: {
-                            required: true
+                            required: true,
+                            customValidation: {
+                                type: 'number',
+                                message: 'numberonly'
+                            }
                         },
                         description: {
                             required: false
                         },
                         email: {
-                            required: false
+                            required: false,
+                            customValidation: {
+                                type: 'email',
+                                message: 'invalid_email'
+                            }
                         },
                         address: {
                             required: false
@@ -89,10 +104,14 @@ module.exports = function (app) {
                             required: true
                         },
                         mobileNumber: {
-                            required: true
+                            required: true,
+                            customValidation: {
+                                type: 'number',
+                                message: 'numberonly'
+                            }
                         },
                         description: {
-                            required: true
+                            required: false
                         },
                         email: {
                             required: false
@@ -104,15 +123,20 @@ module.exports = function (app) {
                     OTHER: {
                         typeId: {
                             required: true
-                        }, name: {
+                        },
+                        name: {
                             required: true
-                        }, mobileNumber: {
+                        },
+                        mobileNumber: {
                             required: true
-                        }, description: {
+                        },
+                        description: {
                             required: false
-                        }, email: {
+                        },
+                        email: {
                             required: false
-                        }, address: {
+                        },
+                        address: {
                             required: false
                         }
                     }

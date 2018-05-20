@@ -944,7 +944,7 @@ module.exports = function (app) {
                     },
                     selectedRegOU: function (employeeService) {
                         'ngInject';
-                        return employeeService.getEmployee().organization.ouRegistryID;
+                        return employeeService.isAdminUser() ? -1 : employeeService.getEmployee().organization.ouRegistryID;
                     }
                 }
             })
@@ -957,6 +957,10 @@ module.exports = function (app) {
                     lookups: function (correspondenceService) {
                         'ngInject';
                         return correspondenceService.loadCorrespondenceLookups('common')
+                    },
+                    attachmentTypes: function (attachmentTypeService) {
+                        'ngInject';
+                        return attachmentTypeService.getAttachmentTypes();
                     }
                 }
             })
@@ -988,6 +992,7 @@ module.exports = function (app) {
                                 return [];
                             });
                     }
+
                 }
             })
             // department inbox
@@ -999,6 +1004,10 @@ module.exports = function (app) {
                     lookups: function (correspondenceService) {
                         'ngInject';
                         return correspondenceService.loadCorrespondenceLookups('common')
+                    },
+                    attachmentTypes: function (attachmentTypeService) {
+                        'ngInject';
+                        return attachmentTypeService.getAttachmentTypes();
                     }
                 }
             })
@@ -1334,6 +1343,10 @@ module.exports = function (app) {
                         'ngInject';
                         return correspondenceService
                             .loadCorrespondenceLookups('common');
+                    },
+                    attachmentTypes: function (attachmentTypeService) {
+                        'ngInject';
+                        return attachmentTypeService.getAttachmentTypes();
                     }
                 }
             })

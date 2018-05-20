@@ -16,7 +16,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'manageCorrespondenceSiteIncomingDirectiveCtrl';
         self.documentClass = 'incoming';
-        self.correspondenceSiteTypes = correspondenceService.getLookup(self.documentClass, 'siteTypes');
+        self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));
         self.correspondenceSiteTypes.push(new CorrespondenceSiteType({
             id: null,
             arName: langService.getKey('not_found', 'ar'),

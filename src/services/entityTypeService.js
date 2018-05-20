@@ -319,6 +319,8 @@ module.exports = function (app) {
          * @returns {number}
          */
         self.setLinkedType = function (type) {
+            if (!type.lookupStrKey)
+                debugger;
             var position = defaultValues.indexOf(type.lookupStrKey);
             return position !== -1 ? position : type.lookupKey;
         };

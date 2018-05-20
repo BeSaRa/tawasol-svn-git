@@ -638,9 +638,7 @@ module.exports = function (app) {
                 callback: self.printBarcode,
                 class: "action-green",
                 permissionKey: "PRINT_BARCODE",
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model);
-                }
+                checkShow: self.checkToShowAction
             },
             // Reject
             {

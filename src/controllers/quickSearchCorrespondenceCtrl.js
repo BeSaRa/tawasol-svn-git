@@ -142,6 +142,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Print Barcode
+         * @param searchedCorrespondenceDocument
+         * @param $event
+         */
+        self.printBarcode = function (searchedCorrespondenceDocument, $event) {
+            searchedCorrespondenceDocument.barcodePrint($event);
+        };
+
+        /**
          * @description manage tag for searched Correspondence document
          * @param searchedCorrespondenceDocument
          * @param $event
@@ -521,6 +530,21 @@ module.exports = function (app) {
                 checkShow: self.checkToShowAction,
                 callback: self.viewTrackingSheet,
                 params: ['view_tracking_sheet', 'tabs']
+            },
+
+            // Print Barcode
+            {
+                type: 'action',
+                icon: 'barcode-scan',
+                text: 'grid_action_print_barcode',
+                callback: self.printBarcode,
+                class: "action-green",
+                permissionKey: 'PRINT_BARCODE',
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model)
+                        && (info.documentClass === "incoming" || ((info.documentClass === "outgoing" || info.documentClass === 'internal')  && (!model.needApprove() || info.isPaper)));
+                }
             },
             // Manage
             {

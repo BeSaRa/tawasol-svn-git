@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                                   dialog,
                                                                   langService,
                                                                   $scope,
+                                                                  $timeout,
                                                                   employeeService) {
         'ngInject';
         var self = this;
@@ -19,6 +20,8 @@ module.exports = function (app) {
         self.selectedCorrespondences = [];
         // get global settings
         self.globalSetting = rootEntity.getGlobalSettings();
+
+        self.vsId = null;
 
         self.grid = {
             limit: 5, //self.globalSetting.searchAmount, // default limit
@@ -72,7 +75,8 @@ module.exports = function (app) {
                     targetEvent: $event,
                     locals: {
                         linkedDocs: self.linkedDocs,
-                        viewCallback: self.viewCorrespondence
+                        viewCallback: self.viewCorrespondence,
+                        excludeVsId: self.vsId
                     }
                 })
                 .then(function (correspondences) {

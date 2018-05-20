@@ -1,9 +1,9 @@
 module.exports = function (app) {
-    app.controller('organizationMenuDirectiveCtrl', function ($scope, 
-                                                              langService, 
-                                                              referencePlanNumberService, 
-                                                              organizationService, 
-                                                              $rootScope, 
+    app.controller('organizationMenuDirectiveCtrl', function ($scope,
+                                                              langService,
+                                                              referencePlanNumberService,
+                                                              organizationService,
+                                                              $rootScope,
                                                               $element) {
         'ngInject';
         var self = this;
@@ -34,6 +34,9 @@ module.exports = function (app) {
                         .then(function () {
                             organizationService.loadOrganizations();
                         })
+                })
+                .catch(function () {
+
                 })
         };
 

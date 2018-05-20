@@ -17,6 +17,9 @@ module.exports = function (app) {
             General.prototype.getDocClassIndicator = function (docClass) {
                 return indicator.getDocClassIndicator(docClass);
             };
+            General.prototype.getIsPaperIndicator = function (isPaper) {
+                return indicator.getIsPaperIndicator(isPaper);
+            };
 
             if (model)
                 angular.extend(this, model);

@@ -67,39 +67,6 @@ module.exports = function (app) {
                 'unStarBulk': userInboxService.controllerMethod.userInboxUnStarBulk
             };
 
-            var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
-                var info = model.getInfo();
-                var hasPermission = false;
-                if (info.documentClass === "internal") {
-                    //If approved internal electronic, don't allow to edit
-                    if (info.docStatus >= 24 && !info.isPaper)
-                        hasPermission = false;
-                    else
-                        hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-                }
-                else if (info.documentClass === "incoming")
-                    hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
-                else if (info.documentClass === "outgoing") {
-                    //If approved outgoing electronic, don't allow to edit
-                    if (info.docStatus >= 24 && !info.isPaper)
-                        hasPermission = false;
-                    else
-                        hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
-                }
-                if (checkForViewPopup)
-                    return !hasPermission;
-                return hasPermission;
-            };
-
-            var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
-                var info = model.getInfo();
-                var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
-                var allowed = (hasPermission && info.documentClass !== "internal");
-                if (checkForViewPopup)
-                    return !(allowed);
-                return allowed;
-            };
-
             /**
              * @description Terminate User Inbox Item
              * @param userInbox
@@ -239,19 +206,53 @@ module.exports = function (app) {
                     });
             };
 
+
+            var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
+                var info = model.getInfo();
+                var hasPermission = false;
+                if (info.documentClass === "internal") {
+                    //If approved internal electronic, don't allow to edit
+                    if (info.docStatus >= 24 && !info.isPaper)
+                        hasPermission = false;
+                    else
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                }
+                else if (info.documentClass === "incoming")
+                    hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+                else if (info.documentClass === "outgoing") {
+                    //If approved outgoing electronic, don't allow to edit
+                    if (info.docStatus >= 24 && !info.isPaper)
+                        hasPermission = false;
+                    else
+                        hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                }
+                if (checkForViewPopup)
+                    return !hasPermission;
+                return hasPermission && !model.isBroadcasted();
+            };
+
+
+            var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
+                var info = model.getInfo();
+                var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+                var allowed = (hasPermission && info.documentClass !== "internal");
+                if (checkForViewPopup)
+                    return !(allowed);
+                return allowed;
+            };
+
             /**
              * @description View document
              * @param workItem
              * @param $event
              */
             self.viewDocument = function (workItem, $event) {
-
                 if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                     dialog.infoMessage(langService.get('no_view_permission'));
                     return;
                 }
 
-                correspondenceService.viewCorrespondenceGroupMail(workItem, self.gridActions)
+                correspondenceService.viewCorrespondenceGroupMail(workItem, self.gridActions, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
                     .then(function () {
                         return self.reloadGroupInbox(self.grid.page);
                     })
@@ -1021,12 +1022,15 @@ module.exports = function (app) {
                         var info = model.getInfo();
                         var hasPermission = false;
                         if (info.documentClass === "internal")
-                            hasPermission = (employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT"));
+                            hasPermission = ((employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") && checkIfEditPropertiesAllowed(model))
+                                || (employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT") && info.docStatus < 23));
                         else if (info.documentClass === "incoming")
-                            hasPermission = (employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT"));
+                            hasPermission = ((employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES") && checkIfEditPropertiesAllowed(model))
+                                || (employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT") && info.docStatus < 23));
                         else if (info.documentClass === "outgoing")
-                            hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-                        return self.checkToShowAction(action, model) && hasPermission;
+                            hasPermission = ((employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") && checkIfEditPropertiesAllowed(model))
+                                || (employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT") && info.docStatus < 23));
+                        return self.checkToShowAction(action, model) && hasPermission && !model.isBroadcasted();
                     },
                     subMenu: [
                         // Content
@@ -1045,6 +1049,9 @@ module.exports = function (app) {
                             class: "action-green",
                             checkShow: function (action, model) {
                                 var info = model.getInfo();
+                                /*If partially approved, don't show edit content*/
+                                if (info.docStatus === 23)
+                                    return false;
                                 var hasPermission = false;
                                 if (info.documentClass === "internal")
                                     hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
@@ -1052,7 +1059,7 @@ module.exports = function (app) {
                                     hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
                                 else if (info.documentClass === "outgoing")
                                     hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
-                                return self.checkToShowAction(action, model) && hasPermission && info.docStatus < 24;
+                                return self.checkToShowAction(action, model) && hasPermission && info.docStatus < 23;
                             }
                         },
                         // Properties

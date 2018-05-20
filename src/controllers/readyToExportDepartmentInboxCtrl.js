@@ -682,10 +682,7 @@ module.exports = function (app) {
                 callback: self.printBarcode,
                 permissionKey: "PRINT_BARCODE",
                 class: "action-green",
-                checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && (info.documentClass === "incoming" || (info.documentClass === "outgoing" && info.isPaper))
-                }
+                checkShow: self.checkToShowAction
             },
             // Open
             {

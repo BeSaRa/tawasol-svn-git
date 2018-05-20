@@ -169,6 +169,19 @@ module.exports = function (app) {
             }
         };
 
+        self.selectedTab = "basic";
+        self.tabsToShow = [
+            'basic',
+            'security_settings',
+            'workflow_settings',
+            'children',
+            'classifications',
+            'correspondence_sites',
+            'document_templates',
+            'property_config',
+            'users'
+        ];
+
         self.selectedOUClassifications = [];
 
         self.classifications = classifications;
@@ -221,6 +234,23 @@ module.exports = function (app) {
         self.currentOUClassifiaction = new OUClassification();
 
         self.userAdded = false;
+
+        self.setCurrentTab = function (tabName) {
+            self.selectedTab = tabName;
+        };
+
+        self.showTab = function(tabName){
+            return self.tabsToShow.indexOf(tabName) > -1;
+        };
+
+        self.showSaveButton = function () {
+            return !(self.selectedTab === 'property_config'
+                || self.selectedTab === 'document_templates'
+                || self.selectedTab === 'correspondence_sites'
+                || self.selectedTab === 'classifications'
+                || self.selectedTab === 'users'
+                || self.selectedTab === 'children');
+        };
 
         /**
          * to get all right list for current organization.

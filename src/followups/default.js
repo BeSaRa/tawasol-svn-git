@@ -4,6 +4,7 @@ module.exports = function (app) {
                       employeeService,
                       $stateParams,
                       loginDialogService,
+                      loadingIndicatorService,
                       stateHelperService,
                       $transitions,
                       $timeout,
@@ -28,8 +29,7 @@ module.exports = function (app) {
                 dialog
                     .errorMessage(langService.get('access_denied'))
             } else {
-                // return loginDialogService
-                //     .displaySessionMessage();
+                loadingIndicatorService.forceEndLoading();
             }
         });
 
@@ -75,10 +75,6 @@ module.exports = function (app) {
                     return true;
                 })
                 .catch(function (rootEntityIdentifier) {
-                    /*return langService
-                        .getLanguages()
-                        .then(function (lang) {
-                            $rootScope.lang = lang;*/
                     return authenticationService
                         .logout()
                         .then(function () {

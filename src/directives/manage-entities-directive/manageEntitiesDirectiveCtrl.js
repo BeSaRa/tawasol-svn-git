@@ -129,6 +129,7 @@ module.exports = function (app) {
                     self.linkedEntities.push(self.entity);
                     document.linkedEntities = self.linkedEntities;
                 }
+                debugger;
                 promise = outgoingService
                     .addLinkedObject(document);
 
@@ -147,7 +148,7 @@ module.exports = function (app) {
 
             }
             promise.then(function () {
-                toast.success(langService.get(self.editMode ? 'save_success' : 'add_success').change({name: self.entity.name}));
+                toast.success(langService.get(self.editMode ? 'save_success' : 'add_success').change({name: self.entity.getTranslatedName()}));
                 self.closeEntityForm();
             });
         };

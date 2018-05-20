@@ -85,7 +85,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -465,12 +465,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedEntities = function (proxyMailInbox, $event) {
-            //var wfName = 'outgoing';
-            var wfName = proxyMailInbox.hasOwnProperty('generalStepElm')
-                ? (proxyMailInbox.generalStepElm.hasOwnProperty('workFlowName') ? proxyMailInbox.generalStepElm.workFlowName : proxyMailInbox.generalStepElm)
-                : (proxyMailInbox.hasOwnProperty('workFlowName') ? proxyMailInbox.workFlowName : proxyMailInbox);
+            var info = proxyMailInbox.getInfo();
             managerService
-                .manageDocumentEntities(proxyMailInbox.generalStepElm.vsId, wfName.toLowerCase(), proxyMailInbox.generalStepElm.docSubject, $event);
+                .manageDocumentEntities(info.vsId, info.documentClass, info.title, $event);
         };
 
 
@@ -647,7 +644,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.editProperties = function (proxyMailInbox, $event) {
-            //console.log('editProxyMailInboxProperties : ', proxyMailInbox);
             var info = proxyMailInbox.getInfo();
             managerService
                 .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
@@ -702,7 +698,6 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            //correspondenceService.viewCorrespondence(proxyMailInbox, self.gridActions, checkIfEditPropertiesAllowed(proxyMailInbox, true), checkIfEditCorrespondenceSiteAllowed(proxyMailInbox, true))
             proxyMailInbox.viewInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(proxyMailInbox, true), checkIfEditCorrespondenceSiteAllowed(proxyMailInbox, true))
                 .then(function () {
                     return self.reloadProxyMailInboxes(self.grid.page);
@@ -736,8 +731,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }
@@ -1145,12 +1140,15 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     var hasPermission = false;
                     if (info.documentClass === "internal")
-                        hasPermission = (employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT"));
+                        hasPermission = ((employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") && checkIfEditPropertiesAllowed(model))
+                            || (employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT") && info.docStatus < 23));
                     else if (info.documentClass === "incoming")
-                        hasPermission = (employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT"));
+                        hasPermission = ((employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES") && checkIfEditPropertiesAllowed(model))
+                            || (employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT") && info.docStatus < 23));
                     else if (info.documentClass === "outgoing")
-                        hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-                    return self.checkToShowAction(action, model) && hasPermission;
+                        hasPermission = ((employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") && checkIfEditPropertiesAllowed(model))
+                            || (employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT") && info.docStatus < 23));
+                    return self.checkToShowAction(action, model) && hasPermission && !model.isBroadcasted();
                 },
                 subMenu: [
                     // Content
@@ -1169,6 +1167,9 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: function (action, model) {
                             var info = model.getInfo();
+                            /*If partially approved, don't show edit content*/
+                            if (info.docStatus === 23)
+                                return false;
                             var hasPermission = false;
                             if (info.documentClass === "internal")
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
@@ -1176,7 +1177,8 @@ module.exports = function (app) {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
                             else if (info.documentClass === "outgoing")
                                 hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
-                            return self.checkToShowAction(action, model) && hasPermission;
+                            return self.checkToShowAction(action, model) && hasPermission && info.docStatus < 23;
+                            /*If partially or fully approved, don't show edit content*/
                         }
                     },
                     // Properties

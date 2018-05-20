@@ -91,18 +91,21 @@ module.exports = function (app) {
              * @returns {Indicator}
              */
             Indicator.prototype.getPriorityLevelIndicator = function (priorityLevel) {
-                var priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
-                var priorityLevelMap = _.find(_.map(priorityLevels, function (lookup, index) {
-                    return {
-                        key: lookup.lookupKey,
-                        class: 'indicator prior' + (lookup.lookupKey),
-                        text: 'indicator_priority_level',
-                        icon: self.getIndicatorIcons(lookupService.priorityLevel + '_prior' + priorityLevel.lookupKey),
-                        tooltip: 'indicator_priority_level',
-                        value: lookup
-                    }
-                }), ['key', priorityLevel.lookupKey]);
-                return new Indicator(priorityLevelMap);
+                if(priorityLevel.lookupKey !== 0) {
+                    var priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
+                    var priorityLevelMap = _.find(_.map(priorityLevels, function (lookup, index) {
+                        return {
+                            key: lookup.lookupKey,
+                            class: 'indicator prior' + (lookup.lookupKey),
+                            text: 'indicator_priority_level',
+                            icon: self.getIndicatorIcons(lookupService.priorityLevel + '_prior' + priorityLevel.lookupKey),
+                            tooltip: 'indicator_priority_level',
+                            value: lookup
+                        }
+                    }), ['key', priorityLevel.lookupKey]);
+                    return new Indicator(priorityLevelMap);
+                }
+                return null;
             };
 
             /**
@@ -137,18 +140,21 @@ module.exports = function (app) {
              * @returns {Indicator}
              */
             Indicator.prototype.getFollowUpStatusIndicator = function (followupStatus) {
-                var followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
-                var followupStatusMap = _.find(_.map(followUpStatuses, function (lookup, index) {
-                    return {
-                        key: lookup.lookupKey,
-                        class: 'indicator f-status' + (lookup.lookupKey),
-                        text: 'indicator_followup_status',
-                        icon: self.getIndicatorIcons('followupStatus' + lookup.lookupKey),
-                        tooltip: 'indicator_followup_status',
-                        value: lookup
-                    }
-                }), ['key', followupStatus.lookupKey]);
-                return new Indicator(followupStatusMap);
+                if(followupStatus.lookupKey === 0) {
+                    var followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
+                    var followupStatusMap = _.find(_.map(followUpStatuses, function (lookup, index) {
+                        return {
+                            key: lookup.lookupKey,
+                            class: 'indicator f-status' + (lookup.lookupKey),
+                            text: 'indicator_followup_status',
+                            icon: self.getIndicatorIcons('followupStatus' + lookup.lookupKey),
+                            tooltip: 'indicator_followup_status',
+                            value: lookup
+                        }
+                    }), ['key', followupStatus.lookupKey]);
+                    return new Indicator(followupStatusMap);
+                }
+                return null;
             };
 
             /**
