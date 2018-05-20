@@ -84,7 +84,7 @@ module.exports = function (app) {
     require('./UserSearchCriteriaInterceptor')(app);
     require('./UserCommentInterceptor')(app);
     require('./UserFilterInterceptor')(app);
-    require('./CorrespondenceSiteViewInterceptor')(app);
+    require('./SiteViewInterceptor')(app);
     require('./G2GInterceptor')(app);
     require('./PartialExportInterceptor')(app);
     require('./PartialExportCollectionInterceptor')(app);

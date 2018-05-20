@@ -299,6 +299,7 @@ module.exports = function (app) {
         self._sharedMethods = generator.generateSharedMethods(self.deleteWorkflowAction, self.updateWorkflowAction);
         /**
          * @description Update the given workflow action.
+         * @param applicationUser
          * @param workflowAction
          * @return {Promise|WorkflowAction}
          */

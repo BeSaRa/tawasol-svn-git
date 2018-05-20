@@ -42,7 +42,10 @@ module.exports = function (app) {
                                                    PartialExportSelective,
                                                    Attachment,
                                                    DistributionList,
-                                                   OUDistributionList) {
+                                                   OUDistributionList,
+                                                   OutgoingSearch,
+                                                   IncomingSearch,
+                                                   InternalSearch) {
         'ngInject';
         var self = this;
         self.serviceName = 'correspondenceService';
@@ -55,6 +58,12 @@ module.exports = function (app) {
         // for partial export
         util.inherits(PartialExportCollection, PartialExport);
         util.inherits(PartialExportSelective, PartialExport);
+        // search
+        util.inherits(OutgoingSearch, Outgoing);
+        util.inherits(IncomingSearch, Outgoing);
+        util.inherits(InternalSearch, Outgoing);
+
+
 
         /**
          * the registered models for our CMS

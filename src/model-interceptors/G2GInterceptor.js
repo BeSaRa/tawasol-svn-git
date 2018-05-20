@@ -10,6 +10,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            model.correspondence.lastModified = generator.getTimeStampFromDate(model.correspondence.lastModified);
             return model;
         });
 

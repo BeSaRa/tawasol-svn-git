@@ -4,6 +4,7 @@ module.exports = function (app) {
                                             Incoming,
                                             Internal,
                                             General,
+                                            util,
                                             langService) {
         'ngInject';
         return function DocumentSearch(model) {
@@ -17,6 +18,8 @@ module.exports = function (app) {
             if (model.reqType === 3)
                 model = new General({docStatus: null});
             //model.followupStatus = null;
+            model.docStatus = null;
+
             model.siteType = null;
             model.mainSiteId = null;
             model.subSiteId = null;
@@ -31,7 +34,7 @@ module.exports = function (app) {
 
             delete model.sitesInfoTo;
             delete model.sitesInfoCC;
-            delete model.docClassName;
+            //delete model.docClassName;
 
             //delete self.props.docStatus;
             delete model.contentSize;

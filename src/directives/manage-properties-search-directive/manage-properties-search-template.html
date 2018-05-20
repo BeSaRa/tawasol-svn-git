@@ -1,0 +1,426 @@
+<fieldset class="field-set-hidden">
+    <form name="docSearchForm">
+        <div layout="column" ng-if="ctrl.searchType === 'basic'">
+            <div layout="row">
+                <!--<md-input-container ng-if="ctrl.showRegistryUnit()" flex>
+                    <label for="registryOU">{{lang.corr_registry}}</label>
+                    <md-select name="registryOU"
+                               id="registryOU"
+                               ng-change="ctrl.onRegistryChange(ctrl.document.registryOU)"
+                               ng-disabled="ctrl.checkOrganizationDisabled()"
+                               ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
+                               ng-model="ctrl.document.registryOU"
+                               ng-required="ctrl.checkMandatory('registryOU')">
+                        <md-option ng-value="organization.id"
+                                   ng-repeat="organization in ctrl.registryOrganizations">
+                            {{organization.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.ou.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <md-input-container ng-if="!ctrl.showRegistryUnit()" flex>
+                    <label for="ou">{{lang.organization_unit}}</label>
+                    <md-select name="ou"
+                               id="ou"
+                               ng-disabled="ctrl.checkOrganizationDisabled()"
+                               ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
+                               ng-model="ctrl.document.ou"
+                               ng-required="ctrl.checkMandatory('ou')">
+                        <md-option ng-value="organization.id"
+                                   ng-repeat="organization in ctrl.organizations">
+                            {{organization.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.ou.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <md-input-container ng-if="ctrl.showRegistryUnit()" flex>
+                    <label for="ou">{{lang.organization_unit}}</label>
+                    <md-select name="ou"
+                               id="ou"
+                               ng-disabled="ctrl.checkOrganizationDisabled()"
+                               ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
+                               ng-model="ctrl.document.ou"
+                               ng-required="ctrl.checkMandatory('ou')">
+                        <md-option ng-value="organization.id"
+                                   ng-repeat="organization in ctrl.subOrganizations">
+                            {{organization.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.ou.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>-->
+
+                <!-- Security Level -->
+                <md-input-container flex>
+                    <label for="securityLevel">{{lang.security_level}}</label>
+                    <md-select name="securityLevel"
+                               id="securityLevel"
+                               ng-change="ctrl.onSecurityLevelChange()"
+                               ng-model="ctrl.document.securityLevel"
+                               ng-model-options="{trackBy: '$value.id'}"
+                               ng-required="ctrl.checkMandatory('securityLevel')">
+                        <md-option ng-value="level"
+                                   ng-repeat="level in ctrl.securityLevels">
+                            {{level.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.securityLevel.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <!-- Priority Level -->
+                <md-input-container flex>
+                    <label for="priorityLevel">{{lang.outgoing_priority_level}}</label>
+                    <md-select name="priorityLevel"
+                               id="priorityLevel"
+                               ng-model="ctrl.document.priorityLevel"
+                               ng-model-options="{trackBy: '$value.id'}"
+                               ng-required="ctrl.checkMandatory('priorityLevel')">
+                        <md-option ng-value="priorityLevel"
+                                   ng-repeat="priorityLevel in ctrl.priorityLevels">
+                            {{priorityLevel.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.priorityLevel.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <!-- Document Number -->
+                <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "incoming"'>
+                    <label for="refDocNumber">{{lang.document_number}}</label>
+                    <input name="refDocNumber" id="refDocNumber"
+                           ng-required="ctrl.checkMandatory('refDocNumber')"
+                           ng-model="ctrl.document.refDocNumber">
+                    <div ng-messages="docSearchForm.refDocNumber.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <!-- Type -->
+                <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "internal"'>
+                    <label for="type">{{lang.type}}</label>
+                    <md-select name="type" id="type"
+                               ng-model="ctrl.document.internalDocType"
+                               ng-required="ctrl.checkMandatory('internalDocType')"
+                               required>
+                        <md-option ng-value="type.value"
+                                   ng-repeat="type in ctrl.typeOptions track by $index">
+                            {{lang[type.key]}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.type.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <!-- Document Subject -->
+                <md-input-container flex>
+                    <label for="docSubject">{{lang.document_subject}}</label>
+                    <!--custom-validate-directive="AEN" -->
+                    <textarea name="docSubject"
+                              id="docSubject"
+                              ng-model="ctrl.document.docSubject"
+                              ng-required="ctrl.checkMandatory('docSubject')"></textarea>
+                    <div ng-messages="docSearchForm.docSubject.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                        <div ng-message="AEN">{{lang.arabic_english_number}}</div>
+                    </div>
+                </md-input-container>
+                <!-- Year -->
+                <md-input-container flex>
+                    <label for="year">{{lang.search_module_year}}</label>
+                    <md-select name="year" id="year"
+                               ng-required="ctrl.checkMandatory('year')"
+                               ng-change="ctrl.setSelectedYear(true, $event)"
+                               ng-model="ctrl.document.year">
+                        <md-option ng-value="year"
+                                   ng-repeat="year in ctrl.years() track by $index">
+                            {{year}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.year.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <!-- Change Date Range -->
+                <md-input-container ng-if="ctrl.checkShowDateFields()">
+                    <md-button class="md-icon-button"
+                               tooltip="{{lang.change_date_range}}"
+                               ng-click="ctrl.changeYearRange($event)">
+                        <md-icon md-svg-icon="calendar"></md-icon>
+                    </md-button>
+                </md-input-container>
+                <!-- Date Label From -->
+                <md-input-container ng-if="ctrl.checkShowDateFields()">
+                    <label>{{lang.search_module_start_date}}</label>
+                    <input readonly="true" disabled="true" value="{{ctrl.docDateFromLabel}}">
+                </md-input-container>
+                <!-- Date Label To -->
+                <md-input-container ng-if="ctrl.checkShowDateFields()">
+                    <label>{{lang.search_module_end_date}}</label>
+                    <input readonly="true" disabled="true" value="{{ctrl.docDateToLabel}}">
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <!-- Main Classification -->
+                <md-input-container flex>
+                    <label for="mainClassification">{{lang.outgoing_main_classification}}</label>
+                    <md-select name="mainClassification"
+                               id="mainClassification"
+                               ng-model="ctrl.document.mainClassification"
+                               ng-model-options="{trackBy: '$value.id'}"
+                               ng-required="ctrl.checkMandatory('mainClassification')">
+                        <md-option ng-value="classification.classification"
+                                   ng-repeat="classification in ctrl.classifications">
+                            {{classification.classification.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.mainClassification.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <!-- Sub Classification -->
+                <md-input-container flex>
+                    <label for="subClassification">{{lang.outgoing_sub_classification}}</label>
+                    <md-select
+                            ng-disabled="!ctrl.document.mainClassification"
+                            name="subClassification"
+                            id="subClassification"
+                            ng-model-options="{trackBy: '$value.id'}"
+                            ng-model="ctrl.document.subClassification"
+                            ng-required="ctrl.checkMandatory('subClassification')">
+                        <md-option ng-value="classification"
+                                   ng-repeat="classification in ctrl.document.mainClassification.children">
+                            {{classification.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.subClassification.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <!-- Document Type -->
+                <md-input-container flex>
+                    <label for="docType">{{lang.outgoing_document_type}}</label>
+                    <md-select name="docType"
+                               id="docType"
+                               ng-model="ctrl.document.docType"
+                               ng-model-options="{trackBy: '$value.id'}"
+                               ng-required="ctrl.checkMandatory('docType')">
+                        <md-option ng-value="documentType"
+                                   ng-repeat="documentType in ctrl.documentTypes">
+                            {{documentType.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.docType.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <!-- File -->
+                <md-input-container flex>
+                    <label for="fileId">{{lang.outgoing_file}}</label>
+                    <md-select name="fileId"
+                               id="fileId"
+                               ng-change="ctrl.onFileChange(ctrl.document.fileId)"
+                               ng-model="ctrl.document.fileId"
+                               ng-model-options="{trackBy: '$value.id'}"
+                               ng-required="ctrl.checkMandatory('fileId')">
+                        <md-option ng-value="file.file"
+                                   ng-repeat="file in ctrl.documentFiles">
+                            {{file.file.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.fileId.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <!-- File Code -->
+                <md-input-container flex>
+                    <label for="fileCode">{{lang.outgoing_file_code}}</label>
+                    <input name="fileCode"
+                           id="fileCode"
+                           ng-enter="ctrl.onFileCodeChanged()"
+                           ng-model="ctrl.document.fileCode"
+                           ng-required="ctrl.checkMandatory('fileCode')">
+                    <div ng-messages="docSearchForm.fileCode.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <!-- File Serial -->
+                <md-input-container flex>
+                    <label for="fileSerial">{{lang.outgoing_file_serial}}</label>
+                    <input name="fileSerial" custom-validate-directive="number"
+                           id="fileSerial"
+                           ng-model="ctrl.document.fileSerial"
+                           ng-required="ctrl.checkMandatory('fileSerial')">
+                    <div ng-messages="docSearchForm.fileSerial.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                        <div ng-message="number">{{lang.numberonly}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <!-- Notes -->
+                <md-input-container flex>
+                    <label for="docNotes">{{lang.properties_notes}}</label>
+                    <textarea ng-required="ctrl.checkMandatory('docNotes')" name="docNotes" id="docNotes"
+                              ng-model="ctrl.document.docNotes" rows="5"></textarea>
+                </md-input-container>
+            </div>
+        </div>
+
+        <div layout="column" ng-if="ctrl.searchType === 'advanced'">
+            <!-- Correspondence Site -->
+            <div layout="row" ng-if='ctrl.document.docClassName.toLowerCase() !== "internal"'>
+                <!-- Correspondence Site Type -->
+                <md-input-container flex>
+                    <label for="correspondenceSiteType">{{lang.correspondence_site_type}}</label>
+                    <md-select name="correspondenceSiteType"
+                               id="correspondenceSiteType"
+                               ng-change="ctrl.getCorrespondenceSites(true, $event)"
+                               ng-model="ctrl.correspondenceSiteType"
+                               ng-required="ctrl.checkMandatory('sitesInfoTo') || ctrl.checkMandatory('sitesInfoCC')">
+                        <md-option ng-value="siteType"
+                                   ng-repeat="siteType in ctrl.correspondenceSiteTypes">
+                            {{siteType.getTranslatedName()}}
+                        </md-option>
+                        <md-option ng-value="null">{{lang.none}}</md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.correspondenceSiteType.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+
+                <!-- Change correspondence sites -->
+                <md-input-container >
+                    <md-button class="md-icon-button"
+                               tooltip="{{lang.change_correspondence_sites}}"
+                               tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}"
+                               ng-click="ctrl.getCorrespondenceSites(false, $event)">
+                        <md-icon md-svg-icon="pencil"></md-icon>
+                    </md-button>
+                </md-input-container>
+
+                <!-- Selected Main Site -->
+                <md-input-container flex ng-if="ctrl.correspondenceSiteType && ctrl.mainSiteLabel">
+                    <label for="sitesInfoTo">{{lang.main_site}}</label>
+                    <input name="sitesInfoTo" id="sitesInfoTo"
+                           ng-required="ctrl.checkMandatory('sitesInfoTo')"
+                           ng-model="ctrl.mainSiteLabel"
+                           ng-disabled="true" ng-readonly="true">
+                    <div ng-messages="docSearchForm.sitesInfoTo.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+
+                <!-- Selected Sub Site -->
+                <md-input-container flex ng-if="ctrl.correspondenceSiteType && ctrl.subSiteLabel">
+                    <label for="sitesInfoCC">{{lang.sub_site}}</label>
+                    <input name="sitesInfoCC" id="sitesInfoCC"
+                           ng-required="ctrl.checkMandatory('sitesInfoCC')"
+                           ng-model="ctrl.subSiteLabel"
+                           ng-disabled="true" ng-readonly="true">
+                    <div ng-messages="docSearchForm.sitesInfoCC.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+
+            <!-- Entity Type -->
+            <div layout="row">
+                <!-- Entity Type Drop down -->
+                <md-input-container flex>
+                    <label for="selectedEntityType">{{lang.linked_entity}}</label>
+                    <md-select name="selectedEntityType"
+                               id="selectedEntityType"
+                               ng-change="ctrl.openEntityTypePopup(true, $event)"
+                               ng-model="ctrl.selectedEntityType"
+                               ng-required="ctrl.checkMandatory('linkedEntities')">
+                        <md-option ng-value="entityType"
+                                   ng-repeat="entityType in ctrl.entityTypesArray">
+                            {{entityType.getTranslatedName()}}
+                        </md-option>
+                        <md-option ng-value="null">{{lang.none}}</md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.selectedEntityType.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+
+                <!-- Change Entity Type Values -->
+                <md-input-container >
+                    <md-button class="md-icon-button" ng-if="!!ctrl.linkedEntityValueName"
+                               tooltip="{{lang.change_entity_type}}"
+                               tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}"
+                               ng-click="ctrl.openEntityTypePopup(false, $event)">
+                        <md-icon md-svg-icon="pencil"></md-icon>
+                    </md-button>
+                </md-input-container>
+
+                <!-- Name of linked entity -->
+                <md-input-container flex ng-if="!!ctrl.linkedEntityValueName">
+                    <label for="linkedEntityName">{{lang.name}}</label>
+                    <input name="linkedEntityName" id="linkedEntityName"
+                           ng-required="ctrl.checkMandatory('linkedEntities')"
+                           ng-model="ctrl.linkedEntityValueName"
+                           ng-disabled="true" ng-readonly="true">
+                    <div ng-messages="docSearchForm.linkedEntities.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+
+            <!-- Approver -->
+            <!--<div layout="row">
+                &lt;!&ndash; Users drop down &ndash;&gt;
+                <md-input-container flex>
+                    <label for="approvers">{{lang.linked_entity}}</label>
+                    <md-select name="approvers"
+                               id="approvers"
+                               ng-change="ctrl.openEntityTypePopup(true, $event)"
+                               ng-model="ctrl.document.approvers"
+                               ng-required="ctrl.checkMandatory('approvers')">
+                        <md-option ng-value="approver"
+                                   ng-repeat="approver in ctrl.approvers">
+                            {{approver.getTranslatedName()}}
+                        </md-option>
+                        <md-option ng-value="null">{{lang.none}}</md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.selectedEntityType.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+
+                &lt;!&ndash; Change Entity Type Values &ndash;&gt;
+                <md-input-container >
+                    <md-button class="md-icon-button" ng-if="!!ctrl.linkedEntityValueName"
+                               tooltip="{{lang.change_entity_type}}"
+                               tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}"
+                               ng-click="ctrl.openEntityTypePopup(false, $event)">
+                        <md-icon md-svg-icon="pencil"></md-icon>
+                    </md-button>
+                </md-input-container>
+
+                &lt;!&ndash; Name of linked entity &ndash;&gt;
+                <md-input-container flex ng-if="!!ctrl.linkedEntityValueName">
+                    <label for="linkedEntityName">{{lang.name}}</label>
+                    <input name="linkedEntityName" id="linkedEntityName"
+                           ng-required="ctrl.checkMandatory('linkedEntities')"
+                           ng-model="ctrl.linkedEntityValueName"
+                           ng-disabled="true" ng-readonly="true">
+                    <div ng-messages="docSearchForm.linkedEntities.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+            </div>-->
+        </div>
+    </form>
+</fieldset>

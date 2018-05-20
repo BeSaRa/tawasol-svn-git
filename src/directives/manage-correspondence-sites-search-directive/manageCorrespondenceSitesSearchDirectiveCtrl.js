@@ -1,54 +1,39 @@
 module.exports = function (app) {
-    app.controller('manageCorrespondenceSitesDirectiveCtrl', function (correspondenceViewService,
-                                                                       langService,
-                                                                       dialog,
-                                                                       moment,
-                                                                       $scope,
-                                                                       Site,
-                                                                       lookupService,
-                                                                       CorrespondenceSiteType,
-                                                                       LangWatcher,
-                                                                       $timeout,
-                                                                       $q,
-                                                                       _,
-                                                                       correspondenceService,
-                                                                       generator,
-                                                                       SiteView,
-                                                                       rootEntity) {
+    app.controller('manageCorrespondenceSitesSearchDirectiveCtrl', function (correspondenceViewService,
+                                                                             langService,
+                                                                             dialog,
+                                                                             moment,
+                                                                             $scope,
+                                                                             Site,
+                                                                             lookupService,
+                                                                             CorrespondenceSiteType,
+                                                                             LangWatcher,
+                                                                             $timeout,
+                                                                             $q,
+                                                                             _,
+                                                                             correspondenceService,
+                                                                             generator,
+                                                                             SiteView,
+                                                                             rootEntity) {
         'ngInject';
         var self = this;
-        self.controllerName = 'manageCorrespondenceSitesDirectiveCtrl';
+        self.controllerName = 'manageCorrespondenceSitesSearchDirectiveCtrl';
 
-        self.tabsToShow = [
-            'correspondenceSites',
-            'distributionLists'
-        ];
-        self.showTab = function (tabName) {
-            return self.tabsToShow.indexOf(tabName) > -1;
-        };
-        self.currentTab = 'correspondenceSites';
-        self.setCurrentTab = function (tabName) {
-            self.currentTab = tabName;
-        };
         self.isSimpleCorrespondenceSiteSearchType = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
 
-        // all correspondence site types
-        // self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
         self.documentClass = null;
         $timeout(function () {
+            // all correspondence site types
             self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));
-            self.correspondenceSiteTypes.push(new CorrespondenceSiteType({
-                id: null,
-                arName: langService.getKey('not_found', 'ar'),
-                enName: langService.getKey('not_found', 'en')
-            }));
-
-            self.distributionLists = angular.copy(correspondenceService.getLookup(self.documentClass, 'distributionList'));
+            self.sitesInfoCC = self.sitesInfoCC || [];
+            self.sitesInfoTo = self.sitesInfoTo || [];
+            if(self.isSimpleCorrespondenceSiteSearchType && self.selectedSiteType)
+                self.onSiteTypeChange();
         });
 
         // model to search on correspondence sites type
         self.typeSearch = '';
-        self.selectedType = null;
+        //self.selectedType = null;
         // model for search on main correspondence sites
         self.mainSearch = '';
         // selected mainCorrespondence sites
@@ -85,18 +70,10 @@ module.exports = function (app) {
         self.sitesInfoCCFollowupStatus = null;
         // default sites info to followupStatusDate
         self.sitesInfoToFollowupStatusDate = null;
+        self.sitesInfoToFollowupStatusDateTo = null;
         // default sites info to followupStatusDate
         self.sitesInfoCCFollowupStatusDate = null;
-
-
-        // sub Search result for distribution list
-        self.subSearchResult_DL = [];
-        // sub correspondence selected from result for distribution list
-        self.subSearchSelected_DL = [];
-        // selected followup Status for distribution list
-        self.followupStatus_DL = null;
-        // get the main sites for selected correspondence site type
-        self.selectedDistributionList = null;
+        self.sitesInfoCCFollowupStatusDateTo = null;
 
 
         /**
@@ -171,19 +148,6 @@ module.exports = function (app) {
                         label: langService.get('all'),
                         value: function () {
                             return (self.sitesInfoCC.length + 21);
-                        }
-                    }
-                ]
-            },
-            subSearchResult_DL: {
-                limit: 5, // default limit
-                page: 1, // first page
-                order: 'arName', // default sorting order
-                limitOptions: [5, 10, 20, // limit options
-                    {
-                        label: langService.get('all'),
-                        value: function () {
-                            return (self.subSearchResult_DL.length + 21);
                         }
                     }
                 ]
@@ -303,10 +267,31 @@ module.exports = function (app) {
          * @private
          */
         function _addSite(to, site) {
-            return $timeout(function () {
+            var promise;
+            if (self.sitesInfoTo.length || self.sitesInfoCC.length) {
+                promise = dialog
+                    .confirmMessage(langService.get('correspondence_site_will_change'))
+                    .then(function () {
+                        self.sitesInfoTo = [];
+                        self.sitesInfoCC = [];
+                        self['sitesInfo' + to].push(site);
+                        return true;
+                    });
+            }
+            else {
+                promise = $timeout(function () {
+                    self['sitesInfo' + to].push(site);
+                    return true;
+                });
+            }
+
+            return promise.then(function (result) {
+                return result;
+            })
+            /*return $timeout(function () {
                 self['sitesInfo' + to].push(site);
                 return true;
-            });
+            });*/
         }
 
         /**
@@ -318,8 +303,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.subSearchSelected = [];
                     _concatCorrespondenceSites(true).then(function () {
-                        self.subSearchResult = _.filter(self.subSearchResult, _filterSubSites);
-                        self.subSearchResult_DL = _.filter(self.subSearchResult_DL, _filterSubSites);
+                        self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                     });
                 })
         };
@@ -332,8 +316,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.subSearchSelected = [];
                     _concatCorrespondenceSites(true).then(function () {
-                        self.subSearchResult = _.filter(self.subSearchResult, _filterSubSites);
-                        self.subSearchResult_DL = _.filter(self.subSearchResult_DL, _filterSubSites);
+                        self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                     });
                 });
         };
@@ -341,9 +324,8 @@ module.exports = function (app) {
          * @description add all selected sites to To.
          * @param sites
          * @param $event
-         * @param isDistributionListRecord
          */
-        self.addSitesTo = function (sites, $event, isDistributionListRecord) {
+        self.addSitesTo = function (sites, $event) {
             if (self.needReply(self.followupStatus) && !self.followUpStatusDate) {
                 dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
                 return;
@@ -351,24 +333,18 @@ module.exports = function (app) {
             _.map(sites, function (site) {
                 self.addSiteTo(site);
             });
-            if (isDistributionListRecord) {
-                self.followUpStatusDate_DL = null;
-                self.followupStatus_DL = null;
-                self.subSearchSelected_DL = [];
-            }
-            else {
+
                 self.followUpStatusDate = null;
                 self.followupStatus = null;
                 self.subSearchSelected = [];
-            }
+
         };
         /**
          * @description add all selected sites to CC.
          * @param sites
          * @param $event
-         * @param isDistributionListRecord
          */
-        self.addSitesCC = function (sites, $event, isDistributionListRecord) {
+        self.addSitesCC = function (sites, $event) {
             if (self.needReply(self.followupStatus) && !self.followUpStatusDate) {
                 dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
                 return;
@@ -376,16 +352,10 @@ module.exports = function (app) {
             _.map(sites, function (site) {
                 self.addSiteCC(site);
             });
-            if (isDistributionListRecord) {
-                self.followUpStatusDate_DL = null;
-                self.followupStatus_DL = null;
-                self.subSearchSelected_DL = [];
-            }
-            else {
                 self.followUpStatusDate = null;
                 self.followupStatus = null;
                 self.subSearchSelected = [];
-            }
+
         };
         /**
          * @description change site from CC to To and else.
@@ -421,7 +391,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.onSiteTypeChange = function ($event) {
-            if (self.selectedSiteType.id) {
+            if (self.selectedSiteType && self.selectedSiteType.id) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                     criteria: null,
@@ -447,7 +417,7 @@ module.exports = function (app) {
                 criteria: null,
                 excludeOuSites: false
             }).then(function (result) {
-                self.subSearchResultCopy = angular.copy(result);
+                self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                 self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
             });
         };
@@ -469,7 +439,7 @@ module.exports = function (app) {
                     $timeout(function () {
                         refreshDebounce();
                         correspondenceViewService.correspondenceSiteSearch('main', {
-                            type: self.selectedType ? self.selectedType.lookupKey : null,
+                            type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                             criteria: mainSearch
                         }).then(function (result) {
                             resolve(_.map(result, _mapSite));
@@ -484,8 +454,8 @@ module.exports = function (app) {
          * @param main
          */
         self.onMainChange = function (main) {
-            if (main && !self.selectedType)
-                self.selectedType = _mapTypes(_getTypeByLookupKey(main.correspondenceSiteTypeId));
+            if (main && !self.selectedSiteType)
+                self.selectedSiteType = _mapTypes(_getTypeByLookupKey(main.correspondenceSiteTypeId));
         };
         /**
          * check if need replay
@@ -517,21 +487,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description set all followupStatus for all subSearchResult.
-         */
-        self.onFollowupStatusChange_DL = function (status) {
-            self.followupStatus_DL = status;
-            _setSitesProperty(self.subSearchSelected_DL, 'followupStatus', status);
-        };
-        /**
-         * @description set all followupDate for all subSearchResult.
-         */
-        self.onFollowupDateChange_DL = function () {
-            _setSitesProperty(self.subSearchSelected_DL, 'followupDate', self.followUpStatusDate_DL);
-        };
-
-
-        /**
          * single select to set follow up status for selected row.
          * @param site
          * @param status
@@ -540,6 +495,7 @@ module.exports = function (app) {
             site.followupStatus = status;
             if (!self.needReply(site.followupStatus)) {
                 site.followupDate = null;
+                site.followupDate2= null;
             }
         };
 
@@ -600,7 +556,7 @@ module.exports = function (app) {
                     $timeout(function () {
                         refreshDebounce();
                         correspondenceViewService.correspondenceSiteSearch('sub', {
-                            type: self.selectedType ? self.selectedType.lookupKey : null,
+                            type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                             parent: self.selectedMain ? self.selectedMain.id : null,
                             criteria: self.subSearch
                         }).then(function (result) {
@@ -608,6 +564,7 @@ module.exports = function (app) {
                                 self.subSearchResult = [];
                                 return;
                             }
+                            self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                             self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
                             resolve(self.subSearchResult);
                         });
@@ -615,30 +572,6 @@ module.exports = function (app) {
                 });
             }
             return pendingSearch;
-        };
-
-        self.getCorrespondenceSites_DL = function ($event) {
-            /*return correspondenceViewService.getCorrespondenceSitesByDistributionListId(self.selectedDistributionList)
-                .then(function (result) {
-                    self.subSearchResult_DL = _.filter(_.map(result, _mapSubSites), _filterSubSites);
-                });*/
-            var sites = _.map(self.selectedDistributionList.distributionListMembers, function (member) {
-                return member.site;
-            });
-            var siteViews = generator.generateCollection(sites, SiteView, self._sharedMethods);
-            siteViews = generator.interceptReceivedCollection('SiteView', siteViews);
-
-            self.subSearchResult_DL = _.filter(_.map(siteViews, _mapSubSites), _filterSubSites);
-
-        };
-
-        /**
-         * @description empty the subSearch result and selected to hide the search result grid.
-         */
-        self.onCloseSearch_DL = function () {
-            self.subSearchResult_DL = [];
-            self.subSearchSelected_DL = [];
-            self.selectedDistributionList = null;
         };
 
         /**

@@ -80,4 +80,7 @@ module.exports = function (app) {
     require('./magazine-right-click-directive/magazine-right-click-directive')(app);
     require('./filter-label-directive/01-index')(app);
     require('./barcode-element-directive/barcode-element-directive')(app);
+    require('./manage-properties-search-directive/01-index')(app);
+    require('./manage-correspondence-sites-search-directive/01-index')(app);
+    require('./manage-entities-search-directive/01-index')(app);
 };

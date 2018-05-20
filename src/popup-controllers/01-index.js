@@ -92,4 +92,7 @@ module.exports = function (app) {
     require('./addUserToWorkflowGroupPopCtrl')(app);
     require('./filterPopCtrl')(app);
     require('./partialExportPopCtrl')(app);
+    require('./searchDocDateRangePopCtrl')(app);
+    require('./manageCorrespondenceSitesSearchPopCtrl')(app);
+    require('./manageDocumentEntitiesSearchPopCtrl')(app);
 };

@@ -32,7 +32,8 @@ module.exports = function (app) {
                                                    counterService,
                                                    correspondenceService,
                                                    favoriteDocumentsService,
-                                                   mailNotificationService) {
+                                                   mailNotificationService,
+                                                   OutgoingSearch) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchOutgoingCtrl';
@@ -43,9 +44,8 @@ module.exports = function (app) {
         self.progress = null;
         self.showAdvancedSearch = false;
 
-        self.searchOutgoing = new DocumentSearch({
-            reqType: 0
-        });
+        self.searchOutgoing = new OutgoingSearch();
+
         //self.searchOutgoing.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
         self.searchOutgoingModel = angular.copy(self.searchOutgoing);
 
@@ -151,11 +151,6 @@ module.exports = function (app) {
          */
         self.checkRequiredFieldsSearchOutgoing = function (model) {
             var required = self.requiredFieldsSearchOutgoing, result = [];
-            /*_.map(required, function (property) {
-             var propertyValueToCheck = (model.hasOwnProperty(property) ? model[property] : model.props[property]);
-             if (!generator.validRequired(propertyValueToCheck))
-             result.push(property);
-             });*/
             _.map(required, function (property) {
                 var propertyValueToCheck = model[property];
                 if (!generator.validRequired(propertyValueToCheck))

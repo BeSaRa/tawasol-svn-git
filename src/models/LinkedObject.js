@@ -194,6 +194,29 @@ module.exports = function (app) {
                 }
                 return name;
             };
+
+            /**
+             * @description Gets the name of the linked object in any language
+             * @returns {*}
+             */
+            LinkedObject.prototype.getName = function () {
+                var position = defaultTypes.indexOf(this.getType(this.typeId));
+                var self = this;
+                var currentLang = langService.current === 'ar' ? 'Ar' : 'En',
+                    currentLangReverse = langService.current === 'ar' ? 'En' : 'Ar',
+                    name = null;
+                switch (position) {
+                    case 0:
+                    case 1:
+                        name = self['fullName' + currentLang] || self['fullName' + currentLangReverse];
+                        break;
+                    default:
+                        name = self.name;
+                        break;
+                }
+                return name;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('LinkedObject', 'init', this);

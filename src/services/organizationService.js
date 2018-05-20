@@ -336,6 +336,8 @@ module.exports = function (app) {
          */
         self.loadOrganizationChildren = function (organization, type) {
             var id = organization.hasOwnProperty('id') ? organization.id : organization;
+
+            // type query parameter is used to exclude reg Ous.
             return $http
                 .get((urlService.organizations + '/' + id + '/childs' + (type ? '?type=1' : '')))
                 .then(function (result) {

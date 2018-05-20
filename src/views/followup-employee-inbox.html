@@ -239,7 +239,7 @@
                                                  ng-if="!ctrl.selectedFollowupEmployeeInboxes.length
                                                           || ctrl.selectedFollowupEmployeeInboxes.length===1 && ctrl.selectedFollowupEmployeeInboxes[0].generalStepElm.workObjectNumber === followupEmployeeInbox.generalStepElm.workObjectNumber"
                                                  tooltip="{{followupEmployeeInbox.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
-                                                 tooltip-direction="{{ctrl.langService.getCurrentLang() === 'en' ? 'left' : 'right'}}">
+                                                 tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}">
                                             </div>
                                         </td>
                                     </tr>

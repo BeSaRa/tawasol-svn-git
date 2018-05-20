@@ -135,10 +135,12 @@ module.exports = function (app) {
     require('./SignDocumentModel')(app);
     require('./Rank')(app);
     require('./UserFilter')(app);
-    require('./CorrespondenceSiteView')(app);
     require('./G2G')(app);
     require('./PartialExport')(app);
     require('./PartialExportSelective')(app);
     require('./PartialExportCollection')(app);
     require('./BarcodeSetting')(app);
+    require('./OutgoingSearch')(app);
+    require('./IncomingSearch')(app);
+    require('./InternalSearch')(app);
 };

@@ -646,6 +646,7 @@ module.exports = function (app) {
             return $http
                 .post(urlService.ouApplicationUsers + '/search', criteria)
                 .then(function (result) {
+                    debugger;
                     return generator.interceptReceivedCollection('OUApplicationUser', generator.generateCollection(result.data.rs, OUApplicationUser));
                 });
         };

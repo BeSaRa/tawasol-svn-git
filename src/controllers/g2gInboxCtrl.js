@@ -84,16 +84,28 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            alert("view document");
+
+            return g2gInboxService.openG2G(g2gInbox)
+                .then(function (result) {
+                    alert("open document");
+                })
         };
 
 
-        self.receiveDocument = function(g2gInbox, $event){
-          console.log('receive document', g2gInbox);
+        self.receiveDocument = function (g2gInbox, $event) {
+            console.log('receive document', g2gInbox);
+            return g2gInboxService.receiveG2G(g2gInbox)
+                .then(function (result) {
+                    toast.success(langService.get('success'));
+                })
         };
 
-        self.returnDocument = function(g2gInbox, $event){
+        self.returnDocument = function (g2gInbox, $event) {
             console.log('return document', g2gInbox);
+            return g2gInboxService.returnG2G(g2gInbox)
+                .then(function (result) {
+                    toast.success(langService.get('success'));
+                })
         };
 
         /**

@@ -16,7 +16,6 @@
             <div scroll-directive>
                 <div class="page-padding">
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                        <!-- exact table from live demo -->
                         <md-table-container>
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedFavoriteDocuments"
@@ -29,8 +28,6 @@
                                             <div layout="row" layout-align="start center">
                                                 <span>{{ctrl.selectedFavoriteDocuments.length}} {{lang.items_selected}} </span>
                                                 <span flex></span>
-                                                <!--<table-status-directive
-                                                        when-close="ctrl.changeStatusBulkFavoriteDocuments"></table-status-directive>-->
                                                 <md-button class="md-icon-button"
                                                            ng-click="ctrl.removeBulkFavoriteDocuments($event)">
                                                     <md-icon md-svg-icon="delete" class="action-green"></md-icon>

@@ -222,7 +222,7 @@
                                                  ng-if="!ctrl.selectedWorkItems.length
                                                           || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === workItem.generalStepElm.workObjectNumber"
                                                  tooltip="{{workItem.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
-                                                 tooltip-direction="{{ctrl.langService.getCurrentLang() === 'en' ? 'left' : 'right'}}">
+                                                 tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}">
                                             </div>
                                         </td>
                                     </tr>

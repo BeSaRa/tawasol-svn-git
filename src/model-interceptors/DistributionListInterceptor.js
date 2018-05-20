@@ -4,7 +4,7 @@ module.exports = function (app) {
                       organizationService,
                       distributionListService,
                       OUDistributionList,
-                      CorrespondenceSiteView,
+                      SiteView,
                       generator,
                       _) {
         'ngInject';
@@ -33,8 +33,8 @@ module.exports = function (app) {
 
             angular.forEach(model.distributionListMembers, function (value, key) {
                 var member = angular.copy(value);
-                member = new CorrespondenceSiteView(member.site);
-                member = generator.interceptReceivedInstance('CorrespondenceSiteView', member);
+                member = new SiteView(member.site);
+                member = generator.interceptReceivedInstance('SiteView', member);
                 value.site = member;
             });
             var ouDistributionList = ouDistributionListService.ouDistributionLists;

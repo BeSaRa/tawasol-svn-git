@@ -4,7 +4,6 @@ module.exports = function (app) {
                                                        $q, 
                                                        generator, 
                                                        SiteView,
-                                                       CorrespondenceSiteView,
                                                        _) {
         'ngInject';
         var self = this;
@@ -39,16 +38,6 @@ module.exports = function (app) {
                 return generator.interceptReceivedCollection('SiteView', siteViews);
             });
         };
-
-        self.correspondenceSiteSearchForDistributionList = function (searchType, details) {
-            var url = _createSearchUrl(searchType, details);
-            return $http.post(url , details).then(function (result) {
-                var correspondenceSiteViews = generator.generateCollection(result.data.rs, CorrespondenceSiteView, self._sharedMethods);
-                return generator.interceptReceivedCollection('CorrespondenceSiteView', correspondenceSiteViews);
-            });
-        };
-
-
 
         self.getCorrespondenceSitesByDistributionListId = function (distributionListId) {
             distributionListId = distributionListId.hasOwnProperty('id') ? distributionListId.id : distributionListId;

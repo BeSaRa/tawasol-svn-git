@@ -1,15 +1,17 @@
 module.exports = function (app) {
-    app.directive('gridRightClickDirective', function ($parse, $compile, $timeout, $window) {
+    app.directive('gridRightClickDirective', function ($parse, $compile, $timeout, _, $window) {
         'ngInject';
         return function (scope, element, attrs) {
+            var cursorLeft, cursorTop, sideBar, sideBarVisibleInitially = false, sideBarWidth, subLeft, subTop;
             element.bind('contextmenu', function (event) {
+                var $target = $(event.target);
                 var tagName = event.target.tagName.toLowerCase();
                 /*
-                * If right click on column
+                * If right click on column(td)
                 * OR
-                * If right click on span and span has a parent td with class "td-data"
+                * If right click on span inside (td) and span has any parent td with class "td-data"
                 * OR
-                * If right click on anchor and anchor has a parent td with class "subject"
+                * If right click on anchor inside (td) and anchor has any parent td with class "subject" or "td-data"
                 *
                 * AND
                 *
@@ -17,19 +19,20 @@ module.exports = function (app) {
                 * */
                 if (// If right click on td
                 ( tagName === "td"
-                    // If right click on span and span has parent with class td-data
-                    || (tagName === 'span' && $(event.target).parents("td.td-data").length > 0)
-                    // If right click on anchor tag and it has class subject
-                    || (tagName === 'a' && $(event.target).parents("td.subject").length > 0)
+                    // If right click on span and it has parent with class "td-data"
+                    || (tagName === 'span' && $target.parents("td.td-data").length > 0)
+                    // If right click on anchor tag and it has parent with class "subject" or "td-data"
+                    || (tagName === 'a' && ($target.parents("td.subject").length > 0 || $target.parents("td.td-data").length > 0))
                 )
                 // Selected records count should be less than 2
-                && Number(attrs.selectedLength < 2)
+                && Number(attrs['selectedLength'] < 2)
                 ) {//scope.$parent.ctrl.selectedPrepareOutgoings.length < 2){
 
                     // If no record selected
                     // OR
                     // If 1 record is selected and right click on same element.
-                    if (Number(attrs.selectedLength) === 0 || (Number(attrs.selectedLength) === 1 && event.target.parentElement.classList.contains('md-selected'))) {
+                    if (Number(attrs['selectedLength']) === 0 || (Number(attrs['selectedLength']) === 1 && event.target.parentElement.classList.contains('md-selected'))) {
+                        /*var left, top, subLeft, subTop;*/
                         scope.$apply(function () {
                             event.preventDefault();
                             if (angular.element('#grid-menu-container').length)
@@ -42,9 +45,13 @@ module.exports = function (app) {
                             wrapper.append(currentMenuContainer);
 
                             var positions = currentMenuContainer.offset();
-                            var left = event.clientX - positions.left - 18;
-                            var top = event.clientY - positions.top - 13;
+                            var left = angular.copy(event.clientX - positions.left - 18);
+                            var top = angular.copy(event.clientY - positions.top - 13);
 
+                            if(!cursorLeft && !cursorTop) {
+                                cursorLeft = angular.copy(event.clientX);
+                                cursorTop = angular.copy(event.clientY);
+                            }
                             var menu = angular.element('<grid-actions-directive />', {
                                 'grid-actions': 'ctrl.gridActions',
                                 'model': attrs.model,
@@ -60,11 +67,48 @@ module.exports = function (app) {
 
                             $timeout(function () {
                                 menu.find('.menu-handler').click();
+                                /*sideBar = angular.element('#main-sidebar');
+                                sideBarWidth = angular.copy(parseInt(sideBar.width(), 10));
+                                sideBarVisibleInitially = angular.copy(sideBar.hasClass('gt-small'));
+
+                                angular.element($window).bind('resize', function () {
+                                    handleResizeEnd();
+                                });
+                                // manual call for digest as resize is outside of angular scope
+                                scope.$digest();*/
                             });
                         });
                     }
                 }
             });
+
+            var handleResizeEnd = _.debounce(function () {
+
+                sideBar = angular.element('#main-sidebar');
+                sideBarWidth = angular.copy(parseInt(sideBar.width(), 10));
+
+                var newLeft, menuVisibleNow= sideBar.hasClass('gt-small');
+                console.log('sidebar width ', sideBarWidth);
+                if((menuVisibleNow && sideBarVisibleInitially) || (!menuVisibleNow && !sideBarVisibleInitially)){
+                    newLeft = cursorLeft;
+                }
+                else if(menuVisibleNow && !sideBarVisibleInitially){
+                    newLeft = cursorLeft + sideBarWidth;
+                }
+                else if(!menuVisibleNow && sideBarVisibleInitially){
+                    newLeft = cursorLeft - sideBarWidth;
+                }
+
+                var contextMenu = angular.element('.context-menu').parent();
+                if (contextMenu && contextMenu.length) {
+                    contextMenu.css({
+                        left: newLeft + 'px',
+                        top: cursorTop + 'px'
+                    });
+                }
+            }, 500);
         };
+
+
     });
 };

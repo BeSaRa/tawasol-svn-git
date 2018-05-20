@@ -12,7 +12,6 @@ module.exports = function (app) {
                                                                     $q,
                                                                     _,
                                                                     generator,
-                                                                    CorrespondenceSiteView,
                                                                     correspondenceSiteTypeService,
                                                                     rootEntity) {
 
@@ -212,7 +211,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.getSubSites = function ($event) {
-            correspondenceViewService.correspondenceSiteSearchForDistributionList('sub', {
+            correspondenceViewService.correspondenceSiteSearch('sub', {
                 type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                 parent: self.selectedMainSite ? self.selectedMainSite.id : null,
                 criteria: null,
@@ -287,7 +286,7 @@ module.exports = function (app) {
 
                     $timeout(function () {
                         refreshDebounce();
-                        correspondenceViewService.correspondenceSiteSearchForDistributionList('sub', {
+                        correspondenceViewService.correspondenceSiteSearch('sub', {
                             type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                             parent: self.selectedMainSite ? self.selectedMainSite.id : null,
                             criteria: self.subSiteSearchText,

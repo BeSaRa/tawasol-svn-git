@@ -2,7 +2,8 @@ module.exports = function (app) {
     app.service('generator', function (_,
                                        CMSModelInterceptor,
                                        tableGeneratorService,
-                                       listGeneratorService) {
+                                       listGeneratorService,
+                                       moment) {
         'ngInject';
         var self = this, dialog, langService, toast, rootEntity;
         var documentClassMap = {
@@ -361,7 +362,6 @@ module.exports = function (app) {
          * @param  {string} errorMessage
          * @param {string} successMessage
          * @param {string} failureSomeMessage
-         * @param {string} keyProperty
          * @returns {*}
          */
         self.getBulkActionResponse = function (resultCollection, selectedItems, ignoreMessage, errorMessage, successMessage, failureSomeMessage) {
@@ -424,7 +424,7 @@ module.exports = function (app) {
             return newer;
         };
         /**
-         * to reset the model after making any changes
+         * @description Reset the model after making any changes
          * @param model
          * @param defaultModel
          */
@@ -432,7 +432,7 @@ module.exports = function (app) {
             _.map(model, function (value, key) {
                 model[key] = defaultModel[key];
             });
-            console.log("RESET MODEL");
+            //console.log("RESET MODEL");
         };
         /**
          * @description upper case first letter.
@@ -518,6 +518,53 @@ module.exports = function (app) {
                 return property + '.' + (langService.current === 'ar' ? 'defaultArName' : 'defaultEnName');
             return property;
         };
+
+        self.defaultDateFormat = 'YYYY-MM-DD';
+        self.defaultDateTimeFormat = 'YYYY-MM-DD hh:mm:ss A';
+        /**
+         * @description Gets the date in default format
+         * @param timestamp
+         * @param dateAndTime
+         * @returns {string | null}
+         */
+        self.getDateFromTimeStamp = function (timestamp, dateAndTime) {
+            if (timestamp) {
+                // in case of long numbers, they will be having L at last. so remove L and change timestamp to moment date.
+                timestamp = Number(timestamp.toString().split('L')[0]);
+                return moment(timestamp).format(dateAndTime ? self.defaultDateTimeFormat : self.defaultDateFormat);
+            }
+            return null;
+        };
+
+        /**
+         * @description Gets timestamp from the provided date
+         * @param date
+         * @param addL
+         * @returns {string | null}
+         */
+        self.getTimeStampFromDate = function (date, addL) {
+            if (date) {
+                date = moment(date, self.defaultDateFormat).valueOf();
+                return addL ? date + 'L' : date;
+            }
+            return null;
+        };
+
+        /**
+         * @description Converts the date to string using provided string format or default date format
+         * @param date
+         * @param format
+         * @returns {string}
+         */
+        self.convertDateToString = function (date, format) {
+            if (date) {
+                date = typeof date === 'string' ? new Date(date) : date;
+                format = format || self.defaultDateFormat;
+                return moment(date).format(format);
+            }
+            return "";
+        };
+
 
         self.filterSecurityLevels = function (collection, available) {
             var lookupKeys = available ? _.map(available, 'lookupKey') : _.map(rootEntity.getGlobalSettings().securityLevels, 'lookupKey');

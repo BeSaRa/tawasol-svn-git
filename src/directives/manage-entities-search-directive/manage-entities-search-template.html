@@ -1,0 +1,13 @@
+<div layout="column">
+    <ng-form layout="column" name="entityForm">
+        <div ng-repeat="fields in ctrl.currentFields track by $index" layout="row">
+            <md-input-container flex ng-repeat="field in fields track by $index">
+                <label for="{{field.label}}">{{lang[ctrl.labels[field.label]]}}</label>
+                <input name="{{field.label}}" id="{{field.label}}" ng-model="ctrl.linkedEntity[field.label]"/>
+                <div ng-messages="entityForm[field.label].$error">
+                    <div ng-message="required">{{lang.field_required}}</div>
+                </div>
+            </md-input-container>
+        </div>
+    </ng-form>
+</div>

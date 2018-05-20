@@ -11,7 +11,7 @@
                 .setBaseUrl('demo', 'http://eblaepm.no-ip.org:9081/CMSServices/service')
                 .setBaseUrl('training', 'http://100.100.3.142:9080/CMSServices/service')
                 .setBaseUrl('ibm', 'http://100.100.3.107:9080/CMSServices/service')
-                .setBaseUrl('manohar', 'http://100.100.12.25:9080/CMSServices/service');
+                .setBaseUrl('manohar', 'http://100.100.11.29:9080/CMSServices/service');
 
             urlServiceProvider
             // to load languages
@@ -302,7 +302,7 @@
                 // all users who set this user as proxy
                 .addToAllWithBase('usersWhoSetYouAsProxy', 'cms-entity/admin/ou-application-user/proxy/')
                 // G2G inbox
-                .addToAllWithBase('g2gInbox', '/g2g/getInboxByOU');
+                .addToAllWithBase('g2gInbox', '/g2g/');
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

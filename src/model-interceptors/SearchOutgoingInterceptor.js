@@ -66,10 +66,24 @@ module.exports = function (app) {
                 model.followUpDate = {From: angular.copy(model.followUpFrom), To: angular.copy(model.followUpTo)};
             }
 
-            // model.tags = (model.tags.length) ? model.tags : null;
-            // model.linkedDocs = (model.linkedDocs.length) ? model.linkedDocs : null;
-            // model.linkedEntities = (model.linkedEntities.length) ? model.linkedEntities : null;
-            // model.attachments = (model.attachments.length) ? model.attachments : null;
+            if (angular.isArray(model.sitesInfoTo) && model.sitesInfoTo.length) {
+                model.sitesInfoTo = model.sitesInfoTo[0];
+                model.sitesInfoTo = JSON.stringify(generator.interceptSendInstance('Site', model.sitesInfoTo));
+            } else {
+                model.sitesInfoTo = null;
+            }
+            if (angular.isArray(model.sitesInfoCC) && model.sitesInfoCC.length) {
+                model.sitesInfoCC = model.sitesInfoCC[0];
+                model.sitesInfoCC = JSON.stringify(generator.interceptSendInstance('Site', model.sitesInfoCC));
+            } else {
+                model.sitesInfoCC = null;
+            }
+//because we select only one linked entity. so, it can't be array
+            if (model.linkedEntities && !angular.isArray(model.linkedEntities)) {
+                model.linkedEntities = angular.toJson(generator.interceptSendInstance('LinkedObject', model.linkedEntities));
+            } else {
+                model.linkedEntities = null;
+            }
 
             model.mainSiteId = model.mainSiteId ? (model.mainSiteId.exactId ? model.mainSiteId.exactId : null) : null;
             model.subSiteId = model.subSiteId ? (model.subSiteId.exactId ? model.subSiteId.exactId : null) : null;
@@ -96,8 +110,8 @@ module.exports = function (app) {
             if (model.docDate.From)
                 model.docDate.From = '' + model.docDate.From;
             //TODO : 11 Jan, 2018. This if condition is added for Iyad to check something. It has to be removed once he finished checking.
-            if(model.docDate.To)
-                model.docDate.To = ''+ model.docDate.To;
+            if (model.docDate.To)
+                model.docDate.To = '' + model.docDate.To;
             model.docDate = angular.toJson(model.docDate);
             return model;
         });

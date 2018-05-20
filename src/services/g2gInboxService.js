@@ -3,7 +3,7 @@ module.exports = function (app) {
                                                     $http , 
                                                     $q , 
                                                     generator,
-                                             G2G,
+                                                    G2G,
                                                     _,
                                                     dialog,
                                                     langService,
@@ -19,7 +19,7 @@ module.exports = function (app) {
          * @returns {Promise|g2gInboxes}
          */
         self.loadG2gInboxes = function () {
-            return $http.get(urlService.g2gInbox).then(function (result) {
+            return $http.get(urlService.g2gInbox + 'getInboxByOU').then(function (result) {
                 self.g2gInboxes = generator.generateCollection(result.data.rs, G2G, self._sharedMethods);
                 self.g2gInboxes = generator.interceptReceivedCollection('G2G', self.g2gInboxes);
                 return self.g2gInboxes;
@@ -119,26 +119,7 @@ module.exports = function (app) {
                                 return response;
                          });
                     });
-            }/*,
-            /!**
-             * @description Open dialog to add relation app users to g2g inbox item
-             * @param g2gInbox
-             * @param $event
-             *!/
-            g2gInboxSetGlobalNo: function(g2gInbox, $event){
-                return dialog
-                    .showDialog({
-                        targetEvent: $event,
-                        template: cmsTemplate.getPopup('relation-app-user'),
-                        controller: 'relationAppUserPopCtrl',
-                        controllerAs: 'ctrl',
-                        locals: {
-                            model: g2gInbox,
-                            propertyToSetValue: 'propertyToSetAppUsers',
-                            updateMethod: self.updateG2gInbox
-                        }
-                    });
-            }*/
+            }
         };
         
         /**
@@ -212,83 +193,45 @@ module.exports = function (app) {
          * @returns {G2gInbox|undefined} return G2gInbox Model or undefined if not found.
          */
         self.getG2gInboxById = function (g2gInboxId) {
-            g2gInboxId = g2gInboxId instanceof G2gInbox ? g2gInboxId.id : g2gInboxId;
+            g2gInboxId = g2gInboxId instanceof G2G ? g2gInboxId.id : g2gInboxId;
             return _.find(self.g2gInboxes, function (g2gInbox) {
                 return Number(g2gInbox.id) === Number(g2gInboxId);
             });
         };
-        
-         /** 
-         * @description Activate g2g inbox item
-         * @param g2gInbox
-         */
-        self.activateG2gInbox = function (g2gInbox) {
+
+        self.returnG2G = function(g2gInboxId){
+            g2gInboxId = g2gInboxId instanceof G2G ? g2gInboxId.id : g2gInboxId;
+        };
+
+        self.receiveG2G = function(g2gCorrespondence){
+            // intercept send instance for G2G
+            g2gCorrespondence =  g2gCorrespondence instanceof G2G ? generator.interceptSendInstance('G2G', g2gCorrespondence) : g2gCorrespondence;
+            // get correspondence from G2G object
+            g2gCorrespondence = g2gCorrespondence.hasOwnProperty('correspondence') ? g2gCorrespondence.correspondence : g2gCorrespondence;
             return $http
-                .put((urlService.g2gInbox + '/activate/' + g2gInbox.id))
-                .then(function () {
-                    return g2gInbox;
+                .put(urlService.g2gInbox + 'receive', g2gCorrespondence)
+                .then(function (result) {
+                    console.log(result);
+                    debugger;
+                    return result;
                 });
         };
         
-        /**
-         * @description Deactivate g2g inbox item
-         * @param g2gInbox
-         */
-        self.deactivateG2gInbox = function (g2gInbox) {
+        self.openG2G  = function(g2gCorrespondence){
+            // intercept send instance for G2G
+            //g2gCorrespondence =  g2gCorrespondence instanceof G2G ? generator.interceptSendInstance('G2G', g2gCorrespondence) : g2gCorrespondence;
+            // get correspondence from G2G object
+            g2gCorrespondence = g2gCorrespondence.hasOwnProperty('correspondence') ? g2gCorrespondence.correspondence : g2gCorrespondence;
+            debugger;
             return $http
-                .put((urlService.g2gInbox + '/deactivate/' + g2gInbox.id))
-                .then(function () {
-                    return g2gInbox;
+                .post(urlService.g2gInbox + 'open', g2gCorrespondence )
+                .then(function (result) {
+                    console.log(result);
+                    debugger;
+                    return result;
                 });
         };
-        
-        /**
-         * @description Activate bulk of g2g inbox items
-         * @param g2gInboxes
-         */
-        self.activateBulkG2gInboxes = function (g2gInboxes) {
-            var bulkIds = g2gInboxes[0].hasOwnProperty('id') ? _.map(g2gInboxes, 'id') : g2gInboxes;
-            return $http
-                .put((urlService.g2gInbox + '/activate/bulk'), bulkIds)
-                .then(function () {
-                    return g2gInboxes;
-                });
-        };
-        
-         /**
-         * @description Deactivate bulk of g2g inbox items
-         * @param g2gInboxes
-         */
-        self.deactivateBulkG2gInboxes = function (g2gInboxes) {
-            var bulkIds = g2gInboxes[0].hasOwnProperty('id') ? _.map(g2gInboxes, 'id') : g2gInboxes;
-            return $http
-                .put((urlService.g2gInbox + '/deactivate/bulk'), bulkIds)
-                .then(function () {
-                    return g2gInboxes;
-                });
-        };
-        
-        /**
-         * @description Check if record with same name exists. Returns true if exists
-         * @param g2gInbox
-         * @param editMode
-         * @returns {boolean}
-         */
-        self.checkDuplicateG2gInbox = function (g2gInbox, editMode) {
-            var g2gInboxesToFilter = self.g2gInboxes;
-            if (editMode) {
-                g2gInboxesToFilter = _.filter(g2gInboxesToFilter, function (g2gInboxToFilter) {
-                    return g2gInboxToFilter.id !== g2gInbox.id;
-                });
-            }
-            return _.some(_.map(g2gInboxesToFilter, function (existingG2gInbox) {
-                return existingG2gInbox.arName === g2gInbox.arName
-                    || existingG2gInbox.enName.toLowerCase() === g2gInbox.enName.toLowerCase();
-            }), function (matchingResult) {
-                return matchingResult === true;
-            });
-        };
-        
+
         /**
          * @description Create the shared method to the model.
          * @type {{delete: generator.delete, update: generator.update}}

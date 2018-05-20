@@ -2,11 +2,10 @@ module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
                       correspondenceSiteTypeService,
                       moment,
-                      Information,
-                      lookupService) {
+                      Information) {
         'ngInject';
 
-        var modelName = 'CorrespondenceSiteView';
+        var modelName = 'SiteView';
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
             return model;

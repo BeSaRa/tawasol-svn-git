@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('SiteView', function (CMSModelInterceptor,
-                                      langService) {
+                                      langService,
+                                      Information) {
         'ngInject';
         return function SiteView(model) {
             var self = this;
@@ -17,6 +18,7 @@ module.exports = function (app) {
             self.ouId = null;
             self.code = null;
             self.correspondenceSiteTypeId = null;
+            self.parent = new Information();
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];

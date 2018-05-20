@@ -99,9 +99,9 @@
                                ng-model="ctrl.document.internalDocType"
                                ng-required="ctrl.checkMandatory('internalDocType')"
                                required>
-                        <md-option ng-value="type.id"
+                        <md-option ng-value="type.value"
                                    ng-repeat="type in ctrl.typeOptions track by $index">
-                            {{lang.current==="en"? type.enName:type.arName}}
+                            {{lang[type.key]}}
                         </md-option>
                     </md-select>
                     <div ng-messages="outgoing_properties.type.$error">

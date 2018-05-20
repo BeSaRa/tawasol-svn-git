@@ -181,7 +181,7 @@
                                                   tooltip="{{lang[userInbox.dueDateStatusIndicator.tooltip].change({due_date_status:lang[userInbox.dueDateStatusIndicator.text] })}}">
                                                 {{userInbox.generalStepElm.dueDate}}</span>
                 </td>
-                <td md-cell>
+                <td md-cell class="td-data">
                     <main-site-sub-site-directive item="userInbox"
                                                   ng-if="userInbox.getInfo().documentClass!=='internal'">
                     </main-site-sub-site-directive>
@@ -206,7 +206,7 @@
                          ng-if="!ctrl.selectedWorkItems.length
                                                           || ctrl.selectedWorkItems.length===1 && ctrl.selectedWorkItems[0].generalStepElm.workObjectNumber === userInbox.generalStepElm.workObjectNumber"
                          tooltip="{{userInbox.generalStepElm.isOpen===true?lang.indicator_mark_unread: lang.indicator_mark_read}}"
-                         tooltip-direction="{{ctrl.langService.getCurrentLang() === 'en' ? 'left' : 'right'}}">
+                         tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}">
                     </div>
                 </td>
             </tr>
