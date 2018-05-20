@@ -55,6 +55,23 @@
                     </div>
                 </md-input-container>-->
 
+                <!-- Paper/Electronic Level -->
+                <md-input-container flex ng-if="ctrl.document.docClassName !== 'Incoming'">
+                    <label for="addMethod">{{lang.document_type}}</label>
+                    <md-select name="addMethod" id="addMethod"
+                               ng-change="ctrl.onChangeAddMethod($event)"
+                               ng-model="ctrl.document.addMethod"
+                               ng-required="ctrl.checkMandatory('addMethod')">
+                        <md-option ng-value="type.value"
+                                   ng-repeat="type in ctrl.paperElectronicTypes">
+                            {{lang[type.key]}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.addMethod.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+
                 <!-- Security Level -->
                 <md-input-container flex>
                     <label for="securityLevel">{{lang.security_level}}</label>
@@ -300,7 +317,7 @@
                 </md-input-container>
 
                 <!-- Change correspondence sites -->
-                <md-input-container >
+                <md-input-container>
                     <md-button class="md-icon-button"
                                tooltip="{{lang.change_correspondence_sites}}"
                                tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}"
@@ -356,7 +373,7 @@
                 </md-input-container>
 
                 <!-- Change Entity Type Values -->
-                <md-input-container >
+                <md-input-container>
                     <md-button class="md-icon-button" ng-if="!!ctrl.linkedEntityValueName"
                                tooltip="{{lang.change_entity_type}}"
                                tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}"
@@ -379,8 +396,9 @@
             </div>
 
             <!-- Approver -->
-            <div layout="row" ng-if="ctrl.document.docClassName.toLowerCase() !== 'incoming'">
-                <!-- Users drop down -->
+            <div layout="row"
+                 ng-if="ctrl.document.docClassName.toLowerCase() !== 'incoming' && ctrl.document.addMethod !== 1">
+                <!-- Approver drop down -->
                 <md-input-container flex>
                     <label for="approvers">{{lang.approver}}</label>
                     <md-select name="approvers"
@@ -398,21 +416,19 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-                <!-- Date Label From -->
+                <!-- Approver Date From -->
                 <md-input-container ng-if="ctrl.document.approvers">
                     <label>{{lang.search_module_start_date}}</label>
                     <md-datepicker id="approverFrom" name="approverFrom" md-open-on-focus
-                                   ng-change="ctrl.setMinMaxApproveDate('picker',$event)"
                                    ng-required="ctrl.document.approveDateTo" md-open-on-focus
                                    ng-model="ctrl.document.approveDateFrom"
                                    md-max-date="ctrl.document.approveDateTo"
                     ></md-datepicker>
                 </md-input-container>
-                <!-- Date Label To -->
+                <!-- Approver Date To -->
                 <md-input-container ng-if="ctrl.document.approvers">
                     <label>{{lang.search_module_end_date}}</label>
                     <md-datepicker id="approverTo" name="approverTo" md-open-on-focus
-                                   ng-change="ctrl.setMinMaxApproveDate('picker',$event)"
                                    ng-required="ctrl.document.approveDateFrom" md-open-on-focus
                                    ng-model="ctrl.document.approveDateTo"
                                    md-min-date="ctrl.document.approveDateFrom"

@@ -48,6 +48,21 @@ module.exports = function (app) {
                 key: "departmental"
             }
         ];
+
+        self.paperElectronicTypes = [
+            {
+                value: null,
+                key: 'all'
+            },
+            {
+                value: 0,
+                key: "electronic"
+            },
+            {
+                value: 1,
+                key: "paper"
+            }
+        ];
         var required = {};
         self.selectedEntityType = null;
 
@@ -445,6 +460,14 @@ module.exports = function (app) {
             self.document.approveDateFrom = null;
             self.document.approveDateTo = null;
         };
+
+        self.onChangeAddMethod = function($event){
+            if(self.document.addMethod === 1){
+                self.document.approvers = null;
+                self.document.approveDateFrom = null;
+                self.document.approveDateTo = null;
+            }
+        }
 
 
     });
