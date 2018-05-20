@@ -1,0 +1,82 @@
+#globalSettingForm {
+  padding: 0;
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 76px;
+  bottom: 0;
+  & div[md-tabs-template] > md-content {
+    position: absolute !important;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+  }
+}
+
+.barcode-item {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background-color: red;
+  font-size: 12px;
+  line-height: 12px;
+  margin-bottom: 5px;
+  padding: 5px 20px;
+  color: white;
+  position: relative;
+
+}
+
+
+.barcode-layout-border {
+  padding: 0 10px;
+}
+
+.barcode-layout-generator {
+  background-color: #EEE;
+  border: 2px dashed #c5cecc;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.barcode-row {
+  background-color: #f0f9f7;
+  border: 1px dashed #c5cecc;
+  padding: 20px 10px 10px 10px;
+  position: relative;
+  margin-bottom: 5px;
+  .barcode-item {
+    margin: 0 2.5px;
+  }
+}
+
+.barcode-delete-item-button {
+  position: absolute;
+  left: 5px;
+  top: 3px;
+  button {
+    min-height: auto !important;
+    min-width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 15px !important;
+    height: 15px !important;
+    md-icon {
+      width: 15px;
+      height: 15px;
+      min-width: auto;
+      min-height: auto;
+      color: white;
+    }
+  }
+  &.black {
+    button {
+      md-icon {
+        color: black;
+      }
+    }
+  }
+}

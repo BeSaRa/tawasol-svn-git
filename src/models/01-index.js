@@ -140,4 +140,5 @@ module.exports = function (app) {
     require('./PartialExport')(app);
     require('./PartialExportSelective')(app);
     require('./PartialExportCollection')(app);
+    require('./BarcodeSetting')(app);
 };

@@ -224,7 +224,7 @@ module.exports = function (app) {
             'workflowsecurity',
             'workflownotification',
             'upload',
-            //'barcodeSettings'
+            'barcodeSettings'
         ];
 
         self.showTab = function (tabName) {
@@ -235,7 +235,7 @@ module.exports = function (app) {
          * @description Contains the selected tab name
          * @type {string}
          */
-        self.selectedTabName = "basic";
+        self.selectedTabName = "barcodeSettings";
 
         /**
          * @description Set the current tab name
@@ -298,7 +298,7 @@ module.exports = function (app) {
             reader.onload = function () {
                 image = new Blob([reader.result], {type: file.type});
                 if (self.globalSetting[modelName]) {
-                    self.globalSetting[modelName].id = self.globalSetting[modelName].id;
+                    // self.globalSetting[modelName].id = self.globalSetting[modelName].id;
                     self.globalSetting[modelName].mimeType = file.type;
                     self.globalSetting[modelName].fileSize = file.size;
                     self.globalSetting[modelName].extension = file.name.split('.').pop();
@@ -318,5 +318,7 @@ module.exports = function (app) {
             };
             reader.readAsArrayBuffer(file);
         };
+
+
     });
 };

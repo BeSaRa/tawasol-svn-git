@@ -1,4 +1,5 @@
 module.exports = function (app) {
+    require('./barcode-settings-style.scss');
     app.directive('barcodeSettingsDirective', function () {
         'ngInject';
         return {
@@ -6,6 +7,7 @@ module.exports = function (app) {
             controller: 'barcodeSettingsDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,
+            replace: true,
             scope: {
                 barcodeOptions: '='
             },

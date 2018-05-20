@@ -1,3 +1,33 @@
-<div>
-    hello barcode
+<div id="barcode-settings" flex layout="row">
+    <div class="barcode-column" flex id="barcode-generator" layout="row">
+        <div class="barcode-generator" layout="column">
+            <div barcode-element-directive="item" flex class="barcode-item"
+                 ng-repeat="item in ctrl.barcodeElements track by $index">
+                <span md-truncate>{{item.getTranslatedName()}}</span>
+            </div>
+        </div>
+        <div flex class="barcode-layout-border" layout="column">
+            <div flex barcode-sortable-directive class="barcode-layout-generator" layout="column">
+                <div barcode-row-directive="row" ng-repeat="row in ctrl.rows track by $index " layout="row"
+                     class="barcode-row">
+                    <div class="barcode-delete-item-button black">
+                        <md-button ng-click="ctrl.deleteRow($event)" class="md-icon-button">
+                            <md-icon md-svg-icon="close"></md-icon>
+                        </md-button>
+                    </div>
+                    <div ng-repeat="item in row track by $index" class="barcode-item">
+                        <div class="barcode-delete-item-button">
+                            <md-button ng-click="ctrl.deleteItem($event)" class="md-icon-button">
+                                <md-icon md-svg-icon="close"></md-icon>
+                            </md-button>
+                        </div>
+                        <span md-truncate>{{item.getTranslatedName()}}</span>
+                    </div><!-- barcode-item -->
+                </div>
+            </div>
+        </div>
+    </div><!--barcode-generator -->
+    <div class="barcode-column" flex="40" id="barcode-viewer" layout="column">
+
+    </div><!-- barcode-viewer -->
 </div>

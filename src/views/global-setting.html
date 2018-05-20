@@ -7,9 +7,10 @@
 
         <form class="white-bg" name="globalSettingForm" id="globalSettingForm" flex layout="column" autocomplete="off">
             <!--flex-->
-            <md-tabs class="content white-bg">
+            <md-tabs md-selected="7" class="content white-bg">
                 <!-- BASIC PROPERTIES TAB -->
-                <md-tab label="{{lang.basic_properties}}" ng-if="ctrl.showTab('basic')" md-on-select="ctrl.setCurrentTab('basic')">
+                <md-tab label="{{lang.basic_properties}}" ng-if="ctrl.showTab('basic')"
+                        md-on-select="ctrl.setCurrentTab('basic')">
                     <md-content scroll-directive class="white-bg">
                         <div layout="column">
                             <div layout="row" flex class="p20">
@@ -154,7 +155,8 @@
                                     <label>{{lang.correspondence_Site_search_type}}</label>
                                     <md-select name="simpleCorsSiteSearch" required
                                                ng-model="ctrl.globalSetting.simpleCorsSiteSearch">
-                                        <md-option ng-repeat="searchType in ctrl.correspondenceSiteSearchTypeOptions" ng-value="searchType.value">
+                                        <md-option ng-repeat="searchType in ctrl.correspondenceSiteSearchTypeOptions"
+                                                   ng-value="searchType.value">
                                             {{lang[searchType.key]}}
                                         </md-option>
                                     </md-select>
@@ -180,7 +182,8 @@
                     </md-content>
                 </md-tab>
                 <!-- APPEARANCE TAB -->
-                <md-tab label="{{lang.appearance}}" ng-if="ctrl.showTab('appearance')" md-on-select="ctrl.setCurrentTab('appearance')">
+                <md-tab label="{{lang.appearance}}" ng-if="ctrl.showTab('appearance')"
+                        md-on-select="ctrl.setCurrentTab('appearance')">
                     <md-content scroll-directive class="white-bg">
                         <div layout="column">
                             <div layout="row" flex class="p20">
@@ -278,7 +281,8 @@
                     </md-content>
                 </md-tab>
                 <!-- AUDIT LOG TAB -->
-                <md-tab label="{{lang.audit_log}}" ng-if="ctrl.showTab('auditlog')" md-on-select="ctrl.setCurrentTab('auditlog')">
+                <md-tab label="{{lang.audit_log}}" ng-if="ctrl.showTab('auditlog')"
+                        md-on-select="ctrl.setCurrentTab('auditlog')">
                     <md-content scroll-directive class="white-bg">
                         <div layout="column">
                             <div layout="row" class="p20">
@@ -336,7 +340,8 @@
                     </md-content>
                 </md-tab>
                 <!-- DOCUMENT SECURITY SETTINGS TAB -->
-                <md-tab label="{{lang.document_security_settings}}" ng-if="ctrl.showTab('docsecurity')" md-on-select="ctrl.setCurrentTab('docsecurity')">
+                <md-tab label="{{lang.document_security_settings}}" ng-if="ctrl.showTab('docsecurity')"
+                        md-on-select="ctrl.setCurrentTab('docsecurity')">
                     <md-content scroll-directive class="white-bg">
                         <div layout="column">
                             <div layout="row" class="p20">
@@ -400,7 +405,8 @@
                                             {{securitySchema.getTranslatedName()}}
                                         </md-option>
                                     </md-select>-->
-                                    <md-select required name="securitySchema" ng-change="ctrl.confirmChangeSecuritySchema($event)"
+                                    <md-select required name="securitySchema"
+                                               ng-change="ctrl.confirmChangeSecuritySchema($event)"
                                                ng-model="ctrl.globalSetting.securitySchema">
                                         <md-option
                                                 ng-repeat="securitySchema in ctrl.documentSecuritySchemas track by $index"
@@ -417,7 +423,8 @@
                     </md-content>
                 </md-tab>
                 <!-- WORKFLOW SECURITY TAB -->
-                <md-tab label="{{lang.workflow_security_settings}}" ng-if="ctrl.showTab('workflowsecurity')" md-on-select="ctrl.setCurrentTab('workflowsecurity')">
+                <md-tab label="{{lang.workflow_security_settings}}" ng-if="ctrl.showTab('workflowsecurity')"
+                        md-on-select="ctrl.setCurrentTab('workflowsecurity')">
                     <md-content scroll-directive class="white-bg">
                         <div layout="column">
                             <div layout="row" flex class="p20">
@@ -463,7 +470,8 @@
                     </md-content>
                 </md-tab>
                 <!-- WORKFLOW NOTIFICATION TAB -->
-                <md-tab label="{{lang.workflow_notification}}" ng-if="ctrl.showTab('workflownotification')" md-on-select="ctrl.setCurrentTab('workflownotification')">
+                <md-tab label="{{lang.workflow_notification}}" ng-if="ctrl.showTab('workflownotification')"
+                        md-on-select="ctrl.setCurrentTab('workflownotification')">
                     <md-content scroll-directive class="white-bg">
                         <div layout="column">
                             <div layout="row" flex class="p20">
@@ -513,17 +521,8 @@
 
                             <div layout="row" flex class="p20">
                                 <!-- Escalation process -->
-                                <md-input-container class="md-block" flex>
+                                <md-input-container flex>
                                     <label>{{$parent.lang.choose_escalation_process}}</label>
-                                    <!--<md-select multiple required name="escalationProcess"
-                                               ng-model="ctrl.globalSetting.escalationProcess"
-                                               ng-model-options="{trackBy: '$value.id'}">
-                                        <md-option
-                                                ng-repeat="escalationProcess in ctrl.escalationProcesses track by $index"
-                                                ng-value="escalationProcess">
-                                            {{escalationProcess.getTranslatedName()}}
-                                        </md-option>
-                                    </md-select>-->
                                     <md-select required name="escalationProcess"
                                                ng-model="ctrl.globalSetting.escalationProcess">
                                         <md-option
@@ -575,7 +574,9 @@
                     </md-content>
                 </md-tab>
                 <!-- UPLOAD TAB -->
-                <md-tab label="{{lang.upload}}" ng-if="ctrl.showTab('upload')" md-on-select="ctrl.setCurrentTab('upload')" ng-disabled="ctrl.globalSetting.id === null || ctrl.globalSetting.id===0">
+                <md-tab label="{{lang.upload}}" ng-if="ctrl.showTab('upload')"
+                        md-on-select="ctrl.setCurrentTab('upload')"
+                        ng-disabled="ctrl.globalSetting.id === null || ctrl.globalSetting.id===0">
                     <md-content scroll-directive class="white-bg">
                         <div layout="column">
                             <div layout="row" flex class="p20">
@@ -629,7 +630,8 @@
                     </md-content>
                 </md-tab>
                 <!-- BARCODE SETTINGS TAB -->
-                <md-tab label="{{lang.barcode_settings}}" ng-if="ctrl.showTab('barcodeSettings')"  md-on-select="ctrl.setCurrentTab('barcodeSettings')"
+                <md-tab label="{{lang.barcode_settings}}" ng-if="ctrl.showTab('barcodeSettings')"
+                        md-on-select="ctrl.setCurrentTab('barcodeSettings')"
                         ng-disabled="ctrl.globalSetting.id === null || ctrl.globalSetting.id===0">
                     <md-content scroll-directive class="white-bg">
                         <div layout="column">
