@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('Site_Search', function (CMSModelInterceptor,
-                                  langService) {
+                                  langService,
+                                         generator) {
         'ngInject';
         return function Site_Search(model) {
             var self = this, exportTypes = {
@@ -106,7 +107,7 @@ module.exports = function (app) {
                 model.mainSiteId = this.mainSiteId && this.mainSiteId.hasOwnProperty('id') ? this.mainSiteId.id : this.mainSiteId;
                 model.subSiteId = this.subSiteId && this.subSiteId.hasOwnProperty('id') ? this.subSiteId.id : this.subSiteId;
                 model.followupStatus = this.followupStatus && this.followupStatus.hasOwnProperty('id') ? this.followupStatus.lookupKey : this.followupStatus;
-                model.followupDate = this.followupDate;
+                //model.followupDate = this.followupDate;
                 return model;
             };
 

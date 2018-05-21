@@ -11,6 +11,7 @@ module.exports = function (app) {
                 selectedSiteType: '=',
                 sitesInfoTo: '=',
                 sitesInfoCC: '=',
+                sitesInfoIncoming: '=',
                 documentClass: '=',
                 emptySubRecords: '='
             }

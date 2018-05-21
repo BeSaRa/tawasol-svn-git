@@ -10,7 +10,7 @@ module.exports = function (app) {
                                                    correspondenceSiteService,
                                                    searchIncomingService,
                                                    $q,
-                                                   DocumentSearch,
+                                                   IncomingSearch,
                                                    propertyConfigurations,
                                                    validationService,
                                                    generator,
@@ -40,18 +40,22 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'searchIncomingCtrl';
         contextHelpService.setHelpTo('search-incoming');
-        self.progress = null;
-        self.showAdvancedSearch = false;
+
         // employee service to check the permission in html
         self.employeeService = employeeService;
 
-        self.searchIncoming = new DocumentSearch({"reqType": 1});
-        //self.searchIncoming.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
+        self.searchIncoming = new IncomingSearch({
+            selectedEntityType: null,
+            selectedCorrSiteType: null
+        });
         self.searchIncomingModel = angular.copy(self.searchIncoming);
-        self.organizations = organizations;
+
+        self.propertyConfigurations = propertyConfigurations;
+
+        /*self.organizations = organizations;
         //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
-        self.propertyConfigurations = propertyConfigurations;
+
 
         self.docStatuses = angular.copy(documentStatuses);
         self.docStatuses.unshift(new DocumentStatus({arName: 'الكل', enName: 'All'}));
@@ -61,17 +65,9 @@ module.exports = function (app) {
         self.documentTypes = documentTypes;
         self.documentFiles = documentFiles;
 
-        self.years = function () {
-            var currentYear = new Date().getFullYear(), years = ['All'];
-            var lastYearForRange = currentYear - 10;
-            while (lastYearForRange <= currentYear) {
-                years.push(currentYear--);
-            }
-            return years;
-        };
         self.correspondenceSiteTypes = correspondenceSiteTypes;
         //self.mainCorrespondenceSites_Copy = angular.copy(mainCorrespondenceSites);
-        self.mainClassifications = mainClassifications;
+        self.mainClassifications = mainClassifications;*/
 
         /**
          * @description Get the dynamic required fields
@@ -150,11 +146,6 @@ module.exports = function (app) {
          */
         self.checkRequiredFieldsSearchIncoming = function (model) {
             var required = self.requiredFieldsSearchIncoming, result = [];
-            /*_.map(required, function (property) {
-             var propertyValueToCheck = (model.hasOwnProperty(property) ? model[property] : model.props[property]);
-             if (!generator.validRequired(propertyValueToCheck))
-             result.push(property);
-             });*/
             _.map(required, function (property) {
                 var propertyValueToCheck = model[property];
                 if (!generator.validRequired(propertyValueToCheck))
@@ -183,115 +174,11 @@ module.exports = function (app) {
             return self.dynamicValidations[dataType][typeOrMessage];
         };
 
-
-        self.toggleAdvancedSearch = function () {
-            self.showAdvancedSearch = !self.showAdvancedSearch;
-        };
-
-        /**
-         * @description Set the selected year on changing the value
-         * @param searchForm
-         * @param $event
-         */
-        self.setSelectedYear = function (searchForm, $event) {
-            self.selectedYear = self.searchIncoming.year;
-            self.searchIncoming.docDateFrom = self.searchIncoming.docDateTo = null;
-            searchForm.docDateFrom.$setUntouched();
-            searchForm.docDateTo.$setUntouched();
-            if (self.selectedYear === 'All') {
-                self.requiredFieldsSearchIncoming.push('docDateFrom');
-                self.requiredFieldsSearchIncoming.push('docDateTo');
-            }
-            else {
-                var dateFromIndex = self.requiredFieldsSearchIncoming.indexOf('docDateFrom');
-                if (dateFromIndex > -1)
-                    self.requiredFieldsSearchIncoming.splice(dateFromIndex, 1);
-                var dateToIndex = self.requiredFieldsSearchIncoming.indexOf('docDateTo');
-                if (dateToIndex > -1)
-                    self.requiredFieldsSearchIncoming.splice(dateToIndex, 1);
-
-                self.docDateFromCopy = self.selectedYear + '-01-01 00:00:00.000';
-                self.docDateToCopy = self.selectedYear + '-12-31 23:59:59.999';
-                self.setMinMaxDocDate('year');
-            }
-        };
-
-        /**
-         * @description Set the min and max range of date
-         * @param changedBy
-         * @param $event
-         */
-        self.setMinMaxDocDate = function (changedBy, $event) {
-            /*If value is instance of date, that means user has changed the value from datepicker
-             * else value is changed on change of year field and we need to cast the value to date type.
-             */
-            if (changedBy === 'year') {
-                self.maxDocDate = self.maxDateForTo = new Date(self.docDateToCopy);
-                self.minDocDate = self.minDateForFrom = new Date(self.docDateFromCopy);
-            }
-            else if (changedBy === 'picker') {
-                if (self.selectedYear === 'All') {
-                    self.maxDocDate = self.searchIncoming.docDateTo;
-                    self.minDocDate = self.searchIncoming.docDateFrom;
-                    self.minDateForFrom = null;
-                    self.maxDateForTo = null;
-                }
-                else {
-                    self.maxDocDate = self.searchIncoming.docDateTo ? self.searchIncoming.docDateTo : new Date(self.docDateToCopy);
-                    self.minDocDate = self.searchIncoming.docDateFrom ? self.searchIncoming.docDateFrom : new Date(self.docDateFromCopy);
-                    self.minDateForFrom = new Date(self.docDateFromCopy);
-                    self.maxDateForTo = new Date(self.docDateToCopy);
-                }
-            }
-        };
-
-
-        /**
-         * @description Get the main correspondence sites by correspondence site type
-         * @returns {Array|*}
-         */
-        self.getMainCorrespondenceSites = function ($event) {
-            self.searchIncoming.mainSiteId = self.searchIncoming.subSiteId = null;
-            /*self.mainCorrespondenceSites = _.filter(self.mainCorrespondenceSites_Copy, function (correspondenceSite) {
-             return correspondenceSite.correspondenceTypeId.id === self.searchIncoming.siteType;
-             });
-             return self.mainCorrespondenceSites;*/
-            return correspondenceSiteService.getMainCorrespondenceSitesWithSiteTypeId(self.searchIncoming.siteType).then(function (result) {
-                self.mainCorrespondenceSites = result;
-                return self.mainCorrespondenceSites;
-            });
-        };
-
-        /**
-         * @description Get the sub correspondence sites by main correspondence site
-         * @returns {Array|*}
-         */
-        self.getSubCorrespondenceSites = function ($event) {
-            self.searchIncoming.subSiteId = null;
-            /*self.subCorrespondenceSites = correspondenceSiteService.getSubCorrespondenceSites(self.searchIncoming.mainSiteId);
-             return self.subCorrespondenceSites;*/
-            return correspondenceSiteService.getSubCorrespondenceSitesWithSiteTypeId(self.searchIncoming.mainSiteId.id).then(function (result) {
-                self.subCorrespondenceSites = result;
-                return self.subCorrespondenceSites;
-            });
-        };
-
-        /**
-         * @description Get the sub classifications by main classification
-         * @returns {Array|*}
-         */
-        self.getSubClassifications = function (searchIncomingForm, $event) {
-            self.searchIncoming.subClassification = null;
-            searchIncomingForm.subClassification.$setUntouched();
-            self.subClassifications = classificationService.getSubClassifications(self.searchIncoming.mainClassification);
-            return self.subClassifications;
-        };
-
         /**
          * @description Contains the selected tab name
          * @type {string}
          */
-        self.selectedTabName = "ens";
+        self.selectedTabName = "search";
         self.selectedTab = 0;
 
         /**
@@ -368,11 +255,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.resetFilters = function (form, $event) {
-            self.searchIncoming = new DocumentSearch({"reqType": 1});
-            //self.searchIncoming.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
+            self.searchIncoming = new IncomingSearch({
+                selectedEntityType: null,
+                selectedCorrSiteType: null
+            });
             self.searchIncomingModel = angular.copy(self.searchIncoming);
-            self.mainCorrespondenceSites = self.subCorrespondenceSites = self.subClassifications = [];
-            self.maxDocDate = self.maxDateForTo = self.minDocDate = self.minDateForFrom = null;
             form.$setUntouched();
         };
 

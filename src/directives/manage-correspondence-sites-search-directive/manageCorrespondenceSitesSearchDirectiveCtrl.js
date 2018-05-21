@@ -28,6 +28,7 @@ module.exports = function (app) {
             self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));
             self.sitesInfoCC = self.sitesInfoCC || [];
             self.sitesInfoTo = self.sitesInfoTo || [];
+            self.sitesInfoIncoming = self.sitesInfoIncoming || [];
             if (self.isSimpleCorrespondenceSiteSearchType && self.selectedSiteType)
                 self.onSiteTypeChange();
         });
@@ -45,10 +46,12 @@ module.exports = function (app) {
         self.subSearchResult = [];
         // sub correspondence selected from result
         self.subSearchSelected = [];
-        // sites info cc
-        self.sitesInfoCC = [];
         // sites info to
         self.sitesInfoTo = [];
+        // sites info cc
+        self.sitesInfoCC = [];
+        // site info incoming
+        self.sitesInfoIncoming = [];
         // book vsId
         self.vsId = null;
         // followup statuses
@@ -65,16 +68,23 @@ module.exports = function (app) {
         self.sitesInfoToSelected = [];
         // selected siteInfoCC
         self.sitesInfoCCSelected = [];
+        // selected siteInfoIncoming
+        self.sitesInfoIncomingSelected = [];
         // default sites info to followupStatus
         self.sitesInfoToFollowupStatus = null;
         // default sites info CC followupStatus
         self.sitesInfoCCFollowupStatus = null;
+        // default sites info Incoming followupStatus
+        self.sitesInfoIncomingFollowupStatus = null;
         // default sites info to followupStatusDate
-        self.sitesInfoToFollowupStatusDate = null;
-        self.sitesInfoToFollowupStatusDateTo = null;
-        // default sites info to followupStatusDate
-        self.sitesInfoCCFollowupStatusDate = null;
-        self.sitesInfoCCFollowupStatusDateTo = null;
+        self.sitesInfoToFollowupStatusDate1 = null;
+        self.sitesInfoToFollowupStatusDate2 = null;
+        // default sites info cc followupStatusDate
+        self.sitesInfoCCFollowupStatusDate1 = null;
+        self.sitesInfoCCFollowupStatusDate2 = null;
+        // default sites info incoming followupStatusDate
+        self.sitesInfoIncomingFollowupStatusDate1 = null;
+        self.sitesInfoIncomingFollowupStatusDate2 = null;
 
 
         /**
@@ -90,18 +100,18 @@ module.exports = function (app) {
         }
 
         /**
-         * concatenate main and sub correspondence sites.
+         * @description concatenate main and sub correspondence sites.
          * @param timeout
          * @return {*}
          * @private
          */
         function _concatCorrespondenceSites(timeout) {
-            if (!timeout) {
-                self.subRecords = _.map([].concat(self.sitesInfoTo, self.sitesInfoCC), 'subSiteId');
-                return;
-            }
+            /*if (!timeout) {
+                self.subRecords = _.map([].concat(self.sitesInfoTo, self.sitesInfoCC, self.sitesInfoIncoming), 'subSiteId');
+                return true;
+            }*/
             return $timeout(function () {
-                return self.subRecords = _.map([].concat(self.sitesInfoTo, self.sitesInfoCC), 'subSiteId');
+                return self.subRecords = _.map([].concat(self.sitesInfoTo, self.sitesInfoCC, self.sitesInfoIncoming), 'subSiteId');
             });
         }
 
@@ -149,6 +159,19 @@ module.exports = function (app) {
                         label: langService.get('all'),
                         value: function () {
                             return (self.sitesInfoCC.length + 21);
+                        }
+                    }
+                ]
+            },
+            sitesInfoIncoming: {
+                limit: 5, // default limit
+                page: 1, // first page
+                order: 'mainArSiteText', // default sorting order
+                limitOptions: [5, 10, 20, // limit options
+                    {
+                        label: langService.get('all'),
+                        value: function () {
+                            return (self.sitesInfoIncoming.length + 21);
                         }
                     }
                 ]
@@ -269,19 +292,34 @@ module.exports = function (app) {
          */
         function _addSite(to, site) {
             var promise;
-            if (self.sitesInfoTo.length || self.sitesInfoCC.length) {
+            delete site.followupDate1Max;
+            delete site.followupDate2Min;
+
+            if (self.sitesInfoTo.length || self.sitesInfoCC.length || self.sitesInfoIncoming.length) {
                 promise = dialog
                     .confirmMessage(langService.get('correspondence_site_will_change'))
                     .then(function () {
-                        self.sitesInfoTo = [];
-                        self.sitesInfoCC = [];
-                        self['sitesInfo' + to].push(site);
+
+                        if (to.toLowerCase() === 'incoming') {
+                            self.sitesInfoIncoming = [];
+                            self.sitesInfoIncoming.push(site);
+                        }
+                        else {
+                            self.sitesInfoTo = [];
+                            self.sitesInfoCC = [];
+                            self['sitesInfo' + to].push(site);
+                        }
                         return true;
                     });
             }
             else {
                 promise = $timeout(function () {
-                    self['sitesInfo' + to].push(site);
+                    if (to.toLowerCase() === 'incoming') {
+                        self.sitesInfoIncoming.push(site);
+                    }
+                    else {
+                        self['sitesInfo' + to].push(site);
+                    }
                     return true;
                 });
             }
@@ -289,10 +327,6 @@ module.exports = function (app) {
             return promise.then(function (result) {
                 return result;
             })
-            /*return $timeout(function () {
-                self['sitesInfo' + to].push(site);
-                return true;
-            });*/
         }
 
         self.disableAddButton = function (site) {
@@ -304,7 +338,7 @@ module.exports = function (app) {
          * @param site
          */
         self.addSiteTo = function (site) {
-            if(self.disableAddButton(site))
+            if (self.disableAddButton(site))
                 return toast.error(langService.get('select_date_range'));
             _addSite('To', site)
                 .then(function () {
@@ -319,7 +353,7 @@ module.exports = function (app) {
          * @param site
          */
         self.addSiteCC = function (site) {
-            if(self.disableAddButton(site))
+            if (self.disableAddButton(site))
                 return toast.error(langService.get('select_date_range'));
             _addSite('CC', site)
                 .then(function () {
@@ -329,6 +363,19 @@ module.exports = function (app) {
                     });
                 });
         };
+
+        self.addSiteIncoming = function (site, $event) {
+            /*if (self.disableAddButton(site))
+                return toast.error(langService.get('select_date_range'));*/
+            _addSite('Incoming', site)
+                .then(function () {
+                    self.subSearchSelected = [];
+                    _concatCorrespondenceSites(true).then(function () {
+                        self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
+                    });
+                })
+        };
+
         /**
          * @description add all selected sites to To.
          * @param sites
@@ -488,12 +535,6 @@ module.exports = function (app) {
             self.followupStatus = status;
             _setSitesProperty(self.subSearchSelected, 'followupStatus', status);
         };
-        /**
-         * @description set all followupDate for all subSearchResult.
-         */
-        self.onFollowupDateChange = function () {
-            _setSitesProperty(self.subSearchSelected, 'followupDate', self.followUpStatusDate);
-        };
 
         /**
          * single select to set follow up status for selected row.
@@ -502,8 +543,8 @@ module.exports = function (app) {
          */
         self.setCurrentFollowUpStatus = function (site, status) {
             site.followupStatus = status;
-            if (!self.needReply(site.followupStatus)) {
-                site.followupDate = null;
+            if (!self.needReply(site.followupStatus) || self.documentClass.toLowerCase() === 'incoming') {
+                site.followupDate1 = null;
                 site.followupDate2 = null;
             }
         };
@@ -512,9 +553,64 @@ module.exports = function (app) {
          * @description change date for selected sitesInfo.
          */
         self.onSitesInfoFollowupDateChange = function (type, picker) {
-            var followupDate = 'followupDate' + picker;
-            _setSitesProperty(self['sitesInfo' + type + 'Selected'], followupDate, self['sitesInfo' + type + 'FollowupStatusDate' + picker]);
+            _setSitesProperty(self['sitesInfo' + type + 'Selected'], 'followupDate' + picker, self['sitesInfo' + type + 'FollowupStatusDate' + picker]);
+            self.getSitesInfoFollowupStatusMinMaxDate(type, picker);
         };
+
+        self.getSiteFollowupStatusMinMaxDate = function (site, picker) {
+            var date;
+            if (picker === 1) {
+                date = new Date(site.followupDate1);
+                date.setDate(date.getDate() + 1);
+                site.followupDate2Min = date;
+            }
+            else {
+                date = new Date(site.followupDate2);
+                date.setDate(date.getDate() - 1);
+                site.followupDate1Max = date;
+            }
+        };
+
+        self.getSitesInfoFollowupStatusMinMaxDate = function (type, picker) {
+            var date;
+            if (type === 'To') {
+                if (picker === 1) {
+                    date = new Date(self.sitesInfoToFollowupStatusDate1);
+                    date.setDate(date.getDate() + 1);
+                    self.sitesInfoToFollowupStatusDateMin = date;
+                }
+                else {
+                    date = new Date(self.sitesInfoToFollowupStatusDate2);
+                    date.setDate(date.getDate() - 1);
+                    self.sitesInfoToFollowupStatusDateMax = date
+                }
+            }
+            else if (type === 'CC') {
+                if (picker === 1) {
+                    date = new Date(self.sitesInfoCCFollowupStatusDate1);
+                    date.setDate(date.getDate() + 1);
+                    self.sitesInfoCCFollowupStatusDateMin = date;
+                }
+                else {
+                    date = new Date(self.sitesInfoCCFollowupStatusDate2);
+                    date.setDate(date.getDate() - 1);
+                    self.sitesInfoCCFollowupStatusDateMax = date
+                }
+            }
+            else if (type === 'Incoming') {
+                if (picker === 1) {
+                    date = new Date(self.sitesInfoIncomingFollowupStatusDate1);
+                    date.setDate(date.getDate() + 1);
+                    self.sitesInfoIncomingFollowupStatusDateMin = date;
+                }
+                else {
+                    date = new Date(self.sitesInfoIncomingFollowupStatusDate2);
+                    date.setDate(date.getDate() - 1);
+                    self.sitesInfoIncomingFollowupStatusDateMax = date
+                }
+            }
+        };
+
         /**
          * @description change followupStatus for selected sitesInfo.
          * @param type
@@ -523,8 +619,10 @@ module.exports = function (app) {
         self.onSitesFollowupStatusChange = function (type, status) {
             self['sitesInfo' + type + 'FollowupStatus'] = status;
             _setSitesProperty(self['sitesInfo' + type + 'Selected'], 'followupStatus', status);
+            _setSitesProperty(self['sitesInfo' + type + 'Selected'], 'followupDate1', null);
+            _setSitesProperty(self['sitesInfo' + type + 'Selected'], 'followupDate2', null);
             if (!self.needReply(status)) {
-                _setSitesProperty(self['sitesInfo' + type + 'Selected'], 'followupDate', null);
+                //_setSitesProperty(self['sitesInfo' + type + 'Selected'], 'followupDate', null);
                 self['sitesInfo' + type + 'Selected'] = [];
                 self['sitesInfo' + type + 'FollowupStatus'] = null;
             }
@@ -544,7 +642,11 @@ module.exports = function (app) {
                         return ids.indexOf(site.subSiteId) === -1;
                     });
                     self['sitesInfo' + type + 'Selected'] = [];
-                    _concatCorrespondenceSites(false);
+                    debugger;
+                    _concatCorrespondenceSites(false).then(function () {
+                        debugger;
+                        self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
+                    });
                 });
         };
         /**
@@ -582,21 +684,6 @@ module.exports = function (app) {
                 });
             }
             return pendingSearch;
-        };
-
-        /**
-         * @description to check if the given site valid or not based on needReply Status and date.
-         * @param site
-         * @return {boolean}
-         */
-        self.isValidSite = function (site) {
-            var date;
-            try {
-                date = moment(site.followupDate);
-            } catch (e) {
-
-            }
-            return self.needReply(site.followupStatus) && date.isValid();
         };
 
         $scope.$watch(function () {

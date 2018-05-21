@@ -20,13 +20,11 @@ module.exports = function (app) {
             self.followUpFrom = null;
             self.followUpTo = null;
 
+            self.selectedEntityType = null;
 
-            delete self.sitesInfoTo;
-            delete self.sitesInfoCC;
-            //delete model.docClassName;
-
-            //delete self.props.docStatus;
-            delete self.contentSize;
+            // every model has required fields
+            // if you don't need to make any required fields leave it as an empty array
+            var requiredFields = [];
 
             OutgoingSearch.prototype.getTranslatedYesNo = function (fieldName) {
                 return self[fieldName] ? langService.get('yes') : langService.get('no');

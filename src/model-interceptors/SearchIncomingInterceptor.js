@@ -11,20 +11,12 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            /*
-            //This will be used when security level is multi-select
-            var securityLevel = generator.getResultFromSelectedCollection(model.securityLevel, 'lookupKey');
-            model.securityLevel = (securityLevel === 0) ? null : securityLevel;
-
-             var followupStatus = generator.getResultFromSelectedCollection(model.followupStatus, 'lookupKey');
-            model.followupStatus = (followupStatus === 0) ? null : followupStatus;
-            */
-
-            if (model.createdFrom || model.createdTo) {
+            /*if (model.createdFrom || model.createdTo) {
                 model.createdFrom = (model.createdFrom) ? moment(model.createdFrom).format("YYYY-MM-DD") : '1900-01-01';
                 model.createdTo = (model.createdTo) ? model.createdTo : moment().format("YYYY-MM-DD");
                 model.createdOn = {From: angular.copy(model.createdFrom), To: angular.copy(model.createdTo)};
-            }
+            }*/
+
             if (model.year === 'All' && model.docDateFrom && model.docDateTo) {
                 model.docDate = {
                     From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),
@@ -59,22 +51,29 @@ module.exports = function (app) {
                 }
             }
 
-
-            if (model.followUpFrom || model.followUpTo) {
-                model.followUpFrom = (model.followUpFrom) ? moment(model.followUpFrom).format("YYYY-MM-DD") : '1900-01-01';
-                model.followUpTo = (model.followUpTo) ? model.followUpTo : moment().format("YYYY-MM-DD");
-                model.followUpDate = {From: angular.copy(model.followUpFrom), To: angular.copy(model.followUpTo)};
+            if (angular.isArray(model.sitesInfoIncoming) && model.sitesInfoIncoming.length) {
+                model.sitesInfoIncoming = model.sitesInfoIncoming[0];
+                model.sitesInfoIncoming.getSiteToIncoming(model);
             }
+            delete model.sitesInfoIncoming;
 
-            model.tags = (model.tags.length) ? model.tags : null;
-            model.linkedDocs = (model.linkedDocs.length) ? model.linkedDocs : null;
-            model.linkedEntities = (model.linkedEntities.length) ? model.linkedEntities : null;
-            model.attachments = (model.attachments.length) ? model.attachments : null;
+            //because we select only one linked entity. so, it can't be array
+            if (model.linkedEntities && !angular.isArray(model.linkedEntities)) {
+                model.linkedEntities = angular.toJson(generator.interceptSendInstance('LinkedObject', model.linkedEntities));
+            } else {
+                model.linkedEntities = null;
+            }
+            if (model.docDate.From)
+                model.docDate.From = '' + model.docDate.From;
+            //TODO : 14 Jan, 2018. This if condition is added for Iyad to check something. It has to be removed once he finished checking.
+            if (model.docDate.To)
+                model.docDate.To = '' + model.docDate.To;
 
+            model.docDate = angular.toJson(model.docDate);
 
             delete model.followUpFrom;
             delete model.followUpTo;
-            delete model.followUpDate;
+            //delete model.followUpDate;
             delete model.approvedBy;
             delete model.approveDateFrom;
             delete model.approveDateTo;
@@ -86,17 +85,6 @@ module.exports = function (app) {
             delete model.docDateTo;
             delete model.year;
 
-            delete model.followupStatus;
-            delete model.siteType;
-            delete model.mainSiteId;
-            delete model.subSiteId;
-            if (model.docDate.From)
-                model.docDate.From = '' + model.docDate.From;
-            //TODO : 14 Jan, 2018. This if condition is added for Iyad to check something. It has to be removed once he finished checking.
-            if (model.docDate.To)
-                model.docDate.To = '' + model.docDate.To;
-
-            model.docDate = angular.toJson(model.docDate);
             return model;
         });
 

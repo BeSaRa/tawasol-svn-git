@@ -11,18 +11,11 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            /*
-            //This will be used when security level is multi-select
-            var securityLevel = generator.getResultFromSelectedCollection(model.securityLevel, 'lookupKey');
-            model.securityLevel = (securityLevel === 0) ? null : securityLevel;
-
-            var followupStatus = generator.getResultFromSelectedCollection(model.followupStatus, 'lookupKey');
-            model.followupStatus = (followupStatus === 0) ? null : followupStatus;*/
-            if (model.createdFrom || model.createdTo) {
+            /*if (model.createdFrom || model.createdTo) {
                 model.createdFrom = (model.createdFrom) ? moment(model.createdFrom).format("YYYY-MM-DD") : '1900-01-01';
                 model.createdTo = (model.createdTo) ? model.createdTo : moment().format("YYYY-MM-DD");
                 model.createdOn = {From: angular.copy(model.createdFrom), To: angular.copy(model.createdTo)};
-            }
+            }*/
 
 
             if (model.year === 'All' && model.docDateFrom && model.docDateTo) {
@@ -57,13 +50,6 @@ module.exports = function (app) {
                         To: angular.copy(moment(model.docDateTo).format("YYYY-MM-DD"))
                     };
                 }
-            }
-
-
-            if (model.followUpFrom || model.followUpTo) {
-                model.followUpFrom = (model.followUpFrom) ? moment(model.followUpFrom).format("YYYY-MM-DD") : '1900-01-01';
-                model.followUpTo = (model.followUpTo) ? model.followUpTo : moment().format("YYYY-MM-DD");
-                model.followUpDate = {From: angular.copy(model.followUpFrom), To: angular.copy(model.followUpTo)};
             }
 
             if (angular.isArray(model.sitesInfoTo) && model.sitesInfoTo.length) {
@@ -122,9 +108,6 @@ module.exports = function (app) {
                 }
             }) : null;
 
-            model.mainSiteId = model.mainSiteId ? (model.mainSiteId.exactId ? model.mainSiteId.exactId : null) : null;
-            model.subSiteId = model.subSiteId ? (model.subSiteId.exactId ? model.subSiteId.exactId : null) : null;
-
             if (model.docDate.From)
                 model.docDate.From = '' + model.docDate.From;
             //TODO : 11 Jan, 2018. This if condition is added for Iyad to check something. It has to be removed once he finished checking.
@@ -133,7 +116,6 @@ module.exports = function (app) {
             model.docDate = angular.toJson(model.docDate);
 
             delete model.selectedEntityType;
-            delete model.selectedCorrSiteType;
 
             delete model.followUpFrom;
             delete model.followUpTo;
@@ -151,9 +133,6 @@ module.exports = function (app) {
 
             delete model.followupStatus;
             delete model.siteType;
-            delete model.mainSiteId;
-            delete model.subSiteId;
-
 
             return model;
         });

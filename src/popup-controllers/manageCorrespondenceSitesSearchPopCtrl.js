@@ -11,8 +11,10 @@ module.exports = function (app) {
         });
 
         self.checkDisabled = function ($event) {
-            return !(self.document.sitesInfoTo && self.document.sitesInfoTo.length
+            return !(
+                (self.document.sitesInfoTo && self.document.sitesInfoTo.length)
                 || (self.document.sitesInfoCC && self.document.sitesInfoCC.length)
+                || (self.document.sitesInfoIncoming && self.document.sitesInfoIncoming.length)
             )
         };
 

@@ -136,26 +136,27 @@
                                             </md-menu>
                                         </md-menu-bar>
                                     </div>
-                                    <div>
+                                    <div ng-if="ctrl.documentClass.toLowerCase() === 'outgoing'">
                                         <md-datepicker ng-if="ctrl.needReply(site.followupStatus)"
+                                                       ng-change="ctrl.getSiteFollowupStatusMinMaxDate(site, 1)"
                                                        name="followUpStatusDate1"
                                                        ng-model="site.followupDate1"
                                                        md-placeholder="{{lang.sites_follow_up_status_date}}"
-                                                       md-max-date="ctrl.maxCreateDate"
-                                                       md-min-date="ctrl.minDate"
+                                                       md-max-date="site.followupDate1Max"
                                                        md-open-on-focus></md-datepicker>
                                         <md-datepicker ng-if="ctrl.needReply(site.followupStatus)"
                                                        name="followUpStatusDate2"
+                                                       ng-change="ctrl.getSiteFollowupStatusMinMaxDate(site, 2)"
                                                        ng-model="site.followupDate2"
                                                        md-placeholder="{{lang.sites_follow_up_status_date}}"
-                                                       md-max-date="ctrl.maxCreateDate"
-                                                       md-min-date="ctrl.minDate"
+                                                       md-min-date="site.followupDate2Min"
                                                        md-open-on-focus></md-datepicker>
                                     </div>
                                 </div>
                             </td>
                             <td md-cell>
-                                <div flex layout="row" layout-align="start center">
+                                <div ng-if="ctrl.documentClass.toLowerCase() === 'outgoing'"
+                                     flex layout="row" layout-align="start center">
                                     <md-menu-bar>
                                         <md-menu>
                                             <button class="md-icon-button" ng-click="$mdMenu.open()">
@@ -176,6 +177,11 @@
                                         </md-menu>
                                     </md-menu-bar>
                                 </div>
+                                <md-button ng-if="ctrl.documentClass.toLowerCase() === 'incoming'"
+                                           class="md-icon-button" title="{{lang.add}}"
+                                           ng-click="ctrl.addSiteIncoming(site, $event)">
+                                    <md-icon md-svg-icon="plus"></md-icon>
+                                </md-button>
                             </td>
                         </tr>
                         </tbody>
@@ -227,15 +233,15 @@
                                             name="sitesInfoToFollowupStatus1"
                                             ng-model="ctrl.sitesInfoToFollowupStatusDate1"
                                             md-placeholder="{{lang.sites_follow_up_status_date}}"
-                                            md-min-date="ctrl.minDate"
                                             ng-change="ctrl.onSitesInfoFollowupDateChange('To', 1)"
+                                            md-max-date="ctrl.sitesInfoToFollowupStatusDateMax"
                                             md-open-on-focus></md-datepicker>
                                     <md-datepicker
                                             ng-if="ctrl.needReply(ctrl.sitesInfoToFollowupStatus)"
                                             name="sitesInfoToFollowupStatus2"
                                             ng-model="ctrl.sitesInfoToFollowupStatusDate2"
                                             md-placeholder="{{lang.sites_follow_up_status_date}}"
-                                            md-min-date="ctrl.minDate"
+                                            md-min-date="ctrl.sitesInfoToFollowupStatusDateMin"
                                             ng-change="ctrl.onSitesInfoFollowupDateChange('To', 2)"
                                             md-open-on-focus></md-datepicker>
                                 </div>
@@ -361,7 +367,7 @@
                                             name="sitesInfoCCFollowupStatus1"
                                             ng-model="ctrl.sitesInfoCCFollowupStatusDate1"
                                             md-placeholder="{{lang.sites_follow_up_status_date}}"
-                                            md-min-date="ctrl.minDate"
+                                            md-min-date="ctrl.sitesInfoCCFollowupStatusDateMax"
                                             ng-change="ctrl.onSitesInfoFollowupDateChange('CC', 1)"
                                             md-open-on-focus></md-datepicker>
                                     <md-datepicker
@@ -369,7 +375,7 @@
                                             name="sitesInfoCCFollowupStatus2"
                                             ng-model="ctrl.sitesInfoCCFollowupStatusDate2"
                                             md-placeholder="{{lang.sites_follow_up_status_date}}"
-                                            md-min-date="ctrl.minDate"
+                                            md-min-date="ctrl.sitesInfoCCFollowupStatusDateMin"
                                             ng-change="ctrl.onSitesInfoFollowupDateChange('CC', 2)"
                                             md-open-on-focus></md-datepicker>
                                 </div>
@@ -453,6 +459,101 @@
                             md-limit-options="ctrl.grid.sitesInfoCC.limitOptions"
                             md-limit="ctrl.grid.sitesInfoCC.limit" md-page="ctrl.grid.sitesInfoCC.page"
                             md-total="{{ctrl.sitesInfoCC.length}}" md-page-select>
+                    </md-table-pagination>
+                </md-table-container>
+            </md-card>
+        </div>
+        <br/>
+        <!-- Added Incoming site after searching / from database -->
+        <div flex layout="column">
+            <md-card ng-if="ctrl.sitesInfoIncoming.length" md-whiteframe="3" layout="column" class="card-overlay">
+                <!-- Copy sites toolbar -->
+                <md-toolbar class="md-table-toolbar md-default"
+                            ng-class="{'selected':ctrl.sitesInfoIncomingSelected.length}">
+                    <div class="md-toolbar-tools">
+                        <div ng-if="ctrl.sitesInfoIncomingSelected.length" layout="row" flex
+                             layout-align="start center">
+                            <div>{{ctrl.sitesInfoIncomingSelected.length}} {{lang.items_selected}}</div>
+                            <span flex></span>
+                            <div layout="row">
+                                <div>
+                                    <md-menu-bar class="follow-up-menu-bar">
+                                        <md-menu>
+                                            <md-button ng-click="$mdMenu.open()">
+                                                {{ctrl.sitesInfoIncomingFollowupStatus.getTranslatedName() ||
+                                                lang.sites_follow_up_status}}
+                                            </md-button>
+                                            <md-menu-content width="3">
+                                                <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
+                                                    <md-button
+                                                            ng-click="ctrl.onSitesFollowupStatusChange( 'Incoming' , status)">
+                                                        {{status.getTranslatedName()}}
+                                                    </md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                    </md-menu-bar>
+                                </div>
+                                <div layout="row" layout-align="start center">
+                                    <md-button class="md-icon-button"
+                                               ng-click="ctrl.onSitesInfoDeleteBulk( 'Incoming' ,$event)">
+                                        <md-icon md-svg-icon="delete"></md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </md-toolbar>
+                <!-- Copy sites table -->
+                <md-table-container flex scroll-directive>
+                    <table md-table md-row-select multiple ng-model="ctrl.sitesInfoIncomingSelected"
+                           md-progress="ctrl.progress">
+                        <thead md-head md-order="ctrl.grid.sitesInfoIncoming.order">
+                        <tr md-row>
+                            <th md-column md-order-by="mainEnSiteText">
+                                <span>{{lang.sites_main_site}}</span>
+                            </th>
+                            <th md-column md-order-by="mainArSiteText">
+                                <span>{{lang.sites_sub_site}}</span>
+                            </th>
+                            <th md-column md-order-by="siteType">
+                                <span>{{lang.sites_select_site_type}}</span>
+                            </th>
+                            <th md-column>
+                                <span>{{lang.sites_follow_up_status}}</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody md-body>
+                        <tr md-row md-select="site"
+                            ng-repeat="site in ctrl.sitesInfoIncoming  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoIncoming.limit: ((ctrl.grid.sitesInfoIncoming.page - 1) * ctrl.grid.sitesInfoIncoming.limit) |orderBy:ctrl.grid.sitesInfoIncoming.order  track by $index">
+                            <td md-cell>
+                                <div flex layout="column">
+                                    <span class="span-column">{{site.getTranslatedParentName()}}</span>
+                                </div>
+                            </td>
+                            <td md-cell>
+                                <div flex layout="column">
+                                    <span class="span-column">{{site.getTranslatedName()}}</span>
+                                </div>
+                            </td>
+                            <td md-cell>
+                                <div flex layout="column">
+                                    <span class="span-column">{{site.getTranslatedSiteType()}}</span>
+                                </div>
+                            </td>
+                            <td md-cell>
+                                <div layout="row"><span flex>{{site.followupStatus.getTranslatedName()}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <md-table-pagination
+                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                            md-limit-options="ctrl.grid.sitesInfoIncoming.limitOptions"
+                            md-limit="ctrl.grid.sitesInfoIncoming.limit" md-page="ctrl.grid.sitesInfoIncoming.page"
+                            md-total="{{ctrl.sitesInfoIncoming.length}}" md-page-select>
                     </md-table-pagination>
                 </md-table-container>
             </md-card>

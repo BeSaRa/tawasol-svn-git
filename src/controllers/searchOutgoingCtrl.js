@@ -42,13 +42,7 @@ module.exports = function (app) {
         // employee service to check the permission in html
         self.employeeService = employeeService;
 
-        self.progress = null;
-        self.showAdvancedSearch = false;
-
-        self.searchOutgoing = new OutgoingSearch({
-            selectedEntityType: null,
-            selectedCorrSiteType: null
-        });
+        self.searchOutgoing = new OutgoingSearch();
         self.searchOutgoingModel = angular.copy(self.searchOutgoing);
 
         /*self.organizations = organizations;
@@ -179,7 +173,7 @@ module.exports = function (app) {
          * @description Contains the selected tab name
          * @type {string}
          */
-        self.selectedTabName = "ens";
+        self.selectedTabName = "search";
         self.selectedTab = 0;
 
         /**
@@ -255,11 +249,7 @@ module.exports = function (app) {
          * @param form
          */
         self.resetFilters = function (form) {
-            self.searchOutgoing = new OutgoingSearch({
-                selectedEntityType: null,
-                selectedCorrSiteType: null
-            });
-            //self.searchOutgoing.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
+            self.searchOutgoing = new OutgoingSearch();
             self.searchOutgoingModel = angular.copy(self.searchOutgoing);
             form.$setUntouched();
         };
@@ -383,8 +373,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.launchDistributionWorkflow = function (searchedOutgoingDocument, $event) {
-
-
             if (!searchedOutgoingDocument.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
@@ -394,7 +382,6 @@ module.exports = function (app) {
                     self.reloadSearchedOutgoingDocument(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                            ;
                         });
                 });
             // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))

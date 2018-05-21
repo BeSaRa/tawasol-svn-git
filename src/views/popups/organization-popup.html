@@ -1171,7 +1171,7 @@
                                                             md-limit-options="ctrl.propertyConfigurationGrid.limitOptions"
                                                             md-limit="ctrl.propertyConfigurationGrid.limit"
                                                             md-page="ctrl.propertyConfigurationGrid.page"
-                                                            md-total="{{ctrl.propertyConfigurations.length}}"
+                                                            md-total="{{(ctrl.propertyConfigurations | filter:ctrl.searchModelPropertyConfigurations).length}}"
                                                             md-page-select>
                                                     </md-table-pagination>
                                                 </md-table-container>

@@ -389,8 +389,9 @@ module.exports = function (app) {
             if (resetSites) {
                 self.document.sitesInfoTo = null;
                 self.document.sitesInfoCC = null;
+                self.document.sitesInfoIncoming = null;
             }
-            if (self.document.selectedCorrSiteType || !resetSites) {
+            if (self.document.siteType || !resetSites) {
                 return dialog
                     .showDialog({
                         template: cmsTemplate.getPopup('manage-correspondence-sites-search'),
@@ -398,20 +399,20 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         bindToController: true,
                         locals: {
-                            selectedSiteType: self.document.selectedCorrSiteType,
+                            selectedSiteType: self.document.siteType,
                             document: self.document
                         }
                     }).then(function (result) {
-                        self.document.selectedCorrSiteType = result.siteType;
+                        self.document.siteType = result.siteType;
                         self.document = result.document;
                         self.mainSiteLabel = result.mainSiteLabel;
                         self.subSiteLabel = result.subSiteLabel;
                     })
                     .catch(function (result) {
-                        self.document.selectedCorrSiteType = result.siteType;
+                        self.document.siteType = result.siteType;
                         self.document = result.document;
-                        if (!(self.document.selectedCorrSiteType && (result.mainSiteLabel || result.subSiteLabel))) {
-                            self.document.selectedCorrSiteType = null;
+                        if (!(self.document.siteType && (result.mainSiteLabel || result.subSiteLabel))) {
+                            self.document.siteType = null;
                         }
                         self.mainSiteLabel = result.mainSiteLabel;
                         self.subSiteLabel = result.subSiteLabel;

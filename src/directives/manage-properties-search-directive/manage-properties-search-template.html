@@ -56,8 +56,8 @@
                 </md-input-container>-->
 
                 <!-- Paper/Electronic -->
-                <md-input-container flex ng-if="ctrl.document.docClassName !== 'Incoming'">
-                    <label for="addMethod">{{lang.document_type}}</label>
+                <md-input-container flex ng-if="ctrl.document.docClassName.toLowerCase() !== 'incoming'">
+                    <label for="addMethod">{{lang.type}}</label>
                     <md-select name="addMethod" id="addMethod"
                                ng-change="ctrl.onChangeAddMethod($event)"
                                ng-model="ctrl.document.addMethod"
@@ -306,7 +306,7 @@
                     <md-select name="correspondenceSiteType"
                                id="correspondenceSiteType"
                                ng-change="ctrl.getCorrespondenceSites(true, $event)"
-                               ng-model="ctrl.document.selectedCorrSiteType"
+                               ng-model="ctrl.document.siteType"
                                ng-required="ctrl.checkMandatory('sitesInfoTo') || ctrl.checkMandatory('sitesInfoCC')">
                         <md-option ng-value="siteType"
                                    ng-repeat="siteType in ctrl.correspondenceSiteTypes">
@@ -330,7 +330,7 @@
                 </md-input-container>
 
                 <!-- Selected Main Site -->
-                <md-input-container flex ng-if="ctrl.document.selectedCorrSiteType && ctrl.mainSiteLabel">
+                <md-input-container flex ng-if="ctrl.document.siteType && ctrl.mainSiteLabel">
                     <label for="sitesInfoTo">{{lang.main_site}}</label>
                     <input name="sitesInfoTo" id="sitesInfoTo"
                            ng-required="ctrl.checkMandatory('sitesInfoTo') || ctrl.checkMandatory('sitesInfoCC')"
@@ -342,7 +342,7 @@
                 </md-input-container>
 
                 <!-- Selected Sub Site -->
-                <md-input-container flex ng-if="ctrl.document.selectedCorrSiteType && ctrl.subSiteLabel">
+                <md-input-container flex ng-if="ctrl.document.siteType && ctrl.subSiteLabel">
                     <label for="sitesInfoCC">{{lang.sub_site}}</label>
                     <input name="sitesInfoCC" id="sitesInfoCC"
                            ng-required="ctrl.checkMandatory('sitesInfoTo') || ctrl.checkMandatory('sitesInfoCC')"
