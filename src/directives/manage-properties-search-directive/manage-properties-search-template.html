@@ -55,7 +55,7 @@
                     </div>
                 </md-input-container>-->
 
-                <!-- Paper/Electronic Level -->
+                <!-- Paper/Electronic -->
                 <md-input-container flex ng-if="ctrl.document.docClassName !== 'Incoming'">
                     <label for="addMethod">{{lang.document_type}}</label>
                     <md-select name="addMethod" id="addMethod"
@@ -71,7 +71,6 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-
                 <!-- Security Level -->
                 <md-input-container flex>
                     <label for="securityLevel">{{lang.security_level}}</label>
@@ -303,7 +302,7 @@
                     <md-select name="correspondenceSiteType"
                                id="correspondenceSiteType"
                                ng-change="ctrl.getCorrespondenceSites(true, $event)"
-                               ng-model="ctrl.correspondenceSiteType"
+                               ng-model="ctrl.document.selectedCorrSiteType"
                                ng-required="ctrl.checkMandatory('sitesInfoTo') || ctrl.checkMandatory('sitesInfoCC')">
                         <md-option ng-value="siteType"
                                    ng-repeat="siteType in ctrl.correspondenceSiteTypes">
@@ -327,7 +326,7 @@
                 </md-input-container>
 
                 <!-- Selected Main Site -->
-                <md-input-container flex ng-if="ctrl.correspondenceSiteType && ctrl.mainSiteLabel">
+                <md-input-container flex ng-if="ctrl.document.selectedCorrSiteType && ctrl.mainSiteLabel">
                     <label for="sitesInfoTo">{{lang.main_site}}</label>
                     <input name="sitesInfoTo" id="sitesInfoTo"
                            ng-required="ctrl.checkMandatory('sitesInfoTo')"
@@ -339,7 +338,7 @@
                 </md-input-container>
 
                 <!-- Selected Sub Site -->
-                <md-input-container flex ng-if="ctrl.correspondenceSiteType && ctrl.subSiteLabel">
+                <md-input-container flex ng-if="ctrl.document.selectedCorrSiteType && ctrl.subSiteLabel">
                     <label for="sitesInfoCC">{{lang.sub_site}}</label>
                     <input name="sitesInfoCC" id="sitesInfoCC"
                            ng-required="ctrl.checkMandatory('sitesInfoCC')"
@@ -351,7 +350,7 @@
                 </md-input-container>
             </div>
 
-            <!-- Entity Type -->
+            <!-- Linked Entity -->
             <div layout="row">
                 <!-- Entity Type Drop down -->
                 <md-input-container flex>
@@ -359,7 +358,7 @@
                     <md-select name="selectedEntityType"
                                id="selectedEntityType"
                                ng-change="ctrl.openEntityTypePopup(true, $event)"
-                               ng-model="ctrl.selectedEntityType"
+                               ng-model="ctrl.document.selectedEntityType"
                                ng-required="ctrl.checkMandatory('linkedEntities')">
                         <md-option ng-value="entityType"
                                    ng-repeat="entityType in ctrl.entityTypesArray">
@@ -372,9 +371,9 @@
                     </div>
                 </md-input-container>
 
-                <!-- Change Entity Type Values -->
+                <!-- Change Linked Entity Type Values -->
                 <md-input-container>
-                    <md-button class="md-icon-button" ng-if="!!ctrl.linkedEntityValueName"
+                    <md-button class="md-icon-button" ng-if="ctrl.document.selectedEntityType && !!ctrl.linkedEntityValueName"
                                tooltip="{{lang.change_entity_type}}"
                                tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}"
                                ng-click="ctrl.openEntityTypePopup(false, $event)">
@@ -383,7 +382,7 @@
                 </md-input-container>
 
                 <!-- Name of linked entity -->
-                <md-input-container flex ng-if="!!ctrl.linkedEntityValueName">
+                <md-input-container flex ng-if="ctrl.document.selectedEntityType && !!ctrl.linkedEntityValueName">
                     <label for="linkedEntityName">{{lang.name}}</label>
                     <input name="linkedEntityName" id="linkedEntityName"
                            ng-required="ctrl.checkMandatory('linkedEntities')"

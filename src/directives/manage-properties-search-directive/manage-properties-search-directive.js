@@ -9,12 +9,12 @@ module.exports = function (app) {
             template: require('./manage-properties-search-template.html'),
             scope: {
                 document: '=',
+                searchType: '@',
+                centralArchives: '=?',
                 organizations: '=?',
                 documentFiles: '=?',
                 sourceForm: '=?',
-                centralArchives: '=',
                 registryOrganizations: '=?',
-                searchType: '@',
                 approvers: '=?'
             }
         }

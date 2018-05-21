@@ -27,7 +27,7 @@ module.exports = function (app) {
             model.subSiteId = model.subSiteId && model.subSiteId.hasOwnProperty('id') ? model.subSiteId.id : model.subSiteId;
             model.siteType = model.siteType && model.siteType.hasOwnProperty('id') ? model.siteType.lookupKey : model.siteType;
             model.followupStatus = model.followupStatus.hasOwnProperty('id') ? model.followupStatus.lookupKey : model.followupStatus;
-            model.followupDate = _getDate(model.followupDate);
+            model.followupDate = model.followupDate ? _getDate(model.followupDate) : null;
             delete model.mainEnSiteText;
             delete model.mainArSiteText;
             delete model.subArSiteText;

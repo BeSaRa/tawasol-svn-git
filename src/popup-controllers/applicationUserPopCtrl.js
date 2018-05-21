@@ -855,7 +855,7 @@ module.exports = function (app) {
             var indexOfUpdatedOUApplicationUser = _.findIndex(self.ouApplicationUsers, function (x) {
                 return x.ouid.id === self.ouApplicationUserBeforeEdit.ouid.id;
             });
-            debugger;
+
             self.saveOUApplicationUserFromCtrl(self.ouApplicationUser)
                 .then(function () {
                     self.ouApplicationUsers.splice(indexOfUpdatedOUApplicationUser, 1, self.ouApplicationUser);

@@ -68,17 +68,45 @@ module.exports = function (app) {
 
             if (angular.isArray(model.sitesInfoTo) && model.sitesInfoTo.length) {
                 model.sitesInfoTo = model.sitesInfoTo[0];
-                model.sitesInfoTo = JSON.stringify(generator.interceptSendInstance('Site', model.sitesInfoTo));
+
+                if (model.sitesInfoTo.followupDate1 && model.sitesInfoTo.followupDate2) {
+                    model.sitesInfoTo.followupDates = {
+                        first: generator.getTimeStampFromDate(model.sitesInfoTo.followupDate1),
+                        second: generator.getTimeStampFromDate(model.sitesInfoTo.followupDate2)
+                    };
+                }
+                model.sitesInfoTo = generator.interceptSendInstance('Site', model.sitesInfoTo);
+                delete model.sitesInfoTo.followupDate1;
+                delete model.sitesInfoTo.followupDate2;
+                delete model.sitesInfoTo.siteCategory;
+                delete model.sitesInfoTo.followupDate;
+                model.sitesInfoTo = JSON.stringify(model.sitesInfoTo);
+
             } else {
                 model.sitesInfoTo = null;
             }
             if (angular.isArray(model.sitesInfoCC) && model.sitesInfoCC.length) {
                 model.sitesInfoCC = model.sitesInfoCC[0];
-                model.sitesInfoCC = JSON.stringify(generator.interceptSendInstance('Site', model.sitesInfoCC));
+
+                if (model.sitesInfoCC.followupDate1 && model.sitesInfoCC.followupDate2) {
+                    model.sitesInfoCC.followupDates = {
+                        first: generator.getTimeStampFromDate(model.sitesInfoCC.followupDate1),
+                        second: generator.getTimeStampFromDate(model.sitesInfoCC.followupDate2)
+                    };
+                }
+
+                model.sitesInfoCC = generator.interceptSendInstance('Site', model.sitesInfoCC);
+
+                delete model.sitesInfoCC.followupDate1;
+                delete model.sitesInfoCC.followupDate2;
+                delete model.sitesInfoCC.siteCategory;
+                delete model.sitesInfoCC.followupDate;
+                model.sitesInfoCC = JSON.stringify(model.sitesInfoCC);
             } else {
                 model.sitesInfoCC = null;
             }
-//because we select only one linked entity. so, it can't be array
+
+            //because we select only one linked entity. so, it can't be array
             if (model.linkedEntities && !angular.isArray(model.linkedEntities)) {
                 model.linkedEntities = angular.toJson(generator.interceptSendInstance('LinkedObject', model.linkedEntities));
             } else {
@@ -96,6 +124,16 @@ module.exports = function (app) {
 
             model.mainSiteId = model.mainSiteId ? (model.mainSiteId.exactId ? model.mainSiteId.exactId : null) : null;
             model.subSiteId = model.subSiteId ? (model.subSiteId.exactId ? model.subSiteId.exactId : null) : null;
+
+            if (model.docDate.From)
+                model.docDate.From = '' + model.docDate.From;
+            //TODO : 11 Jan, 2018. This if condition is added for Iyad to check something. It has to be removed once he finished checking.
+            if (model.docDate.To)
+                model.docDate.To = '' + model.docDate.To;
+            model.docDate = angular.toJson(model.docDate);
+
+            delete model.selectedEntityType;
+            delete model.selectedCorrSiteType;
 
             delete model.followUpFrom;
             delete model.followUpTo;
@@ -116,12 +154,7 @@ module.exports = function (app) {
             delete model.mainSiteId;
             delete model.subSiteId;
 
-            if (model.docDate.From)
-                model.docDate.From = '' + model.docDate.From;
-            //TODO : 11 Jan, 2018. This if condition is added for Iyad to check something. It has to be removed once he finished checking.
-            if (model.docDate.To)
-                model.docDate.To = '' + model.docDate.To;
-            model.docDate = angular.toJson(model.docDate);
+
             return model;
         });
 

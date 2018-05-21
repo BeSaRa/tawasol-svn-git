@@ -4,7 +4,7 @@ module.exports = function (app) {
                                                                              dialog,
                                                                              moment,
                                                                              $scope,
-                                                                             Site,
+                                                                             Site_Search,
                                                                              lookupService,
                                                                              CorrespondenceSiteType,
                                                                              LangWatcher,
@@ -14,7 +14,8 @@ module.exports = function (app) {
                                                                              correspondenceService,
                                                                              generator,
                                                                              SiteView,
-                                                                             rootEntity) {
+                                                                             rootEntity,
+                                                                             toast) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSitesSearchDirectiveCtrl';
@@ -27,7 +28,7 @@ module.exports = function (app) {
             self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));
             self.sitesInfoCC = self.sitesInfoCC || [];
             self.sitesInfoTo = self.sitesInfoTo || [];
-            if(self.isSimpleCorrespondenceSiteSearchType && self.selectedSiteType)
+            if (self.isSimpleCorrespondenceSiteSearchType && self.selectedSiteType)
                 self.onSiteTypeChange();
         });
 
@@ -230,7 +231,7 @@ module.exports = function (app) {
          * @private
          */
         function _mapSubSites(siteView) {
-            return (new Site())
+            return (new Site_Search())
                 .mapFromSiteView(siteView)
                 .setFollowupStatus(self.followUpStatuses[1])
                 .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
@@ -294,11 +295,17 @@ module.exports = function (app) {
             });*/
         }
 
+        self.disableAddButton = function (site) {
+            return (self.needReply(site.followupStatus) && !(site.followupDate1 && site.followupDate2));
+        };
+
         /**
          * @description add single site to To.
          * @param site
          */
         self.addSiteTo = function (site) {
+            if(self.disableAddButton(site))
+                return toast.error(langService.get('select_date_range'));
             _addSite('To', site)
                 .then(function () {
                     self.subSearchSelected = [];
@@ -312,6 +319,8 @@ module.exports = function (app) {
          * @param site
          */
         self.addSiteCC = function (site) {
+            if(self.disableAddButton(site))
+                return toast.error(langService.get('select_date_range'));
             _addSite('CC', site)
                 .then(function () {
                     self.subSearchSelected = [];
@@ -334,9 +343,9 @@ module.exports = function (app) {
                 self.addSiteTo(site);
             });
 
-                self.followUpStatusDate = null;
-                self.followupStatus = null;
-                self.subSearchSelected = [];
+            self.followUpStatusDate = null;
+            self.followupStatus = null;
+            self.subSearchSelected = [];
 
         };
         /**
@@ -352,9 +361,9 @@ module.exports = function (app) {
             _.map(sites, function (site) {
                 self.addSiteCC(site);
             });
-                self.followUpStatusDate = null;
-                self.followupStatus = null;
-                self.subSearchSelected = [];
+            self.followUpStatusDate = null;
+            self.followupStatus = null;
+            self.subSearchSelected = [];
 
         };
         /**
@@ -495,15 +504,16 @@ module.exports = function (app) {
             site.followupStatus = status;
             if (!self.needReply(site.followupStatus)) {
                 site.followupDate = null;
-                site.followupDate2= null;
+                site.followupDate2 = null;
             }
         };
 
         /**
          * @description change date for selected sitesInfo.
          */
-        self.onSitesInfoFollowupDateChange = function (type) {
-            _setSitesProperty(self['sitesInfo' + type + 'Selected'], 'followupDate', self['sitesInfo' + type + 'FollowupStatusDate']);
+        self.onSitesInfoFollowupDateChange = function (type, picker) {
+            var followupDate = 'followupDate' + picker;
+            _setSitesProperty(self['sitesInfo' + type + 'Selected'], followupDate, self['sitesInfo' + type + 'FollowupStatusDate' + picker]);
         };
         /**
          * @description change followupStatus for selected sitesInfo.

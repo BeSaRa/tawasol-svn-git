@@ -24,7 +24,7 @@ module.exports = function (app) {
         self.document = null;
         self.maxCreateDate = new Date();
 
-        self.correspondenceSiteType = null;
+
         // all security level
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
         self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
@@ -64,7 +64,6 @@ module.exports = function (app) {
             }
         ];
         var required = {};
-        self.selectedEntityType = null;
 
 
         self.years = function () {
@@ -387,7 +386,7 @@ module.exports = function (app) {
                 self.document.sitesInfoTo = null;
                 self.document.sitesInfoCC = null;
             }
-            if (self.correspondenceSiteType || !resetSites) {
+            if (self.document.selectedCorrSiteType || !resetSites) {
                 return dialog
                     .showDialog({
                         template: cmsTemplate.getPopup('manage-correspondence-sites-search'),
@@ -395,20 +394,20 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         bindToController: true,
                         locals: {
-                            selectedSiteType: self.correspondenceSiteType,
+                            selectedSiteType: self.document.selectedCorrSiteType,
                             document: self.document
                         }
                     }).then(function (result) {
-                        self.correspondenceSiteType = result.siteType;
+                        self.document.selectedCorrSiteType = result.siteType;
                         self.document = result.document;
                         self.mainSiteLabel = result.mainSiteLabel;
                         self.subSiteLabel = result.subSiteLabel;
                     })
                     .catch(function (result) {
-                        self.correspondenceSiteType = result.siteType;
+                        self.document.selectedCorrSiteType = result.siteType;
                         self.document = result.document;
-                        if (!(self.correspondenceSiteType && (result.mainSiteLabel || result.subSiteLabel))) {
-                            self.correspondenceSiteType = null;
+                        if (!(self.document.selectedCorrSiteType && (result.mainSiteLabel || result.subSiteLabel))) {
+                            self.document.selectedCorrSiteType = null;
                         }
                         self.mainSiteLabel = result.mainSiteLabel;
                         self.subSiteLabel = result.subSiteLabel;
@@ -424,7 +423,7 @@ module.exports = function (app) {
         self.openEntityTypePopup = function (resetValues, $event) {
             if (resetValues)
                 self.document.linkedEntities = null;
-            if (self.selectedEntityType) {
+            if (self.document.selectedEntityType) {
                 return dialog
                     .showDialog({
                         template: cmsTemplate.getPopup('manage-document-entities-search'),
@@ -434,23 +433,23 @@ module.exports = function (app) {
                         locals: {
                             documentClass: self.document.docClassName,
                             linkedEntity: self.document.linkedEntities,
-                            selectedEntityType: self.selectedEntityType,
+                            selectedEntityType: self.document.selectedEntityType,
                             formValid: !!self.document.linkedEntities
                         }
                     }).then(function (result) {
                         self.document.linkedEntities = result.linkedEntity;
-                        self.selectedEntityType = result.selectedEntityType;
+                        self.document.selectedEntityType = result.selectedEntityType;
                         self.linkedEntityValueName = result.linkedEntity.getName();
                     })
                     .catch(function (result) {
-                        self.selectedEntityType = result.linkedEntity ? result.selectedEntityType : null;
+                        self.document.selectedEntityType = result.linkedEntity ? result.selectedEntityType : null;
                         self.document.linkedEntities = result.linkedEntity;
                         self.linkedEntityValueName = result.linkedEntity ? result.linkedEntity.getName() : '';
                     });
             }
             else {
                 self.document.linkedEntities = null;
-                self.selectedEntityType = null;
+                self.document.selectedEntityType = null;
                 self.linkedEntityValueName = '';
             }
         };
@@ -461,8 +460,8 @@ module.exports = function (app) {
             self.document.approveDateTo = null;
         };
 
-        self.onChangeAddMethod = function($event){
-            if(self.document.addMethod === 1){
+        self.onChangeAddMethod = function ($event) {
+            if (self.document.addMethod === 1) {
                 self.document.approvers = null;
                 self.document.approveDateFrom = null;
                 self.document.approveDateTo = null;

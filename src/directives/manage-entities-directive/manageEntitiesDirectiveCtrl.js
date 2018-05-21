@@ -129,7 +129,7 @@ module.exports = function (app) {
                     self.linkedEntities.push(self.entity);
                     document.linkedEntities = self.linkedEntities;
                 }
-                debugger;
+
                 promise = outgoingService
                     .addLinkedObject(document);
 

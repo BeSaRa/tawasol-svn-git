@@ -45,35 +45,30 @@ module.exports = function (app) {
         self.progress = null;
         self.showAdvancedSearch = false;
 
-        self.searchOutgoing = new OutgoingSearch();
-
-        //self.searchOutgoing.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
+        self.searchOutgoing = new OutgoingSearch({
+            selectedEntityType: null,
+            selectedCorrSiteType: null
+        });
         self.searchOutgoingModel = angular.copy(self.searchOutgoing);
 
-        self.organizations = organizations;
+        /*self.organizations = organizations;
 
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
-        self.propertyConfigurations = propertyConfigurations;
 
         self.docStatuses = angular.copy(documentStatuses);
         self.docStatuses.unshift(new DocumentStatus({arName: 'الكل', enName: 'All'}));
         self.followupStatuses = lookupService.returnLookups(lookupService.followupStatus);
-        self.approvers = approvers;
+
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
         self.documentTypes = documentTypes;
         self.documentFiles = documentFiles;
 
-        self.years = function () {
-            var currentYear = new Date().getFullYear(), years = ['All'];
-            var lastYearForRange = currentYear - 10;
-            while (lastYearForRange <= currentYear) {
-                years.push(currentYear--);
-            }
-            return years;
-        };
         self.correspondenceSiteTypes = correspondenceSiteTypes;
         //self.mainCorrespondenceSites_Copy = angular.copy(mainCorrespondenceSites);
-        self.mainClassifications = mainClassifications;
+        self.mainClassifications = mainClassifications;*/
+
+        self.approvers = approvers;
+        self.propertyConfigurations = propertyConfigurations;
 
         /**
          * @description Get the dynamic required fields
@@ -180,104 +175,6 @@ module.exports = function (app) {
             return self.dynamicValidations[dataType][typeOrMessage];
         };
 
-
-        self.toggleAdvancedSearch = function () {
-            self.showAdvancedSearch = !self.showAdvancedSearch;
-        };
-
-        /**
-         * @description Set the selected year on changing the value
-         * @param searchForm
-         * @param $event
-         */
-        self.setSelectedYear = function (searchForm, $event) {
-            self.selectedYear = self.searchOutgoing.year;
-            self.searchOutgoing.docDateFrom = self.searchOutgoing.docDateTo = null;
-            searchForm.docDateFrom.$setUntouched();
-            searchForm.docDateTo.$setUntouched();
-            if (self.selectedYear === 'All') {
-                self.requiredFieldsSearchOutgoing.push('docDateFrom');
-                self.requiredFieldsSearchOutgoing.push('docDateTo');
-            }
-            else {
-                var dateFromIndex = self.requiredFieldsSearchOutgoing.indexOf('docDateFrom');
-                if (dateFromIndex > -1)
-                    self.requiredFieldsSearchOutgoing.splice(dateFromIndex, 1);
-                var dateToIndex = self.requiredFieldsSearchOutgoing.indexOf('docDateTo');
-                if (dateToIndex > -1)
-                    self.requiredFieldsSearchOutgoing.splice(dateToIndex, 1);
-
-                self.docDateFromCopy = self.selectedYear + '-01-01 00:00:00.000';
-                self.docDateToCopy = self.selectedYear + '-12-31 23:59:59.999';
-                self.setMinMaxDocDate('year');
-            }
-        };
-
-        /**
-         * @description Set the min and max range of date
-         * @param changedBy
-         * @param $event
-         */
-        self.setMinMaxDocDate = function (changedBy, $event) {
-            /*If value is instance of date, that means user has changed the value from datepicker
-             * else value is changed on change of year field and we need to cast the value to date type.
-             */
-            if (changedBy === 'year') {
-                self.maxDocDate = self.maxDateForTo = new Date(self.docDateToCopy);
-                self.minDocDate = self.minDateForFrom = new Date(self.docDateFromCopy);
-            }
-            else if (changedBy === 'picker') {
-                if (self.selectedYear === 'All') {
-                    self.maxDocDate = self.searchOutgoing.docDateTo;
-                    self.minDocDate = self.searchOutgoing.docDateFrom;
-                    self.minDateForFrom = null;
-                    self.maxDateForTo = null;
-                }
-                else {
-                    self.maxDocDate = self.searchOutgoing.docDateTo ? self.searchOutgoing.docDateTo : new Date(self.docDateToCopy);
-                    self.minDocDate = self.searchOutgoing.docDateFrom ? self.searchOutgoing.docDateFrom : new Date(self.docDateFromCopy);
-                    self.minDateForFrom = new Date(self.docDateFromCopy);
-                    self.maxDateForTo = new Date(self.docDateToCopy);
-                }
-            }
-        };
-
-
-        /**
-         * @description Get the main correspondence sites by correspondence site type
-         * @returns {Array|*}
-         */
-        self.getMainCorrespondenceSites = function ($event) {
-            self.searchOutgoing.mainSiteId = self.searchOutgoing.subSiteId = null;
-            return correspondenceSiteService.getMainCorrespondenceSitesWithSiteTypeId(self.searchOutgoing.siteType).then(function (result) {
-                self.mainCorrespondenceSites = result;
-                return self.mainCorrespondenceSites;
-            });
-        };
-
-        /**
-         * @description Get the sub correspondence sites by main correspondence site
-         * @returns {Array|*}
-         */
-        self.getSubCorrespondenceSites = function ($event) {
-            self.searchOutgoing.subSiteId = null;
-            return correspondenceSiteService.getSubCorrespondenceSitesWithSiteTypeId(self.searchOutgoing.mainSiteId.id).then(function (result) {
-                self.subCorrespondenceSites = result;
-                return self.subCorrespondenceSites;
-            });
-        };
-
-        /**
-         * @description Get the sub classifications by main classification
-         * @returns {Array|*}
-         */
-        self.getSubClassifications = function (searchOutgoingForm, $event) {
-            self.searchOutgoing.subClassification = null;
-            searchOutgoingForm.subClassification.$setUntouched();
-            self.subClassifications = classificationService.getSubClassifications(self.searchOutgoing.mainClassification);
-            return self.subClassifications;
-        };
-
         /**
          * @description Contains the selected tab name
          * @type {string}
@@ -358,11 +255,12 @@ module.exports = function (app) {
          * @param form
          */
         self.resetFilters = function (form) {
-            self.searchOutgoing = new DocumentSearch({"reqType": 0});
+            self.searchOutgoing = new OutgoingSearch({
+                selectedEntityType: null,
+                selectedCorrSiteType: null
+            });
             //self.searchOutgoing.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
             self.searchOutgoingModel = angular.copy(self.searchOutgoing);
-            self.mainCorrespondenceSites = self.subCorrespondenceSites = self.subClassifications = [];
-            self.maxDocDate = self.maxDateForTo = self.minDocDate = self.minDateForFrom = null;
             form.$setUntouched();
         };
 

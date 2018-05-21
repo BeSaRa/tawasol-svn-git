@@ -138,8 +138,8 @@
                                     </div>
                                     <div>
                                         <md-datepicker ng-if="ctrl.needReply(site.followupStatus)"
-                                                       name="followUpStatusDate"
-                                                       ng-model="site.followupDate"
+                                                       name="followUpStatusDate1"
+                                                       ng-model="site.followupDate1"
                                                        md-placeholder="{{lang.sites_follow_up_status_date}}"
                                                        md-max-date="ctrl.maxCreateDate"
                                                        md-min-date="ctrl.minDate"
@@ -224,11 +224,19 @@
                                 <div>
                                     <md-datepicker
                                             ng-if="ctrl.needReply(ctrl.sitesInfoToFollowupStatus)"
-                                            name="sitesInfoToFollowupStatus"
-                                            ng-model="ctrl.sitesInfoToFollowupStatusDate"
+                                            name="sitesInfoToFollowupStatus1"
+                                            ng-model="ctrl.sitesInfoToFollowupStatusDate1"
                                             md-placeholder="{{lang.sites_follow_up_status_date}}"
                                             md-min-date="ctrl.minDate"
-                                            ng-change="ctrl.onSitesInfoFollowupDateChange('To')"
+                                            ng-change="ctrl.onSitesInfoFollowupDateChange('To', 1)"
+                                            md-open-on-focus></md-datepicker>
+                                    <md-datepicker
+                                            ng-if="ctrl.needReply(ctrl.sitesInfoToFollowupStatus)"
+                                            name="sitesInfoToFollowupStatus2"
+                                            ng-model="ctrl.sitesInfoToFollowupStatusDate2"
+                                            md-placeholder="{{lang.sites_follow_up_status_date}}"
+                                            md-min-date="ctrl.minDate"
+                                            ng-change="ctrl.onSitesInfoFollowupDateChange('To', 2)"
                                             md-open-on-focus></md-datepicker>
                                 </div>
                                 <div layout="row" layout-align="start center">
@@ -287,7 +295,9 @@
                                 </div>
                             </td>
                             <td md-cell>
-                                <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                <div layout="row">
+                                    <span flex ng-if="site.followupDate1 && site.followupDate2">{{site.followupDate1|date:'yyyy-MM-dd'}} - {{site.followupDate2|date:'yyyy-MM-dd'}}</span>
+                                    <span flex ng-if="!(site.followupDate1 && site.followupDate2)"></span>
                                 </div>
                             </td>
                             <td md-cell>
@@ -348,11 +358,19 @@
                                 <div>
                                     <md-datepicker
                                             ng-if="ctrl.needReply(ctrl.sitesInfoCCFollowupStatus)"
-                                            name="sitesInfoCCFollowupStatus"
-                                            ng-model="ctrl.sitesInfoCCFollowupStatusDate"
+                                            name="sitesInfoCCFollowupStatus1"
+                                            ng-model="ctrl.sitesInfoCCFollowupStatusDate1"
                                             md-placeholder="{{lang.sites_follow_up_status_date}}"
                                             md-min-date="ctrl.minDate"
-                                            ng-change="ctrl.onSitesInfoFollowupDateChange('CC')"
+                                            ng-change="ctrl.onSitesInfoFollowupDateChange('CC', 1)"
+                                            md-open-on-focus></md-datepicker>
+                                    <md-datepicker
+                                            ng-if="ctrl.needReply(ctrl.sitesInfoCCFollowupStatus)"
+                                            name="sitesInfoCCFollowupStatus2"
+                                            ng-model="ctrl.sitesInfoCCFollowupStatusDate2"
+                                            md-placeholder="{{lang.sites_follow_up_status_date}}"
+                                            md-min-date="ctrl.minDate"
+                                            ng-change="ctrl.onSitesInfoFollowupDateChange('CC', 2)"
                                             md-open-on-focus></md-datepicker>
                                 </div>
                                 <div layout="row" layout-align="start center">
@@ -411,7 +429,9 @@
                                 </div>
                             </td>
                             <td md-cell>
-                                <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                <div layout="row">
+                                    <span flex ng-if="site.followupDate1 && site.followupDate2">{{site.followupDate1|date:'yyyy-MM-dd'}} - {{site.followupDate2|date:'yyyy-MM-dd'}}</span>
+                                    <span flex ng-if="!(site.followupDate1 && site.followupDate2)"></span>
                                 </div>
                             </td>
                             <td md-cell>
