@@ -234,15 +234,14 @@ module.exports = function (app) {
 
         self.typeOptions = [
             {
-                "id": 0,
-                "arName": "شخصى",
-                "enName": "Personal"
+                key: 'personal',
+                value: 0
             },
             {
-                "id": 1,
-                "arName": "إداري",
-                "enName": "Departmental"
-            }];
+                key: 'departmental',
+                value: 1
+            }
+        ];
 
         self.checkCentralDisabled = function (documentClass) {
             return self.employee.inCentralArchive() && self.document && documentClass.indexOf(self.document.docClassName.toLowerCase()) !== -1;
