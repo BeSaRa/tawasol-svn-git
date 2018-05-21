@@ -1,31 +1,21 @@
 module.exports = function (app) {
     app.controller('searchIncomingCtrl', function (lookupService,
                                                    langService,
-                                                   Incoming,
                                                    ResolveDefer,
                                                    viewDocumentService,
                                                    organizations,
-                                                   correspondenceSiteTypes,
-                                                   //mainCorrespondenceSites,
-                                                   correspondenceSiteService,
                                                    searchIncomingService,
                                                    $q,
                                                    IncomingSearch,
                                                    propertyConfigurations,
                                                    validationService,
                                                    generator,
-                                                   documentFiles,
-                                                   documentTypes,
-                                                   classificationService,
-                                                   mainClassifications,
                                                    rootEntity,
                                                    managerService,
                                                    contextHelpService,
                                                    toast,
                                                    viewTrackingSheetService,
-                                                   documentStatuses,
                                                    downloadService,
-                                                   DocumentStatus,
                                                    distributionWorkflowService,
                                                    counterService,
                                                    employeeService,
@@ -44,30 +34,10 @@ module.exports = function (app) {
         // employee service to check the permission in html
         self.employeeService = employeeService;
 
-        self.searchIncoming = new IncomingSearch({
-            selectedEntityType: null,
-            selectedCorrSiteType: null
-        });
+        self.searchIncoming = new IncomingSearch();
         self.searchIncomingModel = angular.copy(self.searchIncoming);
 
         self.propertyConfigurations = propertyConfigurations;
-
-        /*self.organizations = organizations;
-        //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
-        self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
-
-
-        self.docStatuses = angular.copy(documentStatuses);
-        self.docStatuses.unshift(new DocumentStatus({arName: 'الكل', enName: 'All'}));
-        self.followupStatuses = lookupService.returnLookups(lookupService.followupStatus);
-        self.approvers = [];
-        self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
-        self.documentTypes = documentTypes;
-        self.documentFiles = documentFiles;
-
-        self.correspondenceSiteTypes = correspondenceSiteTypes;
-        //self.mainCorrespondenceSites_Copy = angular.copy(mainCorrespondenceSites);
-        self.mainClassifications = mainClassifications;*/
 
         /**
          * @description Get the dynamic required fields
@@ -255,10 +225,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.resetFilters = function (form, $event) {
-            self.searchIncoming = new IncomingSearch({
-                selectedEntityType: null,
-                selectedCorrSiteType: null
-            });
+            self.searchIncoming = new IncomingSearch();
             self.searchIncomingModel = angular.copy(self.searchIncoming);
             form.$setUntouched();
         };

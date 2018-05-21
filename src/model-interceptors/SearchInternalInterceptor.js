@@ -60,6 +60,9 @@ module.exports = function (app) {
 
             model.docDate = angular.toJson(model.docDate);
 
+            delete model.selectedEntityType;
+
+            delete model.docStatus;
             delete model.approvedBy;
             delete model.approveDateFrom;
             delete model.approveDateTo;
@@ -80,8 +83,6 @@ module.exports = function (app) {
             delete model.sitesInfoTo;
             delete model.sitesInfoCC;
             delete model.sitesInfoIncoming;
-
-debugger;
 
             return model;
         });

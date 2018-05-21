@@ -12,7 +12,7 @@
               autocomplete="off" enter-submit-directive="btn_SearchInternal">
             <md-tabs class="content white-bg" md-selected="ctrl.selectedTab">
                 <!-- EDIT/NEW SEARCH TAB -->
-                <md-tab label="{{lang.search}}" md-on-select="ctrl.setCurrentTab('ens')">
+                <md-tab label="{{lang.search}}" md-on-select="ctrl.setCurrentTab('search')">
                     <md-content scroll-directive class="white-bg">
                         <accordion-directive label-collapse="true" validation="false">
                             <accordion-item active>
@@ -458,7 +458,7 @@
                     </md-content>
                 </md-tab>
                 <md-tab label="{{lang.search_module_search_results}}" ng-if="ctrl.showResults"
-                        md-on-select="ctrl.setCurrentTab('sr')">
+                        md-on-select="ctrl.setCurrentTab('result')">
                     <md-table-container>
                         <div flex scroll-directive>
                             <table md-table md-row-select multiple ng-model="ctrl.selectedSearchedInternalDocuments"

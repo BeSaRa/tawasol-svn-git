@@ -143,5 +143,6 @@ module.exports = function (app) {
     require('./OutgoingSearch')(app);
     require('./IncomingSearch')(app);
     require('./InternalSearch')(app);
+    require('./GeneralSearch')(app);
     require('./Site_Search')(app);
 };

@@ -642,9 +642,7 @@ module.exports = function (app) {
                         return ids.indexOf(site.subSiteId) === -1;
                     });
                     self['sitesInfo' + type + 'Selected'] = [];
-                    debugger;
                     _concatCorrespondenceSites(false).then(function () {
-                        debugger;
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                     });
                 });

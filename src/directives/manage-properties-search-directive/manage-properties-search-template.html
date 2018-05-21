@@ -299,7 +299,10 @@
 
         <div layout="column" ng-if="ctrl.searchType === 'advanced'">
             <!-- Correspondence Site -->
-            <div layout="row" ng-if='ctrl.document.docClassName.toLowerCase() !== "internal"'>
+            <div layout="row"
+                 ng-if="ctrl.document.docClassName.toLowerCase() !== 'internal'
+                        && ctrl.document.docClassName.toLowerCase() !== 'general'
+                        && ctrl.document.docClassName.toLowerCase() !== 'correspondence'">
                 <!-- Correspondence Site Type -->
                 <md-input-container flex>
                     <label for="correspondenceSiteType">{{lang.correspondence_site_type}}</label>
@@ -377,7 +380,8 @@
 
                 <!-- Change Linked Entity Type Values -->
                 <md-input-container>
-                    <md-button class="md-icon-button" ng-if="ctrl.document.selectedEntityType && !!ctrl.linkedEntityValueName"
+                    <md-button class="md-icon-button"
+                               ng-if="ctrl.document.selectedEntityType && !!ctrl.linkedEntityValueName"
                                tooltip="{{lang.change_entity_type}}"
                                tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}"
                                ng-click="ctrl.openEntityTypePopup(false, $event)">
@@ -400,7 +404,10 @@
 
             <!-- Approver -->
             <div layout="row"
-                 ng-if="ctrl.document.docClassName.toLowerCase() !== 'incoming' && ctrl.document.addMethod !== 1">
+                 ng-if="ctrl.document.docClassName.toLowerCase() !== 'incoming'
+                 && ctrl.document.docClassName.toLowerCase() !== 'general'
+                 && ctrl.document.docClassName.toLowerCase() !== 'correspondence'
+                 && ctrl.document.addMethod !== 1">
                 <!-- Approver drop down -->
                 <md-input-container flex>
                     <label for="approvers">{{lang.approver}}</label>

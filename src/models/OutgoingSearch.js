@@ -7,7 +7,7 @@ module.exports = function (app) {
 
             Outgoing.call(this);
 
-            self.docStatus = null;
+            delete self.docStatus;
 
             self.siteType = null;
             self.year = null;

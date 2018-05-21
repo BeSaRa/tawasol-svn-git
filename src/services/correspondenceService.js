@@ -45,7 +45,8 @@ module.exports = function (app) {
                                                    OUDistributionList,
                                                    OutgoingSearch,
                                                    IncomingSearch,
-                                                   InternalSearch) {
+                                                   InternalSearch,
+                                                   GeneralSearch) {
         'ngInject';
         var self = this;
         self.serviceName = 'correspondenceService';
@@ -62,6 +63,7 @@ module.exports = function (app) {
         util.inherits(OutgoingSearch, Outgoing);
         util.inherits(IncomingSearch, Outgoing);
         util.inherits(InternalSearch, Outgoing);
+        util.inherits(GeneralSearch, Correspondence);
 
 
 

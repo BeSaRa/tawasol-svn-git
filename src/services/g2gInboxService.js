@@ -212,7 +212,6 @@ module.exports = function (app) {
                 .put(urlService.g2gInbox + 'receive', g2gCorrespondence)
                 .then(function (result) {
                     console.log(result);
-                    debugger;
                     return result;
                 });
         };
@@ -221,13 +220,11 @@ module.exports = function (app) {
             // intercept send instance for G2G
             //g2gCorrespondence =  g2gCorrespondence instanceof G2G ? generator.interceptSendInstance('G2G', g2gCorrespondence) : g2gCorrespondence;
             // get correspondence from G2G object
-            g2gCorrespondence = g2gCorrespondence.hasOwnProperty('correspondence') ? g2gCorrespondence.correspondence : g2gCorrespondence;
-            debugger;
+
             return $http
                 .post(urlService.g2gInbox + 'open', g2gCorrespondence )
                 .then(function (result) {
                     console.log(result);
-                    debugger;
                     return result;
                 });
         };

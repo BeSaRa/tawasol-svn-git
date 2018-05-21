@@ -648,30 +648,6 @@ module.exports = function (app) {
                         'ngInject';
                         return correspondenceSiteTypeService.loadCorrespondenceSiteTypes();
                     },
-                    mainCorrespondenceSites: function (correspondenceSiteService, correspondenceSiteTypes) {
-                        'ngInject';
-                        return correspondenceSiteService.loadCorrespondenceSites().then(function (correspondenceSites) {
-                            return correspondenceSiteService.getMainCorrespondenceSites(correspondenceSites);
-                        });
-                    },
-                    documentFiles: function (documentFileService) {
-                        'ngInject';
-                        return documentFileService.loadDocumentFiles();
-                    },
-                    documentTypes: function (documentTypeService) {
-                        'ngInject';
-                        return documentTypeService.loadDocumentTypes();
-                    },
-                    mainClassifications: function (classificationService) {
-                        'ngInject';
-                        return classificationService.loadClassifications().then(function (classifications) {
-                            return classificationService.getMainClassifications(classifications);
-                        });
-                    },
-                    documentStatuses: function (documentStatusService) {
-                        'ngInject';
-                        return documentStatusService.getDocumentStatuses();
-                    },
                     approvers: function (ouApplicationUserService, employeeService) {
                         'ngInject';
                         return ouApplicationUserService
@@ -711,7 +687,7 @@ module.exports = function (app) {
                         return propertyConfigurationService
                             .loadPropertyConfigurationsByDocumentClassAndOU('incoming', ouId);
                     },
-                    documentFiles: function (documentFileService) {
+                    /*documentFiles: function (documentFileService) {
                         'ngInject';
                         return documentFileService.loadDocumentFiles();
                     },
@@ -728,7 +704,9 @@ module.exports = function (app) {
                     documentStatuses: function (documentStatusService) {
                         'ngInject';
                         return documentStatusService.getDocumentStatuses();
-                    }/*,
+                    }*/
+
+                    /*,
                     centralArchives: function ($q, organizations, employeeService, organizationService) {
                         'ngInject';
                         return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
@@ -761,7 +739,7 @@ module.exports = function (app) {
                         return propertyConfigurationService
                             .loadPropertyConfigurationsByDocumentClassAndOU('internal', ouId);
                     },
-                    documentFiles: function (documentFileService) {
+                    /*documentFiles: function (documentFileService) {
                         'ngInject';
                         return documentFileService.loadDocumentFiles();
                     },
@@ -778,7 +756,7 @@ module.exports = function (app) {
                     documentStatuses: function (documentStatusService) {
                         'ngInject';
                         return documentStatusService.getDocumentStatuses();
-                    },
+                    },*/
                     approvers: function (ouApplicationUserService, employeeService) {
                         'ngInject';
                         return ouApplicationUserService
@@ -818,7 +796,7 @@ module.exports = function (app) {
                         return propertyConfigurationService
                             .loadPropertyConfigurationsByDocumentClassAndOU('general', ouId);
                     },
-                    documentFiles: function (documentFileService) {
+                    /*documentFiles: function (documentFileService) {
                         'ngInject';
                         return documentFileService.loadDocumentFiles();
                     },
@@ -835,7 +813,8 @@ module.exports = function (app) {
                     documentStatuses: function (documentStatusService) {
                         'ngInject';
                         return documentStatusService.getDocumentStatuses();
-                    }/*,
+                    }*/
+                    /*,
                     centralArchives: function ($q, organizations, employeeService, organizationService) {
                         'ngInject';
                         return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);

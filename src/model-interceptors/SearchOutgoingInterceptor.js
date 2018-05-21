@@ -109,10 +109,7 @@ module.exports = function (app) {
             model.docDate = angular.toJson(model.docDate);
 
             delete model.selectedEntityType;
-
-            delete model.followUpFrom;
-            delete model.followUpTo;
-            delete model.followUpDate;
+            delete model.docStatus;
             delete model.approvedBy;
             delete model.approveDateFrom;
             delete model.approveDateTo;

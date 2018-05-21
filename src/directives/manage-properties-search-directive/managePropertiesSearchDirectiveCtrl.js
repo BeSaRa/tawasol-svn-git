@@ -28,8 +28,8 @@ module.exports = function (app) {
         // all security level
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
         self.correspondenceSiteTypes = correspondenceSiteTypeService.correspondenceSiteTypes;
-        self.docStatuses = angular.copy(documentStatusService.documentStatuses);
-        self.docStatuses.unshift(new DocumentStatus({arName: 'الكل', enName: 'All'}));
+        /*self.docStatuses = angular.copy(documentStatusService.documentStatuses);
+        self.docStatuses.unshift(new DocumentStatus({arName: 'الكل', enName: 'All'}));*/
         self.followupStatuses = lookupService.returnLookups(lookupService.followupStatus);
 
         self.approvers = [];

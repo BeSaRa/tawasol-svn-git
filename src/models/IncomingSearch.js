@@ -7,18 +7,13 @@ module.exports = function (app) {
 
             Incoming.call(this);
 
-            self.docStatus = null;
+            //self.docStatus = null;
 
-            self.siteType = null;
             self.mainSiteId = null;
             self.subSiteId = null;
             self.year = null;
             self.docDateFrom = null;
             self.docDateTo = null;
-            self.createdFrom = null;
-            self.createdTo = null;
-            self.followUpFrom = null;
-            self.followUpTo = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

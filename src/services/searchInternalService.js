@@ -22,7 +22,6 @@ module.exports = function (app) {
         }
 
         function _checkPropertyConfiguration(model, properties) {
-            debugger;
             var criteria = {};
             _.map(properties, function (item) {
                 criteria[item.symbolicName] = _findProperty(item.symbolicName.toLowerCase(), model);

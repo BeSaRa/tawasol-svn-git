@@ -7,7 +7,7 @@ module.exports = function (app) {
 
             Internal.call(this);
 
-            self.docStatus = null;
+            //self.docStatus = null;
 
             self.siteType = null;
             self.year = null;

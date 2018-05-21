@@ -23,7 +23,7 @@ module.exports = function (app) {
 
             model.DocSubjectSrc = model.DocSubject;
             model.DocSubject = null;
-            debugger;
+
             return model;
         });
 
