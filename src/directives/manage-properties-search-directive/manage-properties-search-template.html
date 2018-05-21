@@ -84,6 +84,7 @@
                                    ng-repeat="level in ctrl.securityLevels">
                             {{level.getTranslatedName()}}
                         </md-option>
+                        <md-option ng-value="null">{{lang.all}}</md-option>
                     </md-select>
                     <div ng-messages="docSearchForm.securityLevel.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
@@ -101,6 +102,7 @@
                                    ng-repeat="priorityLevel in ctrl.priorityLevels">
                             {{priorityLevel.getTranslatedName()}}
                         </md-option>
+                        <md-option ng-value="null">{{lang.all}}</md-option>
                     </md-select>
                     <div ng-messages="docSearchForm.priorityLevel.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
@@ -195,6 +197,7 @@
                                    ng-repeat="classification in ctrl.classifications">
                             {{classification.classification.getTranslatedName()}}
                         </md-option>
+                        <md-option ng-value="null">{{lang.all}}</md-option>
                     </md-select>
                     <div ng-messages="docSearchForm.mainClassification.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
@@ -253,6 +256,7 @@
                                    ng-repeat="file in ctrl.documentFiles">
                             {{file.file.getTranslatedName()}}
                         </md-option>
+                        <md-option ng-value="null">{{lang.all}}</md-option>
                     </md-select>
                     <div ng-messages="docSearchForm.fileId.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
@@ -310,7 +314,7 @@
                         </md-option>
                         <md-option ng-value="null">{{lang.none}}</md-option>
                     </md-select>
-                    <div ng-messages="docSearchForm.correspondenceSiteType.$error">
+                    <div ng-messages="docSearchForm.selectedCorrSiteType.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
@@ -329,7 +333,7 @@
                 <md-input-container flex ng-if="ctrl.document.selectedCorrSiteType && ctrl.mainSiteLabel">
                     <label for="sitesInfoTo">{{lang.main_site}}</label>
                     <input name="sitesInfoTo" id="sitesInfoTo"
-                           ng-required="ctrl.checkMandatory('sitesInfoTo')"
+                           ng-required="ctrl.checkMandatory('sitesInfoTo') || ctrl.checkMandatory('sitesInfoCC')"
                            ng-model="ctrl.mainSiteLabel"
                            ng-disabled="true" ng-readonly="true">
                     <div ng-messages="docSearchForm.sitesInfoTo.$error">
@@ -341,7 +345,7 @@
                 <md-input-container flex ng-if="ctrl.document.selectedCorrSiteType && ctrl.subSiteLabel">
                     <label for="sitesInfoCC">{{lang.sub_site}}</label>
                     <input name="sitesInfoCC" id="sitesInfoCC"
-                           ng-required="ctrl.checkMandatory('sitesInfoCC')"
+                           ng-required="ctrl.checkMandatory('sitesInfoTo') || ctrl.checkMandatory('sitesInfoCC')"
                            ng-model="ctrl.subSiteLabel"
                            ng-disabled="true" ng-readonly="true">
                     <div ng-messages="docSearchForm.sitesInfoCC.$error">

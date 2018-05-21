@@ -16,6 +16,17 @@ module.exports = function (app) {
                 sourceForm: '=?',
                 registryOrganizations: '=?',
                 approvers: '=?'
+            },
+            link: function (scope, element, attrs) {
+                scope.$watch(function () {
+                        return scope.ctrl.document.securityLevel
+                    },
+                    function (newValue, oldValue) {
+                        if (!newValue) {
+                            scope.ctrl.classifications = [];
+                            scope.ctrl.documentFiles = [];
+                        }
+                    });
             }
         }
     })

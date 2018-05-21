@@ -40,6 +40,10 @@ module.exports = function (app) {
         /*Types options for the type drop down*/
         self.typeOptions = [
             {
+                value: null,
+                key: 'all'
+            },
+            {
                 value: 0,
                 key: "personal"
             },
