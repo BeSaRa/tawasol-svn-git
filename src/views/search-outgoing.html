@@ -12,9 +12,8 @@
               autocomplete="off" enter-submit-directive="btn_SearchOutgoing">
             <md-tabs class="content white-bg" md-selected="ctrl.selectedTab">
                 <!-- EDIT/NEW SEARCH TAB -->
-                <md-tab md-on-select="ctrl.setCurrentTab('ens')">
-                    <md-tab-label>{{lang.search}}</md-tab-label>
-                    <md-tab-body scroll-directive class="white-bg page-padding">
+                <md-tab label="{{lang.search}}" md-on-select="ctrl.setCurrentTab('ens')">
+                    <md-content scroll-directive class="white-bg page-padding">
                         <accordion-directive label-collapse="true" validation="false">
                             <accordion-item active>
                                 <accordion-title>
@@ -609,7 +608,7 @@
                                 </div>
                             </div>
                         </div>-->
-                    </md-tab-body>
+                    </md-content>
                 </md-tab>
                 <md-tab label="{{lang.search_module_search_results}}" ng-if="ctrl.showResults"
                         md-on-select="ctrl.setCurrentTab('sr')">
