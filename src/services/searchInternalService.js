@@ -5,12 +5,7 @@ module.exports = function (app) {
                                                    generator,
                                                    Internal,
                                                    tokenService,
-                                                   _,
-                                                   $timeout,
-                                                   dialog,
-                                                   langService,
-                                                   toast,
-                                                   cmsTemplate) {
+                                                   _) {
         'ngInject';
         var self = this;
         self.serviceName = 'searchInternalService';
@@ -27,6 +22,7 @@ module.exports = function (app) {
         }
 
         function _checkPropertyConfiguration(model, properties) {
+            debugger;
             var criteria = {};
             _.map(properties, function (item) {
                 criteria[item.symbolicName] = _findProperty(item.symbolicName.toLowerCase(), model);
@@ -37,6 +33,7 @@ module.exports = function (app) {
         /**
          * @description Search the internal document
          * @param model
+         * @param properties
          * @return {Promise|searchInternals}
          */
         self.searchInternalDocuments = function (model , properties) {

@@ -11,14 +11,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            /*if (model.createdFrom || model.createdTo) {
-                model.createdFrom = (model.createdFrom) ? moment(model.createdFrom).format("YYYY-MM-DD") : '1900-01-01';
-                model.createdTo = (model.createdTo) ? model.createdTo : moment().format("YYYY-MM-DD");
-                model.createdOn = {From: angular.copy(model.createdFrom), To: angular.copy(model.createdTo)};
-            }*/
-
-
-            if (model.year === 'All' && model.docDateFrom && model.docDateTo) {
+           if (model.year === 'All' && model.docDateFrom && model.docDateTo) {
                 model.docDate = {
                     From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),
                     To: angular.copy(moment(model.docDateTo).format("YYYY-MM-DD"))

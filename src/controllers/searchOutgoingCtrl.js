@@ -45,22 +45,6 @@ module.exports = function (app) {
         self.searchOutgoing = new OutgoingSearch();
         self.searchOutgoingModel = angular.copy(self.searchOutgoing);
 
-        /*self.organizations = organizations;
-
-        self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
-
-        self.docStatuses = angular.copy(documentStatuses);
-        self.docStatuses.unshift(new DocumentStatus({arName: 'الكل', enName: 'All'}));
-        self.followupStatuses = lookupService.returnLookups(lookupService.followupStatus);
-
-        self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
-        self.documentTypes = documentTypes;
-        self.documentFiles = documentFiles;
-
-        self.correspondenceSiteTypes = correspondenceSiteTypes;
-        //self.mainCorrespondenceSites_Copy = angular.copy(mainCorrespondenceSites);
-        self.mainClassifications = mainClassifications;*/
-
         self.approvers = approvers;
         self.propertyConfigurations = propertyConfigurations;
 

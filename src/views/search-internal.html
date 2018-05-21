@@ -14,9 +14,46 @@
                 <!-- EDIT/NEW SEARCH TAB -->
                 <md-tab label="{{lang.search}}" md-on-select="ctrl.setCurrentTab('ens')">
                     <md-content scroll-directive class="white-bg">
-                        <div layout="column">
+                        <accordion-directive label-collapse="true" validation="false">
+                            <accordion-item active>
+                                <accordion-title>
+                                    <div layout="row" layout-align="start center">
+                                        <md-icon md-svg-icon="database-search"></md-icon>
+                                        <span> {{lang.search}}</span>
+                                        <span flex></span>
+                                    </div>
+                                </accordion-title>
+                                <accordion-content>
+                                    <manage-properties-search-directive
+                                            source-form="searchInternalForm"
+                                            registry-organizations="ctrl.registryOrganizations"
+                                            document="ctrl.searchInternal"
+                                            search-type="basic"
+                                    ></manage-properties-search-directive>
+                                </accordion-content>
+                            </accordion-item>
+
+                            <accordion-item>
+                                <accordion-title>
+                                    <div layout="row" layout-align="start center">
+                                        <md-icon md-svg-icon="file-document-box"></md-icon>
+                                        <span> {{lang.search_module_advanced_search}}</span>
+                                        <span flex></span>
+                                    </div>
+                                </accordion-title>
+                                <accordion-content>
+                                    <manage-properties-search-directive
+                                            source-form="searchInternalForm"
+                                            document="ctrl.searchInternal"
+                                            search-type="advanced"
+                                            approvers="ctrl.approvers"
+                                    ></manage-properties-search-directive>
+                                </accordion-content>
+                            </accordion-item>
+                        </accordion-directive>
+                        <!--<div layout="column">
                             <div layout="row" flex class="p020">
-                                <!-- Subject -->
+                                &lt;!&ndash; Subject &ndash;&gt;
                                 <md-input-container flex>
                                     <label for="docSubject">{{lang.search_module_subject}}</label>
                                     <input name="docSubject" id="docSubject"
@@ -26,14 +63,14 @@
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
-                                <!-- Serial -->
+                                &lt;!&ndash; Serial &ndash;&gt;
                                 <md-input-container flex>
                                     <label for="docFullSerial">{{lang.search_module_serial}}</label>
                                     <input name="docFullSerial" id="docFullSerial"
 
                                            ng-required="{{ctrl.dynamicRequired('docFullSerial','search_module_serial')}}"
                                            ng-model="ctrl.searchInternal.docFullSerial">
-                                    <!--custom-validate-directive="{{ctrl.dynamicType('docFullSerial','type')}}"-->
+                                    &lt;!&ndash;custom-validate-directive="{{ctrl.dynamicType('docFullSerial','type')}}"&ndash;&gt;
                                     <div ng-messages="searchInternalForm.docFullSerial.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
                                         <div ng-message="{{ctrl.dynamicType('docFullSerial','type')}}">
@@ -41,7 +78,7 @@
                                         </div>
                                     </div>
                                 </md-input-container>
-                                <!-- Year -->
+                                &lt;!&ndash; Year &ndash;&gt;
                                 <md-input-container flex>
                                     <label for="year">{{lang.search_module_year}}</label>
                                     <md-select name="year" id="year"
@@ -59,7 +96,7 @@
                                 </md-input-container>
                             </div>
                             <div layout="row" flex class="p020">
-                                <!-- Security Levels -->
+                                &lt;!&ndash; Security Levels &ndash;&gt;
                                 <md-input-container flex>
                                     <label for="securityLevel">{{lang.security_level}}</label>
                                     <md-select ng-required="ctrl.dynamicRequired('securityLevel','security_levels')"
@@ -74,8 +111,8 @@
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
-                                <!-- Main Organization Units -->
-                                <!--<md-input-container flex>
+                                &lt;!&ndash; Main Organization Units &ndash;&gt;
+                                &lt;!&ndash;<md-input-container flex>
                                     <label for="ou">{{lang.search_module_main_organization_units}}</label>
                                     <md-select name="ou" id="ou" ng-model="ctrl.searchInternal.ou"
                                                ng-required="ctrl.dynamicRequired('ou','search_module_main_organization_units')">
@@ -87,8 +124,8 @@
                                     <div ng-messages="searchInternalForm.ou.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
-                                </md-input-container>-->
-                                <!-- Priority Levels -->
+                                </md-input-container>&ndash;&gt;
+                                &lt;!&ndash; Priority Levels &ndash;&gt;
                                 <md-input-container flex>
                                     <label for="priorityLevel">{{lang.priority_level}}</label>
                                     <md-select name="priorityLevel" id="priorityLevel"
@@ -103,11 +140,11 @@
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
-                                <!-- Internal Date -->
+                                &lt;!&ndash; Internal Date &ndash;&gt;
                                 <fieldset flex layout="column" class="search-fieldset">
                                     <legend class="md-accent">{{lang.internal_date}}</legend>
                                     <div layout="row">
-                                        <!-- Internal Date From -->
+                                        &lt;!&ndash; Internal Date From &ndash;&gt;
                                         <md-input-container flex>
                                             <label for="docDateFrom">{{lang.search_module_start_date}}</label>
                                             <md-datepicker id="docDateFrom" name="docDateFrom"
@@ -118,12 +155,12 @@
                                                            md-min-date="ctrl.minDateForFrom"
                                                            ng-disabled="!ctrl.searchInternal.year"
                                             ></md-datepicker>
-                                            <!--md-min-date="ctrl.minDocDate"-->
+                                            &lt;!&ndash;md-min-date="ctrl.minDocDate"&ndash;&gt;
                                             <div ng-messages="searchInternalForm.docDateFrom.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                             </div>
                                         </md-input-container>
-                                        <!-- Internal Date To -->
+                                        &lt;!&ndash; Internal Date To &ndash;&gt;
                                         <md-input-container flex>
                                             <label for="docDateTo">{{lang.search_module_end_date}}</label>
                                             <md-datepicker id="docDateTo" name="docDateTo"
@@ -134,7 +171,7 @@
                                                            md-min-date="ctrl.minDocDate"
                                                            ng-disabled="!ctrl.searchInternal.year"
                                             ></md-datepicker>
-                                            <!--md-max-date="ctrl.maxDocDate"-->
+                                            &lt;!&ndash;md-max-date="ctrl.maxDocDate"&ndash;&gt;
                                             <div ng-messages="searchInternalForm.docDateTo.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                             </div>
@@ -142,7 +179,7 @@
                                     </div>
                                 </fieldset>
                             </div>
-                            <!--<div layout="row" flex class="p020">
+                            &lt;!&ndash;<div layout="row" flex class="p020">
                                 &lt;!&ndash; Search within RegOU &ndash;&gt;
                                 <md-switch flex ng-model="ctrl.isSearchByRegOU"
                                            ng-change="ctrl.changeRegOuToggle()"
@@ -176,7 +213,7 @@
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>
-                            </div>-->
+                            </div>&ndash;&gt;
                             <div layout="column" id="advanceSearch" flex class="box-shadow-raised">
                             <span layout="row" id="span_toggleAdvanceSearch" class="cursor-pointer" flex
                                   ng-click="ctrl.toggleAdvancedSearch()">
@@ -187,7 +224,7 @@
                                 <div layout="row" flex class="animate" ng-if="ctrl.showAdvancedSearch">
                                     <div layout="column" flex>
                                         <div layout="row" flex class="p020">
-                                            <!-- Document Type -->
+                                            &lt;!&ndash; Document Type &ndash;&gt;
                                             <md-input-container flex>
                                                 <label for="docType">{{lang.label_document_type}}</label>
                                                 <md-select name="docType" id="docType"
@@ -202,7 +239,7 @@
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                 </div>
                                             </md-input-container>
-                                            <!-- Document Status -->
+                                            &lt;!&ndash; Document Status &ndash;&gt;
                                             <md-input-container flex>
                                                 <label for="status">{{lang.menu_item_document_status}}</label>
                                                 <md-select name="status" id="status"
@@ -217,7 +254,7 @@
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                 </div>
                                             </md-input-container>
-                                            <!-- Document File -->
+                                            &lt;!&ndash; Document File &ndash;&gt;
                                             <md-input-container flex>
                                                 <label for="fileId">{{lang.document_file}}</label>
                                                 <md-select name="fileId" id="fileId"
@@ -234,7 +271,7 @@
                                             </md-input-container>
                                         </div>
                                         <div layout="row" flex class="p020">
-                                            <!-- File Code -->
+                                            &lt;!&ndash; File Code &ndash;&gt;
                                             <md-input-container flex>
                                                 <label for="fileCode">{{lang.search_module_file_code}}</label>
                                                 <input name="fileCode" id="fileCode"
@@ -248,7 +285,7 @@
                                                     </div>
                                                 </div>
                                             </md-input-container>
-                                            <!-- File Number -->
+                                            &lt;!&ndash; File Number &ndash;&gt;
                                             <md-input-container flex>
                                                 <label for="fileSerial">{{lang.file_serial}}</label>
                                                 <input name="fileSerial" id="fileSerial"
@@ -262,7 +299,7 @@
                                                     </div>
                                                 </div>
                                             </md-input-container>
-                                            <!-- Comments -->
+                                            &lt;!&ndash; Comments &ndash;&gt;
                                             <md-input-container flex>
                                                 <label for="comments">{{lang.comments}}</label>
                                                 <input name="comments" id="comments"
@@ -274,7 +311,7 @@
                                             </md-input-container>
                                         </div>
                                         <div layout="row" flex class="p020">
-                                            <!-- Main Classification -->
+                                            &lt;!&ndash; Main Classification &ndash;&gt;
                                             <md-input-container flex>
                                                 <label for="mainClassification">{{lang.search_module_main_classifications}}</label>
                                                 <md-select name="mainClassification" id="mainClassification"
@@ -290,7 +327,7 @@
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                 </div>
                                             </md-input-container>
-                                            <!-- Sub Classification -->
+                                            &lt;!&ndash; Sub Classification &ndash;&gt;
                                             <md-input-container flex>
                                                 <label for="subClassification">{{lang.search_module_sub_classifications}}</label>
                                                 <md-select name="subClassification" id="subClassification"
@@ -306,10 +343,10 @@
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                 </div>
                                             </md-input-container>
-                                            <!-- Follow Up Status -->
+                                            &lt;!&ndash; Follow Up Status &ndash;&gt;
                                             <md-input-container flex class="hidden">
                                                 <label for="followupStatus">{{lang.search_module_follow_up_status}}</label>
-                                                <!--<md-select multiple
+                                                &lt;!&ndash;<md-select multiple
                                                            ng-required="ctrl.dynamicRequired('followupStatus','search_module_follow_up_status')"
                                                            ng-model-options="{trackBy: '$value.id'}"
                                                            name="followupStatus" id="followupStatus"
@@ -318,7 +355,7 @@
                                                                ng-repeat="followupStatus in ctrl.followupStatuses track by $index">
                                                         {{followupStatus.getTranslatedName()}}
                                                     </md-option>
-                                                </md-select>-->
+                                                </md-select>&ndash;&gt;
                                                 <md-select
                                                         ng-required="ctrl.dynamicRequired('followupStatus','search_module_follow_up_status')"
                                                         name="followupStatus" id="followupStatus"
@@ -332,7 +369,7 @@
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                 </div>
                                             </md-input-container>
-                                            <!-- Approved By -->
+                                            &lt;!&ndash; Approved By &ndash;&gt;
                                             <md-input-container flex class="not-found hidden">
                                                 <label for="approvedBy">{{lang.search_module_approved_by}}</label>
                                                 <md-select multiple
@@ -349,11 +386,11 @@
                                                     <div ng-message="required">{{lang.field_required}}</div>
                                                 </div>
                                             </md-input-container>
-                                            <!-- Creation Date -->
+                                            &lt;!&ndash; Creation Date &ndash;&gt;
                                             <fieldset flex layout="column" class="search-fieldset">
                                                 <legend class="md-accent">{{lang.creation_date}}</legend>
                                                 <div layout="row">
-                                                    <!-- Creation Date From-->
+                                                    &lt;!&ndash; Creation Date From&ndash;&gt;
                                                     <md-input-container flex>
                                                         <label for="createdFrom">{{lang.search_module_start_date}}</label>
                                                         <md-datepicker id="createdFrom" name="createdFrom"
@@ -365,7 +402,7 @@
                                                             <div ng-message="required">{{lang.field_required}}</div>
                                                         </div>
                                                     </md-input-container>
-                                                    <!-- Creation Date To-->
+                                                    &lt;!&ndash; Creation Date To&ndash;&gt;
                                                     <md-input-container flex>
                                                         <label for="createdTo">{{lang.search_module_end_date}}</label>
                                                         <md-datepicker id="createdTo" name="createdTo"
@@ -380,7 +417,7 @@
                                                 </div>
                                             </fieldset>
                                         </div>
-                                        <!-- <div layout="row" flex class="p020">
+                                        &lt;!&ndash; <div layout="row" flex class="p020">
                                              &lt;!&ndash; Creation Date &ndash;&gt;
                                              <fieldset flex layout="column" class="search-fieldset">
                                                  <legend class="md-accent">{{lang.creation_date}}</legend>
@@ -413,11 +450,11 @@
                                              </fieldset>
                                              <span flex></span>
                                              <span flex></span>
-                                         </div>-->
+                                         </div>&ndash;&gt;
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     </md-content>
                 </md-tab>
                 <md-tab label="{{lang.search_module_search_results}}" ng-if="ctrl.showResults"

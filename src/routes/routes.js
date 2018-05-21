@@ -778,6 +778,13 @@ module.exports = function (app) {
                     documentStatuses: function (documentStatusService) {
                         'ngInject';
                         return documentStatusService.getDocumentStatuses();
+                    },
+                    approvers: function (ouApplicationUserService, employeeService) {
+                        'ngInject';
+                        return ouApplicationUserService
+                            .searchByCriteria({
+                                regOu: employeeService.getEmployee().organization.ouRegistryID
+                            });
                     }/*,
                     centralArchives: function ($q, organizations, employeeService, organizationService) {
                         'ngInject';

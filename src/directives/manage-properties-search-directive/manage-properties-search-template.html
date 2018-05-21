@@ -57,7 +57,7 @@
 
                 <!-- Paper/Electronic -->
                 <md-input-container flex ng-if="ctrl.document.docClassName.toLowerCase() !== 'incoming'">
-                    <label for="addMethod">{{lang.type}}</label>
+                    <label for="addMethod">{{lang.document_format}}</label>
                     <md-select name="addMethod" id="addMethod"
                                ng-change="ctrl.onChangeAddMethod($event)"
                                ng-model="ctrl.document.addMethod"

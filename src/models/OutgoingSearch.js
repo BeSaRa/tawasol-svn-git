@@ -10,15 +10,9 @@ module.exports = function (app) {
             self.docStatus = null;
 
             self.siteType = null;
-            self.mainSiteId = null;
-            self.subSiteId = null;
             self.year = null;
             self.docDateFrom = null;
             self.docDateTo = null;
-            self.createdFrom = null;
-            self.createdTo = null;
-            self.followUpFrom = null;
-            self.followUpTo = null;
 
             self.selectedEntityType = null;
 
