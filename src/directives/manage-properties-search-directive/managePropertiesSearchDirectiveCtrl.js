@@ -83,19 +83,23 @@ module.exports = function (app) {
             // all system organizations
             self.organizations = self.centralArchives ? self.centralArchives : organizationService.organizations;
             // all document types
-            self.documentTypes = correspondenceService.getLookup(self.document.docClassName, 'docTypes');
-            self.securityLevels = correspondenceService.getLookup(self.document.docClassName, 'securityLevels');
-            properties = lookupService.getPropertyConfigurations(self.document.docClassName);
+            var docClass = self.document.docClassName;
+            if(docClass.toLowerCase() === 'correspondence'){
+                self.documentTypes = correspondenceService.getLookupUnionByLookupName('docTypes');
+                self.securityLevels = generator.getSelectedCollectionFromResult(lookupService.returnLookups(lookupService.securityLevel), employeeService.getEmployee().organization.securityLevels, 'lookupKey');
+            }
+            else {
+                self.documentTypes = correspondenceService.getLookup(docClass, 'docTypes');
+                self.securityLevels = correspondenceService.getLookup(docClass, 'securityLevels');
+            }
+            properties = lookupService.getPropertyConfigurations(docClass);
             _getClassifications(false);
             _getDocumentFiles(false);
 
-            self.defaultEntityTypes = correspondenceService.getDefaultEntityTypesForDocumentClass(self.document.docClassName);
-            self.entityTypes = correspondenceService.getCustomEntityTypesForDocumentClass(self.document.docClassName);
+            self.defaultEntityTypes = correspondenceService.getDefaultEntityTypesForDocumentClass(docClass.toLowerCase() === 'correspondence' ? 'Outgoing' : docClass);
+            self.entityTypes = correspondenceService.getCustomEntityTypesForDocumentClass(docClass.toLowerCase() === 'correspondence' ? 'Outgoing' : docClass);
 
             self.entityTypesArray = self.defaultEntityTypes.concat(self.entityTypes);
-
-            self.document.approveDateFrom = null;
-            self.document.approveDateTo = null;
         });
         // current employee
         self.employee = employeeService.getEmployee();
@@ -218,13 +222,14 @@ module.exports = function (app) {
          * @private
          */
         function _getDocumentFiles(timeout) {
+            var docClass = self.document.docClassName.toLowerCase() === 'correspondence' ? 'outgoing': self.document.docClassName;
             if (timeout) {
                 return $timeout(function () {
-                    self.documentFiles = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'documentFiles'));
+                    self.documentFiles = angular.copy(correspondenceService.getLookup(docClass, 'documentFiles'));
                     self.documentFiles = _displayCorrectDocumentFiles(self.documentFiles);
                 });
             } else {
-                self.documentFiles = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'documentFiles'));
+                self.documentFiles = angular.copy(correspondenceService.getLookup(docClass, 'documentFiles'));
                 self.documentFiles = _displayCorrectDocumentFiles(self.documentFiles);
             }
         }
@@ -236,13 +241,14 @@ module.exports = function (app) {
          * @private
          */
         function _getClassifications(timeout) {
+            var docClass = self.document.docClassName.toLowerCase() === 'correspondence' ? 'outgoing': self.document.docClassName;
             if (timeout) {
                 return $timeout(function () {
-                    self.classifications = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'classifications'));
+                    self.classifications = angular.copy(correspondenceService.getLookup(docClass, 'classifications'));
                     self.classifications = _displayCorrectClassifications(self.classifications);
                 });
             } else {
-                self.classifications = angular.copy(correspondenceService.getLookup(self.document.docClassName, 'classifications'));
+                self.classifications = angular.copy(correspondenceService.getLookup(docClass, 'classifications'));
                 self.classifications = _displayCorrectClassifications(self.classifications);
             }
         }

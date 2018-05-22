@@ -66,7 +66,6 @@ module.exports = function (app) {
         util.inherits(GeneralSearch, Correspondence);
 
 
-
         /**
          * the registered models for our CMS
          * @type {{outgoing: (Outgoing|*), internal: (Internal|*), incoming: (Incoming|*)}}
@@ -779,6 +778,20 @@ module.exports = function (app) {
                 return Number(item.lookupKey) === Number(lookupKey);
             });
         };
+
+        self.getLookupUnionByLookupName = function (lookupName, lookupKey) {
+            var lookups = [];
+            for (var i in self.screenLookups) {
+                if (self.screenLookups[i] && self.screenLookups[i].hasOwnProperty(lookupName)) {
+                    lookups = lookups.concat(self.screenLookups[i][lookupName]);
+                }
+            }
+            lookups = _.uniqBy(lookups, 'lookupKey');
+            return (typeof lookupKey === 'undefined') ? lookups : _.find(lookups, function (item) {
+                return Number(item.lookupKey) === Number(lookupKey);
+            });
+        };
+
         /**
          * @description get custom entity type for documentClass
          * @param documentClass

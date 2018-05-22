@@ -11,7 +11,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-           if (model.year === 'All' && model.docDateFrom && model.docDateTo) {
+            if (model.year === 'All' && model.docDateFrom && model.docDateTo) {
                 model.docDate = {
                     From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),
                     To: angular.copy(moment(model.docDateTo).format("YYYY-MM-DD"))

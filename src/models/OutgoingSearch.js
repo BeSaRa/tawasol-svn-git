@@ -14,6 +14,9 @@ module.exports = function (app) {
             self.docDateFrom = null;
             self.docDateTo = null;
 
+            self.approveDateFrom = null;
+            self.approveDateTo = null;
+
             self.selectedEntityType = null;
 
             // every model has required fields

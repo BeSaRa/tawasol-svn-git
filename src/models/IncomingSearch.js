@@ -15,6 +15,9 @@ module.exports = function (app) {
             self.docDateFrom = null;
             self.docDateTo = null;
 
+            self.approveDateFrom = null;
+            self.approveDateTo = null;
+
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];

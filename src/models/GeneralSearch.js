@@ -6,8 +6,11 @@ module.exports = function (app) {
             var self = this;
 
             Correspondence.call(this);
-            self.docClassName = 'General';
-            self.classDescription = 'General';
+            self.docClassName = 'Correspondence';
+            self.classDescription = 'Correspondence';
+
+            self.approveDateFrom = null;
+            self.approveDateTo = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
