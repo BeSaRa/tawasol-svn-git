@@ -11,7 +11,8 @@ module.exports = function (app) {
                                                                               $timeout,
                                                                               $q,
                                                                               _,
-                                                                              correspondenceService) {
+                                                                              correspondenceService,
+                                                                              toast) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSiteIncomingDirectiveCtrl';
@@ -514,6 +515,8 @@ module.exports = function (app) {
          * @param site
          */
         self.replaceSite = function (site) {
+            if (self.needReply(site.followupStatus) && !(site.followupDate))
+                return toast.error(langService.get('sites_please_select_followup_date'));
             var promise;
             if (self.site && self.site.mainSiteId) {
                 promise = dialog

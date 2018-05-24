@@ -14,7 +14,8 @@ module.exports = function (app) {
                                                                        correspondenceService,
                                                                        generator,
                                                                        SiteView,
-                                                                       rootEntity) {
+                                                                       rootEntity,
+                                                                       toast) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSitesDirectiveCtrl';
@@ -314,6 +315,8 @@ module.exports = function (app) {
          * @param site
          */
         self.addSiteTo = function (site) {
+            if (self.needReply(site.followupStatus) && !(site.followupDate))
+                return toast.error(langService.get('sites_please_select_followup_date'));
             _addSite('To', site)
                 .then(function () {
                     self.subSearchSelected = [];
@@ -328,6 +331,8 @@ module.exports = function (app) {
          * @param site
          */
         self.addSiteCC = function (site) {
+            if (self.needReply(site.followupStatus) && !(site.followupDate))
+                return toast.error(langService.get('sites_please_select_followup_date'));
             _addSite('CC', site)
                 .then(function () {
                     self.subSearchSelected = [];
