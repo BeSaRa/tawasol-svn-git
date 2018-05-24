@@ -12,7 +12,8 @@ module.exports = function (app) {
                                                                               $q,
                                                                               _,
                                                                               correspondenceService,
-                                                                              toast) {
+                                                                              toast,
+                                                                              rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCorrespondenceSiteIncomingDirectiveCtrl';
@@ -24,6 +25,7 @@ module.exports = function (app) {
             enName: langService.getKey('not_found', 'en')
         }));
 
+        self.isSimpleCorrespondenceSiteSearchType = rootEntity.getGlobalSettings().simpleCorsSiteSearch;
         // model to search on correspondence sites type
         self.typeSearch = '';
         self.selectedType = null;
@@ -333,6 +335,43 @@ module.exports = function (app) {
          */
         self.onTypeChange = function (type) {
 
+        };
+
+        /**
+         * @description Get main correspondence sites on change of correspondence site type.
+         * @param $event
+         */
+        self.onSiteTypeChange = function ($event) {
+            if (self.selectedSiteType.id) {
+                correspondenceViewService.correspondenceSiteSearch('main', {
+                    type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
+                    criteria: null,
+                    excludeOuSites: false
+                }).then(function (result) {
+                    self.mainSites = result;
+                });
+            }
+            else {
+                self.mainSites = self.subSearchResult = self.subSearchResultCopy = [];
+            }
+        };
+
+
+        /**
+         * @description Get sub sites on change of main site
+         * @param $event
+         */
+        self.selectedMainSite = null;
+        self.getSubSites = function ($event) {
+            correspondenceViewService.correspondenceSiteSearch('sub', {
+                type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
+                parent: self.selectedMainSite ? self.selectedMainSite.id : null,
+                criteria: null,
+                excludeOuSites: false
+            }).then(function (result) {
+                self.subSearchResultCopy = angular.copy(result);
+                self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+            });
         };
 
         /**

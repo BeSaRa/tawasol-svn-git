@@ -1,5 +1,30 @@
 <div class="p20" layout="column">
-    <div layout="row" flex ng-if="!ctrl.disableCorrespondence">
+
+    <!-- Simple Search Box -->
+    <div layout="row" flex ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
+        <md-input-container flex>
+            <label>{{lang.sites_select_site_type}}</label>
+            <md-select ng-model="ctrl.selectedSiteType" ng-change="ctrl.onSiteTypeChange($event)">
+                <md-option ng-value="type" ng-repeat="type in ctrl.correspondenceSiteTypes">
+                    {{type.getTranslatedName()}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container flex>
+            <label>{{lang.main_site}}</label>
+            <md-select ng-model="ctrl.selectedMainSite"
+                       ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id"
+                       ng-change="ctrl.getSubSites($event)">
+                <md-option ng-value="type" ng-repeat="type in ctrl.mainSites">
+                    {{type.getTranslatedName()}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+
+
+    <!-- Advanced Search-->
+    <div layout="row" flex ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
         <md-input-container flex>
             <label>{{lang.sites_select_site_type}}</label>
             <md-select ng-model="ctrl.selectedType">
@@ -26,6 +51,7 @@
             <input id="subSearch" ng-model="ctrl.subSearch" ng-enter="ctrl.onSubSearch()" ng-change="ctrl.onSubSearch($event)">
         </md-input-container>
     </div>
+    <!-- Search Result-->
     <div flex layout="column">
         <md-card ng-if="ctrl.subSearchResult.length" md-whiteframe="3" layout="column" class="card-overlay">
             <!-- Close search results -->
