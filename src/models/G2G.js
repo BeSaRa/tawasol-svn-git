@@ -53,7 +53,7 @@ module.exports = function (app) {
              * @returns {string}
              */
             G2G.prototype.getTranslatedName = function (reverse) {
-                return langService.current === 'ar' ? (reverse ? this.enName : this.arName ) : (reverse ? this.arName : this.enName);
+                return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
 
             /**
@@ -71,6 +71,22 @@ module.exports = function (app) {
             G2G.prototype.getTranslatedGlobal = function () {
                 return this.global ? langService.get('yes') : langService.get('no');
             };
+
+            G2G.prototype.getTranslatedType = function () {
+                return (this.correspondence.type === null) ? (this.correspondence.type === 0 ? langService.get('original') : langService.get('copy')) : null;
+            };
+
+
+            /**
+             * @description Get the translated correspondence site info.
+             * @returns {string}
+             */
+            G2G.prototype.getTranslatedCorrespondenceSiteInfo = function () {
+                var mainSite = new Information(this.siteInfo.mainSite);
+                var subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : null;
+                return mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : '');
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

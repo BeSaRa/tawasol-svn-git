@@ -1,16 +1,16 @@
 module.exports = function (app) {
-    app.controller('g2gInboxCtrl', function (lookupService,
-                                             g2gInboxService,
-                                             g2gItems,
-                                             $q,
-                                             langService,
-                                             toast,
-                                             dialog,
-                                             employeeService,
-                                             generator) {
+    app.controller('g2gReturnedCtrl', function (lookupService,
+                                                g2gReturnedService,
+                                                g2gItems,
+                                                $q,
+                                                langService,
+                                                toast,
+                                                dialog,
+                                                employeeService,
+                                                generator) {
         var self = this;
 
-        self.controllerName = 'g2gInboxCtrl';
+        self.controllerName = 'g2gReturnedCtrl';
 
         self.progress = null;
 
@@ -62,7 +62,7 @@ module.exports = function (app) {
         self.reloadG2gItems = function (pageNumber) {
             var defer = $q.defer();
             self.progress = defer.promise;
-            return g2gInboxService
+            return g2gReturnedService
                 .loadG2gItems()
                 .then(function (result) {
                     self.g2gItems = result;
@@ -85,41 +85,34 @@ module.exports = function (app) {
                 return;
             }
 
-            return g2gInboxService.openG2G(g2gItem)
+            return g2gReturnedService.openG2G(g2gItem)
                 .then(function (result) {
                     alert("open document");
                 })
         };
 
-        /**
-         * @description Receive Document
-         * @param g2gItem
-         * @param $event
-         * @returns {*}
-         */
-        self.receiveDocument = function (g2gItem, $event) {
-            return g2gInboxService.receiveG2G(g2gItem)
+
+        self.resend = function (g2gItem, $event) {
+            console.log('resend document', g2gItem);
+            return g2gReturnedService.resendG2G(g2gItem)
                 .then(function (result) {
-                    self.reloadG2gItems(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get('receive_specific_success').change({name: g2gItem.correspondence.docSubject}));
-                        })
+                    toast.success(langService.get('success'));
                 })
         };
 
-        /**
-         * @description Return document
-         * @param g2gItem
-         * @param $event
-         * @returns {*}
-         */
-        self.returnDocument = function (g2gItem, $event) {
-            return g2gInboxService.returnG2G(g2gItem)
+        self.terminate = function (g2gItem, $event) {
+            console.log('terminate document', g2gItem);
+            return g2gReturnedService.terminateG2G(g2gItem)
                 .then(function (result) {
-                    self.reloadG2gItems(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get("return_specific_success").change({name: g2gItem.correspondence.docSubject}));
-                        });
+                    toast.success(langService.get('success'));
+                })
+        };
+
+        self.viewDeliveryReport = function (g2gItem, $event) {
+            console.log('view delivery report', g2gItem);
+            return g2gReturnedService.viewDeliveryReport(g2gItem, $event)
+                .then(function (result) {
+
                 })
         };
 
@@ -132,7 +125,7 @@ module.exports = function (app) {
         self.checkToShowAction = function (action, model) {
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
-                    return (!action.hide && !action.hideInGrid) && employeeService.hasPermissionTo(action.permissionKey);
+                    return (!action.hide) && employeeService.hasPermissionTo(action.permissionKey);
                 }
                 else if (angular.isArray(action.permissionKey)) {
                     if (!action.permissionKey.length) {
@@ -148,7 +141,7 @@ module.exports = function (app) {
                     }
                 }
             }
-            return (!action.hide && !action.hideInGrid);
+            return (!action.hide);
         };
 
         /**
@@ -168,31 +161,41 @@ module.exports = function (app) {
                 showInView: false,
                 checkShow: self.checkToShowAction
             },
-            // Receive
+            // Resend
             {
                 type: 'action',
                 icon: 'check',
-                text: 'grid_action_receive',
+                text: 'grid_action_resend',
                 shortcut: true,
-                callback: self.receiveDocument,
+                callback: self.resend,
                 class: "action-green",
                 //permissionKey: 'VIEW_DOCUMENT',
                 showInView: true,
-                hideInGrid: true,
                 checkShow: self.checkToShowAction
             },
-            // Return
+            // Terminate
             {
                 type: 'action',
                 icon: 'undo-variant',
-                text: 'grid_action_return',
+                text: 'grid_action_terminate',
                 shortcut: true,
-                callback: self.returnDocument,
+                callback: self.terminate,
                 class: "action-green",
                 //permissionKey: 'VIEW_DOCUMENT',
                 showInView: true,
-                hideInGrid: true,
                 checkShow: self.checkToShowAction
+            },
+            // View Delivery Report
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'grid_action_view_delivery_report',
+                shortcut: true,
+                callback: self.viewDeliveryReport,
+                class: "action-green",
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: self.checkToShowAction,
+                showInView: true
             }
         ];
     });

@@ -136,6 +136,7 @@ module.exports = function (app) {
     require('./Rank')(app);
     require('./UserFilter')(app);
     require('./G2G')(app);
+    require('./G2GMessagingHistory')(app);
     require('./PartialExport')(app);
     require('./PartialExportSelective')(app);
     require('./PartialExportCollection')(app);

@@ -13,7 +13,7 @@ module.exports = function (app) {
     require('./routes/routes')(app);
     require('./popup-controllers/01-index')(app);
     require('./helper-methods/01-index')(app);
-    //require('./E2EModule')(app);
+    // require('./E2EModule')(app);
     require('./decorators/01-index')(app);
     require('./relation-services/01-index')(app);
     require('./correspondence-interceptor/01-index')(app);

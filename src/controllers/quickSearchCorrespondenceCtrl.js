@@ -512,7 +512,7 @@ module.exports = function (app) {
             {
                 type: 'action',
                 icon: 'eye',
-                text: 'view_tracking_sheet',
+                text: 'grid_action_view_tracking_sheet',
                 shortcut: false,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: self.checkToShowAction,
@@ -522,7 +522,7 @@ module.exports = function (app) {
             {
                 type: 'action',
                 icon: 'eye',
-                text: 'view_tracking_sheet',
+                text: 'grid_action_view_tracking_sheet',
                 shortcut: true,
                 onlyShortcut: true,
                 showInView: false,

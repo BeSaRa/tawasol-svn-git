@@ -841,7 +841,7 @@
   },
   {
     "ID": 85,
-    "lang_key": "menu_item_government_inbox",
+    "lang_key": "menu_item_g2g",
     "icon": "inbox-multiple",
     "parent": null,
     "link": "#",

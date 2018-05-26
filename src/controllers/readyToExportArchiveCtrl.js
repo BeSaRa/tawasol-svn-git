@@ -738,7 +738,7 @@ module.exports = function (app) {
             {
                 type: 'action',
                 icon: 'eye',
-                text: 'view_tracking_sheet',
+                text: 'grid_action_view_tracking_sheet',
                 shortcut: false,
                 hide: true,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",

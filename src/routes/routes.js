@@ -1374,30 +1374,30 @@ module.exports = function (app) {
                 controller: 'g2gInboxCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
-                    g2gInboxes: function (g2gInboxService) {
-                        return g2gInboxService.loadG2gInboxes();
+                    g2gItems: function (g2gInboxService) {
+                        return g2gInboxService.loadG2gItems();
                     }
                 }
             })
             .state('app.g2g.returned', {
                 url: '/returned',
                 template: cmsTemplateProvider.getView('g2g-returned'),
-                controller: 'g2gInboxCtrl',
+                controller: 'g2gReturnedCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
-                    g2gInboxes: function (g2gInboxService) {
-                        return g2gInboxService.loadG2gInboxes();
+                    g2gItems: function (g2gReturnedService) {
+                        return g2gReturnedService.loadG2gItems();
                     }
                 }
             })
             .state('app.g2g.sent-items', {
                 url: '/sent-items',
                 template: cmsTemplateProvider.getView('g2g-sent-items'),
-                controller: 'g2gInboxCtrl',
+                controller: 'g2gSentItemsCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
-                    g2gInboxes: function (g2gInboxService) {
-                        return g2gInboxService.loadG2gInboxes();
+                    g2gItems: function (g2gSentItemsService) {
+                        return g2gSentItemsService.loadG2gItems();
                     }
                 }
             })
