@@ -9,7 +9,7 @@ module.exports = function (app) {
             bindToController: true,
             replace: true,
             scope: {
-                barcodeOptions: '='
+                globalSetting: '='
             },
             link: function (scope, element, attrs) {
 

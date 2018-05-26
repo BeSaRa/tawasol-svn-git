@@ -25,9 +25,11 @@
   padding: 5px 20px;
   color: white;
   position: relative;
-
+  z-index: 2;
+  &.disabled {
+    background-color: gray;
+  }
 }
-
 
 .barcode-layout-border {
   padding: 0 10px;
@@ -79,4 +81,14 @@
       }
     }
   }
+}
+
+.add-row-button {
+  margin: 0 0 10px 0;
+}
+
+#global-settings-buttons {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
 }

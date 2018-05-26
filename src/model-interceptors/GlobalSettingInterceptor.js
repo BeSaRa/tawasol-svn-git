@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
                       lookupService,
                       generator,
+                      BarcodeSetting,
                       applicationUserService,
                       themeService) {
         'ngInject';
@@ -17,6 +18,21 @@ module.exports = function (app) {
             model.securityLevels = generator.getResultFromSelectedCollection(model.securityLevels, 'lookupKey');
             model.excludedUsersFromAudit = JSON.stringify(_.map(model.excludedUsersFromAudit, 'id'));
             model.fileType = angular.toJson(model.fileType);
+
+            // if (model.barcodeElements.hasOwnProperty('rows')) {
+            //     model.barcodeElements.rows = _.map(model.barcodeElements.rows, function (item, idx) {
+            //         return model.barcodeElements.rows[idx] = _.map(model.barcodeElements.rows[idx], function (item) {
+            //             if (item.lookupKey !== 'STATIC_WORD') {
+            //                 item = 'id:' + item.lookupKey;
+            //             } else {
+            //                 item = 'none:' + item.lookupStrKey;
+            //             }
+            //             return item;
+            //         });
+            //     })
+            // }
+            model.barcodeElements = model.barcodeElements.mapSend();
+
             delete model.bannerLogo;
             delete model.loginLogo;
             return model;
@@ -31,6 +47,7 @@ module.exports = function (app) {
             model.excludedUsersFromAudit = _.filter(applicationUserService.applicationUsers, function (applicationUser) {
                 return (excludedUsersFromAudit.indexOf(applicationUser.id) > -1);
             });
+            model.barcodeElements = (new BarcodeSetting(angular.fromJson(model.barcodeElements))).mapReceived();
             return model;
         });
 

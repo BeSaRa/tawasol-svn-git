@@ -1,80 +1,63 @@
 module.exports = function (app) {
-    app.directive('barcodeElementDirective', function ($rootScope, $compile) {
-        'ngInject';
-        var closeButtonTemplate = '<div class="barcode-delete-item-button">\n' +
-            '                            <md-button ng-click="ctrl.deleteItem($event)" class="md-icon-button">\n' +
-            '                                <md-icon md-svg-icon="close"></md-icon>\n' +
-            '                            </md-button>\n' +
-            '                        </div>';
-        return {
-            restrict: 'A',
-            require: '^barcodeSettingsDirective',
-            scope: {
-                item: '=barcodeElementDirective'
-            },
-            link: function (scope, element, attrs, ctrl) {
-                $(element).draggable({
-                    connectToSortable: ".barcode-row",
-                    helper: "clone",
-                    revert: "invalid",
-                    start: function (event, ui) {
-                        ui.helper.data('barcodeElement', scope.item);
-                        ui.helper.removeClass('flex');
-                        var $scope = $rootScope.$new(true);
-                        $scope.ctrl = ctrl;
-                        ui.helper.prepend($compile(angular.element(closeButtonTemplate))($scope));
-                    }
-                });
-            }
-        }
-    });
-
-
-    app.directive('barcodeSortableDirective', function () {
+    app.directive('bcSortable', function () {
         'ngInject';
         return {
             restrict: 'A',
-            link: function (scope, element) {
-                $(element)
-                    .sortable()
-                    .disableSelection();
-            }
-        }
-    });
-
-
-    app.directive('barcodeRowDirective', function ($compile, $rootScope) {
-        'ngInject';
-        return {
-            restrict: 'A',
-            require: '^barcodeSettingsDirective',
-            scope: {
-                row: '=barcodeRowDirective'
-            },
-            link: function (scope, element, attrs, ctrl) {
-                element.data('row', scope.row);
-
+            link: function (scope, element, attrs) {
+                var self = scope.ctrl;
+                if (element.hasClass('barcode-row')) {
+                    element.on('click', function (e) {
+                        if (angular.element(e.target).hasClass('barcode-row')) {
+                            self.setSelectedRow(element);
+                        }
+                    })
+                }
                 $(element)
                     .sortable({
-                        update: function (event, ui) {
+                        tolerance: "pointer",
+                        cancel: '.add-row',
+                        receive: function (e, ui) {
+                            var idx = element.data('rowIndex');
+                            if (element.hasClass('barcode-row')) {
+                                ui.helper.data('rowIndex', idx);
+                                scope.$apply(function () {
+                                    self.updateRows(ui.helper);
+                                });
+                            }
+                        },
+                        update: function () {
+                            //self.updateRows();
+                        }
+                    })
 
+            }
+        }
+    });
+
+    app.directive('bcDraggable', function ($compile) {
+        'ngInject';
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                var item = angular.copy(scope.item);
+                element.data('item', item);
+                var self = scope.ctrl;
+                $(element)
+                    .draggable({
+                        cancel: '.disabled',
+                        connectToSortable: '.barcode-row',
+                        revert: 'invalid',
+                        helper: 'clone',
+                        tolerance: "pointer",
+                        start: function (e, ui) {
+                            ui.helper.prepend($compile(self.createDeleteButton('item'))(scope));
+                            if (scope.item) {
+                                ui.helper.data('item', item);
+                            }
                         }
                     })
                     .disableSelection();
-
-                $(element)
-                    .droppable({
-                        accept: '.barcode-item',
-                        drop: function (event, ui) {
-                            var lookup = ui.helper.data('barcodeElement');
-                            ui.helper
-                                .removeClass('flex');
-                            ui.helper
-                                .removeAttr('style')
-                                .removeAttr('flex');
-                        }
-                    });
             }
         }
-    })
+    });
 };

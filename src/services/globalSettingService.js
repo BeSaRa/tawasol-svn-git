@@ -101,5 +101,13 @@ module.exports = function (app) {
                     return generator.generateInstance(result.data.rs, GlobalSetting, self._sharedMethods);
                 })
         };
+
+        self.testBarcodeSettings = function (globalSettings) {
+            return $http
+                .post(urlService.globalSettings + '/print-test-barcode', generator.interceptSendInstance('GlobalSetting', globalSettings))
+                .then(function (result) {
+                    return result.data.rs;
+                });
+        }
     });
 };

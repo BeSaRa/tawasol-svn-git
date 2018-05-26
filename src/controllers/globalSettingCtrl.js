@@ -3,6 +3,8 @@ module.exports = function (app) {
                                                   globalSettingService,
                                                   globalSetting,
                                                   fileTypes,
+                                                  $timeout,
+                                                  $element,
                                                   $q,
                                                   $scope,
                                                   langService,
@@ -145,28 +147,28 @@ module.exports = function (app) {
 
         self.disableSecurityLevel = function (securityLevel) {
             return !!self.globalSettingCopy.id && !!_.find(self.globalSettingCopy.securityLevels, function (globalSecurityLevel) {
-                    return globalSecurityLevel.lookupKey === securityLevel.lookupKey;
-                });
+                return globalSecurityLevel.lookupKey === securityLevel.lookupKey;
+            });
         };
 
         self.checkMinimumSecurityLevel = function (globalSetting) {
             return generator.getResultFromSelectedCollection(globalSetting.securityLevels, 'lookupKey') >= generator.getResultFromSelectedCollection(self.globalSettingCopy.securityLevels, 'lookupKey');
         };
 
-        self.confirmChangeSecuritySchema = function($event){
+        self.confirmChangeSecuritySchema = function ($event) {
             var defer = $q.defer();
-            if(self.globalSetting.securitySchema === 1){
+            if (self.globalSetting.securitySchema === 1) {
                 dialog.confirmMessage(langService.get('confirm_document_security_schema_change'))
-                    .then(function(result){
+                    .then(function (result) {
                         defer.resolve(true);
-                    }).catch(function(result){
-                        defer.reject(false);
+                    }).catch(function (result) {
+                    defer.reject(false);
                 })
             }
-            else{
+            else {
                 defer.resolve(true);
             }
-            defer.promise.then(function(response){
+            defer.promise.then(function (response) {
 
             })
                 .catch(function (error) {
@@ -318,7 +320,6 @@ module.exports = function (app) {
             };
             reader.readAsArrayBuffer(file);
         };
-
 
     });
 };

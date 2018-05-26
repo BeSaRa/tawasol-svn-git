@@ -5,7 +5,7 @@
             <span ng-if="ctrl.globalSetting.id">{{ctrl.entity.getNames()}}</span>
         </div>
 
-        <form class="white-bg" name="globalSettingForm" id="globalSettingForm" flex layout="column" autocomplete="off">
+        <ng-form class="white-bg" name="globalSettingForm" id="globalSettingForm" flex layout="column" autocomplete="off">
             <!--flex-->
             <md-tabs md-selected="7" class="content white-bg">
                 <!-- BASIC PROPERTIES TAB -->
@@ -178,6 +178,9 @@
 
                             </div>
                         </div>
+                        <br />
+                        <br />
+                        <br />
                     </md-content>
                 </md-tab>
                 <!-- APPEARANCE TAB -->
@@ -277,6 +280,9 @@
                                 </div>
                             </div>
                         </div>
+                        <br />
+                        <br />
+                        <br />
                     </md-content>
                 </md-tab>
                 <!-- AUDIT LOG TAB -->
@@ -336,6 +342,9 @@
                                 </table>
                             </div>
                         </div>
+                        <br />
+                        <br />
+                        <br />
                     </md-content>
                 </md-tab>
                 <!-- DOCUMENT SECURITY SETTINGS TAB -->
@@ -419,6 +428,9 @@
                                 </md-input-container>
                             </div>
                         </div>
+                        <br />
+                        <br />
+                        <br />
                     </md-content>
                 </md-tab>
                 <!-- WORKFLOW SECURITY TAB -->
@@ -466,6 +478,9 @@
                                 </md-input-container>
                             </div>
                         </div>
+                        <br />
+                        <br />
+                        <br />
                     </md-content>
                 </md-tab>
                 <!-- WORKFLOW NOTIFICATION TAB -->
@@ -570,6 +585,9 @@
                                 <md-input-container flex></md-input-container>
                             </div>
                         </div>
+                        <br />
+                        <br />
+                        <br />
                     </md-content>
                 </md-tab>
                 <!-- UPLOAD TAB -->
@@ -626,6 +644,9 @@
                                 </div>
                             </div>
                         </div>
+                        <br />
+                        <br />
+                        <br />
                     </md-content>
                 </md-tab>
                 <!-- BARCODE SETTINGS TAB -->
@@ -636,13 +657,16 @@
                         <div layout="column">
                             <div layout="row" flex class="p20">
                                 <barcode-settings-directive
-                                        barcode-options="ctrl.globalSetting.barcodeElements"></barcode-settings-directive>
+                                        global-setting="ctrl.globalSetting"></barcode-settings-directive>
                             </div>
                         </div>
+                        <br />
+                        <br />
+                        <br />
                     </md-content>
                 </md-tab>
             </md-tabs>
-            <div class="white-bg">
+            <div id="global-settings-buttons">
                 <md-button class="md-raised" ng-disabled="globalSettingForm.$invalid"
                            ng-if="!ctrl.globalSetting.id"
                            ng-click="ctrl.addGlobalSettingFromCtrl()">{{lang.add}}
@@ -652,6 +676,6 @@
                            ng-click="ctrl.editGlobalSettingFromCtrl()">{{lang.save}}
                 </md-button>
             </div>
-        </form>
+        </ng-form>
     </div>
 </div>
