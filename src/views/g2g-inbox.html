@@ -71,11 +71,10 @@
                                         ng-repeat="g2gItem in ctrl.g2gItems | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                                         <td md-cell md-truncate class="subject">
                                             <a href="" class="view-doc" md-truncate
-                                               ng-if="g2gItem.hasContent()"
                                                title="{{g2gItem.correspondence.docSubject}}"
                                                ng-click="ctrl.viewDocument(g2gItem, $event)">{{g2gItem.correspondence.docSubject}}</a>
-                                            <span ng-if="!g2gItem.hasContent()"
-                                                  title="{{g2gItem.correspondence.docSubject}}">{{g2gItem.correspondence.docSubject}}</span>
+                                            <!--<span ng-if="!g2gItem.hasContent()"
+                                                  title="{{g2gItem.correspondence.docSubject}}">{{g2gItem.correspondence.docSubject}}</span>-->
                                         </td>
                                         <td md-cell>{{g2gItem.getTranslatedType()}}</td>
                                         <td md-cell>{{g2gItem.securityLevel.getTranslatedName()}}</td>
