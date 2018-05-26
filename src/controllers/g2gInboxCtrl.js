@@ -85,9 +85,12 @@ module.exports = function (app) {
                 return;
             }
 
-            return g2gInboxService.openG2G(g2gItem)
+            return g2gInboxService.openG2G(g2gItem, self.gridActions, $event)
                 .then(function (result) {
-                    alert("open document");
+                    self.reloadG2gItems(self.grid.page);
+                })
+                .catch(function(error){
+                    self.reloadG2gItems(self.grid.page);
                 })
         };
 
