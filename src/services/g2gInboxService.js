@@ -109,7 +109,7 @@ module.exports = function (app) {
         };
 
         self.popupNumber = 0;
-        self.openG2G1 = function (g2gCorrespondence, actions, $event) {
+        self.openG2G = function (g2gCorrespondence, actions, $event) {
             // intercept send instance for G2G
             g2gCorrespondence = g2gCorrespondence instanceof G2G ? generator.interceptSendInstance('G2G', g2gCorrespondence) : g2gCorrespondence;
             // get correspondence from G2G object
