@@ -7,7 +7,8 @@ module.exports = function (app) {
                                              toast,
                                              dialog,
                                              employeeService,
-                                             generator) {
+                                             generator,
+                                             correspondenceService) {
         var self = this;
 
         self.controllerName = 'g2gInboxCtrl';
@@ -85,7 +86,7 @@ module.exports = function (app) {
                 return;
             }
 
-            return g2gInboxService.openG2G(g2gItem, self.gridActions, $event)
+            return correspondenceService.viewCorrespondenceG2G(g2gItem, self.gridActions, 'G2G', $event)
                 .then(function (result) {
                     self.reloadG2gItems(self.grid.page);
                 })

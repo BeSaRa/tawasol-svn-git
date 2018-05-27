@@ -54,23 +54,6 @@ module.exports = function (app) {
 
         };
 
-        self.viewDeliveryReport = function(g2gItem){
-
-        };
-        
-        self.openG2G  = function(g2gCorrespondence){
-            // intercept send instance for G2GMessagingHistory
-            //g2gCorrespondence =  g2gCorrespondence instanceof G2GMessagingHistory ? generator.interceptSendInstance('G2GMessagingHistory', g2gCorrespondence) : g2gCorrespondence;
-            // get correspondence from G2G object
-
-            return $http
-                .post(urlService.g2gInbox + 'open', g2gCorrespondence )
-                .then(function (result) {
-                    console.log(result);
-                    return result;
-                });
-        };
-
         /**
          * @description Create the shared method to the model.
          * @type {{delete: generator.delete, update: generator.update}}

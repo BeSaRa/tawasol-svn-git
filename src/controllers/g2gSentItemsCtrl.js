@@ -7,7 +7,9 @@ module.exports = function (app) {
                                                  toast,
                                                  dialog,
                                                  employeeService,
-                                                 generator) {
+                                                 generator,
+                                                 correspondenceService,
+                                                 viewDeliveryReportService) {
         var self = this;
 
         self.controllerName = 'g2gSentItemsCtrl';
@@ -85,28 +87,31 @@ module.exports = function (app) {
                 return;
             }
 
-            return g2gSentItemsService.openG2G(g2gItem)
+            return correspondenceService.viewCorrespondenceG2G(g2gItem, self.gridActions, 'G2GMessagingHistory', $event)
                 .then(function (result) {
-                    alert("open document");
+                    self.reloadG2gItems(self.grid.page);
+                })
+                .catch(function(error){
+                    self.reloadG2gItems(self.grid.page);
                 })
         };
 
 
         self.recall = function (g2gItem, $event) {
-            console.log('resend document', g2gItem);
-            return g2gSentItemsService.resendG2G(g2gItem)
+            return g2gSentItemsService.resendG2G(g2gItem, $event)
                 .then(function (result) {
                     toast.success(langService.get('success'));
                 })
         };
 
-
+        /**
+         * @description View Delivery Report
+         * @param g2gItem
+         * @param $event
+         * @returns {*}
+         */
         self.viewDeliveryReport = function (g2gItem, $event) {
-            console.log('view delivery report', g2gItem);
-            return g2gSentItemsService.viewDeliveryReport(g2gItem, $event)
-                .then(function (result) {
-
-                })
+            return viewDeliveryReportService.viewDeliveryReport(g2gItem.incomingDocId, $event);
         };
 
         /**

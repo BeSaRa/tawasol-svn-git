@@ -46,7 +46,9 @@ module.exports = function (app) {
                                                    OutgoingSearch,
                                                    IncomingSearch,
                                                    InternalSearch,
-                                                   GeneralSearch) {
+                                                   GeneralSearch,
+                                                   G2G,
+                                                   G2GMessagingHistory) {
         'ngInject';
         var self = this;
         self.serviceName = 'correspondenceService';
@@ -74,7 +76,9 @@ module.exports = function (app) {
             outgoing: Outgoing,
             internal: Internal,
             incoming: Incoming,
-            general: General
+            general: General,
+            g2g: G2G,
+            g2gmessaginghistory: G2GMessagingHistory
         };
 
         self.screenLookups = {
@@ -1331,6 +1335,53 @@ module.exports = function (app) {
                             document: result.metaData,
                             content: result.content
                         }
+                    });
+                });
+        };
+
+        self.viewCorrespondenceG2G = function (g2gCorrespondence, actions, model, $event) {
+            if(model.toLowerCase()==='g2g') {
+                // intercept send instance for G2G
+                g2gCorrespondence = g2gCorrespondence instanceof G2G ? generator.interceptSendInstance(model, g2gCorrespondence) : g2gCorrespondence;
+                // get correspondence from G2G object
+                g2gCorrespondence = g2gCorrespondence.hasOwnProperty('correspondence') ? g2gCorrespondence.correspondence : g2gCorrespondence;
+            }
+            else if(model.toLowerCase()==='g2gmessaginghistory'){
+                // intercept send instance for G2GMessagingHistory
+                //g2gCorrespondence =  g2gCorrespondence instanceof G2GMessagingHistory ? generator.interceptSendInstance(model, g2gCorrespondence) : g2gCorrespondence;
+                g2gCorrespondence = new G2GMessagingHistory({
+                    incomingDocId : g2gCorrespondence.incomingDocId
+                });
+            }
+            return $http
+                .put(urlService.g2gInbox + 'open', g2gCorrespondence)
+                .then(function (result) {
+                    var documentClass = result.data.rs.metaData.classDescription;
+                    result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                    return result.data.rs;
+                })
+                .then(function (result) {
+                    result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                    self.popupNumber += 1;
+                    return dialog.showDialog({
+                        template: cmsTemplate.getPopup('view-correspondence-g2g'),
+                        controller: 'viewCorrespondenceG2GPopCtrl',
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        escapeToCancel: false,
+                        locals: {
+                            correspondence: result.metaData,
+                            content: result.content,
+                            actions: actions,
+                            workItem: false,
+                            popupNumber: self.popupNumber
+                        }
+                    }).then(function () {
+                        self.popupNumber -= 1;
+                        return true;
+                    }).catch(function () {
+                        self.popupNumber -= 1;
+                        return false;
                     });
                 });
         };

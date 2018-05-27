@@ -108,45 +108,6 @@ module.exports = function (app) {
                 });
         };
 
-        self.popupNumber = 0;
-        self.openG2G = function (g2gCorrespondence, actions, $event) {
-            // intercept send instance for G2G
-            g2gCorrespondence = g2gCorrespondence instanceof G2G ? generator.interceptSendInstance('G2G', g2gCorrespondence) : g2gCorrespondence;
-            // get correspondence from G2G object
-            g2gCorrespondence = g2gCorrespondence.hasOwnProperty('correspondence') ? g2gCorrespondence.correspondence : g2gCorrespondence;
-
-            self.popupNumber += 1;
-
-            return $http
-                .put(urlService.g2gInbox + 'open', g2gCorrespondence)
-                .then(function (result) {
-                    console.log(result);
-                    debugger;
-                    result.metaData = g2gCorrespondence;
-                    result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
-                    return dialog.showDialog({
-                        template: cmsTemplate.getPopup('view-correspondence-g2g'),
-                        controller: 'viewCorrespondenceG2GPopCtrl',
-                        controllerAs: 'ctrl',
-                        bindToController: true,
-                        escapeToCancel: false,
-                        locals: {
-                            correspondence: result.metaData,
-                            content: result.content,
-                            actions: actions,
-                            workItem: false,
-                            popupNumber: self.popupNumber
-                        }
-                    }).then(function () {
-                        self.popupNumber -= 1;
-                        return true;
-                    }).catch(function () {
-                        self.popupNumber -= 1;
-                        return false;
-                    });
-                });
-        };
-
 
         /**
          * @description Create the shared method to the model.

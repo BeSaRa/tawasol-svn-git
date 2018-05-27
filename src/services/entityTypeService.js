@@ -310,6 +310,8 @@ module.exports = function (app) {
          * @returns {EntityType}
          */
         self.getLinkedType = function (type, lookups) {
+            if (typeof type === 'undefined' || type === null)
+                type = 0;
             type = type.hasOwnProperty('id') ? type.lookupKey : type;
             return type > 2 ? self.getEntityTypeByLookupKey(type, lookups) : self.getEntityTypeByIndex(type, lookups);
         };
@@ -321,7 +323,7 @@ module.exports = function (app) {
         self.setLinkedType = function (type) {
             if (!type.lookupStrKey)
 
-            var position = defaultValues.indexOf(type.lookupStrKey);
+                var position = defaultValues.indexOf(type.lookupStrKey);
             return position !== -1 ? position : type.lookupKey;
         };
         /**

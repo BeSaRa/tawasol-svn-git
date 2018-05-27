@@ -663,7 +663,12 @@ module.exports = function (app) {
                         })
                 })
         };
-
+        /**
+         * @description Partial Export
+         * @param correspondence
+         * @param $event
+         * @param defer
+         */
         self.partialExportCallback = function (correspondence, $event, defer) {
             correspondence
                 .partialExport($event)
@@ -740,6 +745,7 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && model.hasContent();
                 }
             },
+            // Partial Export
             {
                 type: 'action',
                 icon: 'backburger',
@@ -749,7 +755,6 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function (action, model) {
                     var info = model.getInfo();
-                    //If document is paper outgoing and unapproved/partially approved, show the button.
                     return self.checkToShowAction(action, model) && (info.docStatus === 25 || info.docStatus === 26);
                 }
             },

@@ -7,7 +7,9 @@ module.exports = function (app) {
                                                 toast,
                                                 dialog,
                                                 employeeService,
-                                                generator) {
+                                                generator,
+                                                correspondenceService,
+                                                viewDeliveryReportService) {
         var self = this;
 
         self.controllerName = 'g2gReturnedCtrl';
@@ -85,15 +87,17 @@ module.exports = function (app) {
                 return;
             }
 
-            return g2gReturnedService.openG2G(g2gItem)
+            return correspondenceService.viewCorrespondenceG2G(g2gItem, self.gridActions, 'G2G', $event)
                 .then(function (result) {
-                    alert("open document");
+                    self.reloadG2gItems(self.grid.page);
+                })
+                .catch(function(error){
+                    self.reloadG2gItems(self.grid.page);
                 })
         };
 
 
         self.resend = function (g2gItem, $event) {
-            console.log('resend document', g2gItem);
             return g2gReturnedService.resendG2G(g2gItem)
                 .then(function (result) {
                     toast.success(langService.get('success'));
@@ -101,19 +105,20 @@ module.exports = function (app) {
         };
 
         self.terminate = function (g2gItem, $event) {
-            console.log('terminate document', g2gItem);
             return g2gReturnedService.terminateG2G(g2gItem)
                 .then(function (result) {
                     toast.success(langService.get('success'));
                 })
         };
 
+        /**
+         * @description View Delivery Report
+         * @param g2gItem
+         * @param $event
+         * @returns {*}
+         */
         self.viewDeliveryReport = function (g2gItem, $event) {
-            console.log('view delivery report', g2gItem);
-            return g2gReturnedService.viewDeliveryReport(g2gItem, $event)
-                .then(function (result) {
-
-                })
+            return viewDeliveryReportService.viewDeliveryReport(g2gItem.correspondence.g2gVSID, $event);
         };
 
         /**
