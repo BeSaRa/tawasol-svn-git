@@ -146,4 +146,5 @@ module.exports = function (app) {
     require('./InternalSearch')(app);
     require('./GeneralSearch')(app);
     require('./Site_Search')(app);
+    require('./UserSubscription')(app);
 };
