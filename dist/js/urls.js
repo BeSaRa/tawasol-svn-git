@@ -4,8 +4,8 @@
         .config(function (urlServiceProvider) {
             'ngInject';
             urlServiceProvider
-                .setEnvironment('stage')
-                .setBaseUrl('dev', 'http://localhost:9080/CMSServices/service')
+                .setEnvironment('dev')
+                .setBaseUrl('dev', 'http://WIN-6E33FAMDEJE:9080/CMSServices/service')
                 .setBaseUrl('stage', 'http://100.100.3.220:9080/CMSServices/service')
                 .setBaseUrl('test', 'http://eblaepm.no-ip.org:9080/CMSServices/service')
                 .setBaseUrl('demo', 'http://eblaepm.no-ip.org:9081/CMSServices/service')
@@ -299,6 +299,8 @@
                 .addToAllWithBase('availableCentralArchive', 'cms-entity/admin/ou/ou-with-central-archive')
                 // user filters.
                 .addToAllWithBase('userFilters', '/cms-entity/user/user-inbox-filter')
+                // user-subscription
+                .addToAllWithBase('userSubscriptions', 'cms-entity/user/user-subscription')
                 // all users who set this user as proxy
                 .addToAllWithBase('usersWhoSetYouAsProxy', 'cms-entity/admin/ou-application-user/proxy/')
                 // G2G inbox
