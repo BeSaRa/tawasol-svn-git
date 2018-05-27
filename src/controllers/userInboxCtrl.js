@@ -33,7 +33,9 @@ module.exports = function (app) {
                                               employeeService,
                                               favoriteDocumentsService,
                                               Information,
-                                              mailNotificationService) {
+                                              mailNotificationService,
+                                              UserSubscription,
+                                              userSubscriptionService) {
         'ngInject';
         var self = this;
 
@@ -468,7 +470,26 @@ module.exports = function (app) {
          * @param $event
          */
         self.subscribe = function (userInbox, $event) {
-            console.log('subscribeUserInbox', userInbox);
+            var info = userInbox.getInfo();
+            var empId = employeeService.getEmployee().id;
+            var ouId = employeeService.getEmployee().getOUID();
+            var id = generator.createNewID(userSubscriptionService.getUserSubscriptions(empId), 'id');
+            id = id + '';
+            id = employeeService.getEmployee().id + id;
+            var userSubscription = new UserSubscription({
+                id: id,
+                trigerID: 1,
+                userId: empId,
+                documentVSId: info.vsId,
+                status: true,
+                ouId: ouId
+            });
+
+            userSubscriptionService.addUserSubscription(userSubscription).then(function (result) {
+                if(result === id){
+                    toast.success(langService.get('subscribe_success'));
+                }
+            });
         };
 
         /**
@@ -1001,8 +1022,8 @@ module.exports = function (app) {
                 text: 'grid_action_subscribe',
                 shortcut: false,
                 callback: self.subscribe,
-                class: "action-red",
-                hide: true,
+                class: "action-green",
+                hide: false,
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 }
