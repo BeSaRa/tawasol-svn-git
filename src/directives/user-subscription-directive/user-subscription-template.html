@@ -1,0 +1,7 @@
+<div layout="column" class="notify">
+    <md-button ng-click="ctrl.showUserSubscriptions($event)" class="md-icon-button">
+        <md-icon md-svg-icon="bell-plus"></md-icon>
+    </md-button>
+    <span ng-click="ctrl.showUserSubscriptions($event)"
+          class="counter blue">{{ctrl.service.count}}</span>
+</div>
