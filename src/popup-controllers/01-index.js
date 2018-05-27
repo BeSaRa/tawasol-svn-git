@@ -95,5 +95,6 @@ module.exports = function (app) {
     require('./searchDocDateRangePopCtrl')(app);
     require('./manageCorrespondenceSitesSearchPopCtrl')(app);
     require('./manageDocumentEntitiesSearchPopCtrl')(app);
-    require('./viewCorrespondenceG2GPopCtrl')(app);
+	require('./viewCorrespondenceG2GPopCtrl')(app);
+    require('./showUserSubscriptionsPopCtrl')(app);
 };
