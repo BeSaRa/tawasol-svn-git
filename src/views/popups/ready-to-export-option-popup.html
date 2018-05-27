@@ -56,7 +56,45 @@
                             </md-table-container>
                         </md-card>
                     </div>
-                    <div ng-if="ctrl.settings.canExport('Attachment') ||  ctrl.settings.canExport('LinkedDoc')"
+
+                        <div class="p20" layout="column" ng-if="ctrl.canExportAnyRelatedData()">
+                            <div layout="row" flex>
+                                <md-input-container flex>
+                                    <label>{{lang.select_export_type}}</label>
+                                    <md-select ng-model="ctrl.exportType" ng-change="ctrl.onChangeExportType()">
+                                        <md-option ng-value="type.id" ng-repeat="type in ctrl.exportTypeList">
+                                            {{lang.get(type.key)}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                            <!-- Group selection -->
+                            <div ng-if="ctrl.exportType === 1" layout="row">
+                                <div ng-repeat="option in ctrl.exportOptions" flex ng-if="ctrl.canExportRelatedData(option)">
+                                    <md-checkbox ng-true-value="true" ng-false-value="false" aria-label="{{option}}"
+                                                 ng-model="ctrl.model[option]">
+                                        {{lang.get(ctrl.labels[$index])}}
+                                    </md-checkbox>
+                                </div>
+                            </div>
+                            <!-- Individual selection -->
+                            <div ng-if="ctrl.exportType !== 1" layout="row">
+                                <div flex ng-repeat="option in ctrl.exportOptions" ng-if="ctrl.canExportRelatedData(option)" layout="column">
+                                    <div>{{lang.get(ctrl.labels[$index])}}</div>
+                                    <br/>
+                                    <div ng-repeat="item in ctrl.loadRelatedThings[option]">
+                                        <md-checkbox aria-label="item"
+                                                     ng-click="ctrl.toggleSelectedItem(item , option)">
+                                            {{item.getTranslatedName()}}
+                                        </md-checkbox>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    <!--<div ng-if="ctrl.settings.canExport('Attachment') ||  ctrl.settings.canExport('LinkedDoc')"
                          layout="row">
                         <div ng-if="ctrl.settings.canExport('Attachment')" flex>
                             <md-switch ng-model="ctrl.model.ATTACHMENTS"
@@ -88,7 +126,7 @@
                             </md-switch>
                         </div>
                         <div flex></div>
-                    </div>
+                    </div>-->
                 </div>
                 <div layout="row">
                     <md-button class="md-raised" ng-click="ctrl.exportCorrespondenceWorkItem()" ng-disabled="!ctrl.correspondenceSites.length">

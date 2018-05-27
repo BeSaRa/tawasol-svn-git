@@ -438,17 +438,19 @@ module.exports = function (app) {
          */
         self.exportReadyToExport = function (readyToExport, exportOptions) {
             var info = readyToExport.getInfo();
-            /*var vsId = readyToExport.hasOwnProperty('generalStepElm')
-                ? (readyToExport.generalStepElm.hasOwnProperty('vsId') ? readyToExport.generalStepElm.vsId : readyToExport.generalStepElm)
-                : (readyToExport.hasOwnProperty('vsId') ? readyToExport.vsId : readyToExport);
-
-            var wobNumber = readyToExport.hasOwnProperty('generalStepElm')
-                ? (readyToExport.generalStepElm.hasOwnProperty('workObjectNumber') ? readyToExport.generalStepElm.workObjectNumber : readyToExport.generalStepElm)
-                : (readyToExport.hasOwnProperty('workObjectNumber') ? readyToExport.workObjectNumber : readyToExport);
-*/
 
             return $http
                 .put((urlService.exportReadyToExports).replace('{{vsId}}', info.vsId).replace('{{wobNum}}', info.wobNumber), exportOptions)
+                .then(function () {
+                    return readyToExport;
+                });
+        };
+
+        self.exportReadyToExportSelective = function(readyToExport, exportOptions){
+            var info = readyToExport.getInfo();
+            exportOptions = generator.interceptSendInstance('PartialExportSelective', exportOptions);
+            return $http
+                .put(urlService.selectiveExport.replace('{{vsId}}', info.vsId).replace('{{wobNum}}', info.wobNumber), exportOptions.exportItems)
                 .then(function () {
                     return readyToExport;
                 });

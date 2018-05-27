@@ -4,7 +4,7 @@
         .config(function (urlServiceProvider) {
             'ngInject';
             urlServiceProvider
-                .setEnvironment('dev')
+                .setEnvironment('stage')
                 .setBaseUrl('dev', 'http://WIN-6E33FAMDEJE:9080/CMSServices/service')
                 .setBaseUrl('stage', 'http://100.100.3.220:9080/CMSServices/service')
                 .setBaseUrl('test', 'http://eblaepm.no-ip.org:9080/CMSServices/service')
@@ -243,6 +243,8 @@
                 .addToAllWithBase('readyToExports', 'cms-entity/user/ou-inbox/ready-to-export')
                 // export ready to export outgoing
                 .addToAllWithBase('exportReadyToExports', 'cms-entity/correspondence/wf/outgoing/book/{{vsId}}/wob-num/{{wobNum}}/export')
+                // selective export
+                .addToAllWithBase('selectiveExport', 'cms-entity/correspondence/wf/outgoing/book/{{vsId}}/wob-num/{{wobNum}}/selective-export')
                 // terminate single ready to export outgoing
                 .addToAllWithBase('terminateReadyToExports', 'cms-entity/correspondence/wf/outgoing/terminate/ready-to-export')
                 // correspondence views.

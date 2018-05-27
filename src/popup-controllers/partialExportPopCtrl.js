@@ -82,6 +82,27 @@ module.exports = function (app) {
             }
         };
 
+        var canExportOptions = {
+            'ATTACHMENTS': 'Attachment',
+            'RELATED_BOOKS': 'LinkedDoc',
+            'RELATED_OBJECTS': 'LinkedObj'
+        };
+
+        self.canExportAnyRelatedData = function () {
+            var canExport;
+            for (var i in canExportOptions) {
+                canExport = self.settings.canExport(canExportOptions[i]);
+                if (canExport)
+                    break;
+            }
+            return canExport;// && self.checkAnyLinkedDataAvailable();
+        };
+
+        self.canExportRelatedData = function (type) {
+            return self.settings.canExport(canExportOptions[type]);
+        };
+
+
         function _selectedItemExists(item, option) {
             return (_getItemPosition(item, option) !== -1);
         }
