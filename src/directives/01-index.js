@@ -83,4 +83,5 @@ module.exports = function (app) {
     require('./manage-properties-search-directive/01-index')(app);
     require('./manage-correspondence-sites-search-directive/01-index')(app);
     require('./manage-entities-search-directive/01-index')(app);
+    require('./user-subscription-directive/01-index')(app);
 };
