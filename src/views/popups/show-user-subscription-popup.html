@@ -2,7 +2,7 @@
            ng-attr-aria-label="show-user-subscriptions">
 
     <md-toolbar style="background: transparent;">
-        <md-button class="md-icon-button close-dialog-button"
+        <md-button class="close-dialog-button"
                    ng-click="showUserSubscriptionsCtrl.closeShowUserSubscriptionsPopupFromCtrl()">
             <md-icon md-svg-icon="close-circle"></md-icon>
         </md-button>
@@ -10,5 +10,23 @@
     <login-subscriptions-directive ng-if="showUserSubscriptionsCtrl.userSubscriptions.length>0"
                                   announcements="showUserSubscriptionsCtrl.userSubscriptions">
     </login-subscriptions-directive>
+
+    <div scroll-directive class="notify-list-wrapper">
+        <ul>
+            <li ng-repeat="item in showUserSubscriptionsCtrl.userSubscriptions track by $index" layout="row">
+                <div class="task-body" flex layout="column">
+                    <div class="task-header" layout="row">
+                        <a href="#" md-truncate flex
+                           class="notification-subject" ng-click="showUserSubscriptionsCtrl.openNotificationItem(item,$event)">{{item.documentVSId}}</a>
+                    </div>
+                    <div layout="column">
+                        <div class="tasks-date-text">{{item.updatedOn}}
+                            <md-icon class="tasks-date-icon" md-svg-icon="update"></md-icon>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
 
 </md-dialog>
