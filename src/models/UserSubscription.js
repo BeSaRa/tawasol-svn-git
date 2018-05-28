@@ -6,20 +6,19 @@ module.exports = function (app) {
 
             //User Subscription properties
             self.id = null;
-            self.trigerID = null;
+            self.trigerId = null;
             self.userId = null;
             self.documentVSId = "";
             self.status = true;
             self.ouId = null;
+            self.updatedOn = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [
-                'trigerID',
-                'userId',
+                'trigerId',
                 'documentVSId',
-                'status',
-                'ouId'
+                'status'
             ];
 
             if (model)
