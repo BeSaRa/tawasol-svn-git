@@ -471,22 +471,14 @@ module.exports = function (app) {
          */
         self.subscribe = function (userInbox, $event) {
             var info = userInbox.getInfo();
-            var empId = employeeService.getEmployee().id;
-            var ouId = employeeService.getEmployee().getOUID();
-            var id = generator.createNewID(userSubscriptionService.getUserSubscriptions(empId), 'id');
-            id = id + '';
-            id = employeeService.getEmployee().id + id;
             var userSubscription = new UserSubscription({
-                id: id,
-                trigerID: 1,
-                userId: empId,
+                trigerId: 1,
                 documentVSId: info.vsId,
-                status: true,
-                ouId: ouId
+                status: true
             });
 
             userSubscriptionService.addUserSubscription(userSubscription).then(function (result) {
-                if(result === id){
+                if(result){
                     toast.success(langService.get('subscribe_success'));
                 }
             });
