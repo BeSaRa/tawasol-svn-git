@@ -321,10 +321,8 @@ module.exports = function (app) {
          * @returns {number}
          */
         self.setLinkedType = function (type) {
-            if (!type.lookupStrKey)
-
-                var position = defaultValues.indexOf(type.lookupStrKey);
-            return position !== -1 ? position : type.lookupKey;
+            var index = defaultValues.indexOf(type.lookupStrKey);
+            return index !== -1 ? index : type.lookupKey;
         };
         /**
          * custom entity types
