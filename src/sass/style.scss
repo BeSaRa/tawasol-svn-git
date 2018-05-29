@@ -1203,7 +1203,6 @@ md-chips.tags {
   padding-bottom: 130px;
 }
 
-
 .box {
   background-color: red;
   padding: 15px;
@@ -1713,8 +1712,13 @@ tr.unread-row {
   .document-properties {
     width: 100%;
     float: right;
-    padding: 5px 0;
     font-size: 12px;
+    background-color: #EEE;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 8px;
     & > ul {
       padding: 0;
       margin: 0;
@@ -1722,6 +1726,9 @@ tr.unread-row {
         padding-bottom: 5px;
         margin-bottom: 5px;
         border-bottom: 1px solid #EEE;
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
     }
   }

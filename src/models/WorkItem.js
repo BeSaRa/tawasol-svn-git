@@ -294,6 +294,10 @@ module.exports = function (app) {
                 var info = this.getInfo();
                 return correspondenceService.viewCorrespondenceWorkItem.apply(correspondenceService, [info, actions, editProperties, editCorrespondence, false, false, false]);
             };
+            WorkItem.prototype.viewNewInboxWorkItem = function (actions, editProperties, editCorrespondence) {
+                var info = this.getInfo();
+                return correspondenceService.viewCorrespondenceWorkItemNew.apply(correspondenceService, [info, actions, editProperties, editCorrespondence, false, false, false]);
+            };
             WorkItem.prototype.manageDocumentComments = function ($event) {
                 var info = this.getInfo();
                 return managerService.manageDocumentComments.apply(managerService, [info.vsId, info.title, $event]);

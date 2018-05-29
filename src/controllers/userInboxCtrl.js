@@ -883,6 +883,11 @@ module.exports = function (app) {
                         })
                 })
         };
+        // new view document
+        self.openNewViewDocument = function () {
+            if (self.userInboxes.length)
+                self.userInboxes[0].viewNewInboxWorkItem(self.actions, true, true)
+        };
 
         /**
          * @description Array of actions that can be performed on grid
@@ -1401,6 +1406,21 @@ module.exports = function (app) {
                         }
                     }
                 ]
+            },
+            // Open
+            {
+                type: 'action',
+                icon: 'book-open-variant',
+                text: 'grid_action_open',
+                shortcut: true,
+                callback: self.openNewViewDocument,
+                class: "action-green",
+                permissionKey: 'VIEW_DOCUMENT',
+                showInView: false,
+                checkShow: function (action, model) {
+                    //If no content or no view document permission, hide the button
+                    return self.checkToShowAction(action, model) && model.hasContent();
+                }
             }
         ];
 
@@ -1429,5 +1449,7 @@ module.exports = function (app) {
             var timer = (self.globalSetting.inboxRefreshInterval * 60 * 100 * 10);
             self.refreshInbox(timer);
         }
+        // TODO: just for test.
+        self.openNewViewDocument();
     });
 };

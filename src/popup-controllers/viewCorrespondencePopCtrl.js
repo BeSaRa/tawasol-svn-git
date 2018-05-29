@@ -11,7 +11,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'viewCorrespondencePopCtrl';
-        self.fullScreen = false;
+        self.fullScreen = true;
         self.validation = false;
         self.detailsReady = false;
         self.employeeService = employeeService;
@@ -37,7 +37,7 @@ module.exports = function (app) {
             self.fullScreen = !self.fullScreen;
         };
         self.closeCorrespondenceDialog = function () {
-            dialog.hide();
+            dialog.hide(self.workItem);
         };
         /**
          * @description save correspondence Changes for content.
@@ -45,11 +45,21 @@ module.exports = function (app) {
         self.saveCorrespondenceChanges = function () {
             var info = self.correspondence.getInfo();
             var method = info.documentClass !== 'incoming' ? 'saveDocumentWithContent' : 'saveDocument';
-            self.correspondence[method](method === 'saveDocument' ? false : self.content)
-                .then(function () {
-                    toast.success(langService.get('save_success'));
-                    dialog.hide();
-                });
+            if (method === 'saveDocumentWithContent') {
+                angular.element('iframe').remove();
+                $timeout(function () {
+                    self.correspondence[method](method === 'saveDocument' ? false : self.content)
+                        .then(function () {
+                            toast.success(langService.get('save_success'));
+                            dialog.hide();
+                        });
+                }, 1000);
+            } else
+                self.correspondence[method](method === 'saveDocument' ? false : self.content)
+                    .then(function () {
+                        toast.success(langService.get('save_success'));
+                        dialog.hide();
+                    });
         };
         /**
          * @description to display correspondence site accordion item.
