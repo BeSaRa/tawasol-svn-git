@@ -1,24 +1,25 @@
 <li class="document-properties">
-    <ul ng-if="!!ctrl.workItem" class="work-item-properties">
+    <ul ng-if="ctrl.item.isWorkItem()" class="work-item-properties">
+        <li class="section-title">{{lang.get(sectionTitle)}}</li>
         <li>
             <span class="property-key">{{lang.previous_action}}</span>
-            <span class="property-value">{{ctrl.workItem.action.getTranslatedName()}}</span>
+            <span class="property-value">{{ctrl.item.action.getTranslatedName()}}</span>
         </li>
         <li>
             <span class="property-key">{{lang.previous_comment}}</span>
-            <span class="property-value">{{ctrl.workItem.comments}}</span>
+            <span class="property-value">{{ctrl.item.comments}}</span>
         </li>
         <li>
             <span class="property-key">{{lang.work_item_sender}}</span>
-            <span class="property-value">{{ctrl.workItem.senderInfo.getTranslatedName()}}</span>
+            <span class="property-value">{{ctrl.item.senderInfo.getTranslatedName()}}</span>
         </li>
         <li>
             <span class="property-key">{{lang.action_date}}</span>
-            <span class="property-value">{{ctrl.workItem.getReceivedDate()}}</span>
+            <span class="property-value">{{ctrl.item.getReceivedDate()}}</span>
         </li>
         <li>
             <span class="property-key">{{lang.time}}</span>
-            <span class="property-value">{{ctrl.workItem.getReceivedTime()}}</span>
+            <span class="property-value">{{ctrl.item.getReceivedTime()}}</span>
         </li>
     </ul>
 </li>

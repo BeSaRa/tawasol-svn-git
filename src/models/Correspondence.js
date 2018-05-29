@@ -551,7 +551,9 @@ module.exports = function (app) {
                     'fileSerial'
                 ];
             };
-
+            Correspondence.prototype.isWorkItem = function () {
+                return false;
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

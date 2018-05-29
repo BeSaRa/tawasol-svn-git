@@ -456,6 +456,10 @@ module.exports = function (app) {
 
             };
 
+            WorkItem.prototype.isWorkItem = function () {
+                return true;
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
