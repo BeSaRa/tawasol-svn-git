@@ -12,13 +12,17 @@ module.exports = function (app) {
             self.status = true;
             self.ouId = null;
             self.updatedOn = null;
+            self.docClass = null;
+            self.docSubject = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [
                 'trigerId',
                 'documentVSId',
-                'status'
+                'status',
+                'docClass',
+                'docSubject'
             ];
 
             if (model)
