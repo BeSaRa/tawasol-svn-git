@@ -177,7 +177,7 @@ module.exports = function (app) {
             model.securityLevel = model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.priorityLevel = model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
 
-            model.creatorInfo =  model.creatorInfo ? new Information(model.creatorInfo) : new Information();
+            model.creatorInfo = model.creatorInfo ? new Information(model.creatorInfo) : new Information();
             if (!angular.isDate(model.docDate)) {
                 model.docDate = moment(model.docDate).format('YYYY-MM-DD');
                 model.createdOn = angular.copy(model.docDate);
@@ -190,7 +190,7 @@ module.exports = function (app) {
 
             if (model.linkedEntities && !angular.isArray(model.linkedEntities)) {
                 model.linkedEntities = _.map(JSON.parse(model.linkedEntities), function (entity) {
-                    entity.typeId = entity.typeId === null ? entityTypeService.getLinkedType(0, entityTypes) : entityTypeService.getLinkedType(entity.typeId, entityTypes);
+                    entity.typeId = !(entity.typeId) ? entityTypeService.getLinkedType(0, entityTypes) : entityTypeService.getLinkedType(entity.typeId, entityTypes);
                     return new LinkedObject(entity);
                 });
             } else {

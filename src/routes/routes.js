@@ -1363,6 +1363,44 @@ module.exports = function (app) {
                 },
                 controllerAs: 'ctrl'
             })
+            .state('app.icn', {
+                url: '/icn/archive',
+                abstract: false,
+                template: '<iframe ng-hide="true" width="0" height="0" ng-src="{{ctrl.url}}"></iframe>' +
+                '<div id="sub-view-wrapper"><ui-view flex layout="column" class="sub-view" /></div>',
+                controller: function (credentials, urlService, $sce) {
+                    'ngInject';
+                    var self = this;
+                    self.url = $sce.trustAsResourceUrl(urlService.icnLogin.replace('{{username}}', credentials.username).replace('{{password}}', credentials.password));
+                },
+                controllerAs: 'ctrl',
+                resolve: {
+                    credentials: function (authenticationService) {
+                        'ngInject';
+                        return authenticationService.getUserData();
+                    }
+                }
+            })
+            .state('app.icn.add', {
+                url: '/add',
+                template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
+                controllerAs: 'ctrl',
+                controller: function (urlService, $sce) {
+                    'ngInject';
+                    var self = this;
+                    self.url = $sce.trustAsResourceUrl(urlService.icnAdd);
+                }
+            })
+            .state('app.icn.search', {
+                url: '/search',
+                template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
+                controllerAs: 'ctrl',
+                controller: function (urlService, $sce) {
+                    'ngInject';
+                    var self = this;
+                    self.url = $sce.trustAsResourceUrl(urlService.icnSearch);
+                }
+            })
             .state('app.g2g', {
                 abstract: true,
                 url: '/g2g',

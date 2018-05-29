@@ -4,11 +4,12 @@ module.exports = function (app) {
                          urlServiceProvider,
                          IdleProvider,
                          rootEntityProvider,
+                         localStorageServiceProvider,
                          $httpProvider) {
         'ngInject';
 
         var urlService = urlServiceProvider.$get();
-
+        localStorageServiceProvider.setPrefix('CMS_');
         // if you do not need to flip login background set it to false
         loginPageProvider.flipLoginBackground(true);
         // add default CMSInterceptor

@@ -886,5 +886,41 @@
     "sort_order": 6,
     "active": true,
     "sort_value": 0
+  },
+  {
+    "ID": 89,
+    "lang_key": "menu_item_icn_archive",
+    "icon": "archive",
+    "parent": null,
+    "link": "#",
+    "state": "app.icn",
+    "icon_type": "font",
+    "sort_order": 6,
+    "active": true,
+    "sort_value": 0
+  },
+  {
+    "ID": 90,
+    "lang_key": "menu_item_icn_archive_add",
+    "icon": "archive",
+    "parent": 89,
+    "link": "#",
+    "state": "app.icn.add",
+    "icon_type": "font",
+    "sort_order": 6,
+    "active": true,
+    "sort_value": 0
+  },
+  {
+    "ID": 91,
+    "lang_key": "menu_item_icn_archive_search",
+    "icon": "archive",
+    "parent": 89,
+    "link": "#",
+    "state": "app.icn.search",
+    "icon_type": "font",
+    "sort_order": 6,
+    "active": true,
+    "sort_value": 0
   }
 ]

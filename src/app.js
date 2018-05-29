@@ -20,7 +20,8 @@
                 'tooltips',
                 'mdColorPicker',
                 'angularTrix',
-                'CMSScanner'
+                'CMSScanner',
+                'LocalStorageModule'
             ]
         );
 

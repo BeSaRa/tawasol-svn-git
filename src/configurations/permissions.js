@@ -98,6 +98,15 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_central_archive_ready_to_export', function (employee) {
                 return employee.userOrganization && employee.userOrganization.centralArchive;
             })
+            .end()
+            .addMenuPermissionGroup('menu_item_icn_archive')
+            .addMenuPermission('menu_item_icn_archive_add', function () {
+                return false;
+            })
+            .addMenuPermission('menu_item_icn_archive_search', function () {
+                return false;
+            })
+
 
     })
 };

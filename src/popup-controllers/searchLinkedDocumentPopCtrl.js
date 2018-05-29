@@ -19,8 +19,8 @@ module.exports = function (app) {
         self.documentClasses = lookupService.returnLookups(lookupService.documentClass);
         // the search criteria for correspondence
         self.correspondence = new Correspondence({
-            year: new Date().getFullYear(),
-            registryOU: employeeService.getCurrentOUApplicationUser().ouRegistryID
+            year: new Date().getFullYear()/*,
+            registryOU: employeeService.getCurrentOUApplicationUser().ouRegistryID*/
         });
 
         self.excludeVsId = excludeVsId;

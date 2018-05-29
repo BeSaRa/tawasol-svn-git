@@ -192,6 +192,7 @@ module.exports = (function () {
     require('angular-messages');
     require('angular-animate');
     require('@uirouter/angularjs');
+    require('angular-local-storage/src/angular-local-storage');
     require('owl.carousel');
     require('owl.carousel/dist/assets/owl.carousel.css');
     require('ng-idle');

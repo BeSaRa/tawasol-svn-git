@@ -1,15 +1,28 @@
 module.exports = function (app) {
     app.service('authenticationService', function ($http,
-                                                   $cookies, 
-                                                   lookupService, 
-                                                   tokenService, 
-                                                   employeeService, 
-                                                   urlService, 
-                                                   rootEntity, 
+                                                   $cookies,
+                                                   lookupService,
+                                                   tokenService,
+                                                   employeeService,
+                                                   base64Factory,
+                                                   localStorageService,
+                                                   urlService,
+                                                   rootEntity,
                                                    Credentials) {
         'ngInject';
         var self = this, cacheCredentials = new Credentials();
         self.logoutBySessionsKey = 'logoutSession';
+
+        function _saveToStorage(credentials) {
+            var c = angular.copy(credentials);
+            delete c.ouId;
+            localStorageService.set('CR', base64Factory.encode(JSON.stringify(credentials)));
+        }
+
+        function _getFromStorage() {
+            return JSON.parse(base64Factory.decode(localStorageService.get('CR')));
+        }
+
         /**
          * this method to make authentication by given credentials
          * @param credentials
@@ -21,9 +34,10 @@ module.exports = function (app) {
             }
             // set current tawasol root entity identifier.
             credentials.setTawasolEntityId(rootEntity.getRootEntityIdentifier());
-            cacheCredentials = credentials;
+            cacheCredentials = angular.copy(credentials);
             // call backend service to login.
             return $http.post(urlService.login, credentials).then(function (result) {
+                _saveToStorage(credentials);
                 if (result.data.hasOwnProperty('rs') && result.data.rs.hasOwnProperty('token')) {
                     tokenService.setToken(result.data.rs.token);
                 }
@@ -86,6 +100,7 @@ module.exports = function (app) {
          * logout from application and destroy current session.
          */
         self.logout = function () {
+            localStorageService.remove('CR');
             return $http.post(urlService.logout, null)
                 .then(function (result) {
                     tokenService.destroy(); // destroy the current sessions
@@ -97,6 +112,10 @@ module.exports = function (app) {
                     employeeService.destroyEmployee(); // destroy current user data
                     return true;
                 });
+        };
+
+        self.getUserData = function () {
+            return _getFromStorage();
         }
 
         /*
