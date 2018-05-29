@@ -1450,6 +1450,6 @@ module.exports = function (app) {
             self.refreshInbox(timer);
         }
         // TODO: just for test.
-        self.openNewViewDocument();
+        //self.openNewViewDocument();
     });
 };
