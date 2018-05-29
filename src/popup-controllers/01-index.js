@@ -98,4 +98,5 @@ module.exports = function (app) {
 	require('./viewCorrespondenceG2GPopCtrl')(app);
     require('./showUserSubscriptionsPopCtrl')(app);
     require('./viewDeliveryReportPopCtrl')(app);
+    require('./subscriptionEventTypePopCtrl')(app);
 };
