@@ -1,0 +1,38 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.select_event_type}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.select_event_type}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="eventType_form" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="eventType">{{lang.event_type}}</label>
+                            <md-select ng-change="subscriptionEventTypeCtrl.setEventType()" id="eventType"
+                                       ng-model="subscriptionEventTypeCtrl.selectedEventType">
+                                <md-option ng-repeat="item in subscriptionEventTypeCtrl.eventTypes" ng-value="item">
+                                    {{item.defaultEnName}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                </div>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised"
+                           ng-disabled="reason_form.$invalid"
+                           ng-click="subscriptionEventTypeCtrl.sendEventType()">
+                    {{lang.save}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="subscriptionEventTypeCtrl.closeEventTypePopup()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>
