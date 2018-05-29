@@ -46,7 +46,7 @@ module.exports = function (app) {
             var info = self.correspondence.getInfo();
             var method = info.documentClass !== 'incoming' ? 'saveDocumentWithContent' : 'saveDocument';
             if (method === 'saveDocumentWithContent') {
-                angular.element('iframe').remove();
+                angular.element('iframe#iframe-main-document').remove();
                 $timeout(function () {
                     self.correspondence[method](method === 'saveDocument' ? false : self.content)
                         .then(function () {
