@@ -4,7 +4,10 @@ module.exports = function (app) {
                                                                $q,
                                                                langService,
                                                                toast,
-                                                               dialog) {
+                                                               dialog,
+                                                               employeeService,
+                                                               correspondenceService,
+                                                               moment) {
         'ngInject';
         var self = this;
 
@@ -15,6 +18,45 @@ module.exports = function (app) {
 
         self.closeShowUserSubscriptionsPopupFromCtrl = function () {
             dialog.cancel();
+        };
+
+        self.viewDocument = function (item, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+
+            correspondenceService.viewCorrespondence({
+                vsId: item.documentVSId,
+                docClassName: item.docClass
+            }, self.gridActions,false ,true);
+        };
+
+        /**
+         * convert unix timestamp to Original Date Format (YYYY-MM-DD hh:mm:ss A)
+         * @param db date
+         * @param formatted date
+         * @returns {*}
+         */
+        self.getDateFromUnixTimeStamp = function (updatedOn) {
+            return moment(updatedOn).format('YYYY-MM-DD hh:mm:ss A');
+        };
+
+
+        self.getSubscriptionEventType = function(selected){
+            var lang = langService.getCurrentLang();
+            if(lang === 'en'){
+                lang = 'En';
+            }
+
+            if(lang === 'ar'){
+                lang = "Ar";
+            }
+
+            var exported = lookupService.returnLookups(lookupService.eventType).filter(function (item){
+                return item.lookupKey === selected;
+            })[0]['default'+lang+'Name'];
+            return exported;
         };
 
     });
