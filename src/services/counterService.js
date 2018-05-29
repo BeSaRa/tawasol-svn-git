@@ -14,12 +14,17 @@ module.exports = function (app) {
          * load all counters for service
          */
         self.loadCounters = function () {
-            return $http.get(urlService.folderCount)
+            return $http
+                .get(urlService.folderCount, {
+                    excludeLoading: true
+                })
                 .then(function (folder) {
                     var folderCount = _.reduce(folder.data.rs, function (oldValue, currentValue) {
                         return oldValue + currentValue;
                     }, 0);
-                    return $http.get(urlService.counters).then(function (result) {
+                    return $http.get(urlService.counters, {
+                        excludeLoading: true
+                    }).then(function (result) {
                         result.data.rs.foldersCount = folderCount;
                         self.counter = generator.interceptReceivedInstance('Counter', generator.generateInstance(result.data.rs, Counter));
                         return self.counter;

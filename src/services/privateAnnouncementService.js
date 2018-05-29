@@ -326,7 +326,9 @@ module.exports = function (app) {
          */
         self.getPrivateAnnouncementByOUID = function () {
             var ouID = employeeService.getEmployee().organization.ouid;
-            return $http.get(urlService.privateAnnouncements + "/ou/" + ouID).then(function (result) {
+            return $http.get(urlService.privateAnnouncements + "/ou/" + ouID, {
+                excludeLoading: true
+            }).then(function (result) {
                 self.privateAnnouncementsToShow = generator.generateCollection(result.data.rs, PrivateAnnouncement, self._sharedMethods);
                 self.privateAnnouncementsToShow = generator.interceptReceivedCollection('PrivateAnnouncement', self.privateAnnouncementsToShow);
 

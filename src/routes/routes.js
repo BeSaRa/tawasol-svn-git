@@ -57,6 +57,10 @@ module.exports = function (app) {
                 template: templateProvider.getView('home'),
                 params: {
                     identifier: rootEntityProvider.getRootEntityIdentifier()
+                },
+                controller: function (counterService, employeeService) {
+                    'ngInject';
+                    !employeeService.isAdminUser() ? counterService.loadCounters() : [];
                 }
             })
             // landing page

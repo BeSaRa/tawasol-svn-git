@@ -244,7 +244,7 @@ module.exports = function (app) {
 
         // to display alert to inform the user this document not approved and will not send it to many users.
         if(!isDeptIncoming) {
-            _justForYourInformationDialog(self.multiStatus);
+            _justForYourInformationDialog(self.multiStatus , true);
         }
         else{
             approvedStatus = false;

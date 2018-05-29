@@ -295,31 +295,32 @@ module.exports = function (app) {
                     return layoutService.loadWidgets();
                 }
             })
-            .bulkResolveToState('app', {/*
-                themes: function (themeService, employeeService) {
-                    'ngInject';
-                    return !employeeService.isCloudUser() ? themeService.getThemes() : [];
-                },*/
+            .bulkResolveToState('app', {
+                /*
+                                themes: function (themeService, employeeService) {
+                                    'ngInject';
+                                    return !employeeService.isCloudUser() ? themeService.getThemes() : [];
+                                },*/
                 /*attachmentTypes: function (attachmentTypeService, employeeService) {
                     'ngInject';
                     return !employeeService.isCloudUser() ? attachmentTypeService.getAttachmentTypes() : [];
                 },*/
-                counters: function (counterService, employeeService) {
-                    'ngInject';
-                    return !employeeService.isAdminUser() ? counterService.loadCounters() : [];
-                },
+                // counters: function (counterService, employeeService) {
+                //     'ngInject';
+                //     return !employeeService.isAdminUser() ? counterService.loadCounters() : [];
+                // },
                 loadMenus: function (sidebarService) {
                     'ngInject';
                     return sidebarService.loadMenuItems();
-                },/*
+                }, /*
                 entityTypes: function (entityTypeService, employeeService) {
                     'ngInject';
                     return !employeeService.isCloudUser() ? entityTypeService.getEntityTypes() : [];
                 },*/
-                organizations: function (organizationService, employeeService) {
-                    'ngInject';
-                    return !employeeService.isCloudUser() ? organizationService.getOrganizations() : [];
-                },
+                // organizations: function (organizationService, employeeService) {
+                //     'ngInject';
+                //     return !employeeService.isCloudUser() ? organizationService.getOrganizations() : [];
+                // },
                 language: function (employeeService, $timeout, langService) {
                     'ngInject';
                     $timeout(function () {
