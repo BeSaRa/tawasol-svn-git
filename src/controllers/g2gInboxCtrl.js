@@ -127,32 +127,66 @@ module.exports = function (app) {
                 })
         };
 
+
+        /**
+         * @description Download Main Document
+         * @param g2gItem
+         * @param $event
+         */
+        self.downloadMainDocument = function (g2gItem, $event) {
+            g2gItem
+                .mainDocumentDownload($event);
+        };
+
+        /**
+         * @description Download Composite Document
+         * @param g2gItem
+         * @param $event
+         */
+        self.downloadCompositeDocument = function (g2gItem, $event) {
+            g2gItem
+                .compositeDocumentDownload($event);
+        };
+
+
         /**
          * @description Check if action will be shown on grid or not
          * @param action
          * @param model
+         * @param popupActionOnly
          * @returns {boolean}
          */
-        self.checkToShowAction = function (action, model) {
+        self.checkToShowAction = function (action, model, popupActionOnly) {
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
-                    return (!action.hide && !action.hideInGrid) && employeeService.hasPermissionTo(action.permissionKey);
+                    if(popupActionOnly)
+                        return (!action.hide && action.showInViewOnly) && employeeService.hasPermissionTo(action.permissionKey);
+                    return (!action.hide && !action.showInViewOnly) && employeeService.hasPermissionTo(action.permissionKey);
                 }
                 else if (angular.isArray(action.permissionKey)) {
                     if (!action.permissionKey.length) {
-                        return (!action.hide);
+                        if(popupActionOnly)
+                            return (!action.hide && action.showInViewOnly)
+                        return (!action.hide && !action.showInViewOnly);
                     }
                     else {
                         var hasPermissions = _.map(action.permissionKey, function (key) {
                             return employeeService.hasPermissionTo(key);
                         });
-                        return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
+                        if(popupActionOnly)
+                            return (!action.hide && action.showInViewOnly) && !(_.some(hasPermissions, function (isPermission) {
+                                return isPermission !== true;
+                            }));
+
+                        return (!action.hide && !action.showInViewOnly) && !(_.some(hasPermissions, function (isPermission) {
                             return isPermission !== true;
                         }));
                     }
                 }
             }
-            return (!action.hide && !action.hideInGrid);
+            if(popupActionOnly)
+                return (!action.hide) && (action.showInViewOnly);
+            return (!action.hide && !action.showInViewOnly);
         };
 
         /**
@@ -182,7 +216,7 @@ module.exports = function (app) {
                 class: "action-green",
                 //permissionKey: 'VIEW_DOCUMENT',
                 showInView: true,
-                hideInGrid: true,
+                showInViewOnly: true,
                 checkShow: self.checkToShowAction
             },
             // Return
@@ -195,9 +229,40 @@ module.exports = function (app) {
                 class: "action-green",
                 //permissionKey: 'VIEW_DOCUMENT',
                 showInView: true,
-                hideInGrid: true,
+                showInViewOnly: true,
                 checkShow: self.checkToShowAction
-            }
+            },
+            // Download
+            {
+                type: 'action',
+                icon: 'download',
+                text: 'grid_action_download',
+                shortcut: false,
+                showInViewOnly: true,
+                checkShow: self.checkToShowAction,
+                subMenu: [
+                    // Main Document
+                    {
+                        type: 'action',
+                        icon: 'file-document',
+                        text: 'grid_action_main_document',
+                        shortcut: false,
+                        callback: self.downloadMainDocument,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Composite Document
+                    {
+                        type: 'action',
+                        icon: 'file-document',
+                        text: 'grid_action_composite_document',
+                        shortcut: false,
+                        callback: self.downloadCompositeDocument,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    }
+                ]
+            },
         ];
     });
 };

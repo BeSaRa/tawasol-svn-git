@@ -30,7 +30,7 @@ module.exports = function (app) {
          * @param correspondence
          */
         self.checkDisplayAction = function (action, workItem, correspondence) {
-            return action.checkShow(action, (workItem || correspondence));
+            return action.checkShow(action, (workItem || correspondence), action.showInViewOnly);
         };
         /**
          * @description hide this action from view correspondence.

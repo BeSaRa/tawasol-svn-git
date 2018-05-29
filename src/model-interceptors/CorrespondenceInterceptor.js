@@ -202,7 +202,7 @@ module.exports = function (app) {
             model.priorityLevelIndicator = model.priorityLevel ? model.getPriorityLevelIndicator(model.priorityLevel) : null;
             model.attachmentsIndicator = model.attachments && model.attachments.length ? model.getAttachmentsIndicator() : null;
 
-            if (!angular.isArray(model.tags)) {
+            if (model.tags && !angular.isArray(model.tags)) {
                 model.tags = angular.fromJson(model.tags);
             }
 
@@ -210,7 +210,7 @@ module.exports = function (app) {
             if (!angular.isArray(model.linkedDocs) && model.linkedDocs && model.linkedDocs.length)
                 linkedDocs = Array.prototype.slice.call(JSON.parse(model.linkedDocs));
             model.linkedDocsIndicator = linkedDocs.length ? model.getLinkedDocumentsIndicator() : null;
-            model.tagsIndicator = model.tags.length ? model.getTagsIndicator(model.tags.length) : null;
+            model.tagsIndicator = (model.tags && model.tags.length) ? model.getTagsIndicator(model.tags.length) : null;
 
             return model;
         });

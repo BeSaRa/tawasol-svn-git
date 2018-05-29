@@ -50,6 +50,7 @@ module.exports = function (app) {
             icons['linked_exported_doc'] = 'link';
             icons['due_date'] = 'calendar';
             icons['copy'] = 'content-copy';
+            icons['locked_g2g'] = 'lock';
 
 
             /**
@@ -302,18 +303,19 @@ module.exports = function (app) {
             };
 
             /**
-             * @description Returns the type(Original/Copy) indicator and description
+             * @description Returns the is locked g2g record indicator and description
              * @returns {Indicator}
-             * @param originalOrCopy
+             * @param isLockedG2G
              */
-            Indicator.prototype.getOriginalCopyIndicator = function (originalOrCopy) {
-                return originalOrCopy !== 0 ? new Indicator({
+            Indicator.prototype.getIsLockedG2GIndicator = function (isLockedG2G) {
+                return isLockedG2G ? new Indicator({
                     class: 'indicator',
-                    text: 'indicator_copy',
-                    icon: self.getIndicatorIcons('copy'),
-                    tooltip: 'indicator_copy'
+                    text: 'indicator_locked_by',
+                    icon: self.getIndicatorIcons('locked_g2g'),
+                    tooltip: 'indicator_locked_by'
                 }) : false;
             };
+
 
 
             // don't remove CMSModelInterceptor from last line

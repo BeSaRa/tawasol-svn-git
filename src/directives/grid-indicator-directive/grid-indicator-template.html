@@ -109,3 +109,13 @@
              tooltip="{{ctrl.langService.get(ctrl.record.originalCopyIndicator.tooltip)}}"
     ></md-icon>
 </span>
+<!-- Is Locked (G2G) -->
+<span ng-if="ctrl.indicatorType === 'isLockedG2G'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.isLockedG2GIndicator}">
+    <md-icon ng-if="ctrl.record.isLockedG2GIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.isLockedG2GIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.isLockedG2GIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.isLockedG2GIndicator.tooltip)
+                        .change({name:ctrl.record.stepElm.lockingInfo.displayName})}}"
+    ></md-icon>
+</span>

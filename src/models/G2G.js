@@ -1,7 +1,9 @@
 module.exports = function (app) {
     app.factory('G2G', function (CMSModelInterceptor,
                                  langService,
-                                 Information) {
+                                 Information,
+                                 downloadService,
+                                 Indicator) {
         return function G2G(model) {
             var self = this;
 
@@ -36,6 +38,17 @@ module.exports = function (app) {
              */
             G2G.prototype.getRequiredFields = function () {
                 return requiredFields;
+            };
+
+            G2G.prototype.mainDocumentDownload = function ($event) {
+                var info = this.getInfo();
+                return downloadService.controllerMethod
+                    .mainDocumentDownload(info.vsId, $event);
+            };
+            G2G.prototype.compositeDocumentDownload = function ($event) {
+                var info = this.getInfo();
+                return downloadService.controllerMethod
+                    .compositeDocumentDownload(info.vsId, $event);
             };
 
             /**
@@ -85,6 +98,20 @@ module.exports = function (app) {
                 var mainSite = new Information(this.siteInfo.mainSite);
                 var subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : null;
                 return mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : '');
+            };
+
+
+            /**
+             * @description to get documentClass,vsId.
+             * @return {{documentClass: *, vsId: *}}
+             */
+            G2G.prototype.getInfo = function () {
+                return this.correspondence.recordInfo;
+            };
+
+            var indicator = new Indicator();
+            G2G.prototype.getIsLockedG2GIndicator = function(){
+                  return indicator.getIsLockedG2GIndicator(this.stepElm.lockedStatus);
             };
 
 
