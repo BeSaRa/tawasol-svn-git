@@ -3,7 +3,10 @@ module.exports = function (app) {
                                                         $http,
                                                         $q,
                                                         generator,
-                                                        UserSubscription) {
+                                                        UserSubscription,
+                                                        lookupService,
+                                                        dialog,
+                                                        cmsTemplate ) {
         'ngInject';
         var self = this;
         self.serviceName = 'userSubscriptionService';
@@ -45,6 +48,31 @@ module.exports = function (app) {
                     generator.interceptSendInstance('UserSubscription', userSubscription))
                 .then(function (result) {
                     return generator.interceptReceivedInstance('UserSubscription', generator.generateInstance(result.data.rs, UserSubscription, self._sharedMethods));
+                });
+        };
+
+
+        /**
+         * @description  open subscription event types dialog
+         * @param dialogTitle
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.showEventTypeDialog = function ($event) {
+            return dialog
+                .showDialog({
+                    template: cmsTemplate.getPopup('subscription-event-type'),
+                    controller: 'subscriptionEventTypePopCtrl',
+                    controllerAs: 'subscriptionEventTypeCtrl',
+                    bindToController: true,
+                    targetEvent: $event,
+                    resolve: {
+                        eventTypes: function (lookupService) {
+                            'ngInject';
+                            return lookupService.returnLookups(lookupService.eventType);
+
+                        }
+                    }
                 });
         };
 
