@@ -312,5 +312,9 @@ module.exports = function (app) {
          * @private
          */
         self._sharedMethods = generator.generateSharedMethods(self.deleteApplicationUserSignature, self.updateApplicationUserSignature);
+
+        self.emptySignatures = function () {
+            self.applicationUserSignatures = [];
+        }
     });
 };

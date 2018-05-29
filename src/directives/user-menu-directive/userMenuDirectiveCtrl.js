@@ -119,7 +119,7 @@ module.exports = function (app) {
             if (!organization)
                 return false;
 
-            return organization.id === self.employee.userOrganization.id;
+            return organization.id === self.employee.organization.ouid;
         };
 
         /**

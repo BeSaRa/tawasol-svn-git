@@ -1,6 +1,6 @@
 <li class="document-properties">
     <ul ng-if="ctrl.item.isWorkItem()" class="work-item-properties">
-        <li class="section-title">{{lang.get(sectionTitle)}}</li>
+        <li ng-if="ctrl.sectionTitle" class="section-title">{{lang.get(sectionTitle)}}</li>
         <li>
             <span class="property-key">{{lang.previous_action}}</span>
             <span class="property-value">{{ctrl.item.action.getTranslatedName()}}</span>

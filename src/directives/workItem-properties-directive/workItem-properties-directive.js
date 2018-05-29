@@ -11,7 +11,8 @@ module.exports = function (app) {
             bindToController: true,
             template: require('./workItem-properties-template.html'),
             scope: {
-                item: '='
+                item: '=',
+                sectionTitle: '@'
             }
         }
     })

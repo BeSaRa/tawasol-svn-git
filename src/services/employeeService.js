@@ -1,12 +1,14 @@
 module.exports = function (app) {
     app.service('employeeService', function ($cookies,
                                              Employee,
+                                             CMSModelInterceptor,
                                              lookupService,
                                              generator,
+                                             $timeout,
                                              permissionService) {
         'ngInject';
         var self = this, employee = null,
-            employeeCookiesKey = 'CMSEmployee', rootEntity, langService;
+            employeeCookiesKey = 'CMSEmployee', rootEntity, langService, applicationUserSignatureService;
 
         self.serviceName = 'employeeService';
 
@@ -111,6 +113,7 @@ module.exports = function (app) {
          * destroy current employee data
          */
         self.destroyEmployee = function () {
+            applicationUserSignatureService.emptySignatures();
             _destroyEmployeeCookies();
         };
         /**
@@ -182,8 +185,14 @@ module.exports = function (app) {
          */
         self.isCentralArchive = function () {
             return employee && employee.inCentralArchive();
-        }
+        };
 
+        self.setSignatureService = function (service) {
+            applicationUserSignatureService = service;
+        };
+        $timeout(function () {
+            CMSModelInterceptor.runEvent('employeeService', 'init', self);
+        },1000);
 
     });
 };

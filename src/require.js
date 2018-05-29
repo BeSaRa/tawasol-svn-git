@@ -1,5 +1,6 @@
 module.exports = function (app) {
     require('./model-interceptors/01-index')(app);
+    require('./service-interceptors/01-index')(app);
     require('./configurations/01-index')(app);
     require('./followups/01-index')(app);
     require('./interceptors/01-index')(app);
