@@ -464,23 +464,30 @@ module.exports = function (app) {
             });
         };
 
+
+
         /**
          * @description Subscribe
          * @param userInbox
          * @param $event
          */
         self.subscribe = function (userInbox, $event) {
-            var info = userInbox.getInfo();
-            var userSubscription = new UserSubscription({
-                trigerId: 1,
-                documentVSId: info.vsId,
-                status: true
-            });
+            userSubscriptionService.showEventTypeDialog($event).then(function (eventType) {
+                var info = userInbox.getInfo();
+                var userSubscription = new UserSubscription({
+                    trigerId: eventType,
+                    documentVSId: info.vsId,
+                    status: true,
+                    docClass: info.documentClass,
+                    docSubject: info.title
+                });
 
-            userSubscriptionService.addUserSubscription(userSubscription).then(function (result) {
-                if(result){
-                    toast.success(langService.get('subscribe_success'));
-                }
+                userSubscriptionService.addUserSubscription(userSubscription).then(function (result) {
+                    if(result){
+                        toast.success(langService.get('subscribe_success'));
+                    }
+                });
+
             });
         };
 
