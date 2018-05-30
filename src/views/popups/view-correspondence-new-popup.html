@@ -11,7 +11,9 @@
                                                       work-item="ctrl.workItem"
                                                       correspondence="ctrl.correspondence"></correspondence-view-action-directive>
                 <div flex layout-align="center center" layout="row">
-                    <span>{{::ctrl.correspondence.getTranslatedName()}}</span>
+                    <span flex>{{::ctrl.correspondence.getTranslatedName()}}</span>
+                    <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
+                                          md-diameter="30"></md-progress-circular>
                 </div>
                 <md-button ng-click="ctrl.toggleFullScreen()" class="md-icon-button">
                     <md-icon md-svg-icon="fullscreen"></md-icon>
@@ -29,17 +31,37 @@
         <div layout="row" flex>
             <md-sidenav md-is-locked-open="true" ng-if="true">
                 <div class="p020" layout="column" scroll-directive>
-                    <ul id="document-properties">
-                        <work-item-properties-directive item="ctrl.workItem"></work-item-properties-directive>
-                        <li class="document-properties">
-                            <ul class="correspondence-properties">
-                                <li>
-                                    <span class="property-key">{{lang.document_number}}</span>
-                                    <span class="property-value">{{ctrl.workItem.getReceivedTime()}}</span>
+                    <ul layout="column" flex id="document-properties">
+                        <work-item-properties-directive ng-if="ctrl.workItem"
+                                                        item="ctrl.workItem"></work-item-properties-directive>
+                        <correspondence-item-properties-directive
+                                section-title="general_information"
+                                item="ctrl.correspondence"></correspondence-item-properties-directive>
+                        <li class="document-properties linked document-attachments">
+                            <ul class="work-item-properties">
+                                <li class="section-title">{{lang.get('attachments')}}</li>
+                                <li ng-class="{'selected':ctrl.checkSelected($index , 'attachments')}"
+                                    layout-align="start center" layout="row"
+                                    ng-repeat="attachment in ctrl.correspondence.attachments track by $index">
+                                    <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)">{{attachment.getTranslatedName()}}</a>
+                                    <md-button class="md-icon-button view-icon-button"
+                                               ng-click="ctrl.showAttachment(attachment)">
+                                        <md-icon md-svg-icon="eye"></md-icon>
+                                    </md-button>
                                 </li>
-                                <li>
-                                    <span class="property-key">{{lang.document_number}}</span>
-                                    <span class="property-value">{{ctrl.workItem.getReceivedTime()}}</span>
+                            </ul>
+                        </li>
+                        <li class="document-properties linked linked-documents">
+                            <ul class="work-item-properties">
+                                <li class="section-title">{{lang.get('linked_documents')}}</li>
+                                <li ng-class="{'selected':ctrl.checkSelected($index , 'linkedDocs')}"
+                                    layout-align="start center" layout="row"
+                                    ng-repeat="doc in ctrl.correspondence.linkedDocs track by $index">
+                                    <a flex href="#" ng-click="ctrl.showLinkedDocument(doc , $index ,  $event)">{{doc.getTranslatedName()}}</a>
+                                    <md-button class="md-icon-button view-icon-button"
+                                               ng-click="ctrl.showLinkedDocument(doc)">
+                                        <md-icon md-svg-icon="eye"></md-icon>
+                                    </md-button>
                                 </li>
                             </ul>
                         </li>
@@ -179,7 +201,37 @@
                     </accordion-directive>
                 </div>
             </md-sidenav>
-            <iframe ng-src="{{ctrl.content.viewURL}}" flex frameborder="0"></iframe>
+            <div layout="row" class="relative" flex>
+                <iframe ng-if="ctrl.mainDocument" id="iframe-main-document" ng-src="{{ctrl.content.viewURL}}" flex
+                        frameborder="0"></iframe>
+
+                <div ng-if="!ctrl.mainDocument" class="absolute-back-button">
+                    <md-button tooltip="{{lang.back_to_main_document}}" class="md-icon-button md-raised"
+                               ng-click="ctrl.backToCorrespondence()">
+                        <md-icon md-svg-icon="backup-restore"></md-icon>
+                    </md-button>
+                </div>
+
+                <div ng-if="!ctrl.mainDocument && ctrl.hasMoreThanOne()"
+                     class="absolute-back-button navigate-next">
+                    <md-button ng-disabled="!ctrl.hasNext()" tooltip="{{lang.next}}" class="md-icon-button md-raised"
+                               ng-click="ctrl.nextItemList()">
+                        <md-icon md-svg-icon="chevron-right"></md-icon>
+                    </md-button>
+                </div>
+
+                <div ng-if="!ctrl.mainDocument && ctrl.hasMoreThanOne()"
+                     class="absolute-back-button navigate-prev">
+                    <md-button ng-disabled="!ctrl.hasPrevious()" tooltip="{{lang.previous}}"
+                               class="md-icon-button md-raised"
+                               ng-click="ctrl.prevItemList()">
+                        <md-icon md-svg-icon="chevron-left"></md-icon>
+                    </md-button>
+                </div>
+
+                <iframe ng-if="!ctrl.mainDocument" ng-src="{{ctrl.secondURL}}" flex frameborder="0"></iframe>
+
+            </div>
             <!--class="document-viewer-full-width-height"-->
         </div>
         <div layout="row">

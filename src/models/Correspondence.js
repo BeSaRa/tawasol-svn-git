@@ -7,6 +7,7 @@ module.exports = function (app) {
                                             queueStatusService,
                                             $q,
                                             dialog,
+                                            moment,
                                             LinkedObject,
                                             Attachment,
                                             DocumentComment,
@@ -553,6 +554,14 @@ module.exports = function (app) {
             };
             Correspondence.prototype.isWorkItem = function () {
                 return false;
+            };
+
+            Correspondence.prototype.getFullSerial = function () {
+                return this.docFullSerial;
+            };
+
+            Correspondence.prototype.getDocumentDate = function () {
+                return this.docDate ? moment(this.docDate).format(langService.current === 'ar' ? 'DD-MM-YYYY' : 'YYYY-MM-DD') : '';
             };
 
             // don't remove CMSModelInterceptor from last line

@@ -215,6 +215,7 @@ module.exports = function (app) {
         /**
          * to upload the files
          * @param files
+         * @param element
          */
         self.uploadAttachmentFile = function (files, element) {
             attachmentService

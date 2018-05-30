@@ -190,9 +190,10 @@ module.exports = function (app) {
         self.setSignatureService = function (service) {
             applicationUserSignatureService = service;
         };
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('employeeService', 'init', self);
-        },1000);
+        }, 100);
 
     });
 };

@@ -1,5 +1,11 @@
 module.exports = function (app) {
-    app.factory('Incoming', function (CMSModelInterceptor, Correspondence, Site, Information, Indicator) {
+    app.factory('Incoming', function (CMSModelInterceptor,
+                                      moment,
+                                      langService,
+                                      Correspondence,
+                                      Site,
+                                      Information,
+                                      Indicator) {
         'ngInject';
         return function Incoming(model) {
             var self = this, correspondenceService;
@@ -14,6 +20,7 @@ module.exports = function (app) {
             self.mainSiteId = null;
             self.subSiteId = null;
             self.addMethod = 1;
+            self.refDocDate = null;
             // G2G FROM ABU AL NASSER
             self.g2gMHId = null;
             /*These fields come from common correspondence model. The below fields are not in Incoming model*/
@@ -66,6 +73,9 @@ module.exports = function (app) {
             Incoming.prototype.receiveDocument = function (wobNumber) {
                 correspondenceService = this.getCorrespondenceService();
                 return correspondenceService.receiveIncoming(this, wobNumber);
+            };
+            Incoming.prototype.getIncomingDate = function () {
+                return this.refDocDate ? moment(this.refDocDate).format(langService.current === 'ar' ? 'DD-MM-YYYY' : 'YYYY-MM-DD') : '';
             };
 
             // don't remove CMSModelInterceptor from last line

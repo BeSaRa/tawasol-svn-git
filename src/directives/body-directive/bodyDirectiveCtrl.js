@@ -80,6 +80,6 @@ module.exports = function (app) {
             dialog.hide();
         });
 
-        $scope.bundleVersion = '2.0.1';
+        $scope.bundleVersion = '2.0.2';
     });
 };

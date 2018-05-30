@@ -34,9 +34,8 @@ module.exports = function (app) {
 
         /**
          * convert unix timestamp to Original Date Format (YYYY-MM-DD hh:mm:ss A)
-         * @param db date
-         * @param formatted date
          * @returns {*}
+         * @param updatedOn
          */
         self.getDateFromUnixTimeStamp = function (updatedOn) {
             return moment(updatedOn).format('YYYY-MM-DD hh:mm:ss A');
@@ -53,10 +52,9 @@ module.exports = function (app) {
                 lang = "Ar";
             }
 
-            var exported = lookupService.returnLookups(lookupService.eventType).filter(function (item){
+            return lookupService.returnLookups(lookupService.eventType).filter(function (item) {
                 return item.lookupKey === selected;
-            })[0]['default'+lang+'Name'];
-            return exported;
+            })[0]['default' + lang + 'Name'];
         };
 
     });

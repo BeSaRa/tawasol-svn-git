@@ -1,20 +1,19 @@
 module.exports = function (app) {
-    app.directive('workItemPropertiesDirective', function () {
+    app.directive('correspondenceItemPropertiesDirective', function () {
         'ngInject';
         return {
             restrict: 'E',
             replace: true,
             controller: function ($scope, LangWatcher) {
-                'ngInject';
                 LangWatcher($scope);
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            template: require('./workItem-properties-template.html'),
+            template: require('./correspondence-item-properties-template.html'),
             scope: {
-                item: '=',
-                sectionTitle: '@'
+                sectionTitle: '@',
+                item: '='
             }
         }
-    })
+    });
 };

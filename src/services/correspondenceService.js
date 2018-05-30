@@ -1171,6 +1171,22 @@ module.exports = function (app) {
                     });
                 });
         };
+        /**
+         * get view link for documents.
+         * @param correspondence
+         */
+        self.getLinkedDocumentViewURL = function (correspondence) {
+            var info = correspondence.getInfo();
+            return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
+                .then(function (result) {
+                    var documentClass = result.data.rs.metaData.classDescription;
+                    result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                    return result.data.rs;
+                })
+                .then(function (result) {
+                    return result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                })
+        };
 
         /**
          * @description open group inbox
@@ -1287,7 +1303,7 @@ module.exports = function (app) {
          * @param attachmentVsId
          * @param documentClass
          */
-        self.viewAttachment = function (attachmentVsId, documentClass) {
+        self.viewAttachment = function (attachmentVsId, documentClass, noDialog) {
             var vsId = attachmentVsId instanceof Attachment ? attachmentVsId.vsId : attachmentVsId;
             return $http.get(_createUrlSchema(vsId, documentClass, 'attachment/with-content'))
                 .then(function (result) {
@@ -1296,7 +1312,8 @@ module.exports = function (app) {
                 })
                 .then(function (attachment) {
                     attachment.content.viewURL = $sce.trustAsResourceUrl(attachment.content.viewURL);
-                    return dialog.showDialog({
+
+                    return noDialog ? attachment.content.viewURL : dialog.showDialog({
                         template: cmsTemplate.getPopup('view-document-readonly'),
                         controller: 'viewDocumentReadOnlyPopCtrl',
                         controllerAs: 'ctrl',
@@ -1340,17 +1357,17 @@ module.exports = function (app) {
         };
 
         self.viewCorrespondenceG2G = function (g2gCorrespondence, actions, model, $event) {
-            if(model.toLowerCase()==='g2g') {
+            if (model.toLowerCase() === 'g2g') {
                 // intercept send instance for G2G
                 g2gCorrespondence = g2gCorrespondence instanceof G2G ? generator.interceptSendInstance(model, g2gCorrespondence) : g2gCorrespondence;
                 // get correspondence from G2G object
                 g2gCorrespondence = g2gCorrespondence.hasOwnProperty('correspondence') ? g2gCorrespondence.correspondence : g2gCorrespondence;
             }
-            else if(model.toLowerCase()==='g2gmessaginghistory'){
+            else if (model.toLowerCase() === 'g2gmessaginghistory') {
                 // intercept send instance for G2GMessagingHistory
                 //g2gCorrespondence =  g2gCorrespondence instanceof G2GMessagingHistory ? generator.interceptSendInstance(model, g2gCorrespondence) : g2gCorrespondence;
                 g2gCorrespondence = new G2GMessagingHistory({
-                    incomingDocId : g2gCorrespondence.incomingDocId
+                    incomingDocId: g2gCorrespondence.incomingDocId
                 });
             }
             return $http

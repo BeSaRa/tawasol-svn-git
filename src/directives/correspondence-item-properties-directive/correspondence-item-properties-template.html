@@ -1,0 +1,46 @@
+<li class="document-properties">
+    <ul class="work-item-properties">
+        <li ng-if="ctrl.sectionTitle" class="section-title">{{lang.get(ctrl.sectionTitle)}}</li>
+        <li>
+            <span class="property-key">{{lang.inbox_serial}}</span>
+            <span class="property-value">{{ctrl.item.getFullSerial()}}</span>
+        </li>
+        <li>
+            <span class="property-key">{{lang.security_level}}</span>
+            <span class="property-value">{{ctrl.item.securityLevelInfo.getTranslatedName()}}</span>
+        </li>
+        <!-- incoming -->
+        <li>
+            <span class="property-key">{{lang.incoming_date}}</span>
+            <span class="property-value">{{ctrl.item.getIncomingDate()}}</span>
+        </li>
+        <li>
+            <span class="property-key">{{lang.document_number}}</span>
+            <span class="property-value">{{ctrl.item.refDocNumber}}</span>
+        </li>
+        <li>
+            <span class="property-key">{{lang.document_date}}</span>
+            <span class="property-value">{{ctrl.item.getDocumentDate()}}</span>
+        </li>
+        <li>
+            <span class="property-key">{{lang.priority_level}}</span>
+            <span class="property-value">{{ctrl.item.priorityLevelInfo.getTranslatedName()}}</span>
+        </li>
+        <li>
+            <span class="property-key">{{lang.main_classification}}</span>
+            <span class="property-value">{{ctrl.item.mainClassification.getTranslatedName()}}</span>
+        </li>
+        <li>
+            <span class="property-key">{{lang.classification}}</span>
+            <span class="property-value">{{ctrl.item.subClassification.getTranslatedName()}}</span>
+        </li>
+        <li>
+            <span class="property-key">{{lang.administration_topic}}</span>
+            <span class="property-value">{{ctrl.item.subClassification.getTranslatedName()}}</span>
+        </li>
+        <li>
+            <span class="property-key">{{lang.administration}}</span>
+            <span class="property-value">{{ctrl.item.subClassification.getTranslatedName()}}</span>
+        </li>
+    </ul>
+</li>

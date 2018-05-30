@@ -1707,18 +1707,26 @@ tr.unread-row {
 #document-properties {
   padding: 0;
   margin: 0;
-  float: right;
-  width: 100%;
+  //float: right;
+  //width: 100%;
   .document-properties {
-    width: 100%;
-    float: right;
+    //width: 100%;
+    //float: right;
     font-size: 12px;
-    background-color: #EEE;
+    //background-color: #EEE;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
     margin-bottom: 10px;
     padding: 8px;
+    border: 1px solid #EEE;
+    &.linked {
+      padding: 0;
+      & > ul > li {
+        padding: 8px;
+        margin: 0;
+      }
+    }
     & > ul {
       padding: 0;
       margin: 0;
@@ -1728,12 +1736,20 @@ tr.unread-row {
         border-bottom: 1px solid #EEE;
         &:last-child {
           margin-bottom: 0;
+          border-bottom: none;
+        }
+        &.selected {
+          background-color: #EEE;
+          a {
+            color: black;
+          }
         }
       }
     }
   }
   .property-value {
     padding-left: 7px;
+    font-weight: bold;
   }
   .property-key:after {
     position: absolute;
@@ -1742,6 +1758,36 @@ tr.unread-row {
   }
   .property-key.property-block {
     display: block;
+  }
+}
+
+.absolute-back-button {
+  position: absolute;
+  z-index: 3;
+  bottom: 0;
+  left: 50%;
+  &.navigate-next {
+    right: 0;
+    left: auto;
+    top: 50%;
+  }
+  &.navigate-prev {
+    right: auto;
+    left: 0;
+    top: 50%;
+  }
+}
+
+.view-icon-button {
+  min-height: auto !important;
+  min-width: auto !important;
+  width: 24px !important;
+  height: 24px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  md-icon {
+    padding: 0;
+    margin: 0;
   }
 }
 

@@ -891,9 +891,11 @@ module.exports = function (app) {
                 })
         };
         // new view document
-        self.openNewViewDocument = function () {
-            if (self.userInboxes.length)
-                self.userInboxes[0].viewNewInboxWorkItem(self.actions, true, true)
+        self.openNewViewDocument = function (workItem) {
+            if (!workItem)
+                self.userInboxes[0].viewNewInboxWorkItem(self.actions, true, true);
+            else
+                workItem.viewNewInboxWorkItem(self.actions, true, true);
         };
 
         /**

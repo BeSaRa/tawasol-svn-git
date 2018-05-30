@@ -5,6 +5,8 @@ module.exports = function (app) {
                                                           toast,
                                                           langService,
                                                           $timeout,
+                                                          loadingIndicatorService,
+                                                          correspondenceService,
                                                           popupNumber,
                                                           employeeService,
                                                           generator) {
@@ -15,10 +17,16 @@ module.exports = function (app) {
         self.validation = false;
         self.detailsReady = false;
         self.employeeService = employeeService;
+        self.mainDocument = true;
+        self.secondURL = null;
+        self.loadingIndicatorService = loadingIndicatorService;
         $timeout(function () {
             self.detailsReady = true;
             self.model = angular.copy(self.correspondence);
         }, 100);
+
+        self.selectedList = null;
+        self.listIndex = null;
 
         //var mainInfo = self.correspondence.getInfo();
         //self.sideNavId = "correspondence-details_" + mainInfo.vsId;
@@ -90,6 +98,74 @@ module.exports = function (app) {
             return false;
         };
 
+        self.backToCorrespondence = function ($event) {
+            self.mainDocument = true;
+            self.secondURL = null;
+        };
+
+        function _changeSecondURL(url, listName, index) {
+            self.secondURL = url;
+            self.mainDocument = false;
+            self.selectedList = listName;
+            self.listIndex = index;
+        }
+
+        self.showAttachment = function (attachment, $index, $event) {
+            $event && $event.preventDefault();
+            self.listIndex = $index;
+            correspondenceService
+                .viewAttachment(attachment, self.correspondence.classDescription, true)
+                .then(function (result) {
+                    _changeSecondURL(result, 'attachments', $index);
+                });
+        };
+
+        self.showLinkedDocument = function (linkedDoc, $index, $event) {
+            $event && $event.preventDefault();
+            self.listIndex = $index;
+            correspondenceService
+                .getLinkedDocumentViewURL(linkedDoc)
+                .then(function (result) {
+                    _changeSecondURL(result, 'linkedDocs', $index);
+                })
+
+        };
+
+        self.checkSelected = function (index, selectedList) {
+            return index === self.listIndex && selectedList === self.selectedList;
+        };
+
+        self.loadListItem = function (item, index) {
+            if (item.hasOwnProperty('attachmentType')) {
+                self.showAttachment(item, index);
+            } else {
+                self.showLinkedDocument(item, index);
+            }
+        };
+
+        self.nextItemList = function () {
+            var index = (self.listIndex + 1);
+            self.loadListItem(self.correspondence[self.selectedList][index], index);
+        };
+
+        self.prevItemList = function () {
+            var index = (self.listIndex - 1);
+            self.loadListItem(self.correspondence[self.selectedList][index], index);
+        };
+
+        self.hasMoreThanOne = function () {
+            return self.selectedList && self.correspondence[self.selectedList].length > 1;
+        };
+
+        self.hasNext = function () {
+            console.log('NEXT', self.hasMoreThanOne() && self.listIndex !== (self.correspondence[self.selectedList].length - 1));
+            return self.hasMoreThanOne() && self.listIndex !== (self.correspondence[self.selectedList].length - 1)
+        };
+
+        self.hasPrevious = function () {
+            console.log('PREV', self.hasMoreThanOne() && self.listIndex !== 0);
+            return self.hasMoreThanOne() && self.listIndex !== 0;
+        }
 
     });
 };

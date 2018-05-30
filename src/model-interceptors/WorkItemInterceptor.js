@@ -22,6 +22,7 @@ module.exports = function (app) {
         var modelName = 'WorkItem';
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
+            // model.download();
             model
                 .setCorrespondenceService(correspondenceService)
                 .setManagerService(managerService)
@@ -155,5 +156,5 @@ module.exports = function (app) {
             return model;
         };
 
-    })
+    });
 };
