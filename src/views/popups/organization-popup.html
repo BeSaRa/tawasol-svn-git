@@ -30,7 +30,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
                                 <div ng-if="ctrl.editMode && !ctrl.rootMode" layout="row">
                                     <md-input-container tooltip="{{ctrl.parentOrganization.getTranslatedName(true)}}"
                                                         flex>
@@ -47,7 +47,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>
@@ -77,7 +77,7 @@
                                             <div ng-message="ENS">{{lang.english_number_space}}</div>
                                         </div>
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="description">{{lang.description}}</label>
@@ -90,7 +90,7 @@
                                             <div ng-message="AEN">{{lang.arabic_english_number}}</div>
                                         </div>
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="code">{{lang.code}}</label>
@@ -123,7 +123,7 @@
                                             <md-icon md-svg-icon="plus"></md-icon>
                                         </md-button>
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
                                 <div layout="column">
                                     <div class="user-selector" layout="row" layout-align="start center">
                                         <md-icon md-svg-icon="account-star"></md-icon>
@@ -176,7 +176,7 @@
                                             <md-icon md-svg-icon="plus"></md-icon>
                                         </md-button>
                                     </div>
-                                </div><!-- row -->
+                                </div>
                                 <div layout="row" layout-align="start center">
                                     <md-switch ng-disabled="ctrl.rootMode || ctrl.organization.id"
                                                ng-change="ctrl.hasRegistryChange(ctrl.organization.hasRegistry)"
@@ -219,7 +219,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
                                 <div layout="row" layout-align="start center">
                                     <md-switch ng-change="ctrl.centralArchiveChange(ctrl.organization.centralArchive)"
                                                ng-model="ctrl.organization.centralArchive">
@@ -244,7 +244,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
                                 <div layout="row">
                                     <md-switch flex ng-model="ctrl.organization.status">
                                         {{lang.status}} : {{ctrl.organization.getTranslatedStatus()}}
@@ -285,7 +285,7 @@
                                             <md-icon md-svg-icon="plus"></md-icon>
                                         </md-button>
                                     </md-input-container>-->
-                                </div><!-- row -->
+                                </div>
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="email">{{lang.email}}</label>
@@ -308,7 +308,16 @@
                                             </div>
                                         </div>
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="cmsRefId">{{lang.old_cms_reference}}</label>
+                                        <input id="cmsRefId" name="cmsRefId" ng-model="ctrl.organization.cmsRefId">
+                                        <div ng-messages="org_form.cmsRefId.$error">
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container></md-input-container>
+                                </div>
 
                             </div><!-- column container -->
                         </md-content>
