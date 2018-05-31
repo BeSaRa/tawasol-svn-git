@@ -1418,7 +1418,7 @@ module.exports = function (app) {
             })
             .state('app.g2g.inbox', {
                 url: '/inbox',
-                template: cmsTemplateProvider.getView('g2g-inbox'),
+                template: cmsTemplateProvider.getView('g2g-incoming'),
                 controller: 'g2gInboxCtrl',
                 controllerAs: 'ctrl',
                 resolve: {

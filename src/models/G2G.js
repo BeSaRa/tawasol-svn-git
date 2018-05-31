@@ -86,7 +86,9 @@ module.exports = function (app) {
             };
 
             G2G.prototype.getTranslatedType = function () {
-                return (this.correspondence.type !== null) ? (this.correspondence.type === 0 ? langService.get('original') : langService.get('copy')) : null;
+                return (typeof this.correspondence.type !== 'undefined' && this.correspondence.type !== null) ?
+                    (this.correspondence.type === 0 ? langService.get('original') : langService.get('copy'))
+                    : null;
             };
 
 
