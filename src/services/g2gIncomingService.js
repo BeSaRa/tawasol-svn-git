@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.service('g2gInboxService', function (urlService,
+    app.service('g2gIncomingService', function (urlService,
                                              $http,
                                              $q,
                                              generator,
@@ -11,7 +11,7 @@ module.exports = function (app) {
                                              cmsTemplate,
                                              $sce) {
         var self = this;
-        self.serviceName = 'g2gInboxService';
+        self.serviceName = 'g2gIncomingService';
 
         self.g2gItems = [];
 

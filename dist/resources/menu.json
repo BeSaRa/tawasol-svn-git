@@ -857,7 +857,7 @@
     "icon": "inbox-multiple",
     "parent": 85,
     "link": "inbox",
-    "state": "app.g2g.inbox",
+    "state": "app.g2g.incoming",
     "icon_type": "font",
     "sort_order": 6,
     "active": true,

@@ -1416,14 +1416,14 @@ module.exports = function (app) {
                     }
                 }
             })
-            .state('app.g2g.inbox', {
-                url: '/inbox',
+            .state('app.g2g.incoming', {
+                url: '/incoming',
                 template: cmsTemplateProvider.getView('g2g-incoming'),
-                controller: 'g2gInboxCtrl',
+                controller: 'g2gIncomingCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
-                    g2gItems: function (g2gInboxService) {
-                        return g2gInboxService.loadG2gItems();
+                    g2gItems: function (g2gIncomingService) {
+                        return g2gIncomingService.loadG2gItems();
                     }
                 }
             })

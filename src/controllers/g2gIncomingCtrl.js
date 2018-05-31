@@ -1,6 +1,6 @@
 module.exports = function (app) {
-    app.controller('g2gInboxCtrl', function (lookupService,
-                                             g2gInboxService,
+    app.controller('g2gIncomingCtrl', function (lookupService,
+                                             g2gIncomingService,
                                              g2gItems,
                                              $q,
                                              langService,
@@ -13,7 +13,7 @@ module.exports = function (app) {
                                              ResolveDefer) {
         var self = this;
 
-        self.controllerName = 'g2gInboxCtrl';
+        self.controllerName = 'g2gIncomingCtrl';
 
         self.progress = null;
 
@@ -65,7 +65,7 @@ module.exports = function (app) {
         self.reloadG2gItems = function (pageNumber) {
             var defer = $q.defer();
             self.progress = defer.promise;
-            return g2gInboxService
+            return g2gIncomingService
                 .loadG2gItems()
                 .then(function (result) {
                     self.g2gItems = result;
@@ -129,7 +129,7 @@ module.exports = function (app) {
         self.receiveDocument = function (g2gItem, $event, defer) {
             var info = g2gItem.getInfo();
             dialog.hide();
-            /*return g2gInboxService.receiveG2G(g2gItem)
+            /*return g2gIncomingService.receiveG2G(g2gItem)
                 .then(function (result) {
                     new ResolveDefer(defer);
                     self.reloadG2gItems(self.grid.page)
@@ -147,7 +147,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.returnDocument = function (g2gItem, $event, defer) {
-            return g2gInboxService.returnG2G(g2gItem)
+            return g2gIncomingService.returnG2G(g2gItem)
                 .then(function (result) {
                     new ResolveDefer(defer);
                     self.reloadG2gItems(self.grid.page)

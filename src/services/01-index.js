@@ -101,7 +101,7 @@ module.exports = function (app) {
     require('./correspondenceStorageService')(app);
     require('./rankService')(app);
     require('./userFilterService')(app);
-    require('./g2gInboxService')(app);
+    require('./g2gIncomingService')(app);
     require('./g2gReturnedService')(app);
     require('./g2gSentItemsService')(app);
     require('./viewDeliveryReportService')(app);
