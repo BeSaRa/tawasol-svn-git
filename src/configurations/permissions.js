@@ -101,10 +101,10 @@ module.exports = function (app) {
             .end()
             .addMenuPermissionGroup('menu_item_icn_archive')
             .addMenuPermission('menu_item_icn_archive_add', function () {
-                return true;
+                return false;
             })
             .addMenuPermission('menu_item_icn_archive_search', function () {
-                return true;
+                return false;
             })
 
 
