@@ -51,22 +51,6 @@ module.exports = function (app) {
 
             model.docClassIndicator = model.getDocClassIndicator();
 
-
-
-
-            model.documentComments = _.map(model.linkedCommentsList, function (item) {
-                return generator.interceptReceivedInstance('DocumentComment', new DocumentComment(item));
-            });
-            model.attachments = _.map([].concat(model.linkedAttachmentList || [], model.linkedAttachmenstList || [], model.linkedExportedDocsList || []), function (item) {
-                return generator.interceptReceivedInstance('Attachment', new Attachment(item))
-            });
-            model.linkedDocs = correspondenceService.interceptReceivedCollectionBasedOnEachDocumentClass(model.linkedDocList);
-            model.linkedEntities = _.map(model.linkedEntitiesList, function (item) {
-                item.documentClass = documentClass;
-                return generator.interceptReceivedInstance('LinkedObject', new LinkedObject(item));
-            });
-
-
             return model;
         });
 

@@ -243,18 +243,27 @@ module.exports = function (app) {
                 receive: function (correspondenceService, $stateParams, $timeout) {
                     'ngInject';
                     var action = $stateParams.action, workItem = $stateParams.workItem;
-                    if (action !== 'receive')
+                    if (action === 'receive') {
+                        return correspondenceService.prepareReceiveIncoming(workItem)
+                            .catch(function (error) {
+                                return $timeout(function () {
+                                    return false;
+                                });
+                            });
+                    }
+                    else if (action === 'receiveg2g') {
+                        return correspondenceService.prepareReceiveIncomingByVsId(workItem)
+                            .catch(function (error) {
+                                return $timeout(function () {
+                                    return false;
+                                });
+                            });
+                    }
+                    else {
                         return $timeout(function () {
                             return false;
                         });
-
-                    return correspondenceService.prepareReceiveIncoming(workItem)
-                        .catch(function (error) {
-                            return $timeout(function () {
-                                return false;
-                            });
-                        });
-
+                    }
                 },
                 centralArchives: function ($q, organizations, employeeService, organizationService) {
                     'ngInject';

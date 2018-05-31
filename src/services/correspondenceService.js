@@ -49,7 +49,7 @@ module.exports = function (app) {
                                                    GeneralSearch,
                                                    G2G,
                                                    G2GMessagingHistory,
-                                                   Information) {
+                                                   DocumentComment) {
         'ngInject';
         var self = this;
         self.serviceName = 'correspondenceService';
@@ -1375,9 +1375,25 @@ module.exports = function (app) {
             return $http
                 .put(urlService.g2gInbox + 'open', g2gItem)
                 .then(function (result) {
-                    result.data.rs.metaData.site = site;
-                    result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence'], generator.generateInstance(result.data.rs.metaData, Incoming));
-                    return result.data.rs;
+                    var metaData = result.data.rs.metaData;
+                    metaData.site = site;
+                    metaData = generator.interceptReceivedInstance(['Correspondence'], generator.generateInstance(metaData, Incoming));
+
+                    metaData.documentComments = _.map(metaData.linkedCommentsList, function (item) {
+                        return generator.interceptReceivedInstance('DocumentComment', new DocumentComment(item));
+                    });
+
+                    metaData.attachments = _.map([].concat(metaData.linkedAttachmentList || [], metaData.linkedAttachmenstList || [], metaData.linkedExportedDocsList || []), function (item) {
+                        return generator.interceptReceivedInstance('Attachment', new Attachment(item))
+                    });
+                    metaData.linkedDocs = self.interceptReceivedCollectionBasedOnEachDocumentClass(metaData.linkedDocList);
+                    metaData.linkedEntities = _.map(metaData.linkedEntitiesList, function (item) {
+                        item.documentClass = documentClass;
+                        return generator.interceptReceivedInstance('LinkedObject', new LinkedObject(item));
+                    });
+
+                    result.data.rs.metaData = metaData;
+                    return  result.data.rs;
                 })
                 .then(function (result) {
                     result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
@@ -1440,6 +1456,18 @@ module.exports = function (app) {
                     return result;
                 });
         };
+
+        self.prepareReceiveIncomingByVsId = function(vsId){
+            /*return $http
+                .put((urlService.departmentWF + '/' + vsId + '/prepare/receive'))
+                .then(function (result) {
+                    result = result.data.rs;
+                    result.metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming', 'ViewIncoming'], new Incoming(result.metaData));
+                    return result;
+                });*/
+        };
+
+
         /**
          * @description receive incoming document
          * @param correspondence

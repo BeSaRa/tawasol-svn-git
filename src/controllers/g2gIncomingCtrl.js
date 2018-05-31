@@ -1,16 +1,17 @@
 module.exports = function (app) {
     app.controller('g2gIncomingCtrl', function (lookupService,
-                                             g2gIncomingService,
-                                             g2gItems,
-                                             $q,
-                                             langService,
-                                             toast,
-                                             dialog,
-                                             employeeService,
-                                             generator,
-                                             correspondenceService,
-                                             mailNotificationService,
-                                             ResolveDefer) {
+                                                g2gIncomingService,
+                                                g2gItems,
+                                                $q,
+                                                langService,
+                                                toast,
+                                                dialog,
+                                                employeeService,
+                                                generator,
+                                                correspondenceService,
+                                                mailNotificationService,
+                                                ResolveDefer,
+                                                $state) {
         var self = this;
 
         self.controllerName = 'g2gIncomingCtrl';
@@ -110,13 +111,13 @@ module.exports = function (app) {
                     }
                     //self.reloadG2gItems(self.grid.page);
                 })
-                .catch(function (error) {
-                    if (!g2gItem.getInfo().vsId) {
-                        g2gItem.correspondence.vsId = error.metaData.vsId;
-                        self.replaceRecord(g2gItem);
-                    }
-                    //self.reloadG2gItems(self.grid.page);
-                })
+            /*.catch(function (error) {
+                if (!g2gItem.getInfo().vsId) {
+                    g2gItem.correspondence.vsId = error.metaData.vsId;
+                    self.replaceRecord(g2gItem);
+                }
+                //self.reloadG2gItems(self.grid.page);
+            })*/
         };
 
         /**
@@ -129,6 +130,7 @@ module.exports = function (app) {
         self.receiveDocument = function (g2gItem, $event, defer) {
             var info = g2gItem.getInfo();
             dialog.hide();
+            $state.go('app.incoming.add', {action: 'receiveg2g', vsId: info.vsId});
             /*return g2gIncomingService.receiveG2G(g2gItem)
                 .then(function (result) {
                     new ResolveDefer(defer);
