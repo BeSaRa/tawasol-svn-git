@@ -8,7 +8,9 @@ module.exports = function (app) {
                                              dialog,
                                              employeeService,
                                              generator,
-                                             correspondenceService) {
+                                             correspondenceService,
+                                             mailNotificationService,
+                                             ResolveDefer) {
         var self = this;
 
         self.controllerName = 'g2gInboxCtrl';
@@ -76,6 +78,20 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Replaces the record in grid after update
+         * @param record
+         */
+        self.replaceRecord = function (record) {
+            var index = _.findIndex(self.g2gItems, function (g2gItem) {
+                return g2gItem.correspondence.g2gVSID === record.correspondence.g2gVSID;
+            });
+            if (index > -1)
+                self.g2gItems.splice(index, 1, record);
+
+            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+        };
+
+        /**
          * @description View document
          * @param g2gItem
          * @param $event
@@ -88,10 +104,18 @@ module.exports = function (app) {
 
             return correspondenceService.viewCorrespondenceG2G(g2gItem, self.gridActions, 'G2G', $event)
                 .then(function (result) {
-                    self.reloadG2gItems(self.grid.page);
+                    if (!g2gItem.getInfo().vsId) {
+                        g2gItem.correspondence.vsId = result.metaData.vsId;
+                        self.replaceRecord(g2gItem);
+                    }
+                    //self.reloadG2gItems(self.grid.page);
                 })
-                .catch(function(error){
-                    self.reloadG2gItems(self.grid.page);
+                .catch(function (error) {
+                    if (!g2gItem.getInfo().vsId) {
+                        g2gItem.correspondence.vsId = error.metaData.vsId;
+                        self.replaceRecord(g2gItem);
+                    }
+                    //self.reloadG2gItems(self.grid.page);
                 })
         };
 
@@ -99,27 +123,33 @@ module.exports = function (app) {
          * @description Receive Document
          * @param g2gItem
          * @param $event
+         * @param defer
          * @returns {*}
          */
-        self.receiveDocument = function (g2gItem, $event) {
-            return g2gInboxService.receiveG2G(g2gItem)
+        self.receiveDocument = function (g2gItem, $event, defer) {
+            var info = g2gItem.getInfo();
+            dialog.hide();
+            /*return g2gInboxService.receiveG2G(g2gItem)
                 .then(function (result) {
+                    new ResolveDefer(defer);
                     self.reloadG2gItems(self.grid.page)
                         .then(function () {
                             toast.success(langService.get('receive_specific_success').change({name: g2gItem.correspondence.docSubject}));
                         })
-                })
+                })*/
         };
 
         /**
          * @description Return document
          * @param g2gItem
          * @param $event
+         * @param defer
          * @returns {*}
          */
-        self.returnDocument = function (g2gItem, $event) {
+        self.returnDocument = function (g2gItem, $event, defer) {
             return g2gInboxService.returnG2G(g2gItem)
                 .then(function (result) {
+                    new ResolveDefer(defer);
                     self.reloadG2gItems(self.grid.page)
                         .then(function () {
                             toast.success(langService.get("return_specific_success").change({name: g2gItem.correspondence.docSubject}));
@@ -159,21 +189,21 @@ module.exports = function (app) {
         self.checkToShowAction = function (action, model, popupActionOnly) {
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
-                    if(popupActionOnly)
+                    if (popupActionOnly)
                         return (!action.hide && action.showInViewOnly) && employeeService.hasPermissionTo(action.permissionKey);
                     return (!action.hide && !action.showInViewOnly) && employeeService.hasPermissionTo(action.permissionKey);
                 }
                 else if (angular.isArray(action.permissionKey)) {
                     if (!action.permissionKey.length) {
-                        if(popupActionOnly)
-                            return (!action.hide && action.showInViewOnly)
+                        if (popupActionOnly)
+                            return (!action.hide && action.showInViewOnly);
                         return (!action.hide && !action.showInViewOnly);
                     }
                     else {
                         var hasPermissions = _.map(action.permissionKey, function (key) {
                             return employeeService.hasPermissionTo(key);
                         });
-                        if(popupActionOnly)
+                        if (popupActionOnly)
                             return (!action.hide && action.showInViewOnly) && !(_.some(hasPermissions, function (isPermission) {
                                 return isPermission !== true;
                             }));
@@ -184,7 +214,7 @@ module.exports = function (app) {
                     }
                 }
             }
-            if(popupActionOnly)
+            if (popupActionOnly)
                 return (!action.hide) && (action.showInViewOnly);
             return (!action.hide && !action.showInViewOnly);
         };

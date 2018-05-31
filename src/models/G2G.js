@@ -106,7 +106,7 @@ module.exports = function (app) {
              * @return {{documentClass: *, vsId: *}}
              */
             G2G.prototype.getInfo = function () {
-                return this.correspondence.recordInfo;
+                return this.recordInfo;
             };
 
             var indicator = new Indicator();

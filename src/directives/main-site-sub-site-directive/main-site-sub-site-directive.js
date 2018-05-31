@@ -9,7 +9,8 @@ module.exports = function (app) {
             bindToController: true,
             replace: true,
             scope: {
-                item: '='
+                item: '=',
+                type: '@?'
             }
         }
     });

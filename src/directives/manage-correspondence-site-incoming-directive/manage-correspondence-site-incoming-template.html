@@ -22,7 +22,6 @@
         </md-input-container>
     </div>
 
-
     <!-- Advanced Search-->
     <div layout="row" flex ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
         <md-input-container flex>
@@ -51,6 +50,7 @@
             <input id="subSearch" ng-model="ctrl.subSearch" ng-enter="ctrl.onSubSearch()" ng-change="ctrl.onSubSearch($event)">
         </md-input-container>
     </div>
+
     <!-- Search Result-->
     <div flex layout="column">
         <md-card ng-if="ctrl.subSearchResult.length" md-whiteframe="3" layout="column" class="card-overlay">

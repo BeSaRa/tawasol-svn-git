@@ -86,4 +86,5 @@ module.exports = function (app) {
     require('./user-subscription-directive/01-index')(app);
     require('./workItem-properties-directive/01-index')(app);
     require('./correspondence-item-properties-directive/01-index')(app);
+    require('./manage-correspondence-site-g2g-directive/01-index')(app);
 };

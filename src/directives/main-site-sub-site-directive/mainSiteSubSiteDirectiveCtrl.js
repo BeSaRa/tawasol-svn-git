@@ -9,11 +9,28 @@ module.exports = function (app) {
         self.controllerName = 'mainSiteSubSiteDirectiveCtrl';
 
         self.viewCorrespondenceSites = function ($event) {
+
             var info = self.item.getInfo();
             var defer = $q.defer();
+            if(self.type === 'g2g'){
+                return dialog.showDialog({
+                    template: cmsTemplate.getPopup('manage-grid-correspondence-sites'),
+                    controller: 'manageGridCorrespondenceSitesPopCtrl',
+                    targetEvent: $event || false,
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    escapeToClose: false,
+                    locals: {
+                        documentSubject: info.title,
+                        type: self.type.toLowerCase(),
+                        correspondence: self.item.correspondence,
+                        sites: []
+                    }
+                });
+            }
             return dialog.showDialog({
                 template: cmsTemplate.getPopup('manage-grid-correspondence-sites'),
-                controller: 'manageDocumentCorrespondencePopCtrl',
+                controller: 'manageGridCorrespondenceSitesPopCtrl',
                 targetEvent: $event || false,
                 controllerAs: 'ctrl',
                 bindToController: true,

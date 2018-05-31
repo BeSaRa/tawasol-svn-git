@@ -82,16 +82,15 @@
                                             <a href="" class="view-doc" md-truncate
                                                title="{{g2gItem.correspondence.docSubject}}"
                                                ng-click="ctrl.viewDocument(g2gItem, $event)">{{g2gItem.correspondence.docSubject}}</a>
-                                            <!--<span ng-if="!g2gItem.hasContent()"
-                                                  title="{{g2gItem.correspondence.docSubject}}">{{g2gItem.correspondence.docSubject}}</span>-->
                                         </td>
                                         <td md-cell>{{g2gItem.getTranslatedType()}}</td>
                                         <td md-cell>{{g2gItem.securityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{g2gItem.correspondence.refDocNumber}}</td>
                                         <td md-cell>{{g2gItem.correspondence.g2gRefNO}}</td>
-                                        <td md-cell>{{g2gItem.correspondence.lastModified}}</td>
+                                        <td md-cell>{{g2gItem.correspondence.lastModifiedString}}</td>
                                         <td md-cell>
-                                            <main-site-sub-site-directive item="g2gItem"></main-site-sub-site-directive>
+                                            <main-site-sub-site-directive item="g2gItem"
+                                                                          type="g2g"></main-site-sub-site-directive>
                                         </td>
                                         <td md-cell class="p-r0"
                                             ng-if="ctrl.selectedG2gItems.length < 2">

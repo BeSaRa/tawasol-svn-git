@@ -89,4 +89,5 @@ module.exports = function (app) {
     require('./PartialExportInterceptor')(app);
     require('./PartialExportCollectionInterceptor')(app);
     require('./PartialExportSelectiveInterceptor')(app);
+    require('./IncomingG2GInterceptor')(app);
 };

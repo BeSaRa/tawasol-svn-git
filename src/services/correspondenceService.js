@@ -48,7 +48,8 @@ module.exports = function (app) {
                                                    InternalSearch,
                                                    GeneralSearch,
                                                    G2G,
-                                                   G2GMessagingHistory) {
+                                                   G2GMessagingHistory,
+                                                   Information) {
         'ngInject';
         var self = this;
         self.serviceName = 'correspondenceService';
@@ -1356,25 +1357,26 @@ module.exports = function (app) {
                 });
         };
 
-        self.viewCorrespondenceG2G = function (g2gCorrespondence, actions, model, $event) {
+        self.viewCorrespondenceG2G = function (g2gItem, actions, model, $event) {
+            var site = null;
             if (model.toLowerCase() === 'g2g') {
+                site = angular.copy(g2gItem.correspondence.site);
                 // intercept send instance for G2G
-                g2gCorrespondence = g2gCorrespondence instanceof G2G ? generator.interceptSendInstance(model, g2gCorrespondence) : g2gCorrespondence;
+                g2gItem = g2gItem instanceof G2G ? generator.interceptSendInstance(model, g2gItem) : g2gItem;
                 // get correspondence from G2G object
-                g2gCorrespondence = g2gCorrespondence.hasOwnProperty('correspondence') ? g2gCorrespondence.correspondence : g2gCorrespondence;
+                g2gItem = g2gItem.hasOwnProperty('correspondence') ? g2gItem.correspondence : g2gItem;
+
             }
             else if (model.toLowerCase() === 'g2gmessaginghistory') {
-                // intercept send instance for G2GMessagingHistory
-                //g2gCorrespondence =  g2gCorrespondence instanceof G2GMessagingHistory ? generator.interceptSendInstance(model, g2gCorrespondence) : g2gCorrespondence;
-                g2gCorrespondence = new G2GMessagingHistory({
-                    incomingDocId: g2gCorrespondence.incomingDocId
+                g2gItem = new G2GMessagingHistory({
+                    incomingDocId: g2gItem.incomingDocId
                 });
             }
             return $http
-                .put(urlService.g2gInbox + 'open', g2gCorrespondence)
+                .put(urlService.g2gInbox + 'open', g2gItem)
                 .then(function (result) {
-                    var documentClass = result.data.rs.metaData.classDescription;
-                    result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                    result.data.rs.metaData.site = site;
+                    result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence'], generator.generateInstance(result.data.rs.metaData, Incoming));
                     return result.data.rs;
                 })
                 .then(function (result) {
@@ -1391,7 +1393,10 @@ module.exports = function (app) {
                             content: result.content,
                             actions: actions,
                             workItem: false,
-                            popupNumber: self.popupNumber
+                            popupNumber: self.popupNumber,
+                            disableEverything: true,
+                            disableProperties: true,
+                            disableCorrespondence: true,
                         }
                     }).then(function () {
                         self.popupNumber -= 1;

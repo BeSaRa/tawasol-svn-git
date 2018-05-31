@@ -1408,7 +1408,13 @@ module.exports = function (app) {
             .state('app.g2g', {
                 abstract: true,
                 url: '/g2g',
-                template: '<div id="sub-view-wrapper"><ui-view flex layout="column" class="sub-view" /></div>'
+                template: '<div id="sub-view-wrapper"><ui-view flex layout="column" class="sub-view" /></div>',
+                resolve: {
+                    lookups: function (correspondenceService) {
+                        'ngInject';
+                        return correspondenceService.getCorrespondenceLookups('common');
+                    }
+                }
             })
             .state('app.g2g.inbox', {
                 url: '/inbox',

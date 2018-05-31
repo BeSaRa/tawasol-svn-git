@@ -6,7 +6,7 @@
         </md-toolbar>
         <md-content scroll-directive>
             <manage-correspondence-sites-directive
-                    ng-if="ctrl.documentClass.toLowerCase()==='outgoing'"
+                    ng-if="ctrl.documentClass.toLowerCase()==='outgoing' && ctrl.type!== 'g2g'"
                     vs-id="ctrl.correspondence.vsId"
                     document-class="ctrl.correspondence.docClassName"
                     sites-info-c-c="ctrl.correspondence.sitesInfoCC"
@@ -14,12 +14,20 @@
                     disable-correspondence="true">
             </manage-correspondence-sites-directive>
             <manage-correspondence-site-incoming-directive
-                    ng-if="ctrl.documentClass.toLowerCase()==='incoming'"
+                    ng-if="ctrl.documentClass.toLowerCase()==='incoming' && ctrl.type!== 'g2g'"
                     vs-id="ctrl.correspondence.vsId"
                     document-class="ctrl.correspondence.docClassName"
                     site="ctrl.correspondence.site"
                     disable-correspondence="true">
             </manage-correspondence-site-incoming-directive>
+            <manage-correspondence-site-g2g-directive
+                    ng-if="ctrl.type === 'g2g'"
+                    vs-id="ctrl.correspondence.vsId"
+                    document-class="ctrl.correspondence.docClassName"
+                    site="ctrl.correspondence.site"
+                    disable-correspondence="true">
+            </manage-correspondence-site-g2g-directive>
+
         </md-content>
         <div>
             <span flex></span>
