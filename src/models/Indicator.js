@@ -303,6 +303,20 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Returns the type(Original/Copy) indicator and description
+             * @returns {Indicator}
+             * @param originalOrCopy
+             */
+            Indicator.prototype.getOriginalCopyIndicator = function (originalOrCopy) {
+                return originalOrCopy !== 0 ? new Indicator({
+                    class: 'indicator',
+                    text: 'indicator_copy',
+                    icon: self.getIndicatorIcons('copy'),
+                    tooltip: 'indicator_copy'
+                }) : false;
+            };
+
+            /**
              * @description Returns the is locked g2g record indicator and description
              * @returns {Indicator}
              * @param isLockedG2G
