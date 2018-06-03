@@ -507,7 +507,7 @@
                     <!-- Sub Site -->
                     <md-input-container flex>
                         <label for="subSearch">{{lang.sites_select_sub_site}}</label>
-                        <input id="subSearch" ng-model="ctrl.subSearch" ng-change="ctrl.onSubSearch($event)">
+                        <input id="subSearch" ng-model="ctrl.subSearch" ng-enter="ctrl.onSubSearch($event)" ng-change="ctrl.onSubSearch($event)">
                     </md-input-container>
                 </div>
 

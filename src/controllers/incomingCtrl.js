@@ -318,23 +318,12 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: "PRINT_BARCODE",
                 checkShow: function (action, model, index) {
-                    isVisible = self.checkToShowAction(action, model); //Incoming is always a paper
-                    self.setAvailability(index, isVisible);
+                    isVisible = self.checkToShowAction(action, model); //Incoming is always a paper, so no need to check paper/electronic
+                    self.setDropdownAvailability(index, isVisible);
                     return isVisible;
-                    //return self.checkToShowAction(action, model);
                 }
 
             },
-            /* // Create Content
-             {
-                 text: langService.get('content_action_create_content'),
-                 callback: self.docActionCreateContent,
-                 class: "action-red",
-                 checkShow: function (action, model, index) {
-                     //Show if meta-data only
-                     return self.checkToShowAction(action, model) && !self.incoming.contentFile;
-                 }
-             },*/
             // Launch Distribution Workflow
             {
                 text: langService.get('content_action_launch_distribution_workflow'),
@@ -344,9 +333,8 @@ module.exports = function (app) {
                 checkShow: function (action, model, index) {
                     //Show if content is uploaded
                     isVisible = self.checkToShowAction(action, model) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
-                    self.setAvailability(index, isVisible);
+                    self.setDropdownAvailability(index, isVisible);
                     return isVisible;
-                    //return self.checkToShowAction(action, model) && (self.documentInformation || (self.incoming.contentFile && self.incoming.hasContent()));
                 }
             },
             // Manage Tasks
@@ -357,9 +345,8 @@ module.exports = function (app) {
                 hide: true,
                 checkShow: function (action, model, index) {
                     isVisible = self.checkToShowAction(action, model);
-                    self.setAvailability(index, isVisible);
+                    self.setDropdownAvailability(index, isVisible);
                     return isVisible;
-                    // return self.checkToShowAction(action, model);
                 }
             },
             //Configure Security
@@ -370,18 +357,22 @@ module.exports = function (app) {
                 hide: true,
                 checkShow: function (action, model, index) {
                     isVisible = self.checkToShowAction(action, model);
-                    self.setAvailability(index, isVisible);
+                    self.setDropdownAvailability(index, isVisible);
                     return isVisible;
-                    // return self.checkToShowAction(action, model);
                 }
             }
         ];
 
-        self.setAvailability = function (index, isVisible) {
-            if (index === 0)
+        /**
+         * @description Sets the availability for the dropdown of actions. If any action is available, dropdown is available.
+         * @param actionIndex
+         * @param isActionVisible
+         */
+        self.setDropdownAvailability = function (actionIndex, isActionVisible) {
+            if (actionIndex === 0)
                 self.visibilityArray = [];
-            self.visibilityArray.push(isVisible);
-            if (index + 1 === self.documentActions.length) {
+            self.visibilityArray.push(isActionVisible);
+            if (actionIndex + 1 === self.documentActions.length) {
                 self.isActionsAvailable = !self.visibilityArray.length ? false : self.visibilityArray.indexOf(true) > -1;
             }
         };

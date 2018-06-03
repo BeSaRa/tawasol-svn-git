@@ -357,6 +357,7 @@ module.exports = function (app) {
 
         var isVisible = false;
         self.documentActions = [
+            // Print Barcode
             {
                 text: langService.get('content_action_print_barcode'),
                 callback: self.docActionPrintBarcode,
@@ -364,12 +365,12 @@ module.exports = function (app) {
                 permissionKey: "PRINT_BARCODE",
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = self.checkToShowAction(action, model) && info.isPaper; //Don't show if its electronic outgoing
-                    self.setAvailability(index, isVisible);
+                    isVisible = self.checkToShowAction(action, model) && !!info.isPaper; //Don't show if its electronic outgoing
+                    self.setDropdownAvailability(index, isVisible);
                     return isVisible;
-                    //return self.checkToShowAction(action, model, index) && info.isPaper; //Don't show if its electronic outgoing
                 }
             },
+            // Launch Distribution Workflow
             {
                 text: langService.get('content_action_launch_distribution_workflow'),
                 callback: self.docActionLaunchDistributionWorkflow,
@@ -377,11 +378,11 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model, index) {
                     isVisible = self.checkToShowAction(action, model) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
-                    self.setAvailability(index, isVisible);
+                    self.setDropdownAvailability(index, isVisible);
                     return isVisible;
-                    //return self.checkToShowAction(action, model, index) && (self.documentInformation || (self.outgoing.contentFile && self.outgoing.hasContent()));
                 }
             },
+            // Send To Review
             {
                 text: langService.get('content_action_send_to_review'),
                 callback: self.docActionSendToReview,
@@ -389,11 +390,11 @@ module.exports = function (app) {
                 hide: true,
                 checkShow: function (action, model, index) {
                     isVisible = self.checkToShowAction(action, model) && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
-                    self.setAvailability(index, isVisible);
+                    self.setDropdownAvailability(index, isVisible);
                     return isVisible;
-                    //return self.checkToShowAction(action, model) && (self.documentInformation || (self.outgoing.contentFile && self.outgoing.hasContent()));
                 }
             },
+            // Manage Tasks
             {
                 text: langService.get('content_action_manage_tasks'),
                 callback: self.docActionManageTasks,
@@ -401,11 +402,11 @@ module.exports = function (app) {
                 hide: true,
                 checkShow: function (action, model, index) {
                     isVisible = self.checkToShowAction(action, model);
-                    self.setAvailability(index, isVisible);
+                    self.setDropdownAvailability(index, isVisible);
                     return isVisible;
-                    //return self.checkToShowAction(action, model);
                 }
             },
+            // Configure Security
             {
                 text: langService.get('content_action_configure_security'),
                 callback: self.docActionConfigureSecurity,
@@ -413,11 +414,11 @@ module.exports = function (app) {
                 hide: true,
                 checkShow: function (action, model, index) {
                     isVisible = self.checkToShowAction(action, model);
-                    self.setAvailability(index, isVisible);
+                    self.setDropdownAvailability(index, isVisible);
                     return isVisible;
-                    //return self.checkToShowAction(action, model);
                 }
             },
+            // Export
             {
                 text: langService.get('content_action_export'),
                 callback: self.docActionExportDocument,
@@ -425,19 +426,23 @@ module.exports = function (app) {
                 hide: true,
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
-                    isVisible = self.checkToShowAction(action, model) && info.isPaper; //Don't show if its electronic outgoing
-                    self.setAvailability(index, isVisible);
+                    isVisible = self.checkToShowAction(action, model) && !!info.isPaper; //Don't show if its electronic outgoing
+                    self.setDropdownAvailability(index, isVisible);
                     return isVisible;
-                    //return self.checkToShowAction(action, model) && info.isPaper; //Don't show if its electronic outgoing
                 }
             }
         ];
 
-        self.setAvailability = function (index, isVisible) {
-            if (index === 0)
+        /**
+         * @description Sets the availability for the dropdown of actions. If any action is available, dropdown is available.
+         * @param actionIndex
+         * @param isActionVisible
+         */
+        self.setDropdownAvailability = function (actionIndex, isActionVisible) {
+            if (actionIndex === 0)
                 self.visibilityArray = [];
-            self.visibilityArray.push(isVisible);
-            if (index + 1 === self.documentActions.length) {
+            self.visibilityArray.push(isActionVisible);
+            if (actionIndex + 1 === self.documentActions.length) {
                 self.isActionsAvailable = !self.visibilityArray.length ? false : self.visibilityArray.indexOf(true) > -1;
             }
         };
