@@ -1,0 +1,69 @@
+Security Level (Category: 0):
+1: NORMAL
+2: CONFIDENTIAL
+4: PRIVATE
+8: SECRET
+16: TOP SECRET
+
+Priority Level (Category: 1):
+0: NORMAL
+1: URGENT
+2: TOP_URGENT
+
+Followup Status (Category: 2):
+0: NEED_REPLY
+1: WITHOUT_REPLY
+2: REPLIED
+
+Actions/Event Types (Category: 4):
+0: Add
+1: Edit
+2: Remove
+
+Document Class (Category: 5):
+0: OUTGOING
+1: INCOMING
+2: INTERNAL
+3: Correspondence
+4: TawasolAttachment
+5: TawasolLinkedAttachment
+
+Security Schema (Category: 6):
+0: Security per Organization Hierarchy(SECURITY_PER_UNIT)
+1: Security per Limited Organization Hierarchy(SECURITY_LIMITED_UNIT)
+
+Workflow Security (Category: 7):
+0: User can send the document to all organization users(FORWARD_SEND_TO_ALL_USERS)
+1: User can send the document to any user in the same unit(FORWARD_SEND_TO_ALL_PARENT_OU)
+2: User can send the document to all(FORWARD_SEND_TO_ALL_OU)
+
+Permission Group (Category: 11):
+0: Administration
+2: Incoming
+3: Outgoing
+4: Internal
+5: Correspondence Workflow
+6: Department Inbox
+7: Search
+8: Reports and Dashboard
+9: Other
+
+Language (Category: 13):
+1: Arabic(ar)
+2: English(en)
+
+Messaging Status (Category: 21):
+0: Pending
+1: Sent
+2: Delivered
+3: Returned
+4: Removed
+
+Linked Item Type (Category: 22):
+0: Attachment
+1: Linked Doc
+2: Linked Object
+3: Destination
+
+
+
