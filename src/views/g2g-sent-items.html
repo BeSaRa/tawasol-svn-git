@@ -47,7 +47,7 @@
                                             <span>{{lang.sent_date}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
-                                            md-order-by="">
+                                            md-order-by="outgoingSerial">
                                             <span>{{lang.document_number}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
@@ -85,7 +85,7 @@
                                         <td md-cell>{{g2gItem.getTranslatedOriginalCopyType()}}</td>
                                         <td md-cell>{{g2gItem.securityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{g2gItem.sentDate}}</td>
-                                        <td md-cell></td>
+                                        <td md-cell>{{g2gItem.outgoingSerial}}</td>
                                         <td md-cell>{{g2gItem.g2GRefNo}}</td>
                                         <td md-cell>{{g2gItem.updateDate}}</td>
                                         <td md-cell>{{g2gItem.statusString}}</td>

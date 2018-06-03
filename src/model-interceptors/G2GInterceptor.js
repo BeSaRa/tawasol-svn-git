@@ -13,10 +13,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            model.correspondence = generator.interceptSendInstance(['Incoming','ViewIncoming'], model.correspondence);
-
-            model.correspondence.lastModified = generator.getTimeStampFromDate(model.correspondence.lastModified);
-
+            model.correspondence = generator.interceptSendInstance(['Incoming', 'ViewIncoming'], model.correspondence);
             delete model.correspondence.site;
             delete model.correspondence.lastModifiedString;
             delete model.recordInfo;
@@ -25,7 +22,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            model.correspondence = generator.generateInstance(model.correspondence,Incoming);
+            model.correspondence = generator.generateInstance(model.correspondence, Incoming);
 
             model.correspondence.site = model.siteInfo.subSite.id ? new Site({
                 mainSiteId: model.siteInfo.mainSite.id,
@@ -39,14 +36,8 @@ module.exports = function (app) {
                 siteType: correspondenceService.getLookup('incoming', 'siteTypes', model.siteInfo.siteType)
             }) : null;
 
-            /*model.siteTypeInfo = model.siteTypeInfo ? new Information(model.siteTypeInfo) : new Information();
-            model.subSiteInfo = model.subSiteInfo ? new Information(model.subSiteInfo) : new Information();
-            model.mainSiteInfo = model.mainSiteInfo ? new Information(model.mainSiteInfo) : new Information();
-
-*/
             model.securityLevel = new Information(model.securityLevel);
             model.correspondence.lastModifiedString = generator.getDateFromTimeStamp(model.correspondence.lastModified, true);
-
             model.isLockedG2GIndicator = model.getIsLockedG2GIndicator();
             model.recordInfo = correspondenceService.getCorrespondenceInformation(model.correspondence);
             return model;
