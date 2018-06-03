@@ -60,26 +60,25 @@ module.exports = function (app) {
          * @description Filters the action buttons for showing/hiding shortcut actions
          * @param gridActions
          * @param direction
-         * @param shortcut
          * @returns {Array}
          */
-        self.filterShortcuts = function (gridActions, direction, shortcut) {
+        self.filterShortcuts = function (gridActions, direction) {
             var mainAction, subAction;
             var shortcutActions = [];
 
-            if (direction === "vertical" && shortcut === 'true') {
+            if (direction === "vertical") {
                 for (var i = 0; i < gridActions.length; i++) {
                     mainAction = gridActions[i];
                     if (mainAction.type.toLowerCase() === "action" && !mainAction.hide) {
                         if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
                             shortcutActions.push(mainAction);
                         }
-                        else if (!mainAction.hasOwnProperty('shortcut')
+                        else if ((!mainAction.hasOwnProperty('shortcut') && mainAction.hasOwnProperty('subMenu'))
                             || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut && mainAction.hasOwnProperty('subMenu'))
                         ) {
                             for (var j = 0; j < mainAction.subMenu.length; j++) {
                                 subAction = mainAction.subMenu[j];
-                                if (subAction.type.toLowerCase() === "action" && subAction.hasOwnProperty('shortcut') && subAction.shortcut && !subAction.hide) {
+                                if (subAction.type.toLowerCase() === "action" && !subAction.hide && subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
                                     shortcutActions.push(mainAction);
                                 }
                                 /*else if (subAction.type.toLowerCase() === "separator" && !subAction.hide)
@@ -96,19 +95,19 @@ module.exports = function (app) {
                 }
                 return shortcutActions;
             }
-            else if (direction === "horizontal" && shortcut === 'true') {
+            else if (direction === "horizontal") {
                 for (var i = 0; i < gridActions.length; i++) {
                     mainAction = gridActions[i];
                     if (mainAction.type.toLowerCase() === "action" && !mainAction.hide) {
                         if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
                             shortcutActions.push(mainAction);
                         }
-                        else if (!mainAction.hasOwnProperty('shortcut')
+                        else if ((!mainAction.hasOwnProperty('shortcut') && mainAction.hasOwnProperty('subMenu'))
                             || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut && mainAction.hasOwnProperty('subMenu'))
                         ) {
                             for (var j = 0; j < mainAction.subMenu.length; j++) {
                                 subAction = mainAction.subMenu[j];
-                                if (subAction.type.toLowerCase() === "action" && subAction.hasOwnProperty('shortcut') && subAction.shortcut && !subAction.hide) {
+                                if (subAction.type.toLowerCase() === "action"  && !subAction.hide && subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
                                     shortcutActions.push(subAction);
                                 }
                                 /*else if (subAction.type.toLowerCase() === "separator" && !subAction.hide)
@@ -132,7 +131,7 @@ module.exports = function (app) {
          */
         self.filterContextMenuItems = function (gridActions) {
             return _.filter(gridActions, function (gridAction) {
-                return !(gridAction.hasOwnProperty('onlyShortcut') && gridAction.onlyShortcut);
+                return !gridAction.hide && !(gridAction.hasOwnProperty('onlyShortcut') && gridAction.onlyShortcut);
             });
         };
 

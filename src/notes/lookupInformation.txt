@@ -1,3 +1,4 @@
+// This file contains the information for the global lookups
 Security Level (Category: 0):
 1: NORMAL
 2: CONFIDENTIAL

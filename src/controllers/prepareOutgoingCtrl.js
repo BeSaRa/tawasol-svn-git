@@ -536,7 +536,6 @@ module.exports = function (app) {
                 icon: 'barcode-scan',
                 text: 'grid_action_print_barcode',
                 callback: self.printBarcode,
-                shortcut: false,
                 class: "action-green",
                 permissionKey: 'PRINT_BARCODE',
                 checkShow: function (action, model) {
