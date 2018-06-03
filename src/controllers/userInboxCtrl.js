@@ -908,7 +908,7 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'information-variant',
                 text: 'grid_action_document_info',
-                shortcut: false,
+                /*shortcut: false,*/
                 showInView: false,
                 subMenu: [
                     {
@@ -941,7 +941,7 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'folder-plus',
                 text: 'grid_action_add_to_folder',
-                shortcut: false,
+                /*shortcut: false,*/
                 callback: self.addToFolder,
                 class: "action-green",
                 checkShow: self.checkToShowAction
@@ -952,7 +952,7 @@ module.exports = function (app) {
                 icon: 'star',
                 text: 'grid_action_add_to_favorite',
                 permissionKey: "MANAGE_FAVORITE",
-                shortcut: false,
+                /*shortcut: false,*/
                 callback: self.addToFavorite,
                 class: "action-green",
                 checkShow: self.checkToShowAction
@@ -962,7 +962,7 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'pen',
                 text: 'grid_action_create_reply',
-                shortcut: false,
+                /*shortcut: false,*/
                 callback: self.createReplyIncoming,
                 class: "action-green",
                 //hide: true,
@@ -989,7 +989,7 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'bullhorn',
                 text: 'grid_action_broadcast',
-                shortcut: false,
+                /*shortcut: false,*/
                 hide: false,
                 callback: self.broadcast,
                 checkShow: function (action, model) {
@@ -1001,7 +1001,7 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'reply',
                 text: 'grid_action_reply',
-                shortcut: false,
+                /*shortcut: false,*/
                 callback: self.reply,
                 class: "action-green",
                 checkShow: function (action, model) {
@@ -1013,7 +1013,7 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'link',
                 text: 'grid_action_get_link',
-                shortcut: false,
+                /*shortcut: false,*/
                 callback: self.getLink,
                 class: "action-green",
                 hide: false,
@@ -1026,7 +1026,7 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'bell-plus',
                 text: 'grid_action_subscribe',
-                shortcut: false,
+                /*shortcut: false,*/
                 callback: self.subscribe,
                 class: "action-green",
                 hide: false,
@@ -1077,7 +1077,7 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'eye',
                 text: 'grid_action_view_tracking_sheet',
-                shortcut: false,
+                /*shortcut: false,*/
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: self.checkToShowAction,
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
@@ -1100,7 +1100,7 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'settings',
                 text: 'grid_action_manage',
-                shortcut: false,
+                /*shortcut: false,*/
                 checkShow: self.checkToShowAction,
                 showInView: false,
                 subMenu: [
@@ -1109,7 +1109,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'tag',
                         text: 'grid_action_tags',
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.manageTags,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1119,7 +1119,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'comment',
                         text: 'grid_action_comments',
-                        shortcut: false,
+                        /*shortcut: false,*/
                         permissionKey: "MANAGE_DOCUMENT’S_COMMENTS",
                         callback: self.manageComments,
                         class: "action-green",
@@ -1130,7 +1130,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'note-multiple',
                         text: 'grid_action_tasks',
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.manageTasks,
                         class: "action-red",
                         hide: true,
@@ -1141,7 +1141,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'attachment',
                         text: 'grid_action_attachments',
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.manageAttachments,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1151,7 +1151,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1161,7 +1161,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'link-variant',
                         text: 'grid_action_linked_entities',
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1171,7 +1171,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'stop',
                         text: 'grid_action_destinations',
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.manageDestinations,
                         permissionKey: "MANAGE_DESTINATIONS",
                         class: "action-green",
@@ -1186,7 +1186,7 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'eye',
                 text: 'grid_action_view',
-                shortcut: false,
+                /*shortcut: false,*/
                 hide: true,
                 checkShow: self.checkToShowAction,
                 subMenu: [
@@ -1195,7 +1195,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_direct_linked_documents',
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.viewDirectLinkedDocuments,
                         class: "action-red",
                         checkShow: self.checkToShowAction
@@ -1205,7 +1205,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'link-variant',
                         text: 'grid_action_complete_linked_documents',
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.viewCompleteLinkedDocuments,
                         class: "action-red",
                         checkShow: self.checkToShowAction
@@ -1217,7 +1217,7 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'download',
                 text: 'grid_action_download',
-                shortcut: false,
+                /*shortcut: false,*/
                 checkShow: self.checkToShowAction,
                 subMenu: [
                     // Main Document
@@ -1225,7 +1225,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_main_document',
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.downloadMainDocument,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1235,7 +1235,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_composite_document',
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.downloadCompositeDocument,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1247,7 +1247,7 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'send',
                 text: 'grid_action_send',
-                shortcut: false,
+                /*shortcut: false,*/
                 hide: false,
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted();
@@ -1258,7 +1258,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'link-variant',
                         text: 'grid_action_link_to_document_by_email',
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.sendLinkToDocumentByEmail,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1268,7 +1268,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'attachment',
                         text: 'grid_action_composite_document_as_attachment_by_email',
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.sendCompositeDocumentAsAttachmentByEmail,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1278,7 +1278,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'attachment',
                         text: 'grid_action_main_document_fax',
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.sendMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction
@@ -1288,7 +1288,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'message',
                         text: 'grid_action_send_sms',
-                        shortcut: false,
+                        /*shortcut: false,*/
                         permissionKey: "SEND_SMS",
                         callback: self.sendSMS,
                         class: "action-red",
@@ -1301,7 +1301,7 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'approval',
                 text: 'grid_action_approve',//signature
-                shortcut: false,
+                /*shortcut: false,*/
                 checkShow: function (action, model) {
                     //addMethod = 0 (Electronic/Digital) - show the button
                     //addMethod = 1 (Paper) - hide the button
@@ -1324,7 +1324,7 @@ module.exports = function (app) {
                         type: 'action',
                         //icon: 'link-variant',
                         text: 'grid_action_electronic',//e_signature
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.signESignature,
                         class: "action-green",
                         permissionKey: "ELECTRONIC_SIGNATURE",
@@ -1335,7 +1335,7 @@ module.exports = function (app) {
                         type: 'action',
                         //icon: 'attachment',
                         text: 'grid_action_digital',//digital_signature
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.signDigitalSignature,
                         class: "action-red",
                         permissionKey: "DIGITAL_SIGNATURE",
@@ -1349,7 +1349,7 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'pencil',
                 text: 'grid_action_edit',
-                shortcut: false,
+                /*shortcut: false,*/
                 showInView: false,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
@@ -1377,7 +1377,7 @@ module.exports = function (app) {
                                 shortcutText: 'grid_action_edit_content'
                             };
                         },
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.editContent,
                         class: "action-green",
                         checkShow: function (action, model) {
@@ -1407,7 +1407,7 @@ module.exports = function (app) {
                                 shortcutText: 'grid_action_edit_properties'
                             };
                         },
-                        shortcut: false,
+                        /*shortcut: false,*/
                         callback: self.editProperties,
                         class: "action-green",
                         checkShow: function (action, model) {
