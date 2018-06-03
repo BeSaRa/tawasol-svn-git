@@ -12,6 +12,9 @@ module.exports = function (app) {
             INTERNAL: 4
         };
 
+        self.defaultDateFormat = 'YYYY-MM-DD';
+        self.defaultDateTimeFormat = 'YYYY-MM-DD hh:mm:ss A';
+
         self.documentStatusAndGridMap = {
             UNDER_RECEIVE: 1,
             /**
@@ -519,8 +522,6 @@ module.exports = function (app) {
             return property;
         };
 
-        self.defaultDateFormat = 'YYYY-MM-DD';
-        self.defaultDateTimeFormat = 'YYYY-MM-DD hh:mm:ss A';
         /**
          * @description Gets the date in default format
          * @param timestamp

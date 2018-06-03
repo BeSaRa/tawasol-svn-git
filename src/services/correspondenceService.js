@@ -201,7 +201,7 @@ module.exports = function (app) {
             } else { // if notification Item
                 documentClass = generator.getDocumentClassName(correspondence.docClassId);
             }
-            return documentClass.toLowerCase();
+            return documentClass ? documentClass.toLowerCase() : documentClass;
         }
 
         /**
@@ -1393,7 +1393,7 @@ module.exports = function (app) {
                     });
 
                     result.data.rs.metaData = metaData;
-                    return  result.data.rs;
+                    return result.data.rs;
                 })
                 .then(function (result) {
                     result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
@@ -1457,7 +1457,7 @@ module.exports = function (app) {
                 });
         };
 
-        self.prepareReceiveIncomingByVsId = function(vsId){
+        self.prepareReceiveIncomingByVsId = function (vsId) {
             /*return $http
                 .put((urlService.departmentWF + '/' + vsId + '/prepare/receive'))
                 .then(function (result) {

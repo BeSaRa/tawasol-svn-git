@@ -111,7 +111,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.viewDeliveryReport = function (g2gItem, $event) {
-            return viewDeliveryReportService.viewDeliveryReport(g2gItem.incomingDocId, $event);
+            return viewDeliveryReportService.viewDeliveryReport(g2gItem, $event);
         };
 
         /**

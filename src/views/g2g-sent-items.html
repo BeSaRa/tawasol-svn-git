@@ -47,15 +47,15 @@
                                             <span>{{lang.sent_date}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
-                                            md-order-by="correspondence.refDocNumber">
+                                            md-order-by="">
                                             <span>{{lang.document_number}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
-                                            md-order-by="correspondence.g2gRefNO">
+                                            md-order-by="g2GRefNo">
                                             <span>{{lang.g2g_book_number}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
-                                            md-order-by="correspondence.lastModified">
+                                            md-order-by="updateDate">
                                             <span>{{lang.received_date}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
@@ -82,16 +82,16 @@
                                                title="{{g2gItem.subject}}"
                                                ng-click="ctrl.viewDocument(g2gItem, $event)">{{g2gItem.subject}}</a>
                                         </td>
-                                        <td md-cell>{{g2gItem.typeString}}</td>
+                                        <td md-cell>{{g2gItem.getTranslatedOriginalCopyType()}}</td>
                                         <td md-cell>{{g2gItem.securityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{g2gItem.sentDate}}</td>
-                                        <td md-cell>{{g2gItem.g2gRefNO}}</td>
                                         <td md-cell></td>
-                                        <td md-cell>{{g2gItem.lastModified}}</td>
+                                        <td md-cell>{{g2gItem.g2GRefNo}}</td>
+                                        <td md-cell>{{g2gItem.updateDate}}</td>
                                         <td md-cell>{{g2gItem.statusString}}</td>
                                         <td md-cell>
                                             <main-site-sub-site-directive item="g2gItem"
-                                                                          type="g2g"></main-site-sub-site-directive>
+                                                                          type="G2GMessagingHistory"></main-site-sub-site-directive>
                                         </td>
                                         <td md-cell class="p-r0"
                                             ng-if="ctrl.selectedG2gItems.length < 2">

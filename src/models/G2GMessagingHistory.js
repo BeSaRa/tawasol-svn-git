@@ -52,10 +52,32 @@ module.exports = function (app) {
                 return requiredFields;
             };
 
+            /**
+             * @description Returns the document subject
+             * @returns {null}
+             */
+            G2GMessagingHistory.prototype.getTranslatedName = function () {
+                return this.subject;
+            };
+
+            /**
+             * @description to get documentClass,vsId.
+             * @return {{documentClass: *, vsId: *}}
+             */
+            G2GMessagingHistory.prototype.getInfo = function () {
+                return this.recordInfo;
+            };
+
             G2GMessagingHistory.prototype.getTranslatedCorrespondenceSiteInfo = function () {
                 var mainSite = new Information(this.mainSiteFrom);
                 var subSite = (this.subSiteFrom) ? new Information(this.subSiteFrom) : '';
                 return (mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : ''));
+            };
+
+            G2GMessagingHistory.prototype.getTranslatedOriginalCopyType = function(){
+                return (typeof this.type !== 'undefined' && this.type !== null) ?
+                    (this.type === 0 ? langService.get('original') : langService.get('copy'))
+                    : null;
             };
 
             // don't remove CMSModelInterceptor from last line

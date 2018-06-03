@@ -78,14 +78,15 @@ module.exports = function (app) {
             };
 
             /**
-             * @description Get the globalization of entity name as Yes or No instead of true or false.
-             * @returns {string}
+             * @description Returns the document subject
+             * @returns {null}
              */
-            G2G.prototype.getTranslatedGlobal = function () {
-                return this.global ? langService.get('yes') : langService.get('no');
+            G2G.prototype.getTranslatedName = function () {
+                return this.correspondence.docSubject;
             };
 
-            G2G.prototype.getTranslatedType = function () {
+
+            G2G.prototype.getTranslatedOriginalCopyType = function () {
                 return (typeof this.correspondence.type !== 'undefined' && this.correspondence.type !== null) ?
                     (this.correspondence.type === 0 ? langService.get('original') : langService.get('copy'))
                     : null;
@@ -101,7 +102,6 @@ module.exports = function (app) {
                 var subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : null;
                 return mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : '');
             };
-
 
             /**
              * @description to get documentClass,vsId.
