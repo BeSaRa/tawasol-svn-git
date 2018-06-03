@@ -306,6 +306,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Print Barcode
+         * @param scanIncoming
+         * @param $event
+         */
+        self.printBarcode = function (scanIncoming, $event) {
+            scanIncoming.barcodePrint($event);
+        };
+
+        /**
          * @description Check if action will be shown on grid or not
          * @param action
          * @param model
@@ -509,7 +518,18 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && (model.addMethod || model.approvers !== null);
                 }
-            }
+            },
+            // Print Barcode
+            {
+                type: 'action',
+                icon: 'barcode-scan',
+                text: 'grid_action_print_barcode',
+                shortcut: false,
+                callback: self.printBarcode,
+                class: "action-green",
+                permissionKey: 'PRINT_BARCODE',
+                checkShow: self.checkToShowAction
+            },
         ];
     });
 };

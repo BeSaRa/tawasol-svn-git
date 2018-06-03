@@ -279,6 +279,16 @@ module.exports = function (app) {
                 });
         };
 
+
+        /**
+         * @description Print Barcode
+         * @param prepareInternal
+         * @param $event
+         */
+        self.printBarcode = function (prepareInternal, $event) {
+            prepareInternal.barcodePrint($event);
+        };
+
         /**
          * @description Check if action will be shown on grid or not
          * @param action
@@ -483,7 +493,21 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && (model.addMethod || model.approvers !== null);
                 }
-            }
+            },
+            // Print Barcode
+            {
+                type: 'action',
+                icon: 'barcode-scan',
+                text: 'grid_action_print_barcode',
+                shortcut: false,
+                callback: self.printBarcode,
+                class: "action-green",
+                permissionKey: 'PRINT_BARCODE',
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && info.isPaper;
+                }
+            },
         ];
     });
 };

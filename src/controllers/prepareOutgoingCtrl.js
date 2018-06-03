@@ -64,7 +64,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -112,7 +112,7 @@ module.exports = function (app) {
                 .prepareOutgoingRemove(prepareOutgoing, $event)
                 .then(function () {
                     self.reloadPrepareOutgoings(self.grid.page)
-                        .then(function(){
+                        .then(function () {
                             new ResolveDefer(defer)
                         });
                 });
@@ -262,7 +262,7 @@ module.exports = function (app) {
             managerService.manageDocumentContent(prepareOutgoing.vsId, prepareOutgoing.docClassName, prepareOutgoing.docSubject, $event)
                 .then(function () {
                     self.reloadPrepareOutgoings(self.grid.page)
-                        .then(function(){
+                        .then(function () {
                             new ResolveDefer(defer);
                         });
                 })
@@ -292,6 +292,15 @@ module.exports = function (app) {
                 .catch(function () {
                     self.reloadPrepareOutgoings(self.grid.page);
                 });
+        };
+
+        /**
+         * @description Print Barcode
+         * @param prepareOutgoing
+         * @param $event
+         */
+        self.printBarcode = function (prepareOutgoing, $event) {
+            prepareOutgoing.barcodePrint($event);
         };
 
         /**
@@ -504,7 +513,7 @@ module.exports = function (app) {
                 callback: self.createContent,
                 class: "action-green",
                 showInView: false,
-                checkShow: function(action, model){
+                checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.hasContent();
                 }
             },
@@ -520,7 +529,21 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && (model.addMethod || model.approvers !== null);
                 }
-            }
+            },
+            // Print Barcode
+            {
+                type: 'action',
+                icon: 'barcode-scan',
+                text: 'grid_action_print_barcode',
+                callback: self.printBarcode,
+                shortcut: false,
+                class: "action-green",
+                permissionKey: 'PRINT_BARCODE',
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && info.isPaper;
+                }
+            },
         ];
     });
 };
