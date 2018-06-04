@@ -1414,12 +1414,12 @@ module.exports = function (app) {
                             disableProperties: true,
                             disableCorrespondence: true,
                         }
-                    }).then(function () {
+                    }).then(function (result) {
                         self.popupNumber -= 1;
-                        return true;
-                    }).catch(function () {
+                        return result;
+                    }).catch(function (error) {
                         self.popupNumber -= 1;
-                        return false;
+                        return error;
                     });
                 });
         };

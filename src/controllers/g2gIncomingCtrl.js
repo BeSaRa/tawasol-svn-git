@@ -106,7 +106,7 @@ module.exports = function (app) {
             return correspondenceService.viewCorrespondenceG2G(g2gItem, self.gridActions, 'G2G', $event)
                 .then(function (result) {
                     if (!g2gItem.getInfo().vsId) {
-                        g2gItem.correspondence.vsId = result.metaData.vsId;
+                        g2gItem.correspondence.vsId = result.vsId;
                         self.replaceRecord(g2gItem);
                     }
                     //self.reloadG2gItems(self.grid.page);

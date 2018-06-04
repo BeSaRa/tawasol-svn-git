@@ -35,7 +35,7 @@ module.exports = function (app) {
             self.fullScreen = !self.fullScreen;
         };
         self.closeCorrespondenceDialog = function () {
-            dialog.hide();
+            dialog.hide(self.correspondence);
         };
         /**
          * @description save correspondence Changes for content.
@@ -61,7 +61,7 @@ module.exports = function (app) {
          * in case if just view.
          */
         self.returnBackCorrespondenceInformation = function () {
-            dialog.hide(self.content);
+            dialog.hide(self.correspondence);
         };
 
         self.openActionMenu = function () {
