@@ -30,7 +30,7 @@ module.exports = function (app) {
         self.controllerName = 'proxyMailInboxCtrl';
 
         self.progress = null;
-        self.proxyUsers = proxyUsers;
+        self.proxyUsers = angular.copy(proxyUsers);
         contextHelpService.setHelpTo('proxy-mail-inbox');
 
         /**
