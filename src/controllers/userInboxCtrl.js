@@ -265,7 +265,7 @@ module.exports = function (app) {
             }
 
             return userInboxService
-                .loadUserInboxes()
+                .loadUserInboxes(true)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);

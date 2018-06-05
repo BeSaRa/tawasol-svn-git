@@ -11,6 +11,7 @@ module.exports = function (app) {
     require('./modules/01-index')(app);
     require('./factories/01-index')(app);
     require('./controllers/01-index')(app);
+    require('./filters/01-index')(app);
     require('./routes/routes')(app);
     require('./popup-controllers/01-index')(app);
     require('./helper-methods/01-index')(app);

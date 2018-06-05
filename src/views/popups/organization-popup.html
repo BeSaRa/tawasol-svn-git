@@ -11,7 +11,8 @@
             <form name="org_form" novalidate autocomplete="off">
                 <md-tabs md-dynamic-height>
                     <!-- Basic Info-->
-                    <md-tab label="{{lang.basic_info}}" ng-if="ctrl.showTab('basic')" ng-click="ctrl.setCurrentTab('basic')">
+                    <md-tab label="{{lang.basic_info}}" ng-if="ctrl.showTab('basic')"
+                            ng-click="ctrl.setCurrentTab('basic')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div ng-if="!ctrl.rootMode && !ctrl.editMode" layout="row">
@@ -30,7 +31,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                </div>
+                                </div><!-- row -->
                                 <div ng-if="ctrl.editMode && !ctrl.rootMode" layout="row">
                                     <md-input-container tooltip="{{ctrl.parentOrganization.getTranslatedName(true)}}"
                                                         flex>
@@ -47,7 +48,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                </div>
+                                </div><!-- row -->
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>
@@ -77,7 +78,7 @@
                                             <div ng-message="ENS">{{lang.english_number_space}}</div>
                                         </div>
                                     </md-input-container>
-                                </div>
+                                </div><!-- row -->
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="description">{{lang.description}}</label>
@@ -90,7 +91,7 @@
                                             <div ng-message="AEN">{{lang.arabic_english_number}}</div>
                                         </div>
                                     </md-input-container>
-                                </div>
+                                </div><!-- row -->
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="code">{{lang.code}}</label>
@@ -123,7 +124,7 @@
                                             <md-icon md-svg-icon="plus"></md-icon>
                                         </md-button>
                                     </md-input-container>
-                                </div>
+                                </div><!-- row -->
                                 <div layout="column">
                                     <div class="user-selector" layout="row" layout-align="start center">
                                         <md-icon md-svg-icon="account-star"></md-icon>
@@ -176,7 +177,7 @@
                                             <md-icon md-svg-icon="plus"></md-icon>
                                         </md-button>
                                     </div>
-                                </div>
+                                </div><!-- row -->
                                 <div layout="row" layout-align="start center">
                                     <md-switch ng-disabled="ctrl.rootMode || ctrl.organization.id"
                                                ng-change="ctrl.hasRegistryChange(ctrl.organization.hasRegistry)"
@@ -219,7 +220,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                </div>
+                                </div><!-- row -->
                                 <div layout="row" layout-align="start center">
                                     <md-switch ng-change="ctrl.centralArchiveChange(ctrl.organization.centralArchive)"
                                                ng-model="ctrl.organization.centralArchive">
@@ -244,7 +245,7 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
-                                </div>
+                                </div><!-- row -->
                                 <div layout="row">
                                     <md-switch flex ng-model="ctrl.organization.status">
                                         {{lang.status}} : {{ctrl.organization.getTranslatedStatus()}}
@@ -308,7 +309,7 @@
                                             </div>
                                         </div>
                                     </md-input-container>
-                                </div>
+                                </div><!-- row -->
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="cmsRefId">{{lang.old_cms_reference}}</label>
@@ -322,7 +323,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Security Settings -->
-                    <md-tab label="{{lang.security_settings}}" ng-if="ctrl.showTab('security_settings')" ng-click="ctrl.setCurrentTab('security_settings')">
+                    <md-tab label="{{lang.security_settings}}" ng-if="ctrl.showTab('security_settings')"
+                            ng-click="ctrl.setCurrentTab('security_settings')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row">
@@ -368,7 +370,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Workflow Settings -->
-                    <md-tab label="{{lang.workflow_settings}}" ng-if="ctrl.showTab('workflow_settings')" ng-click="ctrl.setCurrentTab('workflow_settings')">
+                    <md-tab label="{{lang.workflow_settings}}" ng-if="ctrl.showTab('workflow_settings')"
+                            ng-click="ctrl.setCurrentTab('workflow_settings')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row">
@@ -440,7 +443,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Children -->
-                    <md-tab label="{{lang.childs}}" ng-if="ctrl.editMode && ctrl.showTab('children')" ng-click="ctrl.setCurrentTab('children')">
+                    <md-tab label="{{lang.childs}}" ng-if="ctrl.editMode && ctrl.showTab('children')"
+                            ng-click="ctrl.setCurrentTab('children')">
                         <!--
 
                                                 <md-content>
@@ -601,7 +605,8 @@
 
                     </md-tab>
                     <!-- Classifications -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('classifications')" label="{{lang.classifications}}" ng-click="ctrl.setCurrentTab('classifications')">
+                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('classifications')"
+                            label="{{lang.classifications}}" ng-click="ctrl.setCurrentTab('classifications')">
                         <md-content>
                             <div layout="column" class="content">
                                 <div ng-if="!ctrl.classificationEditMode" layout="row" layout-align="start center"
@@ -786,7 +791,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Correspondence Sites -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('correspondence_sites')" label="{{lang.correspondence_sites}}" ng-click="ctrl.setCurrentTab('correspondence_sites')">
+                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('correspondence_sites')"
+                            label="{{lang.correspondence_sites}}" ng-click="ctrl.setCurrentTab('correspondence_sites')">
                         <md-content>
                             <div layout="column" class="content">
                                 <div ng-if="!ctrl.correspondenceSiteEditMode" layout="row" layout-align="start center"
@@ -981,7 +987,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Document Templates -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('document_templates')" label="{{lang.document_templates}}" ng-click="ctrl.setCurrentTab('document_templates')">
+                    <md-tab ng-if="ctrl.editMode && ctrl.model.hasRegistry && ctrl.showTab('document_templates')"
+                            label="{{lang.document_templates}}" ng-click="ctrl.setCurrentTab('document_templates')">
                         <md-content>
                             <div layout="column" class="content">
                                 <div layout="row" layout-align="start center" class="p25 small">
@@ -1083,7 +1090,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Property Configuration -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('property_config')" label="{{lang.property_configuration}}" ng-click="ctrl.setCurrentTab('property_config')">
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('property_config')"
+                            label="{{lang.property_configuration}}" ng-click="ctrl.setCurrentTab('property_config')">
                         <md-content>
                             <div layout="column" class="content">
                                 <div layout="column" flex class="p25">
@@ -1191,7 +1199,8 @@
                         </md-content>
                     </md-tab>
                     <!-- Users -->
-                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('users')" label="{{lang.users}}" ng-click="ctrl.setCurrentTab('users')">
+                    <md-tab ng-if="ctrl.editMode && ctrl.showTab('users')" label="{{lang.users}}"
+                            ng-click="ctrl.setCurrentTab('users')">
                         <md-content>
                             <div layout="column" class="content">
                                 <div layout="row" layout-align="start center" class="p25 small">

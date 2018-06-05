@@ -26,7 +26,9 @@ module.exports = function (app) {
          * load user layouts
          */
         self.loadUserLayouts = function () {
-            return $http.get(urlService.layouts, _currentOrganization()).then(function (result) {
+            return $http.get(urlService.layouts, _currentOrganization(), {
+                excludeLoading: true
+            }).then(function (result) {
                 self.layouts = generator.generateCollection(result.data.rs, Layout);
                 self.layouts = generator.interceptReceivedCollection('Layout', self.layouts);
                 return self.layouts;
@@ -52,7 +54,9 @@ module.exports = function (app) {
          */
         self.loadWidgets = function () {
             return $http
-                .get(urlService.layouts.replace('layouts', 'widgets'))
+                .get(urlService.layouts.replace('layouts', 'widgets'), {
+                    excludeLoading: true
+                })
                 .then(function (result) {
                     self.widgets = generator.generateCollection(result.data.rs, Widget);
                     self.widgets = generator.interceptReceivedCollection('Widget', self.widgets);
@@ -135,7 +139,7 @@ module.exports = function (app) {
         self.loadLayoutWidgets = function (layout) {
             var layoutId = layout.hasOwnProperty('id') ? layout.id : layout;
             return $http
-                .get((urlService.layouts + '/' + layoutId + '/widgets' ), _currentOrganization())
+                .get((urlService.layouts + '/' + layoutId + '/widgets'), _currentOrganization(), {excludeLoading: true})
                 .then(function (result) {
                     var layoutWidgets = generator.generateCollection(result.data.rs, LayoutWidget);
                     layoutWidgets = generator.interceptReceivedCollection('LayoutWidget', layoutWidgets);
@@ -149,7 +153,7 @@ module.exports = function (app) {
         self.loadLayoutWidgetsOptions = function (layout) {
             var layoutId = layout.hasOwnProperty('id') ? layout.id : layout;
             return $http
-                .get((urlService.layouts + '/' + layoutId + '/options'), _currentOrganization())
+                .get((urlService.layouts + '/' + layoutId + '/options'), _currentOrganization(), {excludeLoading: true})
                 .then(function (result) {
                     var layoutWidgetOptions = generator.generateCollection(result.data.rs, LayoutWidgetOption);
                     layoutWidgetOptions = generator.interceptReceivedCollection('LayoutWidgetOption', layoutWidgetOptions);

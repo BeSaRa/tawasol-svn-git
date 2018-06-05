@@ -21,11 +21,13 @@ module.exports = function (app) {
                 return;
             }
             var menu = angular.element('#menu-id-' + item.ID).children('ul');
+            menu.parents('li').siblings('.has-child').children('ul').slideUp('fast');
             menu.slideToggle('fast', function () {
                 $scope.$apply(function () {
                     item.open = !item.open;
                 });
             });
+
         };
 
         self.isCurrentState = function (item) {

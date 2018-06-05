@@ -43,8 +43,10 @@ module.exports = function (app) {
          * @description Load the user inboxes from server.
          * @returns {Promise|userInboxes}
          */
-        self.loadUserInboxes = function (fake) {
-            return fake ? self.fakeUsersInboxForTest() : $http.get(urlService.userInbox + '/all-mails').then(function (result) {
+        self.loadUserInboxes = function (excludeLoading) {
+            return $http.get(urlService.userInbox + '/all-mails', {
+                excludeLoading: !!excludeLoading
+            }).then(function (result) {
                 self.userInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
                 //self.userInboxes = _.sortBy(self.userInboxes, 'generalStepElm.starred').reverse();
                 self.userInboxes = generator.interceptReceivedCollection('WorkItem', self.userInboxes);

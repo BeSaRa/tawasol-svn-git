@@ -1,4 +1,4 @@
-<md-dialog id="correspondence-workflow-popup" class="dialog-extend" ng-class="{'fullscreen':ctrl.fullScreen}"
+<md-dialog id="correspondence-workflow-popup" class="dialog-extend fullscreen" ng-class="{'fullscreen':ctrl.fullScreen}"
            aria-label="launch correspondence workflow">
     <div class="correspondence-workflow-popup-dialog-header" layout="row" layout-align="start center">
         <div>
@@ -13,8 +13,8 @@
               class="p20">{{lang.get(ctrl.textButton)}} : {{ctrl.correspondence.getTranslatedName()}}</span>
         <span ng-if="ctrl.multi" class="p20">{{lang.send_documents}}</span>
         <span flex></span>
-        <md-progress-circular md-mode="indeterminate"
-                              ng-if="ctrl.loadingIndicatorService.loading"></md-progress-circular>
+        <!--<md-progress-circular md-mode="indeterminate"
+                              ng-if="ctrl.loadingIndicatorService.loading"></md-progress-circular>-->
         <md-button ng-click="ctrl.toggleWorkflowFullScreen()" class="md-icon-button">
             <md-icon md-svg-icon="fullscreen"></md-icon>
         </md-button>

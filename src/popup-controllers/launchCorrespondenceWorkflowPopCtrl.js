@@ -97,7 +97,7 @@ module.exports = function (app) {
         // current sidebar status
         self.sidebarStatus = true;
         // full screen status
-        self.fullScreen = false;
+        self.fullScreen = true;
         // to display the loading indicator
         self.loadingIndicatorService = loadingIndicatorService;
         // all active user comment
