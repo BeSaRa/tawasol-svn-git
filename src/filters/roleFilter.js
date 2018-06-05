@@ -15,5 +15,5 @@ module.exports = function (app) {
                 return search ? _filterRole(item, search) : item;
             });
         }
-    })
+    });
 };
