@@ -1,9 +1,9 @@
-<div flex layout="row" class="owl-carousel login-announcements">
-    <div layout="row"
+<div layout="row" class="login-announcements"><!--owl-carousel-->
+    <div flex
          ng-repeat="announcement in announcements |filter:{status:true} |orderBy:'itemOrder' track by $index"
          md-whiteframe="1" class="announcement danger">
         <md-icon class="announcement-icon" md-svg-icon="bullhorn"></md-icon>
-        <div ng-if="lang.current === 'ar'" ng-bind-html="announcement.arBody"></div>
-        <div ng-if="lang.current === 'en'" ng-bind-html="announcement.enBody"></div>
+        <div ng-if="$root.lang.current === 'ar'" ng-bind-html="announcement.arBody"></div>
+        <div ng-if="$root.lang.current === 'en'" ng-bind-html="announcement.enBody"></div>
     </div>
 </div>

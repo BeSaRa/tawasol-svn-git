@@ -30,7 +30,7 @@ module.exports = function (app) {
                     targetEvent: $event,
                     template: cmsTemplate.getPopup('show-private-announcement'),
                     controller: 'showPrivateAnnouncementPopCtrl',
-                    controllerAs: 'showPrivateAnnouncementCtrl',
+                    controllerAs: 'ctrl',
                     resolve: {
                         privateAnnouncements: function (privateAnnouncementService) {
                             'ngInject';
