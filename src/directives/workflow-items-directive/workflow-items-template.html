@@ -26,12 +26,12 @@
                     <th colspan="3" ng-if="ctrl.selectedWorkflowItems.length" md-column>
                         <span>{{ctrl.selectedWorkflowItems.length}} {{lang.items_selected}} </span>
                     </th>
-                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length" md-order-by="arName">
-                        {{lang.arabic_name}}
+                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length" md-order-by="">
+                        {{lang.name}}
                     </th>
-                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length" md-order-by="enName">
+                    <!--<th md-column ng-if="!ctrl.selectedWorkflowItems.length && lang.current === 'en'" md-order-by="enName">
                         {{lang.english_name}}
-                    </th>
+                    </th>-->
                     <th ng-if="!ctrl.selectedWorkflowItems.length" md-column>
                         {{lang.action}}
                     </th>
@@ -65,14 +65,14 @@
                                     md-svg-icon="{{workflowItem.isFavorite() ? 'star' : 'star-outline'}}"></md-icon>
                         </md-button>
                     </td>
-                    <td md-cell>
+                    <td  md-cell>
                                                 <span md-highlight-text="ctrl.workflowItemsCriteria.arName"
-                                                      md-highlight-flags="i">{{workflowItem.getFullNameByKey('ar')}}</span>
+                                                      md-highlight-flags="i">{{workflowItem.getTranslatedName()}}</span>
                     </td>
-                    <td md-cell>
+                    <!--<td md-cell>
                                                 <span md-highlight-text="ctrl.workflowItemsCriteria.enName"
                                                       md-highlight-flags="i">{{workflowItem.getFullNameByKey('en')}}</span>
-                    </td>
+                    </td>-->
                     <td md-cell>
                         <md-menu-bar class="no-padding">
                             <md-menu>
@@ -121,12 +121,12 @@
                         </md-button>
                     </td>
                     <td md-cell>
-                                                <span md-highlight-text="ctrl.workflowItemsCriteria.arName"
-                                                      md-highlight-flags="i">{{workflowItem.getFullNameByKey('ar')}}</span>
+                                                <span md-highlight-text="ctrl.workflowItemsCriteria[ctrl.getTranslatedKey()]"
+                                                      md-highlight-flags="i">{{workflowItem.getTranslatedName()}}</span>
                     </td>
-                    <td md-cell>
+                    <!--<td ng-if="lang.current === 'en'" md-cell>
                                                 <span md-highlight-text="ctrl.workflowItemsCriteria.enName"
-                                                      md-highlight-flags="i">{{workflowItem.getFullNameByKey('en')}}</span>
+                                                      md-highlight-flags="i">{{workflowItem.getFullNameByKey('en')}}</span>-->
                     </td>
                     <td md-cell>
                         <md-menu-bar class="no-padding">

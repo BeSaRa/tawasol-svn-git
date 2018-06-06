@@ -13,6 +13,14 @@ module.exports = function (app) {
 
         self.defaultWorkflowItemsSettings = new DistributionWFItem();
 
+        /**
+         * @description get translated key name to use it in orderBy.
+         * @returns {string}
+         */
+        self.getTranslatedKey = function () {
+            return langService.current === 'ar' ? 'arName' : 'enName';
+        };
+
         self.grid = {
             limit: 4, // default limit
             page: 1, // first page

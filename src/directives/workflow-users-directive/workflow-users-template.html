@@ -32,12 +32,14 @@
                     </th>
                     <th md-column class="no-padding">
                         <!-- just to display out of office  --></th>
-                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length" md-order-by="arName">
-                        {{lang.arabic_name}}
+                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length"
+                        md-order-by="{{ctrl.getTranslatedKey()}}">
+                        {{lang.name}}
                     </th>
-                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length" md-order-by="enName">
+<!--                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length && lang.current === 'en'"
+                        md-order-by="enName">
                         {{lang.english_name}}
-                    </th>
+                    </th>-->
                     <th ng-if="!ctrl.selectedWorkflowItems.length" md-column>
                         {{lang.organization_unit}}
                     </th>
@@ -86,13 +88,13 @@
                         </md-button>
                     </td>
                     <td md-cell>
-                                                <span md-highlight-text="ctrl.gridItemsCriteria.arName"
-                                                      md-highlight-flags="i">{{workflowUser.getFullNameByKey('ar')}}</span>
+                                                <span md-highlight-text="ctrl.gridItemsCriteria[ctrl.getTranslatedKey()]"
+                                                      md-highlight-flags="i">{{workflowUser.getTranslatedName()}}</span>
                     </td>
-                    <td md-cell>
+                    <!--<td ng-if="lang.current === 'en'" md-cell>
                                                 <span md-highlight-text="ctrl.gridItemsCriteria.enName"
                                                       md-highlight-flags="i">{{workflowUser.getFullNameByKey('en')}}</span>
-                    </td>
+                    </td>-->
                     <td md-cell>
                         <span>{{workflowUser.getTranslatedOrganizationName()}}</span>
                     </td>
@@ -155,12 +157,12 @@
                         </md-button>
                     </td>
                     <td md-cell>
-                                                <span md-highlight-text="ctrl.gridItemsCriteria.arName"
-                                                      md-highlight-flags="i">{{workflowUser.getFullNameByKey('ar')}}</span>
+                                                <span md-highlight-text="ctrl.gridItemsCriteria[ctrl.getTranslatedKey()]"
+                                                      md-highlight-flags="i">{{workflowUser.getTranslatedName()}}</span>
                     </td>
-                    <td md-cell>
+<!--                    <td ng-if="lang.current === 'en'" md-cell>
                                                 <span md-highlight-text="ctrl.gridItemsCriteria.enName"
-                                                      md-highlight-flags="i">{{workflowUser.getFullNameByKey('en')}}</span>
+                                                      md-highlight-flags="i">{{workflowUser.getFullNameByKey('en')}}</span>-->
                     </td>
                     <td md-cell>
                         <span>{{workflowUser.getTranslatedOrganizationName()}}</span>

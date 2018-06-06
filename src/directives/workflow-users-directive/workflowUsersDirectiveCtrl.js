@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('workflowUsersDirectiveCtrl', function ($scope, DistributionWFItem, $timeout, LangWatcher) {
+    app.controller('workflowUsersDirectiveCtrl', function ($scope, langService, DistributionWFItem, $timeout, LangWatcher) {
         'ngInject';
         var self = this;
         self.controllerName = 'workflowUsersDirectiveCtrl';
@@ -8,7 +8,13 @@ module.exports = function (app) {
         self.selectedWorkflowItems = [];
 
         self.defaultWorkflowItemsSettings = new DistributionWFItem();
-
+        /**
+         * @description get translated key name to use it in orderBy.
+         * @returns {string}
+         */
+        self.getTranslatedKey = function () {
+            return langService.current === 'ar' ? 'arName' : 'enName';
+        };
         /**
          * @description run toggle bulk favorites.
          * @param selected

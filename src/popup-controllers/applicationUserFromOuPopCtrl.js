@@ -967,7 +967,7 @@ module.exports = function (app) {
          * @param ouApplicationUser
          * @returns {boolean}
          */
-        self.disableOUApplicationUserStatus = function (ouApplicationUser) {
+        self.disableOUApplicationUserActions = function (ouApplicationUser) {
             return self.applicationUser.defaultOUID === ouApplicationUser.ouid.id && employeeService.isCurrentEmployee(self.applicationUser.id);
         };
 

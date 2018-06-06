@@ -985,7 +985,7 @@
                                                     </td>
                                                     <td md-cell>
                                                         <md-switch ng-model="ouApplicationUser.status"
-                                                                   ng-disabled="ctrl.disableOUApplicationUserStatus(ouApplicationUser)"
+                                                                   ng-disabled="ctrl.disableOUApplicationUserActions(ouApplicationUser)"
                                                                    title="{{ouApplicationUser.getTranslatedStatus()}}"
                                                                    aria-label="{{ouApplicationUser.getTranslatedStatus()}}">
                                                         </md-switch>
@@ -1036,7 +1036,7 @@
                                                                         </md-button>
                                                                     </md-menu-item>
                                                                     <md-menu-item ng-if="!ctrl.currentOrganization">
-                                                                        <md-button
+                                                                        <md-button ng-disabled="ctrl.disableOUApplicationUserActions(ouApplicationUser)"
                                                                                 ng-click="ctrl.removeOUApplicationUserFromCtrl(ouApplicationUser, $event)">
                                                                             {{lang.delete}}
                                                                         </md-button>
