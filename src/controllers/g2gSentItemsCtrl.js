@@ -147,6 +147,22 @@ module.exports = function (app) {
          * @type {[*]}
          */
         self.gridActions = [
+            // Document Information
+            {
+                type: 'action',
+                icon: 'information-variant',
+                text: 'grid_action_document_info',
+                showInView: false,
+                subMenu: [
+                    {
+                        type: 'info',
+                        checkShow: self.checkToShowAction,
+                        gridName: 'g2g-sent-items'
+                    }
+                ],
+                class: "action-green",
+                checkShow: self.checkToShowAction
+            },
             // Open
             {
                 type: 'action',

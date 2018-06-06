@@ -10,6 +10,9 @@ module.exports = function (app) {
                                                          Incoming,
                                                          Internal,
                                                          EventHistory,
+                                                         WorkItem,
+                                                         G2G,
+                                                         G2GMessagingHistory,
                                                          SentItemDepartmentInbox,
                                                          Information) {
         'ngInject';
@@ -209,6 +212,8 @@ module.exports = function (app) {
                 || self.model instanceof Internal
                 || self.model instanceof EventHistory
                 || self.model instanceof SentItemDepartmentInbox
+                || self.model instanceof G2G
+                || self.model instanceof G2GMessagingHistory
             );
         };
 
@@ -227,7 +232,9 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.showAuthorInfo = function (gridName) {
-            return !(self.model instanceof EventHistory);
+            return !(self.model instanceof EventHistory
+                || self.model instanceof G2G
+                || self.model instanceof G2GMessagingHistory);
         };
 
         /**
@@ -236,7 +243,9 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.showTagsInfo = function (gridName) {
-            return true;
+            return !(self.model instanceof G2G
+                || self.model instanceof G2GMessagingHistory
+            );
         };
 
         /**
@@ -257,9 +266,22 @@ module.exports = function (app) {
         self.getDocumentInfo = function (property, gridName) {
             var model = self.model;
             if (property === 'securityLevel') {
-                var securityLevel = model.hasOwnProperty('generalStepElm')
+                /*var securityLevel = model.hasOwnProperty('generalStepElm')
                     ? (model.generalStepElm.hasOwnProperty('securityLevel') ? model.generalStepElm.securityLevel : null)
-                    : (model.hasOwnProperty('securityLevel') ? model.securityLevel : null);
+                    : (model.hasOwnProperty('securityLevel') ? model.securityLevel : null);*/
+                var securityLevel = null;
+                if (model instanceof WorkItem) {
+                    securityLevel = model.generalStepElm.securityLevel;
+                }
+                else if (model instanceof G2G) {
+                    securityLevel = model.correspondence.securityLevel;
+                }
+                else if (model instanceof G2GMessagingHistory) {
+                    securityLevel = model.securityLevel;
+                }
+                else {
+                    securityLevel = model.hasOwnProperty('securityLevel') ? model.securityLevel : null;
+                }
                 if (!securityLevel)
                     return null;
                 if (securityLevel instanceof Lookup)
@@ -268,12 +290,30 @@ module.exports = function (app) {
                     return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel).getTranslatedName();
             }
             else if (property === 'priorityLevel') {
-                var priorityLevel = model.hasOwnProperty('generalStepElm')
+                /*var priorityLevel = model.hasOwnProperty('generalStepElm')
                     ? (model.generalStepElm.hasOwnProperty('priorityLevel') ? model.generalStepElm.priorityLevel : null)
                     : (model.hasOwnProperty('priorityLevel') ? model.priorityLevel : null);
+*/
+                var priorityLevel = null;
+                if (model instanceof WorkItem) {
+                    priorityLevel = model.generalStepElm.priorityLevel;
+                }
+                else if (model instanceof G2G) {
+                    priorityLevel = model.correspondence.priorityLevel;
+                }
+                else if (model instanceof G2GMessagingHistory) {
+                    if (model.hasOwnProperty('prioretyLevel'))
+                        priorityLevel = model.prioretyLevel;
+                    else if (model.hasOwnProperty('priorityLevel'))
+                        priorityLevel = model.priorityLevel;
+                }
+                else {
+                    priorityLevel = model.hasOwnProperty('priorityLevel') ? model.priorityLevel : null;
+                }
 
-                if (!priorityLevel)
+                if (priorityLevel === null || typeof priorityLevel === 'undefined')
                     return null;
+
                 if (priorityLevel instanceof Lookup)
                     return priorityLevel.getTranslatedName();
                 else
@@ -283,9 +323,6 @@ module.exports = function (app) {
                 return model.hasOwnProperty('creatorInfo')
                     ? new Information(model.creatorInfo).getTranslatedName()
                     : (model.hasOwnProperty('creatorOuInfo') ? new Information(model.creatorOuInfo).getTranslatedName() : '');
-                /*return model.hasOwnProperty('createdBy')
-                    ? model.createdBy
-                    : (model.hasOwnProperty('creatorOu') ? model.creatorOu[langService.current + 'Name'] : '');*/
             }
             else if (property === 'tags') {
                 return model.getTagsCount();
