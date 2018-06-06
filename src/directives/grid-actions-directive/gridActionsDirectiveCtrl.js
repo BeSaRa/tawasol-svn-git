@@ -43,15 +43,14 @@ module.exports = function (app) {
         /**
          * @description Process the callback for the action button
          * @param action
-         * @param model
          * @param $event
          */
-        self.processMenu = function (action, model, $event) {
+        self.processMenu = function (action, $event) {
             if (action.hasOwnProperty('params') && action.params) {
-                action.callback(model, action.params, $event);
+                action.callback(self.model, action.params, $event);
             }
             else {
-                action.callback(model, $event);
+                action.callback(self.model, $event);
             }
         };
 
@@ -66,14 +65,56 @@ module.exports = function (app) {
             var mainAction, subAction;
             var shortcutActions = [];
 
-            if (direction === "vertical") {
+            for (var i = 0; i < gridActions.length; i++) {
+                mainAction = gridActions[i];
+                if (mainAction.type.toLowerCase() === "action" && !mainAction.hide) {
+                    /*
+                    * If action has property (shortcut) and it has value = true
+                    * Else if action don't has property (shortcut) or has property (shortcut) but value = false and has subMenu property with array value
+                    * */
+                    if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
+                        shortcutActions.push(mainAction);
+                    }
+                    else if (
+                        (!mainAction.hasOwnProperty('shortcut') || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut))
+                        && (mainAction.hasOwnProperty('subMenu') && angular.isArray(mainAction.subMenu))
+                    ) {
+                        for (var j = 0; j < mainAction.subMenu.length; j++) {
+                            subAction = mainAction.subMenu[j];
+
+                            /*If sub menu has separator, show it in vertical only. not in horizontal*/
+                            if (direction === 'vertical') {
+                                if (subAction.type.toLowerCase() === "action" && !subAction.hide
+                                    && (subAction.hasOwnProperty('shortcut') && subAction.shortcut)
+                                ) {
+                                    shortcutActions.push(mainAction);
+                                }
+                                else if (subAction.type.toLowerCase() === "separator" && !subAction.hide)
+                                    shortcutActions.push(mainAction);
+                            }
+                            else if (direction === 'horizontal') {
+                                if (subAction.type.toLowerCase() === "action" && !subAction.hide && subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
+                                    shortcutActions.push(subAction);
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (mainAction.type.toLowerCase() === "separator" && !mainAction.hide) {
+                    shortcutActions.push(mainAction)
+                }
+            }
+            return shortcutActions;
+
+
+            /*if (direction === "vertical") {
                 for (var i = 0; i < gridActions.length; i++) {
                     mainAction = gridActions[i];
                     if (mainAction.type.toLowerCase() === "action" && !mainAction.hide) {
-                        /*
+                        /!*
                         * If action has property (shortcut) and it has value = true
                         * Else if action don't has property (shortcut) or has property (shortcut) but value = false and has subMenu property with array value
-                        * */
+                        * *!/
                         if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
                             shortcutActions.push(mainAction);
                         }
@@ -88,14 +129,13 @@ module.exports = function (app) {
                                 ) {
                                     shortcutActions.push(mainAction);
                                 }
-                                /*else if (subAction.type.toLowerCase() === "separator" && !subAction.hide)
-                                 shortcutActions.push(mainAction)*/
+
+                                /!*If sub menu has separator, show it in vertical only. not in horizontal*!/
+                                else if (subAction.type.toLowerCase() === "separator" && !subAction.hide)
+                                 shortcutActions.push(mainAction)
                             }
                         }
                     }
-                    /*else if (!mainAction.hasOwnProperty('shortcut') || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut)) {
-                        shortcutActions.push(mainAction)
-                    }*/
                     else if (mainAction.type.toLowerCase() === "separator" && !mainAction.hide) {
                         shortcutActions.push(mainAction)
                     }
@@ -106,10 +146,10 @@ module.exports = function (app) {
                 for (var i = 0; i < gridActions.length; i++) {
                     mainAction = gridActions[i];
                     if (mainAction.type.toLowerCase() === "action" && !mainAction.hide) {
-                        /*
+                        /!*
                        * If action has property (shortcut) and it has value = true
                        * Else if action don't has property (shortcut) or has property (shortcut) but value = false and has subMenu property with array value
-                       * */
+                       * *!/
                         if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
                             shortcutActions.push(mainAction);
                         }
@@ -122,8 +162,8 @@ module.exports = function (app) {
                                 if (subAction.type.toLowerCase() === "action" && !subAction.hide && subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
                                     shortcutActions.push(subAction);
                                 }
-                                /*else if (subAction.type.toLowerCase() === "separator" && !subAction.hide)
-                                 shortcutActions.push(subAction)*/
+                                /!*else if (subAction.type.toLowerCase() === "separator" && !subAction.hide)
+                                 shortcutActions.push(subAction)*!/
                             }
                         }
                     }
@@ -132,7 +172,7 @@ module.exports = function (app) {
                     }
                 }
                 return shortcutActions;
-            }
+            }*/
             return gridActions;
         };
 
@@ -147,43 +187,81 @@ module.exports = function (app) {
             });
         };
 
+
         /**
-         * @description Checks if comments information can be shown or not. It will not show for Outgoing | Incoming | Internal documents
-         * @param model
+         * @description Checks if security level information can be shown or not.
          * @param gridName
          * @returns {boolean}
          */
-        self.showCommentsInfo = function (model, gridName) {
-            return !(model instanceof Outgoing
-                || model instanceof Incoming
-                || model instanceof Internal
-                || model instanceof EventHistory
-                || model instanceof SentItemDepartmentInbox
+        self.showSecurityLevelInfo = function (gridName) {
+            return true;
+        };
+
+        /**
+         * @description Checks if comments information can be shown or not.
+         * It will not show for Outgoing | Incoming | Internal | EventHistory | SentItemDepartmentInbox documents
+         * @param gridName
+         * @returns {boolean}
+         */
+        self.showCommentsInfo = function (gridName) {
+            return !(self.model instanceof Outgoing
+                || self.model instanceof Incoming
+                || self.model instanceof Internal
+                || self.model instanceof EventHistory
+                || self.model instanceof SentItemDepartmentInbox
             );
         };
 
         /**
-         * @description Checks if comments information can be shown or not. It will not show for Outgoing | Incoming | Internal documents
-         * @param model
+         * @description Checks if priority level information can be shown or not.
          * @param gridName
          * @returns {boolean}
          */
-        self.showAuthorInfo = function (model, gridName) {
-            return !(model instanceof EventHistory);
+        self.showPriorityLevel = function (gridName) {
+            return !(self.model instanceof EventHistory && gridName === 'user-sent-items');
+        };
+
+        /**
+         * @description Checks if comments information can be shown or not.
+         * @param gridName
+         * @returns {boolean}
+         */
+        self.showAuthorInfo = function (gridName) {
+            return !(self.model instanceof EventHistory);
+        };
+
+        /**
+         * @description Checks if tags information can be shown or not.
+         * @param gridName
+         * @returns {boolean}
+         */
+        self.showTagsInfo = function (gridName) {
+            return true;
+        };
+
+        /**
+         * @description Checks if broadcasted information can be shown or not.
+         * @param gridName
+         * @returns {boolean}
+         */
+        self.showBroadcastedInfo = function (gridName) {
+            return gridName === 'user-inbox';
         };
 
         /**
          * @description Get the document information for context menu
-         * @param model
          * @param property
          * @param gridName
          * @returns {*}
          */
-        self.getDocumentInfo = function (model, property, gridName) {
+        self.getDocumentInfo = function (property, gridName) {
+            var model = self.model;
             if (property === 'securityLevel') {
                 var securityLevel = model.hasOwnProperty('generalStepElm')
                     ? (model.generalStepElm.hasOwnProperty('securityLevel') ? model.generalStepElm.securityLevel : null)
                     : (model.hasOwnProperty('securityLevel') ? model.securityLevel : null);
+                if (!securityLevel)
+                    return null;
                 if (securityLevel instanceof Lookup)
                     return securityLevel.getTranslatedName();
                 else
@@ -193,6 +271,9 @@ module.exports = function (app) {
                 var priorityLevel = model.hasOwnProperty('generalStepElm')
                     ? (model.generalStepElm.hasOwnProperty('priorityLevel') ? model.generalStepElm.priorityLevel : null)
                     : (model.hasOwnProperty('priorityLevel') ? model.priorityLevel : null);
+
+                if (!priorityLevel)
+                    return null;
                 if (priorityLevel instanceof Lookup)
                     return priorityLevel.getTranslatedName();
                 else
