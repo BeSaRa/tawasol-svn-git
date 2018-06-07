@@ -268,7 +268,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -358,8 +358,9 @@ module.exports = function (app) {
             searchedGeneralDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
                     self.reloadSearchedGeneralDocuments(self.grid.page)
-                        .then(function(){
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            ;
                         });
                 });
             // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
@@ -548,7 +549,6 @@ module.exports = function (app) {
         };
 
 
-
         /**
          * @description send main document fax for searched general document
          * @param searchedGeneralDocument
@@ -653,10 +653,23 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadSearchedGeneralDocuments(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            ;
                             new ResolveDefer(defer);
                         })
                 })
+        };
+
+        /**
+         * @description Destinations
+         * @param correspondence
+         * @param $event
+         */
+        self.manageDestinations = function (correspondence, $event) {
+            correspondence.manageDocumentCorrespondence($event)
+                .then(function () {
+                    self.reloadSearchedGeneralDocuments(self.grid.page);
+                });
         };
 
         self.gridActions = [
@@ -758,7 +771,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model)
-                        && (info.documentClass === "incoming" || ((info.documentClass === "outgoing" || info.documentClass === 'internal')  && (!model.needApprove() || info.isPaper)));
+                        && (info.documentClass === "incoming" || ((info.documentClass === "outgoing" || info.documentClass === 'internal') && (!model.needApprove() || info.isPaper)));
                 }
             },
             // View Tracking Sheet

@@ -542,7 +542,7 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model) && info.isPaper;
                 }
-            },
+            }
         ];
     });
 };
