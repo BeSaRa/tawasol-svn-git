@@ -566,6 +566,9 @@ module.exports = function (app) {
             return "";
         };
 
+        self.deleteIndicators = function(record){
+
+        };
 
         self.filterSecurityLevels = function (collection, available) {
             var lookupKeys = available ? _.map(available, 'lookupKey') : _.map(rootEntity.getGlobalSettings().securityLevels, 'lookupKey');

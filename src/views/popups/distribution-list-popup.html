@@ -6,12 +6,12 @@
             <span class="p20" ng-if="ctrl.editMode">{{ctrl.model.getNames()}}</span>
             <close-dialog-directive></close-dialog-directive>
         </md-toolbar>
-        <md-content scroll-directive>
+        <md-content>
             <form name="distributionList_form" autocomplete="off">
                 <md-tabs md-dynamic-height>
                     <md-tab label="{{lang.basic_info}}">
                         <md-content>
-                            <div layout="column" class="p20">
+                            <div layout="column" class="p20" scroll-directive>
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>

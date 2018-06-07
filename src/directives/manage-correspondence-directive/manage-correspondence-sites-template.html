@@ -453,11 +453,12 @@
     <!-- CORRESPONDENCE SITES TAB -->
     <md-tab label="{{lang.correspondence_sites}}" ng-if="ctrl.showTab('correspondenceSites')"
             md-on-select="ctrl.setCurrentTab('correspondenceSites')">
-        <md-content scroll-directive class="white-bg">
-            <div class="p20" layout="column">
+        <md-content class="white-bg">
+            <div scroll-directive class="p20" layout="column">
 
                 <!-- Simple Search Box -->
-                <div layout="row" flex ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
+                <div layout="row" flex
+                     ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
                     <md-input-container flex>
                         <label>{{lang.sites_select_site_type}}</label>
                         <md-select ng-model="ctrl.selectedSiteType" ng-change="ctrl.onSiteTypeChange($event)">
@@ -507,13 +508,15 @@
                     <!-- Sub Site -->
                     <md-input-container flex>
                         <label for="subSearch">{{lang.sites_select_sub_site}}</label>
-                        <input id="subSearch" ng-model="ctrl.subSearch" ng-enter="ctrl.onSubSearch($event)" ng-change="ctrl.onSubSearch($event)">
+                        <input id="subSearch" ng-model="ctrl.subSearch" ng-enter="ctrl.onSubSearch($event)"
+                               ng-change="ctrl.onSubSearch($event)">
                     </md-input-container>
                 </div>
 
                 <!-- Search Results -->
                 <div flex layout="column">
-                    <md-card ng-if="ctrl.subSearchResult.length" md-whiteframe="3" layout="column" class="card-overlay">
+                    <md-card ng-if="ctrl.subSearchResult.length" md-whiteframe="3" layout="column"
+                             class="card-overlay">
                         <md-toolbar class="md-table-toolbar md-default"
                                     ng-class="{'selected':ctrl.subSearchSelected.length}">
                             <div class="md-toolbar-tools">
@@ -594,104 +597,107 @@
                             </div>
                         </md-toolbar>
                         <!-- Search results -->
-                        <md-table-container flex scroll-directive>
-                            <table md-table md-row-select multiple ng-model="ctrl.subSearchSelected"
-                                   md-progress="ctrl.progress">
-                                <thead md-head md-order="ctrl.grid.subSearchResult.order">
-                                <tr md-row>
-                                    <th md-column md-order-by="mainEnSiteText">
-                                        <span>{{lang.sites_main_site}}</span>
-                                    </th>
-                                    <th md-column md-order-by="mainArSiteText">
-                                        <span>{{lang.sites_sub_site}}</span>
-                                    </th>
-                                    <th md-column md-order-by="mainArSiteText">
-                                        <span>{{lang.sites_select_site_type}}</span>
-                                    </th>
-                                    <th md-column>
-                                        <span>{{lang.sites_follow_up_status}}</span>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody md-body>
-                                <tr md-row md-select="site"
-                                    ng-repeat="site in ctrl.subSearchResult  | filter:ctrl.searchModel | limitTo: ctrl.grid.subSearchResult.limit: ((ctrl.grid.subSearchResult.page - 1) * ctrl.grid.subSearchResult.limit) |orderBy:ctrl.grid.subSearchResult.order  track by $index">
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedParentName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span md-highlight-text="ctrl.subSearch" class="span-column">{{site.getTranslatedName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedSiteType()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div layout="row">
-                                            <div>
-                                                <md-menu-bar class="follow-up-menu-bar">
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.subSearchSelected"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.subSearchResult.order">
+                                    <tr md-row>
+                                        <th md-column md-order-by="mainEnSiteText">
+                                            <span>{{lang.sites_main_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="mainArSiteText">
+                                            <span>{{lang.sites_sub_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="mainArSiteText">
+                                            <span>{{lang.sites_select_site_type}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_status}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="site"
+                                        ng-repeat="site in ctrl.subSearchResult  | filter:ctrl.searchModel | limitTo: ctrl.grid.subSearchResult.limit: ((ctrl.grid.subSearchResult.page - 1) * ctrl.grid.subSearchResult.limit) |orderBy:ctrl.grid.subSearchResult.order  track by $index">
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedParentName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span md-highlight-text="ctrl.subSearch" class="span-column">{{site.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedSiteType()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row">
+                                                <div>
+                                                    <md-menu-bar class="follow-up-menu-bar">
+                                                        <md-menu>
+                                                            <md-button ng-click="$mdMenu.open()"
+                                                                       ng-disabled="!!ctrl.disableCorrespondence">
+                                                                {{site.followupStatus.getTranslatedName() ||
+                                                                lang.sites_follow_up_status}}
+                                                            </md-button>
+                                                            <md-menu-content width="3">
+                                                                <md-menu-item
+                                                                        ng-repeat="status in ctrl.followUpStatuses">
+                                                                    <md-button
+                                                                            ng-click="ctrl.setCurrentFollowUpStatus(site , status)">
+                                                                        {{status.getTranslatedName()}}
+                                                                    </md-button>
+                                                                </md-menu-item>
+                                                            </md-menu-content>
+                                                        </md-menu>
+                                                    </md-menu-bar>
+                                                </div>
+                                                <div>
+                                                    <md-datepicker ng-if="ctrl.needReply(site.followupStatus)"
+                                                                   name="followUpStatusDate"
+                                                                   ng-disabled="!!ctrl.disableCorrespondence"
+                                                                   ng-model="site.followupDate"
+                                                                   md-placeholder="{{lang.sites_follow_up_status_date}}"
+                                                                   md-max-date="ctrl.maxCreateDate"
+                                                                   md-min-date="ctrl.minDate"
+                                                                   md-open-on-focus></md-datepicker>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="row" layout-align="start center">
+                                                <md-menu-bar>
                                                     <md-menu>
-                                                        <md-button ng-click="$mdMenu.open()"
-                                                                   ng-disabled="!!ctrl.disableCorrespondence">
-                                                            {{site.followupStatus.getTranslatedName() ||
-                                                            lang.sites_follow_up_status}}
-                                                        </md-button>
+                                                        <button class="md-icon-button" ng-click="$mdMenu.open()">
+                                                            <md-icon md-svg-icon="plus"></md-icon>
+                                                        </button>
                                                         <md-menu-content width="3">
-                                                            <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
-                                                                <md-button
-                                                                        ng-click="ctrl.setCurrentFollowUpStatus(site , status)">
-                                                                    {{status.getTranslatedName()}}
+                                                            <md-menu-item>
+                                                                <md-button ng-click="ctrl.addSiteTo(site)"
+                                                                           ng-disabled="!!ctrl.disableCorrespondence">
+                                                                    {{lang.sites_original}}
+                                                                </md-button>
+                                                            </md-menu-item>
+                                                            <md-menu-item>
+                                                                <md-button ng-click="ctrl.addSiteCC(site)"
+                                                                           ng-disabled="!!ctrl.disableCorrespondence">
+                                                                    {{lang.sites_copy}}
                                                                 </md-button>
                                                             </md-menu-item>
                                                         </md-menu-content>
                                                     </md-menu>
                                                 </md-menu-bar>
                                             </div>
-                                            <div>
-                                                <md-datepicker ng-if="ctrl.needReply(site.followupStatus)"
-                                                               name="followUpStatusDate"
-                                                               ng-disabled="!!ctrl.disableCorrespondence"
-                                                               ng-model="site.followupDate"
-                                                               md-placeholder="{{lang.sites_follow_up_status_date}}"
-                                                               md-max-date="ctrl.maxCreateDate"
-                                                               md-min-date="ctrl.minDate"
-                                                               md-open-on-focus></md-datepicker>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="row" layout-align="start center">
-                                            <md-menu-bar>
-                                                <md-menu>
-                                                    <button class="md-icon-button" ng-click="$mdMenu.open()">
-                                                        <md-icon md-svg-icon="plus"></md-icon>
-                                                    </button>
-                                                    <md-menu-content width="3">
-                                                        <md-menu-item>
-                                                            <md-button ng-click="ctrl.addSiteTo(site)"
-                                                                       ng-disabled="!!ctrl.disableCorrespondence">
-                                                                {{lang.sites_original}}
-                                                            </md-button>
-                                                        </md-menu-item>
-                                                        <md-menu-item>
-                                                            <md-button ng-click="ctrl.addSiteCC(site)"
-                                                                       ng-disabled="!!ctrl.disableCorrespondence">
-                                                                {{lang.sites_copy}}
-                                                            </md-button>
-                                                        </md-menu-item>
-                                                    </md-menu-content>
-                                                </md-menu>
-                                            </md-menu-bar>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.subSearchResult.limitOptions"
@@ -754,82 +760,87 @@
                             </div>
                         </md-toolbar>
                         <!-- Original sites table -->
-                        <md-table-container flex scroll-directive>
-                            <table md-table md-row-select multiple ng-model="ctrl.sitesInfoToSelected"
-                                   md-progress="ctrl.progress">
-                                <thead md-head md-order="ctrl.grid.sitesInfoTo.order">
-                                <tr md-row>
-                                    <th md-column md-order-by="mainEnSiteText">
-                                        <span>{{lang.sites_main_site}}</span>
-                                    </th>
-                                    <th md-column md-order-by="mainArSiteText">
-                                        <span>{{lang.sites_sub_site}}</span>
-                                    </th>
-                                    <th md-column md-order-by="siteType">
-                                        <span>{{lang.sites_select_site_type}}</span>
-                                    </th>
-                                    <th md-column>
-                                        <span>{{lang.sites_follow_up_status}}</span>
-                                    </th>
-                                    <th md-column>
-                                        <span>{{lang.sites_follow_up_date}}</span>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody md-body>
-                                <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
-                                    ng-repeat="site in ctrl.sitesInfoTo  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoTo.limit: ((ctrl.grid.sitesInfoTo.page - 1) * ctrl.grid.sitesInfoTo.limit) |orderBy:ctrl.grid.sitesInfoTo.order  track by $index">
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedParentName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedSiteType()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div layout="row"><span flex>{{site.followupStatus.getTranslatedName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="row" layout-align="start center"
-                                             ng-if="!ctrl.disableCorrespondence">
-                                            <div>
-                                                <md-button tooltip="{{lang.sites_change_to_copy}}"
-                                                           class="md-icon-button"
-                                                           ng-click="ctrl.changeSiteTo('CC',site,$index)">
-                                                    <md-icon md-svg-icon="priority-low"></md-icon>
-                                                </md-button>
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.sitesInfoToSelected"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.sitesInfoTo.order">
+                                    <tr md-row>
+                                        <th md-column md-order-by="mainEnSiteText">
+                                            <span>{{lang.sites_main_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="mainArSiteText">
+                                            <span>{{lang.sites_sub_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="siteType">
+                                            <span>{{lang.sites_select_site_type}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_status}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_date}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
+                                        ng-repeat="site in ctrl.sitesInfoTo  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoTo.limit: ((ctrl.grid.sitesInfoTo.page - 1) * ctrl.grid.sitesInfoTo.limit) |orderBy:ctrl.grid.sitesInfoTo.order  track by $index">
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedParentName()}}</span>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedSiteType()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row"><span
+                                                    flex>{{site.followupStatus.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="row" layout-align="start center"
+                                                 ng-if="!ctrl.disableCorrespondence">
+                                                <div>
+                                                    <md-button tooltip="{{lang.sites_change_to_copy}}"
+                                                               class="md-icon-button"
+                                                               ng-click="ctrl.changeSiteTo('CC',site,$index)">
+                                                        <md-icon md-svg-icon="priority-low"></md-icon>
+                                                    </md-button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.sitesInfoTo.limitOptions"
                                     md-limit="ctrl.grid.sitesInfoTo.limit" md-page="ctrl.grid.sitesInfoTo.page"
                                     md-total="{{ctrl.sitesInfoTo.length}}" md-page-select>
                             </md-table-pagination>
+
                         </md-table-container>
                     </md-card>
                 </div>
                 <br/>
                 <!-- Added Copy sites after searching / from database -->
                 <div flex layout="column">
-                    <md-card ng-if="ctrl.sitesInfoCC.length" md-whiteframe="3" layout="column" class="card-overlay">
+                    <md-card scroll-directive ng-if="ctrl.sitesInfoCC.length" md-whiteframe="3" layout="column"
+                             class="card-overlay">
                         <!-- Copy sites toolbar -->
                         <md-toolbar class="md-table-toolbar md-default"
                                     ng-class="{'selected':ctrl.sitesInfoCCSelected.length}">
@@ -880,69 +891,72 @@
                             </div>
                         </md-toolbar>
                         <!-- Copy sites table -->
-                        <md-table-container flex scroll-directive>
-                            <table md-table md-row-select multiple ng-model="ctrl.sitesInfoCCSelected"
-                                   md-progress="ctrl.progress">
-                                <thead md-head md-order="ctrl.grid.sitesInfoCC.order">
-                                <tr md-row>
-                                    <th md-column md-order-by="mainEnSiteText">
-                                        <span>{{lang.sites_main_site}}</span>
-                                    </th>
-                                    <th md-column md-order-by="mainArSiteText">
-                                        <span>{{lang.sites_sub_site}}</span>
-                                    </th>
-                                    <th md-column md-order-by="siteType">
-                                        <span>{{lang.sites_select_site_type}}</span>
-                                    </th>
-                                    <th md-column>
-                                        <span>{{lang.sites_follow_up_status}}</span>
-                                    </th>
-                                    <th md-column>
-                                        <span>{{lang.sites_follow_up_date}}</span>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody md-body>
-                                <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
-                                    ng-repeat="site in ctrl.sitesInfoCC  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoCC.limit: ((ctrl.grid.sitesInfoCC.page - 1) * ctrl.grid.sitesInfoCC.limit) |orderBy:ctrl.grid.sitesInfoCC.order  track by $index">
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedParentName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedSiteType()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div layout="row"><span flex>{{site.followupStatus.getTranslatedName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="row" layout-align="start center"
-                                             ng-if="!ctrl.disableCorrespondence">
-                                            <div>
-                                                <md-button tooltip="{{lang.sites_change_to_original}}"
-                                                           class="md-icon-button"
-                                                           ng-click="ctrl.changeSiteTo('To',site,$index)">
-                                                    <md-icon md-svg-icon="priority-high"></md-icon>
-                                                </md-button>
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.sitesInfoCCSelected"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.sitesInfoCC.order">
+                                    <tr md-row>
+                                        <th md-column md-order-by="mainEnSiteText">
+                                            <span>{{lang.sites_main_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="mainArSiteText">
+                                            <span>{{lang.sites_sub_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="siteType">
+                                            <span>{{lang.sites_select_site_type}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_status}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_date}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
+                                        ng-repeat="site in ctrl.sitesInfoCC  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoCC.limit: ((ctrl.grid.sitesInfoCC.page - 1) * ctrl.grid.sitesInfoCC.limit) |orderBy:ctrl.grid.sitesInfoCC.order  track by $index">
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedParentName()}}</span>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedSiteType()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row"><span
+                                                    flex>{{site.followupStatus.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="row" layout-align="start center"
+                                                 ng-if="!ctrl.disableCorrespondence">
+                                                <div>
+                                                    <md-button tooltip="{{lang.sites_change_to_original}}"
+                                                               class="md-icon-button"
+                                                               ng-click="ctrl.changeSiteTo('To',site,$index)">
+                                                        <md-icon md-svg-icon="priority-high"></md-icon>
+                                                    </md-button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.sitesInfoCC.limitOptions"
@@ -959,8 +973,8 @@
     <!-- DISTRIBUTION LIST TAB -->
     <md-tab label="{{lang.distribution_lists}}" ng-if="ctrl.showTab('distributionLists')"
             md-on-select="ctrl.setCurrentTab('distributionLists')">
-        <md-content scroll-directive class="white-bg">
-            <div class="p20" layout="column">
+        <md-content class="white-bg">
+            <div scroll-directive class="p20" layout="column">
                 <!-- Search Box -->
                 <div layout="row" flex ng-if="!ctrl.disableCorrespondence">
                     <!-- Distribution Lists -->
@@ -1060,104 +1074,107 @@
                             </div>
                         </md-toolbar>
                         <!-- Search results table -->
-                        <md-table-container flex scroll-directive>
-                            <table md-table md-row-select multiple ng-model="ctrl.subSearchSelected_DL"
-                                   md-progress="ctrl.progress">
-                                <thead md-head md-order="ctrl.grid.subSearchResult_DL.order">
-                                <tr md-row>
-                                    <th md-column md-order-by="mainEnSiteText">
-                                        <span>{{lang.sites_main_site}}</span>
-                                    </th>
-                                    <th md-column md-order-by="mainArSiteText">
-                                        <span>{{lang.sites_sub_site}}</span>
-                                    </th>
-                                    <th md-column md-order-by="mainArSiteText">
-                                        <span>{{lang.sites_select_site_type}}</span>
-                                    </th>
-                                    <th md-column>
-                                        <span>{{lang.sites_follow_up_status}}</span>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody md-body>
-                                <tr md-row md-select="site"
-                                    ng-repeat="site in ctrl.subSearchResult_DL  | filter:ctrl.searchModel_DL | limitTo: ctrl.grid.subSearchResult_DL.limit: ((ctrl.grid.subSearchResult_DL.page - 1) * ctrl.grid.subSearchResult_DL.limit) |orderBy:ctrl.grid.subSearchResult_DL.order  track by $index">
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedParentName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedSiteType()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div layout="row">
-                                            <div>
-                                                <md-menu-bar class="follow-up-menu-bar">
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.subSearchSelected_DL"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.subSearchResult_DL.order">
+                                    <tr md-row>
+                                        <th md-column md-order-by="mainEnSiteText">
+                                            <span>{{lang.sites_main_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="mainArSiteText">
+                                            <span>{{lang.sites_sub_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="mainArSiteText">
+                                            <span>{{lang.sites_select_site_type}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_status}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="site"
+                                        ng-repeat="site in ctrl.subSearchResult_DL  | filter:ctrl.searchModel_DL | limitTo: ctrl.grid.subSearchResult_DL.limit: ((ctrl.grid.subSearchResult_DL.page - 1) * ctrl.grid.subSearchResult_DL.limit) |orderBy:ctrl.grid.subSearchResult_DL.order  track by $index">
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedParentName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedSiteType()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row">
+                                                <div>
+                                                    <md-menu-bar class="follow-up-menu-bar">
+                                                        <md-menu>
+                                                            <md-button ng-click="$mdMenu.open()"
+                                                                       ng-disabled="!!ctrl.disableCorrespondence">
+                                                                {{site.followupStatus.getTranslatedName() ||
+                                                                lang.sites_follow_up_status}}
+                                                            </md-button>
+                                                            <md-menu-content width="3">
+                                                                <md-menu-item
+                                                                        ng-repeat="status in ctrl.followUpStatuses">
+                                                                    <md-button
+                                                                            ng-click="ctrl.setCurrentFollowUpStatus(site , status)">
+                                                                        {{status.getTranslatedName()}}
+                                                                    </md-button>
+                                                                </md-menu-item>
+                                                            </md-menu-content>
+                                                        </md-menu>
+                                                    </md-menu-bar>
+                                                </div>
+                                                <div>
+                                                    <md-datepicker ng-if="ctrl.needReply(site.followupStatus)"
+                                                                   name="followUpStatusDate_DL"
+                                                                   ng-disabled="!!ctrl.disableCorrespondence"
+                                                                   ng-model="site.followupDate"
+                                                                   md-placeholder="{{lang.sites_follow_up_status_date}}"
+                                                                   md-max-date="ctrl.maxCreateDate"
+                                                                   md-min-date="ctrl.minDate"
+                                                                   md-open-on-focus></md-datepicker>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="row" layout-align="start center">
+                                                <md-menu-bar>
                                                     <md-menu>
-                                                        <md-button ng-click="$mdMenu.open()"
-                                                                   ng-disabled="!!ctrl.disableCorrespondence">
-                                                            {{site.followupStatus.getTranslatedName() ||
-                                                            lang.sites_follow_up_status}}
-                                                        </md-button>
+                                                        <button class="md-icon-button" ng-click="$mdMenu.open()">
+                                                            <md-icon md-svg-icon="plus"></md-icon>
+                                                        </button>
                                                         <md-menu-content width="3">
-                                                            <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
-                                                                <md-button
-                                                                        ng-click="ctrl.setCurrentFollowUpStatus(site , status)">
-                                                                    {{status.getTranslatedName()}}
+                                                            <md-menu-item>
+                                                                <md-button ng-click="ctrl.addSiteTo(site)"
+                                                                           ng-disabled="!!ctrl.disableCorrespondence">
+                                                                    {{lang.sites_original}}
+                                                                </md-button>
+                                                            </md-menu-item>
+                                                            <md-menu-item>
+                                                                <md-button ng-click="ctrl.addSiteCC(site)"
+                                                                           ng-disabled="!!ctrl.disableCorrespondence">
+                                                                    {{lang.sites_copy}}
                                                                 </md-button>
                                                             </md-menu-item>
                                                         </md-menu-content>
                                                     </md-menu>
                                                 </md-menu-bar>
                                             </div>
-                                            <div>
-                                                <md-datepicker ng-if="ctrl.needReply(site.followupStatus)"
-                                                               name="followUpStatusDate_DL"
-                                                               ng-disabled="!!ctrl.disableCorrespondence"
-                                                               ng-model="site.followupDate"
-                                                               md-placeholder="{{lang.sites_follow_up_status_date}}"
-                                                               md-max-date="ctrl.maxCreateDate"
-                                                               md-min-date="ctrl.minDate"
-                                                               md-open-on-focus></md-datepicker>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="row" layout-align="start center">
-                                            <md-menu-bar>
-                                                <md-menu>
-                                                    <button class="md-icon-button" ng-click="$mdMenu.open()">
-                                                        <md-icon md-svg-icon="plus"></md-icon>
-                                                    </button>
-                                                    <md-menu-content width="3">
-                                                        <md-menu-item>
-                                                            <md-button ng-click="ctrl.addSiteTo(site)"
-                                                                       ng-disabled="!!ctrl.disableCorrespondence">
-                                                                {{lang.sites_original}}
-                                                            </md-button>
-                                                        </md-menu-item>
-                                                        <md-menu-item>
-                                                            <md-button ng-click="ctrl.addSiteCC(site)"
-                                                                       ng-disabled="!!ctrl.disableCorrespondence">
-                                                                {{lang.sites_copy}}
-                                                            </md-button>
-                                                        </md-menu-item>
-                                                    </md-menu-content>
-                                                </md-menu>
-                                            </md-menu-bar>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.subSearchResult_DL.limitOptions"
@@ -1222,69 +1239,72 @@
                             </div>
                         </md-toolbar>
                         <!-- Original sites table -->
-                        <md-table-container flex scroll-directive>
-                            <table md-table md-row-select multiple ng-model="ctrl.sitesInfoToSelected"
-                                   md-progress="ctrl.progress">
-                                <thead md-head md-order="ctrl.grid.sitesInfoTo.order">
-                                <tr md-row>
-                                    <th md-column md-order-by="mainEnSiteText">
-                                        <span>{{lang.sites_main_site}}</span>
-                                    </th>
-                                    <th md-column md-order-by="mainArSiteText">
-                                        <span>{{lang.sites_sub_site}}</span>
-                                    </th>
-                                    <th md-column md-order-by="siteType">
-                                        <span>{{lang.sites_select_site_type}}</span>
-                                    </th>
-                                    <th md-column>
-                                        <span>{{lang.sites_follow_up_status}}</span>
-                                    </th>
-                                    <th md-column>
-                                        <span>{{lang.sites_follow_up_date}}</span>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody md-body>
-                                <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
-                                    ng-repeat="site in ctrl.sitesInfoTo  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoTo.limit: ((ctrl.grid.sitesInfoTo.page - 1) * ctrl.grid.sitesInfoTo.limit) |orderBy:ctrl.grid.sitesInfoTo.order  track by $index">
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedParentName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedSiteType()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div layout="row"><span flex>{{site.followupStatus.getTranslatedName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="row" layout-align="start center"
-                                             ng-if="!ctrl.disableCorrespondence">
-                                            <div>
-                                                <md-button tooltip="{{lang.sites_change_to_copy}}"
-                                                           class="md-icon-button"
-                                                           ng-click="ctrl.changeSiteTo('CC',site,$index)">
-                                                    <md-icon md-svg-icon="priority-low"></md-icon>
-                                                </md-button>
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.sitesInfoToSelected"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.sitesInfoTo.order">
+                                    <tr md-row>
+                                        <th md-column md-order-by="mainEnSiteText">
+                                            <span>{{lang.sites_main_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="mainArSiteText">
+                                            <span>{{lang.sites_sub_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="siteType">
+                                            <span>{{lang.sites_select_site_type}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_status}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_date}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
+                                        ng-repeat="site in ctrl.sitesInfoTo  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoTo.limit: ((ctrl.grid.sitesInfoTo.page - 1) * ctrl.grid.sitesInfoTo.limit) |orderBy:ctrl.grid.sitesInfoTo.order  track by $index">
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedParentName()}}</span>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedSiteType()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row"><span
+                                                    flex>{{site.followupStatus.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="row" layout-align="start center"
+                                                 ng-if="!ctrl.disableCorrespondence">
+                                                <div>
+                                                    <md-button tooltip="{{lang.sites_change_to_copy}}"
+                                                               class="md-icon-button"
+                                                               ng-click="ctrl.changeSiteTo('CC',site,$index)">
+                                                        <md-icon md-svg-icon="priority-low"></md-icon>
+                                                    </md-button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.sitesInfoTo.limitOptions"
@@ -1348,69 +1368,72 @@
                             </div>
                         </md-toolbar>
                         <!-- Copy sites table -->
-                        <md-table-container flex scroll-directive>
-                            <table md-table md-row-select multiple ng-model="ctrl.sitesInfoCCSelected"
-                                   md-progress="ctrl.progress">
-                                <thead md-head md-order="ctrl.grid.sitesInfoCC.order">
-                                <tr md-row>
-                                    <th md-column md-order-by="mainEnSiteText">
-                                        <span>{{lang.sites_main_site}}</span>
-                                    </th>
-                                    <th md-column md-order-by="mainArSiteText">
-                                        <span>{{lang.sites_sub_site}}</span>
-                                    </th>
-                                    <th md-column md-order-by="siteType">
-                                        <span>{{lang.sites_select_site_type}}</span>
-                                    </th>
-                                    <th md-column>
-                                        <span>{{lang.sites_follow_up_status}}</span>
-                                    </th>
-                                    <th md-column>
-                                        <span>{{lang.sites_follow_up_date}}</span>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody md-body>
-                                <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
-                                    ng-repeat="site in ctrl.sitesInfoCC  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoCC.limit: ((ctrl.grid.sitesInfoCC.page - 1) * ctrl.grid.sitesInfoCC.limit) |orderBy:ctrl.grid.sitesInfoCC.order  track by $index">
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedParentName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="column">
-                                            <span class="span-column">{{site.getTranslatedSiteType()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div layout="row"><span flex>{{site.followupStatus.getTranslatedName()}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
-                                        </div>
-                                    </td>
-                                    <td md-cell>
-                                        <div flex layout="row" layout-align="start center"
-                                             ng-if="!ctrl.disableCorrespondence">
-                                            <div>
-                                                <md-button tooltip="{{lang.sites_change_to_original}}"
-                                                           class="md-icon-button"
-                                                           ng-click="ctrl.changeSiteTo('To',site,$index)">
-                                                    <md-icon md-svg-icon="priority-high"></md-icon>
-                                                </md-button>
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.sitesInfoCCSelected"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.sitesInfoCC.order">
+                                    <tr md-row>
+                                        <th md-column md-order-by="mainEnSiteText">
+                                            <span>{{lang.sites_main_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="mainArSiteText">
+                                            <span>{{lang.sites_sub_site}}</span>
+                                        </th>
+                                        <th md-column md-order-by="siteType">
+                                            <span>{{lang.sites_select_site_type}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_status}}</span>
+                                        </th>
+                                        <th md-column>
+                                            <span>{{lang.sites_follow_up_date}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
+                                        ng-repeat="site in ctrl.sitesInfoCC  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoCC.limit: ((ctrl.grid.sitesInfoCC.page - 1) * ctrl.grid.sitesInfoCC.limit) |orderBy:ctrl.grid.sitesInfoCC.order  track by $index">
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedParentName()}}</span>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="column">
+                                                <span class="span-column">{{site.getTranslatedSiteType()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row"><span
+                                                    flex>{{site.followupStatus.getTranslatedName()}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                            </div>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="row" layout-align="start center"
+                                                 ng-if="!ctrl.disableCorrespondence">
+                                                <div>
+                                                    <md-button tooltip="{{lang.sites_change_to_original}}"
+                                                               class="md-icon-button"
+                                                               ng-click="ctrl.changeSiteTo('To',site,$index)">
+                                                        <md-icon md-svg-icon="priority-high"></md-icon>
+                                                    </md-button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <md-table-pagination
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.sitesInfoCC.limitOptions"
@@ -1437,57 +1460,59 @@
                 </div>
             </md-toolbar>
             <!-- Original sites table -->
-            <md-table-container flex scroll-directive>
-                <table md-table ng-model="ctrl.sitesInfoToSelected"
-                       md-progress="ctrl.progress">
-                    <thead md-head md-order="ctrl.grid.sitesInfoTo.order">
-                    <tr md-row>
-                        <th md-column md-order-by="mainEnSiteText">
-                            <span>{{lang.sites_main_site}}</span>
-                        </th>
-                        <th md-column md-order-by="mainArSiteText">
-                            <span>{{lang.sites_sub_site}}</span>
-                        </th>
-                        <th md-column md-order-by="siteType">
-                            <span>{{lang.sites_select_site_type}}</span>
-                        </th>
-                        <th md-column>
-                            <span>{{lang.sites_follow_up_status}}</span>
-                        </th>
-                        <th md-column>
-                            <span>{{lang.sites_follow_up_date}}</span>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody md-body>
-                    <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
-                        ng-repeat="site in ctrl.sitesInfoTo  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoTo.limit: ((ctrl.grid.sitesInfoTo.page - 1) * ctrl.grid.sitesInfoTo.limit) |orderBy:ctrl.grid.sitesInfoTo.order  track by $index">
-                        <td md-cell>
-                            <div flex layout="column">
-                                <span class="span-column">{{site.getTranslatedParentName()}}</span>
-                            </div>
-                        </td>
-                        <td md-cell>
-                            <div flex layout="column">
-                                <span class="span-column">{{site.getTranslatedName()}}</span>
-                            </div>
-                        </td>
-                        <td md-cell>
-                            <div flex layout="column">
-                                <span class="span-column">{{site.getTranslatedSiteType()}}</span>
-                            </div>
-                        </td>
-                        <td md-cell>
-                            <div layout="row"><span flex>{{site.followupStatus.getTranslatedName()}}</span>
-                            </div>
-                        </td>
-                        <td md-cell>
-                            <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+            <md-table-container>
+                <div flex scroll-directive>
+                    <table md-table ng-model="ctrl.sitesInfoToSelected"
+                           md-progress="ctrl.progress">
+                        <thead md-head md-order="ctrl.grid.sitesInfoTo.order">
+                        <tr md-row>
+                            <th md-column md-order-by="mainEnSiteText">
+                                <span>{{lang.sites_main_site}}</span>
+                            </th>
+                            <th md-column md-order-by="mainArSiteText">
+                                <span>{{lang.sites_sub_site}}</span>
+                            </th>
+                            <th md-column md-order-by="siteType">
+                                <span>{{lang.sites_select_site_type}}</span>
+                            </th>
+                            <th md-column>
+                                <span>{{lang.sites_follow_up_status}}</span>
+                            </th>
+                            <th md-column>
+                                <span>{{lang.sites_follow_up_date}}</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody md-body>
+                        <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
+                            ng-repeat="site in ctrl.sitesInfoTo  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoTo.limit: ((ctrl.grid.sitesInfoTo.page - 1) * ctrl.grid.sitesInfoTo.limit) |orderBy:ctrl.grid.sitesInfoTo.order  track by $index">
+                            <td md-cell>
+                                <div flex layout="column">
+                                    <span class="span-column">{{site.getTranslatedParentName()}}</span>
+                                </div>
+                            </td>
+                            <td md-cell>
+                                <div flex layout="column">
+                                    <span class="span-column">{{site.getTranslatedName()}}</span>
+                                </div>
+                            </td>
+                            <td md-cell>
+                                <div flex layout="column">
+                                    <span class="span-column">{{site.getTranslatedSiteType()}}</span>
+                                </div>
+                            </td>
+                            <td md-cell>
+                                <div layout="row"><span flex>{{site.followupStatus.getTranslatedName()}}</span>
+                                </div>
+                            </td>
+                            <td md-cell>
+                                <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <md-table-pagination
                         md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                         md-limit-options="ctrl.grid.sitesInfoTo.limitOptions"
@@ -1551,69 +1576,71 @@
                 </div>
             </md-toolbar>
             <!-- Copy sites table -->
-            <md-table-container flex scroll-directive>
-                <table md-table md-row-select multiple ng-model="ctrl.sitesInfoCCSelected"
-                       md-progress="ctrl.progress">
-                    <thead md-head md-order="ctrl.grid.sitesInfoCC.order">
-                    <tr md-row>
-                        <th md-column md-order-by="mainEnSiteText">
-                            <span>{{lang.sites_main_site}}</span>
-                        </th>
-                        <th md-column md-order-by="mainArSiteText">
-                            <span>{{lang.sites_sub_site}}</span>
-                        </th>
-                        <th md-column md-order-by="siteType">
-                            <span>{{lang.sites_select_site_type}}</span>
-                        </th>
-                        <th md-column>
-                            <span>{{lang.sites_follow_up_status}}</span>
-                        </th>
-                        <th md-column>
-                            <span>{{lang.sites_follow_up_date}}</span>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody md-body>
-                    <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
-                        ng-repeat="site in ctrl.sitesInfoCC  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoCC.limit: ((ctrl.grid.sitesInfoCC.page - 1) * ctrl.grid.sitesInfoCC.limit) |orderBy:ctrl.grid.sitesInfoCC.order  track by $index">
-                        <td md-cell>
-                            <div flex layout="column">
-                                <span class="span-column">{{site.getTranslatedParentName()}}</span>
-                            </div>
-                        </td>
-                        <td md-cell>
-                            <div flex layout="column">
-                                <span class="span-column">{{site.getTranslatedName()}}</span>
-                            </div>
-                        </td>
-                        <td md-cell>
-                            <div flex layout="column">
-                                <span class="span-column">{{site.getTranslatedSiteType()}}</span>
-                            </div>
-                        </td>
-                        <td md-cell>
-                            <div layout="row"><span flex>{{site.followupStatus.getTranslatedName()}}</span>
-                            </div>
-                        </td>
-                        <td md-cell>
-                            <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
-                            </div>
-                        </td>
-                        <td md-cell>
-                            <div flex layout="row" layout-align="start center"
-                                 ng-if="!ctrl.disableCorrespondence">
-                                <div>
-                                    <md-button tooltip="{{lang.sites_change_to_original}}"
-                                               class="md-icon-button"
-                                               ng-click="ctrl.changeSiteTo('To',site,$index)">
-                                        <md-icon md-svg-icon="priority-high"></md-icon>
-                                    </md-button>
+            <md-table-container>
+                <div flex scroll-directive>
+                    <table md-table md-row-select multiple ng-model="ctrl.sitesInfoCCSelected"
+                           md-progress="ctrl.progress">
+                        <thead md-head md-order="ctrl.grid.sitesInfoCC.order">
+                        <tr md-row>
+                            <th md-column md-order-by="mainEnSiteText">
+                                <span>{{lang.sites_main_site}}</span>
+                            </th>
+                            <th md-column md-order-by="mainArSiteText">
+                                <span>{{lang.sites_sub_site}}</span>
+                            </th>
+                            <th md-column md-order-by="siteType">
+                                <span>{{lang.sites_select_site_type}}</span>
+                            </th>
+                            <th md-column>
+                                <span>{{lang.sites_follow_up_status}}</span>
+                            </th>
+                            <th md-column>
+                                <span>{{lang.sites_follow_up_date}}</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody md-body>
+                        <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
+                            ng-repeat="site in ctrl.sitesInfoCC  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoCC.limit: ((ctrl.grid.sitesInfoCC.page - 1) * ctrl.grid.sitesInfoCC.limit) |orderBy:ctrl.grid.sitesInfoCC.order  track by $index">
+                            <td md-cell>
+                                <div flex layout="column">
+                                    <span class="span-column">{{site.getTranslatedParentName()}}</span>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                            </td>
+                            <td md-cell>
+                                <div flex layout="column">
+                                    <span class="span-column">{{site.getTranslatedName()}}</span>
+                                </div>
+                            </td>
+                            <td md-cell>
+                                <div flex layout="column">
+                                    <span class="span-column">{{site.getTranslatedSiteType()}}</span>
+                                </div>
+                            </td>
+                            <td md-cell>
+                                <div layout="row"><span flex>{{site.followupStatus.getTranslatedName()}}</span>
+                                </div>
+                            </td>
+                            <td md-cell>
+                                <div layout="row"><span flex>{{site.followupDate|date:'yyyy-MM-dd'}}</span>
+                                </div>
+                            </td>
+                            <td md-cell>
+                                <div flex layout="row" layout-align="start center"
+                                     ng-if="!ctrl.disableCorrespondence">
+                                    <div>
+                                        <md-button tooltip="{{lang.sites_change_to_original}}"
+                                                   class="md-icon-button"
+                                                   ng-click="ctrl.changeSiteTo('To',site,$index)">
+                                            <md-icon md-svg-icon="priority-high"></md-icon>
+                                        </md-button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <md-table-pagination
                         md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                         md-limit-options="ctrl.grid.sitesInfoCC.limitOptions"

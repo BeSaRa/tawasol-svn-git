@@ -237,7 +237,7 @@ module.exports = function (app) {
          * @description Contains the selected tab name
          * @type {string}
          */
-        self.selectedTabName = "barcodeSettings";
+        self.selectedTabName = "basic";
 
         /**
          * @description Set the current tab name
