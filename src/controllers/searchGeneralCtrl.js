@@ -360,7 +360,6 @@ module.exports = function (app) {
                     self.reloadSearchedGeneralDocuments(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                            ;
                         });
                 });
             // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
@@ -485,6 +484,17 @@ module.exports = function (app) {
                 .manageDocumentEntities(searchedGeneralDocument.vsId, searchedGeneralDocument.docClassName, searchedGeneralDocument.docSubject, $event);
         };
 
+        /**
+         * @description Destinations
+         * @param searchedGeneralDocument
+         * @param $event
+         */
+        self.manageDestinations = function (searchedGeneralDocument, $event) {
+            searchedGeneralDocument.manageDocumentCorrespondence($event)
+                .then(function () {
+                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                });
+        };
 
         var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
             var info = model.getInfo();
@@ -654,7 +664,6 @@ module.exports = function (app) {
                     self.reloadSearchedGeneralDocuments(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                            ;
                             new ResolveDefer(defer);
                         })
                 })
@@ -864,7 +873,7 @@ module.exports = function (app) {
                         permissionKey: "MANAGE_DESTINATIONS",
                         class: "action-green",
                         checkShow: function (action, model) {
-                            return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
+                            return self.checkToShowAction(action, model) && model.getInfo().documentClass !== 'internal' && checkIfEditCorrespondenceSiteAllowed(model, false);
                         }
                     }
                 ]
