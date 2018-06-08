@@ -873,7 +873,7 @@ module.exports = function (app) {
                         permissionKey: "MANAGE_DESTINATIONS",
                         class: "action-green",
                         checkShow: function (action, model) {
-                            return self.checkToShowAction(action, model) && model.getInfo().documentClass !== 'internal' && checkIfEditCorrespondenceSiteAllowed(model, false);
+                            return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
                         }
                     }
                 ]
