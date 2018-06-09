@@ -566,8 +566,15 @@ module.exports = function (app) {
             return "";
         };
 
+        /**
+         * @description Deletes all the indicators from the model
+         * @param record
+         */
         self.deleteIndicators = function(record){
-
+            for(var property in record){
+                if(property.endsWith('Indicator'))
+                    delete record[property];
+            }
         };
 
         self.filterSecurityLevels = function (collection, available) {

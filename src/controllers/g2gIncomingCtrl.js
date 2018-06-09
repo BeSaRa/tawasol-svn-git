@@ -105,9 +105,11 @@ module.exports = function (app) {
 
             return correspondenceService.viewCorrespondenceG2G(g2gItem, self.gridActions, 'G2G', $event)
                 .then(function (result) {
-                    if (!g2gItem.getInfo().vsId) {
-                        g2gItem.correspondence.vsId = result.vsId;
-                        self.replaceRecord(g2gItem);
+                    if (result !== 'receive') {
+                        if (!g2gItem.getInfo().vsId) {
+                            g2gItem.correspondence.vsId = result.vsId;
+                            self.replaceRecord(g2gItem);
+                        }
                     }
                     //self.reloadG2gItems(self.grid.page);
                 })
@@ -124,21 +126,12 @@ module.exports = function (app) {
          * @description Receive Document
          * @param g2gItem
          * @param $event
-         * @param defer
          * @returns {*}
          */
-        self.receiveDocument = function (g2gItem, $event, defer) {
+        self.receiveDocument = function (g2gItem, $event) {
             var info = g2gItem.getInfo();
-            dialog.hide();
+            dialog.hide('receive');
             $state.go('app.incoming.add', {action: 'receiveg2g', vsId: info.vsId});
-            /*return g2gIncomingService.receiveG2G(g2gItem)
-                .then(function (result) {
-                    new ResolveDefer(defer);
-                    self.reloadG2gItems(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get('receive_specific_success').change({name: g2gItem.correspondence.docSubject}));
-                        })
-                })*/
         };
 
         /**

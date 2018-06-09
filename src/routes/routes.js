@@ -1091,7 +1091,7 @@ module.exports = function (app) {
             })
             // add incoming
             .state('app.incoming.add', {
-                url: '/add?action?workItem',
+                url: '/add?action?workItem?vsId',
                 template: templateProvider.getView('incoming-add'),
                 controller: 'incomingCtrl',
                 controllerAs: 'ctrl'

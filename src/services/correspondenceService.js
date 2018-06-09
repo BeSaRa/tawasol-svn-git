@@ -217,9 +217,9 @@ module.exports = function (app) {
         }
 
         function _getDocumentType(correspondence) {
-            var docType = "";
+            var docType = 1;
             if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) { /*WorkItem */
-                docType = correspondence.generalStepElm.addMethod;
+                docType = correspondence.generalStepElm.hasOwnProperty('addMethod') ?  correspondence.generalStepElm.addMethod : 1;
             }
             else if (correspondence.hasOwnProperty('addMethod')) { /* Correspondence */
                 docType = correspondence.addMethod;
@@ -243,6 +243,10 @@ module.exports = function (app) {
             }
             else if (correspondence.hasOwnProperty('documentVSID') && correspondence.documentVSID) { /* Event History */
                 vsId = correspondence.documentVSID;
+            }
+            /*in case of G2G*/
+            else if (correspondence.hasOwnProperty('correspondence')) {
+                vsId = correspondence.correspondence.vsId;
             }
             else {  /* Correspondence */
                 vsId = correspondence.vsId;
@@ -1458,13 +1462,13 @@ module.exports = function (app) {
         };
 
         self.prepareReceiveIncomingByVsId = function (vsId) {
-            /*return $http
-                .put((urlService.departmentWF + '/' + vsId + '/prepare/receive'))
+            return $http
+                .get(urlService.g2gInbox + 'start/receive/'+ vsId)
                 .then(function (result) {
                     result = result.data.rs;
                     result.metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming', 'ViewIncoming'], new Incoming(result.metaData));
                     return result;
-                });*/
+                });
         };
 
 
