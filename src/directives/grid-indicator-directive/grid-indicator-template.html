@@ -1,3 +1,19 @@
+<!--<span ng-if="ctrl.displayType !== 'text'" class="{{ctrl.spanClass}} "
+      ng-class="{'indicator-content': ctrl[ctrl.indicatorType+'Indicator']}">
+    <md-icon ng-if="ctrl.getIndicator()"
+             class="{{ctrl[ctrl.indicatorType+'Indicator'].class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl[ctrl.indicatorType+'Indicator'].icon}}"
+             tooltip="{{ctrl.getIndicatorTooltip()}}"
+    ></md-icon>
+</span>
+
+<span ng-if="(ctrl.displayType === 'text') &&  ctrl.getIndicator()"
+      class="{{ctrl[ctrl.indicatorType+'Indicator'].class}} {{ctrl.spanClass}}"
+      tooltip="{{ctrl.getIndicatorTooltip()}}">
+        {{ctrl.getIndicatorText()}}
+</span>-->
+
+
 <!-- Security Level -->
 <span ng-if="ctrl.indicatorType === 'securityLevel'" class="{{ctrl.spanClass}}"
       ng-class="{'indicator-content': ctrl.record.securityLevelIndicator}">
@@ -6,7 +22,7 @@
              md-svg-icon="{{ctrl.record.securityLevelIndicator.icon}}"
              tooltip="{{ctrl.langService.get(ctrl.record.securityLevelIndicator.tooltip)
                                 .change({name: ctrl.record.securityLevelIndicator.value.getTranslatedName()})}}"
-             <!--.change({name: ctrl.record.securityLevelLookup.getTranslatedName()})}}"-->
+    <!--.change({name: ctrl.record.securityLevelLookup.getTranslatedName()})}}"-->
     ></md-icon>
 </span>
 <!-- Doc Class (Outgoing / Incoming / Internal) -->

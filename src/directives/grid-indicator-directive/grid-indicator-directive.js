@@ -14,7 +14,8 @@ module.exports = function (app) {
                 recordType: '=',
                 showIndicator: '@?',
                 spanClass: '@?',
-                iconClass: '@?'
+                iconClass: '@?',
+                displayType: '@?'
             }
         }
     })

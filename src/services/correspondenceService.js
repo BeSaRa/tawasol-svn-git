@@ -1461,12 +1461,17 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description receive incoming by vsid.
+         * @param vsId
+         */
         self.prepareReceiveIncomingByVsId = function (vsId) {
             return $http
                 .get(urlService.g2gInbox + 'start/receive/'+ vsId)
                 .then(function (result) {
                     result = result.data.rs;
                     result.metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming', 'ViewIncoming'], new Incoming(result.metaData));
+                    result.metaData.ou = employeeService.getEmployee().getOUID();
                     return result;
                 });
         };
