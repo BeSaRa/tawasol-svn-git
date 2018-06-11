@@ -4,7 +4,7 @@
         .config(function (urlServiceProvider) {
             'ngInject';
             urlServiceProvider
-                .setEnvironment('stage')
+                .setEnvironment('dev')
                 .setBaseUrl('dev', 'http://WIN-6E33FAMDEJE:9080/CMSServices/service')
                 .setBaseUrl('stage', 'http://100.100.3.220:9080/CMSServices/service')
                 .setBaseUrl('demo', 'http://eblaepm.no-ip.org:9080/CMSServices/service')
@@ -262,6 +262,8 @@
                 .addToAllWithBase('correspondence', 'cms-entity/correspondence')
                 // follow up employee inbox
                 .addToAllWithBase('followupEmployeeInbox', 'cms-entity/user/inbox/followup-emp-inbox/user/:domainName/ou/:ouId')
+                // view workitem
+                .addToAllWithBase('viewWorkItem', 'cms-entity/user/inbox/wob-num/')
                 // follow up employee inbox actions
                 .addToAllWithBase('followupEmployeeInboxActions', '/cms-entity/correspondence/wf')
                 // proxy mail inbox
