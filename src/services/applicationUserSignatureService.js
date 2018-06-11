@@ -167,11 +167,11 @@ module.exports = function (app) {
         /**
          * @description Update the given application user signature .
          * @param applicationUserSignature
+         * @param file
          * @return {Promise|ApplicationUserSignature}
          */
         self.updateApplicationUserSignature = function (applicationUserSignature, file) {
-            var url = "";
-            url = urlService.applicationUserSignatures + '/update';
+            var url = urlService.applicationUserSignatures + '/update';
             var form = new FormData();
             form.append('entity', JSON.stringify(generator.interceptSendInstance('ApplicationUserSignature', applicationUserSignature)));
             form.append('content', file);

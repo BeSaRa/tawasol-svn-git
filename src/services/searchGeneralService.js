@@ -6,12 +6,7 @@ module.exports = function (app) {
                                                   General,
                                                   Correspondence,
                                                   tokenService,
-                                                  _,
-                                                  $timeout,
-                                                  dialog,
-                                                  langService,
-                                                  toast,
-                                                  cmsTemplate) {
+                                                  _) {
         'ngInject';
         var self = this;
         self.serviceName = 'searchGeneralService';

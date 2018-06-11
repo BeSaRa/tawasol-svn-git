@@ -1,7 +1,8 @@
 <md-menu-bar class="notify-list">
     <md-menu md-position-mode="left bottom" md-offset="0 12">
         <div layout="column" class="notify">
-            <md-button class="md-icon-button" ng-click="ctrl.openNotificationMenu($mdMenu)">
+            <md-button class="md-icon-button" ng-click="ctrl.openNotificationMenu($mdMenu)"
+                       tooltip="{{$root.lang.notifications}}" fixed-position="true">
                 <md-icon md-svg-icon="bell-outline"></md-icon>
             </md-button>
             <span ng-if="ctrl.mailService.unreadNotificationsCount > 0" ng-click="ctrl.openNotificationMenu($mdMenu)"
