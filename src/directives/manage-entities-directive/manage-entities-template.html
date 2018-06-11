@@ -72,61 +72,63 @@
     </form>
     <div>
         <md-card ng-if="!ctrl.showEntityFrom && ctrl.linkedEntities.length" flex>
-            <md-table-container flex scroll-directive>
-                <table md-table md-row-select multiple ng-model="ctrl.selectedEntities"
-                       md-progress="ctrl.progress">
-                    <thead md-head md-order="ctrl.grid.order">
-                    <tr md-row>
-                        <th class="table-selector-header"
-                            ng-if="ctrl.selectedEntities.length" md-column>
-                            <div layout="row" layout-align="start center">
-                                <span>{{ctrl.selectedEntities.length}} {{lang.items_selected}} </span>
-                            </div>
-                        </th>
-                        <th ng-if="!ctrl.selectedEntities.length" md-column>
-                            <span>{{lang.entities_name}}</span>
-                        </th>
-                        <th md-column>
-                            <span>{{lang.entities_type}}</span>
-                        </th>
-                        <th md-column ng-if="!ctrl.disableEverything">
-                            <span ng-if="!ctrl.selectedEntities.length">{{lang.actions}}</span>
-                            <md-button ng-if="ctrl.selectedEntities.length" class="md-icon-button"
-                                       ng-click="ctrl.removeBulkDocumentEntities($event)">
-                                <md-icon md-svg-icon="delete"></md-icon>
-                            </md-button>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody md-body>
-                    <tr md-row md-select="entity"
-                        ng-disabled="ctrl.disableEverything"
-                        ng-repeat="entity in ctrl.linkedEntities  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
-                        <td md-cell>
-                            {{entity.getTranslatedName()}}
-                        </td>
-                        <td md-cell>
-                            {{entity.typeId.getTranslatedName()}}
-                        </td>
-                        <td md-cell ng-if="!ctrl.disableEverything">
-                            <div flex layout="row" layout-align="start center">
-                                <div>
-                                    <md-button class="md-icon-button" title="{{lang.delete}}"
-                                               ng-click="ctrl.removeDocumentEntity(entity  , $index , $event)">
-                                        <md-icon md-svg-icon="delete"></md-icon>
-                                    </md-button>
+            <md-table-container>
+                <div flex scroll-directive>
+                    <table md-table md-row-select multiple ng-model="ctrl.selectedEntities"
+                           md-progress="ctrl.progress">
+                        <thead md-head md-order="ctrl.grid.order">
+                        <tr md-row>
+                            <th class="table-selector-header"
+                                ng-if="ctrl.selectedEntities.length" md-column>
+                                <div layout="row" layout-align="start center">
+                                    <span>{{ctrl.selectedEntities.length}} {{lang.items_selected}} </span>
                                 </div>
-                                <div>
-                                    <md-button class="md-icon-button" title="{{lang.edit}}"
-                                               ng-click="ctrl.editDocumentEntity(entity , $index , $event)">
-                                        <md-icon md-svg-icon="pencil"></md-icon>
-                                    </md-button>
+                            </th>
+                            <th ng-if="!ctrl.selectedEntities.length" md-column>
+                                <span>{{lang.entities_name}}</span>
+                            </th>
+                            <th md-column>
+                                <span>{{lang.entities_type}}</span>
+                            </th>
+                            <th md-column ng-if="!ctrl.disableEverything">
+                                <span ng-if="!ctrl.selectedEntities.length">{{lang.actions}}</span>
+                                <md-button ng-if="ctrl.selectedEntities.length" class="md-icon-button"
+                                           ng-click="ctrl.removeBulkDocumentEntities($event)">
+                                    <md-icon md-svg-icon="delete"></md-icon>
+                                </md-button>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody md-body>
+                        <tr md-row md-select="entity"
+                            ng-disabled="ctrl.disableEverything"
+                            ng-repeat="entity in ctrl.linkedEntities  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                            <td md-cell>
+                                {{entity.getTranslatedName()}}
+                            </td>
+                            <td md-cell>
+                                {{entity.typeId.getTranslatedName()}}
+                            </td>
+                            <td md-cell ng-if="!ctrl.disableEverything">
+                                <div flex layout="row" layout-align="start center">
+                                    <div>
+                                        <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                   ng-click="ctrl.removeDocumentEntity(entity  , $index , $event)">
+                                            <md-icon md-svg-icon="delete"></md-icon>
+                                        </md-button>
+                                    </div>
+                                    <div>
+                                        <md-button class="md-icon-button" title="{{lang.edit}}"
+                                                   ng-click="ctrl.editDocumentEntity(entity , $index , $event)">
+                                            <md-icon md-svg-icon="pencil"></md-icon>
+                                        </md-button>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <md-table-pagination
                         md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                         md-limit-options="ctrl.grid.limitOptions"

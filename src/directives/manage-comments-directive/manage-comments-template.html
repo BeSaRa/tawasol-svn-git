@@ -54,11 +54,12 @@
                                             </md-switch>
                                         </div>
                                         <div flex>
-                                            <md-switch ng-disabled="ctrl.documentComment.commentPrivate() || !ctrl.employeeService.hasPermissionTo('VIEW_COMMENT')"
-                                                       ng-true-value="true"
-                                                       ng-false-value="false"
-                                                       ng-change="ctrl.toggleCommentPrivacy()"
-                                                       ng-model="ctrl.documentComment.isGlobal">
+                                            <md-switch
+                                                    ng-disabled="ctrl.documentComment.commentPrivate() || !ctrl.employeeService.hasPermissionTo('VIEW_COMMENT')"
+                                                    ng-true-value="true"
+                                                    ng-false-value="false"
+                                                    ng-change="ctrl.toggleCommentPrivacy()"
+                                                    ng-model="ctrl.documentComment.isGlobal">
                                                 <span>{{lang.comments_global}} : </span>
                                                 <span>{{ctrl.documentComment.getGlobalizationStatus()}}</span>
                                             </md-switch>
@@ -108,46 +109,50 @@
                                 </div>
                                 <div ng-if="ctrl.documentComment.includedIDs.length" layout="row">
                                     <md-card flex>
-                                        <md-table-container flex scroll-directive>
-                                            <table md-table md-row-select multiple ng-model="ctrl.selectedIncludedIDs"
-                                                   md-progress="ctrl.progress">
-                                                <thead md-head md-order="ctrl.grid.order">
-                                                <tr md-row>
-                                                    <th class="table-selector-header"
-                                                        ng-if="ctrl.selectedIncludedIDs.length" md-column>
-                                                        <div layout="row" layout-align="start center">
-                                                            <span>{{ctrl.selectedIncludedIDs.length}} {{lang.items_selected}} </span>
-                                                        </div>
-                                                    </th>
-                                                    <th ng-if="!ctrl.selectedIncludedIDs.length" md-column
-                                                        md-order-by="arName">
-                                                        <span>{{lang.name}}</span>
-                                                    </th>
-                                                    <th md-column>
-                                                        <span ng-if="!ctrl.selectedIncludedIDs.length">{{lang.actions}}</span>
-                                                        <md-button ng-if="ctrl.selectedIncludedIDs.length"
-                                                                   class="md-icon-button"
-                                                                   ng-click="ctrl.removeBulkSelected('includedIDs','selectedIncludedIDs',$event)">
-                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                        </md-button>
-                                                    </th>
-                                                </tr>
-                                                </thead>
-                                                <tbody md-body>
-                                                <tr md-row md-select="include"
-                                                    ng-repeat="include in ctrl.documentComment.includedIDs  | filter:ctrl.searchModel | limitTo: ctrl.grid.includedIDs.limit: ((ctrl.grid.includedIDs.page - 1) * ctrl.grid.includedIDs.limit) |orderBy:ctrl.grid.includedIDs.order  track by $index">
-                                                    <td md-cell>{{include.display}}</td>
-                                                    <td md-cell>
-                                                        <div flex layout="row" layout-align="start center">
-                                                            <md-button class="md-icon-button" title="{{lang.delete}}"
-                                                                       ng-click="ctrl.removeInclude('includedIDs', $index , $event)">
+                                        <md-table-container>
+                                            <div flex scroll-directive>
+                                                <table md-table md-row-select multiple
+                                                       ng-model="ctrl.selectedIncludedIDs"
+                                                       md-progress="ctrl.progress">
+                                                    <thead md-head md-order="ctrl.grid.order">
+                                                    <tr md-row>
+                                                        <th class="table-selector-header"
+                                                            ng-if="ctrl.selectedIncludedIDs.length" md-column>
+                                                            <div layout="row" layout-align="start center">
+                                                                <span>{{ctrl.selectedIncludedIDs.length}} {{lang.items_selected}} </span>
+                                                            </div>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedIncludedIDs.length" md-column
+                                                            md-order-by="arName">
+                                                            <span>{{lang.name}}</span>
+                                                        </th>
+                                                        <th md-column>
+                                                            <span ng-if="!ctrl.selectedIncludedIDs.length">{{lang.actions}}</span>
+                                                            <md-button ng-if="ctrl.selectedIncludedIDs.length"
+                                                                       class="md-icon-button"
+                                                                       ng-click="ctrl.removeBulkSelected('includedIDs','selectedIncludedIDs',$event)">
                                                                 <md-icon md-svg-icon="delete"></md-icon>
                                                             </md-button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody md-body>
+                                                    <tr md-row md-select="include"
+                                                        ng-repeat="include in ctrl.documentComment.includedIDs  | filter:ctrl.searchModel | limitTo: ctrl.grid.includedIDs.limit: ((ctrl.grid.includedIDs.page - 1) * ctrl.grid.includedIDs.limit) |orderBy:ctrl.grid.includedIDs.order  track by $index">
+                                                        <td md-cell>{{include.display}}</td>
+                                                        <td md-cell>
+                                                            <div flex layout="row" layout-align="start center">
+                                                                <md-button class="md-icon-button"
+                                                                           title="{{lang.delete}}"
+                                                                           ng-click="ctrl.removeInclude('includedIDs', $index , $event)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                             <md-table-pagination
                                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                                     md-limit-options="ctrl.grid.includedIDs.limitOptions"
@@ -202,46 +207,50 @@
 
                                 <div ng-if="ctrl.documentComment.excludedIDs.length" layout="row">
                                     <md-card flex>
-                                        <md-table-container flex scroll-directive>
-                                            <table md-table md-row-select multiple ng-model="ctrl.selectedIncludedIDs"
-                                                   md-progress="ctrl.progress">
-                                                <thead md-head md-order="ctrl.grid.order">
-                                                <tr md-row>
-                                                    <th class="table-selector-header"
-                                                        ng-if="ctrl.selectedIncludedIDs.length" md-column>
-                                                        <div layout="row" layout-align="start center">
-                                                            <span>{{ctrl.selectedIncludedIDs.length}} {{lang.items_selected}} </span>
-                                                        </div>
-                                                    </th>
-                                                    <th ng-if="!ctrl.selectedIncludedIDs.length" md-column
-                                                        md-order-by="arName">
-                                                        <span>{{lang.name}}</span>
-                                                    </th>
-                                                    <th md-column>
-                                                        <span ng-if="!ctrl.selectedIncludedIDs.length">{{lang.actions}}</span>
-                                                        <md-button ng-if="ctrl.selectedIncludedIDs.length"
-                                                                   class="md-icon-button"
-                                                                   ng-click="ctrl.removeBulkSelected('excludedIDs','selectedIncludedIDs',$event)">
-                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                        </md-button>
-                                                    </th>
-                                                </tr>
-                                                </thead>
-                                                <tbody md-body>
-                                                <tr md-row md-select="include"
-                                                    ng-repeat="include in ctrl.documentComment.excludedIDs  | filter:ctrl.searchModel | limitTo: ctrl.grid.excludedIDs.limit: ((ctrl.grid.excludedIDs.page - 1) * ctrl.grid.excludedIDs.limit) |orderBy:ctrl.grid.excludedIDs.order  track by $index">
-                                                    <td md-cell>{{include.display}}</td>
-                                                    <td md-cell>
-                                                        <div flex layout="row" layout-align="start center">
-                                                            <md-button class="md-icon-button" title="{{lang.delete}}"
-                                                                       ng-click="ctrl.removeInclude('excludedIDs', $index , $event)">
+                                        <md-table-container>
+                                            <div flex scroll-directive>
+                                                <table md-table md-row-select multiple
+                                                       ng-model="ctrl.selectedIncludedIDs"
+                                                       md-progress="ctrl.progress">
+                                                    <thead md-head md-order="ctrl.grid.order">
+                                                    <tr md-row>
+                                                        <th class="table-selector-header"
+                                                            ng-if="ctrl.selectedIncludedIDs.length" md-column>
+                                                            <div layout="row" layout-align="start center">
+                                                                <span>{{ctrl.selectedIncludedIDs.length}} {{lang.items_selected}} </span>
+                                                            </div>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedIncludedIDs.length" md-column
+                                                            md-order-by="arName">
+                                                            <span>{{lang.name}}</span>
+                                                        </th>
+                                                        <th md-column>
+                                                            <span ng-if="!ctrl.selectedIncludedIDs.length">{{lang.actions}}</span>
+                                                            <md-button ng-if="ctrl.selectedIncludedIDs.length"
+                                                                       class="md-icon-button"
+                                                                       ng-click="ctrl.removeBulkSelected('excludedIDs','selectedIncludedIDs',$event)">
                                                                 <md-icon md-svg-icon="delete"></md-icon>
                                                             </md-button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody md-body>
+                                                    <tr md-row md-select="include"
+                                                        ng-repeat="include in ctrl.documentComment.excludedIDs  | filter:ctrl.searchModel | limitTo: ctrl.grid.excludedIDs.limit: ((ctrl.grid.excludedIDs.page - 1) * ctrl.grid.excludedIDs.limit) |orderBy:ctrl.grid.excludedIDs.order  track by $index">
+                                                        <td md-cell>{{include.display}}</td>
+                                                        <td md-cell>
+                                                            <div flex layout="row" layout-align="start center">
+                                                                <md-button class="md-icon-button"
+                                                                           title="{{lang.delete}}"
+                                                                           ng-click="ctrl.removeInclude('excludedIDs', $index , $event)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                             <md-table-pagination
                                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                                     md-limit-options="ctrl.grid.excludedIDs.limitOptions"
@@ -262,7 +271,8 @@
         <div ng-if="!ctrl.fromDialog">
             <div layout="row">
                 <div>
-                    <md-button ng-if="!ctrl.editMode" ng-disabled="documentCommentForm.$invalid || !ctrl.isValidComment()"
+                    <md-button ng-if="!ctrl.editMode"
+                               ng-disabled="documentCommentForm.$invalid || !ctrl.isValidComment()"
                                class="md-raised md-primary"
                                ng-click="ctrl.addDocumentCommentToDocument()">
                         {{lang.comments_add}}
@@ -285,65 +295,71 @@
     </div>
     <div ng-if="!ctrl.showCommentForm && ctrl.documentComments.length">
         <md-card flex>
-            <md-table-container flex scroll-directive>
-                <table md-table md-row-select multiple="ctrl.employeeService.hasPermissionTo('DELETE_ALL_DOCUMENT_COMMENTS') == true" ng-model="ctrl.selectedDocumentComments"
-                       md-progress="ctrl.progress">
-                    <thead md-head md-order="ctrl.grid.order">
-                    <tr md-row>
-                        <th class="table-selector-header"
-                            ng-if="ctrl.selectedDocumentComments.length" md-column>
-                            <div layout="row" layout-align="start center">
-                                <span>{{ctrl.selectedDocumentComments.length}} {{lang.items_selected}} </span>
-                            </div>
-                        </th>
-                        <th ng-if="!ctrl.selectedDocumentComments.length" md-column
-                            md-order-by="arName">
-                            <span>{{lang.comments_short_description}}</span>
-                        </th>
-                        <th md-column
-                            md-order-by="creationDate">
-                            <span ng-if="!ctrl.selectedDocumentComments.length">{{lang.comments_creation_date}}</span>
-                        </th>
-                        <th md-column ng-if="!ctrl.disableEverything">
-                            <span ng-if="!ctrl.selectedDocumentComments.length">{{lang.actions}}</span>
-                            <md-button ng-if="ctrl.selectedDocumentComments.length && ctrl.vsId  && ctrl.employeeService.hasPermissionTo('DELETE_ALL_DOCUMENT_COMMENTS')" class="md-icon-button"
-                                       ng-click="ctrl.removeBulkDocumentComments($event)">
-                                <md-icon md-svg-icon="delete"></md-icon>
-                            </md-button>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody md-body>
-                    <tr md-row md-select="documentComment"
-                        ng-disabled="ctrl.disableEverything"
-                        ng-repeat="documentComment in ctrl.documentComments  | filter:ctrl.searchModel | limitTo: ctrl.grid.documentComments.limit: ((ctrl.grid.documentComments.page - 1) * ctrl.grid.documentComments.limit) |orderBy:ctrl.grid.documentComments.order  track by $index">
-                        <td md-cell><a href="#"
-                                       ng-click="ctrl.showComment(documentComment , $event)">{{documentComment.shortDescription}}</a>
-                        </td>
-                        <td md-cell>
-                            {{documentComment.creationDate |date:'yyyy-MM-dd'}}
-                        </td>
-                        <td md-cell ng-if="!ctrl.disableEverything">
-                            <div flex layout="row" layout-align="start center">
-                                <div>
-                                    <md-button class="md-icon-button" title="{{lang.delete}}"
-                                               ng-if="ctrl.allowDelete(documentComment)"
-                                               ng-click="ctrl.removeDocumentComment(documentComment , $event)">
-                                        <md-icon md-svg-icon="delete"></md-icon>
-                                    </md-button>
+            <md-table-container>
+                <div flex scroll-directive>
+                    <table md-table md-row-select
+                           multiple="ctrl.employeeService.hasPermissionTo('DELETE_ALL_DOCUMENT_COMMENTS') == true"
+                           ng-model="ctrl.selectedDocumentComments"
+                           md-progress="ctrl.progress">
+                        <thead md-head md-order="ctrl.grid.order">
+                        <tr md-row>
+                            <th class="table-selector-header"
+                                ng-if="ctrl.selectedDocumentComments.length" md-column>
+                                <div layout="row" layout-align="start center">
+                                    <span>{{ctrl.selectedDocumentComments.length}} {{lang.items_selected}} </span>
                                 </div>
-                                <div>
-                                    <md-button class="md-icon-button" title="{{lang.edit}}"
-                                               ng-if="ctrl.allowEdit(documentComment)"
-                                               ng-click="ctrl.editDocumentComment(documentComment , $event)">
-                                        <md-icon md-svg-icon="pencil"></md-icon>
-                                    </md-button>
+                            </th>
+                            <th ng-if="!ctrl.selectedDocumentComments.length" md-column
+                                md-order-by="arName">
+                                <span>{{lang.comments_short_description}}</span>
+                            </th>
+                            <th md-column
+                                md-order-by="creationDate">
+                                <span ng-if="!ctrl.selectedDocumentComments.length">{{lang.comments_creation_date}}</span>
+                            </th>
+                            <th md-column ng-if="!ctrl.disableEverything">
+                                <span ng-if="!ctrl.selectedDocumentComments.length">{{lang.actions}}</span>
+                                <md-button
+                                        ng-if="ctrl.selectedDocumentComments.length && ctrl.vsId  && ctrl.employeeService.hasPermissionTo('DELETE_ALL_DOCUMENT_COMMENTS')"
+                                        class="md-icon-button"
+                                        ng-click="ctrl.removeBulkDocumentComments($event)">
+                                    <md-icon md-svg-icon="delete"></md-icon>
+                                </md-button>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody md-body>
+                        <tr md-row md-select="documentComment"
+                            ng-disabled="ctrl.disableEverything"
+                            ng-repeat="documentComment in ctrl.documentComments  | filter:ctrl.searchModel | limitTo: ctrl.grid.documentComments.limit: ((ctrl.grid.documentComments.page - 1) * ctrl.grid.documentComments.limit) |orderBy:ctrl.grid.documentComments.order  track by $index">
+                            <td md-cell><a href="#"
+                                           ng-click="ctrl.showComment(documentComment , $event)">{{documentComment.shortDescription}}</a>
+                            </td>
+                            <td md-cell>
+                                {{documentComment.creationDate |date:'yyyy-MM-dd'}}
+                            </td>
+                            <td md-cell ng-if="!ctrl.disableEverything">
+                                <div flex layout="row" layout-align="start center">
+                                    <div>
+                                        <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                   ng-if="ctrl.allowDelete(documentComment)"
+                                                   ng-click="ctrl.removeDocumentComment(documentComment , $event)">
+                                            <md-icon md-svg-icon="delete"></md-icon>
+                                        </md-button>
+                                    </div>
+                                    <div>
+                                        <md-button class="md-icon-button" title="{{lang.edit}}"
+                                                   ng-if="ctrl.allowEdit(documentComment)"
+                                                   ng-click="ctrl.editDocumentComment(documentComment , $event)">
+                                            <md-icon md-svg-icon="pencil"></md-icon>
+                                        </md-button>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <md-table-pagination
                         md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                         md-limit-options="ctrl.grid.documentComments.limitOptions"
