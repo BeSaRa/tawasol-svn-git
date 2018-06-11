@@ -133,16 +133,22 @@ module.exports = function (app) {
          * @param $event
          */
         self.recallSingle = function (userSentItem, $event) {
-            //console.log('recall single : ', userSentItem);
-               dialog.showPrompt($event,langService.get('transfer_reason')+'?','','').then(function (reason) {
-                   userSentItemService.recallSingleWorkItem(userSentItem.wfId, employeeService.getEmployee().domainName, reason).then(function (result) {
-                       if(result){
-                           toast.success(langService.get('transfer_mail_success'));
-                       }
-                   }).catch(function (error) {
-                       toast.error(langService.get('work_item_not_found').change({wobNumber: userSentItem.wfId}));
-                   });
-               });
+                userSentItemService.viewWorkItem(userSentItem.wfId).then(function (item) {
+                    if(item.stepElm.isOpen){
+                        toast.error(('cannot_recall_opened_work_item'));
+                    }else{
+                        dialog.showPrompt($event,langService.get('transfer_reason')+'?','','').then(function (reason) {
+                            userSentItemService.recallSingleWorkItem(userSentItem.wfId, employeeService.getEmployee().domainName, reason).then(function (result) {
+                                if(result){
+                                    toast.success(langService.get('transfer_mail_success'));
+                                }
+                            }).catch(function (error) {
+                                toast.error(langService.get('work_item_not_found').change({wobNumber: userSentItem.wfId}));
+                            });
+                        });
+                    }
+                });
+
 
         };
 

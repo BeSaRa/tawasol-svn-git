@@ -155,24 +155,29 @@ module.exports = function (app) {
          * @param $event
          */
         self.recall = function (sentItemDepartmentInbox,$event) {
-            sentItemDepartmentInboxService.fetchDeptSentWorkitemByVsId(sentItemDepartmentInbox.vsId).then(function (result) {
-                var wobNum = 'temp01';
-                angular.forEach(result, function(item){
-                    if(item.senderInfo.id === employeeService.getEmployee().id){
-                        wobNum = item.generalStepElm.workObjectNumber;
-                    }
-                });
-
-                dialog.showPrompt($event,langService.get('transfer_reason')+'?','','').then(function (reason) {
-                    sentItemDepartmentInboxService.recallSingleWorkItem(wobNum, employeeService.getEmployee().domainName, reason).then(function (result) {
-                        if(result){
-                            toast.success(langService.get('transfer_mail_success'));
+           if(sentItemDepartmentInbox.receivedById === null){
+                sentItemDepartmentInboxService.fetchDeptSentWorkitemByVsId(sentItemDepartmentInbox.vsId).then(function (result) {
+                    var wobNum = 'temp01';
+                    angular.forEach(result, function(item){
+                        if(item.senderInfo.id === employeeService.getEmployee().id){
+                            wobNum = item.generalStepElm.workObjectNumber;
                         }
-                    }).catch(function (error) {
-                        toast.error(langService.get('work_item_not_found').change({wobNumber: wobNum}));
+                    });
+
+                    dialog.showPrompt($event,langService.get('transfer_reason')+'?','','').then(function (reason) {
+                        sentItemDepartmentInboxService.recallSingleWorkItem(wobNum, employeeService.getEmployee().domainName, reason).then(function (result) {
+                            if(result){
+                                toast.success(langService.get('transfer_mail_success'));
+                            }
+                        }).catch(function (error) {
+                            toast.error(langService.get('work_item_not_found').change({wobNumber: wobNum}));
+                        });
                     });
                 });
-            });
+            }else{
+                toast.error(langService.get('cannot_recall_received_book'));
+            }
+
         };
 
         /**
