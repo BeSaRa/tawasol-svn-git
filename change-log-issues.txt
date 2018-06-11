@@ -98,3 +98,10 @@ Bugs:
 12856: Fix - User inbox : sent items : cannot sort item by type.
 
 12829: Fix - Enhancement - search in correspondence should search by clicking enter as well
+
+
+2.0.2
+---------
+13410: Fix - IE Compatibility: List of Excluded Users/OUs doesn't appear.
+13412: Fix - IE Compatibility: When add new outgoing, Manage Correspondence site is shrunken and a useless scroll bar appear.
+13498: Fix - Send Main document by Fax or SMS not working

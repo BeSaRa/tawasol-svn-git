@@ -613,7 +613,6 @@ module.exports = function (app) {
                 icon: 'send',
                 text: 'grid_action_send',
                 shortcut: false,
-                hide: false,
                 checkShow: self.checkToShowAction,
                 subMenu: [
                     // Link To Document By Email
@@ -642,6 +641,7 @@ module.exports = function (app) {
                         icon: 'attachment',
                         text: 'grid_action_main_document_fax',
                         shortcut: false,
+                        hide: true,
                         callback: self.sendMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction
@@ -652,6 +652,7 @@ module.exports = function (app) {
                         icon: 'message',
                         text: 'grid_action_send_sms',
                         shortcut: false,
+                        hide: true,
                         permissionKey: "SEND_SMS",
                         callback: self.sendSMS,
                         class: "action-red",
