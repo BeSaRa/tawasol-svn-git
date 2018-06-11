@@ -66,6 +66,16 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description get workitem by vsid from server.
+         * @returns {wobNumber}
+         */
+        self.viewWorkItem = function (wobNum) {
+            return $http.get(urlService.viewWorkItem + wobNum).then(function (result) {
+                return result.data.rs;
+            });
+        };
+
 
     });
 };
