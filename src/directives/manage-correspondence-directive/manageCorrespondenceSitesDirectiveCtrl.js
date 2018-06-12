@@ -322,7 +322,7 @@ module.exports = function (app) {
                     self.subSearchSelected = [];
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
-                        self.subSearchResult_DL = _.filter(self.subSearchResult_DL, _filterSubSites);
+                        self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
                     });
                 })
         };
@@ -338,24 +338,12 @@ module.exports = function (app) {
                     self.subSearchSelected = [];
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
-                        self.subSearchResult_DL = _.filter(self.subSearchResult_DL, _filterSubSites);
+                        self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
                     });
                 });
         };
-        /**
-         * @description add all selected sites to To.
-         * @param sites
-         * @param $event
-         * @param isDistributionListRecord
-         */
-        self.addSitesTo = function (sites, $event, isDistributionListRecord) {
-            if (self.needReply(self.followupStatus) && !self.followUpStatusDate) {
-                dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
-                return;
-            }
-            _.map(sites, function (site) {
-                self.addSiteTo(site);
-            });
+
+        var _resetSelectedData = function (isDistributionListRecord) {
             if (isDistributionListRecord) {
                 self.followUpStatusDate_DL = null;
                 self.followupStatus_DL = null;
@@ -365,6 +353,40 @@ module.exports = function (app) {
                 self.followUpStatusDate = null;
                 self.followupStatus = null;
                 self.subSearchSelected = [];
+            }
+        };
+
+        /**
+         * @description add all selected sites to To.
+         * @param sites
+         * @param $event
+         * @param isDistributionListRecord
+         */
+        self.addSitesTo = function (sites, $event, isDistributionListRecord) {
+            var sitesWithoutNeedReply = _.filter(sites, function (site) {
+                return !self.needReply(site.followupStatus);
+            });
+            /*sitesWithoutNeedReply = [] means all sites need reply
+            * if followupStatus is needReply and no date selected and all sites need reply, show alert
+            * otherwise add sites without need reply
+            * */
+            if (self.needReply(self.followupStatus) && !self.followUpStatusDate) {
+                if (sitesWithoutNeedReply.length === 0) {
+                    dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
+                    return;
+                }
+                else {
+                    _.map(sitesWithoutNeedReply, function (site) {
+                        self.addSiteTo(site);
+                    });
+                    _resetSelectedData(isDistributionListRecord);
+                }
+            }
+            else {
+                _.map(sites, function (site) {
+                    self.addSiteTo(site);
+                });
+                _resetSelectedData(isDistributionListRecord);
             }
         };
         /**
@@ -374,22 +396,30 @@ module.exports = function (app) {
          * @param isDistributionListRecord
          */
         self.addSitesCC = function (sites, $event, isDistributionListRecord) {
-            if (self.needReply(self.followupStatus) && !self.followUpStatusDate) {
-                dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
-                return;
-            }
-            _.map(sites, function (site) {
-                self.addSiteCC(site);
+            var sitesWithoutNeedReply = _.filter(sites, function (site) {
+                return !self.needReply(site.followupStatus);
             });
-            if (isDistributionListRecord) {
-                self.followUpStatusDate_DL = null;
-                self.followupStatus_DL = null;
-                self.subSearchSelected_DL = [];
+            /*sitesWithoutNeedReply = [] means all sites need reply
+            * if followupStatus is needReply and no date selected and all sites need reply, show alert
+            * otherwise add sites without need reply
+            * */
+            if (self.needReply(self.followupStatus) && !self.followUpStatusDate) {
+                if (sitesWithoutNeedReply.length === 0) {
+                    dialog.errorMessage(langService.get('sites_please_select_followup_date'), null, null, $event);
+                    return;
+                }
+                else {
+                    _.map(sitesWithoutNeedReply, function (site) {
+                        self.addSiteTo(site);
+                    });
+                    _resetSelectedData(isDistributionListRecord);
+                }
             }
             else {
-                self.followUpStatusDate = null;
-                self.followupStatus = null;
-                self.subSearchSelected = [];
+                _.map(sites, function (site) {
+                    self.addSiteCC(site);
+                });
+                _resetSelectedData(isDistributionListRecord);
             }
         };
         /**
@@ -518,7 +548,10 @@ module.exports = function (app) {
          * @description set all followupDate for all subSearchResult.
          */
         self.onFollowupDateChange = function () {
-            _setSitesProperty(self.subSearchSelected, 'followupDate', self.followUpStatusDate);
+            var sitesToSetFollowupDate = _.filter(self.subSearchSelected, function(site){
+               return self.needReply(site.followupStatus);
+            });
+            _setSitesProperty(sitesToSetFollowupDate, 'followupDate', self.followUpStatusDate);
         };
 
         /**
@@ -532,7 +565,10 @@ module.exports = function (app) {
          * @description set all followupDate for all subSearchResult.
          */
         self.onFollowupDateChange_DL = function () {
-            _setSitesProperty(self.subSearchSelected_DL, 'followupDate', self.followUpStatusDate_DL);
+            var sitesToSetFollowupDate = _.filter(self.subSearchSelected_DL, function(site){
+                return self.needReply(site.followupStatus);
+            });
+            _setSitesProperty(sitesToSetFollowupDate, 'followupDate', self.followUpStatusDate_DL);
         };
 
 
@@ -585,6 +621,7 @@ module.exports = function (app) {
                     self['sitesInfo' + type + 'Selected'] = [];
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
+                        self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
                     });
                 });
         };
@@ -636,6 +673,7 @@ module.exports = function (app) {
             var siteViews = generator.generateCollection(sites, SiteView, self._sharedMethods);
             siteViews = generator.interceptReceivedCollection('SiteView', siteViews);
 
+            self.subSearchResult_DL_Copy = angular.copy(_.map(siteViews, _mapSubSites));
             self.subSearchResult_DL = _.filter(_.map(siteViews, _mapSubSites), _filterSubSites);
 
         };
