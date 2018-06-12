@@ -468,6 +468,8 @@ md-sidenav {
   #login-logo-popup {
     width: 120px;
     margin: 0 auto;
+    overflow: hidden;
+    display: inline-block;
     img {
       max-width: 100%;
     }
