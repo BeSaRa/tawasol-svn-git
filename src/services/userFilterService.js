@@ -114,6 +114,7 @@ module.exports = function (app) {
          * @returns {promise|*}
          */
         self.createUserFilterDialog = function ($event) {
+            var defer = $q.defer();
             return dialog
                 .showDialog({
                     template: cmsTemplate.getPopup('user-filters'),
@@ -121,13 +122,21 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     targetEvent: $event,
                     resolve: {
+                        organizations: function (organizationService) {
+                            'ngInject';
+                            return organizationService.getOrganizations()
+                                .then(function () {
+
+                                });
+                        },
                         senders: function (ouApplicationUserService, employeeService) {
                             'ngInject';
-                            return ouApplicationUserService
-                                .searchByCriteria({regOu: employeeService.getEmployee().getRegistryOUID()})
-                                .then(function (result) {
-                                    return _.map(result, 'applicationUser');
-                                });
+                            return defer.promise.then(function () {
+                                ouApplicationUserService.searchByCriteria({regOu: employeeService.getEmployee().getRegistryOUID()})
+                                    .then(function (result) {
+                                        return _.map(result, 'applicationUser');
+                                    });
+                            });
                         },
                         actions: function (workflowActionService) {
                             'ngInject';
