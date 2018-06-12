@@ -105,3 +105,4 @@ Bugs:
 13410: Fix - IE Compatibility: List of Excluded Users/OUs doesn't appear.
 13412: Fix - IE Compatibility: When add new outgoing, Manage Correspondence site is shrunken and a useless scroll bar appear.
 13498: Fix - Send Main document by Fax or SMS not working
+13469: Fix - When user add correspondence site then delete it, the deleted Sub Correspondence doesn't appear in list of correspondence site.

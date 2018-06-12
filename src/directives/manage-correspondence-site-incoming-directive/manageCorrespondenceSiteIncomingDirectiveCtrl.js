@@ -251,7 +251,7 @@ module.exports = function (app) {
             _addSite('To', site)
                 .then(function () {
                     _concatCorrespondenceSites(true).then(function () {
-                        self.subSearchResult = _.filter(self.subSearchResult, _filterSubSites);
+                        self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                     });
                 })
         };
@@ -263,7 +263,7 @@ module.exports = function (app) {
             _addSite('CC', site)
                 .then(function () {
                     _concatCorrespondenceSites(true).then(function () {
-                        self.subSearchResult = _.filter(self.subSearchResult, _filterSubSites);
+                        self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                     });
                 });
         };
@@ -369,7 +369,7 @@ module.exports = function (app) {
                 criteria: null,
                 excludeOuSites: false
             }).then(function (result) {
-                self.subSearchResultCopy = angular.copy(result);
+                self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                 self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
             });
         };
@@ -495,7 +495,9 @@ module.exports = function (app) {
                         return ids.indexOf(site.subSiteId) === -1;
                     });
                     self['sitesInfo' + type + 'Selected'] = [];
-                    _concatCorrespondenceSites(false);
+                    _concatCorrespondenceSites(true).then(function () {
+                        self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
+                    });
                 });
         };
         /**
