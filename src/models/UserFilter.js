@@ -125,7 +125,7 @@ module.exports = function (app) {
                 // Due date exists
                 self.ui.key_8.value = self.ui.key_8.value ? '-2000000000000L' : null;
 
-
+                self.filterCriteria = self.filterCriteria || {};
                 _.map(availableKeys, function (number) {
                     var two = Object.keys(self.ui['key_' + number]).length > 1;
                     self.filterCriteria[number] = two ? (self.ui['key_' + number]['value1'] + ',' + self.ui['key_' + number]['value2']) : self.ui['key_' + number].value;
