@@ -44,7 +44,8 @@ module.exports = {
                         useRelativePath: false
                     }
                 }
-            }
+            },
+            { test: /\.txt/, loader: 'ignore-loader' }
         ]
     },
     plugins: [
@@ -59,5 +60,8 @@ module.exports = {
         }),
         new webpack.HotModuleReplacementPlugin(),
         new NGAnnotate()
-    ]
+    ],
+    node:{
+        "fs": 'empty'
+    }
 };
