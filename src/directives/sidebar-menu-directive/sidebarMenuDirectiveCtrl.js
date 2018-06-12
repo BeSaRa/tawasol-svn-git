@@ -4,8 +4,10 @@ module.exports = function (app) {
                                                          employeeService,
                                                          LangWatcher,
                                                          permissionService,
+                                                         sidebarService,
                                                          rootEntity,
                                                          quickSearchCorrespondenceService,
+                                                         $timeout,
                                                          $scope) {
         'ngInject';
         var self = this;
@@ -21,12 +23,18 @@ module.exports = function (app) {
                 return;
             }
             var menu = angular.element('#menu-id-' + item.ID).children('ul');
-            menu.parents('li').siblings('.has-child').children('ul').slideUp('fast');
-            menu.slideToggle('fast', function () {
-                $scope.$apply(function () {
-                    item.open = !item.open;
-                });
-            });
+            sidebarService.toggleMenuItem(item);
+            // $timeout(function () {
+            //     menu.parent().siblings('li.has-child').children('ul').slideUp('fast').end().removeClass('opend');
+            // }).then(function () {
+            //     menu.slideToggle('fast', function () {
+            //         $timeout(function () {
+            //
+            //             menu.removeAttr('style');
+            //         })
+            //     });
+            // });
+
 
         };
 

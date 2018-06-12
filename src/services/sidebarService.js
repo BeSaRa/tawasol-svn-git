@@ -22,6 +22,7 @@ module.exports = function (app) {
         self.menuItems = [];
         self.menuParents = [];
         self.menuChildren = {};
+        self.lastOpendItem = null;
         /**
          * get sidebar by code
          * @param sidebarCode
@@ -79,6 +80,13 @@ module.exports = function (app) {
             return _.find(self.menuItems, function (menu) {
                 return Number(menu.ID) === Number(id);
             });
+        };
+
+        self.toggleMenuItem = function (menuItem) {
+            menuItem.toggleItem();
+            _.map(self.menuItems,function (item) {
+                item.ID !== menuItem.ID && item.closeItem();
+            })
         }
 
 

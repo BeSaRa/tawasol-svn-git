@@ -138,7 +138,7 @@
         height: 20px !important;
       }
     }
-    li.has-child.opend {
+    li.has-child.opend, li.has-child {
       ul {
         display: none !important;
       }
