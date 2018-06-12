@@ -129,6 +129,8 @@
                     <!--custom-validate-directive="AEN" -->
                     <textarea name="docSubject"
                               id="docSubject"
+                              maxlength="255"
+                              md-maxlength="255"
                               ng-disabled="!!ctrl.disableProperties"
                               ng-model="ctrl.document.docSubject"
                               ng-required="ctrl.checkMandatory('docSubject')"></textarea>
