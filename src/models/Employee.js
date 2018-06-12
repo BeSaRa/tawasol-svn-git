@@ -207,6 +207,7 @@ module.exports = function (app) {
              */
             Employee.prototype.hasThesePermissions = function (permissions) {
                 var self = this;
+                permissions = angular.isArray(permissions) ? permissions : [permissions];
                 return !_.some(_.map(permissions, function (permission) {
                     return self.hasPermissionTo(permission);
                 }), function (item) {
