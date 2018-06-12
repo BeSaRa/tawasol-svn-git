@@ -109,4 +109,7 @@ Bugs:
 13471: Fix - inbox filter : Edit Filter did't work.
 13480: Fix - Correspondence site with follow up status without reply hasn't added when Select all other CS need reply without follow up date.
 13467: Fix - Barcode tab is the Default Tab in Global Setting.
-13464: Fix - Sites Fixes - Add new document- the number of characters in document title is not displayed and the title accept more than 255 characters
+13464: Fix - Sites Fixes - Add new document- the number of characters in document title is not displayed and the title accept more than 255 characters.
+13432: Fix - incoming scan queue - there is no print barocode option displayed
+13429: Fix - outgoing and internal Prepare queue - there is no print barocode option displayed
+13426: Fix - Add paper outgoing /internal without content - After saving the actions list is still disabled
