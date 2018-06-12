@@ -157,7 +157,7 @@ module.exports = function (app) {
         // grid options for all grids
         self.grid = {
             users: {
-                limit: 4, // default limit
+                limit: 5, // default limit
                 page: 1, // first page
                 order: '', // default sorting order
                 limitOptions: [5, 10, 20, // limit options
@@ -171,7 +171,7 @@ module.exports = function (app) {
                 selected: []
             },
             favoriteUsers: {
-                limit: 4, // default limit
+                limit: 5, // default limit
                 page: 1, // first page
                 order: '', // default sorting order
                 limitOptions: [5, 10, 20, // limit options
@@ -185,7 +185,7 @@ module.exports = function (app) {
                 selected: []
             },
             privateUsers: {
-                limit: 4, // default limit
+                limit: 5, // default limit
                 page: 1, // first page
                 order: '', // default sorting order
                 limitOptions: [5, 10, 20, // limit options
@@ -199,7 +199,7 @@ module.exports = function (app) {
                 selected: []
             },
             managerUsers: {
-                limit: 4, // default limit
+                limit: 5, // default limit
                 page: 1, // first page
                 order: '', // default sorting order
                 limitOptions: [5, 10, 20, // limit options
@@ -213,7 +213,7 @@ module.exports = function (app) {
                 selected: []
             },
             governmentEntitiesHeads: {
-                limit: 4, // default limit
+                limit: 5, // default limit
                 page: 1, // first page
                 order: '', // default sorting order
                 limitOptions: [5, 10, 20, // limit options
@@ -227,7 +227,7 @@ module.exports = function (app) {
                 selected: []
             },
             workflowGroups: {
-                limit: 4, // default limit
+                limit: 5, // default limit
                 page: 1, // first page
                 order: '', // default sorting order
                 limitOptions: [5, 10, 20, // limit options
