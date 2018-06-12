@@ -326,10 +326,10 @@ module.exports = function (app) {
                     'ngInject';
                     return !employeeService.isCloudUser() ? entityTypeService.getEntityTypes() : [];
                 },*/
-                // organizations: function (organizationService, employeeService) {
-                //     'ngInject';
-                //     return !employeeService.isCloudUser() ? organizationService.getOrganizations() : [];
-                // },
+                organizations: function (organizationService, employeeService) {
+                    'ngInject';
+                    return !employeeService.isCloudUser() ? organizationService.getOrganizations() : [];
+                },
                 language: function (employeeService, $timeout, langService) {
                     'ngInject';
                     $timeout(function () {
