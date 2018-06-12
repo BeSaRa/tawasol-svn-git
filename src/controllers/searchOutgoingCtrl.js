@@ -751,6 +751,7 @@ module.exports = function (app) {
                 icon: 'backburger',
                 text: 'grid_action_partial_export',
                 shortcut: false,
+                permissionKey: 'PARTIAL_EXPORT',
                 callback: self.partialExportCallback,
                 class: "action-green",
                 checkShow: function (action, model) {
