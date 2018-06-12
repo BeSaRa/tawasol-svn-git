@@ -243,16 +243,29 @@ module.exports = function (app) {
         };
 
         // to display alert to inform the user this document not approved and will not send it to many users.
-        if(!isDeptIncoming) {
-            _justForYourInformationDialog(self.multiStatus , true);
+        if (!isDeptIncoming) {
+            _justForYourInformationDialog(self.multiStatus, true);
         }
-        else{
+        else {
             approvedStatus = false;
         }
 
         function _checkPermission(permission) {
             return employeeService.hasPermissionTo(permission);
         }
+
+        self.checkIfNotInternalDocument = function () {
+            if (self.multi) {
+                return !(_.some(_.map(self.correspondence, function (correspondence) {
+                    return correspondence.getInfo().documentClass === 'internal';
+                }), function (matchingResult) {
+                    return matchingResult === true;
+                }));
+            }
+            else {
+                return self.correspondence.getInfo().documentClass !== 'internal';
+            }
+        };
 
         // workflow tabs
         self.workflowTabs = {
@@ -309,7 +322,7 @@ module.exports = function (app) {
             registry_organizations: {
                 lang: 'workflow_menu_item_registry_organizations',
                 icon: 'bank',
-                show: _checkPermission('SEND_TO_ELECTRONIC_INCOMING_QUEUES'),
+                show: _checkPermission('SEND_TO_ELECTRONIC_INCOMING_QUEUES') && self.checkIfNotInternalDocument(),
                 disabled: _getApprovedStatus(),
                 modelName: 'registryOrganizations'
             }
