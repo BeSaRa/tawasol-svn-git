@@ -51,6 +51,8 @@ module.exports = function (app) {
         self.controllerName = 'organizationPopCtrl';
         // current organization.
         self.parentOrganization = organization;
+
+        self.employeeService = employeeService;
         // to check edit mode.
         self.editMode = editMode;
         // to check add root mode.

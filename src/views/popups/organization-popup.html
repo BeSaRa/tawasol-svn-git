@@ -247,7 +247,7 @@
                                     </md-input-container>
                                 </div><!-- row -->
                                 <div layout="row">
-                                    <md-switch flex ng-model="ctrl.organization.status">
+                                    <md-switch flex ng-model="ctrl.organization.status" ng-disabled="ctrl.employeeService.getEmployee().organization.ouid === ctrl.organization.id">
                                         {{lang.status}} : {{ctrl.organization.getTranslatedStatus()}}
                                     </md-switch>
                                     <md-input-container ng-if="ctrl.organization.hasRegistry" flex>
