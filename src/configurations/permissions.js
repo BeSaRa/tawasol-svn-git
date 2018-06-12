@@ -19,6 +19,7 @@ module.exports = function (app) {
             .addMenuPermissions('menu_item_cross_site_management', ['MANAGE_CORRESPONDENCE_SITES'])
             .addMenuPermissions('menu_item_application_users', ['MANAGE_APPLICATION_USERS'])
             .addMenuPermissions('menu_item_reference_number_plans', ['MANAGE_REFERENCE_NUMBER_PLANS'])
+            .addMenuPermissions('menu_item_ranks', ['MANAGE_RANKS'])
             // .addMenuPermissions('menu_item_reference_number_plans', function () {
             //     return false;
             // })
@@ -75,9 +76,10 @@ module.exports = function (app) {
             .addMenuPermissionGroup('menu_item_inbox')
             .addMenuPermission('menu_item_user_inbox', 'USER_INBOX')
             .addMenuPermission('menu_item_sent_items', 'SENT_ITEMS')
+            .addMenuPermission('menu_item_folders', 'FOLDERS_QUEUE')
             .addMenuPermission('menu_item_followup_employee_inbox', 'FOLLOW-UP_EMPLOYEES’_INBOXES')
             .addMenuPermission('menu_item_group_inbox', function (employee) {
-                return !employee.inRegistry();
+                return !employee.inRegistry() && employee.hasThesePermissions('GROUP_MAIL');
             })
             .addMenuPermission('menu_item_proxy_mail_inbox', function (employee) {
                 return !employee.isAdmin && employee.isProxyUser();// && _.map(employee.proxyUsers, 'proxyUserOU').indexOf(employee.organization.ouid) > -1;

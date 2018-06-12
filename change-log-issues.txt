@@ -113,3 +113,4 @@ Bugs:
 13432: Fix - incoming scan queue - there is no print barocode option displayed
 13429: Fix - outgoing and internal Prepare queue - there is no print barocode option displayed
 13426: Fix - Add paper outgoing /internal without content - After saving the actions list is still disabled
+12986: Fix - permission - there is no permission for group mail, broadcast, ranks and folders queues

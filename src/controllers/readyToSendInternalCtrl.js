@@ -623,6 +623,7 @@ module.exports = function (app) {
                 icon: 'bullhorn',
                 text: 'grid_action_broadcast',
                 shortcut: false,
+                permissionKey: 'BROADCAST_DOCUMENT',
                 callback: self.broadcast,
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && (!!model.addMethod || model.hasOwnProperty('approvers') && model.approvers !== null);

@@ -937,6 +937,7 @@ module.exports = function (app) {
                 text: 'grid_action_broadcast',
                 shortcut: false,
                 hide: true,
+                permissionKey: 'BROADCAST_DOCUMENT',
                 callback: self.broadcast,
                 checkShow: self.checkToShowAction
             }

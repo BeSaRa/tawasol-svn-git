@@ -667,6 +667,7 @@ module.exports = function (app) {
                     text: 'grid_action_broadcast',
                     shortcut: false,
                     hide: false,
+                    permissionKey: 'BROADCAST_DOCUMENT',
                     callback: self.broadcast,
                     checkShow: function (action, model) {
                         return (!model.needApprove() || model.hasDocumentClass('incoming')) && !model.isBroadcasted();
