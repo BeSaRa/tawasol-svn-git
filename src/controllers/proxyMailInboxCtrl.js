@@ -125,7 +125,7 @@ module.exports = function (app) {
                 .loadProxyMailInboxes(userId, ouId)
                 .then(function (result) {
                     counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.proxyMailInboxes = result;
                     self.selectedProxyMailInboxes = [];
                     defer.resolve(true);
@@ -277,6 +277,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -306,6 +307,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });

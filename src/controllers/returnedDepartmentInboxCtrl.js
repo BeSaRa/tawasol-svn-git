@@ -104,7 +104,7 @@ module.exports = function (app) {
                 .loadReturnedDepartmentInboxes()
                 .then(function (result) {
                     counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.returnedDepartmentInboxes = result;
                     self.selectedReturnedDepartmentInboxes = [];
                     defer.resolve(true);
@@ -302,6 +302,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -522,7 +523,10 @@ module.exports = function (app) {
                 .controllerMethod
                 .distributionWorkflowSendBulk(self.selectedReturnedDepartmentInboxes, "outgoing", $event)
                 .then(function () {
-                    self.reloadReturnedDepartmentInboxes(self.grid.page);
+                    self.reloadReturnedDepartmentInboxes(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 })
                 .catch(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page);

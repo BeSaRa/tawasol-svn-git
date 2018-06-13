@@ -25,7 +25,8 @@ module.exports = function (app) {
                                           ResolveDefer,
                                           correspondenceService,
                                           listGeneratorService,
-                                          $state) {
+                                          $state,
+                                          mailNotificationService) {
             'ngInject';
 
             var self = this;
@@ -238,6 +239,7 @@ module.exports = function (app) {
                     .then(function () {
                         self.reloadApprovedInternals(self.grid.page)
                             .then(function () {
+                                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                                 new ResolveDefer(defer);
                             });
                     });
@@ -258,7 +260,10 @@ module.exports = function (app) {
                 correspondenceService
                     .launchCorrespondenceWorkflow(self.selectedApprovedInternals, $event)
                     .then(function () {
-                        self.reloadApprovedInternals(self.grid.page);
+                        self.reloadApprovedInternals(self.grid.page)
+                            .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                     })
                     .catch(function () {
                         self.reloadApprovedInternals(self.grid.page);

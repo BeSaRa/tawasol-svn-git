@@ -9,7 +9,8 @@ module.exports = function (app) {
                                                                  langService,
                                                                  distributionWorkflowService,
                                                                  managerService,
-                                                                 employeeService) {
+                                                                 employeeService,
+                                                                 mailNotificationService) {
         'ngInject';
         var self = this;
         self.controllerName = 'incomingAddContentActionsPopCtrl';
@@ -39,7 +40,10 @@ module.exports = function (app) {
 
             distributionWorkflowService
                 .controllerMethod
-                .distributionWorkflowSend(self.incomingDocument, false, false, null, "incoming", $event);
+                .distributionWorkflowSend(self.incomingDocument, false, false, null, "incoming", $event)
+            .then(function () {
+                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+            });
         };
 
         self.docActionSendToReview = function ($event) {

@@ -429,6 +429,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -445,6 +446,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -751,7 +753,10 @@ module.exports = function (app) {
                             return result === 'INTERNAL_PERSONAL'
                         })
                         .then(function () {
-                            self.reloadUserInboxes(self.grid.page);
+                            self.reloadUserInboxes(self.grid.page)
+                                .then(function () {
+                                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                                });
                         });
                     self.reloadUserInboxes(self.grid.page);
                 });

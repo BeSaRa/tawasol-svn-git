@@ -82,7 +82,7 @@ module.exports = function (app) {
                 .loadIncomingDepartmentInboxes()
                 .then(function (result) {
                     counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.incomingDepartmentInboxes = result;
                     self.selectedIncomingDepartmentInboxes = [];
                     defer.resolve(true);
@@ -200,6 +200,7 @@ module.exports = function (app) {
                                 .then(function () {
                                     self.reloadIncomingDepartmentInboxes(self.grid.page)
                                         .then(function () {
+                                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                                             new ResolveDefer(defer);
                                         });
                                 });
@@ -225,6 +226,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadIncomingDepartmentInboxes(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });

@@ -129,7 +129,7 @@ module.exports = function (app) {
 
         self.requestCompleted = false;
         var saveCorrespondenceFinished = function (status, newId) {
-            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
+            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             counterService.loadCounters();
             if (status) {// || (self.incoming.contentFile)
                 toast.success(langService.get('save_success'));
@@ -256,7 +256,7 @@ module.exports = function (app) {
             document.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.resetAddCorrespondence();
                 });
         };

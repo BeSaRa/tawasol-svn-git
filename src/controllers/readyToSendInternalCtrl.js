@@ -127,7 +127,10 @@ module.exports = function (app) {
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedReadyToSendInternals, $event, 'forward', 'favorites')
                 .then(function () {
-                    self.reloadReadyToSendInternals(self.grid.page);
+                    self.reloadReadyToSendInternals(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -142,7 +145,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.reloadReadyToSendInternals(self.grid.page)
                         .then(function(){
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
                 });
         };
@@ -212,7 +215,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReadyToSendInternals(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -337,7 +340,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReadyToSendInternals(self.grid.page)
                         .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         })
                 });

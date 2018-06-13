@@ -112,7 +112,7 @@ module.exports = function (app) {
                 .loadSentItemDepartmentInboxes(self.selectedMonth, self.selectedYear)
                 .then(function (result) {
                     counterService.loadCounters();
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);;
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.sentItemDepartmentInboxes = result;
                     self.selectedSentItemDepartmentInboxes = [];
                     defer.resolve(true);
@@ -205,6 +205,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadSentItemDepartmentInboxes(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });

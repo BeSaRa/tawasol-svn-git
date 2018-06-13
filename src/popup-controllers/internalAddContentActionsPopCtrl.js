@@ -10,7 +10,9 @@ module.exports = function (app) {
                                                                  distributionWorkflowService,
                                                                  draftInternalService,
                                                                  managerService,
-                                                                 employeeService) {
+                                                                 employeeService,
+                                                                 mailNotificationService) {
+
         'ngInject';
         var self = this;
         self.controllerName = 'internalAddContentActionsPopCtrl';
@@ -40,7 +42,10 @@ module.exports = function (app) {
 
             distributionWorkflowService
                 .controllerMethod
-                .distributionWorkflowSend(self.internalDocument, false, false, null, "internal", $event);
+                .distributionWorkflowSend(self.internalDocument, false, false, null, "internal", $event)
+                .then(function () {
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                });
         };
 
         self.docActionSendToReview = function ($event) {
@@ -131,7 +136,7 @@ module.exports = function (app) {
                     callback: self.docActionPrintBarcode,
                     class: "action-red",
                     permissionKey: "PRINT_BARCODE",
-                    checkShow: function(action, model){
+                    checkShow: function (action, model) {
                         var info = model.getInfo();
                         return self.checkToShowAction(action, model) && info.isPaper;
                     }
