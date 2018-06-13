@@ -462,6 +462,7 @@ md-sidenav {
 #login-popup {
   padding: 20px;
   max-width: 420px;
+  z-index: 101;
   h3, h4 {
     margin-top: 0;
   }
