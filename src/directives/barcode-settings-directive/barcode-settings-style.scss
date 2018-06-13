@@ -1,4 +1,4 @@
-#globalSettingForm {
+#globalSettingForm, #searchOutgoingForm, #searchInternalForm, #searchGeneralForm, #searchIncomingForm {
   padding: 0;
   position: absolute;
   right: 0;
@@ -87,7 +87,7 @@
   margin: 0 0 10px 0;
 }
 
-#global-settings-buttons {
+#global-settings-buttons, .absolute-buttons {
   position: absolute;
   bottom: 20px;
   left: 20px;
