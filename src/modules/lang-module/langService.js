@@ -13,7 +13,7 @@ module.exports = function (app) {
                 id: 1,
                 title: 'Arabic',
                 code: 'ar',
-                image: 'qa',
+                image: 'ar',
                 lookupKey: 1
             }),
             new Language({

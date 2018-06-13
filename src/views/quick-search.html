@@ -23,7 +23,7 @@
                                        md-progress="ctrl.progress">
                                     <thead md-head md-order="ctrl.grid.order">
                                     <tr md-row>
-                                        <th colspan="{{ctrl.selectedQuickSearchCorrespondence.length > 1 ? 7 : 8}}"
+                                        <th colspan="{{ctrl.selectedQuickSearchCorrespondence.length > 1 ? 9 : 10}}"
                                             class="table-selector-header"
                                             ng-if="ctrl.selectedQuickSearchCorrespondence.length" md-column>
                                             <div layout="row" layout-align="start center">
@@ -32,6 +32,10 @@
                                         </th>
                                         <th md-column>
                                             <!-- Indicators -->
+                                        </th>
+                                        <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
+                                            md-order-by="docFullSerial">
+                                            <span>{{lang.label_serial}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
                                             md-order-by="docSubject">
@@ -55,6 +59,10 @@
                                         <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
                                             md-order-by="createdOn">
                                             <span>{{lang.created_on}}</span></th>
+                                        <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column
+                                            md-order-by="">
+                                            <span>{{lang.correspondence_sites}}</span>
+                                        </th>
                                         <th ng-if="!ctrl.selectedQuickSearchCorrespondence.length" md-column>
                                             {{lang.action}}
                                         </th>
@@ -71,7 +79,12 @@
                                             <grid-indicator-directive record="quickSearch"
                                                                       indicator-type="docClass"
                                                                       record-type="correspondence"></grid-indicator-directive>
+                                            <!-- Paper/Electronic-->
+                                            <grid-indicator-directive record="quickSearch"
+                                                                      indicator-type="paperElectronic"
+                                                                      record-type="correspondence"></grid-indicator-directive>
                                         </td>
+                                        <td md-cell>{{quickSearch.docFullSerial}}</td>
                                         <td md-cell><a href="" class="view-doc"
                                                        ng-click="ctrl.viewDocument(quickSearch, $event)">{{quickSearch.docSubject}}</a>
                                         </td>
@@ -81,6 +94,9 @@
                                         <td md-cell>{{quickSearch.docType.getTranslatedName()}}</td>
                                         <td md-cell>{{quickSearch.createdBy}}</td>
                                         <td md-cell>{{quickSearch.createdOn}}</td>
+                                        <td md-cell class="td-data">
+                                            <main-site-sub-site-directive item="quickSearch"></main-site-sub-site-directive>
+                                        </td>
                                         <td md-cell ng-if="ctrl.selectedQuickSearchCorrespondence.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedQuickSearchCorrespondence.length
                                                   || ctrl.selectedQuickSearchCorrespondence.length===1 && ctrl.selectedQuickSearchCorrespondence[0].id === quickSearch.id">

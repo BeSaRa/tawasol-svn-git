@@ -45,7 +45,6 @@ module.exports = function (app) {
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.sitesInfoCC = !angular.isArray(model.sitesInfoCC) && model.sitesInfoCC ? angular.fromJson(model.sitesInfoCC) : [];
             model.sitesInfoTo = !angular.isArray(model.sitesInfoTo) && model.sitesInfoTo ? angular.fromJson(model.sitesInfoTo) : [];
-            model.isPaperIndicator = model.getIsPaperIndicator(model.hasOwnProperty('addMethod') ? model.addMethod : 1);
 
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;

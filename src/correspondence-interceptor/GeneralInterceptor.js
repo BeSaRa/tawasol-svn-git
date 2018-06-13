@@ -97,18 +97,8 @@ module.exports = function (app) {
                 });
             }
 
-            model.securityLevelIndicator = model.securityLevel ? model.getSecurityLevelIndicator(model.securityLevel) : null;
-            model.priorityLevelIndicator = model.priorityLevel ? model.getPriorityLevelIndicator(model.priorityLevel) : null;
-            model.attachmentsIndicator = model.attachments.length ? model.getAttachmentsIndicator() : null;
-
-            var linkedDocs = [];
-            if (!angular.isArray(model.linkedDocs) && model.linkedDocs && model.linkedDocs.length)
-                linkedDocs = Array.prototype.slice.call(JSON.parse(model.linkedDocs));
-            model.linkedDocsIndicator = linkedDocs.length ? model.getLinkedDocumentsIndicator() : null;
-
             model.docClassIndicator = model.getDocClassIndicator(model.getInfo().documentClass);
-            model.isPaperIndicator = model.getIsPaperIndicator(model.addMethod);
-            model.tagsIndicator = model.tags.length ? model.getTagsIndicator(model.tags.length) : null;
+            //model.isPaperIndicator = model.getIsPaperIndicator(model.addMethod);
 
             return model;
         });

@@ -36,7 +36,6 @@ module.exports = function (app) {
                 model.tags = (model.tags && model.tags.length) ? Array.prototype.slice.call(JSON.parse(model.tags)) : [];
             if (!angular.isArray(model.attachments))
                 model.attachments = (model.attachments && model.attachments.length) ? Array.prototype.slice.call(JSON.parse(model.attachments)) : [];
-            model.isPaperIndicator = model.getIsPaperIndicator(model.hasOwnProperty('addMethod') ? model.addMethod : 1);
 
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;

@@ -76,7 +76,7 @@
                                    md-progress="ctrl.progress">
                                 <thead md-head md-order="ctrl.grid.order">
                                 <tr md-row>
-                                    <th colspan="{{ctrl.selectedSearchedIncomingDocuments.length > 1 ? 7 : 8}}"
+                                    <th colspan="{{ctrl.selectedSearchedIncomingDocuments.length > 1 ? 9 : 10}}"
                                         ng-if="ctrl.selectedSearchedIncomingDocuments.length" md-column>
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedSearchedIncomingDocuments.length}} {{lang.items_selected}} </span>
@@ -91,7 +91,11 @@
                                         </div>
                                     </th>
                                     <th md-column>
-
+                                        <!-- Indicators -->
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
+                                        md-order-by="docFullSerial">
+                                        <span>{{lang.label_serial}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
                                         md-order-by="docSubject">
@@ -116,6 +120,10 @@
                                     <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
                                         md-order-by="createdOn">
                                         <span>{{lang.created_on}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
+                                        md-order-by="">
+                                        <span>{{lang.correspondence_sites}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length && ctrl.selectedSearchedIncomingDocuments.length < 2"
                                         md-column>
@@ -146,6 +154,7 @@
                                                                   indicator-type="hasLinkedDocuments"
                                                                   record-type="correspondence"></grid-indicator-directive>
                                     </td>
+                                    <td md-cell>{{searchedIncomingDocument.docFullSerial}}</td>
                                     <td md-cell class="td-data">
                                         <a href="" ng-if="searchedIncomingDocument.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(searchedIncomingDocument, $event)">{{searchedIncomingDocument.docSubject}}</a>
@@ -158,6 +167,10 @@
                                     </td>
                                     <td md-cell>{{searchedIncomingDocument.creatorInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{searchedIncomingDocument.createdOn}}</td>
+                                    <td md-cell class="td-data">
+                                        <main-site-sub-site-directive
+                                                item="searchedIncomingDocument"></main-site-sub-site-directive>
+                                    </td>
                                     <td md-cell ng-if="ctrl.selectedSearchedIncomingDocuments.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedSearchedIncomingDocuments.length
                                                   || ctrl.selectedSearchedIncomingDocuments.length===1 && ctrl.selectedSearchedIncomingDocuments[0].id === searchedIncomingDocument.id">

@@ -186,7 +186,7 @@ module.exports = function (app) {
             /*if (!angular.isDate(model.createdOn))
                 model.createdOn = moment(model.createdOn).format('YYYY-MM-DD');*/
 
-            model.linkedDocs = (model.linkedDocs && model.linkedDocs.length) ? angular.fromJson(model.linkedDocs) : model.linkedDocs;
+
 
             if (model.linkedEntities && !angular.isArray(model.linkedEntities)) {
                 model.linkedEntities = _.map(JSON.parse(model.linkedEntities), function (entity) {
@@ -206,12 +206,14 @@ module.exports = function (app) {
                 model.tags = angular.fromJson(model.tags);
             }
 
-            var linkedDocs = [];
-            if (!angular.isArray(model.linkedDocs) && model.linkedDocs && model.linkedDocs.length)
+            model.linkedDocs = (model.linkedDocs && model.linkedDocs.length) ? angular.fromJson(model.linkedDocs) : model.linkedDocs;
+            var linkedDocs = angular.copy(model.linkedDocs) || [];
+            if (model.linkedDocs && model.linkedDocs.length && !angular.isArray(model.linkedDocs))
                 linkedDocs = Array.prototype.slice.call(JSON.parse(model.linkedDocs));
+
             model.linkedDocsIndicator = linkedDocs.length ? model.getLinkedDocumentsIndicator() : null;
             model.tagsIndicator = (model.tags && model.tags.length) ? model.getTagsIndicator(model.tags.length) : null;
-
+            model.isPaperIndicator = model.getInfo().documentClass !== 'incoming' ? model.getIsPaperIndicator(model.hasOwnProperty('addMethod') ? model.addMethod : 1) : null;
             return model;
         });
 

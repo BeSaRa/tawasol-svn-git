@@ -89,12 +89,14 @@ module.exports = function (app) {
                         ? mainSite.getTranslatedName() + (subSite.getTranslatedName() ? (' - ' + subSite.getTranslatedName()) : '')
                         : "";
                 }*/
-
-                mainSite = new Information(this.siteInfo.mainSite);
-                subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : new Information();
-                return this.siteInfo
-                    ? mainSite.getTranslatedName() + (subSite.getTranslatedName() ? (' - ' + subSite.getTranslatedName()) : '')
-                    : "";
+                if (this.siteInfo) {
+                    mainSite = new Information(this.siteInfo.mainSite);
+                    subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : new Information();
+                    return this.siteInfo
+                        ? mainSite.getTranslatedName() + (subSite.getTranslatedName() ? (' - ' + subSite.getTranslatedName()) : '')
+                        : "";
+                }
+                return '';
             };
 
             WorkItem.prototype.setCorrespondenceService = function (service) {

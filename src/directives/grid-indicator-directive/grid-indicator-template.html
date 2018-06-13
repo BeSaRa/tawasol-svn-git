@@ -35,7 +35,7 @@
     ></md-icon>
 </span>
 <!-- Paper/Electronic -->
-<span ng-if="ctrl.indicatorType === 'paperElectronic'" class="{{ctrl.spanClass}}"
+<span ng-if="ctrl.indicatorType === 'paperElectronic' && ctrl.record.getInfo().documentClass!=='incoming'" class="{{ctrl.spanClass}}"
       ng-class="{'indicator-content': ctrl.record.isPaperIndicator}">
     <md-icon ng-if="ctrl.record.isPaperIndicator && ctrl.isShowIndicator()"
              class="{{ctrl.record.isPaperIndicator.class}} {{ctrl.iconClass}}"

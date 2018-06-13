@@ -78,7 +78,7 @@ module.exports = function (app) {
             self.incoming = receive.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = receive.content;
-            console.log(self.incoming.linkedEntities);
+            //console.log(self.incoming.linkedEntities);
         }
 
         self.preventPropagation = function ($event) {

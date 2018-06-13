@@ -13,7 +13,8 @@ module.exports = function (app) {
                                             DocumentComment,
                                             Site,
                                             _,
-                                            Indicator) {
+                                            Indicator,
+                                            Information) {
         'ngInject';
         return function Correspondence(model) {
             var self = this,
@@ -562,6 +563,29 @@ module.exports = function (app) {
 
             Correspondence.prototype.getDocumentDate = function () {
                 return this.docDate ? moment(this.docDate).format(langService.current === 'ar' ? 'DD-MM-YYYY' : 'YYYY-MM-DD') : '';
+            };
+
+            /**
+             * @description Get the translated correspondence site info.
+             * @returns {string}
+             */
+            Correspondence.prototype.getTranslatedCorrespondenceSiteInfo = function () {
+                var mainSite, subSite;
+                /*if (this.getInfo().documentClass === 'outgoing') {
+                    mainSite = new Information(this.firstSiteInfo.mainSite);
+                    subSite = (this.firstSiteInfo.subSite) ? new Information(this.firstSiteInfo.subSite) : new Information();
+                    return this.firstSiteInfo
+                        ? mainSite.getTranslatedName() + (subSite.getTranslatedName() ? (' - ' + subSite.getTranslatedName()) : '')
+                        : "";
+                }*/
+                if(self.siteInfo) {
+                    mainSite = new Information(this.siteInfo.mainSite);
+                    subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : new Information();
+                    return this.siteInfo
+                        ? mainSite.getTranslatedName() + (subSite.getTranslatedName() ? (' - ' + subSite.getTranslatedName()) : '')
+                        : "";
+                }
+                return '';
             };
 
             // don't remove CMSModelInterceptor from last line

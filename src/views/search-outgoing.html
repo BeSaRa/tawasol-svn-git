@@ -76,7 +76,7 @@
                                    md-progress="ctrl.progress">
                                 <thead md-head md-order="ctrl.grid.order">
                                 <tr md-row>
-                                    <th colspan="{{ctrl.selectedSearchedOutgoingDocuments.length > 1 ? 7 : 8}}"
+                                    <th colspan="{{ctrl.selectedSearchedOutgoingDocuments.length > 1 ? 9 : 10}}"
                                         ng-if="ctrl.selectedSearchedOutgoingDocuments.length" md-column>
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedSearchedOutgoingDocuments.length}} {{lang.items_selected}} </span>
@@ -106,6 +106,10 @@
                                         <!-- Indicators -->
                                     </th>
                                     <th ng-if="!ctrl.selectedSearchedOutgoingDocuments.length" md-column
+                                        md-order-by="docFullSerial">
+                                        <span>{{lang.label_serial}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSearchedOutgoingDocuments.length" md-column
                                         md-order-by="docSubject">
                                         <span>{{lang.subject}}</span>
                                     </th>
@@ -128,6 +132,10 @@
                                     <th ng-if="!ctrl.selectedSearchedOutgoingDocuments.length" md-column
                                         md-order-by="createdOn">
                                         <span>{{lang.created_on}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSearchedOutgoingDocuments.length" md-column
+                                        md-order-by="">
+                                        <span>{{lang.correspondence_sites}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSearchedOutgoingDocuments.length && ctrl.selectedSearchedOutgoingDocuments.length < 2"
                                         md-column>
@@ -174,6 +182,7 @@
                                         ></md-icon>
                                     </span>
                                     </td>
+                                    <td md-cell>{{searchedOutgoingDocument.docFullSerial}}</td>
                                     <td md-cell class="td-data">
                                         <a href="" ng-if="searchedOutgoingDocument.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(searchedOutgoingDocument, $event)">{{searchedOutgoingDocument.docSubject}}</a>
@@ -186,6 +195,9 @@
                                     </td>
                                     <td md-cell>{{searchedOutgoingDocument.creatorInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{searchedOutgoingDocument.createdOn}}</td>
+                                    <td md-cell class="td-data">
+                                        <main-site-sub-site-directive item="searchedOutgoingDocument"></main-site-sub-site-directive>
+                                    </td>
                                     <td md-cell ng-if="ctrl.selectedSearchedOutgoingDocuments.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedSearchedOutgoingDocuments.length
                                                   || ctrl.selectedSearchedOutgoingDocuments.length===1 && ctrl.selectedSearchedOutgoingDocuments[0].id === searchedOutgoingDocument.id">

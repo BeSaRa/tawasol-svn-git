@@ -77,7 +77,7 @@
                                    md-progress="ctrl.progress">
                                 <thead md-head md-order="ctrl.grid.order">
                                 <tr md-row>
-                                    <th colspan="{{ctrl.selectedSearchedGeneralDocuments.length > 1 ? 7 : 8}}"
+                                    <th colspan="{{ctrl.selectedSearchedGeneralDocuments.length > 1 ? 9 : 10}}"
                                         ng-if="ctrl.selectedSearchedGeneralDocuments.length" md-column>
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedSearchedGeneralDocuments.length}} {{lang.items_selected}} </span>
@@ -107,6 +107,10 @@
                                         <!-- Indicators -->
                                     </th>
                                     <th ng-if="!ctrl.selectedSearchedGeneralDocuments.length" md-column
+                                        md-order-by="docFullSerial">
+                                        <span>{{lang.label_serial}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSearchedGeneralDocuments.length" md-column
                                         md-order-by="docSubject">
                                         <span>{{lang.subject}}</span>
                                     </th>
@@ -129,6 +133,10 @@
                                     <th ng-if="!ctrl.selectedSearchedGeneralDocuments.length" md-column
                                         md-order-by="createdOn">
                                         <span>{{lang.created_on}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedSearchedGeneralDocuments.length" md-column
+                                        md-order-by="">
+                                        <span>{{lang.correspondence_sites}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSearchedGeneralDocuments.length && ctrl.selectedSearchedGeneralDocuments.length < 2"
                                         md-column>
@@ -180,6 +188,7 @@
                                         ></md-icon>
                                     </span>
                                     </td>
+                                    <td md-cell>{{searchedGeneralDocument.docFullSerial}}</td>
                                     <td md-cell class="td-data">
                                         <a href="" ng-if="searchedGeneralDocument.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(searchedGeneralDocument, $event)">{{searchedGeneralDocument.docSubject}}</a>
@@ -192,6 +201,9 @@
                                     </td>
                                     <td md-cell>{{searchedGeneralDocument.creatorInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{searchedGeneralDocument.createdOn}}</td>
+                                    <td md-cell class="td-data">
+                                        <main-site-sub-site-directive item="searchedGeneralDocument"></main-site-sub-site-directive>
+                                    </td>
                                     <td md-cell ng-if="ctrl.selectedSearchedGeneralDocuments.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedSearchedGeneralDocuments.length
                                                   || ctrl.selectedSearchedGeneralDocuments.length===1 && ctrl.selectedSearchedGeneralDocuments[0].id === searchedGeneralDocument.id">

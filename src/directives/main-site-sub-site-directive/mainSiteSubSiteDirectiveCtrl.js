@@ -8,6 +8,10 @@ module.exports = function (app) {
 
         self.controllerName = 'mainSiteSubSiteDirectiveCtrl';
 
+        self.showCorrespondenceSites = function(){
+          return self.item.getInfo().documentClass !== 'internal';
+        };
+
         self.viewCorrespondenceSites = function ($event) {
 
             var info = self.item.getInfo();
