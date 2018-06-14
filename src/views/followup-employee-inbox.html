@@ -217,9 +217,7 @@
 
                                         </td>
                                         <td md-cell>
-                                            <main-site-sub-site-directive item="followupEmployeeInbox"
-                                                                          ng-if="followupEmployeeInbox.getInfo().documentClass!=='internal'">
-                                            </main-site-sub-site-directive>
+                                            <main-site-sub-site-directive item="followupEmployeeInbox"></main-site-sub-site-directive>
                                         </td>
                                         <td md-cell>{{followupEmployeeInbox.generalStepElm.numberOfDays}}</td>
                                         <td md-cell ng-if="ctrl.selectedFollowupEmployeeInboxes.length < 2">

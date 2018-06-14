@@ -134,9 +134,7 @@
                                                                       record-type="EventHistory"></grid-indicator-directive>
                                         </td>
                                         <td md-cell>
-                                            <main-site-sub-site-directive item="userSentItem"
-                                                                          ng-if="userSentItem.getInfo().documentClass!=='internal'">
-                                            </main-site-sub-site-directive>
+                                            <main-site-sub-site-directive item="userSentItem"></main-site-sub-site-directive>
                                         </td>
                                         <td md-cell>{{lang[userSentItem.docClassIndicator.text]}}</td>
                                         <td md-cell ng-if="ctrl.selectedUserSentItems.length < 2">
