@@ -370,11 +370,11 @@ module.exports = function (app) {
             };
 
             /**
-             * @description Manage entities for draft outgoing
+             * @description Manage Linked Entities
              * @param draftOutgoing
              * @param $event
              */
-            self.manageEntities = function (draftOutgoing, $event) {
+            self.manageLinkedEntities = function (draftOutgoing, $event) {
                 managerService
                     .manageDocumentEntities(draftOutgoing.vsId, draftOutgoing.docClassName, draftOutgoing.docSubject, $event);
             };
@@ -641,13 +641,13 @@ module.exports = function (app) {
                             class: "action-green",
                             checkShow: self.checkToShowAction
                         },
-                        // Entities
+                        // Linked Entities
                         {
                             type: 'action',
                             icon: 'pencil-box-outline',
-                            text: 'grid_action_entities',
+                            text: 'grid_action_linked_entities',
                             shortcut: false,
-                            callback: self.manageEntities,
+                            callback: self.manageLinkedEntities,
                             class: "action-green",
                             checkShow: self.checkToShowAction
                         },

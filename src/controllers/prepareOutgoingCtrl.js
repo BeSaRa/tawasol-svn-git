@@ -234,12 +234,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Manage document entities for prepare outgoing
+         * @description Manage Linked Entities
          * @param prepareOutgoing
          * @param $event
          */
-        self.manageEntities = function (prepareOutgoing, $event) {
-            console.log('manage entities : ', prepareOutgoing);
+        self.manageLinkedEntities = function (prepareOutgoing, $event) {
             managerService
                 .manageDocumentEntities(prepareOutgoing.vsId, prepareOutgoing.docClassName, prepareOutgoing.docSubject, $event);
         };
@@ -434,6 +433,7 @@ module.exports = function (app) {
                 showInView: false,
                 checkShow: self.checkToShowAction,
                 subMenu: [
+                    // Tags
                     {
                         type: 'action',
                         icon: 'tag',
@@ -443,6 +443,7 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
+                    // Comments
                     {
                         type: 'action',
                         icon: 'comment',
@@ -453,6 +454,7 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
+                    // Attachments
                     {
                         type: 'action',
                         icon: 'attachment',
@@ -462,15 +464,17 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
+                    // Linked Entities
                     {
                         type: 'action',
                         icon: 'pencil-box-outline',
-                        text: 'grid_action_entities',
+                        text: 'grid_action_linked_entities',
                         shortcut: false,
-                        callback: self.manageEntities,
+                        callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
+                    // Linked Documents
                     {
                         type: 'action',
                         icon: 'file-document',
@@ -481,6 +485,7 @@ module.exports = function (app) {
                         //hide: true,
                         checkShow: self.checkToShowAction
                     },
+                    // Destinations
                     {
                         type: 'action',
                         icon: 'stop',

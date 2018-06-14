@@ -131,7 +131,6 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
-                    //console.log(result);
                     return result;
                 });
         };
@@ -343,7 +342,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.exportProxyMailInbox = function (proxyMailInbox, $event, defer) {
-            //console.log('exportProxyMailInbox', proxyMailInbox);
             proxyMailInboxService
                 .exportProxyMailInbox(proxyMailInbox, $event)
                 .then(function (result) {
@@ -451,7 +449,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedDocuments = function (proxyMailInbox, $event) {
-            //console.log('manageProxyMailInboxLinkedDocuments : ', proxyMailInbox);
             proxyMailInbox.manageDocumentLinkedDocuments($event)
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page);

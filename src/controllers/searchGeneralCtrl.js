@@ -408,7 +408,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTags = function (searchedGeneralDocument, $event) {
-            //console.log('manage tag for searched general document : ', searchedGeneralDocument);
             var info = searchedGeneralDocument.getInfo();
             managerService.manageDocumentTags(info.vsId, info.documentClass, info.title, $event)
                 .then(function (tags) {
@@ -425,7 +424,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (searchedGeneralDocument, $event) {
-            //console.log('manage comments for searched general document : ', searchedGeneralDocument);
             managerService.manageDocumentComments(searchedGeneralDocument.vsId, searchedGeneralDocument.docSubject, $event)
                 .then(function (documentComments) {
                     searchedGeneralDocument.documentComments = documentComments;
@@ -450,7 +448,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (searchedGeneralDocument, $event) {
-            //console.log('manage attachments for searched general document : ', searchedGeneralDocument);
             var info = searchedGeneralDocument.getInfo();
             //managerService.manageDocumentAttachments(searchedGeneralDocument.vsId, searchedGeneralDocument.docClassName, searchedGeneralDocument.docSubject, $event)
             managerService.manageDocumentAttachments(info.vsId, info.documentClass, info.title, $event)
@@ -468,18 +465,16 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedDocuments = function (searchedGeneralDocument, $event) {
-            //console.log('manage linked documents for searched general document : ', searchedGeneralDocument);
             var info = searchedGeneralDocument.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
         };
 
         /**
-         * @description manage linked entities for searched general document
+         * @description Manage Linked Entities
          * @param searchedGeneralDocument
          * @param $event
          */
         self.manageLinkedEntities = function (searchedGeneralDocument, $event) {
-            //console.log('manage linked entities for searched general document : ', searchedGeneralDocument);
             managerService
                 .manageDocumentEntities(searchedGeneralDocument.vsId, searchedGeneralDocument.docClassName, searchedGeneralDocument.docSubject, $event);
         };
@@ -512,7 +507,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadMainDocument = function (searchedGeneralDocument, $event) {
-            //console.log('download main document for searched general document : ', searchedGeneralDocument);
             downloadService.controllerMethod
                 .mainDocumentDownload(searchedGeneralDocument.vsId);
         };
@@ -523,7 +517,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadCompositeDocument = function (searchedGeneralDocument, $event) {
-            //console.log('download composite document for searched general document : ', searchedGeneralDocument);
             downloadService.controllerMethod
                 .compositeDocumentDownload(searchedGeneralDocument.vsId);
         };

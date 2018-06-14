@@ -215,7 +215,7 @@ module.exports = function (app) {
         };
 
         /**
-         * @description manage linked entities for searched Correspondence document
+         * @description Manage Linked Entities
          * @param searchedCorrespondenceDocument
          * @param $event
          */

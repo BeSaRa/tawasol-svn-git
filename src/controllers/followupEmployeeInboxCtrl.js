@@ -354,7 +354,7 @@ module.exports = function (app) {
          * @param followupEmployeeInbox
          * @param $event
          */
-        self.manageEntities = function (followupEmployeeInbox, $event) {
+        self.manageLinkedEntities = function (followupEmployeeInbox, $event) {
             var wfName = 'outgoing';
             managerService
                 .manageDocumentEntities(followupEmployeeInbox.generalStepElm.vsId, wfName.toLowerCase(), followupEmployeeInbox.generalStepElm.docSubject, $event);
@@ -668,7 +668,7 @@ module.exports = function (app) {
                         icon: 'link-variant',
                         text: 'grid_action_linked_entities',
                         shortcut: false,
-                        callback: self.manageEntities,
+                        callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     }

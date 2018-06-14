@@ -136,7 +136,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkReviewOutgoings = function ($event) {
-            //console.log('remove review outgoing mails bulk : ', self.selectedReviewOutgoings);
             reviewOutgoingService
                 .controllerMethod
                 .reviewOutgoingRemoveBulk(self.selectedReviewOutgoings, $event)
@@ -150,8 +149,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.acceptAndLaunchDistributionWorkflowBulk = function ($event) {
-            //console.log('accept and launch distribution workflow bulk : ', self.selectedReviewOutgoings);
-
             var contentNotExist = _.filter(self.selectedReviewOutgoings, function (reviewOutgoing) {
                 return !reviewOutgoing.hasContent();
             });
@@ -172,7 +169,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.acceptOutgoingBulk = function ($event) {
-            //console.log('accept review outgoing mails bulk : ', self.selectedReviewOutgoings);
             reviewOutgoingService
                 .controllerMethod
                 .reviewOutgoingAcceptBulk(self.selectedReviewOutgoings, $event)
@@ -216,7 +212,7 @@ module.exports = function (app) {
                 'sitesInfoTo',
                 'sitesInfoCC'
             ];
-            //console.log(reviewOutgoing);
+
             managerService
                 .manageDocumentProperties(reviewOutgoing.vsId, reviewOutgoing.docClassName, reviewOutgoing.docSubject, $event)
                 .then(function (document) {
@@ -309,7 +305,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.acceptOutgoing = function (reviewOutgoing, $event, defer) {
-            //console.log('accept outgoing : ', reviewOutgoing);
             reviewOutgoingService.controllerMethod
                 .reviewOutgoingAccept(reviewOutgoing, $event)
                 .then(function (result) {
@@ -355,7 +350,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (reviewOutgoing, $event) {
-            //console.log('manage comments');
             managerService.manageDocumentComments(reviewOutgoing.vsId, reviewOutgoing.docSubject, $event)
                 .then(function (documentComments) {
                     reviewOutgoing.documentComments = documentComments;
@@ -371,7 +365,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (reviewOutgoing, $event) {
-            //console.log('manage attachments');
             managerService.manageDocumentAttachments(reviewOutgoing.vsId, reviewOutgoing.docClassName, reviewOutgoing.docSubject, $event)
                 .then(function (attachments) {
                     reviewOutgoing.attachments = attachments;
@@ -382,12 +375,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Manage Entities
+         * @description Manage Linked Entities
          * @param reviewOutgoing
          * @param $event
          */
-        self.manageEntities = function (reviewOutgoing, $event) {
-            //console.log('manage entities : ', reviewOutgoing);
+        self.manageLinkedEntities = function (reviewOutgoing, $event) {
             managerService
                 .manageDocumentEntities(reviewOutgoing.vsId, reviewOutgoing.docClassName, reviewOutgoing.docSubject, $event);
         };
@@ -398,7 +390,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedDocuments = function (reviewOutgoing, $event) {
-            //console.log('manage linked documents : ', reviewOutgoing);
             var info = reviewOutgoing.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
         };
@@ -418,7 +409,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageDestinations = function (reviewOutgoing, $event) {
-            //console.log('manage destinations : ', reviewOutgoing);
             //var info = reviewOutgoing.getInfo();
             managerService.manageDocumentCorrespondence(reviewOutgoing.vsId, reviewOutgoing.docClassName, reviewOutgoing.docSubject, $event);
         };
@@ -736,13 +726,13 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
-                    // Entities
+                    // Linked Entities
                     {
                         type: 'action',
                         icon: 'pencil-box-outline',
-                        text: 'grid_action_entities',
+                        text: 'grid_action_linked_entities',
                         shortcut: false,
-                        callback: self.manageEntities,
+                        callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },

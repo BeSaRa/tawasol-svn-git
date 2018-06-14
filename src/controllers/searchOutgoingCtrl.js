@@ -471,12 +471,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description manage linked entities for searched outgoing document
+         * @description Manage Linked Entities
          * @param searchedOutgoingDocument
          * @param $event
          */
         self.manageLinkedEntities = function (searchedOutgoingDocument, $event) {
-            //console.log('manage linked entities for searched outgoing document : ', searchedOutgoingDocument);
             managerService
                 .manageDocumentEntities(searchedOutgoingDocument.vsId, searchedOutgoingDocument.docClassName, searchedOutgoingDocument.docSubject, $event);
         };

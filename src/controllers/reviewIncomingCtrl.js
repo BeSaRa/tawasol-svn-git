@@ -466,11 +466,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Manage Entities
+         * @description Manage Linked Entities
          * @param reviewIncoming
          * @param $event
          */
-        self.manageEntities = function (reviewIncoming, $event) {
+        self.manageLinkedEntities = function (reviewIncoming, $event) {
             managerService
                 .manageDocumentEntities(reviewIncoming.vsId, reviewIncoming.docClassName, reviewIncoming.docSubject, $event);
         };
@@ -758,13 +758,13 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
-                    // Entities
+                    // Linked Entities
                     {
                         type: 'action',
                         icon: 'pencil-box-outline',
-                        text: 'grid_action_entities',
+                        text: 'grid_action_linked_entities',
                         shortcut: false,
-                        callback: self.manageEntities,
+                        callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },

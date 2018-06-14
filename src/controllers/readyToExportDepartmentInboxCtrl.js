@@ -346,13 +346,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTags = function (readyToExport, $event) {
-            var vsId = readyToExport.hasOwnProperty('generalStepElm')
-                ? (readyToExport.generalStepElm.hasOwnProperty('vsId') ? readyToExport.generalStepElm.vsId : readyToExport.generalStepElm)
-                : (readyToExport.hasOwnProperty('vsId') ? readyToExport.vsId : readyToExport);
-            var wfName = readyToExport.hasOwnProperty('generalStepElm')
-                ? (readyToExport.generalStepElm.hasOwnProperty('workFlowName') ? readyToExport.generalStepElm.workFlowName : readyToExport.generalStepElm)
-                : (readyToExport.hasOwnProperty('workFlowName') ? readyToExport.workFlowName : readyToExport);
-            managerService.manageDocumentTags(vsId, wfName, readyToExport.getTranslatedName(), $event)
+            var info = readyToExport.getInfo();
+            managerService.manageDocumentTags(info.vsId, info.documentClass, readyToExport.getTranslatedName(), $event)
                 .then(function () {
                     self.reloadReadyToExports(self.grid.page);
                 })
@@ -367,14 +362,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (readyToExport, $event) {
-            //console.log('readyToExport : ', readyToExport);
-            var vsId = readyToExport.hasOwnProperty('generalStepElm')
-                ? (readyToExport.generalStepElm.hasOwnProperty('vsId') ? readyToExport.generalStepElm.vsId : readyToExport.generalStepElm)
-                : (readyToExport.hasOwnProperty('vsId') ? readyToExport.vsId : readyToExport);
-            var wfName = readyToExport.hasOwnProperty('generalStepElm')
-                ? (readyToExport.generalStepElm.hasOwnProperty('workFlowName') ? readyToExport.generalStepElm.workFlowName : readyToExport.generalStepElm)
-                : (readyToExport.hasOwnProperty('workFlowName') ? readyToExport.workFlowName : readyToExport);
-            managerService.manageDocumentComments(vsId, wfName, $event)
+            var info = readyToExport.getInfo();
+            managerService.manageDocumentComments(info.vsId, info.documentClass, $event)
                 .then(function () {
                     self.reloadReadyToExports(self.grid.page);
                 })
@@ -398,14 +387,14 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (readyToExport, $event) {
-            //console.log('manageReadyToExportAttachments : ', readyToExport);
-            var vsId = readyToExport.hasOwnProperty('generalStepElm')
+            /*var vsId = readyToExport.hasOwnProperty('generalStepElm')
                 ? (readyToExport.generalStepElm.hasOwnProperty('vsId') ? readyToExport.generalStepElm.vsId : readyToExport.generalStepElm)
                 : (readyToExport.hasOwnProperty('vsId') ? readyToExport.vsId : readyToExport);
             var wfName = readyToExport.hasOwnProperty('generalStepElm')
                 ? (readyToExport.generalStepElm.hasOwnProperty('workFlowName') ? readyToExport.generalStepElm.workFlowName : readyToExport.generalStepElm)
-                : (readyToExport.hasOwnProperty('workFlowName') ? readyToExport.workFlowName : readyToExport);
-            managerService.manageDocumentAttachments(vsId, wfName, readyToExport.getTranslatedName(), $event);
+                : (readyToExport.hasOwnProperty('workFlowName') ? readyToExport.workFlowName : readyToExport);*/
+            var info = readyToExport.getInfo();
+            managerService.manageDocumentAttachments(info.vsId, info.documentClass, readyToExport.getTranslatedName(), $event);
         };
 
         /**
@@ -414,7 +403,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedDocuments = function (readyToExport, $event) {
-            //console.log('manageReadyToExportLinkedDocuments : ', readyToExport);
             var info = readyToExport.getInfo();
             managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass, "welcome");
         };
@@ -425,7 +413,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedEntities = function (readyToExport, $event) {
-            //console.log('manageReadyToExportLinkedEntities : ', readyToExport);
             managerService
                 .manageDocumentEntities(readyToExport.generalStepElm.vsId, readyToExport.generalStepElm.workFlowName, readyToExport.generalStepElm.docSubject, $event);
         };

@@ -473,12 +473,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description manage linked entities for searched internal document
+         * @description Manage Linked Entities
          * @param searchedInternalDocument
          * @param $event
          */
         self.manageLinkedEntities = function (searchedInternalDocument, $event) {
-            //console.log('manage linked entities for searched internal document : ', searchedInternalDocument);
             managerService
                 .manageDocumentEntities(searchedInternalDocument.vsId, searchedInternalDocument.docClassName, searchedInternalDocument.docSubject, $event);
         };

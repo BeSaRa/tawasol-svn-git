@@ -449,7 +449,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendLinkToDocumentByEmail = function (workItem, $event) {
-            console.log(workItem);
             downloadService.getMainDocumentEmailContent(workItem.generalStepElm.vsId).then(function (result) {
                 dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
                     result: result,

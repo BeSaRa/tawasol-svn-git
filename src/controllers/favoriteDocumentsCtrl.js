@@ -225,7 +225,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (favoriteDocument, $event) {
-            //console.log('manage attachments : ', favoriteDocument);
             managerService.manageDocumentAttachments(favoriteDocument.vsId, favoriteDocument.classDescription, favoriteDocument.docSubject, $event)
                 .then(function (attachments) {
                     favoriteDocument = attachments;
@@ -236,11 +235,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Manage entities for favorite document
+         * @description Manage Linked Entities
          * @param favoriteDocument
          * @param $event
          */
-        self.manageEntities = function (favoriteDocument, $event) {
+        self.manageLinkedEntities = function (favoriteDocument, $event) {
             managerService
                 .manageDocumentEntities(favoriteDocument.vsId, favoriteDocument.classDescription, favoriteDocument.docSubject, $event);
         };
@@ -528,13 +527,13 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
-                    // Entities
+                    // Linked Entities
                     {
                         type: 'action',
                         icon: 'pencil-box-outline',
-                        text: 'grid_action_entities',
+                        text: 'grid_action_linked_entities',
                         shortcut: false,
-                        callback: self.manageEntities,
+                        callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },

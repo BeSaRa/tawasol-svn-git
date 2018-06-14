@@ -398,12 +398,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Manage Entities
+         * @description Manage Linked Entities
          * @param reviewInternal
          * @param $event
          */
-        self.manageEntities = function (reviewInternal, $event) {
-            console.log('manage entities : ', reviewInternal);
+        self.manageLinkedEntities = function (reviewInternal, $event) {
             var info = reviewInternal.getInfo();
             managerService
                 .manageDocumentEntities(info.vsId, info.documentClass, info.title, $event);
@@ -695,13 +694,13 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
-                    // Entites
+                    // Linked Entities
                     {
                         type: 'action',
                         icon: 'pencil-box-outline',
-                        text: 'grid_action_entities',
+                        text: 'grid_action_linked_entities',
                         shortcut: false,
-                        callback: self.manageEntities,
+                        callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },

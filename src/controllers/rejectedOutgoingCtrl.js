@@ -96,7 +96,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.removeRejectedOutgoing = function (rejectedOutgoing, $event, defer) {
-            //console.log('remove rejected outgoing mail : ', rejectedOutgoing);
             rejectedOutgoingService
                 .controllerMethod
                 .rejectedOutgoingRemove(rejectedOutgoing, $event)
@@ -114,7 +113,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkRejectedOutgoings = function ($event) {
-            //console.log('remove rejected outgoing mails bulk : ', self.selectedRejectedOutgoings);
             rejectedOutgoingService
                 .controllerMethod
                 .rejectedOutgoingRemoveBulk(self.selectedRejectedOutgoings, $event)
@@ -158,8 +156,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.launchDistributionWorkflowBulk = function ($event) {
-           // console.log('launch distribution workflow bulk : ', self.selectedRejectedOutgoings);
-
             var contentNotExist = _.filter(self.selectedRejectedOutgoings, function (rejectedOutgoing) {
                 return !rejectedOutgoing.hasContent();
             });
@@ -205,7 +201,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendToReviewBulk = function ($event) {
-            //console.log('send to review rejected outgoing mails bulk : ', self.selectedRejectedOutgoings);
             rejectedOutgoingService
                 .controllerMethod
                 .rejectedOutgoingSendToReviewBulk(self.selectedRejectedOutgoings, $event)
@@ -254,8 +249,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.launchDistributionWorkflow = function (rejectedOutgoing, $event, defer) {
-            //console.log('launch distribution workflow');
-
             if (!rejectedOutgoing.hasContent()) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
@@ -312,7 +305,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.sendToReview = function (rejectedOutgoing, $event, defer) {
-            //console.log('send to review : ', rejectedOutgoing);
             rejectedOutgoingService.controllerMethod
                 .rejectedOutgoingSendToReview(rejectedOutgoing, $event)
                 .then(function (result) {
@@ -360,7 +352,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (rejectedOutgoing, $event) {
-            //console.log('manage comments');
             managerService.manageDocumentComments(rejectedOutgoing.vsId, rejectedOutgoing.docSubject, $event)
                 .then(function (documentComments) {
                     rejectedOutgoing.documentComments = documentComments;
@@ -376,7 +367,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (rejectedOutgoing, $event) {
-            //console.log('manage attachments');
             managerService.manageDocumentAttachments(rejectedOutgoing.vsId, rejectedOutgoing.docClassName, rejectedOutgoing.docSubject, $event)
                 .then(function (attachments) {
                     rejectedOutgoing.attachments = attachments;
@@ -387,12 +377,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Manage Entities
+         * @description Manage Linked Entities
          * @param rejectedOutgoing
          * @param $event
          */
-        self.manageEntities = function (rejectedOutgoing, $event) {
-            console.log('manage entities : ', rejectedOutgoing);
+        self.manageLinkedEntities = function (rejectedOutgoing, $event) {
             managerService
                 .manageDocumentEntities(rejectedOutgoing.vsId, rejectedOutgoing.docClassName, rejectedOutgoing.docSubject, $event);
         };
@@ -404,7 +393,6 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.manageLinkedDocuments = function (rejectedOutgoing, $event) {
-            //console.log('manage linked documents : ', rejectedOutgoing);
             var info = rejectedOutgoing.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
         };
@@ -675,13 +663,13 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
-                    // Entities
+                    // Linked Entities
                     {
                         type: 'action',
                         icon: 'pencil-box-outline',
-                        text: 'grid_action_entities',
+                        text: 'grid_action_linked_entities',
                         shortcut: false,
-                        callback: self.manageEntities,
+                        callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },

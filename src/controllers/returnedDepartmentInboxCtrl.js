@@ -372,7 +372,7 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Manage linked entities for returned department inbox item
+         * @description Manage Linked Entities
          * @param returnedDepartmentInbox
          * @param $event
          */

@@ -256,11 +256,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Manage entities for sent item
+         * @description Manage Linked Entities
          * @param userSentItem
          * @param $event
          */
-        self.manageEntities = function (userSentItem, $event) {
+        self.manageLinkedEntities = function (userSentItem, $event) {
             var info = userSentItem.getInfo();
             managerService
                 .manageDocumentEntities(info.vsId, info.documentClass, info.title, $event);
@@ -537,6 +537,7 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
+                    // Comments
                     {
                         type: 'action',
                         icon: 'comment',
@@ -547,6 +548,7 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
+                    // Attachments
                     {
                         type: 'action',
                         icon: 'attachment',
@@ -556,15 +558,17 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
+                    // Linked Entities
                     {
                         type: 'action',
                         icon: 'pencil-box-outline',
-                        text: 'grid_action_entities',
+                        text: 'grid_action_linked_entities',
                         shortcut: false,
-                        callback: self.manageEntities,
+                        callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
+                    // Linked Documents
                     {
                         type: 'action',
                         icon: 'file-document',

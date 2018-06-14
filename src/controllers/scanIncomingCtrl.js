@@ -234,12 +234,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Manage document entities for scan incoming
+         * @description Manage Linked Entities
          * @param scanIncoming
          * @param $event
          */
-        self.manageEntities = function (scanIncoming, $event) {
-            //console.log('manage entities : ', scanIncoming);
+        self.manageLinkedEntities = function (scanIncoming, $event) {
             managerService
                 .manageDocumentEntities(scanIncoming.vsId, scanIncoming.classDescription, scanIncoming.docSubject, $event);
         };
@@ -449,13 +448,13 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
-                    // Entities
+                    // Linked Entities
                     {
                         type: 'action',
                         icon: 'pencil-box-outline',
-                        text: 'grid_action_entities',
+                        text: 'grid_action_linked_entities',
                         shortcut: false,
-                        callback: self.manageEntities,
+                        callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },

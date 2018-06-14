@@ -150,7 +150,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.removeRejectedIncoming = function (rejectedIncoming, $event, defer) {
-            //console.log('remove rejected incoming mail : ', rejectedIncoming);
             rejectedIncomingService
                 .controllerMethod
                 .rejectedIncomingRemove(rejectedIncoming, $event)
@@ -167,7 +166,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkRejectedIncomings = function ($event) {
-            //console.log('remove rejected incoming mails bulk : ', self.selectedRejectedIncomings);
             rejectedIncomingService
                 .controllerMethod
                 .rejectedIncomingRemoveBulk(self.selectedRejectedIncomings, $event)
@@ -244,7 +242,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.archiveIncomingBulk = function ($event) {
-            console.log('archive rejected incoming mails bulk : ', self.selectedRejectedIncomings);
             rejectedIncomingService
                 .controllerMethod
                 .rejectedIncomingArchiveBulk(self.selectedRejectedIncomings, $event)
@@ -258,7 +255,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendToReviewBulk = function ($event) {
-            //console.log('send to review rejected incoming mails bulk : ', self.selectedRejectedIncomings);
             rejectedIncomingService
                 .controllerMethod
                 .rejectedIncomingSendToReviewBulk(self.selectedRejectedIncomings, $event)
@@ -361,7 +357,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.sendToReview = function (rejectedIncoming, $event, defer) {
-            //console.log('send to review : ', rejectedIncoming);
             rejectedIncomingService.controllerMethod
                 .rejectedIncomingSendToReview(rejectedIncoming, $event)
                 .then(function (result) {
@@ -407,7 +402,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (rejectedIncoming, $event) {
-            //console.log('manage comments');
             managerService.manageDocumentComments(rejectedIncoming.vsId, rejectedIncoming.docSubject, $event)
                 .then(function (documentComments) {
                     rejectedIncoming.documentComments = documentComments;
@@ -423,7 +417,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (rejectedIncoming, $event) {
-            //console.log('manage attachments');
             managerService.manageDocumentAttachments(rejectedIncoming.vsId, rejectedIncoming.docClassName, rejectedIncoming.docSubject, $event)
                 .then(function (attachments) {
                     rejectedIncoming.attachments = attachments;
@@ -434,12 +427,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Manage Entities
+         * @description Manage Linked Entities
          * @param rejectedIncoming
          * @param $event
          */
-        self.manageEntities = function (rejectedIncoming, $event) {
-            console.log('manage entities : ', rejectedIncoming);
+        self.manageLinkedEntities = function (rejectedIncoming, $event) {
             managerService
                 .manageDocumentEntities(rejectedIncoming.vsId, rejectedIncoming.docClassName, rejectedIncoming.docSubject, $event);
         };
@@ -451,7 +443,6 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.manageLinkedDocuments = function (rejectedIncoming, $event) {
-            //console.log('manage linked documents : ', rejectedIncoming);
             var info = rejectedIncoming.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
         };
@@ -698,13 +689,13 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
-                    // Entities
+                    // Linked Entities
                     {
                         type: 'action',
                         icon: 'pencil-box-outline',
-                        text: 'grid_action_entities',
+                        text: 'grid_action_linked_entities',
                         shortcut: false,
-                        callback: self.manageEntities,
+                        callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },

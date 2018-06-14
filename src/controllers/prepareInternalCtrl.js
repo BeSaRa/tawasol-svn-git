@@ -216,11 +216,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Manage document entities for prepare internal
+         * @description Manage Linked Entities
          * @param prepareInternal
          * @param $event
          */
-        self.manageEntities = function (prepareInternal, $event) {
+        self.manageLinkedEntities = function (prepareInternal, $event) {
             var info = prepareInternal.getInfo();
             managerService
                 .manageDocumentEntities(info.vsId, info.documentClass, info.title, $event);
@@ -435,13 +435,13 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
-                    // Entities
+                    // Linked Entities
                     {
                         type: 'action',
                         icon: 'pencil-box-outline',
-                        text: 'grid_action_entities',
+                        text: 'grid_action_linked_entities',
                         shortcut: false,
-                        callback: self.manageEntities,
+                        callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },

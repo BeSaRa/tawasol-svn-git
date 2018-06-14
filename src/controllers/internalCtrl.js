@@ -251,10 +251,6 @@ module.exports = function (app) {
             document.barcodePrint(document);
         };
 
-        /* self.docActionCreateContent = function (document, $event){
-         console.log('create content', document);
-         };*/
-
         self.docActionLaunchDistributionWorkflow = function (document, $event) {
             if (!self.internal.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
@@ -277,7 +273,6 @@ module.exports = function (app) {
         };
 
         self.docActionSendToReview = function (document, $event) {
-            //console.log('send to review', document);
             draftInternalService.controllerMethod
                 .draftInternalSendToReview(self.internal, $event);
         };

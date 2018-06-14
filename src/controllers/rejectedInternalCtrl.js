@@ -108,7 +108,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.removeRejectedInternal = function (rejectedInternal, $event, defer) {
-            console.log('remove rejected internal mail : ', rejectedInternal);
             rejectedInternalService
                 .controllerMethod
                 .rejectedInternalRemove(rejectedInternal, $event)
@@ -289,7 +288,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.sendToReview = function (rejectedInternal, $event, defer) {
-            console.log('send to review : ', rejectedInternal);
             rejectedInternalService.controllerMethod
                 .rejectedInternalSendToReview(rejectedInternal, $event)
                 .then(function (result) {
@@ -307,7 +305,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewTrackingSheet = function (rejectedInternal, params, $event) {
-            //console.log('view tracking sheet : ', rejectedInternal);
             viewTrackingSheetService
                 .controllerMethod
                 .viewTrackingSheetPopup(rejectedInternal, params, $event).then(function (result) {
@@ -336,7 +333,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (rejectedInternal, $event) {
-            //console.log('manage comments : ', rejectedInternal);
             managerService.manageDocumentComments(rejectedInternal.vsId, rejectedInternal.docSubject, $event)
                 .then(function (documentComments) {
                     rejectedInternal.documentComments = documentComments;
@@ -352,7 +348,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (rejectedInternal, $event) {
-            //console.log('manage attachments : ', rejectedInternal);
             managerService.manageDocumentAttachments(rejectedInternal.vsId, rejectedInternal.docClassName, rejectedInternal.docSubject, $event)
                 .then(function (attachments) {
                     rejectedInternal.attachments = attachments;
@@ -363,12 +358,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Manage Entities
+         * @description Manage Linked Entities
          * @param rejectedInternal
          * @param $event
          */
-        self.manageEntities = function (rejectedInternal, $event) {
-            //console.log('manage entities : ', rejectedInternal);
+        self.manageLinkedEntities = function (rejectedInternal, $event) {
             var info = rejectedInternal.getInfo();
             managerService
                 .manageDocumentEntities(info.vsId, info.documentClass, info.title, $event);
@@ -381,7 +375,6 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.manageLinkedDocuments = function (rejectedInternal, $event) {
-            //console.log('manage linked documents : ', rejectedInternal);
             var info = rejectedInternal.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
         };
@@ -620,13 +613,13 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
-                    // Entities
+                    // Linked Entities
                     {
                         type: 'action',
                         icon: 'pencil-box-outline',
-                        text: 'grid_action_entities',
+                        text: 'grid_action_linked_entities',
                         shortcut: false,
-                        callback: self.manageEntities,
+                        callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },

@@ -413,7 +413,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTags = function (searchedIncomingDocument, $event) {
-            //console.log('manage tag for searched incoming document : ', searchedIncomingDocument);
             managerService.manageDocumentTags(searchedIncomingDocument.vsId, searchedIncomingDocument.docClassName, searchedIncomingDocument.docSubject, $event)
                 .then(function (tags) {
                     searchedIncomingDocument.tags = tags;
@@ -429,7 +428,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (searchedIncomingDocument, $event) {
-            //console.log('manage comments for searched incoming document : ', searchedIncomingDocument);
             managerService.manageDocumentComments(searchedIncomingDocument.vsId, searchedIncomingDocument.docSubject, $event)
                 .then(function (documentComments) {
                     searchedIncomingDocument.documentComments = documentComments;
@@ -454,7 +452,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (searchedIncomingDocument, $event) {
-            //console.log('manage attachments for searched incoming document : ', searchedIncomingDocument);
             var info = searchedIncomingDocument.getInfo();
             managerService.manageDocumentAttachments(info.vsId, info.documentClass, info.title, $event)
                 .then(function (attachments) {
@@ -471,18 +468,16 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedDocuments = function (searchedIncomingDocument, $event) {
-            //console.log('manage linked documents for searched incoming document : ', searchedIncomingDocument);
             var info = searchedIncomingDocument.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
         };
 
         /**
-         * @description manage linked entities for searched incoming document
+         * @description Manage Linked Entities
          * @param searchedIncomingDocument
          * @param $event
          */
         self.manageLinkedEntities = function (searchedIncomingDocument, $event) {
-            //console.log('manage linked entities for searched incoming document : ', searchedIncomingDocument);
             managerService
                 .manageDocumentEntities(searchedIncomingDocument.vsId, searchedIncomingDocument.docClassName, searchedIncomingDocument.docSubject, $event);
         };
@@ -502,7 +497,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadMainDocument = function (searchedIncomingDocument, $event) {
-            //console.log('download main document for searched incoming document : ', searchedIncomingDocument);
             downloadService.controllerMethod
                 .mainDocumentDownload(searchedIncomingDocument.vsId);
         };
@@ -513,7 +507,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadCompositeDocument = function (searchedIncomingDocument, $event) {
-            //console.log('download composite document for searched incoming document : ', searchedIncomingDocument);
             downloadService.controllerMethod
                 .compositeDocumentDownload(searchedIncomingDocument.vsId);
         };

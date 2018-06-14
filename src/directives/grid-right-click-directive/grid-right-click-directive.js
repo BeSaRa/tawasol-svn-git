@@ -88,7 +88,7 @@ module.exports = function (app) {
                 sideBarWidth = angular.copy(parseInt(sideBar.width(), 10));
 
                 var newLeft, menuVisibleNow= sideBar.hasClass('gt-small');
-                console.log('sidebar width ', sideBarWidth);
+                //console.log('sidebar width ', sideBarWidth);
                 if((menuVisibleNow && sideBarVisibleInitially) || (!menuVisibleNow && !sideBarVisibleInitially)){
                     newLeft = cursorLeft;
                 }

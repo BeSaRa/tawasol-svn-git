@@ -16,7 +16,6 @@ module.exports = function (app) {
             },
             link: function ($scope, element, attrs) {
                 $scope.$watch(function () {
-                        //console.log($scope, $scope.ctrl.formValid);
                         return $scope.ctrl.submitEnabled($scope.entityForm);
                     },
                     function (newValue, oldValue) {

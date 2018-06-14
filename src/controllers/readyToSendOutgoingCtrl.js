@@ -117,7 +117,7 @@ module.exports = function (app) {
                 .launchCorrespondenceWorkflow(self.selectedReadyToSendOutgoings, $event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadReadyToSendOutgoings(self.grid.page)
-                        .then(function(){
+                        .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
                 });
@@ -128,7 +128,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.archiveOutgoingBulk = function ($event) {
-            //console.log('archive ready to send outgoing mails bulk : ', self.selectedReadyToSendOutgoings);
             readyToSendOutgoingService
                 .controllerMethod
                 .readyToSendOutgoingArchiveBulk(self.selectedReadyToSendOutgoings, $event)
@@ -177,8 +176,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.launchDistributionWorkflow = function (readyToSendOutgoing, $event, defer) {
-            //console.log('launch distribution workflow');
-
             if (!readyToSendOutgoing.hasContent()) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
@@ -213,7 +210,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.archiveOutgoing = function (readyToSendOutgoing, $event, defer) {
-            //console.log('archive outgoing : ', readyToSendOutgoing);
             readyToSendOutgoingService
                 .controllerMethod
                 .readyToSendOutgoingArchive(readyToSendOutgoing, $event)
@@ -275,7 +271,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (readyToSendOutgoing, $event) {
-            //console.log('manage attachments');
             managerService.manageDocumentAttachments(readyToSendOutgoing.vsId, readyToSendOutgoing.classDescription, readyToSendOutgoing.docSubject, $event)
                 .then(function (attachments) {
                     readyToSendOutgoing.attachments = attachments;
@@ -286,12 +281,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Manage Entities
+         * @description Manage Linked Entities
          * @param readyToSendOutgoing
          * @param $event
          */
-        self.manageEntities = function (readyToSendOutgoing, $event) {
-            console.log('manage entities : ', readyToSendOutgoing);
+        self.manageLinkedEntities = function (readyToSendOutgoing, $event) {
             managerService
                 .manageDocumentEntities(readyToSendOutgoing.vsId, readyToSendOutgoing.classDescription, readyToSendOutgoing.docSubject, $event);
         };
@@ -303,7 +297,6 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.manageLinkedDocuments = function (readyToSendOutgoing, $event) {
-            //console.log('manage linked documents : ', readyToSendOutgoing);
             var info = readyToSendOutgoing.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
         };
@@ -323,7 +316,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageDestinations = function (readyToSendOutgoing, $event) {
-            //console.log('manage destinations : ', readyToSendOutgoing);
             managerService.manageDocumentCorrespondence(readyToSendOutgoing.vsId, readyToSendOutgoing.docClassName, readyToSendOutgoing.docSubject, $event)
         };
 
@@ -403,7 +395,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewDocument = function (readyToSendOutgoing, $event) {
-            //console.log(readyToSendOutgoing);
             if (!readyToSendOutgoing.hasContent()) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
@@ -622,13 +613,13 @@ module.exports = function (app) {
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },
-                    // Entities
+                    // Linked Entities
                     {
                         type: 'action',
                         icon: 'pencil-box-outline',
-                        text: 'grid_action_entities',
+                        text: 'grid_action_linked_entities',
                         shortcut: false,
-                        callback: self.manageEntities,
+                        callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },

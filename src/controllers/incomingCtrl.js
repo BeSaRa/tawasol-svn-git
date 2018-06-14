@@ -78,7 +78,6 @@ module.exports = function (app) {
             self.incoming = receive.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = receive.content;
-            //console.log(self.incoming.linkedEntities);
         }
 
         self.preventPropagation = function ($event) {
@@ -221,12 +220,7 @@ module.exports = function (app) {
             document.barcodePrint(document);
         };
 
-        /*self.docActionCreateContent = function (document, $event) {
-            console.log('create content', document);
-        };*/
-
         self.docActionLaunchDistributionWorkflow = function (document, $event) {
-            //console.log('launch distribution workflow', document);
             if (!self.incoming.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
