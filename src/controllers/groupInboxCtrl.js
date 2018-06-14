@@ -672,7 +672,7 @@ module.exports = function (app) {
                     permissionKey: 'BROADCAST_DOCUMENT',
                     callback: self.broadcast,
                     checkShow: function (action, model) {
-                        return (!model.needApprove() || model.hasDocumentClass('incoming')) && !model.isBroadcasted();
+                        return self.checkToShowAction(action, model) && (!model.needApprove() || model.hasDocumentClass('incoming')) && !model.isBroadcasted();
                     }
                 },
                 // Reply
@@ -940,6 +940,7 @@ module.exports = function (app) {
                             icon: 'attachment',
                             text: 'grid_action_composite_document_as_attachment_by_email',
                             shortcut: false,
+                            permissionKey: 'SEND_COMPOSITE_DOCUMENT_BY_EMAIL',
                             callback: self.sendCompositeDocumentAsAttachmentByEmail,
                             class: "action-green",
                             checkShow: self.checkToShowAction

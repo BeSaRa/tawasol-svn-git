@@ -448,7 +448,7 @@ module.exports = function (app) {
                 callback: self.returnWorkItem,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    var info = model.getInfo();
+                    //var info = model.getInfo();
                     return self.checkToShowAction(action, model) && !model.generalStepElm.isReassigned;//!!info.incomingVsId;
                 }
             },
@@ -461,7 +461,7 @@ module.exports = function (app) {
                 callback: self.receiveWorkItem,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    var info = model.getInfo();
+                    //var info = model.getInfo();
                     return self.checkToShowAction(action, model) && !model.generalStepElm.isReassigned;//!!info.incomingVsId;
                 }
             },
@@ -475,7 +475,7 @@ module.exports = function (app) {
                 callback: self.quickReceiveWorkItem,
                 class: "action-green",
                 checkShow: function (action, model) {
-                    var info = model.getInfo();
+                    //var info = model.getInfo();
                     return self.checkToShowAction(action, model) && !model.generalStepElm.isReassigned;//!!info.incomingVsId;
                 }
             },
@@ -489,7 +489,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: function (action, model) {
-                    var info = model.getInfo();
+                    //var info = model.getInfo();
                     return self.checkToShowAction(action, model) && model.generalStepElm.isReassigned;//!info.incomingVsId;
                 }
             },

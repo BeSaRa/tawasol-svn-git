@@ -120,7 +120,11 @@ Bugs:
 13-06-2018
 ------------------------------
 13462: Fix - User doesn't get notification when has a new document in inbox.
+13538: Fix - Some data should be added to Search Result.(1- Indicator of linked document.
+                                                         2- Correspondence site.
+                                                         3- Serial Number and Document Number)
 
 14-06-2018
 ------------------------------
-13545: Fix - Get link appears from the step processor while get link permission is disabled from System Administration. Also added permission for send link to document by email
+13545: Fix - Get link appears from the step processor while get link permission is disabled from System Administration. Also added permission for send link to document by email, SEND_COMPOSITE_DOCUMENT_BY_EMAIL
+13542: Fix - broadcast permission - from general search, for incoming document broadcast action should not appear when user has no permission
