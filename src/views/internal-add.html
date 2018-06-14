@@ -112,7 +112,8 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.internal.linkedEntities.length">
+                        <accordion-item pass-when="!!ctrl.internal.linkedEntities.length"
+                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')">
                             <accordion-title>
                                 <md-icon md-svg-icon="vector-triangle"></md-icon>
                                 <span>{{lang.internal_linked_entities}}</span>

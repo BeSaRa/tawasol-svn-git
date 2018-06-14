@@ -149,7 +149,8 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.correspondence.linkedDocs.length">
+                        <accordion-item pass-when="!!ctrl.correspondence.linkedDocs.length"
+                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')">
                             <accordion-title>
                                 <md-icon md-svg-icon="note-multiple-outline"></md-icon>
                                 <span>{{lang.outgoing_manage_linked_document}}</span>

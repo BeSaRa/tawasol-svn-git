@@ -61,9 +61,6 @@ module.exports = function (app) {
     require('./mergedLinkedDocHistoryEventsPopCtrl')(app);
     require('./broadcastPopCtrl')(app);
     require('./moveToFolderPopCtrl')(app);
-    require('./outgoingAddContentActionsPopCtrl')(app);
-    require('./incomingAddContentActionsPopCtrl')(app);
-    require('./internalAddContentActionsPopCtrl')(app);
     require('./readyToExportOptionPopCtrl')(app);
     require('./departmentInboxSentItemPopCtrl')(app);
     require('./manageDocumentCorrespondencePopCtrl')(app);
