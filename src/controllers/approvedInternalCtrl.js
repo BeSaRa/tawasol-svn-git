@@ -579,6 +579,7 @@ module.exports = function (app) {
                             icon: 'link-variant',
                             text: 'grid_action_link_to_document_by_email',
                             shortcut: false,
+                            permissionKey: 'SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL',
                             callback: self.sendApprovedInternalLinkToDocumentByEmail,
                             class: "action-red",
                             checkShow: self.checkToShowAction

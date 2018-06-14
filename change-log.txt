@@ -15,8 +15,10 @@ features :
 14 - Added - Advanced/simple search in correspondence sites.
 15 - Changed - Search screens to be having similar user experience as of add document.
 16 - Added - G2G section.
+17 - Added - document serial, document number, correspondence sites columns to the search grids.
 
 Fixed issues :
 12504: central archive - in central archive OU while adding a paper outgoing or incoming document there is two fields in paper outgoing while only one in incoming <check attached>
 12643: central archive - when teh archive user add a new paper outgoing or incoming the ou field should not be mandatory
 12310: Delegation - End date is expired still the Out of Office functionality toggle is enabled and functionality too.
+

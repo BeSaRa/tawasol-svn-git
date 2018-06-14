@@ -117,4 +117,10 @@ Bugs:
 13451: Fix - There is no permission for Partial Export.
 13433: Fix - Number of Records appear in Launch and Distribution Workflow doesn't match Rows per page number.
 
+13-06-2018
+------------------------------
 13462: Fix - User doesn't get notification when has a new document in inbox.
+
+14-06-2018
+------------------------------
+13545: Fix - Get link appears from the step processor while get link permission is disabled from System Administration. Also added permission for send link to document by email

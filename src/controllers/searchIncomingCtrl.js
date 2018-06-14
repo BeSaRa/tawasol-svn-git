@@ -922,6 +922,7 @@ module.exports = function (app) {
                         icon: 'link-variant',
                         text: 'grid_action_link_to_document_by_email',
                         shortcut: false,
+                        permissionKey: 'SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL',
                         callback: self.sendLinkToDocumentByEmail,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -967,6 +968,7 @@ module.exports = function (app) {
                 icon: 'link',
                 text: 'grid_action_get_link',
                 shortcut: false,
+                permissionKey: 'GET_A_LINK_TO_THE_DOCUMENT',
                 callback: self.getLink,
                 class: "action-green",
                 hide: false,
