@@ -5,11 +5,13 @@ module.exports = function (app) {
                                                         _,
                                                         $scope,
                                                         LangWatcher,
-                                                        documentTagService) {
+                                                        documentTagService,
+                                                        employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageTagsDirectiveCtrl';
         self.fromDialog = false;
+        self.employeeService = employeeService;
 
         LangWatcher($scope);
 

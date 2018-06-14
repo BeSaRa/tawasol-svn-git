@@ -71,7 +71,8 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.outgoing.tags.length">
+                        <accordion-item pass-when="!!ctrl.outgoing.tags.length"
+                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_TAGS')">
                             <accordion-title>
                                 <md-icon md-svg-icon="tag-multiple"></md-icon>
                                 <span>{{lang.outgoing_manage_tags}}</span>

@@ -52,7 +52,8 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.internal.tags.length">
+                        <accordion-item pass-when="!!ctrl.internal.tags.length"
+                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_TAGS')">
                             <accordion-title>
                                 <md-icon md-svg-icon="tag-multiple"></md-icon>
                                 <span>{{lang.internal_manage_tags}}</span>
@@ -94,7 +95,8 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.internal.documentComments.length" ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS') && ctrl.employeeService.hasPermissionTo('ADD_DOCUMENT_COMMENT')">
+                        <accordion-item pass-when="!!ctrl.internal.documentComments.length"
+                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS') && ctrl.employeeService.hasPermissionTo('ADD_DOCUMENT_COMMENT')">
                             <accordion-title>
                                 <md-icon md-svg-icon="comment"></md-icon>
                                 <span>{{lang.internal_manage_comments}}</span>

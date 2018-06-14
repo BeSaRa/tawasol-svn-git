@@ -7,7 +7,8 @@
               md-transform-chip="ctrl.transformChip($chip)"
               md-on-add="ctrl.addTagToDocument($chip)"
               placeholder="{{lang.tags_add_tag}}"
-              readonly="ctrl.disableEverything">
+              readonly="ctrl.disableEverything ||
+                              !ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_TAGS')">
         <md-autocomplete
                 md-autoselect="true"
                 md-selected-item="ctrl.selectedItem"
@@ -24,4 +25,7 @@
         </md-chip-template>
     </md-chips>
 </div>
-<div class="help-text-div p10" ng-if="!ctrl.disableEverything">{{lang.type_content_and_press_enter_to_make_tag}}</div>
+<div class="help-text-div p10" ng-if="!ctrl.disableEverything &&
+                              ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_TAGS')">
+    {{lang.type_content_and_press_enter_to_make_tag}}
+</div>
