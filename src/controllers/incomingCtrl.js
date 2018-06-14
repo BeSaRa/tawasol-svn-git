@@ -152,20 +152,6 @@ module.exports = function (app) {
             }
         };
 
-        /* self.openDocumentActions = function () {
-             return dialog
-                 .showDialog({
-                     targetEvent: null,
-                     template: cmsTemplate.getPopup('incoming-add-content-actions'),
-                     controller: 'incomingAddContentActionsPopCtrl',
-                     controllerAs: 'ctrl',
-                     locals: {
-                         incomingDocument: self.incoming,
-                         documentInformation: self.documentInformation
-                     }
-                 });
-         };*/
-
         /**
          * demo manage document tags
          * @param $event
@@ -343,6 +329,7 @@ module.exports = function (app) {
                 callback: self.docActionManageTasks,
                 class: "action-red",
                 hide: true,
+                permissionKey: 'MANAGE_TASKS',
                 checkShow: function (action, model, index) {
                     isVisible = self.checkToShowAction(action, model);
                     self.setDropdownAvailability(index, isVisible);

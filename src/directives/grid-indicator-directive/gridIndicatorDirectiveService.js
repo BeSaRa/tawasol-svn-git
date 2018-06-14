@@ -13,12 +13,16 @@ module.exports = function (app) {
                                                            G2G,
                                                            Attachment,
                                                            moment,
-                                                           Lookup
+                                                           Lookup,
+                                                           $timeout,
                                                            //IncomingG2G
     ) {
         'ngInject';
         var self = this;
         self.serviceName = 'gridIndicatorDirectiveService';
+        $timeout(function () {
+            self.recordCopy = angular.copy(self.record);
+        });
 
         /**
          * @description Contains the icons for the indicators
@@ -80,7 +84,7 @@ module.exports = function (app) {
                 var allSecurityLevels = lookupService.returnLookups(lookupService.securityLevel);
 
                 /*Get security level lookup if security level from record comes as lookupKey(value)*/
-                if(!(securityLevel instanceof Lookup))
+                if (!(securityLevel instanceof Lookup))
                     securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel);
 
                 var securityLevelMap = _.find(_.map(allSecurityLevels, function (lookup, index) {
@@ -119,11 +123,11 @@ module.exports = function (app) {
 
             if (priorityLevel) {
                 /*Get priority level lookup if priority level from record comes as lookupKey(value)*/
-                if(!(priorityLevel instanceof Lookup))
+                if (!(priorityLevel instanceof Lookup))
                     priorityLevel = lookupService.getLookupByLookupKey(lookupService.priorityLevel, priorityLevel);
 
                 /* Don't show indicator for normal priority level*/
-                if(priorityLevel.lookupKey !== 0) {
+                if (priorityLevel.lookupKey !== 0) {
                     var allPriorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
                     var priorityLevelMap = _.find(_.map(allPriorityLevels, function (lookup, index) {
                         return {
@@ -219,8 +223,9 @@ module.exports = function (app) {
                 hasLinkedDocs = record.generalStepElm.linkedDocsNO;
             }
             else if (record instanceof General || record instanceof Correspondence) {
-                var linkedDocs = [];
-                if (!angular.isArray(record.linkedDocs) && record.linkedDocs && record.linkedDocs.length)
+                record.linkedDocs = (record.linkedDocs && record.linkedDocs.length) ? angular.fromJson(record.linkedDocs) : record.linkedDocs;
+                var linkedDocs = angular.copy(record.linkedDocs) || [];
+                if (record.linkedDocs && record.linkedDocs.length && !angular.isArray(record.linkedDocs))
                     linkedDocs = Array.prototype.slice.call(JSON.parse(record.linkedDocs));
                 hasLinkedDocs = linkedDocs.length;
             }
@@ -269,7 +274,7 @@ module.exports = function (app) {
                 followupStatus = record.followupStatus;
             }
             /*Get Followup status lookup if followup status from record comes as lookupKey(value)*/
-            if(!(followupStatus instanceof Lookup))
+            if (!(followupStatus instanceof Lookup))
                 followupStatus = lookupService.getLookupByLookupKey(lookupService.followupStatus, followupStatus);
 
             if (followupStatus && followupStatus.lookupKey === 0) {
