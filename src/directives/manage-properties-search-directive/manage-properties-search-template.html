@@ -299,11 +299,11 @@
 
         <div layout="column" ng-if="ctrl.searchType === 'advanced'">
             <!-- Correspondence Site -->
-            <div layout="row"
+            <!--<div layout="row"
                  ng-if="ctrl.document.docClassName.toLowerCase() !== 'internal'
                         && ctrl.document.docClassName.toLowerCase() !== 'general'
                         && ctrl.document.docClassName.toLowerCase() !== 'correspondence'">
-                <!-- Correspondence Site Type -->
+                &lt;!&ndash; Correspondence Site Type &ndash;&gt;
                 <md-input-container flex>
                     <label for="correspondenceSiteType">{{lang.correspondence_site_type}}</label>
                     <md-select name="correspondenceSiteType"
@@ -322,7 +322,7 @@
                     </div>
                 </md-input-container>
 
-                <!-- Change correspondence sites -->
+                &lt;!&ndash; Change correspondence sites &ndash;&gt;
                 <md-input-container>
                     <md-button class="md-icon-button"
                                tooltip="{{lang.change_correspondence_sites}}"
@@ -332,7 +332,7 @@
                     </md-button>
                 </md-input-container>
 
-                <!-- Selected Main Site -->
+                &lt;!&ndash; Selected Main Site &ndash;&gt;
                 <md-input-container flex ng-if="ctrl.document.siteType && ctrl.mainSiteLabel">
                     <label for="sitesInfoTo">{{lang.main_site}}</label>
                     <input name="sitesInfoTo" id="sitesInfoTo"
@@ -344,7 +344,7 @@
                     </div>
                 </md-input-container>
 
-                <!-- Selected Sub Site -->
+                &lt;!&ndash; Selected Sub Site &ndash;&gt;
                 <md-input-container flex ng-if="ctrl.document.siteType && ctrl.subSiteLabel">
                     <label for="sitesInfoCC">{{lang.sub_site}}</label>
                     <input name="sitesInfoCC" id="sitesInfoCC"
@@ -355,6 +355,18 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+            </div>-->
+            <div layout="row"
+                 ng-if="ctrl.document.docClassName.toLowerCase() !== 'internal'
+                        && ctrl.document.docClassName.toLowerCase() !== 'general'
+                        && ctrl.document.docClassName.toLowerCase() !== 'correspondence'">
+                <manage-correspondence-sites-search-directive flex
+                        selected-site-type="ctrl.document.siteType"
+                        document-class="ctrl.document.docClassName"
+                        sites-info-to="ctrl.document.sitesInfoTo"
+                        sites-info-c-c="ctrl.document.sitesInfoCC"
+                        sites-info-incoming="ctrl.document.sitesInfoIncoming">
+                </manage-correspondence-sites-search-directive>
             </div>
 
             <!-- Linked Entity -->
