@@ -288,6 +288,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_main_document',
                         shortcut: false,
+                        permissionKey: "DOWNLOAD_MAIN_DOCUMENT",
                         callback: self.downloadMainDocument,
                         class: "action-green",
                         checkShow: self.checkToShowAction

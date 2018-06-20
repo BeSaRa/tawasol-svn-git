@@ -669,6 +669,7 @@ module.exports = function (app) {
                         icon: 'tag',
                         text: 'grid_action_tags',
                         shortcut: false,
+                        permissionKey: "MANAGE_DOCUMENT’S_TAGS",
                         callback: self.manageTags,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -690,6 +691,7 @@ module.exports = function (app) {
                         icon: 'attachment',
                         text: 'grid_action_attachments',
                         shortcut: false,
+                        permissionKey: "MANAGE_ATTACHMENTS",
                         callback: self.manageAttachments,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -710,6 +712,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
+                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         checkShow: self.checkToShowAction

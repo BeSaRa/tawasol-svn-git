@@ -899,6 +899,7 @@ module.exports = function (app) {
                         icon: 'tag',
                         text: 'grid_action_tags',
                         shortcut: false,
+                        permissionKey: "MANAGE_DOCUMENT’S_TAGS",
                         callback: self.manageTags,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -921,6 +922,7 @@ module.exports = function (app) {
                         text: 'grid_action_tasks',
                         shortcut: false,
                         hide: true,
+                        permissionKey: "MANAGE_TASKS",
                         callback: self.manageTasks,
                         class: "action-red",
                         checkShow: self.checkToShowAction
@@ -931,6 +933,7 @@ module.exports = function (app) {
                         icon: 'attachment',
                         text: 'grid_action_attachments',
                         shortcut: false,
+                        permissionKey: "MANAGE_ATTACHMENTS",
                         callback: self.manageAttachments,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -941,6 +944,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
+                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1015,6 +1019,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_main_document',
                         shortcut: false,
+                        permissionKey: "DOWNLOAD_MAIN_DOCUMENT",
                         callback: self.downloadMainDocument,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1068,6 +1073,7 @@ module.exports = function (app) {
                         text: 'grid_action_main_document_fax',
                         shortcut: false,
                         hide: true,
+                        permissionKey:"SEND_DOCUMENT_BY_FAX",
                         callback: self.sendProxyMailInboxMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction
@@ -1115,6 +1121,7 @@ module.exports = function (app) {
                         //icon: 'link-variant',
                         text: 'grid_action_electronic',//e_signature
                         shortcut: false,
+                        permissionKey: "ELECTRONIC_SIGNATURE",
                         callback: self.signProxyMailInboxESignature,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1125,6 +1132,7 @@ module.exports = function (app) {
                         //icon: 'attachment',
                         text: 'grid_action_digital',//digital_signature
                         shortcut: false,
+                        permissionKey: "DIGITAL_SIGNATURE",
                         callback: self.signProxyMailInboxDigitalSignature,
                         class: "action-red",
                         hide: true,
