@@ -242,7 +242,7 @@ module.exports = function (app) {
                 },
                 receive: function (correspondenceService, $stateParams, $timeout) {
                     'ngInject';
-                    var action = $stateParams.action, workItem = $stateParams.workItem, vsId = $stateParams.vsId;
+                    var action = $stateParams.action, workItem = $stateParams.workItem;/*, vsId = $stateParams.vsId;*/
                     if (action === 'receive') {
                         return correspondenceService.prepareReceiveIncoming(workItem)
                             .catch(function (error) {
@@ -251,7 +251,24 @@ module.exports = function (app) {
                                 });
                             });
                     }
-                    else if (action === 'receiveg2g') {
+                    /*else if (action === 'receiveg2g') {
+                        return correspondenceService.prepareReceiveIncomingByVsId(vsId)
+                            .catch(function (error) {
+                                return $timeout(function () {
+                                    return false;
+                                });
+                            });
+                    }*/
+                    else {
+                        return $timeout(function () {
+                            return false;
+                        });
+                    }
+                },
+                receiveG2G: function(correspondenceService, $stateParams, $timeout){
+                    'ngInject';
+                    var action = $stateParams.action, vsId = $stateParams.vsId;
+                    if (action === 'receiveg2g') {
                         return correspondenceService.prepareReceiveIncomingByVsId(vsId)
                             .catch(function (error) {
                                 return $timeout(function () {

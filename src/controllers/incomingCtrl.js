@@ -28,6 +28,7 @@ module.exports = function (app) {
                                              lookups,
                                              dialog,
                                              receive, // available when the normal receive.
+                                             receiveG2G, // available when g2g receive
                                              mailNotificationService,
                                              distributionWorkflowService,
                                              correspondenceService) {
@@ -43,7 +44,7 @@ module.exports = function (app) {
         // collapse from label
         self.collapse = true;
         // current mode
-        self.editMode = !!receive;
+        self.editMode = !!(receive || receiveG2G);
         // self.editMode = false;
         // copy of the current incoming if saved.
         // self.model = angular.copy(demoOutgoing);
@@ -61,7 +62,7 @@ module.exports = function (app) {
 
         self.documentInformation = null;
 
-
+debugger;
         // incoming document
         self.incoming = /*demoOutgoing;*/
             new Incoming({
@@ -75,10 +76,19 @@ module.exports = function (app) {
 
         if (receive) {
             self.receive = true;
+            self.receiveG2G = false;
             self.incoming = receive.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = receive.content;
         }
+        if(receiveG2G){
+            self.receiveG2G = true;
+            self.receive = false;
+            self.incoming = receiveG2G.metaData;
+            self.model = angular.copy(self.incoming);
+            self.documentInformation = receiveG2G.content;
+        }
+
 
         self.preventPropagation = function ($event) {
             $event.stopPropagation();
@@ -94,7 +104,11 @@ module.exports = function (app) {
             //var isDocHasVsId = angular.copy(self.incoming).hasVsId();
             if (self.receive) {
                 promise = self.incoming.receiveDocument($stateParams.workItem);
-            } else {
+            }
+            else if(self.receiveG2G){
+                promise = self.incoming.receiveG2GDocument($stateParams.vsId);
+            }
+            else {
                 promise = self.incoming
                     .saveDocument(status);
             }

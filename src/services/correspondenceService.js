@@ -1469,13 +1469,13 @@ module.exports = function (app) {
             return $http
                 .get(urlService.g2gInbox + 'start/receive/'+ vsId)
                 .then(function (result) {
+                    result.data.rs.metaData.addMethod = 1;
                     result = result.data.rs;
                     result.metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming', 'ViewIncoming'], new Incoming(result.metaData));
                     result.metaData.ou = employeeService.getEmployee().getOUID();
                     return result;
                 });
         };
-
 
         /**
          * @description receive incoming document
@@ -1490,6 +1490,23 @@ module.exports = function (app) {
                     return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
                 });
         };
+
+        /**
+         * @description receive incoming document
+         * @param correspondence
+         * @param vsId
+         */
+        self.receiveG2GIncoming = function (correspondence, vsId) {
+            /*return $http
+                .put((urlService.departmentWF + '/' + wobNumber + '/receive'), generator.interceptSendInstance(['Correspondence', _getModelName(correspondence.docClassName)], correspondence))
+                .then(function (result) {
+                    correspondence.vsId = result.data.rs;
+                    return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
+                });*/
+        };
+
+
+
         /**
          * send upload word file to make prepare and replace the placeholders from Correspondence.
          * @param file

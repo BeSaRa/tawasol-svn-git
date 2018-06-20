@@ -43,7 +43,8 @@
 
             <user-subscription-directive></user-subscription-directive>
 
-            <md-button ng-click="toolbar.openHelp()" class="md-icon-button">
+            <md-button tooltip="{{lang.help}}" fixed-position="true"
+                       ng-click="toolbar.openHelp()" class="md-icon-button">
                 <md-icon md-svg-icon="help"></md-icon>
             </md-button>
 

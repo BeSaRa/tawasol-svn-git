@@ -2,6 +2,7 @@
     <fieldset class="field-set-hidden">
         <div layout="column">
             <div layout="row">
+                <!-- Correspondence registry -->
                 <md-input-container ng-if="ctrl.showRegistryUnit()" flex>
                     <label for="registryOU">{{lang.corr_registry}}</label>
                     <md-select name="registryOU"
@@ -20,6 +21,7 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+                <!-- OU -->
                 <md-input-container ng-if="!ctrl.showRegistryUnit()" flex>
                     <label for="ou">{{lang.organization_unit}}</label>
                     <md-select name="ou"
@@ -37,6 +39,7 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+                <!-- OU -->
                 <md-input-container ng-if="ctrl.showRegistryUnit()" flex>
                     <label for="ou">{{lang.organization_unit}}</label>
                     <md-select name="ou"
@@ -54,12 +57,14 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+                <!-- Security Level (Disabled Input)-->
                 <md-input-container ng-if="ctrl.document.hasVsId()" flex>
                     <label for="securityLevel">{{lang.security_level}}</label>
                     <input id="securityLevel" name="securityLevel"
                            ng-disabled="true"
                            ng-value="ctrl.sourceModel.securityLevel.getTranslatedName()">
                 </md-input-container>
+                <!-- Security Level (Select) -->
                 <md-input-container ng-if="!ctrl.document.hasVsId()" flex>
                     <label for="securityLevel">{{lang.security_level}}</label>
                     <md-select name="securityLevel"
@@ -78,7 +83,7 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-
+                <!-- Document Number -->
                 <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "incoming"'>
                     <label for="refDocNumber">{{lang.document_number}}</label>
                     <input name="refDocNumber" id="refDocNumber"
@@ -91,7 +96,7 @@
                         <!--<div ng-message="number">{{lang.numberonly}}</div>-->
                     </div>
                 </md-input-container>
-
+                <!-- Type (Personal/Departmental) -->
                 <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "internal"'>
                     <label for="type">{{lang.type}}</label>
                     <md-select name="type" id="type"
@@ -108,7 +113,7 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-
+                <!-- Date -->
                 <md-input-container>
                     <label for="docDate">{{lang.date}}</label>
                     <md-datepicker name="docDate" id="docDate"
@@ -124,6 +129,7 @@
                 </md-input-container>
             </div>
             <div layout="row">
+                <!-- Subject -->
                 <md-input-container flex>
                     <label for="docSubject">{{lang.document_subject}}</label>
                     <!--custom-validate-directive="AEN" -->
@@ -141,6 +147,7 @@
                 </md-input-container>
             </div>
             <div layout="row">
+                <!-- Main Classification -->
                 <md-input-container flex>
                     <label for="mainClassification">{{lang.outgoing_main_classification}}</label>
                     <md-select name="mainClassification"
@@ -158,6 +165,7 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+                <!-- Sub Classification -->
                 <md-input-container flex>
                     <label for="subClassification">{{lang.outgoing_sub_classification}}</label>
                     <md-select
@@ -178,6 +186,7 @@
                 </md-input-container>
             </div>
             <div layout="row">
+                <!-- Priority Level -->
                 <md-input-container flex>
                     <label for="priorityLevel">{{lang.outgoing_priority_level}}</label>
                     <md-select name="priorityLevel"
@@ -195,6 +204,7 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+                <!-- Document Type -->
                 <md-input-container flex>
                     <label for="docType">{{lang.outgoing_document_type}}</label>
                     <md-select name="docType"
@@ -212,6 +222,7 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+                <!-- Add Document Type -->
                 <md-input-container ng-if="!ctrl.disableProperties">
                     <md-button class="md-icon-button"
                                ng-disabled="!!ctrl.disableProperties"
@@ -221,6 +232,7 @@
                 </md-input-container>
             </div>
             <div layout="row">
+                <!-- File -->
                 <md-input-container flex>
                     <label for="fileId">{{lang.outgoing_file}}</label>
                     <md-select name="fileId"
@@ -239,6 +251,7 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+                <!-- Add File -->
                 <md-input-container ng-if="!ctrl.disableProperties">
                     <md-button tooltip="{{lang.outgoing_add_new_document_file}}"
                                class="md-icon-button"
@@ -248,6 +261,7 @@
                         <md-icon md-svg-icon="plus"></md-icon>
                     </md-button>
                 </md-input-container>
+                <!-- File Code -->
                 <md-input-container flex>
                     <label for="fileCode">{{lang.outgoing_file_code}}</label>
                     <input name="fileCode"
@@ -260,6 +274,7 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+                <!-- File Serial -->
                 <md-input-container flex>
                     <label for="fileSerial">{{lang.outgoing_file_serial}}</label>
                     <input name="fileSerial" custom-validate-directive="number"
@@ -274,6 +289,7 @@
                 </md-input-container>
             </div>
             <div layout="row">
+                <!-- Notes -->
                 <md-input-container flex>
                     <label for="docNotes">{{lang.properties_notes}}</label>
                     <textarea ng-required="ctrl.checkMandatory('docNotes')" name="docNotes" id="docNotes"

@@ -74,6 +74,10 @@ module.exports = function (app) {
                 correspondenceService = this.getCorrespondenceService();
                 return correspondenceService.receiveIncoming(this, wobNumber);
             };
+            Incoming.prototype.receiveG2GDocument = function (wobNumber) {
+                correspondenceService = this.getCorrespondenceService();
+                return correspondenceService.receiveG2GIncoming(this, wobNumber);
+            };
             Incoming.prototype.getIncomingDate = function () {
                 return this.refDocDate ? moment(this.refDocDate).format(langService.current === 'ar' ? 'DD-MM-YYYY' : 'YYYY-MM-DD') : '';
             };
