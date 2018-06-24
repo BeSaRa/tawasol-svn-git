@@ -17,8 +17,8 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            var entityTypes = correspondenceService.getLookup(model.documentClass, 'entityTypes');
             if (model && model.hasOwnProperty('documentClass')) {
+                var entityTypes = correspondenceService.getLookup(model.documentClass, 'entityTypes');
                 model.typeId = entityTypeService.getLinkedType(model.typeId, entityTypes);
             } else {
                 model.typeId = entityTypeService.getLinkedType(model.typeId);

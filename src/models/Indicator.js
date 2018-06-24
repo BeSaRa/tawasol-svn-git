@@ -92,7 +92,7 @@ module.exports = function (app) {
              * @returns {Indicator}
              */
             Indicator.prototype.getPriorityLevelIndicator = function (priorityLevel) {
-                if(priorityLevel.lookupKey !== 0) {
+                if (priorityLevel.lookupKey !== 0) {
                     var priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
                     var priorityLevelMap = _.find(_.map(priorityLevels, function (lookup, index) {
                         return {
@@ -141,7 +141,7 @@ module.exports = function (app) {
              * @returns {Indicator}
              */
             Indicator.prototype.getFollowUpStatusIndicator = function (followupStatus) {
-                if(followupStatus.lookupKey === 0) {
+                if (followupStatus.lookupKey === 0) {
                     var followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
                     var followupStatusMap = _.find(_.map(followUpStatuses, function (lookup, index) {
                         return {
@@ -291,15 +291,14 @@ module.exports = function (app) {
             /**
              * @description Returns the is linked exported document(linked document as attachment) indicator and description
              * @returns {Indicator}
-             * @param isLinkedExportedDoc
              */
-            Indicator.prototype.getIsLinkedExportedDocIndicator = function (isLinkedExportedDoc) {
-                return isLinkedExportedDoc ? new Indicator({
+            Indicator.prototype.getIsLinkedExportedDocIndicator = function () {
+                return new Indicator({
                     class: 'indicator',
                     text: 'indicator_linked_exported_doc',
                     icon: self.getIndicatorIcons('linked_exported_doc'),
                     tooltip: 'indicator_linked_exported_doc'
-                }) : false;
+                });
             };
 
             /**

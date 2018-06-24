@@ -63,7 +63,7 @@ module.exports = function (app) {
                 .showDialog({
                     template: cmsTemplate.getPopup('subscription-event-type'),
                     controller: 'subscriptionEventTypePopCtrl',
-                    controllerAs: 'subscriptionEventTypeCtrl',
+                    controllerAs: 'ctrl',
                     bindToController: true,
                     targetEvent: $event,
                     resolve: {

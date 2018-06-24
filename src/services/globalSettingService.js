@@ -4,7 +4,10 @@ module.exports = function (app) {
                                                   $q,
                                                   generator,
                                                   GlobalSetting,
-                                                  _) {
+                                                  _,
+                                                  errorCode,
+                                                  dialog,
+                                                  langService) {
         'ngInject';
         var self = this;
         self.serviceName = 'globalSettingService';
@@ -107,6 +110,11 @@ module.exports = function (app) {
                 .post(urlService.globalSettings + '/print-test-barcode', generator.interceptSendInstance('GlobalSetting', globalSettings))
                 .then(function (result) {
                     return result.data.rs;
+                })
+                .catch(function (error) {
+                    errorCode.checkIf(error, 'PRINT_BARCODE_ERROR_NO_BARCODE_ELEMENT', function () {
+                        dialog.errorMessage(langService.get('print_barcode_error_no_barcode_element'));
+                    })
                 });
         }
     });

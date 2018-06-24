@@ -103,6 +103,9 @@ module.exports = function (app) {
                     return permissionKey(this);
 
                 var result = _.find(self.permissions, function (item) {
+                    if(permissionKey === ''){
+                        return true;
+                    }
                     return item.permissionKey.toLowerCase().trim() === permissionKey.toLowerCase().trim();
                 });
                 return !!result;

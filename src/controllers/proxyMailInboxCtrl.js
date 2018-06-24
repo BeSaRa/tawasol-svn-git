@@ -424,15 +424,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (proxyMailInbox, $event) {
-            /*var vsId = proxyMailInbox.hasOwnProperty('generalStepElm')
-                ? (proxyMailInbox.generalStepElm.hasOwnProperty('vsId') ? proxyMailInbox.generalStepElm.vsId : proxyMailInbox.generalStepElm)
-                : (proxyMailInbox.hasOwnProperty('vsId') ? proxyMailInbox.vsId : proxyMailInbox);
-            var wfName = proxyMailInbox.hasOwnProperty('generalStepElm')
-                ? (proxyMailInbox.generalStepElm.hasOwnProperty('workFlowName') ? proxyMailInbox.generalStepElm.workFlowName : proxyMailInbox.generalStepElm)
-                : (proxyMailInbox.hasOwnProperty('workFlowName') ? proxyMailInbox.workFlowName : proxyMailInbox);
-            //var wfName = 'outgoing';
-            managerService.manageDocumentAttachments(vsId, wfName.toLowerCase(), proxyMailInbox.getTranslatedName(), $event);*/
-
             proxyMailInbox.manageDocumentAttachments($event)
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page);

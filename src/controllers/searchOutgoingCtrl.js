@@ -447,16 +447,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (searchedOutgoingDocument, $event) {
-            //console.log('manage attachments for searched outgoing document : ', searchedOutgoingDocument);
-            var info = searchedOutgoingDocument.getInfo();
-            //managerService.manageDocumentAttachments(searchedOutgoingDocument.vsId, searchedOutgoingDocument.docClassName, searchedOutgoingDocument.docSubject, $event)
-            managerService.manageDocumentAttachments(info.vsId, info.documentClass, info.title, $event)
-                .then(function (attachments) {
-                    searchedOutgoingDocument = attachments;
-                })
-                .catch(function (attachments) {
-                    searchedOutgoingDocument = attachments;
-                });
+            searchedOutgoingDocument.manageDocumentAttachments($event);
         };
 
         /**
@@ -755,6 +746,7 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: function (action, model) {
                     var info = model.getInfo();
+                    // When document is EXPORTED or PARTIALLY_EXPORTED, show partial export button.
                     return self.checkToShowAction(action, model) && (info.docStatus === 25 || info.docStatus === 26);
                 }
             },

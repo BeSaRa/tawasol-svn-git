@@ -456,13 +456,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (reviewIncoming, $event) {
-            managerService.manageDocumentAttachments(reviewIncoming.vsId, reviewIncoming.docClassName, reviewIncoming.docSubject, $event)
-                .then(function (attachments) {
-                    reviewIncoming.attachments = attachments;
-                })
-                .catch(function (attachments) {
-                    reviewIncoming.attachments = attachments;
-                });
+            reviewIncoming.manageDocumentAttachments($event);
         };
 
         /**

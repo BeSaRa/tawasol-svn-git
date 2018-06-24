@@ -20,6 +20,13 @@ module.exports = function (app) {
         self.controllerName = 'gridActionsDirectiveCtrl';
         self.langService = langService;
 
+        self.isShowAction = function(action){
+            if(action.hasOwnProperty('checkAnyPermission')) {
+                return action.checkShow(action, self.model, action.checkAnyPermission);
+            }
+            return action.checkShow(action, self.model);
+        };
+
         /**
          * @description Get the text of action according to selected language
          * @param action

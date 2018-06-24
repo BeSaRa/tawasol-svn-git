@@ -55,6 +55,39 @@ module.exports = function (app) {
             }
         ];
 
+
+        self.tabsToShow = [
+            'basic',
+            'appearance',
+            'auditlog',
+            'docsecurity',
+            'workflowsecurity',
+            'workflownotification',
+            'upload',
+            'barcodeSettings',
+            //'watermarkSettings'
+        ];
+
+        self.showTab = function (tabName) {
+            return self.tabsToShow.indexOf(tabName) > -1;
+        };
+
+        /**
+         * @description Contains the selected tab name
+         * @type {string}
+         */
+        self.selectedTabName = "basic";
+
+        /**
+         * @description Set the current tab name
+         * @param tabName
+         */
+        self.setCurrentTab = function (tabName) {
+            self.selectedTabName = tabName;
+        };
+
+        self.imageDimensionsInfo = langService.get('image_dimensions_info').change({height: 283, width: 283});
+
         /**
          * @description Open the popup to select users to exclude from audit log
          * @param $event
@@ -218,37 +251,6 @@ module.exports = function (app) {
                 });
         };
 
-        self.tabsToShow = [
-            'basic',
-            'appearance',
-            'auditlog',
-            'docsecurity',
-            'workflowsecurity',
-            'workflownotification',
-            'upload',
-            'barcodeSettings'
-        ];
-
-        self.showTab = function (tabName) {
-            return self.tabsToShow.indexOf(tabName) > -1;
-        };
-
-        /**
-         * @description Contains the selected tab name
-         * @type {string}
-         */
-        self.selectedTabName = "basic";
-
-        /**
-         * @description Set the current tab name
-         * @param tabName
-         */
-        self.setCurrentTab = function (tabName) {
-            self.selectedTabName = tabName;
-        };
-
-        self.imageDimensionsInfo = langService.get('image_dimensions_info').change({height: 283, width: 283});
-
         /**
          * Save Uploaded Image File (add or edit)
          * @param modelName
@@ -320,6 +322,16 @@ module.exports = function (app) {
             };
             reader.readAsArrayBuffer(file);
         };
+
+        self.getWatermarkPosition = function($event){
+            var totalPageHeight = 842;
+            var pointerTrackArea = angular.element('#pointer-track');
+            var pointerTrackOffset = $(pointerTrackArea).offset();
+
+            var positionLeft = $event.pageX - pointerTrackOffset.left;
+            var positionBottom = totalPageHeight - ($event.pageY - pointerTrackOffset.top)
+            console.log(positionLeft, positionBottom);
+        }
 
     });
 };

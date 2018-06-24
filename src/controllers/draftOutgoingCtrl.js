@@ -359,14 +359,7 @@ module.exports = function (app) {
              * @param $event
              */
             self.manageAttachments = function (draftOutgoing, $event) {
-                //console.log('manage attachments : ', draftOutgoing);
-                managerService.manageDocumentAttachments(draftOutgoing.vsId, draftOutgoing.docClassName, draftOutgoing.docSubject, $event)
-                    .then(function (attachments) {
-                        draftOutgoing = attachments;
-                    })
-                    .catch(function (attachments) {
-                        draftOutgoing = attachments;
-                    });
+                draftOutgoing.manageDocumentAttachments($event);
             };
 
             /**

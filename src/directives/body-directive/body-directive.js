@@ -12,7 +12,7 @@ module.exports = function (app) {
                     class: 'bundle-version',
                     layout: 'row',
                     'layout-align': 'center center'
-                }).html('{{"version :" + bundleVersion}}');
+                }).html('{{"version: " + bundleVersion}}');
                 element.append($compile(div)(scope));
             }
         }

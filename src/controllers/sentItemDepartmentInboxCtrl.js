@@ -295,10 +295,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (sentItemDepartmentInbox, $event) {
-            //console.log('manage attachments : ', sentItemDepartmentInbox);
-            var vsId = sentItemDepartmentInbox.hasOwnProperty('vsId') ? sentItemDepartmentInbox.vsId : sentItemDepartmentInbox;
-
-            managerService.manageDocumentAttachments(vsId, self.docClassName, sentItemDepartmentInbox.getTranslatedName(), $event);
+            sentItemDepartmentInbox.manageDocumentAttachments($event);
         };
 
         /**

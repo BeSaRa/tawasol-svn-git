@@ -77,12 +77,13 @@ module.exports = function (app) {
         };
         /**
          * manage document attachments for given any document.
+         * @param document
          * @param vsId
          * @param documentClass
          * @param documentSubject
          * @param $event
          */
-        self.manageDocumentAttachments = function (vsId, documentClass, documentSubject, $event) {
+        self.manageDocumentAttachments = function (document, vsId, documentClass, documentSubject, $event) {
             var defer = $q.defer();
             var deferDoc = $q.defer();
             documentClass = _checkDocumentClass(documentClass);
@@ -97,29 +98,15 @@ module.exports = function (app) {
                     fromDialog: true,
                     vsId: vsId,
                     documentClass: documentClass,
-                    documentSubject: documentSubject
+                    documentSubject: documentSubject,
+                    document: document
                 },
                 resolve: {
-                    document: function () {
-                        'ngInject';
-                        return correspondenceService.loadCorrespondenceByVsIdClass(vsId, documentClass)
-                            .then(function (result) {
-                                deferDoc.resolve(result);
-                                return result;
-                            });
-                    },
                     attachments: function (attachmentService) {
                         'ngInject';
-                        return deferDoc.promise.then(function (document) {
-                            return attachmentService.loadDocumentAttachments(vsId, documentClass).then(function (attachments) {
-                                if (document.linkedExportedDocsList.length) {
-                                    document.linkedExportedDocsList = generator.generateCollection(document.linkedExportedDocsList, Attachment, self._sharedMethods);
-                                    document.linkedExportedDocsList = generator.interceptReceivedCollection('Attachment', document.linkedExportedDocsList);
-                                    attachments = attachments.concat(document.linkedExportedDocsList);
-                                }
-                                defer.resolve(attachments);
-                                return attachments;
-                            });
+                        return attachmentService.loadDocumentAttachments(vsId, documentClass).then(function (attachments) {
+                            defer.resolve(attachments);
+                            return attachments;
                         });
 
                     },
@@ -175,6 +162,10 @@ module.exports = function (app) {
                             qDefer.resolve(angular.copy(documentComments));
                         });
                         return qDefer.promise;
+                    },
+                    applicationUsers: function(applicationUserService){
+                        'ngInject';
+                        return applicationUserService.getApplicationUsers();
                     }
                 }
 

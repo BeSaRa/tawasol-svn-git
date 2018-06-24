@@ -450,15 +450,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (searchedInternalDocument, $event) {
-            //console.log('manage attachments for searched internal document : ', searchedInternalDocument);
-            var info = searchedInternalDocument.getInfo();
-            managerService.manageDocumentAttachments(info.vsId, info.documentClass, info.title, $event)
-                .then(function (attachments) {
-                    searchedInternalDocument = attachments;
-                })
-                .catch(function (attachments) {
-                    searchedInternalDocument = attachments;
-                });
+            searchedInternalDocument.manageDocumentAttachments($event);
         };
 
         /**

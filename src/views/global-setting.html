@@ -665,6 +665,14 @@
                         <br />
                     </md-content>
                 </md-tab>
+                <!-- WATERMARK SETTINGS TAB-->
+                <md-tab label="{{lang.watermark}}" ng-if="ctrl.showTab('watermarkSettings')"
+                        md-on-select="ctrl.setCurrentTab('watermarkSettings')"
+                        ng-disabled="ctrl.globalSetting.id === null || ctrl.globalSetting.id===0">
+                    <md-content scroll-directive class="white-bg">
+                        <div id="pointer-track" ng-click="ctrl.getWatermarkPosition($event)"></div>
+                    </md-content>
+                </md-tab>
             </md-tabs>
             <div id="global-settings-buttons">
                 <md-button class="md-raised" ng-disabled="globalSettingForm.$invalid"

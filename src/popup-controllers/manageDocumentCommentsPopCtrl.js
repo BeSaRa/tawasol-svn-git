@@ -3,6 +3,6 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageDocumentCommentsPopCtrl';
-
+self.isValid = false;
     });
 };

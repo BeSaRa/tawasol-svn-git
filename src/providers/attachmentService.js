@@ -93,6 +93,7 @@ module.exports = function (app) {
          * @param $timeout
          * @param Attachment
          * @param _
+         * @param $sce
          * @return {provider}
          */
         provider.$get = function (urlService,
@@ -103,7 +104,8 @@ module.exports = function (app) {
                                   generator,
                                   $timeout,
                                   Attachment,
-                                  _) {
+                                  _,
+                                  $sce) {
             'ngInject';
             var self = this;
             self.serviceName = 'attachmentService';
@@ -111,7 +113,7 @@ module.exports = function (app) {
             self.attachments = [];
 
             /**
-             * generate attachment url for add and update
+             * @description generate attachment url for add and update
              * @param document
              * @return {*}
              * @private
@@ -119,9 +121,6 @@ module.exports = function (app) {
             function _generateAttachmentUrl(document) {
                 var documentClass = (document.hasOwnProperty('docClassName') ? document.docClassName : documentClass).toLowerCase();
                 var vsId = document.hasOwnProperty('vsId') ? document.vsId : false;
-                /*var vsId = document.hasOwnProperty('vsId')
-                    ? document.vsId
-                    : (document.hasOwnProperty('documentVSID') ? document.documentVSID : false);*/
                 var url = null;
                 if (vsId && documentClass) {
                     url = urlService.attachments.replace('{{vsId}}', vsId).replace('{{documentClass}}', documentClass);
@@ -160,6 +159,7 @@ module.exports = function (app) {
              * @description add new attachment to service
              * @param document
              * @param attachment
+             * @param callback
              * @return {Promise|Attachment}
              */
             self.addAttachment = function (document, attachment, callback) {
@@ -178,7 +178,9 @@ module.exports = function (app) {
                     }
                 }).then(function (result) {
                     attachment.vsId = result.data.rs;
-                    return generator.generateInstance(attachment, Attachment, self._sharedMethods);
+                    attachment = generator.generateInstance(attachment, Attachment, self._sharedMethods);
+                    attachment = generator.interceptReceivedInstance('Attachment', attachment);
+                    return attachment;//generator.generateInstance(attachment, Attachment, self._sharedMethods);
                 })
                     .catch(function (error) {
                         return $q.reject(error);
@@ -189,6 +191,7 @@ module.exports = function (app) {
              * @param vsId
              * @param documentClass
              * @param attachment
+             * @param callback
              * @return {Promise|Attachment}
              */
             self.addAttachmentWithVsId = function (vsId, documentClass, attachment, callback) {
@@ -219,6 +222,7 @@ module.exports = function (app) {
              * add attachment without
              * @param documentClass
              * @param attachment
+             * @param callback
              * @return {Promise|Attachment}
              */
             self.addAttachmentWithOutVsId = function (documentClass, attachment, callback) {
@@ -243,6 +247,8 @@ module.exports = function (app) {
             };
             /**
              * @description delete given classification.
+             * @param vsId
+             * @param documentClass
              * @param attachment
              * @return {Promise}
              */
@@ -354,6 +360,58 @@ module.exports = function (app) {
                     }
                 })
             };
+
+
+
+            /**
+             * @description to create the url schema depend on document class and vsId if found.
+             * @param vsId
+             * @param documentClass
+             * @param extension
+             * @return {string}
+             * @private
+             */
+            function _createUrlSchema(vsId, documentClass, extension) {
+                var url = [urlService.correspondence];
+                vsId = (vsId ? vsId : null);
+                documentClass = documentClass ? documentClass.toLowerCase() : null;
+                if (documentClass)
+                    url.push(documentClass);
+                if (vsId)
+                    url.push(vsId);
+                if (extension)
+                    url.push(extension);
+                return url.join('/');
+            }
+
+            /**
+             * @description view attachment
+             * @param attachmentVsId
+             * @param documentClass
+             */
+            self.viewAttachment = function (attachmentVsId, documentClass) {
+                var vsId = attachmentVsId instanceof Attachment ? attachmentVsId.vsId : attachmentVsId;
+                return $http.get(_createUrlSchema(vsId, documentClass, 'attachment/with-content'))
+                    .then(function (result) {
+                        result.data.rs.metaData = generator.generateInstance(result.data.rs.metaData, Attachment);
+                        return result.data.rs;
+                    })
+                    .then(function (attachment) {
+                        attachment.content.viewURL = $sce.trustAsResourceUrl(attachment.content.viewURL);
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-document-readonly'),
+                            controller: 'viewDocumentReadOnlyPopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                document: attachment.metaData,
+                                content: attachment.content
+                            }
+                        });
+                    });
+            };
+
             /**
              * to get Service provider itself
              * @return {*}

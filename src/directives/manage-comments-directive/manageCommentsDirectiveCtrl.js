@@ -515,7 +515,29 @@ module.exports = function (app) {
             }
         });
 
-        self.isValidComment = function () {
+        /*self.isValidComment = function () {
+            var isValid = false;
+            if (self.documentComment.isPrivate) {
+                isValid = true;
+                //return true;
+            }
+            else {
+                if (self.documentComment.isGlobal) {
+                    isValid = true;
+                    //return true;
+                }
+                else {
+                    isValid = !!self.documentComment.includedIDs.length;
+                    //return !!self.documentComment.includedIDs.length;
+                }
+            }
+            self.isValid = isValid;
+            return isValid;
+        };*/
+
+        self.documentCommentForm = 'documentCommentForm';
+
+        self.validateComment = function () {
             if (self.documentComment.isPrivate) {
                 return true;
             }
@@ -525,10 +547,20 @@ module.exports = function (app) {
                 }
                 else {
                     return !!self.documentComment.includedIDs.length;
-                    //return (self.documentComment.includedIDs.length && self.documentComment.excludedIDs.length);
                 }
             }
         };
+
+        self.isValidComment = function (form) {
+            var formValid = false;
+            if (self.showCommentForm) {
+                form = form || self.documentCommentForm;
+                formValid = form && form.$valid && self.validateComment();
+            }
+            return formValid;
+
+        };
+
 
         /**
          * @description Checks if the comment can be edited based on current user and creator and permission

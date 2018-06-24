@@ -1008,7 +1008,7 @@ module.exports = function (app) {
                         availableProxies: function (ouApplicationUserService) {
                             'ngInject';
                             return ouApplicationUserService
-                                .getAvailableProxies(ouApplicationUser.getRegistryOUID())
+                                .getAvailableProxies(ouApplicationUser.getRegistryOUID(), true)
                                 .then(function (result) {
                                     return result
                                 })
@@ -1173,7 +1173,14 @@ module.exports = function (app) {
                             self.ouApplicationUser.applicationUser = self.applicationUser;
                             self.saveOUApplicationUserFromCtrl(self.ouApplicationUser).then(function () {
                                 toast.success(langService.get('edit_success').change({name: self.applicationUser.getNames()}));
-                                dialog.hide(self.applicationUser);
+                                console.log('CHECK');
+                                if (employeeService.isCurrentEmployee(self.applicationUser)) {
+                                    tokenService.forceTokenRefresh().then(function () {
+                                        dialog.hide(self.applicationUser);
+                                    });
+                                } else {
+                                    dialog.hide(self.applicationUser);
+                                }
                             });
 
 

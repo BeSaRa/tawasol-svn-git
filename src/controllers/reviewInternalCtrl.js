@@ -387,14 +387,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (reviewInternal, $event) {
-            console.log('manage attachments : ', reviewInternal);
-            managerService.manageDocumentAttachments(reviewInternal.vsId, reviewInternal.docClassName, reviewInternal.docSubject, $event)
-                .then(function (attachments) {
-                    reviewInternal.attachments = attachments;
-                })
-                .catch(function (attachments) {
-                    reviewInternal.attachments = attachments;
-                });
+            reviewInternal.manageDocumentAttachments($event);
         };
 
         /**

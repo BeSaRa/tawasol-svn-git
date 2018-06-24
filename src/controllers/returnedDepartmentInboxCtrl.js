@@ -356,9 +356,12 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (returnedDepartmentInbox, $event) {
-            var info = returnedDepartmentInbox.getInfo();
+            returnedDepartmentInbox.manageDocumentAttachments($event);
+            /*var vsId = returnedDepartmentInbox.hasOwnProperty('generalStepElm')
+                ? (returnedDepartmentInbox.generalStepElm.hasOwnProperty('vsId') ? returnedDepartmentInbox.generalStepElm.vsId : returnedDepartmentInbox.generalStepElm)
+                : (returnedDepartmentInbox.hasOwnProperty('vsId') ? returnedDepartmentInbox.vsId : returnedDepartmentInbox);
             var wfName = 'outgoing';
-            managerService.manageDocumentAttachments(info.vsId, wfName.toLowerCase(), info.title, $event);
+            managerService.manageDocumentAttachments(returnedDepartmentInbox, vsId, wfName.toLowerCase(), returnedDepartmentInbox.getTranslatedName(), $event);*/
         };
 
         /**

@@ -206,13 +206,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (prepareInternal, $event) {
-            managerService.manageDocumentAttachments(prepareInternal.vsId, prepareInternal.docClassName, prepareInternal.docSubject, $event)
-                .then(function (attachments) {
-                    prepareInternal.attachments = attachments;
-                })
-                .catch(function (attachments) {
-                    prepareInternal.attachments = attachments;
-                });
+            prepareInternal.manageDocumentAttachments($event);
         };
 
         /**

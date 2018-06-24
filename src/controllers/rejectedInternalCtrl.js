@@ -348,13 +348,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (rejectedInternal, $event) {
-            managerService.manageDocumentAttachments(rejectedInternal.vsId, rejectedInternal.docClassName, rejectedInternal.docSubject, $event)
-                .then(function (attachments) {
-                    rejectedInternal.attachments = attachments;
-                })
-                .catch(function (attachments) {
-                    rejectedInternal.attachments = attachments;
-                });
+            rejectedInternal.manageDocumentAttachments($event);
         };
 
         /**

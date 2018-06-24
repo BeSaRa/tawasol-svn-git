@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, PartialExportCollection) {
+    app.run(function (CMSModelInterceptor, PartialExportCollection, _, generator) {
         'ngInject';
         var modelName = 'PartialExportSelective';
 
@@ -10,6 +10,8 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             model.mapSend();
+            if (model.exportItems.RELATED_OBJECTS && model.exportItems.RELATED_OBJECTS.length)
+                model.exportItems.RELATED_OBJECTS = generator.interceptSendCollection('LinkedObject', model.exportItems.RELATED_OBJECTS)
             return model;
         });
 

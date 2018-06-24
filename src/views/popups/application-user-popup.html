@@ -877,7 +877,9 @@
                                                    ng-model="ctrl.ouApplicationUser.ouid">
                                             <md-option ng-value="organization"
                                                        ng-if="ctrl.excludeOrganizationsIfExists(organization)"
-                                                       ng-repeat="organization in ctrl.organizations track by $index">
+                                                       ng-repeat="organization in ctrl.organizations track by $index"
+                                                       ng-disabled="!organization.status"
+                                                       tooltip="{{(!organization.status)? lang.inactive_organization : '' }}">
                                                 {{organization.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
@@ -1036,7 +1038,8 @@
                                                                         </md-button>
                                                                     </md-menu-item>
                                                                     <md-menu-item ng-if="!ctrl.currentOrganization">
-                                                                        <md-button ng-disabled="ctrl.disableOUApplicationUserActions(ouApplicationUser)"
+                                                                        <md-button
+                                                                                ng-disabled="ctrl.disableOUApplicationUserActions(ouApplicationUser)"
                                                                                 ng-click="ctrl.removeOUApplicationUserFromCtrl(ouApplicationUser, $event)">
                                                                             {{lang.delete}}
                                                                         </md-button>

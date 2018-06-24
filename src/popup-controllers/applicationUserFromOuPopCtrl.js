@@ -766,7 +766,7 @@ module.exports = function (app) {
                         availableProxies: function (ouApplicationUserService) {
                             'ngInject';
                             return ouApplicationUserService
-                                .getAvailableProxies(ouApplicationUser.getRegistryOUID())
+                                .getAvailableProxies(ouApplicationUser.getRegistryOUID(), true)
                                 .then(function (result) {
                                     return result
                                 })

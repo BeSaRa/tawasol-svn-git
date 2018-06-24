@@ -1,4 +1,5 @@
 module.exports = function (app) {
+    require('./toolbar.scss');
     app.directive('toolbarDirective', function () {
         'ngInject';
         return {

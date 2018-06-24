@@ -1,8 +1,8 @@
 module.exports = function (app) {
-    app.factory('Attachment', function (CMSModelInterceptor, 
-                                        _, 
+    app.factory('Attachment', function (CMSModelInterceptor,
+                                        _,
                                         langService,
-    Indicator) {
+                                        Indicator) {
         'ngInject';
         return function Attachment(model) {
             var self = this;
@@ -42,7 +42,8 @@ module.exports = function (app) {
             };
             Attachment.prototype.getSecurityLevels = function (separator) {
                 var lang = langService.current.charAt(0).toUpperCase() + langService.current.substr(1);
-                return this.securityLevel[('default' + lang + 'Name')];
+                var propName = 'default' + lang + 'Name';
+                return this.securityLevel.hasOwnProperty(propName) ? this.securityLevel[propName] : this.securityLevel[langService.current + 'Name'];
             };
             Attachment.prototype.getMemType = function () {
 
@@ -55,8 +56,8 @@ module.exports = function (app) {
             };
 
             var indicator = new Indicator();
-            Attachment.prototype.getIsLinkedExportedDocIndicator = function (refVSID) {
-                return indicator.getIsLinkedExportedDocIndicator(refVSID);
+            Attachment.prototype.getIsLinkedExportedDocIndicator = function () {
+                return indicator.getIsLinkedExportedDocIndicator();
             };
 
 

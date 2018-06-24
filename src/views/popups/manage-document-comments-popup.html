@@ -13,15 +13,20 @@
                     source-create-callback="ctrl.createDocumentComment"
                     source-edit-mode="ctrl.editMode"
                     source-comment="ctrl.documentComment"
-                    from-dialog="ctrl.fromDialog"></manage-comments-directive>
+                    from-dialog="ctrl.fromDialog"
+            is-valid="ctrl.isValid"></manage-comments-directive>
         </md-content>
         <div>
             <div layout="row">
                 <div ng-if="!!ctrl.documentComment">
-                    <md-button class="md-raised" ng-if="!ctrl.editMode" ng-click="ctrl.createDocumentComment()">
+                    <md-button class="md-raised" ng-if="!ctrl.editMode"
+                               ng-disabled="!ctrl.isValid"
+                               ng-click="ctrl.createDocumentComment()">
                         {{lang.add}}
                     </md-button>
-                    <md-button class="md-raised" ng-if="ctrl.editMode" ng-click="ctrl.saveDocumentComments()">
+                    <md-button class="md-raised" ng-if="ctrl.editMode"
+                               ng-disabled="!ctrl.isValid"
+                               ng-click="ctrl.saveDocumentComments()">
                         {{lang.save}}
                     </md-button>
                 </div>

@@ -224,13 +224,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (scanIncoming, $event) {
-            managerService.manageDocumentAttachments(scanIncoming.vsId, scanIncoming.classDescription, scanIncoming.docSubject, $event)
-                .then(function (attachments) {
-                    scanIncoming = attachments;
-                })
-                .catch(function (attachments) {
-                    scanIncoming = attachments;
-                });
+            scanIncoming.manageDocumentAttachments($event);
         };
 
         /**

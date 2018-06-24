@@ -3,7 +3,8 @@ module.exports = function (app) {
                                           langService,
                                           Indicator,
                                           correspondenceService,
-                                          Information) {
+                                          Information,
+                                          managerService) {
         'ngInject';
         return function EventHistory(model) {
             var self = this;
@@ -152,6 +153,11 @@ module.exports = function (app) {
             };
             EventHistory.prototype.hasDocumentClass = function (documentClass) {
                 return this.getInfo().documentClass.toLowerCase() === documentClass.toLowerCase();
+            };
+
+            EventHistory.prototype.manageDocumentAttachments = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentAttachments.apply(managerService, [this, info.vsId, info.documentClass, info.title, $event]);
             };
 
             // don't remove CMSModelInterceptor from last line

@@ -387,14 +387,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (readyToExport, $event) {
-            /*var vsId = readyToExport.hasOwnProperty('generalStepElm')
-                ? (readyToExport.generalStepElm.hasOwnProperty('vsId') ? readyToExport.generalStepElm.vsId : readyToExport.generalStepElm)
-                : (readyToExport.hasOwnProperty('vsId') ? readyToExport.vsId : readyToExport);
-            var wfName = readyToExport.hasOwnProperty('generalStepElm')
-                ? (readyToExport.generalStepElm.hasOwnProperty('workFlowName') ? readyToExport.generalStepElm.workFlowName : readyToExport.generalStepElm)
-                : (readyToExport.hasOwnProperty('workFlowName') ? readyToExport.workFlowName : readyToExport);*/
-            var info = readyToExport.getInfo();
-            managerService.manageDocumentAttachments(info.vsId, info.documentClass, readyToExport.getTranslatedName(), $event);
+            readyToExport.manageDocumentAttachments($event);
         };
 
         /**

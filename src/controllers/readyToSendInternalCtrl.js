@@ -288,13 +288,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (readyToSendInternal, $event) {
-            managerService.manageDocumentAttachments(readyToSendInternal.vsId, readyToSendInternal.docClassName, readyToSendInternal.docSubject, $event)
-                .then(function (attachments) {
-                    readyToSendInternal.attachments = attachments;
-                })
-                .catch(function (attachments) {
-                    readyToSendInternal.attachments = attachments;
-                });
+            readyToSendInternal.manageDocumentAttachments($event);
         };
 
         /**

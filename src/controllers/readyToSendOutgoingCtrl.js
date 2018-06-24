@@ -271,13 +271,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (readyToSendOutgoing, $event) {
-            managerService.manageDocumentAttachments(readyToSendOutgoing.vsId, readyToSendOutgoing.classDescription, readyToSendOutgoing.docSubject, $event)
-                .then(function (attachments) {
-                    readyToSendOutgoing.attachments = attachments;
-                })
-                .catch(function (attachments) {
-                    readyToSendOutgoing.attachments = attachments;
-                });
+            readyToSendOutgoing.manageDocumentAttachments($event);
         };
 
         /**

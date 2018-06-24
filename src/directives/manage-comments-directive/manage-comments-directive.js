@@ -18,7 +18,16 @@ module.exports = function (app) {
                 sourceCreateCallback: '=?',
                 sourceEditMode: '=?',
                 sourceComment: '=?',
-                disableEverything: '=?'
+                disableEverything: '=?',
+                isValid: '=?'
+            },
+            link: function ($scope, element, attrs) {
+                $scope.$watch(function () {
+                        return $scope.ctrl.isValidComment($scope.ctrl.documentCommentForm);
+                    },
+                    function (newValue, oldValue) {
+                        $scope.ctrl.isValid = newValue;
+                    });
             }
         }
     })

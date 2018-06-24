@@ -245,14 +245,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (userSentItem, $event) {
-            var info = userSentItem.getInfo();
-            managerService.manageDocumentAttachments(info.vsId, info.documentClass, info.title, $event)
-                .then(function (attachments) {
-                    userSentItem = attachments;
-                })
-                .catch(function (attachments) {
-                    userSentItem = attachments;
-                });
+            userSentItem.manageDocumentAttachments($event);
         };
 
         /**

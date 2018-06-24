@@ -1304,35 +1304,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description view attachment
-         * @param attachmentVsId
-         * @param documentClass
-         */
-        self.viewAttachment = function (attachmentVsId, documentClass, noDialog) {
-            var vsId = attachmentVsId instanceof Attachment ? attachmentVsId.vsId : attachmentVsId;
-            return $http.get(_createUrlSchema(vsId, documentClass, 'attachment/with-content'))
-                .then(function (result) {
-                    result.data.rs.metaData = generator.generateInstance(result.data.rs.metaData, Attachment);
-                    return result.data.rs;
-                })
-                .then(function (attachment) {
-                    attachment.content.viewURL = $sce.trustAsResourceUrl(attachment.content.viewURL);
-
-                    return noDialog ? attachment.content.viewURL : dialog.showDialog({
-                        template: cmsTemplate.getPopup('view-document-readonly'),
-                        controller: 'viewDocumentReadOnlyPopCtrl',
-                        controllerAs: 'ctrl',
-                        bindToController: true,
-                        escapeToCancel: false,
-                        locals: {
-                            document: attachment.metaData,
-                            content: attachment.content
-                        }
-                    });
-                });
-        };
-
-        /**
          * @description view linked document
          * @param correspondence
          */
@@ -2258,6 +2229,11 @@ module.exports = function (app) {
                             'ngInject';
                             return correspondenceService
                                 .loadCorrespondenceSites(workItem);
+                        },
+                        entityTypes: function(entityTypeService){
+                            'ngInject';
+                            return entityTypeService
+                                .loadEntityTypes();
                         }
                     }
                 });
@@ -2440,11 +2416,12 @@ module.exports = function (app) {
                 .get(_createUrlSchema(null, info.documentClass, ['related-objects', info.vsId].join('/')))
                 .then(function (result) {
                     result = result.data.rs;
+
                     result.relatedDocs = self.interceptReceivedCollectionBasedOnEachDocumentClass(result.linkedDocs);
                     return {
                         ATTACHMENTS: generator.interceptReceivedCollection('Attachment', generator.generateCollection(result.linkedAttachments, Attachment)),
                         RELATED_BOOKS: result.relatedDocs,
-                        RELATED_OBJECTS: generator.interceptReceivedCollection('linkedObject', generator.generateCollection(result.linkedObjects, LinkedObject))
+                        RELATED_OBJECTS: generator.interceptReceivedCollection('LinkedObject', generator.generateCollection(result.linkedObjects, LinkedObject))
                     };
                 })
         };
@@ -2469,6 +2446,11 @@ module.exports = function (app) {
                         sites: function (correspondenceService) {
                             'ngInject';
                             return correspondenceService.loadCorrespondenceSites(correspondence);
+                        },
+                        entityTypes: function(entityTypeService){
+                            'ngInject';
+                            return entityTypeService
+                                .loadEntityTypes();
                         }
                     }
                 });

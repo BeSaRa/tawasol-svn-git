@@ -158,8 +158,8 @@ module.exports = function (app) {
 
         // just for start
         function _prepareFilters() {
-            self.workItemsFilters = new Array(userFilters.length);
-            for (var i = 0; i < userFilters.length; i++) {
+            self.workItemsFilters = new Array(self.userFilters.length);
+            for (var i = 0; i < self.userFilters.length; i++) {
                 self.filterGrid.push({
                     limit: 5, //self.globalSetting.searchAmount, // default limit
                     page: 1, // first page
@@ -467,7 +467,6 @@ module.exports = function (app) {
         };
 
 
-
         /**
          * @description Subscribe
          * @param userInbox
@@ -485,7 +484,7 @@ module.exports = function (app) {
                 });
 
                 userSubscriptionService.addUserSubscription(userSubscription).then(function (result) {
-                    if(result){
+                    if (result) {
                         toast.success(langService.get('subscribe_success'));
                     }
                 });
@@ -854,32 +853,25 @@ module.exports = function (app) {
          * @description Check if action will be shown on grid or not
          * @param action
          * @param model
+         * @param checkHasAnyPermission
          * @returns {boolean}
          */
-        self.checkToShowAction = function (action, model) {
-            /*if (action.hasOwnProperty('permissionKey'))
-             return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-             return (!action.hide);*/
-
+        self.checkToShowAction = function (action, model, checkHasAnyPermission) {
+            var hasPermission = true;
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
-                    return (!action.hide) && employeeService.hasPermissionTo(action.permissionKey);
+                    hasPermission = employeeService.hasPermissionTo(action.permissionKey);
                 }
-                else if (angular.isArray(action.permissionKey)) {
-                    if (!action.permissionKey.length) {
-                        return (!action.hide);
+                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                    if (checkHasAnyPermission) {
+                        hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
                     }
                     else {
-                        var hasPermissions = _.map(action.permissionKey, function (key) {
-                            return employeeService.hasPermissionTo(key);
-                        });
-                        return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                        hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
             }
-            return (!action.hide);
+            return (!action.hide) && hasPermission;
         };
 
         /**
@@ -913,7 +905,6 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'information-variant',
                 text: 'grid_action_document_info',
-                /*shortcut: false,*/
                 showInView: false,
                 subMenu: [
                     {
@@ -946,7 +937,6 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'folder-plus',
                 text: 'grid_action_add_to_folder',
-                /*shortcut: false,*/
                 callback: self.addToFolder,
                 class: "action-green",
                 checkShow: self.checkToShowAction
@@ -957,7 +947,6 @@ module.exports = function (app) {
                 icon: 'star',
                 text: 'grid_action_add_to_favorite',
                 permissionKey: "MANAGE_FAVORITE",
-                /*shortcut: false,*/
                 callback: self.addToFavorite,
                 class: "action-green",
                 checkShow: self.checkToShowAction
@@ -967,7 +956,6 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'pen',
                 text: 'grid_action_create_reply',
-                /*shortcut: false,*/
                 callback: self.createReplyIncoming,
                 class: "action-green",
                 //hide: true,
@@ -994,7 +982,6 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'bullhorn',
                 text: 'grid_action_broadcast',
-                /*shortcut: false,*/
                 hide: false,
                 permissionKey: 'BROADCAST_DOCUMENT',
                 callback: self.broadcast,
@@ -1007,7 +994,6 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'reply',
                 text: 'grid_action_reply',
-                /*shortcut: false,*/
                 callback: self.reply,
                 class: "action-green",
                 checkShow: function (action, model) {
@@ -1019,7 +1005,6 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'link',
                 text: 'grid_action_get_link',
-                /*shortcut: false,*/
                 permissionKey: 'GET_A_LINK_TO_THE_DOCUMENT',
                 callback: self.getLink,
                 class: "action-green",
@@ -1033,7 +1018,6 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'bell-plus',
                 text: 'grid_action_subscribe',
-                /*shortcut: false,*/
                 callback: self.subscribe,
                 class: "action-green",
                 hide: false,
@@ -1061,7 +1045,6 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted() && (info.docStatus <= 22);
                     // (model.generalStepElm.addMethod && model.generalStepElm.workFlowName.toLowerCase() !== 'internal')
                     // || model.generalStepElm.workFlowName.toLowerCase() === 'incoming';
-
                 }
             },
             // Open
@@ -1084,7 +1067,6 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'eye',
                 text: 'grid_action_view_tracking_sheet',
-                /*shortcut: false,*/
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: self.checkToShowAction,
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
@@ -1107,7 +1089,16 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'settings',
                 text: 'grid_action_manage',
-                /*shortcut: false,*/
+                permissionKey: [
+                    "MANAGE_DOCUMENT’S_TAGS",
+                    "MANAGE_DOCUMENT’S_COMMENTS",
+                    "MANAGE_TASKS",
+                    "MANAGE_ATTACHMENTS",
+                    "MANAGE_LINKED_DOCUMENTS",
+                    "",// linked entities permission not available in database
+                    "MANAGE_DESTINATIONS"
+                ],
+                checkAnyPermission: true,
                 checkShow: self.checkToShowAction,
                 showInView: false,
                 subMenu: [
@@ -1116,7 +1107,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'tag',
                         text: 'grid_action_tags',
-                        /*shortcut: false,*/
                         permissionKey: "MANAGE_DOCUMENT’S_TAGS",
                         callback: self.manageTags,
                         class: "action-green",
@@ -1127,7 +1117,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'comment',
                         text: 'grid_action_comments',
-                        /*shortcut: false,*/
                         permissionKey: "MANAGE_DOCUMENT’S_COMMENTS",
                         callback: self.manageComments,
                         class: "action-green",
@@ -1138,7 +1127,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'note-multiple',
                         text: 'grid_action_tasks',
-                        /*shortcut: false,*/
                         permissionKey: "MANAGE_TASKS",
                         callback: self.manageTasks,
                         class: "action-red",
@@ -1150,7 +1138,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'attachment',
                         text: 'grid_action_attachments',
-                        /*shortcut: false,*/
                         permissionKey: "MANAGE_ATTACHMENTS",
                         callback: self.manageAttachments,
                         class: "action-green",
@@ -1161,8 +1148,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
-                        /*shortcut: false,*/
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1172,7 +1158,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'link-variant',
                         text: 'grid_action_linked_entities',
-                        /*shortcut: false,*/
                         callback: self.manageLinkedEntities,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1182,7 +1167,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'stop',
                         text: 'grid_action_destinations',
-                        /*shortcut: false,*/
                         callback: self.manageDestinations,
                         permissionKey: "MANAGE_DESTINATIONS",
                         class: "action-green",
@@ -1197,7 +1181,6 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'eye',
                 text: 'grid_action_view',
-                /*shortcut: false,*/
                 hide: true,
                 checkShow: self.checkToShowAction,
                 subMenu: [
@@ -1206,7 +1189,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_direct_linked_documents',
-                        /*shortcut: false,*/
                         callback: self.viewDirectLinkedDocuments,
                         class: "action-red",
                         checkShow: self.checkToShowAction
@@ -1216,7 +1198,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'link-variant',
                         text: 'grid_action_complete_linked_documents',
-                        /*shortcut: false,*/
                         callback: self.viewCompleteLinkedDocuments,
                         class: "action-red",
                         checkShow: self.checkToShowAction
@@ -1228,7 +1209,6 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'download',
                 text: 'grid_action_download',
-                /*shortcut: false,*/
                 checkShow: self.checkToShowAction,
                 subMenu: [
                     // Main Document
@@ -1236,7 +1216,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_main_document',
-                        /*shortcut: false,*/
                         permissionKey: "DOWNLOAD_MAIN_DOCUMENT",
                         callback: self.downloadMainDocument,
                         class: "action-green",
@@ -1247,7 +1226,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_composite_document',
-                        /*shortcut: false,*/
                         callback: self.downloadCompositeDocument,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1259,7 +1237,6 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'send',
                 text: 'grid_action_send',
-                /*shortcut: false,*/
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 },
@@ -1269,7 +1246,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'link-variant',
                         text: 'grid_action_link_to_document_by_email',
-                        /*shortcut: false,*/
                         permissionKey: 'SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL',
                         callback: self.sendLinkToDocumentByEmail,
                         class: "action-green",
@@ -1280,7 +1256,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'attachment',
                         text: 'grid_action_composite_document_as_attachment_by_email',
-                        /*shortcut: false,*/
                         permissionKey: 'SEND_COMPOSITE_DOCUMENT_BY_EMAIL',
                         callback: self.sendCompositeDocumentAsAttachmentByEmail,
                         class: "action-green",
@@ -1291,9 +1266,8 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'attachment',
                         text: 'grid_action_main_document_fax',
-                        /*shortcut: false,*/
                         hide: true,
-                        permissionKey:"SEND_DOCUMENT_BY_FAX",
+                        permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction
@@ -1303,7 +1277,6 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'message',
                         text: 'grid_action_send_sms',
-                        /*shortcut: false,*/
                         hide: true,
                         permissionKey: "SEND_SMS",
                         callback: self.sendSMS,
@@ -1317,7 +1290,6 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'approval',
                 text: 'grid_action_approve',//signature
-                /*shortcut: false,*/
                 checkShow: function (action, model) {
                     //addMethod = 0 (Electronic/Digital) - show the button
                     //addMethod = 1 (Paper) - hide the button
@@ -1340,7 +1312,6 @@ module.exports = function (app) {
                         type: 'action',
                         //icon: 'link-variant',
                         text: 'grid_action_electronic',//e_signature
-                        /*shortcut: false,*/
                         callback: self.signESignature,
                         class: "action-green",
                         permissionKey: "ELECTRONIC_SIGNATURE",
@@ -1351,7 +1322,6 @@ module.exports = function (app) {
                         type: 'action',
                         //icon: 'attachment',
                         text: 'grid_action_digital',//digital_signature
-                        /*shortcut: false,*/
                         callback: self.signDigitalSignature,
                         class: "action-red",
                         permissionKey: "DIGITAL_SIGNATURE",
@@ -1365,7 +1335,6 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'pencil',
                 text: 'grid_action_edit',
-                /*shortcut: false,*/
                 showInView: false,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
@@ -1393,7 +1362,6 @@ module.exports = function (app) {
                                 shortcutText: 'grid_action_edit_content'
                             };
                         },
-                        /*shortcut: false,*/
                         callback: self.editContent,
                         class: "action-green",
                         checkShow: function (action, model) {
@@ -1423,7 +1391,6 @@ module.exports = function (app) {
                                 shortcutText: 'grid_action_edit_properties'
                             };
                         },
-                        /*shortcut: false,*/
                         callback: self.editProperties,
                         class: "action-green",
                         checkShow: function (action, model) {

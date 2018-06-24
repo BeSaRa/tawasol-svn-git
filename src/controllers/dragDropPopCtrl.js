@@ -27,9 +27,11 @@ module.exports = function (app) {
         // all attachment types
         self.attachmentTypes = attachmentTypeService.returnAttachmentTypes();
 
-        self.securityLevels = correspondenceService.getLookup(correspondence.docClassName, 'securityLevels');
+        var info = correspondence.getInfo();
+        self.securityLevels = correspondenceService.getLookup(info.documentClass, 'securityLevels');
         // the selected security level.
-        self.securityLevel = correspondence.securityLevel;
+        //self.securityLevel = correspondence.securityLevel;
+        self.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, correspondence.securityLevel);
         // attachment title for all
         self.attachmentTitle = null;
 
@@ -180,7 +182,13 @@ module.exports = function (app) {
          */
         self.startUploadAttachment = function (attachment, single) {
             return (function (attachment) {
-                return attachmentService.addAttachment(correspondence, attachment, function (progress) {
+                //return attachmentService.addAttachment(correspondence, attachment, function (progress) {
+                var info = correspondence.getInfo();
+                var document = {
+                    vsId: info.vsId,
+                    docClassName: info.documentClass
+                };
+                return attachmentService.addAttachment(document, attachment, function (progress) {
                     attachment.progress = progress;
                 }).then(function (attachment) {
                     if (single)

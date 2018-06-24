@@ -3,7 +3,7 @@ module.exports = function (app) {
         'ngInject';
 
         permissionServiceProvider
-        // group of system administration
+            // group of system administration
             .addMenuPermissionGroup('menu_item_system_administration')
             .addMenuPermissions('menu_item_global_settings', ['MANAGE_GLOBAL_SETTINGS'])
             .addMenuPermissions('menu_item_government_entities', ['MANAGE_GOVERNMENT_ENTITIES'])
@@ -86,7 +86,7 @@ module.exports = function (app) {
             })
             .addMenuPermission('menu_item_user_favorite_documents', 'MANAGE_FAVORITE')
             .end()
-            .addMenuPermission('menu_item_dashboard', 'landing_page')
+            .addMenuPermission('menu_item_dashboard', 'LANDING_PAGE')
             .addMenuPermissionGroup('menu_item_search_module')
             .addMenuPermission('menu_item_search_module_outgoing', 'SEARCH_OUTGOING')
             .addMenuPermission('menu_item_search_module_incoming', 'SEARCH_INCOMING')

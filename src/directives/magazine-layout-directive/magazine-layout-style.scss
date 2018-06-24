@@ -134,6 +134,10 @@
   z-index: 3;
   position: fixed;
 }
+.z-index-3-absolute {
+  z-index: 3;
+  position: absolute;
+}
 
 html.rtl {
   .static-bar-fixed {
@@ -149,6 +153,7 @@ html.rtl {
 }
 
 .static-bar-fixed {
+  //position: absolute;
   background-color: white;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;

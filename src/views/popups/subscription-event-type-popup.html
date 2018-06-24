@@ -1,7 +1,7 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.select_event_type}}">
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.user_subscription}}">
     <div layout="column">
         <md-toolbar>
-            <span class="p20">{{lang.select_event_type}}</span>
+            <span class="p20">{{lang.user_subscription}}</span>
             <close-dialog-directive></close-dialog-directive>
         </md-toolbar>
         <md-content scroll-directive>
@@ -9,13 +9,16 @@
                 <div layout="column" class="p20">
                     <div layout="row">
                         <md-input-container flex>
-                            <label for="eventType">{{lang.event_type}}</label>
-                            <md-select ng-change="subscriptionEventTypeCtrl.setEventType()" id="eventType"
-                                       ng-model="subscriptionEventTypeCtrl.selectedEventType">
-                                <md-option ng-repeat="item in subscriptionEventTypeCtrl.eventTypes" ng-value="item">
-                                    {{item.defaultEnName}}
+                            <label for="eventType">{{lang.user_subscription_event_type}}</label>
+                            <md-select ng-change="ctrl.setEventType()" id="eventType" name="eventType"
+                                       ng-model="ctrl.selectedEventType" required>
+                                <md-option ng-repeat="item in ctrl.eventTypes" ng-value="item">
+                                    {{item.getTranslatedName()}}
                                 </md-option>
                             </md-select>
+                            <div ng-messages="eventType_form.eventType.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
                         </md-input-container>
                     </div>
                 </div>
@@ -24,12 +27,12 @@
         <div>
             <div layout="row">
                 <md-button class="md-raised"
-                           ng-disabled="reason_form.$invalid"
-                           ng-click="subscriptionEventTypeCtrl.sendEventType()">
+                           ng-disabled="eventType_form.$invalid"
+                           ng-click="ctrl.sendEventType()">
                     {{lang.save}}
                 </md-button>
                 <span flex></span>
-                <md-button class="md-raised" ng-click="subscriptionEventTypeCtrl.closeEventTypePopup()">
+                <md-button class="md-raised" ng-click="ctrl.closeEventTypePopup()">
                     {{lang.close}}
                 </md-button>
             </div>

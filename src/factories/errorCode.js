@@ -14,7 +14,8 @@ module.exports = function (app) {
             DUPLICATE_ENTRY: 1008,
             INACTIVE_USER_ENTITY: 9016,
             PASSWORD_EMPTY: 9017,
-            NO_USER_TO_BROADCAST: 3018
+            NO_USER_TO_BROADCAST: 3018,
+            PRINT_BARCODE_ERROR_NO_BARCODE_ELEMENT: 3019
         };
 
         return {

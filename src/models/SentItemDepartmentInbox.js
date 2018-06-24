@@ -1,7 +1,8 @@
 module.exports = function (app) {
     app.factory('SentItemDepartmentInbox', function (CMSModelInterceptor,
                                                      Indicator,
-                                                     langService) {
+                                                     langService,
+                                                     managerService) {
         'ngInject';
         return function SentItemDepartmentInbox(model) {
             var self = this, correspondenceService = null;
@@ -131,6 +132,12 @@ module.exports = function (app) {
 
             SentItemDepartmentInbox.prototype.launchWorkFlow = function ($event, action, tab) {
                 return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
+            };
+
+
+            SentItemDepartmentInbox.prototype.manageDocumentAttachments = function ($event) {
+                var info = this.getInfo();
+                return managerService.manageDocumentAttachments.apply(managerService, [this, info.vsId, info.documentClass, info.title, $event]);
             };
 
             // don't remove CMSModelInterceptor from last line

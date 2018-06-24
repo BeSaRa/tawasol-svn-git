@@ -452,14 +452,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (searchedIncomingDocument, $event) {
-            var info = searchedIncomingDocument.getInfo();
-            managerService.manageDocumentAttachments(info.vsId, info.documentClass, info.title, $event)
-                .then(function (attachments) {
-                    searchedIncomingDocument = attachments;
-                })
-                .catch(function (attachments) {
-                    searchedIncomingDocument = attachments;
-                });
+            searchedIncomingDocument.manageDocumentAttachments($event);
         };
 
         /**

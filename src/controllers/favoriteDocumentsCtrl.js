@@ -225,13 +225,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (favoriteDocument, $event) {
-            managerService.manageDocumentAttachments(favoriteDocument.vsId, favoriteDocument.classDescription, favoriteDocument.docSubject, $event)
-                .then(function (attachments) {
-                    favoriteDocument = attachments;
-                })
-                .catch(function (attachments) {
-                    favoriteDocument = attachments;
-                });
+            favoriteDocument.manageDocumentAttachments($event);
         };
 
         /**

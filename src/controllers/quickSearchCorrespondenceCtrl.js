@@ -195,13 +195,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (searchedCorrespondenceDocument, $event) {
-            managerService.manageDocumentAttachments(searchedCorrespondenceDocument.vsId, searchedCorrespondenceDocument.classDescription, searchedCorrespondenceDocument.docSubject, $event)
-                .then(function (attachments) {
-                    searchedCorrespondenceDocument = attachments;
-                })
-                .catch(function (attachments) {
-                    searchedCorrespondenceDocument = attachments;
-                });
+            searchedCorrespondenceDocument.manageDocumentAttachments($event);
         };
 
         /**

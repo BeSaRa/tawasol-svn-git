@@ -28,25 +28,49 @@ module.exports = function (app) {
                             required: true
                         },
                         fullNameAr: {
-                            required: true
+                            required: true,
+                            customValidation: {
+                                type: 'A1NS',
+                                message: 'one_arabic_number_space'
+                            }
                         },
                         fullNameEn: {
-                            required: true
+                            required: true,
+                            customValidation: {
+                                type: 'E1NS',
+                                message: 'one_english_number_space'
+                            }
                         },
                         qid: {
-                            required: true
+                            required: true,
+                            customValidation: {
+                                type: 'number',
+                                message: 'numberonly'
+                            }
                         },
                         nationality: {
-                            required: false
+                            required: false,
+                            customValidation : {
+                                type: 'AES',
+                                message : 'arabic_english_space'
+                            }
                         },
                         mobileNumber: {
-                            required: true
+                            required: true,
+                            customValidation: {
+                                type: 'number',
+                                message: 'numberonly'
+                            }
                         },
                         description: {
                             required: false
                         },
                         email: {
-                            required: false
+                            required: false,
+                            customValidation: {
+                                type: 'email',
+                                message: 'invalid_email'
+                            }
                         },
                         address: {
                             required: false
@@ -57,13 +81,25 @@ module.exports = function (app) {
                             required: true
                         },
                         fullNameAr: {
-                            required: true
+                            required: true,
+                            customValidation: {
+                                type: 'A1NS',
+                                message: 'one_arabic_number_space'
+                            }
                         },
                         fullNameEn: {
-                            required: true
+                            required: true,
+                            customValidation: {
+                                type: 'E1NS',
+                                message: 'one_english_number_space'
+                            }
                         },
                         qid: {
-                            required: true
+                            required: true,
+                            customValidation: {
+                                type: 'number',
+                                message: 'numberonly'
+                            }
                         },
                         employeeNum: {
                             required: true,
@@ -98,10 +134,18 @@ module.exports = function (app) {
                             required: true
                         },
                         name: {
-                            required: true
+                            required: true,
+                            customValidation: {
+                                type: 'AE',
+                                message: 'arabic_english'
+                            }
                         },
                         crNumber: {
-                            required: true
+                            required: true,
+                            customValidation: {
+                                type: 'number',
+                                message: 'numberonly'
+                            }
                         },
                         mobileNumber: {
                             required: true,
@@ -114,7 +158,11 @@ module.exports = function (app) {
                             required: false
                         },
                         email: {
-                            required: false
+                            required: false,
+                            customValidation: {
+                                type: 'email',
+                                message: 'invalid_email'
+                            }
                         },
                         address: {
                             required: false
@@ -125,16 +173,28 @@ module.exports = function (app) {
                             required: true
                         },
                         name: {
-                            required: true
+                            required: true,
+                            customValidation: {
+                                type: 'AE',
+                                message: 'arabic_english'
+                            }
                         },
                         mobileNumber: {
-                            required: true
+                            required: true,
+                            customValidation: {
+                                type: 'number',
+                                message: 'numberonly'
+                            }
                         },
                         description: {
                             required: false
                         },
                         email: {
-                            required: false
+                            required: false,
+                            customValidation: {
+                                type: 'email',
+                                message: 'invalid_email'
+                            }
                         },
                         address: {
                             required: false

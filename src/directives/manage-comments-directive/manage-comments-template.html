@@ -16,7 +16,7 @@
                 <md-tabs class="content" md-dynamic-height>
                     <md-tab label="{{lang.comments_comment}}">
                         <md-content>
-                            <form novalidate name="documentCommentForm">
+                            <form novalidate name="ctrl.documentCommentForm">
                                 <div layout="column" class="p20">
                                     <div layout="row">
                                         <md-input-container flex>
@@ -24,7 +24,7 @@
                                             <input id="shortDescription" minlength="3" name="shortDescription"
                                                    required
                                                    ng-model="ctrl.documentComment.shortDescription">
-                                            <div ng-messages="documentCommentForm.shortDescription.$error">
+                                            <div ng-messages="ctrl.documentCommentForm.shortDescription.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                                 <div ng-message="minlength">{{lang.short}}</div>
                                             </div>
@@ -36,7 +36,7 @@
                                             <textarea required minlength="5" rows="3" name="description"
                                                       id="description"
                                                       ng-model="ctrl.documentComment.description"></textarea>
-                                            <div ng-messages="documentCommentForm.description.$error">
+                                            <div ng-messages="ctrl.documentCommentForm.description.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
                                                 <div ng-message="minlength">{{lang.short}}</div>
                                             </div>
@@ -271,15 +271,16 @@
         <div ng-if="!ctrl.fromDialog">
             <div layout="row">
                 <div>
-                    <md-button ng-if="!ctrl.editMode"
-                               ng-disabled="documentCommentForm.$invalid || !ctrl.isValidComment()"
+                    <md-button ng-if="!ctrl.editMode" ng-disabled="!ctrl.isValidComment()"
                                class="md-raised md-primary"
                                ng-click="ctrl.addDocumentCommentToDocument()">
+                        <!--ng-disabled="ctrl.documentCommentForm.$invalid || !ctrl.isValidComment()"-->
                         {{lang.comments_add}}
                     </md-button>
-                    <md-button ng-if="ctrl.editMode" ng-disabled="documentCommentForm.$invalid"
+                    <md-button ng-if="ctrl.editMode" ng-disabled="!ctrl.isValidComment()"
                                class="md-raised md-primary"
                                ng-click="ctrl.saveDocumentCommentToDocument()">
+                        <!--ng-disabled="ctrl.documentCommentForm.$invalid || !ctrl.isValidComment()"-->
                         {{lang.comments_save}}
                     </md-button>
                 </div>

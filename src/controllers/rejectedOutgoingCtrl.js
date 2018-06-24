@@ -335,8 +335,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTags = function (rejectedOutgoing, $event) {
-            // TODO: Please Navjot Check with Iyad tommorow why this document fail when i get tags for it.
-            // vsId {D5654765-D569-C8DC-841A-5E2407D00000}
             managerService.manageDocumentTags(rejectedOutgoing.vsId, rejectedOutgoing.docClassName, rejectedOutgoing.docSubject, $event)
                 .then(function (tags) {
                     rejectedOutgoing.tags = tags;
@@ -367,13 +365,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (rejectedOutgoing, $event) {
-            managerService.manageDocumentAttachments(rejectedOutgoing.vsId, rejectedOutgoing.docClassName, rejectedOutgoing.docSubject, $event)
-                .then(function (attachments) {
-                    rejectedOutgoing.attachments = attachments;
-                })
-                .catch(function (attachments) {
-                    rejectedOutgoing.attachments = attachments;
-                });
+            rejectedOutgoing.manageDocumentAttachments($event);
         };
 
         /**

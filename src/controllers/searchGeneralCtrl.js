@@ -448,15 +448,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (searchedGeneralDocument, $event) {
-            var info = searchedGeneralDocument.getInfo();
-            //managerService.manageDocumentAttachments(searchedGeneralDocument.vsId, searchedGeneralDocument.docClassName, searchedGeneralDocument.docSubject, $event)
-            managerService.manageDocumentAttachments(info.vsId, info.documentClass, info.title, $event)
-                .then(function (attachments) {
-                    searchedGeneralDocument = attachments;
-                })
-                .catch(function (attachments) {
-                    searchedGeneralDocument = attachments;
-                });
+            searchedGeneralDocument.manageDocumentAttachments($event);
         };
 
         /**
@@ -481,13 +473,13 @@ module.exports = function (app) {
 
         /**
          * @description Destinations
-         * @param searchedGeneralDocument
+         * @param correspondence
          * @param $event
          */
-        self.manageDestinations = function (searchedGeneralDocument, $event) {
-            searchedGeneralDocument.manageDocumentCorrespondence($event)
+        self.manageDestinations = function (correspondence, $event) {
+            correspondence.manageDocumentCorrespondence($event)
                 .then(function () {
-                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                    self.reloadSearchedGeneralDocuments(self.grid.page);
                 });
         };
 
@@ -550,7 +542,6 @@ module.exports = function (app) {
                 return true;
             });
         };
-
 
         /**
          * @description send main document fax for searched general document
@@ -660,18 +651,6 @@ module.exports = function (app) {
                             new ResolveDefer(defer);
                         })
                 })
-        };
-
-        /**
-         * @description Destinations
-         * @param correspondence
-         * @param $event
-         */
-        self.manageDestinations = function (correspondence, $event) {
-            correspondence.manageDocumentCorrespondence($event)
-                .then(function () {
-                    self.reloadSearchedGeneralDocuments(self.grid.page);
-                });
         };
 
         self.gridActions = [

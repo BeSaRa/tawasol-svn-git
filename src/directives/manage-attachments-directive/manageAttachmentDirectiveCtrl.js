@@ -11,12 +11,9 @@ module.exports = function (app) {
                                                               LangWatcher,
                                                               attachmentService,
                                                               toast,
-                                                              lookupService,
                                                               langService,
                                                               correspondenceService,
-                                                              errorCode,
-                                                              employeeService,
-                                                              generator) {
+                                                              errorCode) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageAttachmentDirectiveCtrl';
@@ -32,7 +29,7 @@ module.exports = function (app) {
 
         $timeout(function () {
             // all security level
-            self.securityLevel = correspondenceService.getLookup(self.document.docClassName, 'securityLevels');
+            self.securityLevel = correspondenceService.getLookup(self.document.getInfo().documentClass, 'securityLevels');
         });
 
         // to hide buttons when one of the process work.
@@ -65,9 +62,16 @@ module.exports = function (app) {
 
 
         function _createAttachmentFile(file) {
+            var securityLevel = self.document.securityLevel;
+            if (securityLevel.hasOwnProperty('lookupKey')) {
+                securityLevel = securityLevel.lookupKey;
+            }
+            else if (securityLevel.hasOwnProperty('id')) {
+                securityLevel = securityLevel.id;
+            }
             return new Attachment({
                 file: file,
-                securityLevel: self.document ? self.document.securityLevel : null
+                securityLevel: self.document ? securityLevel : null
             });
         }
 
@@ -167,8 +171,8 @@ module.exports = function (app) {
                     var attachments = angular.copy(self.attachments);
                     linkedExportedAttachments = angular.copy(self.linkedExportedAttachments);
                     attachments.splice(self.attachments.indexOf(attachment), 1);
-                    if(attachment.refVSID) {
-                        var index = _.findIndex(linkedExportedAttachments, function(linkedExportedAttachment){
+                    if (attachment.refVSID) {
+                        var index = _.findIndex(linkedExportedAttachments, function (linkedExportedAttachment) {
                             return linkedExportedAttachment.vsId === attachment.vsId;
                         });
                         linkedExportedAttachments.splice(index, 1);
@@ -210,7 +214,8 @@ module.exports = function (app) {
         };
 
         self.openViewDocumentAttachment = function (attachment, $event) {
-            correspondenceService.viewAttachment(attachment, self.documentClass);
+            //correspondenceService.viewAttachment(attachment, self.documentClass);
+            attachmentService.viewAttachment(attachment, self.documentClass);
         };
         /**
          * to upload the files

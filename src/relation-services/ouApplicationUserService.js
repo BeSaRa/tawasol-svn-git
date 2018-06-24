@@ -665,9 +665,10 @@ module.exports = function (app) {
         /**
          * @description get available proxy users for given registry organization.
          * @param registryOuId
+         * @param includeChildOus
          */
-        self.getAvailableProxies = function (registryOuId) {
-            return self.searchByCriteria({regOu: registryOuId}).then(function (result) {
+        self.getAvailableProxies = function (registryOuId, includeChildOus) {
+            return self.searchByCriteria({regOu: registryOuId, includeChildOus: includeChildOus}).then(function (result) {
                 result = _.filter(result, function (ouAppUser) {
                     return !ouAppUser.applicationUser.outOfOffice;
                 });

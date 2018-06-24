@@ -9,7 +9,9 @@ module.exports = function (app) {
                                                              $element,
                                                              globalSettingService,
                                                              BarcodeSetting,
-                                                             lookupService) {
+                                                             lookupService,
+                                                             dialog,
+                                                             cmsTemplate) {
         'ngInject';
         var self = this;
         self.controllerName = 'barcodeSettingsDirectiveCtrl';
@@ -173,11 +175,26 @@ module.exports = function (app) {
             self.selectedRowIndex = angular.element(element).data('rowIndex');
         };
 
-        self.getBarcodeTest = function () {
+        self.getBarcodeTest = function ($event) {
             globalSettingService
                 .testBarcodeSettings(self.globalSetting)
                 .then(function (result) {
-                    console.log(result);
+                    return dialog
+                        .showDialog({
+                            targetEvent: $event,
+                            template: cmsTemplate.getPopup('test-barcode-settings'),
+                            controller: function () {
+                                'ngInject';
+                                this.closeBarcodePopup = function ($event) {
+                                    dialog.hide();
+                                }
+                            },
+                            bindToController: true,
+                            controllerAs: 'ctrl',
+                            locals: {
+                                barcode: result
+                            }
+                        });
                 });
         };
 

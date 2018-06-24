@@ -324,8 +324,7 @@ module.exports = function (app) {
              * @param $event
              */
             self.manageAttachments = function (workItem, $event) {
-                var info = workItem.getInfo();
-                managerService.manageDocumentAttachments(info.vsId, info.documentClass, info.title, $event);
+                workItem.manageDocumentAttachments($event);
             };
 
 
@@ -773,6 +772,16 @@ module.exports = function (app) {
                     icon: 'settings',
                     text: 'grid_action_manage',
                     shortcut: false,
+                    permissionKey: [
+                        "MANAGE_DOCUMENT’S_TAGS",
+                        "MANAGE_DOCUMENT’S_COMMENTS",
+                        "MANAGE_TASKS",
+                        "MANAGE_ATTACHMENTS",
+                        "MANAGE_LINKED_DOCUMENTS",
+                        "",// linked entities permission not available in database
+                        "MANAGE_DESTINATIONS"
+                    ],
+                    checkAnyPermission: true,
                     checkShow: self.checkToShowAction,
                     showInView: false,
                     subMenu: [

@@ -58,6 +58,7 @@ module.exports = function (app) {
             DocumentComment.prototype.commentGlobal = function () {
                 return this.isGlobal;
             };
+
             // DocumentComment.prototype.setPrivacy = function (privacy) {
             //     var properties = ['isGlobal', 'isPrivate'];
             //     var self = this;

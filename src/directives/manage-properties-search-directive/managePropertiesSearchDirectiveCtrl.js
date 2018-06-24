@@ -151,13 +151,23 @@ module.exports = function (app) {
                 self.required.docDateFrom = false;
                 self.required.docDateTo = false;
 
+                /*
                 var docDateFromCopy = self.selectedYear + '-01-01 00:00:00.000';
                 var docDateToCopy = self.docDateToLabel = self.selectedYear + '-12-31 23:59:59.999';
 
                 self.document.docDateFrom = new Date(docDateFromCopy);
                 self.document.docDateTo = new Date(docDateToCopy);
+
                 self.docDateFromLabel = generator.convertDateToString(docDateFromCopy);
                 self.docDateToLabel = generator.convertDateToString(docDateToCopy);
+                */
+
+                self.document.docDateFrom = new Date(self.selectedYear, 0, 1, 0, 0, 0, 0);
+                self.document.docDateTo = new Date(self.selectedYear, 11, 31, 23, 59, 59, 999);
+
+                self.docDateFromLabel = generator.convertDateToString(self.document.docDateFrom);
+                self.docDateToLabel = generator.convertDateToString(self.document.docDateTo);
+
             }
         };
 

@@ -39,7 +39,6 @@ module.exports = function (app) {
         };
         /**
          * @description add new documentComment to service
-         * @param vsId
          * @param documentComment
          * @return {Promise|DocumentComment}
          */

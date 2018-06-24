@@ -98,6 +98,10 @@ Bugs:
 12856: Fix - User inbox : sent items : cannot sort item by type.
 
 12829: Fix - Enhancement - search in correspondence should search by clicking enter as well
+13487 Fix - Buisness - linked entities - there is no validation in some fields when add Employee from any type of document
+13488 Fix - Buisness - linked entities - there is no validation in some fields when add company from any type of document
+13435 Fix - Usability - Enhancement - Add tooltips to alert , annoucement and help icons
+
 
 
 2.0.2
@@ -128,3 +132,22 @@ Bugs:
 ------------------------------
 13545: Fix - Get link appears from the step processor while get link permission is disabled from System Administration. Also added permission for send link to document by email, SEND_COMPOSITE_DOCUMENT_BY_EMAIL
 13542: Fix - broadcast permission - from general search, for incoming document broadcast action should not appear when user has no permission
+
+24-06-2018
+------------------------------
+13409: Fix - IE Compatibility: When Scroll inbox down, Pagination is overlapped with Documents.
+13438: Fix - Comment is edited successfully When disable private and Global toggles and no user/OU is included
+13544: Fix - Partial export doesn't appear when user has permission.
+13550: Fix - export by selection - cannot open document exported with selection items
+13535: Fix - Edit word- crash is occurred in the backend when save after editing any electronic document's content from any queue after saving the document
+13463: Fix - Admin- Global Settings - Can't Generate barcode
+13457: Fix - There is no title for Subscribe Screen.
+13459: Fix - inbox filter : ( Action , type , Sender ) tabs didn't have title name
+13461: Fix - inbox filter : there are tab and toggle didn't have title
+13547: Fix - export by selection - the linked entities with type < external user and employee> its name is not displayed in the list
+13549: Fix - IE Compatibility : When Search by Year, there is no default dates are added and invalid dates appear.
+13491: Fix - User Inbox - Reload icon doesn't work
+13502: Fix - There is no validation when search by linked entities.
+13157: Fix - Buisness - linked entities - there is no validation in some fields when add external user from any type of document
+13448: Fix - Name of Related Object Linked to Document doesn't appear while Export/partial Export.
+13456: Fix - inbox filter : there is no Has due date, due date from and due date to filter option.

@@ -34,6 +34,10 @@ module.exports = function (app) {
             delete model.subEnSiteText;
             delete model.followupStatusResult;
             delete model.siteTypeResult;
+
+            delete model.mainSite;
+            delete model.subSite;
+
             return model;
         });
 
