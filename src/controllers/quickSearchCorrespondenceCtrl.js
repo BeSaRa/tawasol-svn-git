@@ -464,7 +464,6 @@ module.exports = function (app) {
                      return self.checkToShowAction(action, model) && model.docStatus < 24 && info.isPaper && info.documentClass === "outgoing";
                  }
              },*/
-            //Open
             // Launch Distribution Workflow
             {
                 type: 'action',
@@ -474,8 +473,13 @@ module.exports = function (app) {
                 callback: self.launchDistributionWorkflow,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model)
+                        && (info.isPaper || (!info.isPaper && info.docStatus >= 24));
+                }
             },
+            // Open
             {
                 type: 'action',
                 icon: 'book-open-variant',
@@ -526,7 +530,6 @@ module.exports = function (app) {
                 callback: self.viewTrackingSheet,
                 params: ['view_tracking_sheet', 'tabs']
             },
-
             // Print Barcode
             {
                 type: 'action',

@@ -154,4 +154,7 @@ Bugs:
 
 25-06-2018
 ---------------------------------
-13439: Fix -    User can't remove multiple Comments.
+13439: Fix - User can't remove multiple Comments.
+13402: Fix - compatability - firefox - the new magazine view is not opened properly on firefox
+13540: Fix - regression - Launch from search, user should not be able to launch an electronic approved document that already has an active WF
+13600: Fix - UI - change the filter icon and tooltip

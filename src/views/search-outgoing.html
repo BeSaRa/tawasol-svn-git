@@ -9,7 +9,7 @@
         </div>
 
         <ng-form class="white-bg" name="searchOutgoingForm" id="searchOutgoingForm" flex layout="column"
-              autocomplete="off" enter-submit-directive="btn_SearchOutgoing">
+                 autocomplete="off" enter-submit-directive="btn_SearchOutgoing">
             <md-tabs class="content white-bg" md-selected="ctrl.selectedTab">
                 <!-- EDIT/NEW SEARCH TAB -->
                 <md-tab label="{{lang.search}}" md-on-select="ctrl.setCurrentTab('search')">
@@ -24,12 +24,12 @@
                                     </div>
                                 </accordion-title>
                                 <accordion-content>
-                                        <manage-properties-search-directive
-                                                source-form="searchOutgoingForm"
-                                                registry-organizations="ctrl.registryOrganizations"
-                                                document="ctrl.searchOutgoing"
-                                                search-type="basic"
-                                        ></manage-properties-search-directive>
+                                    <manage-properties-search-directive
+                                            source-form="searchOutgoingForm"
+                                            registry-organizations="ctrl.registryOrganizations"
+                                            document="ctrl.searchOutgoing"
+                                            search-type="basic"
+                                    ></manage-properties-search-directive>
                                 </accordion-content>
                             </accordion-item>
 
@@ -51,8 +51,9 @@
                                 </accordion-content>
                             </accordion-item>
                         </accordion-directive>
-                        <div layout="row"  ng-if="ctrl.selectedTab===0" layout-align="start center">
-                            <md-button ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}" class="md-raised" ng-disabled="searchOutgoingForm.$invalid"
+                        <div layout="row" ng-if="ctrl.selectedTab===0" layout-align="start center">
+                            <md-button ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}"
+                                       class="md-raised" ng-disabled="searchOutgoingForm.$invalid"
                                        id="btn_SearchOutgoing"
                                        ng-click="ctrl.search()">{{lang.search}}
                             </md-button>
@@ -81,18 +82,6 @@
                                         <div layout="row" layout-align="start center">
                                             <span>{{ctrl.selectedSearchedOutgoingDocuments.length}} {{lang.items_selected}} </span>
                                             <span flex></span>
-                                            <!--<md-button class="md-icon-button" ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
-                                                       ng-if="ctrl.selectedSearchedOutgoingDocuments.length > 1"
-                                                       tooltip="{{lang.grid_action_launch_distribution_workflow}}"
-                                                       ng-click="ctrl.launchDistributionWorkflowBulk($event)">
-                                                <md-icon md-svg-icon="sitemap"></md-icon>
-                                            </md-button>
-                                            <md-button class="md-icon-button"
-                                                       tooltip="{{lang.grid_action_archive}}"
-                                                       ng-if="ctrl.selectedSearchedOutgoingDocuments.length > 1"
-                                                       ng-click="ctrl.archiveOutgoingBulk($event)">
-                                                <md-icon md-svg-icon="stop"></md-icon>
-                                            </md-button>-->
                                             <!-- Add to Favorite -->
                                             <md-button class="md-icon-button" class="action-green"
                                                        tooltip="{{lang.grid_action_add_to_favorite}}"
@@ -196,7 +185,8 @@
                                     <td md-cell>{{searchedOutgoingDocument.creatorInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{searchedOutgoingDocument.createdOn}}</td>
                                     <td md-cell class="td-data">
-                                        <main-site-sub-site-directive item="searchedOutgoingDocument"></main-site-sub-site-directive>
+                                        <main-site-sub-site-directive
+                                                item="searchedOutgoingDocument"></main-site-sub-site-directive>
                                     </td>
                                     <td md-cell ng-if="ctrl.selectedSearchedOutgoingDocuments.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedSearchedOutgoingDocuments.length

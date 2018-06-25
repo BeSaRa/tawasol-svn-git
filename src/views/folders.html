@@ -14,7 +14,7 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
-            <div layout-align="start center" layout="row">
+            <div ng-if="ctrl.selectedFolder" layout-align="start center" layout="row">
                 <span>{{ctrl.selectedFolder.getTranslatedName()}}</span>
                 <md-button class="md-icon-button">
                     <md-icon md-svg-icon="folder"></md-icon>
