@@ -151,3 +151,7 @@ Bugs:
 13157: Fix - Buisness - linked entities - there is no validation in some fields when add external user from any type of document
 13448: Fix - Name of Related Object Linked to Document doesn't appear while Export/partial Export.
 13456: Fix - inbox filter : there is no Has due date, due date from and due date to filter option.
+
+25-06-2018
+---------------------------------
+13439: Fix -    User can't remove multiple Comments.

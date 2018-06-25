@@ -162,14 +162,14 @@ module.exports = function (app) {
 
             titleTemplate.append(content);
             return self.errorMessage(titleTemplate.html());
-        }
+        };
 
 
         /**
          * show a prompt dialog
-         * @param event
+         * @param ev
+         * @param title
          * @param text
-         * @param event
          * @param placeHolder
          * @return user input
          */

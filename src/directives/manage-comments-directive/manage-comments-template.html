@@ -299,7 +299,7 @@
             <md-table-container>
                 <div flex scroll-directive>
                     <table md-table md-row-select
-                           multiple="ctrl.employeeService.hasPermissionTo('DELETE_ALL_DOCUMENT_COMMENTS') == true"
+                           multiple="{{ctrl.employeeService.hasPermissionTo('DELETE_ALL_DOCUMENT_COMMENTS')}}"
                            ng-model="ctrl.selectedDocumentComments"
                            md-progress="ctrl.progress">
                         <thead md-head md-order="ctrl.grid.order">

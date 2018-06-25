@@ -376,10 +376,13 @@ module.exports = function (app) {
                     return;
                 }
                 else {
-                    _.map(sitesWithoutNeedReply, function (site) {
-                        self.addSiteTo(site);
-                    });
-                    _resetSelectedData(isDistributionListRecord);
+                    dialog.confirmMessage(langService.get('sites_with_need_reply_missing_date_confirm_skip'))
+                        .then(function () {
+                            _.map(sitesWithoutNeedReply, function (site) {
+                                self.addSiteTo(site);
+                            });
+                            _resetSelectedData(isDistributionListRecord);
+                        });
                 }
             }
             else {
@@ -548,8 +551,8 @@ module.exports = function (app) {
          * @description set all followupDate for all subSearchResult.
          */
         self.onFollowupDateChange = function () {
-            var sitesToSetFollowupDate = _.filter(self.subSearchSelected, function(site){
-               return self.needReply(site.followupStatus);
+            var sitesToSetFollowupDate = _.filter(self.subSearchSelected, function (site) {
+                return self.needReply(site.followupStatus);
             });
             _setSitesProperty(sitesToSetFollowupDate, 'followupDate', self.followUpStatusDate);
         };
@@ -565,7 +568,7 @@ module.exports = function (app) {
          * @description set all followupDate for all subSearchResult.
          */
         self.onFollowupDateChange_DL = function () {
-            var sitesToSetFollowupDate = _.filter(self.subSearchSelected_DL, function(site){
+            var sitesToSetFollowupDate = _.filter(self.subSearchSelected_DL, function (site) {
                 return self.needReply(site.followupStatus);
             });
             _setSitesProperty(sitesToSetFollowupDate, 'followupDate', self.followUpStatusDate_DL);
