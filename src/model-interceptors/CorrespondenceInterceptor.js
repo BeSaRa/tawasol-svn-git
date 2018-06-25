@@ -146,6 +146,8 @@ module.exports = function (app) {
             delete model.subSiteInfo;
             delete model.mainSiteInfo;
 
+            delete model.sitesToList;
+
             return model;
         });
 
