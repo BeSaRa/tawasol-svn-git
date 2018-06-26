@@ -50,10 +50,13 @@ module.exports = function (app) {
                 },
                 key_12: {
                     value: null
+                },
+                key_13: {
+                    value: null
                 }
             };
             // this is available keys for the current ui model
-            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

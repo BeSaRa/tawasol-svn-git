@@ -361,11 +361,11 @@
                         && ctrl.document.docClassName.toLowerCase() !== 'general'
                         && ctrl.document.docClassName.toLowerCase() !== 'correspondence'">
                 <manage-correspondence-sites-search-directive flex
-                        selected-site-type="ctrl.document.siteType"
-                        document-class="ctrl.document.docClassName"
-                        sites-info-to="ctrl.document.sitesInfoTo"
-                        sites-info-c-c="ctrl.document.sitesInfoCC"
-                        sites-info-incoming="ctrl.document.sitesInfoIncoming">
+                                                              selected-site-type="ctrl.document.siteType"
+                                                              document-class="ctrl.document.docClassName"
+                                                              sites-info-to="ctrl.document.sitesInfoTo"
+                                                              sites-info-c-c="ctrl.document.sitesInfoCC"
+                                                              sites-info-incoming="ctrl.document.sitesInfoIncoming">
                 </manage-correspondence-sites-search-directive>
             </div>
 
@@ -446,6 +446,9 @@
                                    ng-model="ctrl.document.approveDateFrom"
                                    md-max-date="ctrl.document.approveDateTo"
                     ></md-datepicker>
+                    <div ng-messages="docSearchForm.approverFrom.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
                 </md-input-container>
                 <!-- Approver Date To -->
                 <md-input-container ng-if="ctrl.document.approvers">
@@ -455,25 +458,42 @@
                                    ng-model="ctrl.document.approveDateTo"
                                    md-min-date="ctrl.document.approveDateFrom"
                     ></md-datepicker>
+                    <div ng-messages="docSearchForm.approverTo.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
                 </md-input-container>
             </div>
 
-            <!--<div layout="row">
-                &lt;!&ndash; Serial Number From &ndash;&gt;
+            <div layout="row">
+                <!-- Serial Number From -->
                 <md-input-container>
                     <label>{{lang.search_module_serial_from}}</label>
-                    <input id="serialNoFrom" name="serialNoFrom"
-                                   ng-required="ctrl.document.serialNoTo"
-                                   ng-model="ctrl.document.serialNoFrom">
+                    <input id="serialNoFrom" name="serialNoFrom" ng-required="ctrl.serialNoTo"
+                           min="1" max="ctrl.getMinMaxSerialNumberValues('from', 'max').value"
+                           ng-change="ctrl.setSerialNumber($event)"
+                           custom-validate-directive="number"
+                           min-max-number-directive ng-model="ctrl.serialNoFrom">
+                    <div ng-messages="docSearchForm.serialNoFrom.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                        <div ng-message="number">{{lang.number_only}}</div>
+                        <div ng-message="min">{{lang.min_number.change({number: ctrl.getMinMaxSerialNumberValues('from', 'min').errorValue})}}</div>
+                        <div ng-message="max">{{lang.max_number.change({number: ctrl.getMinMaxSerialNumberValues('from', 'max').errorValue})}}</div>
+                    </div>
                 </md-input-container>
-                &lt;!&ndash; Serial Number To &ndash;&gt;
+                <!-- Serial Number To -->
                 <md-input-container>
                     <label>{{lang.search_module_serial_to}}</label>
-                    <input id="serialNoTo" name="serialNoTo"
-                                   ng-required="ctrl.document.serialNoFrom"
-                                   ng-model="ctrl.document.serialNoTo">
+                    <input id="serialNoTo" name="serialNoTo" ng-required="ctrl.serialNoFrom"
+                           ng-change="ctrl.setSerialNumber($event)"
+                           custom-validate-directive="number" min="ctrl.getMinMaxSerialNumberValues('to', 'min').value"
+                           min-max-number-directive ng-model="ctrl.serialNoTo">
+                    <div ng-messages="docSearchForm.serialNoTo.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                        <div ng-message="number">{{lang.number_only}}</div>
+                        <div ng-message="min">{{lang.min_number.change({number: ctrl.getMinMaxSerialNumberValues('to', 'min').errorValue})}}</div>
+                    </div>
                 </md-input-container>
-            </div>-->
+            </div>
         </div>
     </form>
 </fieldset>

@@ -517,6 +517,7 @@
                 <div flex layout="column">
                     <md-card ng-if="ctrl.subSearchResult.length" md-whiteframe="3" layout="column"
                              class="card-overlay">
+                        <!-- Search results toolbar -->
                         <md-toolbar class="md-table-toolbar md-default"
                                     ng-class="{'selected':ctrl.subSearchSelected.length}">
                             <div class="md-toolbar-tools">
@@ -619,6 +620,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="site"
+                                        md-on-select="ctrl.resetSearchStatusAndDate"
                                         ng-repeat="site in ctrl.subSearchResult  | filter:ctrl.searchModel | limitTo: ctrl.grid.subSearchResult.limit: ((ctrl.grid.subSearchResult.page - 1) * ctrl.grid.subSearchResult.limit) |orderBy:ctrl.grid.subSearchResult.order  track by $index">
                                         <td md-cell>
                                             <div flex layout="column">
@@ -785,6 +787,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
+                                        md-on-select="ctrl.resetToStatusAndDate"
                                         ng-repeat="site in ctrl.sitesInfoTo  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoTo.limit: ((ctrl.grid.sitesInfoTo.page - 1) * ctrl.grid.sitesInfoTo.limit) |orderBy:ctrl.grid.sitesInfoTo.order  track by $index">
                                         <td md-cell>
                                             <div flex layout="column">
@@ -916,6 +919,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
+                                        md-on-select="ctrl.resetCCStatusAndDate"
                                         ng-repeat="site in ctrl.sitesInfoCC  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoCC.limit: ((ctrl.grid.sitesInfoCC.page - 1) * ctrl.grid.sitesInfoCC.limit) |orderBy:ctrl.grid.sitesInfoCC.order  track by $index">
                                         <td md-cell>
                                             <div flex layout="column">
@@ -993,6 +997,7 @@
                 <div flex layout="column">
                     <md-card ng-if="ctrl.subSearchResult_DL.length" md-whiteframe="3" layout="column"
                              class="card-overlay">
+                        <!-- Search results toolbar -->
                         <md-toolbar class="md-table-toolbar md-default"
                                     ng-class="{'selected':ctrl.subSearchSelected_DL.length}">
                             <div class="md-toolbar-tools">
@@ -1096,6 +1101,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="site"
+                                        md-on-select="ctrl.resetSearchStatusAndDate_DL"
                                         ng-repeat="site in ctrl.subSearchResult_DL  | filter:ctrl.searchModel_DL | limitTo: ctrl.grid.subSearchResult_DL.limit: ((ctrl.grid.subSearchResult_DL.page - 1) * ctrl.grid.subSearchResult_DL.limit) |orderBy:ctrl.grid.subSearchResult_DL.order  track by $index">
                                         <td md-cell>
                                             <div flex layout="column">
@@ -1264,6 +1270,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
+                                        md-on-select="ctrl.resetToStatusAndDate"
                                         ng-repeat="site in ctrl.sitesInfoTo  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoTo.limit: ((ctrl.grid.sitesInfoTo.page - 1) * ctrl.grid.sitesInfoTo.limit) |orderBy:ctrl.grid.sitesInfoTo.order  track by $index">
                                         <td md-cell>
                                             <div flex layout="column">
@@ -1393,6 +1400,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
+                                        md-on-select="ctrl.resetCCStatusAndDate"
                                         ng-repeat="site in ctrl.sitesInfoCC  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoCC.limit: ((ctrl.grid.sitesInfoCC.page - 1) * ctrl.grid.sitesInfoCC.limit) |orderBy:ctrl.grid.sitesInfoCC.order  track by $index">
                                         <td md-cell>
                                             <div flex layout="column">
@@ -1448,6 +1456,7 @@
     </md-tab>
 </md-tabs>
 
+<!-- Added original and copy sites if manage destination is not allowed -->
 <div class="p20" layout="column" ng-if="ctrl.disableCorrespondence">
     <!-- Added Original sites after searching / from database -->
     <div flex layout="column">

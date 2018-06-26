@@ -158,3 +158,9 @@ Bugs:
 13402: Fix - compatability - firefox - the new magazine view is not opened properly on firefox
 13540: Fix - regression - Launch from search, user should not be able to launch an electronic approved document that already has an active WF
 13600: Fix - UI - change the filter icon and tooltip
+
+26-06-2018
+-----------------------------------
+13470: Fix - Follow up date - can't set the same date for more than one correspondence site in The Selected Distribution List
+13499: Fix - The Correspondence sites appear on advanced search are the same with that appear on the pop-up.	3 - Medium	Active	Navjot Singh	1
+
