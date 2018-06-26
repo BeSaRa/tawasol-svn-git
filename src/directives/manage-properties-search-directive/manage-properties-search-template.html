@@ -442,7 +442,7 @@
                 <md-input-container ng-if="ctrl.document.approvers">
                     <label>{{lang.search_module_start_date}}</label>
                     <md-datepicker id="approverFrom" name="approverFrom" md-open-on-focus
-                                   ng-required="ctrl.document.approveDateTo" md-open-on-focus
+                                   ng-required="ctrl.document.approveDateTo"
                                    ng-model="ctrl.document.approveDateFrom"
                                    md-max-date="ctrl.document.approveDateTo"
                     ></md-datepicker>
@@ -451,12 +451,29 @@
                 <md-input-container ng-if="ctrl.document.approvers">
                     <label>{{lang.search_module_end_date}}</label>
                     <md-datepicker id="approverTo" name="approverTo" md-open-on-focus
-                                   ng-required="ctrl.document.approveDateFrom" md-open-on-focus
+                                   ng-required="ctrl.document.approveDateFrom"
                                    ng-model="ctrl.document.approveDateTo"
                                    md-min-date="ctrl.document.approveDateFrom"
                     ></md-datepicker>
                 </md-input-container>
             </div>
+
+            <!--<div layout="row">
+                &lt;!&ndash; Serial Number From &ndash;&gt;
+                <md-input-container>
+                    <label>{{lang.search_module_serial_from}}</label>
+                    <input id="serialNoFrom" name="serialNoFrom"
+                                   ng-required="ctrl.document.serialNoTo"
+                                   ng-model="ctrl.document.serialNoFrom">
+                </md-input-container>
+                &lt;!&ndash; Serial Number To &ndash;&gt;
+                <md-input-container>
+                    <label>{{lang.search_module_serial_to}}</label>
+                    <input id="serialNoTo" name="serialNoTo"
+                                   ng-required="ctrl.document.serialNoFrom"
+                                   ng-model="ctrl.document.serialNoTo">
+                </md-input-container>
+            </div>-->
         </div>
     </form>
 </fieldset>

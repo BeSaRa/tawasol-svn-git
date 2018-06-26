@@ -578,7 +578,7 @@ module.exports = function (app) {
                         ? mainSite.getTranslatedName() + (subSite.getTranslatedName() ? (' - ' + subSite.getTranslatedName()) : '')
                         : "";
                 }*/
-                if(self.siteInfo) {
+                if(this.siteInfo) {
                     mainSite = new Information(this.siteInfo.mainSite);
                     subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : new Information();
                     return this.siteInfo
