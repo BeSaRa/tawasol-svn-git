@@ -4,8 +4,9 @@
         <!-- page-header start -->
         <div layout="row" layout-align="start center" class="page-header padding-header small">
             <div>
-                <md-button class="md-icon-button" ng-click="ctrl.toggleSidebarFolder()">
-                    <md-icon md-svg-icon="file-tree"></md-icon>
+                <md-button layout="row" class="md-icon-button list-button" ng-click="ctrl.toggleSidebarFolder()">
+                    <md-icon md-svg-icon="file-tree" id="list-icon"></md-icon>
+                    <span class="list-counter">{{ctrl.inboxFolders.length}}</span>
                 </md-button>
             </div>
             <span>{{lang.menu_item_folders}}</span>
@@ -14,7 +15,7 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
-            <div ng-if="ctrl.selectedFolder" layout-align="start center" layout="row">
+            <div layout-align="start center" layout="row" ng-if="ctrl.selectedFolder">
                 <span>{{ctrl.selectedFolder.getTranslatedName()}}</span>
                 <md-button class="md-icon-button">
                     <md-icon md-svg-icon="folder"></md-icon>

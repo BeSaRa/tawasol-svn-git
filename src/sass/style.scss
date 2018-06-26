@@ -1877,3 +1877,26 @@ table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child
 
   background-color: #EEE;
 }
+
+button.list-button {
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 35%;
+
+  #list-icon {
+    margin: 0;
+    position: relative;
+  }
+
+  .list-counter {
+    position: absolute;
+    top: 2px;
+    left: 20px;
+    font-size: 10px;
+    line-height: 10px;
+    background-color: #F44336;
+    padding: 3px 4px;
+    border-radius: 10px;
+  }
+}
+
