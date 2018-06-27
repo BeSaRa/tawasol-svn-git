@@ -90,6 +90,17 @@ module.exports = function (app) {
                 .controllerMethod
                 .manageUserPreference(null, 'general', $event)
         };
+
+        /**
+         * @description Opens the popup for manage Subscriptions
+         * @param $event
+         */
+        self.manageSubscriptions = function ($event) {
+            applicationUserService
+                .controllerMethod
+                .manageSubscriptions($event)
+        };
+
         /**
          * @description switch organization
          * @param organization
