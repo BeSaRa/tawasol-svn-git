@@ -8,8 +8,9 @@
             <md-icon md-svg-icon="close" class="action-green"></md-icon>
         </md-button>
     </div>
+
     <login-subscriptions-directive ng-if="showUserSubscriptionsCtrl.userSubscriptions.length>0"
-                                  announcements="showUserSubscriptionsCtrl.userSubscriptions">
+                                   userSubscriptions="showUserSubscriptionsCtrl.userSubscriptions">
     </login-subscriptions-directive>
 
     <div scroll-directive class="notify-list-wrapper">
@@ -18,14 +19,11 @@
                 <div class="task-body" flex layout="column">
                     <div class="task-header" layout="row">
                         <a href="" md-truncate flex
-                           class="notification-subject" ng-click="showUserSubscriptionsCtrl.viewDocument(item,$event)">{{item.docSubject}}</a>
+                           class="notification-subject"  ng-click="showUserSubscriptionsCtrl.viewDocument(item,$event)">{{item.docSubject}}</a>
                     </div>
                     <div layout="column">
-                        <div class="tasks-date-text">{{ showUserSubscriptionsCtrl.getDateFromUnixTimeStamp(item.updatedOn) }}
-                            <md-icon class="tasks-date-icon" md-svg-icon="update"></md-icon>
-                        </div>
-                        <div class="notification-subject">{{ showUserSubscriptionsCtrl.getSubscriptionEventType(item.trigerId) }}
-                        </div>
+                        <div class="notification-subject" >{{ showUserSubscriptionsCtrl.getSubscriptionEventType(item.triggerId) }}</div>
+                        <div class="notification-subject" >{{ item.docFullSerial}}</div>
                     </div>
                 </div>
             </li>
