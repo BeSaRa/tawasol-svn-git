@@ -112,7 +112,7 @@
                                     <md-input-container flex>
                                         <label for="action">{{lang.user_inbox_filter_received_date}}</label>
                                         <md-select ng-model="ctrl.filter.selectedReceivedDateFilterType"
-                                                   ng-change="ctrl.changeReceivedDateType($event)">
+                                                   ng-change="ctrl.resetReceivedDateType($event)">
                                             <md-option ng-value="action.optionValue"
                                                        ng-repeat="action in ctrl.receivedDateFilterTypes">
                                                 {{lang[action.optionLangKey]}}
@@ -192,19 +192,18 @@
                                         </md-input-container>
                                     </div>
                                 </fieldset>
-
                                 <div layout="row">
+                                    <!-- Serial -->
+                                    <md-input-container flex>
+                                        <label for="docSerial">{{lang.user_inbox_filter_full_serial}}</label>
+                                        <input id="docSerial" name="docSerial" ng-model="ctrl.filter.ui.key_13.value">
+                                    </md-input-container>
                                     <!-- Due Date -->
                                     <md-switch ng-model="ctrl.filter.ui.key_8.value"
                                                aria-label="{{lang.status}}">
                                         <label>{{lang.user_inbox_filter_due_date_exists}} :
                                             {{ctrl.filter.getTranslatedDueDate($event)}}</label>
                                     </md-switch>
-                                    <!-- Serial -->
-                                    <md-input-container flex>
-                                        <label for="docSerial">{{lang.user_inbox_filter_full_serial}}</label>
-                                        <input id="docSerial" name="docSerial" ng-model="ctrl.filter.ui.key_13.value">
-                                    </md-input-container>
                                 </div>
                             </div>
                         </md-content>

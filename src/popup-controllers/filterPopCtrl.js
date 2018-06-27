@@ -54,19 +54,29 @@ module.exports = function (app) {
         ];
 
 
-        self.changeReceivedDateType = function ($event) {
+        /**
+         * @description Resets the received dates on changing the received date type
+         * @param $event
+         */
+        self.resetReceivedDateType = function ($event) {
             self.filter.ui['key_4'].value = null;
             self.filter.ui['key_6'].value = null;
             self.filter.ui['key_11'].value1 = null;
             self.filter.ui['key_11'].value2 = null;
         };
 
+        /**
+         * @description Gets the maximum start date
+         */
         self.getMaxReceivedStartDate = function () {
             var endDate = new Date(self.filter.ui.key_11.value2);
             self.calculatedMaxReceivedStartDate = endDate ? new Date(endDate.setDate(endDate.getDate() - 1)) : null;
         };
         self.calculatedMaxReceivedStartDate = self.filter.ui.key_11.value1 ? self.filter.ui.key_11.value1 : self.getMaxReceivedStartDate();
 
+        /**
+         * @description Gets the minimum end date
+         */
         self.getMinReceivedEndDate = function () {
             var startDate = new Date(self.filter.ui.key_11.value1);
             self.calculatedMinReceivedEndDate = startDate ? new Date(startDate.setDate(startDate.getDate() + 1)) : null;
@@ -86,8 +96,11 @@ module.exports = function (app) {
         self.calculatedMinDueEndDate = self.filter.ui.key_10.value2 ? self.filter.ui.key_10.value2 : self.getMinDueEndDate();
 
 
-
-
+        /**
+         * @description Check the save button whether it will be enabled/disabled
+         * @param form
+         * @returns {boolean|*}
+         */
         self.checkDisabled = function (form) {
             var hasCriteria = false, record, typeOfRecord = 'undefined', recordValue;
             for (var key in self.filter.ui) {
@@ -117,12 +130,21 @@ module.exports = function (app) {
             return form.$invalid || !hasCriteria;
         };
 
+        /**
+         * @description Reset the filter form
+         * @param form
+         * @param $event
+         */
         self.resetFilterForm = function (form, $event) {
             self.filter = angular.copy(self.model);
             self.filter.ui['key_8'].value = (self.filter.ui['key_8'].value === '-2000000000000L');
             form.$setUntouched();
         };
 
+        /**
+         * @description Close the filter popup
+         * @param $event
+         */
         self.closeFilterForm = function ($event) {
             dialog.cancel();
         };

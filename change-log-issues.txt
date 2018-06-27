@@ -164,3 +164,7 @@ Bugs:
 13470: Fix - Follow up date - can't set the same date for more than one correspondence site in The Selected Distribution List
 13499: Fix - The Correspondence sites appear on advanced search are the same with that appear on the pop-up.	3 - Medium	Active	Navjot Singh	1
 
+27-06-2018
+-----------------------------------
+13591: Fix - Regression - hide the document security schema for NON REG OUs
+
