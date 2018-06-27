@@ -10,7 +10,8 @@ module.exports = function (app) {
                                                     langService,
                                                     toast,
                                                     cmsTemplate,
-                                                    employeeService) {
+                                                    employeeService,
+                                                    userSubscriptionService) {
         'ngInject';
         var self = this;
         self.serviceName = 'applicationUserService';
@@ -437,6 +438,35 @@ module.exports = function (app) {
                                     })
                             }
 
+                        }
+                    });
+            },
+
+            /**
+             * @description Opens dialog to manage user Subscriptions
+             * @param $event
+             * @returns {promise}
+             */
+            manageSubscriptions: function ($event) {
+                return dialog
+                    .showDialog({
+                        targetEvent: $event,
+                        template: cmsTemplate.getPopup('manage-subscriptions'),
+                        controller: 'manageSubscriptionsPopCtrl',
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        targetEvent: $event,
+                        resolve: {
+                            documentSubscriptions: function (lookupService) {
+                                'ngInject';
+                                return lookupService.returnLookups(lookupService.documentSubscription);
+
+                            },
+                            userSubscriptions: function (userSubscriptionService) {
+                                'ngInject';
+                                return userSubscriptionService.loadUserSubscriptionsByUserId(employeeService.getEmployee().id);
+
+                            }
                         }
                     });
             }
