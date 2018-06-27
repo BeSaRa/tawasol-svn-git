@@ -23,6 +23,14 @@
                     </div>
                 </md-button>
             </md-menu-item>
+            <md-menu-item ng-if="!userMenu.employeeService.isAdminUser() && userMenu.employeeService.hasPermissionTo('MANAGE_PREFERENCES')">
+                <md-button ng-click="userMenu.manageSubscriptions($event)">
+                    <div layout="row" layout-align="start center">
+                        <md-icon md-svg-icon="bell-plus"></md-icon>
+                        <span>{{lang.manage_subscriptions}}</span>
+                    </div>
+                </md-button>
+            </md-menu-item>
             <!--<md-menu-item>
                 <md-button ng-click="userMenu.moveToFolders($event)">
                     <div layout="row" layout-align="start center">
