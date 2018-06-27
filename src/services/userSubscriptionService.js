@@ -6,34 +6,37 @@ module.exports = function (app) {
                                                         UserSubscription,
                                                         lookupService,
                                                         dialog,
-                                                        cmsTemplate ) {
+                                                        cmsTemplate,
+                                                        langService,
+                                                        toast) {
         'ngInject';
         var self = this;
         self.serviceName = 'userSubscriptionService';
-
         self.userSubscriptions = [];
-        self.userSubscriptionsToShow = [];
+        self.userSubscriptionsByUserId = [];
         self.count = 0;
 
         /**
          * @description Load the user Subscriptions from server.
          * @returns {Promise|userSubscriptions}
          */
-        self.loadUserSubscriptions = function (userid) {
-            return $http.get(urlService.userSubscriptions+ '/user-id/' + userid).then(function (result) {
-                self.userSubscriptions = generator.generateCollection(result.data.rs, UserSubscription, self._sharedMethods);
-                self.userSubscriptions = generator.interceptReceivedCollection('UserSubscription', self.userSubscriptions);
-                self.count = self.userSubscriptions.length;
-                return self.userSubscriptions;
-            });
+        self.loadUserSubscriptions = function () {
+            $http.get(urlService.notifications.change({count: 10}), {
+                    excludeLoading: true
+                })
+                .then(function (result) {
+                    self.userSubscriptions = result.data.rs.second;
+                    self.count = self.userSubscriptions.length;
+                    return self.userSubscriptions;
+                });
         };
 
         /**
          * @description Get User Subscriptions from self.userSubscriptions if found and if not load it from server again.
          * @returns {Promise|userSubscriptions}
          */
-        self.getUserSubscriptions = function (userid) {
-            return self.userSubscriptions.length ? $q.when(self.userSubscriptions) : self.loadUserSubscriptions(userid);
+        self.getUserSubscriptions = function () {
+            return self.userSubscriptions.length ? $q.when(self.userSubscriptions) : self.loadUserSubscriptions();
         };
 
 
@@ -69,10 +72,169 @@ module.exports = function (app) {
                     resolve: {
                         eventTypes: function (lookupService) {
                             'ngInject';
-                            return lookupService.returnLookups(lookupService.eventType);
+                            return lookupService.returnLookups(lookupService.documentSubscription);
 
                         }
                     }
+                });
+        };
+
+        /**
+         * @description Load the user Subscriptions by userid from server.
+         * @returns {Promise|userSubscriptions}
+         */
+        self.loadUserSubscriptionsByUserId = function (userid) {
+            return $http.get(urlService.userSubscriptions+ '/user-id/' + userid).then(function (result) {
+                self.userSubscriptionsByUserId = generator.generateCollection(result.data.rs, UserSubscription, self._sharedMethods);
+                self.userSubscriptionsByUserId = generator.interceptReceivedCollection('UserSubscription', self.userSubscriptionsByUserId);
+                return self.userSubscriptionsByUserId;
+            });
+        };
+
+        /**
+         * @description Get User Subscriptions from self.userSubscriptions if found and if not load it from server again.
+         * @returns {Promise|userSubscriptions}
+         */
+        self.getUserSubscriptionsByUserId = function (userid) {
+            return self.userSubscriptionsByUserId.length ? $q.when(self.userSubscriptionsByUserId) : self.loadUserSubscriptionsByUserId(userid);
+        };
+
+
+    /**
+    * @description Contains methods for CRUD operations for user Subscriptions
+        */
+        self.controllerMethod = {
+            /**
+             * @description Show confirm box and delete user Subscription
+             * @param userSubscription
+             * @param $event
+             */
+            userSubscriptionDelete: function (userSubscription, $event) {
+                return dialog.confirmMessage(langService.get('confirm_delete').change({name: userSubscription.docSubject}), null, null, $event)
+                    .then(function () {
+                        return self.deleteUserSubscription(userSubscription).then(function () {
+                            toast.success(langService.get("delete_specific_success").change({name: userSubscription.docSubject}));
+                            return true;
+                        })
+                    });
+            },
+            /**
+             * @description Show confirm box and delete bulk user Subscriptions
+             * @param userSubscriptions
+             * @param $event
+             */
+            userSubscriptionDeleteBulk: function (userSubscriptions, $event) {
+                return dialog
+                    .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event || null)
+                    .then(function () {
+                        return self.deleteBulkUserSubscriptions(userSubscriptions)
+                            .then(function (result) {
+                                var response = false;
+                                if (result.length === userSubscriptions.length) {
+                                    toast.error(langService.get("failed_delete_selected"));
+                                    response = false;
+                                } else if (result.length) {
+                                    generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (userSubscription) {
+                                        return userSubscription.docSubject;
+                                    }));
+                                    response = true;
+                                } else {
+                                    toast.success(langService.get("delete_success"));
+                                    response = true;
+                                }
+                                return response;
+                            });
+                    });
+            }
+        }
+
+        /**
+         * @description Delete given user Subscription.
+         * @param userSubscription
+         * @return {Promise|null}
+         */
+        self.deleteUserSubscription = function (userSubscription) {
+            var id = userSubscription.hasOwnProperty('id') ? userSubscription.id : userSubscription;
+            return $http.delete((urlService.userSubscriptions + '/' + id)).then(function (result) {
+                return result;
+            });
+        };
+
+        /**
+         * @description Delete bulk user Subscriptions.
+         * @param userSubscriptions
+         * @return {Promise|null}
+         */
+        self.deleteBulkUserSubscriptions = function (userSubscriptions) {
+            var bulkIds = userSubscriptions[0].hasOwnProperty('id') ? _.map(userSubscriptions, 'id') : userSubscriptions;
+            return $http({
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                url: urlService.userSubscriptions + '/bulk',
+                data: bulkIds
+            }).then(function (result) {
+                result = result.data.rs;
+                var failedUserSubscriptions = [];
+                _.map(result, function (value, key) {
+                    if (!value)
+                        failedUserSubscriptions.push(key);
+                });
+                return _.filter(userSubscriptions, function (userSubscriptions) {
+                    return (failedUserSubscriptions.indexOf(userSubscriptions.id) > -1);
+                });
+            });
+        };
+
+
+        /**
+         * @description Activate user Subscription
+         * @param userSubscription
+         */
+        self.activateUserSubscription = function (userSubscription) {
+            return $http
+                .put((urlService.userSubscriptions + '/activate/' + userSubscription.id))
+                .then(function () {
+                    return userSubscription;
+                });
+        };
+
+        /**
+         * @description Deactivate user Subscription
+         * @param userSubscription
+         */
+        self.deactivateUserSubscription = function (userSubscription) {
+            return $http
+                .put((urlService.userSubscriptions + '/deactivate/' + userSubscription.id))
+                .then(function () {
+                    return userSubscription;
+                });
+        };
+
+        /**
+         * @description Activate bulk of user Subscriptions
+         * @param userSubscriptions
+         */
+        self.activateBulkUserSubscriptions = function (userSubscriptions) {
+            var bulkIds = userSubscriptions[0].hasOwnProperty('id') ? _.map(userSubscriptions, 'id') : userSubscriptions;
+            return $http
+                .put((urlService.userSubscriptions + '/activate/bulk'), bulkIds)
+                .then(function () {
+                    return userSubscriptions;
+                });
+        };
+
+        /**
+         * @description Deactivate bulk of user Subscriptions
+         * @param userSubscriptions
+         */
+        self.deactivateBulkUserSubscriptions = function (userSubscriptions) {
+            var bulkIds = userSubscriptions[0].hasOwnProperty('id') ? _.map(userSubscriptions, 'id') : userSubscriptions;
+            return $http
+                .put((urlService.userSubscriptions + '/deactivate/bulk'), bulkIds)
+                .then(function () {
+                    return userSubscriptions;
                 });
         };
 
