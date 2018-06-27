@@ -479,7 +479,6 @@ module.exports = function (app) {
                     trigerId: eventType,
                     documentVSId: info.vsId,
                     status: true,
-                    docClass: info.documentClass,
                     docSubject: info.title
                 });
 
