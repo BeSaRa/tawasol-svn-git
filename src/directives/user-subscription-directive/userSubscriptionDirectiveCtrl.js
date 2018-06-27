@@ -4,7 +4,6 @@ module.exports = function (app) {
                                                                  langService,
                                                                  toast,
                                                                  cmsTemplate,
-                                                                 employeeService,
                                                                  $sce,
                                                                  userSubscriptionService,
                                                                  dialog) {
@@ -20,7 +19,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.showUserSubscriptions = function ($event) {
-            if (self.service.count === 0) {
+            if (self.service.userSubscriptions.length === 0) {
                 dialog.alertMessage(langService.get("no_user_subscriptions"));
                 return;
             }
@@ -34,7 +33,7 @@ module.exports = function (app) {
                     resolve: {
                         userSubscriptions: function (userSubscriptionService) {
                             'ngInject';
-                            return userSubscriptionService.getUserSubscriptions(employeeService.getEmployee().id).then(function (result) {
+                            return userSubscriptionService.getUserSubscriptions().then(function (result) {
                                 self.countUserSubscriptions = result.length;
                                 return result;
                             });
@@ -44,7 +43,7 @@ module.exports = function (app) {
         };
 
         self.getUserSubscriptionsCount = function () {
-            userSubscriptionService.getUserSubscriptions(employeeService.getEmployee().id);
+            userSubscriptionService.getUserSubscriptions();
         };
 
         self.getUserSubscriptionsCount();
