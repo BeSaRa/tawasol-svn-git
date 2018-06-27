@@ -7,7 +7,8 @@ module.exports = function (app) {
                                                                dialog,
                                                                employeeService,
                                                                correspondenceService,
-                                                               moment) {
+                                                               moment,
+                                                               generator) {
         'ngInject';
         var self = this;
 
@@ -15,6 +16,7 @@ module.exports = function (app) {
         self.progress = null;
 
         self.userSubscriptions = userSubscriptions;
+
 
         self.closeShowUserSubscriptionsPopupFromCtrl = function () {
             dialog.cancel();
@@ -27,19 +29,11 @@ module.exports = function (app) {
             }
 
             correspondenceService.viewCorrespondence({
-                vsId: item.documentVSId,
-                docClassName: item.docClass
+                vsId: item.vsId,
+                docClassName: generator.getDocumentClassName(item.docClassId)
             }, self.gridActions,false ,true);
         };
 
-        /**
-         * convert unix timestamp to Original Date Format (YYYY-MM-DD hh:mm:ss A)
-         * @returns {*}
-         * @param updatedOn
-         */
-        self.getDateFromUnixTimeStamp = function (updatedOn) {
-            return moment(updatedOn).format('YYYY-MM-DD hh:mm:ss A');
-        };
 
 
         self.getSubscriptionEventType = function(selected){
@@ -52,7 +46,7 @@ module.exports = function (app) {
                 lang = "Ar";
             }
 
-            return lookupService.returnLookups(lookupService.eventType).filter(function (item) {
+            return lookupService.returnLookups(lookupService.documentSubscription).filter(function (item) {
                 return item.lookupKey === selected;
             })[0]['default' + lang + 'Name'];
         };
