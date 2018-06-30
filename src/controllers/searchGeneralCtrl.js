@@ -602,8 +602,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(searchedGeneralDocument, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(searchedGeneralDocument, true));
-            return;
+            correspondenceService.viewCorrespondence(searchedGeneralDocument, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(searchedGeneralDocument, true))
+                .then(function () {
+                    return self.reloadSearchedGeneralDocuments(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadSearchedGeneralDocuments(self.grid.page);
+                });
         };
 
         /**
@@ -696,7 +701,7 @@ module.exports = function (app) {
              text: 'grid_action_export',
              shortcut: true,
              callback: self.exportSearchGeneralDocument,
-             class: "action-yellow",
+             class: "action-green",
              checkShow: function (action, model) {
              //If document is paper outgoing and unapproved/partially approved, show the button.
              var info = model.getInfo();

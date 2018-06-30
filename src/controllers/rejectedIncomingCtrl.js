@@ -481,8 +481,13 @@ module.exports = function (app) {
                 return;
             }
 
-            correspondenceService.viewCorrespondence(rejectedIncoming, self.gridActions, checkIfEditPropertiesAllowed(rejectedIncoming, true), true);
-            return;
+            correspondenceService.viewCorrespondence(rejectedIncoming, self.gridActions, checkIfEditPropertiesAllowed(rejectedIncoming, true), true)
+                .then(function () {
+                    return self.reloadRejectedIncomings(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadRejectedIncomings(self.grid.page);
+                });
         };
 
         /**

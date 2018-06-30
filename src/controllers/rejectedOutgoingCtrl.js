@@ -428,8 +428,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(rejectedOutgoing, self.gridActions, checkIfEditPropertiesAllowed(rejectedOutgoing, true), false);
-            return;
+            correspondenceService.viewCorrespondence(rejectedOutgoing, self.gridActions, checkIfEditPropertiesAllowed(rejectedOutgoing, true), false)
+                .then(function () {
+                    return self.reloadRejectedOutgoings(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadRejectedOutgoings(self.grid.page);
+                });
         };
 
         /**

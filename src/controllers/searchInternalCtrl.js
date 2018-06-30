@@ -585,8 +585,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(searchedInternalDocument, self.gridActions, true, true);
-            return;
+            correspondenceService.viewCorrespondence(searchedInternalDocument, self.gridActions, true, true)
+                .then(function () {
+                    return self.reloadSearchedInternalDocuments(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadSearchedInternalDocuments(self.grid.page);
+                });
         };
 
         /**
@@ -680,7 +685,7 @@ module.exports = function (app) {
              shortcut: true,
              callback: self.exportSearchInternalDocument,
              hide: true,
-             class: "action-yellow",
+             class: "action-green",
              checkShow: self.checkToShowAction
              },*/
             //Open

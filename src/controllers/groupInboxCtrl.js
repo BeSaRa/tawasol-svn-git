@@ -111,7 +111,7 @@ module.exports = function (app) {
             /**
              * @description terminate bulk group inbox
              */
-            self.terminateBulkGroupInbox = function ($event) {
+            self.terminateBulk = function ($event) {
                 correspondenceService
                     .terminateBulkWorkItem(self.selectedWorkItems, $event)
                     .then(function () {
@@ -352,7 +352,7 @@ module.exports = function (app) {
             self.manageLinkedEntities = function (workItem, $event) {
                 var info = workItem.getInfo();
                 managerService
-                    .manageDocumentEntities(info.vsId, info, documentClass, info.title, $event);
+                    .manageDocumentEntities(info.vsId, info.documentClass, info.title, $event);
             };
 
             /**

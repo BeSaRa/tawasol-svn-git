@@ -537,8 +537,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(reviewIncoming, self.gridActions, checkIfEditPropertiesAllowed(reviewIncoming, true), false);
-            return;
+            correspondenceService.viewCorrespondence(reviewIncoming, self.gridActions, checkIfEditPropertiesAllowed(reviewIncoming, true), false)
+                .then(function () {
+                    return self.reloadReviewIncomings(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadReviewIncomings(self.grid.page);
+                });
         };
 
         /**

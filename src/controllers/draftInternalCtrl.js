@@ -402,8 +402,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(draftInternal, self.gridActions, checkIfEditPropertiesAllowed(draftInternal, true), true);
-            return;
+            correspondenceService.viewCorrespondence(draftInternal, self.gridActions, checkIfEditPropertiesAllowed(draftInternal, true), true)
+                .then(function () {
+                    return self.reloadDraftInternals(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadDraftInternals(self.grid.page);
+                });
         };
 
         /**

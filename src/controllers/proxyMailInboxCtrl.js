@@ -139,10 +139,10 @@ module.exports = function (app) {
          * @description Terminate proxy Mail Inboxes Bulk
          * @param $event
          */
-        self.terminateProxyMailInboxBulk = function ($event) {
-            proxyMailInboxService.controllerMethod
-                .proxyMailInboxTerminateBulk(self.selectedProxyMailInboxes, $event)
-                .then(function (result) {
+        self.terminateBulk = function ($event) {
+            correspondenceService
+                .terminateBulkWorkItem(self.selectedProxyMailInboxes, $event)
+                .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page);
                 });
         };
@@ -163,19 +163,19 @@ module.exports = function (app) {
 
         /**
          * @description Change the starred for proxy Mail inbox
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.changeProxyMailInboxStar = function (proxyMailInbox, $event) {
-            self.starServices[proxyMailInbox.generalStepElm.starred](proxyMailInbox)
+        self.changeProxyMailInboxStar = function (workItem, $event) {
+            self.starServices[workItem.generalStepElm.starred](workItem)
                 .then(function (result) {
                     if (result) {
                         self.reloadProxyMailInboxes(self.grid.page)
                             .then(function () {
-                                if (!proxyMailInbox.generalStepElm.starred)
-                                    toast.success(langService.get("star_specific_success").change({name: proxyMailInbox.generalStepElm.docSubject}));
+                                if (!workItem.generalStepElm.starred)
+                                    toast.success(langService.get("star_specific_success").change({name: workItem.generalStepElm.docSubject}));
                                 else
-                                    toast.success(langService.get("unstar_specific_success").change({name: proxyMailInbox.generalStepElm.docSubject}));
+                                    toast.success(langService.get("unstar_specific_success").change({name: workItem.generalStepElm.docSubject}));
                             });
                     }
                     else {
@@ -201,31 +201,28 @@ module.exports = function (app) {
 
         /**
          * @description Terminate proxy Mail Inbox Item
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.terminateProxyMailInbox = function (proxyMailInbox, $event, defer) {
-            proxyMailInboxService.controllerMethod
-                .proxyMailInboxTerminate(proxyMailInbox, $event)
-                .then(function (result) {
-                    self.reloadProxyMailInboxes(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get("terminate_specific_success").change({name: proxyMailInbox.generalStepElm.docSubject}));
-                            new ResolveDefer(defer);
-                        });
+        self.terminate = function (workItem, $event, defer) {
+            workItem
+                .terminate($event)
+                .then(function () {
+                    new ResolveDefer(defer);
+                    self.reloadProxyMailInboxes(self.grid.page);
                 });
         };
 
         /**
          * @description Add To Folder
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.addToFolderProxyMailInbox = function (proxyMailInbox, $event) {
+        self.addToFolderProxyMailInbox = function (workItem, $event) {
             userFolderService
                 .controllerMethod
-                .addToUserFolder(proxyMailInbox.generalStepElm.workObjectNumber, proxyMailInbox.generalStepElm["folderId"], proxyMailInbox, $event)
+                .addToUserFolder(workItem.generalStepElm.workObjectNumber, workItem.generalStepElm["folderId"], workItem, $event)
                 .then(function (result) {
                     if (result === -1) {
                         toast.error(langService.get("inbox_failed_add_to_folder_selected"));
@@ -235,7 +232,7 @@ module.exports = function (app) {
                             .then(function () {
                                 var currentFolder = _.find(userFolderService.allUserFolders, ['id', result]);
                                 toast.success(langService.get("inbox_add_to_folder_specific_success").change({
-                                    name: proxyMailInbox.getTranslatedName(),
+                                    name: workItem.getTranslatedName(),
                                     folder: currentFolder.getTranslatedName()
                                 }));
                             });
@@ -245,24 +242,24 @@ module.exports = function (app) {
 
         /**
          * @description Create Reply
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.createReplyProxyMailInboxIncoming = function (proxyMailInbox, $event) {
-            var info = proxyMailInbox.getInfo();
+        self.createReplyProxyMailInboxIncoming = function (workItem, $event) {
+            var info = workItem.getInfo();
             $state.go('app.outgoing.add', {workItem: info.wobNumber, action: 'reply'});
         };
 
         /**
          * @description Forward
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.forward = function (proxyMailInbox, $event, defer) {
+        self.forward = function (workItem, $event, defer) {
             /*distributionWorkflowService
              .controllerMethod
-             .distributionWorkflowSend(proxyMailInbox.generalStepElm, true, false, null, proxyMailInbox.generalStepElm.workFlowName, $event)
+             .distributionWorkflowSend(workItem.generalStepElm, true, false, null, workItem.generalStepElm.workFlowName, $event)
              .then(function (result) {
              dialog.hide();
              self.reloadProxyMailInboxes(self.grid.page).then(function () {
@@ -272,7 +269,7 @@ module.exports = function (app) {
              .catch(function (result) {
              self.reloadProxyMailInboxes(self.grid.page);
              });*/
-            proxyMailInbox.launchWorkFlow($event, 'forward', 'favorites')
+            workItem.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page)
                         .then(function () {
@@ -285,14 +282,14 @@ module.exports = function (app) {
 
         /**
          * @description Reply proxy Mail inbox
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.reply = function (proxyMailInbox, $event, defer) {
+        self.reply = function (workItem, $event, defer) {
             /*distributionWorkflowService
              .controllerMethod
-             .distributionWorkflowSend(proxyMailInbox.generalStepElm, false, true, proxyMailInbox.senderInfo, proxyMailInbox.generalStepElm.workFlowName, $event)
+             .distributionWorkflowSend(workItem.generalStepElm, false, true, workItem.senderInfo, workItem.generalStepElm.workFlowName, $event)
              .then(function (result) {
              dialog.hide();
              self.reloadProxyMailInboxes(self.grid.page).then(function () {
@@ -302,7 +299,7 @@ module.exports = function (app) {
              .catch(function (result) {
              self.reloadProxyMailInboxes(self.grid.page);
              });*/
-            proxyMailInbox.launchWorkFlow($event, 'reply')
+            workItem.launchWorkFlow($event, 'reply')
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page)
                         .then(function () {
@@ -314,11 +311,11 @@ module.exports = function (app) {
 
         /**
          * @description Get the link of proxy Mail inbox
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.getLink = function (proxyMailInbox, $event) {
-            var info = proxyMailInbox.getInfo();
+        self.getLink = function (workItem, $event) {
+            var info = workItem.getInfo();
             viewDocumentService.loadDocumentViewUrlWithOutEdit(info.vsId).then(function (result) {
                 //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
                 dialog.successMessage(langService.get('link_message').change({result: result}));
@@ -328,22 +325,22 @@ module.exports = function (app) {
 
         /**
          * @description Subscribe
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.subscribeProxyMailInbox = function (proxyMailInbox, $event) {
-            console.log('subscribeProxyMailInbox', proxyMailInbox);
+        self.subscribeProxyMailInbox = function (workItem, $event) {
+            console.log('subscribeProxyMailInbox', workItem);
         };
 
         /**
          * @description Export proxy Mail inbox
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.exportProxyMailInbox = function (proxyMailInbox, $event, defer) {
+        self.exportProxyMailInbox = function (workItem, $event, defer) {
             proxyMailInboxService
-                .exportProxyMailInbox(proxyMailInbox, $event)
+                .exportProxyMailInbox(workItem, $event)
                 .then(function (result) {
                     self.reloadProxyMailInboxes(self.grid.page)
                         .then(function () {
@@ -355,26 +352,26 @@ module.exports = function (app) {
 
         /**
          * @description View Tracking Sheet
-         * @param proxyMailInbox
+         * @param workItem
          * @param params
          * @param $event
          */
-        self.viewTrackingSheet = function (proxyMailInbox, params, $event) {
+        self.viewTrackingSheet = function (workItem, params, $event) {
             viewTrackingSheetService
                 .controllerMethod
-                .viewTrackingSheetPopup(proxyMailInbox, params, $event).then(function (result) {
+                .viewTrackingSheetPopup(workItem, params, $event).then(function (result) {
 
             });
         };
 
         /**
          * @description Manage Tags
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.manageTags = function (proxyMailInbox, $event) {
-            var info = proxyMailInbox.getInfo();
-            managerService.manageDocumentTags(info.vsId, info.documentClass, proxyMailInbox.getTranslatedName(), $event)
+        self.manageTags = function (workItem, $event) {
+            var info = workItem.getInfo();
+            managerService.manageDocumentTags(info.vsId, info.documentClass, workItem.getTranslatedName(), $event)
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page);
                 })
@@ -385,22 +382,22 @@ module.exports = function (app) {
 
         /**
          * @description Manage Comments
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.manageComments = function (proxyMailInbox, $event) {
-            /*var vsId = proxyMailInbox.hasOwnProperty('generalStepElm')
-                ? (proxyMailInbox.generalStepElm.hasOwnProperty('vsId') ? proxyMailInbox.generalStepElm.vsId : proxyMailInbox.generalStepElm)
-                : (proxyMailInbox.hasOwnProperty('vsId') ? proxyMailInbox.vsId : proxyMailInbox);
-            var wfName = proxyMailInbox.hasOwnProperty('generalStepElm')
-                ? (proxyMailInbox.generalStepElm.hasOwnProperty('workFlowName') ? proxyMailInbox.generalStepElm.workFlowName : proxyMailInbox.generalStepElm)
-                : (proxyMailInbox.hasOwnProperty('workFlowName') ? proxyMailInbox.workFlowName : proxyMailInbox);
+        self.manageComments = function (workItem, $event) {
+            /*var vsId = workItem.hasOwnProperty('generalStepElm')
+                ? (workItem.generalStepElm.hasOwnProperty('vsId') ? workItem.generalStepElm.vsId : workItem.generalStepElm)
+                : (workItem.hasOwnProperty('vsId') ? workItem.vsId : workItem);
+            var wfName = workItem.hasOwnProperty('generalStepElm')
+                ? (workItem.generalStepElm.hasOwnProperty('workFlowName') ? workItem.generalStepElm.workFlowName : workItem.generalStepElm)
+                : (workItem.hasOwnProperty('workFlowName') ? workItem.workFlowName : workItem);
 
             //var wfName = 'outgoing';
             managerService.manageDocumentComments(vsId, wfName.toLowerCase(), $event);*/
 
 
-            proxyMailInbox.manageDocumentComments($event)
+            workItem.manageDocumentComments($event)
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page);
                 })
@@ -411,20 +408,20 @@ module.exports = function (app) {
 
         /**
          * @description Manage Tasks
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.manageTasks = function (proxyMailInbox, $event) {
-            console.log('manageProxyMailInboxTasks : ', proxyMailInbox);
+        self.manageTasks = function (workItem, $event) {
+            console.log('manageProxyMailInboxTasks : ', workItem);
         };
 
         /**
          * @description Manage Attachments
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.manageAttachments = function (proxyMailInbox, $event) {
-            proxyMailInbox.manageDocumentAttachments($event)
+        self.manageAttachments = function (workItem, $event) {
+            workItem.manageDocumentAttachments($event)
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page);
                 })
@@ -436,11 +433,11 @@ module.exports = function (app) {
 
         /**
          * @description Manage Linked Documents
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.manageLinkedDocuments = function (proxyMailInbox, $event) {
-            proxyMailInbox.manageDocumentLinkedDocuments($event)
+        self.manageLinkedDocuments = function (workItem, $event) {
+            workItem.manageDocumentLinkedDocuments($event)
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page);
                 })
@@ -451,11 +448,11 @@ module.exports = function (app) {
 
         /**
          * @description Manage Linked Entities
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.manageLinkedEntities = function (proxyMailInbox, $event) {
-            var info = proxyMailInbox.getInfo();
+        self.manageLinkedEntities = function (workItem, $event) {
+            var info = workItem.getInfo();
             managerService
                 .manageDocumentEntities(info.vsId, info.documentClass, info.title, $event);
         };
@@ -463,11 +460,11 @@ module.exports = function (app) {
 
         /**
          * @description Destinations
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.manageDestinations = function (proxyMailInbox, $event) {
-            proxyMailInbox.manageDocumentCorrespondence($event)
+        self.manageDestinations = function (workItem, $event) {
+            workItem.manageDocumentCorrespondence($event)
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page);
                 });
@@ -475,49 +472,49 @@ module.exports = function (app) {
 
         /**
          * @description View Direct Linked Documents
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.viewProxyMailInboxDirectLinkedDocuments = function (proxyMailInbox, $event) {
-            console.log('viewProxyMailInboxDirectLinkedDocuments : ', proxyMailInbox);
+        self.viewProxyMailInboxDirectLinkedDocuments = function (workItem, $event) {
+            console.log('viewProxyMailInboxDirectLinkedDocuments : ', workItem);
         };
 
         /**
          * @description View Complete Linked Documents
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.viewProxyMailInboxCompleteLinkedDocuments = function (proxyMailInbox, $event) {
-            console.log('viewProxyMailInboxCompleteLinkedDocuments : ', proxyMailInbox);
+        self.viewProxyMailInboxCompleteLinkedDocuments = function (workItem, $event) {
+            console.log('viewProxyMailInboxCompleteLinkedDocuments : ', workItem);
         };
 
         /**
          * @description Download Main Document
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.downloadMainDocument = function (proxyMailInbox, $event) {
+        self.downloadMainDocument = function (workItem, $event) {
             downloadService.controllerMethod
-                .mainDocumentDownload(proxyMailInbox.generalStepElm.vsId);
+                .mainDocumentDownload(workItem.generalStepElm.vsId);
         };
 
         /**
          * @description Download Composite Document
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.downloadCompositeDocument = function (proxyMailInbox, $event) {
+        self.downloadCompositeDocument = function (workItem, $event) {
             downloadService.controllerMethod
-                .compositeDocumentDownload(proxyMailInbox.generalStepElm.vsId);
+                .compositeDocumentDownload(workItem.generalStepElm.vsId);
         };
 
         /**
          * @description Send Link To Document By Email
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.sendProxyMailInboxLinkToDocumentByEmail = function (proxyMailInbox, $event) {
-            var info = proxyMailInbox.getInfo();
+        self.sendProxyMailInboxLinkToDocumentByEmail = function (workItem, $event) {
+            var info = workItem.getInfo();
             downloadService.getMainDocumentEmailContent(info.vsId).then(function (result) {
                 dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
                     result: result,
@@ -529,20 +526,20 @@ module.exports = function (app) {
 
         /**
          * @description Send Composite Document As Attachment
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.sendProxyMailInboxCompositeDocumentAsAttachment = function (proxyMailInbox, $event) {
-            console.log('sendProxyMailInboxCompositeDocumentAsAttachment : ', proxyMailInbox);
+        self.sendProxyMailInboxCompositeDocumentAsAttachment = function (workItem, $event) {
+            console.log('sendProxyMailInboxCompositeDocumentAsAttachment : ', workItem);
         };
 
         /**
          * @description Send Composite Document As Attachment By Email
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.sendProxyMailInboxCompositeDocumentAsAttachmentByEmail = function (proxyMailInbox, $event) {
-            var info = proxyMailInbox.getInfo();
+        self.sendProxyMailInboxCompositeDocumentAsAttachmentByEmail = function (workItem, $event) {
+            var info = workItem.getInfo();
             downloadService.getCompositeDocumentEmailContent(info.vsId).then(function (result) {
                 dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
                     result: result,
@@ -554,54 +551,55 @@ module.exports = function (app) {
 
         /**
          * @description Send Main Document Fax
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.sendProxyMailInboxMainDocumentFax = function (proxyMailInbox, $event) {
-            console.log('sendProxyMailInboxMainDocumentFax : ', proxyMailInbox);
+        self.sendProxyMailInboxMainDocumentFax = function (workItem, $event) {
+            console.log('sendProxyMailInboxMainDocumentFax : ', workItem);
         };
 
         /**
          * @description Send SMS
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.sendProxyMailInboxSMS = function (proxyMailInbox, $event) {
-            console.log('sendProxyMailInboxSMS : ', proxyMailInbox);
+        self.sendProxyMailInboxSMS = function (workItem, $event) {
+            console.log('sendProxyMailInboxSMS : ', workItem);
         };
 
         /**
          * @description Send Main Document As Attachment
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.sendProxyMailInboxMainDocumentAsAttachment = function (proxyMailInbox, $event) {
-            console.log('sendProxyMailInboxMainDocumentAsAttachment : ', proxyMailInbox);
+        self.sendProxyMailInboxMainDocumentAsAttachment = function (workItem, $event) {
+            console.log('sendProxyMailInboxMainDocumentAsAttachment : ', workItem);
         };
 
         /**
          * @description Send Link
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.sendProxyMailInboxLink = function (proxyMailInbox, $event) {
-            console.log('sendProxyMailInboxLink : ', proxyMailInbox);
+        self.sendProxyMailInboxLink = function (workItem, $event) {
+            console.log('sendProxyMailInboxLink : ', workItem);
         };
 
         /**
          * @description Sign Internal e-Signature
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
+         * @param defer
          */
-        self.signProxyMailInboxESignature = function (proxyMailInbox, $event, defer) {
+        self.signProxyMailInboxESignature = function (workItem, $event, defer) {
             proxyMailInboxService
                 .controllerMethod
-                .proxyMailInboxSignaturePopup(proxyMailInbox, $event)
+                .proxyMailInboxSignaturePopup(workItem, $event)
                 .then(function (result) {
                     if (result)
                         self.reloadProxyMailInboxes(self.grid.page)
                             .then(function () {
-                                toast.success(langService.get('sign_specific_success').change({name: proxyMailInbox.getTranslatedName()}));
+                                toast.success(langService.get('sign_specific_success').change({name: workItem.getTranslatedName()}));
                                 new ResolveDefer(defer);
                             });
                 });
@@ -609,32 +607,32 @@ module.exports = function (app) {
 
         /**
          * @description Sign Digital Signature
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.signProxyMailInboxDigitalSignature = function (proxyMailInbox, $event, defer) {
-            console.log('signProxyMailInboxDigitalSignature : ', proxyMailInbox);
+        self.signProxyMailInboxDigitalSignature = function (workItem, $event, defer) {
+            console.log('signProxyMailInboxDigitalSignature : ', workItem);
         };
 
         /**
          * @description Edit Content
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.editContent = function (proxyMailInbox, $event) {
-            var info = proxyMailInbox.getInfo();
+        self.editContent = function (workItem, $event) {
+            var info = workItem.getInfo();
             managerService.manageDocumentContent(info.vsId, info.documentClass, info.title, $event);
         };
 
 
         /**
          * @description Edit Properties
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.editProperties = function (proxyMailInbox, $event) {
-            var info = proxyMailInbox.getInfo();
+        self.editProperties = function (workItem, $event) {
+            var info = workItem.getInfo();
             managerService
                 .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
                 .finally(function () {
@@ -642,7 +640,12 @@ module.exports = function (app) {
                 });
         };
 
-
+        /**
+         * @description Checks if edit properties is allowed
+         * @param model
+         * @param checkForViewPopup
+         * @returns {boolean}
+         */
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             var info = model.getInfo();
             var hasPermission = false;
@@ -667,7 +670,12 @@ module.exports = function (app) {
             return hasPermission;
         };
 
-
+        /**
+         * @description Checks if edit correspondence sites(destinations) is allowed
+         * @param model
+         * @param checkForViewPopup
+         * @returns {*}
+         */
         var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
             var info = model.getInfo();
             var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
@@ -680,15 +688,15 @@ module.exports = function (app) {
 
         /**
          * @description View document
-         * @param proxyMailInbox
+         * @param workItem
          * @param $event
          */
-        self.viewDocument = function (proxyMailInbox, $event) {
+        self.viewDocument = function (workItem, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            proxyMailInbox.viewInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(proxyMailInbox, true), checkIfEditCorrespondenceSiteAllowed(proxyMailInbox, true))
+            workItem.viewInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
                 .then(function () {
                     return self.reloadProxyMailInboxes(self.grid.page);
                 })
@@ -763,7 +771,7 @@ module.exports = function (app) {
                 icon: 'stop',
                 text: 'grid_action_terminate',
                 shortcut: true,
-                callback: self.terminateProxyMailInbox,
+                callback: self.terminate,
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
@@ -935,7 +943,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1064,7 +1072,7 @@ module.exports = function (app) {
                         text: 'grid_action_main_document_fax',
                         shortcut: false,
                         hide: true,
-                        permissionKey:"SEND_DOCUMENT_BY_FAX",
+                        permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendProxyMailInboxMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction

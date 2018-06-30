@@ -121,7 +121,7 @@ module.exports = function (app) {
              * @description Terminate approved internals Bulk
              * @param $event
              */
-            self.terminateApprovedInternalBulk = function ($event) {
+            self.terminateBulk = function ($event) {
                 var numberOfRecordsToTerminate = angular.copy(self.selectedApprovedInternals.length);
                 approvedInternalService.controllerMethod
                     .approvedInternalTerminateBulk(self.selectedApprovedInternals, $event)
@@ -166,7 +166,7 @@ module.exports = function (app) {
              * @param $event
              * @param defer
              */
-            self.terminateApprovedInternal = function (approvedInternal, $event, defer) {
+            self.terminate = function (approvedInternal, $event, defer) {
                 approvedInternalService.controllerMethod
                     .approvedInternalTerminate(approvedInternal, $event)
                     .then(function (result) {
@@ -376,7 +376,13 @@ module.exports = function (app) {
                     dialog.infoMessage(langService.get('no_view_permission'));
                     return;
                 }
-                return correspondenceService.viewCorrespondence(approvedInternal, self.gridActions, checkIfEditPropertiesAllowed(approvedInternal, true), true, false, false, true);
+                return correspondenceService.viewCorrespondence(approvedInternal, self.gridActions, checkIfEditPropertiesAllowed(approvedInternal, true), true, false, false, true)
+                    .then(function () {
+                        return self.reloadApprovedInternals(self.grid.page);
+                    })
+                    .catch(function () {
+                        return self.reloadApprovedInternals(self.grid.page);
+                    });
             };
 
             /**
@@ -485,7 +491,7 @@ module.exports = function (app) {
                     icon: 'stop',
                     text: 'grid_action_terminate',
                     shortcut: true,
-                    callback: self.terminateApprovedInternal,
+                    callback: self.terminate,
                     class: "action-green",
                     checkShow: self.checkToShowAction
                 },

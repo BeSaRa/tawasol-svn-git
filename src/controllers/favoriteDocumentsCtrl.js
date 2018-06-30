@@ -287,8 +287,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(favoriteDocument, self.gridActions, checkIfEditPropertiesAllowed(favoriteDocument, true), true);
-            return;
+            correspondenceService.viewCorrespondence(favoriteDocument, self.gridActions, checkIfEditPropertiesAllowed(favoriteDocument, true), true)
+                .then(function () {
+                    return self.reloadFavoriteDocuments(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadFavoriteDocuments(self.grid.page);
+                });
         };
 
 

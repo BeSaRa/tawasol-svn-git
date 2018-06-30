@@ -441,8 +441,13 @@ module.exports = function (app) {
                     return;
                 }
 
-                correspondenceService.viewCorrespondence(draftOutgoing, self.gridActions, checkIfEditPropertiesAllowed(draftOutgoing, true), true);
-                return;
+                correspondenceService.viewCorrespondence(draftOutgoing, self.gridActions, checkIfEditPropertiesAllowed(draftOutgoing, true), true)
+                    .then(function () {
+                        return self.reloadDraftOutgoings(self.grid.page);
+                    })
+                    .catch(function () {
+                        return self.reloadDraftOutgoings(self.grid.page);
+                    });
             };
 
             /**

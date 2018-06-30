@@ -349,10 +349,14 @@ module.exports = function (app) {
                     excludeOuSites: false
                 }).then(function (result) {
                     self.mainSites = result;
+                    self.selectedMainSite = null;
                 });
             }
             else {
-                self.mainSites = self.subSearchResult = self.subSearchResultCopy = [];
+                self.mainSites = [];
+                self.subSearchResult = [];
+                self.subSearchResultCopy = [];
+                self.selectedMainSite = null;
             }
         };
 

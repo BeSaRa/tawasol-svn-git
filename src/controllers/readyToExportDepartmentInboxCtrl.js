@@ -217,7 +217,7 @@ module.exports = function (app) {
          * @description Terminate Ready To Export Bulk
          * @param $event
          */
-        self.terminateReadyToExportBulk = function ($event) {
+        self.terminateBulk = function ($event) {
             var numberOfRecordsToTerminate = angular.copy(self.selectedReadyToExports.length);
             readyToExportService
                 .controllerMethod
@@ -281,7 +281,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.terminateReadyToExport = function (readyToExport, $event, defer) {
+        self.terminate = function (readyToExport, $event, defer) {
             readyToExportService
                 .controllerMethod
                 .readyToExportTerminate(readyToExport, $event)
@@ -625,7 +625,7 @@ module.exports = function (app) {
                 icon: 'stop',
                 text: 'grid_action_terminate',
                 shortcut: true,
-                callback: self.terminateReadyToExport,
+                callback: self.terminate,
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },

@@ -604,7 +604,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(searchedOutgoingDocument, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(searchedOutgoingDocument, true));
+            correspondenceService.viewCorrespondence(searchedOutgoingDocument, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(searchedOutgoingDocument, true))
+                .then(function () {
+                    return self.reloadSearchedOutgoingDocument(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadSearchedOutgoingDocument(self.grid.page);
+                });
         };
 
         /**

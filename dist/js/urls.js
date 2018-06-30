@@ -12,7 +12,8 @@
                 .setBaseUrl('training', 'http://100.100.3.142:9080/CMSServices/service')
                 .setBaseUrl('ibm', 'http://100.100.3.107:9080/CMSServices/service')
                 .setBaseUrl('manohar', 'http://100.100.11.29:9080/CMSServices/service')
-                .setBaseUrl('hussam', 'http://172.16.10.107:9080/CMSServices/service');
+                .setBaseUrl('hussam', 'http://172.16.10.107:9080/CMSServices/service')
+                .setBaseUrl('migration', 'http://100.100.3.138:9080/CMSServices/service');
 
             urlServiceProvider
             // to load languages

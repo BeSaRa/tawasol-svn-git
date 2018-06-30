@@ -332,7 +332,13 @@ module.exports = function (app) {
                 return;
             }
 
-            correspondenceService.viewCorrespondence(searchedCorrespondenceDocument, [], true, true);
+            correspondenceService.viewCorrespondence(searchedCorrespondenceDocument, [], true, true)
+                .then(function () {
+                    return self.reloadQuickSearchCorrespondence(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadQuickSearchCorrespondence(self.grid.page);
+                });
         };
 
         /**
@@ -457,7 +463,7 @@ module.exports = function (app) {
                  text: 'grid_action_export',
                  shortcut: true,
                  callback: self.exportQuickSearchCorrespondence,
-                 class: "action-yellow",
+                 class: "action-green",
                  checkShow: function (action, model) {
                      //If document is paper outgoing and unapproved/partially approved, show the button.
                      var info = model.getInfo();

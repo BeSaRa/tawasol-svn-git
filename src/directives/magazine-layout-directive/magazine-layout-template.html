@@ -57,7 +57,7 @@
                                      md-svg-icon="star-outline"></md-icon>
                         </md-button>
                     </div>
-                    <div>
+                    <div ng-if="!ctrl.selectedWorkItems.length">
                         <md-button tooltip="{{lang.view_grid}}"
                                    ng-click="ctrl.employeeService.getEmployee().toggleInboxView()"
                                    class="md-icon-button">

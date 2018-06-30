@@ -160,7 +160,7 @@ module.exports = function (app) {
          * @description Terminate followup employee inbox Bulk
          * @param $event
          *!/
-         self.terminateFollowupEmployeeInboxBulk = function ($event) {
+         self.terminateBulk = function ($event) {
          var numberOfRecordsToTerminate = angular.copy(self.selectedFollowupEmployeeInboxes.length);
          followupEmployeeInboxService
          .controllerMethod
@@ -244,7 +244,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          *!/
-         self.terminateFollowupEmployeeInbox = function (followupEmployeeInbox, $event, defer) {
+         self.terminate = function (followupEmployeeInbox, $event, defer) {
          followupEmployeeInboxService
          .controllerMethod
          .followupEmployeeInboxTerminate(followupEmployeeInbox, $event)
@@ -770,7 +770,7 @@ module.exports = function (app) {
              icon: 'stop',
              text: 'grid_action_terminate',
              shortcut: true,
-             callback: self.terminateFollowupEmployeeInbox,
+             callback: self.terminate,
              class: "action-green",
              checkShow: self.checkToShowAction
              },*/

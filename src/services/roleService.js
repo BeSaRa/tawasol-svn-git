@@ -275,7 +275,6 @@ module.exports = function (app) {
                         toast.success(langService.get("delete_specific_success").change({name: role.getNames()}));
                         return result;
                     })
-                }, function () {
                 });
             },
             roleDeleteBulk: function (roles, $event) {

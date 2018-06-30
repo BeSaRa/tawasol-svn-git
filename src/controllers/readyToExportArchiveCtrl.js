@@ -217,7 +217,7 @@ module.exports = function (app) {
          * @description Terminate Ready To Export Bulk
          * @param $event
          */
-        self.terminateReadyToExportBulk = function ($event) {
+        self.terminateBulk = function ($event) {
             correspondenceService
                 .terminateBulkWorkItem(self.selectedWorkItems, $event)
                 .then(function () {
@@ -275,7 +275,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.terminateReadyToExport = function (readyToExport, $event, defer) {
+        self.terminate = function (readyToExport, $event, defer) {
             readyToExport
                 .terminate($event)
                 .then(function () {
@@ -651,7 +651,7 @@ module.exports = function (app) {
                 icon: 'stop',
                 text: 'grid_action_terminate',
                 shortcut: true,
-                callback: self.terminateReadyToExport,
+                callback: self.terminate,
                 class: "action-green",
                 hide: false,
                 checkShow: self.checkToShowAction

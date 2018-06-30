@@ -405,8 +405,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(readyToSendIncoming, self.gridActions, checkIfEditPropertiesAllowed(readyToSendIncoming, true), false);
-            return;
+            correspondenceService.viewCorrespondence(readyToSendIncoming, self.gridActions, checkIfEditPropertiesAllowed(readyToSendIncoming, true), false)
+                .then(function () {
+                    return self.reloadReadyToSendIncomings(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadReadyToSendIncomings(self.grid.page);
+                });
         };
 
         /**

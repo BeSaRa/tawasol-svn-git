@@ -10,7 +10,7 @@
                     <div layout="row">
                         <md-input-container flex>
                             <label for="eventType">{{lang.user_subscription_event_type}}</label>
-                            <md-select ng-change="ctrl.setEventType()" id="eventType" name="eventType"
+                            <md-select id="eventType" name="eventType"
                                        ng-model="ctrl.selectedEventType" required>
                                 <md-option ng-repeat="item in ctrl.eventTypes" ng-value="item">
                                     {{item.getTranslatedName()}}

@@ -254,8 +254,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(incomingDepartmentInbox, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true, false, false, true);
-            return;
+            correspondenceService.viewCorrespondence(incomingDepartmentInbox, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true, false, false, true)
+            .then(function () {
+                return self.reloadIncomingDepartmentInboxes(self.grid.page);
+            })
+                .catch(function () {
+                    return self.reloadIncomingDepartmentInboxes(self.grid.page);
+                });
         };
 
         /**

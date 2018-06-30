@@ -167,4 +167,13 @@ Bugs:
 27-06-2018
 -----------------------------------
 13591: Fix - Regression - hide the document security schema for NON REG OUs
+13688: Fix - Regression: Loading in screen and menu when cancel Deleting Role
 
+28-06-2018
+-----------------------------------
+13702: Fix - Regression: The new document subject doesn't displayed when edit it from the document.
+13694: Fix - In Simple Search, When Select Correspondence site type and Main then Change the Main, the selected main doesn't disappear.
+
+30-06-2018
+-----------------------------------
+13699: Fix - Regression - Proxy mail- crash occurred when terminate any document

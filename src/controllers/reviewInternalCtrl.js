@@ -470,8 +470,13 @@ module.exports = function (app) {
                 return;
             }
 
-            correspondenceService.viewCorrespondence(reviewInternal, self.gridActions, checkIfEditPropertiesAllowed(reviewInternal, true), true);
-            return;
+            correspondenceService.viewCorrespondence(reviewInternal, self.gridActions, checkIfEditPropertiesAllowed(reviewInternal, true), true)
+                .then(function () {
+                    return self.reloadReviewInternals(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadReviewInternals(self.grid.page);
+                });
         };
 
         /**

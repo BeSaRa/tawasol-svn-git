@@ -611,8 +611,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(searchedIncomingDocument, self.gridActions, true, false);
-            return;
+            correspondenceService.viewCorrespondence(searchedIncomingDocument, self.gridActions, true, false)
+                .then(function () {
+                    return self.reloadSearchedIncomingDocument(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadSearchedIncomingDocument(self.grid.page);
+                });
         };
 
         /**
@@ -705,7 +710,7 @@ module.exports = function (app) {
              text: 'grid_action_export',
              shortcut: true,
              callback: self.exportSearchIncomingDocument,
-             class: "action-yellow",
+             class: "action-green",
              checkShow: self.checkToShowAction
              },*/
             //Open

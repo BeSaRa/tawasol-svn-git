@@ -283,7 +283,7 @@ module.exports = function (app) {
          * @description Terminate User inboxes Bulk
          * @param $event
          */
-        self.terminateUserInboxBulk = function ($event) {
+        self.terminateBulk = function ($event) {
             //var numberOfRecordsToTerminate = angular.copy(self.selectedUserInboxes.length);
             correspondenceService
                 .terminateBulkWorkItem(self.selectedUserInboxes, $event)
@@ -454,11 +454,11 @@ module.exports = function (app) {
 
         /**
          * @description Get the link of user inbox
-         * @param userInbox
+         * @param workItem
          * @param $event
          */
-        self.getLink = function (userInbox, $event) {
-            var info = userInbox.getInfo();
+        self.getLink = function (workItem, $event) {
+            var info = workItem.getInfo();
             viewDocumentService.loadDocumentViewUrlWithOutEdit(info.vsId).then(function (result) {
                 //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
                 dialog.successMessage(langService.get('link_message').change({result: result}));
@@ -476,7 +476,7 @@ module.exports = function (app) {
             userSubscriptionService.showEventTypeDialog($event).then(function (eventType) {
                 var info = userInbox.getInfo();
                 var userSubscription = new UserSubscription({
-                    trigerId: eventType,
+                    trigerId: eventType.hasOwnProperty('lookupKey') ? eventType.lookupKey : eventType,
                     documentVSId: info.vsId,
                     status: true,
                     docSubject: info.title
@@ -484,7 +484,7 @@ module.exports = function (app) {
 
                 userSubscriptionService.addUserSubscription(userSubscription).then(function (result) {
                     if (result) {
-                        toast.success(langService.get('subscribe_success'));
+                        toast.success(langService.get('subscribe_success').change({name: info.title, event: eventType.getTranslatedName()}));
                     }
                 });
 

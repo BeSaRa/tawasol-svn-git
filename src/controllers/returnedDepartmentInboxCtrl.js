@@ -283,21 +283,6 @@ module.exports = function (app) {
             // but it need in DW popup to create URL, records will always come from Outgoing export
             returnedDepartmentInbox.generalStepElm.workFlowName = "Outgoing";
 
-            /*distributionWorkflowService
-             .controllerMethod
-             .distributionWorkflowSend(returnedDepartmentInbox.generalStepElm, false, false, null, "outgoing", $event)
-             .then(function (result) {
-             self.reloadReturnedDepartmentInboxes(self.grid.page)
-             .then(function () {
-             new ResolveDefer(defer);
-             })
-             ;
-             //self.replaceRecord(result);
-             })
-             .catch(function (result) {
-             self.reloadReturnedDepartmentInboxes(self.grid.page);
-             //self.replaceRecord(result);
-             });*/
             returnedDepartmentInbox.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page)

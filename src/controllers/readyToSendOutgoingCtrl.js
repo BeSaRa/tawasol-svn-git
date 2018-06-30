@@ -397,8 +397,13 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
-            correspondenceService.viewCorrespondence(readyToSendOutgoing, self.gridActions, checkIfEditPropertiesAllowed(readyToSendOutgoing, true), false);
-            return;
+            correspondenceService.viewCorrespondence(readyToSendOutgoing, self.gridActions, checkIfEditPropertiesAllowed(readyToSendOutgoing, true), false)
+                .then(function () {
+                    return self.reloadReadyToSendOutgoings(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadReadyToSendOutgoings(self.grid.page);
+                });
         };
 
         /**

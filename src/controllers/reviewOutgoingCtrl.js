@@ -488,8 +488,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(reviewOutgoing, self.gridActions, checkIfEditPropertiesAllowed(reviewOutgoing, true), false);
-            return;
+            correspondenceService.viewCorrespondence(reviewOutgoing, self.gridActions, checkIfEditPropertiesAllowed(reviewOutgoing, true), false)
+                .then(function () {
+                    return self.reloadReviewOutgoings(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadReviewOutgoings(self.grid.page);
+                });
         };
 
         /**
