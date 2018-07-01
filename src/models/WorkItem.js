@@ -334,11 +334,12 @@ module.exports = function (app) {
                 return downloadService.controllerMethod
                     .compositeDocumentDownload(info.vsId, $event);
             };
-            WorkItem.prototype.addToFolder = function (folders, $event, showInbox) {
+            WorkItem.prototype.addToFolder = function ($event, showInbox) {
                 return correspondenceService
-                    .showAddWorkItemToFolder(this, folders, $event, showInbox)
+                    .showAddWorkItemToFolder(this, $event, showInbox)
                     .then(function (result) {
-                        return result[0];
+                        if(result)
+                            return result[0];
                     });
             };
             WorkItem.prototype.getFolderId = function () {

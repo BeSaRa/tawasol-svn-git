@@ -14,7 +14,6 @@ module.exports = function (app) {
              * @param $event
              */
             mainDocumentDownload: function (vsId, $event) {
-                //console.log("EX" , vsId);
                 vsId = typeof vsId.getInfo === 'function' ? vsId.getInfo().vsId : vsId;
                 return self.downloadMainDocument(vsId).then(function (result) {
                     console.log("EX" , vsId);

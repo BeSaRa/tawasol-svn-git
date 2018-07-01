@@ -15,8 +15,8 @@ module.exports = function (app) {
                                                           $window,
                                                           tokenService,
                                                           contextHelpService,
-                                                          userFolders,
-                                                          userFolderService,
+                                                          /*userFolders,
+                                                          userFolderService,*/
                                                           viewTrackingSheetService,
                                                           downloadService,
                                                           employeeService,
@@ -39,7 +39,7 @@ module.exports = function (app) {
          */
         // self.followupEmployeeInboxes = followupEmployeeInboxes;
         self.followupEmployeeInboxes = [];
-        self.userFolders = userFolders;
+        /*self.userFolders = userFolders;*/
         self.langService = langService;
 
         /**
@@ -146,7 +146,7 @@ module.exports = function (app) {
          * @description Move To Folder Followup Employee inboxes Bulk
          * @param $event
          */
-        self.moveToFolderFollowupEmployeeInboxBulk = function ($event) {
+        /*self.moveToFolderFollowupEmployeeInboxBulk = function ($event) {
             var itemsToAdd = _.map(self.selectedFollowupEmployeeInboxes, 'generalStepElm.workObjectNumber');
             userFolderService
                 .controllerMethod
@@ -154,7 +154,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.reloadFollowupEmployeeInboxes(self.grid.page);
                 });
-        };
+        };*/
 
         /* /!**
          * @description Terminate followup employee inbox Bulk
@@ -446,7 +446,7 @@ module.exports = function (app) {
          * @param followupEmployeeInbox
          * @param $event
          */
-        self.moveToFolderFollowupEmployeeInbox = function (followupEmployeeInbox, $event) {
+        /*self.moveToFolderFollowupEmployeeInbox = function (followupEmployeeInbox, $event) {
             userFolderService
                 .controllerMethod
                 .addToUserFolder(followupEmployeeInbox.generalStepElm.workObjectNumber, followupEmployeeInbox.generalStepElm.folderId, followupEmployeeInbox, $event)
@@ -465,7 +465,7 @@ module.exports = function (app) {
                             });
                     }
                 });
-        };
+        };*/
 
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             return true;
@@ -784,7 +784,7 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
-            // Move To Folder
+           /* // Move To Folder
             {
                 type: 'action',
                 icon: 'folder-plus',
@@ -794,7 +794,7 @@ module.exports = function (app) {
                 callback: self.moveToFolderFollowupEmployeeInbox,
                 class: "action-green",
                 checkShow: self.checkToShowAction
-            },
+            },*/
             // Open
             {
                 type: 'action',

@@ -252,6 +252,7 @@ module.exports = function (app) {
         self.showTagsInfo = function (gridName) {
             return !(self.model instanceof G2G
                 || self.model instanceof G2GMessagingHistory
+                || self.model instanceof EventHistory
             );
         };
 

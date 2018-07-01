@@ -107,7 +107,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkFavoriteDocuments = function ($event) {
-
             correspondenceService
                 .deleteBulkCorrespondenceFromFavorite(self.selectedFavoriteDocuments)
                 .then(function () {

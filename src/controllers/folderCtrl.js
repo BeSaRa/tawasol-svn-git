@@ -106,7 +106,7 @@ module.exports = function (app) {
 
         self.moveToFolder = function (workItem, $event, defer) {
             workItem
-                .addToFolder(self.folders, $event, true)
+                .addToFolder($event, true)
                 .then(function () {
                     self.reloadFolders(self.grid.page);
                 });
@@ -117,7 +117,7 @@ module.exports = function (app) {
          */
         self.moveToFolderBulk = function ($event) {
             return correspondenceService
-                .showAddBulkWorkItemsToFolder(self.selectedWorkItems, self.folders, $event, true)
+                .showAddBulkWorkItemsToFolder(self.selectedWorkItems, $event, true)
                 .then(function () {
                     self.reloadFolders(self.grid.page);
                 });

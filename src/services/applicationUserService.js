@@ -455,7 +455,6 @@ module.exports = function (app) {
                         controller: 'manageSubscriptionsPopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,
-                        targetEvent: $event,
                         resolve: {
                             documentSubscriptions: function (lookupService) {
                                 'ngInject';

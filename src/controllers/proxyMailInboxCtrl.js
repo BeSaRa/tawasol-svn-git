@@ -332,12 +332,12 @@ module.exports = function (app) {
             console.log('subscribeProxyMailInbox', workItem);
         };
 
-        /**
+       /* /!**
          * @description Export proxy Mail inbox
          * @param workItem
          * @param $event
          * @param defer
-         */
+         *!/
         self.exportProxyMailInbox = function (workItem, $event, defer) {
             proxyMailInboxService
                 .exportProxyMailInbox(workItem, $event)
@@ -348,6 +348,27 @@ module.exports = function (app) {
                             new ResolveDefer(defer);
                         });
                 });
+        };*/
+        /**
+         * @description Export proxy workItem (export to ready to export)
+         * @param workItem
+         * @param $event
+         * @param defer
+         */
+        self.sendWorkItemToReadyToExport = function (workItem, $event, defer) {
+            if (workItem.exportViaArchive()) {
+                return workItem.exportWorkItem($event, true).then(function () {
+                    self.reloadProxyMailInboxes(self.grid.page);
+                    new ResolveDefer(defer);
+                });
+            }
+            workItem.sendToReadyToExport().then(function () {
+                self.reloadProxyMailInboxes(self.grid.page)
+                    .then(function () {
+                        toast.success(langService.get('export_success'));
+                        new ResolveDefer(defer);
+                    });
+            })
         };
 
         /**
@@ -842,7 +863,7 @@ module.exports = function (app) {
                 hide: true,
                 checkShow: self.checkToShowAction
             },
-            // Export
+            /*// Export
             {
                 type: 'action',
                 icon: 'export',
@@ -856,6 +877,28 @@ module.exports = function (app) {
                     //addMethod = 1 (Paper) - show the export button
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model) && info.isPaper && info.documentClass === "outgoing";
+                }
+            },*/
+            // Export (Send to ready to export)
+            {
+                type: 'action',
+                icon: 'export',
+                text: 'grid_action_send_to_ready_to_export',
+                textCallback: function (model) {
+                    return model.exportViaArchive() ? 'grid_action_send_to_central_archive' : 'grid_action_send_to_ready_to_export';
+                },
+                shortcut: true,
+                callback: self.sendWorkItemToReadyToExport,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    //addMethod = 0 (Electronic/Digital) - hide the export button
+                    //addMethod = 1 (Paper) - show the export button
+                    var info = model.getInfo();
+                    // If internal book, no export is allowed
+                    // If incoming book, no addMethod will be available. So check workFlowName(if incoming) and show export button
+                    return self.checkToShowAction(action, model) && info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted() && (info.docStatus <= 22);
+                    // (model.generalStepElm.addMethod && model.generalStepElm.workFlowName.toLowerCase() !== 'internal')
+                    // || model.generalStepElm.workFlowName.toLowerCase() === 'incoming';
                 }
             },
             // Open

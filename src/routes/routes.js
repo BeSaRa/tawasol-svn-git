@@ -972,10 +972,10 @@ module.exports = function (app) {
                         'ngInject';
                         return userInboxService.loadUserInboxes();
                     },
-                    userFolders: function (userFolderService) {
+                    /*userFolders: function (userFolderService) {
                         'ngInject';
                         return userFolderService.getUserFoldersForApplicationUser();
-                    },
+                    },*/
                     userFilters: function (userFilterService) {
                         'ngInject';
                         return userFilterService.loadUserFilters();
@@ -1261,12 +1261,12 @@ module.exports = function (app) {
                 template: templateProvider.getView('followup-employee-inbox'),
                 controller: 'followupEmployeeInboxCtrl',
                 controllerAs: 'ctrl',
-                resolve: {
+                /*resolve: {
                     userFolders: function (userFolderService) {
                         'ngInject';
                         return userFolderService.getUserFoldersForApplicationUser();
                     }
-                }
+                }*/
             })
             // proxy mail inbox
             .state('app.inbox.proxy-mail-inbox', {

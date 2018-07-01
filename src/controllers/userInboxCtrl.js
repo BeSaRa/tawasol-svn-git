@@ -21,7 +21,7 @@ module.exports = function (app) {
                                               viewDocumentService,
                                               managerService,
                                               distributionWorkflowService,
-                                              userFolders,
+                                              //userFolders,
                                               $window,
                                               // welcome,
                                               tokenService,
@@ -70,7 +70,7 @@ module.exports = function (app) {
          */
         self.userInboxes = userInboxes;
         self.starredUserInboxes = _.filter(self.userInboxes, 'generalStepElm.starred');
-        self.userFolders = userFolders;
+        //self.userFolders = userFolders;
 
 
         /**
@@ -341,9 +341,10 @@ module.exports = function (app) {
          */
         self.addToFolderUserInboxBulk = function ($event) {
             return correspondenceService
-                .showAddBulkWorkItemsToFolder(self.selectedUserInboxes, self.userFolders, $event, false)
-                .then(function () {
-                    self.reloadUserInboxes(self.grid.page);
+                .showAddBulkWorkItemsToFolder(self.selectedUserInboxes, $event, false)
+                .then(function (result) {
+                    if (result)
+                        self.reloadUserInboxes(self.grid.page);
                 });
         };
 
@@ -391,8 +392,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.addToFolder = function (userInbox, $event) {
-            userInbox.addToFolder(self.userFolders, $event, false).then(function () {
-                self.reloadUserInboxes(self.grid.page);
+            userInbox.addToFolder($event, false).then(function (result) {
+                if (result)
+                    self.reloadUserInboxes(self.grid.page);
             });
         };
 
@@ -484,7 +486,10 @@ module.exports = function (app) {
 
                 userSubscriptionService.addUserSubscription(userSubscription).then(function (result) {
                     if (result) {
-                        toast.success(langService.get('subscribe_success').change({name: info.title, event: eventType.getTranslatedName()}));
+                        toast.success(langService.get('subscribe_success').change({
+                            name: info.title,
+                            event: eventType.getTranslatedName()
+                        }));
                     }
                 });
 
