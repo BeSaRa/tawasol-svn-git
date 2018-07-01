@@ -106,7 +106,7 @@ debugger;
                 promise = self.incoming.receiveDocument($stateParams.workItem);
             }
             else if(self.receiveG2G){
-                promise = self.incoming.receiveG2GDocument($stateParams.vsId);
+                promise = self.incoming.receiveG2GDocument();
             }
             else {
                 promise = self.incoming

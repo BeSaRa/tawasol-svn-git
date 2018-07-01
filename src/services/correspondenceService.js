@@ -1466,15 +1466,14 @@ module.exports = function (app) {
             /**
              * @description receive incoming document
              * @param correspondence
-             * @param vsId
              */
-            self.receiveG2GIncoming = function (correspondence, vsId) {
-                /*return $http
-                    .put((urlService.departmentWF + '/' + wobNumber + '/receive'), generator.interceptSendInstance(['Correspondence', _getModelName(correspondence.docClassName)], correspondence))
+            self.receiveG2GIncoming = function (correspondence) {
+                return $http
+                    .put(urlService.g2gInbox + 'receive',
+                        generator.interceptSendInstance(['Correspondence', 'Incoming'], correspondence))
                     .then(function (result) {
-                        correspondence.vsId = result.data.rs;
-                        return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
-                    });*/
+                        return true;
+                    });
             };
 
 
