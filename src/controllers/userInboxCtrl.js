@@ -288,7 +288,10 @@ module.exports = function (app) {
             correspondenceService
                 .terminateBulkWorkItem(self.selectedUserInboxes, $event)
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadUserInboxes(self.grid.page)
+                        .then(function () {
+                            userSubscriptionService.loadUserSubscriptions();
+                        });
                 });
         };
 
@@ -330,7 +333,10 @@ module.exports = function (app) {
             return correspondenceService
                 .launchCorrespondenceWorkflow(selectedItems, $event, 'forward', 'favorites')
                 .then(function () {
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadUserInboxes(self.grid.page)
+                        .then(function () {
+                            userSubscriptionService.loadUserSubscriptions();
+                        });
                 });
         }
 
@@ -382,7 +388,10 @@ module.exports = function (app) {
                 .terminate($event)
                 .then(function () {
                     new ResolveDefer(defer);
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadUserInboxes(self.grid.page)
+                        .then(function () {
+                            userSubscriptionService.loadUserSubscriptions();
+                        });
                 });
         };
 
@@ -432,6 +441,7 @@ module.exports = function (app) {
                     self.reloadUserInboxes(self.grid.page)
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            userSubscriptionService.loadUserSubscriptions();
                             new ResolveDefer(defer);
                         });
                 });
@@ -759,9 +769,13 @@ module.exports = function (app) {
                             self.reloadUserInboxes(self.grid.page)
                                 .then(function () {
                                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                                    userSubscriptionService.loadUserSubscriptions();
                                 });
                         });
-                    self.reloadUserInboxes(self.grid.page);
+                    self.reloadUserInboxes(self.grid.page)
+                        .then(function () {
+                            userSubscriptionService.loadUserSubscriptions();
+                        });
                 });
         };
 
@@ -781,7 +795,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.editContent = function (userInbox, $event) {
-            userInbox.manageDocumentContent($event);
+            userInbox.manageDocumentContent($event)
+                .then(function () {
+                    userSubscriptionService.loadUserSubscriptions();
+                });
         };
 
         /**
@@ -795,6 +812,10 @@ module.exports = function (app) {
                 .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
                 .finally(function (e) {
                     self.reloadUserInboxes(self.grid.page)
+                        .then(function () {
+                            userSubscriptionService.loadUserSubscriptions();
+                        });
+
                 });
         };
 

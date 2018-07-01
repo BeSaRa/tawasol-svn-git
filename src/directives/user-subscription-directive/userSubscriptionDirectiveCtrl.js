@@ -29,7 +29,7 @@ module.exports = function (app) {
                     targetEvent: $event,
                     template: cmsTemplate.getPopup('show-user-subscription'),
                     controller: 'showUserSubscriptionsPopCtrl',
-                    controllerAs: 'showUserSubscriptionsCtrl',
+                    controllerAs: 'ctrl',
                     resolve: {
                         userSubscriptions: function (userSubscriptionService) {
                             'ngInject';

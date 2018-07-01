@@ -549,7 +549,7 @@ module.exports = function (app) {
 
         self.transferToAnotherEmployeeBulk = function ($event) {
             correspondenceService
-                .openTransferDialog(self.selectedFollowupEmployeeInboxes, $event)
+                .openTransferDialog(self.selectedFollowupEmployeeInboxes, self.currentSelectedUser, self.availableUsers, $event)
                 .then(function () {
                     self.reloadFollowupEmployeeInboxes(self.grid.page)
                         .then(function () {

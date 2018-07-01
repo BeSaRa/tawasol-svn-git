@@ -847,11 +847,10 @@ module.exports = function (app) {
                     $http.post(urlService.exportToExcel, exportData)
                         //{headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
                         .then(function (result) {
-                            var path = result.data.rs;
-                            if (!path)
+                            if (!result.data.rs)
                                 toast.error(langService.get('error_export_to_excel'));
                             else
-                                downloadService.controllerMethod.fileDownload(path);
+                                downloadService.controllerMethod.fileDownload(result.data.rs);
                         })
                         .catch(function (error) {
                             toast.error(langService.get('error_export_to_excel'));
@@ -874,11 +873,10 @@ module.exports = function (app) {
                     return $http.post(urlService.exportToPdf, exportData)
                         //{headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
                         .then(function (result) {
-                            var path = result.data.rs;
-                            if (!path)
+                            if (!result.data.rs)
                                 toast.error(langService.get('error_print'));
                             else
-                                downloadService.controllerMethod.fileDownload(path);
+                                downloadService.controllerMethod.fileDownload(result.data.rs);
                         })
                         .catch(function (error) {
                             toast.error(langService.get('error_print'));

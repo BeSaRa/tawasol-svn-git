@@ -178,7 +178,11 @@ Bugs:
 -----------------------------------
 13686: Fix - Regression - Tags indicator not working from Sent Items
 13699: Fix - Regression - Proxy mail- crash occurred when terminate any document
+
+01-07-2018
+-----------------------------------
 13675: Fix - Regression : Add to Folder need to be removed from Follow-up employee inbox.
 13696: Fix - Regeression - OOF - proxy mail - export for outgoing paper document crash in the backend
 13647: Fix - Regression : Add to folder action is not working in user inbox.
+13674: Fix - Regression: Empty Users list appear when Transfer multiple documents to user in follow-up employee inbox queue.
 

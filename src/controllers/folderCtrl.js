@@ -69,6 +69,8 @@ module.exports = function (app) {
         self.toggleSidebarFolder = function () {
             self.sidebarStatus = !self.sidebarStatus;
         };
+        self.toggleSidebarFolder();
+
         /**
          * @description get clicked folder content.
          * @param folder
