@@ -15,7 +15,9 @@ module.exports = function (app) {
             INACTIVE_USER_ENTITY: 9016,
             PASSWORD_EMPTY: 9017,
             NO_USER_TO_BROADCAST: 3018,
-            PRINT_BARCODE_ERROR_NO_BARCODE_ELEMENT: 3019
+            PRINT_BARCODE_ERROR_NO_BARCODE_ELEMENT: 3019,
+            CANNOT_RECALL_OPENED_BOOK: 3031,
+            CANNOT_RECALL_NON_EXISTING_BOOK: 2016
         };
 
         return {

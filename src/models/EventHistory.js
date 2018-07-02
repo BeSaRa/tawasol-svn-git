@@ -81,8 +81,8 @@ module.exports = function (app) {
             };
 
             /**
-             * @description to get documentClass,vsId.
-             * @return {{documentClass: *, vsId: *}}
+             * @description Gets the common properties of the document
+             * @returns {CorrespondenceInfo}
              */
             EventHistory.prototype.getInfo = function () {
                 return correspondenceService.getCorrespondenceInformation(this);

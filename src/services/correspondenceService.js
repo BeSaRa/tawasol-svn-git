@@ -281,7 +281,7 @@ module.exports = function (app) {
                 if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) { /* WorkItem */
                     wobNumber = correspondence.generalStepElm.workObjectNumber;
                 }
-                else if (correspondence.hasOwnProperty('wobNum') && correspondence.wobNumber) { /* EventHistory */
+                else if (correspondence.hasOwnProperty('wobNum') && correspondence.wobNum) { /* EventHistory */
                     wobNumber = correspondence.wobNum;
                 }
                 else {  /* Correspondence */

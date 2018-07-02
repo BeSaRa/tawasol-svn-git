@@ -75,7 +75,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -133,21 +133,56 @@ module.exports = function (app) {
          * @param $event
          */
         self.recallSingle = function (userSentItem, $event) {
-                userSentItemService.viewWorkItem(userSentItem.wfId).then(function (item) {
-                    if(item.stepElm.isOpen){
-                        toast.error(('cannot_recall_opened_work_item'));
-                    }else{
-                        dialog.showPrompt($event,langService.get('transfer_reason')+'?','','').then(function (reason) {
-                            userSentItemService.recallSingleWorkItem(userSentItem.wfId, employeeService.getEmployee().domainName, reason).then(function (result) {
-                                if(result){
-                                    toast.success(langService.get('transfer_mail_success'));
-                                }
-                            }).catch(function (error) {
-                                toast.error(langService.get('work_item_not_found').change({wobNumber: userSentItem.wfId}));
-                            });
+            userSentItemService.recallSentItem(userSentItem, $event)
+                .then(function (result) {
+                    if(result){
+                        self.reloadUserSentItems(self.grid.page)
+                            .then(function () {
+                                toast.success(langService.get('recall_success').change({name: userSentItem.getTranslatedName()}));
                         });
                     }
                 });
+
+            /*userSentItemService.viewWorkItem(userSentItem.wfId)
+                .then(function (item) {
+                    if (item.stepElm.isOpen) {
+                        toast.error(langService.get('cannot_recall_opened_work_item'));
+                    } else {
+                        /!*dialog.showPrompt($event, langService.get('transfer_reason') + '?', '', '')
+                            .then(function (reason) {
+                                userSentItemService.recallSingleWorkItem(userSentItem.wfId, employeeService.getEmployee().domainName, reason)
+                                    .then(function (result) {
+                                        if (result) {
+                                            toast.success(langService.get('recall_success').change({name: userSentItem.getTranslatedName()}));
+                                        }
+                                    })
+                                    .catch(function (error) {
+                                        errorCode.checkIf(error, 'CANNOT_RECALL_NON_EXISTING_OR_OPENED_BOOK', function () {
+                                            dialog.errorMessage(langService.get('cannot_recall_opened_non_existing_work_item'));
+                                        })
+                                    });
+                            });*!/
+
+
+                        return self.showReasonDialog('recall_reason', $event)
+                            .then(function (reason) {
+                                userSentItemService.recallSingleWorkItem(userSentItem.wfId, reason)
+                                    .then(function (result) {
+                                        if (result) {
+                                            self.reloadUserSentItems(self.grid.page)
+                                                .then(function () {
+                                                    toast.success(langService.get('recall_success').change({name: userSentItem.getTranslatedName()}));
+                                                })
+                                        }
+                                    })
+                                    .catch(function (error) {
+                                        errorCode.checkIf(error, 'CANNOT_RECALL_NON_EXISTING_OR_OPENED_BOOK', function () {
+                                            dialog.errorMessage(langService.get('cannot_recall_opened_non_existing_work_item'));
+                                        })
+                                    });
+                            });
+                    }
+                });*/
 
 
         };
@@ -569,7 +604,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         //hide: true,
@@ -645,7 +680,7 @@ module.exports = function (app) {
                         text: 'grid_action_main_document_fax',
                         shortcut: false,
                         hide: true,
-                        permissionKey:"SEND_DOCUMENT_BY_FAX",
+                        permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction
