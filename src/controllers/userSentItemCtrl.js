@@ -142,49 +142,6 @@ module.exports = function (app) {
                         });
                     }
                 });
-
-            /*userSentItemService.viewWorkItem(userSentItem.wfId)
-                .then(function (item) {
-                    if (item.stepElm.isOpen) {
-                        toast.error(langService.get('cannot_recall_opened_work_item'));
-                    } else {
-                        /!*dialog.showPrompt($event, langService.get('transfer_reason') + '?', '', '')
-                            .then(function (reason) {
-                                userSentItemService.recallSingleWorkItem(userSentItem.wfId, employeeService.getEmployee().domainName, reason)
-                                    .then(function (result) {
-                                        if (result) {
-                                            toast.success(langService.get('recall_success').change({name: userSentItem.getTranslatedName()}));
-                                        }
-                                    })
-                                    .catch(function (error) {
-                                        errorCode.checkIf(error, 'CANNOT_RECALL_NON_EXISTING_OR_OPENED_BOOK', function () {
-                                            dialog.errorMessage(langService.get('cannot_recall_opened_non_existing_work_item'));
-                                        })
-                                    });
-                            });*!/
-
-
-                        return self.showReasonDialog('recall_reason', $event)
-                            .then(function (reason) {
-                                userSentItemService.recallSingleWorkItem(userSentItem.wfId, reason)
-                                    .then(function (result) {
-                                        if (result) {
-                                            self.reloadUserSentItems(self.grid.page)
-                                                .then(function () {
-                                                    toast.success(langService.get('recall_success').change({name: userSentItem.getTranslatedName()}));
-                                                })
-                                        }
-                                    })
-                                    .catch(function (error) {
-                                        errorCode.checkIf(error, 'CANNOT_RECALL_NON_EXISTING_OR_OPENED_BOOK', function () {
-                                            dialog.errorMessage(langService.get('cannot_recall_opened_non_existing_work_item'));
-                                        })
-                                    });
-                            });
-                    }
-                });*/
-
-
         };
 
         /**

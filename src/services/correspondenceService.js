@@ -675,6 +675,7 @@ module.exports = function (app) {
                         return self.screenLookups[documentClass];
                     });
             };
+
             /**
              * get correspondence lookups
              * @param documentClass
@@ -1444,7 +1445,7 @@ module.exports = function (app) {
                         result.data.rs.metaData.addMethod = 1;
                         result = result.data.rs;
                         result.metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming', 'ViewIncoming'], new Incoming(result.metaData));
-                        result.metaData.ou = employeeService.getEmployee().getOUID();
+                        //result.metaData.ou = employeeService.getEmployee().getOUID();
                         return result;
                     });
             };

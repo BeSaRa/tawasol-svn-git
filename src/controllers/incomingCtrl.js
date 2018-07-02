@@ -62,10 +62,8 @@ module.exports = function (app) {
 
         self.documentInformation = null;
 
-debugger;
         // incoming document
-        self.incoming = /*demoOutgoing;*/
-            new Incoming({
+        self.incoming = new Incoming({
                 ou: centralArchives ? null : self.employee.getOUID(),
                 addMethod: 1,//Paper document
                 createdOn: new Date(),

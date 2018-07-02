@@ -155,7 +155,18 @@ module.exports = function (app) {
          * @param $event
          */
         self.recall = function (sentItemDepartmentInbox,$event) {
-           if(sentItemDepartmentInbox.receivedById === null){
+            sentItemDepartmentInboxService.recallSentItem(sentItemDepartmentInbox, $event)
+                .then(function (result) {
+                    if(result){
+                        self.reloadSentItemDepartmentInboxes(self.grid.page)
+                            .then(function () {
+                                toast.success(langService.get('recall_success').change({name: sentItemDepartmentInbox.getTranslatedName()}));
+                            });
+                    }
+                });
+
+
+            /*if(sentItemDepartmentInbox.receivedById === null){
                 sentItemDepartmentInboxService.fetchDeptSentWorkitemByVsId(sentItemDepartmentInbox.vsId).then(function (result) {
                     var wobNum = 'temp01';
                     angular.forEach(result, function(item){
@@ -176,7 +187,7 @@ module.exports = function (app) {
                 });
             }else{
                 toast.error(langService.get('cannot_recall_received_book'));
-            }
+            }*/
 
         };
 

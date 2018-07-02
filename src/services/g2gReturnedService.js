@@ -3,7 +3,7 @@ module.exports = function (app) {
                                                     $http , 
                                                     $q , 
                                                     generator,
-                                                    G2G,
+                                                    G2GMessagingHistory,
                                                     _,
                                                     dialog,
                                                     langService,
@@ -20,8 +20,8 @@ module.exports = function (app) {
          */
         self.loadG2gItems = function () {
             return $http.get(urlService.g2gInbox + 'getReturn').then(function (result) {
-                self.g2gItems = generator.generateCollection(result.data.rs, G2G, self._sharedMethods);
-                self.g2gItems = generator.interceptReceivedCollection('G2G', self.g2gItems);
+                self.g2gItems = generator.generateCollection(result.data.rs, G2GMessagingHistory, self._sharedMethods);
+                self.g2gItems = generator.interceptReceivedCollection('G2GMessagingHistory', self.g2gItems);
                 return self.g2gItems;
             });
         };
@@ -40,23 +40,23 @@ module.exports = function (app) {
          * @returns {G2G|undefined} return G2G Model or undefined if not found.
          */
         self.getG2gInboxById = function (g2gItemId) {
-            g2gItemId = g2gItemId instanceof G2G ? g2gItemId.correspondence.id : g2gItemId;
+            g2gItemId = g2gItemId instanceof G2GMessagingHistory ? g2gItemId.correspondence.id : g2gItemId;
             return _.find(self.g2gItems, function (g2gItem) {
                 return Number(g2gItem.id) === Number(g2gItemId);
             });
         };
 
         self.terminateG2G = function(g2gItemId){
-            g2gItemId = g2gItemId instanceof G2G ? g2gItemId.correspondence.id : g2gItemId;
+            g2gItemId = g2gItemId instanceof G2GMessagingHistory ? g2gItemId.correspondence.id : g2gItemId;
         };
 
         self.resendG2G = function(g2gItemId){
-            g2gItemId = g2gItemId instanceof G2G ? g2gItemId.correspondence.id : g2gItemId;
+            g2gItemId = g2gItemId instanceof G2GMessagingHistory ? g2gItemId.correspondence.id : g2gItemId;
         };
 
         self.openG2G  = function(g2gCorrespondence){
-            // intercept send instance for G2G
-            //g2gCorrespondence =  g2gCorrespondence instanceof G2G ? generator.interceptSendInstance('G2G', g2gCorrespondence) : g2gCorrespondence;
+            // intercept send instance for G2GMessagingHistory
+            //g2gCorrespondence =  g2gCorrespondence instanceof G2GMessagingHistory ? generator.interceptSendInstance('G2GMessagingHistory', g2gCorrespondence) : g2gCorrespondence;
             // get correspondence from G2G object
 
             return $http

@@ -91,16 +91,21 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.reloadG2gItems(self.grid.page);
                 })
-                .catch(function(error){
+                .catch(function (error) {
                     self.reloadG2gItems(self.grid.page);
                 })
         };
 
 
         self.recall = function (g2gItem, $event) {
-            return g2gSentItemsService.resendG2G(g2gItem, $event)
+            return g2gSentItemsService.recallG2G(g2gItem, $event)
                 .then(function (result) {
-                    toast.success(langService.get('success'));
+                    if (result) {
+                        self.reloadG2gItems(self.page.grid)
+                            .then(function () {
+                                toast.success(langService.get('recall_success').change({name: g2gItem.getTranslatedName()}));
+                            });
+                    }
                 })
         };
 

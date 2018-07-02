@@ -4,7 +4,8 @@ module.exports = function (app) {
                       generator,
                       correspondenceService,
                       Incoming,
-                      Site) {
+                      Site,
+                      g2gLookupService) {
 
         var modelName = 'G2G';
 
@@ -18,6 +19,7 @@ module.exports = function (app) {
             delete model.correspondence.lastModifiedString;
             delete model.recordInfo;
             delete model.isLockedG2GIndicator;
+            delete model.typeInfo;
             return model;
         });
 
@@ -40,6 +42,8 @@ module.exports = function (app) {
             model.correspondence.lastModifiedString = generator.getDateFromTimeStamp(model.correspondence.lastModified, true);
             model.isLockedG2GIndicator = model.getIsLockedG2GIndicator();
             model.recordInfo = correspondenceService.getCorrespondenceInformation(model.correspondence);
+            //todo: type info is binded to siteType property until confirmed by Hussam from Abu Al Nassr
+            model.typeInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.copyOrOriginal.name, model.correspondence.siteType);
             return model;
         });
 

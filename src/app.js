@@ -21,7 +21,8 @@
                 'mdColorPicker',
                 'angularTrix',
                 'CMSScanner',
-                'LocalStorageModule'
+                'LocalStorageModule',
+                'ui.mask'
             ]
         );
 

@@ -35,7 +35,7 @@
                                             <span>{{lang.subject}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
-                                            md-order-by="docType">
+                                            md-order-by="{{ctrl.getSortingKey('typeInfo', 'LookupG2G')}}">
                                             <span>{{lang.document_type}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
@@ -59,7 +59,7 @@
                                             <span>{{lang.received_date}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
-                                            md-order-by="statusString">
+                                            md-order-by="{{ctrl.getSortingKey('statusInfo', 'LookupG2G')}}">
                                             <span>{{lang.status}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
@@ -82,13 +82,13 @@
                                                title="{{g2gItem.subject}}"
                                                ng-click="ctrl.viewDocument(g2gItem, $event)">{{g2gItem.subject}}</a>
                                         </td>
-                                        <td md-cell>{{g2gItem.getTranslatedOriginalCopyType()}}</td>
+                                        <td md-cell>{{g2gItem.typeInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{g2gItem.securityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{g2gItem.sentDate}}</td>
                                         <td md-cell>{{g2gItem.outgoingSerial}}</td>
                                         <td md-cell>{{g2gItem.g2GRefNo}}</td>
                                         <td md-cell>{{g2gItem.updateDate}}</td>
-                                        <td md-cell>{{g2gItem.statusString}}</td>
+                                        <td md-cell>{{g2gItem.statusInfo.getTranslatedName()}}</td>
                                         <td md-cell>
                                             <main-site-sub-site-directive item="g2gItem"
                                                                           type="G2GMessagingHistory"></main-site-sub-site-directive>

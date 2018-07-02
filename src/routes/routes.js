@@ -1422,7 +1422,12 @@ module.exports = function (app) {
                 controller: 'g2gIncomingCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
+                    lookups: function (g2gLookupService) {
+                        'ngInject';
+                        return g2gLookupService.getG2gLookups();
+                    },
                     g2gItems: function (g2gIncomingService) {
+                        'ngInject';
                         return g2gIncomingService.loadG2gItems();
                     }
                 }
@@ -1433,7 +1438,12 @@ module.exports = function (app) {
                 controller: 'g2gReturnedCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
+                    lookups: function (g2gLookupService) {
+                        'ngInject';
+                        return g2gLookupService.getG2gLookups();
+                    },
                     g2gItems: function (g2gReturnedService) {
+                        'ngInject';
                         return g2gReturnedService.loadG2gItems();
                     }
                 }
@@ -1444,7 +1454,12 @@ module.exports = function (app) {
                 controller: 'g2gSentItemsCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
+                    lookups: function (g2gLookupService) {
+                        'ngInject';
+                        return g2gLookupService.getG2gLookups();
+                    },
                     g2gItems: function (g2gSentItemsService) {
+                        'ngInject';
                         return g2gSentItemsService.loadG2gItems();
                     }
                 }

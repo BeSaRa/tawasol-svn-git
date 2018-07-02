@@ -85,14 +85,6 @@ module.exports = function (app) {
                 return this.correspondence.docSubject;
             };
 
-
-            G2G.prototype.getTranslatedOriginalCopyType = function () {
-                return (typeof this.correspondence.type !== 'undefined' && this.correspondence.type !== null) ?
-                    (this.correspondence.type === 0 ? langService.get('original') : langService.get('copy'))
-                    : null;
-            };
-
-
             /**
              * @description Get the translated correspondence site info.
              * @returns {string}

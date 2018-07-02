@@ -39,20 +39,66 @@ module.exports = function (app) {
          * @param g2gItemId
          * @returns {G2G|undefined} return G2G Model or undefined if not found.
          */
-        self.getG2gInboxById = function (g2gItemId) {
+        self.getG2gItemsById = function (g2gItemId) {
             g2gItemId = g2gItemId instanceof G2GMessagingHistory ? g2gItemId.id : g2gItemId;
             return _.find(self.g2gItems, function (g2gItem) {
                 return Number(g2gItem.id) === Number(g2gItemId);
             });
         };
 
-        self.recallG2G = function(g2gItem){
-
+        /**
+         * @description  open reason dialog
+         * @param dialogTitle
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.showReasonDialog = function (dialogTitle, $event) {
+            return dialog
+                .showDialog({
+                    template: cmsTemplate.getPopup('reason'),
+                    controller: 'reasonPopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    targetEvent: $event,
+                    locals: {
+                        title: dialogTitle
+                    },
+                    resolve: {
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return userCommentService.getUserComments()
+                                .then(function (result) {
+                                    return _.filter(result, 'status');
+                                });
+                        }
+                    }
+                });
         };
 
-        self.terminateG2G = function(g2gItem){
-
+        /**
+         * @description Recalls the g2g sent item
+         * @param g2gItem
+         * @param $event
+         */
+        self.recallG2G = function(g2gItem, $event){
+            return self.showReasonDialog('recall_reason', $event)
+                .then(function (reason) {
+                    /*return $http.put((urlService.userInbox + '/' + sentItem.wfId + '/recall'), {
+                        comment: reason
+                    }).then(function (result) {
+                        return result.data.rs;
+                    }).catch(function (error) {
+                        errorCode.checkIf(error, 'CANNOT_RECALL_OPENED_BOOK', function () {
+                            dialog.errorMessage(langService.get('cannot_recall_opened_book'));
+                        });
+                        errorCode.checkIf(error, 'CANNOT_RECALL_NON_EXISTING_BOOK', function () {
+                            dialog.errorMessage(langService.get('cannot_call_non_existing_book'));
+                        });
+                        return false;
+                    });*/
+                });
         };
+
 
         /**
          * @description Create the shared method to the model.

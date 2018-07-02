@@ -39,7 +39,7 @@
                                             <span>{{lang.subject}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
-                                            md-order-by="correspondence.docType">
+                                            md-order-by="{{ctrl.getSortingKey('typeInfo', 'LookupG2G')}}">
                                             <span>{{lang.document_type}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
@@ -83,7 +83,7 @@
                                                title="{{g2gItem.correspondence.docSubject}}"
                                                ng-click="ctrl.viewDocument(g2gItem, $event)">{{g2gItem.correspondence.docSubject}}</a>
                                         </td>
-                                        <td md-cell>{{g2gItem.getTranslatedOriginalCopyType()}}</td>
+                                        <td md-cell>{{g2gItem.typeInfo.getTranslatedName()}}</td>
                                         <td md-cell>{{g2gItem.securityLevel.getTranslatedName()}}</td>
                                         <td md-cell>{{g2gItem.correspondence.refDocNumber}}</td>
                                         <td md-cell>{{g2gItem.correspondence.g2gRefNO}}</td>

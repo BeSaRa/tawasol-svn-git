@@ -224,4 +224,6 @@ module.exports = (function () {
     require('angular-trix');
     require('chart.js');
     require('animate.css/animate.css');
+    // angular ui mask
+    require('angular-ui-mask');
 })();

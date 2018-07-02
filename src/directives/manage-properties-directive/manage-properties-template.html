@@ -2,7 +2,7 @@
     <fieldset class="field-set-hidden">
         <div layout="column">
             <div layout="row">
-                <!-- Correspondence registry -->
+                <!-- Correspondence registry (If show registry unit)-->
                 <md-input-container ng-if="ctrl.showRegistryUnit()" flex>
                     <label for="registryOU">{{lang.corr_registry}}</label>
                     <md-select name="registryOU"
@@ -21,7 +21,7 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-                <!-- OU -->
+                <!-- OU (If not show registry unit) -->
                 <md-input-container ng-if="!ctrl.showRegistryUnit()" flex>
                     <label for="ou">{{lang.organization_unit}}</label>
                     <md-select name="ou"
@@ -39,7 +39,7 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-                <!-- OU -->
+                <!-- OU (If show registry unit) -->
                 <md-input-container ng-if="ctrl.showRegistryUnit()" flex>
                     <label for="ou">{{lang.organization_unit}}</label>
                     <md-select name="ou"

@@ -147,6 +147,10 @@ module.exports = function (app) {
             delete model.mainSiteInfo;
 
             delete model.sitesToList;
+            delete model.mainClassificationInfo;
+            delete model.subClassificationInfo;
+            delete model.registeryOuInfo;
+            delete model.followupStatusInfo;
 
             return model;
         });

@@ -255,7 +255,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.receiveDocument,
                 class: "action-green",
-                //permissionKey: 'VIEW_DOCUMENT',
+                //permissionKey: '',
                 showInView: true,
                 showInViewOnly: true,
                 checkShow: self.checkToShowAction
@@ -268,7 +268,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.returnDocument,
                 class: "action-green",
-                //permissionKey: 'VIEW_DOCUMENT',
+                //permissionKey: '',
                 showInView: true,
                 showInViewOnly: true,
                 checkShow: self.checkToShowAction

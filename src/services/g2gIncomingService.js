@@ -76,6 +76,12 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Returns the document
+         * @param g2gCorrespondence
+         * @param $event
+         * @returns {*}
+         */
         self.returnG2G = function (g2gCorrespondence, $event) {
             // intercept send instance for G2G
             g2gCorrespondence = g2gCorrespondence instanceof G2G ? generator.interceptSendInstance('G2G', g2gCorrespondence) : g2gCorrespondence;
@@ -96,7 +102,8 @@ module.exports = function (app) {
                 });
         };
 
-        self.receiveG2G = function (g2gCorrespondence) {
+
+       /* self.receiveG2G = function (g2gCorrespondence) {
             // intercept send instance for G2G
             g2gCorrespondence = g2gCorrespondence instanceof G2G ? generator.interceptSendInstance('G2G', g2gCorrespondence) : g2gCorrespondence;
             // get correspondence from G2G object
@@ -106,7 +113,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     return true;
                 });
-        };
+        };*/
 
 
         /**

@@ -6,6 +6,9 @@ module.exports = function (app) {
         return function G2GMessagingHistory(model) {
             var self = this;
 
+            self.refDocId = null;
+            self.status = null;
+            self.type = null;
             self.mainSiteFrom = null;
             self.subSiteFrom = null;
             self.sentDate = null;
@@ -72,12 +75,6 @@ module.exports = function (app) {
                 var mainSite = new Information(this.mainSiteFrom);
                 var subSite = (this.subSiteFrom) ? new Information(this.subSiteFrom) : '';
                 return (mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : ''));
-            };
-
-            G2GMessagingHistory.prototype.getTranslatedOriginalCopyType = function(){
-                return (typeof this.type !== 'undefined' && this.type !== null) ?
-                    (this.type === 0 ? langService.get('original') : langService.get('copy'))
-                    : null;
             };
 
             // don't remove CMSModelInterceptor from last line

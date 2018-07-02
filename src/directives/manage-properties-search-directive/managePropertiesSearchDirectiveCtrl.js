@@ -167,6 +167,7 @@ module.exports = function (app) {
                         controller: 'searchDocDateRangePopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,
+                        escapeToClose: false,
                         locals: {
                             document: self.document,
                             year: self.selectedYear

@@ -9,6 +9,8 @@ module.exports = function (app) {
                                                             langService,
                                                             toast,
                                                             cmsTemplate,
+                                                            errorCode,
+                                                            userCommentService,
                                                             tokenService,
                                                             $timeout) {
         'ngInject';
@@ -25,11 +27,70 @@ module.exports = function (app) {
             /*
             * Pending(0),Sent(1),Delivered(2),Returned(3),Removed(4)
             * */
-            return $http.post(urlService.departmentInboxes + '/dept-sent-items/month/' + month + '/year/' + year, [0,1,2,3]).then(function (result) {
+            month = month.hasOwnProperty('value') ? month.value : month;
+            return $http.post(urlService.departmentInboxes + '/dept-sent-items/month/' + month + '/year/' + year, [0, 1, 2, 3]).then(function (result) {
                 self.sentItemDepartmentInboxes = generator.generateCollection(result.data.rs, SentItemDepartmentInbox, self._sharedMethods);
                 self.sentItemDepartmentInboxes = generator.interceptReceivedCollection('SentItemDepartmentInbox', self.sentItemDepartmentInboxes);
                 return self.sentItemDepartmentInboxes;
             });
+        };
+
+
+        /**
+         * @description  open reason dialog
+         * @param dialogTitle
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.showReasonDialog = function (dialogTitle, $event) {
+            return dialog
+                .showDialog({
+                    template: cmsTemplate.getPopup('reason'),
+                    controller: 'reasonPopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    targetEvent: $event,
+                    locals: {
+                        title: dialogTitle
+                    },
+                    resolve: {
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return userCommentService.getUserComments()
+                                .then(function (result) {
+                                    return _.filter(result, 'status');
+                                });
+                        }
+                    }
+                });
+        };
+        /**
+         * @description open bulk reason.
+         * @param dialogTitle
+         * @param workItems
+         * @param $event
+         */
+        self.showReasonBulkDialog = function (dialogTitle, workItems, $event) {
+            return dialog
+                .showDialog({
+                    template: cmsTemplate.getPopup('reason-bulk'),
+                    controller: 'reasonBulkPopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    locals: {
+                        workItems: workItems,
+                        title: dialogTitle
+                    },
+                    resolve: {
+                        comments: function (userCommentService) {
+                            'ngInject';
+                            return userCommentService.getUserComments()
+                                .then(function (result) {
+                                    return _.filter(result, 'status');
+                                });
+                        }
+                    }
+                });
         };
 
         /**
@@ -47,7 +108,7 @@ module.exports = function (app) {
          * @returns WorkItem status
          */
 
-        self.recallSingleWorkItem = function (wobNumber,user,comment) {
+        /*self.recallSingleWorkItem = function (wobNumber,user,comment) {
             return $http
                 .put((urlService.userInbox + '/' + wobNumber + '/reassign'), {
                     user: user,
@@ -55,6 +116,33 @@ module.exports = function (app) {
                 })
                 .then(function (result) {
                     return result.data.rs;
+                });
+        };*/
+
+        /**
+         * @description recall sent item again to user inbox.
+         * @returns WorkItem status
+         */
+        self.recallSentItem = function (sentItem, $event, ignoreMessage) {
+            if (sentItem.receivedById !== null) {
+                dialog.errorMessage(langService.get('cannot_recall_received_book'));
+                return false;
+            }
+            return self.showReasonDialog('recall_reason', $event)
+                .then(function (reason) {
+                    return $http.put((urlService.departmentInboxes + '/' + sentItem.getInfo().vsId + '/recall'), {
+                        comment: reason
+                    }).then(function (result) {
+                        return result.data.rs;
+                    }).catch(function (error) {
+                        errorCode.checkIf(error, 'CANNOT_RECALL_OPENED_BOOK', function () {
+                            dialog.errorMessage(langService.get('cannot_recall_received_book'));
+                        });
+                        errorCode.checkIf(error, 'CANNOT_RECALL_NON_EXISTING_BOOK', function () {
+                            dialog.errorMessage(langService.get('cannot_call_non_existing_book'));
+                        });
+                        return false;
+                    });
                 });
         };
 

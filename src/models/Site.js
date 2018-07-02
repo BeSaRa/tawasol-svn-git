@@ -104,7 +104,14 @@ module.exports = function (app) {
                 model.siteType = this.siteType && this.siteType.hasOwnProperty('id') ? this.siteType.lookupKey : this.siteType;
                 model.mainSiteId = this.mainSiteId && this.mainSiteId.hasOwnProperty('id') ? this.mainSiteId.id : this.mainSiteId;
                 model.subSiteId = this.subSiteId && this.subSiteId.hasOwnProperty('id') ? this.subSiteId.id : this.subSiteId;
-                model.followupStatus = this.followupStatus && this.followupStatus.hasOwnProperty('id') ? this.followupStatus.lookupKey : this.followupStatus;
+                // model.followupStatus = this.followupStatus && this.followupStatus.hasOwnProperty('id') ? this.followupStatus.lookupKey : this.followupStatus;
+                model.followupStatus = this.followupStatus;
+                if (this.followupStatus) {
+                    if (this.followupStatus.hasOwnProperty('lookupKey'))
+                        model.followupStatus = this.followupStatus.lookupKey;
+                    else if (this.followupStatus.hasOwnProperty('id'))
+                        model.followupStatus = this.followupStatus.id;
+                }
                 model.followupDate = this.followupDate;
                 return model;
             };
