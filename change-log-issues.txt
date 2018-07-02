@@ -188,4 +188,5 @@ Bugs:
 
 02-07-2018
 --------------------
-13753:Fix - Recall - User sent items - Wrong message appear when Recall document already recalled.
+13753: Fix - Recall - User sent items - Wrong message appear when Recall document already recalled.
+13754: Fix - Recall - User sent items - The Recalled Document appear in sender user inbox.

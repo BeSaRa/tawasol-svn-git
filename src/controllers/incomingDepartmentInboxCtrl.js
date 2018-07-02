@@ -513,6 +513,7 @@ module.exports = function (app) {
              type: 'action',
              icon: 'tag',
              text: 'grid_action_tags',
+             permissionKey: "MANAGE_DOCUMENT’S_TAGS",
              shortcut: false,
              callback: self.manageTags,
              class: "action-green",
