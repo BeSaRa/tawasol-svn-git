@@ -1,8 +1,7 @@
 module.exports = function (app) {
     app.service('downloadService', function (urlService,
                                              $http,
-                                             tokenService,
-                                             $timeout) {
+                                             tokenService) {
         'ngInject';
         var self = this;
         self.serviceName = 'downloadService';
@@ -39,6 +38,7 @@ module.exports = function (app) {
              * @param $event
              */
             fileDownload: function (path, $event) {
+                //var domain = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/";
                 window.open(path);
             }
         };

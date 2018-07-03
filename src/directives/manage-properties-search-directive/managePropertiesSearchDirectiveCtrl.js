@@ -209,9 +209,9 @@ module.exports = function (app) {
              * @private
              */
             function _securityLevelExist(securityLevel, securityLevels) {
-                var Id = securityLevel && securityLevel.hasOwnProperty('id') ? securityLevel.id : securityLevel;
+                var id = securityLevel && securityLevel.hasOwnProperty('id') ? securityLevel.id : securityLevel;
                 return _.find(securityLevels, function (item) {
-                    return item.id === Id;
+                    return item.id === id || !id;
                 });
             }
 
@@ -305,8 +305,8 @@ module.exports = function (app) {
                 if (self.document.fileId && !_securityLevelExist(self.document.securityLevel, self.document.fileId.securityLevels)) {
                     self.document.fileId = null;
                 }
-                _getClassifications(false);
-                _getDocumentFiles(false);
+                _getClassifications(true);
+                _getDocumentFiles(true);
             };
 
             /**
@@ -521,11 +521,11 @@ module.exports = function (app) {
                 }
             };
 
-        /**
-         * @description Set the formatted serial number for search on changing the serial number from and to values
-         * @param $event
-         */
-        self.setSerialNumber = function ($event) {
+            /**
+             * @description Set the formatted serial number for search on changing the serial number from and to values
+             * @param $event
+             */
+            self.setSerialNumber = function ($event) {
                 if (self.serialNoFrom && self.serialNoTo)
                     self.document.docSerial = self.serialNoFrom + ',' + self.serialNoTo;
                 else

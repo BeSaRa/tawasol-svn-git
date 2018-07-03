@@ -23,7 +23,8 @@ module.exports = function (app) {
                                                    ResolveDefer,
                                                    generator,
                                                    mailNotificationService,
-                                                   correspondenceService) {
+                                                   correspondenceService,
+                                                   $state) {
         'ngInject';
         var self = this;
 
