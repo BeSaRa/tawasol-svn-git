@@ -192,3 +192,7 @@ Bugs:
 --------------------
 13753: Fix - Recall - User sent items - Wrong message appear when Recall document already recalled.
 13754: Fix - Recall - User sent items - The Recalled Document appear in sender user inbox.
+
+03-07-2018
+-------------------
+13661: Fix - Regression: The Correspondence site is saved successfully, when edit it to need reply without select follow-up date.
