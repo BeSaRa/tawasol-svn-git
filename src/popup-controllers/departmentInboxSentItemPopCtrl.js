@@ -18,54 +18,55 @@ module.exports = function (app) {
         //self.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         self.months = [
             {
-                text: langService.get('january'),
+                text: 'january',
                 value: 1
             },
             {
-                text: langService.get('february'),
+                text: 'february',
                 value: 2
             },
             {
-                text: langService.get('march'),
+                text: 'march',
                 value: 3
             },
             {
-                text: langService.get('april'),
+                text: 'april',
                 value: 4
             },
             {
-                text: langService.get('may'),
+                text: 'may',
                 value: 5
             },
             {
-                text: langService.get('june'),
+                text: 'june',
                 value: 6
             },
             {
-                text: langService.get('july'),
+                text: 'july',
                 value: 7
             },
             {
-                text: langService.get('august'),
+                text: 'august',
                 value: 8
             },
             {
-                text: langService.get('september'),
+                text: 'september',
                 value: 9
             },
             {
-                text: langService.get('october'),
+                text: 'october',
                 value: 10
             },
             {
-                text: langService.get('november'),
+                text: 'november',
                 value: 11
             },
             {
-                text: langService.get('december'),
+                text: 'december',
                 value: 12
             }
         ];
+
         self.years = function () {
             var currentYear = new Date().getFullYear(), years = [];
             var lastYearForRange = currentYear - 10;
@@ -84,7 +85,8 @@ module.exports = function (app) {
             dialog.hide(
                 {
                     month: self.selectedMonth,
-                    year: self.selectedYear
+                    year: self.selectedYear,
+                    monthText: self.months[self.selectedMonth - 1].text
                 }
             );
         };

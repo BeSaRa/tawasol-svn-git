@@ -94,6 +94,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.selectedMonth = result.month;
                     self.selectedYear = result.year;
+                    self.selectedMonthText = angular.copy(result.monthText);
                     self.reloadSentItemDepartmentInboxes(self.grid.page);
                 });
         };
@@ -154,10 +155,10 @@ module.exports = function (app) {
          * @param sentItemDepartmentInbox
          * @param $event
          */
-        self.recall = function (sentItemDepartmentInbox,$event) {
+        self.recall = function (sentItemDepartmentInbox, $event) {
             sentItemDepartmentInboxService.recallSentItem(sentItemDepartmentInbox, $event)
                 .then(function (result) {
-                    if(result){
+                    if (result) {
                         self.reloadSentItemDepartmentInboxes(self.grid.page)
                             .then(function () {
                                 toast.success(langService.get('recall_success').change({name: sentItemDepartmentInbox.getTranslatedName()}));
@@ -440,7 +441,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadSentItemDepartmentInboxes(self.grid.page);
                 })
-                .catch(function(){
+                .catch(function () {
                     self.reloadSentItemDepartmentInboxes(self.grid.page);
                 });
         };
@@ -469,8 +470,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }
@@ -669,7 +670,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -754,7 +755,7 @@ module.exports = function (app) {
                         text: 'grid_action_main_document_fax',
                         shortcut: false,
                         hide: true,
-                        permissionKey:"SEND_DOCUMENT_BY_FAX",
+                        permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction

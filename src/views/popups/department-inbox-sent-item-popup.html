@@ -14,7 +14,7 @@
                                        aria-label="{{lang.dep_month}}"
                                        ng-model="ctrl.selectedMonth">
                                 <md-option ng-value="month.value" ng-repeat="month in ctrl.months track by $index">
-                                    {{month.text}}
+                                    {{lang[month.text]}}
                                 </md-option>
                             </md-select>
                             <div ng-messages="monthAndYearForm.month.$error">
