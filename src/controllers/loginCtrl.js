@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.controller('loginCtrl', function (loginPage,
                                           cmsTemplate,
+                                          $scope,
                                           employeeService,
                                           dialog,
                                           FilterFactory,
@@ -26,6 +27,7 @@ module.exports = function (app) {
         self.controllerName = 'loginCtrl';
         self.flipBg = loginPage.flip;
         self.loginStatus = false;
+
 
         self.credentials = new Credentials({
             username: '',
@@ -145,6 +147,7 @@ module.exports = function (app) {
             authenticationService
                 .authenticate(self.credentials)
                 .then(function (result) {
+                    _hideFixOverlay();
                     _completeLogin(callback, result);
                 })
                 .catch(function () {
@@ -189,7 +192,15 @@ module.exports = function (app) {
                 });
         };
 
-        checkIfLogoutBySession();
+        function _fixLoginOverlay() {
+            $scope.hasOwnProperty('_loginDialog') && $scope._loginDialog ? angular.element('body').addClass('login-dialog') : null;
+        }
 
+        function _hideFixOverlay() {
+            angular.element('body').removeClass('login-dialog');
+        }
+
+        checkIfLogoutBySession();
+        _fixLoginOverlay()
     });
 };

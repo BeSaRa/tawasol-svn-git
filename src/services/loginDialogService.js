@@ -22,6 +22,7 @@ module.exports = function (app) {
             }
             var scope = $rootScope.$new(false);
             scope.callback = self.callback;
+            scope._loginDialog = true;
             self.openStatus = true;
             return self.promise = dialog.showDialog({
                 template: cmsTemplate.getPopup('login'),

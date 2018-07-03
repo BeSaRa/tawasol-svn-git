@@ -16,6 +16,12 @@ html {
   }
 }
 
+body.login-dialog {
+  .md-dialog-container {
+    z-index: 101;
+  }
+}
+
 body, html, #main-view, #sub-view-wrapper {
   overflow: hidden !important;
   position: relative !important;
@@ -1639,7 +1645,8 @@ tr.unread-row {
 .size-50 {
   width: 50% !important;
 }
-.size-100{
+
+.size-100 {
   width: 100% !important;
 }
 
@@ -1873,7 +1880,7 @@ table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child
   }
 }
 
-#pointer-track{
+#pointer-track {
   width: 595px;
   height: 842px;
   margin: 10px;
@@ -1902,4 +1909,3 @@ button.list-button {
     border-radius: 10px;
   }
 }
-
