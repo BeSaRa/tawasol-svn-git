@@ -196,3 +196,4 @@ Bugs:
 03-07-2018
 -------------------
 13661: Fix - Regression: The Correspondence site is saved successfully, when edit it to need reply without select follow-up date.
+12855: Fix - Regression - Incoming review queue - manage distinations add new/editing are not saved

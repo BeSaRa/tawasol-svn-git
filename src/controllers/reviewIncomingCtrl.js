@@ -495,6 +495,9 @@ module.exports = function (app) {
          */
         self.manageDestinations = function (reviewIncoming, $event) {
             managerService.manageDocumentCorrespondence(reviewIncoming.vsId, reviewIncoming.docClassName, reviewIncoming.docSubject, $event)
+                .then(function(){
+                    self.reloadReviewIncomings(self.grid.page);
+                })
         };
 
         /**
