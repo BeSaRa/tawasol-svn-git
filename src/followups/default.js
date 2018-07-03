@@ -103,9 +103,9 @@ module.exports = function (app) {
             return tokenService
                 .tokenRefresh()
                 .then(function () {
-                    // return true;
-                    return loginDialogService
-                        .openLoginDialog(true);
+                    return true;
+                    // return loginDialogService
+                    //     .openLoginDialog(true);
                 })
                 .catch(function () {
                     return loginDialogService
