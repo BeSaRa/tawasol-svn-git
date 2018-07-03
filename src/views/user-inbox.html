@@ -6,7 +6,10 @@
             <!--<md-button ng-click="ctrl.openSidebarFilter()" class="md-icon-button" tooltip="{{lang.user_filters}}">
                 <md-icon md-svg-icon="file-tree"></md-icon>
             </md-button>-->
-            <md-button layout="row" class="md-icon-button list-button" ng-click="ctrl.openSidebarFilter()" tooltip="{{lang.user_filters}}">
+
+            <!-- Hide it unless confirmed again to show -->
+            <md-button layout="row" ng-if="false" class="md-icon-button list-button" ng-click="ctrl.openSidebarFilter()"
+                       tooltip="{{lang.user_filters}}">
                 <md-icon md-svg-icon="file-tree" id="list-icon"></md-icon>
                 <span class="list-counter">{{ctrl.userFilters.length}}</span>
             </md-button>
@@ -34,7 +37,9 @@
         <!-- page-content -->
         <div layout="column" flex>
             <!-- User filters -->
-            <div class="z-index-4">
+
+            <!-- Hide it unless confirmed again to show -->
+            <div class="z-index-4" ng-if="false">
                 <md-sidenav id="sidebar-folder-structure" md-is-open="ctrl.sidebarFilter"
                             ng-class="{'md-sidenav-right':lang.current === 'ar'}">
                     <div class="p20 first-folder-list" layout="column">
@@ -150,7 +155,7 @@
                             </md-tabs>
                         </div>
                     </md-card>
-                    <md-tabs  ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid" md-selected="ctrl.selectedTab"
+                    <md-tabs ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid" md-selected="ctrl.selectedTab"
                              class="z-index-3 filter-tabs"
                              md-dynamic-height>
                         <md-tab md-on-select="ctrl.resetSelectedFilter(0)" label="{{lang.inbox}}">

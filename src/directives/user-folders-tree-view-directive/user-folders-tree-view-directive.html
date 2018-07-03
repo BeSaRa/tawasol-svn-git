@@ -6,10 +6,22 @@
         {{$root.lang.reload}}
     </md-button>-->
 </div>
-<ul>
+
+<folders-tree-structure-directive disable-selected="0"
+                                  allow-control="true"
+                                  add-callback="ctrl.openAddUserFolderDialog"
+                                  delete-callback="ctrl.removeUserFolder"
+                                  edit-callback="ctrl.openEditUserFolderDialog"
+                                  folders="ctrl.folders"></folders-tree-structure-directive>
+
+
+
+<!--<ul>
     <li ng-repeat="node in ctrl.folders track by $index">
-        <i class="collapsed" ng-show="node.children.length && node.collapsed" ng-click="ctrl.toggleChildNodes(node)"></i>
-        <i class="expanded" ng-show="node.children.length && !node.collapsed" ng-click="ctrl.toggleChildNodes(node)"></i>
+        <i class="collapsed" ng-show="node.children.length && node.collapsed"
+           ng-click="ctrl.toggleChildNodes(node)"></i>
+        <i class="expanded" ng-show="node.children.length && !node.collapsed"
+           ng-click="ctrl.toggleChildNodes(node)"></i>
         <i class="normal" ng-hide="node.children.length"></i>
         <span ng-if="!node.children.length" ng-class="{'selected' : ctrl.currentNode === node.id}"
               ng-click="ctrl.selectCurrentNode(node)">{{ctrl.currentLang === 'en'? node.enName:node.arName}}</span>
@@ -38,4 +50,4 @@
                 ng-hide="node.collapsed">
         </user-folders-tree-view-directive>
     </li>
-</ul>
+</ul>-->

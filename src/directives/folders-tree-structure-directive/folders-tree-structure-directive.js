@@ -14,7 +14,11 @@ module.exports = function (app) {
                 clickCallback: '=',
                 disableSelected: '=',
                 highlightSelected: '=',
-                icon: '@?'
+                icon: '@?',
+                allowControl: '=?',
+                addCallback: '=?',
+                deleteCallback: '=?',
+                editCallback: '=?'
             }
         }
     })

@@ -13,21 +13,30 @@
                         </div>
                     </md-button>
                 </div>
-                <!--<div>
-                    <md-button class="folder-button-icon md-icon-button">
+                <div ng-if="ctrl.allowControl && ctrl.addCallback">
+                    <md-button ng-click="ctrl.addCallback(folder, $event)" class="folder-button-icon md-icon-button">
                         <md-icon md-svg-icon="plus"></md-icon>
                     </md-button>
-                </div>-->
-                <!--<div>
-                    <md-button class="folder-button-icon md-icon-button">
+                </div>
+                <div ng-if="ctrl.allowControl && ctrl.editCallback">
+                    <md-button ng-click="ctrl.editCallback(folder, $event)" class="folder-button-icon md-icon-button">
+                        <md-icon md-svg-icon="pencil"></md-icon>
+                    </md-button>
+                </div>
+                <div ng-if="ctrl.allowControl && ctrl.deleteCallback">
+                    <md-button ng-click="ctrl.deleteCallback(folder, $event)" class="folder-button-icon md-icon-button">
                         <md-icon md-svg-icon="delete"></md-icon>
                     </md-button>
-                </div>-->
+                </div>
             </div>
         </div>
         <folders-tree-structure-directive highlight-selected="ctrl.highlightSelected"
                                           disable-selected="ctrl.disableSelected" click-callback="ctrl.clickCallback"
                                           ng-if="folder.children.length"
+                                          allow-control="ctrl.allowControl"
+                                          add-callback="ctrl.addCallback"
+                                          edit-callback="ctrl.editCallback"
+                                          delete-callback="ctrl.deleteCallback"
                                           folders="folder.children"></folders-tree-structure-directive>
     </li>
 </ul>
