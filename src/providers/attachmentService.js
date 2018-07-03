@@ -94,6 +94,8 @@ module.exports = function (app) {
          * @param Attachment
          * @param _
          * @param $sce
+         * @param rootEntity
+         * @param fileTypeService
          * @return {provider}
          */
         provider.$get = function (urlService,
@@ -105,7 +107,9 @@ module.exports = function (app) {
                                   $timeout,
                                   Attachment,
                                   _,
-                                  $sce) {
+                                  $sce,
+                                  rootEntity,
+                                  fileTypeService) {
             'ngInject';
             var self = this;
             self.serviceName = 'attachmentService';
@@ -317,13 +321,41 @@ module.exports = function (app) {
             };
 
             /**
-             * validate before upload extensions
+             * @description validate before upload extensions
              * @param groupName
              * @param file
              * @param getResult
              */
             self.validateBeforeUpload = function (groupName, file, getResult) {
-                var allowedExtensions = provider.getExtensionGroup(groupName), result = false;
+                var deferFileType = $q.defer();
+                fileTypeService.getDocumentFileTypes().then(function (result) {
+                    deferFileType.resolve(result);
+                });
+                return deferFileType.promise.then(function(allFileTypes){
+                    var allowedExtensions = _.map(rootEntity.getGlobalSettings().fileType, function(allowed){
+                        return _.find(allFileTypes, function(fileType){
+                            return fileType.id === allowed;
+                        }).extension;
+                    });
+                    var extension = file.name.split('.').pop().toLowerCase();
+                    var position = _.findIndex(allowedExtensions, function (ext) {
+                        return ext === extension;
+                    });
+
+                    if (getResult) {
+                        return position !== -1;
+                    }
+
+                    var extensionDefer = $q.defer();
+                    if (position !== -1) {
+                        _resolveFile(extensionDefer, file);
+                    } else {
+                        rejectFile(extensionDefer, allowedExtensions.map(function(item) {return '.' + item}));
+                    }
+                    return extensionDefer.promise;
+                });
+
+               /* var allowedExtensions = provider.getExtensionGroup(groupName), result = false;
                 var defer = $q.defer();
 
                 var extension = '.' + file.name.split('.').pop().toLowerCase();
@@ -341,7 +373,7 @@ module.exports = function (app) {
                 } else {
                     rejectFile(defer, allowedExtensions);
                 }
-                return defer.promise;
+                return defer.promise;*/
             };
             /**
              * @description open drag and drop dialog to upload files with drag&drop.
@@ -360,7 +392,6 @@ module.exports = function (app) {
                     }
                 })
             };
-
 
 
             /**

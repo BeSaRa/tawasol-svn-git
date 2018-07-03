@@ -26,7 +26,13 @@ module.exports = function (app) {
             model.mainSiteId = model.mainSiteId && model.mainSiteId.hasOwnProperty('id') ? model.mainSiteId.id : model.mainSiteId;
             model.subSiteId = model.subSiteId && model.subSiteId.hasOwnProperty('id') ? model.subSiteId.id : model.subSiteId;
             model.siteType = model.siteType && model.siteType.hasOwnProperty('id') ? model.siteType.lookupKey : model.siteType;
-            model.followupStatus = model.followupStatus.hasOwnProperty('id') ? model.followupStatus.lookupKey : model.followupStatus;
+            //model.followupStatus = model.followupStatus.hasOwnProperty('id') ? model.followupStatus.lookupKey : model.followupStatus;
+            if(model.followupStatus.hasOwnProperty('lookupKey')){
+                model.followupStatus = model.followupStatus.lookupKey;
+            }
+            else if(model.followupStatus.hasOwnProperty('id')){
+                model.followupStatus = model.followupStatus.id;
+            }
             model.followupDate = model.followupDate ? _getDate(model.followupDate) : null;
             delete model.mainEnSiteText;
             delete model.mainArSiteText;

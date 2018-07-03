@@ -543,10 +543,16 @@ module.exports = function (app) {
             }
 
             var info = returnedDepartmentInbox.getInfo();
-            return correspondenceService.viewCorrespondence({
+            correspondenceService.viewCorrespondence({
                 vsId: info.vsId,
                 docClassName: info.documentClass
-            }, self.gridActions, checkIfEditPropertiesAllowed(returnedDepartmentInbox, true), true, true);
+            }, self.gridActions, checkIfEditPropertiesAllowed(returnedDepartmentInbox, true), true, true)
+                .then(function () {
+                    self.reloadReturnedDepartmentInboxes(self.grid.page);
+                })
+                .catch(function(){
+                    self.reloadReturnedDepartmentInboxes(self.grid.page);
+                });
 
         };
 

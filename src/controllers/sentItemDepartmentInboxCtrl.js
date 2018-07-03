@@ -436,7 +436,13 @@ module.exports = function (app) {
             correspondenceService.viewCorrespondence({
                 vsId: sentItemDepartmentInbox.vsId,
                 docClassName: self.docClassName
-            }, self.gridActions, true, true, true);
+            }, self.gridActions, true, true, true)
+                .then(function () {
+                    self.reloadSentItemDepartmentInboxes(self.grid.page);
+                })
+                .catch(function(){
+                    self.reloadSentItemDepartmentInboxes(self.grid.page);
+                });
         };
 
         /**

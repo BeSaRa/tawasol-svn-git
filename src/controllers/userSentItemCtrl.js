@@ -383,7 +383,13 @@ module.exports = function (app) {
             correspondenceService.viewCorrespondence({
                 vsId: info.vsId,
                 docClassName: info.documentClass
-            }, self.gridActions, checkIfEditPropertiesAllowed(userSentItem, true), true);
+            }, self.gridActions, checkIfEditPropertiesAllowed(userSentItem, true), true)
+                .then(function () {
+                    self.reloadUserSentItems(self.grid.page);
+                })
+                .catch(function(){
+                    self.reloadUserSentItems(self.grid.page);
+                });
         };
 
         /**

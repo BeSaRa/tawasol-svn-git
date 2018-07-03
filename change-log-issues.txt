@@ -35,6 +35,8 @@ General:
 34. Added - Indicator for outgoing and internal grids.
 35. Fix - Show move to folder in shortcut in folders grid.
 36. Fix - Add private workflow group in user preferences.
+37. Fix - Manage linked entity in group mail.
+38: Fix - Grid actions to show in quick actions.
 
 Bugs:
 12291: Fix - Business : user cannot delete others comments (user has permission to delete all comments)
