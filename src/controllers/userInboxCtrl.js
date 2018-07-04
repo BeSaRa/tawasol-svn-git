@@ -1493,8 +1493,7 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted()
                         && !info.isPaper
                         && (info.documentClass !== 'incoming')
-                        && model.needApprove()
-                        && employeeService.hasPermissionTo("ELECTRONIC_SIGNATURE");
+                        && model.needApprove();
                 }
             }
         ];
