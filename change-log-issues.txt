@@ -197,3 +197,9 @@ Bugs:
 -------------------
 13661: Fix - Regression: The Correspondence site is saved successfully, when edit it to need reply without select follow-up date.
 12855: Fix - Regression - Incoming review queue - manage distinations add new/editing are not saved
+13634: Fix - Workflow History - The Creation Date is incorrect when create content from Prepare Queue from electronic document (outgoing / internal)
+13646: Fix - Enhancement : Need to add tooltip to document type in Magazine view in user inbox.
+13617: Fix - Regression : Classification List doesn't appear in Outgoing / Incoming / Internal / General Search.
+13618: Fix - Regression : File List doesn't appear in Outgoing / Incoming / Internal / General Search.
+13533: Fix - regression - Session timeout - after the session is timedout and i click on any other queue, the login popup is opened but not responsive at all, cannot click on anything
+13539: Fix - In Magazine view, Quick actions should be added.

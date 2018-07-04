@@ -1442,6 +1442,64 @@ module.exports = function (app) {
         ];
 
         /**
+         * @description Array of shortcut actions that can be performed on magazine view
+         * @type {[*]}
+         */
+        self.magazineQuickActions = [
+            // Terminate
+            {
+                type: 'action',
+                icon: 'stop',
+                text: 'grid_action_terminate',
+                shortcut: true,
+                callback: self.terminate,
+                class: "action-green",
+                checkShow: self.checkToShowAction
+            },
+            // Reply
+            {
+                type: 'action',
+                icon: 'reply',
+                text: 'grid_action_reply',
+                callback: self.reply,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
+            },
+            // Forward
+            {
+                type: 'action',
+                icon: 'share',
+                text: 'grid_action_forward',
+                shortcut: true,
+                callback: self.forward,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model)
+                    /*&& !model.isBroadcasted()*/ // remove the this cond. after talk  with ;
+                }
+            },
+            // Approve(e-Signature)
+            {
+                type: 'action',
+                icon: 'approval',
+                text: 'grid_action_electronic',//e_signature
+                callback: self.signESignature,
+                class: "action-green",
+                permissionKey: "ELECTRONIC_SIGNATURE",
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted()
+                        && !info.isPaper
+                        && (info.documentClass !== 'incoming')
+                        && model.needApprove()
+                        && employeeService.hasPermissionTo("ELECTRONIC_SIGNATURE");
+                }
+            }
+        ];
+
+        /**
          * @description Mark item as read/unread
          * @param userInbox
          * @param $event

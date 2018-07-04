@@ -1,5 +1,14 @@
 module.exports = function (app) {
-    app.controller('magazineLayoutDirectiveCtrl', function ($scope, _, employeeService, LangWatcher, $compile, $timeout, $element, $mdMedia, sidebarService) {
+    app.controller('magazineLayoutDirectiveCtrl', function ($scope,
+                                                            _,
+                                                            employeeService,
+                                                            LangWatcher,
+                                                            $compile,
+                                                            $timeout,
+                                                            $element,
+                                                            $mdMedia,
+                                                            sidebarService,
+                                                            langService) {
         'ngInject';
         var self = this;
         LangWatcher($scope);
@@ -170,5 +179,105 @@ module.exports = function (app) {
                 _detachSelectAllCheckBox();
             }
         });
+
+        self.isShowQuickAction = function (action, workItem) {
+            if (action.hasOwnProperty('checkAnyPermission')) {
+                return action.checkShow(action, workItem, action.checkAnyPermission);
+            }
+            return action.checkShow(action, workItem);
+        };
+
+        /**
+         * @description Get the text of action according to selected language
+         * @param action
+         * @param isShortcutRequest
+         */
+        self.getQuickActionText = function (action, isShortcutRequest) {
+            var langKey = "";
+            if (action.hasOwnProperty('textCallback') && angular.isFunction(action.textCallback)) {
+                return langService.get(action.textCallback(self.model));
+            }
+
+            if (angular.isFunction(action.text)) {
+                if (isShortcutRequest)
+                    langKey = action.text().shortcutText;
+                else
+                    langKey = action.text().contextText;
+            }
+            else {
+                langKey = action.text;
+            }
+            return langService.get(langKey);
+        };
+
+        /**
+         * @description Process the callback for the action button
+         * @param action
+         * @param workItem
+         * @param $event
+         */
+        self.callbackQuickAction = function (action, workItem, $event) {
+            if (action.hasOwnProperty('params') && action.params) {
+                action.callback(workItem, action.params, $event);
+            }
+            else {
+                action.callback(workItem, $event);
+            }
+        };
+
+        /**
+         * @description Filters the action buttons for showing/hiding shortcut actions
+         * It will skip the separators
+         * @param direction
+         * @returns {Array}
+         */
+        self.filterQuickActionShortcuts = function (direction) {
+            var mainAction, subAction;
+            var shortcutActions = [];
+            if (!!self.shortcut) {
+                for (var i = 0; i < self.quickActions.length; i++) {
+                    mainAction = self.quickActions[i];
+                    if (mainAction.type.toLowerCase() === "action" && !mainAction.hide) {
+                        /*
+                        * If action has property (shortcut) and it has value = true
+                        * Else if action don't has property (shortcut) or has property (shortcut) but value = false and has subMenu property with array value
+                        * */
+                        if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
+                            shortcutActions.push(mainAction);
+                        }
+                        else if (
+                            (!mainAction.hasOwnProperty('shortcut') || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut))
+                            && (mainAction.hasOwnProperty('subMenu') && angular.isArray(mainAction.subMenu))
+                        ) {
+                            for (var j = 0; j < mainAction.subMenu.length; j++) {
+                                subAction = mainAction.subMenu[j];
+
+                                /*If sub menu has separator, show it in vertical only. not in horizontal*/
+                                if (direction === 'vertical') {
+                                    if (subAction.type.toLowerCase() === "action" && !subAction.hide
+                                        && (subAction.hasOwnProperty('shortcut') && subAction.shortcut)
+                                    ) {
+                                        shortcutActions.push(mainAction);
+                                    }
+                                    else if (subAction.type.toLowerCase() === "separator" && !subAction.hide)
+                                        shortcutActions.push(mainAction);
+                                }
+                                else if (direction === 'horizontal') {
+                                    if (subAction.type.toLowerCase() === "action" && !subAction.hide && subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
+                                        shortcutActions.push(subAction);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //skip the separators in shortcut menu
+                    /*else if (mainAction.type.toLowerCase() === "separator" && !mainAction.hide) {
+                        shortcutActions.push(mainAction)
+                    }*/
+                }
+                return shortcutActions;
+            }
+            return self.quickActions;
+        };
     });
 };

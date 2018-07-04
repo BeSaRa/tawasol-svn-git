@@ -134,6 +134,7 @@
   z-index: 3;
   position: fixed;
 }
+
 .z-index-3-absolute {
   z-index: 3;
   position: absolute;
@@ -216,5 +217,20 @@ html.rtl {
   margin: 0 !important;
   &.read {
     opacity: .3;
+  }
+}
+
+// Temporary classes to highlight status of actions
+.magazine-fix-actions {
+  .action-red {
+    color: red;
+  }
+
+  .action-yellow {
+    color: #e7d118;
+  }
+
+  .action-green {
+    color: green;
   }
 }

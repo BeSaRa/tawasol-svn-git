@@ -254,6 +254,9 @@ module.exports = function (app) {
              */
             self.editContent = function (draftOutgoing, $event) {
                 managerService.manageDocumentContent(draftOutgoing.vsId, draftOutgoing.docClassName, draftOutgoing.docSubject, $event)
+                    .then(function () {
+                        self.reloadDraftOutgoings(self.grid.page);
+                    })
             };
 
             /**

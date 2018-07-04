@@ -562,7 +562,7 @@ module.exports = function (app) {
                             langService.get('view_tracking_sheet_sender'),
                             langService.get('view_tracking_sheet_receiver'),
                             langService.get('view_tracking_sheet_action'),
-                            langService.get('view_tracking_sheet_creation_date'),
+                            //langService.get('view_tracking_sheet_creation_date'),
                             langService.get('view_tracking_sheet_action_date'),
                             langService.get('view_tracking_sheet_comments')
                         ];
@@ -572,7 +572,7 @@ module.exports = function (app) {
                                 record.getTranslatedUserFrom(),
                                 record.getTranslatedUserTo(),
                                 record.getTranslatedAction(),
-                                record.documentCreationDate_vts,
+                                //record.documentCreationDate_vts,
                                 record.actionDate_vts,
                                 record.comments
                             ]);

@@ -79,7 +79,8 @@
                class="magazine-read-unread" ng-click="ctrl.markAsReadUnread( workItem , $event)"
                ng-class="{'read':workItem.isRead()}"></a>
             <div class="magazine-image" layout="column">
-                <div flex layout="row" layout-align="center center" class="magazine-check-box">
+                <div flex layout="row" layout-align="center center" class="magazine-check-box"
+                     tooltip="{{lang[workItem.getTypeText()]}}">
                     <!--<md-checkbox ng-checked="ctrl.toggleSelect()" aria-label="select"></md-checkbox>-->
                 </div>
                 <div layout="row" flex class="magazine-icon">
@@ -109,6 +110,21 @@
                                       class="magazine-serial date {{workItem.getIndicatorDueDate().class}}">{{workItem.generalStepElm.dueDate}}</span>
                             </span>
                         </span>
+                    </div>
+                    <div class="magazine-fix-actions">
+                        <span ng-repeat="quickAction in ctrl.filterQuickActionShortcuts('horizontal') track by $index"
+                              ng-if="ctrl.isShowQuickAction(quickAction, workItem)">
+                            <md-icon md-svg-icon="{{quickAction.icon}}" class="cursor-pointer {{quickAction.class}}"
+                                     tooltip="{{ctrl.getQuickActionText(quickAction, true)}}"
+                                     tooltip-direction="{{lang.current === 'en' ? 'left': 'right'}}"
+                                     ng-click="ctrl.callbackQuickAction(quickAction, workItem, $event)"></md-icon>
+                        </span>
+                        <!--<md-icon md-svg-icon="stop" class="cursor-pointer action-green"
+                                 tooltip="{{lang.grid_action_terminate}}"
+                                 ng-click="ctrl.terminate(workItem, $event)"></md-icon>
+                        <md-icon md-svg-icon="reply" class="cursor-pointer action-green"
+                                 tooltip="{{lang.grid_action_reply}}"
+                                 ng-click="ctrl.reply(workItem, $event)"></md-icon>-->
                     </div>
                     <div class="magazine-sender">{{lang.sender }} -
                         {{workItem.senderInfo.getTranslatedName()}}
@@ -168,14 +184,15 @@
                     </div>
                 </div>
             </div>
-            <!--<div class="magazine-action" layout="column">-->
-            <!--<div>-->
-            <!--<grid-actions-directive menu-direction="vertical"-->
-            <!--grid-actions="ctrl.rightClickActions"-->
-            <!--model="workItem">-->
-            <!--</grid-actions-directive>-->
-            <!--</div>-->
-            <!--</div>-->
+            <!--<div class="magazine-action" layout="column">
+                <div>
+                    <grid-actions-directive menu-direction="vertical"
+                                            grid-actions="ctrl.gridActions"
+                                            shortcut="true"
+                                            model="workItem">
+                    </grid-actions-directive>
+                </div>
+            </div>-->
         </div><!-- magazine-item-->
     </div><!-- magazine-layout-->
 </div>

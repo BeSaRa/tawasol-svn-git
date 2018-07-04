@@ -12,7 +12,7 @@ module.exports = function (app) {
                 gridActions: '=',
                 menuDirection: '@',
                 model:'=',
-                shortcut: '@'
+                shortcut: '='
             }
         }
     })

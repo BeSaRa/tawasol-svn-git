@@ -214,6 +214,9 @@ module.exports = function (app) {
          */
         self.editContent = function (draftInternal, $event) {
             managerService.manageDocumentContent(draftInternal.vsId, draftInternal.docClassName, draftInternal.docSubject, $event)
+                .then(function () {
+                    self.reloadDraftInternals(self.grid.page);
+                })
         };
 
         /**
@@ -641,7 +644,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         checkShow: self.checkToShowAction

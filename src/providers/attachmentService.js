@@ -296,7 +296,7 @@ module.exports = function (app) {
              */
             self._sharedMethods = generator.generateSharedMethods(self.deleteAttachment, self.updateAttachment);
 
-            self.viewAttachment = function (attachment, $event) {
+           /* self.viewAttachment = function (attachment, $event) {
                 dialog.showDialog({
                     template: cmsTemplate.getPopup('view-attachment'),
                     targetEvent: $event || false,
@@ -306,7 +306,7 @@ module.exports = function (app) {
                     controller: 'viewAttachmentPopCtrl',
                     controllerAs: 'ctrl'
                 });
-            };
+            };*/
 
 
             var _resolveFile = function (defer, file) {

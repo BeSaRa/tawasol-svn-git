@@ -7,9 +7,8 @@
     </md-button>
     <md-menu-content class="grid-action-menu" width="2" layout="row">
         <md-menu-item
-                ng-repeat="gridAction in ctrl.filterShortcuts(ctrl.gridActions, 'horizontal') track by $index"
+                ng-repeat="gridAction in ctrl.filterShortcuts('horizontal') track by $index"
                 ng-if="ctrl.isShowAction(gridAction)">
-            <!--ng-if="gridAction.checkShow(gridAction, ctrl.model)"-->
             <md-button aria-label="{{ctrl.getActionText(gridAction, true)}}"
                        tooltip="{{ctrl.getActionText(gridAction, true)}}"
                        tooltip-direction="{{$root.lang.current === 'en' ? 'left': 'right'}}"
@@ -37,10 +36,9 @@
         </md-button>
         <md-menu-content class="grid-action-menu" width="4" layout="column">
             <md-menu-item
-                          ng-repeat="gridAction in ctrl.filterShortcuts(ctrl.gridActions, 'vertical') track by $index"
+                          ng-repeat="gridAction in ctrl.filterShortcuts('vertical') track by $index"
                           ng-if="ctrl.isShowAction(gridAction)"
                           ng-class="{'gm-separator-horizontal':gridAction.type==='separator'}">
-                <!--ng-if="gridAction.checkShow(gridAction, ctrl.model)"-->
                 <!-- Main Menu Button -->
                 <md-button aria-label="{{ctrl.getActionText(gridAction, true)}}"
                            ng-if="gridAction.type==='action' && (!gridAction.subMenu || !gridAction.subMenu.length)"
@@ -67,7 +65,6 @@
                                       ng-repeat="gridSubAction in gridAction.subMenu track by $index"
                                       ng-if="ctrl.isShowAction(gridSubAction)"
                                       ng-class="{'gm-separator-horizontal':gridSubAction.type.toLowerCase()==='separator', 'gm-info':gridSubAction.type.toLowerCase()==='info'}">
-                            <!--ng-if="gridSubAction.checkShow(gridSubAction, ctrl.model)"-->
                             <!-- Sub Menu Button -->
                             <md-button aria-label="{{ctrl.getActionText(gridSubAction)}}" role="menuitem"
                                        ng-if="gridSubAction.type.toLowerCase()==='action' && !gridSubAction.subMenu"
@@ -141,10 +138,9 @@
     <md-menu>
         <button class="menu-handler" ng-click="$mdMenu.open()" ng-hide="true"></button>
         <md-menu-content class="grid-action-menu context-menu" width="4" layout="column">
-            <md-menu-item ng-repeat="gridAction in ctrl.filterContextMenuItems(ctrl.gridActions) track by $index"
+            <md-menu-item ng-repeat="gridAction in ctrl.filterContextMenuItems() track by $index"
                           ng-if="ctrl.isShowAction(gridAction)"
                           ng-class="{'gm-separator-horizontal':gridAction.type === 'separator'}">
-                <!--ng-if="gridAction.checkShow(gridAction, ctrl.model)"-->
                 <!-- Main Menu Button -->
                 <md-button aria-label="{{ctrl.getActionText(gridAction)}}"
                            ng-if="gridAction.type==='action' && (!gridAction.subMenu || !gridAction.subMenu.length)"
@@ -171,7 +167,6 @@
                                       ng-repeat="gridSubAction in gridAction.subMenu track by $index"
                                       ng-if="ctrl.isShowAction(gridSubAction)"
                                       ng-class="{'gm-separator-horizontal':gridSubAction.type.toLowerCase()==='separator', 'gm-info':gridSubAction.type.toLowerCase()==='info'}">
-                            <!--ng-if="gridSubAction.checkShow(gridSubAction, ctrl.model)"-->
                             <!-- Sub Menu Button -->
                             <md-button aria-label="{{ctrl.getActionText(gridSubAction)}}" role="menuitem"
                                        ng-if="gridSubAction.type.toLowerCase()==='action' && !gridSubAction.subMenu"

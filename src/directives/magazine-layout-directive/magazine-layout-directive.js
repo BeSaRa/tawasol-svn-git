@@ -26,7 +26,8 @@ module.exports = function (app) {
                 searchModel: '=',
                 viewDocument: '=',
                 markAsReadUnread: '=',
-                changeUserInboxStar: '='
+                changeUserInboxStar: '=',
+                quickActions: '='
             }
         }
     })

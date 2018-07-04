@@ -442,6 +442,11 @@ module.exports = function (app) {
                 return icons[this.generalStepElm.docType];
             };
 
+            WorkItem.prototype.getTypeText = function () {
+                var typeText = ['indicator_outgoing', 'indicator_incoming', 'indicator_internal'];
+                return typeText[this.generalStepElm.docType];
+            };
+
             WorkItem.prototype.isRead = function () {
                 return this.generalStepElm.isOpen;
             };

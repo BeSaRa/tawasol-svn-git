@@ -20,8 +20,8 @@ module.exports = function (app) {
         self.controllerName = 'gridActionsDirectiveCtrl';
         self.langService = langService;
 
-        self.isShowAction = function(action){
-            if(action.hasOwnProperty('checkAnyPermission')) {
+        self.isShowAction = function (action) {
+            if (action.hasOwnProperty('checkAnyPermission')) {
                 return action.checkShow(action, self.model, action.checkAnyPermission);
             }
             return action.checkShow(action, self.model);
@@ -64,62 +64,63 @@ module.exports = function (app) {
             }
         };
 
-
         /**
          * @description Filters the action buttons for showing/hiding shortcut actions
-         * @param gridActions
+         * It will skip the separators
          * @param direction
          * @returns {Array}
          */
-        self.filterShortcuts = function (gridActions, direction) {
+        self.filterShortcuts = function (direction) {
             var mainAction, subAction;
             var shortcutActions = [];
+            if (!!self.shortcut) {
+                for (var i = 0; i < self.gridActions.length; i++) {
+                    mainAction = self.gridActions[i];
+                    if (mainAction.type.toLowerCase() === "action" && !mainAction.hide) {
+                        /*
+                        * If action has property (shortcut) and it has value = true
+                        * Else if action don't has property (shortcut) or has property (shortcut) but value = false and has subMenu property with array value
+                        * */
+                        if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
+                            shortcutActions.push(mainAction);
+                        }
+                        else if (
+                            (!mainAction.hasOwnProperty('shortcut') || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut))
+                            && (mainAction.hasOwnProperty('subMenu') && angular.isArray(mainAction.subMenu))
+                        ) {
+                            for (var j = 0; j < mainAction.subMenu.length; j++) {
+                                subAction = mainAction.subMenu[j];
 
-            for (var i = 0; i < gridActions.length; i++) {
-                mainAction = gridActions[i];
-                if (mainAction.type.toLowerCase() === "action" && !mainAction.hide) {
-                    /*
-                    * If action has property (shortcut) and it has value = true
-                    * Else if action don't has property (shortcut) or has property (shortcut) but value = false and has subMenu property with array value
-                    * */
-                    if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
-                        shortcutActions.push(mainAction);
-                    }
-                    else if (
-                        (!mainAction.hasOwnProperty('shortcut') || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut))
-                        && (mainAction.hasOwnProperty('subMenu') && angular.isArray(mainAction.subMenu))
-                    ) {
-                        for (var j = 0; j < mainAction.subMenu.length; j++) {
-                            subAction = mainAction.subMenu[j];
-
-                            /*If sub menu has separator, show it in vertical only. not in horizontal*/
-                            if (direction === 'vertical') {
-                                if (subAction.type.toLowerCase() === "action" && !subAction.hide
-                                    && (subAction.hasOwnProperty('shortcut') && subAction.shortcut)
-                                ) {
-                                    shortcutActions.push(mainAction);
+                                /*If sub menu has separator, show it in vertical only. not in horizontal*/
+                                if (direction === 'vertical') {
+                                    if (subAction.type.toLowerCase() === "action" && !subAction.hide
+                                        && (subAction.hasOwnProperty('shortcut') && subAction.shortcut)
+                                    ) {
+                                        shortcutActions.push(mainAction);
+                                    }
+                                    else if (subAction.type.toLowerCase() === "separator" && !subAction.hide)
+                                        shortcutActions.push(mainAction);
                                 }
-                                else if (subAction.type.toLowerCase() === "separator" && !subAction.hide)
-                                    shortcutActions.push(mainAction);
-                            }
-                            else if (direction === 'horizontal') {
-                                if (subAction.type.toLowerCase() === "action" && !subAction.hide && subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
-                                    shortcutActions.push(subAction);
+                                else if (direction === 'horizontal') {
+                                    if (subAction.type.toLowerCase() === "action" && !subAction.hide && subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
+                                        shortcutActions.push(subAction);
+                                    }
                                 }
                             }
                         }
                     }
+                    //skip the separators in shortcut menu
+                    /*else if (mainAction.type.toLowerCase() === "separator" && !mainAction.hide) {
+                        shortcutActions.push(mainAction)
+                    }*/
                 }
-                else if (mainAction.type.toLowerCase() === "separator" && !mainAction.hide) {
-                    shortcutActions.push(mainAction)
-                }
+                return shortcutActions;
             }
-            return shortcutActions;
-
+            return self.gridActions;
 
             /*if (direction === "vertical") {
-                for (var i = 0; i < gridActions.length; i++) {
-                    mainAction = gridActions[i];
+                for (var i = 0; i < self.gridActions.length; i++) {
+                    mainAction = self.gridActions[i];
                     if (mainAction.type.toLowerCase() === "action" && !mainAction.hide) {
                         /!*
                         * If action has property (shortcut) and it has value = true
@@ -153,8 +154,8 @@ module.exports = function (app) {
                 return shortcutActions;
             }
             else if (direction === "horizontal") {
-                for (var i = 0; i < gridActions.length; i++) {
-                    mainAction = gridActions[i];
+                for (var i = 0; i < self.gridActions.length; i++) {
+                    mainAction = self.gridActions[i];
                     if (mainAction.type.toLowerCase() === "action" && !mainAction.hide) {
                         /!*
                        * If action has property (shortcut) and it has value = true
@@ -182,17 +183,16 @@ module.exports = function (app) {
                     }
                 }
                 return shortcutActions;
-            }*/
-            return gridActions;
+            }
+            return self.gridActions;*/
         };
 
         /**
          * @description Filters the action buttons for showing/hiding context menu actions
-         * @param gridActions
          * @returns {Array}
          */
-        self.filterContextMenuItems = function (gridActions) {
-            return _.filter(gridActions, function (gridAction) {
+        self.filterContextMenuItems = function () {
+            return _.filter(self.gridActions, function (gridAction) {
                 return !gridAction.hide && !(gridAction.hasOwnProperty('onlyShortcut') && gridAction.onlyShortcut);
             });
         };
