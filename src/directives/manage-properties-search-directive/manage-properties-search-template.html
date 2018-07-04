@@ -222,6 +222,17 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+                <!-- Doc serial -->
+                <md-input-container flex>
+                    <label for="docFullSerial">{{lang.search_module_serial}}</label>
+                    <input name="docFullSerial" id="docFullSerial"
+                           ng-required="ctrl.checkMandatory('docFullSerial')"
+                           ng-model="ctrl.document.docFullSerial">
+                    <!--custom-validate-directive="{{ctrl.dynamicType('docFullSerial','type')}}"-->
+                    <div ng-messages="searchOutgoingForm.docFullSerial.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
             </div>
             <div layout="row">
                 <!-- Document Type -->
