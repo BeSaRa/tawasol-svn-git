@@ -12,7 +12,7 @@ module.exports = function (app) {
         self.documentTags = [];
 
         function generateUrl(url) {
-            return urlService.documentTags.replace('tags/tagsearch?tag={{tag}}', url.toLowerCase());
+            return urlService.documentTags.replace('tag/search?criteria={{tag}}', url.toLowerCase());
         }
 
         self.saveDocumentTags = function (documentClass, vsId, tags) {
