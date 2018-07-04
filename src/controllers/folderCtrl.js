@@ -588,7 +588,7 @@ module.exports = function (app) {
                     hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
             }
             if (checkForViewPopup)
-                return !hasPermission;
+                return !hasPermission || model.isBroadcasted();
             return hasPermission && !model.isBroadcasted();
         };
 

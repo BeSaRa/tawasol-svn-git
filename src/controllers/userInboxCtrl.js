@@ -840,7 +840,7 @@ module.exports = function (app) {
                     hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
             }
             if (checkForViewPopup)
-                return !hasPermission;
+                return !hasPermission || model.isBroadcasted();
             return hasPermission && !model.isBroadcasted();
         };
 
@@ -864,7 +864,6 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-
             userInbox.viewInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(userInbox, true), checkIfEditCorrespondenceSiteAllowed(userInbox, true))
                 .then(function () {
                     return self.reloadUserInboxes(self.grid.page);
@@ -917,7 +916,10 @@ module.exports = function (app) {
             if (!workItem)
                 self.userInboxes[0].viewNewInboxWorkItem(self.gridActions, true, true);
             else
-                workItem.viewNewInboxWorkItem({gridActions: self.gridActions, viewerActions: self.magazineQuickActions}, true, true);
+                workItem.viewNewInboxWorkItem({
+                    gridActions: self.gridActions,
+                    viewerActions: self.magazineQuickActions
+                }, true, true);
         };
 
         /**
