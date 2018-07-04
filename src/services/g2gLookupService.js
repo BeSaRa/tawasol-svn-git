@@ -78,7 +78,7 @@ module.exports = function (app) {
                     result = generator.generateCollection(result.data.rs, LookupG2G, self._sharedMethods);
                     result = generator.interceptReceivedCollection('LookupG2G', result);
                     self.categorizeLookups(result);
-                    console.log('g2g lookups', self.g2gLookups);
+                    //console.log('g2g lookups', self.g2gLookups);
                     return self.g2gLookups;
                 });
         };

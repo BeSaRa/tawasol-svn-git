@@ -31,7 +31,9 @@
 
     app.config(function ($mdIconProvider, $compileProvider, $qProvider) {
         'ngInject';
-        $mdIconProvider.defaultIconSet('assets/icon-set/mdi.svg');
+        $mdIconProvider
+            .defaultIconSet('assets/icon-set/mdi.svg')
+            .icon('add-filter','assets/icon-set/add-filter.svg');
         $compileProvider.debugInfoEnabled(false);
         // $qProvider.errorOnUnhandledRejections(false);
     });

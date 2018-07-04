@@ -17,6 +17,7 @@ module.exports = function (app) {
                       $rootScope,
                       Idle,
                       exception,
+                      // $templateRequest,
                       dialog,
                       langService) {
         'ngInject';
@@ -122,6 +123,13 @@ module.exports = function (app) {
                 return true;
             }, 100).catch(angular.noop);
         });
+
+        /*var icons = ['/assets/icon-set/add-filter.svg'];
+
+        angular.forEach(icons, function (url) {
+            $templateRequest(url);
+        });*/
+
 
     });
 };
