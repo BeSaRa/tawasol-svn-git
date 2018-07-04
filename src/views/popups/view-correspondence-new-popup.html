@@ -32,11 +32,14 @@
             <md-sidenav md-is-locked-open="true" ng-if="true">
                 <div class="p020" layout="column" scroll-directive>
                     <ul layout="column" flex id="document-properties">
-                        <work-item-properties-directive ng-if="ctrl.workItem"
+                        <work-item-properties-directive section-title="workitem_information" ng-if="ctrl.workItem"
                                                         item="ctrl.workItem"></work-item-properties-directive>
                         <correspondence-item-properties-directive
                                 section-title="general_information"
                                 item="ctrl.correspondence"></correspondence-item-properties-directive>
+                        <div class="new-view-quick-actions">
+                            <!-- TODO add a quick actions here also -->
+                        </div>
                         <li class="document-properties linked document-attachments">
                             <ul class="work-item-properties">
                                 <li class="section-title">{{lang.get('attachments')}}</li>

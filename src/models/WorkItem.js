@@ -338,7 +338,7 @@ module.exports = function (app) {
                 return correspondenceService
                     .showAddWorkItemToFolder(this, $event, showInbox)
                     .then(function (result) {
-                        if(result)
+                        if (result)
                             return result[0];
                     });
             };

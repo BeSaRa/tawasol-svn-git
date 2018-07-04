@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                           $timeout,
                                                           loadingIndicatorService,
                                                           correspondenceService,
+                                                          attachmentService,
                                                           popupNumber,
                                                           employeeService,
                                                           generator) {
@@ -101,6 +102,7 @@ module.exports = function (app) {
         self.backToCorrespondence = function ($event) {
             self.mainDocument = true;
             self.secondURL = null;
+            self.listIndex = null;
         };
 
         function _changeSecondURL(url, listName, index) {
@@ -113,7 +115,7 @@ module.exports = function (app) {
         self.showAttachment = function (attachment, $index, $event) {
             $event && $event.preventDefault();
             self.listIndex = $index;
-            correspondenceService
+            attachmentService
                 .viewAttachment(attachment, self.correspondence.classDescription, true)
                 .then(function (result) {
                     _changeSecondURL(result, 'attachments', $index);
@@ -158,14 +160,70 @@ module.exports = function (app) {
         };
 
         self.hasNext = function () {
-            console.log('NEXT', self.hasMoreThanOne() && self.listIndex !== (self.correspondence[self.selectedList].length - 1));
             return self.hasMoreThanOne() && self.listIndex !== (self.correspondence[self.selectedList].length - 1)
         };
 
         self.hasPrevious = function () {
-            console.log('PREV', self.hasMoreThanOne() && self.listIndex !== 0);
             return self.hasMoreThanOne() && self.listIndex !== 0;
-        }
+        };
+
+
+        /**
+         * @description Array of shortcut actions that can be performed on magazine view
+         * @type {[*]}
+         */
+        self.magazineQuickActions = [
+            // Terminate
+            {
+                type: 'action',
+                icon: 'stop',
+                text: 'grid_action_terminate',
+                shortcut: true,
+                callback: self.terminate,
+                class: "action-green",
+                checkShow: self.checkToShowAction
+            },
+            // Reply
+            {
+                type: 'action',
+                icon: 'reply',
+                text: 'grid_action_reply',
+                callback: self.reply,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
+            },
+            // Forward
+            {
+                type: 'action',
+                icon: 'share',
+                text: 'grid_action_forward',
+                shortcut: true,
+                callback: self.forward,
+                class: "action-green",
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model)
+                    /*&& !model.isBroadcasted()*/ // remove the this cond. after talk  with ;
+                }
+            },
+            // Approve(e-Signature)
+            {
+                type: 'action',
+                icon: 'approval',
+                text: 'grid_action_electronic_approve',//e_signature
+                callback: self.signESignature,
+                class: "action-green",
+                permissionKey: "ELECTRONIC_SIGNATURE",
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted()
+                        && !info.isPaper
+                        && (info.documentClass !== 'incoming')
+                        && model.needApprove();
+                }
+            }
+        ];
 
     });
 };

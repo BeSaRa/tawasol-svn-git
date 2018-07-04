@@ -6,7 +6,13 @@ module.exports = function (app) {
             replace: true,
             controller: function ($scope, LangWatcher) {
                 'ngInject';
+                var self = this;
                 LangWatcher($scope);
+                self.collapse = false;
+                self.toggleCollapse = function ($event) {
+                    self.collapse = !self.collapse;
+                    angular.element($event.target).parents('.section-title').next().slideToggle('fast');
+                }
             },
             controllerAs: 'ctrl',
             bindToController: true,

@@ -915,9 +915,9 @@ module.exports = function (app) {
         // new view document
         self.openNewViewDocument = function (workItem) {
             if (!workItem)
-                self.userInboxes[0].viewNewInboxWorkItem(self.actions, true, true);
+                self.userInboxes[0].viewNewInboxWorkItem(self.gridActions, true, true);
             else
-                workItem.viewNewInboxWorkItem(self.actions, true, true);
+                workItem.viewNewInboxWorkItem(self.gridActions, true, true);
         };
 
         /**

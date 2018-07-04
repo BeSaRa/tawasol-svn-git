@@ -1731,7 +1731,6 @@ tr.unread-row {
     -moz-border-radius: 5px;
     border-radius: 5px;
     margin-bottom: 10px;
-    padding: 8px;
     border: 1px solid #EEE;
     &.linked {
       padding: 0;
@@ -1789,6 +1788,10 @@ tr.unread-row {
     left: 0;
     top: 50%;
   }
+}
+
+#document-properties .document-properties > ul.item-properties {
+  padding: 8px;
 }
 
 .view-icon-button {
@@ -1908,4 +1911,22 @@ button.list-button {
     padding: 3px 4px;
     border-radius: 10px;
   }
+}
+
+.section-title {
+  background-color: #EEE;
+  padding: 0 8px;
+}
+
+.item-properties {
+  padding: 8px;
+}
+
+.collapse-button {
+  padding: 0 !important;
+  margin: 0 !important;
+  min-height: auto !important;
+  min-width: auto !important;
+  width: 25px;
+  height: 25px;
 }

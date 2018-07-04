@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                    cmsTemplate,
                                                    CommentModel,
                                                    employeeService,
+                                                   $timeout,
                                                    loadingIndicatorService,
                                                    langService,
                                                    CorrespondenceInfo,
@@ -1389,7 +1390,7 @@ module.exports = function (app) {
                                 popupNumber: self.popupNumber,
                                 disableEverything: true,
                                 disableProperties: true,
-                                disableCorrespondence: true,
+                                disableCorrespondence: true
                             }
                         }).then(function (result) {
                             self.popupNumber -= 1;
@@ -1541,17 +1542,23 @@ module.exports = function (app) {
                         }
                     });
             };
-            /**
-             * @description
-             * @param correspondence
-             * @param action
-             * @param tab
-             * @param $event
-             * @param isDeptIncoming
-             * @returns {promise|*}
-             */
-            self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming) {
-                loadingIndicatorService.forceStartLoading();
+
+            self.validateSite = function (correspondence) {
+                return correspondence.hasSite() ? false : correspondence;
+            };
+
+            self.validateBeforeSend = function (correspondence) {
+                correspondence = angular.isArray(correspondence) ? correspondence : [correspondence];
+                var result = [];
+                _.map(correspondence, function (item) {
+                    result.push(self.validateSite(item));
+                });
+                return _.filter(result, function (item) {
+                    return typeof item.getInfo === 'function';
+                });
+            };
+
+            function _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming) {
                 var multi = angular.isArray(correspondence) && correspondence.length > 1;
                 action = action || 'forward';
                 var errorMessage = [];
@@ -1585,11 +1592,7 @@ module.exports = function (app) {
                                         errorMessage.push('organizations');
                                         return [];
                                     });
-                            }, /*
-                         distUsers: function (distributionWFService) {
-                         'ngInject';
-                         return distributionWFService.loadWorkflowUsers();
-                         },*/
+                            },
                             comments: function (userCommentService) {
                                 'ngInject';
                                 return userCommentService
@@ -1601,10 +1604,7 @@ module.exports = function (app) {
                             workflowActions: function (workflowActionService) {
                                 'ngInject';
                                 return workflowActionService.loadCurrentUserWorkflowActions()
-                            }/*,
-                         workflowGroups: function (distributionWFService) {
-                         return distributionWFService.loadDistWorkflowGroups();
-                         }*/,
+                            },
                             organizationGroups: function (distributionWFService) {
                                 'ngInject';
                                 return distributionWFService
@@ -1623,6 +1623,24 @@ module.exports = function (app) {
                             }
                         }
                     });
+            }
+
+            /**
+             * @description
+             * @param correspondence
+             * @param action
+             * @param tab
+             * @param $event
+             * @param isDeptIncoming
+             * @returns {promise|*}
+             */
+            self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming) {
+                /*sitesValidation = self.validateBeforeSend(correspondence);
+                               if (sitesValidation.length && sitesValidation.length === correspondence.length) {
+                                   // TODO
+                               }*/
+                return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming);
+
             };
             /**
              * @description load group inbox from service
@@ -2498,6 +2516,7 @@ module.exports = function (app) {
              * @description to view correspondence workItem
              */
             self.viewCorrespondenceWorkItemNew = function (info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming) {
+                console.log('actions', actions);
                 return $http.get(approvedQueue ? _createCorrespondenceWFSchema([info.documentClass, 'approved-queue', 'wob-num', info.wobNumber]) : _createWorkItemSchema(info, department, readyToExport))
                     .then(function (result) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));

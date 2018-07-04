@@ -331,9 +331,9 @@ module.exports = function (app) {
                 fileTypeService.getDocumentFileTypes().then(function (result) {
                     deferFileType.resolve(result);
                 });
-                return deferFileType.promise.then(function(allFileTypes){
-                    var allowedExtensions = _.map(rootEntity.getGlobalSettings().fileType, function(allowed){
-                        return _.find(allFileTypes, function(fileType){
+                return deferFileType.promise.then(function (allFileTypes) {
+                    var allowedExtensions = _.map(rootEntity.getGlobalSettings().fileType, function (allowed) {
+                        return _.find(allFileTypes, function (fileType) {
                             return fileType.id === allowed;
                         }).extension;
                     });
@@ -350,30 +350,32 @@ module.exports = function (app) {
                     if (position !== -1) {
                         _resolveFile(extensionDefer, file);
                     } else {
-                        rejectFile(extensionDefer, allowedExtensions.map(function(item) {return '.' + item}));
+                        rejectFile(extensionDefer, allowedExtensions.map(function (item) {
+                            return '.' + item
+                        }));
                     }
                     return extensionDefer.promise;
                 });
 
-               /* var allowedExtensions = provider.getExtensionGroup(groupName), result = false;
-                var defer = $q.defer();
+                /* var allowedExtensions = provider.getExtensionGroup(groupName), result = false;
+                 var defer = $q.defer();
 
-                var extension = '.' + file.name.split('.').pop().toLowerCase();
+                 var extension = '.' + file.name.split('.').pop().toLowerCase();
 
-                var position = _.findIndex(allowedExtensions, function (item) {
-                    return item === extension;
-                });
+                 var position = _.findIndex(allowedExtensions, function (item) {
+                     return item === extension;
+                 });
 
-                if (getResult) {
-                    return position !== -1;
-                }
+                 if (getResult) {
+                     return position !== -1;
+                 }
 
-                if (position !== -1) {
-                    _resolveFile(defer, file);
-                } else {
-                    rejectFile(defer, allowedExtensions);
-                }
-                return defer.promise;*/
+                 if (position !== -1) {
+                     _resolveFile(defer, file);
+                 } else {
+                     rejectFile(defer, allowedExtensions);
+                 }
+                 return defer.promise;*/
             };
             /**
              * @description open drag and drop dialog to upload files with drag&drop.
@@ -420,7 +422,7 @@ module.exports = function (app) {
              * @param attachmentVsId
              * @param documentClass
              */
-            self.viewAttachment = function (attachmentVsId, documentClass) {
+            self.viewAttachment = function (attachmentVsId, documentClass, justUrl) {
                 var vsId = attachmentVsId instanceof Attachment ? attachmentVsId.vsId : attachmentVsId;
                 return $http.get(_createUrlSchema(vsId, documentClass, 'attachment/with-content'))
                     .then(function (result) {
@@ -428,18 +430,18 @@ module.exports = function (app) {
                         return result.data.rs;
                     })
                     .then(function (attachment) {
-                        attachment.content.viewURL = $sce.trustAsResourceUrl(attachment.content.viewURL);
-                        return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-document-readonly'),
-                            controller: 'viewDocumentReadOnlyPopCtrl',
-                            controllerAs: 'ctrl',
-                            bindToController: true,
-                            escapeToCancel: false,
-                            locals: {
-                                document: attachment.metaData,
-                                content: attachment.content
-                            }
-                        });
+                        return justUrl ? attachment.content.viewURL = $sce.trustAsResourceUrl(attachment.content.viewURL) :
+                            dialog.showDialog({
+                                template: cmsTemplate.getPopup('view-document-readonly'),
+                                controller: 'viewDocumentReadOnlyPopCtrl',
+                                controllerAs: 'ctrl',
+                                bindToController: true,
+                                escapeToCancel: false,
+                                locals: {
+                                    document: attachment.metaData,
+                                    content: attachment.content
+                                }
+                            });
                     });
             };
 

@@ -571,14 +571,7 @@ module.exports = function (app) {
              */
             Correspondence.prototype.getTranslatedCorrespondenceSiteInfo = function () {
                 var mainSite, subSite;
-                /*if (this.getInfo().documentClass === 'outgoing') {
-                    mainSite = new Information(this.firstSiteInfo.mainSite);
-                    subSite = (this.firstSiteInfo.subSite) ? new Information(this.firstSiteInfo.subSite) : new Information();
-                    return this.firstSiteInfo
-                        ? mainSite.getTranslatedName() + (subSite.getTranslatedName() ? (' - ' + subSite.getTranslatedName()) : '')
-                        : "";
-                }*/
-                if(this.siteInfo) {
+                if (this.siteInfo) {
                     mainSite = new Information(this.siteInfo.mainSite);
                     subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : new Information();
                     return this.siteInfo
@@ -586,6 +579,27 @@ module.exports = function (app) {
                         : "";
                 }
                 return '';
+            };
+            Correspondence.prototype.checkIncomingSites = function () {
+                return !!this.mainSiteId
+            };
+            Correspondence.prototype.checkOutgoingSites = function () {
+                return (angular.isArray(this.ccSitesList) && this.ccSitesList.length) || (angular.isArray(this.toSitesList) && this.toSitesList.length)
+            };
+
+            Correspondence.prototype.hasSite = function () {
+                var value = false, classDescription = this.classDescription.toLowerCase();
+                switch (classDescription) {
+                    case 'incoming':
+                        value = this.checkIncomingSites();
+                        break;
+                    case 'outgoing':
+                        value = this.checkOutgoingSites();
+                        break;
+                    default:
+                        value = true;
+                }
+                return value;
             };
 
             // don't remove CMSModelInterceptor from last line

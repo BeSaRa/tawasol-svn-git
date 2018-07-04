@@ -93,7 +93,6 @@ module.exports = function (app) {
         self.correspondence = correspondence;
         // current selected tab
         self.selectedTab = selectedTab || 'users';
-
         // current sidebar status
         self.sidebarStatus = true;
         // full screen status
