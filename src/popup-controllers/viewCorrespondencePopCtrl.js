@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                           attachmentService,
                                                           popupNumber,
                                                           employeeService,
+                                                          $q,
                                                           generator) {
         'ngInject';
         var self = this;
@@ -167,63 +168,113 @@ module.exports = function (app) {
             return self.hasMoreThanOne() && self.listIndex !== 0;
         };
 
+        /**
+         * @description Checks whether to show the quick action or not
+         * @param action
+         * @returns {*}
+         */
+        self.isShowViewerAction = function (action) {
+            if (action.hasOwnProperty('checkAnyPermission')) {
+                return action.checkShow(action, self.workItem, action.checkAnyPermission);
+            }
+            return action.checkShow(action, self.workItem);
+        };
 
         /**
-         * @description Array of shortcut actions that can be performed on magazine view
-         * @type {[*]}
+         * @description Get the text of action according to selected language
+         * @param action
+         * @param isShortcutRequest
          */
-        self.magazineQuickActions = [
-            // Terminate
-            {
-                type: 'action',
-                icon: 'stop',
-                text: 'grid_action_terminate',
-                shortcut: true,
-                callback: self.terminate,
-                class: "action-green",
-                checkShow: self.checkToShowAction
-            },
-            // Reply
-            {
-                type: 'action',
-                icon: 'reply',
-                text: 'grid_action_reply',
-                callback: self.reply,
-                class: "action-green",
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
-                }
-            },
-            // Forward
-            {
-                type: 'action',
-                icon: 'share',
-                text: 'grid_action_forward',
-                shortcut: true,
-                callback: self.forward,
-                class: "action-green",
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model)
-                    /*&& !model.isBroadcasted()*/ // remove the this cond. after talk  with ;
-                }
-            },
-            // Approve(e-Signature)
-            {
-                type: 'action',
-                icon: 'approval',
-                text: 'grid_action_electronic_approve',//e_signature
-                callback: self.signESignature,
-                class: "action-green",
-                permissionKey: "ELECTRONIC_SIGNATURE",
-                checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && !model.isBroadcasted()
-                        && !info.isPaper
-                        && (info.documentClass !== 'incoming')
-                        && model.needApprove();
-                }
+        self.getViewerActionText = function (action, isShortcutRequest) {
+            var langKey = "";
+            if (action.hasOwnProperty('textCallback') && angular.isFunction(action.textCallback)) {
+                return langService.get(action.textCallback(self.workItem));
             }
-        ];
+
+            if (angular.isFunction(action.text)) {
+                if (isShortcutRequest)
+                    langKey = action.text().shortcutText;
+                else
+                    langKey = action.text().contextText;
+            }
+            else {
+                langKey = action.text;
+            }
+            return langService.get(langKey);
+        };
+
+        /**
+         * @description Process the callback for the action button
+         * @param action
+         * @param $event
+         */
+        self.callbackViewerAction = function (action, $event) {
+            var defer = $q.defer();
+            defer.promise.then(function () {
+                dialog.cancel();
+            });
+            if (action.hasOwnProperty('params') && action.params) {
+                action.callback(self.workItem, action.params, $event, defer);
+            }
+            else {
+                action.callback(self.workItem, $event, defer);
+            }
+        };
+
+        /**
+         * @description Filters the action buttons for showing/hiding shortcut actions
+         * It will skip the separators
+         * @param direction
+         * @returns {Array}
+         */
+        self.filterViewerActionShortcuts = function (direction) {
+            var mainAction, subAction;
+            var shortcutActions = [];
+            if (!!self.shortcut) {
+                for (var i = 0; i < self.viewerActions.length; i++) {
+                    mainAction = self.viewerActions[i];
+                    if (mainAction.type.toLowerCase() === "action" && !mainAction.hide) {
+                        /*
+                        * If action has property (shortcut) and it has value = true
+                        * Else if action don't has property (shortcut) or has property (shortcut) but value = false and has subMenu property with array value
+                        * */
+                        if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
+                            shortcutActions.push(mainAction);
+                        }
+                        else if (
+                            (!mainAction.hasOwnProperty('shortcut') || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut))
+                            && (mainAction.hasOwnProperty('subMenu') && angular.isArray(mainAction.subMenu))
+                        ) {
+                            for (var j = 0; j < mainAction.subMenu.length; j++) {
+                                subAction = mainAction.subMenu[j];
+
+                                /*If sub menu has separator, show it in vertical only. not in horizontal*/
+                                if (direction === 'vertical') {
+                                    if (subAction.type.toLowerCase() === "action" && !subAction.hide
+                                        && (subAction.hasOwnProperty('shortcut') && subAction.shortcut)
+                                    ) {
+                                        shortcutActions.push(mainAction);
+                                    }
+                                    else if (subAction.type.toLowerCase() === "separator" && !subAction.hide)
+                                        shortcutActions.push(mainAction);
+                                }
+                                else if (direction === 'horizontal') {
+                                    if (subAction.type.toLowerCase() === "action" && !subAction.hide && subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
+                                        shortcutActions.push(subAction);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //skip the separators in shortcut menu
+                    /*else if (mainAction.type.toLowerCase() === "separator" && !mainAction.hide) {
+                        shortcutActions.push(mainAction)
+                    }*/
+                }
+                return shortcutActions;
+            }
+            return self.viewerActions;
+        };
 
     });
 };

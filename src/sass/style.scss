@@ -1773,6 +1773,26 @@ tr.unread-row {
   }
 }
 
+.viewer-actions {
+  margin-bottom: 10px;
+  button.md-fab {
+    background: none !important;
+    height: 30px !important;
+    width: 30px !important;
+    min-height: 30px !important;
+  }
+  button.md-fab:active {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,.4) !important;
+  }
+  button.md-fab:hover {
+    background-color: #EEE !important;
+  }
+  md-icon {
+    color: rgba(0, 0, 0, 0.54) !important;
+    margin: -3px;
+  }
+}
+
 .absolute-back-button {
   position: absolute;
   z-index: 3;

@@ -2516,7 +2516,6 @@ module.exports = function (app) {
              * @description to view correspondence workItem
              */
             self.viewCorrespondenceWorkItemNew = function (info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming) {
-                console.log('actions', actions);
                 return $http.get(approvedQueue ? _createCorrespondenceWFSchema([info.documentClass, 'approved-queue', 'wob-num', info.wobNumber]) : _createWorkItemSchema(info, department, readyToExport))
                     .then(function (result) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
@@ -2532,14 +2531,15 @@ module.exports = function (app) {
                             locals: {
                                 correspondence: generalStepElementView.correspondence,
                                 content: generalStepElementView.documentViewInfo,
-                                actions: actions,
+                                actions: actions.gridActions,
                                 workItem: generalStepElementView,
                                 readyToExport: readyToExport,
                                 disableProperties: disableProperties,
                                 disableCorrespondence: disableCorrespondence,
                                 disableEverything: departmentIncoming,
                                 popupNumber: self.popupNumber,
-                                fullScreen: true
+                                fullScreen: true,
+                                viewerActions: actions.viewerActions
                             },
                             resolve: {
                                 organizations: function (organizationService) {

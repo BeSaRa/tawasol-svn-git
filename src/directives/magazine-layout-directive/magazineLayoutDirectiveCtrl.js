@@ -180,6 +180,12 @@ module.exports = function (app) {
             }
         });
 
+        /**
+         * @description Checks whether to show the quick action or not
+         * @param action
+         * @param workItem
+         * @returns {*}
+         */
         self.isShowQuickAction = function (action, workItem) {
             if (action.hasOwnProperty('checkAnyPermission')) {
                 return action.checkShow(action, workItem, action.checkAnyPermission);

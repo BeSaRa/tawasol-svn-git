@@ -917,7 +917,7 @@ module.exports = function (app) {
             if (!workItem)
                 self.userInboxes[0].viewNewInboxWorkItem(self.gridActions, true, true);
             else
-                workItem.viewNewInboxWorkItem(self.gridActions, true, true);
+                workItem.viewNewInboxWorkItem({gridActions: self.gridActions, viewerActions: self.magazineQuickActions}, true, true);
         };
 
         /**
@@ -1453,7 +1453,7 @@ module.exports = function (app) {
                 text: 'grid_action_terminate',
                 shortcut: true,
                 callback: self.terminate,
-                class: "action-green",
+                class: "",
                 checkShow: self.checkToShowAction
             },
             // Reply
@@ -1462,7 +1462,7 @@ module.exports = function (app) {
                 icon: 'reply',
                 text: 'grid_action_reply',
                 callback: self.reply,
-                class: "action-green",
+                class: "",
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 }
@@ -1474,7 +1474,7 @@ module.exports = function (app) {
                 text: 'grid_action_forward',
                 shortcut: true,
                 callback: self.forward,
-                class: "action-green",
+                class: "",
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model)
                     /*&& !model.isBroadcasted()*/ // remove the this cond. after talk  with ;
@@ -1486,7 +1486,7 @@ module.exports = function (app) {
                 icon: 'approval',
                 text: 'grid_action_electronic_approve',//e_signature
                 callback: self.signESignature,
-                class: "action-green",
+                class: "",
                 permissionKey: "ELECTRONIC_SIGNATURE",
                 checkShow: function (action, model) {
                     var info = model.getInfo();

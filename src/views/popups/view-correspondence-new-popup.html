@@ -37,9 +37,21 @@
                         <correspondence-item-properties-directive
                                 section-title="general_information"
                                 item="ctrl.correspondence"></correspondence-item-properties-directive>
-                        <div class="new-view-quick-actions">
-                            <!-- TODO add a quick actions here also -->
+                        <!-- Quick Actions -->
+                        <div class="viewer-actions">
+                            <md-button
+                                    ng-repeat="quickAction in ctrl.filterViewerActionShortcuts('horizontal') track by $index"
+                                    ng-if="ctrl.isShowViewerAction(quickAction)" class="md-fab md-mini"
+                                    aria-label="{{ctrl.getViewerActionText(quickAction, true)}}"
+                                    ng-click="ctrl.callbackViewerAction(quickAction, $event)"
+                                    tooltip="{{ctrl.getViewerActionText(quickAction, true)}}"
+                                    tooltip-direction="{{lang.current === 'ar' ? 'left': 'right'}}">
+                                <md-icon md-svg-icon="{{quickAction.icon}}"
+                                         class="{{quickAction.class}}"
+                                ></md-icon>
+                            </md-button>
                         </div>
+
                         <li class="document-properties linked document-attachments">
                             <ul class="work-item-properties">
                                 <li class="section-title">{{lang.get('attachments')}}</li>
