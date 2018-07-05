@@ -195,6 +195,10 @@ module.exports = function (app) {
         self.userFilterEdit = function (filter, $index, $event) {
             return userFilterService.editUserFilterDialog(filter, $event).then(function (result) {
                 self.userFilters[$index] = angular.extend(self.userFilters[$index], result);
+                if (self.selectedFilter && self.selectedFilter.filter.id === result.id) {
+                    self.selectedFilter.filter = self.userFilters[$index];
+                }
+
                 if (self.selectedFilter)
                     self.selectFilter(self.selectedFilter.filter, self.selectedFilter.index)
             });
@@ -217,6 +221,11 @@ module.exports = function (app) {
          * @param $index
          */
         self.selectFilter = function (filter, $index) {
+            if (!filter.status) {
+                toast.info('This Filter is disabled and make it active first to get the data');
+                self.workItemsFilters[$index] = [];
+                return;
+            }
             self.selectedTab = ($index + self.fixedTabsCount);
             self.selectedFilter = {
                 index: $index,

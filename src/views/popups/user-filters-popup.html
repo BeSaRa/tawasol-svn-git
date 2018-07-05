@@ -15,7 +15,7 @@
                                 <md-input-container flex>
                                     <label for="arName">{{lang.arabic_name}}</label>
                                     <input name="arName" id="arName" required minlength="1"
-                                           ng-model="ctrl.filter.arName" no-space-directive
+                                           ng-model="ctrl.filter.arName"
                                            maxlength="10" custom-validate-directive="A1NS">
                                     <div ng-messages="userFilter.arName.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
@@ -28,7 +28,7 @@
                                 <md-input-container flex>
                                     <label for="enName">{{lang.english_name}}</label>
                                     <input name="enName" id="enName" required minlength="1"
-                                           ng-model="ctrl.filter.enName" no-space-directive
+                                           ng-model="ctrl.filter.enName"
                                            maxlength="10" custom-validate-directive="E1NS">
                                     <div ng-messages="userFilter.enName.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
