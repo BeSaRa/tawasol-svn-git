@@ -230,7 +230,8 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.showPriorityLevel = function (gridName) {
-            return !(self.model instanceof EventHistory && gridName === 'user-sent-items');
+            return !((self.model instanceof EventHistory && gridName === 'user-sent-items')
+                || self.model instanceof G2GMessagingHistory);
         };
 
         /**
@@ -240,6 +241,7 @@ module.exports = function (app) {
          */
         self.showAuthorInfo = function (gridName) {
             return !(self.model instanceof EventHistory
+                || self.model instanceof SentItemDepartmentInbox
                 || self.model instanceof G2G
                 || self.model instanceof G2GMessagingHistory);
         };
@@ -253,6 +255,7 @@ module.exports = function (app) {
             return !(self.model instanceof G2G
                 || self.model instanceof G2GMessagingHistory
                 || self.model instanceof EventHistory
+                || self.model instanceof SentItemDepartmentInbox
             );
         };
 

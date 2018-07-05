@@ -19,7 +19,8 @@ module.exports = function (app) {
                 viewDocument: '=',
                 gridActions: '=',
                 markAsReadUnread: '=',
-                grid: '='
+                grid: '=',
+                searchModel: '='
             }
         }
     })

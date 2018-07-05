@@ -128,6 +128,9 @@ module.exports = function (app) {
                 // Due date exists
                 self.ui.key_8.value = self.ui.key_8.value ? '-2000000000000L' : null;
 
+                //Doc full serial
+                self.ui.key_13.value = self.ui.key_13.value ? self.ui.key_13.value : null;
+
                 self.filterCriteria = self.filterCriteria || {};
                 _.map(availableKeys, function (number) {
                     var two = Object.keys(self.ui['key_' + number]).length > 1;
