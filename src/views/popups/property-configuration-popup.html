@@ -33,8 +33,8 @@
                                        required
                                        ng-required="true" ng-disabled="ctrl.isDefaultOperatorDisabled && !ctrl.editMode"
                                        ng-model="ctrl.propertyConfiguration.defaultOperator">
-                                <md-option ng-if="do.display(ctrl.propertyConfiguration.dataType)" ng-value="do.value"
-                                           ng-repeat="do in ctrl.defaultOperators track by $index">
+                                <md-option ng-repeat="do in ctrl.defaultOperators track by $index"
+                                           ng-if="do.display(ctrl.propertyConfiguration)" ng-value="do.value">
                                     {{do.text}}
                                 </md-option>
                             </md-select>

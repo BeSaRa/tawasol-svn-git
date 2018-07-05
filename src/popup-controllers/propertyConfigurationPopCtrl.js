@@ -43,31 +43,39 @@ module.exports = function (app) {
             {
                 text: "Like",
                 value: "Like",
-                display: function (type) {
-                    return type === 'String';
+                display: function (config) {
+                    return config.dataType === 'String';
                 }
             },
             {
                 text: "=",
                 value: "Equal",
-                display: function (type) {
-                    return type === 'Integer' || type === 'Date' || type === 'String';
+                display: function (config) {
+                    return config.dataType === 'Integer' || config.dataType === 'Date' || config.dataType === 'String';
                 }
             },
             {
                 text: ">=",
                 value: ">=",
-                display: function (type) {
-                    return type === 'Integer' || type === 'Date';
+                display: function (config) {
+                    return config.dataType === 'Integer' || config.dataType === 'Date';
                 }
             },
             {
                 text: "<=",
                 value: "<=",
-                display: function (type) {
-                    return type === 'Integer' || type === 'Date';
+                display: function (config) {
+                    return config.dataType === 'Integer' || config.dataType === 'Date';
                 }
-            }
+            }/*,
+            {
+                text: "Between",
+                value: "Between",
+                display: function (config) {
+                    return config.dataType === 'Date' ||
+                        (config.dataType === 'Integer' && self.propertyConfiguration.symbolicName === 'DocSerialBetween')
+                }
+            }*/
         ];
 
         /**
