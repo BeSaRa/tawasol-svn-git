@@ -946,5 +946,113 @@
     "sort_order": 6,
     "active": true,
     "sort_value": 0
+  },
+  {
+    "ID": 94,
+    "lang_key": "menu_item_reports_statistical_correspondence_report",
+    "icon": "file-chart",
+    "parent": 92,
+    "link": "#",
+    "state": "app.reports",
+    "icon_type": "font",
+    "sort_order": 6,
+    "active": true,
+    "sort_value": 0
+  },
+  {
+    "ID": 95,
+    "lang_key": "menu_item_reports_documentary_report",
+    "icon": "file-chart",
+    "parent": 92,
+    "link": "#",
+    "state": "app.reports",
+    "icon_type": "font",
+    "sort_order": 6,
+    "active": true,
+    "sort_value": 0
+  },
+  {
+    "ID": 96,
+    "lang_key": "menu_item_reports_followup_report",
+    "icon": "file-chart",
+    "parent": 92,
+    "link": "#",
+    "state": "app.reports",
+    "icon_type": "font",
+    "sort_order": 6,
+    "active": true,
+    "sort_value": 0
+  },
+  {
+    "ID": 97,
+    "lang_key": "menu_item_reports_user_mail_report",
+    "icon": "file-chart",
+    "parent": 92,
+    "link": "#",
+    "state": "app.reports",
+    "icon_type": "font",
+    "sort_order": 6,
+    "active": true,
+    "sort_value": 0
+  },
+  {
+    "ID": 98,
+    "lang_key": "menu_item_reports_login_logs_report",
+    "icon": "file-chart",
+    "parent": 92,
+    "link": "#",
+    "state": "app.reports",
+    "icon_type": "font",
+    "sort_order": 6,
+    "active": true,
+    "sort_value": 0
+  },
+  {
+    "ID": 99,
+    "lang_key": "menu_item_reports_system_usage_report",
+    "icon": "file-chart",
+    "parent": 92,
+    "link": "#",
+    "state": "app.reports",
+    "icon_type": "font",
+    "sort_order": 6,
+    "active": true,
+    "sort_value": 0
+  },
+  {
+    "ID": 100,
+    "lang_key": "menu_item_reports_message_board_response",
+    "icon": "file-chart",
+    "parent": 92,
+    "link": "#",
+    "state": "app.reports",
+    "icon_type": "font",
+    "sort_order": 6,
+    "active": true,
+    "sort_value": 0
+  },
+  {
+    "ID": 101,
+    "lang_key": "menu_item_reports_user_performance_panel",
+    "icon": "file-chart",
+    "parent": 92,
+    "link": "#",
+    "state": "app.reports",
+    "icon_type": "font",
+    "sort_order": 6,
+    "active": true,
+    "sort_value": 0
+  },
+  {
+    "ID": 102,
+    "lang_key": "menu_item_reports_monitoring_correspondence_documentary_panel",
+    "icon": "file-chart",
+    "parent": 92,
+    "link": "#",
+    "state": "app.reports",
+    "icon_type": "font",
+    "sort_order": 6,
+    "active": true,
+    "sort_value": 0
   }
 ]
