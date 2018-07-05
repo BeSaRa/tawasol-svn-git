@@ -349,8 +349,6 @@
                 .addExtensionGroupWithExtend('attachmentUpload', ['scannerImport', 'wordDocument'], [
                     '.pdf'
                 ]);
-
-
         });
 
 })();

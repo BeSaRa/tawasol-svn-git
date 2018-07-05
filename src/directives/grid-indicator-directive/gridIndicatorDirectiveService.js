@@ -14,9 +14,7 @@ module.exports = function (app) {
                                                            Attachment,
                                                            moment,
                                                            Lookup,
-                                                           $timeout,
-                                                           //IncomingG2G
-    ) {
+                                                           $timeout) {
         'ngInject';
         var self = this;
         self.serviceName = 'gridIndicatorDirectiveService';

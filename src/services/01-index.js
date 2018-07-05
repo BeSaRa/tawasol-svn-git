@@ -107,4 +107,5 @@ module.exports = function (app) {
     require('./viewDeliveryReportService')(app);
 	require('./userSubscriptionService')(app);
 	require('./g2gLookupService')(app);
+	require('./reportService')(app);
 };

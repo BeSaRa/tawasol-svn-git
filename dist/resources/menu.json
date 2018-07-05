@@ -922,5 +922,29 @@
     "sort_order": 6,
     "active": true,
     "sort_value": 0
+  },
+  {
+    "ID": 92,
+    "lang_key": "menu_item_reports",
+    "icon": "file-chart",
+    "parent": null,
+    "link": "#",
+    "state": "app.reports",
+    "icon_type": "font",
+    "sort_order": 6,
+    "active": true,
+    "sort_value": 0
+  },
+  {
+    "ID": 93,
+    "lang_key": "menu_item_reports_statistical_report",
+    "icon": "file-chart",
+    "parent": 92,
+    "link": "#",
+    "state": "app.reports",
+    "icon_type": "font",
+    "sort_order": 6,
+    "active": true,
+    "sort_value": 0
   }
 ]

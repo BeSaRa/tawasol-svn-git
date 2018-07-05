@@ -148,4 +148,5 @@ module.exports = function (app) {
     require('./Site_Search')(app);
     require('./UserSubscription')(app);
     require('./LookupG2G')(app);
+    require('./Report')(app);
 };

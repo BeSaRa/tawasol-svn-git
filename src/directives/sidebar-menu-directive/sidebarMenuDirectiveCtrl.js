@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                          rootEntity,
                                                          quickSearchCorrespondenceService,
                                                          $timeout,
+                                                         reportService,
                                                          $scope) {
         'ngInject';
         var self = this;
@@ -18,24 +19,20 @@ module.exports = function (app) {
         self.navigateToLink = function (item, $event) {
             $event.preventDefault();
             if (!item.children.length) {
-                $state.go(item.state, {identifier: rootEntity.getRootEntityIdentifier()});
+                var report = reportService.getReportByKey(item.lang_key);
+                if (report) {
+                    $state.go(item.state, {
+                        identifier: rootEntity.getRootEntityIdentifier(),
+                        reportName: report.reportName
+                    });
+                } else {
+                    $state.go(item.state, {identifier: rootEntity.getRootEntityIdentifier()});
+                }
                 quickSearchCorrespondenceService.hideSearchForm().emptySearchInput();
                 return;
             }
             var menu = angular.element('#menu-id-' + item.ID).children('ul');
             sidebarService.toggleMenuItem(item);
-            // $timeout(function () {
-            //     menu.parent().siblings('li.has-child').children('ul').slideUp('fast').end().removeClass('opend');
-            // }).then(function () {
-            //     menu.slideToggle('fast', function () {
-            //         $timeout(function () {
-            //
-            //             menu.removeAttr('style');
-            //         })
-            //     });
-            // });
-
-
         };
 
         self.isCurrentState = function (item) {

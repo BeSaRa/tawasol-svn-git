@@ -1362,8 +1362,7 @@ module.exports = function (app) {
                     'ngInject';
                     var self = this;
                     var reportName = $stateParams.reportName;
-                    // self.url = $sce.trustAsResourceUrl(('http://100.100.3.228/Reports/report/Reports/Follow-up-04?rs:embed=true'));
-                    self.url = $sce.trustAsResourceUrl(('http://100.100.11.81:8030/ReportServer_MSSQLSERVER1?rs:embed=true'));
+                    self.url = $sce.trustAsResourceUrl(('http://100.100.3.228/Reports/report/Reports/' + encodeURIComponent(reportName) + '?rs:embed=true'));
                 },
                 controllerAs: 'ctrl'
             })
