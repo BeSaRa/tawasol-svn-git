@@ -113,7 +113,7 @@ module.exports = function (app) {
          * destroy current employee data
          */
         self.destroyEmployee = function () {
-            applicationUserSignatureService.emptySignatures();
+            applicationUserSignatureService ? applicationUserSignatureService.emptySignatures() : null;
             _destroyEmployeeCookies();
         };
         /**

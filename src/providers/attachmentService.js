@@ -296,17 +296,17 @@ module.exports = function (app) {
              */
             self._sharedMethods = generator.generateSharedMethods(self.deleteAttachment, self.updateAttachment);
 
-           /* self.viewAttachment = function (attachment, $event) {
-                dialog.showDialog({
-                    template: cmsTemplate.getPopup('view-attachment'),
-                    targetEvent: $event || false,
-                    locals: {
-                        attachment: attachment
-                    },
-                    controller: 'viewAttachmentPopCtrl',
-                    controllerAs: 'ctrl'
-                });
-            };*/
+            /* self.viewAttachment = function (attachment, $event) {
+                 dialog.showDialog({
+                     template: cmsTemplate.getPopup('view-attachment'),
+                     targetEvent: $event || false,
+                     locals: {
+                         attachment: attachment
+                     },
+                     controller: 'viewAttachmentPopCtrl',
+                     controllerAs: 'ctrl'
+                 });
+             };*/
 
 
             var _resolveFile = function (defer, file) {
@@ -421,6 +421,7 @@ module.exports = function (app) {
              * @description view attachment
              * @param attachmentVsId
              * @param documentClass
+             * @param justUrl
              */
             self.viewAttachment = function (attachmentVsId, documentClass, justUrl) {
                 var vsId = attachmentVsId instanceof Attachment ? attachmentVsId.vsId : attachmentVsId;
@@ -430,7 +431,8 @@ module.exports = function (app) {
                         return result.data.rs;
                     })
                     .then(function (attachment) {
-                        return justUrl ? attachment.content.viewURL = $sce.trustAsResourceUrl(attachment.content.viewURL) :
+                        attachment.content.viewURL = $sce.trustAsResourceUrl(attachment.content.viewURL);
+                        return justUrl ? attachment.content.viewURL :
                             dialog.showDialog({
                                 template: cmsTemplate.getPopup('view-document-readonly'),
                                 controller: 'viewDocumentReadOnlyPopCtrl',
