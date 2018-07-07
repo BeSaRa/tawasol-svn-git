@@ -463,8 +463,8 @@ module.exports = function (app) {
                 class: "action-green",
                 hide: false, /*In Phase 2*/
                 checkShow: function (action, model) {
-                    /*Action == 9 can't Recall terminated Document*/
-                    return self.checkToShowAction(action, model) && (model.workflowActionId !== 9);
+                    /*workflowActionId == 9(terminated) or (actionType == 3 == broadcast) can't Recall terminated Document and broadcasted*/
+                    return self.checkToShowAction(action, model) && (model.workflowActionId !== 9 && model.actionType !== 3);
                 }
             },
             // Reassign
