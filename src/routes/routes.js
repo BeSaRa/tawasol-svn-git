@@ -1295,7 +1295,7 @@ module.exports = function (app) {
                     userSentItems: function (userSentItemService, rootEntity) {
                         'ngInject';
                         var globalSetting = rootEntity.returnRootEntity().settings;
-                        return userSentItemService.loadUserSentItems(1, globalSetting.searchAmount);
+                        return userSentItemService.loadUserSentItems(1, 5);
                     }
                 }
             })
@@ -1309,7 +1309,7 @@ module.exports = function (app) {
                     favoriteDocuments: function (favoriteDocumentsService, rootEntity) {
                         'ngInject';
                         var globalSetting = rootEntity.returnRootEntity().settings;
-                        return favoriteDocumentsService.loadFavoriteDocuments(1, globalSetting.searchAmount);
+                        return favoriteDocumentsService.loadFavoriteDocuments(1, 5);
                     }
                 }
             })
