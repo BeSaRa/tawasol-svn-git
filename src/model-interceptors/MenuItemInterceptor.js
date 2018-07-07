@@ -1,7 +1,8 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, 
-                      $rootScope, 
-                      sidebarService, 
+    app.run(function (CMSModelInterceptor,
+                      $rootScope,
+                      reportService,
+                      sidebarService,
                       langService) {
         'ngInject';
 
@@ -9,6 +10,9 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
             model.translate = langService.get(model.lang_key);
+            var report = reportService.getReportByKey(model.lang_key);
+            model.isReport = !!report;
+            model.report = report;
             $rootScope.$watch(function () {
                 return langService.current;
             }, function () {

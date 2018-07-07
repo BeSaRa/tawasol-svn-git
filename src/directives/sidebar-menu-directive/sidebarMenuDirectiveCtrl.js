@@ -36,7 +36,11 @@ module.exports = function (app) {
         };
 
         self.isCurrentState = function (item) {
-            return $state.includes(item.state);
+            if (item.isReport) {
+                return $state.includes(item.state, {reportName: item.report.reportName});
+            } else {
+                return $state.includes(item.state);
+            }
         };
 
         self.showMenuItem = function (item) {
