@@ -462,7 +462,10 @@ module.exports = function (app) {
                 callback: self.recallSingle,
                 class: "action-green",
                 hide: false, /*In Phase 2*/
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model) {
+                    /*Action == 9 can't Recall terminated Document*/
+                    return self.checkToShowAction(action, model) && (model.workflowActionId !== 9);
+                }
             },
             // Reassign
             {

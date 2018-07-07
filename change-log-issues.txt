@@ -203,3 +203,5 @@ Bugs:
 13618: Fix - Regression : File List doesn't appear in Outgoing / Incoming / Internal / General Search.
 13533: Fix - regression - Session timeout - after the session is timedout and i click on any other queue, the login popup is opened but not responsive at all, cannot click on anything
 13539: Fix - In Magazine view, Quick actions should be added.
+
+13783 Fix - Recall - User Sent items - Recall appear for Terminated Document
