@@ -14,7 +14,8 @@ module.exports = function (app) {
                                             Site,
                                             _,
                                             Indicator,
-                                            Information) {
+                                            Information,
+                                            lookupService) {
         'ngInject';
         return function Correspondence(model) {
             var self = this,
@@ -159,6 +160,22 @@ module.exports = function (app) {
             Correspondence.prototype.getRequiredFields = function () {
                 return requiredFields;
             };
+
+            /**
+             * @description Returns the security level lookup based on value from database
+             * @returns {*}
+             */
+            Correspondence.prototype.getSecurityLevelLookup = function () {
+                var securityLevel = this.securityLevel;
+                if (securityLevel.hasOwnProperty('lookupKey')) {
+                    return securityLevel;
+                }
+                else if (securityLevel.hasOwnProperty('id')) {
+                    return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel.id);
+                }
+                return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel);
+            };
+
 
             Correspondence.prototype.getPriorityLevels = function (separator) {
                 var lang = langService.current.charAt(0).toUpperCase() + langService.current.substr(1);

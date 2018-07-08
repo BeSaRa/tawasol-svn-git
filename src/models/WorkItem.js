@@ -7,7 +7,8 @@ module.exports = function (app) {
                                       $sce,
                                       $q,
                                       dialog,
-                                      moment) {
+                                      moment,
+                                      lookupService) {
         'ngInject';
 
         return function WorkItem(model) {
@@ -136,6 +137,20 @@ module.exports = function (app) {
                 return this.status ? langService.get('active') : langService.get('inactive');
             };
 
+            /**
+             * @description Returns the security level lookup based on value from database
+             * @returns {*}
+             */
+            WorkItem.prototype.getSecurityLevelLookup = function () {
+                var securityLevel = this.generalStepElm.securityLevel;
+                if (securityLevel.hasOwnProperty('lookupKey')) {
+                    return securityLevel;
+                }
+                else if (securityLevel.hasOwnProperty('id')) {
+                    return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel.id);
+                }
+                return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel);
+            };
 
             var indicator = new Indicator();
             WorkItem.prototype.getSecurityLevelIndicator = function (securityLevel) {

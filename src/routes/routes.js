@@ -459,7 +459,7 @@ module.exports = function (app) {
                         'ngInject';
                         return ouApplicationUserService.loadOUApplicationUsers();
                     },
-                    userClassificationViewPermissions: function (userClassificationViewPermissionService) {
+                    userClassificationViewPermissions: function (userClassificationViewPermissionService, classifications) {
                         'ngInject';
                         return userClassificationViewPermissionService.loadUserClassificationViewPermissions();
                     },

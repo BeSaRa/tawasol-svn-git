@@ -368,11 +368,17 @@ module.exports = function (app) {
                 .then(function () {
                     applicationUserService
                         .addApplicationUser(self.applicationUser)
-                        .then(function () {
+                        .then(function (result) {
                             //dialog.hide();
-                            self.applicationUser = angular.copy(self.applicationUser);
+                            self.applicationUser = angular.copy(result);
                             self.model = angular.copy(self.applicationUser);
                             self.editMode = true;
+
+                            self.classificationViewPermissions = _.filter(userClassificationViewPermissions, function (userClassificationViewPermission) {
+                                return Number(userClassificationViewPermission.userId) === Number(self.applicationUser.id);
+                            });
+                            self.cancelClassificationViewPermissionFromCtrl();
+
                             toast.success(langService.get('add_success').change({name: self.applicationUser.getNames()}));
                         });
                 })
@@ -515,7 +521,7 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-                    self.signature.appUserId = applicationUser.id;
+                    self.signature.appUserId = self.applicationUser.id;
                     applicationUserSignatureService
                         .addApplicationUserSignature(self.signature, self.selectedFile).then(function () {
                         var defer = $q.defer();
@@ -1115,6 +1121,12 @@ module.exports = function (app) {
                                 return organization.id === self.applicationUser.defaultOUID;
                             });
                             self.ouApplicationUser.applicationUser = result;
+
+                            self.classificationViewPermissions = _.filter(userClassificationViewPermissions, function (userClassificationViewPermission) {
+                                return Number(userClassificationViewPermission.userId) === Number(self.applicationUser.id);
+                            });
+                            self.cancelClassificationViewPermissionFromCtrl();
+
                             self.addOUApplicationUserFromCtrl().then(function () {
                                 self.applicationUser = angular.copy(self.applicationUser);
                                 self.model = angular.copy(self.applicationUser);

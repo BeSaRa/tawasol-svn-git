@@ -266,6 +266,20 @@ module.exports = function (app) {
             }
         };
 
+        self.isPrivateDoc = function(){
+            if (self.multi) {
+                return !(_.some(_.map(self.correspondence, function (correspondence) {
+                    return correspondence.getSecurityLevelLookup().lookupKey === 'internal';
+                }), function (matchingResult) {
+                    return matchingResult === true;
+                }));
+            }
+            else {
+                return self.correspondence.getSecurityLevelLookup().lookupKey === 4;
+            }
+
+        };
+
         // workflow tabs
         self.workflowTabs = {
             favorites: {
@@ -321,7 +335,7 @@ module.exports = function (app) {
             registry_organizations: {
                 lang: 'workflow_menu_item_registry_organizations',
                 icon: 'bank',
-                show: _checkPermission('SEND_TO_ELECTRONIC_INCOMING_QUEUES') && self.checkIfNotInternalDocument(),
+                show: _checkPermission('SEND_TO_ELECTRONIC_INCOMING_QUEUES') && self.checkIfNotInternalDocument() && !self.isPrivateDoc(),
                 disabled: _getApprovedStatus(),
                 modelName: 'registryOrganizations'
             }

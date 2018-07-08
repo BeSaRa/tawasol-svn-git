@@ -60,7 +60,7 @@
                             </md-input-container>
                             <div ng-if="!ctrl.usersCriteria.hide">
                                 <md-button tooltip="{{lang.send_to_whole_department}}" id="add_organization"
-                                           ng-disabled="ctrl.getApprovedStatus() || !ctrl.workItemNotExists(ctrl.usersCriteria.ou) || ctrl.loadingIndicatorService.loading || !ctrl.usersCriteria.ou || ctrl.usersCriteria.ou.isRegOU() "
+                                           ng-disabled="ctrl.getApprovedStatus() || !ctrl.workItemNotExists(ctrl.usersCriteria.ou) || ctrl.loadingIndicatorService.loading || !ctrl.usersCriteria.ou || ctrl.usersCriteria.ou.isRegOU() || self.isPrivateDoc()"
                                            class="md-icon-button mt16"
                                            ng-click="ctrl.addToSelected(ctrl.usersCriteria.ou)">
                                     <md-icon md-svg-icon="plus"></md-icon>

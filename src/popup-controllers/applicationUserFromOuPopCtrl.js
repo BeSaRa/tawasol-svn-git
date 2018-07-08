@@ -393,7 +393,7 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-                    self.signature.appUserId = applicationUser.id;
+                    self.signature.appUserId = self.applicationUser.id;
                     applicationUserSignatureService
                         .addApplicationUserSignature(self.signature, self.selectedFile).then(function () {
                         var defer = $q.defer();
@@ -871,6 +871,12 @@ module.exports = function (app) {
                         .then(function (result) {
                             self.ouApplicationUser.ouid = self.currentOrganization;
                             self.ouApplicationUser.applicationUser = result;
+
+                            self.classificationViewPermissions = _.filter(userClassificationViewPermissions, function (userClassificationViewPermission) {
+                                return Number(userClassificationViewPermission.userId) === Number(self.applicationUser.id);
+                            });
+                            self.cancelClassificationViewPermissionFromCtrl();
+
                             self.addOUApplicationUserFromCtrl().then(function () {
                                 self.applicationUser = angular.copy(self.applicationUser);
                                 self.model = angular.copy(self.applicationUser);

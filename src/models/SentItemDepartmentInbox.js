@@ -2,7 +2,8 @@ module.exports = function (app) {
     app.factory('SentItemDepartmentInbox', function (CMSModelInterceptor,
                                                      Indicator,
                                                      langService,
-                                                     managerService) {
+                                                     managerService,
+                                                     lookupService) {
         'ngInject';
         return function SentItemDepartmentInbox(model) {
             var self = this, correspondenceService = null;
@@ -59,6 +60,22 @@ module.exports = function (app) {
 
             SentItemDepartmentInbox.prototype.getTranslatedType = function () {
                 return this.type === 0 ? langService.get('original') : langService.get('copy');
+            };
+
+
+            /**
+             * @description Returns the security level lookup based on value from database
+             * @returns {*}
+             */
+            SentItemDepartmentInbox.prototype.getSecurityLevelLookup = function () {
+                var securityLevel = this.securityLevel;
+                if (securityLevel.hasOwnProperty('lookupKey')) {
+                    return securityLevel;
+                }
+                else if (securityLevel.hasOwnProperty('id')) {
+                    return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel.id);
+                }
+                return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel);
             };
 
             var indicator = new Indicator();
