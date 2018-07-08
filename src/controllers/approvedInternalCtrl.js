@@ -552,7 +552,7 @@ module.exports = function (app) {
                     permissionKey: 'BROADCAST_DOCUMENT',
                     callback: self.broadcast,
                     checkShow: function (action, model) {
-                        return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                        return self.checkToShowAction(action, model) && !model.isBroadcasted() && (model.getSecurityLevelLookup().lookupKey !== 4);
                     }
                 },
                 // Edit After Approve (Only electronic)

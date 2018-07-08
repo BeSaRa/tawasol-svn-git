@@ -513,7 +513,7 @@ module.exports = function (app) {
                 callback: self.broadcast,
                 class: 'action-green',
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && (model.addMethod || model.approvers !== null);
+                    return self.checkToShowAction(action, model) && (model.addMethod || model.approvers !== null) && (model.getSecurityLevelLookup().lookupKey !== 4);
                 }
             },
             // Print Barcode

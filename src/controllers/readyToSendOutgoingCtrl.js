@@ -685,7 +685,7 @@ module.exports = function (app) {
                 permissionKey: 'BROADCAST_DOCUMENT',
                 callback: self.broadcast,
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && (!!model.addMethod || (model.hasOwnProperty('approvers') && model.approvers !== null));
+                    return self.checkToShowAction(action, model) && (!!model.addMethod || (model.hasOwnProperty('approvers') && model.approvers !== null)) && (model.getSecurityLevelLookup().lookupKey !== 4);
                 }
             }
         ];

@@ -62,7 +62,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -269,7 +269,6 @@ module.exports = function (app) {
                 return true;
             });
         };
-
 
 
         /**
@@ -510,7 +509,7 @@ module.exports = function (app) {
                 permissionKey: 'BROADCAST_DOCUMENT',
                 callback: self.broadcast,
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && (!model.needApprove() || model.hasDocumentClass('incoming'));
+                    return self.checkToShowAction(action, model) && (!model.needApprove() || model.hasDocumentClass('incoming')) && (model.getSecurityLevelLookup().lookupKey !== 4);
                 }
             },
             // View Tracking Sheet
@@ -547,7 +546,7 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model)
-                        && (info.documentClass === "incoming" || ((info.documentClass === "outgoing" || info.documentClass === 'internal')  && (!model.needApprove() || info.isPaper)));
+                        && (info.documentClass === "incoming" || ((info.documentClass === "outgoing" || info.documentClass === 'internal') && (!model.needApprove() || info.isPaper)));
                 }
             },
             // Manage
@@ -610,7 +609,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -695,7 +694,7 @@ module.exports = function (app) {
                         text: 'grid_action_main_document_fax',
                         shortcut: false,
                         hide: true,
-                        permissionKey:"SEND_DOCUMENT_BY_FAX",
+                        permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction

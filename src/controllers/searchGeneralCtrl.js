@@ -747,7 +747,7 @@ module.exports = function (app) {
                 permissionKey: 'BROADCAST_DOCUMENT',
                 callback: self.broadcast,
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && (!model.needApprove() || model.hasDocumentClass('incoming'));
+                    return self.checkToShowAction(action, model) && (!model.needApprove() || model.hasDocumentClass('incoming')) && (model.getSecurityLevelLookup().lookupKey !== 4);
                 }
             },
             // Print Barcode
