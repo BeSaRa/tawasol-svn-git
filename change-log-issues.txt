@@ -209,3 +209,4 @@ Bugs:
 -------------------
 13783 Fix - Recall - User Sent items - Recall appear for Terminated Document
 13439 Fix - User can't remove multiple Comments.
+13694 Fix - In Simple Search, When Select Correspondence site type and Main then Change the Main, the selected main doesn't disappear.

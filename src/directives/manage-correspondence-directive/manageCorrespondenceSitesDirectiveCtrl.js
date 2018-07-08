@@ -471,6 +471,7 @@ module.exports = function (app) {
                         criteria: null,
                         excludeOuSites: false
                     }).then(function (result) {
+                        self.subSearchResult = [];
                         self.mainSites = result;
                         self.selectedMainSite = null;
                     });
