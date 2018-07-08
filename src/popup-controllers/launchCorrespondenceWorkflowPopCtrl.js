@@ -269,13 +269,13 @@ module.exports = function (app) {
         self.isPrivateDoc = function(){
             if (self.multi) {
                 return !(_.some(_.map(self.correspondence, function (correspondence) {
-                    return correspondence.getSecurityLevelLookup().lookupKey === 'internal';
+                    return correspondence.getSecurityLevelLookup().lookupKey === 32;
                 }), function (matchingResult) {
                     return matchingResult === true;
                 }));
             }
             else {
-                return self.correspondence.getSecurityLevelLookup().lookupKey === 4;
+                return self.correspondence.getSecurityLevelLookup().lookupKey === 32;
             }
 
         };
