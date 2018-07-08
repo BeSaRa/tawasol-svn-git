@@ -1582,27 +1582,21 @@ tr.unread-row {
 
 .read-td {
   padding-right: 0 !important;
-  position: relative;
+  position: relative !important;
+  overflow: hidden !important;
   .status {
     content: '';
-    width: 6px;
     position: absolute;
-    height: 100%;
+    height: 200px;
     top: 0;
     bottom: 0;
     right: 0;
+    width: 12px;
     &.read {
-      visibility: hidden;
       background: #B1D6F0;
-    }
-    &.read:hover {
-      width: 12px;
     }
     &.unread {
       background: #0067B0;
-    }
-    &.unread:hover {
-      width: 12px;
     }
   }
 }
@@ -1782,7 +1776,7 @@ tr.unread-row {
     min-height: 30px !important;
   }
   button.md-fab:active {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,.4) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .4) !important;
   }
   button.md-fab:hover {
     background-color: #EEE !important;
