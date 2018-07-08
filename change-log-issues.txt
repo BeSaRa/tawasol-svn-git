@@ -211,3 +211,5 @@ Bugs:
 13439: Fix - User can't remove multiple Comments.
 13694: Fix - In Simple Search, When Select Correspondence site type and Main then Change the Main, the selected main doesn't disappear.
 13685: Fix - Regression: An Error occur on console when add classification view permission when add new user.
+13925 Fix - Regression - user can't Edit Correspondence site from Draft Queue inside outgoing document
+

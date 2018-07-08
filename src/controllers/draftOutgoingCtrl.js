@@ -444,7 +444,7 @@ module.exports = function (app) {
                     return;
                 }
 
-                correspondenceService.viewCorrespondence(draftOutgoing, self.gridActions, checkIfEditPropertiesAllowed(draftOutgoing, true), true)
+                correspondenceService.viewCorrespondence(draftOutgoing, self.gridActions, checkIfEditPropertiesAllowed(draftOutgoing, true), false)
                     .then(function () {
                         return self.reloadDraftOutgoings(self.grid.page);
                     })
