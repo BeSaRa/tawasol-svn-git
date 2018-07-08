@@ -298,11 +298,11 @@
         <md-card flex>
             <md-table-container>
                 <div flex scroll-directive>
-                    <table md-table md-row-select
-                           multiple="{{ctrl.employeeService.hasPermissionTo('DELETE_ALL_DOCUMENT_COMMENTS')}}"
+                    <!--multiple="{{ctrl.employeeService.hasPermissionTo('DELETE_ALL_DOCUMENT_COMMENTS')}}"-->
+                    <table md-table md-row-select multiple
                            ng-model="ctrl.selectedDocumentComments"
                            md-progress="ctrl.progress">
-                        <thead md-head md-order="ctrl.grid.order">
+                        <thead md-head md-order="ctrl.grid.documentComments.order">
                         <tr md-row>
                             <th class="table-selector-header"
                                 ng-if="ctrl.selectedDocumentComments.length" md-column>
@@ -311,7 +311,7 @@
                                 </div>
                             </th>
                             <th ng-if="!ctrl.selectedDocumentComments.length" md-column
-                                md-order-by="arName">
+                                md-order-by="shortDescription">
                                 <span>{{lang.comments_short_description}}</span>
                             </th>
                             <th md-column
@@ -320,8 +320,9 @@
                             </th>
                             <th md-column ng-if="!ctrl.disableEverything">
                                 <span ng-if="!ctrl.selectedDocumentComments.length">{{lang.actions}}</span>
+                                <!--&& ctrl.vsId && ctrl.employeeService.hasPermissionTo('DELETE_ALL_DOCUMENT_COMMENTS')-->
                                 <md-button
-                                        ng-if="ctrl.selectedDocumentComments.length && ctrl.vsId  && ctrl.employeeService.hasPermissionTo('DELETE_ALL_DOCUMENT_COMMENTS')"
+                                        ng-if="ctrl.selectedDocumentComments.length"
                                         class="md-icon-button"
                                         ng-click="ctrl.removeBulkDocumentComments($event)">
                                     <md-icon md-svg-icon="delete"></md-icon>

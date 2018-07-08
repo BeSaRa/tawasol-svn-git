@@ -58,6 +58,10 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            _.map(model.documentComments, function (comment) {
+                delete comment.dummyCommentId;
+                return comment;
+            });
             model.tags = model.tags ? angular.toJson(model.tags) : model.tags;
             model.registryOU = model.registryOU.hasOwnProperty('id') ? model.registryOU.id : model.registryOU;
             _.map(lookupConverter, function (property) {
@@ -191,7 +195,6 @@ module.exports = function (app) {
             //TODO: Commented and added in upper if condition according to change from Iyad as createdOn field is reflecting a field from filenet but we used docDate in place of createdOn to reflect our custom date.
             /*if (!angular.isDate(model.createdOn))
                 model.createdOn = moment(model.createdOn).format('YYYY-MM-DD');*/
-
 
 
             if (model.linkedEntities && !angular.isArray(model.linkedEntities)) {

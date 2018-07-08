@@ -10,7 +10,8 @@ module.exports = function (app) {
                                                             organizationService,
                                                             documentCommentService,
                                                             DocumentComment,
-                                                            $scope) {
+                                                            $scope,
+                                                            _) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageCommentsDirectiveCtrl';
@@ -157,9 +158,9 @@ module.exports = function (app) {
 
             if (!self.vsId) {
                 $timeout(function () {
+                    self.documentComment.dummyCommentId = Date.now();
                     promise.resolve(true);
                 });
-
             } else {
                 documentCommentService.addDocumentComment(self.documentComment).then(function () {
                     promise.resolve(true);
@@ -421,18 +422,28 @@ module.exports = function (app) {
             dialog
                 .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event)
                 .then(function () {
-
-                    documentCommentService
-                        .deleteBulkDocumentComments(self.selectedDocumentComments)
-                        .then(function () {
-                            var ids = _.map(self.selectedDocumentComments, 'id');
-                            self.documentComments = _.filter(self.documentComments, function (documentComment) {
-                                return ids.indexOf(documentComment.id) === -1;
-                            });
-                            self.selectedDocumentComments = [];
-                            toast.success(langService.get('delete_success'));
-                            self.model = angular.copy(self.documentComments);
+                    if (!self.editMode && !self.vsId) {
+                        var ids = _.map(self.selectedDocumentComments, 'dummyCommentId');
+                        self.documentComments = _.filter(self.documentComments, function (documentComment) {
+                            return ids.indexOf(documentComment.dummyCommentId) === -1;
                         });
+                        self.selectedDocumentComments = [];
+                        toast.success(langService.get('delete_success'));
+                        self.model = angular.copy(self.documentComments);
+                    }
+                    else {
+                        documentCommentService
+                            .deleteBulkDocumentComments(self.selectedDocumentComments)
+                            .then(function () {
+                                var ids = _.map(self.selectedDocumentComments, 'id');
+                                self.documentComments = _.filter(self.documentComments, function (documentComment) {
+                                    return ids.indexOf(documentComment.id) === -1;
+                                });
+                                self.selectedDocumentComments = [];
+                                toast.success(langService.get('delete_success'));
+                                self.model = angular.copy(self.documentComments);
+                            });
+                    }
                 });
         };
         /**
