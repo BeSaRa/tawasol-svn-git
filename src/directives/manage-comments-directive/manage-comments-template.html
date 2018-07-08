@@ -331,8 +331,8 @@
                         </thead>
                         <tbody md-body>
                         <tr md-row md-select="documentComment"
-                            ng-disabled="ctrl.disableEverything"
-                            ng-repeat="documentComment in ctrl.documentComments  | filter:ctrl.searchModel | limitTo: ctrl.grid.documentComments.limit: ((ctrl.grid.documentComments.page - 1) * ctrl.grid.documentComments.limit) |orderBy:ctrl.grid.documentComments.order  track by $index">
+                            ng-repeat="documentComment in ctrl.documentComments  | filter:ctrl.searchModel | limitTo: ctrl.grid.documentComments.limit: ((ctrl.grid.documentComments.page - 1) * ctrl.grid.documentComments.limit) |orderBy:ctrl.grid.documentComments.order  track by $index"
+                            ng-disabled="ctrl.disableEverything || !ctrl.allowDelete(documentComment)">
                             <td md-cell><a href="#"
                                            ng-click="ctrl.showComment(documentComment , $event)">{{documentComment.shortDescription}}</a>
                             </td>
