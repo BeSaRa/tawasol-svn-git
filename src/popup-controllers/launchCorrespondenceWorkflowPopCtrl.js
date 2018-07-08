@@ -266,16 +266,16 @@ module.exports = function (app) {
             }
         };
 
-        self.isPrivateDoc = function(){
+        self.isPrivateDoc = function () {
             if (self.multi) {
-                return !(_.some(_.map(self.correspondence, function (correspondence) {
-                    return correspondence.getSecurityLevelLookup().lookupKey === 32;
+                return (_.some(_.map(self.correspondence, function (correspondence) {
+                    return correspondence.getSecurityLevelLookup().lookupKey === 4;
                 }), function (matchingResult) {
                     return matchingResult === true;
                 }));
             }
             else {
-                return self.correspondence.getSecurityLevelLookup().lookupKey === 32;
+                return self.correspondence.getSecurityLevelLookup().lookupKey === 4;
             }
 
         };
@@ -320,7 +320,7 @@ module.exports = function (app) {
             workflow_groups: {
                 lang: 'workflow_menu_item_workflow_groups',
                 icon: 'account-group',
-                show: _checkPermission('SEND_TO_GROUPS_'),
+                show: _checkPermission('SEND_TO_GROUPS_') && !self.isPrivateDoc(),
                 disabled: _getApprovedStatus(),
                 modelName: 'workflowGroups'
             }, /*,

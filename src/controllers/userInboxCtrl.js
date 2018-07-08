@@ -1025,7 +1025,7 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model)
                         && (!model.needApprove() || model.hasDocumentClass('incoming'))
                         && !model.isBroadcasted()
-                        && (model.getSecurityLevelLookup().lookupKey !== 32);
+                        && (model.getSecurityLevelLookup().lookupKey !== 4);
                 }
             },
             // Reply

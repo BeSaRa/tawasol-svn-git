@@ -155,7 +155,8 @@
                                                 grid-items="ctrl.favoriteUsers"></workflow-users-directive>
                                     </div>
                                 </md-tab>
-                                <md-tab ng-disabled="ctrl.getApprovedStatus()" label="{{lang.organizations}}">
+                                <md-tab ng-disabled="ctrl.getApprovedStatus() || ctrl.isPrivateDoc()"
+                                        label="{{lang.organizations}}">
                                     <div>
                                         <workflow-items-directive
                                                 multi-select="!ctrl.getApprovedStatus()"

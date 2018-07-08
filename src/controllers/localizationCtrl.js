@@ -92,13 +92,18 @@ module.exports = function (app) {
                     self.reloadLocalizationModule(self.grid.page);
                 });
         };
-
+        /**
+         * @description edit localization
+         * @param localization
+         * @param $event
+         */
         self.modifyLocalization = function (localization, $event) {
             return langService
                 .controllerMethod
                 .editLocalization(localization, $event)
                 .then(function (local) {
                     toast.success(langService.get('edit_success').change({name: local.getLocalizationKey()}));
+                    // TODO: LOAD LOCALIZATION BY MODULE TILL THE BACKEND TEAM CHANGE IT.
                     langService
                         .loadLocalizationKeys()
                         .then(function (localizations) {
