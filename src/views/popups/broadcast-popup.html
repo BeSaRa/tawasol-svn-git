@@ -73,9 +73,10 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody md-body>
-                                                <tr md-row md-select="organization"
-                                                    ng-disabled="ctrl.disableRow(organization)"
-                                                    ng-repeat="organization in ctrl.organizationsBroadcast | limitTo: ctrl.gridOrganizations.limit: ((ctrl.gridOrganizations.page - 1) * ctrl.gridOrganizations.limit) |orderBy:ctrl.gridOrganizations.order track by $index">
+                                                <tr md-row
+                                                    ng-repeat="organization in ctrl.organizationsBroadcast | limitTo: ctrl.gridOrganizations.limit: ((ctrl.gridOrganizations.page - 1) * ctrl.gridOrganizations.limit) |orderBy:ctrl.gridOrganizations.order track by $index"
+                                                    md-select="organization"
+                                                    ng-disabled="ctrl.disableRow(organization)">
                                                     <td md-cell>
                                                         {{organization.arName}}
                                                     </td>
@@ -83,7 +84,8 @@
                                                         {{organization.enName}}
                                                     </td>
                                                     <td md-cell>
-                                                        <md-checkbox ng-model="organization.withSub"></md-checkbox>
+                                                        <md-checkbox aria-label="{{lang.with_sub}}"
+                                                                     ng-model="organization.withSub"></md-checkbox>
                                                     </td>
                                                     <td md-cell>
                                                         <div flex layout="row" layout-align="start center">
@@ -121,8 +123,10 @@
                                                    ng-required="!ctrl.organizationsBroadcast.length"
                                                    name="workflowGroupBroadcast" ng-model="ctrl.workflowGroupBroadcast">
                                             <md-option ng-value="null">{{lang.none}}</md-option>
-                                            <md-option md-truncate ng-value="workflowGroup"
-                                                       ng-repeat="workflowGroup in ctrl.workflowGroups track by $index">
+                                            <md-option md-truncate
+                                                       ng-repeat="workflowGroup in ctrl.workflowGroups track by $index"
+                                                       ng-value="workflowGroup"
+                                                       ng-if="workflowGroup.status">
                                                 {{workflowGroup.getTranslatedName()}}
                                             </md-option>
                                         </md-select>

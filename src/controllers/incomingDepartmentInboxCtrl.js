@@ -193,7 +193,8 @@ module.exports = function (app) {
                         .then(function () {
                             var correspondence = new Incoming({
                                 vsId: result,
-                                docSubject: documentName
+                                docSubject: documentName,
+                                securityLevel: incomingDepartmentInbox.generalStepElm.securityLevel
                             });
                             /* isDeptIncoming is sent true to avoid alert message */
                             correspondence.launchWorkFlow($event, 'forward', 'favorites', true)
