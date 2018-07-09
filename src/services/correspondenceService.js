@@ -2569,6 +2569,61 @@ module.exports = function (app) {
                     });
             };
 
+            /**
+             * @description to view correspondence workItem
+             */
+            self.viewCorrespondenceReturnedWorkItem = function (info, actions, disableProperties, disableCorrespondence) {
+                return $http.get(urlService.departmentWF + '/returned/' + info.wobNumber)
+                    .then(function (result) {
+                        return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
+                    })
+                    .then(function (generalStepElementView) {
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-correspondence'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: generalStepElementView.correspondence,
+                                content: generalStepElementView.documentViewInfo,
+                                actions: actions,
+                                workItem: generalStepElementView,
+                                readyToExport: false,
+                                disableProperties: disableProperties,
+                                disableCorrespondence: disableCorrespondence,
+                                disableEverything: false,
+                                popupNumber: self.popupNumber
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        })
+                            .then(function () {
+                                self.popupNumber -= 1;
+                                return true;
+                            })
+                            .catch(function () {
+                                self.popupNumber -= 1;
+                                return false;
+                            });
+                    })
+                    .catch(function (error) {
+                        return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                            return $q.reject('WORK_ITEM_NOT_FOUND');
+                        })
+                    });
+            };
+
         }
     );
 };

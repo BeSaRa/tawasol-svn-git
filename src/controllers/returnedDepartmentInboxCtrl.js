@@ -542,11 +542,20 @@ module.exports = function (app) {
                 return;
             }
 
-            var info = returnedDepartmentInbox.getInfo();
+            /*var info = returnedDepartmentInbox.getInfo();
             correspondenceService.viewCorrespondence({
                 vsId: info.vsId,
                 docClassName: info.documentClass
             }, self.gridActions, checkIfEditPropertiesAllowed(returnedDepartmentInbox, true), true, true)
+                .then(function () {
+                    self.reloadReturnedDepartmentInboxes(self.grid.page);
+                })
+                .catch(function(){
+                    self.reloadReturnedDepartmentInboxes(self.grid.page);
+                });*/
+
+            var info = returnedDepartmentInbox.getInfo();
+            correspondenceService.viewCorrespondenceReturnedWorkItem(info, self.gridActions, checkIfEditPropertiesAllowed(returnedDepartmentInbox, true), true, true)
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page);
                 })

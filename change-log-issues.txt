@@ -220,3 +220,5 @@ Bugs:
 13679: Fix - UI: Caption need to be added in the drop down list that correspondence site is selected from.
 13763: Fix - IE Compatibility - Action Tab in Broadcast Screen is Empty.
 13743: Fix - IE Compatibility - Group Mail icon Not Found in Launch and Distribution workflow
+13682: Fix - Regression - user can't be able to Resend document from Returned Mail
+13684: Fix - regression - Launch New Distribution Workflow not working from Returned Mail inside document
