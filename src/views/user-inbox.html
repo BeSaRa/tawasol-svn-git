@@ -54,13 +54,14 @@
             <!-- Grid/Magazine view -->
             <div scroll-directive>
                 <div class="page-padding">
+                    <!-- Grid View -->
                     <md-card ng-if="ctrl.employeeService.getEmployee().viewInboxAsGrid" md-whiteframe="3"
                              layout="column" class="card-overlay">
                         <div>
-                            <md-tabs md-selected="ctrl.selectedTab" class="filter-tabs"
-                                     md-dynamic-height>
+                            <md-tabs md-selected="ctrl.selectedTab" class="filter-tabs" md-dynamic-height>
                                 <md-tab md-on-select="ctrl.resetSelectedFilter(0)" label="{{lang.inbox}}">
                                     <md-content class="white-bg">
+                                        <!-- Inbox Grid -->
                                         <work-item-inbox-directive
                                                 grid="ctrl.grid"
                                                 change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
@@ -81,6 +82,7 @@
                                 <md-tab md-on-select="ctrl.resetSelectedFilter(1)" label="{{lang.starred_tab}}"
                                         ng-if="ctrl.showStarred">
                                     <md-content class="white-bg">
+                                        <!-- Starred Grid -->
                                         <work-item-inbox-directive
                                                 grid="ctrl.starredGrid"
                                                 search-model="ctrl.searchModel"
@@ -137,6 +139,7 @@
                                     </md-tab-label>
                                     <md-tab-body>
                                         <md-content class="white-bg">
+                                            <!-- Filter Grids -->
                                             <work-item-inbox-directive
                                                     grid="ctrl.filterGrid[$index]"
                                                     change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
@@ -158,11 +161,13 @@
                             </md-tabs>
                         </div>
                     </md-card>
+                    <!-- Magazine View -->
                     <md-tabs ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid" md-selected="ctrl.selectedTab"
                              class="z-index-3 filter-tabs"
                              md-dynamic-height>
                         <md-tab md-on-select="ctrl.resetSelectedFilter(0)" label="{{lang.inbox}}">
                             <md-content class="transparent-bg">
+                                <!-- Inbox Magazine -->
                                 <magazine-layout-directive
                                         mark-as-read-unread="ctrl.markAsReadUnread"
                                         view-document="ctrl.viewDocument"
@@ -188,12 +193,14 @@
                         <md-tab md-on-select="ctrl.resetSelectedFilter(1)" label="{{lang.starred_tab}}"
                                 ng-if="ctrl.showStarred">
                             <md-content class="transparent-bg">
+                                <!-- Starred Magazine -->
                                 <magazine-layout-directive
                                         mark-as-read-unread="ctrl.markAsReadUnread"
                                         view-document="ctrl.viewDocument"
                                         change-user-inbox-star="ctrl.changeUserInboxStar"
                                         search-model="ctrl.searchModel"
                                         grid-actions="ctrl.gridActions"
+                                        quick-actions="ctrl.magazineQuickActions"
                                         limit-options="ctrl.starredGrid.limitOptions"
                                         page-limit="ctrl.starredGrid.limit"
                                         page="ctrl.starredGrid.page"
@@ -247,12 +254,14 @@
                             </md-tab-label>
                             <md-tab-body>
                                 <md-content class="transparent-bg">
+                                    <!-- Filter Magazines -->
                                     <magazine-layout-directive
                                             mark-as-read-unread="ctrl.markAsReadUnread"
                                             view-document="ctrl.viewDocument"
                                             change-user-inbox-star="ctrl.changeUserInboxStar"
                                             search-model="ctrl.searchModel"
                                             grid-actions="ctrl.gridActions"
+                                            quick-actions="ctrl.magazineQuickActions"
                                             limit-options="ctrl.filterGrid[$index].limitOptions"
                                             page-limit="ctrl.filterGrid[$index].limit"
                                             page="ctrl.filterGrid[$index].page"
