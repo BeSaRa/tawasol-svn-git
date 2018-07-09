@@ -219,3 +219,4 @@ Bugs:
 13936: Fix - regression - quick search - Actions from inside the document donot exist
 13679: Fix - UI: Caption need to be added in the drop down list that correspondence site is selected from.
 13763: Fix - IE Compatibility - Action Tab in Broadcast Screen is Empty.
+13743: Fix - IE Compatibility - Group Mail icon Not Found in Launch and Distribution workflow

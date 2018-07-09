@@ -46,7 +46,7 @@
                     <div flex layout="column" ng-if="ctrl.isSelectedTab('users')">
                         <current-tab-label-directive selected-tab="ctrl.selectedTab"
                                                      workflow-tabs="ctrl.workflowTabs"></current-tab-label-directive>
-                        <div flex enter-submit-directive="user_search" layout="row">
+                        <div enter-submit-directive="user_search" layout="row">
                             <md-input-container ng-if="!ctrl.usersCriteria.hide">
                                 <label for="ou">{{lang.select_organization}}</label>
                                 <md-select id="ou" name="ou"
