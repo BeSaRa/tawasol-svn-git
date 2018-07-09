@@ -56,10 +56,12 @@
                                                             </md-button>
                                                         </div>
                                                     </th>
-                                                    <th ng-if="!ctrl.selectedOrganizationBroadcast.length" md-column>
+                                                    <th ng-if="!ctrl.selectedOrganizationBroadcast.length" md-column
+                                                        md-order-by="arName">
                                                         {{lang.arabic_name}}
                                                     </th>
-                                                    <th ng-if="!ctrl.selectedOrganizationBroadcast.length" md-column>
+                                                    <th ng-if="!ctrl.selectedOrganizationBroadcast.length" md-column
+                                                        md-order-by="enName">
                                                         {{lang.english_name}}
                                                     </th>
                                                     <th ng-if="!ctrl.selectedOrganizationBroadcast.length" md-column>
@@ -156,10 +158,12 @@
                                                             </md-button>
                                                         </div>
                                                     </th>
-                                                    <th ng-if="!ctrl.selectedWorkflowGroupBroadcast.length" md-column>
+                                                    <th ng-if="!ctrl.selectedWorkflowGroupBroadcast.length" md-column
+                                                        md-order-by="arName">
                                                         {{lang.arabic_name}}
                                                     </th>
-                                                    <th ng-if="!ctrl.selectedWorkflowGroupBroadcast.length" md-column>
+                                                    <th ng-if="!ctrl.selectedWorkflowGroupBroadcast.length" md-column
+                                                        md-order-by="enName">
                                                         {{lang.english_name}}
                                                     </th>
                                                     <th ng-if="!ctrl.selectedWorkflowGroupBroadcast.length" md-column>
