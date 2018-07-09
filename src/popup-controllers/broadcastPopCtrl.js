@@ -66,8 +66,8 @@ module.exports = function (app) {
         self.correspondence = correspondence;
         self.selectedAction = null;
 
-        self.ouBroadcast = new OUBroadcast();
-        self.workflowGroupBroadcast = new WorkflowGroup();
+        self.ouBroadcast = null;
+        self.workflowGroupBroadcast = null;
 
         self.selectedOrganizationBroadcast = [];
         self.selectedWorkflowGroupBroadcast = [];
@@ -86,7 +86,7 @@ module.exports = function (app) {
             if (!isOUExist) {
                 self.organizationsBroadcast.push(self.ouBroadcast);
             }
-            self.ouBroadcast = new OUBroadcast();
+            self.ouBroadcast = null;
             organizationForm.$setUntouched();
         };
 
@@ -95,20 +95,26 @@ module.exports = function (app) {
          * @param organization
          */
         self.removeOrganizationBroadcast = function (organization) {
-            var organizationToDelete = _.filter(self.organizationsBroadcast, function (ou) {
-                return ou.id === organization.id;
-            })[0];
-            var organizationIndexToDelete = self.organizationsBroadcast.indexOf(organizationToDelete);
-            self.organizationsBroadcast.splice(organizationIndexToDelete, 1);
-            self.selectedOrganizationBroadcast = [];
+            dialog.confirmMessage(langService.get('confirm_delete_msg'))
+                .then(function () {
+                    var organizationToDelete = _.filter(self.organizationsBroadcast, function (ou) {
+                        return ou.id === organization.id;
+                    })[0];
+                    var organizationIndexToDelete = self.organizationsBroadcast.indexOf(organizationToDelete);
+                    self.organizationsBroadcast.splice(organizationIndexToDelete, 1);
+                    self.selectedOrganizationBroadcast = [];
+                });
         };
 
         /**
          * @description remove bulk organization from list
          */
         self.removeBulkOrganizationBroadcast = function () {
-            self.organizationsBroadcast = [];
-            self.selectedOrganizationBroadcast = [];
+            dialog.confirmMessage(langService.get('confirm_delete_selected_multiple'))
+                .then(function () {
+                    self.organizationsBroadcast = [];
+                    self.selectedOrganizationBroadcast = [];
+                });
         };
 
         /**
@@ -122,7 +128,7 @@ module.exports = function (app) {
             if (!isWorkflowGroupExist) {
                 self.allSelectedWorkflowGroups.push(self.workflowGroupBroadcast);
             }
-            self.workflowGroupBroadcast = new WorkflowGroup();
+            self.workflowGroupBroadcast = null;
             workflowGroupForm.$setUntouched();
         };
 
@@ -131,22 +137,34 @@ module.exports = function (app) {
          * @param workflowGroupsBroadcast
          */
         self.removeWorkflowGroupBroadcast = function (workflowGroupsBroadcast) {
-            var workflowGroupToDelete = _.filter(self.allSelectedWorkflowGroups, function (wfGroup) {
-                return wfGroup.id === workflowGroupsBroadcast.id;
-            })[0];
-            var workflowGroupIndexToDelete = self.allSelectedWorkflowGroups.indexOf(workflowGroupToDelete);
-            self.allSelectedWorkflowGroups.splice(workflowGroupIndexToDelete, 1);
-            self.selectedWorkflowGroupBroadcast = [];
+            dialog.confirmMessage(langService.get('confirm_delete_msg'))
+                .then(function () {
+                    var workflowGroupToDelete = _.filter(self.allSelectedWorkflowGroups, function (wfGroup) {
+                        return wfGroup.id === workflowGroupsBroadcast.id;
+                    })[0];
+                    var workflowGroupIndexToDelete = self.allSelectedWorkflowGroups.indexOf(workflowGroupToDelete);
+                    self.allSelectedWorkflowGroups.splice(workflowGroupIndexToDelete, 1);
+                    self.selectedWorkflowGroupBroadcast = [];
+                });
         };
 
         /**
          * @description remove bulk workflow group from list
          */
         self.removeBulkWorkflowGroupBroadcast = function () {
-            self.allSelectedWorkflowGroups = [];
-            self.selectedWorkflowGroupBroadcast = [];
+            dialog.confirmMessage(langService.get('confirm_delete_selected_multiple'))
+                .then(function () {
+                    self.allSelectedWorkflowGroups = [];
+                    self.selectedWorkflowGroupBroadcast = [];
+                });
         };
 
+        self.checkDisabled = function () {
+            return !(
+                !!(self.organizationsBroadcast.length || self.allSelectedWorkflowGroups.length)
+                && !!(self.selectedAction)
+            );
+        };
         /**
          * @description broadcast all selected organizations and workflow group with selected action
          */

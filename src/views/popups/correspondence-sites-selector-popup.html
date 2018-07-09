@@ -8,7 +8,7 @@
         <md-content scroll-directive>
             <div class="p20" layout="row">
                 <md-input-container flex>
-                    <label>{{lang.select_correspondenceSite}}</label>
+                    <label>{{lang.select_correspondence_site}}</label>
                     <md-select multiple ng-model="ctrl.correspondenceSite">
                         <md-option
                                 ng-if="ctrl.excludeIfExists(correspondenceSite) && !correspondenceSite.isGlobal && correspondenceSite.status"
