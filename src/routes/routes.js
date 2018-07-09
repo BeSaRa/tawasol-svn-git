@@ -1358,11 +1358,11 @@ module.exports = function (app) {
             .state('app.reports', {
                 url: '/reports/:reportName',
                 template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
-                controller: function ($sce, $stateParams, employeeService) {
+                controller: function ($sce, $stateParams, urlService ,  employeeService) {
                     'ngInject';
                     var self = this;
                     var reportName = $stateParams.reportName;
-                    self.url = $sce.trustAsResourceUrl(('http://100.100.3.228/Reports/report/Reports/' + encodeURIComponent(reportName) + '?rs:embed=true'));
+                    self.url = $sce.trustAsResourceUrl((urlService.reports + encodeURIComponent(reportName) + '?rs:embed=true'));
                 },
                 controllerAs: 'ctrl'
             })
