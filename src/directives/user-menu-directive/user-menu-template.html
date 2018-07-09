@@ -10,12 +10,13 @@
                     <md-icon class="profile-status" ng-class="userMenu.selectedStatus.class"
                              md-svg-icon="{{userMenu.selectedStatus.icon}}"></md-icon>
                 </div>
-                <span flex class="user-name">{{userMenu.employeeService.getTranslatedName()}}</span>
+                <div class="user-name">{{userMenu.employeeService.getTranslatedName()}}</div>
                 <md-icon md-svg-icon="chevron-down"></md-icon>
             </div>
         </md-button>
         <md-menu-content width="3">
-            <md-menu-item ng-if="!userMenu.employeeService.isAdminUser() && userMenu.employeeService.hasPermissionTo('MANAGE_PREFERENCES')">
+            <md-menu-item
+                    ng-if="!userMenu.employeeService.isAdminUser() && userMenu.employeeService.hasPermissionTo('MANAGE_PREFERENCES')">
                 <md-button ng-click="userMenu.userPreferences($event)">
                     <div layout="row" layout-align="start center">
                         <md-icon md-svg-icon="account-settings-variant"></md-icon>
@@ -23,7 +24,8 @@
                     </div>
                 </md-button>
             </md-menu-item>
-            <md-menu-item ng-if="!userMenu.employeeService.isAdminUser() && userMenu.employeeService.hasPermissionTo('MANAGE_PREFERENCES')">
+            <md-menu-item
+                    ng-if="!userMenu.employeeService.isAdminUser() && userMenu.employeeService.hasPermissionTo('MANAGE_PREFERENCES')">
                 <md-button ng-click="userMenu.manageSubscriptions($event)">
                     <div layout="row" layout-align="start center">
                         <md-icon md-svg-icon="bell-plus"></md-icon>
