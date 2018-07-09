@@ -43,7 +43,7 @@
                                         <div flex scroll-directive>
                                             <table md-table multiple md-row-select
                                                    ng-model="ctrl.selectedOrganizationBroadcast">
-                                                <thead md-head>
+                                                <thead md-head md-order="ctrl.gridOrganizations.order">
                                                 <tr md-row>
                                                     <th colspan="4" class="table-selector-header"
                                                         ng-if="ctrl.selectedOrganizationBroadcast.length" md-column>
@@ -145,7 +145,7 @@
                                         <div flex scroll-directive>
                                             <table md-table multiple md-row-select
                                                    ng-model="ctrl.selectedWorkflowGroupBroadcast">
-                                                <thead md-head>
+                                                <thead md-head md-order="ctrl.gridWorkflowGroups.order">
                                                 <tr md-row>
                                                     <th colspan="3" class="table-selector-header"
                                                         ng-if="ctrl.selectedWorkflowGroupBroadcast.length" md-column>
