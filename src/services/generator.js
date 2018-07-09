@@ -485,9 +485,21 @@ module.exports = function (app) {
             });
         };
 
-        self.checkCollectionStatus = function (collection, status, field) {
+        /**
+         * @description Compares the collections status(active/inactive) against the passed status value.
+         * @param collection
+         * Collection of records to check the status
+         * @param status
+         * Active/Inactive
+         * @param statusField
+         * The name of the field to check the status from record of collection. By default, it checks 'status' field
+         * @returns {boolean}
+         * Returns false, if the collection contains all records with same status.
+         * Returns true, if the collection contains any record with different status
+         */
+        self.checkCollectionStatus = function (collection, status, statusField) {
             return _.some(_.map(collection, function (model) {
-                return model[!field ? 'status' : field];
+                return model[!statusField ? 'status' : statusField];
             }), function (item) {
                 return item !== status;
             });

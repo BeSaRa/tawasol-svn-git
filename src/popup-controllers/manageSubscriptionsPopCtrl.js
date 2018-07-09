@@ -1,15 +1,24 @@
 module.exports = function (app) {
-    app.controller('manageSubscriptionsPopCtrl', function (dialog, documentSubscriptions, userSubscriptions, $q, langService, userSubscriptionService, employeeService, toast) {
+    app.controller('manageSubscriptionsPopCtrl', function (dialog,
+                                                           lookupService,
+                                                           userSubscriptions,
+                                                           $q,
+                                                           langService,
+                                                           userSubscriptionService,
+                                                           employeeService,
+                                                           toast,
+                                                           generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageSubscriptionsPopCtrl';
-        self.documentSubscriptions = documentSubscriptions;
-        self.userSubscriptions = userSubscriptions.filter(function (subscription) {
-            return subscription.trigerId === documentSubscriptions.length? -1 : documentSubscriptions[0].lookupKey;
-        });
+        self.documentSubscriptions = lookupService.returnLookups(lookupService.documentSubscription);
+        self.userSubscriptions = [];    //by default, set it to [], because we will filter it on change of event
+        self.userSubscriptionsCopy = angular.copy(userSubscriptions);
+
         self.selectedUserSubscriptions = [];
-        self.lookupKey = null;
         self.progress = null;
+        self.subscriptionEvent = null;
+
 
         /**
          * @description Contains options for grid configuration
@@ -33,24 +42,17 @@ module.exports = function (app) {
         /**
          * @description filter UserSubscriptions by trigger id.
          */
-        self.filterUserSubscriptions = function(lookupKey){
-            self.lookupKey = lookupKey;
-            self.userSubscriptions = userSubscriptions.filter(function (subscription) {
-                return subscription.trigerId === lookupKey;
-            })
-
-        };
-
-
-
-        /**
-         * @description Contains methods for CRUD operations for User Subscriptions
-         */
-        self.statusServices = {
-            'activate': userSubscriptionService.activateBulkUserSubscriptions,
-            'deactivate': userSubscriptionService.deactivateBulkUserSubscriptions,
-            'true': userSubscriptionService.activateUserSubscription,
-            'false': userSubscriptionService.deactivateUserSubscription
+        self.filterUserSubscriptions = function () {
+            if (self.subscriptionEvent) {
+                self.userSubscriptions = _.filter(self.userSubscriptionsCopy, function (subscription) {
+                    return subscription.trigerId === self.subscriptionEvent.lookupKey;
+                });
+            }
+            else {
+                self.userSubscriptions = [];
+            }
+            self.selectedUserSubscriptions = [];
+            self.grid.page = 1;
         };
 
         /**
@@ -65,14 +67,26 @@ module.exports = function (app) {
                 .loadUserSubscriptionsByUserId(employeeService.getEmployee().id)
                 .then(function (result) {
                     self.userSubscriptions = result;
-                    self.filterUserSubscriptions(self.lookupKey);
-                    self.selectedUserSubscriptions = [];
+                    self.userSubscriptionsCopy = angular.copy(result);
+                    self.filterUserSubscriptions();
+
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
                     return self.userSubscriptions;
                 });
         };
+
+        /**
+         * @description Contains methods for CRUD operations for User Subscriptions
+         */
+        self.statusServices = {
+            'activate': userSubscriptionService.activateBulkUserSubscriptions,
+            'deactivate': userSubscriptionService.deactivateBulkUserSubscriptions,
+            'true': userSubscriptionService.activateUserSubscription,
+            'false': userSubscriptionService.deactivateUserSubscription
+        };
+
 
         /**
          * @description Delete single user Subscription
@@ -122,9 +136,15 @@ module.exports = function (app) {
          * @param status
          */
         self.changeStatusBulkUserSubscriptions = function (status) {
+            var statusCheck = (status === 'activate');
+            if (!generator.checkCollectionStatus(self.selectedUserSubscriptions, statusCheck)) {
+                //toast.error(langService.get('the_status_already_changed'));
+                toast.success(langService.get(statusCheck ? 'success_activate_selected' : 'success_deactivate_selected'));
+                return;
+            }
             self.statusServices[status](self.selectedUserSubscriptions).then(function () {
                 self.reloadUserSubscriptions(self.grid.page).then(function () {
-                    toast.success(langService.get('selected_status_updated'));
+                    //toast.success(langService.get('selected_status_updated'));
                 });
             });
         };

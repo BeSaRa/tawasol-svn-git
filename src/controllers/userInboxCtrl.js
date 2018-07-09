@@ -489,30 +489,31 @@ module.exports = function (app) {
 
 
         /**
-         * @description Subscribe
-         * @param userInbox
+         * @description Subscribe to actions on the workItem
+         * @param workItem
          * @param $event
          */
-        self.subscribe = function (userInbox, $event) {
-            userSubscriptionService.showEventTypeDialog($event).then(function (eventType) {
-                var info = userInbox.getInfo();
-                var userSubscription = new UserSubscription({
-                    trigerId: eventType.hasOwnProperty('lookupKey') ? eventType.lookupKey : eventType,
-                    documentVSId: info.vsId,
-                    status: true,
-                    docSubject: info.title
-                });
+        self.subscribe = function (workItem, $event) {
+            var info = workItem.getInfo();
+            userSubscriptionService.showSubscribeDialog(info, $event)
+                .then(function (eventType) {
+                    var userSubscription = new UserSubscription({
+                        trigerId: eventType.hasOwnProperty('lookupKey') ? eventType.lookupKey : eventType,
+                        documentVSId: info.vsId,
+                        status: true,
+                        docSubject: info.title
+                    });
 
-                userSubscriptionService.addUserSubscription(userSubscription).then(function (result) {
-                    if (result) {
-                        toast.success(langService.get('subscribe_success').change({
-                            name: info.title,
-                            event: eventType.getTranslatedName()
-                        }));
-                    }
+                    userSubscriptionService.addUserSubscription(userSubscription)
+                        .then(function (result) {
+                            if (result) {
+                                toast.success(langService.get('subscribe_success').change({
+                                    name: info.title,
+                                    event: eventType.getTranslatedName()
+                                }));
+                            }
+                        });
                 });
-
-            });
         };
 
         /**

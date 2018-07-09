@@ -156,7 +156,8 @@ module.exports = function (app) {
         self.changeStatusBulkJobTitles = function (status) {
             var statusCheck = (status === 'activate');
             if (!generator.checkCollectionStatus(self.selectedJobTitles, statusCheck)) {
-                toast.error(langService.get('the_status_already_changed'));
+                //toast.error(langService.get('the_status_already_changed'));
+                toast.success(langService.get(statusCheck ? 'success_activate_selected' : 'success_deactivate_selected'));
                 return;
             }
             self.statusServices[status](self.selectedJobTitles).then(function () {

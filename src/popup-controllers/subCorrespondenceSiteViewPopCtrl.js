@@ -205,11 +205,10 @@ module.exports = function (app) {
          * @param status
          */
         self.changeBulkStatusCorrespondenceSites = function (status) {
-
-            var statusCheck = status === 'activate';
-
+            var statusCheck = (status === 'activate');
             if(!generator.checkCollectionStatus(self.selectedCorrespondenceSites , statusCheck )){
-                toast.error(langService.get('the_status_already_changed'));
+                //toast.error(langService.get('the_status_already_changed'));
+                toast.success(langService.get(statusCheck ? 'success_activate_selected' : 'success_deactivate_selected'));
                 return;
             }
 

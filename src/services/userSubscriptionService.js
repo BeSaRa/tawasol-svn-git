@@ -1,14 +1,14 @@
 module.exports = function (app) {
     app.service('userSubscriptionService', function (urlService,
-                                                        $http,
-                                                        $q,
-                                                        generator,
-                                                        UserSubscription,
-                                                        lookupService,
-                                                        dialog,
-                                                        cmsTemplate,
-                                                        langService,
-                                                        toast) {
+                                                     $http,
+                                                     $q,
+                                                     generator,
+                                                     UserSubscription,
+                                                     lookupService,
+                                                     dialog,
+                                                     cmsTemplate,
+                                                     langService,
+                                                     toast) {
         'ngInject';
         var self = this;
         self.serviceName = 'userSubscriptionService';
@@ -22,8 +22,8 @@ module.exports = function (app) {
          */
         self.loadUserSubscriptions = function () {
             $http.get(urlService.notifications.change({count: 10}), {
-                    excludeLoading: true
-                })
+                excludeLoading: true
+            })
                 .then(function (result) {
                     self.userSubscriptions = result.data.rs.second;
                     self.count = self.userSubscriptions.length;
@@ -57,11 +57,11 @@ module.exports = function (app) {
 
         /**
          * @description  open subscription event types dialog
-         * @param dialogTitle
+         * @param info
          * @param $event
          * @returns {promise|*}
          */
-        self.showEventTypeDialog = function ($event) {
+        self.showSubscribeDialog = function (info, $event) {
             return dialog
                 .showDialog({
                     template: cmsTemplate.getPopup('subscription-event-type'),
@@ -69,11 +69,13 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     bindToController: true,
                     targetEvent: $event,
+                    locals: {
+                        subject: info.title
+                    },
                     resolve: {
                         eventTypes: function (lookupService) {
                             'ngInject';
                             return lookupService.returnLookups(lookupService.documentSubscription);
-
                         }
                     }
                 });
@@ -84,7 +86,7 @@ module.exports = function (app) {
          * @returns {Promise|userSubscriptions}
          */
         self.loadUserSubscriptionsByUserId = function (userid) {
-            return $http.get(urlService.userSubscriptions+ '/user-id/' + userid).then(function (result) {
+            return $http.get(urlService.userSubscriptions + '/user-id/' + userid).then(function (result) {
                 self.userSubscriptionsByUserId = generator.generateCollection(result.data.rs, UserSubscription, self._sharedMethods);
                 self.userSubscriptionsByUserId = generator.interceptReceivedCollection('UserSubscription', self.userSubscriptionsByUserId);
                 return self.userSubscriptionsByUserId;
@@ -100,9 +102,9 @@ module.exports = function (app) {
         };
 
 
-    /**
-    * @description Contains methods for CRUD operations for user Subscriptions
-        */
+        /**
+         * @description Contains methods for CRUD operations for user Subscriptions
+         */
         self.controllerMethod = {
             /**
              * @description Show confirm box and delete user Subscription
@@ -127,8 +129,8 @@ module.exports = function (app) {
                 return dialog
                     .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event || null)
                     .then(function () {
-                        return self.deleteBulkUserSubscriptions(userSubscriptions)
-                            .then(function (result) {
+                        return self.deleteBulkUserSubscriptions(userSubscriptions);
+                            /*.then(function (result) {
                                 var response = false;
                                 if (result.length === userSubscriptions.length) {
                                     toast.error(langService.get("failed_delete_selected"));
@@ -143,10 +145,10 @@ module.exports = function (app) {
                                     response = true;
                                 }
                                 return response;
-                            });
+                            });*/
                     });
             }
-        }
+        };
 
         /**
          * @description Delete given user Subscription.
@@ -175,7 +177,7 @@ module.exports = function (app) {
                 url: urlService.userSubscriptions + '/bulk',
                 data: bulkIds
             }).then(function (result) {
-                result = result.data.rs;
+                /*result = result.data.rs;
                 var failedUserSubscriptions = [];
                 _.map(result, function (value, key) {
                     if (!value)
@@ -183,7 +185,9 @@ module.exports = function (app) {
                 });
                 return _.filter(userSubscriptions, function (userSubscriptions) {
                     return (failedUserSubscriptions.indexOf(userSubscriptions.id) > -1);
-                });
+                });*/
+                return generator.getBulkActionResponse(result, userSubscriptions, false, 'failed_delete_selected', 'delete_success', 'delete_success_except_following');
+
             });
         };
 
@@ -220,8 +224,9 @@ module.exports = function (app) {
             var bulkIds = userSubscriptions[0].hasOwnProperty('id') ? _.map(userSubscriptions, 'id') : userSubscriptions;
             return $http
                 .put((urlService.userSubscriptions + '/activate/bulk'), bulkIds)
-                .then(function () {
-                    return userSubscriptions;
+                .then(function (result) {
+                    return generator.getBulkActionResponse(result, userSubscriptions, false, 'failed_activate_selected', 'success_activate_selected', 'success_activate_selected_except_following');
+                    //return userSubscriptions;
                 });
         };
 
@@ -233,8 +238,9 @@ module.exports = function (app) {
             var bulkIds = userSubscriptions[0].hasOwnProperty('id') ? _.map(userSubscriptions, 'id') : userSubscriptions;
             return $http
                 .put((urlService.userSubscriptions + '/deactivate/bulk'), bulkIds)
-                .then(function () {
-                    return userSubscriptions;
+                .then(function (result) {
+                    return generator.getBulkActionResponse(result, userSubscriptions, false, 'failed_deactivate_selected', 'success_deactivate_selected', 'success_deactivate_selected_except_following');
+                    //return userSubscriptions;
                 });
         };
 

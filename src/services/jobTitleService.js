@@ -225,7 +225,7 @@ module.exports = function (app) {
         self.deactivateBulkJobTitles = function (jobTitles) {
             return $http
                 .put((urlService.jobTitles + '/deactivate/bulk'), _.map(jobTitles, 'id'))
-                .then(function () {
+                .then(function (result) {
                     return generator.getBulkActionResponse(result, jobTitles, false, 'failed_deactivate_selected', 'success_deactivate_selected', 'success_deactivate_selected_except_following');
                 //    return jobTitles;
                 });

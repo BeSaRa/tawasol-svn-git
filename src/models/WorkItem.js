@@ -116,9 +116,10 @@ module.exports = function (app) {
                 // return correspondenceService.getContentSize(this);
                 return true;
             };
+
             /**
-             * @description to get documentClass,vsId.
-             * @return {{documentClass: *, vsId: *}}
+             * @description To get the workItem information
+             * @returns {CorrespondenceInfo}
              */
             WorkItem.prototype.getInfo = function () {
                 return correspondenceService.getCorrespondenceInformation(this);

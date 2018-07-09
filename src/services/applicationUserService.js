@@ -454,17 +454,11 @@ module.exports = function (app) {
                         template: cmsTemplate.getPopup('manage-subscriptions'),
                         controller: 'manageSubscriptionsPopCtrl',
                         controllerAs: 'ctrl',
-                        bindToController: true,
+                        //bindToController: true,
                         resolve: {
-                            documentSubscriptions: function (lookupService) {
-                                'ngInject';
-                                return lookupService.returnLookups(lookupService.documentSubscription);
-
-                            },
                             userSubscriptions: function (userSubscriptionService) {
                                 'ngInject';
                                 return userSubscriptionService.loadUserSubscriptionsByUserId(employeeService.getEmployee().id);
-
                             }
                         }
                     });
