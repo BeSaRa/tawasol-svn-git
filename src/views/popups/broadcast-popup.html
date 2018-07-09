@@ -126,7 +126,7 @@
                                             <md-option md-truncate
                                                        ng-repeat="workflowGroup in ctrl.workflowGroups track by $index"
                                                        ng-value="workflowGroup"
-                                                       ng-if="workflowGroup.status">
+                                                       ng-if="ctrl.workflowGroupNotExists(workflowGroup) && workflowGroup.status">
                                                 {{workflowGroup.getTranslatedName()}}
                                             </md-option>
                                         </md-select>

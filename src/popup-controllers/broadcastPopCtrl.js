@@ -112,7 +112,10 @@ module.exports = function (app) {
         self.removeBulkOrganizationBroadcast = function () {
             dialog.confirmMessage(langService.get('confirm_delete_selected_multiple'))
                 .then(function () {
-                    self.organizationsBroadcast = [];
+                    _.forEach(self.selectedOrganizationBroadcast, function (selectedOu) {
+                        self.organizationsBroadcast.splice(self.organizationsBroadcast.indexOf(selectedOu), 1);
+                    });
+                    // self.organizationsBroadcast = [];
                     self.selectedOrganizationBroadcast = [];
                 });
         };
@@ -154,7 +157,10 @@ module.exports = function (app) {
         self.removeBulkWorkflowGroupBroadcast = function () {
             dialog.confirmMessage(langService.get('confirm_delete_selected_multiple'))
                 .then(function () {
-                    self.allSelectedWorkflowGroups = [];
+                    _.forEach(self.selectedWorkflowGroupBroadcast, function (selectedWf) {
+                        self.allSelectedWorkflowGroups.splice(self.allSelectedWorkflowGroups.indexOf(selectedWf), 1);
+                    });
+                    // self.allSelectedWorkflowGroups = [];
                     self.selectedWorkflowGroupBroadcast = [];
                 });
         };
@@ -189,10 +195,26 @@ module.exports = function (app) {
 
         };
 
+        /**
+         * @description Check if the organization does not exists in the added organizations
+         * @returns {boolean}
+         * @param organization
+         */
         self.organizationNotExists = function (organization) {
             return !_.find(self.organizationsBroadcast, function (item) {
                 return item.id === organization.id
             });
+        };
+
+        /**
+         * @description Check if the workflow group does not exists in the added workflow groups
+         * @param workflowGroup
+         * @returns {boolean}
+         */
+        self.workflowGroupNotExists = function (workflowGroup) {
+            return !_.find(self.allSelectedWorkflowGroups, function (item) {
+                return item.id === workflowGroup.id;
+            })
         };
 
         /**
