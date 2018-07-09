@@ -937,7 +937,7 @@
   },
   {
     "ID": 93,
-    "lang_key": "menu_item_reports_statistical_report",
+    "lang_key": "menu_item_reports_statistical_correspondence_report",
     "icon": "file-chart",
     "parent": 92,
     "link": "#",
@@ -949,7 +949,7 @@
   },
   {
     "ID": 94,
-    "lang_key": "menu_item_reports_statistical_correspondence_report",
+    "lang_key": "menu_item_reports_statistical_report",
     "icon": "file-chart",
     "parent": 92,
     "link": "#",
