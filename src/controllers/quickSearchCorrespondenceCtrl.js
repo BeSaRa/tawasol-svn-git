@@ -331,7 +331,7 @@ module.exports = function (app) {
                 return;
             }
 
-            correspondenceService.viewCorrespondence(searchedCorrespondenceDocument, [], true, true)
+            correspondenceService.viewCorrespondence(searchedCorrespondenceDocument, self.gridActions, true, true)
                 .then(function () {
                     return self.reloadQuickSearchCorrespondence(self.grid.page);
                 })

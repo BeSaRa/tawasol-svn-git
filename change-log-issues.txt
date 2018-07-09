@@ -214,3 +214,4 @@ Bugs:
 13925: Fix - Regression - user can't Edit Correspondence site from Draft Queue inside outgoing document
 
 13935: Fix - Magazine view - Quick actions in magzaine view donot appear in filters pages
+13936: Fix - regression - quick search - Actions from inside the document donot exist
