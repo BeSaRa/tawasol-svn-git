@@ -1944,3 +1944,26 @@ button.list-button {
   width: 25px;
   height: 25px;
 }
+
+.simple-padding {
+  padding: 0 10px;
+  & > .simple-properties {
+    margin-right: 5px;
+  }
+  & > .simple-viewer {
+    margin-left: 5px;
+  }
+}
+
+html.rtl {
+  .simple-padding {
+    & > .simple-properties {
+      margin-left: 5px;
+      margin-right: 0;
+    }
+    & > .simple-viewer {
+      margin-right: 5px;
+      margin-left: 0;
+    }
+  }
+}

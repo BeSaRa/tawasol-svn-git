@@ -69,4 +69,7 @@ module.exports = function (app) {
     require('./g2gIncomingCtrl')(app);
     require('./g2gReturnedCtrl')(app);
     require('./g2gSentItemsCtrl')(app);
+    require('./simpleInternalCtrl')(app);
+    require('./simpleOutgoingCtrl')(app);
+    require('./simpleIncomingCtrl')(app);
 };

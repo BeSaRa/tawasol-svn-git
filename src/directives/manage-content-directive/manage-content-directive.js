@@ -17,7 +17,9 @@ module.exports = function (app) {
                 document: '=?',
                 documentInformation: '=',
                 disableWhen: '=',
-                signaturesCount: '='
+                signaturesCount: '=',
+                simpleViewUrl: '=?',
+                isSimpleAdd: '=?'
             }
         }
     })

@@ -849,6 +849,13 @@ module.exports = function (app) {
                 controller: 'outgoingCtrl',
                 controllerAs: 'ctrl'
             })
+            // add simple outgoing
+            .state('app.outgoing.simple-add', {
+                url: '/simpleAdd?vsId?workItem?action',
+                template: templateProvider.getView('outgoing-simple-add'),
+                controller: 'simpleOutgoingCtrl',
+                controllerAs: 'ctrl'
+            })
             // prepare outgoing
             .state('app.outgoing.prepare', {
                 url: '/prepare',
@@ -1096,6 +1103,13 @@ module.exports = function (app) {
                 controller: 'incomingCtrl',
                 controllerAs: 'ctrl'
             })
+            // add simple incoming
+            .state('app.incoming.simple-add', {
+                url: '/simpleAdd?action?workItem?vsId',
+                template: templateProvider.getView('incoming-simple-add'),
+                controller: 'simpleIncomingCtrl',
+                controllerAs: 'ctrl'
+            })
             // scan incoming
             .state('app.incoming.scan', {
                 url: '/scan',
@@ -1172,6 +1186,15 @@ module.exports = function (app) {
                 controller: 'internalCtrl',
                 controllerAs: 'ctrl'
             })
+
+            // add simple internal
+            .state('app.internal.simple-add', {
+                url: '/simpleAdd?vsId?workItem?action',
+                template: templateProvider.getView('internal-simple-add'),
+                controller: 'simpleInternalCtrl',
+                controllerAs: 'ctrl'
+            })
+
             // prepare internal
             .state('app.internal.prepare', {
                 url: '/prepare',

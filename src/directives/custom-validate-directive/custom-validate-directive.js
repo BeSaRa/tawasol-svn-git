@@ -13,11 +13,17 @@ module.exports = function (app) {
             restrict: 'A',
             require: 'ngModel',
             link: function ($scope, $element, attrs, ngModelCtrl) {
+
                 var type = attrs.customValidateDirective;
                 if (!type)
                     return;
 
                 var regex = {
+                    /**
+                     * @description allow only dates with format YYYY-MM-dd
+                     **/
+                    Date: /([1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/,
+
                     /**
                      * @description Allows url format with http or https or www
                      */

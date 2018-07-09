@@ -69,6 +69,7 @@ module.exports = function (app) {
                             self.startPrepareCorrespondence($event);
                         });
                 }
+
                 return self.startPrepareCorrespondence($event);
             });
         };
@@ -123,7 +124,12 @@ module.exports = function (app) {
                 .displayTemplates(self.templates, $event)
                 .then(function (template) {
                     self.template = template;
-                    return self.openPreparedTemplate(template.getSubjectTitle(), $event);
+
+                    if (self.isSimpleAdd)
+                        return self.getTrustViewUrl(template.getSubjectTitle(), $event);
+
+                    else
+                        return self.openPreparedTemplate(template.getSubjectTitle(), $event);
                 });
         };
 
@@ -157,7 +163,11 @@ module.exports = function (app) {
                                     return correspondenceService
                                         .sendUploadedFileToPrepare(file, self.document)
                                         .then(function (result) {
-                                            return self.openPreparedTemplate(file.name, null, result);
+                                            if (self.isSimpleAdd)
+                                                return self.getTrustViewUrl(file.name, null, result);
+
+                                            else
+                                                return self.openPreparedTemplate(file.name, null, result);
                                         })
                                         .catch(function (error) {
                                             errorCode.checkIf(error, 'FILE_NOT_ALLOWED', function () {
@@ -239,5 +249,46 @@ module.exports = function (app) {
         self.openEditContentInEditPopup = function () {
             return correspondenceService.viewCorrespondence(self.document, [], true, true);
         };
+
+
+        self.savePreparedDocument = function () {
+            self.documentInformation = self.docInfo;
+            self.templateOrFileName = self.docName;
+            if (self.simpleViewUrl) {
+                if (self.vsId && !self.fromDialog) {
+                    correspondenceService
+                        .updateCorrespondenceWithContent(self.document, self.documentInformation)
+                }
+            } else {
+                self.removeTemplateOrContentFile();
+            }
+        }
+
+        self.getTrustViewUrl = function (templateOrFileName, $event, information) {
+            self.docName = templateOrFileName;
+
+            if (information) {
+                self.lastTemplate = information;
+                self.docInfo = information;
+                self.signaturesCount = 1;
+
+                self.simpleViewUrl = $sce.trustAsResourceUrl(information.viewURL);
+                return self.simpleViewUrl;
+            }
+
+            self.model = angular.copy(self.document);
+            self.model.classDescription = self.document.docClassName;
+
+            return officeWebAppService.getTemplateToPrepare(self.template, generator.interceptSendInstance(['Correspondence', 'Outgoing'], self.model))
+                .then(function (result) {
+
+                    self.lastTemplate = result;
+                    self.docInfo = result;
+                    self.signaturesCount = self.template.signaturesCount;
+                    self.simpleViewUrl = $sce.trustAsResourceUrl(result.viewURL);
+
+                    return self.simpleViewUrl;
+                });
+        }
     });
 };

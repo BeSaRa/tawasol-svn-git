@@ -39,6 +39,7 @@ module.exports = function (app) {
     require('./manage-comments-directive/01-index')(app);
     require('./manage-entities-directive/01-index')(app);
     require('./manage-properties-directive/01-index')(app);
+    require('./manage-properties-simple-directive/01-index')(app);
     require('./counter-directive/counter-directive')(app);
     //require('./upload-attachment-directive/upload-attachment-directive')(app);
     //require('./user-folders-treeview-directive/01-index')(app);
@@ -47,6 +48,7 @@ module.exports = function (app) {
     require('./view-document-inbox-directive/01-index')(app);
     require('./manage-content-directive/01-index')(app);
     require('./manage-correspondence-directive/01-index')(app);
+    require('./manage-correspondence-simple-directive/01-index')(app);
     require('./private-announcement-directive/01-index')(app);
     require('./move-to-folders-tree-view-directive/01-index')(app);
     require('./draggable-work-item-directive/01-index')(app);
@@ -58,6 +60,7 @@ module.exports = function (app) {
     require('./barcode-settings-directive/01-index')(app);
     require('./correspondence-view-action-directive/01-index')(app);
     require('./manage-correspondence-site-incoming-directive/01-index')(app);
+    require('./manage-correspondence-site-incoming-simple-directive/01-index')(app);
     require('./main-site-sub-site-directive/01-index')(app);
     require('./localization-module-converter-directive/01-index')(app);
     require('./current-tab-label-directive/01-index')(app);
@@ -87,4 +90,5 @@ module.exports = function (app) {
     require('./workItem-properties-directive/01-index')(app);
     require('./correspondence-item-properties-directive/01-index')(app);
     require('./manage-correspondence-site-g2g-directive/01-index')(app);
+    require('./max-date-directive/max-date-directive')(app);
 };

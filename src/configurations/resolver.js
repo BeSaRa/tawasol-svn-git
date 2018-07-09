@@ -235,7 +235,146 @@ module.exports = function (app) {
                     return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
                 }
             })
+            .bulkResolveToState('app.outgoing.simple-add', {
+                organizations: function (organizationService) {
+                    'ngInject';
+                    return organizationService.getOrganizations();
+                },
+                replyTo: function ($timeout, $stateParams, correspondenceService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, workItem = $stateParams.workItem, action = $stateParams.action;
+                    if (action !== 'reply')
+                        return $timeout(function () {
+                            return false;
+                        });
+
+                    if (vsId) {
+                        return correspondenceService
+                            .createReplyFromCorrespondence('incoming', vsId, 'outgoing', {})
+                            .then(function (outgoing) {
+                                return correspondenceService
+                                    .loadCorrespondenceByVsIdClass(outgoing.linkedDocs[0], 'incoming')
+                                    .then(function (result) {
+                                        outgoing.linkedDocs = [result];
+                                        outgoing.docDate = new Date();
+                                        outgoing.createdOn = new Date();
+                                        outgoing.addMethod = 0;
+                                        outgoing.classDescription = 'Outgoing';
+                                        return outgoing
+                                    });
+                            })
+                    } else if (workItem) {
+                        return correspondenceService
+                            .createReplyFromWorkItem('incoming', workItem, 'outgoing', {})
+                            .then(function (outgoing) {
+                                return correspondenceService
+                                    .loadCorrespondenceByVsIdClass(outgoing.linkedDocs[0], 'incoming')
+                                    .then(function (result) {
+                                        outgoing.linkedDocs = [result];
+                                        outgoing.docDate = new Date();
+                                        outgoing.createdOn = new Date();
+                                        outgoing.addMethod = 0;
+                                        outgoing.sitesInfoTo = [result.site];
+                                        outgoing.classDescription = 'Outgoing';
+                                        return outgoing
+                                    });
+                            });
+                    } else {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                },
+                editAfterApproved: function ($timeout, $stateParams, correspondenceStorageService, correspondenceService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, workItem = $stateParams.workItem, action = $stateParams.action;
+                    if (action !== 'editAfterApproved') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                    return correspondenceStorageService
+                        .getCorrespondence('approved')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
+                },
+                editAfterExport: function ($timeout, $stateParams, correspondenceStorageService, correspondenceService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, workItem = $stateParams.workItem, action = $stateParams.action;
+                    if (action !== 'editAfterExport') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                    return correspondenceStorageService
+                        .getCorrespondence('export')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
+                },
+                centralArchives: function ($q, organizations, employeeService, organizationService) {
+                    'ngInject';
+                    return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+                }
+            })
             .bulkResolveToState('app.incoming.add', {
+        organizations: function (organizationService) {
+            'ngInject';
+            return organizationService.getOrganizations();
+        },
+        receive: function (correspondenceService, $stateParams, $timeout) {
+            'ngInject';
+            var action = $stateParams.action, workItem = $stateParams.workItem;/*, vsId = $stateParams.vsId;*/
+            if (action === 'receive') {
+                return correspondenceService.prepareReceiveIncoming(workItem)
+                    .catch(function (error) {
+                        return $timeout(function () {
+                            return false;
+                        });
+                    });
+            }
+            /*else if (action === 'receiveg2g') {
+                return correspondenceService.prepareReceiveIncomingByVsId(vsId)
+                    .catch(function (error) {
+                        return $timeout(function () {
+                            return false;
+                        });
+                    });
+            }*/
+            else {
+                return $timeout(function () {
+                    return false;
+                });
+            }
+        },
+        receiveG2G: function(correspondenceService, $stateParams, $timeout){
+            'ngInject';
+            var action = $stateParams.action, vsId = $stateParams.vsId;
+            if (action === 'receiveg2g') {
+                return correspondenceService.prepareReceiveIncomingByVsId(vsId)
+                    .catch(function (error) {
+                        return $timeout(function () {
+                            return false;
+                        });
+                    });
+            }
+            else {
+                return $timeout(function () {
+                    return false;
+                });
+            }
+        },
+        centralArchives: function ($q, organizations, employeeService, organizationService) {
+            'ngInject';
+            return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+        }
+    })
+            .bulkResolveToState('app.incoming.simple-add', {
                 organizations: function (organizationService) {
                     'ngInject';
                     return organizationService.getOrganizations();
@@ -280,6 +419,28 @@ module.exports = function (app) {
                 }
             })
             .bulkResolveToState('app.internal.add', {
+                organizations: function (organizationService) {
+                    'ngInject';
+                    return organizationService.getOrganizations();
+                },
+                editAfterApproved: function ($timeout, $stateParams, correspondenceStorageService, correspondenceService) {
+                    'ngInject';
+                    var vsId = $stateParams.vsId, workItem = $stateParams.workItem, action = $stateParams.action;
+                    if (action !== 'editAfterApproved') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                    return correspondenceStorageService
+                        .getCorrespondence('approved')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
+                }
+            })
+            .bulkResolveToState('app.internal.simple-add', {
                 organizations: function (organizationService) {
                     'ngInject';
                     return organizationService.getOrganizations();

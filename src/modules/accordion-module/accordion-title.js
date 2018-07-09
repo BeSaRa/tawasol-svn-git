@@ -11,7 +11,8 @@ module.exports = function (app) {
             restrict: 'E',
             require: '^accordionDirective',
             scope: {
-                onSelect: '&?'
+                onSelect: '&?',
+                disableCollapse: '='
             },
             compile: function (tElement, attrs) {
                 var content = tElement.contents().detach();

@@ -1,5 +1,5 @@
 <div layout="column" flex>
-    <div layout="row" layout-align="start center">
+    <div layout="row" flex layout-align="start center">
         <div>
             <md-button ng-if="ctrl.displayPrepare" class="md-raised" ng-click="ctrl.openPrepareTemplateDialog($event)">
                 <md-icon md-svg-icon="content-paste"></md-icon>
@@ -33,10 +33,11 @@
                 {{lang.edit_content}}
             </md-button>
         </div>
-        <span flex ng-if="ctrl.displayPrepare && ctrl.documentInformation && ctrl.templateOrFileName">{{ctrl.templateOrFileName}}</span>
-        <span flex ng-if="!ctrl.displayPrepare && ctrl.document.contentFile && ctrl.templateOrFileName">{{ctrl.templateOrFileName}}</span>
-        <!--<span flex ng-if="ctrl.document.contentFile">{{ctrl.document.contentFile.name}}</span>-->
-        <!--<span flex ng-if="ctrl.displayPrepare && ctrl.template">{{ctrl.template.getSubjectTitle()}}</span>-->
+
+            <span flex ng-if="ctrl.displayPrepare && ctrl.documentInformation && ctrl.templateOrFileName">{{ctrl.templateOrFileName}}</span>
+            <span flex ng-if="!ctrl.displayPrepare && ctrl.document.contentFile && ctrl.templateOrFileName">{{ctrl.templateOrFileName}}</span>
+            <!--<span flex ng-if="ctrl.document.contentFile">{{ctrl.document.contentFile.name}}</span>-->
+            <!--<span flex ng-if="ctrl.displayPrepare && ctrl.template">{{ctrl.template.getSubjectTitle()}}</span>-->
 
         <div>
             <md-icon md-svg-icon="close" class="cursor-pointer red-text" tooltip="{{lang.remove_content}}"
@@ -49,6 +50,16 @@
         <div>
             <md-button ng-if="ctrl.editContent" class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
                 {{lang.edit_content}}
+            </md-button>
+        </div>
+        <span flex></span>
+        <div ng-if="ctrl.simpleViewUrl">
+            <!--save document -->
+            <md-button ng-click="ctrl.savePreparedDocument()"
+                       class="md-icon-button"
+                       ng-disabled="!ctrl.simpleViewUrl"
+                       tooltip="{{lang.save}}">
+                <md-icon md-svg-icon="content-save"></md-icon>
             </md-button>
         </div>
     </div>

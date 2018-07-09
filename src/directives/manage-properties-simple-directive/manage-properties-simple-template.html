@@ -2,7 +2,7 @@
     <fieldset class="field-set-hidden">
         <div layout="column">
             <div layout="row">
-                <!-- Correspondence registry (If show registry unit)-->
+                <!-- Correspondence registry -->
                 <md-input-container ng-if="ctrl.showRegistryUnit()" flex>
                     <label for="registryOU">{{lang.corr_registry}}</label>
                     <md-select name="registryOU"
@@ -21,7 +21,7 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-                <!-- OU (If not show registry unit) -->
+                <!-- OU -->
                 <md-input-container ng-if="!ctrl.showRegistryUnit()" flex>
                     <label for="ou">{{lang.organization_unit}}</label>
                     <md-select name="ou"
@@ -39,7 +39,7 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-                <!-- OU (If show registry unit) -->
+                <!-- OU -->
                 <md-input-container ng-if="ctrl.showRegistryUnit()" flex>
                     <label for="ou">{{lang.organization_unit}}</label>
                     <md-select name="ou"
@@ -63,25 +63,6 @@
                     <input id="securityLevel" name="securityLevel"
                            ng-disabled="true"
                            ng-value="ctrl.sourceModel.securityLevel.getTranslatedName()">
-                </md-input-container>
-                <!-- Security Level (Select) -->
-                <md-input-container ng-if="!ctrl.document.hasVsId()" flex>
-                    <label for="securityLevel">{{lang.security_level}}</label>
-                    <md-select name="securityLevel"
-                               id="securityLevel"
-                               ng-change="ctrl.onSecurityLevelChange()"
-                               ng-disabled="!!ctrl.disableProperties"
-                               ng-model="ctrl.document.securityLevel"
-                               ng-model-options="{trackBy: '$value.id'}"
-                               ng-required="ctrl.checkMandatory('securityLevel')">
-                        <md-option ng-value="level"
-                                   ng-repeat="level in ctrl.securityLevels">
-                            {{level.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                    <div ng-messages="outgoing_properties.securityLevel.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
                 </md-input-container>
                 <!-- Document Number -->
                 <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "incoming"'>
@@ -113,20 +94,6 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-                <!-- Date -->
-                <md-input-container>
-                    <label for="docDate">{{lang.date}}</label>
-                    <md-datepicker name="docDate" id="docDate"
-                                   ng-disabled="!!ctrl.disableProperties"
-                                   ng-model="ctrl.document.docDate"
-                                   md-max-date="ctrl.maxCreateDate"
-                                   ng-required="ctrl.checkMandatory('docDate')"
-                                   md-open-on-focus></md-datepicker>
-                    <!--md-placeholder="{{lang.document_date}}"-->
-                    <div ng-messages="outgoing_properties.docDate.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
             </div>
             <div layout="row">
                 <!-- Subject -->
@@ -147,6 +114,50 @@
                 </md-input-container>
             </div>
             <div layout="row">
+                <!-- Security Level (Select) -->
+                <md-input-container ng-if="!ctrl.document.hasVsId()" flex>
+                    <label for="securityLevel">{{lang.security_level}}</label>
+                    <md-select name="securityLevel"
+                               id="securityLevel"
+                               ng-change="ctrl.onSecurityLevelChange()"
+                               ng-disabled="!!ctrl.disableProperties"
+                               ng-model="ctrl.document.securityLevel"
+                               ng-model-options="{trackBy: '$value.id'}"
+                               ng-required="ctrl.checkMandatory('securityLevel')">
+                        <md-option ng-value="level"
+                                   ng-repeat="level in ctrl.securityLevels">
+                            {{level.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="outgoing_properties.securityLevel.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <!-- Date -->
+                <md-input-container flex>
+                    <label for="docDate">{{lang.date}}</label>
+                    <input id="docDate" type="text" name="docDate"
+                           ng-model="ctrl.document.docDate"
+                           ng-disabled="!!ctrl.disableProperties"
+                           ng-required="ctrl.checkMandatory('docDate')"
+                           ui-mask="9999-99-99"
+                           ui-mask-placeholder="{{ctrl.defaultDateFormat}}"
+                           ui-mask-placeholder-char="_"
+                           model-view-value="true"
+                           custom-validate-directive="Date"
+                           max-date-directive="{{ctrl.maxCreateDate}}"/>
+
+                    <div ng-messages="outgoing_properties.docDate.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                        <div ng-message="Date">{{lang.dateonly}}</div>
+                        <div ng-message="maxDate">{{lang.tadayMaxDate.change({date :ctrl.maxCreateDate})}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div ng-if="ctrl.checkMandatory('mainClassification') || ctrl.checkMandatory('subClassification')"
+                 layout="row">
                 <!-- Main Classification -->
                 <md-input-container flex>
                     <label for="mainClassification">{{lang.outgoing_main_classification}}</label>
@@ -205,7 +216,7 @@
                     </div>
                 </md-input-container>
                 <!-- Document Type -->
-                <md-input-container flex>
+                <md-input-container ng-if="ctrl.checkMandatory('docType')" flex>
                     <label for="docType">{{lang.outgoing_document_type}}</label>
                     <md-select name="docType"
                                id="docType"
@@ -223,80 +234,13 @@
                     </div>
                 </md-input-container>
                 <!-- Add Document Type -->
-                <md-input-container ng-if="!ctrl.disableProperties">
-                    <md-button class="md-icon-button"
-                               ng-disabled="!!ctrl.disableProperties"
-                               ng-click="ctrl.shortcut.addNewDocumentType($event)">
-                        <md-icon md-svg-icon="plus"></md-icon>
-                    </md-button>
-                </md-input-container>
-            </div>
-
-            <div layout="row">
-                <!-- File -->
-                <md-input-container flex>
-                    <label for="fileId">{{lang.outgoing_file}}</label>
-                    <md-select name="fileId"
-                               id="fileId"
-                               ng-change="ctrl.onFileChange(ctrl.document.fileId)"
-                               ng-model="ctrl.document.fileId"
-                               ng-disabled="!!ctrl.disableProperties"
-                               ng-model-options="{trackBy: '$value.id'}"
-                               ng-required="ctrl.checkMandatory('fileId')">
-                        <md-option ng-value="file.file"
-                                   ng-repeat="file in ctrl.documentFiles">
-                            {{file.file.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                    <div ng-messages="outgoing_properties.fileId.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
-                <!-- Add File -->
-                <md-input-container ng-if="!ctrl.disableProperties">
-                    <md-button tooltip="{{lang.outgoing_add_new_document_file}}"
-                               class="md-icon-button"
-
-                               ng-disabled="!!ctrl.disableProperties"
-                               ng-click="ctrl.shortcut.addNewDocumentFile($event)">
-                        <md-icon md-svg-icon="plus"></md-icon>
-                    </md-button>
-                </md-input-container>
-                <!-- File Code -->
-                <md-input-container flex>
-                    <label for="fileCode">{{lang.outgoing_file_code}}</label>
-                    <input name="fileCode"
-                           id="fileCode"
-                           ng-disabled="!!ctrl.disableProperties"
-                           ng-enter="ctrl.onFileCodeChanged()"
-                           ng-model="ctrl.document.fileCode"
-                           ng-required="ctrl.checkMandatory('fileCode')">
-                    <div ng-messages="outgoing_properties.fileCode.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
-                <!-- File Serial -->
-                <md-input-container flex>
-                    <label for="fileSerial">{{lang.outgoing_file_serial}}</label>
-                    <input name="fileSerial" custom-validate-directive="number"
-                           id="fileSerial"
-                           ng-disabled="!!ctrl.disableProperties"
-                           ng-model="ctrl.document.fileSerial"
-                           ng-required="ctrl.checkMandatory('fileSerial')">
-                    <div ng-messages="outgoing_properties.fileSerial.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                        <div ng-message="number">{{lang.numberonly}}</div>
-                    </div>
-                </md-input-container>
-            </div>
-            <div layout="row">
-                <!-- Notes -->
-                <md-input-container flex>
-                    <label for="docNotes">{{lang.properties_notes}}</label>
-                    <textarea ng-required="ctrl.checkMandatory('docNotes')" name="docNotes" id="docNotes"
-                              ng-model="ctrl.document.docNotes" rows="5"
-                              ng-disabled="!!ctrl.disableProperties"></textarea>
-                </md-input-container>
+                <!--<md-input-container ng-if="!ctrl.disableProperties">-->
+                <!--<md-button class="md-icon-button"-->
+                <!--ng-disabled="!!ctrl.disableProperties"-->
+                <!--ng-click="ctrl.shortcut.addNewDocumentType($event)">-->
+                <!--<md-icon md-svg-icon="plus"></md-icon>-->
+                <!--</md-button>-->
+                <!--</md-input-container>-->
             </div>
         </div>
     </fieldset>
