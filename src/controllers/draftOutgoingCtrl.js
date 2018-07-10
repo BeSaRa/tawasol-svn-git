@@ -472,13 +472,13 @@ module.exports = function (app) {
                 }
 
                 viewDocumentService
-                    .viewQueueDocument(correspondence, self.gridActions, $event, checkIfEditPropertiesAllowed(correspondence, true), checkIfEditCorrespondenceSiteAllowed(correspondence, true))
+                    .viewQueueDocument(correspondence, self.gridActions, $event, 'draftOutgoing')
                     .then(function () {
                         console.log("RESUTL");
                         return self.reloadDraftOutgoings(self.grid.page);
                     })
                     .catch(function (error) {
-                        console.log("ERROR",error);
+                        console.log("ERROR", error);
                         return self.reloadDraftOutgoings(self.grid.page);
                     });
             };
@@ -633,7 +633,7 @@ module.exports = function (app) {
                             callback: self.editProperties,
                             class: "action-green",
                             permissionKey: "EDIT_OUTGOING_PROPERTIES",
-                            checkShow: function(action, model){
+                            checkShow: function (action, model) {
                                 return self.checkToShowAction(action, model) && checkIfEditPropertiesAllowed(model);
                             }
                         }

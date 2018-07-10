@@ -4,6 +4,7 @@ module.exports = function (app) {
                          urlServiceProvider,
                          IdleProvider,
                          rootEntityProvider,
+                         viewDocumentServiceProvider,
                          localStorageServiceProvider,
                          $httpProvider) {
         'ngInject';
@@ -21,6 +22,11 @@ module.exports = function (app) {
         IdleProvider.timeout(60); // in seconds
         //
         // 3164, 3165, 3166, 3167, 3168, 3169, 3170, 3171, 3172, 3173
+
+        viewDocumentServiceProvider
+            .addPageName('draftOutgoing')
+            .addPageName('reviewOutgoing')
+
 
     });
 };

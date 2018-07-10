@@ -16,6 +16,7 @@ module.exports = function (app) {
                       urlService,
                       $rootScope,
                       Idle,
+                      viewDocumentService,
                       exception,
                       // $templateRequest,
                       dialog,
@@ -124,12 +125,16 @@ module.exports = function (app) {
             }, 100).catch(angular.noop);
         });
 
-        /*var icons = ['/assets/icon-set/add-filter.svg'];
-
-        angular.forEach(icons, function (url) {
-            $templateRequest(url);
-        });*/
-
+        viewDocumentService
+            .getPageName('draftOutgoing',
+                function (model) {
+                    return true;
+                    return !employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                }, function (model) {
+                    return !employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+                }, function (model) {
+                    return false
+                })
 
     });
 };

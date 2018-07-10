@@ -1,9 +1,19 @@
 module.exports = function (app) {
     app.provider('viewDocumentService', function () {
-        var provider = this , pageNames = {};
+        var provider = this, pageNames = {};
 
-        provider.addPage = function (pageName) {
-            //pageNames.hasOwnProperty(pageName) ? throw Error('Page Name Already exists ') : pageNames[pageName] = {};
+        provider.addPageName = function (pageName) {
+            pageNames.hasOwnProperty(pageName) ? console.error('Page Already exists ') :
+                pageNames[pageName] = {
+                    disableProperties: false,
+                    disableSites: false,
+                    disableAll: false
+                };
+            return provider;
+        };
+
+        provider.getPageByName = function (pageName) {
+            return pageNames.hasOwnProperty(pageName) ? pageNames[pageName] : console.error('PageName Not Exists: ', pageName);
         };
 
         provider.$get = function (dialog,
@@ -26,6 +36,22 @@ module.exports = function (app) {
             self.serviceName = 'viewDocumentService';
             // number of opened popup
             self.popupNumber = 0;
+
+            function _getPage(pageName) {
+                return provider.getPageByName(pageName);
+            }
+
+            self.getPageName = function (pageName, propCallback, sitesCallback, allCallback) {
+                var page = _getPage(pageName);
+                if (!page)
+                    return;
+
+                page.disableAll = allCallback;
+                page.disableProperties = propCallback;
+                page.disableSites = sitesCallback;
+                return self;
+            };
+
             /**
              * @description Get the readonly document view url
              * Used for get link.
@@ -96,6 +122,16 @@ module.exports = function (app) {
                 return self.models[documentClass.toLowerCase()];
             }
 
+            function _checkDisabled(pageName, model) {
+                var page = _getPage(pageName);
+                console.log(page);
+                return {
+                    disableAll: page ? page.disableAll(model) : false,
+                    disableProperties: page ? page.disableProperties(model) : false,
+                    disableSites: page ? page.disableSites(model) : false
+                }
+            }
+
 
             /**
              * @description Open the view popup for queues
@@ -106,6 +142,14 @@ module.exports = function (app) {
              */
             self.viewQueueDocument = function (correspondence, actions, $event, pageName) {
                 var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : new Outgoing(correspondence).getInfo();
+                var disabled = _checkDisabled(pageName, correspondence);
+
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+
+                console.log(disabled);
 
                 return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
                     .then(function (result) {
@@ -127,8 +171,8 @@ module.exports = function (app) {
                                 content: result.content,
                                 actions: actions,
                                 workItem: false,
-                                disableProperties: disableProperties,
-                                disableCorrespondence: disableCorrespondence,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
                                 popupNumber: self.popupNumber
                             },
                             resolve: {
