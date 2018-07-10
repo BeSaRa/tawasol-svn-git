@@ -68,6 +68,8 @@ module.exports = function (app) {
                 // override page by selected page
                 _setPage(page, oPage.disableAll, oPage.disableProperties, oPage.disableSites);
                 // override again if you have any special override functions
+                if (!override)
+                    override = {};
                 _setPage(page, override.disableAll, override.disableProperties, override.disableSites);
                 return self;
             };
