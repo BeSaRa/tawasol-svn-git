@@ -12,10 +12,6 @@ module.exports = function (app) {
                 }, function (model) {
                     return false
                 })
-            .getPageNameOverride('reviewOutgoing', 'draftOutgoing', {
-                disableAll: function () {
-                    return true;
-                }
-            })
+            .getPageNameOverride('reviewOutgoing', 'draftOutgoing')
     })
 };
