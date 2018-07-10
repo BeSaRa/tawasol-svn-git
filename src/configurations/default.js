@@ -42,6 +42,7 @@ module.exports = function (app) {
             .addPageName('searchIncoming')
             .addPageName('searchInternal')
             .addPageName('searchGeneral')
+            .addPageName('quickSearch')
 
 
     });

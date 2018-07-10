@@ -47,7 +47,7 @@ module.exports = function (app) {
                     return true;
                 }
             })
-            .getPageNameOverride('searchGeneral', 'draftOutgoing',{
+            .getPageNameOverride('searchGeneral', 'draftOutgoing', {
                 disableProperties: function () {
                     return true;
                 },
@@ -57,6 +57,14 @@ module.exports = function (app) {
                     var allowedByDocClass = (info.documentClass === 'outgoing') ? (info.docStatus < 25) : (info.documentClass === 'incoming');
                     var allowed = (hasPermission && info.documentClass !== "internal") && allowedByDocClass;
                     return !allowed
+                }
+            })
+            .getPageNameOverride('quickSearch', 'draftOutgoing', {
+                disableProperties: function () {
+                    return true;
+                },
+                disableSites: function () {
+                    return true;
                 }
             })
     })

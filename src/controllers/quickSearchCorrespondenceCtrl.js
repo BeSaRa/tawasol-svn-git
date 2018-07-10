@@ -350,7 +350,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            correspondence.viewFromQueue(self.gridActions, 'quickSearch', $event)
+                .then(function () {
+                    return self.reloadQuickSearchCorrespondence(self.grid.page);
+                })
+                .catch(function (error) {
+                    return self.reloadQuickSearchCorrespondence(self.grid.page);
+                });
         };
 
         /**
