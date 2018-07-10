@@ -14,6 +14,9 @@ module.exports = function (app) {
                 scope.$watch(attrs.labelCollapse, function (value) {
                     element.data('labelCollapse', value);
                 });
+                scope.$watch(attrs.disableCollapse, function (value) {
+                    element.data('labelCollapse', value);
+                });
             }
         }
     })

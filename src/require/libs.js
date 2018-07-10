@@ -206,6 +206,7 @@ module.exports = (function () {
     require('jquery-ui/ui/widgets/droppable.js');
     require('jquery-ui/ui/widgets/draggable.js');
     require('jquery-ui/ui/disable-selection.js');
+    require('jquery-ui/ui/widgets/resizable');
 
     require('orgchart');
     require('jquery-textcomplete');

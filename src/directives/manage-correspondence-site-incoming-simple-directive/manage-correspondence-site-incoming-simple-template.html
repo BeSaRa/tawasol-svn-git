@@ -1,8 +1,7 @@
-<div class="p20" layout="column" scroll-directive>
-
+<div layout="column" scroll-directive>
     <!-- Simple Search Box -->
     <div layout="row" flex ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
-        <md-input-container flex>
+        <md-input-container class="exclude-margin" flex>
             <label>{{lang.sites_select_site_type}}</label>
             <md-select ng-model="ctrl.selectedSiteType" ng-change="ctrl.onSiteTypeChange($event)">
                 <md-option ng-value="type" ng-repeat="type in ctrl.correspondenceSiteTypes">
@@ -10,7 +9,7 @@
                 </md-option>
             </md-select>
         </md-input-container>
-        <md-input-container flex>
+        <md-input-container class="exclude-margin" flex>
             <label>{{lang.main_site}}</label>
             <md-select ng-model="ctrl.selectedMainSite"
                        ng-disabled="!ctrl.selectedSiteType || !ctrl.selectedSiteType.id"
@@ -60,7 +59,7 @@
                 <div class="md-toolbar-tools">
                     <div layout="row" flex>
                         <div layout="row" flex>
-                            <div>{{lang.sites_search_results}}</div>
+                            <div class="p0p5" flex>{{lang.sites_search_results}}</div>
                             <div flex ng-if="ctrl.subSearchSelected.length">
                                 &nbsp; : &nbsp; {{ctrl.subSearchSelected.length}}
                                 {{lang.items_selected}}
@@ -87,8 +86,8 @@
                             <th md-column md-order-by="mainArSiteText">
                                 <span>{{lang.sites_sub_site}}</span>
                             </th>
-                            <th md-column md-order-by="mainArSiteText">
-                                <span>{{lang.sites_select_site_type}}</span>
+                            <th md-column>
+                                <span></span>
                             </th>
                             <th md-column>
                                 <span>{{lang.sites_follow_up_status}}</span>
@@ -108,9 +107,17 @@
                                     <span md-highlight-text="ctrl.subSearch" class="span-column">{{site.getTranslatedName()}}</span>
                                 </div>
                             </td>
-                            <td md-cell>
+                            <!--<td md-cell>
                                 <div flex layout="column">
                                     <span class="span-column">{{site.getTranslatedSiteType()}}</span>
+                                </div>
+                            </td>-->
+                            <td md-cell>
+                                <div flex layout="row" layout-align="start center">
+                                    <md-button class="md-icon-button" ng-click="ctrl.replaceSite(site)"
+                                               ng-disabled="!!ctrl.disableCorrespondence">
+                                        <md-icon md-svg-icon="plus"></md-icon>
+                                    </md-button>
                                 </div>
                             </td>
                             <td md-cell>
@@ -144,14 +151,6 @@
                                                        md-min-date="ctrl.minDate"
                                                        md-open-on-focus></md-datepicker>
                                     </div>
-                                </div>
-                            </td>
-                            <td md-cell>
-                                <div flex layout="row" layout-align="start center">
-                                    <md-button class="md-icon-button" ng-click="ctrl.replaceSite(site)"
-                                               ng-disabled="!!ctrl.disableCorrespondence">
-                                        <md-icon md-svg-icon="plus"></md-icon>
-                                    </md-button>
                                 </div>
                             </td>
                         </tr>
@@ -225,8 +224,8 @@
                             <th md-column md-order-by="mainArSiteText">
                                 <span>{{lang.sites_sub_site}}</span>
                             </th>
-                            <th md-column md-order-by="siteType">
-                                <span>{{lang.sites_select_site_type}}</span>
+                            <th md-column>
+                                <span></span>
                             </th>
                             <th md-column>
                                 <span>{{lang.sites_follow_up_status}}</span>
@@ -248,18 +247,6 @@
                                     <span class="span-column">{{ctrl.site.getTranslatedName()}}</span>
                                 </div>
                             </td>
-                            <td md-cell>
-                                <div flex layout="column">
-                                    <span class="span-column">{{ctrl.site.getTranslatedSiteType()}}</span>
-                                </div>
-                            </td>
-                            <td md-cell>
-                                <div layout="row"><span flex>{{ctrl.site.followupStatus.getTranslatedName()}}</span>
-                                </div>
-                            </td>
-                            <td md-cell>
-                                <div layout="row"><span flex>{{ctrl.site.followupDate|date:'yyyy-MM-dd'}}</span></div>
-                            </td>
                             <td md-cell ng-if="!ctrl.disableCorrespondence">
                                 <div flex layout="row" layout-align="start center">
                                     <div>
@@ -270,6 +257,20 @@
                                     </div>
                                 </div>
                             </td>
+                            <!-- <td md-cell>
+                                <div flex layout="column">
+                                    <span class="span-column">{{ctrl.site.getTranslatedSiteType()}}</span>
+                                </div>
+                            </td>-->
+
+                            <td md-cell>
+                                <div layout="row"><span flex>{{ctrl.site.followupStatus.getTranslatedName()}}</span>
+                                </div>
+                            </td>
+                            <td md-cell>
+                                <div layout="row"><span flex>{{ctrl.site.followupDate|date:'yyyy-MM-dd'}}</span></div>
+                            </td>
+
                         </tr>
                         </tbody>
                     </table>

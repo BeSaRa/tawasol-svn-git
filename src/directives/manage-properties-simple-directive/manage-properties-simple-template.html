@@ -21,6 +21,8 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+            </div>
+            <div layout="row">
                 <!-- OU -->
                 <md-input-container ng-if="!ctrl.showRegistryUnit()" flex>
                     <label for="ou">{{lang.organization_unit}}</label>
@@ -64,19 +66,8 @@
                            ng-disabled="true"
                            ng-value="ctrl.sourceModel.securityLevel.getTranslatedName()">
                 </md-input-container>
-                <!-- Document Number -->
-                <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "incoming"'>
-                    <label for="refDocNumber">{{lang.document_number}}</label>
-                    <input name="refDocNumber" id="refDocNumber"
-                           ng-required="ctrl.checkMandatory('refDocNumber')"
-                           ng-disabled="!!ctrl.disableProperties"
-                           ng-model="ctrl.document.refDocNumber">
-                    <!--custom-validate-directive="number"-->
-                    <div ng-messages="outgoing_properties.refDocNumber.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                        <!--<div ng-message="number">{{lang.numberonly}}</div>-->
-                    </div>
-                </md-input-container>
+            </div>
+            <div layout="row">
                 <!-- Type (Personal/Departmental) -->
                 <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "internal"'>
                     <label for="type">{{lang.type}}</label>
@@ -92,6 +83,21 @@
                     </md-select>
                     <div ng-messages="outgoing_properties.type.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <!-- Document Number -->
+                <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "incoming"'>
+                    <label for="refDocNumber">{{lang.document_number}}</label>
+                    <input name="refDocNumber" id="refDocNumber"
+                           ng-required="ctrl.checkMandatory('refDocNumber')"
+                           ng-disabled="!!ctrl.disableProperties"
+                           ng-model="ctrl.document.refDocNumber">
+                    <!--custom-validate-directive="number"-->
+                    <div ng-messages="outgoing_properties.refDocNumber.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                        <!--<div ng-message="number">{{lang.numberonly}}</div>-->
                     </div>
                 </md-input-container>
             </div>

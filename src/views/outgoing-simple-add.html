@@ -15,7 +15,8 @@
                     <!--document content-->
                     <div class="simple-properties" layout="row" flex="30">
                         <div layout="column" flex>
-                            <accordion-directive label-collapse="ctrl.collapse" validation="ctrl.validation">
+                            <accordion-directive class="simple-add-properties-accordion" label-collapse="ctrl.collapse"
+                                                 validation="ctrl.validation">
                                 <accordion-item active fail-when="ctrl.document_properties.$invalid ||
                                                                       !ctrl.outgoing.sitesInfoTo.length"
                                                 pass-when="ctrl.document_properties.$valid &&
@@ -35,9 +36,10 @@
                                                     document="ctrl.outgoing"></manage-properties-simple-directive>
                                         </div>
                                         <div>
-                                            <md-icon md-svg-icon="arrange-send-backward"></md-icon>
-                                            <span>{{lang.manage_correspondence_sites}}</span>
-
+                                            <div layout="row" layout-align="start center" class="p10">
+                                                <md-icon md-svg-icon="arrange-send-backward"></md-icon>
+                                                <span flex>{{lang.manage_correspondence_sites}}</span>
+                                            </div>
                                             <manage-correspondence-sites-simple-directive
                                                     empty-sub-records="ctrl.emptySubSites"
                                                     vs-id="ctrl.outgoing.vsId"
@@ -48,8 +50,8 @@
                                     </accordion-content>
                                 </accordion-item>
                             </accordion-directive>
-                            <div layout="row">
-                                <div>
+                            <div layout="column">
+                                <div layout="row">
                                     <md-button ng-disabled="ctrl.document_properties.$invalid || !ctrl.outgoing.sitesInfoTo.length ||
                                         ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
                                                ng-click="ctrl.saveCorrespondence()" class="md-raised"
@@ -57,43 +59,44 @@
                                         <!--|| (ctrl.documentInformation || ctrl.outgoing.contentFile)-->
                                         {{lang.outgoing_save}}
                                     </md-button>
-                                </div>
-                                <div ng-if="!ctrl.outgoing.addMethod && !ctrl.editContent">
-                                    <md-button ng-disabled="ctrl.document_properties.$invalid
+                                    <div ng-if="!ctrl.outgoing.addMethod && !ctrl.editContent">
+                                        <md-button ng-disabled="ctrl.document_properties.$invalid
                                                     || !ctrl.outgoing.sitesInfoTo.length
                                                     || !(ctrl.documentInformation || ctrl.outgoing.contentFile)"
-                                               ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
-                                        {{lang.outgoing_save_draft}}
-                                    </md-button>
+                                                   ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
+                                            {{lang.outgoing_save_draft}}
+                                        </md-button>
+                                    </div>
                                 </div>
-                                <div>
-                                    <md-button ng-click="ctrl.resetAddCorrespondence($event)" class="md-raised">
+                                <div layout="row">
+                                    <md-button ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}"
+                                               ng-click="ctrl.resetAddCorrespondence($event)" class="md-raised">
                                         {{lang.outgoing_new}}
                                     </md-button>
-                                </div>
-                                <div>
                                     <md-button ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
                                         {{lang.outgoing_cancel}}
                                     </md-button>
                                 </div>
-                                <div ng-if="ctrl.outgoing.hasVsId() && ctrl.requestCompleted">
-                                    <md-input-container>
-                                        <label for="documentAction">{{lang.document_action}}</label>
-                                        <md-select name="documentAction" id="documentAction"
-                                                   ng-disabled="!ctrl.isActionsAvailable"
-                                                   ng-model="ctrl.documentAction">
-                                            <md-option ng-value="action" class="{{action.class}}"
-                                                       ng-if="action.checkShow(action, ctrl.outgoing, $index)"
-                                                       ng-repeat="action in ctrl.documentActions track by $index">
-                                                {{action.text}}
-                                            </md-option>
-                                        </md-select>
-                                    </md-input-container>
-                                </div>
-                                <div ng-if="ctrl.outgoing.hasVsId() && ctrl.requestCompleted">
-                                    <md-button class="md-raised" ng-disabled="!ctrl.documentAction"
-                                               ng-click="ctrl.performDocumentAction($event)">{{lang.action_submit}}
-                                    </md-button>
+                                <div layout="row">
+                                    <div ng-if="ctrl.outgoing.hasVsId() && ctrl.requestCompleted">
+                                        <md-input-container>
+                                            <label for="documentAction">{{lang.document_action}}</label>
+                                            <md-select name="documentAction" id="documentAction"
+                                                       ng-disabled="!ctrl.isActionsAvailable"
+                                                       ng-model="ctrl.documentAction">
+                                                <md-option ng-value="action" class="{{action.class}}"
+                                                           ng-if="action.checkShow(action, ctrl.outgoing, $index)"
+                                                           ng-repeat="action in ctrl.documentActions track by $index">
+                                                    {{action.text}}
+                                                </md-option>
+                                            </md-select>
+                                        </md-input-container>
+                                    </div>
+                                    <div ng-if="ctrl.outgoing.hasVsId() && ctrl.requestCompleted">
+                                        <md-button class="md-raised" ng-disabled="!ctrl.documentAction"
+                                                   ng-click="ctrl.performDocumentAction($event)">{{lang.action_submit}}
+                                        </md-button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -136,7 +139,7 @@
                                         </div>
                                         <div flex layout="row">
                                             <!--document viewer editor-->
-                                            <iframe class="document-viewer-full-width-height" id="document-viewer"
+                                            <iframe class="simple-viewer-iframe" id="document-viewer"
                                                     ng-if="ctrl.simpleViewUrl"
                                                     ng-src="{{ctrl.simpleViewUrl}}"
                                                     flex

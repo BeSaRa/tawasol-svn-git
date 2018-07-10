@@ -1,20 +1,28 @@
 .text-center {
   text-align: center !important;
 }
-.text-left{
+
+.text-left {
   text-align: left !important;
 }
-.text-right{
+
+.text-right {
   text-align: right !important;
 }
+
 .p10 {
   padding: 10px;
 }
+
 .p20 {
   padding: 20px;
 }
 
-.p020{
+.p0p5 {
+  padding: 0 5px;
+}
+
+.p020 {
   padding: 0 20px;
 }
 
@@ -22,7 +30,7 @@
   margin: 5px;
 }
 
-.m8{
+.m8 {
   margin: 8px;
 }
 
@@ -54,11 +62,11 @@
   margin: 0 auto;
 }
 
-.mw60{
+.mw60 {
   min-width: 60% !important;
 }
 
-.md-column{
+.md-column {
   &.p-r0 {
     padding-right: 0 !important;
   }

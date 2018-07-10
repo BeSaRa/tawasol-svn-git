@@ -30,7 +30,6 @@ module.exports = function (app) {
 
                     scope.index = ctrl.getAccordionElementIndex(element);
                     scope.active = false;
-
                     ctrl.pushScopeTitle(scope);
 
                     $timeout(function () {
@@ -58,9 +57,19 @@ module.exports = function (app) {
                         }
                     };
 
-                    $compile(wrapper.append(btn))(scope);
+                    if (!scope.disableCollapse)
+                        $compile(wrapper.append(btn))(scope);
+
                     wrapper.append($compile(content)(ctrl.scope));
                     element.append(wrapper);
+
+                    scope.$watch('disableCollapse', function (value) {
+                        if (value) {
+                            wrapper.removeClass('cursor-pointer');
+                        } else {
+                            wrapper.addClass('cursor-pointer');
+                        }
+                    })
                 }
             }
         }

@@ -31,6 +31,9 @@ module.exports = function (app) {
 
         self.required = {};
 
+
+        self.simpleViewUrl = null;
+
         LangWatcher($scope);
 
         function _isMandatory(propertyName) {
@@ -125,11 +128,11 @@ module.exports = function (app) {
                 .then(function (template) {
                     self.template = template;
 
-                    if (self.isSimpleAdd)
+                    if (self.isSimpleAdd) {
                         return self.getTrustViewUrl(template.getSubjectTitle(), $event);
-
-                    else
+                    } else {
                         return self.openPreparedTemplate(template.getSubjectTitle(), $event);
+                    }
                 });
         };
 
@@ -191,6 +194,21 @@ module.exports = function (app) {
                         self.document.contentFile = file;
                         self.isContentFileAttached = true;
                         self.templateOrFileName = fileName;
+
+                        if (self.isSimpleAdd) {
+                            var reader = new FileReader();
+                            reader.onload = function () {
+                                var bytesArray = new Uint8Array(reader.result);
+                                var blob = new Blob([bytesArray], {
+                                    type: file.type
+                                });
+                                $timeout(function () {
+                                    self.simpleViewUrl = $sce.trustAsResourceUrl(URL.createObjectURL(blob));
+                                });
+                            };
+                            reader.readAsArrayBuffer(file);
+                        }
+
                         return file;
                     })
                     .catch(function (availableExtensions) {
@@ -217,6 +235,7 @@ module.exports = function (app) {
             self.documentInformation = null;
             self.contentFile = self.document.contentFile = null;
             self.isContentFileAttached = false;
+            self.simpleViewUrl = null;
         };
         /**
          * @description open edit correspondence when editAfterApproved = true.
@@ -262,7 +281,7 @@ module.exports = function (app) {
             } else {
                 self.removeTemplateOrContentFile();
             }
-        }
+        };
 
         self.getTrustViewUrl = function (templateOrFileName, $event, information) {
             self.docName = templateOrFileName;
@@ -281,7 +300,6 @@ module.exports = function (app) {
 
             return officeWebAppService.getTemplateToPrepare(self.template, generator.interceptSendInstance(['Correspondence', 'Outgoing'], self.model))
                 .then(function (result) {
-
                     self.lastTemplate = result;
                     self.docInfo = result;
                     self.signaturesCount = self.template.signaturesCount;

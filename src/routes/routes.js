@@ -1385,6 +1385,7 @@ module.exports = function (app) {
                     'ngInject';
                     var self = this;
                     var reportName = $stateParams.reportName;
+                    console.log(reportName);
                     self.url = $sce.trustAsResourceUrl((urlService.reports + encodeURIComponent(reportName) + '?rs:embed=true'));
                 },
                 controllerAs: 'ctrl'
