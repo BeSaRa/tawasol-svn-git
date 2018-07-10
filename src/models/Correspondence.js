@@ -511,7 +511,13 @@ module.exports = function (app) {
             Correspondence.prototype.view = function () {
                 return correspondenceService.viewCorrespondence.apply(correspondenceService, arguments);
             };
-
+            /**
+             * @description view from queue as full view.
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @return {*}
+             */
             Correspondence.prototype.viewFromQueue = function (actions, queueName, $event) {
                 return viewDocumentService.viewQueueDocument(this, actions, queueName, $event);
             };

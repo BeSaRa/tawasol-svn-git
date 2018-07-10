@@ -41,14 +41,34 @@ module.exports = function (app) {
                 return provider.getPageByName(pageName);
             }
 
+            function _setPage(page, allCallback, propCallback, sitesCallback) {
+                allCallback ? _setDisable(page, 'disableAll', allCallback) : null;
+                propCallback ? _setDisable(page, 'disableProperties', propCallback) : null;
+                sitesCallback ? _setDisable(page, 'disableSites', sitesCallback) : null;
+            }
+
+            function _setDisable(page, propertyName, callback) {
+                page[propertyName] = callback;
+            }
+
             self.getPageName = function (pageName, propCallback, sitesCallback, allCallback) {
                 var page = _getPage(pageName);
                 if (!page)
                     return;
+                _setPage(page, allCallback, propCallback, sitesCallback);
+                return self;
+            };
 
-                page.disableAll = allCallback;
-                page.disableProperties = propCallback;
-                page.disableSites = sitesCallback;
+            self.getPageNameOverride = function (pageName, pageNameOverride, override) {
+                var oPage = _getPage(pageNameOverride);
+                var page = _getPage(pageName);
+
+                if (!page || !oPage)
+                    return;
+                // override page by selected page
+                _setPage(page, oPage.disableAll, oPage.disableProperties, oPage.disableSites);
+                // override again if you have any special override functions
+                _setPage(page, override.disableAll, override.disableProperties, override.disableSites);
                 return self;
             };
 

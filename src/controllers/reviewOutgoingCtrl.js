@@ -68,7 +68,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -507,7 +507,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            correspondence.viewFromQueue(self.gridActions, 'reviewOutgoing', $event);
         };
 
         /**
@@ -771,7 +771,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         //hide: true,
