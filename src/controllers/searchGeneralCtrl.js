@@ -772,6 +772,7 @@ module.exports = function (app) {
                         && (info.isPaper || (!info.isPaper && info.docStatus >= 24));
                 }
             },
+            // Broadcast
             {
                 type: 'action',
                 icon: 'bullhorn',

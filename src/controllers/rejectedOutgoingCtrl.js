@@ -85,7 +85,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -177,7 +177,7 @@ module.exports = function (app) {
                 .launchCorrespondenceWorkflow(self.selectedRejectedOutgoings, $event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadRejectedOutgoings(self.grid.page)
-                        .then(function(){
+                        .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
                 });
@@ -414,6 +414,14 @@ module.exports = function (app) {
             return isEditAllowed;
         };
 
+        var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
+            var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+            if (checkForViewPopup)
+                return !(hasPermission);
+            return hasPermission;
+        };
+
+
         /**
          * @description Preview document
          * @param rejectedOutgoing
@@ -447,7 +455,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            correspondence.viewFromQueue(self.gridActions, 'rejectedOutgoing', $event)
+                .then(function () {
+                    return self.reloadRejectedOutgoings(self.grid.page);
+                })
+                .catch(function (error) {
+                    return self.reloadRejectedOutgoings(self.grid.page);
+                });
         };
 
         /**
@@ -706,7 +720,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         //hide: true,
@@ -721,7 +735,9 @@ module.exports = function (app) {
                         callback: self.manageDestinations,
                         permissionKey: "MANAGE_DESTINATIONS",
                         class: "action-green",
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
+                        }
                     }
                 ]
             },

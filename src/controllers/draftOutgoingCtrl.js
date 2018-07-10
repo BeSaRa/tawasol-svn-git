@@ -478,14 +478,6 @@ module.exports = function (app) {
                     .catch(function (error) {
                         return self.reloadDraftOutgoings(self.grid.page);
                     });
-                /*viewDocumentService
-                    .viewQueueDocument(correspondence, self.gridActions, 'draftOutgoing', $event)
-                    .then(function () {
-                        return self.reloadDraftOutgoings(self.grid.page);
-                    })
-                    .catch(function (error) {
-                        return self.reloadDraftOutgoings(self.grid.page);
-                    });*/
             };
 
             /**

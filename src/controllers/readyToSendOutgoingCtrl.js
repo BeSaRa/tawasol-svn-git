@@ -383,6 +383,13 @@ module.exports = function (app) {
             return isEditAllowed;
         };
 
+        var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
+            var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+            if (checkForViewPopup)
+                return !(hasPermission);
+            return hasPermission;
+        };
+
         /**
          * @description Preview document
          * @param readyToSendOutgoing
@@ -416,7 +423,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            correspondence.viewFromQueue(self.gridActions, 'readyToSendOutgoing', $event)
+                .then(function () {
+                    return self.reloadReadyToSendOutgoings(self.grid.page);
+                })
+                .catch(function (error) {
+                    return self.reloadReadyToSendOutgoings(self.grid.page);
+                });
         };
 
         /**
@@ -658,7 +671,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         //hide: true,
@@ -673,7 +686,9 @@ module.exports = function (app) {
                         callback: self.manageDestinations,
                         permissionKey: "MANAGE_DESTINATIONS",
                         class: "action-green",
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
+                        }
                     }
                 ]
             },

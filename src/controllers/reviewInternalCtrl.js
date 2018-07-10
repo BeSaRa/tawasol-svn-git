@@ -489,7 +489,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            correspondence.viewFromQueue(self.gridActions, 'reviewInternal', $event)
+                .then(function () {
+                    return self.reloadReviewInternals(self.grid.page);
+                })
+                .catch(function (error) {
+                    return self.reloadReviewInternals(self.grid.page);
+                });
         };
 
 

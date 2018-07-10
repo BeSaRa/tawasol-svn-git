@@ -26,6 +26,22 @@ module.exports = function (app) {
         viewDocumentServiceProvider
             .addPageName('draftOutgoing')
             .addPageName('reviewOutgoing')
+            .addPageName('readyToSendOutgoing')
+            .addPageName('rejectedOutgoing')
+            // Incoming
+            .addPageName('reviewIncoming')
+            .addPageName('readyToSendIncoming')
+            .addPageName('rejectedIncoming')
+            // Internal
+            .addPageName('draftInternal')
+            .addPageName('reviewInternal')
+            .addPageName('readyToSendInternal')
+            .addPageName('rejectedInternal')
+            // Search
+            .addPageName('searchOutgoing')
+            .addPageName('searchIncoming')
+            .addPageName('searchInternal')
+            .addPageName('searchGeneral')
 
 
     });

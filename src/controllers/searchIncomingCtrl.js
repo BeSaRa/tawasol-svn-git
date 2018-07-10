@@ -270,7 +270,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -361,7 +361,7 @@ module.exports = function (app) {
             searchedIncomingDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
                     self.reloadSearchedIncomingDocument(self.grid.page)
-                        .then(function(){
+                        .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
                 })
@@ -535,7 +535,6 @@ module.exports = function (app) {
         };
 
 
-
         /**
          * @description send main document fax for searched incoming document
          * @param searchedIncomingDocument
@@ -596,6 +595,12 @@ module.exports = function (app) {
             $state.go('app.outgoing.add', {vsId: info.vsId, action: 'reply'});
         };
 
+        var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
+            var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+            if (checkForViewPopup)
+                return !(hasPermission);
+            return hasPermission;
+        };
 
         /**
          * @description Preview document
@@ -611,7 +616,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(searchedIncomingDocument, self.gridActions, true, false)
+            correspondenceService.viewCorrespondence(searchedIncomingDocument, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(searchedIncomingDocument, true))
                 .then(function () {
                     return self.reloadSearchedIncomingDocument(self.grid.page);
                 })
@@ -630,7 +635,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            correspondence.viewFromQueue(self.gridActions, 'searchIncoming', $event)
+                .then(function () {
+                    return self.reloadSearchedIncomingDocument(self.grid.page);
+                })
+                .catch(function (error) {
+                    return self.reloadSearchedIncomingDocument(self.grid.page);
+                });
         };
 
 
@@ -793,8 +804,8 @@ module.exports = function (app) {
                 hide: false,
                 permissionKey: 'BROADCAST_DOCUMENT',
                 callback: self.broadcast,
-                checkShow:function (action , model) {
-                    return self.checkToShowAction(action , model ) && (model.getSecurityLevelLookup().lookupKey !== 4);
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && (model.getSecurityLevelLookup().lookupKey !== 4);
                 }
             },
             // Print Barcode
@@ -877,7 +888,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         //hide:true,
@@ -902,7 +913,9 @@ module.exports = function (app) {
                         callback: self.manageDestinations,
                         permissionKey: "MANAGE_DESTINATIONS",
                         class: "action-green",
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
+                        }
                     }
                 ]
             },
@@ -974,7 +987,7 @@ module.exports = function (app) {
                         text: 'grid_action_main_document_fax',
                         shortcut: false,
                         hide: true,
-                        permissionKey:"SEND_DOCUMENT_BY_FAX",
+                        permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction

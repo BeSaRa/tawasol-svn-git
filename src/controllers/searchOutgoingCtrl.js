@@ -589,7 +589,7 @@ module.exports = function (app) {
         var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
             var info = model.getInfo();
             var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
-            var allowed = (hasPermission && info.documentClass !== "internal") && info.docStatus < 25;
+            var allowed = hasPermission && info.docStatus < 25;
             if (checkForViewPopup)
                 return !(allowed);
             return allowed;
@@ -628,7 +628,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            correspondence.viewFromQueue(self.gridActions, 'searchOutgoing', $event)
+                .then(function () {
+                    return self.reloadSearchedOutgoingDocument(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadSearchedOutgoingDocument(self.grid.page);
+                });
         };
 
         /**
@@ -902,7 +908,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         //hide:true,
@@ -1001,7 +1007,7 @@ module.exports = function (app) {
                         text: 'grid_action_main_document_fax',
                         shortcut: false,
                         hide: true,
-                        permissionKey:"SEND_DOCUMENT_BY_FAX",
+                        permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction

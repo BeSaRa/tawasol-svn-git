@@ -125,15 +125,5 @@ module.exports = function (app) {
             }, 100).catch(angular.noop);
         });
 
-        viewDocumentService
-            .getPageName('draftOutgoing',
-                function (model) {
-                    return !employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
-                }, function (model) {
-                    return !employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
-                }, function (model) {
-                    return false
-                })
-
     });
 };

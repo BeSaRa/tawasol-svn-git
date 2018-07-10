@@ -170,9 +170,6 @@ module.exports = function (app) {
                     disabled.disableSites = true;
                     disabled.disableProperties = true;
                 }
-
-                console.log(disabled);
-
                 return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
                     .then(function (result) {
                         var documentClass = result.data.rs.metaData.classDescription;
@@ -195,7 +192,8 @@ module.exports = function (app) {
                                 workItem: false,
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
-                                popupNumber: self.popupNumber
+                                popupNumber: self.popupNumber,
+                                disableEverything: disabled.disableAll
                             },
                             resolve: {
                                 organizations: function (organizationService) {

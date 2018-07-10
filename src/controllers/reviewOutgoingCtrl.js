@@ -474,6 +474,13 @@ module.exports = function (app) {
             return isEditAllowed;
         };
 
+        var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
+            var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+            if (checkForViewPopup)
+                return !(hasPermission);
+            return hasPermission;
+        };
+
         /**
          * @description Preview document
          * @param reviewOutgoing
@@ -507,7 +514,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondence.viewFromQueue(self.gridActions, 'reviewOutgoing', $event);
+            correspondence.viewFromQueue(self.gridActions, 'reviewOutgoing', $event)
+                .then(function () {
+                    return self.reloadReviewOutgoings(self.grid.page);
+                })
+                .catch(function (error) {
+                    return self.reloadReviewOutgoings(self.grid.page);
+                });
         };
 
         /**
@@ -786,7 +799,9 @@ module.exports = function (app) {
                         callback: self.manageDestinations,
                         permissionKey: "MANAGE_DESTINATIONS",
                         class: "action-green",
-                        checkShow: self.checkToShowAction
+                        checkShow: function (action, model) {
+                            return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
+                        }
                     }
                 ]
             },

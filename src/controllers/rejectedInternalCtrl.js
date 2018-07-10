@@ -424,7 +424,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            correspondence.viewFromQueue(self.gridActions, 'rejectedInternal', $event)
+                .then(function () {
+                    return self.reloadRejectedInternals(self.grid.page);
+                })
+                .catch(function (error) {
+                    return self.reloadRejectedInternals(self.grid.page);
+                });
         };
 
 
@@ -660,7 +666,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         checkShow: self.checkToShowAction
