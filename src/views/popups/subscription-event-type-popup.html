@@ -12,6 +12,7 @@
                             <label for="eventType">{{lang.user_subscription_event_type}}</label>
                             <md-select id="eventType" name="eventType"
                                        ng-model="ctrl.selectedEventType" required>
+                                <md-option ng-value="null">{{lang.none}}</md-option>
                                 <md-option ng-repeat="item in ctrl.eventTypes" ng-value="item">
                                     {{item.getTranslatedName()}}
                                 </md-option>

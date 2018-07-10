@@ -44,8 +44,6 @@ module.exports = function (app) {
     //require('./upload-attachment-directive/upload-attachment-directive')(app);
     //require('./user-folders-treeview-directive/01-index')(app);
     require('./user-folders-tree-view-directive/01-index')(app);
-    require('./view-document-queue-directive/01-index')(app);
-    require('./view-document-inbox-directive/01-index')(app);
     require('./manage-content-directive/01-index')(app);
     require('./manage-correspondence-directive/01-index')(app);
     require('./manage-correspondence-simple-directive/01-index')(app);

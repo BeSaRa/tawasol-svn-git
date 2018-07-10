@@ -244,11 +244,11 @@ module.exports = function (app) {
             };
 
             /**
-             * @description View document
+             * @description Preview document
              * @param workItem
              * @param $event
              */
-            self.viewDocument = function (workItem, $event) {
+            self.previewDocument = function (workItem, $event) {
                 if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                     dialog.infoMessage(langService.get('no_view_permission'));
                     return;
@@ -262,6 +262,19 @@ module.exports = function (app) {
                         return self.reloadGroupInbox(self.grid.page);
                     });
             };
+
+        /**
+         * @description View document
+         * @param workItem
+         * @param $event
+         */
+        self.viewDocument = function (workItem, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            console.log('view document');
+        };
 
             /**
              * @description View Tracking Sheet
@@ -598,6 +611,21 @@ module.exports = function (app) {
                     ],
                     class: "action-green",
                     checkShow: self.checkToShowAction
+                },
+                // Preview
+                {
+                    type: 'action',
+                    icon: 'book-open-variant',
+                    text: 'grid_action_preview_document',
+                    shortcut: true,
+                    callback: self.previewDocument,
+                    class: "action-green",
+                    permissionKey: 'VIEW_DOCUMENT',
+                    showInView: false,
+                    checkShow: function (action, model) {
+                        //If no content or no view document permission, hide the button
+                        return self.checkToShowAction(action, model) && model.hasContent();
+                    }
                 },
                 // Separator
                 {

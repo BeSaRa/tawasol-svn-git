@@ -22,7 +22,12 @@ module.exports = function (app) {
             dialog.cancel();
         };
 
-        self.viewDocument = function (item, $event) {
+        /**
+         * @description Preview document
+         * @param item
+         * @param $event
+         */
+        self.previewDocument = function (item, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
@@ -35,6 +40,19 @@ module.exports = function (app) {
         };
 
 
+
+        /**
+         * @description View document
+         * @param item
+         * @param $event
+         */
+        self.viewDocument = function (item, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            console.log('view document');
+        };
 
         self.getSubscriptionEventType = function(selected){
             var lang = langService.getCurrentLang();

@@ -262,7 +262,7 @@ module.exports = function (app) {
          * @param followupEmployeeInbox
          * @param $event
          */
-        self.getFollowupEmployeeInboxLink = function (followupEmployeeInbox, $event) {
+        self.getLink = function (followupEmployeeInbox, $event) {
             var info = followupEmployeeInbox.getInfo();
             viewDocumentService.loadDocumentViewUrlWithOutEdit(info.vsId).then(function (result) {
                 //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
@@ -472,11 +472,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description View document
+         * @description Preview document
          * @param followupEmployeeInbox
          * @param $event
          */
-        self.viewDocument = function (followupEmployeeInbox, $event) {
+        self.previewDocument = function (followupEmployeeInbox, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
@@ -495,6 +495,19 @@ module.exports = function (app) {
                 .catch(function () {
                     return self.reloadFollowupEmployeeInboxes(self.grid.page);
                 });
+        };
+
+        /**
+         * @description View document
+         * @param workItem
+         * @param $event
+         */
+        self.viewDocument = function (workItem, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            console.log('view document');
         };
 
         /**
@@ -579,6 +592,21 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: self.checkToShowAction
+            },
+            // Preview
+            {
+                type: 'action',
+                icon: 'book-open-variant',
+                text: 'grid_action_preview_document',
+                shortcut: true,
+                callback: self.previewDocument,
+                class: "action-green",
+                showInView: false,
+                permissionKey: 'VIEW_DOCUMENT',
+                checkShow: function (action, model) {
+                    //If no content or no view document permission, hide the button
+                    return self.checkToShowAction(action, model) && model.hasContent();
+                }
             },
             // Separator
             {
@@ -817,7 +845,7 @@ module.exports = function (app) {
                 text: 'grid_action_get_link',
                 shortcut: false,
                 permissionKey: 'GET_A_LINK_TO_THE_DOCUMENT',
-                callback: self.getFollowupEmployeeInboxLink,
+                callback: self.getLink,
                 class: "action-green",
                 hide: false,
                 checkShow: self.checkToShowAction

@@ -246,11 +246,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description View document of incoming department inbox
+         * @description Preview document
          * @param incomingDepartmentInbox
          * @param $event
          */
-        self.viewDocument = function (incomingDepartmentInbox, $event) {
+        self.previewDocument = function (incomingDepartmentInbox, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
@@ -262,6 +262,19 @@ module.exports = function (app) {
                 .catch(function () {
                     return self.reloadIncomingDepartmentInboxes(self.grid.page);
                 });
+        };
+
+        /**
+         * @description View document
+         * @param incomingDepartmentInbox
+         * @param $event
+         */
+        self.viewDocument = function (incomingDepartmentInbox, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            console.log('view document');
         };
 
         /**
@@ -423,6 +436,21 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: self.checkToShowAction
+            },
+            // Preview
+            {
+                type: 'action',
+                icon: 'book-open-variant',
+                text: 'grid_action_preview_document',
+                shortcut: true,
+                callback: self.previewDocument,
+                showInView: false,
+                class: "action-green",
+                permissionKey: 'VIEW_DOCUMENT',
+                checkShow: function (action, model) {
+                    //If no content or no view document permission, hide the button
+                    return self.checkToShowAction(action, model) && model.hasContent();
+                }
             },
             // Separator
             {

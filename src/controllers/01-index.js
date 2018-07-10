@@ -23,9 +23,7 @@ module.exports = function (app) {
     require('./workflowActionCtrl')(app);
     require('./correspondenceSiteCtrl')(app);
     require('./localizationCtrl')(app);
-    require('./inboxCtrl')(app);
     require('./outgoingCtrl')(app);
-    require('./viewDocumentCtrl')(app);
     require('./searchOutgoingCtrl')(app);
     require('./searchIncomingCtrl')(app);
     require('./searchInternalCtrl')(app);

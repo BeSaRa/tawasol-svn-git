@@ -588,20 +588,6 @@ module.exports = function (app) {
                     }
                 }
             })
-            // view document
-            .state('app.outgoing.view-document', {
-                url: '/view-document',
-                template: templateProvider.getView('view-documents'),
-                controller: 'viewDocumentCtrl',
-                controllerAs: 'ctrl'
-            })
-            // temporary states
-            .state('app.administration.inbox', {
-                url: '/inbox',
-                template: templateProvider.getView('inbox'),
-                controller: 'inboxCtrl',
-                controllerAs: 'ctrl'
-            })
             // attachment types
             .state('app.administration.attachment-types', {
                 url: '/attachment-types',

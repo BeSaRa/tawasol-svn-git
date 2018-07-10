@@ -133,6 +133,7 @@ module.exports = function (app) {
             delete model.tagsIndicator;
             delete model.followUpStatusIndicator;
             delete model.dueDateStatusIndicator;
+            delete model.docClassIndicator;
             // delete model.linkedAttachmenstList;
             delete model.attachmentList;
             delete model.linkedEntitiesList;
@@ -155,6 +156,10 @@ module.exports = function (app) {
             delete model.subClassificationInfo;
             delete model.registeryOuInfo;
             delete model.followupStatusInfo;
+            delete model.creatorOuInfo;
+            delete model.creatorInfo;
+            delete model.docStatusInfo;
+            delete model.lastModifierInfo;
 
             return model;
         });

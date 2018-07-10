@@ -544,11 +544,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description View document
+         * @description Preview document
          * @param readyToExport
          * @param $event
          */
-        self.viewDocument = function (readyToExport, $event) {
+        self.previewDocument = function (readyToExport, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT', true)) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
@@ -561,6 +561,20 @@ module.exports = function (app) {
                     self.reloadReadyToExports(self.grid.page);
                 });
         };
+
+        /**
+         * @description View document
+         * @param workItem
+         * @param $event
+         */
+        self.viewDocument = function (workItem, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            console.log('view document');
+        };
+
 
         /**
          * @description Check if action will be shown on grid or not
@@ -637,6 +651,18 @@ module.exports = function (app) {
                     }
                 ],
                 class: "action-green",
+                checkShow: self.checkToShowAction
+            },
+            // Preview
+            {
+                type: 'action',
+                icon: 'book-open-variant',
+                text: 'grid_action_preview_document',
+                shortcut: true,
+                callback: self.previewDocument,
+                class: "action-green",
+                showInView: false,
+                permissionKey: 'VIEW_DOCUMENT',
                 checkShow: self.checkToShowAction
             },
             // Separator

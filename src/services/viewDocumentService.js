@@ -1,221 +1,181 @@
 module.exports = function (app) {
-    app.service('viewDocumentService', function (dialog,
-                                                 generator,
-                                                 $http,
-                                                 $sce,
-                                                 urlService,
-                                                 cmsTemplate,
-                                                 classificationService,
-                                                 outgoingService,
-                                                 documentTypeService,
-                                                 documentFileService,
-                                                 managerService,
-                                                 validationService,
-                                                 langService,
-                                                 toast,
-                                                 employeeService,
-                                                 $timeout,
-                                                 lookupService,
-                                                 organizationService) {
-        'ngInject';
-        var self = this;
-        self.serviceName = 'viewDocumentService';
-        self.document = {
-            'content': './assets/images/document.jpg',
-            'author': 'A.Smith',
-            'sender': 'Another',
-            'due': '20/05/17',
-            'received': '10/05/17',
-            'serial': '134567892',
-            'description': 'This report covers our findings based on the research that we conducted as part of phase one.',
-            'linkedDocuments': [{'id': 1, 'name': 'Document 1'}, {'id': 2, 'name': 'Document 2'}],
-            'attachments': [{'id': 1, 'name': 'Attachment 1'}, {'id': 2, 'name': 'Attachment 2'}],
-            'linkedPersons': [{'id': 1, 'name': 'Person 1'}, {'id': 2, 'name': 'Person 2'}],
-            'notes': 'Testing notes'
+    app.provider('viewDocumentService', function () {
+        var provider = this , pageNames = {};
+
+        provider.addPage = function (pageName) {
+            //pageNames.hasOwnProperty(pageName) ? throw Error('Page Name Already exists ') : pageNames[pageName] = {};
         };
 
-        function _checkView(info, justView) {
-            return info.documentClass.toLowerCase() === 'incoming' ? true : justView;
-        }
+        provider.$get = function (dialog,
+                                  generator,
+                                  $http,
+                                  $sce,
+                                  urlService,
+                                  cmsTemplate,
+                                  Correspondence,
+                                  General,
+                                  G2G,
+                                  G2GMessagingHistory,
+                                  Outgoing,
+                                  Internal,
+                                  Incoming,
+                                  WorkItem,
+                                  EventHistory) {
+            'ngInject';
+            var self = this;
+            self.serviceName = 'viewDocumentService';
+            // number of opened popup
+            self.popupNumber = 0;
+            /**
+             * @description Get the readonly document view url
+             * Used for get link.
+             * @param vsId
+             */
+            self.loadDocumentViewUrlWithOutEdit = function (vsId) {
+                return $http.get((urlService.officeWebApps).replace('{{vsId}}', vsId).replace('/edit', ''))
+                    .then(function (result) {
+                        return result.data.rs;
+                    });
+            };
 
-        self.loadDocumentViewUrl = function (vsId) {
-            return $http.get((urlService.officeWebApps).replace('{{vsId}}', vsId))
-                .then(function (result) {
-                    return result.data.rs;
-                });
-        };
 
-        self.loadDocumentViewUrlWithOutEdit = function (vsId) {
-            return $http.get((urlService.officeWebApps).replace('{{vsId}}', vsId).replace('/edit', ''))
-                .then(function (result) {
-                    return result.data.rs;
-                });
-        };
-
-
-        self.openDocumentPopup = function (outgoing, fullAccess, buttonsToShow, $event, justView) {
-            if (!outgoing.hasContent()) {
-                dialog.alertMessage(langService.get('content_not_found'));
-                return;
+            /**
+             * @description to create the url schema depend on document class and vsId if found.
+             * @param vsId
+             * @param documentClass
+             * @param extension
+             * @return {string}
+             * @private
+             */
+            function _createUrlSchema(vsId, documentClass, extension) {
+                var url = [urlService.correspondence];
+                vsId = (vsId ? vsId : null);
+                documentClass = documentClass ? documentClass.toLowerCase() : null;
+                if (documentClass)
+                    url.push(documentClass);
+                if (vsId)
+                    url.push(vsId);
+                if (extension)
+                    url.push(extension);
+                return url.join('/');
             }
 
-            /*if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }*/
+            /**
+             * the registered models for our CMS
+             * @type {{outgoing: (Outgoing|*), internal: (Internal|*), incoming: (Incoming|*)}}
+             */
+            self.models = {
+                outgoing: Outgoing,
+                internal: Internal,
+                incoming: Incoming,
+                general: General,
+                g2g: G2G,
+                g2gmessaginghistory: G2GMessagingHistory
+            };
 
-            var info = outgoing.getInfo();
-            justView = _checkView(info, justView);
+            self.screenLookups = {
+                outgoing: {},
+                incoming: {},
+                internal: {},
+                general: {}
+            };
 
-            dialog
-                .showDialog({
-                    targetEvent: $event,
-                    template: cmsTemplate.getPopup('view-document'),
-                    controller: 'viewDocumentPopCtrl',
-                    controllerAs: 'ctrl',
-                    locals: {
-                        fullAccess: fullAccess,
-                        outgoing: outgoing,
-                        buttonsToShow: buttonsToShow,
-                        justView: justView
-                    },
-                    resolve: {
-                        attachments: function () {
-                            'ngInject';
-                            return outgoing.loadDocumentAttachments().then(function (attachments) {
-                                outgoing.attachments = attachments;
-                                return attachments;
-                            }).catch(function (e) {
-                                console.log(e);
-                            });
-                        },
-                        documentComments: function () {
-                            'ngInject';
-                            return outgoing.loadDocumentComments().then(function (documentComments) {
-                                outgoing.documentComments = documentComments;
-                                return documentComments;
-                            }).catch(function (e) {
-                                console.log(e);
-                            });
-                        },
-                        documentUrl: function () {
-                            'ngInject';
-                            var method = justView ? 'loadDocumentViewUrlWithOutEdit' : 'loadDocumentViewUrl';
-                            return self[method](outgoing.vsId)
-                                .then(function (result) {
-                                    if (justView) {
-                                        return $sce.trustAsResourceUrl(result);
-                                    } else {
-                                        result.viewURL = $sce.trustAsResourceUrl(result.viewURL);
-                                        return result;
-                                    }
-                                });
-                        },
-                        correspondence: function (correspondenceService) {
-                            'ngInject';
-                            return correspondenceService.loadCorrespondenceByVsIdClass(info.vsId, info.documentClass);
-                        }
-                    }
+            /**
+             * @description to specifying the model Name from given document class.
+             * @param documentClass
+             * @return {string}
+             * @private
+             */
+            function _getModelName(documentClass) {
+                documentClass = documentClass.toLowerCase();
+                return documentClass.charAt(0).toUpperCase() + documentClass.substr(1);
+            }
 
-                });
-        };
 
-        self.openFakeDocumentPopup = function (outgoing, fullAccess, buttonsToShow, $event, justView) {
-           /* if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }*/
-            var info = outgoing.getInfo();
-            console.log('justView',arguments);
-            justView = _checkView(info, justView);
+            function _getModel(documentClass) {
+                return self.models[documentClass.toLowerCase()];
+            }
 
-            return dialog
-                .showDialog({
-                    targetEvent: $event,
-                    template: cmsTemplate.getPopup('view-document'),
-                    controller: 'viewDocumentPopCtrl',
-                    controllerAs: 'ctrl',
-                    escapeToClose: false,
-                    locals: {
-                        fullAccess: fullAccess,
-                        outgoing: outgoing,
-                        attachments: [],
-                        documentComments: [],
-                        buttonsToShow: buttonsToShow,
-                        justView: justView
-                    },
-                    resolve: {
-                        documentUrl: function () {
-                            'ngInject';
-                            var method = justView ? 'loadDocumentViewUrlWithOutEdit' : 'loadDocumentViewUrl';
-                            return self[method](outgoing.generalStepElm.vsId)
-                                .then(function (result) {
-                                    if (justView) {
-                                        return $sce.trustAsResourceUrl(result);
-                                    } else {
-                                        result.viewURL = $sce.trustAsResourceUrl(result.viewURL);
-                                        return result;
-                                    }
-                                });
-                        },
-                        correspondence: function (correspondenceService) {
-                            'ngInject';
-                            return correspondenceService.loadCorrespondenceByVsIdClass(info.vsId, info.documentClass);
-                        }
 
-                    }
+            /**
+             * @description Open the view popup for queues
+             * @param correspondence
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
+            self.viewQueueDocument = function (correspondence, actions, $event, pageName) {
+                var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : new Outgoing(correspondence).getInfo();
 
-                });
-        };
+                return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
+                    .then(function (result) {
+                        var documentClass = result.data.rs.metaData.classDescription;
+                        result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                        return result.data.rs;
+                    })
+                    .then(function (result) {
+                        result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: result.metaData,
+                                content: result.content,
+                                actions: actions,
+                                workItem: false,
+                                disableProperties: disableProperties,
+                                disableCorrespondence: disableCorrespondence,
+                                popupNumber: self.popupNumber
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        }).then(function () {
+                            self.popupNumber -= 1;
+                            return true;
+                        }).catch(function () {
+                            self.popupNumber -= 1;
+                            return false;
+                        });
+                    });
+            };
 
-        self.openQuickSearchDocumentPopup = function (correspondence, fullAccess, buttonsToShow, $event, justView) {
-            /*if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }*/
-            var info = correspondence.getInfo();
-            justView = info.documentClass === 'incoming' ? true : justView;
-            dialog
-                .showDialog({
-                    targetEvent: $event,
-                    template: cmsTemplate.getPopup('view-document'),
-                    controller: 'viewDocumentPopCtrl',
-                    controllerAs: 'ctrl',
-                    locals: {
-                        fullAccess: fullAccess,
-                        outgoing: correspondence,
-                        attachments: [],
-                        documentComments: [],
-                        buttonsToShow: buttonsToShow,
-                        justView: justView
-                    },
-                    resolve: {
-                        documentUrl: function () {
-                            'ngInject';
-                            var method = justView ? 'loadDocumentViewUrlWithOutEdit' : 'loadDocumentViewUrl';
-                            return self[method](correspondence.vsId)
-                                .then(function (result) {
-                                    if (justView) {
-                                        return $sce.trustAsResourceUrl(result);
-                                    } else {
-                                        result.viewURL = $sce.trustAsResourceUrl(result.viewURL);
-                                        return result;
-                                    }
-                                });
-                        },
-                        correspondence: function (correspondenceService) {
-                            'ngInject';
-                            return correspondenceService.loadCorrespondenceByVsIdClass(info.vsId, info.documentClass);
-                        }
-                    }
+            self.viewUserInboxDocument = function (workItem, gridActions, disableProperties, disableDestinations, $event) {
 
-                });
-        };
-        /**
-         * @description Create the shared method to the model.
-         * @type {{delete: generator.delete, update: generator.update}}
-         * @private
-         */
-        self._sharedMethods = generator.generateSharedMethods(self.deleteViewDocument, self.updateViewDocument);
+            };
+
+            self.viewUserSentDocument = function (sentItem, gridActions, disableProperties, disableDestinations, $event) {
+
+            };
+
+            self.viewDepartmentIncomingDocument = function (departmentIncomingDocument, gridActions, disableProperties, disableDestinations, $event) {
+
+            };
+
+            self.viewDepartmentReturnedDocument = function (departmentReturnedDocument, gridActions, disableProperties, disableDestinations, $event) {
+
+            };
+
+            self.viewDepartmentSentDocument = function (departmentSentDocument, gridActions, disableProperties, disableDestinations, $event) {
+
+            };
+
+            self.viewDepartmentReadyToExportDocument = function (workItem, gridActions, disableProperties, disableDestinations, $event) {
+
+            };
+
+            return self;
+        }
     });
 };

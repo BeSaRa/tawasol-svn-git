@@ -865,11 +865,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description View document
+         * @description Preview document
          * @param userInbox
          * @param $event
          */
-        self.viewDocument = function (userInbox, $event) {
+        self.previewDocument = function (userInbox, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
@@ -952,6 +952,21 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: self.checkToShowAction
+            },
+            // Preview
+            {
+                type: 'action',
+                icon: 'book-open-variant',
+                text: 'grid_action_preview_document',
+                shortcut: true,
+                callback: self.previewDocument,
+                class: "action-green",
+                permissionKey: 'VIEW_DOCUMENT',
+                showInView: false,
+                checkShow: function (action, model) {
+                    //If no content or no view document permission, hide the button
+                    return self.checkToShowAction(action, model) && model.hasContent();
+                }
             },
             // Separator
             {
@@ -1085,21 +1100,6 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted() && (info.docStatus <= 22);
                     // (model.generalStepElm.addMethod && model.generalStepElm.workFlowName.toLowerCase() !== 'internal')
                     // || model.generalStepElm.workFlowName.toLowerCase() === 'incoming';
-                }
-            },
-            // Open
-            {
-                type: 'action',
-                icon: 'book-open-variant',
-                text: 'grid_action_open',
-                shortcut: true,
-                callback: self.viewDocument,
-                class: "action-green",
-                permissionKey: 'VIEW_DOCUMENT',
-                showInView: false,
-                checkShow: function (action, model) {
-                    //If no content or no view document permission, hide the button
-                    return self.checkToShowAction(action, model) && model.hasContent();
                 }
             },
             // View Tracking Sheet

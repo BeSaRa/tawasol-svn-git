@@ -135,11 +135,11 @@ module.exports = function (app) {
         self.recallSingle = function (userSentItem, $event) {
             userSentItemService.recallSentItem(userSentItem, $event)
                 .then(function (result) {
-                    if(result){
+                    if (result) {
                         self.reloadUserSentItems(self.grid.page)
                             .then(function () {
                                 toast.success(langService.get('recall_success').change({name: userSentItem.getTranslatedName()}));
-                        });
+                            });
                     }
                 });
         };
@@ -370,13 +370,16 @@ module.exports = function (app) {
             return true;
         };
 
-
-        self.viewDocument = function (userSentItem, $event) {
+        /**
+         * @description Preview document
+         * @param userSentItem
+         * @param $event
+         */
+        self.previewDocument = function (userSentItem, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            // viewDocumentService.openDocumentPopup(userSentItem, false, [], $event, true);
 
             var info = userSentItem.getInfo();
             info.wobNumber = null;
@@ -387,9 +390,22 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadUserSentItems(self.grid.page);
                 })
-                .catch(function(){
+                .catch(function () {
                     self.reloadUserSentItems(self.grid.page);
                 });
+        };
+
+        /**
+         * @description View document
+         * @param userSentItem
+         * @param $event
+         */
+        self.viewDocument = function (userSentItem, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            console.log('view document');
         };
 
         /**
@@ -445,6 +461,21 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: self.checkToShowAction
+            },
+            // Preview
+            {
+                type: 'action',
+                icon: 'book-open-variant',
+                text: 'grid_action_preview_document',
+                shortcut: true,
+                showInView: false,
+                callback: self.previewDocument,
+                class: "action-green",
+                permissionKey: 'VIEW_DOCUMENT',
+                checkShow: function (action, model) {
+                    //If no content or no view document permission, hide the button
+                    return self.checkToShowAction(action, model);// && model.hasContent();
+                }
             },
             // Separator
             {

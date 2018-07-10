@@ -384,11 +384,11 @@ module.exports = function (app) {
         };
 
         /**
-         * @description View document
+         * @description Preview document
          * @param readyToSendOutgoing
          * @param $event
          */
-        self.viewDocument = function (readyToSendOutgoing, $event) {
+        self.previewDocument = function (readyToSendOutgoing, $event) {
             if (!readyToSendOutgoing.hasContent()) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
@@ -404,6 +404,19 @@ module.exports = function (app) {
                 .catch(function () {
                     return self.reloadReadyToSendOutgoings(self.grid.page);
                 });
+        };
+
+        /**
+         * @description View document
+         * @param correspondence
+         * @param $event
+         */
+        self.viewDocument = function (correspondence, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            console.log('view document');
         };
 
         /**
@@ -458,6 +471,21 @@ module.exports = function (app) {
                 ],
                 class: "action-green",
                 checkShow: self.checkToShowAction
+            },
+            // Preview
+            {
+                type: 'action',
+                icon: 'book-open-variant',
+                text: 'grid_action_preview_document',
+                shortcut: false,
+                callback: self.previewDocument,
+                showInView: false,
+                class: "action-green",
+                permissionKey: 'VIEW_DOCUMENT',
+                checkShow: function (action, model) {
+                    //If no content or no view document permission, hide the button
+                    return self.checkToShowAction(action, model) && model.hasContent();
+                }
             },
             {
                 type: 'separator',

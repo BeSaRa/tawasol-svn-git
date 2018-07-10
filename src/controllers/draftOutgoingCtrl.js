@@ -62,17 +62,17 @@ module.exports = function (app) {
                 ]
             };
 
-        /**
-         * @description Get the sorting key for information or lookup model
-         * @param property
-         * @param modelType
-         * @returns {*}
-         */
-        self.getSortingKey = function(property, modelType){
-            return generator.getColumnSortingKey(property, modelType);
-        };
+            /**
+             * @description Get the sorting key for information or lookup model
+             * @param property
+             * @param modelType
+             * @returns {*}
+             */
+            self.getSortingKey = function (property, modelType) {
+                return generator.getColumnSortingKey(property, modelType);
+            };
 
-        /**
+            /**
              * @description Contains methods for CRUD operations for draft outgoing mails
              */
             self.statusServices = {
@@ -199,7 +199,7 @@ module.exports = function (app) {
                     .launchCorrespondenceWorkflow(self.selectedDraftOutgoings, $event, 'forward', 'favorites')
                     .then(function () {
                         self.reloadDraftOutgoings(self.grid.page)
-                            .then(function(){
+                            .then(function () {
                                 mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             });
                     });
@@ -303,14 +303,14 @@ module.exports = function (app) {
                         //self.replaceRecord(result);
                     });*/
 
-            draftOutgoing.launchWorkFlow($event, 'forward', 'favorites')
-                .then(function () {
-                    self.reloadDraftOutgoings(self.grid.page)
-                        .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                            new ResolveDefer(defer);
-                        });
-                });
+                draftOutgoing.launchWorkFlow($event, 'forward', 'favorites')
+                    .then(function () {
+                        self.reloadDraftOutgoings(self.grid.page)
+                            .then(function () {
+                                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                                new ResolveDefer(defer);
+                            });
+                    });
             };
 
             /**
@@ -403,12 +403,12 @@ module.exports = function (app) {
                 managerService.manageDocumentCorrespondence(draftOutgoing.vsId, draftOutgoing.docClassName, draftOutgoing.docSubject, $event)
             };
 
-        /**
-         * @description broadcast selected organizations and workflow groups
-         * @param draftOutgoing
-         * @param $event
-         * @param defer
-         */
+            /**
+             * @description broadcast selected organizations and workflow groups
+             * @param draftOutgoing
+             * @param $event
+             * @param defer
+             */
             self.broadcast = function (draftOutgoing, $event, defer) {
                 draftOutgoing
                     .correspondenceBroadcast($event)
@@ -421,6 +421,7 @@ module.exports = function (app) {
                     })
             };
 
+
             var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
                 var isEditAllowed = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
                 if (checkForViewPopup)
@@ -428,13 +429,19 @@ module.exports = function (app) {
                 return isEditAllowed;
             };
 
+            var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
+                var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+                if (checkForViewPopup)
+                    return !(hasPermission);
+                return hasPermission;
+            };
+
             /**
-             * @description View document
+             * @description Preview document
              * @param draftOutgoing
              * @param $event
              */
-            self.viewDocument = function (draftOutgoing, $event) {
-                //console.log("draftOutgoing", draftOutgoing);
+            self.previewDocument = function (draftOutgoing, $event) {
                 if (!draftOutgoing.hasContent()) {
                     dialog.alertMessage(langService.get('content_not_found'));
                     return;
@@ -449,6 +456,29 @@ module.exports = function (app) {
                         return self.reloadDraftOutgoings(self.grid.page);
                     })
                     .catch(function () {
+                        return self.reloadDraftOutgoings(self.grid.page);
+                    });
+            };
+
+            /**
+             * @description View document
+             * @param correspondence
+             * @param $event
+             */
+            self.viewDocument = function (correspondence, $event) {
+                if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                    dialog.infoMessage(langService.get('no_view_permission'));
+                    return;
+                }
+
+                viewDocumentService
+                    .viewQueueDocument(correspondence, self.gridActions, $event, checkIfEditPropertiesAllowed(correspondence, true), checkIfEditCorrespondenceSiteAllowed(correspondence, true))
+                    .then(function () {
+                        console.log("RESUTL");
+                        return self.reloadDraftOutgoings(self.grid.page);
+                    })
+                    .catch(function (error) {
+                        console.log("ERROR",error);
                         return self.reloadDraftOutgoings(self.grid.page);
                     });
             };
@@ -506,6 +536,21 @@ module.exports = function (app) {
                     ],
                     class: "action-green",
                     checkShow: self.checkToShowAction
+                },
+                // Preview
+                {
+                    type: 'action',
+                    icon: 'book-open-variant',
+                    text: 'grid_action_preview_document',
+                    shortcut: false,
+                    callback: self.previewDocument,
+                    showInView: false,
+                    class: "action-green",
+                    permissionKey: 'VIEW_DOCUMENT',
+                    checkShow: function (action, model) {
+                        //If no content or no view document permission, hide the button
+                        return self.checkToShowAction(action, model) && model.hasContent();
+                    }
                 },
                 // Separator
                 {
@@ -588,7 +633,9 @@ module.exports = function (app) {
                             callback: self.editProperties,
                             class: "action-green",
                             permissionKey: "EDIT_OUTGOING_PROPERTIES",
-                            checkShow: self.checkToShowAction
+                            checkShow: function(action, model){
+                                return self.checkToShowAction(action, model) && checkIfEditPropertiesAllowed(model);
+                            }
                         }
                     ]
                 },
@@ -660,11 +707,12 @@ module.exports = function (app) {
                             icon: 'file-document',
                             text: 'grid_action_linked_documents',
                             shortcut: false,
-                            permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                            permissionKey: "MANAGE_LINKED_DOCUMENTS",
                             callback: self.manageLinkedDocuments,
                             class: "action-green",
                             checkShow: self.checkToShowAction
                         },
+                        // Destinations
                         {
                             type: 'action',
                             icon: 'stop',
@@ -673,7 +721,9 @@ module.exports = function (app) {
                             callback: self.manageDestinations,
                             permissionKey: "MANAGE_DESTINATIONS",
                             class: "action-green",
-                            checkShow: self.checkToShowAction
+                            checkShow: function (action, model) {
+                                return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
+                            }
                         }
                     ]
                 },

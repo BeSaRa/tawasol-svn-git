@@ -598,11 +598,11 @@ module.exports = function (app) {
 
 
         /**
-         * @description View document
+         * @description Preview document
          * @param searchedIncomingDocument
          * @param $event
          */
-        self.viewDocument = function (searchedIncomingDocument, $event) {
+        self.previewDocument = function (searchedIncomingDocument, $event) {
             if (!searchedIncomingDocument.hasContent()) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
@@ -619,6 +619,20 @@ module.exports = function (app) {
                     return self.reloadSearchedIncomingDocument(self.grid.page);
                 });
         };
+
+        /**
+         * @description View document
+         * @param correspondence
+         * @param $event
+         */
+        self.viewDocument = function (correspondence, $event) {
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                dialog.infoMessage(langService.get('no_view_permission'));
+                return;
+            }
+            console.log('view document');
+        };
+
 
         /**
          * @description Check if action will be shown on grid or not
@@ -668,6 +682,7 @@ module.exports = function (app) {
         };
 
         self.gridActions = [
+            // Document Information
             {
                 type: 'action',
                 icon: 'information-variant',
@@ -684,6 +699,22 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
+            // Preview
+            {
+                type: 'action',
+                icon: 'book-open-variant',
+                text: 'grid_action_preview_document',
+                shortcut: false,
+                showInView: false,
+                callback: self.previewDocument,
+                class: "action-green",
+                permissionKey: 'VIEW_DOCUMENT',
+                checkShow: function (action, model) {
+                    //If no content or no view document permission, hide the button
+                    return self.checkToShowAction(action, model) && model.hasContent();
+                }
+            },
+            // Separator
             {
                 type: 'separator',
                 checkShow: self.checkToShowAction,
@@ -713,7 +744,7 @@ module.exports = function (app) {
              class: "action-green",
              checkShow: self.checkToShowAction
              },*/
-            //Open
+            // Open
             {
                 type: 'action',
                 icon: 'book-open-variant',

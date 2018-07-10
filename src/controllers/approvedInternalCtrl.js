@@ -367,11 +367,11 @@ module.exports = function (app) {
             };
 
             /**
-             * @description View document
+             * @description Preview document
              * @param approvedInternal
              * @param $event
              */
-            self.viewDocument = function (approvedInternal, $event) {
+            self.previewDocument = function (approvedInternal, $event) {
                 if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                     dialog.infoMessage(langService.get('no_view_permission'));
                     return;
@@ -383,6 +383,19 @@ module.exports = function (app) {
                     .catch(function () {
                         return self.reloadApprovedInternals(self.grid.page);
                     });
+            };
+
+            /**
+             * @description View document
+             * @param workItem
+             * @param $event
+             */
+            self.viewDocument = function (workItem, $event) {
+                if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                    dialog.infoMessage(langService.get('no_view_permission'));
+                    return;
+                }
+                console.log('view document');
             };
 
             /**
@@ -478,6 +491,21 @@ module.exports = function (app) {
                     ],
                     class: "action-green",
                     checkShow: self.checkToShowAction
+                },
+                // Preview
+                {
+                    type: 'action',
+                    icon: 'book-open-variant',
+                    text: 'grid_action_preview_document',
+                    shortcut: false,
+                    showInView: false,
+                    callback: self.previewDocument,
+                    class: "action-green",
+                    permissionKey: 'VIEW_DOCUMENT',
+                    checkShow: function (action, model) {
+                        //If no content or no view document permission, hide the button
+                        return self.checkToShowAction(action, model) && model.hasContent();
+                    }
                 },
                 // Separator
                 {

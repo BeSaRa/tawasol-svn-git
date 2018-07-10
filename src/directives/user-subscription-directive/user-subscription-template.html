@@ -1,3 +1,34 @@
+<md-menu-bar class="notify-list">
+    <md-menu md-position-mode="left bottom" md-offset="0 12">
+        <div layout="column" class="notify">
+            <md-button class="md-icon-button" ng-click="ctrl.openSubscriptionMenu($mdMenu)"
+                       tooltip="{{$root.lang.user_subscriptions}}" fixed-position="true">
+                <md-icon md-svg-icon="bell-outline"></md-icon>
+            </md-button>
+            <span ng-if="ctrl.service.userSubscriptions.length > 0" ng-click="ctrl.openSubscriptionMenu($mdMenu)"
+                  class="counter blue">{{ctrl.service.userSubscriptions.length}}</span>
+        </div>
+        <md-menu-content class="toolbar-menu-content">
+            <div scroll-directive class="notify-list-wrapper">
+                <ul>
+                    <li ng-repeat="item in ctrl.service.userSubscriptions track by $index" layout="row">
+                        <div class="task-body" flex layout="column">
+                            <div class="task-header" layout="row">
+                                <a href="#" md-truncate flex ng-class="{'unread': !item.isOpen}"
+                                   class="notification-subject" ng-click="ctrl.viewDocument(item,$event)">{{item.docSubject}}</a>
+                            </div>
+                            <div layout="column">
+                                <div class="tasks-date-text" >{{ctrl.getSubscriptionEventType(item.triggerId)}}</div>
+                                <!--<div class="tasks-date-text" >{{item.docFullSerial}}</div>-->
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </md-menu-content>
+    </md-menu>
+</md-menu-bar>
+<!--
 <div layout="column" class="notify">
     <md-button ng-click="ctrl.showUserSubscriptions($event)" class="md-icon-button"
                tooltip="{{$root.lang.user_subscriptions}}" fixed-position="true">
@@ -5,4 +36,4 @@
     </md-button>
     <span ng-click="ctrl.showUserSubscriptions($event)"
           class="counter blue">{{ctrl.service.count}}</span>
-</div>
+</div>-->

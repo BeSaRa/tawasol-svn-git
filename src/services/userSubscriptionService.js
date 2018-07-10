@@ -14,7 +14,6 @@ module.exports = function (app) {
         self.serviceName = 'userSubscriptionService';
         self.userSubscriptions = [];
         self.userSubscriptionsByUserId = [];
-        self.count = 0;
 
         /**
          * @description Load the user Subscriptions from server.
@@ -26,7 +25,6 @@ module.exports = function (app) {
             })
                 .then(function (result) {
                     self.userSubscriptions = result.data.rs.second;
-                    self.count = self.userSubscriptions.length;
                     return self.userSubscriptions;
                 });
         };
