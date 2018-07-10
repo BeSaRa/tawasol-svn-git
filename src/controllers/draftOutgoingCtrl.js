@@ -471,16 +471,21 @@ module.exports = function (app) {
                     return;
                 }
 
-                viewDocumentService
-                    .viewQueueDocument(correspondence, self.gridActions, $event, 'draftOutgoing')
+                correspondence.viewFromQueue(self.gridActions, 'draftOutgoing', $event)
                     .then(function () {
-                        console.log("RESUTL");
                         return self.reloadDraftOutgoings(self.grid.page);
                     })
                     .catch(function (error) {
-                        console.log("ERROR", error);
                         return self.reloadDraftOutgoings(self.grid.page);
                     });
+                /*viewDocumentService
+                    .viewQueueDocument(correspondence, self.gridActions, 'draftOutgoing', $event)
+                    .then(function () {
+                        return self.reloadDraftOutgoings(self.grid.page);
+                    })
+                    .catch(function (error) {
+                        return self.reloadDraftOutgoings(self.grid.page);
+                    });*/
             };
 
             /**

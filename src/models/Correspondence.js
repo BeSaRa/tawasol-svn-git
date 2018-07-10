@@ -24,7 +24,8 @@ module.exports = function (app) {
                 attachmentService,
                 documentTagService,
                 downloadService,
-                documentCommentService;
+                documentCommentService,
+                viewDocumentService;
 
             self.docSubject = null;
             self.documentTitle = null;
@@ -103,6 +104,11 @@ module.exports = function (app) {
 
             Correspondence.prototype.setCorrespondenceService = function (service) {
                 correspondenceService = service;
+                return this;
+            };
+
+            Correspondence.prototype.setViewDocumentService = function (service) {
+                viewDocumentService = service;
                 return this;
             };
 
@@ -505,6 +511,11 @@ module.exports = function (app) {
             Correspondence.prototype.view = function () {
                 return correspondenceService.viewCorrespondence.apply(correspondenceService, arguments);
             };
+
+            Correspondence.prototype.viewFromQueue = function (actions, queueName, $event) {
+                return viewDocumentService.viewQueueDocument(this, actions, queueName, $event);
+            };
+
             Correspondence.prototype.manageDocumentComments = function ($event) {
                 var info = this.getInfo();
                 return managerService.manageDocumentComments.apply(managerService, [info.vsId, info.title, $event]);

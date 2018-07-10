@@ -128,7 +128,6 @@ module.exports = function (app) {
         viewDocumentService
             .getPageName('draftOutgoing',
                 function (model) {
-                    return true;
                     return !employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
                 }, function (model) {
                     return !employeeService.hasPermissionTo("MANAGE_DESTINATIONS");

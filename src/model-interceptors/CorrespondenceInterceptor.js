@@ -17,7 +17,8 @@ module.exports = function (app) {
                       downloadService,
                       documentCommentService,
                       correspondenceService,
-                      Information) {
+                      Information,
+                      viewDocumentService) {
         'ngInject';
 
         var modelName = 'Correspondence';
@@ -53,7 +54,8 @@ module.exports = function (app) {
                 .setDocumentTagService(documentTagService)
                 .setDocumentCommentService(documentCommentService)
                 .setManagerService(managerService)
-                .setDownloadService(downloadService);
+                .setDownloadService(downloadService)
+                .setViewDocumentService(viewDocumentService);
             return model;
         });
 

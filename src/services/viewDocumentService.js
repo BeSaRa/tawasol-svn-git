@@ -140,7 +140,7 @@ module.exports = function (app) {
              * @param $event
              * @param pageName
              */
-            self.viewQueueDocument = function (correspondence, actions, $event, pageName) {
+            self.viewQueueDocument = function (correspondence, actions, pageName, $event) {
                 var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : new Outgoing(correspondence).getInfo();
                 var disabled = _checkDisabled(pageName, correspondence);
 
