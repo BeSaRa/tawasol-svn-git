@@ -122,15 +122,15 @@ module.exports = function (app) {
                 })
         };
 
-        /**
+      /*  /!**
          * @description View Delivery Report
          * @param g2gItem
          * @param $event
          * @returns {*}
-         */
+         *!/
         self.viewDeliveryReport = function (g2gItem, $event) {
             return viewDeliveryReportService.viewDeliveryReport(g2gItem, $event);
-        };
+        };*/
 
         /**
          * @description Check if action will be shown on grid or not
@@ -223,7 +223,7 @@ module.exports = function (app) {
                 showInView: true,
                 checkShow: self.checkToShowAction
             },
-            // View Delivery Report
+           /* // View Delivery Report
             {
                 type: 'action',
                 icon: 'eye',
@@ -234,7 +234,7 @@ module.exports = function (app) {
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: self.checkToShowAction,
                 showInView: true
-            }
+            }*/
         ];
     });
 };

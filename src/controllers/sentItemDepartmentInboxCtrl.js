@@ -156,6 +156,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.recall = function (sentItemDepartmentInbox, $event) {
+            if (sentItemDepartmentInbox.receivedById !== null) {
+                dialog.errorMessage(langService.get('cannot_recall_received_book'));
+                return;
+            }
             sentItemDepartmentInboxService.recallSentItem(sentItemDepartmentInbox, $event)
                 .then(function (result) {
                     if (result) {

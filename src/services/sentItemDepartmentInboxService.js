@@ -124,10 +124,6 @@ module.exports = function (app) {
          * @returns WorkItem status
          */
         self.recallSentItem = function (sentItem, $event, ignoreMessage) {
-            if (sentItem.receivedById !== null) {
-                dialog.errorMessage(langService.get('cannot_recall_received_book'));
-                return false;
-            }
             return self.showReasonDialog('recall_reason', $event)
                 .then(function (reason) {
                     return $http.put((urlService.departmentInboxes + '/' + sentItem.getInfo().vsId + '/recall'), {

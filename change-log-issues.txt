@@ -227,6 +227,7 @@ Bugs:
 
 11-07-2018
 ------------------
-13931 Fix - Inbox Filter - Filtration by Received date is between values get result for documents between from date and the day before to date
-13910 Fix - Inbox Filter - Add new filtration shouldn't accept the duplicated name
-13908 Fix - Inbox Filter - Item order display a random number when user add new filter
+13931: Fix - Inbox Filter - Filtration by Received date is between values get result for documents between from date and the day before to date
+13910: Fix - Inbox Filter - Add new filtration shouldn't accept the duplicated name
+13908: Fix - Inbox Filter - Item order display a random number when user add new filter
+13907: Fix - Recall- Department inbox - Empty Pop-up appear when recall Received/Quick Received/Returned Document.
