@@ -112,7 +112,7 @@ module.exports = function (app) {
                     return result.data.rs;
                 })
                 .catch(function (error) {
-                    errorCode.checkIf(error, 'PRINT_BARCODE_ERROR_NO_BARCODE_ELEMENT', function () {
+                    return errorCode.checkIf(error, 'PRINT_BARCODE_ERROR_NO_BARCODE_ELEMENT', function () {
                         dialog.errorMessage(langService.get('print_barcode_error_no_barcode_element'));
                     })
                 });
