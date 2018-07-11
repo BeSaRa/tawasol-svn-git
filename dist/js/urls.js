@@ -15,15 +15,24 @@
                 .setBaseUrl('hussam', 'http://172.16.10.107:9080/CMSServices/service')
                 .setBaseUrl('migration', 'http://100.100.3.138:9080/CMSServices/service');
 
+            // External Systems
+            urlServiceProvider
+                .addSegment('icn', 'http://100.100.3.229:9080') //  ICN URL
+                .addSegment('report', 'http://100.100.3.228'); // Reporting Service URL
+
             urlServiceProvider
             // to load languages
                 .addToAll('language', 'dist/resources/lang.json')
                 // to load sidebar menus
                 .addToAll('menus', 'dist/resources/menu.json')
-                .addToAll('icnLogin', 'http://100.100.3.229:9080/navigator/jaxrs/logon?userid={{username}}&password={{password}}')
-                .addToAll('icnSearch', 'http://100.100.3.229:9080/navigator/bookmark.jsp?desktop=cms&repositoryId=EBLAICN&repositoryType=p8&docid=StoredSearch%2C%7BF4B4E428-6FC3-4BD3-BC91-AF46EC513DB1%7D%2C%7B76B326FF-8873-CB36-8524-6381F0800000%7D&mimeType=application%2Fx-filenet-searchtemplate&template_name=StoredSearch&version=current&vsId=%7BFF5CAE8D-D59D-CDF2-8488-6381F0800000%7D')
-                .addToAll('icnAdd', 'http://100.100.3.229:9080/navigator/bookmark.jsp?desktop=cms&repositoryId=EBLAICN&repositoryType=p8&docid=EntryTemplate%2C%7BF4B4E428-6FC3-4BD3-BC91-AF46EC513DB1%7D%2C%7BFB387ADC-CD58-C442-87A2-6381EEA00000%7D&mimeType=application%2Fx-icn-documententrytemplate&template_name=EntryTemplate&version=current&vsId=%7B2248377B-9A84-C3F3-845F-6381EEA00000%7D')
-                .addToAll('reports', 'http://100.100.3.228/Reports/report/Reports/')
+                // .addToAll('icnLogin', 'http://100.100.3.229:9080/navigator/jaxrs/logon?userid={{username}}&password={{password}}')
+                // .addToAll('icnSearch', 'http://100.100.3.229:9080/navigator/bookmark.jsp?desktop=cms&repositoryId=EBLAICN&repositoryType=p8&docid=StoredSearch%2C%7BF4B4E428-6FC3-4BD3-BC91-AF46EC513DB1%7D%2C%7B76B326FF-8873-CB36-8524-6381F0800000%7D&mimeType=application%2Fx-filenet-searchtemplate&template_name=StoredSearch&version=current&vsId=%7BFF5CAE8D-D59D-CDF2-8488-6381F0800000%7D')
+                // .addToAll('icnAdd', 'http://100.100.3.229:9080/navigator/bookmark.jsp?desktop=cms&repositoryId=EBLAICN&repositoryType=p8&docid=EntryTemplate%2C%7BF4B4E428-6FC3-4BD3-BC91-AF46EC513DB1%7D%2C%7BFB387ADC-CD58-C442-87A2-6381EEA00000%7D&mimeType=application%2Fx-icn-documententrytemplate&template_name=EntryTemplate&version=current&vsId=%7B2248377B-9A84-C3F3-845F-6381EEA00000%7D')
+                // .addToAll('reports', 'http://100.100.3.228/Reports/report/Reports/')
+                .addToAllWithSegment('icnLogin', '/navigator/jaxrs/logon?userid={{username}}&password={{password}}', 'icn')
+                .addToAllWithSegment('icnSearch', '/navigator/bookmark.jsp?desktop=cms&repositoryId=EBLAICN&repositoryType=p8&docid=StoredSearch%2C%7BF4B4E428-6FC3-4BD3-BC91-AF46EC513DB1%7D%2C%7B76B326FF-8873-CB36-8524-6381F0800000%7D&mimeType=application%2Fx-filenet-searchtemplate&template_name=StoredSearch&version=current&vsId=%7BFF5CAE8D-D59D-CDF2-8488-6381F0800000%7D', 'icn')
+                .addToAllWithSegment('icnAdd', 'http://100.100.3.228/Reports/report/Reports/', 'icn')
+                .addToAllWithSegment('reports', '/Reports/report/Reports/', 'report')
                 // to make authenticate
                 .addToAllWithBase('login', 'auth/login')
                 // manage localizations

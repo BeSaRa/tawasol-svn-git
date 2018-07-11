@@ -8,6 +8,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this,
             environments = {},
+            segments = {},
             currentEnv = null;
 
         /**
@@ -211,6 +212,32 @@ module.exports = function (app) {
         self.setBaseUrl = function (env, value) {
             addUrl('BASE', value, env);
             return self;
+        };
+        /**
+         * @description add segment to use it later while create a new url.
+         * @param key
+         * @param value
+         */
+        self.addSegment = function (key, value) {
+            if (segments.hasOwnProperty(key))
+                console.error('segment already exists');
+
+            segments[key] = value;
+            return self;
+        };
+        /**
+         * @description add url with selected segment
+         * @param key
+         * @param value
+         * @param segmentKey
+         * @return {urlServiceService}
+         */
+        self.addToAllWithSegment = function (key, value, segmentKey) {
+            var segment = '';
+            if (segmentKey && segments.hasOwnProperty(segmentKey))
+                segment = segments[segmentKey];
+
+            return self.addToAll(key, (segment + value));
         };
         /**
          * return the current environment
