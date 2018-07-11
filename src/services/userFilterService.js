@@ -147,7 +147,7 @@ module.exports = function (app) {
                         filter: new UserFilter({
                             userId: employeeService.getEmployee().id,
                             ouId: employeeService.getEmployee().getOUID(),
-                            sortOptionId: self.userFilters.length + 1
+                            sortOptionId: generator.createNewID(self.userFilters, 'sortOptionId') //self.userFilters.length + 1
                         }),
                         editMode: false
                     }
@@ -189,7 +189,7 @@ module.exports = function (app) {
                         editMode: true
                     }
                 });
-        }
+        };
 
 
         /**

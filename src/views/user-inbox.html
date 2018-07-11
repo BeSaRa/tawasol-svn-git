@@ -100,10 +100,11 @@
                                         </work-item-inbox-directive>
                                     </md-content>
                                 </md-tab>
-                                <md-tab ng-repeat="filter in ctrl.userFilters | orderBy : 'sortOptionId'"
+                                <md-tab ng-repeat="filter in ctrl.userFilters"
                                         md-on-select="ctrl.selectFilter(filter, $index)">
+                                    <!--| orderBy : 'sortOptionId'-->
                                     <md-tab-label>
-                                        <div layout="row" flex layout-align="start center">
+                                        <div layout="row" layout-align="start center">
                                             <div class="tab-title">{{filter.getTranslatedName()}}</div>
                                             <div class="filter-absolute">
                                                 <md-menu-bar class="filter-menu">
