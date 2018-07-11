@@ -18,7 +18,7 @@ module.exports = function (app) {
             PRINT_BARCODE_ERROR_NO_BARCODE_ELEMENT: 3019,
             CANNOT_RECALL_OPENED_BOOK: 3031,
             CANNOT_RECALL_NON_EXISTING_BOOK: 2016,
-            CANNT_ADD_SUBSCRIPTION_SAME_USER_SAME_BOOK: 3032
+            CANNOT_ADD_SUBSCRIPTION_SAME_USER_SAME_BOOK: 3032
         };
 
         return {

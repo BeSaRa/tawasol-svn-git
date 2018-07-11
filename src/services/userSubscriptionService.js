@@ -8,7 +8,8 @@ module.exports = function (app) {
                                                      dialog,
                                                      cmsTemplate,
                                                      langService,
-                                                     toast) {
+                                                     toast,
+                                                     errorCode) {
         'ngInject';
         var self = this;
         self.serviceName = 'userSubscriptionService';
@@ -49,6 +50,11 @@ module.exports = function (app) {
                     generator.interceptSendInstance('UserSubscription', userSubscription))
                 .then(function (result) {
                     return generator.interceptReceivedInstance('UserSubscription', generator.generateInstance(result.data.rs, UserSubscription, self._sharedMethods));
+                })
+                .catch(function (error) {
+                    return errorCode.checkIf(error, 'CANNOT_ADD_SUBSCRIPTION_SAME_USER_SAME_BOOK', function () {
+                        dialog.errorMessage(langService.get('cannot_add_subscription_same_user_same_book'));
+                    });
                 });
         };
 
@@ -128,22 +134,22 @@ module.exports = function (app) {
                     .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event || null)
                     .then(function () {
                         return self.deleteBulkUserSubscriptions(userSubscriptions);
-                            /*.then(function (result) {
-                                var response = false;
-                                if (result.length === userSubscriptions.length) {
-                                    toast.error(langService.get("failed_delete_selected"));
-                                    response = false;
-                                } else if (result.length) {
-                                    generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (userSubscription) {
-                                        return userSubscription.docSubject;
-                                    }));
-                                    response = true;
-                                } else {
-                                    toast.success(langService.get("delete_success"));
-                                    response = true;
-                                }
-                                return response;
-                            });*/
+                        /*.then(function (result) {
+                            var response = false;
+                            if (result.length === userSubscriptions.length) {
+                                toast.error(langService.get("failed_delete_selected"));
+                                response = false;
+                            } else if (result.length) {
+                                generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (userSubscription) {
+                                    return userSubscription.docSubject;
+                                }));
+                                response = true;
+                            } else {
+                                toast.success(langService.get("delete_success"));
+                                response = true;
+                            }
+                            return response;
+                        });*/
                     });
             }
         };
