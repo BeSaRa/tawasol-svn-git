@@ -47,7 +47,11 @@ module.exports = function (app) {
             model.excludedUsersFromAudit = _.filter(applicationUserService.applicationUsers, function (applicationUser) {
                 return (excludedUsersFromAudit.indexOf(applicationUser.id) > -1);
             });
-            model.barcodeElements = (new BarcodeSetting(angular.fromJson(model.barcodeElements))).mapReceived();
+            try {
+                model.barcodeElements = (new BarcodeSetting(angular.fromJson(model.barcodeElements))).mapReceived();
+            } catch (e) {
+                model.barcodeElements = new BarcodeSetting();
+            }
             return model;
         });
 
