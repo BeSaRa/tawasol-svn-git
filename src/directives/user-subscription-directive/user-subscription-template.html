@@ -18,7 +18,7 @@
                                    class="notification-subject" ng-click="ctrl.previewDocument(item,$event)">{{item.docSubject}}</a>
 
                                 <a ng-click="ctrl.viewTrackingSheet(item, $event)"
-                                   ng-if="ctrl.checkPermission('trackingSheet')">
+                                   ng-if="ctrl.checkPermission(self.permissions.trackingSheet)">
                                     <md-icon md-svg-icon="file" tooltip="{{lang.view_tracking_sheet}}"
                                              tooltip-direction="{{lang.current === 'ar'? 'right': 'left'}}"></md-icon>
                                 </a>

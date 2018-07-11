@@ -100,6 +100,14 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Contains the permissions objects to be used for subscription actions.
+         * @type {{trackingSheet: string}}
+         */
+        self.permissions = {
+            trackingSheet: "VIEW_DOCUMENT'S_TRACKING_SHEET"
+        };
+
+        /**
          * @description Check the permission for given action
          * @param permissionKey
          * @param checkAtleastOne
