@@ -70,10 +70,10 @@ module.exports = function (app) {
          * @description Returns the lookups based on lookupName.
          * @param lookupName
          * Describes the category of the lookup to be returned.
-         * If the category is 'documentClass', it will return an array containing 'outgoing', 'incoming', 'internal'
+         * If the category is 'documentClass', return an array containing lookups for 'outgoing', 'incoming', 'internal'
          * @param isDocumentSecurity
          * Describes if the lookups returned will be used for the document security settings.
-         * It will return an array containing 'outgoing', 'incoming', 'internal', 'tawasolattachment'
+         * If the category is 'documentClass', return an array containing lookups for 'outgoing', 'incoming', 'internal', 'tawasolattachment'
          * @returns {Array}
          */
         self.returnLookups = function (lookupName, isDocumentSecurity) {

@@ -107,10 +107,10 @@ module.exports = function (app) {
          */
         self.checkPermission = function (permissionKey, checkAtleastOne) {
             var hasPermission = true;
-            if (typeof action.permissionKey === 'string') {
+            if (typeof permissionKey === 'string') {
                 hasPermission = employeeService.hasPermissionTo(permissionKey);
             }
-            else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+            else if (angular.isArray(permissionKey) && permissionKey.length) {
                 if (checkAtleastOne) {
                     hasPermission = employeeService.getEmployee().hasAnyPermissions(permissionKey);
                 }
