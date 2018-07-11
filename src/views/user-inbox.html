@@ -216,7 +216,7 @@
                                 </magazine-layout-directive>
                             </md-content>
                         </md-tab>
-                        <md-tab ng-repeat="filter in ctrl.userFilters | orderBy : 'sortOptionId'"
+                        <md-tab ng-repeat="filter in ctrl.userFilters"
                                 md-on-select="ctrl.selectFilter(filter, $index)">
                             <md-tab-label>
                                 <div layout="row" flex layout-align="start center">
