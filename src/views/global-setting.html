@@ -5,7 +5,8 @@
             <span ng-if="ctrl.globalSetting.id">{{ctrl.entity.getNames()}}</span>
         </div>
 
-        <ng-form class="white-bg" name="globalSettingForm" id="globalSettingForm" flex layout="column" autocomplete="off">
+        <ng-form class="white-bg" name="globalSettingForm" id="globalSettingForm" flex layout="column"
+                 autocomplete="off">
             <!--flex-->
             <md-tabs md-selected="0" class="content white-bg">
                 <!-- BASIC PROPERTIES TAB -->
@@ -178,9 +179,9 @@
 
                             </div>
                         </div>
-                        <br />
-                        <br />
-                        <br />
+                        <br/>
+                        <br/>
+                        <br/>
                     </md-content>
                 </md-tab>
                 <!-- APPEARANCE TAB -->
@@ -280,9 +281,9 @@
                                 </div>
                             </div>
                         </div>
-                        <br />
-                        <br />
-                        <br />
+                        <br/>
+                        <br/>
+                        <br/>
                     </md-content>
                 </md-tab>
                 <!-- AUDIT LOG TAB -->
@@ -342,9 +343,9 @@
                                 </table>
                             </div>
                         </div>
-                        <br />
-                        <br />
-                        <br />
+                        <br/>
+                        <br/>
+                        <br/>
                     </md-content>
                 </md-tab>
                 <!-- DOCUMENT SECURITY SETTINGS TAB -->
@@ -428,9 +429,9 @@
                                 </md-input-container>
                             </div>
                         </div>
-                        <br />
-                        <br />
-                        <br />
+                        <br/>
+                        <br/>
+                        <br/>
                     </md-content>
                 </md-tab>
                 <!-- WORKFLOW SECURITY TAB -->
@@ -478,9 +479,9 @@
                                 </md-input-container>
                             </div>
                         </div>
-                        <br />
-                        <br />
-                        <br />
+                        <br/>
+                        <br/>
+                        <br/>
                     </md-content>
                 </md-tab>
                 <!-- WORKFLOW NOTIFICATION TAB -->
@@ -585,9 +586,9 @@
                                 <md-input-container flex></md-input-container>
                             </div>
                         </div>
-                        <br />
-                        <br />
-                        <br />
+                        <br/>
+                        <br/>
+                        <br/>
                     </md-content>
                 </md-tab>
                 <!-- UPLOAD TAB -->
@@ -644,9 +645,9 @@
                                 </div>
                             </div>
                         </div>
-                        <br />
-                        <br />
-                        <br />
+                        <br/>
+                        <br/>
+                        <br/>
                     </md-content>
                 </md-tab>
                 <!-- BARCODE SETTINGS TAB -->
@@ -660,9 +661,9 @@
                                         global-setting="ctrl.globalSetting"></barcode-settings-directive>
                             </div>
                         </div>
-                        <br />
-                        <br />
-                        <br />
+                        <br/>
+                        <br/>
+                        <br/>
                     </md-content>
                 </md-tab>
                 <!-- WATERMARK SETTINGS TAB-->
@@ -670,7 +671,94 @@
                         md-on-select="ctrl.setCurrentTab('watermarkSettings')"
                         ng-disabled="ctrl.globalSetting.id === null || ctrl.globalSetting.id===0">
                     <md-content scroll-directive class="white-bg">
-                        <div id="pointer-track" ng-click="ctrl.getWatermarkPosition($event)"></div>
+                        <div layout="row" flex class="p20">
+                            <div flex layout="column">
+                                <div flex layout="row">
+                                    <!-- Show Watermark -->
+                                    <md-switch flex ng-model="ctrl.documentSecurity.status"
+                                               aria-label="{{lang.apply_document_protection}}">
+                                        <span>{{lang.apply_document_protection}} : </span>{{
+                                        ctrl.documentSecurity.getTranslatedYesNo('status')}}
+                                    </md-switch>
+                                    <!-- Document Types to protect -->
+                                    <md-input-container flex>
+                                        <label>{{lang.document_types}}</label>
+                                        <md-select ng-model="ctrl.selectedDocSecurityDocumentType" multiple>
+                                            <md-option
+                                                    ng-repeat="docType in ctrl.availableDocTypesToProtect track by $index"
+                                                    ng-value="docType.lookupKey">
+                                                {{docType.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <md-tabs flex md-selected="0" class="content white-bg"
+                                         ng-if="ctrl.selectedDocSecurityDocumentType.length">
+                                    <!-- Outgoing -->
+                                    <md-tab label="{{lang.outgoing}}" ng-if="ctrl.showWatermarkTab('outgoing')"
+                                            ng-disabled="ctrl.documentSecurityTabDisabled('outgoing')"
+                                            md-on-select="ctrl.setCurrentWaterMarkTab('outgoing')">
+                                        <md-content scroll-directive class="white-bg">
+                                            <div layout="column">
+                                                <div layout="row" flex class="p20">
+                                                    Outgoing
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                        </md-content>
+                                    </md-tab>
+                                    <!-- Incoming -->
+                                    <md-tab label="{{lang.incoming}}" ng-if="ctrl.showWatermarkTab('incoming')"
+                                            ng-disabled="ctrl.documentSecurityTabDisabled('incoming')"
+                                            md-on-select="ctrl.setCurrentWaterMarkTab('incoming')">
+                                        <md-content scroll-directive class="white-bg">
+                                            <div layout="column">
+                                                <div layout="row" flex class="p20">
+                                                    Incoming
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                        </md-content>
+                                    </md-tab>
+                                    <!-- Internal -->
+                                    <md-tab label="{{lang.internal}}" ng-if="ctrl.showWatermarkTab('internal')"
+                                            ng-disabled="ctrl.documentSecurityTabDisabled('internal')"
+                                            md-on-select="ctrl.setCurrentWaterMarkTab('internal')">
+                                        <md-content scroll-directive class="white-bg">
+                                            <div layout="column">
+                                                <div layout="row" flex class="p20">
+                                                    Internal
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                        </md-content>
+                                    </md-tab>
+                                    <!-- Attachments -->
+                                    <md-tab label="{{lang.attachments}}"
+                                            ng-if="ctrl.showWatermarkTab('tawasolattachments')"
+                                            ng-disabled="ctrl.documentSecurityTabDisabled('tawasolattachments')"
+                                            md-on-select="ctrl.setCurrentWatermarkTab('tawasolattachments')">
+                                        <md-content scroll-directive class="white-bg">
+                                            <div layout="column">
+                                                <div layout="row" flex class="p20">
+                                                    Attachments
+                                                </div>
+                                            </div>
+                                            <br/>
+                                            <br/>
+                                            <br/>
+                                        </md-content>
+                                    </md-tab>
+                                </md-tabs>
+                            </div>
+                            <div flex id="pointer-track" ng-click="ctrl.getWatermarkPosition($event)"></div>
+                        </div>
                     </md-content>
                 </md-tab>
             </md-tabs>

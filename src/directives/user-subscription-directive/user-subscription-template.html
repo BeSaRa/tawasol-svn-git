@@ -14,11 +14,17 @@
                     <li ng-repeat="item in ctrl.service.userSubscriptions track by $index" layout="row">
                         <div class="task-body" flex layout="column">
                             <div class="task-header" layout="row">
-                                <a href="#" md-truncate flex ng-class="{'unread': !item.isOpen}"
-                                   class="notification-subject" ng-click="ctrl.viewDocument(item,$event)">{{item.docSubject}}</a>
+                                <a href="#" md-truncate flex
+                                   class="notification-subject" ng-click="ctrl.previewDocument(item,$event)">{{item.docSubject}}</a>
+
+                                <a ng-click="ctrl.viewTrackingSheet(item, $event)"
+                                   ng-if="ctrl.checkPermission('trackingSheet')">
+                                    <md-icon md-svg-icon="file" tooltip="{{lang.view_tracking_sheet}}"
+                                             tooltip-direction="{{lang.current === 'ar'? 'right': 'left'}}"></md-icon>
+                                </a>
                             </div>
                             <div layout="column">
-                                <div class="tasks-date-text" >{{ctrl.getSubscriptionEventType(item.triggerId)}}</div>
+                                <div class="tasks-date-text">{{ctrl.getSubscriptionEventType(item)}}</div>
                                 <!--<div class="tasks-date-text" >{{item.docFullSerial}}</div>-->
                             </div>
                         </div>
@@ -28,12 +34,3 @@
         </md-menu-content>
     </md-menu>
 </md-menu-bar>
-<!--
-<div layout="column" class="notify">
-    <md-button ng-click="ctrl.showUserSubscriptions($event)" class="md-icon-button"
-               tooltip="{{$root.lang.user_subscriptions}}" fixed-position="true">
-        <md-icon md-svg-icon="bell-plus"></md-icon>
-    </md-button>
-    <span ng-click="ctrl.showUserSubscriptions($event)"
-          class="counter blue">{{ctrl.service.count}}</span>
-</div>-->

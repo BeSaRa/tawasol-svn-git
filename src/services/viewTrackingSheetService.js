@@ -178,6 +178,9 @@ module.exports = function (app) {
                  * @description open popup for tracking sheet
                  * @param document
                  * @param params
+                 * Contains an array of parameters.
+                 * First parameter is type of tracking sheet.
+                 * Second parameter is type of popup representation(grid/tabs)
                  * @param $event
                  * @returns {promise}
                  */
@@ -199,86 +202,86 @@ module.exports = function (app) {
                                 'ngInject';
                                 return (heading === 'view_tracking_sheet_work_flow_history' || gridType === 'tabs')
                                     ? self.loadWorkflowHistory(document)
-                                    .then(function (result) {
-                                        return result;
-                                    }) : [];
+                                        .then(function (result) {
+                                            return result;
+                                        }) : [];
                             },
                             linkedDocumentsHistoryRecords: function () {
                                 'ngInject';
                                 return (heading === 'view_tracking_sheet_linked_documents_history' || gridType === 'tabs')
                                     ? self.loadLinkedDocumentsHistory(document)
-                                    .then(function (result) {
-                                        return result;
-                                    }) : [];
+                                        .then(function (result) {
+                                            return result;
+                                        }) : [];
                             },
                             attachmentsHistoryRecords: function () {
                                 'ngInject';
                                 return (heading === 'view_tracking_sheet_attachments_history' || gridType === 'tabs')
                                     ? self.loadAttachmentsHistory(document)
-                                    .then(function (result) {
-                                        return result;
-                                    }) : [];
+                                        .then(function (result) {
+                                            return result;
+                                        }) : [];
                             },
                             mergedLinkedDocumentHistoryRecords: function () {
                                 'ngInject';
                                 return (heading === 'view_tracking_sheet_merged_linked_document_history' || gridType === 'tabs')
                                     ? self.loadMergedLinkedDocumentHistory(document)
-                                    .then(function (result) {
-                                        return result;
-                                    }) : [];
+                                        .then(function (result) {
+                                            return result;
+                                        }) : [];
                             },
                             linkedEntitiesHistoryRecords: function () {
                                 'ngInject';
                                 return (heading === 'view_tracking_sheet_linked_entities_history' || gridType === 'tabs')
                                     ? self.loadLinkedEntitiesHistory(document)
-                                    .then(function (result) {
-                                        return result;
-                                    }) : [];
+                                        .then(function (result) {
+                                            return result;
+                                        }) : [];
                             },
                             destinationHistoryRecords: function () {
                                 'ngInject';
                                 return (heading === 'view_tracking_sheet_destination_history' || gridType === 'tabs')
                                     ? self.loadDestinationHistory(document)
-                                    .then(function (result) {
-                                        return result;
-                                    }) : [];
+                                        .then(function (result) {
+                                            return result;
+                                        }) : [];
                             },
                             contentViewHistoryRecords: function () {
                                 'ngInject';
                                 return (heading === 'view_tracking_sheet_content_view_history' || gridType === 'tabs')
                                     ? self.loadContentViewHistory(document)
-                                    .then(function (result) {
-                                        return result;
-                                    }).catch(function (error) {
-                                        return [];
-                                    }) : [];
+                                        .then(function (result) {
+                                            return result;
+                                        }).catch(function (error) {
+                                            return [];
+                                        }) : [];
                             },
                             smsLogRecords: function () {
                                 'ngInject';
                                 return (heading === 'view_tracking_sheet_sms_logs' || gridType === 'tabs')
                                     ? self.loadSmsLogs(document)
-                                    .then(function (result) {
-                                        return result;
-                                    }) : [];
+                                        .then(function (result) {
+                                            return result;
+                                        }) : [];
                             },
                             outgoingDeliveryReportRecords: function () {
                                 'ngInject';
                                 var info = document.getInfo();
                                 return (heading === 'view_tracking_sheet_outgoing_delivery_reports' || (gridType === 'tabs' && info.documentClass === 'outgoing'))
                                     ? self.loadOutgoingDeliveryReports(document)
-                                    .then(function (result) {
-                                        return result;
-                                    }) : [];
+                                        .then(function (result) {
+                                            return result;
+                                        }) : [];
                             },
                             fullHistoryRecords: function () {
                                 'ngInject';
                                 return (heading === 'view_tracking_sheet_full_history' || gridType === 'tabs')
                                     ? self.loadFullHistory(document)
-                                    .then(function (result) {
-                                        return result;
-                                    }).catch(function (error) {
-                                        return [];
-                                    }) : [];
+                                        .then(function (result) {
+                                            return result;
+                                        }).catch(function (error) {
+                                            return [];
+                                        }) : [];
                             },
                             /*docUpdateHistoryRecords: function () {
                              'ngInject';
@@ -365,10 +368,10 @@ module.exports = function (app) {
                 return document.hasOwnProperty('vsId')
                     ? document.vsId
                     : (document.hasOwnProperty('documentVSID')
-                    ? document.documentVSID
-                    : (document.hasOwnProperty('generalStepElm')
-                    ? document.generalStepElm.vsId
-                    : document));
+                        ? document.documentVSID
+                        : (document.hasOwnProperty('generalStepElm')
+                            ? document.generalStepElm.vsId
+                            : document));
             };
 
             /**
@@ -845,7 +848,7 @@ module.exports = function (app) {
                 }
                 else {
                     $http.post(urlService.exportToExcel, exportData)
-                        //{headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
+                    //{headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
                         .then(function (result) {
                             if (!result.data.rs)
                                 toast.error(langService.get('error_export_to_excel'));
@@ -871,7 +874,7 @@ module.exports = function (app) {
                 }
                 else {
                     return $http.post(urlService.exportToPdf, exportData)
-                        //{headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
+                    //{headerText: exportData.headerText, headerNames: exportData.headerNames, data: exportData.data})
                         .then(function (result) {
                             if (!result.data.rs)
                                 toast.error(langService.get('error_print'));

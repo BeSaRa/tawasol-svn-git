@@ -64,11 +64,24 @@ module.exports = function (app) {
         };
 
         self.defaultDocumentClasses = ['outgoing', 'incoming', 'internal'];
+        self.defaultDocumentClassesDocumentSecurity = ['outgoing', 'incoming', 'internal', 'tawasolattachment'];
 
-        self.returnLookups = function (lookupName) {
+        /**
+         * @description Returns the lookups based on lookupName.
+         * @param lookupName
+         * Describes the category of the lookup to be returned.
+         * If the category is 'documentClass', it will return an array containing 'outgoing', 'incoming', 'internal'
+         * @param isDocumentSecurity
+         * Describes if the lookups returned will be used for the document security settings.
+         * It will return an array containing 'outgoing', 'incoming', 'internal', 'tawasolattachment'
+         * @returns {Array}
+         */
+        self.returnLookups = function (lookupName, isDocumentSecurity) {
             var lookups = self.lookups.hasOwnProperty(lookupName) ? self.lookups[lookupName] : [];
             if (lookups.length && lookupName === self.documentClass) {
                 lookups = _.filter(lookups, function (lookup) {
+                    if(isDocumentSecurity)
+                        return self.defaultDocumentClassesDocumentSecurity.indexOf(lookup.lookupStrKey.toLowerCase()) > -1;
                     return self.defaultDocumentClasses.indexOf(lookup.lookupStrKey.toLowerCase()) > -1;
                 });
             }

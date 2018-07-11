@@ -93,9 +93,8 @@ module.exports = function (app) {
     require('./manageCorrespondenceSitesSearchPopCtrl')(app);
     require('./manageDocumentEntitiesSearchPopCtrl')(app);
 	require('./viewCorrespondenceG2GPopCtrl')(app);
-    require('./showUserSubscriptionsPopCtrl')(app);
     require('./viewDeliveryReportPopCtrl')(app);
-    require('./subscriptionEventTypePopCtrl')(app);
+    require('./subscriptionPopCtrl')(app);
     require('./manageGridCorrespondenceSitesPopCtrl')(app);
     require('./manageSubscriptionsPopCtrl')(app);
 };

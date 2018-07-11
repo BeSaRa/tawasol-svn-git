@@ -149,4 +149,5 @@ module.exports = function (app) {
     require('./UserSubscription')(app);
     require('./LookupG2G')(app);
     require('./Report')(app);
+    require('./DocumentSecurity')(app);
 };

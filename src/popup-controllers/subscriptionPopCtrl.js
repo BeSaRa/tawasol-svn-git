@@ -1,9 +1,9 @@
 module.exports = function (app) {
-    app.controller('subscriptionEventTypePopCtrl', function (dialog,
+    app.controller('subscriptionPopCtrl', function (dialog,
                                                              eventTypes) {
         'ngInject';
         var self = this;
-        self.controllerName = 'subscriptionEventTypePopCtrl';
+        self.controllerName = 'subscriptionPopCtrl';
         //self.eventType = '';
         self.eventTypes = eventTypes;
         self.selectedEventType = null;

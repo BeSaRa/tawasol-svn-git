@@ -17,7 +17,8 @@ module.exports = function (app) {
                                                   generator,
                                                   contextHelpService,
                                                   rootEntity,
-                                                  dialog) {
+                                                  dialog,
+                                                  DocumentSecurity) {
         'ngInject';
         var self = this;
 
@@ -55,7 +56,10 @@ module.exports = function (app) {
             }
         ];
 
-
+        /**
+         * @description Contains the list of tabs that can be shown
+         * @type {string[]}
+         */
         self.tabsToShow = [
             'basic',
             'appearance',
@@ -323,14 +327,59 @@ module.exports = function (app) {
             reader.readAsArrayBuffer(file);
         };
 
-        self.getWatermarkPosition = function($event){
+
+        self.watermarkTabsToShow = [
+            {key: 'outgoing', value: 0},
+            {key: 'incoming', value: 1},
+            {key: 'internal', value: 2},
+            {key: 'tawasolattachments', value: 4}
+        ];
+        self.watermarkTabsToShowKeys = _.map(self.watermarkTabsToShow, 'value');
+
+        self.showWatermarkTab = function (tabName) {
+            //return self.watermarkTabsToShow.indexOf(tabName) > -1;
+            return !!(_.find(self.watermarkTabsToShow, function (tab) {
+                return tab.key === tabName;
+            }));
+        };
+
+        /**
+         * @description Contains the selected tab name
+         * @type {string}
+         */
+        self.selectedWatermarkTabName = "outgoing";
+
+        /**
+         * @description Set the current tab name
+         * @param tabName
+         */
+        self.setCurrentWatermarkTab = function (tabName) {
+            self.selectedWatermarkTabName = tabName;
+        };
+
+        self.availableDocTypesToProtect = lookupService.returnLookups(lookupService.documentClass, true);
+        self.documentSecurity = new DocumentSecurity();
+
+
+        self.selectedDocSecurityDocumentType = [];
+        self.documentSecurityTabDisabled = function (tabName) {
+            var tabValueToCheck = _.find(self.watermarkTabsToShow, function (tab) {
+                return tab.key === tabName;
+            }).value;
+            return self.selectedDocSecurityDocumentType.length
+                ? !(self.selectedDocSecurityDocumentType.indexOf(tabValueToCheck) > -1)
+                : true;
+        };
+
+
+        self.getWatermarkPosition = function ($event) {
             var totalPageHeight = 842;
             var pointerTrackArea = angular.element('#pointer-track');
             var pointerTrackOffset = $(pointerTrackArea).offset();
 
             var positionLeft = $event.pageX - pointerTrackOffset.left;
-            var positionBottom = totalPageHeight - ($event.pageY - pointerTrackOffset.top)
-            console.log(positionLeft, positionBottom);
+            var positionBottom = totalPageHeight - ($event.pageY - pointerTrackOffset.top);
+            console.log('position from bottom left: ', positionLeft, positionBottom);
         }
 
     });

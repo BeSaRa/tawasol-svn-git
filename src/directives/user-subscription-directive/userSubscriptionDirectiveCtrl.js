@@ -1,15 +1,16 @@
 module.exports = function (app) {
     app.controller('userSubscriptionDirectiveCtrl', function (lookupService,
-                                                              $q,
                                                               langService,
-                                                              toast,
-                                                              cmsTemplate,
-                                                              $sce,
                                                               userSubscriptionService,
                                                               dialog,
                                                               employeeService,
                                                               correspondenceService,
-                                                              generator) {
+                                                              generator,
+                                                              viewTrackingSheetService,
+                                                              Outgoing,
+                                                              Incoming,
+                                                              Internal,
+                                                              General) {
         'ngInject';
         var self = this;
 
@@ -17,7 +18,19 @@ module.exports = function (app) {
         self.service = userSubscriptionService;
         self.progress = null;
 
+        self.models = {
+            outgoing: Outgoing,
+            internal: Internal,
+            incoming: Incoming,
+            general: General
+        };
 
+        userSubscriptionService.getUserSubscriptions();
+
+        /**
+         * @description Opens the menu for subscriptions
+         * @param $mdMenu
+         */
         self.openSubscriptionMenu = function ($mdMenu) {
             if (userSubscriptionService.userSubscriptions.length)
                 $mdMenu.open();
@@ -25,18 +38,12 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("no_user_subscriptions"));
         };
 
-        self.getSubscriptionEventType = function (selected) {
-            var lang = langService.getCurrentLang();
-            if (lang === 'en') {
-                lang = 'En';
-            }
-
-            if (lang === 'ar') {
-                lang = "Ar";
-            }
+        self.getSubscriptionEventType = function (subscription) {
+            subscription = subscription.hasOwnProperty('triggerId') ? subscription.triggerId : subscription;
+            var lang = generator.ucFirst(langService.current);
 
             return lookupService.returnLookups(lookupService.documentSubscription).filter(function (item) {
-                return item.lookupKey === selected;
+                return item.lookupKey === subscription;
             })[0]['default' + lang + 'Name'];
         };
 
@@ -58,7 +65,6 @@ module.exports = function (app) {
             }, self.gridActions, false, true);
         };
 
-
         /**
          * @description View document
          * @param item
@@ -73,40 +79,46 @@ module.exports = function (app) {
             console.log('view document');
         };
 
+        function _getModelAndInitialize(documentClass, vsId) {
+            var model = new self.models[documentClass.toLowerCase()]();
+            if (vsId)
+                model.vsId = vsId.hasOwnProperty('vsId') ? vsId.vsId : vsId;
+            return model;
+        }
 
         /**
-         * @description open popup to show User Subscriptions, if not available then show alert
+         * @description View Tracking sheet
+         * @param record
          * @param $event
          */
-        self.showUserSubscriptions = function ($event) {
-            if (self.service.userSubscriptions.length === 0) {
-                dialog.alertMessage(langService.get("no_user_subscriptions"));
-                return;
+        self.viewTrackingSheet = function (record, $event) {
+            var document = _getModelAndInitialize(generator.getDocumentClassName(record.docClassId), record);
+            debugger;
+            viewTrackingSheetService
+                .controllerMethod
+                .viewTrackingSheetPopup(document, ['view_tracking_sheet', 'tabs'], $event)
+        };
+
+        /**
+         * @description Check the permission for given action
+         * @param permissionKey
+         * @param checkAtleastOne
+         * @returns {boolean|*}
+         */
+        self.checkPermission = function (permissionKey, checkAtleastOne) {
+            var hasPermission = true;
+            if (typeof action.permissionKey === 'string') {
+                hasPermission = employeeService.hasPermissionTo(permissionKey);
             }
-
-            dialog
-                .showDialog({
-                    targetEvent: $event,
-                    template: cmsTemplate.getPopup('show-user-subscription'),
-                    controller: 'showUserSubscriptionsPopCtrl',
-                    controllerAs: 'ctrl',
-                    resolve: {
-                        userSubscriptions: function (userSubscriptionService) {
-                            'ngInject';
-                            return userSubscriptionService.getUserSubscriptions().then(function (result) {
-                                self.countUserSubscriptions = result.length;
-                                return result;
-                            });
-                        }
-                    }
-                });
-        };
-
-        self.getUserSubscriptionsCount = function () {
-            userSubscriptionService.getUserSubscriptions();
-        };
-
-        self.getUserSubscriptionsCount();
-
+            else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                if (checkAtleastOne) {
+                    hasPermission = employeeService.getEmployee().hasAnyPermissions(permissionKey);
+                }
+                else {
+                    hasPermission = employeeService.getEmployee().hasThesePermissions(permissionKey);
+                }
+            }
+            return hasPermission;
+        }
     });
 };
