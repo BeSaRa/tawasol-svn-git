@@ -99,8 +99,12 @@ module.exports = function (app) {
                 if (status) {
                     self.internal.docStatus = queueStatusService.getDocumentStatus(status);
                 }
-                promise = self.internal
-                    .saveDocumentWithContent(self.documentInformation);
+                angular.element('iframe#document-viewer').remove();
+                promise = $timeout(function () {
+                    return self.internal
+                        .saveDocumentWithContent(self.documentInformation);
+                }, 1000);
+
             } else {
                 promise = self.internal
                     .saveDocument(status)
@@ -436,7 +440,7 @@ module.exports = function (app) {
                 ou: self.employee.getOUID(),
                 addMethod: 0,
                 createdOn: new Date(),
-                docDate: generator.convertDateToString(new Date(),self.defaultDateFormat),
+                docDate: generator.convertDateToString(new Date(), self.defaultDateFormat),
                 registryOU: self.employee.getRegistryOUID(),
                 securityLevel: lookups.securityLevels[0]
             });

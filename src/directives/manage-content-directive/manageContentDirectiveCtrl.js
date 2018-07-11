@@ -95,6 +95,7 @@ module.exports = function (app) {
                             }
                             self.model = angular.copy(self.document);
                             self.model.classDescription = self.document.docClassName;
+
                             return officeWebAppService.getTemplateToPrepare(self.template, generator.interceptSendInstance(['Correspondence', 'Outgoing'], self.model))
                                 .then(function (result) {
                                     self.lastTemplate = result;
@@ -302,9 +303,10 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.lastTemplate = result;
                     self.docInfo = result;
+                    self.documentInformation = self.lastTemplate;
                     self.signaturesCount = self.template.signaturesCount;
                     self.simpleViewUrl = $sce.trustAsResourceUrl(result.viewURL);
-
+                    self.templateOrFileName = self.document.getTranslatedName();
                     return self.simpleViewUrl;
                 });
         }

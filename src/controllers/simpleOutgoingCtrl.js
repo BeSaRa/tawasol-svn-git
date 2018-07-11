@@ -1,39 +1,39 @@
 module.exports = function (app) {
     app.controller('simpleOutgoingCtrl', function (Outgoing,
-                                             $state,
-                                             $stateParams,
-                                             outgoingService,
-                                             queueStatusService,
-                                             organizationService,
-                                             // documentTypes,
-                                             officeWebAppService,
-                                             counterService,
-                                             generator,
-                                             // documentFiles,
-                                             managerService,
-                                             documentFileService,
-                                             documentTypeService,
-                                             validationService,
-                                             toast,
-                                             employeeService,
-                                             $timeout,
-                                             // templates,
-                                             lookupService,
-                                             // demoOutgoing,
-                                             langService,
-                                             contextHelpService,
-                                             organizations,
-                                             cmsTemplate,
-                                             dialog,
-                                             distributionWorkflowService,
-                                             draftOutgoingService,
-                                             replyTo,
-                                             editAfterApproved,
-                                             editAfterExport,
-                                             centralArchives,
-                                             mailNotificationService,
-                                             lookups, // new injector for all lookups can user access
-                                             correspondenceService) {
+                                                   $state,
+                                                   $stateParams,
+                                                   outgoingService,
+                                                   queueStatusService,
+                                                   organizationService,
+                                                   // documentTypes,
+                                                   officeWebAppService,
+                                                   counterService,
+                                                   generator,
+                                                   // documentFiles,
+                                                   managerService,
+                                                   documentFileService,
+                                                   documentTypeService,
+                                                   validationService,
+                                                   toast,
+                                                   employeeService,
+                                                   $timeout,
+                                                   // templates,
+                                                   lookupService,
+                                                   // demoOutgoing,
+                                                   langService,
+                                                   contextHelpService,
+                                                   organizations,
+                                                   cmsTemplate,
+                                                   dialog,
+                                                   distributionWorkflowService,
+                                                   draftOutgoingService,
+                                                   replyTo,
+                                                   editAfterApproved,
+                                                   editAfterExport,
+                                                   centralArchives,
+                                                   mailNotificationService,
+                                                   lookups, // new injector for all lookups can user access
+                                                   correspondenceService) {
         'ngInject';
         var self = this;
         self.controllerName = 'simpleOutgoingCtrl';
@@ -148,8 +148,11 @@ module.exports = function (app) {
                 if (status) {
                     self.outgoing.docStatus = queueStatusService.getDocumentStatus(status);
                 }
-                promise = self.outgoing
-                    .saveDocumentWithContent(self.documentInformation);
+                angular.element('iframe#document-viewer').remove();
+                promise = $timeout(function () {
+                    return self.outgoing
+                        .saveDocumentWithContent(self.documentInformation);
+                }, 1000);
             } else {
                 promise = self.outgoing
                     .saveDocument(status)
@@ -458,7 +461,7 @@ module.exports = function (app) {
                 ou: self.employee.getOUID(),
                 addMethod: 0,
                 createdOn: new Date(),
-                docDate: generator.convertDateToString(new Date(),self.defaultDateFormat),
+                docDate: generator.convertDateToString(new Date(), self.defaultDateFormat),
                 registryOU: self.employee.getRegistryOUID(),
                 securityLevel: lookups.securityLevels[0],
                 sitesInfoTo: [],
