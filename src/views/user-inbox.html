@@ -100,7 +100,7 @@
                                         </work-item-inbox-directive>
                                     </md-content>
                                 </md-tab>
-                                <md-tab ng-repeat="filter in ctrl.userFilters"
+                                <md-tab ng-repeat="filter in ctrl.userFilters | orderBy : 'sortOptionId'"
                                         md-on-select="ctrl.selectFilter(filter, $index)">
                                     <md-tab-label>
                                         <div layout="row" flex layout-align="start center">
@@ -215,7 +215,7 @@
                                 </magazine-layout-directive>
                             </md-content>
                         </md-tab>
-                        <md-tab ng-repeat="filter in ctrl.userFilters"
+                        <md-tab ng-repeat="filter in ctrl.userFilters | orderBy : 'sortOptionId'"
                                 md-on-select="ctrl.selectFilter(filter, $index)">
                             <md-tab-label>
                                 <div layout="row" flex layout-align="start center">

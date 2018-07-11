@@ -223,3 +223,10 @@ Bugs:
 13682: Fix - Regression - user can't be able to Resend document from Returned Mail
 13684: Fix - regression - Launch New Distribution Workflow not working from Returned Mail inside document
 13939: Fix - IE Compatibility - Filters name appear corrupted in Magazine View.
+
+
+11-07-2018
+------------------
+13931 Fix - Inbox Filter - Filtration by Received date is between values get result for documents between from date and the day before to date
+13910 Fix - Inbox Filter - Add new filtration shouldn't accept the duplicated name
+13908 Fix - Inbox Filter - Item order display a random number when user add new filter

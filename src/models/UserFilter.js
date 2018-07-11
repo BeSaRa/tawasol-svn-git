@@ -117,8 +117,9 @@ module.exports = function (app) {
                     self.ui.key_6.value = generator.getTimeStampFromDate(self.ui.key_6.value, true);
                 // Received date between
                 else if (self.ui.key_11.value1 && self.ui.key_11.value2) {
+                    var dateTo = new Date(self.ui.key_11.value2);
                     self.ui.key_11.value1 = generator.getTimeStampFromDate(self.ui.key_11.value1, true);
-                    self.ui.key_11.value2 = generator.getTimeStampFromDate(self.ui.key_11.value2, true);
+                    self.ui.key_11.value2 = generator.getTimeStampFromDate(new Date(dateTo.getFullYear(), dateTo.getMonth(), dateTo.getDate(), 23, 59, 59, 999), true);
                 }
                 // Due date between
                 if (self.ui.key_10.value1 && self.ui.key_10.value2) {
@@ -144,7 +145,6 @@ module.exports = function (app) {
                 });
                 return this;
             };
-
 
             UserFilter.prototype.prepareReceivedUserFilter = function () {
                 var criteria = angular.fromJson(this.parsedExpression),

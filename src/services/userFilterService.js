@@ -147,7 +147,7 @@ module.exports = function (app) {
                         filter: new UserFilter({
                             userId: employeeService.getEmployee().id,
                             ouId: employeeService.getEmployee().getOUID(),
-                            sortOptionId: generator.createNewID(self.userFilters, 'sortOptionId')
+                            sortOptionId: self.userFilters.length + 1
                         }),
                         editMode: false
                     }
@@ -190,6 +190,29 @@ module.exports = function (app) {
                     }
                 });
         }
+
+
+        /**
+         * @description Check if record with same name exists. Returns true if exists
+         * @param userFilter
+         * @param editMode
+         * @returns {boolean}
+         */
+        self.checkDuplicateUserFilter = function (userFilter, editMode) {
+            var userFiltersToFilter = self.userFilters;
+            if (editMode) {
+                userFiltersToFilter = _.filter(userFiltersToFilter, function (userFilterToFilter) {
+                    return userFilterToFilter.id !== userFilter.id;
+                });
+            }
+            return _.some(_.map(userFiltersToFilter, function (existingUserFilter) {
+                return existingUserFilter.arName.toLowerCase() === userFilter.arName.toLowerCase()
+                    || existingUserFilter.enName.toLowerCase() === userFilter.enName.toLowerCase();
+                // || existingUserFilter.lookupStrKey.toLowerCase() === userFilter.lookupStrKey.toLowerCase();
+            }), function (matchingResult) {
+                return matchingResult === true;
+            });
+        };
 
     });
 };

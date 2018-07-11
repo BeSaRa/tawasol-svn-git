@@ -7,7 +7,10 @@ module.exports = function (app) {
                                               langService,
                                               LangWatcher,
                                               lookupService,
-                                              editMode) {
+                                              editMode,
+                                              toast,
+                                              validationService,
+                                              userFilterService) {
         'ngInject';
         var self = this;
         self.controllerName = 'filterPopCtrl';
@@ -27,12 +30,23 @@ module.exports = function (app) {
          * @param $event
          */
         self.saveUserFilterFromCtrl = function ($event) {
-            self.filter.saveUserFilter().then(function (filter) {
-                self.filter = angular.copy(self.filter);
-                dialog.hide(filter);
-            })
+            validationService
+                .createValidation("Save_User_Filter")
+                .addStep('check_duplicate', true, userFilterService.checkDuplicateUserFilter, [self.filter, self.editMode], function (result) {
+                    return !result;
+                }, true)
+                .notifyFailure(function () {
+                    toast.error(langService.get('name_duplication_message'));
+                })
+                .validate()
+                .then(function () {
+                    self.filter.saveUserFilter().then(function (filter) {
+                        // debugger;
+                        self.filter = angular.copy(self.filter);
+                        dialog.hide(filter);
+                    });
+                });
         };
-
 
         self.receivedDateFilterTypes = [
             {
@@ -52,7 +66,6 @@ module.exports = function (app) {
                 optionValue: 11
             }
         ];
-
 
         /**
          * @description Resets the received dates on changing the received date type
