@@ -79,10 +79,12 @@ module.exports = function (app) {
             console.log('view document');
         };
 
-        function _getModelAndInitialize(documentClass, vsId) {
+        function _getModelAndInitialize(documentClass, record) {
             var model = new self.models[documentClass.toLowerCase()]();
-            if (vsId)
-                model.vsId = vsId.hasOwnProperty('vsId') ? vsId.vsId : vsId;
+            if (record) {
+                model.vsId = record.vsId;
+                model.docSubject = record.docSubject
+            }
             return model;
         }
 
@@ -93,7 +95,6 @@ module.exports = function (app) {
          */
         self.viewTrackingSheet = function (record, $event) {
             var document = _getModelAndInitialize(generator.getDocumentClassName(record.docClassId), record);
-            debugger;
             viewTrackingSheetService
                 .controllerMethod
                 .viewTrackingSheetPopup(document, ['view_tracking_sheet', 'tabs'], $event)
