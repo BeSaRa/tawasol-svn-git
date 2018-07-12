@@ -81,6 +81,27 @@ module.exports = function (app) {
             $event.stopPropagation();
         };
 
+        /**
+         * @description Handle the change of paper/electronic switch
+         * @returns {*}
+         */
+        self.checkChangeInternalType = function ($event) {
+            $event.preventDefault();
+            if (self.documentInformation || self.internal.contentFile) {
+                return dialog
+                    .confirmMessage(langService.get('content_will_remove_confirm'))
+                    .then(function () {
+                        self.documentInformation = null;
+                        self.internal.contentFile = null;
+                    })
+                    .catch(function () {
+                        //self.internal.addMethod = !self.internal.addMethod;
+                        self.internal.addMethod = 1 - self.internal.addMethod;
+                    })
+            }
+            return self.documentInformation = null;
+        };
+
         self.requestCompleted = false;
         self.saveCorrespondence = function (status) {
             if (status && !self.documentInformation) {

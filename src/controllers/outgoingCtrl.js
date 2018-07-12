@@ -115,19 +115,26 @@ module.exports = function (app) {
             }
         };
 
+        /**
+         * @description Handle the change of paper/electronic switch
+         * @returns {*}
+         */
         self.checkChangeOutgoingType = function () {
-            self.checkCentralArchive();
+            // self.checkCentralArchive();
             if (self.documentInformation || self.outgoing.contentFile) {
                 return dialog
                     .confirmMessage(langService.get('content_will_remove_confirm'))
                     .then(function () {
+                        self.checkCentralArchive();
                         self.documentInformation = null;
                         self.outgoing.contentFile = null;
                     })
                     .catch(function () {
-                        self.outgoing.addMethod = !self.outgoing.addMethod;
+                        //self.outgoing.addMethod = !self.outgoing.addMethod;
+                        self.outgoing.addMethod = 1 - self.outgoing.addMethod;
                     })
             }
+            self.checkCentralArchive();
             return self.documentInformation = null;
         };
 
