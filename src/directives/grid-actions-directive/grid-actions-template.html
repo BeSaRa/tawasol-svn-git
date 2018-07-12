@@ -7,7 +7,7 @@
     </md-button>
     <md-menu-content class="grid-action-menu" width="2" layout="row">
         <md-menu-item
-                ng-repeat="gridAction in ctrl.filterShortcuts('horizontal') track by $index"
+                ng-repeat="gridAction in ctrl.filterShortcuts() track by $index"
                 ng-if="ctrl.isShowAction(gridAction)">
             <md-button aria-label="{{ctrl.getActionText(gridAction, true)}}"
                        tooltip="{{ctrl.getActionText(gridAction, true)}}"
@@ -36,7 +36,7 @@
         </md-button>
         <md-menu-content class="grid-action-menu" width="4" layout="column">
             <md-menu-item
-                          ng-repeat="gridAction in ctrl.filterShortcuts('vertical') track by $index"
+                          ng-repeat="gridAction in ctrl.filterShortcuts() track by $index"
                           ng-if="ctrl.isShowAction(gridAction)"
                           ng-class="{'gm-separator-horizontal':gridAction.type==='separator'}">
                 <!-- Main Menu Button -->

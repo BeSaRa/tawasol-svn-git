@@ -890,14 +890,14 @@ module.exports = function (app) {
          * @param checkHasAnyPermission
          * @returns {boolean}
          */
-        self.checkToShowAction = function (action, model, checkHasAnyPermission) {
+        self.checkToShowAction = function (action, model) {
             var hasPermission = true;
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
                     hasPermission = employeeService.hasPermissionTo(action.permissionKey);
                 }
                 else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
-                    if (checkHasAnyPermission) {
+                    if (action.hasOwnProperty('checkAnyPermission')) {
                         hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
                     }
                     else {
