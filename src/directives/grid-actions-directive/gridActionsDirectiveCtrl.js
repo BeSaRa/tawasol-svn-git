@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('gridActionsDirectiveCtrl', function ($q,
                                                          $scope,
                                                          langService,
+                                                         $timeout,
                                                          _,
                                                          Lookup,
                                                          lookupService,
@@ -19,6 +20,10 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'gridActionsDirectiveCtrl';
         self.langService = langService;
+
+        $timeout(function () {
+            self.menuDirection = self.menuDirection || 'horizontal';
+        });
 
         self.isShowAction = function (action) {
             if (action.hasOwnProperty('checkAnyPermission')) {
