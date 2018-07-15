@@ -24,6 +24,7 @@ module.exports = function (app) {
         $timeout(function () {
             self.menuDirection = self.menuDirection || 'horizontal';
             self[self.menuDirection + 'Actions'] = self.filterShortcuts();
+            // self.filterShortcuts();
         });
 
         /**
@@ -91,7 +92,7 @@ module.exports = function (app) {
                         * If action has property (shortcut) and it has value = true
                         * Else if action don't has property (shortcut) or has property (shortcut) but value = false and has subMenu property with array value
                         * */
-                        if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
+                        if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut && self.isShowAction(mainAction)) {
                             shortcutActions.push(mainAction);
                         }
                         else if (
@@ -103,8 +104,9 @@ module.exports = function (app) {
 
                                 /*If sub menu has separator, show it in vertical only. not in horizontal*/
                                 if (self.menuDirection === 'vertical') {
-                                    if (subAction.type.toLowerCase() === "action" && !subAction.hide
+                                    if (subAction.type.toLowerCase() === "action"
                                         && (subAction.hasOwnProperty('shortcut') && subAction.shortcut)
+                                        && self.isShowAction(mainAction)
                                     ) {
                                         shortcutActions.push(mainAction);
                                     }
@@ -112,7 +114,8 @@ module.exports = function (app) {
                                         shortcutActions.push(mainAction);
                                 }
                                 else if (self.menuDirection === 'horizontal') {
-                                    if (subAction.type.toLowerCase() === "action" && !subAction.hide && subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
+                                    if (subAction.type.toLowerCase() === "action" && subAction.hasOwnProperty('shortcut') && subAction.shortcut
+                                        && self.isShowAction(mainAction)) {
                                         shortcutActions.push(subAction);
                                     }
                                 }
