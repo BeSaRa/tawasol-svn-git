@@ -9,7 +9,8 @@ module.exports = function (app) {
                                                                   langService,
                                                                   $scope,
                                                                   $timeout,
-                                                                  employeeService) {
+                                                                  employeeService,
+                                                                  toast) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageLinkedDocumentDirectiveCtrl';
@@ -96,6 +97,21 @@ module.exports = function (app) {
                         return vsId !== correspondence.getInfo().vsId;
                     });
                 });
+        };
+
+        /**
+         * @description delete bulk of linked documents
+         */
+        self.deleteBulkLinkedDocument = function ($event) {
+            dialog.confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event)
+                .then(function () {
+                    var vsIds = _.map(self.selectedCorrespondences, 'vsId');
+                    self.linkedDocs = _.filter(self.linkedDocs, function (linkedDocs) {
+                        return vsIds.indexOf(linkedDocs.vsId) === -1;
+                    });
+                    self.selectedCorrespondences = [];
+                    toast.success(langService.get('delete_success'));
+                })
         };
     });
 };

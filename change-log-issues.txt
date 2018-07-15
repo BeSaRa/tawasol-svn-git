@@ -231,3 +231,8 @@ Bugs:
 13910: Fix - Inbox Filter - Add new filtration shouldn't accept the duplicated name
 13908: Fix - Inbox Filter - Item order display a random number when user add new filter
 13907: Fix - Recall- Department inbox - Empty Pop-up appear when recall Received/Quick Received/Returned Document.
+
+
+15-07-2018
+-----------------
+13940 Fix - Regression - There is no action appear when user click on multi select check box from Manage Linked Documents

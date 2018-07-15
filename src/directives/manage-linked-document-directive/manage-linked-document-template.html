@@ -12,11 +12,17 @@
                        md-progress="ctrl.progress">
                     <thead md-head md-order="ctrl.grid.order">
                     <tr md-row>
-                        <th ng-if="ctrl.selectedCorrespondences.length" md-column colspan="7">
+                        <th ng-if="ctrl.selectedCorrespondences.length" md-column colspan="6">
                             <div layout="row" layout-align="start center">
                                 <span>{{ctrl.selectedCorrespondences.length}} {{lang.items_selected}} </span>
                                 <span flex></span>
                             </div>
+                        </th>
+                        <th ng-if="ctrl.selectedCorrespondences.length" md-column>
+                            <md-button class="md-icon-button"
+                                       ng-click="ctrl.deleteBulkLinkedDocument($event)">
+                                <md-icon md-svg-icon="delete"></md-icon>
+                            </md-button>
                         </th>
                         <th ng-if="!ctrl.selectedCorrespondences.length" md-column>
                             <!-- Indicators -->
