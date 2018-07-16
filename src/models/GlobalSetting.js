@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.factory('GlobalSetting', function (CMSModelInterceptor,
+                                           BarcodeSetting,
                                            langService) {
         'ngInject';
         return function GlobalSetting(model) {
@@ -46,7 +47,7 @@ module.exports = function (app) {
             self.escalationProcess = null;
             self.simpleCorsSiteSearch = false;
             //required
-            self.barcodeElements = "";
+            self.barcodeElements = new BarcodeSetting();
             self.deadlineReminderDays = null;
             //endregion
 

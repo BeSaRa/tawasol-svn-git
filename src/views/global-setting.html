@@ -652,8 +652,7 @@
                 </md-tab>
                 <!-- BARCODE SETTINGS TAB -->
                 <md-tab label="{{lang.barcode_settings}}" ng-if="ctrl.showTab('barcodeSettings')"
-                        md-on-select="ctrl.setCurrentTab('barcodeSettings')"
-                        ng-disabled="ctrl.globalSetting.id === null || ctrl.globalSetting.id===0">
+                        md-on-select="ctrl.setCurrentTab('barcodeSettings')">
                     <md-content scroll-directive class="white-bg">
                         <div layout="column">
                             <div layout="row" flex class="p20">
