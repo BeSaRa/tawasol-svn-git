@@ -155,7 +155,7 @@
                                                                   indicator-type="hasLinkedDocuments"
                                                                   record-type="correspondence"></grid-indicator-directive>
                                     </td>
-                                    <td md-cell>{{searchedInternalDocument.docFullSerial}}</td>
+                                    <td class="serial-td" md-cell>{{searchedInternalDocument.docFullSerial}}</td>
                                     <td md-cell class="td-data">
                                         <a href="" ng-if="searchedInternalDocument.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(searchedInternalDocument, $event)">{{searchedInternalDocument.docSubject}}</a>

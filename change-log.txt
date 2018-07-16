@@ -22,3 +22,6 @@ Fixed issues :
 12643: central archive - when teh archive user add a new paper outgoing or incoming the ou field should not be mandatory
 12310: Delegation - End date is expired still the Out of Office functionality toggle is enabled and functionality too.
 
+fixed Issues:
+13510: Can't search by Linked entity from General Search.
+13514: Regression - Serial number - The order of the serial number displayed inside the document in serial number key.

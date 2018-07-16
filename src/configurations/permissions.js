@@ -3,7 +3,7 @@ module.exports = function (app) {
         'ngInject';
 
         permissionServiceProvider
-            // group of system administration
+        // group of system administration
             .addMenuPermissionGroup('menu_item_system_administration')
             .addMenuPermissions('menu_item_global_settings', ['MANAGE_GLOBAL_SETTINGS'])
             .addMenuPermissions('menu_item_government_entities', ['MANAGE_GOVERNMENT_ENTITIES'])
@@ -108,6 +108,8 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_icn_archive_search', function () {
                 return true;
             })
+            .end()
+            .addMenuPermission('menu_item_g2g', 'GOVERNMENT_TO_GOVERNMENT');
 
 
     })

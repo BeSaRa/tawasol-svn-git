@@ -13,9 +13,14 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'manageEntitiesSearchDirectiveCtrl';
         LangWatcher($scope);
+
+        function _getDocumentClass(documentClass) {
+            return documentClass.toLowerCase() === 'correspondence' ? 'outgoing' : documentClass;
+        }
+
         $timeout(function () {
-            self.defaultEntityTypes = correspondenceService.getDefaultEntityTypesForDocumentClass(self.documentClass);
-            self.entityTypes = correspondenceService.getCustomEntityTypesForDocumentClass(self.documentClass);
+            self.defaultEntityTypes = correspondenceService.getDefaultEntityTypesForDocumentClass(_getDocumentClass(self.documentClass));
+            self.entityTypes = correspondenceService.getCustomEntityTypesForDocumentClass(_getDocumentClass(self.documentClass));
             if (self.selectedEntityType) {
                 if (self.linkedEntity) {
                     self.editDocumentEntity(self.linkedEntity);
