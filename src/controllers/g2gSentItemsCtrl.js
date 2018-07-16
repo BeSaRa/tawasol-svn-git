@@ -217,7 +217,7 @@ module.exports = function (app) {
                 icon: 'check',
                 text: 'grid_action_recall',
                 shortcut: true,
-                callback: self.resend,
+                callback: self.recall,
                 class: "action-green",
                 //permissionKey: 'VIEW_DOCUMENT',
                 showInView: true,

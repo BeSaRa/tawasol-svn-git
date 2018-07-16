@@ -323,57 +323,58 @@ module.exports = function (app) {
                 }
             })
             .bulkResolveToState('app.incoming.add', {
-        organizations: function (organizationService) {
-            'ngInject';
-            return organizationService.getOrganizations();
-        },
-        receive: function (correspondenceService, $stateParams, $timeout) {
-            'ngInject';
-            var action = $stateParams.action, workItem = $stateParams.workItem;/*, vsId = $stateParams.vsId;*/
-            if (action === 'receive') {
-                return correspondenceService.prepareReceiveIncoming(workItem)
-                    .catch(function (error) {
+                organizations: function (organizationService) {
+                    'ngInject';
+                    return organizationService.getOrganizations();
+                },
+                receive: function (correspondenceService, $stateParams, $timeout) {
+                    'ngInject';
+                    var action = $stateParams.action, workItem = $stateParams.workItem;
+                    /*, vsId = $stateParams.vsId;*/
+                    if (action === 'receive') {
+                        return correspondenceService.prepareReceiveIncoming(workItem)
+                            .catch(function (error) {
+                                return $timeout(function () {
+                                    return false;
+                                });
+                            });
+                    }
+                    /*else if (action === 'receiveg2g') {
+                        return correspondenceService.prepareReceiveIncomingByVsId(vsId)
+                            .catch(function (error) {
+                                return $timeout(function () {
+                                    return false;
+                                });
+                            });
+                    }*/
+                    else {
                         return $timeout(function () {
                             return false;
                         });
-                    });
-            }
-            /*else if (action === 'receiveg2g') {
-                return correspondenceService.prepareReceiveIncomingByVsId(vsId)
-                    .catch(function (error) {
+                    }
+                },
+                receiveG2G: function (correspondenceService, $stateParams, $timeout) {
+                    'ngInject';
+                    var action = $stateParams.action, vsId = $stateParams.vsId;
+                    if (action === 'receiveg2g') {
+                        return correspondenceService.prepareReceiveIncomingByVsId(vsId)
+                            .catch(function (error) {
+                                return $timeout(function () {
+                                    return false;
+                                });
+                            });
+                    }
+                    else {
                         return $timeout(function () {
                             return false;
                         });
-                    });
-            }*/
-            else {
-                return $timeout(function () {
-                    return false;
-                });
-            }
-        },
-        receiveG2G: function(correspondenceService, $stateParams, $timeout){
-            'ngInject';
-            var action = $stateParams.action, vsId = $stateParams.vsId;
-            if (action === 'receiveg2g') {
-                return correspondenceService.prepareReceiveIncomingByVsId(vsId)
-                    .catch(function (error) {
-                        return $timeout(function () {
-                            return false;
-                        });
-                    });
-            }
-            else {
-                return $timeout(function () {
-                    return false;
-                });
-            }
-        },
-        centralArchives: function ($q, organizations, employeeService, organizationService) {
-            'ngInject';
-            return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
-        }
-    })
+                    }
+                },
+                centralArchives: function ($q, organizations, employeeService, organizationService) {
+                    'ngInject';
+                    return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
+                }
+            })
             .bulkResolveToState('app.incoming.simple-add', {
                 organizations: function (organizationService) {
                     'ngInject';
@@ -396,7 +397,7 @@ module.exports = function (app) {
                         });
                     }
                 },
-                receiveG2G: function(correspondenceService, $stateParams, $timeout){
+                receiveG2G: function (correspondenceService, $stateParams, $timeout) {
                     'ngInject';
                     var action = $stateParams.action, vsId = $stateParams.vsId;
                     if (action === 'receiveg2g') {

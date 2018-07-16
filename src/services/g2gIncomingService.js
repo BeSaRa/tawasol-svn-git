@@ -9,6 +9,7 @@ module.exports = function (app) {
                                              langService,
                                              toast,
                                              cmsTemplate,
+                                                errorCode,
                                              $sce) {
         var self = this;
         self.serviceName = 'g2gIncomingService';
@@ -88,16 +89,20 @@ module.exports = function (app) {
             // get correspondence from G2G object
             g2gCorrespondence = g2gCorrespondence.hasOwnProperty('correspondence') ? g2gCorrespondence.correspondence : g2gCorrespondence;
 
-
             return self.showReasonDialog('return_reason', $event)
                 .then(function (reason) {
                     return $http
-                        .put(urlService.g2gInbox + "return", {
+                        .put(urlService.g2gInbox + "returnToSender", {
                             entity: g2gCorrespondence,
                             comment: reason
                         })
                         .then(function (result) {
                             return true;
+                        })
+                        .catch(function(error){
+                            errorCode.checkIf(error, 'G2G_ERROR_WHILE_RETURNING_TO_SENDER', function () {
+                                dialog.errorMessage(langService.get('g2g_error_while_returning_to_sender'));
+                            });
                         });
                 });
         };

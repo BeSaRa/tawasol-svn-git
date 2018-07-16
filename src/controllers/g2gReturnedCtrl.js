@@ -236,6 +236,7 @@ module.exports = function (app) {
                 class: "action-green",
                 //permissionKey: 'VIEW_DOCUMENT',
                 showInView: true,
+                hide: true,
                 checkShow: self.checkToShowAction
             },
             // View Delivery Report

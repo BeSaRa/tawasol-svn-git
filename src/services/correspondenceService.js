@@ -1446,7 +1446,6 @@ module.exports = function (app) {
                         result.data.rs.metaData.addMethod = 1;
                         result = result.data.rs;
                         result.metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming', 'ViewIncoming'], new Incoming(result.metaData));
-                        //result.metaData.ou = employeeService.getEmployee().getOUID();
                         return result;
                     });
             };
@@ -1475,6 +1474,11 @@ module.exports = function (app) {
                         generator.interceptSendInstance(['Correspondence', 'Incoming'], correspondence))
                     .then(function (result) {
                         return true;
+                    })
+                    .catch(function(error){
+                        errorCode.checkIf(error, 'G2G_ERROR_WHILE_RECEIVING', function () {
+                            dialog.errorMessage(langService.get('g2g_error_while_receiving'));
+                        });
                     });
             };
 

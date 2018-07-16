@@ -1,17 +1,18 @@
 module.exports = function (app) {
     app.service('g2gSentItemsService', function (urlService,
-                                                    $http , 
-                                                    $q , 
-                                                    generator,
-                                                    G2GMessagingHistory,
-                                                    _,
-                                                    dialog,
-                                                    langService,
-                                                    toast,
-                                                    cmsTemplate) {
+                                                 $http,
+                                                 $q,
+                                                 generator,
+                                                 G2GMessagingHistory,
+                                                 _,
+                                                 dialog,
+                                                 langService,
+                                                 toast,
+                                                 cmsTemplate,
+                                                 errorCode) {
         var self = this;
         self.serviceName = 'g2gSentItemsService';
-        
+
         self.g2gItems = [];
 
         /**
@@ -25,7 +26,7 @@ module.exports = function (app) {
                 return self.g2gItems;
             });
         };
-        
+
         /**
          * @description Get g2g sent items from self.g2gItems if found and if not load it from server again.
          * @returns {Promise|g2gItems}
@@ -80,23 +81,25 @@ module.exports = function (app) {
          * @param g2gItem
          * @param $event
          */
-        self.recallG2G = function(g2gItem, $event){
-            return self.showReasonDialog('recall_reason', $event)
-                .then(function (reason) {
-                    /*return $http.put((urlService.userInbox + '/' + sentItem.wfId + '/recall'), {
-                        comment: reason
-                    }).then(function (result) {
-                        return result.data.rs;
-                    }).catch(function (error) {
-                        errorCode.checkIf(error, 'CANNOT_RECALL_OPENED_BOOK', function () {
-                            dialog.errorMessage(langService.get('cannot_recall_opened_book'));
-                        });
-                        errorCode.checkIf(error, 'CANNOT_RECALL_NON_EXISTING_BOOK', function () {
-                            dialog.errorMessage(langService.get('cannot_call_non_existing_book'));
-                        });
-                        return false;
-                    });*/
+        self.recallG2G = function (g2gItem, $event) {
+            g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
+            return $http.put((urlService.userInbox + 'recall'), g2gItem).then(function (result) {
+                return result.data.rs;
+            }).catch(function (error) {
+                errorCode.checkIf(error, 'CANNOT_RECALL_OPENED_BOOK', function () {
+                    dialog.errorMessage(langService.get('cannot_recall_opened_book'));
                 });
+                errorCode.checkIf(error, 'G2G_BOOK_PROPERTIES_CAN_NOT_BE_EMPTY', function () {
+                    dialog.errorMessage(langService.get('g2g_book_properties_can_not_be_empty'));
+                });
+                errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED_TO_RECALL', function () {
+                    dialog.errorMessage(langService.get('g2g_you_are_not_authorized_to_recall'));
+                });
+                errorCode.checkIf(error, 'G2G_ERROR_WHILE_RECALLING', function () {
+                    dialog.errorMessage(langService.get('g2g_error_occurred_while_recalling'));
+                });
+                return false;
+            });
         };
 
 
@@ -105,6 +108,6 @@ module.exports = function (app) {
          * @type {{delete: generator.delete, update: generator.update}}
          * @private
          */
-        self._sharedMethods = generator.generateSharedMethods(self.deleteG2gInbox, self.updateG2gInbox);       
+        self._sharedMethods = generator.generateSharedMethods(self.deleteG2gInbox, self.updateG2gInbox);
     });
 };

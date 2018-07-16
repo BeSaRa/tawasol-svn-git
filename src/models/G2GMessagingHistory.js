@@ -72,8 +72,8 @@ module.exports = function (app) {
             };
 
             G2GMessagingHistory.prototype.getTranslatedCorrespondenceSiteInfo = function () {
-                var mainSite = new Information(this.mainSiteFrom);
-                var subSite = (this.subSiteFrom) ? new Information(this.subSiteFrom) : '';
+                var mainSite = new Information(this.mainSiteTo);
+                var subSite = (this.subSiteTo) ? new Information(this.subSiteTo) : '';
                 return (mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : ''));
             };
 
