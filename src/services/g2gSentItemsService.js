@@ -83,7 +83,7 @@ module.exports = function (app) {
          */
         self.recallG2G = function (g2gItem, $event) {
             g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
-            return $http.put((urlService.g2g + 'recall'), g2gItem).then(function (result) {
+            return $http.put((urlService.g2gInbox + 'recall'), g2gItem).then(function (result) {
                 return result.data.rs;
             }).catch(function (error) {
                 errorCode.checkIf(error, 'CANNOT_RECALL_OPENED_BOOK', function () {
