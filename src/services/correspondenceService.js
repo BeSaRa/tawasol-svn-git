@@ -1475,7 +1475,7 @@ module.exports = function (app) {
                     .then(function (result) {
                         return true;
                     })
-                    .catch(function(error){
+                    .catch(function (error) {
                         errorCode.checkIf(error, 'G2G_ERROR_WHILE_RECEIVING', function () {
                             dialog.errorMessage(langService.get('g2g_error_while_receiving'));
                         });
@@ -2260,7 +2260,7 @@ module.exports = function (app) {
              * @param $event
              * @returns {promise|*}
              */
-            self.openExportCorrespondenceDialog = function (workItem, $event) {
+            self.openExportCorrespondenceDialog = function (workItem, $event, resend) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -2268,7 +2268,8 @@ module.exports = function (app) {
                         controller: 'readyToExportOptionPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
-                            readyToExport: workItem
+                            readyToExport: workItem,
+                            resend: resend
                         },
                         resolve: {
                             sites: function (correspondenceService) {

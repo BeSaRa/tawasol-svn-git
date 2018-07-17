@@ -35,7 +35,7 @@ module.exports = function (app) {
          * @returns {Promise|userSubscriptions}
          */
         self.getUserSubscriptions = function () {
-            return self.userSubscriptions.length ? $q.when(self.userSubscriptions) : self.loadUserSubscriptions();
+            return self.userSubscriptions && self.userSubscriptions.length ? $q.when(self.userSubscriptions) : self.loadUserSubscriptions();
         };
 
 

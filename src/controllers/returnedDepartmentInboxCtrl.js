@@ -261,7 +261,8 @@ module.exports = function (app) {
          */
         self.resend = function (returnedDepartmentInbox, $event, defer) {
             returnedDepartmentInboxService
-                .controllerMethod.returnedDepartmentInboxResend(returnedDepartmentInbox, $event)
+                .controllerMethod
+                .returnedDepartmentInboxResend(returnedDepartmentInbox, $event)
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page)
                         .then(function (result) {

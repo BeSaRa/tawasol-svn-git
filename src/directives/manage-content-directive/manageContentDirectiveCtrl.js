@@ -197,6 +197,11 @@ module.exports = function (app) {
                         self.templateOrFileName = fileName;
 
                         if (self.isSimpleAdd) {
+                            // available viewer
+                            var availableViewer = ['jpg', 'jpeg', 'gif', 'png'];
+                            if (availableViewer.indexOf(file.name.split('.').pop().toLowerCase()) === -1) {
+                                return file;
+                            }
                             var reader = new FileReader();
                             reader.onload = function () {
                                 var bytesArray = new Uint8Array(reader.result);

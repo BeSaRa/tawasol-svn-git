@@ -12,7 +12,7 @@
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-model="ctrl.document.registryOU"
                                ng-required="ctrl.checkMandatory('registryOU')">
-                        <md-option ng-value="organization.id"
+                        <md-option md-truncate ng-value="organization.id"
                                    ng-repeat="organization in ctrl.registryOrganizations">
                             {{organization.getTranslatedName()}}
                         </md-option>
@@ -32,7 +32,7 @@
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-model="ctrl.document.ou"
                                ng-required="ctrl.checkMandatory('ou')">
-                        <md-option ng-value="organization.id"
+                        <md-option md-truncate ng-value="organization.id"
                                    ng-repeat="organization in ctrl.organizations">
                             {{organization.getTranslatedName()}}
                         </md-option>
@@ -50,7 +50,7 @@
                                ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
                                ng-model="ctrl.document.ou"
                                ng-required="ctrl.checkMandatory('ou')">
-                        <md-option ng-value="organization.id"
+                        <md-option md-truncate ng-value="organization.id"
                                    ng-repeat="organization in ctrl.subOrganizations">
                             {{organization.getTranslatedName()}}
                         </md-option>
@@ -76,7 +76,7 @@
                                ng-model="ctrl.document.internalDocType"
                                ng-required="ctrl.checkMandatory('internalDocType')"
                                required>
-                        <md-option ng-value="type.value"
+                        <md-option md-truncate ng-value="type.value"
                                    ng-repeat="type in ctrl.typeOptions track by $index">
                             {{lang[type.key]}}
                         </md-option>
@@ -130,7 +130,7 @@
                                ng-model="ctrl.document.securityLevel"
                                ng-model-options="{trackBy: '$value.id'}"
                                ng-required="ctrl.checkMandatory('securityLevel')">
-                        <md-option ng-value="level"
+                        <md-option md-truncate ng-value="level"
                                    ng-repeat="level in ctrl.securityLevels">
                             {{level.getTranslatedName()}}
                         </md-option>
@@ -143,8 +143,7 @@
             <div layout="row">
                 <!-- Date -->
                 <md-input-container flex>
-                    <label for="docDate">{{lang.date}}</label>
-                    <input id="docDate" type="text" name="docDate"
+                    <input id="docDate" tooltip="docDate" type="text" name="docDate"
                            ng-model="ctrl.document.docDate"
                            ng-disabled="!!ctrl.disableProperties"
                            ng-required="ctrl.checkMandatory('docDate')"

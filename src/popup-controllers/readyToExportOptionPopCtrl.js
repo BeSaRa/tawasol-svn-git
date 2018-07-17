@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                            toast,
                                                            sites,
                                                            _,
+                                                           resend,
                                                            downloadService,
                                                            readyToExport,
                                                            rootEntity,
@@ -21,7 +22,7 @@ module.exports = function (app) {
 
         self.progress = null;
         self.readyToExport = readyToExport;
-
+        self.resend = resend;
         self.model = new ReadyToExportOption();
 
         self.settings = rootEntity.getGlobalSettings();
@@ -126,24 +127,9 @@ module.exports = function (app) {
                 _addItem(item, option);
             }
         };
-
-
-
         /**
-         * @description export click
+         * @description export workItem
          */
-        /*self.exportCorrespondenceWorkItem = function () {
-            readyToExportService
-                .exportReadyToExport(self.readyToExport, self.model)
-                .then(function (result) {
-                    toast.success(langService.get('export_success'));
-                    dialog.hide(result);
-                })
-                .catch(function () {
-                    toast.error(langService.get('export_failed'));
-                });
-        };*/
-
         self.exportCorrespondenceWorkItem = function () {
             if (self.exportType === 1) {
                 readyToExportService

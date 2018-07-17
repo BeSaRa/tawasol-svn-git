@@ -124,6 +124,7 @@ module.exports = function (app) {
                     .then(function () {
                         self.documentInformation = null;
                         self.outgoing.contentFile = null;
+                        self.simpleViewUrl = null;
                     })
                     .catch(function () {
                         self.outgoing.addMethod = !self.outgoing.addMethod;

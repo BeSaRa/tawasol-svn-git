@@ -464,6 +464,23 @@ module.exports = function (app) {
 
         self.toggleDocumentViewer = function ($event) {
             self.activeDocumentViewer = !self.activeDocumentViewer;
-        }
+        };
+
+        self.checkChangeInternalType = function () {
+            // self.checkCentralArchive();
+            if (self.documentInformation || self.internal.contentFile) {
+                return dialog
+                    .confirmMessage(langService.get('content_will_remove_confirm'))
+                    .then(function () {
+                        self.documentInformation = null;
+                        self.internal.contentFile = null;
+                        self.simpleViewUrl = null;
+                    })
+                    .catch(function () {
+                        self.internal.addMethod = !self.internal.addMethod;
+                    })
+            }
+            return self.documentInformation = null;
+        };
     });
 };

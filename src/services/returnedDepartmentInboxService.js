@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                             WorkItem,
                                                             _,
                                                             dialog,
+                                                            correspondenceService,
                                                             langService,
                                                             toast,
                                                             $timeout,
@@ -161,7 +162,9 @@ module.exports = function (app) {
              * @param $event
              */
             returnedDepartmentInboxResend: function (returnedDepartmentInbox, $event) {
-                return self.resendReturnedDepartmentInbox(returnedDepartmentInbox)
+                // return correspondenceService
+                //     .openExportCorrespondenceDialog(returnedDepartmentInbox , $event , true);
+                self.resendReturnedDepartmentInbox(returnedDepartmentInbox)
                     .then(function (result) {
                         return true;
                     });
