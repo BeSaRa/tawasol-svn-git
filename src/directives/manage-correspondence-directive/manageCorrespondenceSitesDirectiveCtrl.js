@@ -418,10 +418,13 @@ module.exports = function (app) {
                         return;
                     }
                     else {
-                        _.map(sitesWithoutNeedReply, function (site) {
-                            self.addSiteCC(site);
-                        });
-                        _resetSelectedData(isDistributionListRecord);
+                        dialog.confirmMessage(langService.get('sites_with_need_reply_missing_date_confirm_skip'))
+                            .then(function () {
+                                _.map(sitesWithoutNeedReply, function (site) {
+                                    self.addSiteCC(site);
+                                });
+                                _resetSelectedData(isDistributionListRecord);
+                            });
                     }
                 }
                 else {
