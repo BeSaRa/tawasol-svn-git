@@ -189,7 +189,7 @@ module.exports = function (app) {
         var saveCorrespondenceFinished = function (status, newId) {
             counterService.loadCounters();
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-            if(replyTo){
+            if (replyTo) {
                 userSubscriptionService.loadUserSubscriptions();
             }
             if (status) {// || (self.outgoing.contentFile)
@@ -478,6 +478,7 @@ module.exports = function (app) {
             });
 
             self.emptySubSites = true;
+            self.emptySiteSearch = true;
             self.documentInformation = null;
             self.document_properties.$setUntouched();
         };

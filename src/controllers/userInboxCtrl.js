@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('userInboxCtrl', function (lookupService,
                                               userInboxService,
                                               userInboxes,
+                                              $filter,
                                               errorCode,
                                               $timeout,
                                               sidebarService,
@@ -138,9 +139,12 @@ module.exports = function (app) {
             //self.showStarred = !self.showStarred;
             if (self.showStarred) {
                 self.fixedTabsCount = 2;
+                ++self.selectedTab;
             } else {
                 self.fixedTabsCount = 1;
+                --self.selectedTab;
             }
+
             return self.showStarred;
         };
 
@@ -150,7 +154,7 @@ module.exports = function (app) {
 
         self.filterGrid = [];
 
-        self.userFilters = userFilters;
+        self.userFilters = $filter('orderBy')(userFilters, 'sortOptionId');
 
         self.workItemsFilters = [];
 
@@ -185,6 +189,13 @@ module.exports = function (app) {
                     })
                 });
         };
+
+        function _getFilterIndex(userFilter) {
+            return _.findIndex(self.userFilters, function (filter) {
+                return userFilter.id === filter.id;
+            });
+        }
+
         /**
          * @description edit filter.
          * @param filter
@@ -194,9 +205,12 @@ module.exports = function (app) {
          */
         self.userFilterEdit = function (filter, $index, $event) {
             return userFilterService.editUserFilterDialog(filter, $event).then(function (result) {
-                self.userFilters[$index] = angular.extend(self.userFilters[$index], result);
+                self.userFilters[_getFilterIndex(result)] = result;
+                console.log(_.map(self.userFilters, 'sortOptionId'));
+                self.userFilters = $filter('orderBy')(self.userFilters, 'sortOptionId');
                 if (self.selectedFilter && self.selectedFilter.filter.id === result.id) {
-                    self.selectedFilter.filter = self.userFilters[$index];
+                    self.selectedFilter.filter = result;
+                    self.selectedFilter.index = _getFilterIndex(result);
                 }
 
                 if (self.selectedFilter)

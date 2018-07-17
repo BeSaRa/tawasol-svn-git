@@ -472,6 +472,7 @@ module.exports = function (app) {
             });
 
             self.emptySubSites = true;
+            self.emptySiteSearch = true;
             self.documentInformation = null;
             self.document_properties.$setUntouched();
 

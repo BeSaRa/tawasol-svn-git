@@ -749,5 +749,14 @@ module.exports = function (app) {
             }
         });
 
+        $scope.$watch(function () {
+            return self.emptySiteSearch;
+        }, function (value) {
+            if (value) {
+                self.subSearchResult = [];
+                self.emptySiteSearch = false;
+            }
+        });
+
     });
 };

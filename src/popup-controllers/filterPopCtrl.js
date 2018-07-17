@@ -41,7 +41,7 @@ module.exports = function (app) {
                 .validate()
                 .then(function () {
                     self.filter.saveUserFilter().then(function (filter) {
-                        // debugger;
+                        filter.sortOptionId = Number(filter.sortOptionId);
                         self.filter = angular.copy(self.filter);
                         dialog.hide(filter);
                     });
