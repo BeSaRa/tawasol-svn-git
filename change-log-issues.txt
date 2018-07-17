@@ -235,4 +235,9 @@ Bugs:
 
 15-07-2018
 -----------------
-13940 Fix - Regression - There is no action appear when user click on multi select check box from Manage Linked Documents
+13940: Fix - Regression - There is no action appear when user click on multi select check box from Manage Linked Documents
+
+17-07-2018
+-----------------
+13965: Fix - Subscription - Notification doesn't displayed while backend returns it when create reply for subscribed document.
+13946: Fix - Subscription - Can add document subscribe more than one Time.

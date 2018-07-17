@@ -32,6 +32,7 @@ module.exports = function (app) {
                                              editAfterExport,
                                              centralArchives,
                                              mailNotificationService,
+                                             userSubscriptionService,
                                              lookups, // new injector for all lookups can user access
                                              correspondenceService) {
         'ngInject';
@@ -188,6 +189,9 @@ module.exports = function (app) {
         var saveCorrespondenceFinished = function (status, newId) {
             counterService.loadCounters();
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+            if(replyTo){
+                userSubscriptionService.loadUserSubscriptions();
+            }
             if (status) {// || (self.outgoing.contentFile)
                 toast.success(langService.get('save_success'));
                 $timeout(function () {
