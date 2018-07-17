@@ -2,9 +2,9 @@ module.exports = function (app) {
     app.controller('gridActionsDirectiveCtrl', function ($q,
                                                          $scope,
                                                          langService,
-                                                         $timeout,
                                                          _,
                                                          Lookup,
+                                                         $timeout,
                                                          lookupService,
                                                          employeeService,
                                                          Outgoing,
@@ -21,21 +21,13 @@ module.exports = function (app) {
         self.controllerName = 'gridActionsDirectiveCtrl';
         self.langService = langService;
 
-        $timeout(function () {
-            self.menuDirection = self.menuDirection || 'horizontal';
-            self[self.menuDirection + 'Actions'] = self.filterShortcuts();
-            // self.filterShortcuts();
-        });
-
+        self.shortcutActions = [];
         /**
          * @description Checks if actions will be shown or not
          * @param action
          * @returns {*}
          */
         self.isShowAction = function (action) {
-            /*if (action.hasOwnProperty('checkAnyPermission')) {
-                return action.checkShow(action, self.model, action.checkAnyPermission);
-            }*/
             return action.checkShow(action, self.model);
         };
 
@@ -81,56 +73,110 @@ module.exports = function (app) {
          * It will skip the separators
          * @returns {Array}
          */
-        self.filterShortcuts = function () {
-            var mainAction, subAction;
-            var shortcutActions = [];
+        self.filterShortcuts = function (direction) {
+            self.shortcutActions = [];
+            var mainAction, action;
+            direction = direction || self.menuDirection;
             if (!!self.shortcut) {
                 for (var i = 0; i < self.gridActions.length; i++) {
                     mainAction = self.gridActions[i];
-                    if (mainAction.type.toLowerCase() === "action" && !mainAction.hide) {
-                        /*
-                        * If action has property (shortcut) and it has value = true
-                        * Else if action don't has property (shortcut) or has property (shortcut) but value = false and has subMenu property with array value
-                        * */
-                        if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut && self.isShowAction(mainAction)) {
-                            shortcutActions.push(mainAction);
-                        }
-                        else if (
-                            (!mainAction.hasOwnProperty('shortcut') || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut))
-                            && (mainAction.hasOwnProperty('subMenu') && angular.isArray(mainAction.subMenu))
-                        ) {
-                            for (var j = 0; j < mainAction.subMenu.length; j++) {
-                                subAction = mainAction.subMenu[j];
+                    if (direction === 'vertical') {
+                        action = _filterVerticalShortcuts(mainAction);
+                    }
+                    else {
+                        action = _filterHorizontalShortcuts(mainAction);
+                    }
+                    if (action) {
+                        angular.isArray(action) ? self.shortcutActions = self.shortcutActions.concat(action) : self.shortcutActions.push(action);
+                    }
+                }
 
-                                /*If sub menu has separator, show it in vertical only. not in horizontal*/
-                                if (self.menuDirection === 'vertical') {
-                                    if (subAction.type.toLowerCase() === "action"
-                                        && (subAction.hasOwnProperty('shortcut') && subAction.shortcut)
-                                        && self.isShowAction(mainAction)
-                                    ) {
-                                        shortcutActions.push(mainAction);
-                                    }
-                                    else if (subAction.type.toLowerCase() === "separator" && !subAction.hide)
-                                        shortcutActions.push(mainAction);
-                                }
-                                else if (self.menuDirection === 'horizontal') {
-                                    if (subAction.type.toLowerCase() === "action" && subAction.hasOwnProperty('shortcut') && subAction.shortcut
-                                        && self.isShowAction(mainAction)) {
-                                        shortcutActions.push(subAction);
-                                    }
-                                }
-                            }
+            }
+        };
+
+        /**
+         * @description Filter the actions to be shown in horizontal direction depending on permissions and values.
+         * It will skip the separators
+         * @param mainAction
+         * @returns {*}
+         * Returns the array of actions(main or sub menu action) or false.
+         * @private
+         */
+        function _filterHorizontalShortcuts(mainAction) {
+            if (mainAction.hasOwnProperty('subMenu') && angular.isArray(mainAction.subMenu) && mainAction.subMenu.length) {
+                if (self.isShowAction(mainAction)) {
+                    var shortcutActions = [], subAction;
+                    for (var k = 0; k < mainAction.subMenu.length; k++) {
+                        subAction = mainAction.subMenu[k];
+                        if (subAction.type.toLowerCase() === "action" && self.isShowAction(subAction) && subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
+                            shortcutActions.push(subAction);
+                        }
+                        /*else if (subAction.type.toLowerCase() === 'separator' && !subAction.hide) {
+                            shortcutActions.push(subAction);
+                        }*/
+                    }
+                    return shortcutActions;
+                }
+                return false;
+            }
+            else {
+                if (mainAction.type.toLowerCase() === "action" && self.isShowAction(mainAction) && mainAction.hasOwnProperty('shortcut') && mainAction.shortcut)
+                    return mainAction;
+                /*else if (mainAction.type.toLowerCase() === 'separator' && !mainAction.hide)
+                    return mainAction;*/
+                else
+                    return false;
+            }
+        }
+
+        /**
+         * @description Filter the actions to be shown in vertical direction depending on permissions and values.
+         * It will include the separators
+         * @param mainAction
+         * @returns {*}
+         * Returns the main action.
+         * If there is no sub menu, main action will be returned.
+         * If there is sub menu, sub menu array will be replaced with available sub menus according to permissions and values and main action will be returned;
+         * If no condition matches, return false;
+         * @private
+         */
+        function _filterVerticalShortcuts(mainAction) {
+            if (mainAction.hasOwnProperty('subMenu') && angular.isArray(mainAction.subMenu) && mainAction.subMenu.length) {
+                if (self.isShowAction(mainAction)) {
+                    var subActionsToShow = [];
+                    for (var j = 0; j < mainAction.subMenu.length; j++) {
+                        var subAction = mainAction.subMenu[j];
+                        /*If sub menu has separator, show it in vertical only. not in horizontal*/
+                        if (subAction.type.toLowerCase() === "action" && self.isShowAction(subAction)
+                            && (subAction.hasOwnProperty('shortcut') && subAction.shortcut)
+                        ) {
+                            subActionsToShow.push(subAction);
+                        }
+                        else if (subAction.type.toLowerCase() === "separator" && !subAction.hide) {
+                            subActionsToShow.push(subAction);
                         }
                     }
-                    //skip the separators in shortcut menu
-                    /*else if (mainAction.type.toLowerCase() === "separator" && !mainAction.hide) {
-                        shortcutActions.push(mainAction)
-                    }*/
+                    if (subActionsToShow.length) {
+                        mainAction.subMenu = subActionsToShow;
+                        return mainAction;
+                    }
+                    else {
+                        return false;
+                    }
                 }
-                return shortcutActions;
+                return false;
             }
-            return self.gridActions;
-        };
+            else {
+                if (mainAction.type.toLowerCase() === "action" && self.isShowAction(mainAction) && mainAction.hasOwnProperty('shortcut') && mainAction.shortcut)
+                    return mainAction;
+                else if (mainAction.type.toLowerCase() === 'separator' && !mainAction.hide) {
+                    return mainAction;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
 
         /**
          * @description Filters the action buttons for showing/hiding context menu actions
@@ -289,6 +335,30 @@ module.exports = function (app) {
             else if (property === 'broadcasted') {
                 return model.isBroadcasted() ? langService.get('yes') : langService.get('no');
             }
-        }
+        };
+
+        /**
+         * @description Initialize and filter the shortcut actions.
+         */
+        $timeout(function () {
+            self.filterShortcuts();
+        });
+
+        /**
+         * @description Opens the grid shortcut menu
+         * @param $mdMenu
+         */
+        self.openShortcutMenu = function ($mdMenu) {
+            $mdMenu.open();
+        };
+
+        /**
+         * @description Filter the shortcut actions for each model change/digest.
+         */
+        $scope.$watch(function () {
+            return self.model;
+        }, function () {
+            self.filterShortcuts();
+        });
     });
-};
+};	

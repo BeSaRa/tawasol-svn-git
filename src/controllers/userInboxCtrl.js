@@ -1350,7 +1350,7 @@ module.exports = function (app) {
                     // e-Signature
                     {
                         type: 'action',
-                        //icon: 'link-variant',
+                        icon: 'approval',
                         text: 'grid_action_electronic',//e_signature
                         callback: self.signESignature,
                         class: "action-green",
