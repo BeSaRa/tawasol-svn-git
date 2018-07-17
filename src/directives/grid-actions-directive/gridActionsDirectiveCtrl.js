@@ -77,20 +77,17 @@ module.exports = function (app) {
             self.shortcutActions = [];
             var mainAction, action;
             direction = direction || self.menuDirection;
-            if (!!self.shortcut) {
-                for (var i = 0; i < self.gridActions.length; i++) {
-                    mainAction = self.gridActions[i];
-                    if (direction === 'vertical') {
-                        action = _filterVerticalShortcuts(mainAction);
-                    }
-                    else {
-                        action = _filterHorizontalShortcuts(mainAction);
-                    }
-                    if (action) {
-                        angular.isArray(action) ? self.shortcutActions = self.shortcutActions.concat(action) : self.shortcutActions.push(action);
-                    }
+            for (var i = 0; i < self.gridActions.length; i++) {
+                mainAction = self.gridActions[i];
+                if (direction === 'vertical') {
+                    action = _filterVerticalShortcuts(mainAction);
                 }
-
+                else {
+                    action = _filterHorizontalShortcuts(mainAction);
+                }
+                if (action) {
+                    angular.isArray(action) ? self.shortcutActions = self.shortcutActions.concat(action) : self.shortcutActions.push(action);
+                }
             }
         };
 
@@ -108,24 +105,36 @@ module.exports = function (app) {
                     var shortcutActions = [], subAction;
                     for (var k = 0; k < mainAction.subMenu.length; k++) {
                         subAction = mainAction.subMenu[k];
-                        if (subAction.type.toLowerCase() === "action" && self.isShowAction(subAction) && subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
-                            shortcutActions.push(subAction);
+                        if (subAction.type.toLowerCase() === "action" && self.isShowAction(subAction)) {
+                            if (!!self.shortcut) {
+                                if (subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
+                                    shortcutActions.push(subAction);
+                                }
+                            }
+                            else {
+                                shortcutActions.push(subAction);
+                            }
                         }
-                        /*else if (subAction.type.toLowerCase() === 'separator' && !subAction.hide) {
-                            shortcutActions.push(subAction);
-                        }*/
                     }
                     return shortcutActions;
                 }
                 return false;
             }
             else {
-                if (mainAction.type.toLowerCase() === "action" && self.isShowAction(mainAction) && mainAction.hasOwnProperty('shortcut') && mainAction.shortcut)
-                    return mainAction;
-                /*else if (mainAction.type.toLowerCase() === 'separator' && !mainAction.hide)
-                    return mainAction;*/
-                else
+                if (mainAction.type.toLowerCase() === "action" && self.isShowAction(mainAction)) {
+                    if (!!self.shortcut) {
+                        if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
+                            return mainAction;
+                        }
+                        return false;
+                    }
+                    else {
+                        return mainAction;
+                    }
+                }
+                else {
                     return false;
+                }
             }
         }
 
@@ -141,16 +150,25 @@ module.exports = function (app) {
          * @private
          */
         function _filterVerticalShortcuts(mainAction) {
+            /*
+            * if main action has subMenu and subMenu has length
+            * else main action doesn't have subMenu
+            * */
             if (mainAction.hasOwnProperty('subMenu') && angular.isArray(mainAction.subMenu) && mainAction.subMenu.length) {
                 if (self.isShowAction(mainAction)) {
                     var subActionsToShow = [];
                     for (var j = 0; j < mainAction.subMenu.length; j++) {
                         var subAction = mainAction.subMenu[j];
                         /*If sub menu has separator, show it in vertical only. not in horizontal*/
-                        if (subAction.type.toLowerCase() === "action" && self.isShowAction(subAction)
-                            && (subAction.hasOwnProperty('shortcut') && subAction.shortcut)
-                        ) {
-                            subActionsToShow.push(subAction);
+                        if (subAction.type.toLowerCase() === "action" && self.isShowAction(subAction)) {
+                            if (!!self.shortcut) {
+                                if (subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
+                                    subActionsToShow.push(subAction);
+                                }
+                            }
+                            else {
+                                subActionsToShow.push(subAction);
+                            }
                         }
                         else if (subAction.type.toLowerCase() === "separator" && !subAction.hide) {
                             subActionsToShow.push(subAction);
@@ -167,8 +185,26 @@ module.exports = function (app) {
                 return false;
             }
             else {
-                if (mainAction.type.toLowerCase() === "action" && self.isShowAction(mainAction) && mainAction.hasOwnProperty('shortcut') && mainAction.shortcut)
-                    return mainAction;
+                /*
+                * If main menu is of type "action", check if its allowed to show
+                * else if main menu is of type "separator", and separator is allowed to show(not hidden)
+                * else nothing(return false)
+                * */
+                if (mainAction.type.toLowerCase() === "action" && self.isShowAction(mainAction)) {
+                    /*
+                    * If shortcut is passed true in directive, this means, we need to show only shortcut actions
+                    * else show all actions
+                    * */
+                    if (!!self.shortcut) {
+                        if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
+                            return mainAction;
+                        }
+                        return false;
+                    }
+                    else {
+                        return mainAction;
+                    }
+                }
                 else if (mainAction.type.toLowerCase() === 'separator' && !mainAction.hide) {
                     return mainAction;
                 }
