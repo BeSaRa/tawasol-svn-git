@@ -5,9 +5,9 @@ module.exports = function (app) {
         'ngInject';
         return function ReadyToExportOption(model) {
             var self = this;
-            self.ATTACHMENTS = false;
-            self.RELATED_BOOKS = false;
-            self.RELATED_OBJECTS = false;
+            self.ATTACHMENTS = true;
+            self.RELATED_BOOKS = true;
+            self.RELATED_OBJECTS = true;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
