@@ -94,8 +94,8 @@ module.exports = function (app) {
 
                     return $http
                         .put(urlService.g2gInbox + "return-to-sender", {
-                            properties: g2gCorrespondence,
-                            comment: reason
+                            first: g2gCorrespondence,
+                            second: reason
                         })
                         .then(function (result) {
                             return true;
