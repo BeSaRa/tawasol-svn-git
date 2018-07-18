@@ -1441,7 +1441,7 @@ module.exports = function (app) {
              */
             self.prepareReceiveIncomingByVsId = function (vsId) {
                 return $http
-                    .get(urlService.g2gInbox + 'start/receive/' + vsId)
+                    .get(urlService.g2gInbox + 'start-receive/' + vsId)
                     .then(function (result) {
                         result.data.rs.metaData.addMethod = 1;
                         result = result.data.rs;

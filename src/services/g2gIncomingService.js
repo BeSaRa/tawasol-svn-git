@@ -1,16 +1,16 @@
 module.exports = function (app) {
     app.service('g2gIncomingService', function (urlService,
-                                             $http,
-                                             $q,
-                                             generator,
-                                             G2G,
-                                             _,
-                                             dialog,
-                                             langService,
-                                             toast,
-                                             cmsTemplate,
+                                                $http,
+                                                $q,
+                                                generator,
+                                                G2G,
+                                                _,
+                                                dialog,
+                                                langService,
+                                                toast,
+                                                cmsTemplate,
                                                 errorCode,
-                                             $sce) {
+                                                $sce) {
         var self = this;
         self.serviceName = 'g2gIncomingService';
 
@@ -84,9 +84,8 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.returnG2G = function (g2gCorrespondence, $event) {
-            debugger;
-            // intercept send instance for G2G
-            g2gCorrespondence = generator.interceptSendInstance(['Correspondence','Incoming', 'ViewIncoming'], g2gCorrespondence);
+            // intercept send instance for Correspondence, Incoming, ViewIncoming
+            g2gCorrespondence = generator.interceptSendInstance(['Correspondence', 'Incoming', 'ViewIncoming'], g2gCorrespondence);
             // get correspondence from G2G object
             g2gCorrespondence = g2gCorrespondence.hasOwnProperty('correspondence') ? g2gCorrespondence.correspondence : g2gCorrespondence;
 
@@ -101,27 +100,13 @@ module.exports = function (app) {
                         .then(function (result) {
                             return true;
                         })
-                        .catch(function(error){
+                        .catch(function (error) {
                             errorCode.checkIf(error, 'G2G_ERROR_WHILE_RETURNING_TO_SENDER', function () {
                                 dialog.errorMessage(langService.get('g2g_error_while_returning_to_sender'));
                             });
                         });
                 });
         };
-
-
-       /* self.receiveG2G = function (g2gCorrespondence) {
-            // intercept send instance for G2G
-            g2gCorrespondence = g2gCorrespondence instanceof G2G ? generator.interceptSendInstance('G2G', g2gCorrespondence) : g2gCorrespondence;
-            // get correspondence from G2G object
-            g2gCorrespondence = g2gCorrespondence.hasOwnProperty('correspondence') ? g2gCorrespondence.correspondence : g2gCorrespondence;
-            return $http
-                .put(urlService.g2gInbox + 'receive', g2gCorrespondence)
-                .then(function (result) {
-                    return true;
-                });
-        };*/
-
 
         /**
          * @description Create the shared method to the model.
