@@ -23,7 +23,7 @@ module.exports = function (app) {
          */
         self.loadG2gItems = function (month, year) {
             month = month.hasOwnProperty('value') ? month.value : month;
-            return $http.get(urlService.g2gInbox + 'get-outbox-by-ou/month/'+month+'/year/'+year).then(function (result) {
+            return $http.get(urlService.g2gInbox + 'get-outbox-by-ou/year/' + year + '/month/' + month).then(function (result) {
                 self.g2gItems = generator.generateCollection(result.data.rs, G2GMessagingHistory, self._sharedMethods);
                 self.g2gItems = generator.interceptReceivedCollection('G2GMessagingHistory', self.g2gItems);
                 return self.g2gItems;
