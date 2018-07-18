@@ -87,7 +87,7 @@ module.exports = function (app) {
                 return;
             }
 
-            return correspondenceService.viewCorrespondenceG2G(g2gItem, self.gridActions, 'G2G', $event)
+            return correspondenceService.viewCorrespondenceG2G(g2gItem, self.gridActions, 'G2GMessagingHistory', $event)
                 .then(function (result) {
                     self.reloadG2gItems(self.grid.page);
                 })
