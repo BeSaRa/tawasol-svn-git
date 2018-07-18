@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                 langService,
                                                 toast,
                                                 cmsTemplate,
+                                                Incoming,
                                                 errorCode,
                                                 $sce) {
         var self = this;
@@ -84,10 +85,11 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.returnG2G = function (g2gCorrespondence, $event) {
-            // intercept send instance for Correspondence, Incoming, ViewIncoming
-            g2gCorrespondence = generator.interceptSendInstance(['Correspondence', 'Incoming', 'ViewIncoming'], g2gCorrespondence);
             // get correspondence from G2G object
             g2gCorrespondence = g2gCorrespondence.hasOwnProperty('correspondence') ? g2gCorrespondence.correspondence : g2gCorrespondence;
+            // intercept send instance for Correspondence, Incoming, ViewIncoming
+            g2gCorrespondence = generator.interceptSendInstance(['Correspondence', 'Incoming', 'ViewIncoming'], g2gCorrespondence);
+
 
             return self.showReasonDialog('return_reason', $event)
                 .then(function (reason) {
