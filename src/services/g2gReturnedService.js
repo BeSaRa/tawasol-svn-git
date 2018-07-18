@@ -19,7 +19,7 @@ module.exports = function (app) {
          * @returns {Promise|g2gItems}
          */
         self.loadG2gItems = function () {
-            return $http.get(urlService.g2gInbox + 'getReturn').then(function (result) {
+            return $http.get(urlService.g2gInbox + 'get-returned').then(function (result) {
                 self.g2gItems = generator.generateCollection(result.data.rs, G2GMessagingHistory, self._sharedMethods);
                 self.g2gItems = generator.interceptReceivedCollection('G2GMessagingHistory', self.g2gItems);
                 return self.g2gItems;

@@ -60,10 +60,11 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            _.map(model.documentComments, function (comment) {
-                delete comment.dummyCommentId;
-                return comment;
-            });
+            if (model.documentComments && model.documentComments.length)
+                _.map(model.documentComments, function (comment) {
+                    delete comment.dummyCommentId;
+                    return comment;
+                });
             model.tags = model.tags ? angular.toJson(model.tags) : model.tags;
             model.registryOU = model.registryOU.hasOwnProperty('id') ? model.registryOU.id : model.registryOU;
             _.map(lookupConverter, function (property) {

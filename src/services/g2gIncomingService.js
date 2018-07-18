@@ -84,15 +84,17 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.returnG2G = function (g2gCorrespondence, $event) {
+            debugger;
             // intercept send instance for G2G
-            g2gCorrespondence = g2gCorrespondence instanceof G2G ? generator.interceptSendInstance('G2G', g2gCorrespondence) : g2gCorrespondence;
+            g2gCorrespondence = generator.interceptSendInstance(['Correspondence','Incoming', 'ViewIncoming'], g2gCorrespondence);
             // get correspondence from G2G object
             g2gCorrespondence = g2gCorrespondence.hasOwnProperty('correspondence') ? g2gCorrespondence.correspondence : g2gCorrespondence;
 
             return self.showReasonDialog('return_reason', $event)
                 .then(function (reason) {
+
                     return $http
-                        .put(urlService.g2gInbox + "returnToSender", {
+                        .put(urlService.g2gInbox + "return-to-sender", {
                             properties: g2gCorrespondence,
                             comment: reason
                         })

@@ -20,7 +20,7 @@ module.exports = function (app) {
          * @returns {Promise|viewDeliveryReports}
          */
         self.loadDeliveryReport = function (recordId) {
-            return $http.get(urlService.g2gInbox + 'getDeliveryReport/' + recordId).then(function (result) {
+            return $http.get(urlService.g2gInbox + 'get-delivery-report/' + recordId).then(function (result) {
                 var viewDeliveryReports = generator.generateCollection(result.data.rs, G2GMessagingHistory);
                 viewDeliveryReports = generator.interceptReceivedCollection('G2GMessagingHistory', viewDeliveryReports);
                 return viewDeliveryReports;
