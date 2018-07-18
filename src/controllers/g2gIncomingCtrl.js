@@ -302,7 +302,7 @@ module.exports = function (app) {
                 class: "action-green",
                 //permissionKey: '',
                 showInView: true,
-                showInViewOnly: true,
+                //showInViewOnly: true,
                 checkShow: self.checkToShowAction
             },
             // Download
