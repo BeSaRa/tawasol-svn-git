@@ -40,9 +40,7 @@ module.exports = function (app) {
          */
         self.searchIncomingDocuments = function (model, properties) {
             var criteria = generator.interceptSendInstance('SearchIncoming', model);
-
             criteria = _checkPropertyConfiguration(criteria, properties);
-
             return $http
                 .post(urlService.searchDocument.change({searchType: 'incoming'}),
                     generator.interceptSendInstance('SearchCriteria', criteria))

@@ -134,7 +134,9 @@ module.exports = function (app) {
         };
 
         self.fixedTabsCount = 1;
+
         self.showStarred = false;
+
         self.toggleStarredTab = function ($event) {
             //self.showStarred = !self.showStarred;
             if (self.showStarred) {
@@ -206,15 +208,15 @@ module.exports = function (app) {
         self.userFilterEdit = function (filter, $index, $event) {
             return userFilterService.editUserFilterDialog(filter, $event).then(function (result) {
                 self.userFilters[_getFilterIndex(result)] = result;
-                console.log(_.map(self.userFilters, 'sortOptionId'));
                 self.userFilters = $filter('orderBy')(self.userFilters, 'sortOptionId');
+
                 if (self.selectedFilter && self.selectedFilter.filter.id === result.id) {
                     self.selectedFilter.filter = result;
                     self.selectedFilter.index = _getFilterIndex(result);
                 }
 
                 if (self.selectedFilter)
-                    self.selectFilter(self.selectedFilter.filter, self.selectedFilter.index)
+                    self.selectFilter(self.selectedFilter.filter, self.selectedFilter.index);
             });
         };
         /**
@@ -235,12 +237,15 @@ module.exports = function (app) {
          * @param $index
          */
         self.selectFilter = function (filter, $index) {
+
             if (!filter.status) {
                 toast.info('This Filter is disabled and make it active first to get the data');
                 self.workItemsFilters[$index] = [];
                 return;
             }
+
             self.selectedTab = ($index + self.fixedTabsCount);
+
             self.selectedFilter = {
                 index: $index,
                 filter: angular.copy(filter)
@@ -901,7 +906,6 @@ module.exports = function (app) {
          * @description Check if action will be shown on grid or not
          * @param action
          * @param model
-         * @param checkHasAnyPermission
          * @returns {boolean}
          */
         self.checkToShowAction = function (action, model) {

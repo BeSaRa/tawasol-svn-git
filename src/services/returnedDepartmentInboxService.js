@@ -162,12 +162,8 @@ module.exports = function (app) {
              * @param $event
              */
             returnedDepartmentInboxResend: function (returnedDepartmentInbox, $event) {
-                // return correspondenceService
-                //     .openExportCorrespondenceDialog(returnedDepartmentInbox , $event , true);
-                self.resendReturnedDepartmentInbox(returnedDepartmentInbox)
-                    .then(function (result) {
-                        return true;
-                    });
+                return correspondenceService
+                    .openExportCorrespondenceDialog(returnedDepartmentInbox , $event , true);
             },
             /**
              * @description UnStar bulk returned department inbox items

@@ -1,8 +1,8 @@
 <md-dialog id="ready-to-export-options" class="dialog-extend" ng-attr-aria-label="{{lang.export_message}}">
     <div layout="column">
         <md-toolbar>
-            <span ng-if="!ctrl.resend" class="p20">{{lang.export_message}}</span>
-            <span ng-if="ctrl.resend" class="p20">{{lang.resend_message}}</span>
+            <span class="p20">{{lang.export_message}}</span>
+            <!--<span ng-if="ctrl.resend" class="p20">{{lang.resend_message}}</span>-->
             <close-dialog-directive></close-dialog-directive>
         </md-toolbar>
         <md-content scroll-directive>
@@ -94,57 +94,25 @@
                             </div>
                         </div>
                     </div>
-
-
-                    <!--<div ng-if="ctrl.settings.canExport('Attachment') ||  ctrl.settings.canExport('LinkedDoc')"
-                         layout="row">
-                        <div ng-if="ctrl.settings.canExport('Attachment')" flex>
-                            <md-switch ng-model="ctrl.model.ATTACHMENTS"
-                                       layout-align="start center"
-                                       name="attachmentExportOption" id="attachmentExportOption"
-                                       aria-label="{{lang.attachments}}">
-                                <span>{{lang.attachments}} : </span>
-                                {{ctrl.model.getTranslatedAttachmentStatus()}}
-                            </md-switch>
-                        </div>
-                        <div ng-if="ctrl.settings.canExport('LinkedDoc')" flex>
-                            <md-switch ng-model="ctrl.model.RELATED_BOOKS"
-                                       layout-align="start center"
-                                       name="relatedBookExportOption" id="relatedBookExportOption"
-                                       aria-label="{{lang.related_books}}">
-                                <span>{{lang.related_books}} : </span>
-                                {{ctrl.model.getTranslatedRelatedBookStatus()}}
-                            </md-switch>
-                        </div>
-                    </div>
-                    <div ng-if="ctrl.settings.canExport('LinkedObj')" layout="row">
-                        <div flex>
-                            <md-switch ng-model="ctrl.model.RELATED_OBJECTS"
-                                       layout-align="start center"
-                                       name="relatedObjectExportOption" id="relatedObjectExportOption"
-                                       aria-label="{{lang.related_objects}}">
-                                <span>{{lang.related_objects}} : </span>
-                                {{ctrl.model.getTranslatedRelatedObjectStatus()}}
-                            </md-switch>
-                        </div>
-                        <div flex></div>
-                    </div>-->
-                </div>
-                <div layout="row">
-                    <md-button class="md-raised" ng-click="ctrl.exportCorrespondenceWorkItem()"
-                               ng-disabled="!ctrl.correspondenceSites.length">
-                        {{lang.export}}
-                    </md-button>
-                    <span ng-if="ctrl.hasExternalSite" flex></span>
-                    <md-button ng-if="ctrl.hasExternalSite" class="md-raised" ng-click="ctrl.printWithTerminate()">
-                        {{lang.print_with_terminate}}
-                    </md-button>
-                    <span flex></span>
-                    <md-button class="md-raised" ng-click="ctrl.closeExportPopupFromCtrl()">
-                        {{lang.close}}
-                    </md-button>
                 </div>
             </form>
         </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-click="ctrl.exportCorrespondenceWorkItem()"
+                           ng-disabled="!ctrl.correspondenceSites.length">
+                    {{ctrl.resend ? lang.resend : lang.export}}
+                </md-button>
+                <span ng-if="ctrl.hasExternalSite && !ctrl.resend" flex></span>
+                <md-button ng-if="ctrl.hasExternalSite && !ctrl.resend" class="md-raised"
+                           ng-click="ctrl.printWithTerminate()">
+                    {{lang.print_with_terminate}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeExportPopupFromCtrl()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
     </div>
 </md-dialog>

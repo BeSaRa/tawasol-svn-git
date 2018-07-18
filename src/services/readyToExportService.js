@@ -438,14 +438,17 @@ module.exports = function (app) {
          */
         self.exportReadyToExport = function (readyToExport, exportOptions) {
             var info = readyToExport.getInfo();
-
             return $http
                 .put((urlService.exportReadyToExports).replace('{{vsId}}', info.vsId).replace('{{wobNum}}', info.wobNumber), exportOptions)
                 .then(function () {
                     return readyToExport;
                 });
         };
-
+        /**
+         * @description Export ready to export item with selective.
+         * @param readyToExport
+         * @param exportOptions
+         */
         self.exportReadyToExportSelective = function(readyToExport, exportOptions){
             var info = readyToExport.getInfo();
             exportOptions = generator.interceptSendInstance('PartialExportSelective', exportOptions);

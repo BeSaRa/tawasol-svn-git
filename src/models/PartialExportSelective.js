@@ -45,7 +45,21 @@ module.exports = function (app) {
                         return item.hasOwnProperty('vsId') ? item.vsId : item;
                     });
                 });
+                return this;
+            };
 
+            PartialExportSelective.prototype.isSelective = function () {
+                return true;
+            };
+
+            PartialExportSelective.prototype.prepareResendModel = function () {
+                var self = this;
+                delete self.sitesCCList;
+                delete self.sitesToList;
+                _.map(self.exportItems, function (item, key) {
+                    self[key] = item;
+                });
+                delete self.exportItems;
                 return this;
             };
             // don't remove CMSModelInterceptor from last line

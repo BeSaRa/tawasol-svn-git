@@ -45,6 +45,10 @@ module.exports = function (app) {
                 return this.RELATED_OBJECTS ? langService.get('yes') : langService.get('no');
             };
 
+            ReadyToExportOption.prototype.isSelective = function () {
+                return false;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('ReadyToExportOption', 'init', this);

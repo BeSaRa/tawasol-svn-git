@@ -393,6 +393,11 @@ module.exports = function (app) {
                 return correspondenceService.exportCorrespondence(this, $event, checkArchive, ignoreMessage);
             };
 
+            WorkItem.prototype.resendWorkItem = function ($event) {
+                return correspondenceService
+                    .openExportCorrespondenceDialog(this, $event, true);
+            };
+
             WorkItem.prototype.returnWorkItem = function ($event, ignoreMessage) {
                 return correspondenceService.returnWorkItem(this, $event, ignoreMessage);
             };

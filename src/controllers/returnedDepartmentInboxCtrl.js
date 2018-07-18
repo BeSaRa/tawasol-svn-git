@@ -78,7 +78,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -255,18 +255,16 @@ module.exports = function (app) {
 
         /**
          * @description Resend returned department inbox item
-         * @param returnedDepartmentInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.resend = function (returnedDepartmentInbox, $event, defer) {
-            returnedDepartmentInboxService
-                .controllerMethod
-                .returnedDepartmentInboxResend(returnedDepartmentInbox, $event)
+        self.resend = function (workItem, $event, defer) {
+            workItem.resendWorkItem($event)
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page)
                         .then(function (result) {
-                            toast.success(langService.get('resend_specific_success').change({name: returnedDepartmentInbox.getTranslatedName()}));
+                            toast.success(langService.get('resend_specific_success').change({name: workItem.getTranslatedName()}));
                             new ResolveDefer(defer);
                         });
                 })
@@ -560,7 +558,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page);
                 })
-                .catch(function(){
+                .catch(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page);
                 });
 
@@ -826,7 +824,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -911,7 +909,7 @@ module.exports = function (app) {
                         text: 'grid_action_main_document_fax',
                         shortcut: false,
                         hide: true,
-                        permissionKey:"SEND_DOCUMENT_BY_FAX",
+                        permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction

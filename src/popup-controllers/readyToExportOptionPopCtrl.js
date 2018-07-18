@@ -131,6 +131,17 @@ module.exports = function (app) {
          * @description export workItem
          */
         self.exportCorrespondenceWorkItem = function () {
+            if (self.resend) {
+                return correspondenceService
+                    .resendCorrespondenceWorkItem(self.readyToExport, self.exportType === 1 ? self.model : self.partialExportList)
+                    .then(function (result) {
+                        dialog.hide(result);
+                    })
+                    .catch(function () {
+                        toast.error(langService.get('export_failed'));
+                    });
+            }
+
             if (self.exportType === 1) {
                 readyToExportService
                     .exportReadyToExport(self.readyToExport, self.model)

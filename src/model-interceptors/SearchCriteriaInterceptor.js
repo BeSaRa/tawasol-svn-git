@@ -23,7 +23,6 @@ module.exports = function (app) {
             model.DocType = model.DocType = model.DocType && model.DocType.hasOwnProperty('id') ? model.DocType.lookupKey : model.DocType;
             model.DocSubjectSrc = model.DocSubject;
             model.DocSubject = null;
-
             return model;
         });
 

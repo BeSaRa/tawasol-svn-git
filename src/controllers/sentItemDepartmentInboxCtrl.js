@@ -160,7 +160,8 @@ module.exports = function (app) {
                 dialog.errorMessage(langService.get('cannot_recall_received_book'));
                 return;
             }
-            sentItemDepartmentInboxService.recallSentItem(sentItemDepartmentInbox, $event)
+            sentItemDepartmentInboxService
+                .recallSentItem(sentItemDepartmentInbox, $event)
                 .then(function (result) {
                     if (result) {
                         self.reloadSentItemDepartmentInboxes(self.grid.page)
