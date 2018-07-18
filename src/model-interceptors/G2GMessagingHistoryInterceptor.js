@@ -17,9 +17,43 @@ module.exports = function (app) {
             model.deliveryDate = generator.getTimeStampFromDate(model.deliveryDate);
             model.sentDate = generator.getTimeStampFromDate(model.sentDate);
             model.updateDate = generator.getTimeStampFromDate(model.updateDate);
+
             delete model.recordInfo;
             delete model.statusInfo;
             delete model.typeInfo;
+            // all the below properties are removed because service is using the G2GMessaging history but returning G2GMessagingHistoryView
+            delete model.mainSiteFrom;
+            delete model.subSiteFrom;
+            delete model.sentDate;
+            delete model.sentByOrg;
+            delete model.sentBy;
+            delete model.mainSiteTo;
+            delete model.subSiteTo;
+            delete model.typeString;
+            delete model.followupStatusString;
+            delete model.followupDate;
+            delete model.receivedByOrg;
+            delete model.receivedBy;
+            delete model.deliveryDate;
+            delete model.statusString;
+            delete model.incomingDocId;
+            delete model.refIncomingDocId;
+            delete model.updatedByOrg;
+            delete model.updatedBy;
+            delete model.updateDate;
+            delete model.comment;
+            delete model.g2GRefNo;
+            delete model.outgoingSerial;
+            delete model.subject;
+            delete model.securityLevelString;
+            delete model.prioretyLevelString;
+            delete model.isCurrent;
+            delete model.isRead;
+            delete model.creationDocDate;
+            delete model.lockedBy;
+            delete model.lockedDate;
+
+
             return model;
         });
 

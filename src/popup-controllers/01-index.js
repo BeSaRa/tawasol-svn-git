@@ -62,7 +62,7 @@ module.exports = function (app) {
     require('./broadcastPopCtrl')(app);
     require('./moveToFolderPopCtrl')(app);
     require('./readyToExportOptionPopCtrl')(app);
-    require('./departmentInboxSentItemPopCtrl')(app);
+    require('./selectMonthYearPopCtrl')(app);
     require('./manageDocumentCorrespondencePopCtrl')(app);
     require('./manageDocumentContentPopCtrl')(app);
     require('./distributionWorkflowAddOUPopCtrl')(app);

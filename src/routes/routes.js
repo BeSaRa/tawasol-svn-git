@@ -1466,11 +1466,11 @@ module.exports = function (app) {
                     lookups: function (g2gLookupService) {
                         'ngInject';
                         return g2gLookupService.getG2gLookups();
-                    },
+                    }/*,
                     g2gItems: function (g2gSentItemsService) {
                         'ngInject';
                         return g2gSentItemsService.loadG2gItems();
-                    }
+                    }*/
                 }
             })
     });

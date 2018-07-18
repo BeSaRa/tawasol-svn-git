@@ -1,12 +1,12 @@
 module.exports = function (app) {
-    app.controller('departmentInboxSentItemPopCtrl', function (
+    app.controller('selectMonthYearPopCtrl', function (
                                                                dialog,
                                                                langService,
                                                                currentMonth,
                                                                currentYear) {
         'ngInject';
         var self = this;
-        self.controllerName = 'departmentInboxSentItemPopCtrl';
+        self.controllerName = 'selectMonthYearPopCtrl';
         self.validateLabels = {};
 
         self.selectedMonthCopy =  angular.copy(currentMonth);
@@ -15,7 +15,6 @@ module.exports = function (app) {
         self.selectedMonth = currentMonth || null;
         self.selectedYear = currentYear || null;
 
-        //self.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         self.months = [
             {
                 text: 'january',
@@ -81,7 +80,7 @@ module.exports = function (app) {
          * @param $event
          * @returns {*|Promise<any>}
          */
-        self.getSentItemsDataForMonthAndYear = function ($event) {
+        self.returnMonthAndYear = function ($event) {
             dialog.hide(
                 {
                     month: self.selectedMonth,
@@ -94,7 +93,7 @@ module.exports = function (app) {
         /**
          * @description Close the popup
          */
-        self.closeDepartmentInboxSentItemPopupFromCtrl = function () {
+        self.closeMonthAndYearPopup = function () {
             dialog.cancel();
         }
     });

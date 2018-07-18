@@ -1,7 +1,6 @@
 module.exports = function (app) {
     app.controller('g2gSentItemsCtrl', function (lookupService,
                                                  g2gSentItemsService,
-                                                 g2gItems,
                                                  $q,
                                                  langService,
                                                  toast,
@@ -20,7 +19,7 @@ module.exports = function (app) {
          * @description All g2g inbox items
          * @type {*}
          */
-        self.g2gItems = g2gItems;
+        self.g2gItems = [];
 
         /**
          * @description Contains the selected g2g inbox items
@@ -56,6 +55,22 @@ module.exports = function (app) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
+        var today = new Date();
+        self.selectedYear = today.getFullYear();
+        self.selectedMonth = today.getMonth() + 1;
+        self.getMonthYearForSentItems = function ($event) {
+            g2gSentItemsService
+                .openDateAndYearDialog(self.selectedMonth, self.selectedYear, $event)
+                .then(function (result) {
+                    self.selectedMonth = result.month;
+                    self.selectedYear = result.year;
+                    self.selectedMonthText = angular.copy(result.monthText);
+                    self.reloadG2gItems(self.grid.page);
+                });
+        };
+
+        self.getMonthYearForSentItems();
+
         /**
          * @description Reload the grid of g2g inbox item
          * @param pageNumber
@@ -65,7 +80,7 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.progress = defer.promise;
             return g2gSentItemsService
-                .loadG2gItems()
+                .loadG2gItems(self.selectedMonth, self.selectedYear)
                 .then(function (result) {
                     self.g2gItems = result;
                     self.selectedG2gItems = [];

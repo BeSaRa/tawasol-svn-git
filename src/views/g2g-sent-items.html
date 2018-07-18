@@ -8,6 +8,11 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
+            <span ng-if="!!(ctrl.selectedMonthText && ctrl.selectedYear)">{{lang[ctrl.selectedMonthText]}}, {{ctrl.selectedYear}}</span>
+            <md-button ng-click="ctrl.getMonthYearForSentItems($event)" class="md-icon-button"
+                       tooltip="{{lang.select_month_and_year}}">
+                <md-icon md-svg-icon="calendar"></md-icon>
+            </md-button>
             <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
         </div>
         <!-- end page-header -->

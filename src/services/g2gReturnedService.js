@@ -1,17 +1,17 @@
 module.exports = function (app) {
     app.service('g2gReturnedService', function (urlService,
-                                                    $http , 
-                                                    $q , 
-                                                    generator,
-                                                    G2GMessagingHistory,
-                                                    _,
-                                                    dialog,
-                                                    langService,
-                                                    toast,
-                                                    cmsTemplate) {
+                                                $http,
+                                                $q,
+                                                generator,
+                                                G2GMessagingHistory,
+                                                _,
+                                                dialog,
+                                                langService,
+                                                toast,
+                                                cmsTemplate) {
         var self = this;
         self.serviceName = 'g2gReturnedService';
-        
+
         self.g2gItems = [];
 
         /**
@@ -25,7 +25,7 @@ module.exports = function (app) {
                 return self.g2gItems;
             });
         };
-        
+
         /**
          * @description Get g2g inbox items from self.g2gItems if found and if not load it from server again.
          * @returns {Promise|g2gItems}
@@ -46,21 +46,38 @@ module.exports = function (app) {
             });
         };
 
-        self.terminateG2G = function(g2gItemId){
+        self.terminateG2G = function (g2gItem) {
+            return dialog.confirmMessage(langService.get('confirm_terminate').change({name: g2gItem.getTranslatedName()}))
+                .then(function () {
+                    g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
+                    return $http.put((urlService.g2gInbox + 'terminate'), g2gItem).then(function (result) {
+                        return result.data.rs;
+                    }).catch(function (error) {
+                        errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
+                            dialog.errorMessage(langService.get('g2g_you_are_not_authorized'));
+                        });
+                        errorCode.checkIf(error, 'G2G_ERROR_WHILE_TERMINATE', function () {
+                            dialog.errorMessage(langService.get('g2g_error_occurred_while_terminate'));
+                        });
+                        errorCode.checkIf(error, 'G2G_BOOK_PROPERTIES_CAN_NOT_BE_EMPTY', function () {
+                            dialog.errorMessage(langService.get('g2g_book_properties_can_not_be_empty'));
+                        });
+                        return false;
+                    });
+                });
+        };
+
+        self.resendG2G = function (g2gItemId) {
             g2gItemId = g2gItemId instanceof G2GMessagingHistory ? g2gItemId.correspondence.id : g2gItemId;
         };
 
-        self.resendG2G = function(g2gItemId){
-            g2gItemId = g2gItemId instanceof G2GMessagingHistory ? g2gItemId.correspondence.id : g2gItemId;
-        };
-
-        self.openG2G  = function(g2gCorrespondence){
+        self.openG2G = function (g2gCorrespondence) {
             // intercept send instance for G2GMessagingHistory
             //g2gCorrespondence =  g2gCorrespondence instanceof G2GMessagingHistory ? generator.interceptSendInstance('G2GMessagingHistory', g2gCorrespondence) : g2gCorrespondence;
             // get correspondence from G2G object
 
             return $http
-                .post(urlService.g2gInbox + 'open', g2gCorrespondence )
+                .post(urlService.g2gInbox + 'open', g2gCorrespondence)
                 .then(function (result) {
                     console.log(result);
                     return result;
@@ -72,6 +89,6 @@ module.exports = function (app) {
          * @type {{delete: generator.delete, update: generator.update}}
          * @private
          */
-        self._sharedMethods = generator.generateSharedMethods(self.deleteG2gInbox, self.updateG2gInbox);       
+        self._sharedMethods = generator.generateSharedMethods(self.deleteG2gInbox, self.updateG2gInbox);
     });
 };

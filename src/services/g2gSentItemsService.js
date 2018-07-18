@@ -17,10 +17,13 @@ module.exports = function (app) {
 
         /**
          * @description Load the g2g sent items from server.
-         * @returns {Promise|g2gItems}
+         * @param month
+         * @param year
+         * @returns {*}
          */
-        self.loadG2gItems = function () {
-            return $http.get(urlService.g2gInbox + 'getOutboxByOU').then(function (result) {
+        self.loadG2gItems = function (month, year) {
+            month = month.hasOwnProperty('value') ? month.value : month;
+            return $http.get(urlService.g2gInbox + 'get-outbox-by-ou/month/'+month+'/year/'+year).then(function (result) {
                 self.g2gItems = generator.generateCollection(result.data.rs, G2GMessagingHistory, self._sharedMethods);
                 self.g2gItems = generator.interceptReceivedCollection('G2GMessagingHistory', self.g2gItems);
                 return self.g2gItems;
@@ -45,6 +48,26 @@ module.exports = function (app) {
             return _.find(self.g2gItems, function (g2gItem) {
                 return Number(g2gItem.id) === Number(g2gItemId);
             });
+        };
+
+        /**
+         * @description Opens the dialog to select the month and year to get the data in the grid
+         * @param currentMonth
+         * @param currentYear
+         * @param $event
+         */
+        self.openDateAndYearDialog = function (currentMonth, currentYear, $event) {
+            return dialog
+                .showDialog({
+                    targetEvent: $event,
+                    template: cmsTemplate.getPopup('select-month-year'),
+                    controller: 'selectMonthYearPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        currentMonth: currentMonth,
+                        currentYear: currentYear
+                    }
+                });
         };
 
         /**
@@ -82,24 +105,27 @@ module.exports = function (app) {
          * @param $event
          */
         self.recallG2G = function (g2gItem, $event) {
-            g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
-            return $http.put((urlService.g2gInbox + 'recall'), g2gItem).then(function (result) {
-                return result.data.rs;
-            }).catch(function (error) {
-                errorCode.checkIf(error, 'CANNOT_RECALL_OPENED_BOOK', function () {
-                    dialog.errorMessage(langService.get('cannot_recall_opened_book'));
+            return dialog.confirmMessage(langService.get('confirm_recall').change({name: g2gItem.getTranslatedName()}))
+                .then(function () {
+                    g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
+                    return $http.put((urlService.g2gInbox + 'recall'), g2gItem).then(function (result) {
+                        return result.data.rs;
+                    }).catch(function (error) {
+                        errorCode.checkIf(error, 'CANNOT_RECALL_OPENED_BOOK', function () {
+                            dialog.errorMessage(langService.get('cannot_recall_opened_book'));
+                        });
+                        errorCode.checkIf(error, 'G2G_BOOK_PROPERTIES_CAN_NOT_BE_EMPTY', function () {
+                            dialog.errorMessage(langService.get('g2g_book_properties_can_not_be_empty'));
+                        });
+                        errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
+                            dialog.errorMessage(langService.get('g2g_you_are_not_authorized'));
+                        });
+                        errorCode.checkIf(error, 'G2G_ERROR_WHILE_RECALLING', function () {
+                            dialog.errorMessage(langService.get('g2g_error_occurred_while_recalling'));
+                        });
+                        return false;
+                    });
                 });
-                errorCode.checkIf(error, 'G2G_BOOK_PROPERTIES_CAN_NOT_BE_EMPTY', function () {
-                    dialog.errorMessage(langService.get('g2g_book_properties_can_not_be_empty'));
-                });
-                errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED_TO_RECALL', function () {
-                    dialog.errorMessage(langService.get('g2g_you_are_not_authorized_to_recall'));
-                });
-                errorCode.checkIf(error, 'G2G_ERROR_WHILE_RECALLING', function () {
-                    dialog.errorMessage(langService.get('g2g_error_occurred_while_recalling'));
-                });
-                return false;
-            });
         };
 
 

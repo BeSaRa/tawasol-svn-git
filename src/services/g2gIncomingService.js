@@ -21,7 +21,7 @@ module.exports = function (app) {
          * @returns {Promise|g2gItems}
          */
         self.loadG2gItems = function () {
-            return $http.get(urlService.g2gInbox + 'getInboxByOU').then(function (result) {
+            return $http.get(urlService.g2gInbox + 'get-inbox-by-ou').then(function (result) {
                 self.g2gItems = generator.generateCollection(result.data.rs, G2G, self._sharedMethods);
                 self.g2gItems = generator.interceptReceivedCollection('G2G', self.g2gItems);
                 return self.g2gItems;
@@ -93,7 +93,7 @@ module.exports = function (app) {
                 .then(function (reason) {
                     return $http
                         .put(urlService.g2gInbox + "returnToSender", {
-                            entity: g2gCorrespondence,
+                            properties: g2gCorrespondence,
                             comment: reason
                         })
                         .then(function (result) {

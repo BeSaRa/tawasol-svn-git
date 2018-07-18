@@ -156,7 +156,7 @@ module.exports = function (app) {
          */
         self.controllerMethod = {
             /**
-             * @description Opens the dialog to select the month and ab year to get the data in the grid
+             * @description Opens the dialog to select the month and year to get the data in the grid
              * @param currentMonth
              * @param currentYear
              * @param $event
@@ -165,8 +165,8 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('department-inbox-sent-item'),
-                        controller: 'departmentInboxSentItemPopCtrl',
+                        template: cmsTemplate.getPopup('select-month-year'),
+                        controller: 'selectMonthYearPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
                             currentMonth: currentMonth,

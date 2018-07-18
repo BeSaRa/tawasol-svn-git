@@ -20,8 +20,7 @@ module.exports = function (app) {
                                                  WorkItem,
                                                  ResolveDefer,
                                                  generator,
-                                                 dialog,
-                                                 employeeService) {
+                                                 dialog) {
         'ngInject';
         var self = this;
 

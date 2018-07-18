@@ -9,9 +9,9 @@
                 <div layout="column" class="p20">
                     <div layout="row">
                         <md-input-container flex>
-                            <label for="month">{{lang.dep_month}}</label>
+                            <label for="month">{{lang.month}}</label>
                             <md-select name="month" id="month" required
-                                       aria-label="{{lang.dep_month}}"
+                                       aria-label="{{lang.month}}"
                                        ng-model="ctrl.selectedMonth">
                                 <md-option ng-value="month.value" ng-repeat="month in ctrl.months track by $index">
                                     {{lang[month.text]}}
@@ -39,11 +39,11 @@
                 </div>
                 <div layout="row">
                     <md-button class="md-raised" ng-disabled="monthAndYearForm.$invalid"
-                               ng-click="ctrl.getSentItemsDataForMonthAndYear($event)">
+                               ng-click="ctrl.returnMonthAndYear($event)">
                         {{lang.dep_get_sent_items}}
                     </md-button>
                     <span flex></span>
-                    <md-button class="md-raised" ng-click="ctrl.closeDepartmentInboxSentItemPopupFromCtrl()">
+                    <md-button class="md-raised" ng-click="ctrl.closeMonthAndYearPopup()">
                         {{lang.close}}
                     </md-button>
                 </div>

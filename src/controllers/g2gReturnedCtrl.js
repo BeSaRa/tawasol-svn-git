@@ -91,7 +91,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.reloadG2gItems(self.grid.page);
                 })
-                .catch(function(error){
+                .catch(function (error) {
                     self.reloadG2gItems(self.grid.page);
                 })
         };
@@ -110,18 +110,17 @@ module.exports = function (app) {
         };
 
 
-
         self.resend = function (g2gItem, $event) {
             return g2gReturnedService.resendG2G(g2gItem)
                 .then(function (result) {
-                    toast.success(langService.get('success'));
+                    toast.success(langService.get('resend_specific_success').change({name: g2gItem.getTranslatedName()}));
                 })
         };
 
         self.terminate = function (g2gItem, $event) {
             return g2gReturnedService.terminateG2G(g2gItem)
                 .then(function (result) {
-                    toast.success(langService.get('success'));
+                    toast.success(langService.get('terminate_success'));
                 })
         };
 
@@ -236,7 +235,6 @@ module.exports = function (app) {
                 class: "action-green",
                 //permissionKey: 'VIEW_DOCUMENT',
                 showInView: true,
-                hide: true,
                 checkShow: self.checkToShowAction
             },
             // View Delivery Report
