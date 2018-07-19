@@ -753,6 +753,8 @@ module.exports = function (app) {
             return self.emptySiteSearch;
         }, function (value) {
             if (value) {
+                self.selectedSiteType = null;
+                self.selectedMainSite = null;
                 self.subSearchResult = [];
                 self.emptySiteSearch = false;
             }

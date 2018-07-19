@@ -5,8 +5,7 @@
         <md-content class="white-bg">
             <div scroll-directive layout="column">
                 <!-- Simple Search Box -->
-                <div layout="row" flex
-                     ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
+                <div layout="row" flex>
                     <md-input-container class="exclude-margin" flex>
                         <label>{{lang.sites_select_site_type}}</label>
                         <md-select ng-model="ctrl.selectedSiteType" ng-change="ctrl.onSiteTypeChange($event)">
@@ -28,8 +27,7 @@
                 </div>
 
                 <!-- Advanced Search Box -->
-                <div layout="row" flex
-                     ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
+                <div layout="row" flex ng-if="false">
                     <!-- Correspondence Site Type -->
                     <md-input-container flex>
                         <label>{{lang.sites_select_site_type}}</label>
@@ -246,29 +244,29 @@
                                             </div>
                                         </td>
                                         <!--<td md-cell>-->
-                                            <!--<div flex layout="row" layout-align="start center">-->
-                                                <!--<md-menu-bar>-->
-                                                    <!--<md-menu>-->
-                                                        <!--<button class="md-icon-button" ng-click="$mdMenu.open()">-->
-                                                            <!--<md-icon md-svg-icon="plus"></md-icon>-->
-                                                        <!--</button>-->
-                                                        <!--<md-menu-content width="3">-->
-                                                            <!--<md-menu-item>-->
-                                                                <!--<md-button ng-click="ctrl.addSiteTo(site)"-->
-                                                                           <!--ng-disabled="!!ctrl.disableCorrespondence">-->
-                                                                    <!--{{lang.sites_original}}-->
-                                                                <!--</md-button>-->
-                                                            <!--</md-menu-item>-->
-                                                            <!--<md-menu-item>-->
-                                                                <!--<md-button ng-click="ctrl.addSiteCC(site)"-->
-                                                                           <!--ng-disabled="!!ctrl.disableCorrespondence">-->
-                                                                    <!--{{lang.sites_copy}}-->
-                                                                <!--</md-button>-->
-                                                            <!--</md-menu-item>-->
-                                                        <!--</md-menu-content>-->
-                                                    <!--</md-menu>-->
-                                                <!--</md-menu-bar>-->
-                                            <!--</div>-->
+                                        <!--<div flex layout="row" layout-align="start center">-->
+                                        <!--<md-menu-bar>-->
+                                        <!--<md-menu>-->
+                                        <!--<button class="md-icon-button" ng-click="$mdMenu.open()">-->
+                                        <!--<md-icon md-svg-icon="plus"></md-icon>-->
+                                        <!--</button>-->
+                                        <!--<md-menu-content width="3">-->
+                                        <!--<md-menu-item>-->
+                                        <!--<md-button ng-click="ctrl.addSiteTo(site)"-->
+                                        <!--ng-disabled="!!ctrl.disableCorrespondence">-->
+                                        <!--{{lang.sites_original}}-->
+                                        <!--</md-button>-->
+                                        <!--</md-menu-item>-->
+                                        <!--<md-menu-item>-->
+                                        <!--<md-button ng-click="ctrl.addSiteCC(site)"-->
+                                        <!--ng-disabled="!!ctrl.disableCorrespondence">-->
+                                        <!--{{lang.sites_copy}}-->
+                                        <!--</md-button>-->
+                                        <!--</md-menu-item>-->
+                                        <!--</md-menu-content>-->
+                                        <!--</md-menu>-->
+                                        <!--</md-menu-bar>-->
+                                        <!--</div>-->
                                         <!--</td>-->
                                     </tr>
                                     </tbody>
@@ -291,7 +289,9 @@
                         <md-toolbar class="md-table-toolbar md-default"
                                     ng-class="{'selected':ctrl.sitesInfoToSelected.length}">
                             <div class="md-toolbar-tools">
-                                <div class="p0p5" ng-if="!ctrl.sitesInfoToSelected.length" flex>{{lang.sites_original}}</div>
+                                <div class="p0p5" ng-if="!ctrl.sitesInfoToSelected.length" flex>
+                                    {{lang.sites_original}}
+                                </div>
                                 <div ng-if="ctrl.sitesInfoToSelected.length" layout="row" flex
                                      layout-align="start center">
                                     <div class="p0p5">{{ctrl.sitesInfoToSelected.length}} {{lang.items_selected}}</div>
