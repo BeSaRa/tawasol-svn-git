@@ -1,21 +1,22 @@
 #co-ordinates-container {
   /*width: 595px;
   height: 842px;*/
-  //height: calc(842px / 2);
   direction: ltr !important;
   background-color: #EEE;
+  margin: 0 !important;
 }
 
 #barcode-box {
   //width: 200px;
   //height: 200px;
+  margin: 0 !important;
 }
 
 #security-text {
   text-align: center;
   margin-top: 0;
   margin-bottom: 0;
-  &.direction-1 {
+  &.orientation-1 {
     /* Safari */
     -webkit-transform: rotate(0deg);
     /* Firefox */
@@ -27,7 +28,7 @@
     /* Internet Explorer */
     transform: rotate(0deg);
   }
-  &.direction-2 {
+  &.orientation-2 {
     /* Safari */
     -webkit-transform: rotate(-90deg);
     /* Firefox */
@@ -39,7 +40,7 @@
     /* Internet Explorer */
     transform: rotate(-90deg);
   }
-  &.direction-3 {
+  &.orientation-3 {
     /* Safari */
     -webkit-transform: rotate(-45deg);
     /* Firefox */
@@ -51,7 +52,7 @@
     /* Internet Explorer */
     transform: rotate(-45deg);
   }
-  &.direction-4 {
+  &.orientation-4 {
     /* Safari */
     -webkit-transform: rotate(45deg);
     /* Firefox */

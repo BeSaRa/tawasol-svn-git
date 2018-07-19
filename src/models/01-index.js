@@ -152,4 +152,6 @@ module.exports = function (app) {
     require('./DocumentSecurity')(app);
     require('./ApprovedCriteria')(app);
     require('./DocumentSecuritySetting')(app);
+    require('./DocumentSecurityBarcodeBox')(app);
+    require('./DocumentSecurityPage')(app);
 };

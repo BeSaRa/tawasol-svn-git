@@ -1,9 +1,7 @@
-<div id="co-ordinates-container" ng-style="ctrl.barcodeSpecs.pageSettingsPx">
-    <div id="barcode-box"
-         ng-style="ctrl.barcodeSpecs.barcodeBoxPositionSizePx">
-        <!--ng-if="ctrl.documentSecuritySetting.status2D"
-         ng-hide="!ctrl.documentSecuritySetting.status2D"-->
-        <img src="assets/images/barcode-sample.png" width="100%" height="100%" >
+<div id="co-ordinates-container" ng-style="ctrl.pageDimensions">
+    <div id="barcode-box" class="cursor-move" ng-hide="!ctrl.documentSecuritySetting.status2D"
+         ng-style="ctrl.barcodeBoxDimensionsAndPosition">
+        <img src="assets/images/qrcode-sample.png" width="100%" height="100%" >
     </div>
 
     <div id="security-text" ng-if="ctrl.documentSecuritySetting.textOrientation"

@@ -14,7 +14,9 @@ module.exports = function (app) {
                                                                        globalSettingService,
                                                                        BarcodeSetting,
                                                                        lookupService,
-                                                                       documentSecurityService) {
+                                                                       documentSecurityService,
+                                                                       DocumentSecurityBarcodeBox,
+                                                                       DocumentSecurityPage) {
         'ngInject';
         var self = this;
         self.controllerName = 'documentSecurityWatermarkDirectiveCtrl';
@@ -23,11 +25,48 @@ module.exports = function (app) {
         self.availableDocTypesToProtect = lookupService.returnLookups(lookupService.documentClass, true);
         self.documentSecurityTextOrientations = lookupService.returnLookups(lookupService.waterMarkTextOrientation);
 
+        self.documentSecurityPage = new DocumentSecurityPage();
+        self.documentSecurityBarcodeBox = new DocumentSecurityBarcodeBox();
+
         $timeout(function () {
             self.initializeDocumentSecurity();
-            self.setDefaultBarcodeSettings();
             self.securityLevels = self.globalSettingCopy.securityLevels;
         });
+
+        /**
+         * @description Initializes the document security
+         * If value is already available(on load or after reload), value will be used from service
+         * otherwise, new object will be initialized
+         */
+        self.initializeDocumentSecurity = function () {
+            /* After reload, documentSecurity will have value in service and it will differentiate all kinds of security settings*/
+            if (documentSecurityService.documentSecurity) {
+                self.documentSecurity = angular.copy(documentSecurityService.documentSecurity);
+                _.map(self.documentSecurity.settingDetails, function (settingDetail) {
+                    if (settingDetail.documentType === 0)
+                        self.documentSecurityOutgoing = settingDetail;
+                    else if (settingDetail.documentType === 1)
+                        self.documentSecurityIncoming = settingDetail;
+                    else if (settingDetail.documentType === 2)
+                        self.documentSecurityInternal = settingDetail;
+                    else if (settingDetail.documentType === 3 || settingDetail.documentType === 4)
+                        self.documentSecurityTawasolAttachment = settingDetail;
+                })
+            }
+            else {
+                self.documentSecurity = new DocumentSecurity();
+                self.documentSecurityOutgoing = new DocumentSecuritySetting({documentType: 0});
+                self.documentSecurityIncoming = new DocumentSecuritySetting({documentType: 1});
+                self.documentSecurityInternal = new DocumentSecuritySetting({documentType: 2});
+                self.documentSecurityTawasolAttachment = new DocumentSecuritySetting({documentType: 4});
+            }
+
+            self.documentSecurityCopy = angular.copy(self.documentSecurity);
+            self.documentSecurityOutgoingCopy = angular.copy(self.documentSecurityOutgoing);
+            self.documentSecurityIncomingCopy = angular.copy(self.documentSecurityIncoming);
+            self.documentSecurityInternalCopy = angular.copy(self.documentSecurityInternal);
+            self.documentSecurityTawasolAttachmentCopy = angular.copy(self.documentSecurityTawasolAttachment);
+        };
 
         self.watermarkTabsToShow = [
             'outgoing',
@@ -70,108 +109,6 @@ module.exports = function (app) {
         self.setCurrentWatermarkTab = function (tabName, lookupKey) {
             self.selectedWatermarkTabName = tabName.toLowerCase();
             _setSelectedTabDocType(lookupKey)
-        };
-
-        /**
-         * @description Initializes the document security
-         * If value is already available(on load or after reload), value will be used from service
-         * otherwise, new object will be initialized
-         */
-        self.initializeDocumentSecurity = function () {
-            /* After reload, documentSecurity will have value in service and it will differentiate all kinds of security settings*/
-            if (documentSecurityService.documentSecurity) {
-                self.documentSecurity = angular.copy(documentSecurityService.documentSecurity);
-                _.map(self.documentSecurity.settingDetails, function (settingDetail) {
-                    if (settingDetail.documentType === 0)
-                        self.documentSecurityOutgoing = settingDetail;
-                    else if (settingDetail.documentType === 1)
-                        self.documentSecurityIncoming = settingDetail;
-                    else if (settingDetail.documentType === 2)
-                        self.documentSecurityInternal = settingDetail;
-                    else if (settingDetail.documentType === 3 || settingDetail.documentType === 4)
-                        self.documentSecurityTawasolAttachment = settingDetail;
-                })
-            }
-            else {
-                self.documentSecurity = new DocumentSecurity();
-                self.documentSecurityOutgoing = new DocumentSecuritySetting({documentType: 0});
-                self.documentSecurityIncoming = new DocumentSecuritySetting({documentType: 1});
-                self.documentSecurityInternal = new DocumentSecuritySetting({documentType: 2});
-                self.documentSecurityTawasolAttachment = new DocumentSecuritySetting({documentType: 4});
-            }
-
-            self.documentSecurityCopy = angular.copy(self.documentSecurity);
-            self.documentSecurityOutgoingCopy = angular.copy(self.documentSecurityOutgoing);
-            self.documentSecurityIncomingCopy = angular.copy(self.documentSecurityIncoming);
-            self.documentSecurityInternalCopy = angular.copy(self.documentSecurityInternal);
-            self.documentSecurityTawasolAttachmentCopy = angular.copy(self.documentSecurityTawasolAttachment);
-        };
-
-        /**
-         * @description Set the default barcode settings
-         * Contains pageSettings, barcode size, barcode size(in pixels), barcodeBoxPosition(in pixels)
-         * @private
-         */
-        self.setDefaultBarcodeSettings = function () {
-            var pageSettings = {
-                type: 'A4',
-                height: 842,
-                width: 595,
-                hwRatio: (840 / 592)//1.4145
-            };
-            var pageSettingsPx = {
-                type: pageSettings.type,
-                height: pageSettings.height + 'px',
-                width: pageSettings.width + 'px',
-                hwRatio: (pageSettings.height / pageSettings.width)//1.4145
-            };
-
-            var barcodeHeight = angular.copy(self.globalSetting.barcodeElements.height),
-                barcodeWidth = angular.copy(self.globalSetting.barcodeElements.width);
-
-            barcodeHeight = barcodeHeight.indexOf('px') > -1 ? Number(barcodeHeight.substring(0, barcodeHeight.indexOf('px'))) : Number(barcodeHeight);
-            barcodeWidth = barcodeWidth.indexOf('px') > -1 ? Number(barcodeWidth.substring(0, barcodeWidth.indexOf('px'))) : Number(barcodeWidth);
-
-            var barcodeSize = {
-                height: barcodeHeight,
-                width: barcodeWidth
-            };
-            var barcodeSizePx = {
-                height: barcodeSize.height + 'px',
-                width: barcodeSize.width + 'px'
-            };
-            var barcodeBoxPosition = {
-                //left: (pageSettings.width - barcodeSize.width) - self.documentSecurity.locationX2D,
-                left: self.documentSecurity.locationX2D,
-                top: (pageSettings.height - barcodeSize.height) - self.documentSecurity.locationY2D
-            };
-            var barcodeBoxPositionPx = {
-                left: barcodeBoxPosition.left + 'px',
-                top: barcodeBoxPosition.top + 'px'
-            };
-            var barcodeBoxPositionSize = {
-                left: barcodeBoxPosition.left,
-                top: barcodeBoxPosition.top,
-                height: barcodeSize.height,
-                width: barcodeSize.width
-            };
-            var barcodeBoxPositionSizePx = {
-                left: barcodeBoxPositionPx.left,
-                top: barcodeBoxPositionPx.top,
-                height: barcodeSizePx.height,
-                width: barcodeSizePx.width
-            };
-
-            self.barcodeSpecs = {
-                pageSettings: pageSettings,
-                pageSettingsPx: pageSettingsPx,
-                barcodeSize: barcodeSize,
-                barcodeSizePx: barcodeSizePx,
-                barcodeBoxPosition: barcodeBoxPosition,
-                barcodeBoxPositionPx: barcodeBoxPositionPx,
-                barcodeBoxPositionSize: barcodeBoxPositionSize,
-                barcodeBoxPositionSizePx: barcodeBoxPositionSizePx
-            };
         };
 
         self.checkDisabledDocSecurity = function (type) {
@@ -271,29 +208,3 @@ module.exports = function (app) {
 
     });
 };
-
-
-/* function _setDocSecurityType(docType) {
-     var type = docType.lookupStrKey;
-     if (type.toLowerCase() === 'tawasolattachment')
-         type = 'TawasolAttachment';
-     else
-         type = generator.ucFirst(type.toLowerCase());
-
-     self['documentSecurity' + type] = new DocumentSecuritySetting({documentType: docType.lookupKey});
- }
-
- self.resetDocSecurityByType = function (type) {
-     if (!type || type.toLowerCase() === 'all') {
-         _.map(self.availableDocTypesToProtect, function (docType) {
-             _setDocSecurityType(docType);
-         });
-     }
-     else {
-         type = _.find(self.availableDocTypesToProtect, function (docType) {
-             return docType.lookupKey === type;
-         });
-         _setDocSecurityType(type);
-     }
- };
- self.resetDocSecurityByType();*/

@@ -434,38 +434,30 @@
         </form>
     </div>
     <div>
-        <span>{{ctrl.selectedWatermarkTabDocType.getTranslatedName()}} {{lang.document_security}} ({{ctrl.barcodeSpecs.pageSettings.type}})</span>
+        <span>{{ctrl.selectedWatermarkTabDocType.getTranslatedName()}} {{lang.document_security}} ({{ctrl.documentSecurityPage.type}})</span>
         <document-security-co-ordinates-directive
-                ng-if="ctrl.selectedWatermarkTabName === 'outgoing' && ctrl.barcodeSpecs"
+                ng-if="ctrl.selectedWatermarkTabName === 'outgoing'"
                 global-setting="ctrl.globalSetting"
                 document-security="ctrl.documentSecurity"
                 document-security-setting="ctrl.documentSecurityOutgoing"
-                barcode-specs="ctrl.barcodeSpecs"
-                barcode-specs-method="ctrl.setDefaultBarcodeSettings"
         ></document-security-co-ordinates-directive>
         <document-security-co-ordinates-directive
-                ng-if="ctrl.selectedWatermarkTabName === 'incoming' && ctrl.barcodeSpecs"
+                ng-if="ctrl.selectedWatermarkTabName === 'incoming'"
                 global-setting="ctrl.globalSetting"
                 document-security="ctrl.documentSecurity"
                 document-security-setting="ctrl.documentSecurityIncoming"
-                barcode-specs="ctrl.barcodeSpecs"
-                barcode-specs-method="ctrl.setDefaultBarcodeSettings"
         ></document-security-co-ordinates-directive>
         <document-security-co-ordinates-directive
-                ng-if="ctrl.selectedWatermarkTabName === 'internal' && ctrl.barcodeSpecs"
+                ng-if="ctrl.selectedWatermarkTabName === 'internal'"
                 global-setting="ctrl.globalSetting"
                 document-security="ctrl.documentSecurity"
                 document-security-setting="ctrl.documentSecurityInternal"
-                barcode-specs="ctrl.barcodeSpecs"
-                barcode-specs-method="ctrl.setDefaultBarcodeSettings"
         ></document-security-co-ordinates-directive>
         <document-security-co-ordinates-directive
-                ng-if="ctrl.selectedWatermarkTabName === 'tawasolattachment' && ctrl.barcodeSpecs"
+                ng-if="ctrl.selectedWatermarkTabName === 'tawasolattachment'"
                 global-setting="ctrl.globalSetting"
                 document-security="ctrl.documentSecurity"
                 document-security-setting="ctrl.documentSecurityTawasolAttachment"
-                barcode-specs="ctrl.barcodeSpecs"
-                barcode-specs-method="ctrl.setDefaultBarcodeSettings"
         ></document-security-co-ordinates-directive>
     </div>
 </div>

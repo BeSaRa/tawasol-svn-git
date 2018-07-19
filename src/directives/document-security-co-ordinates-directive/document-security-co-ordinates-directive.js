@@ -13,16 +13,16 @@ module.exports = function (app) {
             scope: {
                 globalSetting: '=',
                 documentSecurity: '=',
-                documentSecuritySetting: '=',
-                barcodeSpecs: '=',
-                barcodeSpecsMethod: '='
+                documentSecuritySetting: '='
             },
             link: function (scope, element, attrs) {
                 element = angular.element(element[0].querySelector('#barcode-box'));
-                var pageSpecs = scope.ctrl.barcodeSpecs.pageSettings,
-                    barcodeSize = scope.ctrl.barcodeSpecs.barcodeSize,
-                    barcodeSizeSpecs = scope.ctrl.barcodeSpecs.barcodeSizePx,
-                    defer = null;
+                var defer = null, newTop, newLeft;
+
+                var documentSecurityPage = scope.ctrl.documentSecurityPage,
+                    calculatedPageDimensions = documentSecurityPage.getCalculatedDimensions(),
+                    barcodeBox = scope.ctrl.documentSecurityBarcodeBox,
+                    barcodeBoxDimensions = barcodeBox.getCalculatedDimensions();
 
                 if (element) {
                     element.draggable({
@@ -33,13 +33,16 @@ module.exports = function (app) {
                         stop: function (event, ui) {
                             $timeout(function () {
                                 defer.promise.then(function (result) {
-                                    scope.ctrl.documentSecurity.locationX2D = ui.position.left;
-                                    scope.ctrl.documentSecurity.locationY2D = pageSpecs.height - (ui.position.top + barcodeSize.height);
-                                    scope.ctrl.barcodeSpecsMethod();
-                                })
-                                    .catch(function (error) {
-                                        toast.info(langService.get('can_not_reposition_disabled_2D'));
-                                    });
+                                    newTop = ui.position.top < 0 ? 0 : ui.position.top;
+                                    newLeft = ui.position.left < 0 ? 0 : ui.position.left;
+                                    newTop = (calculatedPageDimensions.height - (newTop + barcodeBoxDimensions.height));
+                                    var updatedDimensions = barcodeBox.calculatePositionsAndDimensions(false, newTop, newLeft, false);
+                                    scope.ctrl.documentSecurity.locationX2D = Math.round(updatedDimensions.left);
+                                    scope.ctrl.documentSecurity.locationY2D = Math.round(updatedDimensions.top);
+
+                                }).catch(function (error) {
+                                    toast.info(langService.get('can_not_reposition_disabled_2D'));
+                                });
                             });
                         },
                         revert: function () {
@@ -56,17 +59,6 @@ module.exports = function (app) {
                         revertDuration: 200
                     })
                 }
-
-                /*scope.$watch(function () {
-                    return scope.ctrl.documentSecuritySetting.status2D;
-                }, function (oldValue, newValue) {
-                    if (newValue) {
-
-                    }
-                    else {
-
-                    }
-                })*/
             }
         }
     })
