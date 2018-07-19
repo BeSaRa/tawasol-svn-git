@@ -26,7 +26,7 @@ module.exports = function (app) {
                             }
                         },
                         update: function () {
-                            //self.updateRows();
+                            self.updateRows();
                         }
                     })
 

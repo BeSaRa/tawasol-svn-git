@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('InternalSearch', function (CMSModelInterceptor,
                                             langService,
+                                            generator,
                                             Internal) {
         return function InternalSearch(model) {
             var self = this;
@@ -29,6 +30,21 @@ module.exports = function (app) {
 
             InternalSearch.prototype.getTranslatedYesNo = function (fieldName) {
                 return self[fieldName] ? langService.get('yes') : langService.get('no');
+            };
+
+            InternalSearch.prototype.prepareApproved = function () {
+                model = this;
+                if (model.approvers) {
+                    model.approvers = model.approvers ? angular.toJson({
+                        userId: model.approvers.applicationUser.id,
+                        userOuId: model.approvers.ouid.id,
+                        approveDate: {
+                            first: generator.getTimeStampFromDate(model.approveDateFrom),
+                            second: generator.getTimeStampFromDate(model.approveDateTo)
+                        }
+                    }) : null;
+                }
+                return model;
             };
 
             // don't remove CMSModelInterceptor from last line

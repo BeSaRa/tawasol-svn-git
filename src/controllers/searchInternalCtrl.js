@@ -23,10 +23,8 @@ module.exports = function (app) {
                                                    dialog,
                                                    mailNotificationService,
                                                    favoriteDocumentsService,
-                                                   approvers//,
-                                                   //centralArchives
-
-    ) {
+                                                   // centralArchives
+                                                   approvers) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchInternalCtrl';
@@ -180,15 +178,6 @@ module.exports = function (app) {
          * @description Search the document on basis of search criteria
          */
         self.search = function () {
-            /*if(self.isSearchByRegOU){
-                if(!employeeService.isCentralArchive()){
-                    self.searchInternal.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
-                }
-            }
-            else{
-                self.searchInternal.registryOU = null;
-            }*/
-
             validationService
                 .createValidation('SEARCH_INTERNAL')
                 .addStep('check_required', true, self.checkRequiredFieldsSearchInternal, self.searchInternal, function (result) {
