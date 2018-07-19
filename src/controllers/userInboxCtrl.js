@@ -942,12 +942,26 @@ module.exports = function (app) {
         // new view document
         self.openNewViewDocument = function (workItem) {
             if (!workItem)
-                self.userInboxes[0].viewNewInboxWorkItem(self.gridActions, true, true);
+                self.userInboxes[0].viewNewInboxWorkItem(self.gridActions, true, true)
+                    .then(function () {
+                        self.reloadUserInboxes(self.grid.page);
+                    })
+                    .catch(function () {
+                        self.reloadUserInboxes(self.grid.page);
+                    });
+
             else
                 workItem.viewNewInboxWorkItem({
                     gridActions: self.gridActions,
                     viewerActions: self.magazineQuickActions
-                }, true, true);
+                }, true, true)
+                    .then(function () {
+                        self.reloadUserInboxes(self.grid.page);
+                    })
+                    .catch(function () {
+                        self.reloadUserInboxes(self.grid.page);
+                    });
+
         };
 
         /**
