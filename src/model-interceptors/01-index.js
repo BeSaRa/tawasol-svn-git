@@ -91,4 +91,6 @@ module.exports = function (app) {
     require('./PartialExportCollectionInterceptor')(app);
     require('./PartialExportSelectiveInterceptor')(app);
     require('./IncomingG2GInterceptor')(app);
+    require('./DocumentSecurityInterceptor')(app);
+    require('./DocumentSecuritySettingInterceptor')(app);
 };

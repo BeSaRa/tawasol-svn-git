@@ -89,4 +89,6 @@ module.exports = function (app) {
     require('./correspondence-item-properties-directive/01-index')(app);
     require('./manage-correspondence-site-g2g-directive/01-index')(app);
     require('./max-date-directive/max-date-directive')(app);
+    require('./document-security-watermark-directive/01-index')(app);
+    require('./document-security-co-ordinates-directive/01-index')(app);
 };

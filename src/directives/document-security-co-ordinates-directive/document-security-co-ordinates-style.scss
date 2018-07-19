@@ -1,0 +1,66 @@
+#co-ordinates-container {
+  /*width: 595px;
+  height: 842px;*/
+  //height: calc(842px / 2);
+  direction: ltr !important;
+  background-color: #EEE;
+}
+
+#barcode-box {
+  //width: 200px;
+  //height: 200px;
+}
+
+#security-text {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  &.direction-1 {
+    /* Safari */
+    -webkit-transform: rotate(0deg);
+    /* Firefox */
+    -moz-transform: rotate(0deg);
+    /* IE */
+    -ms-transform: rotate(0deg);
+    /* Opera */
+    -o-transform: rotate(0deg);
+    /* Internet Explorer */
+    transform: rotate(0deg);
+  }
+  &.direction-2 {
+    /* Safari */
+    -webkit-transform: rotate(-90deg);
+    /* Firefox */
+    -moz-transform: rotate(-90deg);
+    /* IE */
+    -ms-transform: rotate(-90deg);
+    /* Opera */
+    -o-transform: rotate(-90deg);
+    /* Internet Explorer */
+    transform: rotate(-90deg);
+  }
+  &.direction-3 {
+    /* Safari */
+    -webkit-transform: rotate(-45deg);
+    /* Firefox */
+    -moz-transform: rotate(-45deg);
+    /* IE */
+    -ms-transform: rotate(-45deg);
+    /* Opera */
+    -o-transform: rotate(-45deg);
+    /* Internet Explorer */
+    transform: rotate(-45deg);
+  }
+  &.direction-4 {
+    /* Safari */
+    -webkit-transform: rotate(45deg);
+    /* Firefox */
+    -moz-transform: rotate(45deg);
+    /* IE */
+    -ms-transform: rotate(45deg);
+    /* Opera */
+    -o-transform: rotate(45deg);
+    /* Internet Explorer */
+    transform: rotate(45deg);
+  }
+}

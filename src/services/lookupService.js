@@ -27,6 +27,8 @@ module.exports = function (app) {
         self.externalDataSourceType = 'externalDataSourceType';
         self.themeKey = 'themeKey';
         self.gender = 'gender';
+        self.waterMarkTextOrientation = 'waterMarkTextOrientation';
+
         // this propertyConfiguration related to the property configurations Service.
         self.propertyConfigurations = {
             outgoing: [],

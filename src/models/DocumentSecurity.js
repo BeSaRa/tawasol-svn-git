@@ -5,13 +5,11 @@ module.exports = function (app) {
         return function DocumentSecurity(model) {
             var self = this;
             self.id = null;
-            self.ouId = null;
+            self.ouId = -1;
             self.status = true;
-            self.locationX2D = null;
-            self.locationY2D = null;
-            self.locationXText = null;
-            self.locationYText = null;
-            self.settingDetails = null;
+            self.locationX2D = 395;// 595px is A4 page width and 200 px is barcode width(595-200=395)
+            self.locationY2D = 0;// 0 is bottom of page
+            self.settingDetails = [];
 
 
             // every model has required fields

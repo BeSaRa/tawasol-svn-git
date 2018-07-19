@@ -1,0 +1,12 @@
+<div id="co-ordinates-container" ng-style="ctrl.barcodeSpecs.pageSettingsPx">
+    <div id="barcode-box"
+         ng-style="ctrl.barcodeSpecs.barcodeBoxPositionSizePx">
+        <!--ng-if="ctrl.documentSecuritySetting.status2D"
+         ng-hide="!ctrl.documentSecuritySetting.status2D"-->
+        <img src="assets/images/barcode-sample.png" width="100%" height="100%" >
+    </div>
+
+    <div id="security-text" ng-if="ctrl.documentSecuritySetting.textOrientation"
+       ng-style="ctrl.getWatermarkTextStyle()"
+       ng-class="ctrl.getWatermarkTextClass()">ABCDEF-ABCDEF-ABCDEF</div>
+</div>

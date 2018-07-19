@@ -151,4 +151,5 @@ module.exports = function (app) {
     require('./Report')(app);
     require('./DocumentSecurity')(app);
     require('./ApprovedCriteria')(app);
+    require('./DocumentSecuritySetting')(app);
 };

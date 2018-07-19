@@ -5,14 +5,14 @@
             'ngInject';
             urlServiceProvider
                 .setEnvironment('stage')
-                .setBaseUrl('dev', 'http://WIN-6E33FAMDEJE:9080/CMSServices/service')
+                .setBaseUrl('dev', 'http://localhost:9080/CMSServices/service')
                 .setBaseUrl('stage', 'http://100.100.3.220:9080/CMSServices/service')
                 .setBaseUrl('demo', 'http://eblaepm.no-ip.org:9080/CMSServices/service')
                 .setBaseUrl('test', 'http://eblaepm.no-ip.org:9081/CMSServices/service')
                 .setBaseUrl('training', 'http://100.100.3.142:9080/CMSServices/service')
                 .setBaseUrl('ibm', 'http://100.100.3.107:9080/CMSServices/service')
                 .setBaseUrl('manohar', 'http://100.100.197.220:9080/CMSServices/service')
-                .setBaseUrl('hussam', 'http://172.16.10.107:9080/CMSServices/service')
+                .setBaseUrl('hussam', 'http://100.100.11.12:9080/CMSServices/service')
                 .setBaseUrl('migration', 'http://100.100.3.138:9080/CMSServices/service');
 
             // External Systems
@@ -323,7 +323,9 @@
                 // all users who set this user as proxy
                 .addToAllWithBase('usersWhoSetYouAsProxy', 'cms-entity/admin/ou-application-user/proxy/')
                 // G2G inbox
-                .addToAllWithBase('g2gInbox', '/g2g/');
+                .addToAllWithBase('g2gInbox', '/g2g/')
+                // document security in global settings
+                .addToAllWithBase('documentSecurity', 'cms-entity/admin/documentsecurity');
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

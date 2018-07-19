@@ -419,6 +419,10 @@ module.exports = function (app) {
                                 defer.resolve(new GlobalSetting());
                             });
                         return defer.promise;
+                    },
+                    documentSecurity: function(documentSecurityService, globalSetting){
+                        'ngInject';
+                        return documentSecurityService.loadDocumentSecurity();
                     }
                 }
             })
@@ -572,6 +576,10 @@ module.exports = function (app) {
                                 defer.resolve(result);
                             });
                         return defer.promise;
+                    },
+                    documentSecurity: function(documentSecurityService, globalSetting){
+                        'ngInject';
+                        return documentSecurityService.loadDocumentSecurity();
                     }
                 }
             })
