@@ -3,7 +3,9 @@ module.exports = function (app) {
         'ngInject';
         return function DocumentTag(model) {
             var self = this;
-
+            self.id = null;
+            self.tagSource = null;
+            self.tagValue = null;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];

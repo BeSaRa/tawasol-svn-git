@@ -1,9 +1,9 @@
 module.exports = function (app) {
-    app.service('documentTagService', function (urlService, 
-                                                $http, 
-                                                $q, 
-                                                generator, 
-                                                DocumentTag, 
+    app.service('documentTagService', function (urlService,
+                                                $http,
+                                                $q,
+                                                generator,
+                                                DocumentTag,
                                                 _) {
         'ngInject';
         var self = this;
@@ -66,6 +66,18 @@ module.exports = function (app) {
                     generator.interceptSendInstance('DocumentTag', documentTag))
                 .then(function () {
                     return documentTag;
+                });
+        };
+        /**
+         * @description add bulk tags.
+         * @param tags
+         */
+        self.addBulkTags = function (tags) {
+            tags = angular.isArray(tags) ? tags : [tags];
+            return $http
+                .post(generateUrl('tag/bulk'), tags)
+                .then(function () {
+                    return tags;
                 });
         };
         /**

@@ -12,42 +12,27 @@ module.exports = function (app) {
         self.controllerName = 'manageTagsDirectiveCtrl';
         self.fromDialog = false;
         self.employeeService = employeeService;
+        self.searchResult = [];
 
         LangWatcher($scope);
 
-        //// loading 100 document tags from server and check if there are more tags //////////////////////
-        self.loadedTags = [];
-        self.moreThan100Tags = false;
-
-        documentTagService
-            .searchForTag('')
-            .then(function (result) { // always use name convention (result) for any Http response coming from BE.
-                // get here first 100 tag
-                self.moreThan100Tags = result.length > 100;
-                self.loadedTags = _.map(_.take(result, 100), 'tagValue');
-            });
-
-
         self.searchText = '';
 
-        self.addTagToDocument = function () {
-            // outgoingService.saveTags(self.document, self.tags);
+        self.addTagToDocument = function (tag) {
+            self.checkTagExists(tag) ? null : documentTagService.addBulkTags(tag);
         };
 
-        self.checkTagExists = function (text) {
-            return _.find(self.loadedTags, function (item) {
-                return item === text;
-            });
+        self.checkTagExists = function (tag) {
+            return self.searchResult.indexOf(tag) !== -1;
         };
 
         // search for tag -- calling the search service if tags more than 100, unless filter the current tags on client side
         self.querySearch = function (query) {
-            if (self.moreThan100Tags && !self.checkTagExists(query)) {
-                documentTagService.searchForTag(query).then(function (result) {
-                    self.loadedTags = _.map(result, 'tagValue');
+            return documentTagService
+                .searchForTag(query)
+                .then(function (result) {
+                    return self.searchResult = _.uniq(_.map(result, 'tagValue'));
                 });
-                return self.loadedTags;
-            } else return query ? self.loadedTags.filter(createFilterFor(query)) : [];
         };
 
         /**

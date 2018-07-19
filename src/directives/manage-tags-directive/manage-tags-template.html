@@ -11,6 +11,7 @@
                               !ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_TAGS')">
         <md-autocomplete
                 md-autoselect="true"
+                md-no-cache="true"
                 md-selected-item="ctrl.selectedItem"
                 md-search-text="ctrl.searchText"
                 md-items="item in ctrl.querySearch(ctrl.searchText)"
