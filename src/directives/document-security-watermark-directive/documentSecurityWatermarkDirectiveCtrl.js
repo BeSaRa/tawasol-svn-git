@@ -117,12 +117,12 @@ module.exports = function (app) {
                 type: 'A4',
                 height: 842,
                 width: 595,
-                hwRatio: (842 / 595)//1.4145
+                hwRatio: (840 / 592)//1.4145
             };
             var pageSettingsPx = {
                 type: pageSettings.type,
                 height: pageSettings.height + 'px',
-                width: pageSettings + 'px',
+                width: pageSettings.width + 'px',
                 hwRatio: (pageSettings.height / pageSettings.width)//1.4145
             };
 
