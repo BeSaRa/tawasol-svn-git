@@ -434,7 +434,7 @@
         </form>
     </div>
     <div>
-        <span>{{ctrl.selectedWatermarkTabDocType.getTranslatedName()}} {{lang.document_security}} (A4)</span>
+        <span>{{ctrl.selectedWatermarkTabDocType.getTranslatedName()}} {{lang.document_security}} ({{ctrl.barcodeSpecs.pageSettings.type}})</span>
         <document-security-co-ordinates-directive
                 ng-if="ctrl.selectedWatermarkTabName === 'outgoing' && ctrl.barcodeSpecs"
                 global-setting="ctrl.globalSetting"
