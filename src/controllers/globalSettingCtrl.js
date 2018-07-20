@@ -67,8 +67,8 @@ module.exports = function (app) {
             'workflowsecurity',
             'workflownotification',
             'upload',
-            'barcodeSettings'/*,
-            'watermarkSettings'*/
+            'barcodeSettings',
+            'watermarkSettings'
         ];
 
         self.showTab = function (tabName) {
