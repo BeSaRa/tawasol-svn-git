@@ -1656,6 +1656,7 @@ module.exports = function (app) {
                 var sitesValidation = self.validateBeforeSend(correspondence);
                 if (sitesValidation.length && sitesValidation.length === count && count === 1) {
                     var info = correspondence.getInfo();
+
                     return dialog
                         .confirmMessage('no_sites_cannot_send', 'add', 'cancel', $event)
                         .then(function () {
