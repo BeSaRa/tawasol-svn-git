@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                    $http,
                                                    cmsTemplate,
                                                    CommentModel,
+                                                   CMSModelInterceptor,
                                                    employeeService,
                                                    $timeout,
                                                    loadingIndicatorService,
@@ -53,7 +54,7 @@ module.exports = function (app) {
                                                    DocumentComment,
                                                    userFolderService) {
         'ngInject';
-        var self = this;
+        var self = this, managerService;
         self.serviceName = 'correspondenceService';
         // make inherits from parent Model (Correspondence)
         util.inherits(Outgoing, Correspondence);
@@ -1566,6 +1567,7 @@ module.exports = function (app) {
             _.map(correspondence, function (item) {
                 result.push(self.validateSite(item));
             });
+            // send the correspondence that doesn't have correspondence sites
             return _.filter(result, function (item) {
                 return typeof item.getInfo === 'function';
             });
@@ -1648,10 +1650,25 @@ module.exports = function (app) {
          * @returns {promise|*}
          */
         self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming) {
-            /*sitesValidation = self.validateBeforeSend(correspondence);
-                           if (sitesValidation.length && sitesValidation.length === correspondence.length) {
-                               // TODO
-                           }*/
+            var normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
+            var count = angular.isArray(correspondence) ? correspondence.length : 1;
+            if (normalCorrespondence) {
+                var sitesValidation = self.validateBeforeSend(correspondence);
+                if (sitesValidation.length && sitesValidation.length === count && count === 1) {
+                    var info = correspondence.getInfo();
+                    return dialog
+                        .confirmMessage('no_sites_cannot_send', 'add', 'cancel', $event)
+                        .then(function () {
+                            return managerService
+                                .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
+                                .then(function (result) {
+                                    return result.hasSite() ? _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming) : null;
+                                })
+                        })
+                } else {
+                    return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming);
+                }
+            }
             return _launchCorrespondence(correspondence, $event, action, tab, isDeptIncoming);
 
         };
@@ -2662,5 +2679,13 @@ module.exports = function (app) {
                 });
         };
 
+        self.setManagerService = function (service) {
+            managerService = service;
+            return this
+        };
+
+        $timeout(function () {
+            CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
+        }, 100);
     });
 };

@@ -618,7 +618,10 @@ module.exports = function (app) {
                 return !!this.mainSiteId
             };
             Correspondence.prototype.checkOutgoingSites = function () {
-                return (angular.isArray(this.ccSitesList) && this.ccSitesList.length) || (angular.isArray(this.toSitesList) && this.toSitesList.length)
+                return (angular.isArray(this.ccSitesList) && this.ccSitesList.length) ||
+                    (angular.isArray(this.toSitesList) && this.toSitesList.length) ||
+                    (angular.isArray(this.sitesInfoTo) && this.sitesInfoTo.length) ||
+                    (angular.isArray(this.sitesInfoCC) && this.sitesInfoCC.length)
             };
 
             Correspondence.prototype.hasSite = function () {

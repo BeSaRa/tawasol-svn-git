@@ -246,23 +246,6 @@ module.exports = function (app) {
                 return;
             }
 
-            /*distributionWorkflowService
-             .controllerMethod
-             .distributionWorkflowSend(reviewOutgoing, false, false, null, "outgoing", $event)
-             .then(function (result) {
-             self.reloadReviewOutgoings(self.grid.page)
-             .then(function () {
-             new ResolveDefer(defer);
-             });
-             //self.replaceRecord(result);
-             })
-             .catch(function (result) {
-             self.reloadReviewOutgoings(self.grid.page).then(function () {
-             new ResolveDefer(defer);
-             });
-             //self.replaceRecord(result);
-             });*/
-
             reviewOutgoing.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadReviewOutgoings(self.grid.page)

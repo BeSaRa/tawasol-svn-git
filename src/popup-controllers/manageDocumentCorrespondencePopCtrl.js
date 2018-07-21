@@ -65,7 +65,6 @@ module.exports = function (app) {
         };
 
         self.saveCorrespondenceSite = function () {
-            //console.log('save incoming correspondence site');
             self.correspondence.saveDocument()
                 .then(function (result) {
                     toast.success(langService.get('correspondence_sites_save_success'));
@@ -73,7 +72,7 @@ module.exports = function (app) {
         };
 
         self.closeDocumentCorrespondence = function () {
-            dialog.hide();
+            dialog.hide(self.correspondence);
         };
     });
 };

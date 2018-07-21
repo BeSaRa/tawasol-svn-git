@@ -10,7 +10,7 @@ module.exports = function (app) {
          */
         function getTemplate(type) {
             var template = require('./templates/' + type + '.html');
-            return template.replace(/..\/..\/..\/..\/assets/g,'assets');
+            return template.replace(/..\/..\/..\/..\/assets/g, 'assets');
         }
 
         /**
@@ -113,7 +113,7 @@ module.exports = function (app) {
          * @returns {promise}
          */
         self.confirmMessage = function (content, acceptButton, rejectButton, event) {
-            var dialog = prepareDialog('confirm', content, acceptButton, rejectButton, event);
+            var dialog = prepareDialog('confirm', content, rejectButton, acceptButton, event);
             return $mdDialog.show(dialog);
         };
         /**
@@ -173,7 +173,7 @@ module.exports = function (app) {
          * @param placeHolder
          * @return user input
          */
-        self.showPrompt = function(ev,title,text,placeHolder) {
+        self.showPrompt = function (ev, title, text, placeHolder) {
 
             var confirm = $mdDialog.prompt()
                 .title(title)
