@@ -4,11 +4,15 @@ module.exports = function (app) {
         return {
             restrict: 'E',
             replace: true,
-            controller: function ($scope, LangWatcher) {
+            controller: function ($scope, $timeout, LangWatcher) {
                 'ngInject';
                 LangWatcher($scope);
                 var self = this;
                 self.collapse = false;
+                self.site = null;
+                $timeout(function () {
+                    self.site = self.item.getFirstSite();
+                });
                 self.toggleCollapse = function ($event) {
                     self.collapse = !self.collapse;
                     angular.element($event.target).parents('.section-title').next().slideToggle('fast');

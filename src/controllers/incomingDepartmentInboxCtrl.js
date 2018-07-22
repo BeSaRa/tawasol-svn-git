@@ -62,7 +62,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -194,7 +194,8 @@ module.exports = function (app) {
                             var correspondence = new Incoming({
                                 vsId: result,
                                 docSubject: documentName,
-                                securityLevel: incomingDepartmentInbox.generalStepElm.securityLevel
+                                securityLevel: incomingDepartmentInbox.generalStepElm.securityLevel,
+                                mainSiteId: true // to avoid the check correspondence sites for the document before launch it.
                             });
                             /* isDeptIncoming is sent true to avoid alert message */
                             correspondence.launchWorkFlow($event, 'forward', 'favorites', true)
@@ -206,7 +207,7 @@ module.exports = function (app) {
                                         });
                                 });
                         })
-                        .catch(function(){
+                        .catch(function () {
                             self.reloadIncomingDepartmentInboxes(self.grid.page)
                                 .then(function () {
                                     new ResolveDefer(defer);
@@ -256,9 +257,9 @@ module.exports = function (app) {
                 return;
             }
             correspondenceService.viewCorrespondence(incomingDepartmentInbox, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true, false, false, true)
-            .then(function () {
-                return self.reloadIncomingDepartmentInboxes(self.grid.page);
-            })
+                .then(function () {
+                    return self.reloadIncomingDepartmentInboxes(self.grid.page);
+                })
                 .catch(function () {
                     return self.reloadIncomingDepartmentInboxes(self.grid.page);
                 });
@@ -301,8 +302,8 @@ module.exports = function (app) {
                             return employeeService.hasPermissionTo(key);
                         });
                         return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            return isPermission !== true;
+                        }));
                     }
                 }
             }

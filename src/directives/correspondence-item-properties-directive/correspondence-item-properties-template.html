@@ -15,11 +15,11 @@
             <span class="property-value">{{ctrl.item.securityLevelInfo.getTranslatedName()}}</span>
         </li>
         <!-- incoming -->
-        <li>
+        <li ng-if="ctrl.item.hasDocumentClass('incoming')">
             <span class="property-key">{{lang.incoming_date}}</span>
             <span class="property-value">{{ctrl.item.getIncomingDate()}}</span>
         </li>
-        <li>
+        <li ng-if="ctrl.item.hasDocumentClass('incoming')">
             <span class="property-key">{{lang.document_number}}</span>
             <span class="property-value">{{ctrl.item.refDocNumber}}</span>
         </li>
@@ -39,13 +39,21 @@
             <span class="property-key">{{lang.classification}}</span>
             <span class="property-value">{{ctrl.item.subClassification.getTranslatedName()}}</span>
         </li>
-        <li>
+        <li ng-if="ctrl.item.hasDocumentClass('incoming')">
             <span class="property-key">{{lang.administration_topic}}</span>
-            <span class="property-value">{{ctrl.item.subClassification.getTranslatedName()}}</span>
+            <span class="property-value">{{ctrl.item.mainSiteInfo.getTranslatedName()}}</span>
         </li>
-        <li>
+        <li ng-if="ctrl.item.hasDocumentClass('incoming')">
             <span class="property-key">{{lang.administration}}</span>
-            <span class="property-value">{{ctrl.item.subClassification.getTranslatedName()}}</span>
+            <span class="property-value">{{ctrl.item.subSiteInfo.getTranslatedName()}}</span>
+        </li>
+        <li ng-if="ctrl.item.hasDocumentClass('outgoing')">
+            <span class="property-key">{{lang.administration_topic}}</span>
+            <span class="property-value">{{ctrl.site.getTranslatedParentName()}}</span>
+        </li>
+        <li ng-if="ctrl.item.hasDocumentClass('outgoing')">
+            <span class="property-key">{{lang.administration}}</span>
+            <span class="property-value">{{ctrl.site.getTranslatedName()}}</span>
         </li>
     </ul>
 </li>

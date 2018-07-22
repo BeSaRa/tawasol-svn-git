@@ -639,6 +639,10 @@ module.exports = function (app) {
                 return value;
             };
 
+            Correspondence.prototype.getFirstSite = function () {
+                return this.sitesInfoTo[0] || this.sitesInfoCC[0];
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Correspondence', 'init', this);

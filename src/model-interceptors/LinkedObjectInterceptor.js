@@ -13,6 +13,9 @@ module.exports = function (app) {
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             model.preparedType();
             model.typeId = entityTypeService.setLinkedType(model.typeId);
+            // fix the employeeNum to send it for backend team as String.
+            if (model.hasOwnProperty('employeeNum') && model.employeeNum)
+                model.employeeNum = '' + model.employeeNum;
             return model;
         });
 
