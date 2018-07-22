@@ -115,18 +115,18 @@ module.exports = function (app) {
             type = type.toLowerCase();
             var enabled = true;
             if (type === 'outgoing') {
-                enabled = self.documentSecurityOutgoing.status;
+                enabled = self.documentSecurityOutgoing && self.documentSecurityOutgoing.status;
             }
             else if (type === 'incoming') {
-                enabled = self.documentSecurityIncoming.status;
+                enabled = self.documentSecurityIncoming && self.documentSecurityIncoming.status;
             }
             else if (type === 'internal') {
-                enabled = self.documentSecurityInternal.status;
+                enabled = self.documentSecurityInternal && self.documentSecurityInternal.status;
             }
             else if (type === 'tawasolattachment') {
-                enabled = self.documentSecurityTawasolAttachment.status;
+                enabled = self.documentSecurityTawasolAttachment && self.documentSecurityTawasolAttachment.status;
             }
-            return !(self.documentSecurity.status && enabled);
+            return !(self.documentSecurity && self.documentSecurity.status && enabled);
         };
 
         /**
