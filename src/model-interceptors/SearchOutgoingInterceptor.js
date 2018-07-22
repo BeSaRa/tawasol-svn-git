@@ -92,14 +92,16 @@ module.exports = function (app) {
                 model.linkedEntities = null;
             }
 
-            model.approvers = model.approvers ? angular.toJson({
-                userId: model.approvers.applicationUser.id,
-                userOuId: model.approvers.ouid.id,
-                approveDate: {
-                    first: generator.getTimeStampFromDate(model.approveDateFrom),
-                    second: generator.getTimeStampFromDate(model.approveDateTo)
-                }
-            }) : null;
+            // model.approvers = model.approvers ? angular.toJson({
+            //     userId: model.approvers.applicationUser.id,
+            //     userOuId: model.approvers.ouid.id,
+            //     approveDate: {
+            //         first: generator.getTimeStampFromDate(model.approveDateFrom),
+            //         second: generator.getTimeStampFromDate(model.approveDateTo)
+            //     }
+            // }) : null;
+
+            typeof model.prepareApproved === 'function' ? model.prepareApproved() : null;
 
             if (model.docDate.From)
                 model.docDate.From = '' + model.docDate.From;

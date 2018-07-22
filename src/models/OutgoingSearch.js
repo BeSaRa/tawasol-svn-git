@@ -27,6 +27,21 @@ module.exports = function (app) {
                 return self[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
+            OutgoingSearch.prototype.prepareApproved = function () {
+                model = this;
+                if (model.approvers) {
+                    model.approvers = model.approvers ? angular.toJson({
+                        userId: model.approvers.applicationUser.id,
+                        userOuId: model.approvers.ouid.id,
+                        approveDate: {
+                            first: generator.getTimeStampFromDate(model.approveDateFrom),
+                            second: generator.getTimeStampFromDate(model.approveDateTo)
+                        }
+                    }) : null;
+                }
+                return model;
+            };
+
             if (model)
                 angular.extend(this, model);
 

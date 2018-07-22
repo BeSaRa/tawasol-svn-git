@@ -60,7 +60,7 @@ module.exports = function (app) {
 
             model.docDate = angular.toJson(model.docDate);
 
-            model.prepareApproved();
+            typeof model.prepareApproved === 'function' ? model.prepareApproved() : null;
 
             delete model.selectedEntityType;
 
