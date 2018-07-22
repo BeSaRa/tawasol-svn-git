@@ -566,9 +566,10 @@ module.exports = function (app) {
         self.viewTrackingSheet = function (userInbox, params, $event) {
             viewTrackingSheetService
                 .controllerMethod
-                .viewTrackingSheetPopup(userInbox, params, $event).then(function (result) {
+                .viewTrackingSheetPopup(userInbox, params, $event)
+                .then(function (result) {
 
-            });
+                });
         };
 
         /**

@@ -215,27 +215,37 @@ module.exports = function (app) {
                     });
             };
 
-            self.viewUserInboxDocument = function (workItem, gridActions, disableProperties, disableDestinations, $event) {
+            self.viewUserInboxDocument = function (workItem, actions, pageName, $event) {
 
             };
 
-            self.viewUserSentDocument = function (sentItem, gridActions, disableProperties, disableDestinations, $event) {
+            self.viewUserInboxProxyDocument = function (workItem, actions, pageName, $event) {
 
             };
 
-            self.viewDepartmentIncomingDocument = function (departmentIncomingDocument, gridActions, disableProperties, disableDestinations, $event) {
+            self.viewUserSentDocument = function (sentItem, actions, pageName, $event) {
 
             };
 
-            self.viewDepartmentReturnedDocument = function (departmentReturnedDocument, gridActions, disableProperties, disableDestinations, $event) {
+            self.viewDepartmentIncomingDocument = function (workItem, actions, pageName, $event) {
 
             };
 
-            self.viewDepartmentSentDocument = function (departmentSentDocument, gridActions, disableProperties, disableDestinations, $event) {
+            self.viewDepartmentReturnedDocument = function (workItem, actions, pageName, $event) {
 
             };
 
-            self.viewDepartmentReadyToExportDocument = function (workItem, gridActions, disableProperties, disableDestinations, $event) {
+            self.viewDepartmentSentDocument = function (sentItem, actions, pageName, $event) {
+
+            };
+
+            self.viewDepartmentReadyToExportDocument = function (workItem, actions, pageName, $event) {
+
+            };
+            self.viewG2GDocument = function (g2gIncoming, actions, pageName, $event) {
+
+            };
+            self.viewG2GHistoryDocument = function (g2gItem, actions, pageName, $event) {
 
             };
 

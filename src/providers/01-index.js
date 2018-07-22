@@ -11,5 +11,5 @@ module.exports = function (app) {
     require('./permissionProvider')(app);
     require('./headerProvider')(app);
     require('./themeServiceProvider')(app);
-    require('./CMSActionProvider')(app);
+    require('./CMSActionServiceProvider')(app);
 };

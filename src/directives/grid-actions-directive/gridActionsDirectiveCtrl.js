@@ -60,7 +60,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.processMenu = function (action, $event) {
-            if (action.hasOwnProperty('params') && action.params) {
+            if (action.hasOwnProperty('params') && action.params && action.params.length) {
                 action.callback(self.model, action.params, $event);
             }
             else {
