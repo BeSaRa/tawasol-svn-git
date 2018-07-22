@@ -39,7 +39,6 @@ module.exports = function (app) {
                                     var updatedDimensions = barcodeBox.calculatePositionsAndDimensions(false, newTop, newLeft, false);
                                     scope.ctrl.documentSecurity.locationX2D = Math.round(updatedDimensions.left);
                                     scope.ctrl.documentSecurity.locationY2D = Math.round(updatedDimensions.top);
-
                                 }).catch(function (error) {
                                     toast.info(langService.get('can_not_reposition_disabled_2D'));
                                 });

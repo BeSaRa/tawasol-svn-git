@@ -35,6 +35,10 @@ module.exports = function (app) {
             return self.pageDimensions;
         };
 
+        /**
+         * @description Gets the barcode box's calculated dimensions and positions
+         * @returns {*}
+         */
         self.getBarcodeBoxDimensionsAndPosition = function () {
             return $timeout(function () {
                 var calculatedValues = self.documentSecurityBarcodeBox.calculatePositionsAndDimensions(true, self.documentSecurityCopy.locationY2D, self.documentSecurityCopy.locationX2D, true);
@@ -45,13 +49,21 @@ module.exports = function (app) {
             })
         };
 
+        /**
+         * @description Gets the class to be used with watermark text
+         * @returns {string}
+         */
         self.getWatermarkTextClass = function () {
             return 'orientation-' + self.documentSecuritySetting.textOrientation;
         };
 
+        /**
+         * @description Gets the style to be used for the text
+         * @returns {{"font-size": string}}
+         */
         self.getWatermarkTextStyle = function () {
             return {
-                'font-size': self.documentSecuritySetting.textSize + 'px'
+                'font-size': self.documentSecuritySetting.textSize * self.documentSecurityBarcodeBox.whRatio + 'px'
             };
         };
 
