@@ -27,7 +27,6 @@ module.exports = function (app) {
                 return self[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
-
             if (model)
                 angular.extend(this, model);
 

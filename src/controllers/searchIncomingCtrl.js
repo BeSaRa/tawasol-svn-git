@@ -174,6 +174,13 @@ module.exports = function (app) {
          */
         self.selectedSearchedIncomingDocuments = [];
 
+        function _mapResultToAvoidCorrespondenceCheck(result) {
+            return _.map(result, function (item) {
+                item.mainSiteId = true;
+                return item;
+            });
+        }
+
 
         /**
          * @description Search the document on basis of search criteria
@@ -207,7 +214,7 @@ module.exports = function (app) {
                             self.searchIncomingModel = angular.copy(self.searchIncoming);
                             self.showResults = true;
                             self.selectedTab = 1;
-                            self.searchedIncomingDocuments = result;
+                            self.searchedIncomingDocuments = _mapResultToAvoidCorrespondenceCheck(result);
                             self.selectedSearchedIncomingDocuments = [];
                         })
                         .catch(function (error) {
@@ -286,7 +293,7 @@ module.exports = function (app) {
                 .searchIncomingDocuments(self.searchIncomingModel, self.propertyConfigurations)
                 .then(function (result) {
                     counterService.loadCounters();
-                    self.searchedIncomingDocuments = result;
+                    self.searchedIncomingDocuments = _mapResultToAvoidCorrespondenceCheck(result);
                     self.selectedSearchedIncomingDocuments = [];
                     defer.resolve(true);
                     if (pageNumber)

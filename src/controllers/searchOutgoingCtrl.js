@@ -172,6 +172,13 @@ module.exports = function (app) {
          */
         self.selectedSearchedOutgoingDocuments = [];
 
+        function _mapResultToAvoidCorrespondenceCheck(result) {
+            return _.map(result, function (item) {
+                // this workaround to display the correspondence has at least one site.
+                item.sitesInfoTo = [true];
+                return item;
+            });
+        }
 
         /**
          * @description Search the document on basis of search criteria
@@ -205,7 +212,7 @@ module.exports = function (app) {
                             self.searchOutgoingModel = angular.copy(self.searchOutgoing);
                             self.showResults = true;
                             self.selectedTab = 1;
-                            self.searchedOutgoingDocuments = result;
+                            self.searchedOutgoingDocuments = _mapResultToAvoidCorrespondenceCheck(result);
                             self.selectedSearchedOutgoingDocuments = [];
                         })
                         .catch(function (error) {
@@ -281,7 +288,7 @@ module.exports = function (app) {
                 .searchOutgoingDocuments(self.searchOutgoingModel, self.propertyConfigurations)
                 .then(function (result) {
                     counterService.loadCounters();
-                    self.searchedOutgoingDocuments = result;
+                    self.searchedOutgoingDocuments = _mapResultToAvoidCorrespondenceCheck(result);
                     self.selectedSearchedOutgoingDocuments = [];
                     defer.resolve(true);
                     if (pageNumber)

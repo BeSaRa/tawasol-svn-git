@@ -28,7 +28,7 @@ module.exports = function (app) {
          * @description All Correspondence
          * @type {*}
          */
-        self.quickSearchCorrespondence = quickSearchCorrespondence;
+        self.quickSearchCorrespondence = _mapResultToAvoidCorrespondenceCheck(quickSearchCorrespondence);
 
         /**
          * @description Contains the selected Correspondence
@@ -55,6 +55,19 @@ module.exports = function (app) {
             ]
         };
 
+        function _mapResultToAvoidCorrespondenceCheck(result) {
+            return _.map(result, function (item) {
+                switch (item.classDescription.toLowerCase()) {
+                    case 'outgoing' :
+                        item.sitesInfoTo = [true];
+                        break;
+                    case 'incoming':
+                        item.mainSiteId = true;
+                        break;
+                }
+                return item;
+            });
+        }
 
         /**
          * @description Get the sorting key for information or lookup model
@@ -81,7 +94,7 @@ module.exports = function (app) {
             return quickSearchCorrespondenceService
                 .loadQuickSearchCorrespondence(searchJSON)
                 .then(function (result) {
-                    self.quickSearchCorrespondence = result;
+                    self.quickSearchCorrespondence = _mapResultToAvoidCorrespondenceCheck(result);
                     self.selectedQuickSearchCorrespondence = [];
                     defer.resolve(true);
                     if (pageNumber)

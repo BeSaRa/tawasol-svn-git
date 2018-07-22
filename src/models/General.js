@@ -20,6 +20,9 @@ module.exports = function (app) {
             General.prototype.getIsPaperIndicator = function (isPaper) {
                 return indicator.getIsPaperIndicator(isPaper);
             };
+            General.prototype.hasSite = function () {
+                return true;
+            };
 
             if (model)
                 angular.extend(this, model);

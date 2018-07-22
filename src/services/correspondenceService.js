@@ -1706,10 +1706,10 @@ module.exports = function (app) {
          * @param isDeptIncoming
          * @returns {promise|*}
          */
-        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming) {
+        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming , inSearch) {
             var normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
             var count = angular.isArray(correspondence) ? correspondence.length : 1;
-            if (normalCorrespondence) {
+            if (normalCorrespondence && !inSearch) {
                 var sitesValidation = self.validateBeforeSend(correspondence);
                 if (sitesValidation.length && sitesValidation.length === count && count === 1) {
                     var info = correspondence.getInfo();
