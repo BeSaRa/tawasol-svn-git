@@ -4,12 +4,14 @@ module.exports = function (app) {
                       lookupService,
                       WorkflowAction,
                       DocumentStatus,
+                      viewDocumentService,
                       Information) {
         'ngInject';
 
         var modelName = 'EventHistory';
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
+            model.setViewDocumentService(viewDocumentService);
             return model;
         });
 

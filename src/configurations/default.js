@@ -37,13 +37,29 @@ module.exports = function (app) {
             .addPageName('reviewInternal')
             .addPageName('readyToSendInternal')
             .addPageName('rejectedInternal')
+            .addPageName('approvedInternal')
             // Search
             .addPageName('searchOutgoing')
             .addPageName('searchIncoming')
             .addPageName('searchInternal')
             .addPageName('searchGeneral')
             .addPageName('quickSearch')
-
+            // User Inbox
+            .addPageName('proxyMail')
+            .addPageName('userInbox')
+            .addPageName('followupEmployeeInbox')
+            .addPageName('favoriteDocument')
+            .addPageName('groupMail')
+            .addPageName('sentItem')
+            .addPageName('folder')
+            // Central Archive
+            .addPageName('centralArchiveReadyToExport')
+            // Department Inbox
+            .addPageName('departmentIncoming')
+            .addPageName('departmentReturned')
+            .addPageName('departmentSentItem')
+            .addPageName('departmentReadyToExport')
+        ;
 
     });
 };

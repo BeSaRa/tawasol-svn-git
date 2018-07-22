@@ -574,7 +574,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            workItem.viewNewDepartmentReturned(self.gridActions, 'departmentReturned', $event)
+                .then(function () {
+                    self.reloadReturnedDepartmentInboxes(self.grid.page);
+                })
+                .catch(function () {
+                    self.reloadReturnedDepartmentInboxes(self.grid.page);
+                });
         };
 
 

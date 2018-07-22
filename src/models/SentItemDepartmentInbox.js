@@ -6,7 +6,7 @@ module.exports = function (app) {
                                                      lookupService) {
         'ngInject';
         return function SentItemDepartmentInbox(model) {
-            var self = this, correspondenceService = null;
+            var self = this, correspondenceService = null, viewDocumentService;
             self.id = null;
             self.vsId = null;
             self.refVSId = null;
@@ -45,7 +45,8 @@ module.exports = function (app) {
             self.securityLevelInfo = null;
             self.priorityLevelInfo = null;
             self.g2GRefNo = null;
-            self.docStatus = 24;/*Default status to show its already approved*/
+            self.docStatus = 24;
+            /*Default status to show its already approved*/
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -53,6 +54,12 @@ module.exports = function (app) {
 
             if (model)
                 angular.extend(this, model);
+
+
+            SentItemDepartmentInbox.prototype.setViewDocumentService = function (service) {
+                viewDocumentService = service;
+                return this;
+            };
 
             SentItemDepartmentInbox.prototype.getTranslatedName = function () {
                 return this.docSubject;
@@ -129,14 +136,17 @@ module.exports = function (app) {
 
             SentItemDepartmentInbox.prototype.setCorrespondenceService = function (service) {
                 correspondenceService = service;
+                return this;
             };
 
             SentItemDepartmentInbox.prototype.getTagsCount = function () {
-                return 0;/*Tags property missing*/
+                return 0;
+                /*Tags property missing*/
             };
 
             SentItemDepartmentInbox.prototype.getCommentsCount = function () {
-                return 0;/*Comments property missing*/
+                return 0;
+                /*Comments property missing*/
             };
 
             /**
@@ -155,6 +165,22 @@ module.exports = function (app) {
             SentItemDepartmentInbox.prototype.manageDocumentAttachments = function ($event) {
                 var info = this.getInfo();
                 return managerService.manageDocumentAttachments.apply(managerService, [this, info.vsId, info.documentClass, info.title, $event]);
+            };
+
+
+            /**
+             * @description Opens the new viewer for department sent items
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @returns {*}
+             */
+            SentItemDepartmentInbox.prototype.viewNewDepartmentSentItem = function (actions, queueName, $event) {
+                var model = {
+                    vsId: this.vsId,
+                    docClassName: 'outgoing'
+                };
+                return viewDocumentService.viewDepartmentSentItemDocument(model, actions, queueName, $event);
             };
 
             // don't remove CMSModelInterceptor from last line

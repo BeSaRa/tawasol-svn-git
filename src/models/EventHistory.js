@@ -7,7 +7,7 @@ module.exports = function (app) {
                                           managerService) {
         'ngInject';
         return function EventHistory(model) {
-            var self = this;
+            var self = this, viewDocumentService;
             self.id = null;
             self.documentVSID = null;
             self.documentCreationDate = null;
@@ -49,6 +49,11 @@ module.exports = function (app) {
 
             EventHistory.prototype.getTranslatedName = function () {
                 return this.docSubject;
+            };
+
+            EventHistory.prototype.setViewDocumentService = function (service) {
+                viewDocumentService = service;
+                return this;
             };
 
             EventHistory.prototype.getTranslatedUserFrom = function (reverse) {
@@ -94,7 +99,7 @@ module.exports = function (app) {
             };
 
             /*This is used by due date indicator*/
-            EventHistory.prototype.getDueDate = function(){
+            EventHistory.prototype.getDueDate = function () {
                 return this.dueDate;
             };
 
@@ -128,9 +133,9 @@ module.exports = function (app) {
              return indicator.getFollowUpStatusIndicator(workItem);
              };*/
 
-             EventHistory.prototype.getDueDateStatusIndicator = function(dueDate){
-             return indicator.getDueDateStatusIndicator(dueDate);
-             };
+            EventHistory.prototype.getDueDateStatusIndicator = function (dueDate) {
+                return indicator.getDueDateStatusIndicator(dueDate);
+            };
 
             EventHistory.prototype.getTagsIndicator = function (tagsCount) {
                 return indicator.getTagsIndicator(tagsCount);
@@ -158,6 +163,10 @@ module.exports = function (app) {
             EventHistory.prototype.manageDocumentAttachments = function ($event) {
                 var info = this.getInfo();
                 return managerService.manageDocumentAttachments.apply(managerService, [this, info.vsId, info.documentClass, info.title, $event]);
+            };
+
+            EventHistory.prototype.viewUserSentItem = function (actions, gridName, $event) {
+                return viewDocumentService.viewUserSentDocument(this, actions, gridName, $event);
             };
 
             // don't remove CMSModelInterceptor from last line

@@ -24,6 +24,14 @@ module.exports = function (app) {
             .getPageNameOverride('reviewInternal', 'draftOutgoing')
             .getPageNameOverride('readyToSendInternal', 'draftOutgoing')
             .getPageNameOverride('rejectedInternal', 'draftOutgoing')
+            .getPageNameOverride('approvedInternal', 'draftOutgoing', {
+                disableProperties: function (model) {
+                    return true;
+                },
+                disableSites: function (model) {
+                    return true;
+                }
+            })
             // Search
             .getPageNameOverride('searchOutgoing', 'draftOutgoing', {
                 disableProperties: function () {
@@ -67,5 +75,199 @@ module.exports = function (app) {
                     return true;
                 }
             })
+            // User Inbox
+            .getPageNameOverride('proxyMail', 'draftOutgoing', {
+                disableProperties: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = false;
+                    if (info.documentClass === "internal") {
+                        //If approved internal electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                    }
+                    else if (info.documentClass === "incoming")
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+                    else if (info.documentClass === "outgoing") {
+                        //If approved outgoing electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                    }
+                    return !hasPermission;
+                },
+                disableSites: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+                    return !(hasPermission && info.documentClass !== "internal");
+                }
+            })
+            .getPageNameOverride('userInbox', 'draftOutgoing', {
+                disableProperties: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = false;
+                    if (info.documentClass === "internal") {
+                        //If approved internal electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                    }
+                    else if (info.documentClass === "incoming")
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+                    else if (info.documentClass === "outgoing") {
+                        //If approved outgoing electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                    }
+                    return !hasPermission;
+                },
+                disableSites: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+                    return !(hasPermission && info.documentClass !== "internal");
+                }
+            })
+            .getPageNameOverride('followupEmployeeInbox', 'draftOutgoing')
+            .getPageNameOverride('favoriteDocument', 'draftOutgoing', {
+                disableProperties: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = false;
+                    if (info.documentClass === "internal") {
+                        //If approved internal electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                    }
+                    else if (info.documentClass === "incoming")
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+                    else if (info.documentClass === "outgoing") {
+                        //If approved outgoing electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                    }
+                    return !hasPermission;
+                },
+                disableSites: function () {
+                    return true;
+                }
+            })
+            .getPageNameOverride('groupMail', 'draftOutgoing', {
+                disableProperties: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = false;
+                    if (info.documentClass === "internal") {
+                        //If approved internal electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                    }
+                    else if (info.documentClass === "incoming")
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+                    else if (info.documentClass === "outgoing") {
+                        //If approved outgoing electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                    }
+                    return !hasPermission || model.isBroadcasted();
+                },
+                disableSites: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+                    return !(hasPermission && info.documentClass !== "internal");
+                }
+            })
+            .getPageNameOverride('sentItem', 'draftOutgoing')
+            .getPageNameOverride('folder', 'draftOutgoing', {
+                disableProperties: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = false;
+                    if (info.documentClass === "internal") {
+                        //If approved internal electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                    }
+                    else if (info.documentClass === "incoming")
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
+                    else if (info.documentClass === "outgoing") {
+                        //If approved outgoing electronic, don't allow to edit
+                        if (info.docStatus >= 24 && !info.isPaper)
+                            hasPermission = false;
+                        else
+                            hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                    }
+                    return !hasPermission || model.isBroadcasted();
+                },
+                disableSites: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+                    return !(hasPermission && info.documentClass !== "internal");
+                }
+            })
+            // Central Archive
+            .getPageNameOverride('centralArchiveReadyToExport', 'draftOutgoing', {
+                disableProperties: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                    var allowed = hasPermission && info.isPaper;// && info.docStatus < 24
+                    return !allowed;
+                },
+                disableSites: function (model) {
+                    return !(employeeService.hasPermissionTo("MANAGE_DESTINATIONS"));
+                }
+            })
+            // Department Inbox
+            .getPageNameOverride('departmentIncoming', 'draftOutgoing', {
+                /*disableProperties: function (model) {
+                    return true;
+                },
+                disableSites: function (model) {
+                    return true;
+                },*/
+                disableAll: function (model) {
+                    return true;
+                }
+            })
+            .getPageNameOverride('departmentReturned', 'draftOutgoing', {
+                disableProperties: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                    return !(hasPermission && info.isPaper);// && info.docStatus < 24
+                },
+                disableSites: function (model) {
+                    return true;
+                }
+            })
+            .getPageNameOverride('departmentSentItem', 'draftOutgoing', {
+                disableProperties: function (model) {
+                    return true;
+                },
+                disableSites: function (model) {
+                    return true;
+                }
+            })
+            .getPageNameOverride('departmentReadyToExport', 'draftOutgoing', {
+                disableProperties: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                    return !(hasPermission && info.isPaper);// && info.docStatus < 24
+                },
+                disableSites: function (model) {
+                    return !(employeeService.hasPermissionTo("MANAGE_DESTINATIONS"));
+                }
+            })
+        ;
     })
 };

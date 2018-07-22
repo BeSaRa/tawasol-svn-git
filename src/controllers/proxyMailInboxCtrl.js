@@ -718,7 +718,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            workItem.viewInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
+            workItem.viewProxyInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
                 .then(function () {
                     return self.reloadProxyMailInboxes(self.grid.page);
                 })
@@ -737,7 +737,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            workItem.viewNewProxyDocument(self.gridActions, 'proxyMail', $event)
+                .then(function () {
+                    return self.reloadProxyMailInboxes(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadProxyMailInboxes(self.grid.page);
+                });
         };
 
 

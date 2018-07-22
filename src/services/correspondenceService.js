@@ -219,15 +219,15 @@ module.exports = function (app) {
                 : correspondence.docSubject;
         }
 
-        function _getDocumentType(correspondence) {
-            var docType = 1;
+        function _getIsPaperElectronic(correspondence) {
+            var isPaper = 1;
             if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) { /*WorkItem */
-                docType = correspondence.generalStepElm.hasOwnProperty('addMethod') ? correspondence.generalStepElm.addMethod : 1;
+                isPaper = correspondence.generalStepElm.hasOwnProperty('addMethod') ? correspondence.generalStepElm.addMethod : 1;
             }
             else if (correspondence.hasOwnProperty('addMethod')) { /* Correspondence */
-                docType = correspondence.addMethod;
+                isPaper = correspondence.addMethod;
             }
-            return docType;
+            return isPaper;
 
             /* The ternary condition is removed and separate if else added due to the model "EventHistory" which has different structure than workItem and correspondence */
             //return correspondence.hasOwnProperty('generalStepElm') ? correspondence.generalStepElm.addMethod : correspondence.addMethod;
@@ -434,7 +434,7 @@ module.exports = function (app) {
                 workFlow: _getWorkFlow(correspondence),
                 wobNumber: _getWobNumber(correspondence),
                 title: _getTitle(correspondence),
-                isPaper: _getDocumentType(correspondence),
+                isPaper: _getIsPaperElectronic(correspondence),
                 docStatus: _getDocumentStatus(correspondence),
                 docFullSerial: _getDocFullSerial(correspondence),
                 incomingVsId: _getIncomingVsId(correspondence),
@@ -1257,6 +1257,63 @@ module.exports = function (app) {
          */
         self.viewCorrespondenceWorkItem = function (info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming) {
             return $http.get(approvedQueue ? _createCorrespondenceWFSchema([info.documentClass, 'approved-queue', 'wob-num', info.wobNumber]) : _createWorkItemSchema(info, department, readyToExport))
+                .then(function (result) {
+                    return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
+                })
+                .then(function (generalStepElementView) {
+                    self.popupNumber += 1;
+                    return dialog.showDialog({
+                        template: cmsTemplate.getPopup('view-correspondence'),
+                        controller: 'viewCorrespondencePopCtrl',
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        escapeToCancel: false,
+                        locals: {
+                            correspondence: generalStepElementView.correspondence,
+                            content: generalStepElementView.documentViewInfo,
+                            actions: actions,
+                            workItem: generalStepElementView,
+                            readyToExport: readyToExport,
+                            disableProperties: disableProperties,
+                            disableCorrespondence: disableCorrespondence,
+                            disableEverything: departmentIncoming,
+                            popupNumber: self.popupNumber
+                        },
+                        resolve: {
+                            organizations: function (organizationService) {
+                                'ngInject';
+                                return organizationService.getOrganizations();
+                            },
+                            lookups: function (correspondenceService) {
+                                'ngInject';
+                                return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                            }
+                        }
+                    })
+                        .then(function () {
+                            self.popupNumber -= 1;
+                            return true;
+                        })
+                        .catch(function () {
+                            self.popupNumber -= 1;
+                            return false;
+                        });
+                })
+                .catch(function (error) {
+                    return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                        dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                        return $q.reject('WORK_ITEM_NOT_FOUND');
+                    })
+                });
+        };
+
+        /**
+         * @description to view correspondence workItem(proxy mail)
+         */
+        self.viewCorrespondenceProxyWorkItem = function (info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming) {
+            var url = urlService.inboxWF + '/proxy/wob-num/'+info.wobNumber;
+            //url = approvedQueue ? _createCorrespondenceWFSchema([info.documentClass, 'approved-queue', 'wob-num', info.wobNumber]) : _createWorkItemSchema(info, department, readyToExport);
+            return $http.get(url)
                 .then(function (result) {
                     return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                 })

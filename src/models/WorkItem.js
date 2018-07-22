@@ -5,6 +5,7 @@ module.exports = function (app) {
                                       Information,
                                       ResolveDefer,
                                       $sce,
+                                      viewDocumentService,
                                       $q,
                                       dialog,
                                       moment,
@@ -312,10 +313,111 @@ module.exports = function (app) {
                 var info = this.getInfo();
                 return correspondenceService.viewCorrespondenceWorkItem.apply(correspondenceService, [info, actions, editProperties, editCorrespondence, false, false, false]);
             };
+            WorkItem.prototype.viewProxyInboxWorkItem = function (actions, editProperties, editCorrespondence) {
+                var info = this.getInfo();
+                return correspondenceService.viewCorrespondenceProxyWorkItem.apply(correspondenceService, [info, actions, editProperties, editCorrespondence, false, false, false]);
+            };
             WorkItem.prototype.viewNewInboxWorkItem = function (actions, editProperties, editCorrespondence) {
                 var info = this.getInfo();
                 return correspondenceService.viewCorrespondenceWorkItemNew.apply(correspondenceService, [info, actions, editProperties, editCorrespondence, false, false, false]);
             };
+            /**
+             * @description Opens the new viewer for user inbox items
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @returns {*}
+             */
+            WorkItem.prototype.viewNewWorkItemDocument = function (actions, queueName, $event) {
+                return viewDocumentService.viewUserInboxDocument(this, actions, queueName, $event);
+            };
+            /**
+             * @description Opens the new viewer for approved internal items
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @returns {*}
+             */
+            WorkItem.prototype.viewNewApprovedInternalWorkItemDocument = function (actions, queueName, $event) {
+                return viewDocumentService.viewApprovedInternalDocument(this, actions, queueName, $event);
+            };
+            /**
+             * @description Opens the new viewer for proxy mail
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @returns {*}
+             */
+            WorkItem.prototype.viewNewProxyDocument = function (actions, queueName, $event) {
+                return viewDocumentService.viewUserInboxProxyDocument(this, actions, queueName, $event);
+            };
+            /**
+             * @description view from group inbox documents as full view.
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @return {*}
+             */
+            WorkItem.prototype.viewNewGroupMailDocument = function (actions, queueName, $event) {
+                return viewDocumentService.viewGroupMailDocument(this, actions, queueName, $event);
+            };
+
+            /**
+             * @description view from group inbox documents as full view.
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @return {*}
+             */
+            WorkItem.prototype.viewNewCentralArchiveReadyToExport = function (actions, queueName, $event) {
+                return viewDocumentService.viewCentralArchiveReadyToExportDocument(this, actions, queueName, $event);
+            };
+
+
+            /**
+             * @description Opens the new viewer for department incoming as workItem
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @returns {*}
+             */
+            WorkItem.prototype.viewNewDepartmentIncomingAsWorkItem = function (actions, queueName, $event) {
+                return viewDocumentService.viewDepartmentIncomingAsWorkItemDocument(this, actions, queueName, $event);
+            };
+
+            /**
+             * @description Opens the new viewer for department incoming as correspondence
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @returns {*}
+             */
+            WorkItem.prototype.viewNewDepartmentIncomingAsCorrespondence = function (actions, queueName, $event) {
+                return viewDocumentService.viewDepartmentIncomingAsCorrespondenceDocument(this, actions, queueName, $event);
+            };
+
+            /**
+             * @description Opens the new viewer for department returned
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @returns {*}
+             */
+            WorkItem.prototype.viewNewDepartmentReturned = function (actions, queueName, $event) {
+                return viewDocumentService.viewDepartmentReturnedDocument(this, actions, queueName, $event);
+            };
+
+            /**
+             * @description Opens the new viewer for department ready to export
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @returns {*}
+             */
+            WorkItem.prototype.viewNewDepartmentReadyToExport = function (actions, queueName, $event) {
+                return viewDocumentService.viewDepartmentReadyToExportDocument(this, actions, queueName, $event);
+            };
+
             WorkItem.prototype.manageDocumentComments = function ($event) {
                 var info = this.getInfo();
                 return managerService.manageDocumentComments.apply(managerService, [info.vsId, info.title, $event]);

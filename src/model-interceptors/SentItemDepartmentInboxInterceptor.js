@@ -5,6 +5,8 @@ module.exports = function (app) {
                       correspondenceService,
                       SenderInfo,
                       entityTypeService,
+                      viewDocumentService,
+                      generator,
                       LinkedObject,
                       langService,
                       moment) {
@@ -18,7 +20,8 @@ module.exports = function (app) {
             model.mainSiteToIdInfo = new CorrespondenceSite(model.mainSiteToIdInfo);
             model.subSiteToIdInfo = new CorrespondenceSite(model.subSiteToIdInfo);
             model.sentByIdInfo = new SenderInfo(model.sentByIdInfo);
-            model.setCorrespondenceService(correspondenceService);
+            model.setCorrespondenceService(correspondenceService)
+                .setViewDocumentService(viewDocumentService);
             return model;
         });
 

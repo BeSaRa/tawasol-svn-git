@@ -267,15 +267,37 @@ module.exports = function (app) {
 
         /**
          * @description View document
-         * @param incomingDepartmentInbox
+         * @param workItem
          * @param $event
          */
-        self.viewDocument = function (incomingDepartmentInbox, $event) {
+        self.viewDocument = function (workItem, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            var info = workItem.getInfo();
+            /*
+                If document is sent to regOu from launchScreen
+                else document is exported from ready to export
+            */
+            if (!info.incomingVsId && info.docType !== 1) {
+                workItem.viewNewDepartmentIncomingAsWorkItem(self.gridActions, 'departmentIncoming', $event)
+                    .then(function () {
+                        self.reloadIncomingDepartmentInboxes(self.grid.page);
+                    })
+                    .catch(function () {
+                        self.reloadIncomingDepartmentInboxes(self.grid.page);
+                    });
+            }
+            else {
+                workItem.viewNewDepartmentIncomingAsCorrespondence(self.gridActions, 'departmentIncoming', $event)
+                    .then(function () {
+                        self.reloadIncomingDepartmentInboxes(self.grid.page);
+                    })
+                    .catch(function () {
+                        self.reloadIncomingDepartmentInboxes(self.grid.page);
+                    });
+            }
         };
 
         /**

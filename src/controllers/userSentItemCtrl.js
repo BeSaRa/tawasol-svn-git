@@ -404,7 +404,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            userSentItem.viewUserSentItem(self.gridActions, 'sentItem', $event)
+                .then(function () {
+                    return self.reloadUserSentItems(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadUserSentItems(self.grid.page);
+                });
         };
 
         /**

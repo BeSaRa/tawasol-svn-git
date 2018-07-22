@@ -59,7 +59,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -633,7 +633,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            workItem.viewNewWorkItemDocument(self.gridActions, 'folder', $event)
+                .then(function () {
+                    return self.reloadFolders(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadFolders(self.grid.page);
+                });
         };
         /**
          * @description Check if action will be shown on grid or not
@@ -955,7 +961,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1087,7 +1093,7 @@ module.exports = function (app) {
                         text: 'grid_action_main_document_fax',
                         shortcut: false,
                         hide: true,
-                        permissionKey:"SEND_DOCUMENT_BY_FAX",
+                        permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction

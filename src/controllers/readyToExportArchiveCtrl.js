@@ -572,7 +572,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            workItem.viewNewCentralArchiveReadyToExport(self.gridActions, 'centralArchiveReadyToExport', $event)
+                .then(function () {
+                    return self.reloadReadyToExports(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadReadyToExports(self.grid.page);
+                });
         };
 
 

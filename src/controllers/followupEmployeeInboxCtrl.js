@@ -507,7 +507,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            workItem.viewNewWorkItemDocument(self.gridActions, 'followupEmployeeInbox', $event)
+                .then(function () {
+                    return self.reloadFollowupEmployeeInboxes(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadFollowupEmployeeInboxes(self.grid.page);
+                });
         };
 
         /**

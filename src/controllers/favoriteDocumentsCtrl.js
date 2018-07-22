@@ -298,15 +298,21 @@ module.exports = function (app) {
 
         /**
          * @description View document
-         * @param favoriteDocument
+         * @param correspondence
          * @param $event
          */
-        self.viewDocument = function (favoriteDocument, $event) {
+        self.viewDocument = function (correspondence, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            correspondence.viewFavoriteDocument(self.gridActions, 'favoriteDocument', $event)
+                .then(function () {
+                    return self.reloadFavoriteDocuments(self.grid.page);
+                })
+                .catch(function () {
+                    return self.reloadFavoriteDocuments(self.grid.page);
+                });
         };
 
 

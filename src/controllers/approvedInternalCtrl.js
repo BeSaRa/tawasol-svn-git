@@ -395,7 +395,13 @@ module.exports = function (app) {
                     dialog.infoMessage(langService.get('no_view_permission'));
                     return;
                 }
-                console.log('view document');
+                workItem.viewNewApprovedInternalWorkItemDocument(self.gridActions, 'approvedInternal', $event)
+                    .then(function () {
+                        self.reloadApprovedInternals(self.grid.page);
+                    })
+                    .catch(function () {
+                        self.reloadApprovedInternals(self.grid.page);
+                    });
             };
 
             /**

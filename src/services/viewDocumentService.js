@@ -19,20 +19,26 @@ module.exports = function (app) {
         provider.$get = function (dialog,
                                   generator,
                                   $http,
+                                  $timeout,
                                   $sce,
+                                  $q,
+                                  CMSModelInterceptor,
                                   urlService,
                                   cmsTemplate,
+                                  langService,
                                   Correspondence,
                                   General,
                                   G2G,
                                   G2GMessagingHistory,
                                   Outgoing,
                                   Internal,
-                                  Incoming,
-                                  WorkItem,
-                                  EventHistory) {
+                                  Incoming) {
             'ngInject';
-            var self = this;
+            var self = this,
+                GeneralStepElementView,
+                WorkItem,
+                EventHistory,
+                SentItemDepartmentInbox;
             self.serviceName = 'viewDocumentService';
             // number of opened popup
             self.popupNumber = 0;
@@ -108,6 +114,24 @@ module.exports = function (app) {
                 return url.join('/');
             }
 
+            function _createWorkItemSchema(info, department, readyToExport) {
+                var url = [readyToExport ? urlService.readyToExports : (department) ? urlService.departmentWF : urlService.inboxWF];
+                if (!readyToExport)
+                    url.push('wob-num');
+                url.push(info.wobNumber);
+                return url.join('/');
+            }
+
+            function _createCorrespondenceWFSchema() {
+                var url = [urlService.correspondenceWF];
+                if (arguments[0] && angular.isArray(arguments[0])) {
+                    url = url.concat(arguments[0]);
+                } else {
+                    url = url.concat(arguments);
+                }
+                return url.join('/')
+            }
+
             /**
              * the registered models for our CMS
              * @type {{outgoing: (Outgoing|*), internal: (Internal|*), incoming: (Incoming|*)}}
@@ -139,6 +163,9 @@ module.exports = function (app) {
                 return documentClass.charAt(0).toUpperCase() + documentClass.substr(1);
             }
 
+            function _createInstance(correspondence) {
+                return new Correspondence(correspondence);
+            }
 
             function _getModel(documentClass) {
                 return self.models[documentClass.toLowerCase()];
@@ -146,7 +173,7 @@ module.exports = function (app) {
 
             function _checkDisabled(pageName, model) {
                 var page = _getPage(pageName);
-                console.log(page);
+                //console.log(page);
                 return {
                     disableAll: page ? page.disableAll(model) : false,
                     disableProperties: page ? page.disableProperties(model) : false,
@@ -215,40 +242,834 @@ module.exports = function (app) {
                     });
             };
 
+
+            /**
+             * @description Open the new view popup for favorite documents
+             * @param favoriteDocument
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
+            self.viewFavoriteDocument = function (favoriteDocument, actions, pageName, $event) {
+                var info = null;
+                if (typeof favoriteDocument.getInfo === 'function')
+                    info = favoriteDocument.getInfo();
+                else {
+                    var model = self.models[favoriteDocument.classDescription.toLowerCase()];
+                    info = new model(favoriteDocument).getInfo();
+                }
+                var disabled = _checkDisabled(pageName, favoriteDocument);
+
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+                return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
+                    .then(function (result) {
+                        var documentClass = result.data.rs.metaData.classDescription;
+                        result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                        return result.data.rs;
+                    })
+                    .then(function (result) {
+                        result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: result.metaData,
+                                content: result.content,
+                                actions: actions,
+                                workItem: false,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
+                                popupNumber: self.popupNumber,
+                                disableEverything: disabled.disableAll
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        }).then(function () {
+                            self.popupNumber -= 1;
+                            return true;
+                        }).catch(function () {
+                            self.popupNumber -= 1;
+                            return false;
+                        });
+                    });
+            };
+
+            /**
+             * @description Open the view popup for workItems under userInbox
+             * @param workItem
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
             self.viewUserInboxDocument = function (workItem, actions, pageName, $event) {
+                var info = typeof workItem.getInfo === 'function' ? workItem.getInfo() : new WorkItem(workItem).getInfo();
+                var disabled = _checkDisabled(pageName, workItem);
 
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+
+                return $http.get(urlService.inboxWF + '/wob-num/' + info.wobNumber)
+                    .then(function (result) {
+                        return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
+                    })
+                    .then(function (generalStepElementView) {
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: generalStepElementView.correspondence,
+                                content: generalStepElementView.documentViewInfo,
+                                actions: actions,
+                                workItem: generalStepElementView,
+                                readyToExport: false,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
+                                disableEverything: disabled.disableAll,
+                                popupNumber: self.popupNumber
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        })
+                            .then(function () {
+                                self.popupNumber -= 1;
+                                return true;
+                            })
+                            .catch(function () {
+                                self.popupNumber -= 1;
+                                return false;
+                            });
+                    })
+                    .catch(function (error) {
+                        return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                            return $q.reject('WORK_ITEM_NOT_FOUND');
+                        })
+                    });
             };
 
+            /**
+             * @description Open the view popup for approved internal workItem
+             * @param workItem
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
+            self.viewApprovedInternalDocument = function (workItem, actions, pageName, $event) {
+                var info = typeof workItem.getInfo === 'function' ? workItem.getInfo() : new WorkItem(workItem).getInfo();
+                var disabled = _checkDisabled(pageName, workItem);
+
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+
+                return $http.get(_createCorrespondenceWFSchema([info.documentClass, 'approved-queue', 'wob-num', info.wobNumber]))
+                    .then(function (result) {
+                        return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
+                    })
+                    .then(function (generalStepElementView) {
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: generalStepElementView.correspondence,
+                                content: generalStepElementView.documentViewInfo,
+                                actions: actions,
+                                workItem: generalStepElementView,
+                                readyToExport: false,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
+                                disableEverything: false,
+                                popupNumber: self.popupNumber
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        })
+                            .then(function () {
+                                self.popupNumber -= 1;
+                                return true;
+                            })
+                            .catch(function () {
+                                self.popupNumber -= 1;
+                                return false;
+                            });
+                    })
+                    .catch(function (error) {
+                        return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                            return $q.reject('WORK_ITEM_NOT_FOUND');
+                        })
+                    });
+            };
+
+            /**
+             * @description Open the view popup for proxy mail
+             * @param workItem
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
             self.viewUserInboxProxyDocument = function (workItem, actions, pageName, $event) {
+                var info = typeof workItem.getInfo === 'function' ? workItem.getInfo() : new WorkItem(workItem).getInfo();
+                var disabled = _checkDisabled(pageName, workItem);
 
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+                var url = urlService.inboxWF + '/proxy/wob-num/' + info.wobNumber;
+                //url = approvedQueue ? _createCorrespondenceWFSchema([info.documentClass, 'approved-queue', 'wob-num', info.wobNumber]) : _createWorkItemSchema(info, department, readyToExport);
+                return $http.get(url)
+                    .then(function (result) {
+                        return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
+                    })
+                    .then(function (generalStepElementView) {
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: generalStepElementView.correspondence,
+                                content: generalStepElementView.documentViewInfo,
+                                actions: actions,
+                                workItem: generalStepElementView,
+                                readyToExport: false,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
+                                disableEverything: false,
+                                popupNumber: self.popupNumber
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        })
+                            .then(function () {
+                                self.popupNumber -= 1;
+                                return true;
+                            })
+                            .catch(function () {
+                                self.popupNumber -= 1;
+                                return false;
+                            });
+                    })
+                    .catch(function (error) {
+                        return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                            return $q.reject('WORK_ITEM_NOT_FOUND');
+                        })
+                    });
             };
 
+            /**
+             * @description Open the view popup for group mail
+             * @param workItem
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
+            self.viewGroupMailDocument = function (workItem, actions, pageName, $event) {
+                var info = typeof workItem.getInfo === 'function' ? workItem.getInfo() : new WorkItem(workItem).getInfo();
+
+                var disabled = _checkDisabled(pageName, workItem);
+
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+
+                return $http.get([urlService.correspondence, 'ou-queue', 'wob-num', info.wobNumber].join('/'))
+                    .then(function (result) {
+                        return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
+                    })
+                    .then(function (generalStepElementView) {
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: generalStepElementView.correspondence,
+                                content: generalStepElementView.documentViewInfo,
+                                actions: actions,
+                                workItem: generalStepElementView,
+                                readyToExport: false,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
+                                disableEverything: disabled.disableAll,
+                                popupNumber: self.popupNumber
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        })
+                            .then(function () {
+                                self.popupNumber -= 1;
+
+                                return true;
+                            })
+                            .catch(function () {
+                                self.popupNumber -= 1;
+                                return false;
+                            });
+                    });
+            };
+
+            /**
+             * @description Open the view popup for user sent items
+             * @param sentItem
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
             self.viewUserSentDocument = function (sentItem, actions, pageName, $event) {
+                var info = typeof sentItem.getInfo === 'function' ? sentItem.getInfo() : new EventHistory(sentItem).getInfo();
+                var disabled = _checkDisabled(pageName, sentItem);
+
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+
+                return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
+                    .then(function (result) {
+                        var documentClass = result.data.rs.metaData.classDescription;
+                        result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                        return result.data.rs;
+                    })
+                    .then(function (result) {
+                        result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: result.metaData,
+                                content: result.content,
+                                actions: actions,
+                                workItem: false,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
+                                popupNumber: self.popupNumber
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        }).then(function () {
+                            self.popupNumber -= 1;
+                            return true;
+                        }).catch(function () {
+                            self.popupNumber -= 1;
+                            return false;
+                        });
+                    });
+            };
+
+            /**
+             * @description Open the view popup for central archive ready to export
+             * @param workItem
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
+            self.viewCentralArchiveReadyToExportDocument = function (workItem, actions, pageName, $event) {
+                var info = typeof workItem.getInfo === 'function' ? workItem.getInfo() : new WorkItem(workItem).getInfo();
+                var disabled = _checkDisabled(pageName, workItem);
+
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+
+                return $http.get(_createWorkItemSchema(info, true, true))
+                    .then(function (result) {
+                        return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
+                    })
+                    .then(function (generalStepElementView) {
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: generalStepElementView.correspondence,
+                                content: generalStepElementView.documentViewInfo,
+                                actions: actions,
+                                workItem: generalStepElementView,
+                                readyToExport: true,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
+                                disableEverything: disabled.disableAll,
+                                popupNumber: self.popupNumber
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        })
+                            .then(function () {
+                                self.popupNumber -= 1;
+                                return true;
+                            })
+                            .catch(function () {
+                                self.popupNumber -= 1;
+                                return false;
+                            });
+                    })
+                    .catch(function (error) {
+                        return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                            return $q.reject('WORK_ITEM_NOT_FOUND');
+                        })
+                    });
+            };
+
+
+            /**
+             * @description Open the view popup for department incoming document
+             * @param workItem
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
+            self.viewDepartmentIncomingAsWorkItemDocument = function (workItem, actions, pageName, $event) {
+                var info = typeof workItem.getInfo === 'function' ? workItem.getInfo() : new WorkItem(workItem).getInfo();
+                var disabled = _checkDisabled(pageName, workItem);
+
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+
+                return $http.get(_createWorkItemSchema(info, true, false))
+                    .then(function (result) {
+                        return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
+                    })
+                    .then(function (generalStepElementView) {
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: generalStepElementView.correspondence,
+                                content: generalStepElementView.documentViewInfo,
+                                actions: actions,
+                                workItem: generalStepElementView,
+                                readyToExport: false,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
+                                disableEverything: disabled.disableAll,
+                                popupNumber: self.popupNumber
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        })
+                            .then(function () {
+                                self.popupNumber -= 1;
+                                return true;
+                            })
+                            .catch(function () {
+                                self.popupNumber -= 1;
+                                return false;
+                            });
+                    })
+                    .catch(function (error) {
+                        return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                            return $q.reject('WORK_ITEM_NOT_FOUND');
+                        })
+                    });
+            };
+
+            /**
+             * @description Open the view popup for department incoming document
+             * @param workItem
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
+            self.viewDepartmentIncomingAsCorrespondenceDocument = function (workItem, actions, pageName, $event) {
+                var info = typeof workItem.getInfo === 'function' ? workItem.getInfo() : new WorkItem(workItem).getInfo();
+                var disabled = _checkDisabled(pageName, workItem);
+
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+
+                var incomingWithIncomingVsId = info.incomingVsId;
+
+                var vsId = incomingWithIncomingVsId ? info.incomingVsId : info.vsId;
+                var docClass = incomingWithIncomingVsId ? 'incoming' : info.documentClass;
+                return $http.get(_createUrlSchema(vsId, docClass, 'with-content'))
+                    .then(function (result) {
+                        var documentClass = result.data.rs.metaData.classDescription;
+                        result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                        return result.data.rs;
+                    })
+                    .then(function (result) {
+                        result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: result.metaData,
+                                content: result.content,
+                                actions: actions,
+                                workItem: workItem,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
+                                popupNumber: self.popupNumber
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        }).then(function () {
+                            self.popupNumber -= 1;
+                            return true;
+                        }).catch(function () {
+                            self.popupNumber -= 1;
+                            return false;
+                        });
+                    });
 
             };
 
-            self.viewDepartmentIncomingDocument = function (workItem, actions, pageName, $event) {
-
-            };
-
+            /**
+             * @description Open the view popup for department returned document
+             * @param workItem
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
             self.viewDepartmentReturnedDocument = function (workItem, actions, pageName, $event) {
+                var info = typeof workItem.getInfo === 'function' ? workItem.getInfo() : new WorkItem(workItem).getInfo();
+                var disabled = _checkDisabled(pageName, workItem);
 
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+
+                return $http.get(urlService.departmentWF + '/returned/' + info.wobNumber)
+                    .then(function (result) {
+                        return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
+                    })
+                    .then(function (generalStepElementView) {
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: generalStepElementView.correspondence,
+                                content: generalStepElementView.documentViewInfo,
+                                actions: actions,
+                                workItem: generalStepElementView,
+                                readyToExport: false,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
+                                disableEverything: false,
+                                popupNumber: self.popupNumber
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        })
+                            .then(function () {
+                                self.popupNumber -= 1;
+                                return true;
+                            })
+                            .catch(function () {
+                                self.popupNumber -= 1;
+                                return false;
+                            });
+                    })
+                    .catch(function (error) {
+                        return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                            return $q.reject('WORK_ITEM_NOT_FOUND');
+                        })
+                    });
             };
 
-            self.viewDepartmentSentDocument = function (sentItem, actions, pageName, $event) {
+            /**
+             * @description Open the view popup for department sent item document
+             * @param sentItem
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
+            self.viewDepartmentSentItemDocument = function (sentItem, actions, pageName, $event) {
+                var info = typeof sentItem.getInfo === 'function' ? sentItem.getInfo() : new Outgoing(sentItem).getInfo();
+                var disabled = _checkDisabled(pageName, sentItem);
 
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+                return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
+                    .then(function (result) {
+                        var documentClass = result.data.rs.metaData.classDescription;
+                        result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                        return result.data.rs;
+                    })
+                    .then(function (result) {
+                        result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: result.metaData,
+                                content: result.content,
+                                actions: actions,
+                                workItem: false,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
+                                popupNumber: self.popupNumber,
+                                disableEverything: disabled.disableAll
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        }).then(function () {
+                            self.popupNumber -= 1;
+                            return true;
+                        }).catch(function () {
+                            self.popupNumber -= 1;
+                            return false;
+                        });
+                    });
             };
 
+            /**
+             * @description Open the view popup for department ready to export
+             * @param workItem
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
             self.viewDepartmentReadyToExportDocument = function (workItem, actions, pageName, $event) {
+                var info = typeof workItem.getInfo === 'function' ? workItem.getInfo() : new WorkItem(workItem).getInfo();
+                var disabled = _checkDisabled(pageName, workItem);
 
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+
+                return $http.get(_createWorkItemSchema(info, true, true))
+                    .then(function (result) {
+                        return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
+                    })
+                    .then(function (generalStepElementView) {
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: generalStepElementView.correspondence,
+                                content: generalStepElementView.documentViewInfo,
+                                actions: actions,
+                                workItem: generalStepElementView,
+                                readyToExport: true,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
+                                disableEverything: disabled.disableAll,
+                                popupNumber: self.popupNumber
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        })
+                            .then(function () {
+                                self.popupNumber -= 1;
+                                return true;
+                            })
+                            .catch(function () {
+                                self.popupNumber -= 1;
+                                return false;
+                            });
+                    })
+                    .catch(function (error) {
+                        return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                            return $q.reject('WORK_ITEM_NOT_FOUND');
+                        })
+                    });
             };
+
+            /**
+             * @description Open the view popup for g2g incoming document
+             * @param g2gIncoming
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
             self.viewG2GDocument = function (g2gIncoming, actions, pageName, $event) {
 
             };
+
+            /**
+             * @description Open the view popup for g2g messaging history document
+             * @param g2gItem
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
             self.viewG2GHistoryDocument = function (g2gItem, actions, pageName, $event) {
 
             };
 
+            self.setGeneralStepElementView = function (factory) {
+                GeneralStepElementView = factory;
+                return self;
+            };
+            self.setWorkItem = function (factory) {
+                WorkItem = factory;
+                return self;
+            };
+            self.setEventHistory = function (factory) {
+                EventHistory = factory;
+                return self;
+            };
+            self.setSentItemDepartmentInbox = function (factory) {
+                SentItemDepartmentInbox = factory;
+                return self;
+            };
+
+            $timeout(function () {
+                CMSModelInterceptor.runEvent('viewDocumentService', 'init', self);
+            }, 100);
             return self;
         }
     });

@@ -569,7 +569,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            workItem.viewNewDepartmentReadyToExport(self.gridActions, 'departmentReadyToExport', $event)
+                .then(function () {
+                    self.reloadReadyToExports(self.grid.page);
+                })
+                .catch(function () {
+                    self.reloadReadyToExports(self.grid.page);
+                });
         };
 
         /**

@@ -521,6 +521,16 @@ module.exports = function (app) {
             Correspondence.prototype.viewFromQueue = function (actions, queueName, $event) {
                 return viewDocumentService.viewQueueDocument(this, actions, queueName, $event);
             };
+            /**
+             * @description view from favorite documents as full view.
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @return {*}
+             */
+            Correspondence.prototype.viewFavoriteDocument= function (actions, queueName, $event) {
+                return viewDocumentService.viewFavoriteDocument(this, actions, queueName, $event);
+            };
 
             Correspondence.prototype.manageDocumentComments = function ($event) {
                 var info = this.getInfo();
