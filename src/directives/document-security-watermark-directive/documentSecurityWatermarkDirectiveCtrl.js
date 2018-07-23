@@ -33,6 +33,80 @@ module.exports = function (app) {
             self.securityLevels = self.globalSettingCopy.securityLevels;
         });
 
+
+        /**
+         * @description Initialize a new instance of document security setting by type
+         * @param {number | documentClass} [documentType]
+         * DocumentType differentiates between the initialization of security setting.
+         * If not passed, all the document security settings will be initialized with new instance.
+         * @param {boolean=} initDocumentSecurity
+         * @param {boolean=} makeCopy
+         */
+        self.initDocumentSecuritySetting = function (documentType, initDocumentSecurity, makeCopy) {
+            if (initDocumentSecurity) {
+                self.documentSecurity = new DocumentSecurity();
+            }
+            if (typeof documentType === 'undefined' || documentType === null || documentType === false) {
+                self.documentSecurityOutgoing = new DocumentSecuritySetting({documentType: 0});
+                self.documentSecurityIncoming = new DocumentSecuritySetting({documentType: 1});
+                self.documentSecurityInternal = new DocumentSecuritySetting({documentType: 2});
+                self.documentSecurityTawasolAttachment = new DocumentSecuritySetting({documentType: 4});
+            }
+            else {
+                documentType = documentType.hasOwnProperty('lookupKey') ? documentType.lookupKey : documentType;
+                if (documentType === 0) {
+                    self.documentSecurityOutgoing = new DocumentSecuritySetting({documentType: 0});
+                }
+                else if (documentType === 1) {
+                    self.documentSecurityIncoming = new DocumentSecuritySetting({documentType: 1});
+                }
+                else if (documentType === 2) {
+                    self.documentSecurityInternal = new DocumentSecuritySetting({documentType: 2});
+                }
+                else if (documentType === 4) {
+                    self.documentSecurityTawasolAttachment = new DocumentSecuritySetting({documentType: 4});
+                }
+            }
+
+            if (makeCopy) {
+                self.makeDocumentSecuritySettingCopy(documentType, initDocumentSecurity);
+            }
+        };
+
+        /**
+         * @description Makes the copy of the document security setting.
+         * @param {number | documentClass} [documentType]
+         * Represents the document type to make copy. If not passed, copy of all the document type security settings will be made
+         * @param {boolean=} copyDocumentSecurity
+         * Checks whether to make a copy of document security object or not
+         */
+        self.makeDocumentSecuritySettingCopy = function (documentType, copyDocumentSecurity) {
+            if (copyDocumentSecurity) {
+                self.documentSecurityCopy = angular.copy(self.documentSecurity);
+            }
+            if (typeof documentType === 'undefined' || documentType === null || documentType === false) {
+                self.documentSecurityOutgoingCopy = angular.copy(self.documentSecurityOutgoing);
+                self.documentSecurityIncomingCopy = angular.copy(self.documentSecurityIncoming);
+                self.documentSecurityInternalCopy = angular.copy(self.documentSecurityInternal);
+                self.documentSecurityTawasolAttachmentCopy = angular.copy(self.documentSecurityTawasolAttachment);
+            }
+            else {
+                documentType = documentType.hasOwnProperty('lookupKey') ? documentType.lookupKey : documentType;
+                if (documentType === 0) {
+                    self.documentSecurityOutgoingCopy = angular.copy(self.documentSecurityOutgoing);
+                }
+                else if (documentType === 1) {
+                    self.documentSecurityIncomingCopy = angular.copy(self.documentSecurityIncoming);
+                }
+                else if (documentType === 2) {
+                    self.documentSecurityInternalCopy = angular.copy(self.documentSecurityInternal);
+                }
+                else if (documentType === 4) {
+                    self.documentSecurityTawasolAttachmentCopy = angular.copy(self.documentSecurityTawasolAttachment);
+                }
+            }
+        };
+
         /**
          * @description Initializes the document security
          * If value is already available(on load or after reload), value will be used from service
@@ -42,30 +116,36 @@ module.exports = function (app) {
             /* After reload, documentSecurity will have value in service and it will differentiate all kinds of security settings*/
             if (documentSecurityService.documentSecurity) {
                 self.documentSecurity = angular.copy(documentSecurityService.documentSecurity);
-                _.map(self.documentSecurity.settingDetails, function (settingDetail) {
-                    if (settingDetail.documentType === 0)
-                        self.documentSecurityOutgoing = settingDetail;
-                    else if (settingDetail.documentType === 1)
-                        self.documentSecurityIncoming = settingDetail;
-                    else if (settingDetail.documentType === 2)
-                        self.documentSecurityInternal = settingDetail;
-                    else if (settingDetail.documentType === 3 || settingDetail.documentType === 4)
-                        self.documentSecurityTawasolAttachment = settingDetail;
-                })
+                if (self.documentSecurity.settingDetails && self.documentSecurity.settingDetails.length) {
+                    _.map(self.documentSecurity.settingDetails, function (settingDetail) {
+                        if (settingDetail.documentType === 0)
+                            self.documentSecurityOutgoing = settingDetail;
+                        else if (settingDetail.documentType === 1)
+                            self.documentSecurityIncoming = settingDetail;
+                        else if (settingDetail.documentType === 2)
+                            self.documentSecurityInternal = settingDetail;
+                        else if (settingDetail.documentType === 4)
+                            self.documentSecurityTawasolAttachment = settingDetail;
+                    });
+                    var availableType,
+                        existingDocTypes = _.map(self.documentSecurity.settingDetails, 'documentType');
+                    for (var i = 0; i < self.availableDocTypesToProtect.length; i++) {
+                        availableType = self.availableDocTypesToProtect[i];
+                        if (existingDocTypes.indexOf(availableType.lookupKey) < 0) {
+                            self.initDocumentSecuritySetting(availableType.lookupKey);
+                        }
+                    }
+                }
+                else {
+                    self.initDocumentSecuritySetting();
+                }
             }
             else {
-                self.documentSecurity = new DocumentSecurity();
-                self.documentSecurityOutgoing = new DocumentSecuritySetting({documentType: 0});
-                self.documentSecurityIncoming = new DocumentSecuritySetting({documentType: 1});
-                self.documentSecurityInternal = new DocumentSecuritySetting({documentType: 2});
-                self.documentSecurityTawasolAttachment = new DocumentSecuritySetting({documentType: 4});
+                self.initDocumentSecuritySetting(null, true);
             }
 
-            self.documentSecurityCopy = angular.copy(self.documentSecurity);
-            self.documentSecurityOutgoingCopy = angular.copy(self.documentSecurityOutgoing);
-            self.documentSecurityIncomingCopy = angular.copy(self.documentSecurityIncoming);
-            self.documentSecurityInternalCopy = angular.copy(self.documentSecurityInternal);
-            self.documentSecurityTawasolAttachmentCopy = angular.copy(self.documentSecurityTawasolAttachment);
+            /* Make the copy of the available data*/
+            self.makeDocumentSecuritySettingCopy(null, true);
         };
 
         self.watermarkTabsToShow = [
@@ -111,6 +191,11 @@ module.exports = function (app) {
             _setSelectedTabDocType(lookupKey)
         };
 
+        /**
+         * @description Check if the document security is disabled
+         * @param type
+         * @returns {boolean}
+         */
         self.checkDisabledDocSecurity = function (type) {
             type = type.toLowerCase();
             var enabled = true;
@@ -206,5 +291,7 @@ module.exports = function (app) {
                 })
         }
 
-    });
-};
+    })
+    ;
+}
+;
