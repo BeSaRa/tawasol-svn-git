@@ -243,3 +243,7 @@ Bugs:
 13946: Fix - Subscription - Can add document subscribe more than one Time.
 13961: Fix - Simple Add - Warning message should appear that sites has status need reply and date not entered will not be added.
 13960: Fix - Simple Add - When Select Correspondence site type and Main then Change the Type, the selected main and sub results don't disappear.
+
+23-07-2018
+-----------------
+14404: Fix - Admin -barcode settings - if the Barcode label element is not added an empty popup and a warning pop up both appeared

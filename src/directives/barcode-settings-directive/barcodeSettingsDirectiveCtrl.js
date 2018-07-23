@@ -179,22 +179,24 @@ module.exports = function (app) {
             globalSettingService
                 .testBarcodeSettings(self.globalSetting)
                 .then(function (result) {
-                    return dialog
-                        .showDialog({
-                            targetEvent: $event,
-                            template: cmsTemplate.getPopup('test-barcode-settings'),
-                            controller: function () {
-                                'ngInject';
-                                this.closeBarcodePopup = function ($event) {
-                                    dialog.hide();
+                    if (result) {
+                        return dialog
+                            .showDialog({
+                                targetEvent: $event,
+                                template: cmsTemplate.getPopup('test-barcode-settings'),
+                                controller: function () {
+                                    'ngInject';
+                                    this.closeBarcodePopup = function ($event) {
+                                        dialog.hide();
+                                    }
+                                },
+                                bindToController: true,
+                                controllerAs: 'ctrl',
+                                locals: {
+                                    barcode: result
                                 }
-                            },
-                            bindToController: true,
-                            controllerAs: 'ctrl',
-                            locals: {
-                                barcode: result
-                            }
-                        });
+                            });
+                    }
                 });
         };
 
