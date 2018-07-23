@@ -3,9 +3,10 @@
         <div layout="column">
             <div layout="row">
                 <div layout="column" flex>
-                    <md-button ng-class="{'selected': ctrl.checkSelected(folder)}" ng-disabled="ctrl.sameFolder(folder)"
+                    <md-button ng-class="{'selected': ctrl.checkSelected(folder)}"
+                               ng-disabled="ctrl.sameFolder(folder) || !folder.status"
                                ng-click="ctrl.clickCallback(folder , $event)">
-                        <div layout="row" layout-align="start center">
+                        <div layout="row" layout-align="start center" tooltip="{{(!folder.status) ? lang.folder_deactivated:''}}">
                             <div class="folder-icon">
                                 <md-icon md-svg-icon="{{ctrl.icon ? ctrl.icon : 'folder'}}"></md-icon>
                             </div>

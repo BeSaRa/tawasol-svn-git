@@ -2307,6 +2307,11 @@ module.exports = function (app) {
          * @returns {Promise<any>}
          */
         self.addWorkItemToFolder = function (workItems, folder, ignoreMessage) {
+            if (!folder.status) {
+                toast.error(langService.get('folder_deactivated'))
+                return $q.reject();
+            }
+
             return self.commonAddToFolder(workItems, folder)
                 .then(function (result) {
                     var info = workItems[0].getInfo();
