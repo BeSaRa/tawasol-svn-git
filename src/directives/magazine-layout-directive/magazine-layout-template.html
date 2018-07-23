@@ -104,11 +104,11 @@
                             <span ng-if="!workItem.isSameOU()">
                                 <span>{{lang.in}}</span>
                                 <span class="magazine-serial"> {{workItem.getRegistryOUTranslate()}}</span>
-                                <span ng-if="workItem.generalStepElm.dueDate">{{lang.due_on}}</span>
+                            </span>
+                            <span ng-if="workItem.generalStepElm.dueDate">{{lang.due_on}}</span>
                                 <span ng-if="workItem.generalStepElm.dueDate"
                                       tooltip="{{lang[workItem.getIndicatorDueDate().tooltip]}}"
                                       class="magazine-serial date {{workItem.getIndicatorDueDate().class}}">{{workItem.generalStepElm.dueDate}}</span>
-                            </span>
                         </span>
                     </div>
                     <div class="magazine-fix-actions">

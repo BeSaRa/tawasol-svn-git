@@ -247,3 +247,4 @@ Bugs:
 23-07-2018
 -----------------
 14404: Fix - Admin -barcode settings - if the Barcode label element is not added an empty popup and a warning pop up both appeared
+14402: Fix - Magazine view - due date is not appearing in the grid if its not passed
