@@ -264,8 +264,6 @@
                 .addToAllWithBase('terminateReadyToExports', 'cms-entity/correspondence/wf/outgoing/terminate/ready-to-export')
                 // correspondence views.
                 .addToAllWithBase('correspondenceViews', 'cms-entity/correspondence/correspondence-site-view')
-                // correspondence views(Admin).
-                .addToAllWithBase('adminCorrespondenceViews', 'cms-entity/admin/correspondence-site-view')
                 // quick search
                 .addToAllWithBase('quickSearchCorrespondence', 'cms-entity/correspondence/search/quick')
                 // incoming

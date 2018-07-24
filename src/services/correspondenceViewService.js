@@ -14,6 +14,8 @@ module.exports = function (app) {
         self.parents = [];
         self.children = {};
 
+        self.globalCorrespondenceSitesForG2GId = [];
+
         function _createSearchUrl(searchType, details) {
             var url = [];
 
@@ -96,10 +98,10 @@ module.exports = function (app) {
          * Used in organization structure for binding g2g Id(Code).
          */
         self.getGlobalCorrespondenceSitesForG2GId = function () {
-            $http.get(urlService.adminCorrespondenceViews + '/g2g-codes')
+            $http.get(urlService.correspondenceViews + '/g2g-codes')
                 .then(function (result) {
                     result = generator.generateCollection(result.data.rs, SiteView);
-                    result = generator.interceptReceivedCollection('SiteView', result);
+                    self.globalCorrespondenceSitesForG2GId = generator.interceptReceivedCollection('SiteView', result);
                     return result;
                 })
                 .catch(function (error) {

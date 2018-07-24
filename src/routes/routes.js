@@ -251,6 +251,10 @@ module.exports = function (app) {
                     permissions: function (roleService) {
                         'ngInject';
                         return roleService.getPermissionByGroup();
+                    },
+                    globalCorrespondenceSitesForG2GId: function (correspondenceViewService) {
+                        'ngInject';
+                        return correspondenceViewService.getGlobalCorrespondenceSitesForG2GId();
                     }/*,
                      organizations: function(organizationService){
                      return organizationService.loadOrganizations();

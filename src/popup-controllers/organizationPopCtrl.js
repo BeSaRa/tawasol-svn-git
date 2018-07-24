@@ -44,8 +44,8 @@ module.exports = function (app) {
                                                     userClassificationViewPermissionService,
                                                     ApplicationUser,
                                                     cmsTemplate,
-                                                    globalCorrespondenceSitesForG2GId,
-                                                    employeeService) {
+                                                    employeeService,
+                                                    correspondenceViewService) {
         'ngInject';
 
         var self = this;
@@ -75,7 +75,7 @@ module.exports = function (app) {
         self.model = new Organization(organization);
         self.selectedDocumentClass = null;
         // get global correspondence sites for g2gId
-        self.globalCorrespondenceSitesForG2GId = globalCorrespondenceSitesForG2GId;
+        self.globalCorrespondenceSitesForG2GId = correspondenceViewService.globalCorrespondenceSitesForG2GId;
         // get job titles
         self.jobTitles = jobTitleService.jobTitles;
         //get ranks
@@ -244,7 +244,7 @@ module.exports = function (app) {
             self.selectedTab = tabName;
         };
 
-        self.showTab = function(tabName){
+        self.showTab = function (tabName) {
             return self.tabsToShow.indexOf(tabName) > -1;
         };
 
@@ -534,7 +534,7 @@ module.exports = function (app) {
 
             })
                 .catch(function (error) {
-                    self.organization.securitySchema =  lookupService.getLookupByLookupKey(lookupService.securitySchema, 0);
+                    self.organization.securitySchema = lookupService.getLookupByLookupKey(lookupService.securitySchema, 0);
                 })
         };
 

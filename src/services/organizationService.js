@@ -432,10 +432,6 @@ module.exports = function (app) {
                             'ngInject';
                             // return documentTemplateService.loadDocumentTemplates(organization.id);
                             return [];
-                        },
-                        globalCorrespondenceSitesForG2GId: function (correspondenceViewService) {
-                            'ngInject';
-                            return correspondenceViewService.getGlobalCorrespondenceSitesForG2GId();
                         }/*,
                          organizations: function(organizationService){
                          return organizationService.getOrganizations()
@@ -525,10 +521,6 @@ module.exports = function (app) {
                         ouAssignedUsers: function (ouApplicationUserService) {
                             'ngInject';
                             return ouApplicationUserService.loadRelatedOUApplicationUsers(organization.id);
-                        },
-                        globalCorrespondenceSitesForG2GId: function (correspondenceViewService) {
-                            'ngInject';
-                            return correspondenceViewService.getGlobalCorrespondenceSitesForG2GId();
                         }/*,
                          organizations: function(organizationService){
                          return organizationService.getOrganizations()
