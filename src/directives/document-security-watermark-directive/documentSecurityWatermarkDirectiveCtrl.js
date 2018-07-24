@@ -291,7 +291,5 @@ module.exports = function (app) {
                 })
         }
 
-    })
-    ;
-}
-;
+    });
+};

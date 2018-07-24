@@ -219,8 +219,8 @@
                         <md-tab ng-repeat="filter in ctrl.userFilters"
                                 md-on-select="ctrl.selectFilter(filter, $index)">
                             <md-tab-label>
-                                <div layout="row" flex layout-align="start center">
-                                    <div flex class="tab-title">{{filter.getTranslatedName()}}</div>
+                                <div layout="row" layout-align="start center">
+                                    <div class="tab-title">{{filter.getTranslatedName()}}</div>
                                     <div class="filter-absolute">
                                         <md-menu-bar class="filter-menu">
                                             <md-menu>
@@ -228,7 +228,7 @@
                                                            class="md-icon-button filter-button">
                                                     <md-icon md-svg-icon="dots-vertical"></md-icon>
                                                 </md-button>
-                                                <md-menu-content width="2">
+                                                <md-menu-content width="3">
                                                     <md-menu-item>
                                                         <md-button
                                                                 ng-click="ctrl.userFilterEdit(filter , $index , $event)">
