@@ -64,14 +64,13 @@ module.exports = function (app) {
 
         // incoming document
         self.incoming = new Incoming({
-                ou: centralArchives ? null : self.employee.getOUID(),
-                addMethod: 1,//Paper document
-                createdOn: new Date(),
-                docDate: new Date(),
-                registryOU: centralArchives ? null : self.employee.getRegistryOUID(),
-                securityLevel: lookups.securityLevels[0]
-            });
-
+            ou: centralArchives ? null : self.employee.getOUID(),
+            addMethod: 1,//Paper document
+            createdOn: new Date(),
+            docDate: new Date(),
+            registryOU: centralArchives ? null : self.employee.getRegistryOUID(),
+            securityLevel: lookups.securityLevels[0]
+        });
         if (receive) {
             self.receive = true;
             self.receiveG2G = false;
@@ -79,7 +78,7 @@ module.exports = function (app) {
             self.model = angular.copy(self.incoming);
             self.documentInformation = receive.content;
         }
-        if(receiveG2G){
+        if (receiveG2G) {
             self.receiveG2G = true;
             self.receive = false;
             self.incoming = receiveG2G.metaData;
@@ -103,7 +102,7 @@ module.exports = function (app) {
             if (self.receive) {
                 promise = self.incoming.receiveDocument($stateParams.workItem);
             }
-            else if(self.receiveG2G){
+            else if (self.receiveG2G) {
                 promise = self.incoming.receiveG2GDocument();
             }
             else {

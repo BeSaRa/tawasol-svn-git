@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                               lookupService,
                                                               langService,
                                                               employeeService,
+                                                              $stateParams,
                                                               organizationService,
                                                               documentTypeService,
                                                               classificationService,
@@ -252,11 +253,12 @@ module.exports = function (app) {
         };
 
         self.checkOrganizationDisabled = function () {
+            console.log($stateParams);
             // if no document provided or still the controller prepare the instance.
             if (!self.document)
                 return false;
             // disable organization when edit mode for any case || if in add mode and the current employee not in central archive organization.
-            if (self.document.hasVsId() || !self.employee.inCentralArchive()) {
+            if ((self.document.hasVsId() && $stateParams.action !== 'receiveg2g') || !self.employee.inCentralArchive()) {
                 return true;
             }
             // if this document new and internal or outgoing electronic disable the select organization.
