@@ -528,7 +528,7 @@ module.exports = function (app) {
              * @param $event
              * @return {*}
              */
-            Correspondence.prototype.viewFavoriteDocument= function (actions, queueName, $event) {
+            Correspondence.prototype.viewFavoriteDocument = function (actions, queueName, $event) {
                 return viewDocumentService.viewFavoriteDocument(this, actions, queueName, $event);
             };
 
@@ -650,7 +650,7 @@ module.exports = function (app) {
             };
 
             Correspondence.prototype.getFirstSite = function () {
-                return this.sitesInfoTo[0] || this.sitesInfoCC[0];
+                return this.classDescription.toLowerCase() === 'outgoing' ? (this.sitesInfoTo[0] || this.sitesInfoCC[0]) : null;
             };
 
             // don't remove CMSModelInterceptor from last line
