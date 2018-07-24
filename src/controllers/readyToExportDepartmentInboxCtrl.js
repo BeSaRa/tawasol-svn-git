@@ -418,6 +418,9 @@ module.exports = function (app) {
         self.manageDestinations = function (readyToExport, $event) {
             var info = readyToExport.getInfo();
             managerService.manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
+                .then(function () {
+                    self.reloadReadyToExports(self.grid.page);
+                })
         };
 
         /**

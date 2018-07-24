@@ -386,6 +386,7 @@ module.exports = function (app) {
             });
             self.emptySubSites = true;
             self.documentInformation = null;
+            self.documentAction = null;
             self.document_properties.$setUntouched();
         };
 

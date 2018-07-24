@@ -460,6 +460,7 @@ module.exports = function (app) {
             });
 
             self.documentInformation = null;
+            self.documentAction = null;
             self.document_properties.$setUntouched();
         };
 

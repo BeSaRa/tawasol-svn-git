@@ -19,7 +19,8 @@ module.exports = function (app) {
                 disableWhen: '=',
                 signaturesCount: '=',
                 simpleViewUrl: '=?',
-                isSimpleAdd: '=?'
+                isSimpleAdd: '=?',
+                receiveDocument: '=?'
             }
         }
     })

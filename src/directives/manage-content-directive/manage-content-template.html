@@ -1,13 +1,14 @@
 <div layout="column" flex>
     <div layout="row" flex layout-align="start center">
         <div>
-            <md-button ng-if="ctrl.displayPrepare" class="md-raised" ng-click="ctrl.openPrepareTemplateDialog($event)">
+            <md-button ng-if="ctrl.displayPrepare && !ctrl.receiveDocument" class="md-raised" ng-click="ctrl.openPrepareTemplateDialog($event)">
                 <md-icon md-svg-icon="content-paste"></md-icon>
                 {{lang.prepare_document_content}}
             </md-button>
         </div>
         <label for="upload-file-content"
-               class="md-button md-raised">
+               class="md-button md-raised"
+               ng-if="!ctrl.receiveDocument">
                 <span layout="row" layout-align="start center">
                     <md-icon md-svg-icon="upload"></md-icon>
                     <span>{{lang.content_upload}}</span>
@@ -18,7 +19,7 @@
                    ng-model="ctrl.document.contentFile" aria-label="{{lang.content_upload}}"
                    id="upload-file-content" name="upload-file-content">
         </label>
-        <div ng-if="!ctrl.displayPrepare">
+        <div ng-if="!ctrl.displayPrepare && !ctrl.receiveDocument">
             <md-button ng-click="ctrl.openScannerDialog('scanner',$event)"
                        class="md-raised">
                 <div layout="row" layout-align="start center">
@@ -39,7 +40,7 @@
             <!--<span flex ng-if="ctrl.document.contentFile">{{ctrl.document.contentFile.name}}</span>-->
             <!--<span flex ng-if="ctrl.displayPrepare && ctrl.template">{{ctrl.template.getSubjectTitle()}}</span>-->
 
-        <div>
+        <div ng-if="!ctrl.receiveDocument">
             <md-icon md-svg-icon="close" class="cursor-pointer red-text" tooltip="{{lang.remove_content}}"
                      aria-label="{{lang.remove_content}}"
                      ng-if="(ctrl.documentInformation || ctrl.document.contentFile) && ctrl.templateOrFileName"
@@ -48,12 +49,15 @@
             </md-icon>
         </div>
         <div>
-            <md-button ng-if="ctrl.editContent" class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
+            <md-button ng-if="ctrl.editContent && !ctrl.receiveDocument" class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
                 {{lang.edit_content}}
             </md-button>
+            <md-button ng-if="ctrl.receiveDocument" class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
+                {{lang.view}}
+            </md-button>
         </div>
-        <span flex></span>
-        <!--<div ng-if="ctrl.simpleViewUrl">
+        <!--<span flex></span>
+        <div ng-if="ctrl.simpleViewUrl">
             &lt;!&ndash;save document &ndash;&gt;
             <md-button ng-click="ctrl.savePreparedDocument()"
                        class="md-icon-button"
