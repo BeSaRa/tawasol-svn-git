@@ -28,20 +28,17 @@ module.exports = function (app) {
         };
 
         self.viewDeliveryReport = function (record, $event) {
-
-            var id = record.hasOwnProperty('incomingDocId')
-                ? record.incomingDocId
-                : (record.correspondence ? record.correspondence.g2gVSID : null);
+            var id = record.hasOwnProperty('docId') ? record.docId : record;
 
             return dialog
                 .showDialog({
                     targetEvent: $event,
-                    template: cmsTemplate.getPopup('view-delivery-report'),
-                    controller: 'viewDeliveryReportPopCtrl',
+                    template: cmsTemplate.getPopup('g2g-delivery-report'),
+                    controller: 'g2gDeliveryReportPopCtrl',
                     controllerAs: 'ctrl',
                     bindToController: true,
-                    locals:{
-                      title : record.getTranslatedName()
+                    locals: {
+                        title: record.getTranslatedName()
                     },
                     resolve: {
                         records: function () {

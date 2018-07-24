@@ -132,7 +132,23 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            g2gItem.viewDocument(self.gridActions, 'g2gIncoming', $event)
+                .then(function (result) {
+                    if (result !== 'receive') {
+                        if (!g2gItem.getInfo().vsId) {
+                            g2gItem.correspondence.vsId = result.vsId;
+                            self.replaceRecord(g2gItem);
+                        }
+                    }
+                    //self.reloadG2gItems(self.grid.page);
+                })
+            /*.catch(function (error) {
+                if (!g2gItem.getInfo().vsId) {
+                    g2gItem.correspondence.vsId = error.metaData.vsId;
+                    self.replaceRecord(g2gItem);
+                }
+                //self.reloadG2gItems(self.grid.page);
+            })*/
         };
 
 

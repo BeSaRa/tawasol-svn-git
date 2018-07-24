@@ -30,30 +30,6 @@ module.exports = function (app) {
             fileType: {name: 'fileType', lKey: 15},
             sessionActon: {name: 'sessionActon', lKey: 16}
         };
-        /*self.securityLevel = 0;
-        self.priorityLevel = 1;
-        self.docClass = 2;
-        self.followupType = 3;
-        self.trackingActions = 4;
-        self.documentActions = 5;
-        self.ouTypes = 6;
-        self.category = 7;
-        self.userType = 8;
-        self.requiredFields = 9;
-        self.documentType = 10;*/
-
-
-        /*var findKeyByValue = function (obj, value) {
-            var key = null;
-            for (var prop in obj) {
-                if (obj.hasOwnProperty(prop)) {
-                    if (obj[prop].value === value) {
-                        key = prop;
-                    }
-                }
-            }
-            return key;
-        };*/
 
         self.categorizeLookups = function (g2gLookups) {
             self.g2gLookups = {};

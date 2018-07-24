@@ -59,6 +59,10 @@ module.exports = function (app) {
             .addPageName('departmentReturned')
             .addPageName('departmentSentItem')
             .addPageName('departmentReadyToExport')
+            // G2G
+            .addPageName('g2gIncoming')
+            .addPageName('g2gSentItem')
+            .addPageName('g2gReturned')
         ;
 
     });

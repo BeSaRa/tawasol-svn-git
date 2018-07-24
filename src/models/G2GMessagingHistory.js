@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('G2GMessagingHistory', function (CMSModelInterceptor,
                                                  Information,
+                                                 viewDocumentService,
                                                  langService) {
         'ngInject';
         return function G2GMessagingHistory(model) {
@@ -75,6 +76,10 @@ module.exports = function (app) {
                 var mainSite = new Information(this.mainSiteTo);
                 var subSite = (this.subSiteTo) ? new Information(this.subSiteTo) : '';
                 return (mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : ''));
+            };
+
+            G2GMessagingHistory.prototype.viewDocument = function (actions, queueName, $event) {
+                return viewDocumentService.viewG2GHistoryDocument(this, actions, queueName, $event);
             };
 
             // don't remove CMSModelInterceptor from last line

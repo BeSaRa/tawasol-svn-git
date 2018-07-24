@@ -268,6 +268,21 @@ module.exports = function (app) {
                     return !(employeeService.hasPermissionTo("MANAGE_DESTINATIONS"));
                 }
             })
-        ;
+            // G2G
+            .getPageNameOverride('g2gIncoming', 'draftOutgoing', {
+                disableAll: function (model) {
+                    return true;
+                }
+            })
+            .getPageNameOverride('g2gSentItem', 'draftOutgoing', {
+                disableAll: function (model) {
+                    return true;
+                }
+            })
+            .getPageNameOverride('g2gReturned', 'draftOutgoing', {
+                disableAll: function (model) {
+                    return true;
+                }
+            });
     })
 };

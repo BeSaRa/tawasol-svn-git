@@ -121,7 +121,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            g2gItem.viewDocument(self.gridActions, 'g2gSentItem', $event)
+                .then(function (result) {
+                    self.reloadG2gItems(self.grid.page);
+                })
+                .catch(function (error) {
+                    self.reloadG2gItems(self.grid.page);
+                })
         };
 
 
@@ -137,15 +143,15 @@ module.exports = function (app) {
                 })
         };
 
-      /*  /!**
+        /**
          * @description View Delivery Report
          * @param g2gItem
          * @param $event
          * @returns {*}
-         *!/
+         */
         self.viewDeliveryReport = function (g2gItem, $event) {
             return viewDeliveryReportService.viewDeliveryReport(g2gItem, $event);
-        };*/
+        };
 
         /**
          * @description Check if action will be shown on grid or not
@@ -238,7 +244,7 @@ module.exports = function (app) {
                 showInView: true,
                 checkShow: self.checkToShowAction
             },
-           /* // View Delivery Report
+            // View Delivery Report
             {
                 type: 'action',
                 icon: 'eye',
@@ -249,7 +255,7 @@ module.exports = function (app) {
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: self.checkToShowAction,
                 showInView: true
-            }*/
+            }
         ];
     });
 };

@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('viewDeliveryReportPopCtrl', function (viewDeliveryReportService,
+    app.controller('g2gDeliveryReportPopCtrl', function (viewDeliveryReportService,
                                                           _,
                                                           toast,
                                                           generator,
@@ -8,7 +8,7 @@ module.exports = function (app) {
                                                           records) {
         'ngInject';
         var self = this;
-        self.controllerName = 'viewDeliveryReportPopCtrl';
+        self.controllerName = 'g2gDeliveryReportPopCtrl';
         self.deliveryReportRecords = records;
 
 
@@ -39,8 +39,6 @@ module.exports = function (app) {
         self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
-
-
 
         /**
          * @description Close the popup

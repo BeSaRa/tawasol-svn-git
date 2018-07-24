@@ -3,6 +3,7 @@ module.exports = function (app) {
                                  langService,
                                  Information,
                                  downloadService,
+                                 viewDocumentService,
                                  Indicator) {
         return function G2G(model) {
             var self = this;
@@ -103,9 +104,13 @@ module.exports = function (app) {
                 return this.recordInfo;
             };
 
-            var indicator = new Indicator();
+            /*var indicator = new Indicator();
             G2G.prototype.getIsLockedG2GIndicator = function(){
                   return indicator.getIsLockedG2GIndicator(this.stepElm.lockedStatus);
+            };*/
+
+            G2G.prototype.viewDocument = function(actions, queueName, $event){
+                return viewDocumentService.viewG2GDocument(this, actions, queueName, $event);
             };
 
 

@@ -28,11 +28,12 @@ module.exports = function (app) {
                                   langService,
                                   Correspondence,
                                   General,
-                                  G2G,
-                                  G2GMessagingHistory,
                                   Outgoing,
                                   Internal,
-                                  Incoming) {
+                                  Incoming,
+                                  DocumentComment,
+                                  Attachment,
+                                  LinkedObject) {
             'ngInject';
             var self = this,
                 GeneralStepElementView,
@@ -132,6 +133,29 @@ module.exports = function (app) {
                 return url.join('/')
             }
 
+            function _getDocumentClass(correspondence) {
+                var documentClass = null;
+                if (correspondence.hasOwnProperty('docClassName') && correspondence.docClassName) {
+                    documentClass = correspondence.docClassName;
+                } else if (correspondence.hasOwnProperty('classDescription') && correspondence.classDescription) {
+                    documentClass = correspondence.classDescription;
+                } else if (correspondence.hasOwnProperty('generalStepElm')) {
+                    documentClass = generator.getDocumentClassName(correspondence.generalStepElm.docType);
+                } else { // if notification Item
+                    documentClass = generator.getDocumentClassName(correspondence.docClassId);
+                }
+                return documentClass ? documentClass.toLowerCase() : documentClass;
+            }
+
+            self.interceptReceivedCollectionBasedOnEachDocumentClass = function (collection) {
+                _.map(collection, function (correspondence, key) {
+                    var documentClass = _getModelName(_getDocumentClass(correspondence));
+                    correspondence = generator.generateInstance(correspondence, _getModel(documentClass));
+                    collection[key] = generator.interceptReceivedInstance(['Correspondence', documentClass], correspondence);
+                });
+                return collection;
+            };
+
             /**
              * the registered models for our CMS
              * @type {{outgoing: (Outgoing|*), internal: (Internal|*), incoming: (Incoming|*)}}
@@ -140,9 +164,7 @@ module.exports = function (app) {
                 outgoing: Outgoing,
                 internal: Internal,
                 incoming: Incoming,
-                general: General,
-                g2g: G2G,
-                g2gmessaginghistory: G2GMessagingHistory
+                general: General
             };
 
             self.screenLookups = {
@@ -1036,7 +1058,71 @@ module.exports = function (app) {
              * @param pageName
              */
             self.viewG2GDocument = function (g2gIncoming, actions, pageName, $event) {
+                var disabled = _checkDisabled(pageName, g2gIncoming);
 
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+
+                var site = angular.copy(g2gIncoming.correspondence.site);
+                // intercept send instance for G2G
+                g2gIncoming = generator.interceptSendInstance('G2G', g2gIncoming);
+                // get correspondence from G2G object
+                g2gIncoming = g2gIncoming.hasOwnProperty('correspondence') ? g2gIncoming.correspondence : g2gIncoming;
+
+                return $http
+                    .put(urlService.g2gInbox + 'open', g2gIncoming)
+                    .then(function (result) {
+                        var metaData = result.data.rs.metaData;
+                        metaData.site = site;
+                        metaData = generator.interceptReceivedInstance(['Correspondence'], generator.generateInstance(metaData, Incoming));
+
+                        metaData.documentComments = _.map(metaData.linkedCommentsList, function (item) {
+                            return generator.interceptReceivedInstance('DocumentComment', new DocumentComment(item));
+                        });
+
+                        metaData.attachments = _.map([].concat(metaData.linkedAttachmentList || [], metaData.linkedAttachmenstList || [], metaData.linkedExportedDocsList || []), function (item) {
+                            return generator.interceptReceivedInstance('Attachment', new Attachment(item))
+                        });
+                        metaData.linkedDocs = self.interceptReceivedCollectionBasedOnEachDocumentClass(metaData.linkedDocList);
+                        metaData.linkedEntities = _.map(metaData.linkedEntitiesList, function (item) {
+                            item.documentClass = documentClass;
+                            return generator.interceptReceivedInstance('LinkedObject', new LinkedObject(item));
+                        });
+
+                        result.data.rs.metaData = metaData;
+                        return result.data.rs;
+                    })
+                    .then(function (result) {
+                        result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL)
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            /*template: cmsTemplate.getPopup('view-correspondence-g2g'),
+                            controller: 'viewCorrespondenceG2GPopCtrl',*/
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: result.metaData,
+                                content: result.content,
+                                actions: actions,
+                                workItem: false,
+                                popupNumber: self.popupNumber,
+                                disableEverything: true,
+                                disableProperties: true,
+                                disableCorrespondence: true
+                            }
+                        }).then(function (result) {
+                            self.popupNumber -= 1;
+                            return result;
+                        }).catch(function (error) {
+                            self.popupNumber -= 1;
+                            return error;
+                        });
+                    });
             };
 
             /**
@@ -1047,7 +1133,69 @@ module.exports = function (app) {
              * @param pageName
              */
             self.viewG2GHistoryDocument = function (g2gItem, actions, pageName, $event) {
+                var disabled = _checkDisabled(pageName, g2gItem);
 
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+
+                var site = null;
+                g2gItem = {
+                    incomingDocId: g2gItem.incomingDocId
+                };
+                return $http
+                    .put(urlService.g2gInbox + 'open', g2gItem)
+                    .then(function (result) {
+                        var metaData = result.data.rs.metaData;
+                        metaData.site = site;
+                        metaData = generator.interceptReceivedInstance(['Correspondence'], generator.generateInstance(metaData, Incoming));
+
+                        metaData.documentComments = _.map(metaData.linkedCommentsList, function (item) {
+                            return generator.interceptReceivedInstance('DocumentComment', new DocumentComment(item));
+                        });
+
+                        metaData.attachments = _.map([].concat(metaData.linkedAttachmentList || [], metaData.linkedAttachmenstList || [], metaData.linkedExportedDocsList || []), function (item) {
+                            return generator.interceptReceivedInstance('Attachment', new Attachment(item))
+                        });
+                        metaData.linkedDocs = self.interceptReceivedCollectionBasedOnEachDocumentClass(metaData.linkedDocList);
+                        metaData.linkedEntities = _.map(metaData.linkedEntitiesList, function (item) {
+                            item.documentClass = documentClass;
+                            return generator.interceptReceivedInstance('LinkedObject', new LinkedObject(item));
+                        });
+
+                        result.data.rs.metaData = metaData;
+                        return result.data.rs;
+                    })
+                    .then(function (result) {
+                        result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            /*template: cmsTemplate.getPopup('view-correspondence-g2g'),
+                            controller: 'viewCorrespondenceG2GPopCtrl',*/
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: result.metaData,
+                                content: result.content,
+                                actions: actions,
+                                workItem: false,
+                                popupNumber: self.popupNumber,
+                                disableEverything: disabled.disableAll,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites
+                            }
+                        }).then(function (result) {
+                            self.popupNumber -= 1;
+                            return result;
+                        }).catch(function (error) {
+                            self.popupNumber -= 1;
+                            return error;
+                        });
+                    });
             };
 
             self.setGeneralStepElementView = function (factory) {

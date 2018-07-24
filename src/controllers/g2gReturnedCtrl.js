@@ -106,7 +106,13 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            console.log('view document');
+            g2gItem.viewDocument(self.gridActions, 'g2gReturned', $event)
+                .then(function (result) {
+                    self.reloadG2gItems(self.grid.page);
+                })
+                .catch(function (error) {
+                    self.reloadG2gItems(self.grid.page);
+                })
         };
 
 

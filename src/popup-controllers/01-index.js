@@ -93,7 +93,7 @@ module.exports = function (app) {
     require('./manageCorrespondenceSitesSearchPopCtrl')(app);
     require('./manageDocumentEntitiesSearchPopCtrl')(app);
 	require('./viewCorrespondenceG2GPopCtrl')(app);
-    require('./viewDeliveryReportPopCtrl')(app);
+    require('./g2gDeliveryReportPopCtrl')(app);
     require('./subscriptionPopCtrl')(app);
     require('./manageGridCorrespondenceSitesPopCtrl')(app);
     require('./manageSubscriptionsPopCtrl')(app);

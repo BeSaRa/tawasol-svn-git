@@ -12,7 +12,7 @@
                 .setBaseUrl('training', 'http://100.100.3.142:9080/CMSServices/service')
                 .setBaseUrl('ibm', 'http://100.100.3.107:9080/CMSServices/service')
                 .setBaseUrl('manohar', 'http://100.100.197.220:9080/CMSServices/service')
-                .setBaseUrl('hussam', 'http://100.100.11.12:9080/CMSServices/service')
+                .setBaseUrl('hussam', 'http://100.100.11.49:9080/CMSServices/service')
                 .setBaseUrl('migration', 'http://100.100.3.138:9080/CMSServices/service');
 
             // External Systems

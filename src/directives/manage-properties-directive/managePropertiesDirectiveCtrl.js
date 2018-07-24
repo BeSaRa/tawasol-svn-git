@@ -253,7 +253,6 @@ module.exports = function (app) {
         };
 
         self.checkOrganizationDisabled = function () {
-            console.log($stateParams);
             // if no document provided or still the controller prepare the instance.
             if (!self.document)
                 return false;

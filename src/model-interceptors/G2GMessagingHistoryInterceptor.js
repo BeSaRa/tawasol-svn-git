@@ -52,7 +52,7 @@ module.exports = function (app) {
             //delete model.creationDocDate;
             //delete model.lockedBy;
             //delete model.lockedDate;
-
+delete model.senderForTrackingSheet;
 
             return model;
         });
@@ -68,8 +68,16 @@ module.exports = function (app) {
             model.recordInfo = correspondenceService.getCorrespondenceInformation(model);
             model.statusInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.trackingActions.name, model.status);
             model.typeInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.copyOrOriginal.name, model.type);
+            model.senderForTrackingSheet = null;
+            if(model.sentByOrg){
+                if(generator.isJsonString(model.sentByOrg)){
+                    model.senderForTrackingSheet = JSON.parse(model.sentByOrg).name;
+                }
+                else{
+                    model.senderForTrackingSheet = model.sentByOrg;
+                }
+            }
             return model;
         });
-
     })
 };

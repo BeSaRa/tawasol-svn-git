@@ -7,7 +7,7 @@
         <md-content scroll-directive>
             <form name="trackingSheetForm" autocomplete="off">
                 <!-- SINGLE GRID VIEW -->
-                <div md-dynamic-height >
+                <div md-dynamic-height>
                     <!-- Delivery Report Grid-->
                     <div>
                         <md-content>
@@ -17,17 +17,48 @@
                                         <table md-table>
                                             <thead md-head md-order="ctrl.grid.order">
                                             <tr md-row>
-                                                <th md-column md-order-by=""><span>{{lang.id}}</span>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('statusInfo', 'Information')}}">
+                                                    <span>{{lang.status}}</span>
                                                 </th>
-                                                <th md-column md-order-by=""><span>{{lang.subject}}</span>
+                                                <th md-column md-order-by="">
+                                                    <span>{{lang.correspondence_sites}}</span>
+                                                </th>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('typeInfo', 'LookupG2G')}}">
+                                                    <span>{{lang.document_type}}</span>
+                                                </th>
+                                                <th md-column md-order-by="sentDate">
+                                                    <span>{{lang.sent_date}}</span>
+                                                </th>
+                                                <th md-column md-order-by="senderForTrackingSheet.name">
+                                                    <span>{{lang.sender}}</span>
+                                                </th>
+                                                <th md-column md-order-by="deliveryDate">
+                                                    <span>{{lang.received_date}}</span>
+                                                </th>
+                                                <th md-column md-order-by="receivedByOrg">
+                                                    <span>{{lang.received_by}}</span>
+                                                </th>
+                                                <th md-column md-order-by="comment">
+                                                    <span>{{lang.comments}}</span>
                                                 </th>
                                             </tr>
                                             </thead>
                                             <tbody md-body>
                                             <tr md-select="record" md-row
                                                 ng-repeat="record in ctrl.deliveryReportRecords | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
-                                                <td md-cell>{{record.incomingDocId}}</td>
-                                                <td md-cell>{{record.subject}}</td>
+                                                <td md-cell>{{record.statusInfo.getTranslatedName()}}</td>
+                                                <td md-cell>
+                                                    <main-site-sub-site-directive item="record"
+                                                                                  type="G2GMessagingHistory"></main-site-sub-site-directive>
+                                                </td>
+                                                <td md-cell>{{record.typeInfo.getTranslatedName()}}</td>
+                                                <td md-cell>{{record.sentDate}}</td>
+                                                <td md-cell>{{record.senderForTrackingSheet}}</td>
+                                                <td md-cell>{{record.deliveryDate}}</td>
+                                                <td md-cell>{{record.receivedByOrg}}</td>
+                                                <td md-cell>{{record.comment}}</td>
                                             </tr>
                                             </tbody>
                                         </table>
