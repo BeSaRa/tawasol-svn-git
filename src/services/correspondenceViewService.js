@@ -1,8 +1,8 @@
 module.exports = function (app) {
-    app.service('correspondenceViewService', function (urlService, 
-                                                       $http, 
-                                                       $q, 
-                                                       generator, 
+    app.service('correspondenceViewService', function (urlService,
+                                                       $http,
+                                                       $q,
+                                                       generator,
                                                        SiteView,
                                                        _) {
         'ngInject';
@@ -33,7 +33,7 @@ module.exports = function (app) {
          */
         self.correspondenceSiteSearch = function (searchType, details) {
             var url = _createSearchUrl(searchType, details);
-            return $http.post(url , details).then(function (result) {
+            return $http.post(url, details).then(function (result) {
                 var siteViews = generator.generateCollection(result.data.rs, SiteView, self._sharedMethods);
                 return generator.interceptReceivedCollection('SiteView', siteViews);
             });
@@ -89,6 +89,22 @@ module.exports = function (app) {
          */
         self.getSitesView = function () {
             return self.correspondenceViews;
+        };
+
+        /**
+         * @description Get the global correspondence sites.
+         * Used in organization structure for binding g2g Id(Code).
+         */
+        self.getGlobalCorrespondenceSitesForG2GId = function () {
+            $http.get(urlService.adminCorrespondenceViews + '/g2g-codes')
+                .then(function (result) {
+                    result = generator.generateCollection(result.data.rs, SiteView);
+                    result = generator.interceptReceivedCollection('SiteView', result);
+                    return result;
+                })
+                .catch(function (error) {
+                    return [];
+                });
         }
     });
 };

@@ -93,7 +93,7 @@
                                     </md-input-container>
                                 </div><!-- row -->
                                 <div layout="row">
-                                    <md-input-container flex>
+                                    <!--<md-input-container flex>
                                         <label for="code">{{lang.code}}</label>
                                         <input id="code" name="code" maxlength="10" required
                                                ng-model="ctrl.organization.code">
@@ -101,6 +101,17 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="maxlength">{{lang.short}}</div>
                                         </div>
+                                    </md-input-container>-->
+                                    <md-input-container flex>
+                                        <label for="g2gId">{{lang.g2g_id}}</label>
+                                        <md-select name="g2gId" id="g2gId"
+                                                   ng-model="ctrl.organization.code">
+                                            <md-option tooltip="{{globalCorrespondenceSite.getTranslatedName(true)}}"
+                                                       ng-value="globalCorrespondenceSite.exactId"
+                                                       ng-repeat="globalCorrespondenceSite in ctrl.globalCorrespondenceSitesForG2GId track by $index">
+                                                {{globalCorrespondenceSite.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
                                     </md-input-container>
                                     <md-input-container flex>
                                         <label for="outype">{{lang.organization_type}}</label>
@@ -352,7 +363,8 @@
                                         </div>
                                     </fieldset>
                                     <!-- Workflow Security Settings -->
-                                    <fieldset ng-class="{'size-50' : ctrl.organization.hasRegistry, 'size-100': !ctrl.organization.hasRegistry}">
+                                    <fieldset
+                                            ng-class="{'size-50' : ctrl.organization.hasRegistry, 'size-100': !ctrl.organization.hasRegistry}">
                                         <legend class="md-accent">{{lang.workflow_security_settings}}</legend>
                                         <div layout="row">
                                             <md-input-container flex>

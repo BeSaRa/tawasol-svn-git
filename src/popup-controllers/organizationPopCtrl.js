@@ -44,6 +44,7 @@ module.exports = function (app) {
                                                     userClassificationViewPermissionService,
                                                     ApplicationUser,
                                                     cmsTemplate,
+                                                    globalCorrespondenceSitesForG2GId,
                                                     employeeService) {
         'ngInject';
 
@@ -73,6 +74,8 @@ module.exports = function (app) {
 
         self.model = new Organization(organization);
         self.selectedDocumentClass = null;
+        // get global correspondence sites for g2gId
+        self.globalCorrespondenceSitesForG2GId = globalCorrespondenceSitesForG2GId;
         // get job titles
         self.jobTitles = jobTitleService.jobTitles;
         //get ranks
