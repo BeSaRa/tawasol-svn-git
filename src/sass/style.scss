@@ -1922,6 +1922,11 @@ button.list-button {
   }
 }
 
+trix-editor{
+  max-height: 150px;
+  overflow-y: auto !important;
+}
+
 .section-title {
   background-color: #EEE;
   padding: 0 8px;
