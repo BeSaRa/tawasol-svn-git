@@ -52,7 +52,7 @@ module.exports = function (app) {
             //delete model.creationDocDate;
             //delete model.lockedBy;
             //delete model.lockedDate;
-delete model.senderForTrackingSheet;
+            delete model.senderForTrackingSheet;
 
             return model;
         });

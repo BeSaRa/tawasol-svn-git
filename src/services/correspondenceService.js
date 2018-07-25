@@ -1311,7 +1311,7 @@ module.exports = function (app) {
          * @description to view correspondence workItem(proxy mail)
          */
         self.viewCorrespondenceProxyWorkItem = function (info, actions, disableProperties, disableCorrespondence, department, readyToExport, approvedQueue, departmentIncoming) {
-            var url = urlService.inboxWF + '/proxy/wob-num/'+info.wobNumber;
+            var url = urlService.inboxWF + '/proxy/wob-num/' + info.wobNumber;
             //url = approvedQueue ? _createCorrespondenceWFSchema([info.documentClass, 'approved-queue', 'wob-num', info.wobNumber]) : _createWorkItemSchema(info, department, readyToExport);
             return $http.get(url)
                 .then(function (result) {
@@ -1394,22 +1394,25 @@ module.exports = function (app) {
         };
 
         self.viewCorrespondenceG2G = function (g2gItem, actions, model, $event) {
-            var site = null;
+            var site = null, url;
             if (model.toLowerCase() === 'g2g') {
                 site = angular.copy(g2gItem.correspondence.site);
                 // intercept send instance for G2G
-                g2gItem = g2gItem instanceof G2G ? generator.interceptSendInstance(model, g2gItem) : g2gItem;
+                g2gItem = g2gItem instanceof G2G ? generator.interceptSendInstance('G2G', g2gItem) : g2gItem;
                 // get correspondence from G2G object
                 g2gItem = g2gItem.hasOwnProperty('correspondence') ? g2gItem.correspondence : g2gItem;
-
+                url = urlService.g2gInbox + 'open';
             }
             else if (model.toLowerCase() === 'g2gmessaginghistory') {
-                g2gItem = new G2GMessagingHistory({
-                    incomingDocId: g2gItem.incomingDocId
-                });
+                /*g2gItem = {
+                    //incomingDocId: g2gItem.incomingDocId
+                    g2gVSID: g2gItem.incomingDocId
+                };*/
+                g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
+                url = urlService.g2gInbox + 'open-sent-return';
             }
             return $http
-                .put(urlService.g2gInbox + 'open', g2gItem)
+                .put(url, g2gItem)
                 .then(function (result) {
                     var metaData = result.data.rs.metaData;
                     metaData.site = site;
@@ -1707,7 +1710,7 @@ module.exports = function (app) {
          * @param inSearch
          * @returns {promise|*}
          */
-        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming , inSearch) {
+        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming, inSearch) {
             var normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
             var count = angular.isArray(correspondence) ? correspondence.length : 1;
             if (normalCorrespondence && !inSearch) {

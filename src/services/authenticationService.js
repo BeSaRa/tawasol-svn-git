@@ -101,6 +101,7 @@ module.exports = function (app) {
          */
         self.logout = function () {
             localStorageService.remove('CR');
+            localStorageService.remove('sort');
             return $http.post(urlService.logout, null)
                 .then(function (result) {
                     tokenService.destroy(); // destroy the current sessions

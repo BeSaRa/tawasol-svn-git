@@ -1141,11 +1141,13 @@ module.exports = function (app) {
                 }
 
                 var site = null;
-                g2gItem = {
-                    incomingDocId: g2gItem.incomingDocId
-                };
+                /*g2gItem = {
+                    //incomingDocId: g2gItem.incomingDocId
+                    g2gVSID: g2gItem.incomingDocId
+                };*/
+                g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
                 return $http
-                    .put(urlService.g2gInbox + 'open', g2gItem)
+                    .put(urlService.g2gInbox + 'open-sent-return', g2gItem)
                     .then(function (result) {
                         var metaData = result.data.rs.metaData;
                         metaData.site = site;

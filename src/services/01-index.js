@@ -109,4 +109,5 @@ module.exports = function (app) {
 	require('./g2gLookupService')(app);
 	require('./reportService')(app);
 	require('./documentSecurityService')(app);
+	require('./gridSortingService')(app);
 };
