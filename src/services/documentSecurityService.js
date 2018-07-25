@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.service('documentSecurityService', function (urlService,
                                                      $http,
                                                      $q,
+                                                     tokenService,
                                                      langService,
                                                      DocumentSecurity,
                                                      toast,
@@ -17,7 +18,7 @@ module.exports = function (app) {
          */
         self.loadDocumentSecurity = function () {
             return $http.get(urlService.documentSecurity + '/setting').then(function (result) {
-                if(result.data.rs) {
+                if (result.data.rs) {
                     self.documentSecurity = generator.generateInstance(result.data.rs, DocumentSecurity, self._sharedMethods);
                     self.documentSecurity = generator.interceptReceivedInstance('DocumentSecurity', self.documentSecurity);
                     return self.documentSecurity;
@@ -32,15 +33,17 @@ module.exports = function (app) {
          * @return {Promise|DocumentSecurity}
          */
         self.previewDocumentSecurity = function (documentSecurity) {
-            return $http
-                .post(urlService.documentSecurity + '/previewSettings',
-                    generator.interceptSendInstance('DocumentSecurity', documentSecurity))
-                .then(function (result) {
-                    return result;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+            var defer = $q.defer();
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", urlService.documentSecurity + '/previewSettings');
+            xhr.setRequestHeader('tawasol-auth-header', tokenService.getToken());
+            xhr.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
+            xhr.responseType = "blob";
+            xhr.send(JSON.stringify(generator.interceptSendInstance('DocumentSecurity', documentSecurity)));
+            xhr.onload = function (ev) {
+                defer.resolve(xhr.response);
+            };
+            return defer.promise;
         };
 
         /**

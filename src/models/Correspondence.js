@@ -625,7 +625,7 @@ module.exports = function (app) {
                 return '';
             };
             Correspondence.prototype.checkIncomingSites = function () {
-                return !!this.mainSiteId
+                return !!this.mainSiteId || !!(this.site && this.site.mainSiteId);
             };
             Correspondence.prototype.checkOutgoingSites = function () {
                 return (angular.isArray(this.ccSitesList) && this.ccSitesList.length) ||

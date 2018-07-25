@@ -242,10 +242,10 @@ module.exports = function (app) {
 
             documentSecurityService
                 .previewDocumentSecurity(documentSecurityPreview)
-                .then(function (result) {
-                    var bytesArray = new Uint8Array(result.data);
-                    var file = new Blob([bytesArray], {type: 'application/pdf'});
-                    var fileURL = URL.createObjectURL(file);
+                .then(function (blob) {
+                    // var bytesArray = new Uint8Array(result.data);
+                    // var file = new Blob([bytesArray], {type: 'application/pdf'});
+                    var fileURL = URL.createObjectURL(blob);
                     window.open(fileURL);
                 });
         };

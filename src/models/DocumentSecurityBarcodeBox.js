@@ -7,10 +7,10 @@ module.exports = function (app) {
 
             self.whRatio = .64;
 
-            self.width = 200;
+            self.width = 100;
             self.widthPx = self.width + 'px';
 
-            self.height = 200;
+            self.height = 100;
             self.heightPx = self.height + 'px';
 
             self.cWidth = Math.round(self.width * self.whRatio);

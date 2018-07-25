@@ -7,11 +7,11 @@ module.exports = function (app) {
             self.type = 'A4';
             self.whRatio = .64;
 
-            self.width = 595;
-            self.widthPx = 595 + 'px';
+            self.width = 816;
+            self.widthPx = 816 + 'px';
 
-            self.height = 842;
-            self.heightPx = 842 + 'px';
+            self.height = 1056;
+            self.heightPx = 1056 + 'px';
 
             self.cWidth = Math.round(self.width * self.whRatio);
             self.cWidthPx = self.cWidth + 'px';

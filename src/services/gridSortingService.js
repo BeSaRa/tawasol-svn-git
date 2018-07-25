@@ -1,8 +1,6 @@
 module.exports = function (app) {
     app.service('gridSortingService', function (localStorageService,
-                                                generator,
-                                                toast,
-                                                langService) {
+                                                generator) {
         'ngInject';
         var self = this;
         self.serviceName = 'gridSortingService';
@@ -23,13 +21,13 @@ module.exports = function (app) {
                 draft: 'draftOut',
                 review: 'reviewOut',
                 readyToSend: 'readyToSendOut',
-                rejected: 'rejectedOut',
+                rejected: 'rejectedOut'
             },
             incoming: {
                 scan: 'scanInc',
                 review: 'reviewInc',
                 readyToSend: 'readyToSendInc',
-                rejected: 'rejectedInc',
+                rejected: 'rejectedInc'
             },
             internal: {
                 prepare: 'prepareInt',
@@ -137,7 +135,7 @@ module.exports = function (app) {
 
 
         function _removeGridSortingKey(gridName) {
-            var sortingStorage = self.getGridSortingKey(gridName);
+            var sortingStorage = self.getGridSortingKey();
             if (sortingStorage) {
                 delete sortingStorage[gridName];
             }
