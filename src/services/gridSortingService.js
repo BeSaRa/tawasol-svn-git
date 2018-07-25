@@ -1,6 +1,8 @@
 module.exports = function (app) {
     app.service('gridSortingService', function (localStorageService,
-                                                generator) {
+                                                generator,
+                                                toast,
+                                                langService) {
         'ngInject';
         var self = this;
         self.serviceName = 'gridSortingService';
@@ -17,29 +19,29 @@ module.exports = function (app) {
          */
         self.grids = {
             outgoing: {
-                prepare: 'prepareOutgoing',
-                draft: 'draftOutgoing',
-                review: 'reviewOutgoing',
-                readyToSend: 'readyToSendOutgoing',
-                rejected: 'rejectedOutgoing',
+                prepare: 'prepareOut',
+                draft: 'draftOut',
+                review: 'reviewOut',
+                readyToSend: 'readyToSendOut',
+                rejected: 'rejectedOut',
             },
             incoming: {
-                scan: 'scanIncoming',
-                review: 'reviewIncoming',
-                readyToSend: 'readyToSendIncoming',
-                rejected: 'rejectedIncoming',
+                scan: 'scanInc',
+                review: 'reviewInc',
+                readyToSend: 'readyToSendInc',
+                rejected: 'rejectedInc',
             },
             internal: {
-                prepare: 'prepareInternal',
-                draft: 'draftInternal',
-                review: 'reviewInternal',
-                readyToSend: 'readyToSendInternal',
-                rejected: 'rejectedInternal',
-                approved: 'approvedInternal'
+                prepare: 'prepareInt',
+                draft: 'draftInt',
+                review: 'reviewInt',
+                readyToSend: 'readyToSendInt',
+                rejected: 'rejectedInt',
+                approved: 'approvedInt'
             },
-            userInbox: {
-                inbox: 'inbox',
-                sentItems: 'userSentItems',
+            inbox: {
+                userInbox: 'userInbox',
+                sentItem: 'userSentItem',
                 followupEmp: 'userFollowupEmp',
                 favorite: 'userFavorite',
                 folder: 'userFolder',
@@ -47,27 +49,53 @@ module.exports = function (app) {
                 group: 'userGroup'
             },
             department: {
-                incoming: 'depIncoming',
-                returned: 'depReturned',
-                sentItems: 'depRentItems',
+                incoming: 'depInc',
+                returned: 'depRet',
+                sentItem: 'depSent',
                 readyToExport: 'depReadyToExport'
             },
             g2g: {
-                incoming: 'g2gIncoming',
-                sentItems: 'g2gSentItems',
-                returned: 'g2gReturned'
+                incoming: 'g2gInc',
+                sentItem: 'g2gSent',
+                returned: 'g2gRet'
             },
             centralArchive: {
                 readyToExport: 'caReadyToExport'
             },
             search: {
-                outgoing: 'searchOutgoing',
-                incoming: 'searchIncoming',
-                internal: 'searchInternal',
-                general: 'searchGeneral',
+                outgoing: 'searchOut',
+                incoming: 'searchInc',
+                internal: 'searchInt',
+                general: 'searchGen',
                 quick: 'searchQuick'
             },
-            administration: {}
+            administration: {
+                entity: 'entity',
+                classification: 'classification',
+                workflowGroup: 'wfGroup',
+                jobTitle: 'jobTitle',
+                rank: 'rank',
+                publicAnnouncement: 'pubAnnounce',
+                privateAnnouncement: 'priAnnounce',
+                localization: 'local',
+                role: 'role',
+                smsTemplate: 'smsTemplate',
+                documentType: 'docType',
+                correspondenceSiteType: 'corrSiteType',
+                organizationType: 'orgType',
+                correspondenceSite: 'corrSite',
+                applicationUser: 'appUser',
+                referenceNumberPlan: 'refNoPlan',
+                distributionList: 'distList',
+                entityType: 'entityType',
+                documentStatus: 'docStatus',
+                theme: 'theme',
+                organizationStructure: 'orgStructure',
+                workflowAction: 'wfAction',
+                documentFile: 'docFile',
+                documentTemplate: 'docTemplate',
+                attachmentType: 'attachType'
+            }
         };
 
         /**
@@ -105,20 +133,41 @@ module.exports = function (app) {
             localStorageService.set(self.storageKey, JSON.stringify(sortingStorage));
         };
 
-        /**
-         * @description Delete the sorting key for the grid
-         * @param gridName
-         */
-        self.removeGridSortingKey = function (gridName) {
+
+        function _removeGridSortingKey(gridName) {
             var sortingStorage = self.getGridSortingKey(gridName);
             if (sortingStorage) {
                 delete sortingStorage[gridName];
             }
             if (sortingStorage && Object.keys(sortingStorage).length) {
                 localStorageService.set(self.storageKey, JSON.stringify(sortingStorage));
-                return;
+                return 1;
             }
-            localStorageService.remove('sort');
+            self.removeAllSorting();
+            return -1;
+        }
+
+        /**
+         * @description Delete the sorting key for the grid
+         * @param {string | string[]}gridName
+         */
+        self.removeGridSortingKey = function (gridName) {
+            if (typeof gridName === 'string') {
+                _removeGridSortingKey(gridName);
+            }
+            else if (angular.isArray(gridName) && gridName.length) {
+                for (var i = 0; i < gridName.length; i++) {
+                    if (_removeGridSortingKey(gridName[i]) === -1)
+                        break;
+                }
+            }
+        };
+
+        /**
+         * @description Removes all the sorting keys
+         */
+        self.removeAllSorting = function () {
+            localStorageService.remove(self.storageKey);
         };
     });
 };

@@ -130,7 +130,12 @@ module.exports = function (app) {
                 })
         };
 
-
+        /**
+         * @description Recall the sent item
+         * @param g2gItem
+         * @param $event
+         * @returns {*}
+         */
         self.recall = function (g2gItem, $event) {
             return g2gSentItemsService.recallG2G(g2gItem, $event)
                 .then(function (result) {
