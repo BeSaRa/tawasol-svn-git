@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('documentSecurityCoOrdinatesDirectiveCtrl', function ($scope,
                                                                          $rootScope,
                                                                          $timeout,
+                                                                         $element,
                                                                          _,
                                                                          $q,
                                                                          generator,
@@ -63,7 +64,8 @@ module.exports = function (app) {
          */
         self.getWatermarkTextStyle = function () {
             return {
-                'font-size': self.documentSecuritySetting.textSize * self.documentSecurityBarcodeBox.whRatio + 'px'
+                'font-size': self.documentSecuritySetting.textSize * self.documentSecurityBarcodeBox.whRatio + 'px',
+                'margin-left': -($element.find('#security-text').width() / 2) + 'px'
             };
         };
 

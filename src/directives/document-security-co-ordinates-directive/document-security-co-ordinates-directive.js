@@ -58,6 +58,18 @@ module.exports = function (app) {
                         revertDuration: 200
                     })
                 }
+
+                /*scope.$watch(function(){
+                    $timeout(function(){
+                        return scope.ctrl.documentSecuritySetting.textOrientation;
+                    })
+                }, function (oldValue, newValue) {
+                    if(oldValue !== newValue){
+                        scope.ctrl.makeDocumentSecurityCopy();
+                        scope.ctrl.getWatermarkTextClass();
+                        scope.ctrl.getWatermarkTextStyle();
+                    }
+                })*/
             }
         }
     })

@@ -1415,8 +1415,7 @@ module.exports = function (app) {
                 .put(url, g2gItem)
                 .then(function (result) {
                     var metaData = result.data.rs.metaData;
-                    metaData.site = site;
-                    metaData = generator.interceptReceivedInstance(['Correspondence'], generator.generateInstance(metaData, Incoming));
+                    metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming','ViewIncoming'], generator.generateInstance(metaData, Incoming));
 
                     metaData.documentComments = _.map(metaData.linkedCommentsList, function (item) {
                         return generator.interceptReceivedInstance('DocumentComment', new DocumentComment(item));

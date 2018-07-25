@@ -39,7 +39,7 @@ module.exports = function (app) {
                 {
                     label: langService.get('all'),
                     value: function () {
-                        return self.g2gItems.length
+                        return (self.g2gItems.length + 21);
                     }
                 }
             ]

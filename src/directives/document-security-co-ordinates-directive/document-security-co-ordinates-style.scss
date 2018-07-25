@@ -1,21 +1,26 @@
 #co-ordinates-container {
-  /*width: 595px;
-  height: 842px;*/
   direction: ltr !important;
   background-color: #EEE;
   margin: 0 !important;
+  position: relative !important;
 }
 
 #barcode-box {
-  //width: 200px;
-  //height: 200px;
   margin: 0 !important;
+}
+
+.disable-watermark {
+  opacity: 0.5;
 }
 
 #security-text {
   text-align: center;
   margin-top: 0;
   margin-bottom: 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: inline-block;
   &.orientation-1 {
     /* Safari */
     -webkit-transform: rotate(0deg);

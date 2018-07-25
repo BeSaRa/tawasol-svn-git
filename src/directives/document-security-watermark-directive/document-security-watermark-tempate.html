@@ -75,14 +75,6 @@
                                 <!-- Text Watermark -->
                                 <md-input-container flex>
                                     <label for="textOrientationOutgoing">{{lang.document_security_text_watermark}}</label>
-                                    <!--<md-select id="textOrientationOutgoing" name="textOrientationOutgoing"
-                                               ng-disabled="ctrl.checkDisabledDocSecurity('outgoing')"
-                                               ng-model="ctrl.documentSecurityOutgoing.textOrientation">
-                                        <md-option
-                                                ng-repeat="orientation in ctrl.documentSecurityTextOrientations track by $index"
-                                                ng-value="orientation.value">
-                                            {{lang[orientation.key]}}
-                                        </md-option>-->
                                     <md-select id="textOrientationOutgoing" name="textOrientationOutgoing"
                                                ng-disabled="ctrl.checkDisabledDocSecurity('outgoing')"
                                                ng-model="ctrl.documentSecurityOutgoing.textOrientation">

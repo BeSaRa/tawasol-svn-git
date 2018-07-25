@@ -1065,7 +1065,7 @@ module.exports = function (app) {
                     disabled.disableProperties = true;
                 }
 
-                var site = angular.copy(g2gIncoming.correspondence.site);
+                //var site = angular.copy(g2gIncoming.correspondence.site);
                 // intercept send instance for G2G
                 g2gIncoming = generator.interceptSendInstance('G2G', g2gIncoming);
                 // get correspondence from G2G object
@@ -1075,8 +1075,8 @@ module.exports = function (app) {
                     .put(urlService.g2gInbox + 'open', g2gIncoming)
                     .then(function (result) {
                         var metaData = result.data.rs.metaData;
-                        metaData.site = site;
-                        metaData = generator.interceptReceivedInstance(['Correspondence'], generator.generateInstance(metaData, Incoming));
+                        //metaData.site = site;
+                        metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming', 'ViewIncoming'], generator.generateInstance(metaData, Incoming));
 
                         metaData.documentComments = _.map(metaData.linkedCommentsList, function (item) {
                             return generator.interceptReceivedInstance('DocumentComment', new DocumentComment(item));
@@ -1140,7 +1140,6 @@ module.exports = function (app) {
                     disabled.disableProperties = true;
                 }
 
-                var site = null;
                 /*g2gItem = {
                     //incomingDocId: g2gItem.incomingDocId
                     g2gVSID: g2gItem.incomingDocId
@@ -1150,8 +1149,7 @@ module.exports = function (app) {
                     .put(urlService.g2gInbox + 'open-sent-return', g2gItem)
                     .then(function (result) {
                         var metaData = result.data.rs.metaData;
-                        metaData.site = site;
-                        metaData = generator.interceptReceivedInstance(['Correspondence'], generator.generateInstance(metaData, Incoming));
+                        metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming', 'ViewIncoming'], generator.generateInstance(metaData, Incoming));
 
                         metaData.documentComments = _.map(metaData.linkedCommentsList, function (item) {
                             return generator.interceptReceivedInstance('DocumentComment', new DocumentComment(item));
@@ -1173,8 +1171,6 @@ module.exports = function (app) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         self.popupNumber += 1;
                         return dialog.showDialog({
-                            /*template: cmsTemplate.getPopup('view-correspondence-g2g'),
-                            controller: 'viewCorrespondenceG2GPopCtrl',*/
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
