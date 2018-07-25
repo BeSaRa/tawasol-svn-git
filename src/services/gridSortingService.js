@@ -111,7 +111,9 @@ module.exports = function (app) {
                 sortingStorage = JSON.parse(sortingStorage);
                 if (sortingStorage && Object.keys(sortingStorage).length) {
                     if (gridName) {
-                        return {[gridName]: sortingStorage[gridName]};
+                        var gridSort = {};
+                        gridSort[gridName] = sortingStorage[gridName];
+                        return gridSort;
                     }
                     return sortingStorage;
                 }
