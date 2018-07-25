@@ -54,19 +54,22 @@ module.exports = function (app) {
          * @description Gets the class to be used with watermark text
          * @returns {string}
          */
+        self.watermarkTextClass = '';
         self.getWatermarkTextClass = function () {
-            return 'orientation-' + self.documentSecuritySetting.textOrientation;
+            self.watermarkTextClass = 'orientation-' + self.documentSecuritySetting.textOrientation;
+            return self.watermarkTextClass;
         };
-
         /**
          * @description Gets the style to be used for the text
-         * @returns {{"font-size": string}}
+         * @returns {{"font-size": string, "margin-left": string}}
          */
+        self.watermarkTextStyle = {};
         self.getWatermarkTextStyle = function () {
-            return {
+            self.watermarkTextStyle = {
                 'font-size': self.documentSecuritySetting.textSize * self.documentSecurityBarcodeBox.whRatio + 'px',
                 'margin-left': -($element.find('#security-text').width() / 2) + 'px'
             };
+            return self.watermarkTextStyle;
         };
 
         $timeout(function () {

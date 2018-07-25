@@ -59,17 +59,26 @@ module.exports = function (app) {
                     })
                 }
 
-                /*scope.$watch(function(){
-                    $timeout(function(){
+                $timeout(function () {
+                    scope.$watch(function () {
                         return scope.ctrl.documentSecuritySetting.textOrientation;
-                    })
-                }, function (oldValue, newValue) {
-                    if(oldValue !== newValue){
-                        scope.ctrl.makeDocumentSecurityCopy();
-                        scope.ctrl.getWatermarkTextClass();
-                        scope.ctrl.getWatermarkTextStyle();
-                    }
-                })*/
+                    }, function (oldValue, newValue) {
+                        if ((oldValue !== newValue)) {
+                            scope.ctrl.makeDocumentSecurityCopy();
+                            scope.ctrl.getWatermarkTextClass();
+                            scope.ctrl.getWatermarkTextStyle();
+                        }
+                    });
+                    scope.$watch(function () {
+                        return scope.ctrl.documentSecuritySetting.textSize;
+                    }, function (oldValue, newValue) {
+                        if ((oldValue !== newValue)) {
+                            scope.ctrl.makeDocumentSecurityCopy();
+                            scope.ctrl.getWatermarkTextClass();
+                            scope.ctrl.getWatermarkTextStyle();
+                        }
+                    });
+                })
             }
         }
     })
