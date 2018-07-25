@@ -115,7 +115,12 @@ module.exports = function (app) {
                 })
         };
 
-
+        /**
+         * @description Resend the document
+         * @param g2gItem
+         * @param $event
+         * @returns {*}
+         */
         self.resend = function (g2gItem, $event) {
             return g2gReturnedService.resendG2G(g2gItem)
                 .then(function (result) {
@@ -123,6 +128,12 @@ module.exports = function (app) {
                 })
         };
 
+        /**
+         * @description Terminate the document
+         * @param g2gItem
+         * @param $event
+         * @returns {*}
+         */
         self.terminate = function (g2gItem, $event) {
             return g2gReturnedService.terminateG2G(g2gItem)
                 .then(function (result) {
@@ -225,7 +236,6 @@ module.exports = function (app) {
                 icon: 'check',
                 text: 'grid_action_resend',
                 shortcut: true,
-                hide: true,
                 callback: self.resend,
                 class: "action-green",
                 //permissionKey: 'VIEW_DOCUMENT',
