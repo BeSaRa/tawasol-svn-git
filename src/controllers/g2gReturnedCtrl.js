@@ -225,6 +225,7 @@ module.exports = function (app) {
                 icon: 'check',
                 text: 'grid_action_resend',
                 shortcut: true,
+                hide: true,
                 callback: self.resend,
                 class: "action-green",
                 //permissionKey: 'VIEW_DOCUMENT',

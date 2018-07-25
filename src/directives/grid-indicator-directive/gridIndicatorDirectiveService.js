@@ -70,7 +70,7 @@ module.exports = function (app) {
             if (record instanceof Outgoing || record instanceof Incoming
                 || record instanceof Internal || record instanceof General
                 || record instanceof Correspondence || record instanceof SentItemDepartmentInbox
-                || record instanceof EventHistory //|| record instanceof IncomingG2G
+                || record instanceof EventHistory //|| record instanceof G2G
             ) {
                 securityLevel = record.securityLevel;
             }
@@ -111,7 +111,7 @@ module.exports = function (app) {
             if (record instanceof Outgoing || record instanceof Incoming
                 || record instanceof Internal || record instanceof General
                 || record instanceof Correspondence || record instanceof SentItemDepartmentInbox
-                || record instanceof EventHistory //|| record instanceof IncomingG2G
+                || record instanceof EventHistory //|| record instanceof G2G
             ) {
                 priorityLevel = record.priorityLevel;
             }
@@ -154,7 +154,7 @@ module.exports = function (app) {
             /*var docClass = null;
             if (record instanceof Outgoing || record instanceof Incoming
                 || record instanceof Internal || record instanceof General
-                || record instanceof EventHistory //|| record instanceof IncomingG2G
+                || record instanceof EventHistory //|| record instanceof G2G
             ){
                 docClass = record.docClassName;
             }
