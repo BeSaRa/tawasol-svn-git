@@ -36,8 +36,7 @@ module.exports = function (app) {
                 .post(urlService.documentSecurity + '/previewSettings',
                     generator.interceptSendInstance('DocumentSecurity', documentSecurity))
                 .then(function (result) {
-                    console.log(result);
-                    return documentSecurity;
+                    return result;
                 })
                 .catch(function (error) {
                     console.log(error);
