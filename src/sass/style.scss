@@ -496,7 +496,7 @@ md-sidenav {
 }
 
 .padding-header {
-  padding: 25px;
+  padding: 0 25px;
   & > div > button > md-icon, & > button > md-icon {
     color: white;
   }
@@ -513,9 +513,9 @@ md-sidenav {
     margin-bottom: 4px;
   }
   &.small {
-    max-height: 76px;
-    height: 76px;
-    min-height: 76px;
+    max-height: 50px;
+    height: 50px;
+    min-height: 50px;
   }
   span, label {
     color: white !important;
@@ -554,7 +554,7 @@ md-sidenav {
 }
 
 .background-short {
-  height: 76px;
+  height: 50px;
 }
 
 md-tabs {

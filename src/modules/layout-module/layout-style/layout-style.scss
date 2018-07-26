@@ -314,3 +314,11 @@ html {
     max-width: 100%;
   }
 }
+.clearfix {
+  clear: both;
+}
+.clearfix:after {
+  clear: both;
+  content: "";
+  display: table;
+}
