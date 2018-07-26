@@ -27,6 +27,8 @@ module.exports = function (app) {
                 self.g2gItems = generator.generateCollection(result.data.rs, G2GMessagingHistory, self._sharedMethods);
                 self.g2gItems = generator.interceptReceivedCollection('G2GMessagingHistory', self.g2gItems);
                 return self.g2gItems;
+            }).catch(function(error){
+                return [];
             });
         };
 

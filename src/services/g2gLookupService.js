@@ -56,6 +56,8 @@ module.exports = function (app) {
                     self.categorizeLookups(result);
                     //console.log('g2g lookups', self.g2gLookups);
                     return self.g2gLookups;
+                }).catch(function(error){
+                    return {};
                 });
         };
 

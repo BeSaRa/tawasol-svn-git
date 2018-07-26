@@ -26,6 +26,8 @@ module.exports = function (app) {
                 self.g2gItems = generator.generateCollection(result.data.rs, G2G, self._sharedMethods);
                 self.g2gItems = generator.interceptReceivedCollection('G2G', self.g2gItems);
                 return self.g2gItems;
+            }).catch(function(error){
+                return [];
             });
         };
 
