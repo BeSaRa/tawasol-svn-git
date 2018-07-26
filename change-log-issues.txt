@@ -255,3 +255,5 @@ Bugs:
 13740: Fix - UI - Enhancement - Scroll bar should be Added in Public/Private Announcement for English/Arabic Body
 14407: Fix - Add- in documents without correspondence site should not be broadcasted
 15609: Fix - IE Compatibility - Tracking sheets appear empty.
+15614: Fix - G2G - download action should not appear inside the document in g2g incoming mail
+15626: Fix - G2G - After receiving the incoming document user should be able to launch and print barcode for the document

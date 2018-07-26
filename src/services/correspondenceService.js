@@ -1533,7 +1533,7 @@ module.exports = function (app) {
                 .put(urlService.g2gInbox + 'receive',
                     generator.interceptSendInstance(['Correspondence', 'Incoming'], correspondence))
                 .then(function (result) {
-                    return true;
+                    return correspondence;
                 })
                 .catch(function (error) {
                     errorCode.checkIf(error, 'G2G_ERROR_WHILE_RECEIVING', function () {

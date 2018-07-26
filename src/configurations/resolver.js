@@ -339,14 +339,6 @@ module.exports = function (app) {
                                 });
                             });
                     }
-                    /*else if (action === 'receiveg2g') {
-                        return correspondenceService.prepareReceiveIncomingByVsId(vsId)
-                            .catch(function (error) {
-                                return $timeout(function () {
-                                    return false;
-                                });
-                            });
-                    }*/
                     else {
                         return $timeout(function () {
                             return false;

@@ -182,28 +182,6 @@ module.exports = function (app) {
                 })
         };
 
-
-        /**
-         * @description Download Main Document
-         * @param g2gItem
-         * @param $event
-         */
-        self.downloadMainDocument = function (g2gItem, $event) {
-            g2gItem
-                .mainDocumentDownload($event);
-        };
-
-        /**
-         * @description Download Composite Document
-         * @param g2gItem
-         * @param $event
-         */
-        self.downloadCompositeDocument = function (g2gItem, $event) {
-            g2gItem
-                .compositeDocumentDownload($event);
-        };
-
-
         /**
          * @description Check if action will be shown on grid or not
          * @param action
@@ -320,39 +298,7 @@ module.exports = function (app) {
                 showInView: true,
                 //showInViewOnly: true,
                 checkShow: self.checkToShowAction
-            },
-            // Download
-            {
-                type: 'action',
-                icon: 'download',
-                text: 'grid_action_download',
-                shortcut: false,
-                showInViewOnly: true,
-                checkShow: self.checkToShowAction,
-                subMenu: [
-                    // Main Document
-                    {
-                        type: 'action',
-                        icon: 'file-document',
-                        text: 'grid_action_main_document',
-                        shortcut: false,
-                        permissionKey: "DOWNLOAD_MAIN_DOCUMENT",
-                        callback: self.downloadMainDocument,
-                        class: "action-green",
-                        checkShow: self.checkToShowAction
-                    },
-                    // Composite Document
-                    {
-                        type: 'action',
-                        icon: 'file-document',
-                        text: 'grid_action_composite_document',
-                        shortcut: false,
-                        callback: self.downloadCompositeDocument,
-                        class: "action-green",
-                        checkShow: self.checkToShowAction
-                    }
-                ]
-            },
+            }
         ];
     });
 };

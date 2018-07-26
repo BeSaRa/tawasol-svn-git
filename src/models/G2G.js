@@ -41,17 +41,6 @@ module.exports = function (app) {
                 return requiredFields;
             };
 
-            G2G.prototype.mainDocumentDownload = function ($event) {
-                var info = this.getInfo();
-                return downloadService.controllerMethod
-                    .mainDocumentDownload(info.vsId, $event);
-            };
-            G2G.prototype.compositeDocumentDownload = function ($event) {
-                var info = this.getInfo();
-                return downloadService.controllerMethod
-                    .compositeDocumentDownload(info.vsId, $event);
-            };
-
             /**
              * @description Get the concatenated arabic name and english name with separator passed for entity name. If no separator is passed, it will take hyphen(-)
              * @param separator
