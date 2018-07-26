@@ -249,4 +249,8 @@ Bugs:
 14404: Fix - Admin -barcode settings - if the Barcode label element is not added an empty popup and a warning pop up both appeared
 14402: Fix - Magazine view - due date is not appearing in the grid if its not passed
 14405: Fix - The deactivated Folder from User Preferences should not be opened from Folder Queue
+
+26-07-2018
+-----------------
 13740: Fix - UI - Enhancement - Scroll bar should be Added in Public/Private Announcement for English/Arabic Body
+14407: Fix - Add- in documents without correspondence site should not be broadcasted

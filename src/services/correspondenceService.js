@@ -1415,7 +1415,7 @@ module.exports = function (app) {
                 .put(url, g2gItem)
                 .then(function (result) {
                     var metaData = result.data.rs.metaData;
-                    metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming','ViewIncoming'], generator.generateInstance(metaData, Incoming));
+                    metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming', 'ViewIncoming'], generator.generateInstance(metaData, Incoming));
 
                     metaData.documentComments = _.map(metaData.linkedCommentsList, function (item) {
                         return generator.interceptReceivedInstance('DocumentComment', new DocumentComment(item));
@@ -1583,12 +1583,8 @@ module.exports = function (app) {
                 return result;
             });
         };
-        /**
-         * @description broadcast correspondence.
-         * @param correspondence
-         * @param $event
-         */
-        self.broadcastCorrespondence = function (correspondence, $event) {
+
+        function _broadcast(correspondence, $event) {
             return dialog
                 .showDialog({
                     targetEvent: $event,
@@ -1614,6 +1610,34 @@ module.exports = function (app) {
                         }
                     }
                 });
+        }
+
+        /**
+         * @description broadcast correspondence.
+         * @param correspondence
+         * @param $event
+         */
+        self.broadcastCorrespondence = function (correspondence, $event) {
+            //var normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
+            var count = angular.isArray(correspondence) ? correspondence.length : 1;
+            //if (normalCorrespondence) {
+                var sitesValidation = self.validateBeforeSend(correspondence);
+                if (sitesValidation.length && sitesValidation.length === count && count === 1) {
+                    var info = correspondence.getInfo();
+                    return dialog
+                        .confirmMessage('no_sites_cannot_broadcast_confirm_add', 'add', 'cancel', $event)
+                        .then(function () {
+                            return managerService
+                                .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
+                                .then(function (result) {
+                                    return result.hasSite() ? _broadcast(correspondence, $event) : null;
+                                })
+                        })
+                } else {
+                    return _broadcast(correspondence, $event);
+                }
+            //}
+            //return _broadcast(correspondence, $event);
         };
 
         self.validateSite = function (correspondence) {
@@ -1706,13 +1730,12 @@ module.exports = function (app) {
          * @param tab
          * @param $event
          * @param isDeptIncoming
-         * @param inSearch
          * @returns {promise|*}
          */
-        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming, inSearch) {
+        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming) {
             var normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
             var count = angular.isArray(correspondence) ? correspondence.length : 1;
-            if (normalCorrespondence && !inSearch) {
+            if (normalCorrespondence) {
                 var sitesValidation = self.validateBeforeSend(correspondence);
                 if (sitesValidation.length && sitesValidation.length === count && count === 1) {
                     var info = correspondence.getInfo();
