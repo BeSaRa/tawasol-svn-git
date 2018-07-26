@@ -466,18 +466,42 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Checks if ldap user exists
+         * @param {string}domainName
+         * @returns true/false{boolean}
+         * Returns true if LDAP user exist, you can add new application user.
+         * Returns false if LDAP user doesn't exist, you can't add new application user.
+         */
+        self.checkLDAPUserExist = function (domainName) {
+            domainName = domainName.hasOwnProperty('domainName') ? domainName.domainName : domainName;
+            return $http.post(urlService.applicationUserLdap.change({domainName: domainName}))
+                .then(function (result) {
+                    return result.data.rs;
+                });
+        };
+
+        /**
          * @description Add new application user
          * @param applicationUser
          * @return {Promise|ApplicationUser}
          */
         self.addApplicationUser = function (applicationUser) {
-            return $http
-                .post(urlService.applicationUsers,
-                    generator.interceptSendInstance('ApplicationUser', applicationUser))
+            var defer = $q.defer();
+            self.checkLDAPUserExist(applicationUser)
                 .then(function (result) {
-                    applicationUser.id = result.data.rs;
-                    return applicationUser;
+                    defer.resolve(result);
                 });
+            return defer.promise.then(function () {
+                return $http
+                    .post(urlService.applicationUsers,
+                        generator.interceptSendInstance('ApplicationUser', applicationUser))
+                    .then(function (result) {
+                        applicationUser.id = result.data.rs;
+                        return applicationUser;
+                    });
+            }).catch(function (error) {
+                dialog.errorMessage(langService.get('ldap_user_doesnot_exist_add_please'));
+            });
         };
 
         /**
