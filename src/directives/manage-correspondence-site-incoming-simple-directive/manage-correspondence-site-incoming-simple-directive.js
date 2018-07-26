@@ -3,7 +3,8 @@ module.exports = function (app) {
         'ngInject';
         return {
             restrict: 'E',
-            template: require('./manage-correspondence-site-incoming-simple-template.html'),
+            // template: require('./manage-correspondence-site-incoming-simple-template.html'),
+            template: require('./manage-correspondence-site-incoming-simple-add-template.html'),
             controller: 'manageCorrespondenceSiteIncomingSimpleDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,
@@ -12,7 +13,8 @@ module.exports = function (app) {
                 documentClass: '=',
                 emptySubRecords: '=',
                 site: '=',
-                disableCorrespondence: '='
+                disableCorrespondence: '=',
+                correspondence: '='
             }
         }
     });

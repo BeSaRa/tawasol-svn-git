@@ -32,6 +32,7 @@
                 .addToAllWithSegment('icnLogin', '/navigator/jaxrs/logon?userid={{username}}&password={{password}}', 'icn')
                 .addToAllWithSegment('icnSearch', '/navigator/bookmark.jsp?desktop=cms&repositoryId=EBLAICN&repositoryType=p8&docid=StoredSearch%2C%7BF4B4E428-6FC3-4BD3-BC91-AF46EC513DB1%7D%2C%7B76B326FF-8873-CB36-8524-6381F0800000%7D&mimeType=application%2Fx-filenet-searchtemplate&template_name=StoredSearch&version=current&vsId=%7BFF5CAE8D-D59D-CDF2-8488-6381F0800000%7D', 'icn')
                 .addToAllWithSegment('icnAdd', '/navigator/bookmark.jsp?desktop=cms&repositoryId=EBLAICN&repositoryType=p8&docid=EntryTemplate%2C%7BF4B4E428-6FC3-4BD3-BC91-AF46EC513DB1%7D%2C%7BFB387ADC-CD58-C442-87A2-6381EEA00000%7D&mimeType=application%2Fx-icn-documententrytemplate&template_name=EntryTemplate&version=current&vsId=%7B2248377B-9A84-C3F3-845F-6381EEA00000%7D', 'icn')
+
                 .addToAllWithSegment('reports', '/Reports/report/Reports/{reportName}?rs:embed=true&token={token}', 'report')
                 .addToAllWithSegment('portal', '/ReportServer/logon.aspx?ReturnUrl={reportUrl}', 'report')
                 // to make authenticate

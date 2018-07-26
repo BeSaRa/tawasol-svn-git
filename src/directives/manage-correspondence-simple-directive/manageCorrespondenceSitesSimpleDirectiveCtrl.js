@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                                              moment,
                                                                              $scope,
                                                                              Site,
+                                                                             managerService,
                                                                              lookupService,
                                                                              CorrespondenceSiteType,
                                                                              LangWatcher,
@@ -500,6 +501,36 @@ module.exports = function (app) {
             });
         };
 
+        self.querySearch = function (query) {
+            query = query.toLowerCase();
+            return query ? self.subSearchResult.filter(function (item) {
+                return item.subArSiteText.toLowerCase().indexOf(query) !== -1 || item.subEnSiteText.toLowerCase().indexOf(query) !== -1
+            }) : self.subSearchResult;
+        };
+
+        self.showMore = function ($event) {
+            var info = self.correspondence.getInfo();
+            return self.correspondence.hasVsId() ? managerService
+                .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event) : managerService
+                .manageSitesForDocument(self.correspondence)
+                .then(function (correspondence) {
+                    self.correspondence = correspondence;
+                });
+        };
+
+        self.changeSubCorrespondence = function (item) {
+            if (item) {
+                self.addSiteTo(item);
+
+            }
+            else {
+                self['sitesInfoTo'] = [];
+                _concatCorrespondenceSites(true).then(function () {
+                    self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
+                    self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
+                });
+            }
+        };
         /**
          * search in MainCorrespondenceSites and retrieve the filtered result.
          * @return {Array}
@@ -757,6 +788,16 @@ module.exports = function (app) {
                 self.selectedMainSite = null;
                 self.subSearchResult = [];
                 self.emptySiteSearch = false;
+            }
+        });
+
+        $scope.$watch(function () {
+            return self.sitesInfoTo;
+        }, function (newVal) {
+            if (newVal && angular.isArray(newVal) && newVal.length) {
+                self.selectedItem = newVal[0];
+            } else {
+                self.selectedItem = null;
             }
         });
 

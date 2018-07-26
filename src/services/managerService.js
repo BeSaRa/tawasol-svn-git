@@ -163,7 +163,7 @@ module.exports = function (app) {
                         });
                         return qDefer.promise;
                     },
-                    applicationUsers: function(applicationUserService){
+                    applicationUsers: function (applicationUserService) {
                         'ngInject';
                         return applicationUserService.getApplicationUsers();
                     }
@@ -324,6 +324,31 @@ module.exports = function (app) {
                                 .loadCorrespondenceSites(correspondence)
                         });
                     }
+                }
+            });
+        };
+        /**
+         * @description manage correspondence sites for outgoing document
+         * @param correspondence
+         * @param $event
+         * @return {promise|*}
+         */
+        self.manageSitesForDocument = function (correspondence, $event) {
+            var info = correspondence.getInfo();
+            return dialog.showDialog({
+                template: cmsTemplate.getPopup('manage-document-correspondence'),
+                controller: 'manageDocumentCorrespondencePopCtrl',
+                targetEvent: $event || false,
+                controllerAs: 'ctrl',
+                bindToController: true,
+                escapeToClose: false,
+                locals: {
+                    fromDialog: true,
+                    vsId: info.vsId,
+                    documentClass: info.documentClass,
+                    documentSubject: info.title,
+                    correspondence: correspondence,
+                    sites: {}
                 }
             });
         };

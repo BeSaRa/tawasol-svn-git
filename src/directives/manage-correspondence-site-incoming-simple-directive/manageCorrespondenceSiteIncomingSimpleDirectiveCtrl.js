@@ -589,6 +589,35 @@ module.exports = function (app) {
                 });
         };
 
+        self.querySearch = function (query) {
+            query = query.toLowerCase();
+            return query ? self.subSearchResult.filter(function (item) {
+                return item.subArSiteText.toLowerCase().indexOf(query) !== -1 || item.subEnSiteText.toLowerCase().indexOf(query) !== -1
+            }) : self.subSearchResult;
+        };
+
+        self.showMore = function ($event) {
+            var info = self.correspondence.getInfo();
+            return self.correspondence.hasVsId() ? managerService
+                .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event) : managerService
+                .manageSitesForDocument(self.correspondence)
+                .then(function (correspondence) {
+                    self.correspondence = correspondence;
+                });
+        };
+
+        self.changeSubCorrespondence = function (item) {
+            if (item) {
+                self.replaceSite(item);
+            }
+            else {
+                self.site = null;
+                _concatCorrespondenceSites(true).then(function () {
+                    self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
+                });
+            }
+        };
+
         $scope.$watch(function () {
             return self.emptySubRecords;
         }, function (value) {

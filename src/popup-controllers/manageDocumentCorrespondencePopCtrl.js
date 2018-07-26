@@ -11,8 +11,10 @@ module.exports = function (app) {
         self.correspondence = correspondence;
 
         if (self.correspondence.getInfo().documentClass === 'outgoing') {
-            self.correspondence.sitesInfoTo = sites.first;
-            self.correspondence.sitesInfoCC = sites.second;
+            if (self.correspondence.hasVsId()) {
+                self.correspondence.sitesInfoCC = sites.second;
+                self.correspondence.sitesInfoTo = sites.first;
+            }
         }
 
         self.needReply = function (status) {
@@ -57,6 +59,9 @@ module.exports = function (app) {
         };
 
         self.saveCorrespondenceSites = function () {
+            if (!self.correspondence.hasVsId())
+                return dialog.hide(self.correspondence);
+
             self.correspondence
                 .updateSites()
                 .then(function () {
@@ -65,6 +70,9 @@ module.exports = function (app) {
         };
 
         self.saveCorrespondenceSite = function () {
+            if (!self.correspondence.hasVsId())
+                return dialog.hide(self.correspondence);
+
             self.correspondence.saveDocument()
                 .then(function (result) {
                     toast.success(langService.get('correspondence_sites_save_success'));
