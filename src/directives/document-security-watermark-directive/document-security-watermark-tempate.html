@@ -1,6 +1,6 @@
 <div layout="row" flex class="p20">
     <div flex layout="column">
-        <form name="documentSecurityForm" ng-if="ctrl.documentSecurity">
+        <ng-form name="documentSecurityForm" ng-if="ctrl.documentSecurity">
             <div layout="row">
                 <!-- Show Watermark -->
                 <md-switch flex ng-model="ctrl.documentSecurity.status"
@@ -55,10 +55,11 @@
                                 <!-- Security Level -->
                                 <md-input-container flex>
                                     <label for="securityLevelOutgoing">{{lang.security_levels}}</label>
-                                    <md-select ng-disabled="ctrl.checkDisabledDocSecurity('outgoing')"
-                                               name="securityLevelOutgoing" id="securityLevelOutgoing"
+                                    <md-select name="securityLevelOutgoing" id="securityLevelOutgoing"
                                                ng-model="ctrl.documentSecurityOutgoing.securityLevel"
-                                               multiple ng-required="ctrl.documentSecurityOutgoing.status"
+                                               multiple
+                                               ng-required="ctrl.checkRequiredDocSecurity('outgoing')"
+                                               ng-disabled="ctrl.checkDisabledDocSecurity('outgoing')"
                                                ng-model-options="{trackBy: '$value.id'}">
                                         <md-option
                                                 ng-repeat="securityLevel in ctrl.securityLevels"
@@ -77,6 +78,7 @@
                                     <label for="textOrientationOutgoing">{{lang.document_security_text_watermark}}</label>
                                     <md-select id="textOrientationOutgoing" name="textOrientationOutgoing"
                                                ng-disabled="ctrl.checkDisabledDocSecurity('outgoing')"
+                                               ng-required="ctrl.checkRequiredDocSecurity('outgoing')"
                                                ng-model="ctrl.documentSecurityOutgoing.textOrientation">
                                         <md-option
                                                 ng-repeat="orientation in ctrl.documentSecurityTextOrientations track by $index"
@@ -91,7 +93,7 @@
                                     <input id="textRepetitionNoOutgoing" name="textRepetitionNoOutgoing"
                                            custom-validate-directive="number" min="1"
                                            min-max-number-directive
-                                           ng-required="ctrl.documentSecurityOutgoing.textOrientation"
+                                           ng-required="ctrl.checkRequiredDocSecurity('outgoing', 'textOrientation')"
                                            ng-disabled="ctrl.checkDisabledDocSecurity('outgoing') || ctrl.documentSecurityOutgoing.textOrientation === 0"
                                            ng-model="ctrl.documentSecurityOutgoing.textRepetitionNo">
                                     <div ng-messages="documentSecurityForm.textRepetitionNoOutgoing.$error">
@@ -106,7 +108,7 @@
                                     <input id="textSizeOutgoing" name="textSizeOutgoing"
                                            ng-disabled="ctrl.checkDisabledDocSecurity('outgoing')"
                                            custom-validate-directive="number"
-                                           ng-required="ctrl.documentSecurityOutgoing.status && ctrl.documentSecurityOutgoing.textOrientation"
+                                           ng-required="ctrl.checkRequiredDocSecurity('outgoing', 'textOrientation')"
                                            ng-model="ctrl.documentSecurityOutgoing.textSize">
                                     <div ng-messages="documentSecurityForm.textSizeOutgoing.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
@@ -139,9 +141,10 @@
                                 <md-input-container flex>
                                     <label for="securityLevelIncoming">{{lang.security_levels}}</label>
                                     <md-select ng-disabled="ctrl.checkDisabledDocSecurity('incoming')"
+                                               ng-required="ctrl.checkRequiredDocSecurity('incoming')"
                                                name="securityLevelIncoming" id="securityLevelIncoming"
                                                ng-model="ctrl.documentSecurityIncoming.securityLevel"
-                                               multiple ng-required="ctrl.documentSecurityIncoming.status"
+                                               multiple
                                                ng-model-options="{trackBy: '$value.id'}">
                                         <md-option
                                                 ng-repeat="securityLevel in ctrl.securityLevels"
@@ -160,6 +163,7 @@
                                     <label for="textOrientationIncoming">{{lang.document_security_text_watermark}}</label>
                                     <md-select id="textOrientationIncoming" name="textOrientationIncoming"
                                                ng-disabled="ctrl.checkDisabledDocSecurity('incoming')"
+                                               ng-required="ctrl.checkRequiredDocSecurity('incoming')"
                                                ng-model="ctrl.documentSecurityIncoming.textOrientation">
                                         <md-option
                                                 ng-repeat="orientation in ctrl.documentSecurityTextOrientations track by $index"
@@ -174,7 +178,7 @@
                                     <input id="textRepetitionNoIncoming" name="textRepetitionNoIncoming"
                                            custom-validate-directive="number" min="1"
                                            min-max-number-directive
-                                           ng-required="ctrl.documentSecurityIncoming.textOrientation"
+                                           ng-required="ctrl.checkRequiredDocSecurity('incoming', 'textOrientation')"
                                            ng-disabled="ctrl.checkDisabledDocSecurity('incoming') || ctrl.documentSecurityIncoming.textOrientation === 0"
                                            ng-model="ctrl.documentSecurityIncoming.textRepetitionNo">
                                     <div ng-messages="documentSecurityForm.textRepetitionNoIncoming.$error">
@@ -189,7 +193,7 @@
                                     <input id="textSizeIncoming" name="textSizeIncoming"
                                            ng-disabled="ctrl.checkDisabledDocSecurity('incoming')"
                                            custom-validate-directive="number"
-                                           ng-required="ctrl.documentSecurityIncoming.status && ctrl.documentSecurityIncoming.textOrientation"
+                                           ng-required="ctrl.checkRequiredDocSecurity('incoming', 'textOrientation')"
                                            ng-model="ctrl.documentSecurityIncoming.textSize">
                                     <div ng-messages="documentSecurityForm.textSizeIncoming.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
@@ -224,7 +228,8 @@
                                     <md-select ng-disabled="ctrl.checkDisabledDocSecurity('internal')"
                                                name="securityLevelInternal" id="securityLevelInternal"
                                                ng-model="ctrl.documentSecurityInternal.securityLevel"
-                                               multiple ng-required="ctrl.documentSecurityInternal.status"
+                                               multiple
+                                               ng-required="ctrl.checkRequiredDocSecurity('internal')"
                                                ng-model-options="{trackBy: '$value.id'}">
                                         <md-option
                                                 ng-repeat="securityLevel in ctrl.securityLevels"
@@ -243,6 +248,7 @@
                                     <label for="textOrientationInternal">{{lang.document_security_text_watermark}}</label>
                                     <md-select id="textOrientationInternal" name="textOrientationInternal"
                                                ng-disabled="ctrl.checkDisabledDocSecurity('internal')"
+                                               ng-required="ctrl.checkRequiredDocSecurity('internal')"
                                                ng-model="ctrl.documentSecurityInternal.textOrientation">
                                         <md-option
                                                 ng-repeat="orientation in ctrl.documentSecurityTextOrientations track by $index"
@@ -257,7 +263,7 @@
                                     <input id="textRepetitionNoInternal" name="textRepetitionNoInternal"
                                            custom-validate-directive="number" min="1"
                                            min-max-number-directive
-                                           ng-required="ctrl.documentSecurityInternal.textOrientation"
+                                           ng-required="ctrl.checkRequiredDocSecurity('internal', 'textOrientation')"
                                            ng-disabled="ctrl.checkDisabledDocSecurity('internal') || ctrl.documentSecurityInternal.textOrientation === 0"
                                            ng-model="ctrl.documentSecurityInternal.textRepetitionNo">
                                     <div ng-messages="documentSecurityForm.textRepetitionNoInternal.$error">
@@ -272,7 +278,7 @@
                                     <input id="textSizeInternal" name="textSizeInternal"
                                            ng-disabled="ctrl.checkDisabledDocSecurity('internal')"
                                            custom-validate-directive="number"
-                                           ng-required="ctrl.documentSecurityInternal.status && ctrl.documentSecurityInternal.textOrientation"
+                                           ng-required="ctrl.checkRequiredDocSecurity('internal', 'textOrientation')"
                                            ng-model="ctrl.documentSecurityInternal.textSize">
                                     <div ng-messages="documentSecurityForm.textSizeInternal.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
@@ -307,7 +313,8 @@
                                     <md-select ng-disabled="ctrl.checkDisabledDocSecurity('tawasolattachment')"
                                                name="securityLevelTawasolAttachment" id="securityLevelTawasolAttachment"
                                                ng-model="ctrl.documentSecurityTawasolAttachment.securityLevel"
-                                               multiple ng-required="ctrl.documentSecurityTawasolAttachment.status"
+                                               multiple
+                                               ng-required="ctrl.checkRequiredDocSecurity('tawasolattachment')"
                                                ng-model-options="{trackBy: '$value.id'}">
                                         <md-option
                                                 ng-repeat="securityLevel in ctrl.securityLevels"
@@ -326,6 +333,7 @@
                                     <label for="textOrientationTawasolAttachment">{{lang.document_security_text_watermark}}</label>
                                     <md-select id="textOrientationTawasolAttachment"
                                                name="textOrientationTawasolAttachment"
+                                               ng-required="ctrl.checkRequiredDocSecurity('tawasolattachment')"
                                                ng-disabled="ctrl.checkDisabledDocSecurity('tawasolattachment')"
                                                ng-model="ctrl.documentSecurityTawasolAttachment.textOrientation">
                                         <md-option
@@ -342,7 +350,7 @@
                                            name="textRepetitionNoTawasolAttachment"
                                            custom-validate-directive="number" min="1"
                                            min-max-number-directive
-                                           ng-required="ctrl.documentSecurityTawasolAttachment.textOrientation"
+                                           ng-required="ctrl.checkRequiredDocSecurity('tawasolattachment', 'textOrientation')"
                                            ng-disabled="ctrl.checkDisabledDocSecurity('tawasolattachment') || ctrl.documentSecurityTawasolAttachment.textOrientation === 0"
                                            ng-model="ctrl.documentSecurityTawasolAttachment.textRepetitionNo">
                                     <div ng-messages="documentSecurityForm.textRepetitionNoTawasolAttachment.$error">
@@ -356,7 +364,7 @@
                                     <label for="textSizeTawasolAttachment">{{lang.document_security_text_size}}</label>
                                     <input id="textSizeTawasolAttachment" name="textSizeTawasolAttachment"
                                            custom-validate-directive="number"
-                                           ng-required="ctrl.documentSecurityTawasolAttachment.status && ctrl.documentSecurityTawasolAttachment.textOrientation"
+                                           ng-required="ctrl.checkRequiredDocSecurity('tawasolattachment', 'textOrientation')"
                                            ng-disabled="ctrl.checkDisabledDocSecurity('tawasolattachment')"
                                            ng-model="ctrl.documentSecurityTawasolAttachment.textSize">
                                     <div ng-messages="documentSecurityForm.textSizeTawasolAttachment.$error">
@@ -372,18 +380,18 @@
             <!-- Buttons -->
             <div>
                 <md-button class="md-raised" ng-if="!ctrl.documentSecurity.id"
-                           ng-disabled="documentSecurityForm.$invalid"
+                           ng-disabled="(ctrl.documentSecurity.status && documentSecurityForm.$invalid)"
                            ng-click="ctrl.addDocumentSecurity()">{{lang.add}}
                 </md-button>
                 <md-button class="md-raised" ng-if="ctrl.documentSecurity.id"
-                           ng-disabled="documentSecurityForm.$invalid"
+                           ng-disabled="(ctrl.documentSecurity.status && documentSecurityForm.$invalid)"
                            ng-click="ctrl.saveDocumentSecurity()">{{lang.save}}
                 </md-button>
                 <md-button class="md-raised" ng-disabled="documentSecurityForm.$invalid"
                            ng-click="ctrl.previewDocumentSecuritySettings($event)">{{lang.preview}}
                 </md-button>
             </div>
-        </form>
+        </ng-form>
     </div>
     <div>
         <span>{{ctrl.selectedWatermarkTabDocType.getTranslatedName()}} {{lang.document_security}} ({{ctrl.documentSecurityPage.type}})</span>

@@ -215,6 +215,38 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Check if the document security is required
+         * @param type
+         * @param dependentOnField
+         * @returns {boolean}
+         */
+        self.checkRequiredDocSecurity = function (type, dependentOnField) {
+            type = type.toLowerCase();
+            var required = true;
+            if (type === 'outgoing') {
+                required = self.documentSecurityOutgoing && self.documentSecurityOutgoing.status;
+                if (dependentOnField)
+                    required = required && self.documentSecurityOutgoing[dependentOnField];
+            }
+            else if (type === 'incoming') {
+                required = self.documentSecurityIncoming && self.documentSecurityIncoming.status;
+                    if(dependentOnField)
+                        required = required && self.documentSecurityIncoming[dependentOnField];
+            }
+            else if (type === 'internal') {
+                required = self.documentSecurityInternal && self.documentSecurityInternal.status;
+                if(dependentOnField)
+                    required = required && self.documentSecurityInternal[dependentOnField];
+            }
+            else if (type === 'tawasolattachment') {
+                required = self.documentSecurityTawasolAttachment && self.documentSecurityTawasolAttachment.status;
+                if(dependentOnField)
+                    required = required && self.documentSecurityTawasolAttachment[dependentOnField];
+            }
+            return self.documentSecurity.status && required;
+        };
+
+        /**
          * @description Requests for the real time preview of the settings made by user.
          * @param $event
          */
@@ -292,7 +324,6 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.initializeDocumentSecurity();
                 })
-        }
-
+        };
     });
 };
