@@ -474,7 +474,7 @@ module.exports = function (app) {
          */
         self.checkLDAPUserExist = function (domainName) {
             domainName = domainName.hasOwnProperty('domainName') ? domainName.domainName : domainName;
-            return $http.post(urlService.applicationUserLdap.change({domainName: domainName}))
+            return $http.get(urlService.applicationUserLdap.change({domainName: domainName}))
                 .then(function (result) {
                     return result.data.rs;
                 });
