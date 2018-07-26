@@ -52,6 +52,8 @@
                 .addToAllWithBase('lookups', 'cloud/global-lookup/:lookupName')
                 // applicationUsers
                 .addToAllWithBase('applicationUsers', 'cms-entity/admin/application-user')
+                // ldap application user
+                .addToAllWithBase('applicationUserLdap', 'cms-entity/admin/ldap/entites/check-user-exists/:domainName')
                 // customRoles
                 .addToAllWithBase('roles', 'cms-entity/admin/custom-role')
                 // global lookups

@@ -330,6 +330,25 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Checks if the ldap user exists
+         */
+        self.checkLDAPUser = function () {
+            if (!self.applicationUser.domainName.trim()) {
+                toast.warning(langService.get('please_fill_domain_name'));
+                return false;
+            }
+            applicationUserService.checkLDAPUserExist(self.applicationUser.domainName)
+                .then(function (result) {
+                    if (result) {
+                        dialog.alertMessage(langService.get('ldap_user_exists'))
+                    }
+                    else {
+                        dialog.alertMessage(langService.get('ldap_user_doesnot_exist'))
+                    }
+                });
+        };
+
+        /**
          * @description Add new application user
          */
         self.addApplicationUserFromCtrl = function () {
