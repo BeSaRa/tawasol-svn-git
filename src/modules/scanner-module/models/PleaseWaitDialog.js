@@ -34,7 +34,7 @@ module.exports = function (app) {
                     $timeout(function () {
                         dialog.hide();
                         self.waiting = false;
-                    });
+                    },100);
                 }
             }
 

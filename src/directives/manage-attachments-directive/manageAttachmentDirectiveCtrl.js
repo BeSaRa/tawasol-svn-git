@@ -223,6 +223,7 @@ module.exports = function (app) {
          * @param element
          */
         self.uploadAttachmentFile = function (files, element) {
+            console.log(files);
             attachmentService
                 .validateBeforeUpload('attachmentUpload', files[0])
                 .then(function (file) {
