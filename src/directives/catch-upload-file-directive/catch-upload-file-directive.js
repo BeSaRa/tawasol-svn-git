@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('catchUploadFileDirective', function ($parse) {
+    app.directive('catchUploadFileDirective', function ($parse, $timeout) {
         'ngInject';
         return {
             restrict: 'A',
@@ -10,17 +10,16 @@ module.exports = function (app) {
                 element.on('change', function () {
                     var self = this;
                     if (this.files.length && typeof callback === 'function') {
-                        scope.$apply(function () {
+                        $timeout(function () {
                             callback(self.files, element);
+                            if (reset) {
+                                this.value = '';
+                            }
                         });
-
-                        if (reset) {
-                            this.value = '';
-                        }
-
                     } else if (!this.files.length && typeof callback === 'function') {
-                        scope.$apply(function () {
+                        $timeout(function () {
                             callback([], element);
+
                         });
                     }
                 });

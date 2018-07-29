@@ -303,6 +303,7 @@ module.exports = function (app) {
         }
 
         function onScanStarted(data) {
+            debugger;
             if (isErrorExist(data)) {
                 displayError(data);
                 return;
