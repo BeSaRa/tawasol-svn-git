@@ -255,10 +255,7 @@ module.exports = function (app) {
                     globalCorrespondenceSitesForG2GId: function (correspondenceViewService) {
                         'ngInject';
                         return correspondenceViewService.getGlobalCorrespondenceSitesForG2GId();
-                    }/*,
-                     organizations: function(organizationService){
-                     return organizationService.loadOrganizations();
-                     }*/
+                    }
                 }
             })
             // correspondence site types

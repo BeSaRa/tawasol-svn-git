@@ -102,17 +102,6 @@
                                             <div ng-message="maxlength">{{lang.short}}</div>
                                         </div>
                                     </md-input-container>
-                                    <!--<md-input-container flex>
-                                        <label for="g2gId">{{lang.g2g_id}}</label>
-                                        <md-select name="g2gId" id="g2gId"
-                                                   ng-model="ctrl.organization.code">
-                                            <md-option tooltip="{{globalCorrespondenceSite.getTranslatedName(true)}}"
-                                                       ng-value="globalCorrespondenceSite.exactId"
-                                                       ng-repeat="globalCorrespondenceSite in ctrl.globalCorrespondenceSitesForG2GId track by $index">
-                                                {{globalCorrespondenceSite.getTranslatedName()}}
-                                            </md-option>
-                                        </md-select>
-                                    </md-input-container>-->
                                     <md-input-container flex>
                                         <label for="outype">{{lang.organization_type}}</label>
                                         <md-select ng-model-options="{trackBy: '$value.id'}" required name="outype"
@@ -329,7 +318,19 @@
                                         <div ng-messages="org_form.cmsRefId.$error">
                                         </div>
                                     </md-input-container>
-                                    <md-input-container flex></md-input-container>
+                                    <!-- G2G Id-->
+                                    <md-input-container flex>
+                                        <label for="g2gId">{{lang.g2g_id}}</label>
+                                        <md-select name="g2gId" id="g2gId"
+                                                   ng-model="ctrl.organization.code">
+                                            <md-option
+                                                    ng-repeat="globalCorrespondenceSite in ctrl.globalCorrespondenceSitesForG2GId track by $index"
+                                                    tooltip="{{globalCorrespondenceSite.getTranslatedName(true)}}"
+                                                    ng-value="globalCorrespondenceSite.exactId">
+                                                {{globalCorrespondenceSite.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
                                 </div>
                             </div><!-- column container -->
                         </md-content>
@@ -1284,7 +1285,7 @@
                                     <search-filter-directive
                                             model="ctrl.searchModelOUAppUser"></search-filter-directive>
                                 </div>
-                                <div layout="column"  ng-if="ctrl.ouAssignedUsers.length">
+                                <div layout="column" ng-if="ctrl.ouAssignedUsers.length">
                                     <div scroll-directive>
                                         <div class="page-padding">
                                             <md-card md-whiteframe="3" layout="column" class="card-overlay">
