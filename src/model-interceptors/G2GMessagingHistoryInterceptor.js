@@ -60,6 +60,7 @@ module.exports = function (app) {
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.mainSiteFrom = new Information(model.mainSiteFrom);
             model.subSiteFrom = new Information(model.subSiteFrom);
+
             model.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.deliveryDate = generator.getDateFromTimeStamp(model.deliveryDate, generator.defaultDateTimeFormat);
             model.sentDate = generator.getDateFromTimeStamp(model.sentDate, generator.defaultDateTimeFormat);
@@ -77,6 +78,10 @@ module.exports = function (app) {
                     model.senderForTrackingSheet = model.sentByOrg;
                 }
             }
+
+            model.mainSiteTo = new Information(model.mainSiteTo);
+            model.subSiteTo = new Information(model.subSiteTo);
+
             return model;
         });
     })

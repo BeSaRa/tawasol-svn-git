@@ -14,7 +14,7 @@ module.exports = function (app) {
 
         self.viewCorrespondenceSites = function ($event) {
             var info = self.item.getInfo();
-            if (self.type === 'g2g') {
+            if (self.type && self.type.toLowerCase() === 'g2g') {
                 return dialog.showDialog({
                     template: cmsTemplate.getPopup('manage-grid-correspondence-sites'),
                     controller: 'manageGridCorrespondenceSitesPopCtrl',
@@ -29,7 +29,23 @@ module.exports = function (app) {
                         sites: []
                     }
                 });
-            } else {
+            }
+            else if (self.type && self.type.toLowerCase() === 'g2gmessaginghistory') {
+                return dialog.showDialog({
+                    template: cmsTemplate.getPopup('manage-grid-correspondence-sites'),
+                    controller: 'manageGridCorrespondenceSitesPopCtrl',
+                    targetEvent: $event || false,
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    escapeToClose: false,
+                    locals: {
+                        documentSubject: info.title,
+                        type: self.type.toLowerCase(),
+                        correspondence: self.item,
+                        sites: []
+                    }
+                });
+            }else {
                 var defer = $q.defer();
                 return dialog.showDialog({
                     template: cmsTemplate.getPopup('manage-grid-correspondence-sites'),

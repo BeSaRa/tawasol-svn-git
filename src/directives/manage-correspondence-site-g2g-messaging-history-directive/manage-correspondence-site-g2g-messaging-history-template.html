@@ -3,11 +3,11 @@
     <br/>
     <!-- Added incoming site from database -->
     <div flex layout="column">
-        <md-card ng-if="ctrl.site && ctrl.site.subSiteId" md-whiteframe="3" layout="column" class="card-overlay">
+        <md-card md-whiteframe="3" layout="column" class="card-overlay">
             <md-table-container>
                 <div  flex scroll-directive>
                 <table md-table md-progress="ctrl.progress">
-                    <thead md-head ><!--md-order="ctrl.grid.sitesInfoTo.order"-->
+                    <thead md-head >
                     <tr md-row>
                         <th md-column md-order-by="">
                             <span>{{lang.sites_main_site}}</span>
@@ -30,24 +30,24 @@
                     <tr md-row>
                         <td md-cell>
                             <div flex layout="column">
-                                <span class="span-column">{{ctrl.site.getTranslatedParentName()}}</span>
+                                <span class="span-column">{{ctrl.record.mainSiteTo.getTranslatedName()}}</span>
                             </div>
                         </td>
                         <td md-cell>
                             <div flex layout="column">
-                                <span class="span-column">{{ctrl.site.getTranslatedName()}}</span>
+                                <span class="span-column">{{ctrl.record.subSiteTo.getTranslatedName()}}</span>
                             </div>
                         </td>
                         <td md-cell>
                             <div flex layout="column">
-                                <span class="span-column">{{ctrl.site.getTranslatedSiteType()}}</span>
+                                <span class="span-column">{{ctrl.record.siteType.getTranslatedSiteType()}}</span>
                             </div>
                         </td>
                         <td md-cell>
-                            <div layout="row"><span flex>{{ctrl.site.followupStatus.getTranslatedName()}}</span></div>
+                            <div layout="row"><span flex>{{ctrl.record.followupStatus.getTranslatedName()}}</span></div>
                         </td>
                         <td md-cell>
-                            <div layout="row"><span flex>{{ctrl.site.followupDate ? (ctrl.site.followupDate|date:'yyyy-MM-dd') : ""}}</span></div>
+                            <div layout="row"><span flex>{{ctrl.record.followupDate ? (ctrl.record.followupDate|date:'yyyy-MM-dd') : ""}}</span></div>
                         </td>
                     </tr>
                     </tbody>

@@ -8,11 +8,11 @@ module.exports = function (app) {
             controllerAs: 'ctrl',
             bindToController: true,
             scope: {
-                vsId: '=',
-                documentClass: '=',
-                emptySubRecords: '=',
+                //vsId: '=',
+                //documentClass: '=',
+                //emptySubRecords: '=',
                 site: '=',
-                disableCorrespondence: '=?'
+                //disableCorrespondence: '=?'
             }
         }
     });

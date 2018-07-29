@@ -10,12 +10,10 @@ module.exports = function (app) {
 
         self.correspondence = correspondence;
 
-        if (self.correspondence.getInfo().documentClass === 'outgoing') {
+        if (self.correspondence && self.correspondence.getInfo().documentClass === 'outgoing') {
             self.correspondence.sitesInfoTo = sites.first;
             self.correspondence.sitesInfoCC = sites.second;
         }
-
-
 
         self.closeDocumentCorrespondence = function () {
             dialog.hide();

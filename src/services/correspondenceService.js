@@ -214,9 +214,15 @@ module.exports = function (app) {
          * @private
          */
         function _getTitle(correspondence) {
-            return (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm)
-                ? correspondence.generalStepElm.docSubject
-                : correspondence.docSubject;
+            var docSubject = "";
+            if (correspondence instanceof G2GMessagingHistory)
+                docSubject = correspondence.subject;
+            else {
+                docSubject = (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm)
+                    ? correspondence.generalStepElm.docSubject
+                    : correspondence.docSubject;
+            }
+            return docSubject;
         }
 
         function _getIsPaperElectronic(correspondence) {
@@ -1621,21 +1627,21 @@ module.exports = function (app) {
             //var normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
             var count = angular.isArray(correspondence) ? correspondence.length : 1;
             //if (normalCorrespondence) {
-                var sitesValidation = self.validateBeforeSend(correspondence);
-                if (sitesValidation.length && sitesValidation.length === count && count === 1) {
-                    var info = correspondence.getInfo();
-                    return dialog
-                        .confirmMessage('no_sites_cannot_broadcast_confirm_add', 'add', 'cancel', $event)
-                        .then(function () {
-                            return managerService
-                                .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
-                                .then(function (result) {
-                                    return result.hasSite() ? _broadcast(correspondence, $event) : null;
-                                })
-                        })
-                } else {
-                    return _broadcast(correspondence, $event);
-                }
+            var sitesValidation = self.validateBeforeSend(correspondence);
+            if (sitesValidation.length && sitesValidation.length === count && count === 1) {
+                var info = correspondence.getInfo();
+                return dialog
+                    .confirmMessage('no_sites_cannot_broadcast_confirm_add', 'add', 'cancel', $event)
+                    .then(function () {
+                        return managerService
+                            .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
+                            .then(function (result) {
+                                return result.hasSite() ? _broadcast(correspondence, $event) : null;
+                            })
+                    })
+            } else {
+                return _broadcast(correspondence, $event);
+            }
             //}
             //return _broadcast(correspondence, $event);
         };
