@@ -93,7 +93,7 @@
                                     </md-input-container>
                                 </div><!-- row -->
                                 <div layout="row">
-                                    <!--<md-input-container flex>
+                                    <md-input-container flex>
                                         <label for="code">{{lang.code}}</label>
                                         <input id="code" name="code" maxlength="10" required
                                                ng-model="ctrl.organization.code">
@@ -101,8 +101,8 @@
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="maxlength">{{lang.short}}</div>
                                         </div>
-                                    </md-input-container>-->
-                                    <md-input-container flex>
+                                    </md-input-container>
+                                    <!--<md-input-container flex>
                                         <label for="g2gId">{{lang.g2g_id}}</label>
                                         <md-select name="g2gId" id="g2gId"
                                                    ng-model="ctrl.organization.code">
@@ -112,7 +112,7 @@
                                                 {{globalCorrespondenceSite.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
-                                    </md-input-container>
+                                    </md-input-container>-->
                                     <md-input-container flex>
                                         <label for="outype">{{lang.organization_type}}</label>
                                         <md-select ng-model-options="{trackBy: '$value.id'}" required name="outype"
