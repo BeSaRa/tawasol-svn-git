@@ -257,3 +257,4 @@ Bugs:
 15609: Fix - IE Compatibility - Tracking sheets appear empty.
 15614: Fix - G2G - download action should not appear inside the document in g2g incoming mail
 15626: Fix - G2G - After receiving the incoming document user should be able to launch and print barcode for the document
+15651: Fix - document security - UI - The text displayed for the 2D toggle should be "No" if disabled

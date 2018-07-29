@@ -40,7 +40,7 @@ module.exports = function (app) {
              * @returns {string}
              */
             DocumentSecurity.prototype.getTranslatedYesNo = function (fieldName) {
-                return self[fieldName] ? langService.get('yes') : langService.get('no');
+                return this[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
             // don't remove CMSModelInterceptor from last line
