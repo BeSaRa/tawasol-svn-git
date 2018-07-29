@@ -221,7 +221,7 @@ module.exports = function (app) {
          * @param contentViewHistory
          * @param $event
          */
-        self.viewContentViewHistoryViewers = function(contentViewHistory, $event){
+        self.viewContentViewHistoryViewers = function (contentViewHistory, $event) {
             viewTrackingSheetService.controllerMethod
                 .viewContentViewHistoryViewers(contentViewHistory, $event);
         };
@@ -258,7 +258,7 @@ module.exports = function (app) {
 
         //self.selectedTab = "view_tracking_sheet_work_flow_history";
         self.selectedTab = '';
-            self.setCurrentTab = function (tabName) {
+        self.setCurrentTab = function (tabName) {
             self.selectedTab = tabName;
             self.heading = tabName;
 
@@ -275,19 +275,19 @@ module.exports = function (app) {
         };
 
         self.gridNameRecordCountMap = {
-            'view_tracking_sheet_work_flow_history' : self.workflowHistoryRecords.length,
-            'view_tracking_sheet_linked_documents_history' : self.linkedDocumentsHistoryRecords.length,
-            'view_tracking_sheet_attachments_history' : self.attachmentsHistoryRecords.length,
-            'view_tracking_sheet_merged_linked_document_history' : self.mergedLinkedDocumentHistoryRecords.length,
-            'view_tracking_sheet_linked_entities_history' : self.linkedEntitiesHistoryRecords.length,
-            'view_tracking_sheet_destination_history' : self.destinationHistoryRecords.length,
-            'view_tracking_sheet_content_view_history' : self.contentViewHistoryRecords.length,
+            'view_tracking_sheet_work_flow_history': self.workflowHistoryRecords.length,
+            'view_tracking_sheet_linked_documents_history': self.linkedDocumentsHistoryRecords.length,
+            'view_tracking_sheet_attachments_history': self.attachmentsHistoryRecords.length,
+            'view_tracking_sheet_merged_linked_document_history': self.mergedLinkedDocumentHistoryRecords.length,
+            'view_tracking_sheet_linked_entities_history': self.linkedEntitiesHistoryRecords.length,
+            'view_tracking_sheet_destination_history': self.destinationHistoryRecords.length,
+            'view_tracking_sheet_content_view_history': self.contentViewHistoryRecords.length,
             //'view_tracking_sheet_sms_logs' : self.smsLogRecords.length,
-            'view_tracking_sheet_outgoing_delivery_reports' : self.outgoingDeliveryReportRecords.length,
-            'view_tracking_sheet_full_history' : self.fullHistoryRecords.length
+            'view_tracking_sheet_outgoing_delivery_reports': self.outgoingDeliveryReportRecords.length,
+            'view_tracking_sheet_full_history': self.fullHistoryRecords.length
         };
 
-        self.checkDisabled = function($event){
+        self.checkDisabled = function ($event) {
             var gridOrTab = self.selectedTab || self.heading;
             return !(!!self.gridNameRecordCountMap[gridOrTab]);
         };
@@ -300,11 +300,12 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.getSortingKey = function (property, modelType) {
-            if (modelType.toLowerCase() === 'information')
-                return property + '.' + (langService.current === 'ar' ? 'arName' : 'enName');
-            else if (modelType.toLowerCase() === 'lookup')
-                return property + '.' + (langService.current === 'ar' ? 'defaultArName' : 'defaultEnName');
-            return property;
+            /* if (modelType.toLowerCase() === 'information')
+                 return property + '.' + (langService.current === 'ar' ? 'arName' : 'enName');
+             else if (modelType.toLowerCase() === 'lookup')
+                 return property + '.' + (langService.current === 'ar' ? 'defaultArName' : 'defaultEnName');
+             return property;*/
+            return generator.getColumnSortingKey(property, modelType);
         };
 
         /**
