@@ -1666,13 +1666,15 @@ tr.unread-row {
 
 .background-warning,
 .background-warning:hover {
-  background: #ffeb8061 !important;
+  //background: #ffeb8061 !important;
+  background: rgba(255, 235,128, 0.38) !important;
   div.sidebar:after {
     content: " *";
     color: red;
   }
   td {
-    background: #ffeb8061 !important;
+    //background: #ffeb8061 !important;
+    background: rgba(255, 235,128, 0.38) !important;
   }
 }
 
