@@ -666,9 +666,8 @@
                     </md-content>
                 </md-tab>
                 <!-- WATERMARK SETTINGS TAB-->
-                <md-tab label="{{lang.watermark}}" ng-if="ctrl.showTab('watermarkSettings')"
-                        md-on-select="ctrl.setCurrentTab('watermarkSettings')"
-                        ng-disabled="ctrl.globalSetting.id === null || ctrl.globalSetting.id===0">
+                <md-tab label="{{lang.watermark}}" ng-if="ctrl.showTab('watermarkSettings') && ctrl.globalSetting.id != null "
+                        md-on-select="ctrl.setCurrentTab('watermarkSettings')">
                     <md-content scroll-directive class="white-bg">
                         <document-security-watermark-directive
                                 global-setting="ctrl.globalSetting"
