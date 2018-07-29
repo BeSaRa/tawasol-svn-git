@@ -9,9 +9,6 @@ module.exports = function (app) {
             bindToController: true,
             scope: {
                 record: '='
-            },
-            link: function(scope, element, attr){
-                console.log(scope.ctrl.record);
             }
         }
     });
