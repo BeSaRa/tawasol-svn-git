@@ -428,7 +428,7 @@ md-sidenav {
     border-radius: 8px;
     margin: 10px;
     cursor: move;
-    //float: right;
+    //width: 50%;
     .announcement-icon {
       position: absolute;
       left: 10px;
@@ -454,6 +454,22 @@ md-sidenav {
       background-color: #f2dede;
       border-color: #ebccd1;
     }
+  }
+}
+
+.owl-dots {
+  display: table;
+  margin: 0 auto;
+}
+
+.owl-dot {
+  width: 10px;
+  height: 10px;
+  background-color: lighten(gray, 20) !important;
+  margin: 5px;
+  border-radius: 50%;
+  &.active {
+    background-color: gray !important;
   }
 }
 
@@ -1136,7 +1152,8 @@ md-menu-bar.menu-buttons-view-document {
 .cursor-pointer {
   cursor: pointer;
 }
-.cursor-move{
+
+.cursor-move {
   cursor: move;
 }
 
@@ -1922,7 +1939,7 @@ button.list-button {
   }
 }
 
-trix-editor{
+trix-editor {
   max-height: 150px;
   overflow-y: auto !important;
 }

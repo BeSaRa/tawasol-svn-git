@@ -3,6 +3,7 @@ module.exports = function (app) {
                                             $q,
                                             $element,
                                             $timeout,
+                                            scannerService,
                                             toast,
                                             attachmentService,
                                             // IPSettings,
@@ -128,11 +129,13 @@ module.exports = function (app) {
                 var uploader = new Uploader(self.cc, null, function (progress) {
 
                 }, function (blob, file, url) {
-                    dialog.hide({
+                    var images = {
                         blob: blob,
                         file: file,
                         url: url
-                    });
+                    };
+                    scannerService.storeImages(images);
+                    dialog.hide(images);
                 });
 
                 uploader.send(data);
@@ -303,7 +306,6 @@ module.exports = function (app) {
         }
 
         function onScanStarted(data) {
-            debugger;
             if (isErrorExist(data)) {
                 displayError(data);
                 return;

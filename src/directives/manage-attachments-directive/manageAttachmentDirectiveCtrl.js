@@ -93,10 +93,12 @@ module.exports = function (app) {
             self.hideButton(buttonType);
             scannerService
                 .openScanner(false, $event)
-                .then(function (result) {
+                .then(function () {
+                    var result = scannerService.getStoredImages();
+                    console.log('result', result);
                     self.attachment = _createAttachmentFile(result.file);
                 })
-                .catch(function () {
+                .catch(function (error) {
                     self.showButtons();
                 });
         };

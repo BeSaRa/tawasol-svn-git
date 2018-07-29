@@ -20,6 +20,7 @@ module.exports = function (app) {
         var self = this;
         self.serviceName = 'scannerService';
         self.scannerIsOpen = false;
+        var storedImages = null;
 
         self.openScanner = function (loadSameScanner, $event) {
             self.scannerIsOpen = true;
@@ -53,6 +54,22 @@ module.exports = function (app) {
             return defer.promise;
         }
 
+        /**
+         * @description set stored images
+         * @param images
+         * @return {*}
+         */
+        self.storeImages = function (images) {
+            storedImages = images;
+            return self;
+        };
+        /**
+         * @description get stored images
+         * @return {*}
+         */
+        self.getStoredImages = function () {
+            return storedImages;
+        };
 
         self.convertTiffToPDF = function (file) {
             createSession(true).then(function () {

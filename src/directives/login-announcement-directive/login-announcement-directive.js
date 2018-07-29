@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('loginAnnouncementDirective', function (langService, $document, $timeout) {
+    app.directive('loginAnnouncementDirective', function (LangWatcher, langService, $timeout) {
         'ngInject';
         return {
             restrict: 'E',
@@ -7,45 +7,30 @@ module.exports = function (app) {
             template: require('./login-announcement-template.html'),
             scope: {
                 announcements: '='
-            }/*,
+            },
             link: function (scope, element) {
-                scope.lang = langService.getCurrentTranslate();
+                LangWatcher(scope);
                 if (!scope.announcements)
                     return;
 
-                var owl = null, started = false;
-
-                function startOwl(lang) {
-                    owl = $(element).owlCarousel({
-                        items: 1,
-                        margin: 10,
-                        rewind: true,
-                        autoplay: true,
-                        autoheight: true,
-                        rtl: (lang === 'ar')
-                    });
-                    started = true;
+                function startOwl() {
+                    $(element)
+                        .owlCarousel({
+                            items: 1,
+                            rtl: true,
+                            autoplay: true
+                        });
                 }
 
-                function destroyOwl() {
-                    if (!started)
-                        return;
-                    owl.owlCarousel('destroy');
-                    started = false;
+                function dieOwl() {
+                    $(element).owlCarousel('destroy');
                 }
 
-                startOwl(langService.current);
+                $timeout(function () {
+                    startOwl(langService.current);
+                }, 1000);
 
-                scope.$watch(function () {
-                    return langService.current;
-                }, function (lang) {
-                    scope.lang = langService.getCurrentTranslate();
-                    if (!started)
-                        return;
-                    destroyOwl();
-                    startOwl(lang);
-                });
-            }*/
+            }
         };
 
     })
