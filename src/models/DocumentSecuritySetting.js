@@ -62,16 +62,9 @@ module.exports = function (app) {
              * @returns {string}
              */
             DocumentSecuritySetting.prototype.getTranslatedYesNo = function (fieldName) {
-                return self[fieldName] ? langService.get('yes') : langService.get('no');
+                return this[fieldName] ? langService.get('yes') : langService.get('no');
             };
 
-            /**
-             * @description Get the globalization of document security setting as Yes or No instead of true or false.
-             * @returns {string}
-             */
-            DocumentSecuritySetting.prototype.getTranslatedGlobal = function () {
-                return this.global ? langService.get('yes') : langService.get('no');
-            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
