@@ -840,75 +840,77 @@
                                     <div scroll-directive>
                                         <div class="page-padding">
                                             <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                                                <md-table-container flex scroll-directive>
-                                                    <table md-table md-row-select="true"
-                                                           multiple="true"
-                                                           ng-model="ctrl.selectedUserComments"
-                                                           md-progress="ctrl.progress">
-                                                        <thead md-head md-order="ctrl.grid.order">
-                                                        <tr md-row>
-                                                            <th colspan="4" class="table-selector-header"
-                                                                ng-if="ctrl.selectedUserComments.length" md-column>
-                                                                <div layout="row" layout-align="start center">
-                                                                    <span>{{ctrl.selectedUserComments.length}} {{lang.items_selected}} </span>
-                                                                    <span flex></span>
-                                                                    <table-status-directive
-                                                                            when-close="ctrl.changeStatusBulkUserComments"></table-status-directive>
-                                                                    <md-button class="md-icon-button"
-                                                                               ng-click="ctrl.removeBulkUserComments($event)">
-                                                                        <md-icon md-svg-icon="delete"></md-icon>
-                                                                    </md-button>
-                                                                </div>
-                                                            </th>
-                                                            <th ng-if="!ctrl.selectedUserComments.length" md-column
-                                                                md-order-by=""><span>{{lang.short_comment}}</span>
-                                                            </th>
-                                                            <!--<th ng-if="!ctrl.selectedUserComments.length" md-column-->
-                                                            <!--md-order-by=""><span>{{lang.comment}}</span>-->
-                                                            <!--</th>-->
-                                                            <th ng-if="!ctrl.selectedUserComments.length" md-column
-                                                                md-order-by=""><span>{{lang.status}}</span>
-                                                            </th>
-                                                            <th ng-if="!ctrl.selectedUserComments.length" md-column
-                                                                md-order-by=""><span>{{lang.item_order}}</span>
-                                                            </th>
-                                                            <th ng-if="!ctrl.selectedUserComments.length" md-column
-                                                                md-order-by=""><span>{{lang.actions}}</span>
-                                                            </th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody md-body>
-                                                        <tr md-select="userComment" md-row
-                                                            ng-repeat="userComment in ctrl.userComments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
-                                                            <td md-cell><a href=""
-                                                                           ng-click="ctrl.showComment(userComment, $event)">{{userComment.shortComment}}</a>
-                                                            </td>
-                                                            <!--<td md-cell>{{userComment.comment}}</td>-->
-                                                            <td md-cell>
-                                                                <md-switch aria-label="{{lang.status}}"
-                                                                           ng-model="userComment.status"
-                                                                           ng-change="ctrl.changeStatusUserComment(userComment)"
-                                                                           title="{{userComment.getTranslatedStatus()}}"></md-switch>
-                                                            </td>
-                                                            <td md-cell>{{userComment.itemOrder}}</td>
-                                                            <td md-cell>
-                                                                <div flex layout="row" layout-align="start center">
-                                                                    <md-button class="md-icon-button"
-                                                                               ng-click="ctrl.editUserComment(userComment, userCommentsForm, $event)"
-                                                                               title="{{lang.edit}}">
-                                                                        <md-icon md-svg-icon="pencil"></md-icon>
-                                                                    </md-button>
-                                                                    <md-button class="md-icon-button"
-                                                                               ng-click="ctrl.removeUserComment(userComment, $event)"
-                                                                               title="{{lang.delete}}">
-                                                                        <md-icon md-svg-icon="delete"></md-icon>
-                                                                    </md-button>
+                                                <md-table-container>
+                                                    <div flex scroll-directive>
+                                                        <table md-table md-row-select="true"
+                                                               multiple="true"
+                                                               ng-model="ctrl.selectedUserComments"
+                                                               md-progress="ctrl.progress">
+                                                            <thead md-head md-order="ctrl.grid.order">
+                                                            <tr md-row>
+                                                                <th colspan="4" class="table-selector-header"
+                                                                    ng-if="ctrl.selectedUserComments.length" md-column>
+                                                                    <div layout="row" layout-align="start center">
+                                                                        <span>{{ctrl.selectedUserComments.length}} {{lang.items_selected}} </span>
+                                                                        <span flex></span>
+                                                                        <table-status-directive
+                                                                                when-close="ctrl.changeStatusBulkUserComments"></table-status-directive>
+                                                                        <md-button class="md-icon-button"
+                                                                                   ng-click="ctrl.removeBulkUserComments($event)">
+                                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                                        </md-button>
+                                                                    </div>
+                                                                </th>
+                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
+                                                                    md-order-by=""><span>{{lang.short_comment}}</span>
+                                                                </th>
+                                                                <!--<th ng-if="!ctrl.selectedUserComments.length" md-column-->
+                                                                <!--md-order-by=""><span>{{lang.comment}}</span>-->
+                                                                <!--</th>-->
+                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
+                                                                    md-order-by=""><span>{{lang.status}}</span>
+                                                                </th>
+                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
+                                                                    md-order-by=""><span>{{lang.item_order}}</span>
+                                                                </th>
+                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
+                                                                    md-order-by=""><span>{{lang.actions}}</span>
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody md-body>
+                                                            <tr md-select="userComment" md-row
+                                                                ng-repeat="userComment in ctrl.userComments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                                                <td md-cell><a href=""
+                                                                               ng-click="ctrl.showComment(userComment, $event)">{{userComment.shortComment}}</a>
+                                                                </td>
+                                                                <!--<td md-cell>{{userComment.comment}}</td>-->
+                                                                <td md-cell>
+                                                                    <md-switch aria-label="{{lang.status}}"
+                                                                               ng-model="userComment.status"
+                                                                               ng-change="ctrl.changeStatusUserComment(userComment)"
+                                                                               title="{{userComment.getTranslatedStatus()}}"></md-switch>
+                                                                </td>
+                                                                <td md-cell>{{userComment.itemOrder}}</td>
+                                                                <td md-cell>
+                                                                    <div flex layout="row" layout-align="start center">
+                                                                        <md-button class="md-icon-button"
+                                                                                   ng-click="ctrl.editUserComment(userComment, userCommentsForm, $event)"
+                                                                                   title="{{lang.edit}}">
+                                                                            <md-icon md-svg-icon="pencil"></md-icon>
+                                                                        </md-button>
+                                                                        <md-button class="md-icon-button"
+                                                                                   ng-click="ctrl.removeUserComment(userComment, $event)"
+                                                                                   title="{{lang.delete}}">
+                                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                                        </md-button>
 
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                     <md-table-pagination
                                                             md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                                             md-limit-options="ctrl.grid.limitOptions"
@@ -944,70 +946,72 @@
                                     <div scroll-directive>
                                         <div class="page-padding">
                                             <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                                                <md-table-container flex scroll-directive>
-                                                    <table md-table md-row-select="true"
-                                                           multiple="true"
-                                                           ng-model="ctrl.selectedUserWorkflowGroups"
-                                                           md-progress="ctrl.userWorkflowProgress">
-                                                        <thead md-head md-order="ctrl.userWorkflowGrid.order">
-                                                        <tr md-row>
-                                                            <th colspan="4" class="table-selector-header"
-                                                                ng-if="ctrl.selectedUserWorkflowGroups.length"
-                                                                md-column>
-                                                                <div layout="row" layout-align="start center">
-                                                                    <span>{{ctrl.selectedUserWorkflowGroups.length}} {{lang.items_selected}} </span>
-                                                                    <span flex></span>
-                                                                    <table-status-directive
-                                                                            when-close="ctrl.changeStatusBulkUserWorkflowGroups"></table-status-directive>
-                                                                    <md-button class="md-icon-button"
-                                                                               ng-click="ctrl.removeBulkUserWorkflowGroups($event)">
-                                                                        <md-icon md-svg-icon="delete"></md-icon>
-                                                                    </md-button>
-                                                                </div>
-                                                            </th>
-                                                            <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
-                                                                md-column
-                                                                md-order-by=""><span>{{lang.arabic_name}}</span>
-                                                            </th>
-                                                            <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
-                                                                md-column
-                                                                md-order-by=""><span>{{lang.english_name}}</span>
-                                                            </th>
-                                                            <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
-                                                                md-column
-                                                                md-order-by=""><span>{{lang.status}}</span>
-                                                            </th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody md-body>
-                                                        <tr md-select="userWorkflowGroup" md-row
-                                                            ng-repeat="userWorkflowGroup in ctrl.userWorkflowGroups | filter:ctrl.searchModel | limitTo: ctrl.userWorkflowGrid.limit: ((ctrl.userWorkflowGrid.page - 1) * ctrl.userWorkflowGrid.limit) |orderBy:ctrl.userWorkflowGrid.order  track by $index">
-                                                            <td md-cell>{{userWorkflowGroup.wfgroup.arName}}</td>
-                                                            <td md-cell>{{userWorkflowGroup.wfgroup.enName}}</td>
-                                                            <td md-cell>
-                                                                <md-switch aria-label="{{lang.status}}"
-                                                                           ng-model="userWorkflowGroup.wfgroup.status"
-                                                                           ng-change="ctrl.changeStatusUserWorkflowGroup(userWorkflowGroup.wfgroup)"
-                                                                           title="{{userWorkflowGroup.wfgroup.getTranslatedStatus()}}"></md-switch>
-                                                            </td>
-                                                            <td md-cell>
-                                                                <div flex layout="row" layout-align="start center">
-                                                                    <md-button class="md-icon-button"
-                                                                               ng-click="ctrl.openEditWorkflowGroupDialog(userWorkflowGroup.wfgroup, $event)"
-                                                                               title="{{lang.edit}}">
-                                                                        <md-icon md-svg-icon="pencil"></md-icon>
-                                                                    </md-button>
-                                                                    <md-button class="md-icon-button"
-                                                                               ng-click="ctrl.removeUserWorkflowGroup(userWorkflowGroup, userWorkflowGroup.wfgroup, $event)"
-                                                                               title="{{lang.delete}}">
-                                                                        <md-icon md-svg-icon="delete"></md-icon>
-                                                                    </md-button>
+                                                <md-table-container>
+                                                    <div flex scroll-directive>
+                                                        <table md-table md-row-select="true"
+                                                               multiple="true"
+                                                               ng-model="ctrl.selectedUserWorkflowGroups"
+                                                               md-progress="ctrl.userWorkflowProgress">
+                                                            <thead md-head md-order="ctrl.userWorkflowGrid.order">
+                                                            <tr md-row>
+                                                                <th colspan="4" class="table-selector-header"
+                                                                    ng-if="ctrl.selectedUserWorkflowGroups.length"
+                                                                    md-column>
+                                                                    <div layout="row" layout-align="start center">
+                                                                        <span>{{ctrl.selectedUserWorkflowGroups.length}} {{lang.items_selected}} </span>
+                                                                        <span flex></span>
+                                                                        <table-status-directive
+                                                                                when-close="ctrl.changeStatusBulkUserWorkflowGroups"></table-status-directive>
+                                                                        <md-button class="md-icon-button"
+                                                                                   ng-click="ctrl.removeBulkUserWorkflowGroups($event)">
+                                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                                        </md-button>
+                                                                    </div>
+                                                                </th>
+                                                                <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
+                                                                    md-column
+                                                                    md-order-by=""><span>{{lang.arabic_name}}</span>
+                                                                </th>
+                                                                <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
+                                                                    md-column
+                                                                    md-order-by=""><span>{{lang.english_name}}</span>
+                                                                </th>
+                                                                <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
+                                                                    md-column
+                                                                    md-order-by=""><span>{{lang.status}}</span>
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody md-body>
+                                                            <tr md-select="userWorkflowGroup" md-row
+                                                                ng-repeat="userWorkflowGroup in ctrl.userWorkflowGroups | filter:ctrl.searchModel | limitTo: ctrl.userWorkflowGrid.limit: ((ctrl.userWorkflowGrid.page - 1) * ctrl.userWorkflowGrid.limit) |orderBy:ctrl.userWorkflowGrid.order  track by $index">
+                                                                <td md-cell>{{userWorkflowGroup.wfgroup.arName}}</td>
+                                                                <td md-cell>{{userWorkflowGroup.wfgroup.enName}}</td>
+                                                                <td md-cell>
+                                                                    <md-switch aria-label="{{lang.status}}"
+                                                                               ng-model="userWorkflowGroup.wfgroup.status"
+                                                                               ng-change="ctrl.changeStatusUserWorkflowGroup(userWorkflowGroup.wfgroup)"
+                                                                               title="{{userWorkflowGroup.wfgroup.getTranslatedStatus()}}"></md-switch>
+                                                                </td>
+                                                                <td md-cell>
+                                                                    <div flex layout="row" layout-align="start center">
+                                                                        <md-button class="md-icon-button"
+                                                                                   ng-click="ctrl.openEditWorkflowGroupDialog(userWorkflowGroup.wfgroup, $event)"
+                                                                                   title="{{lang.edit}}">
+                                                                            <md-icon md-svg-icon="pencil"></md-icon>
+                                                                        </md-button>
+                                                                        <md-button class="md-icon-button"
+                                                                                   ng-click="ctrl.removeUserWorkflowGroup(userWorkflowGroup, userWorkflowGroup.wfgroup, $event)"
+                                                                                   title="{{lang.delete}}">
+                                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                                        </md-button>
 
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                     <md-table-pagination
                                                             md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                                             md-limit-options="ctrl.userWorkflowGrid.limitOptions"
@@ -1108,68 +1112,71 @@
 
                                 <div layout="row" ng-if="ctrl.applicationUser.signature.length">
                                     <md-card md-whiteframe="3" flex layout="row" class="card-overlay">
-                                        <md-table-container flex scroll-directive>
-                                            <table md-table md-row-select
-                                                   ng-model="ctrl.selectedSignature"
-                                                   md-progress="ctrl.signatureProgress">
-                                                <thead md-head md-order="ctrl.signatureGrid.order">
-                                                <tr md-row>
-                                                    <th colspan="5" ng-if="ctrl.selectedSignature.length"
-                                                        md-column>
-                                                        <div layout="row" layout-align="start center">
-                                                            <span>{{ctrl.selectedSignature.length}} {{lang.items_selected}} </span>
-                                                            <span flex></span>
-                                                            <!--<table-status-directive
-                                                                    when-close="ctrl.changeStatusBulkDocumentTemplates"></table-status-directive>-->
-                                                            <!--<md-button class="md-icon-button"
-                                                                       ng-click="ctrl.removeBulkSignatures($event)">
-                                                                <md-icon md-svg-icon="delete"></md-icon>
-                                                            </md-button>-->
-                                                        </div>
-                                                    </th>
-                                                    <th ng-if="!ctrl.selectedSignature.length" md-column
-                                                        md-order-by="docSubject">
-                                                        <span>{{lang.subject}}</span>
-                                                    </th>
-                                                    <th ng-if="!ctrl.selectedSignature.length" md-column
-                                                        md-order-by="documentTitle">
-                                                        <span>{{lang.title}}</span>
-                                                    </th>
-                                                    <!--<th ng-if="!ctrl.selectedSignature.length" md-column
-                                                        md-order-by="docType">
-                                                        <span>{{lang.label_document_type}}</span>
-                                                    </th>
-                                                    <th ng-if="!ctrl.selectedSignature.length" md-column
-                                                        md-order-by="templateType">
-                                                        <span>{{lang.template_type}}</span>
-                                                    </th>-->
-                                                    <th ng-if="!ctrl.selectedSignature.length" md-column>
-                                                        <span>{{lang.actions}}</span>
-                                                    </th>
-                                                </tr>
-                                                </thead>
-                                                <tbody md-body>
-                                                <tr md-row
-                                                    ng-repeat="signature in ctrl.applicationUser.signature | filter:ctrl.searchModel | limitTo: ctrl.signatureGrid.limit: ((ctrl.signatureGrid.page - 1) * ctrl.signatureGrid.limit) |orderBy:ctrl.signatureGrid.order  track by $index">
-                                                    <td md-cell>{{signature.docSubject}}</td>
-                                                    <td md-cell>{{signature.documentTitle}}</td>
-                                                    <!--<td md-cell>{{documentTemplate.docType}}</td>
-                                                    <td md-cell>{{documentTemplate.templateType}}</td>-->
-                                                    <td md-cell>
-                                                        <div flex layout="row" layout-align="start center">
-                                                            <md-button class="md-icon-button" title="{{lang.edit}}"
-                                                                       ng-click="ctrl.editSignature(signature, $event)">
-                                                                <md-icon md-svg-icon="pencil"></md-icon>
-                                                            </md-button>
-                                                            <md-button class="md-icon-button" title="{{lang.delete}}"
-                                                                       ng-click="ctrl.removeSignature(signature, $event)">
-                                                                <md-icon md-svg-icon="delete"></md-icon>
-                                                            </md-button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                        <md-table-container>
+                                            <div flex scroll-directive>
+                                                <table md-table md-row-select
+                                                       ng-model="ctrl.selectedSignature"
+                                                       md-progress="ctrl.signatureProgress">
+                                                    <thead md-head md-order="ctrl.signatureGrid.order">
+                                                    <tr md-row>
+                                                        <th colspan="5" ng-if="ctrl.selectedSignature.length"
+                                                            md-column>
+                                                            <div layout="row" layout-align="start center">
+                                                                <span>{{ctrl.selectedSignature.length}} {{lang.items_selected}} </span>
+                                                                <span flex></span>
+                                                                <!--<table-status-directive
+                                                                        when-close="ctrl.changeStatusBulkDocumentTemplates"></table-status-directive>-->
+                                                                <!--<md-button class="md-icon-button"
+                                                                           ng-click="ctrl.removeBulkSignatures($event)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>-->
+                                                            </div>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedSignature.length" md-column
+                                                            md-order-by="docSubject">
+                                                            <span>{{lang.subject}}</span>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedSignature.length" md-column
+                                                            md-order-by="documentTitle">
+                                                            <span>{{lang.title}}</span>
+                                                        </th>
+                                                        <!--<th ng-if="!ctrl.selectedSignature.length" md-column
+                                                            md-order-by="docType">
+                                                            <span>{{lang.label_document_type}}</span>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedSignature.length" md-column
+                                                            md-order-by="templateType">
+                                                            <span>{{lang.template_type}}</span>
+                                                        </th>-->
+                                                        <th ng-if="!ctrl.selectedSignature.length" md-column>
+                                                            <span>{{lang.actions}}</span>
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody md-body>
+                                                    <tr md-row
+                                                        ng-repeat="signature in ctrl.applicationUser.signature | filter:ctrl.searchModel | limitTo: ctrl.signatureGrid.limit: ((ctrl.signatureGrid.page - 1) * ctrl.signatureGrid.limit) |orderBy:ctrl.signatureGrid.order  track by $index">
+                                                        <td md-cell>{{signature.docSubject}}</td>
+                                                        <td md-cell>{{signature.documentTitle}}</td>
+                                                        <!--<td md-cell>{{documentTemplate.docType}}</td>
+                                                        <td md-cell>{{documentTemplate.templateType}}</td>-->
+                                                        <td md-cell>
+                                                            <div flex layout="row" layout-align="start center">
+                                                                <md-button class="md-icon-button" title="{{lang.edit}}"
+                                                                           ng-click="ctrl.editSignature(signature, $event)">
+                                                                    <md-icon md-svg-icon="pencil"></md-icon>
+                                                                </md-button>
+                                                                <md-button class="md-icon-button"
+                                                                           title="{{lang.delete}}"
+                                                                           ng-click="ctrl.removeSignature(signature, $event)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                             <md-table-pagination
                                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                                     md-limit-options="ctrl.signatureGrid.limitOptions"

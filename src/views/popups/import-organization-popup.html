@@ -32,49 +32,51 @@
                  </div>
                 -->
                 <md-card ng-if="ctrl.organizations.length" layout="column" class="card-overlay">
-                    <md-table-container flex>
-                        <table md-table>
-                            <thead md-head>
-                            <tr md-row>
-                                <th md-column>
-                                    <span>{{lang.code}}</span>
-                                </th>
-                                <th md-column>
-                                    <span>{{lang.arabic_name}}</span>
-                                </th>
-                                <th md-column>
-                                    <span>{{lang.english_name}}</span>
-                                </th>
-                                <th md-column>
-                                    <span>{{lang.description}}</span>
-                                </th>
-                                <th md-column>
-                                    <span>{{lang.parent}}</span>
-                                </th>
-                                <th md-column>
-                                    <span>{{lang.error_message}}</span>
-                                </th>
-                                <th md-column>
-                                    <span>{{lang.status}}</span>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody md-body>
-                            <tr md-row md-select="organization"
-                                ng-repeat="organization in ctrl.organizations track by $index">
-                                <td md-cell>{{organization.code}}</td>
-                                <td md-cell>{{organization.arName}}</td>
-                                <td md-cell>{{organization.enName}}</td>
-                                <td md-cell>{{organization.description}}</td>
-                                <td md-cell>{{organization.parent}}</td>
-                                <td md-cell>{{organization.errorMessage}}</td>
-                                <td md-cell>
-                                    <span ng-if="organization.errorCode">{{lang.failed}}</span>
-                                    <span ng-if="!organization.errorCode">{{lang.passed}}</span>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <md-table-container>
+                        <div flex>
+                            <table md-table>
+                                <thead md-head>
+                                <tr md-row>
+                                    <th md-column>
+                                        <span>{{lang.code}}</span>
+                                    </th>
+                                    <th md-column>
+                                        <span>{{lang.arabic_name}}</span>
+                                    </th>
+                                    <th md-column>
+                                        <span>{{lang.english_name}}</span>
+                                    </th>
+                                    <th md-column>
+                                        <span>{{lang.description}}</span>
+                                    </th>
+                                    <th md-column>
+                                        <span>{{lang.parent}}</span>
+                                    </th>
+                                    <th md-column>
+                                        <span>{{lang.error_message}}</span>
+                                    </th>
+                                    <th md-column>
+                                        <span>{{lang.status}}</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="organization"
+                                    ng-repeat="organization in ctrl.organizations track by $index">
+                                    <td md-cell>{{organization.code}}</td>
+                                    <td md-cell>{{organization.arName}}</td>
+                                    <td md-cell>{{organization.enName}}</td>
+                                    <td md-cell>{{organization.description}}</td>
+                                    <td md-cell>{{organization.parent}}</td>
+                                    <td md-cell>{{organization.errorMessage}}</td>
+                                    <td md-cell>
+                                        <span ng-if="organization.errorCode">{{lang.failed}}</span>
+                                        <span ng-if="!organization.errorCode">{{lang.passed}}</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </md-table-container>
 
                 </md-card>

@@ -7,7 +7,8 @@
     <div layout="column">
         <md-toolbar>
             <span class="p20" ng-if="!ctrl.editMode && !ctrl.disableParent">{{lang.add_new_correspondencesite}}</span>
-            <span class="p20" ng-if="!ctrl.editMode && ctrl.disableParent">{{lang.add_new_sub_correspondence_site}}</span>
+            <span class="p20"
+                  ng-if="!ctrl.editMode && ctrl.disableParent">{{lang.add_new_sub_correspondence_site}}</span>
             <span class="p20" md-truncate ng-if="ctrl.editMode">{{ctrl.model.getTranslatedName()}}</span>
             <close-dialog-directive when-close="ctrl.closeCorrespondenceSiteDialog"></close-dialog-directive>
         </md-toolbar>
@@ -152,106 +153,112 @@
                                         </md-button>
                                     </div>
                                 </div>
-                                <md-card ng-if="!ctrl.editMode && ctrl.correspondenceSite.relatedOus.length" layout="column"
+                                <md-card ng-if="!ctrl.editMode && ctrl.correspondenceSite.relatedOus.length"
+                                         layout="column"
                                          class="card-overlay">
-                                    <md-table-container flex>
-                                        <table md-table
-                                               md-row-select multiple ng-model="ctrl.selectedOUCorrespondenceSites"
-                                               md-progress="ctrl.progress">
-                                            <thead md-head>
-                                            <tr md-row>
-                                                <th ng-if="ctrl.selectedOUCorrespondenceSites.length" colspan="3"
-                                                    md-column>
-                                                    <div layout="row" layout-align="start center">
-                                                        <span>{{ctrl.selectedOUCorrespondenceSites.length}} {{lang.items_selected}} </span>
-                                                        <span flex></span>
-                                                        <div>
-                                                            <md-button class="md-icon-button"
-                                                                       ng-click="ctrl.removeBulkOUCorrespondenceSites($event)">
+                                    <md-table-container>
+                                        <div flex>
+                                            <table md-table
+                                                   md-row-select multiple ng-model="ctrl.selectedOUCorrespondenceSites"
+                                                   md-progress="ctrl.progress">
+                                                <thead md-head>
+                                                <tr md-row>
+                                                    <th ng-if="ctrl.selectedOUCorrespondenceSites.length" colspan="3"
+                                                        md-column>
+                                                        <div layout="row" layout-align="start center">
+                                                            <span>{{ctrl.selectedOUCorrespondenceSites.length}} {{lang.items_selected}} </span>
+                                                            <span flex></span>
+                                                            <div>
+                                                                <md-button class="md-icon-button"
+                                                                           ng-click="ctrl.removeBulkOUCorrespondenceSites($event)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
+                                                        <span>{{lang.arabic_name}}</span>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
+                                                        <span>{{lang.english_name}}</span>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
+                                                        <span>{{lang.actions}}</span>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-row md-select="ouCorrespondenceSite"
+                                                    ng-repeat="ouCorrespondenceSite in ctrl.correspondenceSite.relatedOus|orderBy:'itemOrder' track by $index">
+                                                    <td md-cell>{{ouCorrespondenceSite.arName}}</td>
+                                                    <td md-cell>{{ouCorrespondenceSite.enName}}</td>
+                                                    <td md-cell>
+                                                        <div layout="row" layout-align="start center">
+                                                            <md-button
+                                                                    ng-click="ctrl.deleteOUCorrespondenceSiteFromCtrl(ouCorrespondenceSite)"
+                                                                    class="md-icon-button">
                                                                 <md-icon md-svg-icon="delete"></md-icon>
                                                             </md-button>
                                                         </div>
-                                                    </div>
-                                                </th>
-                                                <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
-                                                    <span>{{lang.arabic_name}}</span>
-                                                </th>
-                                                <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
-                                                    <span>{{lang.english_name}}</span>
-                                                </th>
-                                                <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
-                                                    <span>{{lang.actions}}</span>
-                                                </th>
-                                            </tr>
-                                            </thead>
-                                            <tbody md-body>
-                                            <tr md-row md-select="ouCorrespondenceSite"
-                                                ng-repeat="ouCorrespondenceSite in ctrl.correspondenceSite.relatedOus|orderBy:'itemOrder' track by $index">
-                                                <td md-cell>{{ouCorrespondenceSite.arName}}</td>
-                                                <td md-cell>{{ouCorrespondenceSite.enName}}</td>
-                                                <td md-cell>
-                                                    <div layout="row" layout-align="start center">
-                                                        <md-button
-                                                                ng-click="ctrl.deleteOUCorrespondenceSiteFromCtrl(ouCorrespondenceSite)"
-                                                                class="md-icon-button">
-                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                        </md-button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </md-table-container>
                                 </md-card>
-                                <md-card ng-if="ctrl.editMode && ctrl.correspondenceSite.relatedOus.length" layout="column"
+                                <md-card ng-if="ctrl.editMode && ctrl.correspondenceSite.relatedOus.length"
+                                         layout="column"
                                          class="card-overlay">
-                                    <md-table-container flex>
-                                        <table md-table
-                                               md-row-select multiple ng-model="ctrl.selectedOUCorrespondenceSites"
-                                               md-progress="ctrl.progress">
-                                            <thead md-head>
-                                            <tr md-row>
-                                                <th ng-if="ctrl.selectedOUCorrespondenceSites.length" colspan="3"
-                                                    md-column>
-                                                    <div layout="row" layout-align="start center">
-                                                        <span>{{ctrl.selectedOUCorrespondenceSites.length}} {{lang.items_selected}} </span>
-                                                        <span flex></span>
-                                                        <div>
-                                                            <md-button class="md-icon-button"
-                                                                       ng-click="ctrl.removeBulkOUCorrespondenceSites($event)">
+                                    <md-table-container>
+                                        <div flex>
+                                            <table md-table
+                                                   md-row-select multiple ng-model="ctrl.selectedOUCorrespondenceSites"
+                                                   md-progress="ctrl.progress">
+                                                <thead md-head>
+                                                <tr md-row>
+                                                    <th ng-if="ctrl.selectedOUCorrespondenceSites.length" colspan="3"
+                                                        md-column>
+                                                        <div layout="row" layout-align="start center">
+                                                            <span>{{ctrl.selectedOUCorrespondenceSites.length}} {{lang.items_selected}} </span>
+                                                            <span flex></span>
+                                                            <div>
+                                                                <md-button class="md-icon-button"
+                                                                           ng-click="ctrl.removeBulkOUCorrespondenceSites($event)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
+                                                        <span>{{lang.arabic_name}}</span>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
+                                                        <span>{{lang.english_name}}</span>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
+                                                        <span>{{lang.actions}}</span>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-row md-select="ouCorrespondenceSite"
+                                                    ng-repeat="ouCorrespondenceSite in ctrl.correspondenceSite.relatedOus|orderBy:'itemOrder' track by $index">
+                                                    <td md-cell>{{ouCorrespondenceSite.ouid.arName}}</td>
+                                                    <td md-cell>{{ouCorrespondenceSite.ouid.enName}}</td>
+                                                    <td md-cell>
+                                                        <div layout="row" layout-align="start center">
+                                                            <md-button
+                                                                    ng-click="ctrl.deleteOUCorrespondenceSiteFromCtrl(ouCorrespondenceSite)"
+                                                                    class="md-icon-button">
                                                                 <md-icon md-svg-icon="delete"></md-icon>
                                                             </md-button>
                                                         </div>
-                                                    </div>
-                                                </th>
-                                                <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
-                                                    <span>{{lang.arabic_name}}</span>
-                                                </th>
-                                                <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
-                                                    <span>{{lang.english_name}}</span>
-                                                </th>
-                                                <th ng-if="!ctrl.selectedOUCorrespondenceSites.length" md-column>
-                                                    <span>{{lang.actions}}</span>
-                                                </th>
-                                            </tr>
-                                            </thead>
-                                            <tbody md-body>
-                                            <tr md-row md-select="ouCorrespondenceSite"
-                                                ng-repeat="ouCorrespondenceSite in ctrl.correspondenceSite.relatedOus|orderBy:'itemOrder' track by $index">
-                                                <td md-cell>{{ouCorrespondenceSite.ouid.arName}}</td>
-                                                <td md-cell>{{ouCorrespondenceSite.ouid.enName}}</td>
-                                                <td md-cell>
-                                                    <div layout="row" layout-align="start center">
-                                                        <md-button
-                                                                ng-click="ctrl.deleteOUCorrespondenceSiteFromCtrl(ouCorrespondenceSite)"
-                                                                class="md-icon-button">
-                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                        </md-button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </md-table-container>
                                 </md-card>
                             </div>
@@ -269,86 +276,88 @@
                                 </md-button>
                             </div>
                             <div layout="row" ng-if="!!ctrl.correspondenceSite.children.length">
-                                <md-table-container scroll-directive>
-                                    <table md-table md-row-select multiple
-                                           ng-model="ctrl.selectedSubCorrespondenceSites"
-                                           md-progress="ctrl.progress">
-                                        <thead md-head md-order="ctrl.grid.order">
-                                        <tr md-row>
-                                            <th class="table-selector-header"
-                                                ng-if="ctrl.selectedSubCorrespondenceSites.length" md-column>
-                                                <div layout="row" layout-align="start center">
-                                                    <span>{{ctrl.selectedSubCorrespondenceSites.length}} {{lang.items_selected}} </span>
-                                                    <span flex></span>
-                                                </div>
-                                            </th>
-                                            <th ng-if="!ctrl.selectedSubCorrespondenceSites.length" md-column
-                                                md-order-by="arName">
-                                                <span>{{lang.arabic_name}}</span>
-                                            </th>
-                                            <th ng-class="{'hide-table-header':ctrl.selectedSubCorrespondenceSites.length}"
-                                                md-column md-order-by="enName">
-                                                <span>{{lang.english_name}}</span>
-                                            </th>
-                                            <th ng-class="{'hide-table-header':ctrl.selectedSubCorrespondenceSites.length}"
-                                                md-column md-order-by="status">
-                                                <span>{{lang.status}}</span>
-                                            </th>
-                                            <th ng-class="{'hide-table-header':ctrl.selectedSubCorrespondenceSites.length}"
-                                                md-column
-                                                md-order-by="isGlobal">
-                                                <span>{{lang.global}}</span>
-                                            </th>
-                                            <th ng-if="!ctrl.selectedSubCorrespondenceSites.length" md-column>
-                                                <span>{{lang.actions}}</span>
-                                            </th>
-                                            <th colspan="2" md-column
-                                                ng-if="ctrl.selectedSubCorrespondenceSites.length">
-                                                <div layout="row" layout-align="start center">
-                                                    <table-status-directive
-                                                            when-close="ctrl.changeBulkStatusCorrespondenceSites"></table-status-directive>
-                                                    <!--<md-button class="md-icon-button"
-                                                               ng-click="ctrl.removeBulkCorrespondenceSites($event)">
-                                                        <md-icon md-svg-icon="delete"></md-icon>
-                                                    </md-button>-->
-                                                </div>
-                                            </th>
-                                        </tr>
-                                        </thead>
-                                        <tbody md-body>
-                                        <tr md-row md-select="correspondenceSite"
-                                            ng-repeat="correspondenceSite in ctrl.correspondenceSite.children  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
-                                            <td md-cell>{{correspondenceSite.arName}}</td>
-                                            <td md-cell>{{correspondenceSite.enName}}</td>
-                                            <td md-cell>
-                                                <md-switch aria-label="{{lang.status}}"
-                                                           tooltip="{{correspondenceSite.getTranslatedStatus()}}"
-                                                           ng-change="ctrl.changeCorrespondenceSiteStatus(correspondenceSite)"
-                                                           ng-model="correspondenceSite.status"></md-switch>
-                                            </td>
-                                            <td md-cell>
-                                                <md-switch aria-label="{{lang.global}}"
-                                                           tooltip="{{correspondenceSite.getTranslatedGlobal()}}"
-                                                           ng-disabled="correspondenceSite.isGlobal"
-                                                           ng-readonly="correspondenceSite.isGlobal"
-                                                           ng-change="ctrl.changeGlobalFromFromGrid(correspondenceSite)"
-                                                           ng-model="correspondenceSite.isGlobal"></md-switch>
-                                            </td>
-                                            <td md-cell>
-                                                <div flex layout="row" layout-align="start center">
-                                                    <!--<md-button class="md-icon-button" title="{{lang.delete}}"
-                                                               ng-click="ctrl.removeCorrespondenceSite(correspondenceSite, $event)">
-                                                        <md-icon md-svg-icon="delete"></md-icon>
-                                                    </md-button>-->
-                                                    <md-button class="md-icon-button" title="{{lang.edit}}"
-                                                               ng-click="ctrl.editSubCorrespondenceSite(correspondenceSite, $event)">
-                                                        <md-icon md-svg-icon="pencil"></md-icon>
-                                                    </md-button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                <md-table-container>
+                                    <div scroll-directive>
+                                        <table md-table md-row-select multiple
+                                               ng-model="ctrl.selectedSubCorrespondenceSites"
+                                               md-progress="ctrl.progress">
+                                            <thead md-head md-order="ctrl.grid.order">
+                                            <tr md-row>
+                                                <th class="table-selector-header"
+                                                    ng-if="ctrl.selectedSubCorrespondenceSites.length" md-column>
+                                                    <div layout="row" layout-align="start center">
+                                                        <span>{{ctrl.selectedSubCorrespondenceSites.length}} {{lang.items_selected}} </span>
+                                                        <span flex></span>
+                                                    </div>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedSubCorrespondenceSites.length" md-column
+                                                    md-order-by="arName">
+                                                    <span>{{lang.arabic_name}}</span>
+                                                </th>
+                                                <th ng-class="{'hide-table-header':ctrl.selectedSubCorrespondenceSites.length}"
+                                                    md-column md-order-by="enName">
+                                                    <span>{{lang.english_name}}</span>
+                                                </th>
+                                                <th ng-class="{'hide-table-header':ctrl.selectedSubCorrespondenceSites.length}"
+                                                    md-column md-order-by="status">
+                                                    <span>{{lang.status}}</span>
+                                                </th>
+                                                <th ng-class="{'hide-table-header':ctrl.selectedSubCorrespondenceSites.length}"
+                                                    md-column
+                                                    md-order-by="isGlobal">
+                                                    <span>{{lang.global}}</span>
+                                                </th>
+                                                <th ng-if="!ctrl.selectedSubCorrespondenceSites.length" md-column>
+                                                    <span>{{lang.actions}}</span>
+                                                </th>
+                                                <th colspan="2" md-column
+                                                    ng-if="ctrl.selectedSubCorrespondenceSites.length">
+                                                    <div layout="row" layout-align="start center">
+                                                        <table-status-directive
+                                                                when-close="ctrl.changeBulkStatusCorrespondenceSites"></table-status-directive>
+                                                        <!--<md-button class="md-icon-button"
+                                                                   ng-click="ctrl.removeBulkCorrespondenceSites($event)">
+                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                        </md-button>-->
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody md-body>
+                                            <tr md-row md-select="correspondenceSite"
+                                                ng-repeat="correspondenceSite in ctrl.correspondenceSite.children  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                                <td md-cell>{{correspondenceSite.arName}}</td>
+                                                <td md-cell>{{correspondenceSite.enName}}</td>
+                                                <td md-cell>
+                                                    <md-switch aria-label="{{lang.status}}"
+                                                               tooltip="{{correspondenceSite.getTranslatedStatus()}}"
+                                                               ng-change="ctrl.changeCorrespondenceSiteStatus(correspondenceSite)"
+                                                               ng-model="correspondenceSite.status"></md-switch>
+                                                </td>
+                                                <td md-cell>
+                                                    <md-switch aria-label="{{lang.global}}"
+                                                               tooltip="{{correspondenceSite.getTranslatedGlobal()}}"
+                                                               ng-disabled="correspondenceSite.isGlobal"
+                                                               ng-readonly="correspondenceSite.isGlobal"
+                                                               ng-change="ctrl.changeGlobalFromFromGrid(correspondenceSite)"
+                                                               ng-model="correspondenceSite.isGlobal"></md-switch>
+                                                </td>
+                                                <td md-cell>
+                                                    <div flex layout="row" layout-align="start center">
+                                                        <!--<md-button class="md-icon-button" title="{{lang.delete}}"
+                                                                   ng-click="ctrl.removeCorrespondenceSite(correspondenceSite, $event)">
+                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                        </md-button>-->
+                                                        <md-button class="md-icon-button" title="{{lang.edit}}"
+                                                                   ng-click="ctrl.editSubCorrespondenceSite(correspondenceSite, $event)">
+                                                            <md-icon md-svg-icon="pencil"></md-icon>
+                                                        </md-button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     <md-table-pagination
                                             md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                             md-limit-options="ctrl.grid.limitOptions"
@@ -364,7 +373,9 @@
         </md-content>
         <div>
             <div layout="row" layout-align="start center">
-                <md-button class="md-raised" ng-disabled="correspondenceSiteForm.$invalid || (!ctrl.correspondenceSite.isGlobal && !ctrl.correspondenceSite.relatedOus.length)" ng-if="!ctrl.editMode"
+                <md-button class="md-raised"
+                           ng-disabled="correspondenceSiteForm.$invalid || (!ctrl.correspondenceSite.isGlobal && !ctrl.correspondenceSite.relatedOus.length)"
+                           ng-if="!ctrl.editMode"
                            ng-click="ctrl.saveCorrespondenceSite()">
                     {{lang.add}}
                 </md-button>

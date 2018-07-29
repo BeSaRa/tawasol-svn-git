@@ -10,50 +10,52 @@
                 <div layout="column" class="p20">
                     <div>
                         <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                            <md-table-container flex scroll-directive>
-                                <table md-table md-row-select="false" md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.subSearchResult.order">
-                                    <tr md-row>
-                                        <th md-column>
-                                            <span>{{lang.sites_main_site}}</span>
-                                        </th>
-                                        <th md-column>
-                                            <span>{{lang.sites_sub_site}}</span>
-                                        </th>
-                                        <th md-column>
-                                            <span>{{lang.type}}</span>
-                                        </th>
-                                        <th md-column>
-                                            <span>{{lang.export_type}}</span>
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody md-body>
-                                    <tr md-row md-select="site"
-                                        ng-repeat="site in ctrl.correspondenceSites  track by $index">
-                                        <td md-cell>
-                                            <div flex layout="column">
-                                                <span class="span-column">{{site.getTranslatedParentName()}}</span>
-                                            </div>
-                                        </td>
-                                        <td md-cell>
-                                            <div flex layout="column">
-                                                <span class="span-column">{{site.getTranslatedName()}}</span>
-                                            </div>
-                                        </td>
-                                        <td md-cell>
-                                            <div flex layout="column">
-                                                <span class="span-column">{{site.getVersionType()}}</span>
-                                            </div>
-                                        </td>
-                                        <td md-cell>
-                                            <div flex layout="column">
-                                                <span class="span-column">{{site.getExportType()}}</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                            <md-table-container>
+                                <div flex scroll-directive>
+                                    <table md-table md-row-select="false" md-progress="ctrl.progress">
+                                        <thead md-head md-order="ctrl.grid.subSearchResult.order">
+                                        <tr md-row>
+                                            <th md-column>
+                                                <span>{{lang.sites_main_site}}</span>
+                                            </th>
+                                            <th md-column>
+                                                <span>{{lang.sites_sub_site}}</span>
+                                            </th>
+                                            <th md-column>
+                                                <span>{{lang.type}}</span>
+                                            </th>
+                                            <th md-column>
+                                                <span>{{lang.export_type}}</span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                        <tr md-row md-select="site"
+                                            ng-repeat="site in ctrl.correspondenceSites  track by $index">
+                                            <td md-cell>
+                                                <div flex layout="column">
+                                                    <span class="span-column">{{site.getTranslatedParentName()}}</span>
+                                                </div>
+                                            </td>
+                                            <td md-cell>
+                                                <div flex layout="column">
+                                                    <span class="span-column">{{site.getTranslatedName()}}</span>
+                                                </div>
+                                            </td>
+                                            <td md-cell>
+                                                <div flex layout="column">
+                                                    <span class="span-column">{{site.getVersionType()}}</span>
+                                                </div>
+                                            </td>
+                                            <td md-cell>
+                                                <div flex layout="column">
+                                                    <span class="span-column">{{site.getExportType()}}</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </md-table-container>
                         </md-card>
                     </div>

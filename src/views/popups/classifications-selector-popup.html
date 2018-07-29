@@ -10,8 +10,10 @@
                 <md-input-container flex>
                     <label>{{lang.select_classification}}</label>
                     <md-select multiple ng-model="ctrl.classification">
-                        <md-option ng-if="ctrl.excludeIfExists(classification) && ctrl.includeIfEnabled(classification) && !classification.isGlobal" ng-value="classification"
-                                   ng-repeat="classification in ctrl.classifications track by $index">
+                        <md-option
+                                ng-if="ctrl.excludeIfExists(classification) && ctrl.includeIfEnabled(classification) && !classification.isGlobal"
+                                ng-value="classification"
+                                ng-repeat="classification in ctrl.classifications track by $index">
                             {{classification.getTranslatedName()}}
                         </md-option>
                     </md-select>
@@ -25,62 +27,65 @@
             </div>
             <div class="p20">
                 <md-card ng-if="ctrl.selectedClassifications.length" layout="column" class="card-overlay">
-                    <md-table-container flex>
-                        <table md-table
-                               md-row-select multiple ng-model="ctrl.selectedClassificationGrid">
-                            <thead md-head>
-                            <tr md-row>
-                                <th ng-if="ctrl.selectedClassificationGrid.length" colspan="4"
-                                    md-column>
-                                    <div layout="row" layout-align="start center">
-                                        <span>{{ctrl.selectedClassificationGrid.length}} {{lang.items_selected}} </span>
-                                        <span flex></span>
-                                        <div>
+                    <md-table-container>
+                        <div flex>
+                            <table md-table
+                                   md-row-select multiple ng-model="ctrl.selectedClassificationGrid">
+                                <thead md-head>
+                                <tr md-row>
+                                    <th ng-if="ctrl.selectedClassificationGrid.length" colspan="4"
+                                        md-column>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedClassificationGrid.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+                                            <div>
+                                                <md-button class="md-icon-button"
+                                                           ng-click="ctrl.removeSelectedClassification()">
+                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedClassificationGrid.length" md-column>
+                                        <span>{{lang.arabic_name}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedClassificationGrid.length" md-column>
+                                        <span>{{lang.english_name}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedClassificationGrid.length" md-column>
+                                        <span>{{lang.security_levels}}</span>
+                                    </th>
+                                    <th ng-if="!ctrl.selectedClassificationGrid.length" md-column>
+                                        <span>{{lang.actions}}</span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="classification"
+                                    ng-repeat="classification in ctrl.selectedClassifications |orderBy:'itemOrder' track by $index">
+                                    <td md-cell>{{classification.arName}}</td>
+                                    <td md-cell>{{classification.enName}}</td>
+                                    <td md-cell>{{classification.getSecurityLevels()}}</td>
+                                    <td md-cell>
+                                        <div layout="row">
                                             <md-button class="md-icon-button"
-                                                       ng-click="ctrl.removeSelectedClassification()">
+                                                       ng-click="ctrl.removeClassification(classification)">
                                                 <md-icon md-svg-icon="delete"></md-icon>
                                             </md-button>
                                         </div>
-                                    </div>
-                                </th>
-                                <th ng-if="!ctrl.selectedClassificationGrid.length" md-column>
-                                    <span>{{lang.arabic_name}}</span>
-                                </th>
-                                <th ng-if="!ctrl.selectedClassificationGrid.length" md-column>
-                                    <span>{{lang.english_name}}</span>
-                                </th>
-                                <th ng-if="!ctrl.selectedClassificationGrid.length" md-column>
-                                    <span>{{lang.security_levels}}</span>
-                                </th>
-                                <th ng-if="!ctrl.selectedClassificationGrid.length" md-column>
-                                    <span>{{lang.actions}}</span>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody md-body>
-                            <tr md-row md-select="classification"
-                                ng-repeat="classification in ctrl.selectedClassifications |orderBy:'itemOrder' track by $index">
-                                <td md-cell>{{classification.arName}}</td>
-                                <td md-cell>{{classification.enName}}</td>
-                                <td md-cell>{{classification.getSecurityLevels()}}</td>
-                                <td md-cell>
-                                    <div layout="row">
-                                        <md-button class="md-icon-button"
-                                                   ng-click="ctrl.removeClassification(classification)">
-                                            <md-icon md-svg-icon="delete"></md-icon>
-                                        </md-button>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </md-table-container>
                 </md-card>
             </div>
         </md-content>
         <div>
             <div layout="row" layout-align="center center">
-                <md-button class="md-raised"  ng-if="ctrl.selectedClassifications.length" ng-click="ctrl.sendSelectedClassification()">
+                <md-button class="md-raised" ng-if="ctrl.selectedClassifications.length"
+                           ng-click="ctrl.sendSelectedClassification()">
                     {{lang.send}}
                 </md-button>
             </div>

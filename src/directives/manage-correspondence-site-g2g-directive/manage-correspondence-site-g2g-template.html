@@ -4,7 +4,8 @@
     <!-- Added incoming site from database -->
     <div flex layout="column">
         <md-card ng-if="ctrl.site && ctrl.site.subSiteId" md-whiteframe="3" layout="column" class="card-overlay">
-            <md-table-container flex scroll-directive>
+            <md-table-container>
+                <div  flex scroll-directive>
                 <table md-table md-progress="ctrl.progress">
                     <thead md-head ><!--md-order="ctrl.grid.sitesInfoTo.order"-->
                     <tr md-row>
@@ -51,6 +52,7 @@
                     </tr>
                     </tbody>
                 </table>
+                </div>
             </md-table-container>
         </md-card>
     </div>

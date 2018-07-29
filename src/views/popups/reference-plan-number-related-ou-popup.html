@@ -7,52 +7,54 @@
         <md-content scroll-directive>
             <div class="p20">
                 <md-card md-whiteframe="3" layout="column" class="card-overlay">
-                    <md-table-container flex scroll-directive>
-                        <table md-table ng-model="ctrl.organizations"
-                               md-progress="ctrl.progress">
-                            <thead md-head md-order="ctrl.grid.order">
-                            <tr md-row>
+                    <md-table-container>
+                        <div flex scroll-directive>
+                            <table md-table ng-model="ctrl.organizations"
+                                   md-progress="ctrl.progress">
+                                <thead md-head md-order="ctrl.grid.order">
+                                <tr md-row>
 
-                                <th md-column md-order-by="arName">
-                                    <span>{{lang.arabic_name}}</span>
-                                </th>
-                                <th md-column
-                                    md-order-by="enName">
-                                    <span>{{lang.english_name}}</span>
-                                </th>
-                               <!-- <th ng-if="!ctrl.organizations.length" md-column>
-                                    <span ng-if="!ctrl.organizations.length">{{lang.actions}}</span>
+                                    <th md-column md-order-by="arName">
+                                        <span>{{lang.arabic_name}}</span>
+                                    </th>
+                                    <th md-column
+                                        md-order-by="enName">
+                                        <span>{{lang.english_name}}</span>
+                                    </th>
+                                    <!-- <th ng-if="!ctrl.organizations.length" md-column>
+                                         <span ng-if="!ctrl.organizations.length">{{lang.actions}}</span>
 
-                                </th>-->
-                               <!-- <th colspan="3" class="table-selector-header"
-                                    ng-if="ctrl.organizations.length" md-column>
-                                    <div layout="row" layout-align="start center">
-                                        <span>{{ctrl.organizations.length}} {{lang.items_selected}} </span>
-                                        <span flex></span>
-                                        <md-button class="md-icon-button"
-                                                   ng-click="ctrl.removeBulkDocumentFilesRelatedOUs()">
-                                            <md-icon md-svg-icon="delete"></md-icon>
-                                        </md-button>
-                                    </div>
-                                </th>-->
-                            </tr>
-                            </thead>
-                            <tbody md-body>
-                            <tr md-row md-select="organization"
-                                ng-repeat="organization in ctrl.organizations  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
-                                <td md-cell>{{organization.arName}}</td>
-                                <td md-cell>{{organization.enName}}</td>
-                               <!-- <td md-cell>
-                                    <div flex layout="row" layout-align="start center">
-                                        <md-button class="md-icon-button" title="{{lang.delete}}"
-                                                   ng-click="ctrl.removeSelectedOrganization(documentFileRelatedOU, $event)">
-                                            <md-icon md-svg-icon="delete"></md-icon>
-                                        </md-button>
-                                    </div>
-                                </td>-->
-                            </tr>
-                            </tbody>
-                        </table>
+                                     </th>-->
+                                    <!-- <th colspan="3" class="table-selector-header"
+                                         ng-if="ctrl.organizations.length" md-column>
+                                         <div layout="row" layout-align="start center">
+                                             <span>{{ctrl.organizations.length}} {{lang.items_selected}} </span>
+                                             <span flex></span>
+                                             <md-button class="md-icon-button"
+                                                        ng-click="ctrl.removeBulkDocumentFilesRelatedOUs()">
+                                                 <md-icon md-svg-icon="delete"></md-icon>
+                                             </md-button>
+                                         </div>
+                                     </th>-->
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="organization"
+                                    ng-repeat="organization in ctrl.organizations  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    <td md-cell>{{organization.arName}}</td>
+                                    <td md-cell>{{organization.enName}}</td>
+                                    <!-- <td md-cell>
+                                         <div flex layout="row" layout-align="start center">
+                                             <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                        ng-click="ctrl.removeSelectedOrganization(documentFileRelatedOU, $event)">
+                                                 <md-icon md-svg-icon="delete"></md-icon>
+                                             </md-button>
+                                         </div>
+                                     </td>-->
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </md-table-container>
                     <md-table-pagination
                             md-limit-options="ctrl.grid.limitOptions"

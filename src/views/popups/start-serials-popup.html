@@ -6,38 +6,40 @@
         </md-toolbar>
         <md-content scroll-directive>
             <md-card>
-                <md-table-container flex scroll-directive>
-                    <table md-table md-progress="ctrl.progress">
-                        <thead md-head>
-                        <tr md-row>
-                            <th md-column>
-                                <span>{{lang.reference_plan_element_expression}}</span>
-                            </th>
-                            <th md-column>
-                                <span>{{lang.start_serial_from}}</span>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody md-body>
-                        <tr md-row ng-repeat="item in ctrl.referencePlanItemStartSerialList track by $index">
-                            <td md-cell>
-                                <div flex layout="column">
-                                    <span class="span-column">{{item.referencePlanItemId.getExpressionFormat()}}</span>
-                                </div>
-                            </td>
-                            <td md-cell>
-                                <div flex layout="column">
+                <md-table-container>
+                    <div flex scroll-directive>
+                        <table md-table md-progress="ctrl.progress">
+                            <thead md-head>
+                            <tr md-row>
+                                <th md-column>
+                                    <span>{{lang.reference_plan_element_expression}}</span>
+                                </th>
+                                <th md-column>
+                                    <span>{{lang.start_serial_from}}</span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row ng-repeat="item in ctrl.referencePlanItemStartSerialList track by $index">
+                                <td md-cell>
+                                    <div flex layout="column">
+                                        <span class="span-column">{{item.referencePlanItemId.getExpressionFormat()}}</span>
+                                    </div>
+                                </td>
+                                <td md-cell>
+                                    <div flex layout="column">
                                     <span class="span-column">
                                         <md-input-container>
                                             <label>{{lang.start_serial_from}}</label>
                                             <input ng-model="item.startSerial">
                                         </md-input-container>
                                     </span>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </md-table-container>
             </md-card>
         </md-content>

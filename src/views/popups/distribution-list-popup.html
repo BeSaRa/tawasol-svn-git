@@ -66,7 +66,7 @@
                                     distribution-list-members="ctrl.distributionList.distributionListMembers"
                                     selected-site-type="ctrl.selectedSiteType"
                                     selected-main-site="ctrl.selectedMainSite"
-                                    sub-site-search-text ="ctrl.subSiteSearchText"
+                                    sub-site-search-text="ctrl.subSiteSearchText"
                             ></manage-distribution-list-directive>
                         </md-content>
                     </md-tab>
@@ -95,53 +95,55 @@
                                 </div>
                                 <md-card ng-if="ctrl.distributionList.relatedOus.length" layout="column"
                                          class="card-overlay">
-                                    <md-table-container flex>
-                                        <table md-table
-                                               md-row-select multiple ng-model="ctrl.selectedOUDistributionLists"
-                                               md-progress="ctrl.progress">
-                                            <thead md-head>
-                                            <tr md-row>
-                                                <th ng-if="ctrl.selectedOUDistributionLists.length" colspan="3"
-                                                    md-column>
-                                                    <div layout="row" layout-align="start center">
-                                                        <span>{{ctrl.selectedOUDistributionLists.length}} {{lang.items_selected}} </span>
-                                                        <span flex></span>
-                                                        <div>
-                                                            <md-button class="md-icon-button"
-                                                                       ng-click="ctrl.removeBulkOUDistributionLists($event)">
+                                    <md-table-container>
+                                        <div flex>
+                                            <table md-table
+                                                   md-row-select multiple ng-model="ctrl.selectedOUDistributionLists"
+                                                   md-progress="ctrl.progress">
+                                                <thead md-head>
+                                                <tr md-row>
+                                                    <th ng-if="ctrl.selectedOUDistributionLists.length" colspan="3"
+                                                        md-column>
+                                                        <div layout="row" layout-align="start center">
+                                                            <span>{{ctrl.selectedOUDistributionLists.length}} {{lang.items_selected}} </span>
+                                                            <span flex></span>
+                                                            <div>
+                                                                <md-button class="md-icon-button"
+                                                                           ng-click="ctrl.removeBulkOUDistributionLists($event)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column>
+                                                        <span>{{lang.arabic_name}}</span>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column>
+                                                        <span>{{lang.english_name}}</span>
+                                                    </th>
+                                                    <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column>
+                                                        <span>{{lang.actions}}</span>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                <tr md-row md-select="ouDistributionList"
+                                                    ng-repeat="ouDistributionList in ctrl.distributionList.relatedOus|orderBy:'itemOrder' track by $index">
+                                                    <td md-cell>{{ouDistributionList.ouid.arName}}</td>
+                                                    <td md-cell>{{ouDistributionList.ouid.enName}}</td>
+                                                    <td md-cell>
+                                                        <div layout="row" layout-align="start center">
+                                                            <md-button
+                                                                    ng-click="ctrl.deleteOUDistributionListFromCtrl(ouDistributionList)"
+                                                                    class="md-icon-button">
                                                                 <md-icon md-svg-icon="delete"></md-icon>
                                                             </md-button>
                                                         </div>
-                                                    </div>
-                                                </th>
-                                                <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column>
-                                                    <span>{{lang.arabic_name}}</span>
-                                                </th>
-                                                <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column>
-                                                    <span>{{lang.english_name}}</span>
-                                                </th>
-                                                <th ng-if="!ctrl.selectedOUDistributionLists.length" md-column>
-                                                    <span>{{lang.actions}}</span>
-                                                </th>
-                                            </tr>
-                                            </thead>
-                                            <tbody md-body>
-                                            <tr md-row md-select="ouDistributionList"
-                                                ng-repeat="ouDistributionList in ctrl.distributionList.relatedOus|orderBy:'itemOrder' track by $index">
-                                                <td md-cell>{{ouDistributionList.ouid.arName}}</td>
-                                                <td md-cell>{{ouDistributionList.ouid.enName}}</td>
-                                                <td md-cell>
-                                                    <div layout="row" layout-align="start center">
-                                                        <md-button
-                                                                ng-click="ctrl.deleteOUDistributionListFromCtrl(ouDistributionList)"
-                                                                class="md-icon-button">
-                                                            <md-icon md-svg-icon="delete"></md-icon>
-                                                        </md-button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </md-table-container>
                                 </md-card>
                             </div>

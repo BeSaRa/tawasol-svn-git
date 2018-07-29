@@ -107,34 +107,36 @@
                                 </div>
                                 <div>
                                     <md-card>
-                                        <md-table-container scroll-directive>
-                                            <table md-table ng-model="selected"
-                                                   md-progress="promise">
-                                                <thead md-head>
-                                                <tr md-row>
-                                                    <th md-column>{{lang.name}}</th>
-                                                    <th md-column>{{lang.actions}}</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody md-body>
-                                                <tr md-row
-                                                    ng-repeat="element in ctrl.referencePlanNumber.referencePlanItems track by $index">
-                                                    <td md-cell>{{element.refernceExpression}}</td>
-                                                    <td md-cell>
-                                                        <div layout="row">
-                                                            <md-button class="md-icon-button"
-                                                                       ng-click="ctrl.editReferenceItem(element  , $index )">
-                                                                <md-icon md-svg-icon="pencil"></md-icon>
-                                                            </md-button>
-                                                            <md-button class="md-icon-button"
-                                                                       ng-click="ctrl.deleteReferenceItem(element , $index)">
-                                                                <md-icon md-svg-icon="delete"></md-icon>
-                                                            </md-button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                        <md-table-container>
+                                            <div scroll-directive>
+                                                <table md-table ng-model="selected"
+                                                       md-progress="promise">
+                                                    <thead md-head>
+                                                    <tr md-row>
+                                                        <th md-column>{{lang.name}}</th>
+                                                        <th md-column>{{lang.actions}}</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody md-body>
+                                                    <tr md-row
+                                                        ng-repeat="element in ctrl.referencePlanNumber.referencePlanItems track by $index">
+                                                        <td md-cell>{{element.refernceExpression}}</td>
+                                                        <td md-cell>
+                                                            <div layout="row">
+                                                                <md-button class="md-icon-button"
+                                                                           ng-click="ctrl.editReferenceItem(element  , $index )">
+                                                                    <md-icon md-svg-icon="pencil"></md-icon>
+                                                                </md-button>
+                                                                <md-button class="md-icon-button"
+                                                                           ng-click="ctrl.deleteReferenceItem(element , $index)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </md-table-container>
                                     </md-card>
                                 </div>
