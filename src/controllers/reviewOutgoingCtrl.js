@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                    reviewOutgoingService,
                                                    reviewOutgoings,
                                                    $q,
+                                                   $filter,
                                                    generator,
                                                    readyToExportService,
                                                    correspondenceService,
@@ -51,7 +52,7 @@ module.exports = function (app) {
             limit: 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
-            order: '', // default sorting order
+            order: '', // default sorting order,
             limitOptions: [5, 10, 20, // limit options
                 {
                     label: langService.get('all'),
@@ -90,6 +91,12 @@ module.exports = function (app) {
             var index = _.findIndex(self.reviewOutgoings, {'id': record.id});
             if (index > -1)
                 self.reviewOutgoings.splice(index, 1, record);
+        };
+
+        self.getSortedData = function (column) {
+            //column = column.startsWith('-') ? column.substr(1) : column;
+            self.reviewOutgoings = $filter('orderBy')(self.reviewOutgoings, self.grid.order);
+            //console.log(_.map(self.reviewOutgoings, column));
         };
 
         /**
