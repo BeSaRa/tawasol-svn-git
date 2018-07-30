@@ -346,6 +346,7 @@ module.exports = function (app) {
                     }],
                 class: "action-green"
             },
+            // Separator
             {
                 type: 'separator',
                 checkShow: self.checkToShowAction,

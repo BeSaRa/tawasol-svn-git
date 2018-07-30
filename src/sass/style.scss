@@ -1502,7 +1502,7 @@ tr.unread-row {
   width: 60px !important;
 }*/
 
-.indicator {
+/*.indicator {
   min-width: 18px;
   min-height: 18px;
   height: 18px;
@@ -1564,12 +1564,12 @@ tr.unread-row {
   &.no-reassigned {
     color: #FF0000;
   }
-  /* &.open{
+  !* &.open{
      color: #32CD32;
    }
    &.close{
      color: #FF0000;
-   }*/
+   }*!
 }
 
 .indicator-td {
@@ -1586,7 +1586,7 @@ tr.unread-row {
   .float-right {
     float: right !important;
   }
-}
+}*/
 
 .p14-24 {
   padding: 14px 24px !important;
@@ -1672,7 +1672,7 @@ tr.unread-row {
     content: " *";
     color: red;
   }
-  td {
+  td, td:hover {
     //background: #ffeb8061 !important;
     background: rgba(255, 235,128, 0.38) !important;
   }

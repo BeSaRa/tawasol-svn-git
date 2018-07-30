@@ -1071,6 +1071,7 @@ module.exports = function (app) {
                 hide: false,
                 permissionKey: 'BROADCAST_DOCUMENT',
                 callback: self.broadcast,
+                class: "action-green",
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model)
                         && (!model.needApprove() || model.hasDocumentClass('incoming'))

@@ -240,13 +240,19 @@ module.exports = function (app) {
                     var subActionsToShow = [];
                     for (var j = 0; j < mainAction.subMenu.length; j++) {
                         var subAction = mainAction.subMenu[j];
-                        /*If sub menu has separator, show it*/
+                        /*If sub menu is action, and action is allowed to show, show it
+                        * If sub menu is separator and not hidden, show it
+                        * If sub menu is document info, and info is allowed to show, show it
+                        * */
                         if (subAction.type.toLowerCase() === "action" && self.isShowAction(subAction)) {
                             if (!(mainAction.hasOwnProperty('onlyShortcut') && mainAction.onlyShortcut)) {
                                 subActionsToShow.push(subAction);
                             }
                         }
-                        else if (subAction.type.toLowerCase() === "separator" && !subAction.hide) {
+                        else if (subAction.type.toLowerCase() === "separator"&& !subAction.hide) {
+                            subActionsToShow.push(subAction);
+                        }
+                        else if(subAction.type.toLowerCase() === 'info' && self.isShowAction(subAction)){
                             subActionsToShow.push(subAction);
                         }
                     }
