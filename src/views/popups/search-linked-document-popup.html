@@ -118,14 +118,15 @@
                         label="{{ctrl.correspondences.length ? lang.linked_document_search_result + ' - ' + ctrl.correspondences.length : lang.linked_document_search_result }}">
                     <md-content>
                         <div layout="column" class="p20">
-                            <md-card >
+                            <md-card>
                                 <md-table-container>
                                     <div flex scroll-directive>
                                         <table md-table md-row-select multiple ng-model="ctrl.selectedCorrespondences"
                                                md-progress="ctrl.progress">
                                             <thead md-head md-order="ctrl.grid.order">
                                             <tr md-row>
-                                                <th ng-if="ctrl.selectedCorrespondences.length" md-column>
+                                                <th ng-if="ctrl.selectedCorrespondences.length" md-column
+                                                    colspan="7">
                                                     <div layout="row" layout-align="start center">
                                                         <span>{{ctrl.selectedCorrespondences.length}} {{lang.items_selected}} </span>
                                                         <span flex></span>
@@ -134,27 +135,27 @@
                                                 <th ng-if="!ctrl.selectedCorrespondences.length" md-column>
                                                     <!-- Indicators -->
                                                 </th>
-                                                <th md-column
+                                                <th md-column ng-if="!ctrl.selectedCorrespondences.length"
                                                     md-order-by="docSubject">
                                                     <span>{{lang.subject}}</span>
                                                 </th>
-                                                <th md-column
+                                                <th md-column ng-if="!ctrl.selectedCorrespondences.length"
                                                     md-order-by="priorityLevel">
                                                     <span>{{lang.priority_level}}</span>
                                                 </th>
-                                                <th md-column
+                                                <th md-column ng-if="!ctrl.selectedCorrespondences.length"
                                                     md-order-by="securityLevel">
                                                     <span>{{lang.security_level}}</span>
                                                 </th>
-                                                <th md-column
+                                                <th md-column ng-if="!ctrl.selectedCorrespondences.length"
                                                     md-order-by="docType">
                                                     <span>{{lang.label_document_type}}</span>
                                                 </th>
-                                                <th md-column
+                                                <th md-column ng-if="!ctrl.selectedCorrespondences.length"
                                                     md-order-by="createdBy">
                                                     <span>{{lang.creator}}</span>
                                                 </th>
-                                                <th md-column
+                                                <th md-column ng-if="!ctrl.selectedCorrespondences.length"
                                                     md-order-by="createdOn">
                                                     <span>{{lang.created_on}}</span>
                                                 </th>
