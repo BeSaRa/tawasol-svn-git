@@ -604,7 +604,7 @@ module.exports = function (app) {
                     "MANAGE_TASKS",
                     "MANAGE_ATTACHMENTS",
                     "MANAGE_LINKED_DOCUMENTS",
-                    ""
+                    ""// Linked Entities
                 ],
                 checkAnyPermission: true,
                 subMenu: [
@@ -685,7 +685,7 @@ module.exports = function (app) {
                 checkShow: self.checkToShowAction,
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
-                    ""
+                    ""// Composite Document
                 ],
                 checkAnyPermission: true,
                 subMenu: [

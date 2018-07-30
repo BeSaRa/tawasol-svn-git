@@ -524,7 +524,7 @@ module.exports = function (app) {
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
                     "MANAGE_ATTACHMENTS",
-                    "", //permission not available in database
+                    "", // Linked Entities permission not available in database
                     "MANAGE_LINKED_DOCUMENTS"
                 ],
                 checkAnyPermission:true,

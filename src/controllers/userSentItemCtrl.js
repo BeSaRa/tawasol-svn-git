@@ -552,7 +552,7 @@ module.exports = function (app) {
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
                     "MANAGE_ATTACHMENTS",
-                    "", //permission not available in database
+                    "", // Linked Entities permission not available in database
                     "MANAGE_LINKED_DOCUMENTS"
                 ],
                 checkAnyPermission: true,
@@ -623,7 +623,7 @@ module.exports = function (app) {
                 checkShow: self.checkToShowAction,
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
-                    "" //permission not available in database
+                    "" //Composite Documents permission not available in database
                 ],
                 checkAnyPermission: true,
                 subMenu: [
