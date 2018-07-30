@@ -219,11 +219,71 @@ module.exports = function (app) {
          * @returns {Array}
          */
         self.filterContextMenuItems = function () {
-            return _.filter(self.gridActions, function (gridAction) {
-                return !gridAction.hide && !(gridAction.hasOwnProperty('onlyShortcut') && gridAction.onlyShortcut);
-            });
+            var contextMenu, contextMenuActions = [];
+            for (var i = 0; i < self.gridActions.length; i++) {
+                contextMenu = _filterContextMenuActions(self.gridActions[i]);
+                if (contextMenu) {
+                    angular.isArray(contextMenu) ? contextMenuActions = contextMenuActions.concat(contextMenu) : contextMenuActions.push(contextMenu);
+                }
+                //return !gridAction.hide && !(gridAction.hasOwnProperty('onlyShortcut') && gridAction.onlyShortcut);
+            }
+            return contextMenuActions;
         };
 
+        function _filterContextMenuActions(mainAction) {
+            /*
+            * if main action has subMenu and subMenu has length
+            * else main action doesn't have subMenu
+            * */
+            if (mainAction.hasOwnProperty('subMenu') && angular.isArray(mainAction.subMenu) && mainAction.subMenu.length) {
+                if (self.isShowAction(mainAction)) {
+                    var subActionsToShow = [];
+                    for (var j = 0; j < mainAction.subMenu.length; j++) {
+                        var subAction = mainAction.subMenu[j];
+                        /*If sub menu has separator, show it*/
+                        if (subAction.type.toLowerCase() === "action" && self.isShowAction(subAction)) {
+                            if (!(mainAction.hasOwnProperty('onlyShortcut') && mainAction.onlyShortcut)) {
+                                subActionsToShow.push(subAction);
+                            }
+                        }
+                        else if (subAction.type.toLowerCase() === "separator" && !subAction.hide) {
+                            subActionsToShow.push(subAction);
+                        }
+                    }
+                    if (subActionsToShow.length) {
+                        mainAction.subMenu = subActionsToShow;
+                        return mainAction;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                return false;
+            }
+            else {
+                /*
+                * If main menu is of type "action", check if its allowed to show
+                * else if main menu is of type "separator", and separator is allowed to show(not hidden)
+                * else nothing(return false)
+                * */
+                if (mainAction.type.toLowerCase() === "action" && self.isShowAction(mainAction)) {
+                    /*
+                    * If onlyShortcut is true in action, this means, we need not to show action
+                    * else show action
+                    * */
+                    if (mainAction.hasOwnProperty('onlyShortcut') && mainAction.onlyShortcut) {
+                        return false;
+                    }
+                    return mainAction;
+                }
+                else if (mainAction.type.toLowerCase() === 'separator' && !mainAction.hide) {
+                    return mainAction;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
 
         /**
          * @description Checks if security level information can be shown or not.
