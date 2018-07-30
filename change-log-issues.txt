@@ -262,4 +262,5 @@ Bugs:
 -----------------
 15651: Fix - document security - UI - The text displayed for the 2D toggle should be "No" if disabled
 13762: Fix - IE Compatibility - Can't Select OU When Broadcast a document.
+13763: Fix - IE Compatibility - Action Tab in Broadcast Screen is Empty.
 Reverted the g2gId dropdown to code field in organization popup.
