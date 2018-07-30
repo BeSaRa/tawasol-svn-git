@@ -87,7 +87,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
         /**
@@ -523,29 +523,21 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.checkToShowAction = function (action, model) {
-            /*if (action.hasOwnProperty('permissionKey'))
-             return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-             return (!action.hide);*/
-
+            var hasPermission = true;
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
-                    return (!action.hide) && employeeService.hasPermissionTo(action.permissionKey);
+                    hasPermission = employeeService.hasPermissionTo(action.permissionKey);
                 }
-                else if (angular.isArray(action.permissionKey)) {
-                    if (!action.permissionKey.length) {
-                        return (!action.hide);
+                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                    if (action.hasOwnProperty('checkAnyPermission')) {
+                        hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
                     }
                     else {
-                        var hasPermissions = _.map(action.permissionKey, function (key) {
-                            return employeeService.hasPermissionTo(key);
-                        });
-                        return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                        hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
             }
-            return (!action.hide);
+            return (!action.hide) && hasPermission;
         };
 
         /**
@@ -641,6 +633,15 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: self.checkToShowAction,
+                permissionKey: [
+                    "MANAGE_DOCUMENT’S_TAGS",
+                    "MANAGE_DOCUMENT’S_COMMENTS",
+                    "MANAGE_TASKS",
+                    "MANAGE_ATTACHMENTS",
+                    "MANAGE_LINKED_DOCUMENTS",
+                    ""
+                ],
+                checkAnyPermission: true,
                 subMenu: [
                     // Tags
                     {
@@ -693,7 +694,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageDocuments,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -717,6 +718,11 @@ module.exports = function (app) {
                 text: 'grid_action_download',
                 shortcut: false,
                 checkShow: self.checkToShowAction,
+                permissionKey: [
+                    "DOWNLOAD_MAIN_DOCUMENT",
+                    ""
+                ],
+                checkAnyPermission: true,
                 subMenu: [
                     // Main Document
                     {
@@ -748,6 +754,13 @@ module.exports = function (app) {
                 text: 'grid_action_send',
                 shortcut: false,
                 checkShow: self.checkToShowAction,
+                permissionKey:[
+                    "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
+                    "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
+                    "SEND_DOCUMENT_BY_FAX",
+                    "SEND_SMS"
+                ],
+                checkAnyPermission:true,
                 subMenu: [
                     // Link To Document By Email
                     {
@@ -778,7 +791,7 @@ module.exports = function (app) {
                         text: 'grid_action_main_document_fax',
                         shortcut: false,
                         hide: true,
-                        permissionKey:"SEND_DOCUMENT_BY_FAX",
+                        permissionKey: "SEND_DOCUMENT_BY_FAX",
                         callback: self.sendFollowupEmployeeInboxMainDocumentFax,
                         class: "action-red",
                         checkShow: self.checkToShowAction
@@ -818,17 +831,17 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
-           /* // Move To Folder
-            {
-                type: 'action',
-                icon: 'folder-plus',
-                text: 'grid_action_move_to_folder',
-                hide: true,
-                shortcut: true,
-                callback: self.moveToFolderFollowupEmployeeInbox,
-                class: "action-green",
-                checkShow: self.checkToShowAction
-            },*/
+            /* // Move To Folder
+             {
+                 type: 'action',
+                 icon: 'folder-plus',
+                 text: 'grid_action_move_to_folder',
+                 hide: true,
+                 shortcut: true,
+                 callback: self.moveToFolderFollowupEmployeeInbox,
+                 class: "action-green",
+                 checkShow: self.checkToShowAction
+             },*/
             // Open
             {
                 type: 'action',

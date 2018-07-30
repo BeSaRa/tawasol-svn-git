@@ -651,29 +651,21 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.checkToShowAction = function (action, model) {
-            /*if (action.hasOwnProperty('permissionKey'))
-             return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-             return (!action.hide);*/
-
+            var hasPermission = true;
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
-                    return (!action.hide) && employeeService.hasPermissionTo(action.permissionKey);
+                    hasPermission = employeeService.hasPermissionTo(action.permissionKey);
                 }
-                else if (angular.isArray(action.permissionKey)) {
-                    if (!action.permissionKey.length) {
-                        return (!action.hide);
+                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                    if (action.hasOwnProperty('checkAnyPermission')) {
+                        hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
                     }
                     else {
-                        var hasPermissions = _.map(action.permissionKey, function (key) {
-                            return employeeService.hasPermissionTo(key);
-                        });
-                        return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                        hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
             }
-            return (!action.hide);
+            return (!action.hide) && hasPermission;
         };
 
         /**
@@ -863,6 +855,16 @@ module.exports = function (app) {
                 text: 'grid_action_manage',
                 shortcut: false,
                 checkShow: self.checkToShowAction,
+                permissionKey: [
+                    "MANAGE_DOCUMENT’S_TAGS",
+                    "MANAGE_DOCUMENT’S_COMMENTS",
+                    "MANAGE_TASKS",
+                    "MANAGE_ATTACHMENTS",
+                    "MANAGE_LINKED_DOCUMENTS",
+                    "", //permission not available in database
+                    "MANAGE_DESTINATIONS"
+                ],
+                checkAnyPermission: true,
                 subMenu: [
                     // Tags
                     {
@@ -953,6 +955,11 @@ module.exports = function (app) {
                 text: 'grid_action_download',
                 shortcut: false,
                 checkShow: self.checkToShowAction,
+                permissionKey: [
+                    "DOWNLOAD_MAIN_DOCUMENT",
+                    ""
+                ],
+                checkAnyPermission: true,
                 subMenu: [
                     // Main Document
                     {
@@ -984,6 +991,13 @@ module.exports = function (app) {
                 text: 'grid_action_send',
                 shortcut: false,
                 checkShow: self.checkToShowAction,
+                permissionKey: [
+                    "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
+                    "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
+                    "SEND_DOCUMENT_BY_FAX",
+                    "SEND_SMS"
+                ],
+                checkAnyPermission: true,
                 subMenu: [
                     // Link To Document By Email
                     {

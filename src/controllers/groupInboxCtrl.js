@@ -263,24 +263,24 @@ module.exports = function (app) {
                     });
             };
 
-        /**
-         * @description View document
-         * @param workItem
-         * @param $event
-         */
-        self.viewDocument = function (workItem, $event) {
-            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                dialog.infoMessage(langService.get('no_view_permission'));
-                return;
-            }
-            workItem.viewNewGroupMailDocument(self.gridActions, 'groupMail', $event)
-                .then(function () {
-                    return self.reloadGroupInbox(self.grid.page);
-                })
-                .catch(function () {
-                    return self.reloadGroupInbox(self.grid.page);
-                });
-        };
+            /**
+             * @description View document
+             * @param workItem
+             * @param $event
+             */
+            self.viewDocument = function (workItem, $event) {
+                if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
+                    dialog.infoMessage(langService.get('no_view_permission'));
+                    return;
+                }
+                workItem.viewNewGroupMailDocument(self.gridActions, 'groupMail', $event)
+                    .then(function () {
+                        return self.reloadGroupInbox(self.grid.page);
+                    })
+                    .catch(function () {
+                        return self.reloadGroupInbox(self.grid.page);
+                    });
+            };
 
             /**
              * @description View Tracking Sheet
@@ -421,70 +421,70 @@ module.exports = function (app) {
             };
 
 
-        /**
-         * @description Send Link To Document By Email
-         * @param userSentItem
-         * @param $event
-         */
-        self.sendLinkToDocumentByEmail = function (workItem, $event) {
-            var info = workItem.getInfo();
-            downloadService.getMainDocumentEmailContent(info.vsId).then(function (result) {
-                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
-                    result: result,
-                    filename: 'Tawasol.msg'
-                }));
-                return true;
-            });
-        };
+            /**
+             * @description Send Link To Document By Email
+             * @param userSentItem
+             * @param $event
+             */
+            self.sendLinkToDocumentByEmail = function (workItem, $event) {
+                var info = workItem.getInfo();
+                downloadService.getMainDocumentEmailContent(info.vsId).then(function (result) {
+                    dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                        result: result,
+                        filename: 'Tawasol.msg'
+                    }));
+                    return true;
+                });
+            };
 
-        /**
-         * @description Send Composite Document As Attachment By Email
-         * @param userSentItem
-         * @param $event
-         */
-        self.sendCompositeDocumentAsAttachmentByEmail = function (workItem, $event) {
-            var info = workItem.getInfo();
-            downloadService.getCompositeDocumentEmailContent(info.vsId).then(function (result) {
-                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
-                    result: result,
-                    filename: 'Tawasol.msg'
-                }));
-                return true;
-            });
-        };
+            /**
+             * @description Send Composite Document As Attachment By Email
+             * @param userSentItem
+             * @param $event
+             */
+            self.sendCompositeDocumentAsAttachmentByEmail = function (workItem, $event) {
+                var info = workItem.getInfo();
+                downloadService.getCompositeDocumentEmailContent(info.vsId).then(function (result) {
+                    dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
+                        result: result,
+                        filename: 'Tawasol.msg'
+                    }));
+                    return true;
+                });
+            };
 
-        /**
-         * @description Send SMS
-         * @param userSentItem
-         * @param $event
-         */
-        self.sendSMS = function (workItem, $event) {
-            console.log('sendSMS : ', workItem);
-        };
+            /**
+             * @description Send SMS
+             * @param userSentItem
+             * @param $event
+             */
+            self.sendSMS = function (workItem, $event) {
+                console.log('sendSMS : ', workItem);
+            };
 
-        /**
-         * @description Send Main Document Fax
-         * @param userSentItem
-         * @param $event
-         */
-        self.sendMainDocumentFax = function (workItem, $event) {
-            console.log('sendMainDocumentFax : ', workItem);
-        };
+            /**
+             * @description Send Main Document Fax
+             * @param userSentItem
+             * @param $event
+             */
+            self.sendMainDocumentFax = function (workItem, $event) {
+                console.log('sendMainDocumentFax : ', workItem);
+            };
 
 
-        /**
-         * @description Get Link
-         * @param userSentItem
-         * @param $event
-         */
-        self.getLink = function (workItem, $event) {
-            var info = workItem.getInfo();
-            viewDocumentService.loadDocumentViewUrlWithOutEdit(info.vsId).then(function (result) {
-                //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
-                dialog.successMessage(langService.get('link_message').change({result: result}));
-                return true;
-            });
-        };
+            /**
+             * @description Get Link
+             * @param userSentItem
+             * @param $event
+             */
+            self.getLink = function (workItem, $event) {
+                var info = workItem.getInfo();
+                viewDocumentService.loadDocumentViewUrlWithOutEdit(info.vsId).then(function (result) {
+                    //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
+                    dialog.successMessage(langService.get('link_message').change({result: result}));
+                    return true;
+                });
+            };
 
             /**
              * @description Sign e-Signature
@@ -575,29 +575,21 @@ module.exports = function (app) {
              * @returns {boolean}
              */
             self.checkToShowAction = function (action, model) {
-                /*if (action.hasOwnProperty('permissionKey'))
-                 return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-                 return (!action.hide);*/
-
+                var hasPermission = true;
                 if (action.hasOwnProperty('permissionKey')) {
                     if (typeof action.permissionKey === 'string') {
-                        return (!action.hide) && employeeService.hasPermissionTo(action.permissionKey);
+                        hasPermission = employeeService.hasPermissionTo(action.permissionKey);
                     }
-                    else if (angular.isArray(action.permissionKey)) {
-                        if (!action.permissionKey.length) {
-                            return (!action.hide);
+                    else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                        if (action.hasOwnProperty('checkAnyPermission')) {
+                            hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
                         }
                         else {
-                            var hasPermissions = _.map(action.permissionKey, function (key) {
-                                return employeeService.hasPermissionTo(key);
-                            });
-                            return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
+                            hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                         }
                     }
                 }
-                return (!action.hide);
+                return (!action.hide) && hasPermission;
             };
 
             self.gridActions = [
@@ -870,7 +862,7 @@ module.exports = function (app) {
                             icon: 'file-document',
                             text: 'grid_action_linked_documents',
                             shortcut: false,
-                            permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                            permissionKey: "MANAGE_LINKED_DOCUMENTS",
                             callback: self.manageLinkedDocuments,
                             class: "action-green",
                             checkShow: self.checkToShowAction
@@ -939,6 +931,11 @@ module.exports = function (app) {
                     text: 'grid_action_download',
                     shortcut: false,
                     checkShow: self.checkToShowAction,
+                    permissionKey: [
+                        "DOWNLOAD_MAIN_DOCUMENT",
+                        "" //permission not available in database
+                    ],
+                    checkAnyPermission: true,
                     subMenu: [
                         // Main Document
                         {
@@ -970,6 +967,13 @@ module.exports = function (app) {
                     text: 'grid_action_send',
                     shortcut: false,
                     checkShow: self.checkToShowAction,
+                    permissionKey: [
+                        "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
+                        "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
+                        "SEND_DOCUMENT_BY_FAX",
+                        "SEND_SMS"
+                    ],
+                    checkAnyPermission: true,
                     subMenu: [
                         // Link To Document By Email
                         {
@@ -1000,7 +1004,7 @@ module.exports = function (app) {
                             text: 'grid_action_main_document_fax',
                             shortcut: false,
                             hide: true,
-                            permissionKey:"SEND_DOCUMENT_BY_FAX",
+                            permissionKey: "SEND_DOCUMENT_BY_FAX",
                             callback: self.sendMainDocumentFax,
                             class: "action-red",
                             checkShow: self.checkToShowAction
@@ -1041,6 +1045,11 @@ module.exports = function (app) {
                             && model.needApprove()
                             && (employeeService.hasPermissionTo("ELECTRONIC_SIGNATURE") || employeeService.hasPermissionTo("DIGITAL_SIGNATURE"));
                     },
+                    // permissionKey: [
+                    //     "ELECTRONIC_SIGNATURE",
+                    //     "DIGITAL_SIGNATURE"
+                    // ],
+                    // checkAnyPermission: true,
                     subMenu: [
                         // e-Signature
                         {

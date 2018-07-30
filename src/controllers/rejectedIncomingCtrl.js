@@ -65,7 +65,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -79,38 +79,38 @@ module.exports = function (app) {
             'false': rejectedIncomingService.deactivateRejectedIncoming
         };
 
-       /* /!**
-         * @description Opens dialog for add new rejected incoming mail
-         * @param $event
-         *!/
-        self.openAddRejectedIncomingDialog = function ($event) {
-            rejectedIncomingService
-                .controllerMethod
-                .rejectedIncomingAdd($event)
-                .then(function (result) {
-                    self.reloadRejectedIncomings(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get('add_success').change({name: result.getNames()}));
-                        });
-                });
-        };
+        /* /!**
+          * @description Opens dialog for add new rejected incoming mail
+          * @param $event
+          *!/
+         self.openAddRejectedIncomingDialog = function ($event) {
+             rejectedIncomingService
+                 .controllerMethod
+                 .rejectedIncomingAdd($event)
+                 .then(function (result) {
+                     self.reloadRejectedIncomings(self.grid.page)
+                         .then(function () {
+                             toast.success(langService.get('add_success').change({name: result.getNames()}));
+                         });
+                 });
+         };
 
-        /!**
-         * @description Opens dialog for edit rejected incoming mail
-         * @param $event
-         * @param rejectedIncoming
-         *!/
-        self.openEditRejectedIncomingDialog = function (rejectedIncoming, $event) {
-            rejectedIncomingService
-                .controllerMethod
-                .rejectedIncomingEdit(rejectedIncoming, $event)
-                .then(function (result) {
-                    self.reloadRejectedIncomings(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get('edit_success').change({name: result.getNames()}));
-                        });
-                });
-        };*/
+         /!**
+          * @description Opens dialog for edit rejected incoming mail
+          * @param $event
+          * @param rejectedIncoming
+          *!/
+         self.openEditRejectedIncomingDialog = function (rejectedIncoming, $event) {
+             rejectedIncomingService
+                 .controllerMethod
+                 .rejectedIncomingEdit(rejectedIncoming, $event)
+                 .then(function (result) {
+                     self.reloadRejectedIncomings(self.grid.page)
+                         .then(function () {
+                             toast.success(langService.get('edit_success').change({name: result.getNames()}));
+                         });
+                 });
+         };*/
 
         /**
          * @description Replaces the record in grid after update
@@ -483,7 +483,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
-            if(!employeeService.hasPermissionTo('VIEW_DOCUMENT')){
+            if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
@@ -524,29 +524,21 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.checkToShowAction = function (action, model) {
-            /*if (action.hasOwnProperty('permissionKey'))
-                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-            return (!action.hide);*/
-
+            var hasPermission = true;
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
-                    return (!action.hide) && employeeService.hasPermissionTo(action.permissionKey);
+                    hasPermission = employeeService.hasPermissionTo(action.permissionKey);
                 }
-                else if (angular.isArray(action.permissionKey)) {
-                    if (!action.permissionKey.length) {
-                        return (!action.hide);
+                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                    if (action.hasOwnProperty('checkAnyPermission')) {
+                        hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
                     }
                     else {
-                        var hasPermissions = _.map(action.permissionKey, function (key) {
-                            return employeeService.hasPermissionTo(key);
-                        });
-                        return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                        hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
             }
-            return (!action.hide);
+            return (!action.hide) && hasPermission;
         };
 
         /**
@@ -612,6 +604,11 @@ module.exports = function (app) {
                     var hasPermission = (employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT"));
                     return self.checkToShowAction(action, model) && hasPermission;
                 },
+                permissionKey: [
+                    "EDIT_INCOMING’S_CONTENT",
+                    "EDIT_INCOMING’S_PROPERTIES"
+                ],
+                checkAnyPermission: true,
                 subMenu: [
                     // Content
                     {
@@ -698,6 +695,15 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: self.checkToShowAction,
+                permissionKey: [
+                    "MANAGE_DOCUMENT’S_TAGS",
+                    "MANAGE_DOCUMENT’S_COMMENTS",
+                    "MANAGE_ATTACHMENTS",
+                    "", //permission not available in database
+                    "MANAGE_LINKED_DOCUMENTS",
+                    "MANAGE_DESTINATIONS"
+                ],
+                checkAnyPermission: true,
                 subMenu: [
                     // Tags
                     {
@@ -748,7 +754,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         checkShow: self.checkToShowAction

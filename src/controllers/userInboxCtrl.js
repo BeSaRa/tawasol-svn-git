@@ -927,6 +927,7 @@ module.exports = function (app) {
             return (!action.hide) && hasPermission;
         };
 
+
         /**
          * @description do broadcast for workItem.
          */
@@ -1283,6 +1284,11 @@ module.exports = function (app) {
                 icon: 'download',
                 text: 'grid_action_download',
                 checkShow: self.checkToShowAction,
+                permissionKey: [
+                    "DOWNLOAD_MAIN_DOCUMENT",
+                    "" //permission not available in database
+                ],
+                checkAnyPermission: true,
                 subMenu: [
                     // Main Document
                     {
@@ -1313,6 +1319,13 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted();
                 },
+                permissionKey: [
+                    "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
+                    "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
+                    "SEND_DOCUMENT_BY_FAX",
+                    "SEND_SMS"
+                ],
+                checkAnyPermission: true,
                 subMenu: [
                     // Link To Document By Email
                     {

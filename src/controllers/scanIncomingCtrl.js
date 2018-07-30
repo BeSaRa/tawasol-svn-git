@@ -59,7 +59,7 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
@@ -275,7 +275,7 @@ module.exports = function (app) {
             managerService.manageDocumentContent(scanIncoming.vsId, scanIncoming.docClassName, scanIncoming.docSubject, $event)
                 .then(function () {
                     self.reloadScanIncomings(self.grid.page)
-                        .then(function(){
+                        .then(function () {
                             new ResolveDefer(defer);
                         });
                 })
@@ -314,29 +314,21 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.checkToShowAction = function (action, model) {
-            /*if (action.hasOwnProperty('permissionKey'))
-                return !action.hide && employeeService.hasPermissionTo(action.permissionKey);
-            return (!action.hide);*/
-
+            var hasPermission = true;
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
-                    return (!action.hide) && employeeService.hasPermissionTo(action.permissionKey);
+                    hasPermission = employeeService.hasPermissionTo(action.permissionKey);
                 }
-                else if (angular.isArray(action.permissionKey)) {
-                    if (!action.permissionKey.length) {
-                        return (!action.hide);
+                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                    if (action.hasOwnProperty('checkAnyPermission')) {
+                        hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
                     }
                     else {
-                        var hasPermissions = _.map(action.permissionKey, function (key) {
-                            return employeeService.hasPermissionTo(key);
-                        });
-                        return (!action.hide) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                        hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
             }
-            return (!action.hide);
+            return (!action.hide) && hasPermission;
         };
 
         /**
@@ -357,7 +349,8 @@ module.exports = function (app) {
                         checkShow: self.checkToShowAction,
                         gridName: 'incoming-scan'
 
-                    }],
+                    }
+                ],
                 class: "action-green"
             },
             {
@@ -410,6 +403,15 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: self.checkToShowAction,
+                permissionKey: [
+                    "MANAGE_DOCUMENT’S_TAGS",
+                    "MANAGE_DOCUMENT’S_COMMENTS",
+                    "MANAGE_ATTACHMENTS",
+                    "", //permission not available in database
+                    "MANAGE_LINKED_DOCUMENTS",
+                    "MANAGE_DESTINATIONS"
+                ],
+                checkAnyPermission: true,
                 subMenu: [
                     // Tags
                     {
@@ -460,7 +462,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -498,7 +500,7 @@ module.exports = function (app) {
                 callback: self.createContent,
                 class: "action-green",
                 showInView: false,
-                checkShow: function(action, model){
+                checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.hasContent();
                 }
             },
