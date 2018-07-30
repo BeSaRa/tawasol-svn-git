@@ -1192,19 +1192,19 @@ module.exports = function (app) {
                 shortcut: false,
                 //docClass: "Outgoing",
                 checkShow: function (action, model) {
-                    //addMethod = 0 (Electronic/Digital) - hide the button
-                    //addMethod = 1 (Paper) - show the button
+                    //addMethod = 0 (Electronic/Digital) - show the button
+                    //addMethod = 1 (Paper) - hide the button
 
                     // If outgoing or internal, show the button
 
                     /*If document is unapproved or partially approved, show the button. If fully approved, hide the button.
-                     24 is approved
+                     docStatus = 24 is approved
                      */
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model)
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted()
                         && !info.isPaper
-                        && (info.documentClass === "outgoing" || info.documentClass === 'internal')
-                        && (model.generalStepElm.docStatus < 24);
+                        && (info.documentClass !== 'incoming')
+                        && model.needApprove();
                 },
                 permissionKey: [
                     "ELECTRONIC_SIGNATURE",

@@ -598,10 +598,7 @@ module.exports = function (app) {
                 text: 'grid_action_edit',
                 shortcut: false,
                 showInView: false,
-                checkShow: function (action, model) {
-                    var hasPermission = (employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES") || employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT"));
-                    return self.checkToShowAction(action, model) && hasPermission;
-                },
+                checkShow: self.checkToShowAction,
                 permissionKey: [
                     "EDIT_INTERNAL_CONTENT",
                     "EDIT_INTERNAL_PROPERTIES"
