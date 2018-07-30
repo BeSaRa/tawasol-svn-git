@@ -23,7 +23,7 @@
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedDraftOutgoings"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedDraftOutgoings.length > 1 ? 6 : 7}}"
                                             ng-if="ctrl.selectedDraftOutgoings.length" md-column>
@@ -83,7 +83,7 @@
                                     <tr md-row md-select="draftOutgoing" grid-right-click-directive="draftOutgoing"
                                         model="draftOutgoing"
                                         selected-length="{{ctrl.selectedDraftOutgoings.length ? ctrl.selectedDraftOutgoings.length : 0}}"
-                                        ng-repeat="draftOutgoing in searchResults = (ctrl.draftOutgoings | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order)  track by $index">
+                                        ng-repeat="draftOutgoing in searchResults = (ctrl.draftOutgoings | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                         <td md-cell class="indicator-td">
                                             <!-- Electronic/Paper Document -->
                                             <grid-indicator-directive record="draftOutgoing"

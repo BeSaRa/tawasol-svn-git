@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                   draftOutgoingService,
                                                   draftOutgoings,
                                                   $q,
+                                                  $filter,
                                                   langService,
                                                   generator,
                                                   toast,
@@ -93,6 +94,13 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Gets the grid records by sorting
+             */
+            self.getSortedData = function () {
+                self.draftOutgoings = $filter('orderBy')(self.draftOutgoings, self.grid.order);
+            };
+
+            /**
              * @description Reload the grid of draft outgoing mail
              * @param pageNumber
              * @return {*|Promise<U>}
@@ -109,6 +117,7 @@ module.exports = function (app) {
                         defer.resolve(true);
                         if (pageNumber)
                             self.grid.page = pageNumber;
+                        self.getSortedData();
                         return result;
                     });
             };
@@ -593,7 +602,7 @@ module.exports = function (app) {
                         "EDIT_OUTGOING_CONTENT",
                         "EDIT_OUTGOING_PROPERTIES"
                     ],
-                    checkAnyPermission:true,
+                    checkAnyPermission: true,
                     subMenu: [
                         // Content
                         {
@@ -651,7 +660,7 @@ module.exports = function (app) {
                     shortcut: false,
                     showInView: false,
                     checkShow: self.checkToShowAction,
-                    permissionKey:[
+                    permissionKey: [
                         "MANAGE_DOCUMENT’S_TAGS",
                         "MANAGE_DOCUMENT’S_COMMENTS",
                         "MANAGE_ATTACHMENTS",
@@ -659,7 +668,7 @@ module.exports = function (app) {
                         "MANAGE_LINKED_DOCUMENTS",
                         "MANAGE_DESTINATIONS"
                     ],
-                    checkAnyPermission:true,
+                    checkAnyPermission: true,
                     subMenu: [
                         // Tags
                         {

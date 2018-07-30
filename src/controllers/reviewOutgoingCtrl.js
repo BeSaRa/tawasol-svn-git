@@ -93,10 +93,11 @@ module.exports = function (app) {
                 self.reviewOutgoings.splice(index, 1, record);
         };
 
-        self.getSortedData = function (column) {
-            //column = column.startsWith('-') ? column.substr(1) : column;
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
             self.reviewOutgoings = $filter('orderBy')(self.reviewOutgoings, self.grid.order);
-            //console.log(_.map(self.reviewOutgoings, column));
         };
 
         /**
@@ -116,6 +117,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };
