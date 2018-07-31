@@ -264,7 +264,9 @@ Bugs:
 13762: IE Compatibility - Can't Select OU When Broadcast a document.
 13763: IE Compatibility - Action Tab in Broadcast Screen is Empty.
 Reverted the g2gId dropdown to code field in organization popup.
+Changed the sorting for all the grids on base pages.
 
 31-07-2018
 ----------------
 15742: Kahramaa - An Error Occur in Console when Reject Incoming/Internal document.
+Added g2gId field to the organization popup.
