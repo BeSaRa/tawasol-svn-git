@@ -20,7 +20,7 @@
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedReadyToSendIncomings"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedReadyToSendIncomings.length > 1 ? 5 : 6}}"
                                             ng-if="ctrl.selectedReadyToSendIncomings.length" md-column>

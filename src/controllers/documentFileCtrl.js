@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                  documentFileService,
                                                  documentFiles,
                                                  $q,
+                                                 $filter,
                                                  DocumentFile,
                                                  langService,
                                                  toast,
@@ -78,6 +79,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.documentFiles = $filter('orderBy')(self.documentFiles, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of document file
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -96,6 +104,7 @@ module.exports = function (app) {
                             defer.resolve(true);
                             if (pageNumber)
                                 self.grid.page = pageNumber;
+                            self.getSortedData();
                             return result;
                         });
                 });

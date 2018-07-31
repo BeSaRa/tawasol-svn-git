@@ -25,7 +25,7 @@
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedFollowupEmployeeInboxes"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedFollowupEmployeeInboxes.length > 1 ? 13 : 14}}"
                                             ng-if="ctrl.selectedFollowupEmployeeInboxes.length" md-column>
@@ -122,7 +122,7 @@
                                         model="followupEmployeeInbox"
                                         ng-class="!followupEmployeeInbox.generalStepElm.isOpen? 'unread-row': 'read-row'"
                                         selected-length="{{ctrl.selectedFollowupEmployeeInboxes.length ? ctrl.selectedFollowupEmployeeInboxes.length : 0}}"
-                                        ng-repeat="followupEmployeeInbox in searchResults = (ctrl.followupEmployeeInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
+                                        ng-repeat="followupEmployeeInbox in searchResults = (ctrl.followupEmployeeInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->
                                             <grid-indicator-directive record="followupEmployeeInbox"

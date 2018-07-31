@@ -36,7 +36,7 @@
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedDocumentTemplates"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="5" ng-if="ctrl.selectedDocumentTemplates.length" md-column>
                                             <div layout="row" layout-align="start center">
@@ -73,7 +73,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="documentTemplate"
-                                        ng-repeat="documentTemplate in ctrl.documentTemplates | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                        ng-repeat="documentTemplate in ctrl.documentTemplates | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{documentTemplate.docSubject}}</td>
                                         <td md-cell>{{documentTemplate.documentTitle}}</td>
                                         <td md-cell>{{ctrl.getDocumentTypeName(documentTemplate.docType)}}</td>

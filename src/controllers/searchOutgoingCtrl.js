@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                    ResolveDefer,
                                                    searchOutgoingService,
                                                    $q,
+                                                   $filter,
                                                    OutgoingSearch,
                                                    propertyConfigurations,
                                                    validationService,
@@ -277,6 +278,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.searchedOutgoingDocuments = $filter('orderBy')(self.searchedOutgoingDocuments, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of searched outgoing documents
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -293,6 +301,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

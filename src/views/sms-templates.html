@@ -23,7 +23,7 @@
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedSmsTemplates"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="6" ng-if="ctrl.selectedSmsTemplates.length" md-column>
                                             <div layout="row" layout-align="start center">
@@ -56,7 +56,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="smsTemplate"
-                                        ng-repeat="smsTemplate in ctrl.smsTemplates  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                        ng-repeat="smsTemplate in ctrl.smsTemplates  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{smsTemplate.arName}}</td>
                                         <td md-cell>{{smsTemplate.enName}}</td>
                                         <td md-cell>

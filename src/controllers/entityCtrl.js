@@ -3,6 +3,7 @@ module.exports = function (app) {
                                            entityService,
                                            entities,
                                            $q,
+                                           $filter,
                                            langService,
                                            toast,
                                            dialog,
@@ -72,7 +73,7 @@ module.exports = function (app) {
                         toast.success(langService.get('add_success').change({name: result.getNames()}));
                     });
                 })
-                .catch(function(error){
+                .catch(function (error) {
                 })
         };
 
@@ -95,6 +96,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.entities = $filter('orderBy')(self.entities, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of entity
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -110,6 +118,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

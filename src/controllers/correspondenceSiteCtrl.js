@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('correspondenceSiteCtrl', function ($q,
+                                                       $filter,
                                                        correspondenceSites,
                                                        dialog,
                                                        generator,
@@ -104,6 +105,14 @@ module.exports = function (app) {
                 return item.id === correspondenceSite.id;
             }), 1, correspondenceSite);
         };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.correspondenceSites = $filter('orderBy')(self.correspondenceSites, self.grid.order);
+        };
+
         /**
          * reload the grid again and if the pageNumber provide the current grid will be on it.
          * @param pageNumber
@@ -124,6 +133,7 @@ module.exports = function (app) {
                             defer.resolve(true);
                             if (pageNumber)
                                 self.grid.page = pageNumber;
+                            self.getSortedData();
                             return correspondenceSites;
                         });
                 });

@@ -24,7 +24,7 @@
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedWorkflowActions"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="4" ng-if="ctrl.selectedWorkflowActions.length" md-column>
                                             <div layout="row" layout-align="start center">
@@ -53,7 +53,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="workflowAction"
-                                        ng-repeat="workflowAction in ctrl.workflowActions  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                        ng-repeat="workflowAction in ctrl.workflowActions  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{workflowAction.arName}}</td>
                                         <td md-cell>{{workflowAction.enName}}</td>
                                         <td md-cell>

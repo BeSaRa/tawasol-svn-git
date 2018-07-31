@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('localizationCtrl', function (lookupService, _, toast, $rootScope, dialog, langService, cmsTemplate, $q) {
+    app.controller('localizationCtrl', function (lookupService, _, toast, $rootScope, dialog, langService, cmsTemplate, $q, $filter) {
         'ngInject';
         var self = this;
         self.controllerName = 'localizationCtrl';
@@ -51,6 +51,13 @@ module.exports = function (app) {
                 })
         }
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.localizations = $filter('orderBy')(self.localizations, self.grid.order);
+        };
+
         // to start open the localization module when controller loaded.
         _openSelectLocalizationModule(null);
         /**
@@ -70,6 +77,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                 });
         };
         /**

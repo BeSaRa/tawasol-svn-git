@@ -23,7 +23,7 @@
                                        multiple="true"
                                        ng-model="ctrl.selectedEmails"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="9" class="table-selector-header"
                                             ng-if="ctrl.selectedEmails.length" md-column>

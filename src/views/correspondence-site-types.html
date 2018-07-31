@@ -23,7 +23,7 @@
                                        multiple="true"
                                        ng-model="ctrl.selectedCorrespondenceSiteTypes"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="6" class="table-selector-header"
                                             ng-if="ctrl.selectedCorrespondenceSiteTypes.length" md-column>
@@ -39,18 +39,18 @@
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedCorrespondenceSiteTypes.length" md-column
-                                            md-order-by=""><span>{{lang.arabic_name}}</span>
+                                            md-order-by="arName"><span>{{lang.arabic_name}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedCorrespondenceSiteTypes.length" md-column
-                                            md-order-by=""><span>{{lang.english_name}}</span>
+                                            md-order-by="enName"><span>{{lang.english_name}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedCorrespondenceSiteTypes.length" md-column
-                                            md-order-by=""><span>{{lang.status}}</span>
+                                            md-order-by="status"><span>{{lang.status}}</span>
                                         </th>
                                         <!-- <th ng-if="!ctrl.selectedCorrespondenceSiteTypes.length" md-column md-order-by=""><span>{{lang.code}}</span>
                                          </th>-->
                                         <th ng-if="!ctrl.selectedCorrespondenceSiteTypes.length" md-column
-                                            md-order-by=""><span>{{lang.item_order}}</span>
+                                            md-order-by="itemOrder"><span>{{lang.item_order}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedCorrespondenceSiteTypes.length" md-column
                                             md-order-by=""><span>{{lang.actions}}</span>
@@ -59,7 +59,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-select="correspondenceSiteType" md-row
-                                        ng-repeat="correspondenceSiteType in ctrl.correspondenceSiteTypes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                        ng-repeat="correspondenceSiteType in ctrl.correspondenceSiteTypes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{correspondenceSiteType.arName}}</td>
                                         <td md-cell>{{correspondenceSiteType.enName}}</td>
                                         <td md-cell>

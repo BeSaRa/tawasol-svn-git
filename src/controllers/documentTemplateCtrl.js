@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                      documentTemplateService,
                                                      documentTemplates,
                                                      $q,
+                                                     $filter,
                                                      langService,
                                                      toast,
                                                      dialog,
@@ -140,6 +141,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.documentTemplates = $filter('orderBy')(self.documentTemplates, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of document template
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -155,6 +163,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

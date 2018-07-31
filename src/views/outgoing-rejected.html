@@ -23,7 +23,7 @@
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedRejectedOutgoings"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedRejectedOutgoings.length > 1 ? 5 : 6}}"
                                             ng-if="ctrl.selectedRejectedOutgoings.length" md-column>
@@ -88,7 +88,7 @@
                                     <tr md-row md-select="rejectedOutgoing" grid-right-click-directive
                                         model="rejectedOutgoing"
                                         selected-length="{{ctrl.selectedRejectedOutgoings.length ? ctrl.selectedRejectedOutgoings.length : 0}}"
-                                        ng-repeat="rejectedOutgoing in searchResults = (ctrl.rejectedOutgoings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order)  track by $index">
+                                        ng-repeat="rejectedOutgoing in searchResults = (ctrl.rejectedOutgoings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))  track by $index">
                                         <td md-cell class="indicator-td">
                                             <!-- Electronic/Paper Document -->
                                             <grid-indicator-directive record="rejectedOutgoing"

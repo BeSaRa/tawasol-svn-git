@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                   draftInternalService,
                                                   draftInternals,
                                                   $q,
+                                                  $filter,
                                                   langService,
                                                   generator,
                                                   toast,
@@ -81,6 +82,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.draftInternals = $filter('orderBy')(self.draftInternals, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of draft internal mail
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -97,6 +105,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };
@@ -570,7 +579,7 @@ module.exports = function (app) {
                     "EDIT_INTERNAL_CONTENT",
                     "EDIT_INTERNAL_PROPERTIES"
                 ],
-                checkAnyPermission:true,
+                checkAnyPermission: true,
                 subMenu: [
                     // Content
                     {
@@ -633,7 +642,7 @@ module.exports = function (app) {
                     "", //permission not available in database
                     "MANAGE_LINKED_DOCUMENTS"
                 ],
-                checkAnyPermission:true,
+                checkAnyPermission: true,
                 subMenu: [
                     // Tags
                     {

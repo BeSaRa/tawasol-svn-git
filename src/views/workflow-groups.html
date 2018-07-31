@@ -24,7 +24,7 @@
                                        multiple="true"
                                        ng-model="ctrl.selectedWorkflowGroups"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="5" class="table-selector-header"
                                             ng-if="ctrl.selectedWorkflowGroups.length" md-column>
@@ -59,7 +59,7 @@
                                     <tr md-row
                                         ng-if="workflowGroup.global"
                                         md-select="workflowGroup"
-                                        ng-repeat="workflowGroup in ctrl.workflowGroups  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
+                                        ng-repeat="workflowGroup in ctrl.workflowGroups  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{workflowGroup.arName}}</td>
                                         <td md-cell>{{workflowGroup.enName}}</td>
 

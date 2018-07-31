@@ -26,7 +26,7 @@
                                 <table md-table md-row-select multiple
                                        ng-model="ctrl.selectedG2gItems"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedG2gItems.length > 1 ? 11 : 12}}"
                                             ng-if="ctrl.selectedG2gItems.length" md-column>
@@ -81,7 +81,7 @@
                                         grid-right-click-directive="g2gItem"
                                         model="g2gItem"
                                         selected-length="{{ctrl.selectedG2gItems.length ? ctrl.selectedG2gItems.length : 0}}"
-                                        ng-repeat="g2gItem in ctrl.g2gItems | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                        ng-repeat="g2gItem in ctrl.g2gItems | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell md-truncate class="subject">
                                             <a href="" class="view-doc" md-truncate
                                                title="{{g2gItem.subject}}"

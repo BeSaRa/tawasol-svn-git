@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                             correspondenceStorageService,
                                                             userInboxService,
                                                             $q,
+                                                            $filter,
                                                             $state,
                                                             $timeout,
                                                             langService,
@@ -93,6 +94,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.returnedDepartmentInboxes = $filter('orderBy')(self.returnedDepartmentInboxes, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of returned department inbox item
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -110,6 +118,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

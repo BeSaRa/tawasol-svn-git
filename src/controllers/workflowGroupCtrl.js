@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                   workflowGroupService,
                                                   toast,
                                                   $q,
+                                                  $filter,
                                                   langService,
                                                   contextHelpService,
                                                   dialog) {
@@ -44,6 +45,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.workflowGroups = $filter('orderBy')(self.workflowGroups, self.grid.order);
+        };
+
+        /**
          * @description this method to reload the grid
          * @return {*|Promise<U>}
          */
@@ -57,7 +65,7 @@ module.exports = function (app) {
 
                 if (pageNumber)
                     self.grid.page = pageNumber;
-
+                self.getSortedData();
                 return result;
             });
         };

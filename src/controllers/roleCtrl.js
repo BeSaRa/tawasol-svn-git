@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('roleCtrl', function (roles,
                                          roleService,
                                          $q,
+                                         $filter,
                                          permissions,
                                          langService,
                                          toast,
@@ -53,6 +54,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.roles = $filter('orderBy')(self.roles, self.grid.order);
+        };
+
+        /**
          * @description this method to reload the grid
          * @return {*|Promise<U>}
          */
@@ -67,7 +75,7 @@ module.exports = function (app) {
 
                 if (pageNumber)
                     self.grid.page = pageNumber;
-
+                self.getSortedData();
                 return result;
             });
         };

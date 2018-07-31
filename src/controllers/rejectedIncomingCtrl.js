@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                      rejectedIncomingService,
                                                      rejectedIncomings,
                                                      $q,
+                                                     $filter,
                                                      counterService,
                                                      langService,
                                                      generator,
@@ -123,6 +124,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.rejectedIncomings = $filter('orderBy')(self.rejectedIncomings, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of rejected incoming mail
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -139,6 +147,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

@@ -25,7 +25,7 @@
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedEntities"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="7" class="table-selector-header"
                                             ng-if="ctrl.selectedEntities.length" md-column>
@@ -65,7 +65,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-select="entity" md-row
-                                        ng-repeat="entity  in ctrl.entities | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                        ng-repeat="entity  in ctrl.entities | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{entity.identifier}}</td>
                                         <td md-cell>{{entity.arName}}</td>
                                         <td md-cell>{{entity.enName}}</td>

@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                  scanIncomingService,
                                                  scanIncomings,
                                                  $q,
+                                                 $filter,
                                                  langService,
                                                  toast,
                                                  dialog,
@@ -64,6 +65,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.scanIncomings = $filter('orderBy')(self.scanIncomings, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of scan incoming
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -79,6 +87,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

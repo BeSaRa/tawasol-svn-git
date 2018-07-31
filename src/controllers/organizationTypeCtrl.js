@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('organizationTypeCtrl', function ($q,
+                                                     $filter,
                                                      organizationTypes,
                                                      dialog,
                                                      langService,
@@ -81,6 +82,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.organizationTypes = $filter('orderBy')(self.organizationTypes, self.grid.order);
+        };
+
+        /**
          * reload the grid again and if the pageNumber provide the current grid will be on it.
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -96,6 +104,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

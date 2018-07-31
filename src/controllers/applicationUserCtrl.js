@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                     applicationUsers,
                                                     ouApplicationUsers,
                                                     $q,
+                                                    $filter,
                                                     langService,
                                                     toast,
                                                     dialog,
@@ -104,6 +105,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.applicationUsers = $filter('orderBy')(self.applicationUsers, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of application user
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -119,6 +127,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

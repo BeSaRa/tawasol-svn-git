@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('classificationCtrl', function ($q,
+                                                   $filter,
                                                    classifications,
                                                    dialog,
                                                    langService,
@@ -100,6 +101,14 @@ module.exports = function (app) {
                 return item.id === classification.id;
             }), 1, classification);
         };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.classifications = $filter('orderBy')(self.classifications, self.grid.order);
+        };
+
         /**
          * reload the grid again and if the pageNumber provide the current grid will be on it.
          * @param pageNumber
@@ -120,6 +129,7 @@ module.exports = function (app) {
                             defer.resolve(true);
                             if (pageNumber)
                                 self.grid.page = pageNumber;
+                            self.getSortedData();
                             return classifications;
                         });
                 });

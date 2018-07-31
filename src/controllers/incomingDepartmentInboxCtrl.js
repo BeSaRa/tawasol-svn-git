@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                             managerService,
                                                             $state,
                                                             $q,
+                                                            $filter,
                                                             langService,
                                                             viewDocumentService,
                                                             toast,
@@ -71,6 +72,13 @@ module.exports = function (app) {
         }
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.incomingDepartmentInboxes = $filter('orderBy')(self.incomingDepartmentInboxes, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of incoming department inbox item
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -88,6 +96,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

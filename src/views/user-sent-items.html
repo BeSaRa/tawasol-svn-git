@@ -21,7 +21,7 @@
                             <div flex scroll-directive>
                                 <table md-table md-row-select ng-model="ctrl.selectedUserSentItems"
                                        md-progress="ctrl.progress"><!--multiple-->
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <!--md-on-reorder="ctrl.reloadUserSentItems"-->
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedUserSentItems.length > 1 ? 9 : 10}}"
@@ -88,7 +88,7 @@
                                     <tr md-row md-select="userSentItem" model="userSentItem"
                                         grid-right-click-directive="userSentItem"
                                         selected-length="{{ctrl.selectedUserSentItems.length ? ctrl.selectedUserSentItems.length : 0}}"
-                                        ng-repeat="userSentItem in searchResults = (ctrl.userSentItems  | filter:ctrl.searchModel |orderBy:ctrl.grid.order) track by $index">
+                                        ng-repeat="userSentItem in searchResults = (ctrl.userSentItems  | filter:ctrl.searchModel) track by $index">
                                         <!-- | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) -->
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->

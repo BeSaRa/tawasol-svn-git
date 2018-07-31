@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                        publicAnnouncementService,
                                                        publicAnnouncements,
                                                        $q,
+                                                       $filter,
                                                        langService,
                                                        toast,
                                                        contextHelpService,
@@ -83,6 +84,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.publicAnnouncements = $filter('orderBy')(self.publicAnnouncements, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of public announcement
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -98,6 +106,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

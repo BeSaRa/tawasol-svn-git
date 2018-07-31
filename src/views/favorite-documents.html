@@ -20,7 +20,7 @@
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedFavoriteDocuments"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order"  md-on-reorder="ctrl.getSortedData">
                                     <!-- md-on-reorder="ctrl.reloadFavoriteDocuments"-->
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedFavoriteDocuments.length > 1 ? 6 : 7}}"
@@ -67,8 +67,7 @@
                                         grid-right-click-directive="favoriteDocument"
                                         model="favoriteDocument"
                                         selected-length="{{ctrl.selectedFavoriteDocuments.length ? ctrl.selectedFavoriteDocuments.length : 0}}"
-                                        ng-repeat="favoriteDocument in searchResults = (ctrl.favoriteDocuments  | filter:ctrl.searchModel
-                                                   | orderBy:ctrl.grid.order) track by $index" >
+                                        ng-repeat="favoriteDocument in searchResults = (ctrl.favoriteDocuments  | filter:ctrl.searchModel) track by $index" >
                                         <!-- | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) -->
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->

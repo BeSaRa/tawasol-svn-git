@@ -20,7 +20,7 @@
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedWorkItems"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedWorkItems.length > 1 ? 9 : 10}}"
                                             ng-if="ctrl.selectedWorkItems.length" md-column>
@@ -109,7 +109,7 @@
                                         grid-right-click-directive="workItem"
                                         selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
                                         model="workItem"
-                                        ng-repeat="workItem in searchResults = (ctrl.workItems | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
+                                        ng-repeat="workItem in searchResults = (ctrl.workItems | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                         <!--<td md-cell>
                                             <star-unstar-directive record="workItem"
                                                                    record-type="WorkItem"

@@ -4,12 +4,13 @@ module.exports = function (app) {
                                                      organizations,
                                                      distributionLists,
                                                      $q,
+                                                     $filter,
                                                      langService,
                                                      toast,
                                                      dialog,
                                                      contextHelpService,
                                                      ouDistributionListService) {
-        'ngInject';
+            'ngInject';
             var self = this;
 
             self.controllerName = 'distributionListCtrl';
@@ -70,7 +71,7 @@ module.exports = function (app) {
                     .then(function () {
                         self.reloadDistributionLists(self.grid.page);
                     })
-                    .catch(function(){
+                    .catch(function () {
                         self.reloadDistributionLists(self.grid.page);
                     })
             };
@@ -87,16 +88,23 @@ module.exports = function (app) {
                     .then(function (result) {
                         /*self.behindScene(result)
                             .then(function (result) {*/
-                                self.reloadDistributionLists(self.grid.page).then(function () {
-                                    toast.success(langService.get('edit_success').change({name: distributionList.getTranslatedName()}));
-                                });
-                            // });
+                        self.reloadDistributionLists(self.grid.page).then(function () {
+                            toast.success(langService.get('edit_success').change({name: distributionList.getTranslatedName()}));
+                        });
+                        // });
                     }).catch(function () {
                     // self.behindScene(distributionList)
                     //     .then(function () {
-                            self.reloadDistributionLists(self.grid.page);
+                    self.reloadDistributionLists(self.grid.page);
                     //    });
                 });
+            };
+
+            /**
+             * @description Gets the grid records by sorting
+             */
+            self.getSortedData = function () {
+                self.distributionLists = $filter('orderBy')(self.distributionLists, self.grid.order);
             };
 
             /**
@@ -119,6 +127,7 @@ module.exports = function (app) {
                                 defer.resolve(true);
                                 if (pageNumber)
                                     self.grid.page = pageNumber;
+                                self.getSortedData();
                                 return result;
                             });
                     });

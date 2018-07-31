@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                entityTypeService,
                                                entityTypes,
                                                $q,
+                                               $filter,
                                                errorCode,
                                                langService,
                                                toast,
@@ -77,6 +78,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.entityTypes = $filter('orderBy')(self.entityTypes, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of entity type
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -92,6 +100,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

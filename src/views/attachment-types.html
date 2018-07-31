@@ -24,7 +24,7 @@
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedAttachmentTypes"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="6" class="table-selector-header"
                                             ng-if="ctrl.selectedAttachmentTypes.length" md-column>
@@ -63,7 +63,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="attachmentType"
-                                        ng-repeat="attachmentType in ctrl.attachmentTypes  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                        ng-repeat="attachmentType in ctrl.attachmentTypes  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{attachmentType.arName}}</td>
                                         <td md-cell>{{attachmentType.enName}}</td>
                                         <td md-cell>
@@ -95,7 +95,8 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.attachmentTypes | filter:ctrl.searchModel).length}}" md-page-select>
+                                    md-total="{{(ctrl.attachmentTypes | filter:ctrl.searchModel).length}}"
+                                    md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

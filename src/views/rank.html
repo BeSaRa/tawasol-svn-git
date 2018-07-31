@@ -24,7 +24,7 @@
                                        multiple="true"
                                        ng-model="ctrl.selectedRanks"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="6" class="table-selector-header"
                                             ng-if="ctrl.selectedRanks.length" md-column>
@@ -55,7 +55,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-select="rank" md-row
-                                        ng-repeat="rank in ctrl.ranks | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                        ng-repeat="rank in ctrl.ranks | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{rank.arName}}</td>
                                         <td md-cell>{{rank.enName}}</td>
                                         <td md-cell>

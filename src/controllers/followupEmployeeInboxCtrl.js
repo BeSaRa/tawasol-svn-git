@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                           correspondenceService,
                                                           userInboxService,
                                                           $q,
+                                                          $filter,
                                                           langService,
                                                           toast,
                                                           dialog,
@@ -102,6 +103,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.followupEmployeeInboxes = $filter('orderBy')(self.followupEmployeeInboxes, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of followup employee inbox
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -119,6 +127,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };
@@ -754,13 +763,13 @@ module.exports = function (app) {
                 text: 'grid_action_send',
                 shortcut: false,
                 checkShow: self.checkToShowAction,
-                permissionKey:[
+                permissionKey: [
                     "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
                     "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
                     "SEND_DOCUMENT_BY_FAX",
                     "SEND_SMS"
                 ],
-                checkAnyPermission:true,
+                checkAnyPermission: true,
                 subMenu: [
                     // Link To Document By Email
                     {

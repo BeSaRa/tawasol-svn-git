@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                  userSentItemService,
                                                  userSentItems,
                                                  $q,
+                                                 $filter,
                                                  viewDocumentService,
                                                  langService,
                                                  rootEntity,
@@ -78,6 +79,12 @@ module.exports = function (app) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.userSentItems = $filter('orderBy')(self.userSentItems, self.grid.order);
+        };
 
         /**
          * @description Reload the grid of user sent item
@@ -97,6 +104,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

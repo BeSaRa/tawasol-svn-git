@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                    organizations,
                                                    searchIncomingService,
                                                    $q,
+                                                   $filter,
                                                    IncomingSearch,
                                                    propertyConfigurations,
                                                    validationService,
@@ -282,6 +283,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.searchedIncomingDocuments = $filter('orderBy')(self.searchedIncomingDocuments, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of searched incoming documents
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -298,6 +306,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

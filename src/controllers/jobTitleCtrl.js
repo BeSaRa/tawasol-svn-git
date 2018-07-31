@@ -3,6 +3,7 @@ module.exports = function (app) {
                                              jobTitleService,
                                              jobTitles,
                                              $q,
+                                             $filter,
                                              errorCode,
                                              langService,
                                              toast,
@@ -78,6 +79,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.jobTitles = $filter('orderBy')(self.jobTitles, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of job title
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -93,6 +101,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

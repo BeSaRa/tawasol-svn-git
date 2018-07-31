@@ -24,7 +24,7 @@
                                        multiple="true"
                                        ng-model="ctrl.selectedPublicAnnouncements"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="6" class="table-selector-header"
                                             ng-if="ctrl.selectedPublicAnnouncements.length" md-column>
@@ -64,7 +64,7 @@
                                     <tbody md-body>
                                     <tr md-row
                                         md-select="publicAnnouncement"
-                                        ng-repeat="publicAnnouncement in ctrl.publicAnnouncements  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
+                                        ng-repeat="publicAnnouncement in ctrl.publicAnnouncements  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{publicAnnouncement.arSubject}}</td>
                                         <td md-cell>{{publicAnnouncement.enSubject}}</td>
                                         <td md-cell>{{publicAnnouncement.itemOrder}}</td>
@@ -103,7 +103,8 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.publicAnnouncements | filter:ctrl.searchModel).length}}" md-page-select>
+                                    md-total="{{(ctrl.publicAnnouncements | filter:ctrl.searchModel).length}}"
+                                    md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

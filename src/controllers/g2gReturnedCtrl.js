@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                 g2gReturnedService,
                                                 g2gItems,
                                                 $q,
+                                                $filter,
                                                 langService,
                                                 toast,
                                                 dialog,
@@ -57,6 +58,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.g2gItems = $filter('orderBy')(self.g2gItems, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of g2g inbox item
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -72,6 +80,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

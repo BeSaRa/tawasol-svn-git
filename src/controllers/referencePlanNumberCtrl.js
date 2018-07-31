@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                         referencePlanNumberService,
                                                         referencePlanNumbers,
                                                         $q,
+                                                        $filter,
                                                         langService,
                                                         toast,
                                                         contextHelpService,
@@ -103,6 +104,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.referencePlanNumbers = $filter('orderBy')(self.referencePlanNumbers, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of reference plan number
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -118,6 +126,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

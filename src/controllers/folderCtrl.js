@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('folderCtrl', function (langService,
                                            folders,
                                            $q,
+                                           $filter,
                                            $state,
                                            dialog,
                                            toast,
@@ -83,6 +84,14 @@ module.exports = function (app) {
             self.selectedFolder = folder;
             return self.reloadFolders(self.grid.page);
         };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.folders = $filter('orderBy')(self.folders, self.grid.order);
+        };
+
         /**
          * @description reload current folder
          * @param pageNumber
@@ -102,6 +111,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return self.workItems;
                 });
         };

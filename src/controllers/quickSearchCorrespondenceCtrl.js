@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                               quickSearchCorrespondence,
                                                               ResolveDefer,
                                                               $q,
+                                                              $filter,
                                                               dialog,
                                                               langService,
                                                               viewDocumentService,
@@ -80,6 +81,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.quickSearchCorrespondence = $filter('orderBy')(self.quickSearchCorrespondence, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of Correspondence
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -99,6 +107,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

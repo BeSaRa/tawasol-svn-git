@@ -6,6 +6,7 @@ module.exports = function (app) {
                                           counterService,
                                           correspondenceStorageService,
                                           $q,
+                                          $filter,
                                           langService,
                                           toast,
                                           dialog,
@@ -97,6 +98,13 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Gets the grid records by sorting
+             */
+            self.getSortedData = function () {
+                self.approvedInternals = $filter('orderBy')(self.approvedInternals, self.grid.order);
+            };
+
+            /**
              * @description Reload the grid of approved internals
              * @param pageNumber
              * @return {*|Promise<U>}
@@ -113,6 +121,7 @@ module.exports = function (app) {
                         defer.resolve(true);
                         if (pageNumber)
                             self.grid.page = pageNumber;
+                        self.getSortedData();
                         return result;
                     });
             };
@@ -262,8 +271,8 @@ module.exports = function (app) {
                     .then(function () {
                         self.reloadApprovedInternals(self.grid.page)
                             .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                        });
+                                mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                            });
                     })
                     .catch(function () {
                         self.reloadApprovedInternals(self.grid.page);
@@ -612,7 +621,7 @@ module.exports = function (app) {
                         "",
                         ""
                     ],
-                    checkAnyPermission:true,
+                    checkAnyPermission: true,
                     subMenu: [
                         // Link To Document By Email
                         {

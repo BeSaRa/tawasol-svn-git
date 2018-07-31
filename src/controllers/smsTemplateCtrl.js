@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                 applicationUserService,
                                                 smsTemplates,
                                                 $q,
+                                                $filter,
                                                 langService,
                                                 $scope,
                                                 toast,
@@ -75,9 +76,9 @@ module.exports = function (app) {
                 .smsTemplateAdd($event)
                 .then(function (result) {
                     self.reloadSmsTemplates(self.grid.page)
-                        /*.then(function () {
-                            toast.success(langService.get('add_success').change({name: result.getNames()}));
-                        });*/
+                    /*.then(function () {
+                        toast.success(langService.get('add_success').change({name: result.getNames()}));
+                    });*/
                 });
         };
 
@@ -92,15 +93,22 @@ module.exports = function (app) {
                 .smsTemplateEdit(smsTemplate, $event)
                 .then(function (result) {
                     self.reloadSmsTemplates(self.grid.page)
-                        /*.then(function () {
-                            toast.success(langService.get('edit_success').change({name: result.getNames()}));
-                        });*/
+                    /*.then(function () {
+                        toast.success(langService.get('edit_success').change({name: result.getNames()}));
+                    });*/
                 });
         };
 
-        self.showSmsTemplateContent = function(smsTemplate , $event){
+        self.showSmsTemplateContent = function (smsTemplate, $event) {
             dialog
                 .successMessage(smsTemplate.message, null, null, $event, true);
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.smsTemplates = $filter('orderBy')(self.smsTemplates, self.grid.order);
         };
 
         /**
@@ -119,6 +127,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

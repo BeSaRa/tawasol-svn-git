@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('sentItemDepartmentInboxCtrl', function (lookupService,
                                                             sentItemDepartmentInboxService,
                                                             $q,
+                                                            $filter,
                                                             $state,
                                                             listGeneratorService,
                                                             langService,
@@ -102,6 +103,13 @@ module.exports = function (app) {
         self.getMonthYearForSentItems();
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.sentItemDepartmentInboxes = $filter('orderBy')(self.sentItemDepartmentInboxes, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of sent item
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -119,6 +127,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

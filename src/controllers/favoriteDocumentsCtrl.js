@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                       favoriteDocumentsService,
                                                       favoriteDocuments,
                                                       $q,
+                                                      $filter,
                                                       langService,
                                                       toast,
                                                       dialog,
@@ -62,8 +63,15 @@ module.exports = function (app) {
          * @param modelType
          * @returns {*}
          */
-        self.getSortingKey = function(property, modelType){
+        self.getSortingKey = function (property, modelType) {
             return generator.getColumnSortingKey(property, modelType);
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.favoriteDocuments = $filter('orderBy')(self.favoriteDocuments, self.grid.order);
         };
 
         /**
@@ -85,6 +93,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };
@@ -520,14 +529,14 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: self.checkToShowAction,
-                permissionKey : [
+                permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
                     "MANAGE_ATTACHMENTS",
                     "", // Linked Entities permission not available in database
                     "MANAGE_LINKED_DOCUMENTS"
                 ],
-                checkAnyPermission:true,
+                checkAnyPermission: true,
                 subMenu: [
                     // Tags
                     {
@@ -578,7 +587,7 @@ module.exports = function (app) {
                         icon: 'file-document',
                         text: 'grid_action_linked_documents',
                         shortcut: false,
-                        permissionKey:"MANAGE_LINKED_DOCUMENTS",
+                        permissionKey: "MANAGE_LINKED_DOCUMENTS",
                         callback: self.manageLinkedDocuments,
                         class: "action-green",
                         //hide: true,

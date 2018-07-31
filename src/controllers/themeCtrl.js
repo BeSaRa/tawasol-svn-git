@@ -3,6 +3,7 @@ module.exports = function (app) {
                                           themeService,
                                           themes,
                                           $q,
+                                          $filter,
                                           langService,
                                           toast,
                                           contextHelpService,
@@ -89,6 +90,14 @@ module.exports = function (app) {
                     });
                 })
         };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.themes = $filter('orderBy')(self.themes, self.grid.order);
+        };
+
         /**
          * @description Reload the grid of theme
          * @param pageNumber
@@ -105,6 +114,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 })
         };

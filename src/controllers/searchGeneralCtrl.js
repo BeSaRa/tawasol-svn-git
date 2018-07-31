@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                   organizations,
                                                   searchGeneralService,
                                                   $q,
+                                                  $filter,
                                                   GeneralSearch,
                                                   propertyConfigurations,
                                                   validationService,
@@ -273,6 +274,14 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.searchedGeneralDocuments = $filter('orderBy')(self.searchedGeneralDocuments, self.grid.order);
+        };
+
+
+        /**
          * @description Reload the grid of searched general documents
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -289,6 +298,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

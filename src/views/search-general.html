@@ -75,7 +75,7 @@
                         <div flex scroll-directive>
                             <table md-table md-row-select multiple ng-model="ctrl.selectedSearchedGeneralDocuments"
                                    md-progress="ctrl.progress">
-                                <thead md-head md-order="ctrl.grid.order">
+                                <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                 <tr md-row>
                                     <th colspan="{{ctrl.selectedSearchedGeneralDocuments.length > 1 ? 8 : 9}}"
                                         ng-if="ctrl.selectedSearchedGeneralDocuments.length" md-column>
@@ -144,7 +144,7 @@
                                 <tr md-row md-select="searchedGeneralDocument" grid-right-click-directive
                                     model="searchedGeneralDocument"
                                     selected-length="{{ctrl.selectedSearchedGeneralDocuments.length ? ctrl.selectedSearchedGeneralDocuments.length : 0}}"
-                                    ng-repeat="searchedGeneralDocument in searchResults = (ctrl.searchedGeneralDocuments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
+                                    ng-repeat="searchedGeneralDocument in searchResults = (ctrl.searchedGeneralDocuments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                     <td md-cell class="indicator-td">
                                         <!-- Security Level -->
                                         <grid-indicator-directive record="searchedGeneralDocument"

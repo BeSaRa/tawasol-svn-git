@@ -21,7 +21,7 @@
                                        multiple="true"
                                        ng-model="ctrl.selectedQuickSearchCorrespondence"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedQuickSearchCorrespondence.length > 1 ? 8 : 9}}"
                                             class="table-selector-header"
@@ -69,7 +69,7 @@
                                         grid-right-click-directive model="quickSearch"
                                         selected-length="{{ctrl.selectedQuickSearchCorrespondence.length ? ctrl.selectedQuickSearchCorrespondence.length : 0}}"
                                         md-select="quickSearch"
-                                        ng-repeat="quickSearch in searchResults = (ctrl.quickSearchCorrespondence  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
+                                        ng-repeat="quickSearch in searchResults = (ctrl.quickSearchCorrespondence  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->
                                             <grid-indicator-directive record="quickSearch"

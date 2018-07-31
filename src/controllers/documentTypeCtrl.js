@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                  documentTypeService,
                                                  documentTypes,
                                                  $q,
+                                                 $filter,
                                                  langService,
                                                  errorCode,
                                                  toast,
@@ -82,6 +83,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.documentTypes = $filter('orderBy')(self.documentTypes, self.grid.order);
+        };
+
+        /**
          * @description this method to reload the grid
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -97,6 +105,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

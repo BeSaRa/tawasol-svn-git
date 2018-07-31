@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                    documentStatusService,
                                                    documentStatuses,
                                                    $q,
+                                                   $filter,
                                                    $timeout,
                                                    generator,
                                                    toast,
@@ -38,6 +39,12 @@ module.exports = function (app) {
             'true': documentStatusService.activateDocumentStatus,
             'false': documentStatusService.deactivateDocumentStatus
         };
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.documentStatuses = $filter('orderBy')(self.documentStatuses, self.grid.order);
+        };
 
         /**
          * @description this method to reload the grid
@@ -52,7 +59,7 @@ module.exports = function (app) {
                 defer.resolve(true);
                 if (pageNumber)
                     self.grid.page = pageNumber;
-
+                self.getSortedData();
                 return result;
             });
         };

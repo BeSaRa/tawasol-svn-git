@@ -23,7 +23,7 @@
                                        multiple="true"
                                        ng-model="ctrl.selectedJobTitles"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="5" class="table-selector-header"
                                             ng-if="ctrl.selectedJobTitles.length" md-column>
@@ -53,7 +53,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-select="jobTitle" md-row
-                                        ng-repeat="jobTitle in ctrl.jobTitles | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                        ng-repeat="jobTitle in ctrl.jobTitles | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{jobTitle.arName}}</td>
                                         <td md-cell>{{jobTitle.enName}}</td>
                                         <td md-cell>

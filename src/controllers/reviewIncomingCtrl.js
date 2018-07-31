@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                    reviewIncomingService,
                                                    reviewIncomings,
                                                    $q,
+                                                   $filter,
                                                    generator,
                                                    counterService,
                                                    langService,
@@ -132,6 +133,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.reviewIncomings = $filter('orderBy')(self.reviewIncomings, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of review incoming email
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -148,6 +156,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

@@ -21,7 +21,7 @@
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedIncomingDepartmentInboxes"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedIncomingDepartmentInboxes.length > 1 ? 7 : 8}}"
                                             ng-if="ctrl.selectedIncomingDepartmentInboxes.length" md-column>
@@ -76,7 +76,7 @@
                                         grid-right-click-directive="incomingDepartmentInbox"
                                         model="incomingDepartmentInbox"
                                         selected-length="{{ctrl.selectedIncomingDepartmentInboxes.length ? ctrl.selectedIncomingDepartmentInboxes.length : 0}}"
-                                        ng-repeat="incomingDepartmentInbox in searchResults = (ctrl.incomingDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
+                                        ng-repeat="incomingDepartmentInbox in searchResults = (ctrl.incomingDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                         <td md-cell>{{incomingDepartmentInbox.generalStepElm.docFullSerial}}</td>
                                         <td md-cell><a href="" class="view-doc"
                                                        ng-click="ctrl.viewDocument(incomingDepartmentInbox, $event)">{{incomingDepartmentInbox.generalStepElm.docSubject}}</a>

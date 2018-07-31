@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                         privateAnnouncementService,
                                                         privateAnnouncements,
                                                         $q,
+                                                        $filter,
                                                         langService,
                                                         toast,
                                                         dialog,
@@ -54,7 +55,7 @@ module.exports = function (app) {
                 {
                     label: langService.get('all'),
                     value: function () {
-                        return ( self.privateAnnouncements.length + 21); 
+                        return ( self.privateAnnouncements.length + 21);
                     }
                 }
             ]
@@ -98,6 +99,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.privateAnnouncements = $filter('orderBy')(self.privateAnnouncements, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of private announcement
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -113,6 +121,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

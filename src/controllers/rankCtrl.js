@@ -1,13 +1,14 @@
 module.exports = function (app) {
     app.controller('rankCtrl', function (lookupService,
-                                             rankService,
-                                             ranks,
-                                             $q,
-                                             errorCode,
-                                             langService,
-                                             toast,
-                                             contextHelpService,
-                                             dialog) {
+                                         rankService,
+                                         ranks,
+                                         $q,
+                                         $filter,
+                                         errorCode,
+                                         langService,
+                                         toast,
+                                         contextHelpService,
+                                         dialog) {
         'ngInject';
         var self = this;
         self.controllerName = 'rankCtrl';
@@ -77,6 +78,13 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.ranks = $filter('orderBy')(self.ranks, self.grid.order);
+        };
+
+        /**
          * @description Reload the grid of rank
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -92,6 +100,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedData();
                     return result;
                 });
         };

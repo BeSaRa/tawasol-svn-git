@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                    applicationUserService,
                                                    workflowActions,
                                                    $q,
+                                                   $filter,
                                                    langService,
                                                    toast,
                                                    dialog,
@@ -91,6 +92,14 @@ module.exports = function (app) {
                 self.reloadWorkflowActions(self.grid.page);
             });
         };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.workflowActions = $filter('orderBy')(self.workflowActions, self.grid.order);
+        };
+
         /**
          * @description Reload the grid of workflow action
          * @param pageNumber
@@ -108,6 +117,7 @@ module.exports = function (app) {
                         defer.resolve(true);
                         if (pageNumber)
                             self.grid.page = pageNumber;
+                        self.getSortedData();
                         return self.workflowActions = result;
                     });
             });
@@ -118,7 +128,7 @@ module.exports = function (app) {
          * @param workflowAction
          * @returns {boolean}
          */
-        self.isReserved = function(workflowAction){
+        self.isReserved = function (workflowAction) {
             return workflowAction.id < 51;
         };
 

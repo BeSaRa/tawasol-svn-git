@@ -23,7 +23,7 @@
                                        multiple="true"
                                        ng-model="ctrl.selectedRoles"
                                        md-progress="ctrl.progress">
-                                    <thead md-head md-order="ctrl.grid.order">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="6" class="table-selector-header"
                                             ng-if="ctrl.selectedRoles.length" md-column>
@@ -58,7 +58,7 @@
                                     <tbody md-body>
                                     <tr md-row
                                         md-select="role"
-                                        ng-repeat="role in ctrl.roles | roleFilter: ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
+                                        ng-repeat="role in ctrl.roles | roleFilter: ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{role.arName}}</td>
                                         <td md-cell>{{role.enName}}</td>
                                         <!--<td md-cell>{{role.description}}</td>-->

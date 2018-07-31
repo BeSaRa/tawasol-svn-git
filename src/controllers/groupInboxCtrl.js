@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.controller('groupInboxCtrl', function (langService,
                                                $q,
+                                               $filter,
                                                $timeout,
                                                userInboxService,
                                                ResolveDefer,
@@ -88,6 +89,12 @@ module.exports = function (app) {
                     });
             };
 
+            /**
+             * @description Gets the grid records by sorting
+             */
+            self.getSortedData = function () {
+                self.workItems = $filter('orderBy')(self.workItems, self.grid.order);
+            };
 
             /**
              * @description reload group Inbox grid
@@ -105,6 +112,7 @@ module.exports = function (app) {
                         defer.resolve(true);
                         if (pageNumber)
                             self.grid.page = pageNumber;
+                        self.getSortedData();
                         return self.workItems;
                     });
             };
