@@ -270,3 +270,4 @@ Changed the sorting for all the grids on base pages.
 ----------------
 15742: Kahramaa - An Error Occur in Console when Reject Incoming/Internal document.
 Added g2gId field to the organization popup.
+15690: Document security - UI - fields are overlapped on each others

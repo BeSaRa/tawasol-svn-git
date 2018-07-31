@@ -1,37 +1,39 @@
 <div layout="row" flex class="p20">
     <div flex layout="column">
         <ng-form name="documentSecurityForm" ng-if="ctrl.documentSecurity">
-            <div layout="row">
+            <div layout="column" layout-gt-md="row">
                 <!-- Show Watermark -->
                 <md-switch flex ng-model="ctrl.documentSecurity.status"
                            aria-label="{{lang.apply_document_protection}}">
                     <span>{{lang.apply_document_protection}} : </span>
                     {{ctrl.documentSecurity.getTranslatedYesNo('status')}}
                 </md-switch>
-                <!-- Barcode X location -->
-                <md-input-container>
-                    <label for="locationX2D">{{lang.document_security_barcode_x_location}}</label>
-                    <input id="locationX2D" name="locationX2D"
-                           required ng-disabled="true" ng-readonly="true"
-                           ng-model="ctrl.documentSecurity.locationX2D">
-                    <!--max="392" min-max-number-directive-->
-                    <div ng-messages="documentSecurityForm.locationX2D.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                        <div ng-message="max">{{lang.max_number.change({number:393})}}</div>
-                    </div>
-                </md-input-container>
-                <!-- Barcode Y location -->
-                <md-input-container>
-                    <label for="locationY2D">{{lang.document_security_barcode_y_location}}</label>
-                    <input id="locationY2D" name="locationY2D"
-                           required ng-disabled="true" ng-readonly="true"
-                           ng-model="ctrl.documentSecurity.locationY2D">
-                    <!--max="640" min-max-number-directive-->
-                    <div ng-messages="documentSecurityForm.locationY2D.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                        <div ng-message="max">{{lang.max_number.change({number: 641})}}</div>
-                    </div>
-                </md-input-container>
+                <div flex layout="row">
+                    <!-- Barcode X location -->
+                    <md-input-container>
+                        <label for="locationX2D">{{lang.document_security_barcode_x_location}}</label>
+                        <input id="locationX2D" name="locationX2D"
+                               required ng-disabled="true" ng-readonly="true"
+                               ng-model="ctrl.documentSecurity.locationX2D">
+                        <!--max="392" min-max-number-directive-->
+                        <div ng-messages="documentSecurityForm.locationX2D.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                            <div ng-message="max">{{lang.max_number.change({number:393})}}</div>
+                        </div>
+                    </md-input-container>
+                    <!-- Barcode Y location -->
+                    <md-input-container>
+                        <label for="locationY2D">{{lang.document_security_barcode_y_location}}</label>
+                        <input id="locationY2D" name="locationY2D"
+                               required ng-disabled="true" ng-readonly="true"
+                               ng-model="ctrl.documentSecurity.locationY2D">
+                        <!--max="640" min-max-number-directive-->
+                        <div ng-messages="documentSecurityForm.locationY2D.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                            <div ng-message="max">{{lang.max_number.change({number: 641})}}</div>
+                        </div>
+                    </md-input-container>
+                </div>
             </div>
             <md-tabs flex md-selected="0" class="content white-bg">
                 <!-- Outgoing -->
