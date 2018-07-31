@@ -322,7 +322,7 @@
                                     <md-input-container flex>
                                         <label for="g2gId">{{lang.g2g_id}}</label>
                                         <md-select name="g2gId" id="g2gId"
-                                                   ng-model="ctrl.organization.code">
+                                                   ng-model="ctrl.organization.g2gId">
                                             <md-option
                                                     ng-repeat="globalCorrespondenceSite in ctrl.globalCorrespondenceSitesForG2GId track by $index"
                                                     tooltip="{{globalCorrespondenceSite.getTranslatedName(true)}}"
