@@ -20,7 +20,8 @@ module.exports = function (app) {
                 gridActions: '=',
                 markAsReadUnread: '=',
                 grid: '=',
-                searchModel: '='
+                searchModel: '=',
+                sortingCallback: '='
             }
         }
     })

@@ -3,7 +3,7 @@
         <table md-table md-row-select multiple
                ng-model="ctrl.selectedWorkItems"
                md-progress="ctrl.progress">
-            <thead md-head md-order="ctrl.grid.order">
+            <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.sortingCallback">
             <tr md-row>
                 <th colspan="{{ctrl.selectedWorkItems.length > 1 ? 11 : 12}}"
                     ng-if="ctrl.selectedWorkItems.length" md-column>
@@ -89,12 +89,6 @@
                     md-order-by="">
                     <span>{{lang.correspondence_sites}}</span>
                 </th>
-                <!--<th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="docType">
-                    <span>{{lang.type}}</span>
-                </th>
-                <th ng-if="!ctrl.selectedWorkItems.length" md-column md-order-by="numberOfDays">
-                    <span>{{lang.number_of_days}}</span>
-                </th>-->
                 <th ng-if="!ctrl.selectedWorkItems.length" md-column>
                     <!-- Grid Actions -->
                     <md-button tooltip="{{lang.view_magazine}}"
@@ -112,9 +106,9 @@
             <tr md-row md-select="userInbox"
                 grid-right-click-directive="userInbox"
                 model="userInbox"
-                ng-class="!userInbox.generalStepElm.isOpen? 'unread-row': 'read-row'"
+                ng-class="!userInbox.generalStepElm.isOpen ? 'unread-row': 'read-row'"
                 selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
-                ng-repeat="userInbox in ctrl.workItems | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                ng-repeat="userInbox in searchResults = (ctrl.workItems | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                 <td md-cell class="indicator-td">
                     <!-- Doc class -->
                     <grid-indicator-directive record-type="WorkItem"
@@ -184,8 +178,6 @@
                 <td md-cell class="td-data">
                     <main-site-sub-site-directive item="userInbox"></main-site-sub-site-directive>
                 </td>
-                <!--<td md-cell>{{userInbox.generalStepElm.docType}}</td>
-                <td md-cell>{{userInbox.generalStepElm.numberOfDays}}</td>-->
                 <td md-cell class="p-r0"
                     ng-if="ctrl.selectedWorkItems.length < 2">
                     <div layout-align="start center" flex ng-if="!ctrl.selectedWorkItems.length
@@ -208,6 +200,15 @@
                     </div>
                 </td>
             </tr>
+            <tr md-row ng-if="!ctrl.workItems.length">
+                <td md-cell colspan="12" class="red-text text-center">{{lang.no_records_found}}
+                </td>
+            </tr>
+            <tr md-row ng-if="ctrl.workItems.length && !searchResults.length">
+                <td md-cell colspan="12" class="red-text text-center">
+                    {{lang.no_records_found_matching_search}}
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
@@ -215,6 +216,6 @@
             md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
             md-limit-options="ctrl.grid.limitOptions"
             md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-            md-total="{{ctrl.workItems.length}}" md-page-select>
+            md-total="{{(ctrl.workItems | filter:ctrl.searchModel).length}}" md-page-select>
     </md-table-pagination>
 </md-table-container>

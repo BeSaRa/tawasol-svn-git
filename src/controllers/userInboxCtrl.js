@@ -280,6 +280,17 @@ module.exports = function (app) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
         };
 
+        self.getSortedDataForInbox = function () {
+            self.userInboxes = $filter('orderBy')(self.userInboxes, self.grid.order);
+        };
+
+        self.getSortedDataForStarred = function(){
+            self.starredUserInboxes = $filter('orderBy')(self.starredUserInboxes, self.starredGrid.order);
+        };
+        self.getSortedDataForFilter = function(){
+            self.workItemsFilters[self.selectedFilter.index] = $filter('orderBy')(self.workItemsFilters[self.selectedFilter.index], self.filterGrid[self.selectedFilter.index].order);
+        };
+
         /**
          * @description Reload the grid of user inboxes
          * @param pageNumber
@@ -303,6 +314,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedDataForInbox();
                     return result;
                 });
         };

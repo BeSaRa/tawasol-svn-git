@@ -75,7 +75,8 @@
                                                 terminate-user-inbox-bulk="ctrl.terminateBulk"
                                                 mark-as-read-unread="ctrl.markAsReadUnread"
                                                 check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
-                                                selected-work-items="ctrl.selectedUserInboxes">
+                                                selected-work-items="ctrl.selectedUserInboxes"
+                                                sorting-callback="ctrl.getSortedDataForInbox">
                                         </work-item-inbox-directive>
                                     </md-content>
                                 </md-tab>
@@ -96,7 +97,8 @@
                                                 terminate-user-inbox-bulk="ctrl.terminateBulk"
                                                 mark-as-read-unread="ctrl.markAsReadUnread"
                                                 check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
-                                                selected-work-items="ctrl.selectedUserInboxes">
+                                                selected-work-items="ctrl.selectedUserInboxes"
+                                                sorting-callback="ctrl.getSortedDataForStarred">
                                         </work-item-inbox-directive>
                                     </md-content>
                                 </md-tab>
@@ -154,7 +156,8 @@
                                                     terminate-user-inbox-bulk="ctrl.terminateBulk"
                                                     mark-as-read-unread="ctrl.markAsReadUnread"
                                                     check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
-                                                    selected-work-items="ctrl.selectedUserInboxes">
+                                                    selected-work-items="ctrl.selectedUserInboxes"
+                                                    sorting-callback="ctrl.getSortedDataForFilter">
                                             </work-item-inbox-directive>
                                         </md-content>
                                     </md-tab-body>
