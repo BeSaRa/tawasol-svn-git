@@ -56,22 +56,6 @@ module.exports = function (app) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
-        var today = new Date();
-        self.selectedYear = today.getFullYear();
-        self.selectedMonth = today.getMonth() + 1;
-        self.getMonthYearForSentItems = function ($event) {
-            g2gSentItemsService
-                .openDateAndYearDialog(self.selectedMonth, self.selectedYear, $event)
-                .then(function (result) {
-                    self.selectedMonth = result.month;
-                    self.selectedYear = result.year;
-                    self.selectedMonthText = angular.copy(result.monthText);
-                    self.reloadG2gItems(self.grid.page);
-                });
-        };
-
-        self.getMonthYearForSentItems();
-
         /**
          * @description Gets the grid records by sorting
          */
@@ -99,6 +83,23 @@ module.exports = function (app) {
                     return result;
                 });
         };
+
+        var today = new Date();
+        self.selectedYear = today.getFullYear();
+        self.selectedMonth = today.getMonth() + 1;
+        self.getMonthYearForSentItems = function ($event) {
+            g2gSentItemsService
+                .openDateAndYearDialog(self.selectedMonth, self.selectedYear, $event)
+                .then(function (result) {
+                    self.selectedMonth = result.month;
+                    self.selectedYear = result.year;
+                    self.selectedMonthText = angular.copy(result.monthText);
+                    self.reloadG2gItems(self.grid.page);
+                });
+        };
+        self.selectedMonthText = generator.months[self.selectedMonth - 1].text;
+        self.reloadG2gItems(self.grid.page);
+        //self.getMonthYearForSentItems();
 
         /**
          * @description Preview document
