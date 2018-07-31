@@ -2065,8 +2065,13 @@ module.exports = function (app) {
             var info = correspondence.getInfo();
             return self.showReasonDialog('reject_reason', $event)
                 .then(function (reason) {
+                    var url = 'outgoings';
+                    if (info.documentClass === 'incoming')
+                        url = 'incomings';
+                    else if (info.documentClass === 'internal')
+                        url = 'internals';
                     return $http
-                        .put(urlService.outgoings + '/reject', {
+                        .put(urlService[url] + '/reject', {
                             first: info.vsId,
                             second: reason
                         })

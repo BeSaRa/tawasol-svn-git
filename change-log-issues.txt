@@ -39,228 +39,232 @@ General:
 38: Fix - Grid actions to show in quick actions.
 
 Bugs:
-12291: Fix - Business : user cannot delete others comments (user has permission to delete all comments)
-11757: Fix - Business : Review Internal Document : "Print barcode" action for internal paper doesn't exist from review/search pages
-11714: Fix - Admin : Manage Private Announcement : cannot add new Private Announcement
-11715: Fix - Admin : Public Announcement : Add New Public Announcement throws an Internal Server Exception
-12478: Fix - Business : User Inbox - Export and print button are enabled only in Work Flow History in View Tracking Sheet
-11306: Fix - Business : Open Department’s Ready to Export Queue : There is no any confirmation message after click on remove
-10934: Fix - Business : Open Department’s Sent Document Queue : User can't sort items by sender
-10932: Fix - Business : Open Department’s Sent Document Queue : User can't sort items security level
-11721: Fix - Business : sent item : Attachment tab is empty
-11911: Fix - Business : Manage Tags : A help comment should be added in the manage tags window that user should click on enter button once tag is added if not tag will not be stored/saved.
-10265: Fix - Admin : Modify Entity : User can't save the data after editing
-12286: Fix - Admin : Distribution list :Must Reload Distribution lists page to show the New one.
-11634: Fix - Admin : Activate/Deactivate Government Entities after selecting one or more and changing from "Select a status" Dropdown Menu selections don't work.
-12253: Fix - Business: User preferences - When user deactivate a private WF group, it disappears from the list and user cannot enable it again
-12413: Fix - Business: View Tracking Sheet - outgoing delivery report - Added Action Date, Delivery Date, Message status. Removed Priority Level.
-12359: Fix - Business: Create reply - the correspondence site should be filled with the Correspondence site already in the incoming document.
-11709: Fix - Admin: Add new document template - the template donot appear in the list if the user added it is not in an OU with Registery
-12275: Fix - Admin: Distribution List - User is able to add same group members more than once.
-12644: Fix - central archive - while adding a paper outgoing and send to ready to export, the document appear in ready to export for the selected OU from archive.
-10905: Fix - Business: Manage Preferences: OOF-Proxy Mail Inbox: Some Actions must be removed from Proxy Mailbox.
-11391: Fix - Admin: Inactive & Not Global correspondence site doesn't appear when adding it to an OU in the Organization Structure.
-11384: Fix - Admin: Active Sub Correspondence Site doesn't appear when adding it to an OU in the Organization Structure.
-12268: Fix - User preferences - add comment - only the user's OUs should be displayed in the list while adding a new comment.
-12444: Fix - Business: Favorite Documents - pagination - when click on next > it skips and go to empty page.
-11366: Fix - Business: Open Department's Incoming Queue: after receiving an outgoing then Checking for its linked documents Not Linked documents appear when searching.
-12285: Fix - System Administration : Distribution list : Add New Distribution list with only numbers in Arabic name field.
+12291: Business : user cannot delete others comments (user has permission to delete all comments)
+11757: Business : Review Internal Document : "Print barcode" action for internal paper doesn't exist from review/search pages
+11714: Admin : Manage Private Announcement : cannot add new Private Announcement
+11715: Admin : Public Announcement : Add New Public Announcement throws an Internal Server Exception
+12478: Business : User Inbox - Export and print button are enabled only in Work Flow History in View Tracking Sheet
+11306: Business : Open Department’s Ready to Export Queue : There is no any confirmation message after click on remove
+10934: Business : Open Department’s Sent Document Queue : User can't sort items by sender
+10932: Business : Open Department’s Sent Document Queue : User can't sort items security level
+11721: Business : sent item : Attachment tab is empty
+11911: Business : Manage Tags : A help comment should be added in the manage tags window that user should click on enter button once tag is added if not tag will not be stored/saved.
+10265: Admin : Modify Entity : User can't save the data after editing
+12286: Admin : Distribution list :Must Reload Distribution lists page to show the New one.
+11634: Admin : Activate/Deactivate Government Entities after selecting one or more and changing from "Select a status" Dropdown Menu selections don't work.
+12253: Business: User preferences - When user deactivate a private WF group, it disappears from the list and user cannot enable it again
+12413: Business: View Tracking Sheet - outgoing delivery report - Added Action Date, Delivery Date, Message status. Removed Priority Level.
+12359: Business: Create reply - the correspondence site should be filled with the Correspondence site already in the incoming document.
+11709: Admin: Add new document template - the template donot appear in the list if the user added it is not in an OU with Registery
+12275: Admin: Distribution List - User is able to add same group members more than once.
+12644: central archive - while adding a paper outgoing and send to ready to export, the document appear in ready to export for the selected OU from archive.
+10905: Business: Manage Preferences: OOF-Proxy Mail Inbox: Some Actions must be removed from Proxy Mailbox.
+11391: Admin: Inactive & Not Global correspondence site doesn't appear when adding it to an OU in the Organization Structure.
+11384: Admin: Active Sub Correspondence Site doesn't appear when adding it to an OU in the Organization Structure.
+12268: User preferences - add comment - only the user's OUs should be displayed in the list while adding a new comment.
+12444: Business: Favorite Documents - pagination - when click on next > it skips and go to empty page.
+11366: Business: Open Department's Incoming Queue: after receiving an outgoing then Checking for its linked documents Not Linked documents appear when searching.
+12285: System Administration : Distribution list : Add New Distribution list with only numbers in Arabic name field.
 
 
-12678: Fix - Follow up Employee Inbox - all the ous appeared in followup list for all users.
-12702: Fix - Global search - document file field,by default it takes only one value irrespective of what user choose from dropdown and search is not performed based on selected value.
-12687: Fix - Business - Proxy Mail Inbox - Send action appears in Proxy Mail Inbox
-12686: Fix - Launch distribution WF - from department incoming mail launch internal or outgoing document shows a warning that this is a not approved document
-12691: Fix - Tracking sheet - destination history : The full name is displayed in Arabic in the English UI. Also fixed for action by and action type.
-12489: Fix - Incoming document - Edit follow up status once correspondence site added while creating the document.
-12742: Fix - export - while export an outgoing document and enable export with linked document toggle, the document donot appear before and after receiving the document
-12768: Fix - Business - Incoming Mail - Ready To Send Queue - can't be able to edit Correspondence site inside document
-12771: Fix - Terminated Document : view tracking sheet : can't sort action in full history by Action Type or Action By Department
-12772: Fix - Group Mail - Single and Multiple select of documents,Terminate throws an error message.
-12808: Fix - Broadcast - deactivate the OU from organization structure,the OU name shouldn't be appeared in broadcasting drop down while broadcasting.
-12809: Fix - Approving the document from step processor,inside the document.
-12650: Fix - Admin: Manage Preference: When Out Of Office Start date = End Date = Current Date, The Delegation didn't save.
-12239: Fix - Broadcast option should be enabled for any outgoing/Incoming and Internal document from the review phase.
-12441: Fix - linked document - cannot open the burger menu for the linked documents after sending
-12663: Fix - User Preferences - Workflow Groups tab - Edit icon appear in Global Workflow Groups from User Preferences. (showing active workflow groups in broadcast)
-11655: Fix - Business : Open Tracking Sheet : Destinations history is empty
+12678: Follow up Employee Inbox - all the ous appeared in followup list for all users.
+12702: Global search - document file field,by default it takes only one value irrespective of what user choose from dropdown and search is not performed based on selected value.
+12687: Business - Proxy Mail Inbox - Send action appears in Proxy Mail Inbox
+12686: Launch distribution WF - from department incoming mail launch internal or outgoing document shows a warning that this is a not approved document
+12691: Tracking sheet - destination history : The full name is displayed in Arabic in the English UI. Also fixed for action by and action type.
+12489: Incoming document - Edit follow up status once correspondence site added while creating the document.
+12742: export - while export an outgoing document and enable export with linked document toggle, the document donot appear before and after receiving the document
+12768: Business - Incoming Mail - Ready To Send Queue - can't be able to edit Correspondence site inside document
+12771: Terminated Document : view tracking sheet : can't sort action in full history by Action Type or Action By Department
+12772: Group Mail - Single and Multiple select of documents,Terminate throws an error message.
+12808: Broadcast - deactivate the OU from organization structure,the OU name shouldn't be appeared in broadcasting drop down while broadcasting.
+12809: Approving the document from step processor,inside the document.
+12650: Admin: Manage Preference: When Out Of Office Start date = End Date = Current Date, The Delegation didn't save.
+12239: Broadcast option should be enabled for any outgoing/Incoming and Internal document from the review phase.
+12441: linked document - cannot open the burger menu for the linked documents after sending
+12663: User Preferences - Workflow Groups tab - Edit icon appear in Global Workflow Groups from User Preferences. (showing active workflow groups in broadcast)
+11655: Business : Open Tracking Sheet : Destinations history is empty
 
-11728: Fix - Business: Launch and Distribution WF is not working from Returned Mail Queue in Department inbox. (Ahmed Mostafa Ebrahem Mohamed Ali)
-12740: Fix - property configuration - warning appeared while adding the content to enter the main and sub classification although they are not mandatory (Ahmed Mostafa Ebrahem Mohamed Ali)
-12817: Fix - property configuration - editing any item in the list, is duplicated after save. (Ahmed Mostafa Ebrahem Mohamed Ali)
-12818: Fix - property configuration - after editing any item in the list of incoming it disappear from the outgoing and internal document classes and the opposite as well. (Ahmed Mostafa Ebrahem Mohamed Ali)
-11289: Fix - Business: Favorite Page: There is no indicators for the Document Added to favorite.
-11671: Fix - Business : There are some information are missing in document information screen. (Don't show comments count if outgoing | Internal | Incoming | favorite documents | user sent items | department sent items queues).
-12825: Fix - Subject field for any document should accept "."
-12822: Fix - Preferences - warning appeared when try to delegate a user for yourself and already another user is delegating you, but not all the data is displayed.
-12834: Fix - Outgoing search - filter by year documents and right click and click on broadcast throws an error
-12853: Fix - Search: outgoing search : sort result by security level didn't work
-12854: Fix - followup date - follow up date should not accept to be in the past while adding new/ editing a document or in manage destinations
-12857: Fix - user inbox : sent items : sort by security level option didn't work
-12856: Fix - User inbox : sent items : cannot sort item by type.
+11728: Business: Launch and Distribution WF is not working from Returned Mail Queue in Department inbox. (Ahmed Mostafa Ebrahem Mohamed Ali)
+12740: property configuration - warning appeared while adding the content to enter the main and sub classification although they are not mandatory (Ahmed Mostafa Ebrahem Mohamed Ali)
+12817: property configuration - editing any item in the list, is duplicated after save. (Ahmed Mostafa Ebrahem Mohamed Ali)
+12818: property configuration - after editing any item in the list of incoming it disappear from the outgoing and internal document classes and the opposite as well. (Ahmed Mostafa Ebrahem Mohamed Ali)
+11289: Business: Favorite Page: There is no indicators for the Document Added to favorite.
+11671: Business : There are some information are missing in document information screen. (Don't show comments count if outgoing | Internal | Incoming | favorite documents | user sent items | department sent items queues).
+12825: Subject field for any document should accept "."
+12822: Preferences - warning appeared when try to delegate a user for yourself and already another user is delegating you, but not all the data is displayed.
+12834: Outgoing search - filter by year documents and right click and click on broadcast throws an error
+12853: Search: outgoing search : sort result by security level didn't work
+12854: followup date - follow up date should not accept to be in the past while adding new/ editing a document or in manage destinations
+12857: user inbox : sent items : sort by security level option didn't work
+12856: User inbox : sent items : cannot sort item by type.
 
-12829: Fix - Enhancement - search in correspondence should search by clicking enter as well
-13487 Fix - Buisness - linked entities - there is no validation in some fields when add Employee from any type of document
-13488 Fix - Buisness - linked entities - there is no validation in some fields when add company from any type of document
-13435 Fix - Usability - Enhancement - Add tooltips to alert , annoucement and help icons
+12829: Enhancement - search in correspondence should search by clicking enter as well
+13487: Buisness - linked entities - there is no validation in some fields when add Employee from any type of document
+13488: Buisness - linked entities - there is no validation in some fields when add company from any type of document
+13435: Usability - Enhancement - Add tooltips to alert , annoucement and help icons
 
 
 
 2.0.2
 ---------
-13410: Fix - IE Compatibility: List of Excluded Users/OUs doesn't appear.
-13412: Fix - IE Compatibility: When add new outgoing, Manage Correspondence site is shrunken and a useless scroll bar appear.
-13498: Fix - Send Main document by Fax or SMS not working
-13469: Fix - When user add correspondence site then delete it, the deleted Sub Correspondence doesn't appear in list of correspondence site.
-13471: Fix - inbox filter : Edit Filter did't work.
-13480: Fix - Correspondence site with follow up status without reply hasn't added when Select all other CS need reply without follow up date.
-13467: Fix - Barcode tab is the Default Tab in Global Setting.
-13464: Fix - Sites Fixes - Add new document- the number of characters in document title is not displayed and the title accept more than 255 characters.
-13432: Fix - incoming scan queue - there is no print barcode option displayed
-13429: Fix - outgoing and internal Prepare queue - there is no print barcode option displayed
-13426: Fix - Add paper outgoing /internal without content - After saving the actions list is still disabled
-12986: Fix - permission - there is no permission for group mail, broadcast, ranks and folders queues
-13451: Fix - There is no permission for Partial Export.
-13433: Fix - Number of Records appear in Launch and Distribution Workflow doesn't match Rows per page number.
+13410: IE Compatibility: List of Excluded Users/OUs doesn't appear.
+13412: IE Compatibility: When add new outgoing, Manage Correspondence site is shrunken and a useless scroll bar appear.
+13498: Send Main document by Fax or SMS not working
+13469: When user add correspondence site then delete it, the deleted Sub Correspondence doesn't appear in list of correspondence site.
+13471: inbox filter : Edit Filter did't work.
+13480: Correspondence site with follow up status without reply hasn't added when Select all other CS need reply without follow up date.
+13467: Barcode tab is the Default Tab in Global Setting.
+13464: Sites Fixes - Add new document- the number of characters in document title is not displayed and the title accept more than 255 characters.
+13432: incoming scan queue - there is no print barcode option displayed
+13429: outgoing and internal Prepare queue - there is no print barcode option displayed
+13426: Add paper outgoing /internal without content - After saving the actions list is still disabled
+12986: permission - there is no permission for group mail, broadcast, ranks and folders queues
+13451: There is no permission for Partial Export.
+13433: Number of Records appear in Launch and Distribution Workflow doesn't match Rows per page number.
 
 13-06-2018
 ------------------------------
-13462: Fix - User doesn't get notification when has a new document in inbox.
-13538: Fix - Some data should be added to Search Result.(1- Indicator of linked document.
+13462: User doesn't get notification when has a new document in inbox.
+13538: Some data should be added to Search Result.(1- Indicator of linked document.
                                                          2- Correspondence site.
                                                          3- Serial Number and Document Number)
 
 14-06-2018
 ------------------------------
-13545: Fix - Get link appears from the step processor while get link permission is disabled from System Administration. Also added permission for send link to document by email, SEND_COMPOSITE_DOCUMENT_BY_EMAIL
-13542: Fix - broadcast permission - from general search, for incoming document broadcast action should not appear when user has no permission
+13545: Get link appears from the step processor while get link permission is disabled from System Administration. Also added permission for send link to document by email, SEND_COMPOSITE_DOCUMENT_BY_EMAIL
+13542: broadcast permission - from general search, for incoming document broadcast action should not appear when user has no permission
 
 24-06-2018
 ------------------------------
-13409: Fix - IE Compatibility: When Scroll inbox down, Pagination is overlapped with Documents.
-13438: Fix - Comment is edited successfully When disable private and Global toggles and no user/OU is included
-13544: Fix - Partial export doesn't appear when user has permission.
-13550: Fix - export by selection - cannot open document exported with selection items
-13535: Fix - Edit word- crash is occurred in the backend when save after editing any electronic document's content from any queue after saving the document
-13463: Fix - Admin- Global Settings - Can't Generate barcode
-13457: Fix - There is no title for Subscribe Screen.
-13459: Fix - inbox filter : ( Action , type , Sender ) tabs didn't have title name
-13461: Fix - inbox filter : there are tab and toggle didn't have title
-13547: Fix - export by selection - the linked entities with type < external user and employee> its name is not displayed in the list
-13549: Fix - IE Compatibility : When Search by Year, there is no default dates are added and invalid dates appear.
-13491: Fix - User Inbox - Reload icon doesn't work
-13502: Fix - There is no validation when search by linked entities.
-13157: Fix - Buisness - linked entities - there is no validation in some fields when add external user from any type of document
-13448: Fix - Name of Related Object Linked to Document doesn't appear while Export/partial Export.
-13456: Fix - inbox filter : there is no Has due date, due date from and due date to filter option.
+13409: IE Compatibility: When Scroll inbox down, Pagination is overlapped with Documents.
+13438: Comment is edited successfully When disable private and Global toggles and no user/OU is included
+13544: Partial export doesn't appear when user has permission.
+13550: export by selection - cannot open document exported with selection items
+13535: Edit word- crash is occurred in the backend when save after editing any electronic document's content from any queue after saving the document
+13463: Admin- Global Settings - Can't Generate barcode
+13457: There is no title for Subscribe Screen.
+13459: inbox filter : ( Action , type , Sender ) tabs didn't have title name
+13461: inbox filter : there are tab and toggle didn't have title
+13547: export by selection - the linked entities with type < external user and employee> its name is not displayed in the list
+13549: IE Compatibility : When Search by Year, there is no default dates are added and invalid dates appear.
+13491: User Inbox - Reload icon doesn't work
+13502: There is no validation when search by linked entities.
+13157: Buisness - linked entities - there is no validation in some fields when add external user from any type of document
+13448: Name of Related Object Linked to Document doesn't appear while Export/partial Export.
+13456: inbox filter : there is no Has due date, due date from and due date to filter option.
 
 25-06-2018
 ---------------------------------
-13439: Fix - User can't remove multiple Comments.
-13402: Fix - compatability - firefox - the new magazine view is not opened properly on firefox
-13540: Fix - regression - Launch from search, user should not be able to launch an electronic approved document that already has an active WF
-13600: Fix - UI - change the filter icon and tooltip
+13439: User can't remove multiple Comments.
+13402: compatability - firefox - the new magazine view is not opened properly on firefox
+13540: regression - Launch from search, user should not be able to launch an electronic approved document that already has an active WF
+13600: UI - change the filter icon and tooltip
 
 26-06-2018
 -----------------------------------
-13470: Fix - Follow up date - can't set the same date for more than one correspondence site in The Selected Distribution List
-13499: Fix - The Correspondence sites appear on advanced search are the same with that appear on the pop-up.	3 - Medium	Active	Navjot Singh	1
+13470: Follow up date - can't set the same date for more than one correspondence site in The Selected Distribution List
+13499: The Correspondence sites appear on advanced search are the same with that appear on the pop-up.	3 - Medium	Active	Navjot Singh	1
 
 27-06-2018
 -----------------------------------
-13591: Fix - Regression - hide the document security schema for NON REG OUs
-13688: Fix - Regression: Loading in screen and menu when cancel Deleting Role
+13591: Regression - hide the document security schema for NON REG OUs
+13688: Regression: Loading in screen and menu when cancel Deleting Role
 
 28-06-2018
 -----------------------------------
-13702: Fix - Regression: The new document subject doesn't displayed when edit it from the document.
-13694: Fix - In Simple Search, When Select Correspondence site type and Main then Change the Main, the selected main doesn't disappear.
+13702: Regression: The new document subject doesn't displayed when edit it from the document.
+13694: In Simple Search, When Select Correspondence site type and Main then Change the Main, the selected main doesn't disappear.
 
 30-06-2018
 -----------------------------------
-13686: Fix - Regression - Tags indicator not working from Sent Items
-13699: Fix - Regression - Proxy mail- crash occurred when terminate any document
+13686: Regression - Tags indicator not working from Sent Items
+13699: Regression - Proxy mail- crash occurred when terminate any document
 
 01-07-2018
 -----------------------------------
-13675: Fix - Regression : Add to Folder need to be removed from Follow-up employee inbox.
-13696: Fix - Regeression - OOF - proxy mail - export for outgoing paper document crash in the backend
-13647: Fix - Regression : Add to folder action is not working in user inbox.
-13674: Fix - Regression: Empty Users list appear when Transfer multiple documents to user in follow-up employee inbox queue.
+13675: Regression : Add to Folder need to be removed from Follow-up employee inbox.
+13696: Regeression - OOF - proxy mail - export for outgoing paper document crash in the backend
+13647: Regression : Add to folder action is not working in user inbox.
+13674: Regression: Empty Users list appear when Transfer multiple documents to user in follow-up employee inbox queue.
 
 02-07-2018
 --------------------
-13753: Fix - Recall - User sent items - Wrong message appear when Recall document already recalled.
-13754: Fix - Recall - User sent items - The Recalled Document appear in sender user inbox.
+13753: Recall - User sent items - Wrong message appear when Recall document already recalled.
+13754: Recall - User sent items - The Recalled Document appear in sender user inbox.
 
 03-07-2018
 -------------------
-13661: Fix - Regression: The Correspondence site is saved successfully, when edit it to need reply without select follow-up date.
-12855: Fix - Regression - Incoming review queue - manage distinations add new/editing are not saved
-13634: Fix - Workflow History - The Creation Date is incorrect when create content from Prepare Queue from electronic document (outgoing / internal)
-13646: Fix - Enhancement : Need to add tooltip to document type in Magazine view in user inbox.
-13617: Fix - Regression : Classification List doesn't appear in Outgoing / Incoming / Internal / General Search.
-13618: Fix - Regression : File List doesn't appear in Outgoing / Incoming / Internal / General Search.
-13533: Fix - regression - Session timeout - after the session is timedout and i click on any other queue, the login popup is opened but not responsive at all, cannot click on anything
-13539: Fix - In Magazine view, Quick actions should be added.
+13661: Regression: The Correspondence site is saved successfully, when edit it to need reply without select follow-up date.
+12855: Regression - Incoming review queue - manage distinations add new/editing are not saved
+13634: Workflow History - The Creation Date is incorrect when create content from Prepare Queue from electronic document (outgoing / internal)
+13646: Enhancement : Need to add tooltip to document type in Magazine view in user inbox.
+13617: Regression : Classification List doesn't appear in Outgoing / Incoming / Internal / General Search.
+13618: Regression : File List doesn't appear in Outgoing / Incoming / Internal / General Search.
+13533: regression - Session timeout - after the session is timedout and i click on any other queue, the login popup is opened but not responsive at all, cannot click on anything
+13539: In Magazine view, Quick actions should be added.
 
 
 08-07-2018
 -------------------
-13783: Fix - Recall - User Sent items - Recall appear for Terminated Document
-13439: Fix - User can't remove multiple Comments.
-13694: Fix - In Simple Search, When Select Correspondence site type and Main then Change the Main, the selected main doesn't disappear.
-13685: Fix - Regression: An Error occur on console when add classification view permission when add new user.
-13925: Fix - Regression - user can't Edit Correspondence site from Draft Queue inside outgoing document
+13783: Recall - User Sent items - Recall appear for Terminated Document
+13439: User can't remove multiple Comments.
+13694: In Simple Search, When Select Correspondence site type and Main then Change the Main, the selected main doesn't disappear.
+13685: Regression: An Error occur on console when add classification view permission when add new user.
+13925: Regression - user can't Edit Correspondence site from Draft Queue inside outgoing document
 
 09-07-2018
 -------------------
-13935: Fix - Magazine view - Quick actions in magzaine view donot appear in filters pages
-13936: Fix - regression - quick search - Actions from inside the document donot exist
-13679: Fix - UI: Caption need to be added in the drop down list that correspondence site is selected from.
-13763: Fix - IE Compatibility - Action Tab in Broadcast Screen is Empty.
-13743: Fix - IE Compatibility - Group Mail icon Not Found in Launch and Distribution workflow
-13682: Fix - Regression - user can't be able to Resend document from Returned Mail
-13684: Fix - regression - Launch New Distribution Workflow not working from Returned Mail inside document
-13939: Fix - IE Compatibility - Filters name appear corrupted in Magazine View.
+13935: Magazine view - Quick actions in magzaine view donot appear in filters pages
+13936: regression - quick search - Actions from inside the document donot exist
+13679: UI: Caption need to be added in the drop down list that correspondence site is selected from.
+13763: IE Compatibility - Action Tab in Broadcast Screen is Empty.
+13743: IE Compatibility - Group Mail icon Not Found in Launch and Distribution workflow
+13682: Regression - user can't be able to Resend document from Returned Mail
+13684: regression - Launch New Distribution Workflow not working from Returned Mail inside document
+13939: IE Compatibility - Filters name appear corrupted in Magazine View.
 
 
 11-07-2018
 ------------------
-13931: Fix - Inbox Filter - Filtration by Received date is between values get result for documents between from date and the day before to date
-13910: Fix - Inbox Filter - Add new filtration shouldn't accept the duplicated name
-13908: Fix - Inbox Filter - Item order display a random number when user add new filter
-13907: Fix - Recall- Department inbox - Empty Pop-up appear when recall Received/Quick Received/Returned Document.
+13931: Inbox Filter - Filtration by Received date is between values get result for documents between from date and the day before to date
+13910: Inbox Filter - Add new filtration shouldn't accept the duplicated name
+13908: Inbox Filter - Item order display a random number when user add new filter
+13907: Recall- Department inbox - Empty Pop-up appear when recall Received/Quick Received/Returned Document.
 
 
 15-07-2018
 -----------------
-13940: Fix - Regression - There is no action appear when user click on multi select check box from Manage Linked Documents
+13940: Regression - There is no action appear when user click on multi select check box from Manage Linked Documents
 
 17-07-2018
 -----------------
-13965: Fix - Subscription - Notification doesn't displayed while backend returns it when create reply for subscribed document.
-13946: Fix - Subscription - Can add document subscribe more than one Time.
-13961: Fix - Simple Add - Warning message should appear that sites has status need reply and date not entered will not be added.
-13960: Fix - Simple Add - When Select Correspondence site type and Main then Change the Type, the selected main and sub results don't disappear.
+13965: Subscription - Notification doesn't displayed while backend returns it when create reply for subscribed document.
+13946: Subscription - Can add document subscribe more than one Time.
+13961: Simple Add - Warning message should appear that sites has status need reply and date not entered will not be added.
+13960: Simple Add - When Select Correspondence site type and Main then Change the Type, the selected main and sub results don't disappear.
 
 23-07-2018
 -----------------
-14404: Fix - Admin -barcode settings - if the Barcode label element is not added an empty popup and a warning pop up both appeared
-14402: Fix - Magazine view - due date is not appearing in the grid if its not passed
-14405: Fix - The deactivated Folder from User Preferences should not be opened from Folder Queue
+14404: Admin -barcode settings - if the Barcode label element is not added an empty popup and a warning pop up both appeared
+14402: Magazine view - due date is not appearing in the grid if its not passed
+14405: The deactivated Folder from User Preferences should not be opened from Folder Queue
 
 26-07-2018
 -----------------
-13740: Fix - UI - Enhancement - Scroll bar should be Added in Public/Private Announcement for English/Arabic Body
-14407: Fix - Add- in documents without correspondence site should not be broadcasted
-15609: Fix - IE Compatibility - Tracking sheets appear empty.
-15614: Fix - G2G - download action should not appear inside the document in g2g incoming mail
-15626: Fix - G2G - After receiving the incoming document user should be able to launch and print barcode for the document
+13740: UI - Enhancement - Scroll bar should be Added in Public/Private Announcement for English/Arabic Body
+14407: Add- in documents without correspondence site should not be broadcasted
+15609: IE Compatibility - Tracking sheets appear empty.
+15614: G2G - download action should not appear inside the document in g2g incoming mail
+15626: G2G - After receiving the incoming document user should be able to launch and print barcode for the document
 
 29-07-2018
 -----------------
-15651: Fix - document security - UI - The text displayed for the 2D toggle should be "No" if disabled
-13762: Fix - IE Compatibility - Can't Select OU When Broadcast a document.
-13763: Fix - IE Compatibility - Action Tab in Broadcast Screen is Empty.
+15651: document security - UI - The text displayed for the 2D toggle should be "No" if disabled
+13762: IE Compatibility - Can't Select OU When Broadcast a document.
+13763: IE Compatibility - Action Tab in Broadcast Screen is Empty.
 Reverted the g2gId dropdown to code field in organization popup.
+
+31-07-2018
+----------------
+15742: Kahramaa - An Error Occur in Console when Reject Incoming/Internal document.
