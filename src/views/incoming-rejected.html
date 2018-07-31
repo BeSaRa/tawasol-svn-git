@@ -82,7 +82,7 @@
                                     <tr md-row md-select="rejectedIncoming" grid-right-click-directive
                                         model="rejectedIncoming"
                                         selected-length="{{ctrl.selectedRejectedIncomings.length ? ctrl.selectedRejectedIncomings.length : 0}}"
-                                        ng-repeat="rejectedIncoming in searchResults = (ctrl.rejectedIncomings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order) track by $index">
+                                        ng-repeat="rejectedIncoming in searchResults = (ctrl.rejectedIncomings  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                         <td md-cell class="td-data">
                                             <a href="" ng-if="rejectedIncoming.hasContent()" class="view-doc"
                                                ng-click="ctrl.viewDocument(rejectedIncoming, $event)">{{rejectedIncoming.docSubject}}</a>

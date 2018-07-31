@@ -64,7 +64,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-select="email" md-row
-                                        ng-repeat="email in ctrl.emails | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                        ng-repeat="email in ctrl.emails | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{email.subject}}</td>
                                         <td md-cell>{{email.serial}}</td>
                                         <td md-cell>
