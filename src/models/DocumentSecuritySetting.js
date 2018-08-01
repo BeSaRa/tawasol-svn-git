@@ -13,7 +13,7 @@ module.exports = function (app) {
             self.textRepetitionNo = 1;
             self.textSize = 40;
             self.securityLevel = null;
-            self.secureUnSigned = null;
+            self.secureUnSigned = false;
 
 
             // every model has required fields
