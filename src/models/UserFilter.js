@@ -140,7 +140,8 @@ module.exports = function (app) {
                 });
                 delete this.ui;
                 _.map(availableKeys, function (index) {
-                    if (self.filterCriteria[index] === null || self.filterCriteria[index] === 'null,null' || self.filterCriteria[index] === 'null') {
+                    if (self.filterCriteria[index] === null || self.filterCriteria[index] === 'null,null' || self.filterCriteria[index] === 'null' ||
+                        self.filterCriteria[index] === "") {
                         delete self.filterCriteria[index];
                     }
                 });
