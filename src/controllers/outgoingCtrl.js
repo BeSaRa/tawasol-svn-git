@@ -75,7 +75,7 @@ module.exports = function (app) {
         self.documentInformation = null;
 
 
-        self.outgoing = /*demoOutgoing;*/
+        self.outgoing =
             new Outgoing({
                 ou: self.employee.getOUID(),
                 addMethod: 0,

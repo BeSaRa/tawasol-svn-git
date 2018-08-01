@@ -173,7 +173,7 @@ module.exports = function (app) {
                                         outgoing.createdOn = new Date();
                                         outgoing.addMethod = 0;
                                         outgoing.classDescription = 'Outgoing';
-                                        return outgoing
+                                        return outgoing;
                                     });
                             })
                     } else if (workItem) {

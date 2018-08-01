@@ -47,7 +47,7 @@ module.exports = function (app) {
 
             if (angular.isArray(model.sitesInfoTo) && model.sitesInfoTo.length) {
                 model.sitesInfoTo = model.sitesInfoTo[0];
-                console.log(model.sitesInfoTo);
+                //console.log(model.sitesInfoTo);
                 if (model.sitesInfoTo.followupDate1 && model.sitesInfoTo.followupDate2) {
                     model.sitesInfoTo.followupDates = {
                         first: generator.getTimeStampFromDate(model.sitesInfoTo.followupDate1),

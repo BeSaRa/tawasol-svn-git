@@ -602,11 +602,11 @@ module.exports = function (app) {
 
         /**
          * @description Create Reply
-         * @param workItem
+         * @param correspondence
          * @param $event
          */
-        self.createReply = function (workItem, $event) {
-            var info = workItem.getInfo();
+        self.createReply = function (correspondence, $event) {
+            var info = correspondence.getInfo();
             dialog.hide();
             $state.go('app.outgoing.add', {vsId: info.vsId, action: 'reply'});
         };
