@@ -39,6 +39,9 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'outgoingCtrl';
         contextHelpService.setHelpTo('add-outgoing');
+
+        self.isDemoBuild = generator.isDemoBuild;
+
         self.employeeService = employeeService;
         self.emptySubSites = false;
         // current employee

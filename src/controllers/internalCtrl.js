@@ -34,6 +34,9 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'internalCtrl';
         contextHelpService.setHelpTo('add-internal');
+
+        self.isDemoBuild = generator.isDemoBuild;
+
         self.employeeService = employeeService;
         // current employee
         self.employee = employeeService.getEmployee();

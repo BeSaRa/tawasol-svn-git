@@ -72,7 +72,7 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.incoming.tags.length"
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.incoming.tags.length"
                                         ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_TAGS')">
                             <accordion-title>
                                 <md-icon md-svg-icon="tag-multiple"></md-icon>
@@ -100,7 +100,7 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.incoming.attachments.length">
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.incoming.attachments.length">
                             <accordion-title>
                                 <md-icon md-svg-icon="attachment"></md-icon>
                                 <span>{{lang.incoming_manage_attachments}}</span>
@@ -116,7 +116,7 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.incoming.documentComments.length"
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.incoming.documentComments.length"
                                         ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS') && ctrl.employeeService.hasPermissionTo('ADD_DOCUMENT_COMMENT')">
                             <accordion-title>
                                 <md-icon md-svg-icon="comment"></md-icon>
@@ -133,7 +133,7 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.incoming.linkedEntities.length">
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.incoming.linkedEntities.length">
                             <accordion-title>
                                 <md-icon md-svg-icon="vector-triangle"></md-icon>
                                 <span>{{lang.incoming_linked_entities}}</span>

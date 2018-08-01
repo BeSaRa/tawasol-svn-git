@@ -6,6 +6,9 @@ module.exports = function (app) {
                                        moment) {
         'ngInject';
         var self = this, dialog, langService, toast, rootEntity;
+        //TODO: This property is just added to show/hide feature according for demo build. It will be removed soon.
+        self.isDemoBuild = false;
+
         var documentClassMap = {
             OUTGOING: 1,
             INCOMING: 2,

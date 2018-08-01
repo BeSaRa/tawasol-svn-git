@@ -36,6 +36,9 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'incomingCtrl';
         contextHelpService.setHelpTo('add-incoming');
+
+        self.isDemoBuild = generator.isDemoBuild;
+
         self.employeeService = employeeService;
         // current employee
         self.employee = employeeService.getEmployee();

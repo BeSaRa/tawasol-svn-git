@@ -53,7 +53,7 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.internal.tags.length"
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.internal.tags.length"
                                         ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_TAGS')">
                             <accordion-title>
                                 <md-icon md-svg-icon="tag-multiple"></md-icon>
@@ -80,7 +80,7 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.internal.attachments.length">
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.internal.attachments.length" ng-if="false">
                             <accordion-title>
                                 <md-icon md-svg-icon="attachment"></md-icon>
                                 <span>{{lang.internal_manage_attachments}}</span>
@@ -96,7 +96,7 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.internal.documentComments.length"
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.internal.documentComments.length"
                                         ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS') && ctrl.employeeService.hasPermissionTo('ADD_DOCUMENT_COMMENT')">
                             <accordion-title>
                                 <md-icon md-svg-icon="comment"></md-icon>
@@ -113,7 +113,7 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item pass-when="!!ctrl.internal.linkedEntities.length"
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.internal.linkedEntities.length"
                                         ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')">
                             <accordion-title>
                                 <md-icon md-svg-icon="vector-triangle"></md-icon>
