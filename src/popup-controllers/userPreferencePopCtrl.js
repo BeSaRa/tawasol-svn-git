@@ -951,6 +951,7 @@ module.exports = function (app) {
         /**
          * @description this method to reload the grid
          * @param pageNumber
+         * @param $event
          * @return {*|Promise<U>}
          */
         self.reloadUserWorkflowGroups = function (pageNumber, $event) {
@@ -958,7 +959,7 @@ module.exports = function (app) {
             self.userWorkflowProgress = defer.promise;
 
             return userWorkflowGroupService
-                .loadUserWorkflowGroups($event)
+                .getUserWorkflowGroupsByUser($event)
                 .then(function (result) {
                     self.userWorkflowGroups = result;
                     self.selectedUserWorkflowGroups = [];
