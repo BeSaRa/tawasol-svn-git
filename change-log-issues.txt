@@ -274,3 +274,4 @@ Added g2gId field to the organization popup.
 15746: Enhancement - show the documents list directly after opening the user sent items queue or the department sent items queue for the current month
 
 15829: QMC: Inbox : Author didn't display in document information
+15827: QMC-The Private Workflow Group should only appear in the User Preferences from the user which have created this Private WFG

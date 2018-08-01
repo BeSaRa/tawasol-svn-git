@@ -22,7 +22,7 @@ module.exports = function (app) {
          * @returns {Promise|userWorkflowGroups}
          */
         self.loadUserWorkflowGroups = function () {
-            return $http.get(urlService.userWorkflowGroups).then(function (result) {
+            return $http.get(urlService.userWorkflowGroups + '/user/all').then(function (result) {
                 self.userWorkflowGroups = generator.generateCollection(result.data.rs, UserWorkflowGroup, self._sharedMethods);
                 self.userWorkflowGroups = generator.interceptReceivedCollection('UserWorkflowGroup', self.userWorkflowGroups);
                 return self.userWorkflowGroups;
