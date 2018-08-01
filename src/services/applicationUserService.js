@@ -407,7 +407,7 @@ module.exports = function (app) {
                             },
                             userWorkflowGroups: function (userWorkflowGroupService) {
                                 'ngInject';
-                                return userWorkflowGroupService.loadUserWorkflowGroups();
+                                return userWorkflowGroupService.getUserWorkflowGroupsByUser();
                             },
                             // by BeSaRa to resolve the signature if found
                             signature: function (applicationUserSignatureService, $q) {
