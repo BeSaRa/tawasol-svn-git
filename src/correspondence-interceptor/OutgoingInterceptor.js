@@ -11,6 +11,7 @@ module.exports = function (app) {
                       documentTagService,
                       entityTypeService,
                       attachmentService,
+                      Site,
                       documentCommentService,
                       correspondenceService,
                       //manageCorrespondenceSitesService,
@@ -42,9 +43,15 @@ module.exports = function (app) {
             return model;
         });
 
+        function _prepareSites(item) {
+            item.docClassName = 'outgoing';
+            return new Site(item);
+        }
+
+
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            model.sitesInfoCC = !angular.isArray(model.sitesInfoCC) && model.sitesInfoCC ? angular.fromJson(model.sitesInfoCC) : [];
-            model.sitesInfoTo = !angular.isArray(model.sitesInfoTo) && model.sitesInfoTo ? angular.fromJson(model.sitesInfoTo) : [];
+            model.sitesInfoCC = !angular.isArray(model.sitesInfoCC) && model.sitesInfoCC ? generator.interceptReceivedCollection('Site', _.map(model.sitesCCList, _prepareSites)) : [];
+            model.sitesInfoTo = !angular.isArray(model.sitesInfoTo) && model.sitesInfoTo ? generator.interceptReceivedCollection('Site', _.map(model.sitesToList, _prepareSites)) : [];
 
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
