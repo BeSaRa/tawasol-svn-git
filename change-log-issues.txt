@@ -272,3 +272,5 @@ Changed the sorting for all the grids on base pages.
 Added g2gId field to the organization popup.
 15690: Document security - UI - fields are overlapped on each others
 15746: Enhancement - show the documents list directly after opening the user sent items queue or the department sent items queue for the current month
+
+15829: QMC: Inbox : Author didn't display in document information

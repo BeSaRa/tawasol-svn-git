@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('filterPopCtrl', function (filter,
+    app.controller('userFilterPopCtrl', function (filter,
                                               dialog,
                                               actions,
                                               senders,
@@ -13,7 +13,7 @@ module.exports = function (app) {
                                               userFilterService) {
         'ngInject';
         var self = this;
-        self.controllerName = 'filterPopCtrl';
+        self.controllerName = 'userFilterPopCtrl';
         LangWatcher($scope);
         self.editMode = editMode;
         self.model = angular.copy(filter);

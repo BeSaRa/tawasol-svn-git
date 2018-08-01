@@ -424,6 +424,9 @@ module.exports = function (app) {
                     return lookupService.getLookupByLookupKey(lookupService.priorityLevel, priorityLevel).getTranslatedName();
             }
             else if (property === 'author') {
+                if(model instanceof WorkItem){
+                    return new Information(model.creatorOu).getTranslatedName();
+                }
                 return model.hasOwnProperty('creatorInfo')
                     ? new Information(model.creatorInfo).getTranslatedName()
                     : (model.hasOwnProperty('creatorOuInfo') ? new Information(model.creatorOuInfo).getTranslatedName() : '');

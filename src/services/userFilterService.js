@@ -118,7 +118,7 @@ module.exports = function (app) {
             return dialog
                 .showDialog({
                     template: cmsTemplate.getPopup('user-filters'),
-                    controller: 'filterPopCtrl',
+                    controller: 'userFilterPopCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event,
                     resolve: {
@@ -159,7 +159,7 @@ module.exports = function (app) {
             return dialog
                 .showDialog({
                     template: cmsTemplate.getPopup('user-filters'),
-                    controller: 'filterPopCtrl',
+                    controller: 'userFilterPopCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event,
                     resolve: {

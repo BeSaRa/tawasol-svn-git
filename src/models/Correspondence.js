@@ -417,7 +417,7 @@ module.exports = function (app) {
             };
 
             Correspondence.prototype.getTagsCount = function ($event) {
-                return this.tags.length ? this.tags.length : 0;
+                return this.tags && this.tags.length ? this.tags.length : 0;
             };
 
             Correspondence.prototype.getCommentsCount = function ($event) {

@@ -87,7 +87,7 @@ module.exports = function (app) {
     require('./rankPopCtrl')(app);
     require('./applicationUserFromOuPopCtrl')(app);
     require('./addUserToWorkflowGroupPopCtrl')(app);
-    require('./filterPopCtrl')(app);
+    require('./userFilterPopCtrl')(app);
     require('./partialExportPopCtrl')(app);
     require('./searchDocDateRangePopCtrl')(app);
     require('./manageCorrespondenceSitesSearchPopCtrl')(app);
