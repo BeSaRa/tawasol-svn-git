@@ -51,7 +51,8 @@
                                 <!-- 2D -->
                                 <md-switch flex ng-model="ctrl.documentSecurityOutgoing.status2D"
                                            ng-disabled="ctrl.checkDisabledDocSecurity('outgoing')"
-                                           aria-label="{{lang.document_security_2d}}">
+                                           aria-label="{{lang.document_security_2d}}"
+                                           ng-click="ctrl.checkIfTextOrientationDisabled($event)">
                                     <span>{{lang.document_security_2d}} : </span>{{ctrl.documentSecurityOutgoing.getTranslatedYesNo('status2D')}}
                                 </md-switch>
                                 <!-- Security Level -->
@@ -81,7 +82,8 @@
                                     <md-select id="textOrientationOutgoing" name="textOrientationOutgoing"
                                                ng-disabled="ctrl.checkDisabledDocSecurity('outgoing')"
                                                ng-required="ctrl.checkRequiredDocSecurity('outgoing')"
-                                               ng-model="ctrl.documentSecurityOutgoing.textOrientation">
+                                               ng-model="ctrl.documentSecurityOutgoing.textOrientation"
+                                               ng-change="ctrl.checkIfStatus2DDisabled($event)">
                                         <md-option
                                                 ng-repeat="orientation in ctrl.documentSecurityTextOrientations track by $index"
                                                 ng-value="orientation.lookupKey">
@@ -136,7 +138,8 @@
                                 <!-- 2D -->
                                 <md-switch flex ng-model="ctrl.documentSecurityIncoming.status2D"
                                            ng-disabled="ctrl.checkDisabledDocSecurity('incoming')"
-                                           aria-label="{{lang.document_security_2d}}">
+                                           aria-label="{{lang.document_security_2d}}"
+                                           ng-click="ctrl.checkIfTextOrientationDisabled($event)">
                                     <span>{{lang.document_security_2d}} : </span>{{ctrl.documentSecurityIncoming.getTranslatedYesNo('status2D')}}
                                 </md-switch>
                                 <!-- Security Level -->
@@ -166,7 +169,8 @@
                                     <md-select id="textOrientationIncoming" name="textOrientationIncoming"
                                                ng-disabled="ctrl.checkDisabledDocSecurity('incoming')"
                                                ng-required="ctrl.checkRequiredDocSecurity('incoming')"
-                                               ng-model="ctrl.documentSecurityIncoming.textOrientation">
+                                               ng-model="ctrl.documentSecurityIncoming.textOrientation"
+                                               ng-change="ctrl.checkIfStatus2DDisabled($event)">
                                         <md-option
                                                 ng-repeat="orientation in ctrl.documentSecurityTextOrientations track by $index"
                                                 ng-value="orientation.lookupKey">
@@ -221,7 +225,8 @@
                                 <!-- 2D -->
                                 <md-switch flex ng-model="ctrl.documentSecurityInternal.status2D"
                                            ng-disabled="ctrl.checkDisabledDocSecurity('internal')"
-                                           aria-label="{{lang.document_security_2d}}">
+                                           aria-label="{{lang.document_security_2d}}"
+                                           ng-click="ctrl.checkIfTextOrientationDisabled($event)">
                                     <span>{{lang.document_security_2d}} : </span>{{ctrl.documentSecurityInternal.getTranslatedYesNo('status2D')}}
                                 </md-switch>
                                 <!-- Security Level -->
@@ -251,7 +256,8 @@
                                     <md-select id="textOrientationInternal" name="textOrientationInternal"
                                                ng-disabled="ctrl.checkDisabledDocSecurity('internal')"
                                                ng-required="ctrl.checkRequiredDocSecurity('internal')"
-                                               ng-model="ctrl.documentSecurityInternal.textOrientation">
+                                               ng-model="ctrl.documentSecurityInternal.textOrientation"
+                                               ng-change="ctrl.checkIfStatus2DDisabled($event)">
                                         <md-option
                                                 ng-repeat="orientation in ctrl.documentSecurityTextOrientations track by $index"
                                                 ng-value="orientation.lookupKey">
@@ -306,7 +312,8 @@
                                 <!-- 2D -->
                                 <md-switch flex ng-model="ctrl.documentSecurityTawasolAttachment.status2D"
                                            ng-disabled="ctrl.checkDisabledDocSecurity('tawasolattachment')"
-                                           aria-label="{{lang.document_security_2d}}">
+                                           aria-label="{{lang.document_security_2d}}"
+                                           ng-click="ctrl.checkIfTextOrientationDisabled($event)">
                                     <span>{{lang.document_security_2d}} : </span>{{ctrl.documentSecurityTawasolAttachment.getTranslatedYesNo('status2D')}}
                                 </md-switch>
                                 <!-- Security Level -->
@@ -337,7 +344,8 @@
                                                name="textOrientationTawasolAttachment"
                                                ng-required="ctrl.checkRequiredDocSecurity('tawasolattachment')"
                                                ng-disabled="ctrl.checkDisabledDocSecurity('tawasolattachment')"
-                                               ng-model="ctrl.documentSecurityTawasolAttachment.textOrientation">
+                                               ng-model="ctrl.documentSecurityTawasolAttachment.textOrientation"
+                                               ng-change="ctrl.checkIfStatus2DDisabled($event)">
                                         <md-option
                                                 ng-repeat="orientation in ctrl.documentSecurityTextOrientations track by $index"
                                                 ng-value="orientation.lookupKey">

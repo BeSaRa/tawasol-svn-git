@@ -16,7 +16,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.workflowHistoryGrid.order">
+                                                <thead md-head md-order="ctrl.workflowHistoryGrid.order" md-on-reorder="ctrl.getSortedDataWorkflowHistory">
                                                 <tr md-row>
                                                     <th md-column md-order-by="userFromInfo"><span>{{lang.view_tracking_sheet_sender}}</span>
                                                     </th>
@@ -34,7 +34,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="workflowHistoryRecord" md-row
-                                                    ng-repeat="workflowHistoryRecord in ctrl.workflowHistoryRecords | filter:ctrl.searchModelWorkflowHistory | limitTo: ctrl.workflowHistoryGrid.limit: ((ctrl.workflowHistoryGrid.page - 1) * ctrl.workflowHistoryGrid.limit) |orderBy:ctrl.workflowHistoryGrid.order  track by $index">
+                                                    ng-repeat="workflowHistoryRecord in ctrl.workflowHistoryRecords | filter:ctrl.searchModelWorkflowHistory | limitTo: ctrl.workflowHistoryGrid.limit: ((ctrl.workflowHistoryGrid.page - 1) * ctrl.workflowHistoryGrid.limit)  track by $index">
                                                     <td md-cell>{{workflowHistoryRecord.getTranslatedUserFrom()}}</td>
                                                     <td md-cell>{{workflowHistoryRecord.getTranslatedUserTo()}}</td>
                                                     <td md-cell>{{workflowHistoryRecord.getTranslatedAction()}}</td>
@@ -65,7 +65,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.linkedDocumentsHistoryGrid.order">
+                                                <thead md-head md-order="ctrl.linkedDocumentsHistoryGrid.order"  md-on-reorder="ctrl.getSortedDataLinkedDocumentsHistory">
                                                 <tr md-row>
                                                     <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                                     </th>
@@ -83,7 +83,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="linkedDocumentHistoryRecord" md-row
-                                                    ng-repeat="linkedDocumentHistoryRecord in ctrl.linkedDocumentsHistoryRecords | filter:ctrl.searchModelLinkedDocsHistory | limitTo: ctrl.linkedDocumentsHistoryGrid.limit: ((ctrl.linkedDocumentsHistoryGrid.page - 1) * ctrl.linkedDocumentsHistoryGrid.limit) |orderBy:ctrl.linkedDocumentsHistoryGrid.order  track by $index">
+                                                    ng-repeat="linkedDocumentHistoryRecord in ctrl.linkedDocumentsHistoryRecords | filter:ctrl.searchModelLinkedDocsHistory | limitTo: ctrl.linkedDocumentsHistoryGrid.limit: ((ctrl.linkedDocumentsHistoryGrid.page - 1) * ctrl.linkedDocumentsHistoryGrid.limit) track by $index">
                                                     <td md-cell>{{linkedDocumentHistoryRecord.itemName}}</td>
                                                     <td md-cell>
                                                         {{linkedDocumentHistoryRecord.eventTypeInfo.getTranslatedName()}}
@@ -118,7 +118,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.attachmentsHistoryGrid.order">
+                                                <thead md-head md-order="ctrl.attachmentsHistoryGrid.order"  md-on-reorder="ctrl.getSortedDataAttachmentsHistory">
                                                 <tr md-row>
                                                     <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                                     </th>
@@ -132,7 +132,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="attachmentHistoryRecord" md-row
-                                                    ng-repeat="attachmentHistoryRecord in ctrl.attachmentsHistoryRecords | filter:ctrl.searchModelAttachmentsHistory | limitTo: ctrl.attachmentsHistoryGrid.limit: ((ctrl.attachmentsHistoryGrid.page - 1) * ctrl.attachmentsHistoryGrid.limit) |orderBy:ctrl.attachmentsHistoryGrid.order  track by $index">
+                                                    ng-repeat="attachmentHistoryRecord in ctrl.attachmentsHistoryRecords | filter:ctrl.searchModelAttachmentsHistory | limitTo: ctrl.attachmentsHistoryGrid.limit: ((ctrl.attachmentsHistoryGrid.page - 1) * ctrl.attachmentsHistoryGrid.limit)  track by $index">
                                                     <td md-cell>{{attachmentHistoryRecord.itemName}}</td>
                                                     <td md-cell>{{attachmentHistoryRecord.getTranslatedAction()}}</td>
                                                     <td md-cell>{{attachmentHistoryRecord.getTranslatedActionBy()}}</td>
@@ -164,6 +164,7 @@
                                                 <thead md-head md-order="ctrl.mergedLinkedDocHistoryGrid.order"
                                                        md-on-reorder="ctrl.sortMergedLinkedDocs()">
                                                 <tr md-row>
+                                                    {{ctrl.sortMergedLinkedDocs()}}
                                                     <th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                                     </th>
                                                     <th md-column md-order-by="documentCreationDate"><span>{{lang.view_tracking_sheet_creation_date}}</span>
@@ -175,7 +176,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="mergedLinkedDocHistory" md-row
-                                                    ng-repeat="mergedLinkedDocHistory in ctrl.mergedLinkedDocumentHistoryRecords | filter:ctrl.searchModelMergedLinkedDocHistory | limitTo: ctrl.mergedLinkedDocHistoryGrid.limit: ((ctrl.mergedLinkedDocHistoryGrid.page - 1) * ctrl.mergedLinkedDocHistoryGrid.limit) |orderBy:ctrl.mergedLinkedDocHistoryGrid.order  track by $index">
+                                                    ng-repeat="mergedLinkedDocHistory in ctrl.mergedLinkedDocumentHistoryRecords | filter:ctrl.searchModelMergedLinkedDocHistory | limitTo: ctrl.mergedLinkedDocHistoryGrid.limit: ((ctrl.mergedLinkedDocHistoryGrid.page - 1) * ctrl.mergedLinkedDocHistoryGrid.limit)  track by $index">
                                                     <td md-cell>{{mergedLinkedDocHistory.docSubject}}</td>
                                                     <td md-cell>{{mergedLinkedDocHistory.documentCreationDate}}</td>
                                                     <td md-cell>
@@ -225,7 +226,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.linkedEntitiesHistoryGrid.order">
+                                                <thead md-head md-order="ctrl.linkedEntitiesHistoryGrid.order"  md-on-reorder="ctrl.getSortedDataLinkedEntitiesHistory">
                                                 <tr md-row>
                                                     <th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
                                                     </th>
@@ -243,7 +244,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="linkedEntitiesHistoryRecord" md-row
-                                                    ng-repeat="linkedEntitiesHistoryRecord in ctrl.linkedEntitiesHistoryRecords | filter:ctrl.searchModelLinkedEntitiesHistory | limitTo: ctrl.linkedEntitiesHistoryGrid.limit: ((ctrl.linkedEntitiesHistoryGrid.page - 1) * ctrl.linkedEntitiesHistoryGrid.limit) |orderBy:ctrl.linkedEntitiesHistoryGrid.order  track by $index">
+                                                    ng-repeat="linkedEntitiesHistoryRecord in ctrl.linkedEntitiesHistoryRecords | filter:ctrl.searchModelLinkedEntitiesHistory | limitTo: ctrl.linkedEntitiesHistoryGrid.limit: ((ctrl.linkedEntitiesHistoryGrid.page - 1) * ctrl.linkedEntitiesHistoryGrid.limit) track by $index">
                                                     <td md-cell>
                                                         {{linkedEntitiesHistoryRecord.getTranslatedActionBy()}}
                                                     </td>
@@ -279,7 +280,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.destinationHistoryGrid.order">
+                                                <thead md-head md-order="ctrl.destinationHistoryGrid.order" md-on-reorder="ctrl.getSortedDataDestinationHistory">
                                                 <tr md-row>
                                                     <th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
                                                     </th>
@@ -295,7 +296,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="destinationHistoryRecord" md-row
-                                                    ng-repeat="destinationHistoryRecord in ctrl.destinationHistoryRecords | filter:ctrl.searchModelDestinationHistory | limitTo: ctrl.destinationHistoryGrid.limit: ((ctrl.destinationHistoryGrid.page - 1) * ctrl.destinationHistoryGrid.limit) |orderBy:ctrl.destinationHistoryGrid.order  track by $index">
+                                                    ng-repeat="destinationHistoryRecord in ctrl.destinationHistoryRecords | filter:ctrl.searchModelDestinationHistory | limitTo: ctrl.destinationHistoryGrid.limit: ((ctrl.destinationHistoryGrid.page - 1) * ctrl.destinationHistoryGrid.limit) track by $index">
                                                     <td md-cell>
                                                         {{destinationHistoryRecord.actionByInfo.getTranslatedName()}}
                                                     </td>
@@ -331,7 +332,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.contentViewHistoryGrid.order">
+                                                <thead md-head md-order="ctrl.contentViewHistoryGrid.order" md-on-reorder="ctrl.getSortedDataContentViewHistory"	>
                                                 <tr md-row>
                                                     <!--<th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
                                                     </th>
@@ -350,7 +351,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="contentViewHistoryRecord" md-row
-                                                    ng-repeat="contentViewHistoryRecord in ctrl.contentViewHistoryRecords | filter:ctrl.searchModelContentViewHistory | limitTo: ctrl.contentViewHistoryGrid.limit: ((ctrl.contentViewHistoryGrid.page - 1) * ctrl.contentViewHistoryGrid.limit) |orderBy:ctrl.contentViewHistoryGrid.order  track by $index">
+                                                    ng-repeat="contentViewHistoryRecord in ctrl.contentViewHistoryRecords | filter:ctrl.searchModelContentViewHistory | limitTo: ctrl.contentViewHistoryGrid.limit: ((ctrl.contentViewHistoryGrid.page - 1) * ctrl.contentViewHistoryGrid.limit) track by $index">
                                                     <!-- <td md-cell>{{contentViewHistoryRecord.getTranslatedActionBy()}}</td>
                                                      <td md-cell>{{contentViewHistoryRecord.actionDate}}</td>
                                                      <td md-cell>{{contentViewHistoryRecord.docSubject}}</td>
@@ -441,7 +442,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.outgoingDeliveryReportGrid.order">
+                                                <thead md-head md-order="ctrl.outgoingDeliveryReportGrid.order" md-on-reorder="ctrl.getSortedDataOutgoingDeliveryReport"	>
                                                 <tr md-row>
                                                     <th md-column
                                                         md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'Information')}}">
@@ -475,7 +476,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-row
-                                                    ng-repeat="outgoingDeliveryReportRecord in ctrl.outgoingDeliveryReportRecords | filter:ctrl.searchModelOutgoingDeliveryReports | limitTo: ctrl.outgoingDeliveryReportGrid.limit: ((ctrl.outgoingDeliveryReportGrid.page - 1) * ctrl.outgoingDeliveryReportGrid.limit) |orderBy:ctrl.outgoingDeliveryReportGrid.order  track by $index">
+                                                    ng-repeat="outgoingDeliveryReportRecord in ctrl.outgoingDeliveryReportRecords | filter:ctrl.searchModelOutgoingDeliveryReports | limitTo: ctrl.outgoingDeliveryReportGrid.limit: ((ctrl.outgoingDeliveryReportGrid.page - 1) * ctrl.outgoingDeliveryReportGrid.limit)  track by $index">
                                                     <td md-cell>
                                                         {{outgoingDeliveryReportRecord.sentByIdInfo.getTranslatedName()}}
                                                     </td>
@@ -525,7 +526,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.fullHistoryGrid.order">
+                                                <thead md-head md-order="ctrl.fullHistoryGrid.order" md-on-reorder="ctrl.getSortedDataFullHistory"	>
                                                 <tr md-row>
                                                     <!--<th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                                     </th>-->
@@ -547,7 +548,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="fullHistoryRecord" md-row
-                                                    ng-repeat="fullHistoryRecord in ctrl.fullHistoryRecords | filter:ctrl.searchModelFullHistory | limitTo: ctrl.fullHistoryGrid.limit: ((ctrl.fullHistoryGrid.page - 1) * ctrl.fullHistoryGrid.limit) |orderBy:ctrl.fullHistoryGrid.order  track by $index">
+                                                    ng-repeat="fullHistoryRecord in ctrl.fullHistoryRecords | filter:ctrl.searchModelFullHistory | limitTo: ctrl.fullHistoryGrid.limit: ((ctrl.fullHistoryGrid.page - 1) * ctrl.fullHistoryGrid.limit) track by $index">
                                                     <!--<td md-cell>{{fullHistoryRecord.docSubject}}</td>-->
                                                     <td md-cell>{{fullHistoryRecord.actionByInfo.getTranslatedName()}}
                                                     </td>
@@ -586,7 +587,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.workflowHistoryGrid.order">
+                                                <thead md-head md-order="ctrl.workflowHistoryGrid.order" md-on-reorder="ctrl.getSortedDataWorkflowHistory">
                                                 <tr md-row>
                                                     <th md-column md-order-by="userFromInfo"><span>{{lang.view_tracking_sheet_sender}}</span>
                                                     </th>
@@ -604,7 +605,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="workflowHistoryRecord" md-row
-                                                    ng-repeat="workflowHistoryRecord in ctrl.workflowHistoryRecords | filter:ctrl.searchModelWorkflowHistory | limitTo: ctrl.workflowHistoryGrid.limit: ((ctrl.workflowHistoryGrid.page - 1) * ctrl.workflowHistoryGrid.limit) |orderBy:ctrl.workflowHistoryGrid.order  track by $index">
+                                                    ng-repeat="workflowHistoryRecord in ctrl.workflowHistoryRecords | filter:ctrl.searchModelWorkflowHistory | limitTo: ctrl.workflowHistoryGrid.limit: ((ctrl.workflowHistoryGrid.page - 1) * ctrl.workflowHistoryGrid.limit) track by $index">
                                                     <td md-cell>{{workflowHistoryRecord.getTranslatedUserFrom()}}</td>
                                                     <td md-cell>{{workflowHistoryRecord.getTranslatedUserTo()}}</td>
                                                     <td md-cell>{{workflowHistoryRecord.getTranslatedAction()}}</td>
@@ -637,7 +638,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.linkedDocumentsHistoryGrid.order">
+                                                <thead md-head md-order="ctrl.linkedDocumentsHistoryGrid.order" md-on-reorder="ctrl.getSortedDataLinkedDocumentsHistory">
                                                 <tr md-row>
                                                     <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                                     </th>
@@ -655,7 +656,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="linkedDocumentHistoryRecord" md-row
-                                                    ng-repeat="linkedDocumentHistoryRecord in ctrl.linkedDocumentsHistoryRecords | filter:ctrl.searchModelLinkedDocsHistory | limitTo: ctrl.linkedDocumentsHistoryGrid.limit: ((ctrl.linkedDocumentsHistoryGrid.page - 1) * ctrl.linkedDocumentsHistoryGrid.limit) |orderBy:ctrl.linkedDocumentsHistoryGrid.order  track by $index">
+                                                    ng-repeat="linkedDocumentHistoryRecord in ctrl.linkedDocumentsHistoryRecords | filter:ctrl.searchModelLinkedDocsHistory | limitTo: ctrl.linkedDocumentsHistoryGrid.limit: ((ctrl.linkedDocumentsHistoryGrid.page - 1) * ctrl.linkedDocumentsHistoryGrid.limit) track by $index">
                                                     <td md-cell>{{linkedDocumentHistoryRecord.itemName}}</td>
                                                     <td md-cell>
                                                         {{linkedDocumentHistoryRecord.eventTypeInfo.getTranslatedName()}}
@@ -692,7 +693,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.attachmentsHistoryGrid.order">
+                                                <thead md-head md-order="ctrl.attachmentsHistoryGrid.order" md-on-reorder="ctrl.getSortedDataAttachmentsHistory">
                                                 <tr md-row>
                                                     <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                                     </th>
@@ -706,7 +707,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="attachmentHistoryRecord" md-row
-                                                    ng-repeat="attachmentHistoryRecord in ctrl.attachmentsHistoryRecords | filter:ctrl.searchModelAttachmentsHistory | limitTo: ctrl.attachmentsHistoryGrid.limit: ((ctrl.attachmentsHistoryGrid.page - 1) * ctrl.attachmentsHistoryGrid.limit) |orderBy:ctrl.attachmentsHistoryGrid.order  track by $index">
+                                                    ng-repeat="attachmentHistoryRecord in ctrl.attachmentsHistoryRecords | filter:ctrl.searchModelAttachmentsHistory | limitTo: ctrl.attachmentsHistoryGrid.limit: ((ctrl.attachmentsHistoryGrid.page - 1) * ctrl.attachmentsHistoryGrid.limit) track by $index">
                                                     <td md-cell>{{attachmentHistoryRecord.itemName}}</td>
                                                     <td md-cell>{{attachmentHistoryRecord.getTranslatedAction()}}</td>
                                                     <td md-cell>{{attachmentHistoryRecord.getTranslatedActionBy()}}</td>
@@ -751,7 +752,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="mergedLinkedDocHistory" md-row
-                                                    ng-repeat="mergedLinkedDocHistory in ctrl.mergedLinkedDocumentHistoryRecords | filter:ctrl.searchModelMergedLinkedDocHistory | limitTo: ctrl.mergedLinkedDocHistoryGrid.limit: ((ctrl.mergedLinkedDocHistoryGrid.page - 1) * ctrl.mergedLinkedDocHistoryGrid.limit) |orderBy:ctrl.mergedLinkedDocHistoryGrid.order  track by $index">
+                                                    ng-repeat="mergedLinkedDocHistory in ctrl.mergedLinkedDocumentHistoryRecords | filter:ctrl.searchModelMergedLinkedDocHistory | limitTo: ctrl.mergedLinkedDocHistoryGrid.limit: ((ctrl.mergedLinkedDocHistoryGrid.page - 1) * ctrl.mergedLinkedDocHistoryGrid.limit) track by $index">
                                                     <td md-cell>{{mergedLinkedDocHistory.docSubject}}</td>
                                                     <td md-cell>{{mergedLinkedDocHistory.documentCreationDate}}</td>
                                                     <td md-cell>
@@ -803,7 +804,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.linkedEntitiesHistoryGrid.order">
+                                                <thead md-head md-order="ctrl.linkedEntitiesHistoryGrid.order" md-on-reorder="ctrl.getSortedDataLinkedEntitiesHistory">
                                                 <tr md-row>
                                                     <th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
                                                     </th>
@@ -821,7 +822,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="linkedEntitiesHistoryRecord" md-row
-                                                    ng-repeat="linkedEntitiesHistoryRecord in ctrl.linkedEntitiesHistoryRecords | filter:ctrl.searchModelLinkedEntitiesHistory | limitTo: ctrl.linkedEntitiesHistoryGrid.limit: ((ctrl.linkedEntitiesHistoryGrid.page - 1) * ctrl.linkedEntitiesHistoryGrid.limit) |orderBy:ctrl.linkedEntitiesHistoryGrid.order  track by $index">
+                                                    ng-repeat="linkedEntitiesHistoryRecord in ctrl.linkedEntitiesHistoryRecords | filter:ctrl.searchModelLinkedEntitiesHistory | limitTo: ctrl.linkedEntitiesHistoryGrid.limit: ((ctrl.linkedEntitiesHistoryGrid.page - 1) * ctrl.linkedEntitiesHistoryGrid.limit) track by $index">
                                                     <td md-cell>
                                                         {{linkedEntitiesHistoryRecord.getTranslatedActionBy()}}
                                                     </td>
@@ -859,7 +860,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.destinationHistoryGrid.order">
+                                                <thead md-head md-order="ctrl.destinationHistoryGrid.order" md-on-reorder="ctrl.getSortedDataDestinationHistory"	>
                                                 <tr md-row>
                                                     <th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
                                                     </th>
@@ -875,7 +876,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="destinationHistoryRecord" md-row
-                                                    ng-repeat="destinationHistoryRecord in ctrl.destinationHistoryRecords | filter:ctrl.searchModelDestinationHistory | limitTo: ctrl.destinationHistoryGrid.limit: ((ctrl.destinationHistoryGrid.page - 1) * ctrl.destinationHistoryGrid.limit) |orderBy:ctrl.destinationHistoryGrid.order  track by $index">
+                                                    ng-repeat="destinationHistoryRecord in ctrl.destinationHistoryRecords | filter:ctrl.searchModelDestinationHistory | limitTo: ctrl.destinationHistoryGrid.limit: ((ctrl.destinationHistoryGrid.page - 1) * ctrl.destinationHistoryGrid.limit) track by $index">
                                                     <td md-cell>
                                                         {{destinationHistoryRecord.actionByInfo.getTranslatedName()}}
                                                     </td>
@@ -913,7 +914,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.contentViewHistoryGrid.order">
+                                                <thead md-head md-order="ctrl.contentViewHistoryGrid.order" md-on-reorder="ctrl.getSortedDataContentViewHistory"	>
                                                 <tr md-row>
                                                     <!--<th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
                                                     </th>
@@ -932,7 +933,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="contentViewHistoryRecord" md-row
-                                                    ng-repeat="contentViewHistoryRecord in ctrl.contentViewHistoryRecords | filter:ctrl.searchModelContentViewHistory | limitTo: ctrl.contentViewHistoryGrid.limit: ((ctrl.contentViewHistoryGrid.page - 1) * ctrl.contentViewHistoryGrid.limit) |orderBy:ctrl.contentViewHistoryGrid.order  track by $index">
+                                                    ng-repeat="contentViewHistoryRecord in ctrl.contentViewHistoryRecords | filter:ctrl.searchModelContentViewHistory | limitTo: ctrl.contentViewHistoryGrid.limit: ((ctrl.contentViewHistoryGrid.page - 1) * ctrl.contentViewHistoryGrid.limit) track by $index">
                                                     <!-- <td md-cell>{{contentViewHistoryRecord.getTranslatedActionBy()}}</td>
                                                      <td md-cell>{{contentViewHistoryRecord.actionDate}}</td>
                                                      <td md-cell>{{contentViewHistoryRecord.docSubject}}</td>
@@ -1027,7 +1028,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.outgoingDeliveryReportGrid.order">
+                                                <thead md-head md-order="ctrl.outgoingDeliveryReportGrid.order" md-on-reorder="ctrl.getSortedDataOutgoingDeliveryReport"	>
                                                 <tr md-row>
                                                     <th md-column
                                                         md-order-by="{{ctrl.getSortingKey('sentByIdInfo', 'Information')}}">
@@ -1061,7 +1062,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="outgoingDeliveryReportRecord" md-row
-                                                    ng-repeat="outgoingDeliveryReportRecord in ctrl.outgoingDeliveryReportRecords | filter:ctrl.searchModelOutgoingDeliveryReports | limitTo: ctrl.outgoingDeliveryReportGrid.limit: ((ctrl.outgoingDeliveryReportGrid.page - 1) * ctrl.outgoingDeliveryReportGrid.limit) |orderBy:ctrl.outgoingDeliveryReportGrid.order  track by $index">
+                                                    ng-repeat="outgoingDeliveryReportRecord in ctrl.outgoingDeliveryReportRecords | filter:ctrl.searchModelOutgoingDeliveryReports | limitTo: ctrl.outgoingDeliveryReportGrid.limit: ((ctrl.outgoingDeliveryReportGrid.page - 1) * ctrl.outgoingDeliveryReportGrid.limit) track by $index">
                                                     <td md-cell>
                                                         {{outgoingDeliveryReportRecord.sentByIdInfo.getTranslatedName()}}
                                                     </td>
@@ -1113,7 +1114,7 @@
                                     <md-table-container>
                                         <div flex scroll-directive>
                                             <table md-table>
-                                                <thead md-head md-order="ctrl.fullHistoryGrid.order">
+                                                <thead md-head md-order="ctrl.fullHistoryGrid.order" md-on-reorder="ctrl.getSortedDataFullHistory">
                                                 <tr md-row>
                                                     <!--<th md-column md-order-by="docSubject"><span>{{lang.view_tracking_sheet_doc_subject}}</span>
                                                     </th>-->
@@ -1135,7 +1136,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-select="fullHistoryRecord" md-row
-                                                    ng-repeat="fullHistoryRecord in ctrl.fullHistoryRecords | filter:ctrl.searchModelFullHistory | limitTo: ctrl.fullHistoryGrid.limit: ((ctrl.fullHistoryGrid.page - 1) * ctrl.fullHistoryGrid.limit) |orderBy:ctrl.fullHistoryGrid.order  track by $index">
+                                                    ng-repeat="fullHistoryRecord in ctrl.fullHistoryRecords | filter:ctrl.searchModelFullHistory | limitTo: ctrl.fullHistoryGrid.limit: ((ctrl.fullHistoryGrid.page - 1) * ctrl.fullHistoryGrid.limit) track by $index">
                                                     <!--<td md-cell>{{fullHistoryRecord.docSubject}}</td>-->
                                                     <td md-cell>{{fullHistoryRecord.actionByInfo.getTranslatedName()}}
                                                     </td>

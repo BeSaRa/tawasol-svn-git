@@ -275,3 +275,6 @@ Added g2gId field to the organization popup.
 
 15829: QMC: Inbox : Author didn't display in document information
 15827: QMC-The Private Workflow Group should only appear in the User Preferences from the user which have created this Private WFG
+
+
+15839: Document Security - at least one of the option should be selected while the document secuirty for document type is active

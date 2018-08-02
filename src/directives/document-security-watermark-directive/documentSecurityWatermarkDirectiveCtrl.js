@@ -16,7 +16,8 @@ module.exports = function (app) {
                                                                        lookupService,
                                                                        documentSecurityService,
                                                                        DocumentSecurityBarcodeBox,
-                                                                       DocumentSecurityPage) {
+                                                                       DocumentSecurityPage,
+                                                                       dialog) {
         'ngInject';
         var self = this;
         self.controllerName = 'documentSecurityWatermarkDirectiveCtrl';
@@ -230,17 +231,17 @@ module.exports = function (app) {
             }
             else if (type === 'incoming') {
                 required = self.documentSecurityIncoming && self.documentSecurityIncoming.status;
-                    if(dependentOnField)
-                        required = required && self.documentSecurityIncoming[dependentOnField];
+                if (dependentOnField)
+                    required = required && self.documentSecurityIncoming[dependentOnField];
             }
             else if (type === 'internal') {
                 required = self.documentSecurityInternal && self.documentSecurityInternal.status;
-                if(dependentOnField)
+                if (dependentOnField)
                     required = required && self.documentSecurityInternal[dependentOnField];
             }
             else if (type === 'tawasolattachment') {
                 required = self.documentSecurityTawasolAttachment && self.documentSecurityTawasolAttachment.status;
-                if(dependentOnField)
+                if (dependentOnField)
                     required = required && self.documentSecurityTawasolAttachment[dependentOnField];
             }
             return self.documentSecurity.status && required;
@@ -325,5 +326,65 @@ module.exports = function (app) {
                     self.initializeDocumentSecurity();
                 })
         };
+
+        /**
+         * @description check if text oriantation disabled you can't disable both
+         * @param $event
+         */
+        self.checkIfTextOrientationDisabled = function ($event) {
+            if (self.documentSecurityOutgoing.textOrientation === 0 && self.documentSecurityOutgoing.status2D &&
+                self.selectedWatermarkTabName === 'outgoing') {
+                dialog.errorMessage(langService.get("can_not_disable_2D_orientation"));
+                self.documentSecurityOutgoing.status2D = !self.documentSecurityOutgoing.status2D;
+            }
+
+            else if (self.documentSecurityIncoming.textOrientation === 0 && self.documentSecurityIncoming.status2D &&
+                self.selectedWatermarkTabName === 'incoming') {
+                dialog.errorMessage(langService.get("can_not_disable_2D_orientation"));
+                self.documentSecurityIncoming.status2D = !self.documentSecurityIncoming.status2D;
+            }
+
+            else if (self.documentSecurityInternal.textOrientation === 0 && self.documentSecurityInternal.status2D &&
+                self.selectedWatermarkTabName === 'internal') {
+                dialog.errorMessage(langService.get("can_not_disable_2D_orientation"));
+                self.documentSecurityInternal.status2D = !self.documentSecurityInternal.status2D;
+            }
+
+            else if (self.documentSecurityTawasolAttachment.textOrientation === 0 && self.documentSecurityTawasolAttachment.status2D &&
+                self.selectedWatermarkTabName === 'tawasolattachment') {
+                dialog.errorMessage(langService.get("can_not_disable_2D_orientation"));
+                self.documentSecurityTawasolAttachment.status2D = !self.documentSecurityTawasolAttachment.status2D;
+            }
+        }
+
+        /**
+         * @description check if status2D disabled you can't disable both
+         * @param $event
+         */
+        self.checkIfStatus2DDisabled = function ($event) {
+            if (self.documentSecurityOutgoing.textOrientation === 0 && !self.documentSecurityOutgoing.status2D &&
+                self.selectedWatermarkTabName === 'outgoing') {
+                dialog.errorMessage(langService.get('can_not_disable_2D_orientation'));
+                self.documentSecurityOutgoing.textOrientation = self.documentSecurityOutgoingCopy.textOrientation;
+            }
+            else if (self.documentSecurityIncoming.textOrientation === 0 && !self.documentSecurityIncoming.status2D &&
+                self.selectedWatermarkTabName === 'incoming') {
+                dialog.errorMessage(langService.get('can_not_disable_2D_orientation'));
+                self.documentSecurityIncoming.textOrientation = self.documentSecurityIncomingCopy.textOrientation;
+            }
+            else if (self.documentSecurityInternal.textOrientation === 0 && !self.documentSecurityInternal.status2D &&
+                self.selectedWatermarkTabName === 'internal') {
+                dialog.errorMessage(langService.get('can_not_disable_2D_orientation'));
+                self.documentSecurityInternal.textOrientation = self.documentSecurityInternalCopy.textOrientation;
+            }
+            else if (self.documentSecurityTawasolAttachment.textOrientation === 0 && !self.documentSecurityTawasolAttachment.status2D &&
+                self.selectedWatermarkTabName === 'tawasolattachment') {
+                dialog.errorMessage(langService.get('can_not_disable_2D_orientation'));
+                self.documentSecurityTawasolAttachment.textOrientation = self.documentSecurityTawasolAttachmentCopy.textOrientation;
+            }
+            else {
+                self.makeDocumentSecuritySettingCopy(null, true);
+            }
+        }
     });
 };

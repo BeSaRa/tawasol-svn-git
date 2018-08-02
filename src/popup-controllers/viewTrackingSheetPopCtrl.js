@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('viewTrackingSheetPopCtrl', function (_,
+                                                         $filter,
                                                          toast,
                                                          document,
                                                          gridType,
@@ -59,6 +60,13 @@ module.exports = function (app) {
         self.outgoingDeliveryReportRecords = outgoingDeliveryReportRecords;
         self.fullHistoryRecords = fullHistoryRecords;
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataWorkflowHistory = function () {
+            self.workflowHistoryRecords = $filter('orderBy')(self.workflowHistoryRecords, self.workflowHistoryGrid.order);
+        };
+
         self.workflowHistoryGrid = {
             limit: 5, // default limit
             page: 1, // first page
@@ -73,6 +81,13 @@ module.exports = function (app) {
             ]
         };
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataLinkedDocumentsHistory = function () {
+            self.linkedDocumentsHistoryRecords = $filter('orderBy')(self.linkedDocumentsHistoryRecords, self.linkedDocumentsHistoryGrid.order);
+        };
+
         self.linkedDocumentsHistoryGrid = {
             limit: 5, // default limit
             page: 1, // first page
@@ -85,6 +100,13 @@ module.exports = function (app) {
                     }
                 }
             ]
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataAttachmentsHistory = function () {
+            self.attachmentsHistoryRecords = $filter('orderBy')(self.attachmentsHistoryRecords, self.attachmentsHistoryGrid.order);
         };
 
         self.attachmentsHistoryGrid = {
@@ -115,6 +137,13 @@ module.exports = function (app) {
             ]
         };
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataLinkedEntitiesHistory = function () {
+            self.linkedEntitiesHistoryRecords = $filter('orderBy')(self.linkedEntitiesHistoryRecords, self.linkedEntitiesHistoryGrid.order);
+        };
+
         self.linkedEntitiesHistoryGrid = {
             limit: 5, // default limit
             page: 1, // first page
@@ -129,6 +158,13 @@ module.exports = function (app) {
             ]
         };
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataDestinationHistory = function () {
+            self.destinationHistoryRecords = $filter('orderBy')(self.destinationHistoryRecords, self.destinationHistoryGrid.order);
+        };
+
         self.destinationHistoryGrid = {
             limit: 5, // default limit
             page: 1, // first page
@@ -141,6 +177,13 @@ module.exports = function (app) {
                     }
                 }
             ]
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataContentViewHistory = function () {
+            self.contentViewHistoryRecords = $filter('orderBy')(self.contentViewHistoryRecords, self.contentViewHistoryGrid.order);
         };
 
         self.contentViewHistoryGrid = {
@@ -171,6 +214,13 @@ module.exports = function (app) {
             ]
         };
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataOutgoingDeliveryReport = function () {
+            self.outgoingDeliveryReportRecords = $filter('orderBy')(self.outgoingDeliveryReportRecords, self.outgoingDeliveryReportGrid.order);
+        };
+
         self.outgoingDeliveryReportGrid = {
             limit: 5, // default limit
             page: 1, // first page
@@ -183,6 +233,13 @@ module.exports = function (app) {
                     }
                 }
             ]
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataFullHistory = function () {
+            self.fullHistoryRecords = $filter('orderBy')(self.fullHistoryRecords, self.fullHistoryGrid.order);
         };
 
         self.fullHistoryGrid = {
@@ -200,6 +257,8 @@ module.exports = function (app) {
         };
 
         self.sortMergedLinkedDocs = function () {
+            self.mergedLinkedDocumentHistoryRecords = $filter('orderBy')(self.mergedLinkedDocumentHistoryRecords, self.mergedLinkedDocHistoryGrid.order);
+
             var mainDoc = _.find(self.mergedLinkedDocumentHistoryRecords, 'mainDoc');
             var indexOfMainDoc = _.findIndex(self.mergedLinkedDocumentHistoryRecords, ['mainDoc', true]);
             self.mergedLinkedDocumentHistoryRecords.splice(indexOfMainDoc, 1);
