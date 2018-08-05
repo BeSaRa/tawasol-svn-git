@@ -123,7 +123,7 @@ module.exports = function (app) {
                         resolve: {
                             ouApplicationUsers: function (ouApplicationUserService) {
                                 'ngInject';
-                                return ouApplicationUserService.getOUApplicationUsersByUserId(applicationUser.id);
+                                return ouApplicationUserService.loadOUApplicationUsersByUserId(applicationUser.id);
                             },
                             // by BeSaRa to resolve the signature if found
                             signature: function (applicationUserSignatureService, $q) {

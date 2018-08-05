@@ -16,7 +16,7 @@ module.exports = function (app) {
         self.userSubscriptionsByUserId = [];
 
         /**
-         * @description Load the user Subscriptions from server.
+         * @description Load the user Subscriptions for notifications.
          * @returns {Promise|userSubscriptions}
          */
         self.loadUserSubscriptions = function () {
@@ -37,6 +37,11 @@ module.exports = function (app) {
             return self.userSubscriptions && self.userSubscriptions.length ? $q.when(self.userSubscriptions) : self.loadUserSubscriptions();
         };
 
+        /**
+         * @description Loads the user subscriptions for particular document by vsId
+         * @param vsId
+         * @returns {*}
+         */
         self.getSubscriptionsByVsId = function (vsId) {
             vsId = vsId.hasOwnProperty('vsId') ? vsId.vsId : vsId;
             return $http.get(urlService.userSubscriptions + '/vsid/' + vsId)
@@ -47,7 +52,7 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Load the user Subscriptions by userid from server.
+         * @description Load the user Subscriptions by userId from server.
          * @returns {Promise|userSubscriptions}
          */
         self.loadUserSubscriptionsByUserId = function (userid) {
@@ -72,11 +77,12 @@ module.exports = function (app) {
         self.controllerMethod = {
             /**
              * @description  open subscription event types dialog
-             * @param info
+             * @param record
              * @param $event
              * @returns {promise|*}
              */
-            openAddSubscriptionDialog: function (info, $event) {
+            openAddSubscriptionDialog: function (record, $event) {
+                var info = record.getInfo();
                 return dialog
                     .showDialog({
                         template: cmsTemplate.getPopup('subscription-event-type'),
@@ -94,7 +100,7 @@ module.exports = function (app) {
                             },
                             existingSubscriptions: function () {
                                 'ngInject';
-                                return self.getSubscriptionsByVsId(info);
+                                return self.getSubscriptionsByVsId(info.vsId);
                             }
                         }
                     });
@@ -130,19 +136,20 @@ module.exports = function (app) {
         /**
          * @description Add new user Subscription
          * @param userSubscriptions
+         * @param $event
          * @return {Promise|UserSubscription}
          */
-        self.addUserSubscriptionBulk = function (userSubscriptions) {
+        self.addUserSubscriptionBulk = function (userSubscriptions, $event) {
             return $http
                 .post(urlService.userSubscriptions + '/add-bulk', generator.interceptSendCollection('UserSubscription', userSubscriptions))
                 .then(function (result) {
                     return generator.getBulkActionResponse(result, userSubscriptions, false, 'failed_subscribe', 'subscribe_all_success', 'subscribe_success_except_following');
                 })
-            /*.catch(function (error) {
-                return errorCode.checkIf(error, 'CANNOT_ADD_SUBSCRIPTION_SAME_USER_SAME_BOOK', function () {
-                    dialog.errorMessage(langService.get('cannot_add_subscription_same_user_same_book'));
+                .catch(function (error) {
+                    return errorCode.checkIf(error, 'CANNOT_ADD_SUBSCRIPTION_SAME_USER_SAME_BOOK', function () {
+                        dialog.errorMessage(langService.get('cannot_add_subscription_same_user_same_book'));
+                    });
                 });
-            });*/
         };
 
         /**

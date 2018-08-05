@@ -36,9 +36,10 @@ module.exports = function (app) {
             /**
              * @description Save the event subscriptions for the book
              * @param form
+             * @param $event
              * @returns {Promise<any>}
              */
-            self.saveSubscribe = function (form) {
+            self.saveSubscribe = function (form, $event) {
                 var subscribingFor = [];
                 for (var i = 0; i < self.subscribingFor.length; i++) {
                     subscribingFor.push(new UserSubscription({
@@ -49,7 +50,7 @@ module.exports = function (app) {
                     }));
                 }
 
-                return userSubscriptionService.addUserSubscriptionBulk(subscribingFor)
+                return userSubscriptionService.addUserSubscriptionBulk(subscribingFor, $event)
                     .then(function (result) {
                         self.subscribingFor = [];
                         self.reloadUserSubscriptions();

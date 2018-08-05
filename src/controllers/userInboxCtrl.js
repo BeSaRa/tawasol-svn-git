@@ -525,11 +525,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.subscribe = function (workItem, $event) {
-            var info = workItem.getInfo();
-            userSubscriptionService.controllerMethod.openAddSubscriptionDialog(info, $event)
-                .then(function (result) {
-                    
-                });
+            userSubscriptionService.controllerMethod.openAddSubscriptionDialog(workItem, $event);
         };
 
         /**
