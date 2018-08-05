@@ -359,11 +359,6 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.getSortingKey = function (property, modelType) {
-            /* if (modelType.toLowerCase() === 'information')
-                 return property + '.' + (langService.current === 'ar' ? 'arName' : 'enName');
-             else if (modelType.toLowerCase() === 'lookup')
-                 return property + '.' + (langService.current === 'ar' ? 'defaultArName' : 'defaultEnName');
-             return property;*/
             return generator.getColumnSortingKey(property, modelType);
         };
 

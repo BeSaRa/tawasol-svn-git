@@ -24,7 +24,7 @@ module.exports = function (app) {
                 {
                     label: langService.get('all'),
                     value: function () {
-                        return self.deliveryReportRecords.length
+                        return (self.deliveryReportRecords.length + 21);
                     }
                 }
             ]

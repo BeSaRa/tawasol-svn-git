@@ -36,8 +36,9 @@ module.exports = function (app) {
             model.actionDate_vts ? getDateFromUnixTimeStamp_Vts(model, ["actionDate_vts"]) : "";
             (model.actionDate) ? getDateFromUnixTimeStamp(model, ["actionDate"]) : "";
             (model.dueDate) ? getDateFromUnixTimeStamp(model, ["dueDate"]) : "";
-            model.action = (model.workflowActionId) ? new WorkflowAction(model.workflowActionInfo) : (model.documentStatusInfo ? new DocumentStatus(model.documentStatusInfo) : '');
+            model.action = (model.workflowActionId) ? new WorkflowAction(model.workflowActionInfo) : (model.documentStatusInfo ? new DocumentStatus(model.documentStatusInfo) : new Information());
             model.userFromInfo = model.userFromInfo ? new Information(model.userFromInfo) : new Information();
+            model.userToInfo = model.userToInfo ? new Information(model.userToInfo) : new Information();
 
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;

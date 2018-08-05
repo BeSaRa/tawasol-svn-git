@@ -183,7 +183,7 @@ module.exports = function (app) {
                     {
                         label: langService.get('all'),
                         value: function () {
-                            return (self.partialExportList.sitesToList + 21);
+                            return (self.partialExportList.sitesToList.length + 21);
                         }
                     }
                 ]

@@ -69,7 +69,9 @@ module.exports = function (app) {
             };
 
             EventHistory.prototype.getTranslatedAction = function (reverse) {
-                var action = (this.workflowActionId) ? this.workflowActionInfo : (this.documentStatusInfo ? this.documentStatusInfo : '');
+                var action = (this.workflowActionId)
+                    ? this.workflowActionInfo
+                    : (this.documentStatusInfo ? this.documentStatusInfo : '');
                 return langService.current === 'ar'
                     ? (reverse ? action.enName : action.arName)
                     : (reverse ? action.arName : action.enName);

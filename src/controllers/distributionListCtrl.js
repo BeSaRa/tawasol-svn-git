@@ -44,7 +44,7 @@ module.exports = function (app) {
                     {
                         label: langService.get('all'),
                         value: function () {
-                            return self.distributionLists.length
+                            return (self.distributionLists.length + 21);
                         }
                     }
                 ]

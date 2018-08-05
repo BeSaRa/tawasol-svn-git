@@ -28,7 +28,7 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, {
                 label: langService.get('all'),
                 value: function () {
-                    return (self.correspondenceSites.length + 21 );
+                    return (self.correspondenceSites.length + 21);
                 }
             }]
         };

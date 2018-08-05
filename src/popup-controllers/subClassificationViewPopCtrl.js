@@ -26,7 +26,7 @@ module.exports = function (app) {
             limitOptions: [5, 10, 20, {
                 label: langService.get('all'),
                 value: function () {
-                    return self.classifications.length;
+                    return (self.classifications.length + 21);
                 }
             }]
         };

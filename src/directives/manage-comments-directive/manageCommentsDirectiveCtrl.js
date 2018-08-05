@@ -62,7 +62,7 @@ module.exports = function (app) {
                     {
                         label: langService.get('all'),
                         value: function () {
-                            return (self.documentComment.includedIDs.length + 2)
+                            return (self.documentComment.includedIDs.length + 21)
                         }
                     }
                 ]
@@ -75,7 +75,7 @@ module.exports = function (app) {
                     {
                         label: langService.get('all'),
                         value: function () {
-                            return (self.documentComment.excludedIDs.length + 2)
+                            return (self.documentComment.excludedIDs.length + 21)
                         }
                     }
                 ]
