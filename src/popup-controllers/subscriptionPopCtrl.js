@@ -34,24 +34,26 @@ module.exports = function (app) {
             };
 
             /**
-             * @description Save the event subscription for the book
+             * @description Save the event subscriptions for the book
+             * @param form
              * @returns {Promise<any>}
              */
-            self.saveSubscribe = function () {
+            self.saveSubscribe = function (form) {
                 var subscribingFor = [];
                 for (var i = 0; i < self.subscribingFor.length; i++) {
                     subscribingFor.push(new UserSubscription({
-                        trigerId: eventTypes[i].lookupKey,
+                        trigerId: self.subscribingFor[i].lookupKey,
                         documentVSId: self.info.vsId,
                         status: true,
                         docSubject: self.info.title
-                    }))
+                    }));
                 }
 
                 return userSubscriptionService.addUserSubscriptionBulk(subscribingFor)
                     .then(function (result) {
                         self.subscribingFor = [];
                         self.reloadUserSubscriptions();
+                        form.$setUntouched();
                     });
             };
 
