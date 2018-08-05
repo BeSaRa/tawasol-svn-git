@@ -1,5 +1,8 @@
 module.exports = function (app) {
-    app.factory('UserSubscription', function (CMSModelInterceptor,langService) {
+    app.factory('UserSubscription', function (CMSModelInterceptor,
+                                              lookupService,
+                                              _,
+                                              langService) {
         'ngInject';
         return function UserSubscription(model) {
             var self = this;
@@ -40,6 +43,14 @@ module.exports = function (app) {
              */
             UserSubscription.prototype.getTranslatedStatus = function () {
                 return this.status ? langService.get('active') : langService.get('inactive');
+            };
+
+            UserSubscription.prototype.getSubscriptionEventName = function () {
+                var eventTypes = lookupService.returnLookups(lookupService.documentSubscription);
+                var eventToFind = angular.copy(this.trigerId);
+                return _.find(eventTypes, function (eventType) {
+                    return eventType.lookupKey === eventToFind;
+                }).getTranslatedName();
             };
 
             // don't remove CMSModelInterceptor from last line

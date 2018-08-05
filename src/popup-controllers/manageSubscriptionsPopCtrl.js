@@ -19,7 +19,6 @@ module.exports = function (app) {
         self.progress = null;
         self.subscriptionEvent = null;
 
-
         /**
          * @description Contains options for grid configuration
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
@@ -33,7 +32,7 @@ module.exports = function (app) {
                 {
                     label: langService.get('all'),
                     value: function () {
-                        return ( self.userSubscriptions.length + 21);
+                        return (self.userSubscriptions.length + 21);
                     }
                 }
             ]
@@ -87,7 +86,6 @@ module.exports = function (app) {
             'false': userSubscriptionService.deactivateUserSubscription
         };
 
-
         /**
          * @description Delete single user Subscription
          * @param userSubscription
@@ -130,7 +128,6 @@ module.exports = function (app) {
                 })
         };
 
-
         /**
          * @description Change the status of selected User Subscriptions
          * @param status
@@ -148,7 +145,6 @@ module.exports = function (app) {
                 });
             });
         };
-
 
         /**
          * @description close reason reason.

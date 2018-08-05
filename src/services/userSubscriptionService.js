@@ -8,8 +8,7 @@ module.exports = function (app) {
                                                      dialog,
                                                      cmsTemplate,
                                                      langService,
-                                                     toast,
-                                                     errorCode) {
+                                                     toast) {
         'ngInject';
         var self = this;
         self.serviceName = 'userSubscriptionService';
@@ -38,50 +37,12 @@ module.exports = function (app) {
             return self.userSubscriptions && self.userSubscriptions.length ? $q.when(self.userSubscriptions) : self.loadUserSubscriptions();
         };
 
-
-        /**
-         * @description Add new user Subscription
-         * @param userSubscription
-         * @return {Promise|UserSubscription}
-         */
-        self.addUserSubscription = function (userSubscription) {
-            return $http
-                .post(urlService.userSubscriptions,
-                    generator.interceptSendInstance('UserSubscription', userSubscription))
+        self.getSubscriptionsByVsId = function (vsId) {
+            vsId = vsId.hasOwnProperty('vsId') ? vsId.vsId : vsId;
+            return $http.get(urlService.userSubscriptions + '/vsid/' + vsId)
                 .then(function (result) {
-                    return generator.interceptReceivedInstance('UserSubscription', generator.generateInstance(result.data.rs, UserSubscription, self._sharedMethods));
-                })
-                .catch(function (error) {
-                    return errorCode.checkIf(error, 'CANNOT_ADD_SUBSCRIPTION_SAME_USER_SAME_BOOK', function () {
-                        dialog.errorMessage(langService.get('cannot_add_subscription_same_user_same_book'));
-                    });
-                });
-        };
-
-
-        /**
-         * @description  open subscription event types dialog
-         * @param info
-         * @param $event
-         * @returns {promise|*}
-         */
-        self.showSubscribeDialog = function (info, $event) {
-            return dialog
-                .showDialog({
-                    template: cmsTemplate.getPopup('subscription-event-type'),
-                    controller: 'subscriptionPopCtrl',
-                    controllerAs: 'ctrl',
-                    bindToController: true,
-                    targetEvent: $event,
-                    locals: {
-                        subject: info.title
-                    },
-                    resolve: {
-                        eventTypes: function (lookupService) {
-                            'ngInject';
-                            return lookupService.returnLookups(lookupService.documentSubscription);
-                        }
-                    }
+                    result = generator.generateCollection(result.data.rs, UserSubscription, self._sharedMethods);
+                    return result;
                 });
         };
 
@@ -105,11 +66,39 @@ module.exports = function (app) {
             return self.userSubscriptionsByUserId.length ? $q.when(self.userSubscriptionsByUserId) : self.loadUserSubscriptionsByUserId(userid);
         };
 
-
         /**
          * @description Contains methods for CRUD operations for user Subscriptions
          */
         self.controllerMethod = {
+            /**
+             * @description  open subscription event types dialog
+             * @param info
+             * @param $event
+             * @returns {promise|*}
+             */
+            openAddSubscriptionDialog: function (info, $event) {
+                return dialog
+                    .showDialog({
+                        template: cmsTemplate.getPopup('subscription-event-type'),
+                        controller: 'subscriptionPopCtrl',
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        targetEvent: $event,
+                        locals: {
+                            info: info
+                        },
+                        resolve: {
+                            eventTypes: function (lookupService) {
+                                'ngInject';
+                                return lookupService.returnLookups(lookupService.documentSubscription);
+                            },
+                            existingSubscriptions: function () {
+                                'ngInject';
+                                return self.getSubscriptionsByVsId(info);
+                            }
+                        }
+                    });
+            },
             /**
              * @description Show confirm box and delete user Subscription
              * @param userSubscription
@@ -134,24 +123,26 @@ module.exports = function (app) {
                     .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event || null)
                     .then(function () {
                         return self.deleteBulkUserSubscriptions(userSubscriptions);
-                        /*.then(function (result) {
-                            var response = false;
-                            if (result.length === userSubscriptions.length) {
-                                toast.error(langService.get("failed_delete_selected"));
-                                response = false;
-                            } else if (result.length) {
-                                generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (userSubscription) {
-                                    return userSubscription.docSubject;
-                                }));
-                                response = true;
-                            } else {
-                                toast.success(langService.get("delete_success"));
-                                response = true;
-                            }
-                            return response;
-                        });*/
                     });
             }
+        };
+
+        /**
+         * @description Add new user Subscription
+         * @param userSubscriptions
+         * @return {Promise|UserSubscription}
+         */
+        self.addUserSubscriptionBulk = function (userSubscriptions) {
+            return $http
+                .post(urlService.userSubscriptions + '/add-bulk', generator.interceptSendCollection('UserSubscription', userSubscriptions))
+                .then(function (result) {
+                    return generator.getBulkActionResponse(result, userSubscriptions, false, 'failed_subscribe', 'subscribe_all_success', 'subscribe_success_except_following');
+                })
+            /*.catch(function (error) {
+                return errorCode.checkIf(error, 'CANNOT_ADD_SUBSCRIPTION_SAME_USER_SAME_BOOK', function () {
+                    dialog.errorMessage(langService.get('cannot_add_subscription_same_user_same_book'));
+                });
+            });*/
         };
 
         /**
@@ -181,17 +172,7 @@ module.exports = function (app) {
                 url: urlService.userSubscriptions + '/bulk',
                 data: bulkIds
             }).then(function (result) {
-                /*result = result.data.rs;
-                var failedUserSubscriptions = [];
-                _.map(result, function (value, key) {
-                    if (!value)
-                        failedUserSubscriptions.push(key);
-                });
-                return _.filter(userSubscriptions, function (userSubscriptions) {
-                    return (failedUserSubscriptions.indexOf(userSubscriptions.id) > -1);
-                });*/
                 return generator.getBulkActionResponse(result, userSubscriptions, false, 'failed_delete_selected', 'delete_success', 'delete_success_except_following');
-
             });
         };
 
@@ -201,8 +182,7 @@ module.exports = function (app) {
          * @param userSubscription
          */
         self.activateUserSubscription = function (userSubscription) {
-            return $http
-                .put((urlService.userSubscriptions + '/activate/' + userSubscription.id))
+            return $http.put(urlService.userSubscriptions + '/activate/' + userSubscription.id)
                 .then(function () {
                     return userSubscription;
                 });

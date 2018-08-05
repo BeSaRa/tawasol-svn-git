@@ -284,10 +284,10 @@ module.exports = function (app) {
             self.userInboxes = $filter('orderBy')(self.userInboxes, self.grid.order);
         };
 
-        self.getSortedDataForStarred = function(){
+        self.getSortedDataForStarred = function () {
             self.starredUserInboxes = $filter('orderBy')(self.starredUserInboxes, self.starredGrid.order);
         };
-        self.getSortedDataForFilter = function(){
+        self.getSortedDataForFilter = function () {
             self.workItemsFilters[self.selectedFilter.index] = $filter('orderBy')(self.workItemsFilters[self.selectedFilter.index], self.filterGrid[self.selectedFilter.index].order);
         };
 
@@ -526,24 +526,9 @@ module.exports = function (app) {
          */
         self.subscribe = function (workItem, $event) {
             var info = workItem.getInfo();
-            userSubscriptionService.showSubscribeDialog(info, $event)
-                .then(function (eventType) {
-                    var userSubscription = new UserSubscription({
-                        trigerId: eventType.hasOwnProperty('lookupKey') ? eventType.lookupKey : eventType,
-                        documentVSId: info.vsId,
-                        status: true,
-                        docSubject: info.title
-                    });
-
-                    userSubscriptionService.addUserSubscription(userSubscription)
-                        .then(function (result) {
-                            if (result) {
-                                toast.success(langService.get('subscribe_success').change({
-                                    name: info.title,
-                                    event: eventType.getTranslatedName()
-                                }));
-                            }
-                        });
+            userSubscriptionService.controllerMethod.openAddSubscriptionDialog(info, $event)
+                .then(function (result) {
+                    
                 });
         };
 

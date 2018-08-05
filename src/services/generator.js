@@ -452,7 +452,6 @@ module.exports = function (app) {
          * @param setNull
          * @returns {record}
          */
-
         self.replaceWithOriginalValues = function (record, originalRecord, fields, setNull) {
             if (typeof fields === "string") {
                 record[fields] = setNull ? null : originalRecord[fields];
