@@ -14,13 +14,20 @@
                                 <md-table-container>
                                     <div flex scroll-directive>
                                         <table md-table>
-                                            <thead md-head md-order="ctrl.grid.order">
+                                            <thead md-head md-order="ctrl.grid.order"
+                                                   md-on-reorder="ctrl.getSortedData">
                                             <tr md-row>
-                                                <th md-column md-order-by="userFromInfo"><span>{{lang.view_tracking_sheet_sender}}</span>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('userFromInfo','Information') }}">
+                                                    <span>{{lang.view_tracking_sheet_sender}}</span>
                                                 </th>
-                                                <th md-column md-order-by="userToInfo"><span>{{lang.view_tracking_sheet_receiver}}</span>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('userToInfo','Information')}}">
+                                                    <span>{{lang.view_tracking_sheet_receiver}}</span>
                                                 </th>
-                                                <th md-column md-order-by="workflowActionInfo"><span>{{lang.view_tracking_sheet_action}}</span>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('workflowActionInfo','Information')}} ">
+                                                    <span>{{lang.view_tracking_sheet_action}}</span>
                                                 </th>
                                                 <th md-column md-order-by="documentCreationDate_vts"><span>{{lang.view_tracking_sheet_creation_date}}</span>
                                                 </th>
@@ -32,7 +39,7 @@
                                             </thead>
                                             <tbody md-body>
                                             <tr md-select="mergedLinkedDocHistoryEvent" md-row
-                                                ng-repeat="mergedLinkedDocHistoryEvent in ctrl.mergedLinkedDocHistoryEvents | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                                ng-repeat="mergedLinkedDocHistoryEvent in ctrl.mergedLinkedDocHistoryEvents | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  track by $index">
                                                 <td md-cell>{{mergedLinkedDocHistoryEvent.getTranslatedUserFrom()}}</td>
                                                 <td md-cell>{{mergedLinkedDocHistoryEvent.getTranslatedUserTo()}}</td>
                                                 <td md-cell>{{mergedLinkedDocHistoryEvent.getTranslatedAction()}}</td>

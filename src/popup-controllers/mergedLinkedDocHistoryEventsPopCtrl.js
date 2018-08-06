@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('mergedLinkedDocHistoryEventsPopCtrl', function (_,
+                                                                    $filter,
                                                                     generator,
                                                                     dialog,
                                                                     langService,
@@ -11,6 +12,14 @@ module.exports = function (app) {
         self.controllerName = 'mergedLinkedDocHistoryEventsPopCtrl';
         self.mergedLinkedDocHistoryEvents = angular.copy(mergedLinkedDocHistoryEvents);
         self.mergedLinkedDocHistorySubject = mergedLinkedDocHistorySubject;
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.mergedLinkedDocHistoryEvents = $filter('orderBy')(self.mergedLinkedDocHistoryEvents, self.grid.order);
+        };
+
         self.grid = {
             limit: 5, // default limit
             page: 1, // first page
@@ -47,6 +56,16 @@ module.exports = function (app) {
          */
         self.closeMergedLinkedDocHistoryEventsPopupFromCtrl = function () {
             dialog.cancel();
-        }
+        };
+
+        /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function (property, modelType) {
+            return generator.getColumnSortingKey(property, modelType);
+        };
     });
 };

@@ -14,11 +14,13 @@
                                 <md-table-container>
                                     <div flex scroll-directive>
                                         <table md-table>
-                                            <thead md-head md-order="ctrl.grid.order">
+                                            <thead md-head md-order="ctrl.grid.order"
+                                                   md-on-reorder="ctrl.getSortedData">
                                             <tr md-row>
                                                 <th md-column md-order-by="actionBy"><span>{{lang.view_tracking_sheet_action_by}}</span>
                                                 </th>
-                                                <th md-column md-order-by="ouInfo"><span>{{lang.view_tracking_sheet_department}}</span>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('ouInfo','Information')}} "><span>{{lang.view_tracking_sheet_department}}</span>
                                                 </th>
                                                 <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
                                                 </th>
@@ -26,7 +28,7 @@
                                             </thead>
                                             <tbody md-body>
                                             <tr md-select="contentViewHistoryViewer" md-row
-                                                ng-repeat="contentViewHistoryViewer in ctrl.contentViewHistoryViewers | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                                ng-repeat="contentViewHistoryViewer in ctrl.contentViewHistoryViewers | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                                 <td md-cell>
                                                     {{contentViewHistoryViewer.actionByInfo.getTranslatedName()}}
                                                 </td>

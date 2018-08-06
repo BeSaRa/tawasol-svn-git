@@ -42,8 +42,12 @@
                                                 <tbody md-body>
                                                 <tr md-select="workflowHistoryRecord" md-row
                                                     ng-repeat="workflowHistoryRecord in ctrl.workflowHistoryRecords | filter:ctrl.searchModelWorkflowHistory | limitTo: ctrl.workflowHistoryGrid.limit: ((ctrl.workflowHistoryGrid.page - 1) * ctrl.workflowHistoryGrid.limit)  track by $index">
-                                                    <td md-cell>{{workflowHistoryRecord.userFromInfo.getTranslatedName()}}</td><!--{{workflowHistoryRecord.getTranslatedUserFrom()}}-->
-                                                    <td md-cell>{{workflowHistoryRecord.userToInfo.getTranslatedName()}}</td><!--{{workflowHistoryRecord.getTranslatedUserTo()}}-->
+                                                    <td md-cell>
+                                                        {{workflowHistoryRecord.userFromInfo.getTranslatedName()}}
+                                                    </td><!--{{workflowHistoryRecord.getTranslatedUserFrom()}}-->
+                                                    <td md-cell>
+                                                        {{workflowHistoryRecord.userToInfo.getTranslatedName()}}
+                                                    </td><!--{{workflowHistoryRecord.getTranslatedUserTo()}}-->
                                                     <td md-cell>{{workflowHistoryRecord.getTranslatedAction()}}</td>
                                                     <!--<td md-cell>{{workflowHistoryRecord.documentCreationDate_vts}}</td>-->
                                                     <td md-cell>{{workflowHistoryRecord.actionDate_vts}}</td>
@@ -79,7 +83,9 @@
                                                     </th>
                                                     <th md-column md-order-by="operation"><span>{{lang.view_tracking_sheet_action}}</span>
                                                     </th>
-                                                    <th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                    <th md-column
+                                                        md-order-by="ctrl.getSortingKey('actionByInfo','Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_action_by}}</span>
                                                     </th>
                                                     <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
                                                     </th>
@@ -133,7 +139,9 @@
                                                     </th>
                                                     <th md-column md-order-by="operation"><span>{{lang.view_tracking_sheet_action}}</span>
                                                     </th>
-                                                    <th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_action_by}}</span>
                                                     </th>
                                                     <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
                                                     </th>
@@ -238,7 +246,9 @@
                                                 <thead md-head md-order="ctrl.linkedEntitiesHistoryGrid.order"
                                                        md-on-reorder="ctrl.getSortedDataLinkedEntitiesHistory">
                                                 <tr md-row>
-                                                    <th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}} ">
+                                                        <span>{{lang.view_tracking_sheet_action_by}}</span>
                                                     </th>
                                                     <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
                                                     </th>
@@ -293,7 +303,9 @@
                                                 <thead md-head md-order="ctrl.destinationHistoryGrid.order"
                                                        md-on-reorder="ctrl.getSortedDataDestinationHistory">
                                                 <tr md-row>
-                                                    <th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_action_by}}</span>
                                                     </th>
                                                     <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
                                                     </th>
@@ -627,8 +639,12 @@
                                                 <tbody md-body>
                                                 <tr md-select="workflowHistoryRecord" md-row
                                                     ng-repeat="workflowHistoryRecord in ctrl.workflowHistoryRecords | filter:ctrl.searchModelWorkflowHistory | limitTo: ctrl.workflowHistoryGrid.limit: ((ctrl.workflowHistoryGrid.page - 1) * ctrl.workflowHistoryGrid.limit) track by $index">
-                                                    <td md-cell>{{workflowHistoryRecord.userFromInfo.getTranslatedName()}}</td><!--{{workflowHistoryRecord.getTranslatedUserFrom()}}-->
-                                                    <td md-cell>{{workflowHistoryRecord.userToInfo.getTranslatedName()}}</td><!--{{workflowHistoryRecord.getTranslatedUserTo()}}-->
+                                                    <td md-cell>
+                                                        {{workflowHistoryRecord.userFromInfo.getTranslatedName()}}
+                                                    </td><!--{{workflowHistoryRecord.getTranslatedUserFrom()}}-->
+                                                    <td md-cell>
+                                                        {{workflowHistoryRecord.userToInfo.getTranslatedName()}}
+                                                    </td><!--{{workflowHistoryRecord.getTranslatedUserTo()}}-->
                                                     <td md-cell>{{workflowHistoryRecord.getTranslatedAction()}}</td>
                                                     <!--<td md-cell>{{workflowHistoryRecord.documentCreationDate_vts}}</td>-->
                                                     <td md-cell>{{workflowHistoryRecord.actionDate_vts}}</td>
@@ -666,7 +682,9 @@
                                                     </th>
                                                     <th md-column md-order-by="operation"><span>{{lang.view_tracking_sheet_action}}</span>
                                                     </th>
-                                                    <th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_action_by}}</span>
                                                     </th>
                                                     <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
                                                     </th>
@@ -722,7 +740,9 @@
                                                     </th>
                                                     <th md-column md-order-by="operation"><span>{{lang.view_tracking_sheet_action}}</span>
                                                     </th>
-                                                    <th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}} ">
+                                                        <span>{{lang.view_tracking_sheet_action_by}}</span>
                                                     </th>
                                                     <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
                                                     </th>
@@ -830,7 +850,9 @@
                                                 <thead md-head md-order="ctrl.linkedEntitiesHistoryGrid.order"
                                                        md-on-reorder="ctrl.getSortedDataLinkedEntitiesHistory">
                                                 <tr md-row>
-                                                    <th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}} ">
+                                                        <span>{{lang.view_tracking_sheet_action_by}}</span>
                                                     </th>
                                                     <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
                                                     </th>
@@ -887,7 +909,9 @@
                                                 <thead md-head md-order="ctrl.destinationHistoryGrid.order"
                                                        md-on-reorder="ctrl.getSortedDataDestinationHistory">
                                                 <tr md-row>
-                                                    <th md-column md-order-by="actionByInfo"><span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                    <th md-column
+                                                        md-order-by="{{ctrl.getSortingKey('actionByInfo','Information')}}">
+                                                        <span>{{lang.view_tracking_sheet_action_by}}</span>
                                                     </th>
                                                     <th md-column md-order-by="actionDate"><span>{{lang.view_tracking_sheet_action_date}}</span>
                                                     </th>
@@ -895,7 +919,7 @@
                                                     </th>
                                                     <!--<th md-column md-order-by="operation"><span>{{lang.view_tracking_sheet_destination_identitfier}}</span>
                                                     </th>-->
-                                                    <th md-column md-order-by="operation"><span>{{lang.view_tracking_sheet_destination_full_name}}</span>
+                                                    <th md-column md-order-by="itemName"><span>{{lang.view_tracking_sheet_destination_full_name}}</span>
                                                     </th>
                                                 </tr>
                                                 </thead>
