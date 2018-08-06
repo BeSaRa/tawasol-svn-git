@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.controller('broadcastPopCtrl', function (broadcastService,
                                                  $q,
+                                                 $filter,
                                                  langService,
                                                  toast,
                                                  dialog,
@@ -22,6 +23,13 @@ module.exports = function (app) {
             self.progress = null;
 
             /**
+             * @description Gets the grid records by sorting
+             */
+            self.getSortedDataOrganizations = function () {
+                self.organizationsBroadcast = $filter('orderBy')(self.organizationsBroadcast, self.gridOrganizations.order);
+            };
+
+            /**
              * @description Contains options for grid configuration
              * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
              */
@@ -40,6 +48,12 @@ module.exports = function (app) {
                 ]
             };
 
+            /**
+             * @description Gets the grid records by sorting
+             */
+            self.getSortedDataWorkflowGroups = function () {
+                self.allSelectedWorkflowGroups = $filter('orderBy')(self.allSelectedWorkflowGroups, self.gridWorkflowGroups.order);
+            };
 
             /**
              * @description Contains options for grid configuration

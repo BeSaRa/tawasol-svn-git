@@ -12,7 +12,7 @@
                                multiple="true"
                                ng-model="ctrl.selectedDocumentFiles"
                                md-progress="ctrl.progress">
-                            <thead md-head md-order="ctrl.grid.order">
+                            <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                             <tr md-row>
                                 <th colspan="6" class="table-selector-header"
                                     ng-if="ctrl.selectedDocumentFiles.length" md-column>
@@ -45,7 +45,7 @@
                             </thead>
                             <tbody md-body>
                             <tr md-select="documentFile" md-row
-                                ng-repeat="documentFile in ctrl.documentFiles | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                ng-repeat="documentFile in ctrl.documentFiles | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                 <td md-cell>{{documentFile.arName}}</td>
                                 <td md-cell>{{documentFile.enName}}</td>
                                 <td md-cell>

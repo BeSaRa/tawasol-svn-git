@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                       lookupService,
                                                       ouClassificationService,
                                                       $q,
+                                                      $filter,
                                                       organizationService,
                                                       toast,
                                                       langService,
@@ -35,6 +36,13 @@ module.exports = function (app) {
             self.disableParent = true;
         }
         self.model = new Classification(self.classification);
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.classification.children = $filter('orderBy')(self.classification.children, self.grid.order);
+        };
 
         self.grid = {
             limit: 5, // default limit

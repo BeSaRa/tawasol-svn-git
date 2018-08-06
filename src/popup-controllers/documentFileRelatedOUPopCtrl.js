@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('documentFileRelatedOUPopCtrl', function (lookupService,
                                                              documentFileRelatedOU,
                                                              $q,
+                                                             $filter,
                                                              langService,
                                                              toast,
                                                              dialog,
@@ -9,31 +10,38 @@ module.exports = function (app) {
                                                              relatedOUDocumentFileService,
                                                              documentFileService) {
         'ngInject';
-            var self = this;
-            self.controllerName = 'documentFileRelatedOUPopCtrl';
-            self.documentFile = documentFile;
+        var self = this;
+        self.controllerName = 'documentFileRelatedOUPopCtrl';
+        self.documentFile = documentFile;
 
-            /**
-             *@description All document file related ous
-             */
-            self.documentFileRelatedOUs = documentFileRelatedOU;
+        /**
+         *@description All document file related ous
+         */
+        self.documentFileRelatedOUs = documentFileRelatedOU;
 
-            self.promise = null;
-            self.selectedRelatedOUs = [];
+        self.promise = null;
+        self.selectedRelatedOUs = [];
 
-            self.grid = {
-                limit: 5, // default limit
-                page: 1, // first page
-                order: 'arName', // default sorting order
-                limitOptions: [5, 10, 20, // limit options
-                    {
-                        label: langService.get('all'),
-                        value: function () {
-                            return (self.documentFileRelatedOUs.length + 21)
-                        }
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.documentFileRelatedOUs = $filter('orderBy')(self.documentFileRelatedOUs, self.grid.order);
+        };
+
+        self.grid = {
+            limit: 5, // default limit
+            page: 1, // first page
+            order: 'arName', // default sorting order
+            limitOptions: [5, 10, 20, // limit options
+                {
+                    label: langService.get('all'),
+                    value: function () {
+                        return (self.documentFileRelatedOUs.length + 21)
                     }
-                ]
-            };
+                }
+            ]
+        };
         /**
          * @description remove document file related organization
          */
@@ -51,13 +59,13 @@ module.exports = function (app) {
                     if (index === -1) {
                     }
                     self.documentFileRelatedOUs.splice(index, 1);
-                    if(self.documentFileRelatedOUs.length > 0){
+                    if (self.documentFileRelatedOUs.length > 0) {
                         self.documentFile.global = false;
                     }
-                    else{
+                    else {
                         self.documentFile.global = true;
                     }
-                    relatedOUDocumentFileService.loadRelatedOUDocumentFiles().then(function(){
+                    relatedOUDocumentFileService.loadRelatedOUDocumentFiles().then(function () {
                         documentFileService.updateDocumentFile(self.documentFile).then(function () {
                             toast.success(langService.get('delete_success'));
                         });
@@ -75,19 +83,19 @@ module.exports = function (app) {
             dialog.confirmMessage((langService.get('confirm_delete_msg'))).then(function () {
                 relatedOUDocumentFileService.deleteBulkRelatedOUDocumentFiles(self.selectedRelatedOUs).then(function (result) {
                     var index = -1;
-                    for(var j=0; j < result.length; j++) {
-                     index = self.documentFileRelatedOUs.indexOf(result[j]);
-                    if (index > -1) {
-                        self.documentFileRelatedOUs.splice(index, 1);
+                    for (var j = 0; j < result.length; j++) {
+                        index = self.documentFileRelatedOUs.indexOf(result[j]);
+                        if (index > -1) {
+                            self.documentFileRelatedOUs.splice(index, 1);
+                        }
                     }
-                    }
-                    if(self.documentFileRelatedOUs.length > 0){
+                    if (self.documentFileRelatedOUs.length > 0) {
                         self.documentFile.global = false;
                     }
-                    else{
+                    else {
                         self.documentFile.global = true;
                     }
-                    relatedOUDocumentFileService.loadRelatedOUDocumentFiles().then(function(){
+                    relatedOUDocumentFileService.loadRelatedOUDocumentFiles().then(function () {
                         documentFileService.updateDocumentFile(self.documentFile).then(function () {
                             toast.success(langService.get('delete_success'));
                         });
@@ -97,5 +105,5 @@ module.exports = function (app) {
 
             });
         };
-        });
+    });
 };

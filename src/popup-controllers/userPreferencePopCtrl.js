@@ -39,6 +39,7 @@ module.exports = function (app) {
                                                       $scope,
                                                       $rootScope,
                                                       $q,
+                                                      $filter,
                                                       signature,
                                                       selectedTab,
                                                       cmsTemplate,
@@ -650,6 +651,13 @@ module.exports = function (app) {
         self.isUserCommentForm = false;
         self.userCommentForm = null;
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataUserComments = function () {
+            self.userComments = $filter('orderBy')(self.userComments, self.grid.order);
+        };
+
         self.grid = {
             limit: 5, // default limit
             page: 1, // first page
@@ -704,6 +712,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedDataUserComments();
                     return result;
                 });
         };
@@ -829,6 +838,13 @@ module.exports = function (app) {
 
 
         self.selectedUserWorkflowGroups = [];
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataUserWorkflow = function () {
+            self.userWorkflowGroups = $filter('orderBy')(self.userWorkflowGroups, self.userWorkflowGrid.order);
+        };
 
         self.userWorkflowGrid = {
             limit: 5, // default limit
@@ -966,6 +982,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
+                    self.getSortedDataUserWorkflow();
                 });
         };
 
@@ -1146,6 +1163,13 @@ module.exports = function (app) {
 
                 });
             })
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataSignature = function () {
+            self.applicationUser.signature = $filter('orderBy')(self.applicationUser.signature, self.signatureGrid.order);
         };
 
         self.signatureGrid = {

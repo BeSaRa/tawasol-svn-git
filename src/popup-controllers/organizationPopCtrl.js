@@ -31,6 +31,7 @@ module.exports = function (app) {
                                                     allPropertyConfigurations,
                                                     propertyConfigurationService,
                                                     $q,
+                                                    $filter,
                                                     jobTitleService,
                                                     rankService,
                                                     themeService,
@@ -203,6 +204,20 @@ module.exports = function (app) {
         self.selectedOUCorrespondenceSite = new OUCorrespondenceSite({ouid: organization.id});
 
         self.correspondenceSiteEditMode = false;
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataClassifications = function () {
+            self.ouClassifications = $filter('orderBy')(self.ouClassifications, self.grid.classifications.order);
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataCorrespondenceSites = function () {
+            self.ouCorrespondenceSites = $filter('orderBy')(self.ouCorrespondenceSites, self.grid.correspondenceSites.order);
+        };
 
         self.grid = {
             classifications: {
@@ -936,6 +951,13 @@ module.exports = function (app) {
         self.selectedDocumentTemplates = [];
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataTemplate = function () {
+            self.documentTemplates = $filter('orderBy')(self.documentTemplates, self.documentTemplateGrid.order);
+        };
+
+        /**
          * @description Contains options for grid configuration
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
          */
@@ -1030,6 +1052,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.documentTemplateGrid.page = pageNumber;
+                    self.getSortedDataTemplate();
                     return result;
                 });
         };
@@ -1050,6 +1073,13 @@ module.exports = function (app) {
 
 
         self.selectedPropertyConfigurations = [];
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataPropertyConfiguration = function () {
+            self.propertyConfigurations = $filter('orderBy')(self.propertyConfigurations, self.propertyConfigurationGrid.order);
+        };
 
         /**
          * @description Contains options for grid configuration
@@ -1105,6 +1135,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.propertyConfigurationGrid.page = pageNumber;
+                    self.getSortedDataPropertyConfiguration();
                     return result;
                 })
         };
@@ -1155,6 +1186,15 @@ module.exports = function (app) {
         self.ouAssignedUsers = ouAssignedUsers;
         self.unAssignedUsers = unAssignedUsers;
         self.selectedUnassignedUser = null;
+
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataAppUser = function () {
+            self.ouAssignedUsers = $filter('orderBy')(self.ouAssignedUsers, self.appUserGrid.order);
+        };
+
         /**
          * @description Contains options for grid configuration
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
@@ -1200,6 +1240,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                     if (pageNumber)
                         self.appUserGrid.page = pageNumber;
+                    self.getSortedDataAppUser();
                 });
         };
 

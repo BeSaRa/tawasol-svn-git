@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                                      $timeout,
                                                                      langService,
                                                                      $q,
+                                                                     $filter,
                                                                      _) {
             'ngInject';
             var self = this;
@@ -29,6 +30,13 @@ module.exports = function (app) {
             self.ouApplicationUserSelected = self.ouApplicationUser ? _.filter(self.ouApplicationUsers, function (ouAppUser) {
                 return ouAppUser.applicationUser.id === self.ouApplicationUser.id
             }) : [];
+
+            /**
+             * @description Gets the grid records by sorting
+             */
+            self.getSortedData = function () {
+                self.ouApplicationUsers = $filter('orderBy')(self.ouApplicationUsers, self.grid.order);
+            };
 
             /**
              * @description Contains options for grid configuration

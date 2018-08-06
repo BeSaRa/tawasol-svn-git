@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                             langService,
                                                             viewCallback,
                                                             dialog,
+                                                            $filter,
                                                             excludeVsId,
                                                             viewDocumentService,
                                                             correspondenceService,
@@ -54,6 +55,13 @@ module.exports = function (app) {
         self.correspondences = [];
 
         self.selectedIndex = 0;
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.correspondences = $filter('orderBy')(self.correspondences, self.grid.order);
+        };
 
         self.grid = {
             limit: 5, //self.globalSetting.searchAmount, // default limit

@@ -47,7 +47,7 @@
                             <table md-table ng-model="ctrl.selectedUsers"
                                    md-row-select="true"
                                    multiple="true">
-                                <thead md-head md-order="ctrl.searchedUsersGrid.order">
+                                <thead md-head md-order="ctrl.searchedUsersGrid.order" md-on-reorder="ctrl.getSortedData">
                                 <tr md-row>
                                     <th colspan="5" ng-if="ctrl.selectedUsers.length"
                                         md-column>
@@ -69,7 +69,7 @@
                                 </thead>
                                 <tbody md-body>
                                 <tr md-row md-select="user" ng-if="!ctrl.checkIfExist(user)"
-                                    ng-repeat="user in ctrl.users | filter:ctrl.searchModel |limitTo: ctrl.searchedUsersGrid.limit: ((ctrl.searchedUsersGrid.page - 1) * ctrl.searchedUsersGrid.limit) |orderBy:ctrl.searchedUsersGrid.order track by $index">
+                                    ng-repeat="user in ctrl.users | filter:ctrl.searchModel |limitTo: ctrl.searchedUsersGrid.limit: ((ctrl.searchedUsersGrid.page - 1) * ctrl.searchedUsersGrid.limit) track by $index">
                                     <td md-cell>
                                         <span>{{user.toUserDomain}}</span>
                                     </td>

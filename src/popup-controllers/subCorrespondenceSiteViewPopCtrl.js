@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('subCorrespondenceSiteViewPopCtrl', function ($q,
+                                                                 $filter,
                                                                  dialog,
                                                                  toast,
                                                                  generator,
@@ -19,6 +20,14 @@ module.exports = function (app) {
         self.parentCorrespondenceSites = correspondenceSites;
 
         self.selectedCorrespondenceSites = [];
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.correspondenceSites = $filter('orderBy')(self.correspondenceSites, self.grid.order);
+        };
+
 
         self.grid = {
             limit: 5, // default limit
@@ -100,6 +109,7 @@ module.exports = function (app) {
                             defer.resolve(true);
                             if (pageNumber)
                                 self.grid.page = pageNumber;
+                            self.getSortedData();
                             return result;
                         });
                 });
@@ -206,7 +216,7 @@ module.exports = function (app) {
          */
         self.changeBulkStatusCorrespondenceSites = function (status) {
             var statusCheck = (status === 'activate');
-            if(!generator.checkCollectionStatus(self.selectedCorrespondenceSites , statusCheck )){
+            if (!generator.checkCollectionStatus(self.selectedCorrespondenceSites, statusCheck)) {
                 //toast.error(langService.get('the_status_already_changed'));
                 toast.success(langService.get(statusCheck ? 'success_activate_selected' : 'success_deactivate_selected'));
                 return;

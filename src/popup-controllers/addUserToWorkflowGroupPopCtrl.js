@@ -9,7 +9,8 @@ module.exports = function (app) {
                                                               groupMembers,
                                                               generator,
                                                               isUserPreference,
-                                                              organizationGroups) {
+                                                              organizationGroups,
+                                                              $filter) {
             'ngInject';
             var self = this;
 
@@ -53,6 +54,13 @@ module.exports = function (app) {
                         }
                     }
                 ]
+            };
+
+            /**
+             * @description Gets the grid records by sorting
+             */
+            self.getSortedData = function () {
+                self.users = $filter('orderBy')(self.users, self.searchedUsersGrid.order);
             };
 
             /**

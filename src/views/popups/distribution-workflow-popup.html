@@ -71,7 +71,7 @@
                                     <md-table-container flex scroll-directive style="max-height:200px !important;">
                                         <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}" md-row-select
                                                ng-model="ctrl.selectedAppUsers">
-                                            <thead md-head md-order="ctrl.gridAllUser.order">
+                                            <thead md-head md-order="ctrl.gridAllUser.order" md-on-reorder="ctrl.getSortedDataAllUser">
                                             <tr md-row>
                                                 <th md-column>
                                                     <md-button class="md-icon-button"
@@ -90,7 +90,7 @@
                                             <tr md-row
                                                 md-select="applicationUser"
                                                 ng-disabled="ctrl.disableRow(applicationUser)"
-                                                ng-repeat="applicationUser in ctrl.applicationUsers | limitTo: ctrl.gridAllUser.limit: ((ctrl.gridAllUser.page - 1) * ctrl.gridAllUser.limit) |orderBy:ctrl.gridAllUser.order track by $index">
+                                                ng-repeat="applicationUser in ctrl.applicationUsers | limitTo: ctrl.gridAllUser.limit: ((ctrl.gridAllUser.page - 1) * ctrl.gridAllUser.limit) track by $index">
                                                 <td md-cell>
                                                     <md-button class="md-icon-button"
                                                                ng-click="ctrl.addRemoveSingleFavoriteUser(applicationUser, $event)">
@@ -219,7 +219,7 @@
                                                 <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}"
                                                        md-row-select
                                                        ng-model="ctrl.selectedFavoriteUsers">
-                                                    <thead md-head md-order="ctrl.gridFavoriteUser.order">
+                                                    <thead md-head md-order="ctrl.gridFavoriteUser.order" md-on-reorder="ctrl.getSortedDataFavoriteUser">
                                                     <tr md-row>
                                                         <th md-column>
                                                             <md-button class="md-icon-button"
@@ -237,7 +237,7 @@
                                                     <tr md-row md-select="favoriteUser"
                                                         ng-if="ctrl.notCurrentUser(favoriteUser)"
                                                         ng-disabled="ctrl.disableRow(favoriteUser)"
-                                                        ng-repeat="favoriteUser in ctrl.allFavoriteUsers | limitTo: ctrl.gridFavoriteUser.limit: ((ctrl.gridFavoriteUser.page - 1) * ctrl.gridFavoriteUser.limit) |orderBy:ctrl.gridFavoriteUser.order track by $index">
+                                                        ng-repeat="favoriteUser in ctrl.allFavoriteUsers | limitTo: ctrl.gridFavoriteUser.limit: ((ctrl.gridFavoriteUser.page - 1) * ctrl.gridFavoriteUser.limit) track by $index">
                                                         <td md-cell>
                                                             <md-button class="md-icon-button"
                                                                        ng-click="ctrl.removeSingleFavoriteUser(favoriteUser, $event)">
@@ -276,7 +276,7 @@
                                                 <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}"
                                                        md-row-select
                                                        ng-model="ctrl.selectedFavoriteOUs">
-                                                    <thead md-head md-order="ctrl.gridFavoriteOU.order">
+                                                    <thead md-head md-order="ctrl.gridFavoriteOU.order" md-on-reorder="ctrl.getSortedDataFavoriteOU">
                                                     <tr md-row>
                                                         <th md-column>
                                                             <md-button class="md-icon-button"
@@ -291,7 +291,7 @@
                                                     </thead>
                                                     <tbody md-body>
                                                     <tr md-row md-select="favoriteOU"
-                                                        ng-repeat="favoriteOU in ctrl.allFavoriteOUs | limitTo: ctrl.gridFavoriteOU.limit: ((ctrl.gridFavoriteOU.page - 1) * ctrl.gridFavoriteOU.limit) |orderBy:ctrl.gridFavoriteOU.order track by $index">
+                                                        ng-repeat="favoriteOU in ctrl.allFavoriteOUs | limitTo: ctrl.gridFavoriteOU.limit: ((ctrl.gridFavoriteOU.page - 1) * ctrl.gridFavoriteOU.limit) track by $index">
                                                         <td md-cell>
                                                             <md-button class="md-icon-button"
                                                                        ng-click="ctrl.addRemoveSingleFavoriteOU(favoriteOU, $event)">
@@ -424,7 +424,7 @@
                                     <md-table-container flex scroll-directive style="max-height:200px !important;">
                                         <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}" md-row-select
                                                ng-model="ctrl.selectedManagers">
-                                            <thead md-head md-order="ctrl.gridAllManager.order">
+                                            <thead md-head md-order="ctrl.gridAllManager.order" md-on-reorder="ctrl.getSortedDataAllManager">
                                             <tr md-row>
                                                 <th md-column>
                                                     <md-button class="md-icon-button"
@@ -441,7 +441,7 @@
                                             <tbody md-body>
                                             <tr md-row md-select="manager"
                                                 ng-disabled="ctrl.disableRow(manager)"
-                                                ng-repeat="manager in ctrl.allManagers | limitTo: ctrl.gridAllManager.limit: ((ctrl.gridAllManager.page - 1) * ctrl.gridAllManager.limit) |orderBy:ctrl.gridAllManager.order track by $index">
+                                                ng-repeat="manager in ctrl.allManagers | limitTo: ctrl.gridAllManager.limit: ((ctrl.gridAllManager.page - 1) * ctrl.gridAllManager.limit) track by $index">
                                                 <td md-cell>
                                                     <md-button class="md-icon-button"
                                                                ng-click="ctrl.addRemoveSingleFavoriteManager(manager, $event)">
@@ -583,7 +583,7 @@
                                     <md-table-container flex scroll-directive style="max-height:200px !important;">
                                         <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}" md-row-select
                                                ng-model="ctrl.selectedOUGroups">
-                                            <thead md-head md-order="ctrl.gridOUGroup.order">
+                                            <thead md-head md-order="ctrl.gridOUGroup.order" md-on-reorder="ctrl.getSortedDataOUGroup">
                                             <tr md-row>
                                                 <th md-column>
                                                     <md-button class="md-icon-button"
@@ -598,7 +598,7 @@
                                             </thead>
                                             <tbody md-body>
                                             <tr md-row md-select="ouGroup"
-                                                ng-repeat="ouGroup in ctrl.allOUGroups | limitTo: ctrl.gridOUGroup.limit: ((ctrl.gridOUGroup.page - 1) * ctrl.gridOUGroup.limit) |orderBy:ctrl.gridOUGroup.order track by $index">
+                                                ng-repeat="ouGroup in ctrl.allOUGroups | limitTo: ctrl.gridOUGroup.limit: ((ctrl.gridOUGroup.page - 1) * ctrl.gridOUGroup.limit) track by $index">
                                                 <td md-cell>
                                                     <md-button class="md-icon-button"
                                                                ng-click="ctrl.addRemoveSingleFavoriteOU(ouGroup, $event)">
@@ -731,7 +731,7 @@
                                     <md-table-container flex scroll-directive style="max-height:200px !important;">
                                         <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}" md-row-select
                                                ng-model="ctrl.selectedWorkflowMembers">
-                                            <thead md-head md-order="ctrl.gridWorkflowGroupMember.order">
+                                            <thead md-head md-order="ctrl.gridWorkflowGroupMember.order" md-on-reorder="ctrl.getSortedDataWorkflowGroupMemeber">
                                             <tr md-row>
                                                 <th md-column md-order-by="arName">{{lang.arabic_name}}</th>
                                                 <th md-column md-order-by="enName">{{lang.english_name}}</th>
@@ -741,7 +741,7 @@
                                             <tbody md-body>
                                             <tr md-row md-select="workflowGroupMember"
                                                 ng-disabled="ctrl.disableRow(workflowGroupMember)"
-                                                ng-repeat="workflowGroupMember in ctrl.allWorkflowGroupMembers | limitTo: ctrl.gridWorkflowGroupMember.limit: ((ctrl.gridWorkflowGroupMember.page - 1) * ctrl.gridWorkflowGroupMember.limit) |orderBy:ctrl.gridWorkflowGroupMember.order track by $index">
+                                                ng-repeat="workflowGroupMember in ctrl.allWorkflowGroupMembers | limitTo: ctrl.gridWorkflowGroupMember.limit: ((ctrl.gridWorkflowGroupMember.page - 1) * ctrl.gridWorkflowGroupMember.limit) track by $index">
                                                 <td md-cell>
                                                     {{workflowGroupMember.arName}}
                                                 </td>
@@ -864,7 +864,7 @@
                                     <md-table-container flex scroll-directive style="max-height:200px !important;">
                                         <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}" md-row-select
                                                ng-model="ctrl.selectedPrivateUsers">
-                                            <thead md-head md-order="ctrl.gridPrivateUser.order">
+                                            <thead md-head md-order="ctrl.gridPrivateUser.order" md-on-reorder="ctrl.getSortedDataPrivateUser">
                                             <tr md-row>
                                                 <th md-column>
                                                     <md-button class="md-icon-button"
@@ -881,7 +881,7 @@
                                             <tbody md-body>
                                             <tr md-row md-select="privateUser"
                                                 ng-disabled="ctrl.disableRow(privateUser)"
-                                                ng-repeat="privateUser in ctrl.allPrivateUsers | limitTo: ctrl.gridPrivateUser.limit: ((ctrl.gridPrivateUser.page - 1) * ctrl.gridPrivateUser.limit) |orderBy:ctrl.gridPrivateUser.order track by $index">
+                                                ng-repeat="privateUser in ctrl.allPrivateUsers | limitTo: ctrl.gridPrivateUser.limit: ((ctrl.gridPrivateUser.page - 1) * ctrl.gridPrivateUser.limit) track by $index">
                                                 <td md-cell>
                                                     <md-button class="md-icon-button"
                                                                ng-click="ctrl.addRemoveSingleFavoritePrivateUser(privateUser, $event)">
@@ -1000,7 +1000,7 @@
                                     <md-table-container flex scroll-directive style="max-height:200px !important;">
                                         <table md-table multiple="{{!ctrl._canNotSendToMultiUsers()}}" md-row-select
                                                ng-model="ctrl.selectedGovernmentEntities">
-                                            <thead md-head md-order="ctrl.gridGE.order">
+                                            <thead md-head md-order="ctrl.gridGE.order" md-on-reorder="ctrl.getSortedDataGE">
                                             <tr md-row>
                                                 <th md-column md-order-by="arName">{{lang.arabic_name}}</th>
                                                 <th md-column md-order-by="enName">{{lang.english_name}}</th>
@@ -1010,7 +1010,7 @@
                                             <tbody md-body>
                                             <tr md-row md-select="governmentEntity"
                                                 ng-disabled="ctrl.disableRow(governmentEntity)"
-                                                ng-repeat="governmentEntity in ctrl.allGovernmentEntities | limitTo: ctrl.gridGE.limit: ((ctrl.gridGE.page - 1) * ctrl.gridGE.limit) |orderBy:ctrl.gridGE.order track by $index">
+                                                ng-repeat="governmentEntity in ctrl.allGovernmentEntities | limitTo: ctrl.gridGE.limit: ((ctrl.gridGE.page - 1) * ctrl.gridGE.limit) track by $index">
                                                 <td md-cell>
                                                     {{governmentEntity.arName}}
                                                 </td>

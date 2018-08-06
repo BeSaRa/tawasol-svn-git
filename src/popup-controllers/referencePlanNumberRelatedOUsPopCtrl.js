@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('referencePlanNumberRelatedOUsPopCtrl', function (lookupService,
                                                                      referencePlanNumberService,
                                                                      $q,
+                                                                     $filter,
                                                                      langService,
                                                                      organizations,
                                                                      referencePlanNumber,
@@ -13,18 +14,25 @@ module.exports = function (app) {
         self.controllerName = 'referencePlanNumberRelatedOUsPopCtrl';
         self.referencePlanNumber = referencePlanNumber;
         self.progress = null;
-        self.organizations= organizations;
+        self.organizations = organizations;
         /**
          * @description All reference plan number related organization units
          * @type {*}
          */
-       // self.referencePlanNumberRelatedOUsPops = referencePlanNumberRelatedOUsPops;
+        // self.referencePlanNumberRelatedOUsPops = referencePlanNumberRelatedOUsPops;
 
         /**
          * @description Contains the selected reference plan number related organization units
          * @type {Array}
          */
         self.selectedReferencePlanNumberRelatedOUsPops = [];
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.organizations = $filter('orderBy')(self.organizations, self.grid.order);
+        };
 
         /**
          * @description Contains options for grid configuration

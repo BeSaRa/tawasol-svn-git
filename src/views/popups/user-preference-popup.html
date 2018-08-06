@@ -846,7 +846,7 @@
                                                                multiple="true"
                                                                ng-model="ctrl.selectedUserComments"
                                                                md-progress="ctrl.progress">
-                                                            <thead md-head md-order="ctrl.grid.order">
+                                                            <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedDataUserComments">
                                                             <tr md-row>
                                                                 <th colspan="4" class="table-selector-header"
                                                                     ng-if="ctrl.selectedUserComments.length" md-column>
@@ -880,7 +880,7 @@
                                                             </thead>
                                                             <tbody md-body>
                                                             <tr md-select="userComment" md-row
-                                                                ng-repeat="userComment in ctrl.userComments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                                                ng-repeat="userComment in ctrl.userComments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                                                 <td md-cell><a href=""
                                                                                ng-click="ctrl.showComment(userComment, $event)">{{userComment.shortComment}}</a>
                                                                 </td>
@@ -952,7 +952,7 @@
                                                                multiple="true"
                                                                ng-model="ctrl.selectedUserWorkflowGroups"
                                                                md-progress="ctrl.userWorkflowProgress">
-                                                            <thead md-head md-order="ctrl.userWorkflowGrid.order">
+                                                            <thead md-head md-order="ctrl.userWorkflowGrid.order" md-on-reorder="ctrl.getSortedDataUserWorkflow">
                                                             <tr md-row>
                                                                 <th colspan="4" class="table-selector-header"
                                                                     ng-if="ctrl.selectedUserWorkflowGroups.length"
@@ -984,7 +984,7 @@
                                                             </thead>
                                                             <tbody md-body>
                                                             <tr md-select="userWorkflowGroup" md-row
-                                                                ng-repeat="userWorkflowGroup in ctrl.userWorkflowGroups | filter:ctrl.searchModel | limitTo: ctrl.userWorkflowGrid.limit: ((ctrl.userWorkflowGrid.page - 1) * ctrl.userWorkflowGrid.limit) |orderBy:ctrl.userWorkflowGrid.order  track by $index">
+                                                                ng-repeat="userWorkflowGroup in ctrl.userWorkflowGroups | filter:ctrl.searchModel | limitTo: ctrl.userWorkflowGrid.limit: ((ctrl.userWorkflowGrid.page - 1) * ctrl.userWorkflowGrid.limit)  track by $index">
                                                                 <td md-cell>{{userWorkflowGroup.wfgroup.arName}}</td>
                                                                 <td md-cell>{{userWorkflowGroup.wfgroup.enName}}</td>
                                                                 <td md-cell>
@@ -1117,7 +1117,7 @@
                                                 <table md-table md-row-select
                                                        ng-model="ctrl.selectedSignature"
                                                        md-progress="ctrl.signatureProgress">
-                                                    <thead md-head md-order="ctrl.signatureGrid.order">
+                                                    <thead md-head md-order="ctrl.signatureGrid.order" md-on-reorder="ctrl.getSortedDataSignature">
                                                     <tr md-row>
                                                         <th colspan="5" ng-if="ctrl.selectedSignature.length"
                                                             md-column>
@@ -1155,7 +1155,7 @@
                                                     </thead>
                                                     <tbody md-body>
                                                     <tr md-row
-                                                        ng-repeat="signature in ctrl.applicationUser.signature | filter:ctrl.searchModel | limitTo: ctrl.signatureGrid.limit: ((ctrl.signatureGrid.page - 1) * ctrl.signatureGrid.limit) |orderBy:ctrl.signatureGrid.order  track by $index">
+                                                        ng-repeat="signature in ctrl.applicationUser.signature | filter:ctrl.searchModel | limitTo: ctrl.signatureGrid.limit: ((ctrl.signatureGrid.page - 1) * ctrl.signatureGrid.limit) track by $index">
                                                         <td md-cell>{{signature.docSubject}}</td>
                                                         <td md-cell>{{signature.documentTitle}}</td>
                                                         <!--<td md-cell>{{documentTemplate.docType}}</td>

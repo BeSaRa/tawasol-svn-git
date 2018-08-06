@@ -200,7 +200,7 @@
                                         <div flex scroll-directive>
                                             <table md-table md-row-select multiple ng-model="ctrl.subSearchSelected"
                                                    md-progress="ctrl.progress">
-                                                <thead md-head md-order="ctrl.grid.subSearchResult.order">
+                                                <thead md-head md-order="ctrl.grid.subSearchResult.order" md-on-reorder="ctrl.getSortedDataSubSearchResult">
                                                 <tr md-row>
                                                     <th md-column md-order-by="mainEnSiteText">
                                                         <span>{{lang.sites_main_site}}</span>
@@ -218,7 +218,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-row md-select="site"
-                                                    ng-repeat="site in ctrl.subSearchResult  | filter:ctrl.searchModel | limitTo: ctrl.grid.subSearchResult.limit: ((ctrl.grid.subSearchResult.page - 1) * ctrl.grid.subSearchResult.limit) |orderBy:ctrl.grid.subSearchResult.order  track by $index">
+                                                    ng-repeat="site in ctrl.subSearchResult  | filter:ctrl.searchModel | limitTo: ctrl.grid.subSearchResult.limit: ((ctrl.grid.subSearchResult.page - 1) * ctrl.grid.subSearchResult.limit) track by $index">
                                                     <td md-cell>
                                                         <div flex layout="column">
                                                             <span class="span-column">{{site.getTranslatedParentName()}}</span>
@@ -372,7 +372,7 @@
                                         <div flex scroll-directive>
                                             <table md-table md-row-select multiple ng-model="ctrl.sitesInfoToSelected"
                                                    md-progress="ctrl.progress">
-                                                <thead md-head md-order="ctrl.grid.sitesInfoTo.order">
+                                                <thead md-head md-order="ctrl.grid.sitesInfoTo.order" md-on-reorder="ctrl.getSortedDataSitesInfoTo">
                                                 <tr md-row>
                                                     <th md-column md-order-by="mainEnSiteText">
                                                         <span>{{lang.sites_main_site}}</span>
@@ -393,7 +393,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
-                                                    ng-repeat="site in ctrl.partialExportList.sitesToList  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoTo.limit: ((ctrl.grid.sitesInfoTo.page - 1) * ctrl.grid.sitesInfoTo.limit) |orderBy:ctrl.grid.sitesInfoTo.order  track by $index">
+                                                    ng-repeat="site in ctrl.partialExportList.sitesToList  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoTo.limit: ((ctrl.grid.sitesInfoTo.page - 1) * ctrl.grid.sitesInfoTo.limit)  track by $index">
                                                     <td md-cell>
                                                         <div flex layout="column">
                                                             <span class="span-column">{{site.getTranslatedParentName()}}</span>
@@ -505,7 +505,7 @@
                                         <div flex scroll-directive>
                                             <table md-table md-row-select multiple ng-model="ctrl.sitesInfoCCSelected"
                                                    md-progress="ctrl.progress">
-                                                <thead md-head md-order="ctrl.grid.sitesInfoCC.order">
+                                                <thead md-head md-order="ctrl.grid.sitesInfoCC.order" md-on-reorder="ctrl.getSortedDataSitesInfoCC">
                                                 <tr md-row>
                                                     <th md-column md-order-by="mainEnSiteText">
                                                         <span>{{lang.sites_main_site}}</span>
@@ -526,7 +526,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
-                                                    ng-repeat="site in ctrl.partialExportList.sitesCCList| filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoCC.limit: ((ctrl.grid.sitesInfoCC.page - 1) * ctrl.grid.sitesInfoCC.limit) |orderBy:ctrl.grid.sitesInfoCC.order  track by $index">
+                                                    ng-repeat="site in ctrl.partialExportList.sitesCCList| filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoCC.limit: ((ctrl.grid.sitesInfoCC.page - 1) * ctrl.grid.sitesInfoCC.limit)  track by $index">
                                                     <td md-cell>
                                                         <div flex layout="column">
                                                             <span class="span-column">{{site.getTranslatedParentName()}}</span>
@@ -690,7 +690,7 @@
                                         <div flex scroll-directive>
                                             <table md-table md-row-select multiple ng-model="ctrl.subSearchSelected_DL"
                                                    md-progress="ctrl.progress">
-                                                <thead md-head md-order="ctrl.grid.subSearchResult_DL.order">
+                                                <thead md-head md-order="ctrl.grid.subSearchResult_DL.order" md-on-reorder="ctrl.getSortedDataSubSearchResult_DL">
                                                 <tr md-row>
                                                     <th md-column md-order-by="mainEnSiteText">
                                                         <span>{{lang.sites_main_site}}</span>
@@ -708,7 +708,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-row md-select="site"
-                                                    ng-repeat="site in ctrl.subSearchResult_DL  | filter:ctrl.searchModel_DL | limitTo: ctrl.grid.subSearchResult_DL.limit: ((ctrl.grid.subSearchResult_DL.page - 1) * ctrl.grid.subSearchResult_DL.limit) |orderBy:ctrl.grid.subSearchResult_DL.order  track by $index">
+                                                    ng-repeat="site in ctrl.subSearchResult_DL  | filter:ctrl.searchModel_DL | limitTo: ctrl.grid.subSearchResult_DL.limit: ((ctrl.grid.subSearchResult_DL.page - 1) * ctrl.grid.subSearchResult_DL.limit)  track by $index">
                                                     <td md-cell>
                                                         <div flex layout="column">
                                                             <span class="span-column">{{site.getTranslatedParentName()}}</span>
@@ -862,7 +862,7 @@
                                         <div flex scroll-directive>
                                             <table md-table md-row-select multiple ng-model="ctrl.sitesInfoToSelected"
                                                    md-progress="ctrl.progress">
-                                                <thead md-head md-order="ctrl.grid.sitesInfoTo.order">
+                                                <thead md-head md-order="ctrl.grid.sitesInfoTo.order" md-on-reorder="ctrl.getSortedDataSitesInfoTo">
                                                 <tr md-row>
                                                     <th md-column md-order-by="mainEnSiteText">
                                                         <span>{{lang.sites_main_site}}</span>
@@ -883,7 +883,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
-                                                    ng-repeat="site in ctrl.partialExportList.sitesToList  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoTo.limit: ((ctrl.grid.sitesInfoTo.page - 1) * ctrl.grid.sitesInfoTo.limit) |orderBy:ctrl.grid.sitesInfoTo.order  track by $index">
+                                                    ng-repeat="site in ctrl.partialExportList.sitesToList  | filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoTo.limit: ((ctrl.grid.sitesInfoTo.page - 1) * ctrl.grid.sitesInfoTo.limit)  track by $index">
                                                     <td md-cell>
                                                         <div flex layout="column">
                                                             <span class="span-column">{{site.getTranslatedParentName()}}</span>
@@ -995,7 +995,7 @@
                                         <div flex scroll-directive>
                                             <table md-table md-row-select multiple ng-model="ctrl.sitesInfoCCSelected"
                                                    md-progress="ctrl.progress">
-                                                <thead md-head md-order="ctrl.grid.sitesInfoCC.order">
+                                                <thead md-head md-order="ctrl.grid.sitesInfoCC.order" md-on-reorder="ctrl.getSortedDataSitesInfoCC">
                                                 <tr md-row>
                                                     <th md-column md-order-by="mainEnSiteText">
                                                         <span>{{lang.sites_main_site}}</span>
@@ -1016,7 +1016,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-row md-select="site" ng-disabled="!!ctrl.disableCorrespondence"
-                                                    ng-repeat="site in ctrl.partialExportList.sitesCCList| filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoCC.limit: ((ctrl.grid.sitesInfoCC.page - 1) * ctrl.grid.sitesInfoCC.limit) |orderBy:ctrl.grid.sitesInfoCC.order  track by $index">
+                                                    ng-repeat="site in ctrl.partialExportList.sitesCCList| filter:ctrl.searchModel | limitTo: ctrl.grid.sitesInfoCC.limit: ((ctrl.grid.sitesInfoCC.page - 1) * ctrl.grid.sitesInfoCC.limit) track by $index">
                                                     <td md-cell>
                                                         <div flex layout="column">
                                                             <span class="span-column">{{site.getTranslatedParentName()}}</span>

@@ -11,7 +11,7 @@
                         <div flex scroll-directive>
                             <table md-table md-row-select="true" multiple="true" ng-model="ctrl.selectedRelatedOUs"
                                    md-progress="ctrl.progress">
-                                <thead md-head md-order="ctrl.grid.order">
+                                <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                 <tr md-row>
 
                                     <th ng-if="!ctrl.selectedRelatedOUs.length" md-column md-order-by="arName">
@@ -40,7 +40,7 @@
                                 </thead>
                                 <tbody md-body>
                                 <tr md-row md-select="documentFileRelatedOU"
-                                    ng-repeat="documentFileRelatedOU in ctrl.documentFileRelatedOUs  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    ng-repeat="documentFileRelatedOU in ctrl.documentFileRelatedOUs  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                     <td md-cell>{{documentFileRelatedOU.arName}}</td>
                                     <td md-cell>{{documentFileRelatedOU.enName}}</td>
                                     <td md-cell>

@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                           ouCorrespondenceSiteService,
                                                           correspondenceSiteTypeService,
                                                           $q,
+                                                          $filter,
                                                           organizationService,
                                                           toast,
                                                           langService,
@@ -35,6 +36,13 @@ module.exports = function (app) {
         }
 
         self.model = new CorrespondenceSite(self.correspondenceSite);
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.correspondenceSite.children = $filter('orderBy')(self.correspondenceSite.children, self.grid.order);
+        };
 
         self.grid = {
             limit: 5, // default limit

@@ -123,7 +123,7 @@
                                     <div flex scroll-directive>
                                         <table md-table md-row-select multiple ng-model="ctrl.selectedCorrespondences"
                                                md-progress="ctrl.progress">
-                                            <thead md-head md-order="ctrl.grid.order">
+                                            <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                             <tr md-row>
                                                 <th ng-if="ctrl.selectedCorrespondences.length" md-column
                                                     colspan="7">
@@ -164,7 +164,7 @@
                                             <tbody md-body>
                                             <tr md-row md-select="correspondence" model="correspondence"
                                                 selected-length="{{ctrl.selectedCorrespondences.length ? ctrl.selectedCorrespondences.length : 0}}"
-                                                ng-repeat="correspondence in ctrl.correspondences | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                                ng-repeat="correspondence in ctrl.correspondences | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                                 <td md-cell class="indicator-td">
                                     <span flex
                                           ng-class="{'indicator-content': correspondence.securityLevelIndicator}">

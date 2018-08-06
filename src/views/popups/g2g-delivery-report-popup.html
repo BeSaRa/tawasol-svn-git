@@ -15,7 +15,7 @@
                                 <md-card>
                                     <md-table-container flex scroll-directive>
                                         <table md-table>
-                                            <thead md-head md-order="ctrl.grid.order">
+                                            <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                             <tr md-row>
                                                 <th md-column
                                                     md-order-by="{{ctrl.getSortingKey('statusInfo', 'Information')}}">
@@ -47,7 +47,7 @@
                                             </thead>
                                             <tbody md-body>
                                             <tr md-select="record" md-row
-                                                ng-repeat="record in ctrl.deliveryReportRecords | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                                ng-repeat="record in ctrl.deliveryReportRecords | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                                 <td md-cell>{{record.statusInfo.getTranslatedName()}}</td>
                                                 <td md-cell>
                                                     <main-site-sub-site-directive item="record"

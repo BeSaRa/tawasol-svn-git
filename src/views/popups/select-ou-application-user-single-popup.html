@@ -12,7 +12,7 @@
         <md-card>
             <md-table-container>
                 <table md-table md-row-select ng-model="ctrl.ouApplicationUserSelected" md-progress="ctrl.progress">
-                    <thead md-head md-order="ctrl.grid.order">
+                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                     <tr md-row>
                         <th md-column><span>{{lang.name}}</span></th>
                         <th md-column><span>{{lang.login_name}}</span></th>
@@ -21,7 +21,7 @@
                     </thead>
                     <tbody md-body>
                     <tr ng-if="ctrl.ouApplicationUsers.length" md-row md-select="ouApplicationUser"
-                        ng-repeat="ouApplicationUser in ctrl.ouApplicationUsers | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  | filter:ctrl.searchModel | orderBy:ctrl.grid.order track by $index">
+                        ng-repeat="ouApplicationUser in ctrl.ouApplicationUsers | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  | filter:ctrl.searchModel track by $index">
                         <td md-cell>
                             <span tooltip="{{ouApplicationUser.applicationUser.getTranslatedName(true)}}">{{ouApplicationUser.applicationUser.getTranslatedName()}}</span>
                         </td>

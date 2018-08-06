@@ -11,7 +11,7 @@
                         <div flex scroll-directive>
                             <table md-table ng-model="ctrl.organizations"
                                    md-progress="ctrl.progress">
-                                <thead md-head md-order="ctrl.grid.order">
+                                <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                 <tr md-row>
 
                                     <th md-column md-order-by="arName">
@@ -40,7 +40,7 @@
                                 </thead>
                                 <tbody md-body>
                                 <tr md-row md-select="organization"
-                                    ng-repeat="organization in ctrl.organizations  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                    ng-repeat="organization in ctrl.organizations  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                     <td md-cell>{{organization.arName}}</td>
                                     <td md-cell>{{organization.enName}}</td>
                                     <!-- <td md-cell>

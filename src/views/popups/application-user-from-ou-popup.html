@@ -648,7 +648,7 @@
                                             <table md-table md-row-select
                                                    ng-model="ctrl.selectedSignature"
                                                    md-progress="ctrl.signatureProgress">
-                                                <thead md-head md-order="ctrl.signatureGrid.order">
+                                                <thead md-head md-order="ctrl.signatureGrid.order" md-on-reorder="ctrl.getSortedData">
                                                 <tr md-row>
                                                     <th colspan="5" ng-if="ctrl.selectedSignature.length"
                                                         md-column>
@@ -686,7 +686,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-row
-                                                    ng-repeat="signature in ctrl.applicationUser.signature | filter:ctrl.searchModel | limitTo: ctrl.signatureGrid.limit: ((ctrl.signatureGrid.page - 1) * ctrl.signatureGrid.limit) |orderBy:ctrl.signatureGrid.order  track by $index">
+                                                    ng-repeat="signature in ctrl.applicationUser.signature | filter:ctrl.searchModel | limitTo: ctrl.signatureGrid.limit: ((ctrl.signatureGrid.page - 1) * ctrl.signatureGrid.limit) track by $index">
                                                     <td md-cell>{{signature.docSubject}}</td>
                                                     <td md-cell>{{signature.documentTitle}}</td>
                                                     <!--<td md-cell>{{documentTemplate.docType}}</td>

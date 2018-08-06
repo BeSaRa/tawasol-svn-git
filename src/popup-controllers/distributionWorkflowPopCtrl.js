@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.controller('distributionWorkflowPopCtrl', function (lookupService,
                                                             $q,
+                                                            $filter,
                                                             langService,
                                                             applicationUserService,
                                                             $timeout,
@@ -201,6 +202,13 @@ module.exports = function (app) {
         ];
 
         /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataAllUser = function () {
+            self.applicationUsers = $filter('orderBy')(self.applicationUsers, self.gridAllUser.order);
+        };
+
+        /**
          * @description Contains options for grid configuration
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
          */
@@ -217,6 +225,14 @@ module.exports = function (app) {
                 }
             ]
         };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataAllManager = function () {
+            self.allManagers = $filter('orderBy')(self.allManagers, self.gridAllManager.order);
+        };
+
         /**
          * @description Contains options for grid configuration
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
@@ -234,6 +250,14 @@ module.exports = function (app) {
                 }
             ]
         };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataOUGroup = function () {
+            self.gridOUGroup = $filter('orderBy')(self.gridOUGroup, self.gridOUGroup.order);
+        };
+
         /**
          * @description Contains options for grid configuration
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
@@ -251,6 +275,14 @@ module.exports = function (app) {
                 }
             ]
         };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataPrivateUser = function () {
+            self.allPrivateUsers = $filter('orderBy')(self.allPrivateUsers, self.gridPrivateUser.order);
+        };
+
         /**
          * @description Contains options for grid configuration
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
@@ -268,6 +300,14 @@ module.exports = function (app) {
                 }
             ]
         };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataGE = function () {
+            self.allGovernmentEntities = $filter('orderBy')(self.allGovernmentEntities, self.gridGE.order);
+        };
+
         /**
          * @description Contains options for grid configuration
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
@@ -285,6 +325,14 @@ module.exports = function (app) {
                 }
             ]
         };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataFavoriteOU = function () {
+            self.allFavoriteOUs = $filter('orderBy')(self.allFavoriteOUs, self.gridFavoriteOU.order);
+        };
+
         /**
          * @description Contains options for grid configuration
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
@@ -302,6 +350,14 @@ module.exports = function (app) {
                 }
             ]
         };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataFavoriteUser = function () {
+            self.allFavoriteUsers = $filter('orderBy')(self.allFavoriteUsers, self.gridFavoriteUser.order);
+        };
+
         /**
          * @description Contains options for grid configuration
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
@@ -319,6 +375,7 @@ module.exports = function (app) {
                 }
             ]
         };
+
         /**
          * @description Contains options for grid configuration
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
@@ -336,6 +393,14 @@ module.exports = function (app) {
                 }
             ]
         };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataWorkflowGroupMemeber = function () {
+            self.allWorkflowGroupMembers = $filter('orderBy')(self.allWorkflowGroupMembers, self.gridWorkflowGroupMember.order);
+        };
+
         /**
          * @description Contains options for grid configuration
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}

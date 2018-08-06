@@ -10,7 +10,7 @@
                     <md-table-container flex scroll-directive>
                         <table md-table md-row-select multiple ng-model="ctrl.selectedClassifications"
                                md-progress="ctrl.progress">
-                            <thead md-head md-order="ctrl.grid.order">
+                            <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                             <tr md-row>
                                 <th colspan="2" class="table-selector-header"
                                     ng-if="ctrl.selectedClassifications.length" md-column>
@@ -55,7 +55,7 @@
                             </thead>
                             <tbody md-body>
                             <tr md-row md-select="classification"
-                                ng-repeat="classification in ctrl.classifications  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                ng-repeat="classification in ctrl.classifications  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                 <td md-cell>{{classification.arName}}</td>
                                 <td md-cell>{{classification.enName}}</td>
                                 <td md-cell>

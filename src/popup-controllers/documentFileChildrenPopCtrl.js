@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                             documentFileService,
                                                             documentFiles,
                                                             $q,
+                                                            $filter,
                                                             DocumentFile,
                                                             langService,
                                                             toast,
@@ -22,6 +23,13 @@ module.exports = function (app) {
         self.documentFiles = angular.copy(documentFiles);
         self.promise = null;
         self.selectedDocumentFiles = [];
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.documentFiles = $filter('orderBy')(self.documentFiles, self.grid.order);
+        };
 
         self.grid = {
             limit: 5, // default limit
@@ -101,7 +109,8 @@ module.exports = function (app) {
                             defer.resolve(true);
                             if (pageNumber)
                                 self.grid.page = pageNumber;
-                           // return result;
+                            self.getSortedData();
+                            // return result;
                         });
                 });
         };
@@ -202,7 +211,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadDocumentFiles().then(function () {
                     });
-                }).catch(function(){
+                }).catch(function () {
                 self.reloadDocumentFiles().then(function () {
                 });
             });

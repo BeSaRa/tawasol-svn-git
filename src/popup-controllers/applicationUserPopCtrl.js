@@ -39,6 +39,7 @@ module.exports = function (app) {
                                                        currentOrganization,
                                                        organizationService,
                                                        $q,
+                                                       $filter,
                                                        $timeout) {
         'ngInject';
         var self = this;
@@ -594,6 +595,13 @@ module.exports = function (app) {
 
                 });
             })
+        };
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.applicationUser.signature = $filter('orderBy')(self.applicationUser.signature, self.signatureGrid.order);
         };
 
         self.signatureGrid = {

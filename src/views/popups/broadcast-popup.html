@@ -43,7 +43,7 @@
                                         <div flex scroll-directive>
                                             <table md-table multiple md-row-select
                                                    ng-model="ctrl.selectedOrganizationBroadcast">
-                                                <thead md-head md-order="ctrl.gridOrganizations.order">
+                                                <thead md-head md-order="ctrl.gridOrganizations.order" md-on-reorder="ctrl.getSortedDataOrganizations">
                                                 <tr md-row>
                                                     <th colspan="4" class="table-selector-header"
                                                         ng-if="ctrl.selectedOrganizationBroadcast.length" md-column>
@@ -74,7 +74,7 @@
                                                 </thead>
                                                 <tbody md-body>
                                                 <tr md-row
-                                                    ng-repeat="organization in ctrl.organizationsBroadcast | limitTo: ctrl.gridOrganizations.limit: ((ctrl.gridOrganizations.page - 1) * ctrl.gridOrganizations.limit) |orderBy:ctrl.gridOrganizations.order track by $index"
+                                                    ng-repeat="organization in ctrl.organizationsBroadcast | limitTo: ctrl.gridOrganizations.limit: ((ctrl.gridOrganizations.page - 1) * ctrl.gridOrganizations.limit) track by $index"
                                                     md-select="organization"
                                                     ng-disabled="ctrl.disableRow(organization)">
                                                     <td md-cell>
@@ -149,7 +149,7 @@
                                         <div flex scroll-directive>
                                             <table md-table multiple md-row-select
                                                    ng-model="ctrl.selectedWorkflowGroupBroadcast">
-                                                <thead md-head md-order="ctrl.gridWorkflowGroups.order">
+                                                <thead md-head md-order="ctrl.gridWorkflowGroups.order" md-on-reorder="ctrl.getSortedDataWorkflowGroups">
                                                 <tr md-row>
                                                     <th colspan="3" class="table-selector-header"
                                                         ng-if="ctrl.selectedWorkflowGroupBroadcast.length" md-column>
@@ -178,7 +178,7 @@
                                                 <tbody md-body>
                                                 <tr md-row md-select="workflowGroup"
                                                     ng-disabled="ctrl.disableRow(workflowGroup)"
-                                                    ng-repeat="workflowGroup in ctrl.allSelectedWorkflowGroups | limitTo: ctrl.gridWorkflowGroups.limit: ((ctrl.gridWorkflowGroups.page - 1) * ctrl.gridWorkflowGroups.limit) |orderBy:ctrl.gridWorkflowGroups.order track by $index">
+                                                    ng-repeat="workflowGroup in ctrl.allSelectedWorkflowGroups | limitTo: ctrl.gridWorkflowGroups.limit: ((ctrl.gridWorkflowGroups.page - 1) * ctrl.gridWorkflowGroups.limit) track by $index">
                                                     <td md-cell>
                                                         {{workflowGroup.arName}}
                                                     </td>

@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('partialExportPopCtrl', function (sites,
                                                      $timeout,
                                                      _,
+                                                     $filter,
                                                      generator,
                                                      PartialExportCollection,
                                                      rootEntity,
@@ -161,6 +162,30 @@ module.exports = function (app) {
             To: 'CC'
         };
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataSubSearchResult = function () {
+            self.reviewOutgoings = $filter('orderBy')(self.reviewOutgoings, self.grid.subSearchResult.order);
+        };
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataSitesInfoTo = function () {
+            self.partialExportList.sitesToList = $filter('orderBy')(self.partialExportList.sitesToList, self.grid.sitesInfoTo.order);
+        };
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataSitesInfoCC = function () {
+            self.partialExportList.sitesCCList = $filter('orderBy')(self.partialExportList.sitesCCList, self.grid.sitesInfoCC.order);
+        };
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedDataSubSearchResult_DL = function () {
+            self.subSearchResult_DL = $filter('orderBy')(self.subSearchResult_DL, self.grid.subSearchResult_DL.order);
+        };
         self.grid = {
             subSearchResult: {
                 limit: 5, // default limit

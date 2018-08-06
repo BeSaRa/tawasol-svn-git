@@ -722,7 +722,7 @@
                                                         <table md-table md-row-select multiple
                                                                ng-model="ctrl.selectedOUClassifications"
                                                                md-progress="ctrl.progress">
-                                                            <thead md-head md-order="ctrl.grid.classifications.order">
+                                                            <thead md-head md-order="ctrl.grid.classifications.order" md-on-reorder="ctrl.getSortedDataClassifications">
                                                             <tr md-row>
                                                                 <th colspan="6" class="table-selector-header"
                                                                     ng-if="ctrl.selectedOUClassifications.length"
@@ -772,7 +772,7 @@
                                                             <tbody md-body>
                                                             <tr md-row ng-disabled="ctrl.classificationEditMode"
                                                                 md-select="ouClassification"
-                                                                ng-repeat="ouClassification in ctrl.ouClassifications  | filter:ctrl.classificationSearchModel | limitTo: ctrl.grid.classifications.limit: ((ctrl.grid.classifications.page - 1) * ctrl.grid.classifications.limit) |orderBy:ctrl.grid.classifications.order  track by $index">
+                                                                ng-repeat="ouClassification in ctrl.ouClassifications  | filter:ctrl.classificationSearchModel | limitTo: ctrl.grid.classifications.limit: ((ctrl.grid.classifications.page - 1) * ctrl.grid.classifications.limit) track by $index">
                                                                 <td md-cell>{{ouClassification.classification.arName}}
                                                                 </td>
                                                                 <td md-cell>{{ouClassification.classification.enName}}
@@ -917,7 +917,7 @@
                                                                ng-model="ctrl.selectedOUCorrespondenceSites"
                                                                md-progress="ctrl.progress">
                                                             <thead md-head
-                                                                   md-order="ctrl.grid.correspondenceSites.order">
+                                                                   md-order="ctrl.grid.correspondenceSites.order" md-on-reorder="ctrl.getSortedDataCorrespondenceSites">
                                                             <tr md-row>
 
                                                                 <th colspan="6" class="table-selector-header"
@@ -968,7 +968,7 @@
                                                             <tbody md-body>
                                                             <tr md-row ng-disabled="ctrl.correspondenceSiteEditMode"
                                                                 md-select="ouCorrespondenceSite"
-                                                                ng-repeat="ouCorrespondenceSite in ctrl.ouCorrespondenceSites | filter:ctrl.correspondenceSiteSearchModel | limitTo: ctrl.grid.correspondenceSites.limit: ((ctrl.grid.correspondenceSites.page - 1) * ctrl.grid.correspondenceSites.limit) |orderBy:ctrl.grid.correspondenceSites.order  track by $index">
+                                                                ng-repeat="ouCorrespondenceSite in ctrl.ouCorrespondenceSites | filter:ctrl.correspondenceSiteSearchModel | limitTo: ctrl.grid.correspondenceSites.limit: ((ctrl.grid.correspondenceSites.page - 1) * ctrl.grid.correspondenceSites.limit)  track by $index">
                                                                 <td md-cell>
                                                                     {{ouCorrespondenceSite.correspondenceSite.arName}}
                                                                 </td>
@@ -1048,7 +1048,7 @@
                                                                multiple="true"
                                                                ng-model="ctrl.selectedDocumentTemplates"
                                                                md-progress="ctrl.documentTemplateProgress">
-                                                            <thead md-head md-order="ctrl.documentTemplateGrid.order">
+                                                            <thead md-head md-order="ctrl.documentTemplateGrid.order" md-on-reorder="ctrl.getSortedDataTemplate">
                                                             <tr md-row>
                                                                 <th colspan="5" class="table-selector-header"
                                                                     ng-if="ctrl.selectedDocumentTemplates.length"
@@ -1086,7 +1086,7 @@
                                                             </thead>
                                                             <tbody md-body>
                                                             <tr md-row md-select="documentTemplate"
-                                                                ng-repeat="documentTemplate in ctrl.documentTemplates | filter:ctrl.documentTemplateSearchModel | limitTo: ctrl.documentTemplateGrid.limit: ((ctrl.documentTemplateGrid.page - 1) * ctrl.documentTemplateGrid.limit) |orderBy:ctrl.documentTemplateGrid.order  track by $index">
+                                                                ng-repeat="documentTemplate in ctrl.documentTemplates | filter:ctrl.documentTemplateSearchModel | limitTo: ctrl.documentTemplateGrid.limit: ((ctrl.documentTemplateGrid.page - 1) * ctrl.documentTemplateGrid.limit) track by $index">
                                                                 <td md-cell>{{documentTemplate.docSubject}}</td>
                                                                 <td md-cell>{{documentTemplate.documentTitle}}</td>
                                                                 <td md-cell>
@@ -1178,7 +1178,7 @@
                                                                ng-model="ctrl.selectedPropertyConfigurations"
                                                                md-progress="ctrl.propertyConfigurationProgress">
                                                             <thead md-head
-                                                                   md-order="ctrl.propertyConfigurationGrid.order">
+                                                                   md-order="ctrl.propertyConfigurationGrid.order" md-on-reorder="ctrl.getSortedDataPropertyConfiguration">
                                                             <tr md-row>
                                                                 <th md-column
                                                                     md-order-by="dataType">
@@ -1207,7 +1207,7 @@
                                                             </thead>
                                                             <tbody md-body>
                                                             <tr md-row md-select="propertyConfiguration"
-                                                                ng-repeat="propertyConfiguration in ctrl.propertyConfigurations | filter:ctrl.searchModelPropertyConfigurations | limitTo: ctrl.propertyConfigurationGrid.limit: ((ctrl.propertyConfigurationGrid.page - 1) * ctrl.propertyConfigurationGrid.limit) |orderBy:ctrl.propertyConfigurationGrid.order track by $index">
+                                                                ng-repeat="propertyConfiguration in ctrl.propertyConfigurations | filter:ctrl.searchModelPropertyConfigurations | limitTo: ctrl.propertyConfigurationGrid.limit: ((ctrl.propertyConfigurationGrid.page - 1) * ctrl.propertyConfigurationGrid.limit) track by $index">
                                                                 <td md-cell>{{propertyConfiguration.dataType}}</td>
                                                                 <td md-cell>{{propertyConfiguration.defaultOperator}}
                                                                 </td>
@@ -1295,7 +1295,7 @@
                                                         <table md-table md-row-select multiple
                                                                ng-model="ctrl.selectedOUApplicationUsers"
                                                                md-progress="ctrl.appUserProgress">
-                                                            <thead md-head md-order="ctrl.appUserGrid.order">
+                                                            <thead md-head md-order="ctrl.appUserGrid.order" md-on-reorder="ctrl.getSortedDataAppUser">
                                                             <tr md-row>
                                                                 <th colspan="5"
                                                                     ng-if="ctrl.selectedOUApplicationUsers.length"
@@ -1312,22 +1312,22 @@
                                                                 </th>
                                                                 <th ng-if="!ctrl.selectedOUApplicationUsers.length"
                                                                     md-column
-                                                                    md-order-by="arFullName">
+                                                                    md-order-by="applicationUser.arFullName">
                                                                     <span>{{lang.arabic_name}}</span>
                                                                 </th>
                                                                 <th ng-if="!ctrl.selectedOUApplicationUsers.length"
                                                                     md-column
-                                                                    md-order-by="enFullName">
+                                                                    md-order-by="applicationUser.enFullName">
                                                                     <span>{{lang.english_name}}</span>
                                                                 </th>
                                                                 <th ng-if="!ctrl.selectedOUApplicationUsers.length"
                                                                     md-column
-                                                                    md-order-by="loginName">
+                                                                    md-order-by="applicationUser.loginName">
                                                                     <span>{{lang.login_name}}</span>
                                                                 </th>
                                                                 <th ng-if="!ctrl.selectedOUApplicationUsers.length"
                                                                     md-column
-                                                                    md-order-by="domainName">
+                                                                    md-order-by="applicationUser.domainName">
                                                                     <span>{{lang.domain_name}}</span>
                                                                 </th>
                                                                 <th ng-if="!ctrl.selectedOUApplicationUsers.length"
@@ -1339,7 +1339,7 @@
                                                             <tbody md-body>
                                                             <tr md-row md-select="ouApplicationUser"
                                                                 ng-disabled="ctrl.currentEmployee.id === ouApplicationUser.applicationUser.id"
-                                                                ng-repeat="ouApplicationUser in ctrl.ouAssignedUsers  | filter:ctrl.searchModelOUAppUser | limitTo: ctrl.appUserGrid.limit: ((ctrl.appUserGrid.page - 1) * ctrl.appUserGrid.limit) |orderBy:ctrl.appUserGrid.order  track by $index">
+                                                                ng-repeat="ouApplicationUser in ctrl.ouAssignedUsers  | filter:ctrl.searchModelOUAppUser | limitTo: ctrl.appUserGrid.limit: ((ctrl.appUserGrid.page - 1) * ctrl.appUserGrid.limit) track by $index">
                                                                 <td md-cell>
                                                                     {{ouApplicationUser.applicationUser.arFullName}}
                                                                 </td>

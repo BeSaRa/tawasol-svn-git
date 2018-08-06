@@ -1,16 +1,23 @@
 module.exports = function (app) {
     app.controller('g2gDeliveryReportPopCtrl', function (viewDeliveryReportService,
-                                                          _,
-                                                          toast,
-                                                          generator,
-                                                          dialog,
-                                                          langService,
-                                                          records) {
+                                                         _,
+                                                         $filter,
+                                                         toast,
+                                                         generator,
+                                                         dialog,
+                                                         langService,
+                                                         records) {
         'ngInject';
         var self = this;
         self.controllerName = 'g2gDeliveryReportPopCtrl';
         self.deliveryReportRecords = records;
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.deliveryReportRecords = $filter('orderBy')(self.deliveryReportRecords, self.grid.order);
+        };
 
         /**
          * @description Contains options for grid configuration

@@ -1,5 +1,6 @@
 module.exports = function (app) {
     app.controller('subClassificationViewPopCtrl', function ($q,
+                                                             $filter,
                                                              dialog,
                                                              toast,
                                                              classification,
@@ -18,6 +19,14 @@ module.exports = function (app) {
         self.parentClassifications = classifications;
 
         self.selectedClassifications = [];
+
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.classifications = $filter('orderBy')(self.classifications, self.grid.order);
+        };
+
 
         self.grid = {
             limit: 5, // default limit
@@ -99,6 +108,7 @@ module.exports = function (app) {
                             defer.resolve(true);
                             if (pageNumber)
                                 self.grid.page = pageNumber;
+                            self.getSortedData();
                             return result;
                         });
                 });
