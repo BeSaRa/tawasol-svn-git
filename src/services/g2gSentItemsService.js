@@ -113,14 +113,17 @@ module.exports = function (app) {
                     return $http.put((urlService.g2gInbox + 'recall'), g2gItem).then(function (result) {
                         return result.data.rs;
                     }).catch(function (error) {
-                        errorCode.checkIf(error, 'CANNOT_RECALL_OPENED_BOOK', function () {
-                            dialog.errorMessage(langService.get('cannot_recall_opened_book'));
+                        errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
+                            dialog.errorMessage(langService.get('g2g_not_authenticated'));
+                        });
+                        errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
+                            dialog.errorMessage(langService.get('g2g_not_authorized'));
                         });
                         errorCode.checkIf(error, 'G2G_BOOK_PROPERTIES_CAN_NOT_BE_EMPTY', function () {
                             dialog.errorMessage(langService.get('g2g_book_properties_can_not_be_empty'));
                         });
-                        errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
-                            dialog.errorMessage(langService.get('g2g_you_are_not_authorized'));
+                        errorCode.checkIf(error, 'G2G_CANNOT_RECALL_FROM_THIS_SITE_BECAUSE_THE_STATUS_IS_NOT_PENDING_OR_SENT', function () {
+                            dialog.errorMessage(langService.get('g2g_cannot_recall_because_status_is_not_pending_sent'));
                         });
                         errorCode.checkIf(error, 'G2G_ERROR_WHILE_RECALLING', function () {
                             dialog.errorMessage(langService.get('g2g_error_occurred_while_recalling'));

@@ -105,6 +105,15 @@ module.exports = function (app) {
                             return true;
                         })
                         .catch(function (error) {
+                            errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
+                                dialog.errorMessage(langService.get('g2g_not_authenticated'));
+                            });
+                            errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
+                                dialog.errorMessage(langService.get('g2g_not_authorized'));
+                            });
+                            errorCode.checkIf(error, 'G2G_BOOK_PROPERTIES_CAN_NOT_BE_EMPTY', function () {
+                                dialog.errorMessage(langService.get('g2g_book_properties_can_not_be_empty'));
+                            });
                             errorCode.checkIf(error, 'G2G_ERROR_WHILE_RETURNING_TO_SENDER', function () {
                                 dialog.errorMessage(langService.get('g2g_error_while_returning_to_sender'));
                             });

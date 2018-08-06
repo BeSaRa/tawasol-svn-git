@@ -56,14 +56,20 @@ module.exports = function (app) {
                     return $http.put((urlService.g2gInbox + 'terminate'), g2gItem).then(function (result) {
                         return result.data.rs;
                     }).catch(function (error) {
+                        errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
+                            dialog.errorMessage(langService.get('g2g_not_authenticated'));
+                        });
                         errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
-                            dialog.errorMessage(langService.get('g2g_you_are_not_authorized'));
+                            dialog.errorMessage(langService.get('g2g_not_authorized'));
+                        });
+                        errorCode.checkIf(error, 'G2G_BOOK_PROPERTIES_CAN_NOT_BE_EMPTY', function () {
+                            dialog.errorMessage(langService.get('g2g_book_properties_can_not_be_empty'));
                         });
                         errorCode.checkIf(error, 'G2G_ERROR_WHILE_TERMINATE', function () {
                             dialog.errorMessage(langService.get('g2g_error_occurred_while_terminate'));
                         });
-                        errorCode.checkIf(error, 'G2G_BOOK_PROPERTIES_CAN_NOT_BE_EMPTY', function () {
-                            dialog.errorMessage(langService.get('g2g_book_properties_can_not_be_empty'));
+                        errorCode.checkIf(error, 'G2G_CANNOT_REMOVE_TRANSACTION_FOR_THIS_SITE_BECAUSE_THE_STATUS_IS_NOT_REJECTED_OR_RETURNED', function () {
+                            dialog.errorMessage(langService.get('g2g_can_not_terminate_because_book_not_rejected_or_returned'));
                         });
                         return false;
                     });
@@ -75,18 +81,18 @@ module.exports = function (app) {
             return $http.put((urlService.g2gInbox + 'resend'), g2gItem).then(function (result) {
                 return result.data.rs;
             }).catch(function (error) {
-                /*errorCode.checkIf(error, 'CANNOT_RECALL_OPENED_BOOK', function () {
-                    dialog.errorMessage(langService.get('cannot_recall_opened_book'));
-                });*/
+                errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
+                    dialog.errorMessage(langService.get('g2g_not_authenticated'));
+                });
+                errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
+                    dialog.errorMessage(langService.get('g2g_not_authorized'));
+                });
                 errorCode.checkIf(error, 'G2G_BOOK_PROPERTIES_CAN_NOT_BE_EMPTY', function () {
                     dialog.errorMessage(langService.get('g2g_book_properties_can_not_be_empty'));
                 });
-                errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
-                    dialog.errorMessage(langService.get('g2g_you_are_not_authorized'));
+                errorCode.checkIf(error, 'G2G_ERROR_WHILE_SENDING', function () {
+                    dialog.errorMessage(langService.get('g2g_error_while_sending'));
                 });
-                /*errorCode.checkIf(error, 'G2G_ERROR_WHILE_RECALLING', function () {
-                    dialog.errorMessage(langService.get('g2g_error_occurred_while_recalling'));
-                });*/
                 return false;
             });
         };

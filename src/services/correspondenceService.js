@@ -1542,17 +1542,20 @@ module.exports = function (app) {
                     return correspondence;
                 })
                 .catch(function (error) {
+                    errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
+                        dialog.errorMessage(langService.get('g2g_not_authenticated'));
+                    });
+                    errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
+                        dialog.errorMessage(langService.get('g2g_not_authorized'));
+                    });
+                    errorCode.checkIf(error, 'G2G_BOOK_PROPERTIES_CAN_NOT_BE_EMPTY', function () {
+                        dialog.errorMessage(langService.get('g2g_book_properties_can_not_be_empty'));
+                    });
                     errorCode.checkIf(error, 'G2G_ERROR_WHILE_RECEIVING', function () {
                         dialog.errorMessage(langService.get('g2g_error_while_receiving'));
                     });
                     errorCode.checkIf(error, 'G2G_CAN_NOT_RECEIVE_RECALLED_DOCUMENT', function () {
                         dialog.errorMessage(langService.get('g2g_can_not_receive_recalled_document'));
-                    });
-                    errorCode.checkIf(error, 'G2G_BOOK_PROPERTIES_CAN_NOT_BE_EMPTY', function () {
-                        dialog.errorMessage(langService.get('g2g_book_properties_can_not_be_empty'));
-                    });
-                    errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
-                        dialog.errorMessage(langService.get('g2g_you_are_not_authorized'));
                     });
                 });
         };
