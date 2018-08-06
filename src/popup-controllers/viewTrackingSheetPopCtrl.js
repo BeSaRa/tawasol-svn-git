@@ -264,6 +264,9 @@ module.exports = function (app) {
             self.mergedLinkedDocumentHistoryRecords.splice(indexOfMainDoc, 1);
             self.mergedLinkedDocumentHistoryRecords.unshift(mainDoc);
         };
+        if(self.mergedLinkedDocumentHistoryRecords.length){
+            self.sortMergedLinkedDocs();
+        }
 
         /**
          * @description View merged linked document history actions

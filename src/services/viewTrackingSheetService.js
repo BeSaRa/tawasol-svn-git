@@ -572,8 +572,8 @@ module.exports = function (app) {
                         for (i = 0; i < self.eventHistory.length; i++) {
                             record = self.eventHistory[i];
                             data.push([
-                                record.getTranslatedUserFrom(),
-                                record.getTranslatedUserTo(),
+                                record.userFromInfo.getTranslatedName(),
+                                record.userToInfo.getTranslatedName(),
                                 record.getTranslatedAction(),
                                 //record.documentCreationDate_vts,
                                 record.actionDate_vts,
@@ -598,7 +598,7 @@ module.exports = function (app) {
                             data.push([
                                 record.itemName,
                                 record.eventTypeInfo.getTranslatedName(),
-                                record.getTranslatedActionBy(),
+                                record.actionByInfo.getTranslatedName(),
                                 record.actionDate,
                                 record.itemFullSerial//,
                                 //record.itemType
@@ -619,8 +619,8 @@ module.exports = function (app) {
                             record = self.linkedAttachments[i];
                             data.push([
                                 record.itemName,
-                                record.getTranslatedAction(),
-                                record.getTranslatedActionBy(),
+                                record.eventTypeInfo.getTranslatedName(),
+                                record.actionByInfo.getTranslatedName(),
                                 record.actionDate
                             ]);
                         }
@@ -684,9 +684,9 @@ module.exports = function (app) {
                         for (i = 0; i < self.linkedEntities.length; i++) {
                             record = self.linkedEntities[i];
                             data.push([
-                                record.getTranslatedActionBy(),
+                                record.actionByInfo.getTranslatedName(),
                                 record.actionDate,
-                                record.getTranslatedAction(),
+                                record.eventTypeInfo.getTranslatedName(),
                                 //record.getTranslatedItemType(),
                                 record.itemTypeInfo.getTranslatedName(),
                                 record.itemName

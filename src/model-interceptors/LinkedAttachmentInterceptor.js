@@ -1,8 +1,9 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, 
-                      organizationService, 
-                      applicationUserService, 
-                      moment, 
+    app.run(function (CMSModelInterceptor,
+                      organizationService,
+                      applicationUserService,
+                      moment,
+                      Information,
                       lookupService) {
         'ngInject';
 
@@ -17,7 +18,9 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-         (model.actionDate) ? getDateFromUnixTimeStamp(model, ["actionDate"]) : "";
+            model.actionByInfo = new Information(model.actionByInfo);
+            model.eventTypeInfo= new Information(model.eventTypeInfo);
+            (model.actionDate) ? getDateFromUnixTimeStamp(model, ["actionDate"]) : "";
             return model;
         });
 

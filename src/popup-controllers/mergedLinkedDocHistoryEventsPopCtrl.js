@@ -13,13 +13,6 @@ module.exports = function (app) {
         self.mergedLinkedDocHistoryEvents = angular.copy(mergedLinkedDocHistoryEvents);
         self.mergedLinkedDocHistorySubject = mergedLinkedDocHistorySubject;
 
-        /**
-         * @description Gets the grid records by sorting
-         */
-        self.getSortedData = function () {
-            self.mergedLinkedDocHistoryEvents = $filter('orderBy')(self.mergedLinkedDocHistoryEvents, self.grid.order);
-        };
-
         self.grid = {
             limit: 5, // default limit
             page: 1, // first page
@@ -35,6 +28,12 @@ module.exports = function (app) {
             ]
         };
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.mergedLinkedDocHistoryEvents = $filter('orderBy')(self.mergedLinkedDocHistoryEvents, self.grid.order);
+        };
 
         /**
          * @description Export Tracking Sheet To Excel

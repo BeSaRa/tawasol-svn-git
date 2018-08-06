@@ -28,24 +28,6 @@ module.exports = function (app) {
                 return langService.current === 'ar' ? (reverse ? this.actionByInfo.enName : this.actionByInfo.arName ) : (reverse ? this.actionByInfo.arName : this.actionByInfo.enName);
             };
 
-            /*LinkedDocument.prototype.allActions = function () {
-                return [
-                    {id: 0, enName: 'Add', arName: 'Add'},
-                    {id: 1, enName: 'Edit', arName: 'Edit'},
-                    {id: 2, enName: 'Remove', arName: 'Remove'}
-                ]
-            };*/
-
-            /*LinkedDocument.prototype.getTranslatedAction = function (reverse) {
-                var allActions = this.allActions();
-                var operation = this.operation;
-                var objAction = _.find(allActions, function (action) {
-                    return action.id === operation;
-                });
-                return langService.current === 'ar' ? (reverse ? objAction.enName : objAction.arName ) : (reverse ? objAction.arName : objAction.enName);
-            };*/
-
-
             CMSModelInterceptor.runEvent('LinkedDocument', 'init', this);
         }
     })

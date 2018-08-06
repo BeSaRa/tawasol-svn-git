@@ -13,13 +13,6 @@ module.exports = function (app) {
         self.contentViewHistoryViewers = angular.copy(contentViewHistoryViewers);
         self.contentViewHistorySubject = contentViewHistorySubject;
 
-        /**
-         * @description Gets the grid records by sorting
-         */
-        self.getSortedData = function () {
-            self.contentViewHistoryViewers = $filter('orderBy')(self.contentViewHistoryViewers, self.grid.order);
-        };
-
         self.grid = {
             limit: 5, // default limit
             page: 1, // first page
@@ -35,6 +28,12 @@ module.exports = function (app) {
             ]
         };
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.contentViewHistoryViewers = $filter('orderBy')(self.contentViewHistoryViewers, self.grid.order);
+        };
 
         /**
          * @description Export Tracking Sheet To Excel

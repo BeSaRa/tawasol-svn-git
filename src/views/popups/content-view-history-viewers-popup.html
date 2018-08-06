@@ -17,7 +17,7 @@
                                             <thead md-head md-order="ctrl.grid.order"
                                                    md-on-reorder="ctrl.getSortedData">
                                             <tr md-row>
-                                                <th md-column md-order-by="actionBy"><span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('actionByInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_action_by}}</span>
                                                 </th>
                                                 <th md-column
                                                     md-order-by="{{ctrl.getSortingKey('ouInfo','Information')}} "><span>{{lang.view_tracking_sheet_department}}</span>

@@ -17,6 +17,7 @@ module.exports = function (app) {
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             (model.actionDate) ? getDateFromUnixTimeStamp(model, ["actionDate"]) : "";
             model.eventTypeInfo = new Information(model.eventTypeInfo);
+            model.actionByInfo = new Information(model.actionByInfo);
             return model;
         });
 
