@@ -10,6 +10,7 @@ module.exports = function (app) {
         return function Incoming(model) {
             var self = this, correspondenceService;
             Correspondence.call(this);
+            self.docStatus = 2;
             self.docClassName = 'Incoming';
             self.classDescription = 'Incoming';
             self.refDocNumber = null;
