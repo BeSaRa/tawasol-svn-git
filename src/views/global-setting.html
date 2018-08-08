@@ -14,7 +14,7 @@
                         md-on-select="ctrl.setCurrentTab('basic')">
                     <md-content scroll-directive class="white-bg">
                         <div layout="column">
-                            <div layout="row" flex class="p20">
+                            <div layout="row"  class="p20">
                                 <!-- Application Arabic Name -->
                                 <md-input-container flex>
                                     <label for="appArName">{{lang.app_arabic_name}}</label>
@@ -35,7 +35,7 @@
                                 </md-input-container>
                             </div>
 
-                            <div layout="row" flex class="p20">
+                            <div layout="row" class="p20">
                                 <!-- Entity English Name -->
                                 <md-input-container flex>
                                     <label for="enName">{{lang.entity_english_name}}</label>
@@ -55,7 +55,7 @@
                                            ng-model="ctrl.entity.groupPrefix">
                                 </md-input-container>-->
                             </div>
-                            <div layout="row" flex class="p20">
+                            <div layout="row" class="p20">
                                 <!-- Default max rows count of search operation -->
                                 <md-input-container flex>
                                     <label for="searchAmount">{{lang.default_max_row_search}}</label>
@@ -109,7 +109,7 @@
                                 </md-input-container>
                             </div>
 
-                            <div layout="row" flex class="p20">
+                            <div layout="row" class="p20">
                                 <!-- Session Time Out -->
                                 <md-input-container flex>
                                     <label for="sessionTimeout">{{lang.session_time_out}} ({{lang.minutes}})</label>
@@ -149,7 +149,7 @@
                                 </md-input-container>
                             </div>
 
-                            <div layout="row" flex class="p20">
+                            <div layout="row" class="p20">
                                 <!-- Correspondence Site Search Type -->
                                 <md-input-container flex>
                                     <label>{{lang.correspondence_Site_search_type}}</label>
@@ -189,7 +189,7 @@
                         md-on-select="ctrl.setCurrentTab('appearance')">
                     <md-content scroll-directive class="white-bg">
                         <div layout="column">
-                            <div layout="row" flex class="p20">
+                            <div layout="row" class="p20">
                                 <!-- Show Copyright Text -->
                                 <md-switch flex ng-model="ctrl.globalSetting.showCopyrightText"
                                            aria-label="{{lang.show_copyright}}">
@@ -207,7 +207,7 @@
                                 </md-input-container>
                             </div>
 
-                            <div layout="row" flex class="p20">
+                            <div layout="row" class="p20">
                                 <!-- Copyright Text -->
                                 <md-input-container flex>
                                     <label for="copyrightText">{{lang.copyright_text}}</label>
@@ -238,7 +238,7 @@
                                 </md-input-container>
                             </div>
 
-                            <div layout="row" flex class="p20">
+                            <div layout="row" class="p20">
                                 <!-- Support Phone -->
                                 <md-input-container flex>
                                     <label>{{lang.support_phone}}</label>
@@ -266,7 +266,7 @@
                                 </md-input-container>
                             </div>
 
-                            <div layout="row" flex class="p20">
+                            <div layout="row" class="p20">
                                 <!-- Usage Terms and Condition -->
                                 <div flex>
                                     <label>{{lang.usage_terms_and_condition}}</label>
@@ -489,7 +489,7 @@
                         md-on-select="ctrl.setCurrentTab('workflownotification')">
                     <md-content scroll-directive class="white-bg">
                         <div layout="column">
-                            <div layout="row" flex class="p20">
+                            <div layout="row" class="p20">
                                 <!-- Notify the sender when reached the deadline date without action -->
                                 <md-switch flex ng-model="ctrl.globalSetting.escalationNotifySender"
                                            aria-label="{{lang.notify_sender_when_deadline}}">
@@ -504,7 +504,7 @@
                                 </md-switch>
                             </div>
 
-                            <div layout="row" flex class="p20">
+                            <div layout="row" class="p20">
                                 <!-- Enable SMS Notification -->
                                 <md-switch flex ng-model="ctrl.globalSetting.enableSMSNotification"
                                            aria-label="{{lang.enable_sms_notification}}">
@@ -519,7 +519,7 @@
                                 </md-switch>
                             </div>
 
-                            <div layout="row" flex class="p20">
+                            <div layout="row" class="p20">
                                 <!-- Enable Escalation Process -->
                                 <md-switch flex ng-model="ctrl.globalSetting.enableEscalation"
                                            aria-label="{{lang.enable_escalation_process}}">
@@ -534,7 +534,7 @@
                                 </md-switch>
                             </div>
 
-                            <div layout="row" flex class="p20">
+                            <div layout="row" class="p20">
                                 <!-- Escalation process -->
                                 <md-input-container flex>
                                     <label>{{$parent.lang.choose_escalation_process}}</label>
@@ -567,7 +567,7 @@
                                 </md-input-container>
                             </div>
 
-                            <div layout="row" flex class="p20">
+                            <div layout="row" class="p20">
                                 <md-input-container flex>
                                     <label for="deadlineReminderDays">{{$parent.lang.send_a_reminder_before_deadline_date_with}}</label>
                                     <input id="deadlineReminderDays" name="deadlineReminderDays" maxlength="5"

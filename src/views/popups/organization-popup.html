@@ -1038,12 +1038,12 @@
                                     <search-filter-directive
                                             model="ctrl.documentTemplateSearchModel"></search-filter-directive>
                                 </div>
-                                <div layout="column" flex ng-if="ctrl.documentTemplates.length">
+                                <div layout="column"  ng-if="ctrl.documentTemplates.length">
                                     <div scroll-directive>
                                         <div class="p20">
                                             <md-card md-whiteframe="3" layout="column" class="card-overlay">
                                                 <md-table-container>
-                                                    <div flex scroll-directive>
+                                                    <div scroll-directive>
                                                         <table md-table md-row-select="true"
                                                                multiple="true"
                                                                ng-model="ctrl.selectedDocumentTemplates"
@@ -1134,7 +1134,7 @@
                         <md-content>
                             <div layout="column" class="content">
                                 <!-- Dropdown and buttons -->
-                                <div layout="column" flex class="p25">
+                                <div layout="column" class="p25">
                                     <div layout="row" layout-align="start center" class="small">
                                         <md-input-container flex>
                                             <label for="documentClass">{{lang.label_document_class}}</label>
@@ -1167,12 +1167,12 @@
                                     </div>
                                 </div>
                                 <!-- Property configuration table -->
-                                <div layout="column" flex>
+                                <div layout="column">
                                     <div scroll-directive>
                                         <div class="page-padding">
                                             <md-card md-whiteframe="3" layout="column" class="card-overlay">
                                                 <md-table-container>
-                                                    <div flex scroll-directive>
+                                                    <div scroll-directive>
                                                         <table md-table md-row-select="true"
                                                                multiple="true"
                                                                ng-model="ctrl.selectedPropertyConfigurations"
