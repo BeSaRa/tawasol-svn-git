@@ -1090,5 +1090,17 @@
         "sort_order": 1,
         "active": true,
         "sort_value": 0
+    },
+    {
+        "ID": 106,
+        "lang_key": "menu_item_reports_processed_documents",
+        "icon": "arrow-down-bold-box",
+        "parent": 92,
+        "link": "#add",
+        "state": "app.reports",
+        "icon_type": "font",
+        "sort_order": 1,
+        "active": true,
+        "sort_value": 0
     }
 ]

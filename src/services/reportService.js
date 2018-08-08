@@ -54,6 +54,11 @@ module.exports = function (app) {
                 id: 10,
                 reportName: 'لوحة رصد الدورات المستندية للمراسلات',
                 langKey: 'menu_item_reports_monitoring_correspondence_documentary_panel'
+            }),
+            new Report({
+                id: 11,
+                reportName: 'تقرير العمليات التي تمت على المستندات',
+                langKey: 'menu_item_reports_processed_documents'
             })
         ];
         /**
