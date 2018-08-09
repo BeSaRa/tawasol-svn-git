@@ -17,14 +17,18 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.loadDocumentSecurity = function () {
-            return $http.get(urlService.documentSecurity + '/setting').then(function (result) {
-                if (result.data.rs) {
-                    self.documentSecurity = generator.generateInstance(result.data.rs, DocumentSecurity, self._sharedMethods);
-                    self.documentSecurity = generator.interceptReceivedInstance('DocumentSecurity', self.documentSecurity);
-                    return self.documentSecurity;
-                }
-                self.documentSecurity = null;
-            });
+            return $http.get(urlService.documentSecurity + '/setting')
+                .then(function (result) {
+                    if (result.data.rs) {
+                        self.documentSecurity = generator.generateInstance(result.data.rs, DocumentSecurity, self._sharedMethods);
+                        self.documentSecurity = generator.interceptReceivedInstance('DocumentSecurity', self.documentSecurity);
+                        return self.documentSecurity;
+                    }
+                    self.documentSecurity = null;
+                })
+                .catch(function (error) {
+                    self.documentSecurity = null;
+                });
         };
 
         /**

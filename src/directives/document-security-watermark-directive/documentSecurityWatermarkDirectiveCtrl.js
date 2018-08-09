@@ -328,7 +328,7 @@ module.exports = function (app) {
         };
 
         /**
-         * @description check if text oriantation disabled you can't disable both
+         * @description check if text orientation disabled you can't disable both
          * @param $event
          */
         self.checkIfTextOrientationDisabled = function ($event) {
@@ -355,7 +355,7 @@ module.exports = function (app) {
                 dialog.errorMessage(langService.get("can_not_disable_2D_orientation"));
                 self.documentSecurityTawasolAttachment.status2D = !self.documentSecurityTawasolAttachment.status2D;
             }
-        }
+        };
 
         /**
          * @description check if status2D disabled you can't disable both

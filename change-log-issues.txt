@@ -38,6 +38,7 @@ General:
 37. Fix - Manage linked entity in group mail.
 38: Fix - Grid actions to show in quick actions.
 39. Fix - Sync between ouApplicationUser in organization structure and application user
+40. Fix - Handled exception in case of document security is throwing exception when database is not having any document security setting.
 
 Bugs:
 12291: Business : user cannot delete others comments (user has permission to delete all comments)
