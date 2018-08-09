@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.service('documentSecurityService', function (urlService,
                                                      $http,
                                                      $q,
+                                                     errorCode,
                                                      tokenService,
                                                      langService,
                                                      DocumentSecurity,
@@ -27,7 +28,9 @@ module.exports = function (app) {
                     self.documentSecurity = null;
                 })
                 .catch(function (error) {
-                    self.documentSecurity = null;
+                    if (errorCode.checkIf(error, 'NO_DOCUMENT_SECURITY')) {
+                        self.documentSecurity = null;
+                    }
                 });
         };
 
