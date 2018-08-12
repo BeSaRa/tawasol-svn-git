@@ -132,7 +132,8 @@ module.exports = function (app) {
             enableEscalation: 'enable_escalation_process',
             useCentralArchiveInternally: 'use_central_archive_internally',
             escalationProcess: 'choose_escalation_process',
-            simpleCorsSiteSearch: 'correspondence_Site_search_type'
+            simpleCorsSiteSearch: 'correspondence_Site_search_type',
+            theme: 'default_application_theme'
         };
 
         /**

@@ -14,7 +14,7 @@
                         md-on-select="ctrl.setCurrentTab('basic')">
                     <md-content scroll-directive class="white-bg">
                         <div layout="column">
-                            <div layout="row"  class="p20">
+                            <div layout="row" class="p20">
                                 <!-- Application Arabic Name -->
                                 <md-input-container flex>
                                     <label for="appArName">{{lang.app_arabic_name}}</label>
@@ -198,8 +198,8 @@
                                 </md-switch>
                                 <!-- Default Application Theme -->
                                 <md-input-container flex>
-                                    <label>{{lang.default_application_theme}}</label>
-                                    <md-select ng-model="ctrl.globalSetting.theme" required name="theme">
+                                    <label for="theme">{{lang.default_application_theme}}</label>
+                                    <md-select ng-model="ctrl.globalSetting.theme" required id="theme" name="theme">
                                         <md-option ng-repeat="theme in ctrl.themes track by $index" ng-value="theme.id">
                                             {{theme.getTranslatedName()}}
                                         </md-option>
@@ -669,7 +669,8 @@
                     </md-content>
                 </md-tab>
                 <!-- WATERMARK SETTINGS TAB-->
-                <md-tab label="{{lang.watermark}}" ng-if="ctrl.showTab('watermarkSettings') && ctrl.globalSetting.id != null "
+                <md-tab label="{{lang.watermark}}"
+                        ng-if="ctrl.showTab('watermarkSettings') && ctrl.globalSetting.id != null "
                         md-on-select="ctrl.setCurrentTab('watermarkSettings')">
                     <md-content scroll-directive class="white-bg">
                         <document-security-watermark-directive

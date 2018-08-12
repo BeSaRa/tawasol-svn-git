@@ -82,7 +82,8 @@ module.exports = function (app) {
                 'enableEscalation',
                 'useCentralArchiveInternally',
                 'escalationProcess',
-                'simpleCorsSiteSearch'
+                'simpleCorsSiteSearch',
+                'theme'
             ];
 
             if (model)

@@ -1,6 +1,6 @@
 <div id="barcode-settings" flex layout="row">
     <div class="barcode-column" flex id="barcode-generator" layout="row">
-        <div class="barcode-generator block-button" layout="column">
+        <div class="barcode-generator block-display" layout="column">
             <div ng-class="{'disabled':ctrl.elementExists(item)}" bc-draggable="item" flex class="barcode-item"
                  ng-repeat="item in ctrl.barcodeElements track by $index">
                 <span md-truncate>{{item.getTranslatedName()}}</span>
