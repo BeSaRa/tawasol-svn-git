@@ -199,11 +199,14 @@
                                 <!-- Default Application Theme -->
                                 <md-input-container flex>
                                     <label>{{lang.default_application_theme}}</label>
-                                    <md-select ng-model="ctrl.globalSetting.theme">
+                                    <md-select ng-model="ctrl.globalSetting.theme" required name="theme">
                                         <md-option ng-repeat="theme in ctrl.themes track by $index" ng-value="theme.id">
                                             {{theme.getTranslatedName()}}
                                         </md-option>
                                     </md-select>
+                                    <div ng-messages="globalSettingForm.theme.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                    </div>
                                 </md-input-container>
                             </div>
 
