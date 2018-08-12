@@ -97,7 +97,7 @@
                 <div flex scroll-directive>
                     <table md-table md-row-select multiple ng-model="ctrl.selectedAttachments"
                            md-progress="ctrl.progress">
-                        <thead md-head md-order="ctrl.grid.order">
+                        <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                         <tr md-row>
                             <th colspan="5" class="table-selector-header"
                                 ng-if="ctrl.selectedAttachments.length" md-column>
@@ -113,13 +113,15 @@
                             <th ng-if="!ctrl.selectedUserInboxes.length" md-column md-order-by="">
                                 <!-- linked exported doc(attachment with refVSID) Indicators -->
                             </th>
-                            <th ng-if="!ctrl.selectedAttachments.length" md-column md-order-by="documentTitle">
+                            <th ng-if="!ctrl.selectedAttachments.length" md-column md-order-by="docSubject">
                                 <span>{{lang.attachment_document_title}}</span>
                             </th>
-                            <th ng-if="!ctrl.selectedAttachments.length" md-column md-order-by="attachmentType">
+                            <th ng-if="!ctrl.selectedAttachments.length" md-column
+                                md-order-by="{{ctrl.getSortingKey('attachmentType','AttachmentType')}}">
                                 <span>{{lang.attachment_attachment_type}}</span>
                             </th>
-                            <th ng-if="!ctrl.selectedAttachments.length" md-column>
+                            <th ng-if="!ctrl.selectedAttachments.length" md-column
+                                md-order-by="{{ctrl.getSortingKey('securityLevel','Lookup')}}">
                                 <span>{{lang.attachment_attachment_security_level}}</span>
                             </th>
                             <th ng-if="!ctrl.selectedAttachments.length" md-column>
@@ -130,7 +132,7 @@
                         <tbody md-body>
                         <tr md-row md-select="attachment"
                             ng-disabled="ctrl.disableEverything"
-                            ng-repeat="attachment in ctrl.attachments  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                            ng-repeat="attachment in ctrl.attachments  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  track by $index">
                             <td md-cell class="indicator-td">
                                 <!-- Linked Exported Doc -->
                                 <grid-indicator-directive record="attachment"

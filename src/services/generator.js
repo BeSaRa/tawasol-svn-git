@@ -579,7 +579,8 @@ module.exports = function (app) {
          */
         self.getColumnSortingKey = function (property, modelType) {
             modelType = modelType.toLowerCase();
-            if (modelType === 'information' || modelType === 'documenttype' || modelType === 'workflowaction' || modelType === 'senderinfo')
+            if (modelType === 'information' || modelType === 'documenttype' || modelType === 'workflowaction' || modelType === 'senderinfo' ||
+                modelType === 'attachmenttype')
                 return property + '.' + (langService.current === 'ar' ? 'arName' : 'enName');
             else if (modelType === 'lookup')
                 return property + '.' + (langService.current === 'ar' ? 'defaultArName' : 'defaultEnName');

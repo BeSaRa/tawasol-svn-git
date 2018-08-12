@@ -13,7 +13,9 @@ module.exports = function (app) {
                                                               toast,
                                                               langService,
                                                               correspondenceService,
-                                                              errorCode) {
+                                                              errorCode,
+                                                              $filter,
+                                                              generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageAttachmentDirectiveCtrl';
@@ -47,7 +49,7 @@ module.exports = function (app) {
         self.grid = {
             limit: 5, // default limit
             page: 1, // first page
-            order: 'arName', // default sorting order
+            order: '', // default sorting order
             limitOptions: [5, 10, 20, // limit options
                 {
                     label: langService.get('all'),
@@ -253,6 +255,22 @@ module.exports = function (app) {
                 self.sourceModel = newVal;
         });
 
+        /**
+         * @description Gets the grid records by sorting
+         */
+        self.getSortedData = function () {
+            self.attachments = $filter('orderBy')(self.attachments, self.grid.order);
+        };
+
+        /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function (property, modelType) {
+            return generator.getColumnSortingKey(property, modelType);
+        };
 
     });
 };
