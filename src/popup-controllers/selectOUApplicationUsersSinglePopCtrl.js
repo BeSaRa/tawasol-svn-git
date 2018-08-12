@@ -11,6 +11,7 @@ module.exports = function (app) {
                                                                      langService,
                                                                      $q,
                                                                      $filter,
+                                                                     generator,
                                                                      _) {
             'ngInject';
             var self = this;
@@ -30,6 +31,19 @@ module.exports = function (app) {
             self.ouApplicationUserSelected = self.ouApplicationUser ? _.filter(self.ouApplicationUsers, function (ouAppUser) {
                 return ouAppUser.applicationUser.id === self.ouApplicationUser.id
             }) : [];
+
+
+            /**
+             * @description Get the sorting key for information or lookup model
+             * @param property
+             * @param modelType
+             * @returns {*}
+             */
+            self.getSortingKey = function (property, modelType) {
+                if (property === 'applicationUser') {
+                    return property + '.' + (langService.current === 'ar' ? 'arFullName' : 'enFullName');
+                }
+            };
 
             /**
              * @description Gets the grid records by sorting

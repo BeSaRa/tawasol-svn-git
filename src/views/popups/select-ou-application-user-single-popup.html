@@ -14,9 +14,9 @@
                 <table md-table md-row-select ng-model="ctrl.ouApplicationUserSelected" md-progress="ctrl.progress">
                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                     <tr md-row>
-                        <th md-column><span>{{lang.name}}</span></th>
-                        <th md-column><span>{{lang.login_name}}</span></th>
-                        <th md-column><span>{{lang.domain_name}}</span></th>
+                        <th md-column md-order-by="{{ctrl.getSortingKey('applicationUser', 'ApplicationUser')}}"><span>{{lang.name}}</span></th>
+                        <th md-column md-order-by="applicationUser.loginName"><span>{{lang.login_name}}</span></th>
+                        <th md-column md-order-by="applicationUser.domainName"><span>{{lang.domain_name}}</span></th>
                     </tr>
                     </thead>
                     <tbody md-body>
