@@ -161,6 +161,7 @@
                                 <label for="documentAction">{{lang.document_action}}</label>
                                 <md-select name="documentAction" id="documentAction"
                                            ng-disabled="!ctrl.isActionsAvailable"
+                                           ng-hide="!ctrl.isActionsAvailable"
                                            ng-model="ctrl.documentAction">
                                     <md-option ng-value="action" class="{{action.class}}"
                                                ng-if="action.checkShow(action, ctrl.internal, $index)"
@@ -172,6 +173,7 @@
                         </div>
                         <div ng-if="ctrl.internal.hasVsId() && ctrl.requestCompleted">
                             <md-button class="md-raised" ng-disabled="!ctrl.documentAction"
+                                       ng-hide="!ctrl.isActionsAvailable"
                                        ng-click="ctrl.performDocumentAction($event)">{{lang.action_submit}}
                             </md-button>
                         </div>
