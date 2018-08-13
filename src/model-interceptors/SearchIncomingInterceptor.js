@@ -11,6 +11,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            model.docStatus = null;
             /*if (model.createdFrom || model.createdTo) {
                 model.createdFrom = (model.createdFrom) ? moment(model.createdFrom).format("YYYY-MM-DD") : '1900-01-01';
                 model.createdTo = (model.createdTo) ? model.createdTo : moment().format("YYYY-MM-DD");
