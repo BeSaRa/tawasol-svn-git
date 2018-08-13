@@ -103,7 +103,7 @@ module.exports = function (app) {
                     return permissionKey(this);
 
                 var result = _.find(self.permissions, function (item) {
-                    if(permissionKey === ''){
+                    if (permissionKey === '') {
                         return true;
                     }
                     return item.permissionKey.toLowerCase().trim() === permissionKey.toLowerCase().trim();
@@ -270,9 +270,12 @@ module.exports = function (app) {
             Employee.prototype.getOUID = function () {
                 return this.organization.ouid ? (this.organization.ouid.hasOwnProperty('id') ? this.organization.ouid.id : this.organization.ouid) : false;
             };
+            Employee.prototype.getNormalizeID = function (organization) {
+                return organization.hasOwnProperty('id') ? organization.id : organization;
+            };
 
             Employee.prototype.getRegistryOUID = function () {
-                return this.userOrganization.hasRegistry ? this.userOrganization.id : this.userOrganization.registryParentId;
+                return this.userOrganization.hasRegistry ? this.getNormalizeID(this.userOrganization.id) : this.getNormalizeID(this.userOrganization.registryParentId);
             };
 
             Employee.prototype.getIntervalMin = function () {

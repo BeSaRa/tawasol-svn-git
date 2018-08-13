@@ -207,6 +207,7 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
+                    // console.log(angular.copy(self.searchOutgoing));
                     searchOutgoingService
                         .searchOutgoingDocuments(self.searchOutgoing, self.propertyConfigurations)
                         .then(function (result) {
