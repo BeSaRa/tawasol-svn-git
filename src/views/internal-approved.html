@@ -77,7 +77,7 @@
                                         model="approvedInternal"
                                         selected-length="{{ctrl.selectedApprovedInternals.length ? ctrl.selectedApprovedInternals.length : 0}}"
                                         ng-repeat="approvedInternal in ctrl.approvedInternals | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
-                                        <td md-cell>{{approvedInternal.generalStepElm.docFullSerial}}</td>
+                                        <td class="serial-td" md-cell>{{approvedInternal.generalStepElm.docFullSerial}}</td>
                                         <td md-cell md-truncate class="subject">
                                             <a href="" class="view-doc" md-truncate
                                                ng-click="ctrl.viewDocument(approvedInternal, $event)">
