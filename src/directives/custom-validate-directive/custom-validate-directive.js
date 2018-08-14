@@ -122,7 +122,8 @@ module.exports = function (app) {
                      * @description Allows integer value from 1 to 65535
                      */
                     port: /^(([1-9]\d{0,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))$/,
-                    EN_DOT: /^[a-zA-Z0-9_.]+$/
+                    EN_DOT: /^[a-zA-Z0-9_.]+$/,
+                    EN_DOT_DASH: /^[a-zA-Z0-9_.\-]+$/
                 };
                 ngModelCtrl.$asyncValidators[type] = function (modelValue, viewValue) {
                     var defer = $q.defer();
