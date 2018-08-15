@@ -1,5 +1,10 @@
-<md-content scroll-directive ><!--class="white-bg"-->
+<md-content scroll-directive><!--class="white-bg"-->
     <div layout="column"><!--class="p20"-->
+        <div>
+            <md-switch ng-change="ctrl.searchByMainChange()" ng-model="ctrl.searchByMain">
+                {{lang.search_by_main_site}} : {{ ctrl.searchByMain ? lang.yes : lang.no}}
+            </md-switch>
+        </div>
         <!-- Simple Search Box -->
         <div layout="row" flex ng-if="ctrl.isSimpleCorrespondenceSiteSearchType">
             <md-input-container flex>
@@ -60,7 +65,7 @@
         </div>
 
         <!-- Search Results -->
-        <div flex layout="column" ng-if="ctrl.subSearchResult.length" >
+        <div flex layout="column" ng-if="ctrl.subSearchResult.length">
             <md-card md-whiteframe="3" layout="column" class="card-overlay">
                 <md-toolbar class="md-table-toolbar md-default"
                             ng-class="{'selected':ctrl.subSearchSelected.length}">
@@ -198,7 +203,7 @@
         </div>
 
         <!-- Added Original sites after searching / from database -->
-        <div flex layout="column" ng-if="ctrl.sitesInfoTo.length">
+        <div flex layout="column" ng-if="ctrl.sitesInfoTo.length && !ctrl.searchByMain">
             <md-card md-whiteframe="3" layout="column" class="card-overlay">
                 <!-- Original sites toolbar -->
                 <md-toolbar class="md-table-toolbar md-default"
@@ -332,7 +337,7 @@
             <br/>
         </div>
         <!-- Added Copy sites after searching / from database -->
-        <div flex layout="column" ng-if="ctrl.sitesInfoCC.length">
+        <div flex layout="column" ng-if="ctrl.sitesInfoCC.length && !ctrl.searchByMain">
             <md-card md-whiteframe="3" layout="column" class="card-overlay">
                 <!-- Copy sites toolbar -->
                 <md-toolbar class="md-table-toolbar md-default"
@@ -466,7 +471,7 @@
             <br/>
         </div>
         <!-- Added Incoming site after searching / from database -->
-        <div flex layout="column" ng-if="ctrl.sitesInfoIncoming.length">
+        <div flex layout="column" ng-if="ctrl.sitesInfoIncoming.length && !ctrl.searchByMain">
             <md-card md-whiteframe="3" layout="column" class="card-overlay">
                 <!-- Copy sites toolbar -->
                 <md-toolbar class="md-table-toolbar md-default"

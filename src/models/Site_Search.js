@@ -1,6 +1,6 @@
 module.exports = function (app) {
     app.factory('Site_Search', function (CMSModelInterceptor,
-                                  langService,
+                                         langService,
                                          generator) {
         'ngInject';
         return function Site_Search(model) {
@@ -66,6 +66,13 @@ module.exports = function (app) {
                         self[key] = _.get(siteView, property);
                     }
                 });
+                return self;
+            };
+
+            Site_Search.prototype.mapFromMainSiteView = function (siteView) {
+                this.mapFromSiteView(siteView);
+                this.mainSiteId = this.subSiteId;
+                this.subSiteId = null;
                 return self;
             };
             /**
