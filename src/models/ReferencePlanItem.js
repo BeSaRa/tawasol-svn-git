@@ -51,7 +51,7 @@ module.exports = function (app) {
                     });
                 });
 
-                var array = self.refernceExpression.split('&&');
+                var array = self.refernceExpression ? self.refernceExpression.split('&&') : [];
                 var remaining = Object.keys(self.expressionComponents);
 
                 _.map(array, function (item) {
