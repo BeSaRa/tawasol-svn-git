@@ -4,6 +4,7 @@ module.exports = function (app) {
         return {
             restrict: 'A',
             link: function (scope, element) {
+                scope.currentEntity = rootEntity;
                 $rootScope.languages = langService.languages;
                 $rootScope.langService = langService;
                 scope.tokenService = tokenService;

@@ -4,7 +4,8 @@ module.exports = function (app) {
         var self = this,
             rootEntityIdentifier = null,
             rootEntity = null,
-            privateKey = 'LAST_ROOT';
+            privateKey = 'LAST_ROOT',
+            loaded = false;
 
         self.setRootEntityIdentifier = function (identifier) {
             rootEntityIdentifier = identifier;
@@ -30,7 +31,12 @@ module.exports = function (app) {
             rootEntityIdentifier = null;
         };
 
-        self.$get = function (RootEntity, $rootScope, errorCode, $cookies, $stateParams, $http, $location, urlService, dialog, $q) {
+        self.setLoaded = function (value) {
+            loaded = value;
+            return self;
+        };
+
+        self.$get = function (RootEntity, $rootScope, $sce, errorCode, $cookies, $stateParams, $http, $location, urlService, dialog, $q) {
             'ngInject';
             return {
                 loadInformation: function (rootIdentifier) {
@@ -44,6 +50,8 @@ module.exports = function (app) {
                             }
                         })
                         .then(function (result) {
+                            self.setLoaded(true);
+
                             $cookies.put(privateKey, rootIdentifier);
                             dialog.cancel();
                             self.setRootEntity(new RootEntity(result.data.rs));
@@ -114,6 +122,9 @@ module.exports = function (app) {
                 },
                 setFileTypesHashMap: function (map) {
                     rootEntity.setFileTypesHashMapToGlobalSettings(map);
+                },
+                getFavIcon: function () {
+                    return loaded && this.returnRootEntity().settings.loginLogo ? $sce.trustAsResourceUrl(this.returnRootEntity().settings.loginLogo.fileUrl) : false;
                 }
             };
         }
