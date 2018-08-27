@@ -11,7 +11,11 @@
             <md-button hide-gt-sm hide-xs ng-click="toolbar.toggleSidebar('main-sidebar')" class="md-icon-button m015">
                 <md-icon md-svg-icon="menu"></md-icon>
             </md-button>
+
             <div class="separator"></div>
+            <div class="font-size-14 p020">
+                {{lang.administration}} : {{toolbar.employeeService.getEmployee().userOrganization.getTranslatedName()}}
+            </div>
             <user-menu-directive flex hide-gt-xs></user-menu-directive>
             <div class="separator"></div>
             <!--<md-button class="md-icon-button m015">-->

@@ -17,6 +17,8 @@ module.exports = function (app) {
         };
         self.loadingService = loadingIndicatorService;
 
+        self.employeeService = employeeService;
+
 
         /**
          * @description Check if action will be shown on grid or not
