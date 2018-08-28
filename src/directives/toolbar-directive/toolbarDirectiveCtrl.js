@@ -11,13 +11,15 @@ module.exports = function (app) {
                                                      authenticationService,
                                                      $state,
                                                      dialog,
-                                                     contextHelpService) {
+                                                     contextHelpService,
+                                                     toast) {
         'ngInject';
         var self = this;
         self.controllerName = 'toolbarDirectiveCtrl';
 
         self.loadingService = loadingIndicatorService;
         self.employeeService = employeeService;
+        self.employee = employeeService.getEmployee();
         self.themeService = themeService;
 
         self.toggleSidebar = function (sidebarId) {
@@ -55,5 +57,48 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description switch organization
+         * @param organization
+         * @returns {boolean}
+         */
+        self.switchOrganization = function (organization) {
+            if (self.isCurrentOrganization(organization))
+                return true;
+
+            authenticationService
+                .selectDepartmentToLogin(organization)
+                .then(function () {
+                    $state.reload();
+                })
+                .catch(function (error) {
+                    errorCode.checkIf(error, 'INACTIVE_USER_ENTITY', function () {
+                        toast.error(langService.get('can_not_login_with_inactive_user_or_entity'));
+                    });
+                });
+        };
+        /**
+         * @description if the current organization is selected.
+         * @param organization
+         * @returns {boolean}
+         */
+        self.isCurrentOrganization = function (organization) {
+            if (!organization)
+                return false;
+
+            return organization.id === self.employee.organization.ouid;
+        };
+
+
+        /**
+         * set direction for menu content
+         * @param $event
+         * @returns {string}
+         */
+        self.getPositionMode = function ($event) {
+            var dir = langService.current === 'ar' ? 'left' : 'right';
+
+            return dir + " bottom";
+        }
     });
 };

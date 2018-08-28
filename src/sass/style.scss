@@ -93,11 +93,11 @@ body, html, #main-view, #sub-view-wrapper {
   border-bottom: 1px solid rgba(0, 0, 0, .12);
 }
 
-#user-menu, #user-menu md-menu-bar, #user-menu > md-menu > button {
+.user-menu, .user-menu md-menu-bar, .user-menu > md-menu > button {
   height: 64px;
 }
 
-#user-menu {
+.user-menu {
   padding: 0;
   & > md-menu > button {
     margin: 0;

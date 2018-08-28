@@ -13,8 +13,32 @@
             </md-button>
 
             <div class="separator"></div>
-            <div class="font-size-14 p020">
-                {{lang.administration}} : {{toolbar.employeeService.getEmployee().userOrganization.getTranslatedName()}}
+            <div class="font-size-14" ng-if="!toolbar.employeeService.isAdminUser()">
+                <md-menu-bar class="user-menu">
+                    <md-menu flex md-position-mode="{{toolbar.getPositionMode($event)}}">
+                        <md-button ng-click="$mdMenu.open()">
+                            <div layout="row" flex layout-align="start center">
+                                {{lang.administration}} :
+                                {{toolbar.employeeService.getEmployee().userOrganization.getTranslatedName()}}
+                                <md-icon md-svg-icon="chevron-down"></md-icon>
+                            </div>
+                        </md-button>
+                        <md-menu-content width="3">
+                            <md-menu-item>
+                                <md-button ng-disabled="true">
+                                    {{toolbar.employee.userOrganization.getTranslatedName()}}
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-divider></md-menu-divider>
+                            <md-menu-item ng-if="!toolbar.isCurrentOrganization(organization)"
+                                          ng-repeat="organization in toolbar.employee.ouList track by $index">
+                                <md-button ng-click="toolbar.switchOrganization(organization)">
+                                    {{organization.getTranslatedName()}}
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </md-menu-bar>
             </div>
             <user-menu-directive flex hide-gt-xs></user-menu-directive>
             <div class="separator"></div>
