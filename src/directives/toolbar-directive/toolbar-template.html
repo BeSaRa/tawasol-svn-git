@@ -24,12 +24,6 @@
                             </div>
                         </md-button>
                         <md-menu-content width="3">
-                            <md-menu-item>
-                                <md-button ng-disabled="true">
-                                    {{toolbar.employee.userOrganization.getTranslatedName()}}
-                                </md-button>
-                            </md-menu-item>
-                            <md-menu-divider></md-menu-divider>
                             <md-menu-item ng-if="!toolbar.isCurrentOrganization(organization)"
                                           ng-repeat="organization in toolbar.employee.ouList track by $index">
                                 <md-button ng-click="toolbar.switchOrganization(organization)">
