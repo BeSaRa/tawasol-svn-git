@@ -12,7 +12,8 @@ module.exports = function (app) {
                                                      $state,
                                                      dialog,
                                                      contextHelpService,
-                                                     toast) {
+                                                     toast,
+                                                     errorCode) {
         'ngInject';
         var self = this;
         self.controllerName = 'toolbarDirectiveCtrl';
