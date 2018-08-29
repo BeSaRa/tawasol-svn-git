@@ -353,7 +353,14 @@ module.exports = function (app) {
          */
         self.manageDocuments = function (followupEmployeeInbox, $event) {
             var info = followupEmployeeInbox.getInfo();
-            managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass, "welcome");
+            managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass, "welcome")
+                .then(function () {
+                    self.reloadFollowupEmployeeInboxes();
+                })
+                .catch(function () {
+                    self.reloadFollowupEmployeeInboxes();
+                });
+
         };
 
         /**
