@@ -16,7 +16,7 @@
             <div class="font-size-14" ng-if="!toolbar.employeeService.isAdminUser()">
                 <md-menu-bar class="user-menu">
                     <md-menu flex md-position-mode="{{toolbar.getPositionMode($event)}}">
-                        <md-button ng-click="$mdMenu.open()">
+                        <md-button ng-click="toolbar.openUserOrganizationMenu($mdMenu)"  >
                             <div layout="row" flex layout-align="start center">
                                 <!--{{lang.administration}} :-->
                                 {{toolbar.employeeService.getEmployee().userOrganization.getTranslatedName()}}
@@ -33,6 +33,7 @@
                         </md-menu-content>
                     </md-menu>
                 </md-menu-bar>
+
             </div>
             <user-menu-directive flex hide-gt-xs></user-menu-directive>
             <div class="separator"></div>

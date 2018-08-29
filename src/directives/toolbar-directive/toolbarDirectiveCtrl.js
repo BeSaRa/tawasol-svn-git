@@ -100,6 +100,11 @@ module.exports = function (app) {
             var dir = langService.current === 'ar' ? 'left' : 'right';
 
             return dir + " bottom";
-        }
+        };
+
+        self.openUserOrganizationMenu = function ($mdMenu) {
+            if (self.employee.ouList.length > 1)
+                $mdMenu.open();
+        };
     });
 };
