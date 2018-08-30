@@ -382,6 +382,54 @@
                             </div>
                         </md-content>
                     </md-tab>
+                    <md-tab label="{{lang.g2g_settings}}">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="g2gServerAddress">{{lang.server_address}}</label>
+                                        <input name="g2gServerAddress" id="g2gServerAddress"
+                                               ng-model="ctrl.entity.g2gServerAddress"
+                                               ng-required="ctrl.checkG2GRequired(entityForm)">
+                                        <div ng-messages="entityForm.g2gServerAddress.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="g2gUserName">{{lang.username}}</label>
+                                        <input name="g2gUserName" id="g2gUserName" ng-model="ctrl.entity.g2gUserName"
+                                               ng-required="ctrl.checkG2GRequired(entityForm)">
+                                        <div ng-messages="entityForm.g2gUserName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="g2gPassword">{{lang.password}}</label>
+                                        <input name="g2gPassword" id="g2gPassword" ng-model="ctrl.entity.g2gPassword"
+                                               ng-required="ctrl.checkG2GRequired(entityForm)">
+                                        <div ng-messages="entityForm.g2gPassword.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container>
+                                        <label for="g2gGECode">{{lang.g2g_ge_code}}</label>
+                                        <input name="g2gGECode" id="g2gGECode"
+                                               ng-model="ctrl.entity.g2gGECode"
+                                               custom-validate-directive="number"
+                                               ng-required="ctrl.checkG2GRequired(entityForm)">
+                                        <div ng-messages="entityForm.g2gGECode.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
                 </md-tabs>
             </form>
         </md-content>
