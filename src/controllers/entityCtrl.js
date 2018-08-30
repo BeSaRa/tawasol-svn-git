@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('entityCtrl', function (lookupService,
                                            entityService,
                                            entities,
+                                           rootEntity,
                                            $q,
                                            $filter,
                                            langService,
@@ -14,7 +15,6 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'entityCtrl';
-
         self.progress = null;
 
         contextHelpService.setHelpTo('entities');
@@ -150,11 +150,20 @@ module.exports = function (app) {
                 });
         };
 
+        self.isCurrentRootEntity = function (entity) {
+            return rootEntity.getRootEntityIdentifier() === entity.identifier;
+        };
+
         /**
          * @description Change the status of entity
          * @param entity
          */
         self.changeStatusEntity = function (entity) {
+            if (self.isCurrentRootEntity(entity)) {
+                toast.info(langService.get('can_not_disable_logged_in_entity'));
+                entity.status = !entity.status;
+                return false;
+            }
             self.statusServices[entity.status](entity)
                 .then(function () {
                     toast.success(langService.get('status_success'));
@@ -165,16 +174,40 @@ module.exports = function (app) {
                 })
         };
 
+        var _changeBulkStatus = function (entities, status) {
+            self.statusServices[status](entities).then(function () {
+                self.reloadEntities(self.grid.page).then(function () {
+                    toast.success(langService.get('selected_status_updated'));
+                });
+            });
+        };
+
         /**
          * @description Change the status of selected entities
          * @param status
          */
         self.changeStatusBulkEntities = function (status) {
-            self.statusServices[status](self.selectedEntities).then(function () {
-                self.reloadEntities(self.grid.page).then(function () {
-                    toast.success(langService.get('selected_status_updated'));
-                });
+            var isCurrentEntitySelected = _.find(self.selectedEntities, function (entity) {
+                return self.isCurrentRootEntity(entity);
             });
+            if (isCurrentEntitySelected) {
+                if (self.selectedEntities.length === 1) {
+                    toast.info(langService.get('can_not_disable_logged_in_entity'));
+                    return;
+                }
+                else {
+                    dialog.confirmMessage(langService.get('current_entity_selected_skip_and_continue'))
+                        .then(function () {
+                            var entities = _.filter(self.selectedEntities, function (entity) {
+                                return !self.isCurrentRootEntity(entity)
+                            });
+                            _changeBulkStatus(entities, status);
+                        });
+                }
+            }
+            else {
+                _changeBulkStatus(self.selectedEntities, status);
+            }
         };
 
         /**

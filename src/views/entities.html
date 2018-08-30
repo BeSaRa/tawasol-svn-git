@@ -64,7 +64,7 @@
                                     </tr>
                                     </thead>
                                     <tbody md-body>
-                                    <tr md-select="entity" md-row
+                                    <tr md-select="entity" md-row ng-disabled="ctrl.isCurrentRootEntity(entity)"
                                         ng-repeat="entity  in ctrl.entities | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{entity.identifier}}</td>
                                         <td md-cell>{{entity.arName}}</td>
@@ -73,6 +73,7 @@
                                         <td md-cell>{{entity.appEnName}}</td>
                                         <td md-cell>
                                             <md-switch ng-change="ctrl.changeStatusEntity(entity)"
+                                                       ng-disabled="ctrl.isCurrentRootEntity(entity)"
                                                        aria-label="{{lang.status}}"
                                                        title="{{entity.getTranslatedStatus()}}"
                                                        ng-model="entity.status"></md-switch>
