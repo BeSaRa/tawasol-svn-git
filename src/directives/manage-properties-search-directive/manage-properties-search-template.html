@@ -369,11 +369,11 @@
                 <!-- Serial Number From -->
                 <md-input-container>
                     <label>{{lang.search_module_serial_from}}</label>
-                    <input id="serialNoFrom" name="serialNoFrom" ng-required="ctrl.serialNoTo"
+                    <input id="serialNoFrom" name="serialNoFrom" ng-required="ctrl.document.serialNoTo"
                            min="1" max="ctrl.getMinMaxSerialNumberValues('from', 'max').value"
                            ng-change="ctrl.setSerialNumber($event)"
                            custom-validate-directive="number"
-                           min-max-number-directive ng-model="ctrl.serialNoFrom">
+                           min-max-number-directive ng-model="ctrl.document.serialNoFrom">
                     <div ng-messages="docSearchForm.serialNoFrom.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                         <div ng-message="number">{{lang.number_only}}</div>
@@ -388,10 +388,10 @@
                 <!-- Serial Number To -->
                 <md-input-container>
                     <label>{{lang.search_module_serial_to}}</label>
-                    <input id="serialNoTo" name="serialNoTo" ng-required="ctrl.serialNoFrom"
+                    <input id="serialNoTo" name="serialNoTo" ng-required="ctrl.document.serialNoFrom"
                            ng-change="ctrl.setSerialNumber($event)"
                            custom-validate-directive="number" min="ctrl.getMinMaxSerialNumberValues('to', 'min').value"
-                           min-max-number-directive ng-model="ctrl.serialNoTo">
+                           min-max-number-directive ng-model="ctrl.document.serialNoTo">
                     <div ng-messages="docSearchForm.serialNoTo.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                         <div ng-message="number">{{lang.number_only}}</div>

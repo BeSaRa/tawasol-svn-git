@@ -78,6 +78,10 @@ module.exports = function (app) {
             delete model.approvedBy;
             delete model.approveDateFrom;
             delete model.approveDateTo;
+
+            delete model.serialNoFrom;
+            delete model.serialNoTo;
+
             delete model.documentComments;
 
             delete model.createdFrom;

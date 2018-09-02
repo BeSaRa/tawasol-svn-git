@@ -12,6 +12,9 @@ module.exports = function (app) {
             self.approveDateFrom = null;
             self.approveDateTo = null;
 
+            self.serialNoFrom = null;
+            self.serialNoTo = null;
+
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];

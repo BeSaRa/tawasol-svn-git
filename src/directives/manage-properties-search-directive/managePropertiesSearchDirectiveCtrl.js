@@ -494,20 +494,20 @@ module.exports = function (app) {
                     };
                 }
                 else if (minOrMax === 'max') {
-                    if (self.serialNoTo) {
+                    if (self.document.serialNoTo) {
                         return {
-                            value: Number(self.serialNoTo) - 1,
-                            errorValue: Number(self.serialNoTo)
+                            value: Number(self.document.serialNoTo) - 1,
+                            errorValue: Number(self.document.serialNoTo)
                         };
                     }
                 }
             }
             else if (field === 'to') {
                 if (minOrMax === 'min') {
-                    if (self.serialNoFrom) {
+                    if (self.document.serialNoFrom) {
                         return {
-                            value: Number(self.serialNoFrom) + 1,
-                            errorValue: self.serialNoFrom
+                            value: Number(self.document.serialNoFrom) + 1,
+                            errorValue: self.document.serialNoFrom
                         };
                     }
                     return {
@@ -526,8 +526,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.setSerialNumber = function ($event) {
-            if (self.serialNoFrom && self.serialNoTo)
-                self.document.docSerial = self.serialNoFrom + ',' + self.serialNoTo;
+            if (self.document.serialNoFrom && self.document.serialNoTo)
+                self.document.docSerial = self.document.serialNoFrom + ',' + self.document.serialNoTo;
             else
                 self.document.docSerial = null;
         };
