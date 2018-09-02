@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                            correspondenceSiteTypeService,
                                                            correspondenceSiteTypes,
                                                            $q,
+                                                           errorCode,
                                                            $filter,
                                                            langService,
                                                            toast,
@@ -108,12 +109,20 @@ module.exports = function (app) {
          * @param correspondenceSiteType
          * @param $event
          */
-        self.removeCorrespondenceSiteType = function (correspondenceSiteType) {
+        self.removeCorrespondenceSiteType = function (correspondenceSiteType, $event) {
             correspondenceSiteTypeService
                 .controllerMethod
                 .correspondenceSiteTypeDelete(correspondenceSiteType)
                 .then(function () {
                     self.reloadCorrespondenceSiteTypes();
+                })
+                .catch(function (error) {
+                    return errorCode.checkIf(error, 'CAN_NOT_DELETE_LOOKUP', function () {
+                        dialog.errorMessage(langService.get('cannot_delete_lookup').change({
+                            lookup: langService.get('menu_item_correspondence_site_type'),
+                            used: langService.get('other_places')
+                        }), null, $event);
+                    });
                 });
         };
 
@@ -121,7 +130,7 @@ module.exports = function (app) {
          * @description Delete multiple selected correspondence site types
          * @param $event
          */
-        self.removeBulkCorrespondenceSiteTypes = function () {
+        self.removeBulkCorrespondenceSiteTypes = function ($event) {
             correspondenceSiteTypeService
                 .controllerMethod
                 .correspondenceSiteTypeDeleteBulk(self.selectedCorrespondenceSiteTypes)

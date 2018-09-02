@@ -3,11 +3,12 @@ module.exports = function (app) {
                                                            $http,
                                                            $q,
                                                            generator,
+                                                           errorCode,
                                                            CorrespondenceSiteType,
                                                            _,
                                                            dialog,
                                                            langService,
-                                                           toast, 
+                                                           toast,
                                                            cmsTemplate) {
         'ngInject';
         var self = this;
@@ -158,7 +159,7 @@ module.exports = function (app) {
                 var failedCorrespondenceSiteTypes = [];
                 _.map(result, function (value, key) {
                     if (!value)
-                        failedCorrespondenceSiteTypes.push(key);
+                        failedCorrespondenceSiteTypes.push(Number(key));
                 });
                 return _.filter(correspondenceSiteTypes, function (correspondenceSiteType) {
                     return (failedCorrespondenceSiteTypes.indexOf(correspondenceSiteType.id) > -1);
@@ -246,25 +247,25 @@ module.exports = function (app) {
                 return matchingResult === true;
             });
         };
-       /* /!**
-         * @description Check if record with same item order exists. Returns true if exists
-         * @param correspondenceSiteType
-         * @param editMode
-         * @returns {boolean}
-         *!/
-        self.checkDuplicateCorrespondenceSiteTypeItemOrder = function (correspondenceSiteType, editMode) {
-            var correspondenceSiteTypesToFilter = self.correspondenceSiteTypes;
-            if (editMode) {
-                correspondenceSiteTypesToFilter = _.filter(correspondenceSiteTypesToFilter, function (correspondenceSiteTypeToFilter) {
-                    return correspondenceSiteTypeToFilter.id !== correspondenceSiteType.id;
-                });
-            }
-            return _.some(_.map(correspondenceSiteTypesToFilter, function (existingCorrespondenceSiteType) {
-                return existingCorrespondenceSiteType.itemOrder === Number(correspondenceSiteType.itemOrder);
-            }), function (matchingResult) {
-                return matchingResult === true;
-            });
-        };*/
+        /* /!**
+          * @description Check if record with same item order exists. Returns true if exists
+          * @param correspondenceSiteType
+          * @param editMode
+          * @returns {boolean}
+          *!/
+         self.checkDuplicateCorrespondenceSiteTypeItemOrder = function (correspondenceSiteType, editMode) {
+             var correspondenceSiteTypesToFilter = self.correspondenceSiteTypes;
+             if (editMode) {
+                 correspondenceSiteTypesToFilter = _.filter(correspondenceSiteTypesToFilter, function (correspondenceSiteTypeToFilter) {
+                     return correspondenceSiteTypeToFilter.id !== correspondenceSiteType.id;
+                 });
+             }
+             return _.some(_.map(correspondenceSiteTypesToFilter, function (existingCorrespondenceSiteType) {
+                 return existingCorrespondenceSiteType.itemOrder === Number(correspondenceSiteType.itemOrder);
+             }), function (matchingResult) {
+                 return matchingResult === true;
+             });
+         };*/
 
         /**
          * @description create the shared method to the model.
