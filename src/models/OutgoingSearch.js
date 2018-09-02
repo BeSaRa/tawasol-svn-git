@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('OutgoingSearch', function (CMSModelInterceptor,
                                             Outgoing,
+                                            generator,
                                             langService) {
         return function OutgoingSearch(model) {
             var self = this;

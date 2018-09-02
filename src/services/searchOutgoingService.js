@@ -41,6 +41,7 @@ module.exports = function (app) {
          * @return {Promise|searchOutgoings}
          */
         self.searchOutgoingDocuments = function (model, properties) {
+            console.log('generator', generator);
             var criteria = generator.interceptSendInstance('SearchOutgoing', model);
 
             criteria = _checkPropertyConfiguration(criteria, properties);
