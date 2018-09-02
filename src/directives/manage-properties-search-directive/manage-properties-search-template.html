@@ -261,6 +261,7 @@
                         && ctrl.document.docClassName.toLowerCase() !== 'general'
                         && ctrl.document.docClassName.toLowerCase() !== 'correspondence'">
                 <manage-correspondence-sites-search-directive flex
+                                                              empty-sub-records="ctrl.emptyResults"
                                                               selected-site-type="ctrl.document.siteType"
                                                               document-class="ctrl.document.docClassName"
                                                               sites-info-to="ctrl.document.sitesInfoTo"
@@ -376,8 +377,12 @@
                     <div ng-messages="docSearchForm.serialNoFrom.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                         <div ng-message="number">{{lang.number_only}}</div>
-                        <div ng-message="min">{{lang.min_number.change({number: ctrl.getMinMaxSerialNumberValues('from', 'min').errorValue})}}</div>
-                        <div ng-message="max">{{lang.max_number.change({number: ctrl.getMinMaxSerialNumberValues('from', 'max').errorValue})}}</div>
+                        <div ng-message="min">{{lang.min_number.change({number: ctrl.getMinMaxSerialNumberValues('from',
+                            'min').errorValue})}}
+                        </div>
+                        <div ng-message="max">{{lang.max_number.change({number: ctrl.getMinMaxSerialNumberValues('from',
+                            'max').errorValue})}}
+                        </div>
                     </div>
                 </md-input-container>
                 <!-- Serial Number To -->
@@ -390,7 +395,9 @@
                     <div ng-messages="docSearchForm.serialNoTo.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                         <div ng-message="number">{{lang.number_only}}</div>
-                        <div ng-message="min">{{lang.min_number.change({number: ctrl.getMinMaxSerialNumberValues('to', 'min').errorValue})}}</div>
+                        <div ng-message="min">{{lang.min_number.change({number: ctrl.getMinMaxSerialNumberValues('to',
+                            'min').errorValue})}}
+                        </div>
                     </div>
                 </md-input-container>
             </div>

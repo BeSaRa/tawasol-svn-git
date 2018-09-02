@@ -23,7 +23,7 @@ module.exports = function (app) {
         var properties = [];
         self.document = null;
         self.maxCreateDate = new Date();
-
+        self.emptyResults = false;
 
         // all security level
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
@@ -530,6 +530,6 @@ module.exports = function (app) {
                 self.document.docSerial = self.serialNoFrom + ',' + self.serialNoTo;
             else
                 self.document.docSerial = null;
-        }
+        };
     });
 };

@@ -24,6 +24,7 @@ module.exports = function (app) {
 
         self.documentClass = null;
         self.searchByMain = false;
+        self.emptyResults = false;
         $timeout(function () {
             // all correspondence site types
             self.correspondenceSiteTypes = angular.copy(correspondenceService.getLookup(self.documentClass, 'siteTypes'));

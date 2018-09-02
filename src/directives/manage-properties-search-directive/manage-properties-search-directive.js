@@ -15,7 +15,8 @@ module.exports = function (app) {
                 documentFiles: '=?',
                 sourceForm: '=?',
                 registryOrganizations: '=?',
-                approvers: '=?'
+                approvers: '=?',
+                emptyResults: '='
             },
             link: function (scope, element, attrs) {
                 scope.$watch(function () {

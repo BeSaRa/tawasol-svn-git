@@ -34,6 +34,7 @@ module.exports = function (app) {
 
         self.searchOutgoing = new OutgoingSearch();
         self.searchOutgoingModel = angular.copy(self.searchOutgoing);
+        self.emptyResults = false;
 
         self.approvers = approvers;
         self.propertyConfigurations = propertyConfigurations;
@@ -121,7 +122,6 @@ module.exports = function (app) {
                     result.push(property);
             });
             return [];
-            //return result;
         };
 
 
@@ -185,15 +185,6 @@ module.exports = function (app) {
          * @description Search the document on basis of search criteria
          */
         self.search = function () {
-            /*if(self.isSearchByRegOU){
-                if(!employeeService.isCentralArchive()){
-                    self.searchOutgoing.registryOU = employeeService.getCurrentOUApplicationUser().ouRegistryID;
-                }
-            }
-            else{
-                self.searchOutgoing.registryOU = null;
-            }*/
-
             validationService
                 .createValidation('SEARCH_OUTGOING')
                 .addStep('check_required', true, self.checkRequiredFieldsSearchOutgoing, self.searchOutgoing, function (result) {
@@ -232,6 +223,7 @@ module.exports = function (app) {
         self.resetFilters = function (form) {
             self.searchOutgoing = new OutgoingSearch();
             self.searchOutgoingModel = angular.copy(self.searchOutgoing);
+            self.emptyResults = true;
             form.$setUntouched();
         };
 
@@ -338,23 +330,6 @@ module.exports = function (app) {
                 });
         };
 
-        /* /!**
-         * @description Export searched outgoing document
-         * @param searchedOutgoingDocument
-         * @param $event
-         * @type {[*]}
-         *!/
-         self.exportSearchOutgoingDocument = function (searchedOutgoingDocument, $event) {
-         //console.log('export searched outgoing document : ', searchedOutgoingDocument);
-         searchOutgoingService
-         .exportSearchOutgoing(searchedOutgoingDocument, $event)
-         .then(function (result) {
-         self.reloadSearchedOutgoingDocument(self.grid.page)
-         .then(function () {
-         toast.success(langService.get('export_success'));
-         });
-         });
-         };*/
 
         /**
          * @description Launch distribution workflow for outgoing item
@@ -373,24 +348,6 @@ module.exports = function (app) {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
                 });
-            // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
-            //     .then(function () {
-            //         /*distributionWorkflowService
-            //          .controllerMethod
-            //          .distributionWorkflowSend(searchedOutgoingDocument, false, false, null, "outgoing", $event)
-            //          .then(function (result) {
-            //          self.reloadSearchedOutgoingDocument(self.grid.page);
-            //          //self.replaceRecord(result);
-            //          })
-            //          .catch(function (result) {
-            //          self.reloadSearchedOutgoingDocument(self.grid.page);
-            //          //self.replaceRecord(result);
-            //          });*/
-            //         searchedOutgoingDocument.launchWorkFlow($event, 'forward', 'favorites')
-            //             .then(function () {
-            //                 self.reloadSearchedOutgoingDocument(self.grid.page);
-            //             });
-            //     });
         };
 
         /**
@@ -422,7 +379,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTags = function (searchedOutgoingDocument, $event) {
-            //console.log('manage tag for searched outgoing document : ', searchedOutgoingDocument);
             managerService.manageDocumentTags(searchedOutgoingDocument.vsId, searchedOutgoingDocument.docClassName, searchedOutgoingDocument.docSubject, $event)
                 .then(function (tags) {
                     searchedOutgoingDocument.tags = tags;
@@ -438,7 +394,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (searchedOutgoingDocument, $event) {
-            //console.log('manage comments for searched outgoing document : ', searchedOutgoingDocument);
             managerService.manageDocumentComments(searchedOutgoingDocument.vsId, searchedOutgoingDocument.docSubject, $event)
                 .then(function (documentComments) {
                     searchedOutgoingDocument.documentComments = documentComments;
@@ -472,7 +427,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedDocuments = function (searchedOutgoingDocument, $event) {
-            //console.log('manage linked documents for searched outgoing document : ', searchedOutgoingDocument);
             var info = searchedOutgoingDocument.getInfo();
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
         };
@@ -577,7 +531,6 @@ module.exports = function (app) {
          */
         self.getLink = function (searchedOutgoingDocument, $event) {
             viewDocumentService.loadDocumentViewUrlWithOutEdit(searchedOutgoingDocument.vsId).then(function (result) {
-                //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
                 dialog.successMessage(langService.get('link_message').change({result: result}));
                 return true;
             });
