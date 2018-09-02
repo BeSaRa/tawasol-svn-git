@@ -39,7 +39,7 @@ module.exports = function (app) {
         self.searchIncomingModel = angular.copy(self.searchIncoming);
 
         self.propertyConfigurations = propertyConfigurations;
-
+        self.emptyResults = false;
         /**
          * @description Get the dynamic required fields
          */
@@ -235,6 +235,7 @@ module.exports = function (app) {
         self.resetFilters = function (form, $event) {
             self.searchIncoming = new IncomingSearch();
             self.searchIncomingModel = angular.copy(self.searchIncoming);
+            self.emptyResults = true;
             form.$setUntouched();
         };
 

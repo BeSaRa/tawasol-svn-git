@@ -108,10 +108,6 @@ module.exports = function (app) {
          * @private
          */
         function _concatCorrespondenceSites(timeout) {
-            /*if (!timeout) {
-                self.subRecords = _.map([].concat(self.sitesInfoTo, self.sitesInfoCC, self.sitesInfoIncoming), 'subSiteId');
-                return true;
-            }*/
             return $timeout(function () {
                 return self.subRecords = _.map([].concat(self.sitesInfoTo, self.sitesInfoCC, self.sitesInfoIncoming), 'subSiteId');
             });
@@ -387,8 +383,6 @@ module.exports = function (app) {
         };
 
         self.addSiteIncoming = function (site, $event) {
-            /*if (self.disableAddButton(site))
-                return toast.error(langService.get('select_date_range'));*/
             _addSite('Incoming', site)
                 .then(function () {
                     self.subSearchSelected = [];
@@ -731,6 +725,7 @@ module.exports = function (app) {
             return self.emptySubRecords;
         }, function (value) {
             if (value) {
+                self.subSearchResult = [];
                 self.subRecords = _concatCorrespondenceSites(true);
                 self.emptySubRecords = false;
             }
