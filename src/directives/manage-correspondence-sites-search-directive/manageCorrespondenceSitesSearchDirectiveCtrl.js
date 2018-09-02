@@ -514,6 +514,7 @@ module.exports = function (app) {
                 self.subSearchResultCopy = [];
                 self.selectedMainSite = null;
             } else {
+                self.selectedMainSite = null;
                 self.sitesInfoTo = [];
                 self.sitesInfoCC = [];
                 self.sitesInfoIncoming = [];

@@ -2,59 +2,6 @@
     <form name="docSearchForm">
         <div layout="column" ng-if="ctrl.searchType === 'basic'">
             <div layout="row">
-                <!--<md-input-container ng-if="ctrl.showRegistryUnit()" flex>
-                    <label for="registryOU">{{lang.corr_registry}}</label>
-                    <md-select name="registryOU"
-                               id="registryOU"
-                               ng-change="ctrl.onRegistryChange(ctrl.document.registryOU)"
-                               ng-disabled="ctrl.checkOrganizationDisabled()"
-                               ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
-                               ng-model="ctrl.document.registryOU"
-                               ng-required="ctrl.checkMandatory('registryOU')">
-                        <md-option ng-value="organization.id"
-                                   ng-repeat="organization in ctrl.registryOrganizations">
-                            {{organization.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                    <div ng-messages="docSearchForm.ou.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
-                <md-input-container ng-if="!ctrl.showRegistryUnit()" flex>
-                    <label for="ou">{{lang.organization_unit}}</label>
-                    <md-select name="ou"
-                               id="ou"
-                               ng-disabled="ctrl.checkOrganizationDisabled()"
-                               ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
-                               ng-model="ctrl.document.ou"
-                               ng-required="ctrl.checkMandatory('ou')">
-                        <md-option ng-value="organization.id"
-                                   ng-repeat="organization in ctrl.organizations">
-                            {{organization.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                    <div ng-messages="docSearchForm.ou.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
-                <md-input-container ng-if="ctrl.showRegistryUnit()" flex>
-                    <label for="ou">{{lang.organization_unit}}</label>
-                    <md-select name="ou"
-                               id="ou"
-                               ng-disabled="ctrl.checkOrganizationDisabled()"
-                               ng-readonly="!ctrl.employee.hasPermissionTo(ctrl.document.docClassName + '_CENTRAL_ARCHIVING')"
-                               ng-model="ctrl.document.ou"
-                               ng-required="ctrl.checkMandatory('ou')">
-                        <md-option ng-value="organization.id"
-                                   ng-repeat="organization in ctrl.subOrganizations">
-                            {{organization.getTranslatedName()}}
-                        </md-option>
-                    </md-select>
-                    <div ng-messages="docSearchForm.ou.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>-->
-
                 <!-- Paper/Electronic -->
                 <md-input-container flex ng-if="ctrl.document.docClassName.toLowerCase() !== 'incoming'">
                     <label for="addMethod">{{lang.document_format}}</label>
@@ -309,64 +256,6 @@
         </div>
 
         <div layout="column" ng-if="ctrl.searchType === 'advanced'">
-            <!-- Correspondence Site -->
-            <!--<div layout="row"
-                 ng-if="ctrl.document.docClassName.toLowerCase() !== 'internal'
-                        && ctrl.document.docClassName.toLowerCase() !== 'general'
-                        && ctrl.document.docClassName.toLowerCase() !== 'correspondence'">
-                &lt;!&ndash; Correspondence Site Type &ndash;&gt;
-                <md-input-container flex>
-                    <label for="correspondenceSiteType">{{lang.correspondence_site_type}}</label>
-                    <md-select name="correspondenceSiteType"
-                               id="correspondenceSiteType"
-                               ng-change="ctrl.getCorrespondenceSites(true, $event)"
-                               ng-model="ctrl.document.siteType"
-                               ng-required="ctrl.checkMandatory('sitesInfoTo') || ctrl.checkMandatory('sitesInfoCC')">
-                        <md-option ng-value="siteType"
-                                   ng-repeat="siteType in ctrl.correspondenceSiteTypes">
-                            {{siteType.getTranslatedName()}}
-                        </md-option>
-                        <md-option ng-value="null">{{lang.none}}</md-option>
-                    </md-select>
-                    <div ng-messages="docSearchForm.selectedCorrSiteType.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
-
-                &lt;!&ndash; Change correspondence sites &ndash;&gt;
-                <md-input-container>
-                    <md-button class="md-icon-button"
-                               tooltip="{{lang.change_correspondence_sites}}"
-                               tooltip-direction="{{lang.current === 'en' ? 'left' : 'right'}}"
-                               ng-click="ctrl.getCorrespondenceSites(false, $event)">
-                        <md-icon md-svg-icon="pencil"></md-icon>
-                    </md-button>
-                </md-input-container>
-
-                &lt;!&ndash; Selected Main Site &ndash;&gt;
-                <md-input-container flex ng-if="ctrl.document.siteType && ctrl.mainSiteLabel">
-                    <label for="sitesInfoTo">{{lang.main_site}}</label>
-                    <input name="sitesInfoTo" id="sitesInfoTo"
-                           ng-required="ctrl.checkMandatory('sitesInfoTo') || ctrl.checkMandatory('sitesInfoCC')"
-                           ng-model="ctrl.mainSiteLabel"
-                           ng-disabled="true" ng-readonly="true">
-                    <div ng-messages="docSearchForm.sitesInfoTo.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
-
-                &lt;!&ndash; Selected Sub Site &ndash;&gt;
-                <md-input-container flex ng-if="ctrl.document.siteType && ctrl.subSiteLabel">
-                    <label for="sitesInfoCC">{{lang.sub_site}}</label>
-                    <input name="sitesInfoCC" id="sitesInfoCC"
-                           ng-required="ctrl.checkMandatory('sitesInfoTo') || ctrl.checkMandatory('sitesInfoCC')"
-                           ng-model="ctrl.subSiteLabel"
-                           ng-disabled="true" ng-readonly="true">
-                    <div ng-messages="docSearchForm.sitesInfoCC.$error">
-                        <div ng-message="required">{{lang.field_required}}</div>
-                    </div>
-                </md-input-container>
-            </div>-->
             <div layout="row"
                  ng-if="ctrl.document.docClassName.toLowerCase() !== 'internal'
                         && ctrl.document.docClassName.toLowerCase() !== 'general'
