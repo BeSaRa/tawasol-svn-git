@@ -30,7 +30,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('404')
             })
             .state('password', {
-                url: '/password-encrypt/entity/:identifier?',
+                url: '/password-encrypt',
                 template: templateProvider.getView('password-encrypt'),
                 controller: 'passwordEncryptCtrl',
                 controllerAs: 'ctrl'

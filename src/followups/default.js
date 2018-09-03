@@ -51,7 +51,8 @@ module.exports = function (app) {
         });
 
         $transitions.onStart({}, function (transition) {
-            if (!application.isReadyStatus() && transition.to().name !== 'loading') {
+            var stateName = transition.to().name;
+            if (!application.isReadyStatus() && stateName !== 'loading' && stateName !== 'password') {
                 var Identifier = transition.injector().get('$stateParams').identifier;
                 if ($location.path().indexOf('404') === -1) {
                     application.setUrl($location.path());

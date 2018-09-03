@@ -41,25 +41,6 @@ module.exports = function (app) {
                                 return $q.reject();
                             });
                         });
-                    // langService.getLanguages().then(function (lang) {
-                    //     $rootScope.lang = lang;
-                    //     rootEntity
-                    //         .getInformation($stateParams.identifier)
-                    //         .then(function () {
-                    //             // get load languages
-                    //             $timeout(function () {
-                    //                 return application.setReadyStatus();
-                    //             }, 1000);
-                    //         })
-                    //         .catch(function (error) {
-                    //             // langService.getCurrentTranslate();
-                    //             return errorCode.checkIf(error, 'ROOT_ENTITY_NOT_FOUND', function () {
-                    //                 dialog.errorMessage(langService.get('root_entity_not_found'));
-                    //                 return $q.reject();
-                    //             });
-                    //         });
-                    // });
-
                 });
                 return true;
             })
