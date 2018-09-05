@@ -7,7 +7,7 @@ module.exports = function (app) {
                                                  _,
                                                  dialog,
                                                  langService,
-                                                 toast, 
+                                                 toast,
                                                  cmsTemplate) {
         'ngInject';
         var self = this;
@@ -414,10 +414,11 @@ module.exports = function (app) {
             });
         };
 
-        self.getChildrenFroDocumentFile = function (documentFile) {
+        self.getChildrenFromDocumentFile = function (documentFile) {
             var fileId = documentFile.hasOwnProperty('id') ? documentFile.id : documentFile;
             return _.filter(self.documentFiles, function (item) {
-                return Number(item.parent) === Number(fileId);
+                var parentId = (item.parent && item.parent.hasOwnProperty('id')) ? item.parent.id : item.parent;
+                return Number(parentId) === Number(fileId);
             });
         }
     });

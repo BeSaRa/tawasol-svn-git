@@ -73,7 +73,7 @@ module.exports = function (app) {
              * @description get children document files
              */
             DocumentFile.prototype.getChildren = function () {
-                return this.children = documentFileService.getChildrenFroDocumentFile(this);
+                return this.children = documentFileService.getChildrenFromDocumentFile(this);
             };
 
             DocumentFile.prototype.getRelatedOUDocumentFiles = function () {

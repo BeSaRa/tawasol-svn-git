@@ -479,7 +479,13 @@ module.exports = function (app) {
          */
         self.manageLinkedDocuments = function (searchedIncomingDocument, $event) {
             var info = searchedIncomingDocument.getInfo();
-            return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
+            return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass)
+                .then(function () {
+                    self.reloadSearchedIncomingDocument(self.grid.page);
+                })
+                .catch(function () {
+                    self.reloadSearchedIncomingDocument(self.grid.page);
+                });
         };
 
         /**

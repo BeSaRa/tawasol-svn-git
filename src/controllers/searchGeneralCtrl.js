@@ -468,7 +468,12 @@ module.exports = function (app) {
          */
         self.manageLinkedDocuments = function (searchedGeneralDocument, $event) {
             var info = searchedGeneralDocument.getInfo();
-            return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
+            return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass)
+                .then(function () {
+                    self.reloadSearchedGeneralDocuments(self.grid.page);
+                }).catch(function () {
+                    self.reloadSearchedGeneralDocuments(self.grid.page);
+                });
         };
 
         /**

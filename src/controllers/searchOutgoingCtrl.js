@@ -428,7 +428,13 @@ module.exports = function (app) {
          */
         self.manageLinkedDocuments = function (searchedOutgoingDocument, $event) {
             var info = searchedOutgoingDocument.getInfo();
-            return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
+            return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass)
+                .then(function () {
+                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                })
+                .catch(function () {
+                    self.reloadSearchedOutgoingDocument(self.grid.page);
+                });
         };
 
         /**

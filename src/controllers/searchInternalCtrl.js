@@ -459,7 +459,14 @@ module.exports = function (app) {
         self.manageLinkedDocuments = function (searchedInternalDocument, $event) {
             //console.log('manage linked documents for searched internal document : ', searchedInternalDocument);
             var info = searchedInternalDocument.getInfo();
-            return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
+            return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass)
+                .then(function () {
+                    self.reloadSearchedInternalDocuments(self.grid.page);
+                })
+                .catch(function () {
+                    self.reloadSearchedInternalDocuments(self.grid.page);
+                })
+                ;
         };
 
         /**

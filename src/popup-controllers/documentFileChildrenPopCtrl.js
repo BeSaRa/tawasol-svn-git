@@ -63,11 +63,13 @@ module.exports = function (app) {
                 .controllerMethod
                 .documentFileAdd($event)
                 .then(function (result) {
-                    self.reloadDocumentFiles()
+                    self.reloadDocumentFiles(self.grid.page)
                         .then(function () {
                             toast.success(langService.get('add_success').change({name: result.getTranslatedName()}));
                         });
-                })
+                }).catch(function () {
+                self.reloadDocumentFiles(self.grid.page);
+            })
         };
 
         /**
@@ -80,12 +82,12 @@ module.exports = function (app) {
                 .controllerMethod
                 .documentFileEdit(documentFile, $event)
                 .then(function (result) {
-                    self.reloadDocumentFiles()
-                        .then(function () {
+                    self.reloadDocumentFiles(self.grid.page);
+                        /*.then(function () {
                             toast.success(langService.get('edit_success').change({name: result.getTranslatedName()}));
-                        });
+                        });*/
                 }).catch(function () {
-                self.reloadDocumentFiles();
+                self.reloadDocumentFiles(self.grid.page);
             });
         };
 
@@ -110,7 +112,7 @@ module.exports = function (app) {
                             if (pageNumber)
                                 self.grid.page = pageNumber;
                             self.getSortedData();
-                            // return result;
+                            return result;
                         });
                 });
         };
@@ -125,7 +127,7 @@ module.exports = function (app) {
                 .controllerMethod
                 .documentFileDelete(documentFile, $event)
                 .then(function () {
-                    self.reloadDocumentFiles();
+                    self.reloadDocumentFiles(self.grid.page);
                 });
         };
 
@@ -138,7 +140,7 @@ module.exports = function (app) {
                 .controllerMethod
                 .documentFileDeleteBulk(self.selectedDocumentFiles, $event)
                 .then(function () {
-                    self.reloadDocumentFiles().then(function (result) {
+                    self.reloadDocumentFiles(self.grid.page).then(function (result) {
                         toast.success(langService.get('edit_success').change({name: result.getNames()}));
                     });
                 });
@@ -197,7 +199,7 @@ module.exports = function (app) {
                 .controllerMethod
                 .openOrganizationPopup(organization, documentfile, $event)
                 .then(function () {
-                    self.reloadDocumentFiles().then(function () {
+                    self.reloadDocumentFiles(self.grid.page).then(function () {
                     });
                 });
         };
@@ -209,10 +211,10 @@ module.exports = function (app) {
                 .controllerMethod
                 .openChildDocumentFilesPopup(documentFiles, documentfile, $event)
                 .then(function () {
-                    self.reloadDocumentFiles().then(function () {
+                    self.reloadDocumentFiles(self.grid.page).then(function () {
                     });
                 }).catch(function () {
-                self.reloadDocumentFiles().then(function () {
+                self.reloadDocumentFiles(self.grid.page).then(function () {
                 });
             });
         };
