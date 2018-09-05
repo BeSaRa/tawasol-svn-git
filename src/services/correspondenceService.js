@@ -1739,10 +1739,14 @@ module.exports = function (app) {
          * @param tab
          * @param $event
          * @param isDeptIncoming
+         * @param isDeptSent
          * @returns {promise|*}
          */
-        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming) {
-            var normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
+        self.launchCorrespondenceWorkflow = function (correspondence, $event, action, tab, isDeptIncoming, isDeptSent) {
+            var normalCorrespondence = false;
+            if (!isDeptSent) {
+                normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
+            }
             var count = angular.isArray(correspondence) ? correspondence.length : 1;
             if (normalCorrespondence) {
                 var sitesValidation = self.validateBeforeSend(correspondence);

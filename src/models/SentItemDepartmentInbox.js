@@ -158,7 +158,7 @@ module.exports = function (app) {
             };
 
             SentItemDepartmentInbox.prototype.launchWorkFlow = function ($event, action, tab) {
-                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab);
+                return correspondenceService.launchCorrespondenceWorkflow(this, $event, action, tab, false, true);
             };
 
 

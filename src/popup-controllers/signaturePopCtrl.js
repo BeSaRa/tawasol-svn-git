@@ -20,7 +20,7 @@ module.exports = function (app) {
          * @type {*}
          */
         self.signatures = signatures;
-        self.signatureChunks = _.chunk(signatures, 4);
+        self.signatureChunks = _.chunk(signatures, 5);
 
         /**
          * @description Contains the selected signatures
