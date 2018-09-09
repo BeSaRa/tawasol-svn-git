@@ -4,7 +4,7 @@
         .config(function (urlServiceProvider) {
             'ngInject';
             urlServiceProvider
-                .setEnvironment('stage')
+                .setEnvironment('dev')
                 .setBaseUrl('dev', 'http://localhost:9080/CMSServices/service')
                 .setBaseUrl('stage', 'http://100.100.3.220:9080/CMSServices/service')
                 .setBaseUrl('demo', 'http://37.210.190.157:9080/CMSServices/service')
@@ -13,7 +13,7 @@
                 .setBaseUrl('ibm', 'http://100.100.3.107:9080/CMSServices/service')
                 .setBaseUrl('manohar', 'http://100.100.197.220:9080/CMSServices/service')
                 .setBaseUrl('hussam', 'http://100.100.11.49:9080/CMSServices/service')
-                .setBaseUrl('migration', 'http://100.100.3.138:9080/CMSServices/service');
+                .setBaseUrl('oracel', 'http://100.100.3.197:9080/CMSServices/service');
 
             // External Systems
             urlServiceProvider

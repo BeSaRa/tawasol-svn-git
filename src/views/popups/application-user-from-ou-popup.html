@@ -74,7 +74,7 @@
                                     <md-input-container flex>
                                         <label for="employeeNo">{{lang.employee_number}}</label>
                                         <input name="employeeNo" id="employeeNo" required
-                                               ng-model="ctrl.applicationUser.employeeNo" maxlength="5"
+                                               ng-model="ctrl.applicationUser.employeeNo" maxlength="10"
                                                custom-validate-directive="number">
                                         <div ng-messages="applicationUserForm.employeeNo.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
