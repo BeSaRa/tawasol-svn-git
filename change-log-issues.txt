@@ -280,3 +280,8 @@ Added g2gId field to the organization popup.
 
 
 15839: Document Security - at least one of the option should be selected while the document secuirty for document type is active
+
+
+9/9/2018
+------------------
+16066:Oracle - Main correspondence site field and sub results doesn't reset to default when click on Reset button.
