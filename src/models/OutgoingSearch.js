@@ -34,12 +34,14 @@ module.exports = function (app) {
             OutgoingSearch.prototype.prepareApproved = function () {
                 model = this;
                 if (model.approvers) {
+                    var toDate = angular.copy(model.approveDateTo);
+                    toDate = new Date(toDate.getFullYear(), toDate.getMonth(), toDate.getDate(), 23, 59, 59, 999);
                     model.approvers = model.approvers ? angular.toJson({
                         userId: model.approvers.applicationUser.id,
                         userOuId: model.approvers.ouid.id,
                         approveDate: {
                             first: generator.getTimeStampFromDate(model.approveDateFrom),
-                            second: generator.getTimeStampFromDate(model.approveDateTo)
+                            second: generator.getTimeStampFromDate(toDate)
                         }
                     }) : null;
                 }
