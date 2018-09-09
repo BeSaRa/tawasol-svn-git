@@ -4,7 +4,7 @@
         .config(function (urlServiceProvider) {
             'ngInject';
             urlServiceProvider
-                .setEnvironment('dev')
+                .setEnvironment('stage')
                 .setBaseUrl('dev', 'http://localhost:9080/CMSServices/service')
                 .setBaseUrl('stage', 'http://100.100.3.220:9080/CMSServices/service')
                 .setBaseUrl('demo', 'http://37.210.190.157:9080/CMSServices/service')

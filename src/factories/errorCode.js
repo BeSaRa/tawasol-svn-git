@@ -35,7 +35,7 @@ module.exports = function (app) {
 
         return {
             checkIf: function (error, errorCode, callback) {
-                var code = error.hasOwnProperty('data') ? error.data.ec : error;
+                var code = error.hasOwnProperty('data') && error.data ? error.data.ec : error;
                 if (code === errorCodes[errorCode]) {
                     if (callback)
                         return callback();
