@@ -308,23 +308,33 @@ module.exports = function (app) {
                     'ngInject';
                     return organizationService.getOrganizations();
                 },
-                receive: function (correspondenceService, $stateParams, $timeout) {
+                receive: function (correspondenceService, $stateParams, $timeout, $q, dialog, $state, langService) {
                     'ngInject';
                     var action = $stateParams.action, workItem = $stateParams.workItem;
                     /*, vsId = $stateParams.vsId;*/
+                    var defer = $q.defer();
                     if (action === 'receive') {
-                        return correspondenceService.prepareReceiveIncoming(workItem)
+                        correspondenceService.prepareReceiveIncoming(workItem)
+                            .then(function (result) {
+                                defer.resolve(result);
+                            })
                             .catch(function (error) {
-                                return $timeout(function () {
-                                    return false;
-                                });
+                                //$timeout(function () {
+                                    defer.reject(false);
+                                //});
                             });
                     }
                     else {
-                        return $timeout(function () {
-                            return false;
+                        $timeout(function () {
+                            defer.resolve(false);
                         });
                     }
+                    defer.promise.then(function (response) {
+                        return response;
+                    }).catch(function (error) {
+                        dialog.alertMessage(langService.get('error_while_receiving_document'));
+                        $state.go('app.department-inbox.incoming');
+                    })
                 },
                 receiveG2G: function (correspondenceService, $stateParams, $timeout) {
                     'ngInject';
