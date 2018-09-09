@@ -102,10 +102,11 @@
         <div>
             <div layout="row">
                 <md-button class="md-raised" ng-click="ctrl.exportCorrespondenceWorkItem()"
+                           ng-if="!ctrl.hasExternalSite"
                            ng-disabled="!ctrl.correspondenceSites.length">
                     {{ctrl.resend ? lang.resend : lang.export}}
                 </md-button>
-                <span ng-if="ctrl.hasExternalSite && !ctrl.resend" flex></span>
+                <span ng-if="!ctrl.hasExternalSite && !ctrl.resend" flex></span>
                 <md-button ng-if="ctrl.hasExternalSite && !ctrl.resend" class="md-raised"
                            ng-click="ctrl.printWithTerminate()">
                     {{lang.print_with_terminate}}

@@ -285,3 +285,4 @@ Added g2gId field to the organization popup.
 9/9/2018
 ------------------
 16066:Oracle - Main correspondence site field and sub results doesn't reset to default when click on Reset button.
+14406:RACA-Central Archive Mail - User can't export outgoing document to external correspondence site
