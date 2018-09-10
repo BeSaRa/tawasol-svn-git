@@ -329,11 +329,12 @@ module.exports = function (app) {
                             defer.resolve(false);
                         });
                     }
-                    defer.promise.then(function (response) {
+                    return defer.promise.then(function (response) {
                         return response;
                     }).catch(function (error) {
                         dialog.alertMessage(langService.get('error_while_receiving_document'));
                         $state.go('app.department-inbox.incoming');
+                        return false;
                     })
                 },
                 receiveG2G: function (correspondenceService, $stateParams, $timeout) {
