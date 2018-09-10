@@ -22,7 +22,7 @@ module.exports = function (app) {
         };
 
         self.grid = {
-            limit: 4, // default limit
+            limit: 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
             limitOptions: [5, 10, 20, // limit options

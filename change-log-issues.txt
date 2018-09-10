@@ -287,3 +287,4 @@ Added g2gId field to the organization popup.
 16066:Oracle - Main correspondence site field and sub results doesn't reset to default when click on Reset button.
 14406:RACA-Central Archive Mail - User can't export outgoing document to external correspondence site
 16178:MOPH: while receive outgoing document properties and content doesn't exist
+13768:Regression - Number of items doesn't match the workflow groups appear in Launch and distribution workflow page.
