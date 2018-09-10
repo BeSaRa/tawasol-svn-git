@@ -959,6 +959,11 @@ module.exports = function (app) {
 
         };
 
+
+        self.editInDesktop = function (workItem) {
+            correspondenceService.editWordInDesktop(workItem);
+        };
+
         /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
@@ -1497,6 +1502,23 @@ module.exports = function (app) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
                 }
+            },
+            // editInDeskTop
+            {
+                type: 'action',
+                icon: 'book-open-variant',
+                text: 'grid_action_edit_in_desktop',
+                shortcut: true,
+                callback: self.editInDesktop,
+                class: "action-red",
+                showInView: false,
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted()
+                        && !info.isPaper
+                        && (info.documentClass !== 'incoming')
+                        && model.needApprove();
+                }
             }
         ];
 
@@ -1577,6 +1599,7 @@ module.exports = function (app) {
                     $state.is('app.inbox.user-inbox') && self.refreshInbox(time);
                 });
         };
+
 
         if (self.globalSetting.inboxRefreshInterval) {
             var timer = (self.globalSetting.inboxRefreshInterval * 60 * 100 * 10);

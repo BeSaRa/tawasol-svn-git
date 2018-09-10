@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.service('correspondenceService', function (urlService,
                                                    $http,
                                                    cmsTemplate,
+                                                   tokenService,
                                                    CommentModel,
                                                    CMSModelInterceptor,
                                                    employeeService,
@@ -2788,6 +2789,20 @@ module.exports = function (app) {
         self.setManagerService = function (service) {
             managerService = service;
             return this
+        };
+
+        self.editWordInDesktop = function (correspondence) {
+            var info = correspondence.getInfo();
+            var url = urlService
+                .desktopEdit
+                .replace('{type}', 'docx')
+                .replace('{vsId}', info.vsId)
+                .replace('{subject}', info.title)
+                .replace('{token}', tokenService.getToken())
+                .replace('{documentClass}', info.documentClass);
+            return $http.get(url, {
+                excludeLoading: true
+            });
         };
 
         $timeout(function () {
