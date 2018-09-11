@@ -470,7 +470,21 @@ module.exports = function (app) {
          * @param tabName
          */
         self.setCurrentTab = function (tabName) {
-            self.selectedTab = tabName;
+            // self.selectedTab = tabName;
+            var defer = $q.defer();
+            if (tabName === 'signature') {
+                applicationUserSignatureService.loadApplicationUserSignatures(self.applicationUser.id)
+                    .then(function (result) {
+                        self.applicationUser.signature = result;
+                        defer.resolve(tabName);
+                    });
+            }
+            else {
+                defer.resolve(tabName);
+            }
+            return defer.promise.then(function(tab){
+                self.selectedTab = tab;
+            });
         };
 
 

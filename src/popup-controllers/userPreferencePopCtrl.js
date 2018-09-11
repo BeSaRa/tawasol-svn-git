@@ -40,7 +40,7 @@ module.exports = function (app) {
                                                       $rootScope,
                                                       $q,
                                                       $filter,
-                                                      signature,
+                                                      //signature,
                                                       selectedTab,
                                                       cmsTemplate,
                                                       ProxyInfo,
@@ -54,7 +54,7 @@ module.exports = function (app) {
         self.controllerName = 'userPreferencePopCtrl';
         self.applicationUser = new ApplicationUser(applicationUser);
 
-        self.applicationUser.signature = signature;
+        //self.applicationUser.signature = signature;
         self.currentEmployee = applicationUser;
         self.model = angular.copy(self.applicationUser);
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
@@ -293,7 +293,20 @@ module.exports = function (app) {
          * @param tabName
          */
         self.setCurrentTab = function (tabName) {
-            self.selectedTab = tabName;
+            var defer = $q.defer();
+            if (tabName === 'signature') {
+                applicationUserSignatureService.loadApplicationUserSignatures(self.applicationUser.id)
+                    .then(function (result) {
+                        self.applicationUser.signature = result;
+                        defer.resolve(tabName);
+                    });
+            }
+            else {
+                defer.resolve(tabName);
+            }
+            return defer.promise.then(function(tab){
+                self.selectedTab = tab;
+            });
         };
 
         self.tabsToShow = [
@@ -520,7 +533,7 @@ module.exports = function (app) {
                     defer.resolve(true);
                 }
             }
-            defer.promise.then(function(response){
+            defer.promise.then(function (response) {
                 if (!self.isOutOfOffice)
                     self.applicationUser.outOfOffice = false;
                 employeeService.setCurrentEmployee(self.applicationUser);

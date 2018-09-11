@@ -125,17 +125,17 @@ module.exports = function (app) {
                                 'ngInject';
                                 return ouApplicationUserService.loadOUApplicationUsersByUserId(applicationUser.id);
                             },
-                            // by BeSaRa to resolve the signature if found
+                           /* // by BeSaRa to resolve the signature if found
                             signature: function (applicationUserSignatureService, $q) {
                                 'ngInject';
 
-                                if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
-                                    return $q.when(applicationUser.signature);
+                                /!*if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
+                                    return $q.when(applicationUser.signature);*!/
 
                                 return applicationUserSignatureService.loadApplicationUserSignatures(applicationUser.id).then(function (result) {
                                     applicationUser.signature = result;
                                 });
-                            }
+                            }*/
                         }
                     });
             },
@@ -224,16 +224,16 @@ module.exports = function (app) {
                                 'ngInject';
                                 return ouApplicationUserService.getOUApplicationUsersByUserId(applicationUser.id);
                             },
-                            // by BeSaRa to resolve the signature if found
+                           /* // by BeSaRa to resolve the signature if found
                             signature: function (applicationUserSignatureService, $q) {
                                 'ngInject';
-                                if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
-                                    return $q.when(applicationUser.signature);
+                                /!*if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
+                                    return $q.when(applicationUser.signature);*!/
 
                                 return applicationUserSignatureService.loadApplicationUserSignatures(applicationUser.id).then(function (result) {
                                     applicationUser.signature = result;
                                 });
-                            }
+                            }*/
                         }
                     });
             },
@@ -409,11 +409,11 @@ module.exports = function (app) {
                                 'ngInject';
                                 return userWorkflowGroupService.getUserWorkflowGroupsByUser();
                             },
-                            // by BeSaRa to resolve the signature if found
+                           /* // by BeSaRa to resolve the signature if found
                             signature: function (applicationUserSignatureService, $q) {
                                 'ngInject';
-                                if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
-                                    return $q.when(applicationUser.signature);
+                                /!*if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
+                                    return $q.when(applicationUser.signature);*!/
 
                                 return applicationUserSignatureService.loadApplicationUserSignatures(applicationUser.id)
                                     .then(function (result) {
@@ -421,7 +421,7 @@ module.exports = function (app) {
                                         //deferDelay.resolve(applicationUser);
                                         return result;
                                     });
-                            },
+                            },*/
                             userFolders: function (userFolderService) {
                                 'ngInject';
                                 return userFolderService.getUserFoldersForApplicationUser()
