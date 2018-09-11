@@ -332,13 +332,20 @@ module.exports = function (app) {
                     deferFileType.resolve(result);
                 });
                 return deferFileType.promise.then(function (allFileTypes) {
-                    var allowedExtensions = _.map(rootEntity.getGlobalSettings().fileType, function (allowed) {
-                        return _.find(allFileTypes, function (fileType) {
-                            return fileType.id === allowed;
-                        }).extension;
-                    });
+                    var allowedExtensions = [];
+                    if (groupName === 'userSignature')
+                        allowedExtensions = provider.getExtensionGroup(groupName);
+                    else
+                        allowedExtensions = _.map(rootEntity.getGlobalSettings().fileType, function (allowed) {
+                            return _.find(allFileTypes, function (fileType) {
+                                return fileType.id === allowed;
+                            }).extension;
+                        });
+
                     var extension = file.name.split('.').pop().toLowerCase();
                     var position = _.findIndex(allowedExtensions, function (ext) {
+                        if(ext.startsWith('.'))
+                            ext = ext.split('.').pop();
                         return ext === extension;
                     });
 
@@ -351,7 +358,9 @@ module.exports = function (app) {
                         _resolveFile(extensionDefer, file);
                     } else {
                         rejectFile(extensionDefer, allowedExtensions.map(function (item) {
-                            return '.' + item
+                            if (!item.startsWith("."))
+                                item = '.' + item;
+                            return item
                         }));
                     }
                     return extensionDefer.promise;

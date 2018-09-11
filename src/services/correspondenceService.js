@@ -1635,7 +1635,7 @@ module.exports = function (app) {
                 if (sitesValidation.length && sitesValidation.length === count && count === 1) {
                     var info = correspondence.getInfo();
                     return dialog
-                        .confirmMessage('no_sites_cannot_broadcast_confirm_add', 'add', 'cancel', $event)
+                        .confirmMessage(langService.get('no_sites_cannot_broadcast_confirm_add'), 'add', 'cancel', $event)
                         .then(function () {
                             return managerService
                                 .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
@@ -1754,7 +1754,7 @@ module.exports = function (app) {
                 if (sitesValidation.length && sitesValidation.length === count && count === 1) {
                     var info = correspondence.getInfo();
                     return dialog
-                        .confirmMessage('no_sites_cannot_send', 'add', 'cancel', $event)
+                        .confirmMessage(langService.get('no_sites_cannot_send'), 'add', 'cancel', $event)
                         .then(function () {
                             return managerService
                                 .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
