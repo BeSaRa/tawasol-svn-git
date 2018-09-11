@@ -50,9 +50,8 @@ module.exports = function (app) {
 
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            model.sitesInfoCC = !angular.isArray(model.sitesInfoCC) && model.sitesInfoCC ? generator.interceptReceivedCollection('Site', _.map(model.sitesCCList, _prepareSites)) : [];
-            model.sitesInfoTo = !angular.isArray(model.sitesInfoTo) && model.sitesInfoTo ? generator.interceptReceivedCollection('Site', _.map(model.sitesToList, _prepareSites)) : [];
-
+            model.sitesInfoCC = !angular.isArray(model.sitesInfoCC) && model.sitesInfoCC ? generator.interceptReceivedCollection('Site', _.map(model.ccSitesList, _prepareSites)) : [];
+            model.sitesInfoTo = !angular.isArray(model.sitesInfoTo) && model.sitesInfoTo ? generator.interceptReceivedCollection('Site', _.map(model.toSitesList, _prepareSites)) : [];
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
 
