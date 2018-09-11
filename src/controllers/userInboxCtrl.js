@@ -294,7 +294,7 @@ module.exports = function (app) {
         /**
          * @description Reload the grid of user inboxes
          * @param pageNumber
-         * @return {*|Promise<U>}
+         * @return {*|Promise<WorkItem>}
          */
         self.reloadUserInboxes = function (pageNumber) {
             var defer = $q.defer();
@@ -1509,6 +1509,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_edit_in_desktop',
                 shortcut: true,
+                hide: true,
                 callback: self.editInDesktop,
                 class: "action-red",
                 showInView: false,
