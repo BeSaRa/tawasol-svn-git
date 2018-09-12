@@ -202,8 +202,10 @@ module.exports = function (app) {
                 documentClass = correspondence.classDescription;
             } else if (correspondence.hasOwnProperty('generalStepElm')) {
                 documentClass = generator.getDocumentClassName(correspondence.generalStepElm.docType);
-            } else { // if notification Item
+            } else if (correspondence.hasOwnProperty('docClassId')) { // if notification Item
                 documentClass = generator.getDocumentClassName(correspondence.docClassId);
+            } else { // if Mail Notification
+                documentClass = generator.getDocumentClassName(correspondence.docType);
             }
             return documentClass ? documentClass.toLowerCase() : documentClass;
         }
