@@ -514,7 +514,7 @@ module.exports = function (app) {
             }
             self.selectedSiteType = null;
             self.selectedMainSite = null;
-            self.selectedMain =  null;
+            self.selectedMain = null;
             self.onMainChange(self.selectedMain);
         };
         /**
@@ -746,6 +746,9 @@ module.exports = function (app) {
                 self.subSearch = '';
                 self.selectedMainSite = null;
                 self.subSearchResult = [];
+                self.sitesInfoTo = [];
+                self.sitesInfoCC = [];
+                self.sitesInfoIncoming = [];
                 self.subRecords = _concatCorrespondenceSites(true);
                 self.emptySubRecords = false;
             }
