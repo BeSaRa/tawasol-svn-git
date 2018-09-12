@@ -18,12 +18,16 @@ module.exports = function (app) {
 
         self.searchText = '';
 
+        self.normalizeTag = function (tag) {
+            return tag.substr(1, tag.length - 2);
+        };
+
         self.addTagToDocument = function (tag) {
             self.checkTagExists(tag) ? null : documentTagService.addBulkTags(tag);
         };
 
         self.checkTagExists = function (tag) {
-            return self.searchResult.indexOf(tag) !== -1;
+            return self.searchResult.indexOf(self.normalizeTag(tag)) !== -1;
         };
 
         // search for tag -- calling the search service if tags more than 100, unless filter the current tags on client side
