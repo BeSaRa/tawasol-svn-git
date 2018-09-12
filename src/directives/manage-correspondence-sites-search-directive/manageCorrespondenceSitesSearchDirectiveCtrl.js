@@ -742,6 +742,8 @@ module.exports = function (app) {
             return self.emptySubRecords;
         }, function (value) {
             if (value) {
+                self.mainSearch = '';
+                self.subSearch = '';
                 self.selectedMainSite = null;
                 self.subSearchResult = [];
                 self.subRecords = _concatCorrespondenceSites(true);
