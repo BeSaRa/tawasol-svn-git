@@ -507,13 +507,15 @@ module.exports = function (app) {
             if (self.searchByMain) {
                 self.subSearchResult = [];
                 self.subSearchResultCopy = [];
-                self.selectedMainSite = null;
             } else {
-                self.selectedMainSite = null;
                 self.sitesInfoTo = [];
                 self.sitesInfoCC = [];
                 self.sitesInfoIncoming = [];
             }
+            self.selectedSiteType = null;
+            self.selectedMainSite = null;
+            self.selectedMain =  null;
+            self.onMainChange(self.selectedMain);
         };
         /**
          * search in MainCorrespondenceSites and retrieve the filtered result.
@@ -549,6 +551,21 @@ module.exports = function (app) {
         self.onMainChange = function (main) {
             if (main && !self.selectedSiteType)
                 self.selectedSiteType = _mapTypes(_getTypeByLookupKey(main.correspondenceSiteTypeId));
+
+            if (self.searchByMain) {
+                if (self.selectedMain) {
+                    self.documentClass.toLowerCase() === 'outgoing' ? _addSite('To', _mapMainSite(self.selectedMain)) : _addSite('Incoming', _mapMainSite(self.selectedMain));
+                }
+                else {
+                    if (self.documentClass.toLowerCase() === 'incoming' && self.searchByMain) {
+                        self.sitesInfoIncoming = [];
+                    }
+                    else {
+                        self['sitesInfoTo'] = [];
+                    }
+                }
+
+            }
         };
         /**
          * check if need replay

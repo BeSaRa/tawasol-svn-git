@@ -56,7 +56,7 @@
             <span>{{item.getTranslatedName()}}</span>
         </md-autocomplete>
         <!-- Sub Site -->
-        <md-input-container flex>
+        <md-input-container flex ng-if="!ctrl.searchByMain">
             <label for="subSearch">{{lang.sites_select_sub_site}}</label>
             <input id="subSearch" ng-model="ctrl.subSearch" ng-enter="ctrl.onSubSearch($event)"
                    ng-change="ctrl.onSubSearch($event)">
