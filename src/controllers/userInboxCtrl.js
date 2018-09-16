@@ -1509,7 +1509,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_edit_in_desktop',
                 shortcut: true,
-                hide: true,
+                hide: false,
                 callback: self.editInDesktop,
                 class: "action-red",
                 showInView: false,
