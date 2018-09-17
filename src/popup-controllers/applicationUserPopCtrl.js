@@ -386,7 +386,7 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-                    applicationUserService
+                    return applicationUserService
                         .addApplicationUser(self.applicationUser)
                         .then(function (result) {
                             //dialog.hide();
@@ -403,7 +403,7 @@ module.exports = function (app) {
                         });
                 })
                 .catch(function () {
-
+                    // console.log('add app user failed');
                 });
         };
 

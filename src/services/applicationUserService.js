@@ -125,17 +125,17 @@ module.exports = function (app) {
                                 'ngInject';
                                 return ouApplicationUserService.loadOUApplicationUsersByUserId(applicationUser.id);
                             },
-                           /* // by BeSaRa to resolve the signature if found
-                            signature: function (applicationUserSignatureService, $q) {
-                                'ngInject';
+                            /* // by BeSaRa to resolve the signature if found
+                             signature: function (applicationUserSignatureService, $q) {
+                                 'ngInject';
 
-                                /!*if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
-                                    return $q.when(applicationUser.signature);*!/
+                                 /!*if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
+                                     return $q.when(applicationUser.signature);*!/
 
-                                return applicationUserSignatureService.loadApplicationUserSignatures(applicationUser.id).then(function (result) {
-                                    applicationUser.signature = result;
-                                });
-                            }*/
+                                 return applicationUserSignatureService.loadApplicationUserSignatures(applicationUser.id).then(function (result) {
+                                     applicationUser.signature = result;
+                                 });
+                             }*/
                         }
                     });
             },
@@ -224,16 +224,16 @@ module.exports = function (app) {
                                 'ngInject';
                                 return ouApplicationUserService.getOUApplicationUsersByUserId(applicationUser.id);
                             },
-                           /* // by BeSaRa to resolve the signature if found
-                            signature: function (applicationUserSignatureService, $q) {
-                                'ngInject';
-                                /!*if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
-                                    return $q.when(applicationUser.signature);*!/
+                            /* // by BeSaRa to resolve the signature if found
+                             signature: function (applicationUserSignatureService, $q) {
+                                 'ngInject';
+                                 /!*if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
+                                     return $q.when(applicationUser.signature);*!/
 
-                                return applicationUserSignatureService.loadApplicationUserSignatures(applicationUser.id).then(function (result) {
-                                    applicationUser.signature = result;
-                                });
-                            }*/
+                                 return applicationUserSignatureService.loadApplicationUserSignatures(applicationUser.id).then(function (result) {
+                                     applicationUser.signature = result;
+                                 });
+                             }*/
                         }
                     });
             },
@@ -409,19 +409,19 @@ module.exports = function (app) {
                                 'ngInject';
                                 return userWorkflowGroupService.getUserWorkflowGroupsByUser();
                             },
-                           /* // by BeSaRa to resolve the signature if found
-                            signature: function (applicationUserSignatureService, $q) {
-                                'ngInject';
-                                /!*if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
-                                    return $q.when(applicationUser.signature);*!/
+                            /* // by BeSaRa to resolve the signature if found
+                             signature: function (applicationUserSignatureService, $q) {
+                                 'ngInject';
+                                 /!*if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
+                                     return $q.when(applicationUser.signature);*!/
 
-                                return applicationUserSignatureService.loadApplicationUserSignatures(applicationUser.id)
-                                    .then(function (result) {
-                                        applicationUser.signature = result;
-                                        //deferDelay.resolve(applicationUser);
-                                        return result;
-                                    });
-                            },*/
+                                 return applicationUserSignatureService.loadApplicationUserSignatures(applicationUser.id)
+                                     .then(function (result) {
+                                         applicationUser.signature = result;
+                                         //deferDelay.resolve(applicationUser);
+                                         return result;
+                                     });
+                             },*/
                             userFolders: function (userFolderService) {
                                 'ngInject';
                                 return userFolderService.getUserFoldersForApplicationUser()
@@ -489,7 +489,10 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.checkLDAPUserExist(applicationUser)
                 .then(function (result) {
-                    defer.resolve(result);
+                    if (result)
+                        defer.resolve(result);
+                    else
+                        defer.reject(result);
                 });
             return defer.promise.then(function () {
                 return $http
@@ -501,6 +504,7 @@ module.exports = function (app) {
                     });
             }).catch(function (error) {
                 dialog.errorMessage(langService.get('ldap_user_doesnot_exist_add_please'));
+                return $q.reject(false);
             });
         };
 
