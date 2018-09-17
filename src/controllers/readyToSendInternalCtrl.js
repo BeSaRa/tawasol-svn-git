@@ -42,6 +42,10 @@ module.exports = function (app) {
          */
         self.selectedReadyToSendInternals = [];
 
+        self.editInDesktop = function (workItem) {
+            correspondenceService.editWordInDesktop(workItem);
+        };
+
         /**
          * @description Contains options for grid configuration
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
@@ -681,6 +685,34 @@ module.exports = function (app) {
                 callback: self.broadcast,
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && (!!model.addMethod || model.hasOwnProperty('approvers') && model.approvers !== null) && (model.getSecurityLevelLookup().lookupKey !== 4);
+                }
+            },
+            // editInDeskTop
+            {
+                type: 'action',
+                icon: 'book-open-variant',
+                text: 'grid_action_edit_in_desktop',
+                shortcut: true,
+                hide: false,
+                callback: self.editInDesktop,
+                class: "action-green",
+                showInView: false,
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    var hasPermission = false;
+                    if(info.documentClass === 'outgoing'){
+                        hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
+                    } else if(info.documentClass === 'incoming'){
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
+                    }
+                    else if(info.documentClass === 'internal') {
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                    }
+                    return self.checkToShowAction(action, model)
+                        && !info.isPaper
+                        && (info.documentClass !== 'incoming')
+                        && model.needApprove()
+                        && hasPermission;
                 }
             }
         ];
