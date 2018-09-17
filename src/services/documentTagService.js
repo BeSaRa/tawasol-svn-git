@@ -32,7 +32,7 @@ module.exports = function (app) {
         };
 
         self.loadDocumentTags = function (vsId, documentClass) {
-            var url = documentClass + '/' + vsId + '/' + 'tags';
+            var url = documentClass.toLowerCase() + '/' + vsId + '/' + 'tags';
             return $http.get(generateUrl(url)).then(function (result) {
                 return result.data.rs;
             });
