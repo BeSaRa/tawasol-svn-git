@@ -1115,7 +1115,7 @@ module.exports = function (app) {
                 .themeAdd($event)
                 .then(function (result) {
                     self.applicationUser.defaultThemeID = result;
-                    self.theme.unshift(result);
+                    self.themes.unshift(result);
                 });
         };
 

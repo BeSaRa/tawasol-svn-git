@@ -517,7 +517,7 @@ module.exports = function (app) {
 
         self.changeOrganizationStatus = function (organization) {
             return organization
-                .update()
+                .updateStatus()
                 .then(function () {
                     toast.success(langService.get('specific_status_success').change({name: organization.getTranslatedName()}));
                 })
