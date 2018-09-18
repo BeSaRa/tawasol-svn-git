@@ -13,13 +13,13 @@ module.exports = function (app) {
                         $timeout(function () {
                             callback(self.files, element);
                             if (reset) {
-                                this.value = '';
+                                element.wrap('<form>').closest('form').get(0).reset();
+                                element.unwrap();
                             }
                         });
                     } else if (!this.files.length && typeof callback === 'function') {
                         $timeout(function () {
                             callback([], element);
-
                         });
                     }
                 });

@@ -760,9 +760,10 @@ module.exports = function (app) {
          * @description Check if action will be shown on grid or not
          * @param action
          * @param model
+         * @param inViewOnly
          * @returns {boolean}
          */
-        self.checkToShowAction = function (action, model) {
+        self.checkToShowAction = function (action, model, inViewOnly) {
             var hasPermission = true;
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
@@ -777,7 +778,7 @@ module.exports = function (app) {
                     }
                 }
             }
-            return (!action.hide) && hasPermission;
+            return !inViewOnly ? ((!action.hide) && hasPermission) : hasPermission;
         };
 
         /**
@@ -969,7 +970,8 @@ module.exports = function (app) {
                 icon: 'settings',
                 text: 'grid_action_manage',
                 shortcut: false,
-                showInView: false,
+                showInViewOnly: true,
+                hide: true,
                 checkShow: self.checkToShowAction,
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
