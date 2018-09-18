@@ -482,8 +482,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedEntities = function (searchedGeneralDocument, $event) {
-            managerService
-                .manageDocumentEntities(searchedGeneralDocument.vsId, searchedGeneralDocument.docClassName, searchedGeneralDocument.docSubject, $event);
+            searchedGeneralDocument
+                .manageDocumentEntities($event);
         };
 
         /**

@@ -249,6 +249,7 @@ module.exports = function (app) {
         };
 
         self.manageDocumentEntities = function (vsId, documentClass, documentSubject, $event) {
+            console.log(vsId, documentClass, documentSubject);
             documentClass = _checkDocumentClass(documentClass);
             var defer = $q.defer();
             return dialog.showDialog({
