@@ -298,7 +298,7 @@ module.exports = function (app) {
                 self.lastTemplate = information;
                 self.docInfo = information;
                 self.signaturesCount = 1;
-
+                self.documentInformation = self.lastTemplate;
                 self.simpleViewUrl = $sce.trustAsResourceUrl(information.viewURL);
                 return self.simpleViewUrl;
             }
