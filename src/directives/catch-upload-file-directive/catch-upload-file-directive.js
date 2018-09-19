@@ -11,10 +11,12 @@ module.exports = function (app) {
                     var self = this;
                     if (this.files.length && typeof callback === 'function') {
                         $timeout(function () {
-                            callback(self.files, element);
+                            callback(self.files, element, reset);
                             if (reset) {
-                                element.wrap('<form>').closest('form').get(0).reset();
-                                element.unwrap();
+                                $timeout(function () {
+                                    element.wrap('<form>').closest('form').get(0).reset();
+                                    element.unwrap();
+                                }, 1000);
                             }
                         });
                     } else if (!this.files.length && typeof callback === 'function') {

@@ -136,7 +136,6 @@ module.exports = function (app) {
                     }
                 });
         };
-
         /**
          * @description Checks the file for the allowed file formats
          * @param contentFiles
@@ -230,6 +229,8 @@ module.exports = function (app) {
                 })
             }
         };
+
+
 
         /**
          * @description Remove the attached file from the file uploader
