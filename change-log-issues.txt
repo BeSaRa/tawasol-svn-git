@@ -288,3 +288,9 @@ Added g2gId field to the organization popup.
 14406:RACA-Central Archive Mail - User can't export outgoing document to external correspondence site
 16178:MOPH: while receive outgoing document properties and content doesn't exist
 13768:Regression - Number of items doesn't match the workflow groups appear in Launch and distribution workflow page.
+
+
+9/20/2018
+----------------
+Fix 11033:Business : Open Inbox Items from TAWASOL Banner : The pop up window is missing the sender name and date is incorrect
+
