@@ -35,7 +35,7 @@
                             <th md-column md-order-by="lastModified">
                                 <span>{{lang.updated_on}}</span>
                             </th>
-                            <th md-column md-order-by="lastModified">
+                            <th md-column ng-if="ctrl.allowDuplicateAction" md-order-by="lastModified">
                                 <span>{{lang.actions}}</span>
                             </th>
                         </tr>
@@ -59,7 +59,7 @@
                             <td md-cell>
                                 {{item.lastModifiedFormatted}}
                             </td>
-                            <td md-cell>
+                            <td md-cell ng-if="ctrl.allowDuplicateAction">
                                 <md-button ng-click="ctrl.duplicateThisVersion(item)" class="md-icon-button">
                                     <md-icon md-svg-icon="content-copy"></md-icon>
                                 </md-button>

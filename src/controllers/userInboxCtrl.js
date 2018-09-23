@@ -1609,6 +1609,7 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper
                 }
             },
+            // duplicate specific version
             {
                 type: 'action',
                 icon: 'content-duplicate',

@@ -612,7 +612,7 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.viewSpecificVersion = function ($event) {
-                return correspondenceService.viewSpecificCorrespondenceVersion(this, true, $event);
+                return correspondenceService.viewSpecificCorrespondenceVersion(this, false, $event);
             };
 
             WorkItem.prototype.duplicateVersion = function ($event) {
