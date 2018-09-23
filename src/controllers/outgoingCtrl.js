@@ -103,8 +103,9 @@ module.exports = function (app) {
             self.editContent = true;
         } else if (duplicateVersion) {
             self.outgoing = duplicateVersion.metaData;
-            self.documentInformation = duplicateVersion.content;
+            self.documentInformation = self.outgoing.hasContent() ? duplicateVersion.content : null;
             self.editContent = true;
+            console.log('self.documentInformation',  duplicateVersion.content );
         }
 
         self.preventPropagation = function ($event) {
@@ -161,7 +162,7 @@ module.exports = function (app) {
             //var isDocHasVsId = angular.copy(self.outgoing).hasVsId();
 
             /*No document information(No prepare document selected)*/
-            if (self.documentInformation) {
+            if (self.documentInformation && !self.outgoing.addMethod) {
                 if (status) {
                     self.outgoing.docStatus = queueStatusService.getDocumentStatus(status);
                 }
@@ -187,8 +188,15 @@ module.exports = function (app) {
 
                             saveCorrespondenceFinished(status, newId);
                         })
-                }
-                else {
+                } else if (duplicateVersion && self.outgoing.hasContent() && self.outgoing.addMethod) {
+                    self.outgoing
+                        .attacheContentUrl(self.documentInformation)
+                        .then(function () {
+                            self.contentFileExist = true;
+                            self.contentFileSizeExist = true;
+                            saveCorrespondenceFinished(status, newId);
+                        });
+                } else {
                     self.contentFileExist = false;
                     self.contentFileSizeExist = false;
                     saveCorrespondenceFinished(status, newId);

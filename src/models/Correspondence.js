@@ -684,6 +684,10 @@ module.exports = function (app) {
                 return correspondenceService.duplicateCurrentCorrespondenceVersion(this);
             };
 
+            Correspondence.prototype.attacheContentUrl = function(contentInformation){
+                return correspondenceService.updateContentInformation(contentInformation);
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Correspondence', 'init', this);

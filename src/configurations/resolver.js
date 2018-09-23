@@ -370,6 +370,21 @@ module.exports = function (app) {
                         });
                     }
                 },
+                duplicateVersion: function ($timeout, $stateParams, correspondenceStorageService) {
+                    var action = $stateParams.action;
+                    if (action !== 'duplicateVersion') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                    return correspondenceStorageService
+                        .getCorrespondence('duplicate')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
+                },
                 centralArchives: function ($q, organizations, employeeService, organizationService) {
                     'ngInject';
                     return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);

@@ -2956,6 +2956,14 @@ module.exports = function (app) {
             return self.viewSpecificCorrespondenceVersion(correspondence, true, $event);
         };
 
+        self.updateContentInformation = function (correspondence, contentInformation) {
+            var info = correspondence.getInfo();
+            return $http.post(_createUrlSchema(info.vsId, info.documentClass, 'with-content-view-url'), contentInformation).then(function (result) {
+                console.log("RESULT", result.data.rs);
+                return result.data.rs;
+            });
+        };
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('correspondenceService', 'init', self);
         }, 100);

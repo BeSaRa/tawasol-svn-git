@@ -29,6 +29,7 @@ module.exports = function (app) {
                                              dialog,
                                              receive, // available when the normal receive.
                                              receiveG2G, // available when g2g receive
+                                             duplicateVersion,
                                              mailNotificationService,
                                              distributionWorkflowService,
                                              correspondenceService) {
@@ -47,7 +48,7 @@ module.exports = function (app) {
         // collapse from label
         self.collapse = true;
         // current mode
-        self.editMode = !!(receive || receiveG2G);
+        self.editMode = !!(receive || receiveG2G || duplicateVersion);
         // self.editMode = false;
         // copy of the current incoming if saved.
         // self.model = angular.copy(demoOutgoing);
@@ -87,6 +88,14 @@ module.exports = function (app) {
             self.incoming = receiveG2G.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = receiveG2G.content;
+        }
+
+        if (duplicateVersion) {
+            self.receiveG2G = false;
+            self.receive = false;
+            self.incoming = duplicateVersion.metaData;
+            self.model = angular.copy(self.incoming);
+            self.documentInformation = self.incoming.hasContent() ? duplicateVersion.content : null;
         }
 
 
@@ -129,8 +138,15 @@ module.exports = function (app) {
 
                             saveCorrespondenceFinished(status, newId);
                         })
-                }
-                else {
+                } else if (duplicateVersion && self.incoming.hasContent()) {
+                    self.incoming
+                        .attacheContentUrl(self.documentInformation)
+                        .then(function () {
+                            self.contentFileExist = true;
+                            self.contentFileSizeExist = true;
+                            saveCorrespondenceFinished(status, newId);
+                        });
+                } else {
                     self.contentFileExist = false;
                     self.contentFileSizeExist = false;
 

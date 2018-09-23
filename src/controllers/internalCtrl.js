@@ -85,8 +85,9 @@ module.exports = function (app) {
             self.editContent = true;
         } else if (duplicateVersion) {
             self.internal = duplicateVersion.metaData;
-            self.documentInformation = duplicateVersion.content;
+            self.documentInformation = self.internal.hasContent() ? duplicateVersion.content : null;
             self.editContent = true;
+            console.log('duplicateVersion.content', duplicateVersion.content);
         }
 
         self.preventPropagation = function ($event) {
@@ -125,7 +126,7 @@ module.exports = function (app) {
 
             /*No document information(No prepare document selected)*/
 
-            if (self.documentInformation) {
+            if (self.documentInformation && !self.internal.addMethod) {
                 if (status) {
                     self.internal.docStatus = queueStatusService.getDocumentStatus(status);
                 }
@@ -150,8 +151,15 @@ module.exports = function (app) {
 
                             saveCorrespondenceFinished(status);
                         })
-                }
-                else {
+                } else if (duplicateVersion && self.internal.hasContent() && self.internal.addMethod) {
+                    self.internal
+                        .attacheContentUrl(self.documentInformation)
+                        .then(function () {
+                            self.contentFileExist = true;
+                            self.contentFileSizeExist = true;
+                            saveCorrespondenceFinished(status, newId);
+                        });
+                }else {
                     self.contentFileExist = false;
                     self.contentFileSizeExist = false;
 

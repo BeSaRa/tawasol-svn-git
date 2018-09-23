@@ -29,10 +29,10 @@ module.exports = function (app) {
                 subSiteId: model.subSiteId,
                 followupStatus: new Information(model.followupStatusInfo),
                 followupDate: model.followupDate,
-                mainEnSiteText: model.mainSiteInfo.enName,
-                mainArSiteText: model.mainSiteInfo.arName,
-                subEnSiteText: model.subSiteInfo.enName,
-                subArSiteText: model.subSiteInfo.arName,
+                mainEnSiteText: model.mainSiteInfo ? model.mainSiteInfo.enName : null,
+                mainArSiteText: model.mainSiteInfo ? model.mainSiteInfo.arName : null,
+                subEnSiteText: model.subSiteInfo ? model.subSiteInfo.enName : null,
+                subArSiteText: model.subSiteInfo ? model.subSiteInfo.arName : null,
                 siteType: correspondenceService.getLookup('incoming', 'siteTypes', model.siteType)
             }) : null;
             model.siteTypeInfo = model.siteTypeInfo ? new Information(model.siteTypeInfo) : new Information();
