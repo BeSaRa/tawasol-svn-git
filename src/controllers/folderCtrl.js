@@ -26,6 +26,8 @@ module.exports = function (app) {
         self.controllerName = 'folderCtrl';
         contextHelpService.setHelpTo('folders');
 
+        self.employeeService = employeeService;
+
         self.workItems = [];
         self.selectedWorkItems = [];
         self.folders = folders;
@@ -698,6 +700,31 @@ module.exports = function (app) {
             return correspondenceService.editWordInDesktop(workItem);
         };
 
+        // new view document
+        self.openNewViewDocument = function (workItem) {
+            if (!workItem)
+                self.workItems[0].viewNewInboxWorkItem(self.gridActions, true, true)
+                    .then(function () {
+                        self.reloadFolders(self.grid.page);
+                    })
+                    .catch(function () {
+                        self.reloadFolders(self.grid.page);
+                    });
+
+            else
+                workItem.viewNewInboxWorkItem({
+                    gridActions: self.gridActions,
+                    viewerActions: self.magazineQuickActions
+                }, true, true)
+                    .then(function () {
+                        self.reloadFolders(self.grid.page);
+                    })
+                    .catch(function () {
+                        self.reloadFolders(self.grid.page);
+                    });
+
+        };
+
         /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
@@ -880,7 +907,7 @@ module.exports = function (app) {
                 icon: 'book-open-variant',
                 text: 'grid_action_open',
                 shortcut: true,
-                callback: self.viewDocument,
+                callback: self.openNewViewDocument,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
                 showInView: false,
@@ -1316,6 +1343,98 @@ module.exports = function (app) {
                 self.workItems.splice(index, 1, record);
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
         };
+
+
+        /**
+         * @description Contains methods for Star operations for user inbox items
+         */
+        self.starServices = {
+            'false': userInboxService.controllerMethod.userInboxStar,
+            'true': userInboxService.controllerMethod.userInboxUnStar,
+            'starBulk': correspondenceService.starBulkWorkItems,
+            'unStarBulk': correspondenceService.unStarBulkWorkItems
+        };
+
+        /**
+         * @description Change the starred for user inboxes Bulk
+         * @param starUnStar
+         * @param $event
+         */
+        self.changeUserInboxStarBulk = function (starUnStar, $event) {
+            self.starServices[starUnStar](self.selectedWorkItems)
+                .then(function () {
+                    self.reloadFolders(self.grid.page);
+                });
+        };
+
+
+        self.checkIfForwardBulkAvailable = function () {
+            self.itemsAlreadyBroadCasted = [];
+            _.map(self.selectedWorkItems, function (workItem) {
+                if (workItem.isBroadcasted())
+                    self.itemsAlreadyBroadCasted.push(workItem.generalStepElm.vsId);
+            });
+            return !(self.itemsAlreadyBroadCasted && self.itemsAlreadyBroadCasted.length);
+        };
+
+
+        /**
+         * @description Array of shortcut actions that can be performed on magazine view
+         * @type {[*]}
+         */
+        self.magazineQuickActions = [
+            // Terminate
+            {
+                type: 'action',
+                icon: 'stop',
+                text: 'grid_action_terminate',
+                shortcut: true,
+                callback: self.terminate,
+                class: "",
+                checkShow: self.checkToShowAction
+            },
+            // Reply
+            {
+                type: 'action',
+                icon: 'reply',
+                text: 'grid_action_reply',
+                callback: self.reply,
+                class: "",
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
+            },
+            // Forward
+            {
+                type: 'action',
+                icon: 'share',
+                text: 'grid_action_forward',
+                shortcut: true,
+                callback: self.forward,
+                class: "",
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model);
+                    /*&& !model.isBroadcasted()*/ // remove the this cond. after talk  with ;
+                }
+            },
+            // Approve(e-Signature)
+            {
+                type: 'action',
+                icon: 'approval',
+                text: 'grid_action_electronic',//e_signature
+                shortcut: true,
+                callback: self.signESignature,
+                class: "",
+                permissionKey: "ELECTRONIC_SIGNATURE",
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted()
+                        && !info.isPaper
+                        && (info.documentClass !== 'incoming')
+                        && model.needApprove();
+                }
+            }
+        ];
 
         // self.refreshInbox = function (time) {
         //     $timeout(function () {

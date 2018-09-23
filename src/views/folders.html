@@ -4,9 +4,9 @@
         <!-- page-header start -->
         <div layout="row" layout-align="start center" class="page-header padding-header small">
             <div>
-                <md-button layout="row" class="md-icon-button list-button" ng-click="ctrl.toggleSidebarFolder()">
+                <md-button layout="row" class="md-icon-button" ng-click="ctrl.toggleSidebarFolder()"><!--list-button-->
                     <md-icon md-svg-icon="file-tree" id="list-icon"></md-icon>
-                    <span class="list-counter">{{ctrl.inboxFolders.length}}</span>
+                    <!--<span class="list-counter">{{ctrl.inboxFolders.length}}</span>-->
                 </md-button>
             </div>
             <span>{{lang.menu_item_folders}}</span>
@@ -26,7 +26,7 @@
         <!-- end page-header -->
         <!-- page-content -->
         <div layout="column" flex>
-            <div class="z-index-3">
+            <div class="z-index-4">
                 <md-sidenav id="sidebar-folder-structure" md-is-open="ctrl.sidebarStatus"
                             ng-class="{'md-sidenav-right':lang.current === 'ar'}">
                     <div class="p20 first-folder-list" layout="column">
@@ -39,7 +39,8 @@
             </div>
             <div scroll-directive>
                 <div class="page-padding">
-                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay"
+                             ng-if="ctrl.employeeService.getEmployee().viewInboxAsGrid">
                         <md-table-container>
                             <div flex scroll-directive>
                                 <table md-table md-row-select multiple ng-model="ctrl.selectedWorkItems"
@@ -127,6 +128,11 @@
                                         </th>-->
                                         <th ng-if="!ctrl.selectedWorkItems.length" md-column>
                                             <!-- Grid Actions -->
+                                            <md-button tooltip="{{lang.view_magazine}}"
+                                                       ng-click="ctrl.employeeService.getEmployee().toggleInboxView()"
+                                                       class="md-icon-button">
+                                                <md-icon md-svg-icon="view-list"></md-icon>
+                                            </md-button>
                                         </th>
                                         <th ng-if="!ctrl.selectedWorkItems.length" md-column>
                                             <!-- Read/Unread Indicator -->
@@ -287,6 +293,28 @@
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>
+                    <div flex scroll-directive>
+                        <magazine-layout-directive
+                                mark-as-read-unread="ctrl.markAsReadUnread"
+                                view-document="ctrl.openNewViewDocument"
+                                change-user-inbox-star="ctrl.changeStar"
+                                search-model="ctrl.searchModel"
+                                grid-actions="ctrl.gridActions"
+                                quick-actions="ctrl.magazineQuickActions"
+                                limit-options="ctrl.grid.limitOptions"
+                                page-limit="ctrl.grid.limit"
+                                page="ctrl.grid.page"
+                                ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid"
+                                forward-bulk="ctrl.forwardBulk"
+                                check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
+                                change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
+                                move-to-folder-bulk="ctrl.moveToFolderBulk"
+                                terminate-user-inbox-bulk="ctrl.terminateBulk"
+                                allow-selection="true"
+                                selected-work-items="ctrl.selectedWorkItems"
+                                work-items="ctrl.workItems">
+                        </magazine-layout-directive>
+                    </div>
                 </div>
             </div>
         </div>
