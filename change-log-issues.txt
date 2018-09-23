@@ -298,5 +298,7 @@ Fix 11033:Business : Open Inbox Items from TAWASOL Banner : The pop up window is
 9/23/2018
 ----------------
 Fix 10239:Admin : Manage Global Settings : The "Usage Terms and Conditions" Do not appear in the login page
+Fix 16229:TEST : Public Announcement : can add new Public Announcement with previous start date
+
 
 

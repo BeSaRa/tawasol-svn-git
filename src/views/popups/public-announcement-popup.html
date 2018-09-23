@@ -52,13 +52,15 @@
 
                     <div layout="row">
                         <div flex class="p20">
-                            <md-switch ng-change="ctrl.onAlwaysActiveChange()" ng-model="ctrl.alwaysActive" aria-label="{{lang.always_active}}">
+                            <md-switch ng-change="ctrl.onAlwaysActiveChange()" ng-model="ctrl.alwaysActive"
+                                       aria-label="{{lang.always_active}}">
                                 <span>{{lang.always_active}} : </span>
                                 {{ctrl.publicAnnouncement.getTranslatedAlwaysActive(ctrl.alwaysActive)}}
                             </md-switch>
                         </div>
                         <div flex class="p20">
-                            <md-switch ng-model="ctrl.publicAnnouncement.status" ng-disabled="ctrl.isStatusDisabled" aria-label="{{lang.status}}">
+                            <md-switch ng-model="ctrl.publicAnnouncement.status" ng-disabled="ctrl.isStatusDisabled"
+                                       aria-label="{{lang.status}}">
                                 <label>{{lang.status}} : {{ctrl.publicAnnouncement.getTranslatedStatus()}}</label>
                             </md-switch>
                         </div>
@@ -69,9 +71,11 @@
                             <label for="startDate">{{lang.start_date}}</label>
                             <md-datepicker id="startDate" ng-required="!ctrl.alwaysActive"
                                            ng-model="ctrl.startDate"
-                                           name="startDate" ng-disabled="ctrl.alwaysActive"
-                                           ng-change="ctrl.onStartDateChange()"
-                            ></md-datepicker>
+                                           md-min-date="ctrl.currentDate"
+                                           md-max-date="ctrl.endDate"
+                                           name="startDate" ng-disabled="ctrl.alwaysActive" >
+                            <!--ng-change="ctrl.onStartDateChange()"-->
+                            </md-datepicker>
                             <div ng-messages="publicAnnouncementForm.startDate.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
                             </div>
@@ -79,7 +83,7 @@
                         <md-input-container flex>
                             <label for="endDate">{{lang.end_date}}</label>
                             <md-datepicker ng-required="!ctrl.alwaysActive || ctrl.startDate"
-                                           md-min-date="ctrl.currentDate"
+                                           md-min-date="ctrl.startDate"
                                            ng-model="ctrl.endDate" name="endDate" id="endDate"
                                            ng-disabled="ctrl.alwaysActive || !ctrl.startDate"
                                            ng-change="ctrl.onEndDateChange()"

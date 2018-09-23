@@ -136,7 +136,8 @@ module.exports = function (app) {
             dialog.cancel();
         };
 
-        self.startDate = null;
+        self.currentDate = new Date();
+        self.startDate = new Date();
         self.endDate = null;
 
         self.subOU = false;
@@ -170,7 +171,7 @@ module.exports = function (app) {
         }
 
         //on change of start date if date is null or start date is greater than end date, then end date will become null//
-        self.onStartDateChange = function () {
+        /*self.onStartDateChange = function () {
             self.privateAnnouncement.startDate = self.startDate;
 
             var today = new Date();
@@ -180,28 +181,28 @@ module.exports = function (app) {
                 self.privateAnnouncement.startDate = moment(self.privateAnnouncement.startDate).format('YYYY-MM-DD');
             }
 
-            /*var currentDate = self.currentDate.getFullYear() + "-" + (self.currentDate.getMonth() + 1) + "-" + self.currentDate.getDate();
+            /!*var currentDate = self.currentDate.getFullYear() + "-" + (self.currentDate.getMonth() + 1) + "-" + self.currentDate.getDate();
              var IsStartDateGreaterThanCurrentDate = (self.privateAnnouncement.startDate ? moment(self.privateAnnouncement.startDate, "YYYY-MM-DD").valueOf() : null) > (moment(currentDate, "YYYY-MM-DD").valueOf());
              if (IsStartDateGreaterThanCurrentDate) {
              self.currentDate = new Date(self.privateAnnouncement.startDate);
              }
-             */
+             *!/
             if (self.privateAnnouncement.startDateGreaterThanCurrentDate()) {
                 self.currentDate = new Date(self.privateAnnouncement.startDate);
             }
 
-            /*var IsStartDateGreater = self.compareDate(self.privateAnnouncement, "startDate", "endDate");
+            /!*var IsStartDateGreater = self.compareDate(self.privateAnnouncement, "startDate", "endDate");
              if (!self.privateAnnouncement.startDate || (!IsStartDateGreater && self.privateAnnouncement.startDateGreaterThanCurrentDate())) {
              self.privateAnnouncement.endDate = null;
              self.endDate = null;
-             }*/
+             }*!/
 
             if (!self.privateAnnouncement.startDate || (!self.privateAnnouncement.endDateGreaterThanStartDate() && self.privateAnnouncement.startDateGreaterThanCurrentDate())) {
                 self.privateAnnouncement.endDate = null;
                 self.endDate = null;
             }
 
-        };
+        };*/
 
         self.onEndDateChange = function () {
             self.privateAnnouncement.endDate = self.endDate;

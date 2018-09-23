@@ -26,7 +26,8 @@ module.exports = function (app) {
             status: 'status'
         };
 
-        self.startDate = null;
+        self.currentDate = new Date();
+        self.startDate = new Date();
         self.endDate = null;
 
         self.alwaysActive = false;
@@ -138,7 +139,7 @@ module.exports = function (app) {
         };
 
         //on change of start date if date is null or start date is greater than end date, then end date will become null//
-        self.onStartDateChange = function () {
+        /*self.onStartDateChange = function () {
             self.publicAnnouncement.startDate = self.startDate;
 
             var today = new Date();
@@ -152,12 +153,12 @@ module.exports = function (app) {
                 self.publicAnnouncement.endDate = moment(self.publicAnnouncement.endDate).format('YYYY-MM-DD');
             }
 
-            /*var currentDate = self.currentDate.getFullYear() + "-" + (self.currentDate.getMonth() + 1) + "-" + self.currentDate.getDate();
+            /!*var currentDate = self.currentDate.getFullYear() + "-" + (self.currentDate.getMonth() + 1) + "-" + self.currentDate.getDate();
              //compare start date with current date to set min date for end date
              var IsStartDateGreaterThanCurrentDate = (self.publicAnnouncement.startDate ? moment(self.publicAnnouncement.startDate, "YYYY-MM-DD").valueOf() : null) > (moment(currentDate, "YYYY-MM-DD").valueOf());
              if (IsStartDateGreaterThanCurrentDate) {
              self.currentDate = new Date(self.publicAnnouncement.startDate);
-             }*/
+             }*!/
 
             if (self.publicAnnouncement.startDateGreaterThanCurrentDate()) {
                 self.currentDate = new Date(self.publicAnnouncement.startDate);
@@ -168,7 +169,7 @@ module.exports = function (app) {
                 self.publicAnnouncement.endDate = null;
                 self.endDate = null;
             }
-        };
+        };*/
 
         self.onEndDateChange = function () {
             self.publicAnnouncement.endDate = self.endDate;
