@@ -201,6 +201,26 @@ module.exports = function (app) {
         }
 
         checkIfLogoutBySession();
-        _fixLoginOverlay()
+        _fixLoginOverlay();
+
+        self.showTerms = function ($event) {
+            dialog.showDialog({
+                template: cmsTemplate.getPopup('terms'),
+                escToCancel: true,
+                targetEvent: $event,
+                bindToController: true,
+                controller: function ($sce) {
+                    'ngInject';
+                    var self = this;
+                    self.close = function () {
+                        dialog.cancel();
+                    };
+                },
+                controllerAs: 'ctrl',
+                locals: {
+                    termsAndConditions: $sce.trustAsHtml(rootEntity.getGlobalSettings().tamcontent)
+                }
+            });
+        };
     });
 };
