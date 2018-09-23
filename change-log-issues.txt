@@ -299,6 +299,8 @@ Fix 11033:Business : Open Inbox Items from TAWASOL Banner : The pop up window is
 ----------------
 Fix 10239:Admin : Manage Global Settings : The "Usage Terms and Conditions" Do not appear in the login page
 Fix 16229:TEST : Public Announcement : can add new Public Announcement with previous start date
+Fix 10971:Admin: Add Main Classification: When Remove The Last Organization From Main Classification, Yes Button of the Message Appear has no response.
+
 
 
 

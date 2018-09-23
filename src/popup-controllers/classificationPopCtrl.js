@@ -242,7 +242,7 @@ module.exports = function (app) {
                     .confirmMessage(langService.get('last_organization_delete').change({name: self.classification.getTranslatedName()}))
                     .then(function () {
                         return self
-                            .deleteOUClassificationFromCtrl(ouClassification).then(function () {
+                            .deleteOUClassificationSiteConfirmed(ouClassification).then(function () {
                                 return self.classification
                                     .setIsGlobal(true)
                                     .update()
@@ -253,7 +253,7 @@ module.exports = function (app) {
                     })
             }
 
-            return self.deleteOUClassificationFromCtrl(ouClassification);
+            return self.deleteOUClassificationSiteConfirmed(ouClassification);
         };
 
         self.deleteOUClassificationSiteConfirmed = function (ouClassification) {
@@ -264,8 +264,26 @@ module.exports = function (app) {
             });
         };
 
-        self.removeBulkOUClassifications = function () {
-            self.classification
+        self.removeBulkOUClassificationsFromCtrl = function () {
+            if(self.selectedOUClassifications.length === self.classification.relatedOus.length) {
+                return dialog
+                    .confirmMessage(langService.get('last_organization_delete').change({name: self.classification.getTranslatedName()}))
+                    .then(function () {
+                        return self.removeBulkOUClassificationsConfirmed().then(function () {
+                            return self.classification
+                                .setIsGlobal(true)
+                                .update()
+                                .then(function () {
+                                    self.model = angular.copy(self.classification);
+                                });
+                        });
+                    });
+            }
+           return self.removeBulkOUClassificationsConfirmed();
+        };
+
+        self.removeBulkOUClassificationsConfirmed = function () {
+          return  self.classification
                 .deleteBulkFromOUClassifications(self.selectedOUClassifications)
                 .then(function () {
                     self.selectedOUClassifications = [];
