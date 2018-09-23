@@ -203,6 +203,66 @@ module.exports = function (app) {
                 }
             }
 
+            /**
+             * @description Open the view popup for queues
+             * @param correspondence
+             * @param actions
+             * @param $event
+             * @param pageName
+             */
+            self.viewQueueDocumentById = function (correspondence, actions, pageName, $event) {
+                var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : new Outgoing(correspondence).getInfo();
+                var disabled = _checkDisabled(pageName, correspondence);
+
+                if (disabled.disableAll) {
+                    disabled.disableSites = true;
+                    disabled.disableProperties = true;
+                }
+                return $http.get(_createUrlSchema(null, info.documentClass, 'id/' + info.id))
+                    .then(function (result) {
+                        var documentClass = result.data.rs.metaData.classDescription;
+                        result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
+                        return result.data.rs;
+                    })
+                    .then(function (result) {
+                        result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+                        self.popupNumber += 1;
+                        return dialog.showDialog({
+                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            targetEvent: $event,
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: result.metaData,
+                                content: result.content,
+                                actions: actions,
+                                workItem: false,
+                                disableProperties: disabled.disableProperties,
+                                disableCorrespondence: disabled.disableSites,
+                                popupNumber: self.popupNumber,
+                                disableEverything: disabled.disableAll
+                            },
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
+                            }
+                        }).then(function () {
+                            self.popupNumber -= 1;
+                            return true;
+                        }).catch(function () {
+                            self.popupNumber -= 1;
+                            return false;
+                        });
+                    });
+            };
 
             /**
              * @description Open the view popup for queues

@@ -92,4 +92,5 @@ module.exports = function (app) {
     require('./PartialExportSelectiveInterceptor')(app);
     require('./DocumentSecurityInterceptor')(app);
     require('./DocumentSecuritySettingInterceptor')(app);
+    require('./CorrespondenceVersionInterceptor')(app);
 };

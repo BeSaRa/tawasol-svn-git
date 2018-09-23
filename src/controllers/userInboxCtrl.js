@@ -809,7 +809,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.signDigitalSignature = function (userInbox, $event, defer) {
-            console.log('signUserInboxDigitalSignature : ', userInbox);
+            console.log('signUserInboxDigitalSignature : ', $event, defer, userInbox);
         };
 
         /**
@@ -959,9 +959,58 @@ module.exports = function (app) {
 
         };
 
-
+        /**
+         * @description edit word doucment in desktop
+         * @param workItem
+         * @return {Promise}
+         */
         self.editInDesktop = function (workItem) {
-            correspondenceService.editWordInDesktop(workItem);
+            return correspondenceService.editWordInDesktop(workItem);
+        };
+        /**
+         * @description get document versions
+         * @param workItem
+         * @param $event
+         * @return {*}
+         */
+        self.getDocumentVersions = function (workItem, $event) {
+            return workItem
+                .viewSpecificVersion(self.gridActions, $event);
+        };
+        /**
+         * @description deuplicate current version
+         * @param workItem
+         * @param $event
+         */
+        self.duplicateCurrentVersion = function (workItem, $event) {
+            var info = workItem.getInfo();
+            return workItem
+                .duplicateVersion($event)
+                .then(function () {
+                    $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
+                        vsId: info.vsId,
+                        action: 'duplicateVersion',
+                        workItem: info.wobNum
+                    });
+                });
+        };
+        /**
+         * @description duplicate specific version
+         * @param workItem
+         * @param $event
+         * @return {*}
+         */
+        self.duplicateVersion = function (workItem, $event) {
+            var info = workItem.getInfo();
+            return workItem
+                .duplicateSpecificVersion($event)
+                .then(function () {
+                    $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
+                        vsId: info.vsId,
+                        action: 'duplicateVersion',
+                        workItem: info.wobNum
+                    });
+                });
         };
 
         /**
@@ -1506,7 +1555,7 @@ module.exports = function (app) {
             // editInDeskTop
             {
                 type: 'action',
-                icon: 'book-open-variant',
+                icon: 'desktop-classic',
                 text: 'grid_action_edit_in_desktop',
                 shortcut: true,
                 hide: false,
@@ -1516,13 +1565,13 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     var hasPermission = false;
-                    if(info.documentClass === 'outgoing'){
+                    if (info.documentClass === 'outgoing') {
                         hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
-                    } else if(info.documentClass === 'incoming'){
+                    } else if (info.documentClass === 'incoming') {
                         hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
                     }
-                    else if(info.documentClass === 'internal') {
-                        hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                    else if (info.documentClass === 'internal') {
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                     }
                     return self.checkToShowAction(action, model) && !model.isBroadcasted()
                         && !info.isPaper
@@ -1530,8 +1579,51 @@ module.exports = function (app) {
                         && model.needApprove()
                         && hasPermission;
                 }
+            },
+            // versions
+            {
+                type: 'action',
+                icon: 'animation',
+                text: 'grid_action_view_specific_version',
+                shortcut: true,
+                hide: false,
+                callback: self.getDocumentVersions,
+                class: "action-red",
+                showInView: false,
+                checkShow: function (action, model) {
+                    return true;
+                }
+            },
+            // duplicate current version
+            {
+                type: 'action',
+                icon: 'content-copy',
+                text: 'grid_action_duplication_current_version',
+                shortcut: true,
+                hide: false,
+                callback: self.duplicateCurrentVersion,
+                class: "action-red",
+                showInView: false,
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper
+                }
+            },
+            {
+                type: 'action',
+                icon: 'content-duplicate',
+                text: 'grid_action_duplication_specific_version',
+                shortcut: true,
+                hide: false,
+                callback: self.duplicateVersion,
+                class: "action-red",
+                showInView: false,
+                checkShow: function (action, model) {
+                    return true;
+                }
             }
         ];
+
 
         /**
          * @description Array of shortcut actions that can be performed on magazine view

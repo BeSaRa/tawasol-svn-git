@@ -21,6 +21,16 @@ module.exports = function (app) {
                 });
         };
         /**
+         * @descriptione to store correspondence on the fly.
+         * @param key
+         * @param correspondence
+         */
+        self.storeCorrespondence = function (key, correspondence) {
+            self.lastCorrespondence[key] = correspondence;
+            return true;
+        };
+
+        /**
          * @description get last correspondence
          * @returns {null|*}
          */

@@ -46,13 +46,19 @@ module.exports = function (app) {
         // need  timeout here to start init each property mandatory.
         $timeout(function () {
             _.map(properties, function (item) {
-                self.required[item.symbolicName.toLowerCase()] = item.isMandatory;
+                // self.required[item.symbolicName.toLowerCase()] = item.isMandatory;
+                self.required[item.symbolicName.toLowerCase()] = {isMandatory: item.isMandatory, status: item.status};
             });
         });
 
         self.checkMandatory = function (fieldName) {
-            return self.required[fieldName.toLowerCase()];
+            return  self.required[fieldName.toLowerCase()] && self.required[fieldName.toLowerCase()].isMandatory;
         };
+
+        self.checkStatus = function (fieldName) {
+            return  self.required[fieldName.toLowerCase()] && self.required[fieldName.toLowerCase()].status;
+        };
+
 
         /**
          * @description to check if the given securityLevel included or not.

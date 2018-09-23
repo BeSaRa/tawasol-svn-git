@@ -97,4 +97,7 @@ module.exports = function (app) {
     require('./subscriptionPopCtrl')(app);
     require('./manageGridCorrespondenceSitesPopCtrl')(app);
     require('./manageSubscriptionsPopCtrl')(app);
+    require('./attachmentThumbnailPopCtrl')(app);
+    require('./versionPopCtrl')(app);
+    require('./duplicateOptionPopCtrl')(app);
 };

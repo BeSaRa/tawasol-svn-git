@@ -6,6 +6,7 @@ module.exports = function (app) {
             self.bookVsid = null;
             self.signatureVsid = null;
             self.wobNum = null;
+            self.authorizeAsComposite = false;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
@@ -32,6 +33,11 @@ module.exports = function (app) {
                     .setBookVsid(info.vsId)
                     .setWobNum(info.wobNumber)
                     .setSignatureVsid(signature);
+            };
+
+            SignDocumentModel.prototype.setIsComposite = function (value) {
+                this.authorizeAsComposite = value;
+                return this;
             };
 
             SignDocumentModel.prototype.setBookVsid = function (bookVsid) {

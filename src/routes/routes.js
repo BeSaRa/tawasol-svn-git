@@ -58,9 +58,11 @@ module.exports = function (app) {
                 params: {
                     identifier: rootEntityProvider.getRootEntityIdentifier()
                 },
-                controller: function (counterService, employeeService) {
-                    'ngInject';
-                    !employeeService.isAdminUser() ? counterService.loadCounters() : [];
+                resolve: {
+                    counters: function (counterService, employeeService) {
+                        'ngInject';
+                        return !employeeService.isAdminUser() ? counterService.loadCounters() : [];
+                    }
                 }
             })
             // landing page
@@ -1391,7 +1393,7 @@ module.exports = function (app) {
                 url: '/icn/archive',
                 abstract: false,
                 template: '<iframe ng-hide="true" width="0" height="0" ng-src="{{ctrl.url}}"></iframe>' +
-                '<div id="sub-view-wrapper"><ui-view flex layout="column" class="sub-view" /></div>',
+                    '<div id="sub-view-wrapper"><ui-view flex layout="column" class="sub-view" /></div>',
                 controller: function (credentials, urlService, $sce) {
                     'ngInject';
                     var self = this;

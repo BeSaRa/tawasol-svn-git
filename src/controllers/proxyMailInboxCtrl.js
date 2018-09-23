@@ -755,6 +755,15 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description edit word doucment in desktop
+         * @param workItem
+         * @return {Promise}
+         */
+        self.editInDesktop = function (workItem) {
+            return correspondenceService.editWordInDesktop(workItem);
+        };
+
 
         /**
          * @description Check if action will be shown on grid or not
@@ -1319,6 +1328,33 @@ module.exports = function (app) {
                         }
                     }
                 ]
+            },
+            {
+                type: 'action',
+                icon: 'desktop-classic',
+                text: 'grid_action_edit_in_desktop',
+                shortcut: true,
+                hide: false,
+                callback: self.editInDesktop,
+                class: "action-green",
+                showInView: false,
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    var hasPermission = false;
+                    if (info.documentClass === 'outgoing') {
+                        hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
+                    } else if (info.documentClass === 'incoming') {
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
+                    }
+                    else if (info.documentClass === 'internal') {
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
+                    }
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted()
+                        && !info.isPaper
+                        && (info.documentClass !== 'incoming')
+                        && model.needApprove()
+                        && hasPermission;
+                }
             }
         ];
     });

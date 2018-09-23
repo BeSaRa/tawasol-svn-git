@@ -30,6 +30,7 @@ module.exports = function (app) {
                                              replyTo,
                                              editAfterApproved,
                                              editAfterExport,
+                                             duplicateVersion,
                                              centralArchives,
                                              mailNotificationService,
                                              userSubscriptionService,
@@ -51,7 +52,7 @@ module.exports = function (app) {
         // collapse from label
         self.collapse = true;
         // current mode
-        self.editMode = !!(editAfterApproved || editAfterExport);
+        self.editMode = !!(editAfterApproved || editAfterExport || duplicateVersion);
         // self.editMode = false;
         // copy of the current outgoing if saved.
         // self.model = angular.copy(demoOutgoing);
@@ -60,6 +61,8 @@ module.exports = function (app) {
             self.model = angular.copy(editAfterApproved.metaData);
         } else if (editAfterExport) {
             self.model = angular.copy(editAfterExport.metaData);
+        } else if (duplicateVersion) {
+            self.model = angular.copy(duplicateVersion.metaData);
         }
         self.editContent = false;
 
@@ -97,6 +100,10 @@ module.exports = function (app) {
         } else if (editAfterExport) {
             self.outgoing = editAfterExport.metaData;
             self.documentInformation = editAfterExport.content;
+            self.editContent = true;
+        } else if (duplicateVersion) {
+            self.outgoing = duplicateVersion.metaData;
+            self.documentInformation = duplicateVersion.content;
             self.editContent = true;
         }
 

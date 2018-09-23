@@ -802,7 +802,7 @@ module.exports = function (app) {
                             hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
                         }
                         else if (info.documentClass === 'internal') {
-                            hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                            hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                         }
                         return self.checkToShowAction(action, model)
                             && !info.isPaper

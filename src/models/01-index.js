@@ -154,4 +154,6 @@ module.exports = function (app) {
     require('./DocumentSecuritySetting')(app);
     require('./DocumentSecurityBarcodeBox')(app);
     require('./DocumentSecurityPage')(app);
+    require('./ImageThumbnail')(app);
+    require('./DuplicateOption')(app);
 };

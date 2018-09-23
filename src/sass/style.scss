@@ -1173,10 +1173,10 @@ md-chips.tags {
 #distributionWorkflowDialog {
   /*min-width: 1100px;
   min-height: 650px;*/
-
   width: 1100px;
   height: 650px !important;
   min-height: 650px;
+  border: 0;
 }
 
 .iframe-attachment-viewer {
@@ -1184,7 +1184,7 @@ md-chips.tags {
   height: 100%;
   min-width: 900px;
   min-height: 600px;
-  box-sizing: border-box;
+  border: none;
 }
 
 .iframe-attachment-viewer:-webkit-full-screen {
@@ -1484,7 +1484,7 @@ button.menu-select {
   margin-top: 5px;
 }
 
-tr.unread-row {
+tr.unread-row, tr.current-version {
   td {
     font-weight: bold !important;
   }
@@ -1667,14 +1667,14 @@ tr.unread-row {
 .background-warning,
 .background-warning:hover {
   //background: #ffeb8061 !important;
-  background: rgba(255, 235,128, 0.38) !important;
+  background: rgba(255, 235, 128, 0.38) !important;
   div.sidebar:after {
     content: " *";
     color: red;
   }
   td, td:hover {
     //background: #ffeb8061 !important;
-    background: rgba(255, 235,128, 0.38) !important;
+    background: rgba(255, 235, 128, 0.38) !important;
   }
 }
 
@@ -1993,4 +1993,38 @@ html.rtl {
 
 .block-display {
   display: block;
+}
+
+/********* thumbnails ******/
+.thumbnail-item {
+  width: 100px;
+  height: 100px;
+  float: left;
+  border: 1px solid #EEE;
+  margin: 5px 2.5px;
+  border-radius: 10px;
+}
+
+#attachment-thumbnails-popup {
+  background-color: white;
+  height: 100%;
+  width: 100%;
+  max-height: 100% !important;
+  max-width: 100% !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+}
+
+.thumbnail-footer {
+  background-color: #EEE;
+}
+
+.thumbnail-controller {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  button {
+
+  }
 }

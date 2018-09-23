@@ -121,7 +121,7 @@
                         <md-switch flex ng-model="ctrl.propertyConfiguration.isSequence">
                             {{lang.is_sequence}}
                         </md-switch>
-                        <md-switch flex ng-model="ctrl.propertyConfiguration.status">
+                        <md-switch flex ng-if="ctrl.propertyConfiguration.isMandatory == false" ng-model="ctrl.propertyConfiguration.status">
                             {{lang.status}}
                         </md-switch>
                     </div>

@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.service('correspondenceService', function (urlService,
                                                    $http,
+                                                   ImageThumbnail,
                                                    cmsTemplate,
                                                    tokenService,
                                                    CommentModel,
@@ -43,6 +44,8 @@ module.exports = function (app) {
                                                    PartialExport,
                                                    PartialExportCollection,
                                                    PartialExportSelective,
+                                                   ReadyToExportOption,
+                                                   DuplicateOption,
                                                    Attachment,
                                                    DistributionList,
                                                    OUDistributionList,
@@ -55,7 +58,7 @@ module.exports = function (app) {
                                                    DocumentComment,
                                                    userFolderService) {
         'ngInject';
-        var self = this, managerService;
+        var self = this, managerService, correspondenceStorageService;
         self.serviceName = 'correspondenceService';
         // make inherits from parent Model (Correspondence)
         util.inherits(Outgoing, Correspondence);
@@ -66,6 +69,7 @@ module.exports = function (app) {
         // for partial export
         util.inherits(PartialExportCollection, PartialExport);
         util.inherits(PartialExportSelective, PartialExport);
+        util.inherits(DuplicateOption, ReadyToExportOption);
         // search
         util.inherits(OutgoingSearch, Outgoing);
         util.inherits(IncomingSearch, Outgoing);
@@ -269,6 +273,10 @@ module.exports = function (app) {
             //return correspondence.hasOwnProperty('generalStepElm') ? correspondence.generalStepElm.vsId : correspondence.vsId;
         }
 
+        function _getId(correspondence) {
+            return correspondence.id ? correspondence.id : null;
+        }
+
         function _getIncomingVsId(correspondence) {
             var incomingVsId = "";
             if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) { /* WorkItem */
@@ -440,6 +448,7 @@ module.exports = function (app) {
             return new CorrespondenceInfo({
                 documentClass: _getDocumentClass(correspondence),
                 vsId: _getVsId(correspondence),
+                id: _getId(correspondence),
                 workFlow: _getWorkFlow(correspondence),
                 wobNumber: _getWobNumber(correspondence),
                 title: _getTitle(correspondence),
@@ -804,7 +813,7 @@ module.exports = function (app) {
         self.getLookupUnionByLookupName = function (lookupName, lookupKey) {
             var lookups = [];
             for (var i in self.screenLookups) {
-                if (self.screenLookups[i] && self.screenLookups[i].hasOwnProperty(lookupName)) {
+                if (self.screenLookups.hasOwnProperty(i) && self.screenLookups[i] && self.screenLookups[i].hasOwnProperty(lookupName)) {
                     lookups = lookups.concat(self.screenLookups[i][lookupName]);
                 }
             }
@@ -1403,9 +1412,10 @@ module.exports = function (app) {
         };
 
         self.viewCorrespondenceG2G = function (g2gItem, actions, model, $event) {
-            var site = null, url;
+            /*var site = null,*/
+            var url;
             if (model.toLowerCase() === 'g2g') {
-                site = angular.copy(g2gItem.correspondence.site);
+                // site = angular.copy(g2gItem.correspondence.site);
                 // intercept send instance for G2G
                 g2gItem = g2gItem instanceof G2G ? generator.interceptSendInstance('G2G', g2gItem) : g2gItem;
                 // get correspondence from G2G object
@@ -1413,10 +1423,6 @@ module.exports = function (app) {
                 url = urlService.g2gInbox + 'open';
             }
             else if (model.toLowerCase() === 'g2gmessaginghistory') {
-                /*g2gItem = {
-                    //incomingDocId: g2gItem.incomingDocId
-                    g2gVSID: g2gItem.incomingDocId
-                };*/
                 g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
                 url = urlService.g2gInbox + 'open-sent-return';
             }
@@ -1449,6 +1455,7 @@ module.exports = function (app) {
                         template: cmsTemplate.getPopup('view-correspondence-g2g'),
                         controller: 'viewCorrespondenceG2GPopCtrl',
                         controllerAs: 'ctrl',
+                        targetEvent: $event,
                         bindToController: true,
                         escapeToCancel: false,
                         locals: {
@@ -1541,7 +1548,7 @@ module.exports = function (app) {
             return $http
                 .put(urlService.g2gInbox + 'receive',
                     generator.interceptSendInstance(['Correspondence', 'Incoming'], correspondence))
-                .then(function (result) {
+                .then(function () {
                     return correspondence;
                 })
                 .catch(function (error) {
@@ -1970,7 +1977,7 @@ module.exports = function (app) {
                             first: info.wobNumber,
                             second: reason
                         })
-                        .then(function (result) {
+                        .then(function () {
                             if (!ignoreMessage) {
                                 toast.success(langService.get("terminate_specific_success").change({name: workItem.getTranslatedName()}));
                             }
@@ -2025,7 +2032,7 @@ module.exports = function (app) {
                             comment: reason,
                             vsId: info.vsId
                         })
-                        .then(function (result) {
+                        .then(function () {
                             if (!ignoreMessage) {
                                 toast.success(langService.get("return_specific_success").change({name: workItem.getNames()}));
                             }
@@ -2085,7 +2092,7 @@ module.exports = function (app) {
                             first: info.vsId,
                             second: reason
                         })
-                        .then(function (result) {
+                        .then(function () {
                             if (!ignoreMessage) {
                                 toast.success(langService.get("reject_specific_success").change({name: correspondence.getNames()}));
                             }
@@ -2163,6 +2170,7 @@ module.exports = function (app) {
                     template: cmsTemplate.getPopup('reason-bulk'),
                     controller: 'reasonBulkPopCtrl',
                     controllerAs: 'ctrl',
+                    targetEvent: $event,
                     bindToController: true,
                     locals: {
                         workItems: workItems,
@@ -2235,7 +2243,7 @@ module.exports = function (app) {
             var vsId = correspondence.getInfo().vsId;
             return $http
                 .delete(urlService.favoriteDocuments + '/vsid/' + vsId)
-                .then(function (result) {
+                .then(function () {
                     if (!ignoreMessage)
                         toast.success(langService.get("remove_from_favorite_specific_success").change({name: correspondence.getTranslatedName()}));
                     return correspondence;
@@ -2354,7 +2362,7 @@ module.exports = function (app) {
          */
         self.addWorkItemToFolder = function (workItems, folder, ignoreMessage) {
             if (!folder.status) {
-                toast.error(langService.get('folder_deactivated'))
+                toast.error(langService.get('folder_deactivated'));
                 return $q.reject();
             }
 
@@ -2440,7 +2448,7 @@ module.exports = function (app) {
             var info = workItem.getInfo();
             return $http
                 .put(urlService.departmentInboxes + "/" + info.vsId + "/resend/" + info.wobNumber, resendModel)
-                .then(function (result) {
+                .then(function () {
                     return workItem;
                 });
         };
@@ -2453,7 +2461,7 @@ module.exports = function (app) {
             var info = workItem.getInfo();
             return $http
                 .put(_createCorrespondenceWFSchema([info.documentClass, 'vsid', info.vsId, 'wob-num', info.wobNumber, 'to-ready-export-central-archive ']))
-                .then(function (result) {
+                .then(function () {
                     if (!ignoreMessage) {
                         toast.success(langService.get('sent_to_the_central_archive_success'));
                     }
@@ -2540,11 +2548,12 @@ module.exports = function (app) {
          * @description approv
          * @param workItem
          * @param signature
+         * @param isComposite
          * @param ignoreMessage
          */
-        self.approveCorrespondence = function (workItem, signature, ignoreMessage) {
+        self.approveCorrespondence = function (workItem, signature, isComposite, ignoreMessage) {
             var info = workItem.getInfo();
-            var sign = (new SignDocumentModel()).setSignature(workItem, signature);
+            var sign = (new SignDocumentModel()).setSignature(workItem, signature).setIsComposite(isComposite);
             return $http
                 .put(_createUrlSchema(null, info.documentClass, 'authorize'), sign)
                 .then(function (result) {
@@ -2575,7 +2584,14 @@ module.exports = function (app) {
                 .getApplicationUserSignatures(employeeService.getEmployee().id)
                 .then(function (signatures) {
                     if (signatures && signatures.length === 1) {
-                        return self.approveCorrespondence(workItem, signatures[0], ignoreMessage);
+                        return workItem.isComposite() ? dialog
+                            .confirmMessage(langService.get('document_is_composite'))
+                            .then(function () {
+                                return self.approveCorrespondence(workItem, signatures[0], true, ignoreMessage);
+                            })
+                            .catch(function () {
+                                return self.approveCorrespondence(workItem, signatures[0], false, ignoreMessage);
+                            }) : self.approveCorrespondence(workItem, signatures[0], false, ignoreMessage);
                     } else if (signatures && signatures.length > 1) {
                         return dialog
                             .showDialog({
@@ -2584,7 +2600,7 @@ module.exports = function (app) {
                                 controller: 'signaturePopCtrl',
                                 controllerAs: 'ctrl',
                                 locals: {
-                                    userInbox: workItem,
+                                    workItem: workItem,
                                     signatures: signatures
                                 }
                             });
@@ -2668,7 +2684,7 @@ module.exports = function (app) {
                 url = _createUrlSchema(null, info.documentClass, ['book', info.vsId, details.url].join('/'));
             return $http
                 .put(url, generator.interceptSendInstance(['PartialExport', details.interceptor], partialExport))
-                .then(function (result) {
+                .then(function () {
                     if (!ignoreMessage) {
                         toast.success(langService.get('export_success'));
                     }
@@ -2793,6 +2809,39 @@ module.exports = function (app) {
             return this
         };
 
+        self.setStorageManager = function (service) {
+            correspondenceStorageService = service;
+            return this;
+        };
+        /**
+         * @description load thumbnails for any correspondecne/workItem
+         * @param correspondence
+         * @return {PromiseLike<T> | Promise<T> | *}
+         */
+        self.loadDocumentThumbnails = function (correspondence) {
+            var info = correspondence.getInfo();
+            return $http
+                .get(_createUrlSchema(null, info.documentClass, 'thubmnails/vsid/' + info.vsId))
+                .then(function (result) {
+                    var data = result.data.rs;
+                    var images = _.filter(_.map(data, function (item, key) {
+                        return item !== null ? (new ImageThumbnail(item)).setVsId(key).setMainIfEqual(info.vsId) : null;
+                    }), function (item) {
+                        return item !== null
+                    });
+                    // return the images with the sorted type [0] is the main document image and the remaining the attachments.
+                    return [].concat(_.filter(images, function (item) {
+                        return item.isMainDocument();
+                    })).concat(_.filter(images, function (item) {
+                        return !item.isMainDocument();
+                    }));
+                });
+        };
+        /**
+         * @description open word in desktop application.
+         * @param correspondence
+         * @return {Promise}
+         */
         self.editWordInDesktop = function (correspondence) {
             var info = correspondence.getInfo();
             var url = urlService
@@ -2805,6 +2854,106 @@ module.exports = function (app) {
             return $http.get(url, {
                 excludeLoading: true
             });
+        };
+        /**
+         * @description load document versions
+         * @param correspondence
+         * @return {*}
+         */
+        self.loadDocumentVersions = function (correspondence) {
+            var info = correspondence.getInfo();
+            return $http
+                .get(_createUrlSchema(null, info.documentClass, 'versions/' + info.vsId))
+                .then(function (result) {
+                    result = generator.generateCollection(result.data.rs, _getModel(info.documentClass));
+                    return generator.interceptReceivedCollection('CorrespondenceVersion', result);
+                });
+        };
+        /**
+         * view specific version for the document
+         * @param correspondence
+         * @param allowDuplicateAction
+         * @param $event
+         * @return {promise|*}
+         */
+        self.viewSpecificCorrespondenceVersion = function (correspondence, allowDuplicateAction, $event) {
+            return dialog
+                .showDialog({
+                    template: cmsTemplate.getPopup('versions'),
+                    controller: 'versionPopCtrl',
+                    controllerAs: 'ctrl',
+                    targetEvent: $event,
+                    locals: {
+                        correspondence: correspondence,
+                        allowDuplicateAction: allowDuplicateAction
+                    },
+                    resolve: {
+                        versions: function () {
+                            return self.loadDocumentVersions(correspondence);
+                        }
+                    }
+                }).then(function (result) {
+                    return allowDuplicateAction ? self.displayDuplicateOption(result.correspondence, $event)
+                        .then(function (duplicateOption) {
+                            return self.duplicateCorrespondenceVersion(result.correspondence, duplicateOption, result.correspondence.majorVersionNumber)
+                        }) : result;
+                });
+        };
+        /**
+         * @description deuplicate correspondence from current/specific version
+         * @param correspondence
+         * @param duplicateOption
+         * @param majorVersion
+         * @return {*}
+         */
+        self.duplicateCorrespondenceVersion = function (correspondence, duplicateOption, majorVersion) {
+            var info = correspondence.getInfo();
+            return $http
+                .put(_createUrlSchema(null, info.documentClass, 'duplicate/vsid/' + info.vsId + (majorVersion ? '/major-version-number/' + majorVersion : '')), duplicateOption)
+                .then(function (result) {
+                    result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(info.documentClass), 'View' + _getModelName(info.documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(info.documentClass)));
+                    result.data.rs.metaData.docStatus = 2; // by default
+                    return correspondenceStorageService.storeCorrespondence('duplicate', result.data.rs);
+                }).catch(function (error) {
+                    return errorCode.checkIf(error, 'FAIL_DUPLICATION', function () {
+                        dialog.errorMessage(langService.get('fail_to_duplicate').change({name: info.title}));
+                        return $q.reject('fail_to_duplicate');
+                    });
+                });
+        };
+        /**
+         * @description display duplicate options
+         * @param correspondence
+         * @param $event
+         * @return {promise|*}
+         */
+        self.displayDuplicateOption = function (correspondence, $event) {
+            return dialog
+                .showDialog({
+                    template: cmsTemplate.getPopup('duplicate-options'),
+                    controller: 'duplicateOptionPopCtrl',
+                    targetEvent: $event,
+                    controllerAs: 'ctrl',
+                    locals: {
+                        correspondence: correspondence
+                    }
+                });
+        };
+        /**
+         * @description duplicate current version from correspondence.
+         * @param correspondence
+         * @param $event
+         * @return {*}
+         */
+        self.duplicateCurrentCorrespondenceVersion = function (correspondence, $event) {
+            return self.displayDuplicateOption(correspondence, $event)
+                .then(function (duplicateOption) {
+                    return self.duplicateCorrespondenceVersion(correspondence, duplicateOption);
+                });
+        };
+
+        self.duplicateSpecificCorrespondenceVersion = function (correspondence, $event) {
+            return self.viewSpecificCorrespondenceVersion(correspondence, true, $event);
         };
 
         $timeout(function () {

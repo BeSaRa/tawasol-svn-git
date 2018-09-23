@@ -95,6 +95,7 @@ module.exports = function (app) {
          * @param _
          * @param $sce
          * @param rootEntity
+         * @param correspondenceService
          * @param fileTypeService
          * @return {provider}
          */
@@ -109,6 +110,7 @@ module.exports = function (app) {
                                   _,
                                   $sce,
                                   rootEntity,
+                                  correspondenceService,
                                   fileTypeService) {
             'ngInject';
             var self = this;
@@ -344,7 +346,7 @@ module.exports = function (app) {
 
                     var extension = file.name.split('.').pop().toLowerCase();
                     var position = _.findIndex(allowedExtensions, function (ext) {
-                        if(ext.startsWith('.'))
+                        if (ext.startsWith('.'))
                             ext = ext.split('.').pop();
                         return ext === extension;
                     });
@@ -434,13 +436,13 @@ module.exports = function (app) {
              */
             self.viewAttachment = function (attachmentVsId, documentClass, justUrl) {
                 var vsId = attachmentVsId instanceof Attachment ? attachmentVsId.vsId : attachmentVsId;
-                return $http.get(_createUrlSchema(vsId, documentClass, 'attachment/with-content'))
+                /*return $http.get(_createUrlSchema(vsId, documentClass, 'attachment/with-content'))
                     .then(function (result) {
                         result.data.rs.metaData = generator.generateInstance(result.data.rs.metaData, Attachment);
                         return result.data.rs;
-                    })
+                    })*/
+                return self.loadAttachment(vsId, documentClass)
                     .then(function (attachment) {
-                        attachment.content.viewURL = $sce.trustAsResourceUrl(attachment.content.viewURL);
                         return justUrl ? attachment.content.viewURL :
                             dialog.showDialog({
                                 template: cmsTemplate.getPopup('view-document-readonly'),
@@ -455,6 +457,41 @@ module.exports = function (app) {
                             });
                     });
             };
+            /**
+             * @description load attchemnt by vsId and documentClass.
+             * @param attachmentVsId
+             * @param documentClass
+             * @return {*}
+             */
+            self.loadAttachment = function (attachmentVsId, documentClass) {
+                var vsId = attachmentVsId instanceof Attachment ? attachmentVsId.vsId : attachmentVsId;
+                return $http.get(_createUrlSchema(vsId, documentClass, 'attachment/with-content'))
+                    .then(function (result) {
+                        result.data.rs.metaData = generator.generateInstance(result.data.rs.metaData, Attachment);
+                        result.data.rs.content.viewURL = $sce.trustAsResourceUrl(result.data.rs.content.viewURL);
+                        return result.data.rs;
+                    });
+            };
+
+            self.showAttachmentWithThumbnails = function (workItem, selectedImage, $event) {
+                return dialog
+                    .showDialog({
+                        controller: 'attachmentThumbnailPopCtrl',
+                        template: cmsTemplate.getPopup('attachment-thumbnail'),
+                        controllerAs: 'ctrl',
+                        targetEvent: $event,
+                        locals: {
+                            thumbnails: workItem.thumbnails,
+                            correspondence: workItem,
+                            selectedThumb: selectedImage
+                        },
+                        resolve: {
+                            attachment: function () {
+                                return self.loadAttachment(selectedImage.vsId, workItem.getInfo().documentClass);
+                            }
+                        }
+                    });
+            };
 
             /**
              * to get Service provider itself
@@ -463,6 +500,7 @@ module.exports = function (app) {
             self.getProvider = function () {
                 return provider;
             };
+
             _prepareExtensionGroups();
             return self;
 

@@ -69,35 +69,38 @@
         </div>
     </div>
     <div layout="column" class="magazine-layout card-overlay">
-        <div magazine-right-click-directive layout="row"
+        <!--ng-click="ctrl.showThumbnails(  $event , workItem)"-->
+        <div  magazine-right-click-directive layout="column"
              model="workItem"
              ng-class="{'selected':ctrl.isWorkItemSelected(workItem)}"
              magazine-item-directive="workItem" selected-length="ctrl.selectedWorkItems.length" md-whiteframe="1"
              ng-repeat="workItem in ctrl.workItems | filter:ctrl.searchModel| limitTo:ctrl.pageLimit:( ( ctrl.page - 1) * ctrl.pageLimit) track by $index"
              class="magazine-item">
-            <a href="" tooltip="{{workItem.isRead() ? lang.indicator_mark_unread: lang.indicator_mark_read}}"
-               class="magazine-read-unread" ng-click="ctrl.markAsReadUnread( workItem , $event)"
-               ng-class="{'read':workItem.isRead()}"></a>
-            <div class="magazine-image" layout="column">
-                <div flex layout="row" layout-align="center center" class="magazine-check-box"
-                     tooltip="{{lang[workItem.getTypeText()]}}">
-                    <!--<md-checkbox ng-checked="ctrl.toggleSelect()" aria-label="select"></md-checkbox>-->
-                </div>
-                <div layout="row" flex class="magazine-icon">
-                    <md-icon flex md-svg-icon="{{workItem.getTypeIcon()}}"></md-icon>
-                </div>
-                <div class="magazine-date">
-                    <span tooltip="{{lang.get('received_date')}}">{{workItem.getReceivedDate()}}</span>
-                </div>
-            </div>
-            <div class="magazine-content" layout="column" flex>
-                <div layout="row" class="magazine-top">
-                    <star-unstar-directive record="workItem" record-type="workItem" callback="ctrl.changeUserInboxStar"
-                                           selected-records="ctrl.selectedWorkItems"></star-unstar-directive>
-                    <div layout-align="center center" class="magazine-serial serial-td">
-                        {{workItem.getFullSerialText()}}
+            <div layout="row">
+                <a href="" tooltip="{{workItem.isRead() ? lang.indicator_mark_unread: lang.indicator_mark_read}}"
+                   class="magazine-read-unread" ng-click="ctrl.markAsReadUnread( workItem , $event)"
+                   ng-class="{'read':workItem.isRead()}"></a>
+                <div class="magazine-image" layout="column">
+                    <div flex layout="row" layout-align="center center" class="magazine-check-box"
+                         tooltip="{{lang[workItem.getTypeText()]}}">
+                        <!--<md-checkbox ng-checked="ctrl.toggleSelect()" aria-label="select"></md-checkbox>-->
                     </div>
-                    <div flex class="magazine-from">
+                    <div layout="row" flex class="magazine-icon">
+                        <md-icon flex md-svg-icon="{{workItem.getTypeIcon()}}"></md-icon>
+                    </div>
+                    <div class="magazine-date">
+                        <span tooltip="{{lang.get('received_date')}}">{{workItem.getReceivedDate()}}</span>
+                    </div>
+                </div>
+                <div class="magazine-content" layout="column" flex>
+                    <div layout="row" class="magazine-top">
+                        <star-unstar-directive record="workItem" record-type="workItem"
+                                               callback="ctrl.changeUserInboxStar"
+                                               selected-records="ctrl.selectedWorkItems"></star-unstar-directive>
+                        <div layout-align="center center" class="magazine-serial serial-td">
+                            {{workItem.getFullSerialText()}}
+                        </div>
+                        <div flex class="magazine-from">
                         <span class="font-12">
                             <span>{{lang.from}}</span>
                             <span class="magazine-serial">{{workItem.getOUTranslate()}}</span>
@@ -110,8 +113,8 @@
                                       tooltip="{{lang[workItem.getIndicatorDueDate().tooltip]}}"
                                       class="magazine-serial date {{workItem.getIndicatorDueDate().class}}">{{workItem.generalStepElm.dueDate}}</span>
                         </span>
-                    </div>
-                    <div class="magazine-fix-actions">
+                        </div>
+                        <div class="magazine-fix-actions">
                         <span ng-repeat="quickAction in ctrl.filterQuickActionShortcuts('horizontal') track by $index"
                               ng-if="ctrl.isShowQuickAction(quickAction, workItem)">
                             <md-icon md-svg-icon="{{quickAction.icon}}" class="cursor-pointer {{quickAction.class}}"
@@ -119,80 +122,88 @@
                                      tooltip-direction="{{lang.current === 'en' ? 'left': 'right'}}"
                                      ng-click="ctrl.callbackQuickAction(quickAction, workItem, $event)"></md-icon>
                         </span>
-                        <!--<md-icon md-svg-icon="stop" class="cursor-pointer action-green"
-                                 tooltip="{{lang.grid_action_terminate}}"
-                                 ng-click="ctrl.terminate(workItem, $event)"></md-icon>
-                        <md-icon md-svg-icon="reply" class="cursor-pointer action-green"
-                                 tooltip="{{lang.grid_action_reply}}"
-                                 ng-click="ctrl.reply(workItem, $event)"></md-icon>-->
+                            <!--<md-icon md-svg-icon="stop" class="cursor-pointer action-green"
+                                     tooltip="{{lang.grid_action_terminate}}"
+                                     ng-click="ctrl.terminate(workItem, $event)"></md-icon>
+                            <md-icon md-svg-icon="reply" class="cursor-pointer action-green"
+                                     tooltip="{{lang.grid_action_reply}}"
+                                     ng-click="ctrl.reply(workItem, $event)"></md-icon>-->
+                        </div>
+                        <div class="magazine-sender">{{lang.sender }} -
+                            {{workItem.senderInfo.getTranslatedName()}}
+                        </div>
                     </div>
-                    <div class="magazine-sender">{{lang.sender }} -
-                        {{workItem.senderInfo.getTranslatedName()}}
+                    <div layout="column" class="magazine-middle">
+                        <div layout="row" class="magazine-title">
+                            <span md-truncate flex><a href="" ng-click="ctrl.viewDocument(workItem , $event)">{{workItem.getSubject()}}</a></span>
+                            <span class="magazine-serial bg-red">{{lang.action}} : {{workItem.action.getTranslatedName()}}</span>
+                        </div>
+                    </div>
+                    <div layout="row" layout-align="start center" class="magazine-bottom">
+                        <div layout-align="start center" layout="row" flex>
+                            <magazine-indicator
+                                    icon-callback="workItem.getIndicatorDocumentType"
+                                    color="#3498db"
+                                    callback="workItem.getIndicatorBookType"
+                                    model="workItem"></magazine-indicator>
+                            <magazine-indicator
+                                    icon="alert-circle"
+                                    key="priority_level"
+                                    color-callback="workItem.getIndicatorPriorityLevelColor"
+                                    callback="workItem.getIndicatorPriorityLevel"
+                                    model="workItem"></magazine-indicator>
+                            <magazine-indicator
+                                    icon="lock"
+                                    color="#f1c40f"
+                                    key="security_level"
+                                    callback="workItem.getIndicatorSecurityLevel"
+                                    model="workItem"></magazine-indicator>
+                            <magazine-indicator
+                                    ng-if="workItem.isBroadcasted()"
+                                    icon="bullhorn"
+                                    color="#2c3e50"
+                                    callback="workItem.getBroadCastedText"
+                                    model="workItem"></magazine-indicator>
+                            <magazine-indicator
+                                    ng-if="workItem.generalStepElm.isReassigned"
+                                    icon="transfer"
+                                    color="#8e44ad"
+                                    callback="workItem.getIndicatorTransfer"
+                                    model="workItem"></magazine-indicator>
+                            <magazine-indicator
+                                    ng-if="workItem.generalStepElm.attachementsNO"
+                                    icon="paperclip"
+                                    callback="workItem.getIndicatorHasAttachment"
+                                    model="workItem"></magazine-indicator>
+                            <magazine-indicator
+                                    ng-if="workItem.generalStepElm.linkedDocsNO"
+                                    icon="link-variant"
+                                    callback="workItem.getIndicatorHasLinkedDoc"
+                                    model="workItem"></magazine-indicator>
+                        </div>
+                        <div ng-if="workItem.getInfo().documentClass !== 'internal'">
+                            <main-site-sub-site-directive class="magazine-serial font-12"
+                                                          item="workItem"></main-site-sub-site-directive>
+                        </div>
                     </div>
                 </div>
-                <div layout="column" class="magazine-middle">
-                    <div layout="row" class="magazine-title">
-                        <span md-truncate flex><a href="" ng-click="ctrl.viewDocument(workItem , $event)">{{workItem.getSubject()}}</a></span>
-                        <span class="magazine-serial bg-red">{{lang.action}} : {{workItem.action.getTranslatedName()}}</span>
-                    </div>
-                </div>
-                <div layout="row" layout-align="start center" class="magazine-bottom">
-                    <div layout-align="start center" layout="row" flex>
-                        <magazine-indicator
-                                icon-callback="workItem.getIndicatorDocumentType"
-                                color="#3498db"
-                                callback="workItem.getIndicatorBookType"
-                                model="workItem"></magazine-indicator>
-                        <magazine-indicator
-                                icon="alert-circle"
-                                key="priority_level"
-                                color-callback="workItem.getIndicatorPriorityLevelColor"
-                                callback="workItem.getIndicatorPriorityLevel"
-                                model="workItem"></magazine-indicator>
-                        <magazine-indicator
-                                icon="lock"
-                                color="#f1c40f"
-                                key="security_level"
-                                callback="workItem.getIndicatorSecurityLevel"
-                                model="workItem"></magazine-indicator>
-                        <magazine-indicator
-                                ng-if="workItem.isBroadcasted()"
-                                icon="bullhorn"
-                                color="#2c3e50"
-                                callback="workItem.getBroadCastedText"
-                                model="workItem"></magazine-indicator>
-                        <magazine-indicator
-                                ng-if="workItem.generalStepElm.isReassigned"
-                                icon="transfer"
-                                color="#8e44ad"
-                                callback="workItem.getIndicatorTransfer"
-                                model="workItem"></magazine-indicator>
-                        <magazine-indicator
-                                ng-if="workItem.generalStepElm.attachementsNO"
-                                icon="paperclip"
-                                callback="workItem.getIndicatorHasAttachment"
-                                model="workItem"></magazine-indicator>
-                        <magazine-indicator
-                                ng-if="workItem.generalStepElm.linkedDocsNO"
-                                icon="link-variant"
-                                callback="workItem.getIndicatorHasLinkedDoc"
-                                model="workItem"></magazine-indicator>
-                    </div>
+                <!--<div class="magazine-action" layout="column">
                     <div>
-                        <main-site-sub-site-directive class="magazine-serial font-12"
-                                                      item="workItem"></main-site-sub-site-directive>
+                        <grid-actions-directive menu-direction="vertical"
+                                                grid-actions="ctrl.gridActions"
+                                                shortcut="true"
+                                                model="workItem">
+                        </grid-actions-directive>
                     </div>
-                </div>
+                </div>-->
             </div>
-            <!--<div class="magazine-action" layout="column">
-                <div>
-                    <grid-actions-directive menu-direction="vertical"
-                                            grid-actions="ctrl.gridActions"
-                                            shortcut="true"
-                                            model="workItem">
-                    </grid-actions-directive>
-                </div>
-            </div>-->
+            <!--<div layout="row">-->
+                <!--<div class="thumbnail-wrapper" flex>-->
+                    <!--<a class="thumbnail-item" style="background-image: url({{image.url}})"-->
+                       <!--ng-repeat="image in workItem.thumbnails "-->
+                       <!--ng-click="ctrl.showAttachmentViwer(image , workItem , $event)"></a>-->
+                <!--</div>-->
+            <!--</div>-->
         </div><!-- magazine-item-->
     </div><!-- magazine-layout-->
 </div>

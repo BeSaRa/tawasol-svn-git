@@ -509,16 +509,18 @@ module.exports = function (app) {
             };
             WorkItem.prototype.approveWorkItem = function ($event, defer, ignoreMessage) {
                 var workItem = this;
-                return correspondenceService.showApprovedDialog(this, $event, ignoreMessage).then(function (result) {
-                    new ResolveDefer(defer);
-                    if (result === 'PARIALLY_AUTHORIZED') {
-                        return dialog.confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: workItem.getTranslatedName()}))
-                            .then(function () {
-                                return workItem.launchWorkFlow($event, 'forward', 'favorites');
-                            });
-                    }
-                    return result;
-                });
+                return correspondenceService
+                    .showApprovedDialog(this, $event, ignoreMessage)
+                    .then(function (result) {
+                        new ResolveDefer(defer);
+                        if (result === 'PARIALLY_AUTHORIZED') {
+                            return dialog.confirmMessage(langService.get('book_needs_more_signatures_launch_to_user').change({name: workItem.getTranslatedName()}))
+                                .then(function () {
+                                    return workItem.launchWorkFlow($event, 'forward', 'favorites');
+                                });
+                        }
+                        return result;
+                    });
             };
             WorkItem.prototype.markAsReadUnread = function ($event, ignoreMessage, isGroupMail) {
                 return correspondenceService.workItemMarkAsReadUnreadSingle(this, $event, ignoreMessage, isGroupMail);
@@ -589,6 +591,40 @@ module.exports = function (app) {
 
             WorkItem.prototype.isWorkItem = function () {
                 return true;
+            };
+
+            WorkItem.prototype.loadThumbnails = function () {
+                var self = this;
+                return correspondenceService
+                    .loadDocumentThumbnails(this)
+                    .then(function (result) {
+                        self.thumbnails = result;
+                        return self.thumbnails;
+                    });
+            };
+
+            WorkItem.prototype.hasThumbanils = function () {
+                return !!this.thumbnails.length;
+            };
+
+            WorkItem.prototype.loadVersions = function () {
+                return correspondenceService.loadDocumentVersions(this);
+            };
+
+            WorkItem.prototype.viewSpecificVersion = function ($event) {
+                return correspondenceService.viewSpecificCorrespondenceVersion(this, true, $event);
+            };
+
+            WorkItem.prototype.duplicateVersion = function ($event) {
+                return correspondenceService.duplicateCurrentCorrespondenceVersion(this, $event);
+            };
+
+            WorkItem.prototype.duplicateSpecificVersion = function ($event) {
+                return correspondenceService.duplicateSpecificCorrespondenceVersion(this, $event);
+            };
+
+            WorkItem.prototype.isComposite = function () {
+                return this.generalStepElm.isComposite;
             };
 
 

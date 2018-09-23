@@ -604,13 +604,15 @@
                                        md-progress="ctrl.progress">
                                     <thead md-head md-order="ctrl.grid.subSearchResult.order">
                                     <tr md-row>
-                                        <th md-column md-order-by="mainEnSiteText">
+                                        <th ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence"
+                                            md-column md-order-by="mainEnSiteText">
                                             <span>{{lang.sites_main_site}}</span>
                                         </th>
                                         <th md-column md-order-by="mainArSiteText">
                                             <span>{{lang.sites_sub_site}}</span>
                                         </th>
-                                        <th md-column md-order-by="mainArSiteText">
+                                        <th ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence"
+                                            md-column md-order-by="mainArSiteText">
                                             <span>{{lang.sites_select_site_type}}</span>
                                         </th>
                                         <th md-column>
@@ -622,7 +624,8 @@
                                     <tr md-row md-select="site"
                                         md-on-select="ctrl.resetSearchStatusAndDate"
                                         ng-repeat="site in ctrl.subSearchResult  | filter:ctrl.searchModel | limitTo: ctrl.grid.subSearchResult.limit: ((ctrl.grid.subSearchResult.page - 1) * ctrl.grid.subSearchResult.limit) |orderBy:ctrl.grid.subSearchResult.order  track by $index">
-                                        <td md-cell>
+                                        <td md-cell
+                                            ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
                                             <div flex layout="column">
                                                 <span class="span-column">{{site.getTranslatedParentName()}}</span>
                                             </div>
@@ -632,7 +635,8 @@
                                                 <span md-highlight-text="ctrl.subSearch" class="span-column">{{site.getTranslatedName()}}</span>
                                             </div>
                                         </td>
-                                        <td md-cell>
+                                        <td md-cell
+                                            ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence">
                                             <div flex layout="column">
                                                 <span class="span-column">{{site.getTranslatedSiteType()}}</span>
                                             </div>

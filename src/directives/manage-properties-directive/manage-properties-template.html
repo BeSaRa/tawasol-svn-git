@@ -3,7 +3,7 @@
         <div layout="column">
             <div layout="row">
                 <!-- Correspondence registry (If show registry unit)-->
-                <md-input-container ng-if="ctrl.showRegistryUnit()" flex>
+                <md-input-container ng-if="ctrl.showRegistryUnit() && ctrl.checkStatus('registryOU')" flex>
                     <label for="registryOU">{{lang.corr_registry}}</label>
                     <md-select name="registryOU"
                                id="registryOU"
@@ -22,7 +22,7 @@
                     </div>
                 </md-input-container>
                 <!-- OU (If not show registry unit) -->
-                <md-input-container ng-if="!ctrl.showRegistryUnit()" flex>
+                <md-input-container ng-if="!ctrl.showRegistryUnit() && ctrl.checkStatus('ou')" flex>
                     <label for="ou">{{lang.organization_unit}}</label>
                     <md-select name="ou"
                                id="ou"
@@ -40,7 +40,7 @@
                     </div>
                 </md-input-container>
                 <!-- OU (If show registry unit) -->
-                <md-input-container ng-if="ctrl.showRegistryUnit()" flex>
+                <md-input-container ng-if="ctrl.showRegistryUnit() && ctrl.checkStatus('ou')" flex>
                     <label for="ou">{{lang.organization_unit}}</label>
                     <md-select name="ou"
                                id="ou"
@@ -65,7 +65,7 @@
                            ng-value="ctrl.sourceModel.securityLevel.getTranslatedName()">
                 </md-input-container>
                 <!-- Security Level (Select) -->
-                <md-input-container ng-if="!ctrl.document.hasVsId()" flex>
+                <md-input-container ng-if="!ctrl.document.hasVsId() && ctrl.checkStatus('securityLevel')" flex>
                     <label for="securityLevel">{{lang.security_level}}</label>
                     <md-select name="securityLevel"
                                id="securityLevel"
@@ -84,7 +84,7 @@
                     </div>
                 </md-input-container>
                 <!-- Document Number -->
-                <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "incoming"'>
+                <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "incoming" && ctrl.checkStatus("refDocNumber")'>
                     <label for="refDocNumber">{{lang.document_number}}</label>
                     <input name="refDocNumber" id="refDocNumber"
                            ng-required="ctrl.checkMandatory('refDocNumber')"
@@ -97,7 +97,8 @@
                     </div>
                 </md-input-container>
                 <!-- Type (Personal/Departmental) -->
-                <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "internal"'>
+                <md-input-container flex
+                                    ng-if='ctrl.document.docClassName.toLowerCase() === "internal" && ctrl.checkStatus("internalDocType")'>
                     <label for="type">{{lang.type}}</label>
                     <md-select name="type" id="type"
                                ng-disabled="!!ctrl.disableProperties"
@@ -114,7 +115,7 @@
                     </div>
                 </md-input-container>
                 <!-- Date -->
-                <md-input-container>
+                <md-input-container ng-if="ctrl.checkStatus('docDate')">
                     <label for="docDate">{{lang.date}}</label>
                     <md-datepicker name="docDate" id="docDate"
                                    ng-disabled="!!ctrl.disableProperties"
@@ -128,7 +129,7 @@
                     </div>
                 </md-input-container>
             </div>
-            <div layout="row">
+            <div layout="row" ng-if="ctrl.checkStatus('docSubject')">
                 <!-- Subject -->
                 <md-input-container flex>
                     <label for="docSubject">{{lang.document_subject}}</label>
@@ -148,7 +149,7 @@
             </div>
             <div layout="row">
                 <!-- Main Classification -->
-                <md-input-container flex>
+                <md-input-container flex ng-if="ctrl.checkStatus('mainClassification')">
                     <label for="mainClassification">{{lang.outgoing_main_classification}}</label>
                     <md-select name="mainClassification"
                                id="mainClassification"
@@ -166,7 +167,7 @@
                     </div>
                 </md-input-container>
                 <!-- Sub Classification -->
-                <md-input-container flex>
+                <md-input-container flex ng-if="ctrl.checkStatus('subClassification')">
                     <label for="subClassification">{{lang.outgoing_sub_classification}}</label>
                     <md-select
                             ng-disabled="!!ctrl.disableProperties || !ctrl.document.mainClassification"
@@ -187,7 +188,7 @@
             </div>
             <div layout="row">
                 <!-- Priority Level -->
-                <md-input-container flex>
+                <md-input-container ng-if="ctrl.checkStatus('priorityLevel')" flex>
                     <label for="priorityLevel">{{lang.outgoing_priority_level}}</label>
                     <md-select name="priorityLevel"
                                id="priorityLevel"
@@ -205,7 +206,7 @@
                     </div>
                 </md-input-container>
                 <!-- Document Type -->
-                <md-input-container flex>
+                <md-input-container ng-if="ctrl.checkStatus('docType')" flex>
                     <label for="docType">{{lang.outgoing_document_type}}</label>
                     <md-select name="docType"
                                id="docType"
@@ -223,7 +224,7 @@
                     </div>
                 </md-input-container>
                 <!-- Add Document Type -->
-                <md-input-container ng-if="!ctrl.disableProperties">
+                <md-input-container ng-if="ctrl.checkStatus('docType') && !ctrl.disableProperties">
                     <md-button class="md-icon-button"
                                ng-disabled="!!ctrl.disableProperties"
                                ng-click="ctrl.shortcut.addNewDocumentType($event)">
@@ -234,7 +235,7 @@
 
             <div layout="row">
                 <!-- File -->
-                <md-input-container flex>
+                <md-input-container ng-if="ctrl.checkStatus('fileId')" flex>
                     <label for="fileId">{{lang.outgoing_file}}</label>
                     <md-select name="fileId"
                                id="fileId"
@@ -253,7 +254,7 @@
                     </div>
                 </md-input-container>
                 <!-- Add File -->
-                <md-input-container ng-if="!ctrl.disableProperties">
+                <md-input-container ng-if="ctrl.checkStatus('fileId') && !ctrl.disableProperties">
                     <md-button tooltip="{{lang.outgoing_add_new_document_file}}"
                                class="md-icon-button"
 
@@ -263,7 +264,7 @@
                     </md-button>
                 </md-input-container>
                 <!-- File Code -->
-                <md-input-container flex>
+                <md-input-container ng-if="ctrl.checkStatus('fileCode')" flex>
                     <label for="fileCode">{{lang.outgoing_file_code}}</label>
                     <input name="fileCode"
                            id="fileCode"
@@ -276,7 +277,7 @@
                     </div>
                 </md-input-container>
                 <!-- File Serial -->
-                <md-input-container flex>
+                <md-input-container flex ng-if="ctrl.checkStatus('fileSerial')">
                     <label for="fileSerial">{{lang.outgoing_file_serial}}</label>
                     <input name="fileSerial" custom-validate-directive="number"
                            id="fileSerial"
@@ -289,7 +290,7 @@
                     </div>
                 </md-input-container>
             </div>
-            <div layout="row">
+            <div ng-if="ctrl.checkStatus('docNotes')" layout="row">
                 <!-- Notes -->
                 <md-input-container flex>
                     <label for="docNotes">{{lang.properties_notes}}</label>

@@ -54,6 +54,10 @@ module.exports = function (app) {
             return langService.get(langKey);
         };
 
+        self.resolveSubMenu = function (action, $event) {
+
+        };
+
         /**
          * @description Process the callback for the action button
          * @param action
@@ -249,10 +253,10 @@ module.exports = function (app) {
                                 subActionsToShow.push(subAction);
                             }
                         }
-                        else if (subAction.type.toLowerCase() === "separator"&& !subAction.hide) {
+                        else if (subAction.type.toLowerCase() === "separator" && !subAction.hide) {
                             subActionsToShow.push(subAction);
                         }
-                        else if(subAction.type.toLowerCase() === 'info' && self.isShowAction(subAction)){
+                        else if (subAction.type.toLowerCase() === 'info' && self.isShowAction(subAction)) {
                             subActionsToShow.push(subAction);
                         }
                     }
@@ -424,7 +428,7 @@ module.exports = function (app) {
                     return lookupService.getLookupByLookupKey(lookupService.priorityLevel, priorityLevel).getTranslatedName();
             }
             else if (property === 'author') {
-                if(model instanceof WorkItem){
+                if (model instanceof WorkItem) {
                     return new Information(model.creatorOu).getTranslatedName();
                 }
                 return model.hasOwnProperty('creatorInfo')

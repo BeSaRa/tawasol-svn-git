@@ -195,7 +195,7 @@ module.exports = function (app) {
                             });
                         });
                 },
-                editAfterExport: function ($timeout, $stateParams, correspondenceStorageService, correspondenceService) {
+                editAfterExport: function ($timeout, $stateParams, correspondenceStorageService) {
                     'ngInject';
                     var vsId = $stateParams.vsId, workItem = $stateParams.workItem, action = $stateParams.action;
                     if (action !== 'editAfterExport') {
@@ -205,6 +205,22 @@ module.exports = function (app) {
                     }
                     return correspondenceStorageService
                         .getCorrespondence('export')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
+                },
+                duplicateVersion: function ($timeout, $stateParams, correspondenceStorageService) {
+                    var action = $stateParams.action;
+                    console.log(action);
+                    if (action !== 'duplicateVersion') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                    return correspondenceStorageService
+                        .getCorrespondence('duplicate')
                         .catch(function () {
                             return $timeout(function () {
                                 return false;
@@ -320,7 +336,7 @@ module.exports = function (app) {
                             })
                             .catch(function (error) {
                                 //$timeout(function () {
-                                    defer.reject(false);
+                                defer.reject(false);
                                 //});
                             });
                     }
@@ -418,6 +434,21 @@ module.exports = function (app) {
                     }
                     return correspondenceStorageService
                         .getCorrespondence('approved')
+                        .catch(function () {
+                            return $timeout(function () {
+                                return false;
+                            });
+                        });
+                },
+                duplicateVersion: function ($timeout, $stateParams, correspondenceStorageService) {
+                    var action = $stateParams.action;
+                    if (action !== 'duplicateVersion') {
+                        return $timeout(function () {
+                            return false;
+                        })
+                    }
+                    return correspondenceStorageService
+                        .getCorrespondence('duplicate')
                         .catch(function () {
                             return $timeout(function () {
                                 return false;

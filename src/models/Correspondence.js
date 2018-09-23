@@ -522,6 +522,16 @@ module.exports = function (app) {
                 return viewDocumentService.viewQueueDocument(this, actions, queueName, $event);
             };
             /**
+             * @description view from queue as full view by Id
+             * @param actions
+             * @param queueName
+             * @param $event
+             * @return {*}
+             */
+            Correspondence.prototype.viewFromQueueById = function (actions, queueName, $event) {
+                return viewDocumentService.viewQueueDocumentById(this, actions, queueName, $event);
+            };
+            /**
              * @description view from favorite documents as full view.
              * @param actions
              * @param queueName
@@ -651,6 +661,27 @@ module.exports = function (app) {
 
             Correspondence.prototype.getFirstSite = function () {
                 return this.classDescription.toLowerCase() === 'outgoing' ? (this.sitesInfoTo[0] || this.sitesInfoCC[0]) : null;
+            };
+
+            Correspondence.prototype.loadThumbnails = function () {
+                return correspondenceService.loadDocumentThumbnails(this);
+            };
+            Correspondence.prototype.loadVersions = function () {
+                return correspondenceService.loadDocumentVersions(this);
+            };
+
+            Correspondence.prototype.viewSpecificVersion = function (actions, $event) {
+                return correspondenceService.viewSpecificCorrespondenceVersion(this, actions, $event);
+            };
+            Correspondence.prototype.isCurrentVersion = function () {
+                return this.isCurrent;
+            };
+
+            Correspondence.prototype.isBroadcasted = function () {
+                return false;
+            };
+            Correspondence.prototype.duplicateVersion = function ($event) {
+                return correspondenceService.duplicateCurrentCorrespondenceVersion(this);
             };
 
             // don't remove CMSModelInterceptor from last line

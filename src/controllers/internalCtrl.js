@@ -28,6 +28,7 @@ module.exports = function (app) {
                                              distributionWorkflowService,
                                              draftInternalService,
                                              editAfterApproved,
+                                             duplicateVersion,
                                              mailNotificationService,
                                              correspondenceService) {
         'ngInject';
@@ -45,12 +46,16 @@ module.exports = function (app) {
         // collapse from label
         self.collapse = true;
         // current mode
-        self.editMode = !!(editAfterApproved);
+        self.editMode = !!(editAfterApproved || duplicateVersion);
         // self.editMode = false;
         // copy of the current internal if saved.
         // self.model = angular.copy(demoInternal);
-        self.model = editAfterApproved ? angular.copy(editAfterApproved.metaData) : null;
-
+        self.model = null;
+        if (editAfterApproved) {
+            self.model = angular.copy(editAfterApproved.metaData);
+        } else if (duplicateVersion) {
+            self.model = angular.copy(duplicateVersion.metaData);
+        }
         self.editContent = false;
 
 
@@ -77,6 +82,10 @@ module.exports = function (app) {
         if (editAfterApproved) {
             self.internal = editAfterApproved.metaData;
             self.documentInformation = editAfterApproved.content;
+            self.editContent = true;
+        } else if (duplicateVersion) {
+            self.internal = duplicateVersion.metaData;
+            self.documentInformation = duplicateVersion.content;
             self.editContent = true;
         }
 

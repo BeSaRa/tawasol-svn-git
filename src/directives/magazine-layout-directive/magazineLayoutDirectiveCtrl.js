@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('magazineLayoutDirectiveCtrl', function ($scope,
                                                             _,
                                                             employeeService,
+                                                            attachmentService,
                                                             LangWatcher,
                                                             $compile,
                                                             $timeout,
@@ -285,5 +286,23 @@ module.exports = function (app) {
             }
             return self.quickActions;
         };
+
+        self.showThumbnails = function ($event, workItem) {
+            workItem.loadThumbnails();
+        };
+
+        self.showAttachmentViwer = function (image, workItem, $event) {
+            $event.stopPropagation();
+
+            image.isMainDocument(true)
+                .then(function () {
+
+                })
+                .catch(function () {
+                    attachmentService.showAttachmentWithThumbnails(workItem, image, $event);
+                });
+        }
+
+
     });
 };

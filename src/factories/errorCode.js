@@ -30,7 +30,8 @@ module.exports = function (app) {
             G2G_ERROR_WHILE_RETURNING_TO_SENDER: 14026,
             G2G_ERROR_WHILE_RECALLING: 14027,
             G2G_ERROR_WHILE_TERMINATE: 14028,
-            NO_DOCUMENT_SECURITY: 13006
+            NO_DOCUMENT_SECURITY: 13006,
+            FAIL_DUPLICATION : 2053
         };
 
         return {

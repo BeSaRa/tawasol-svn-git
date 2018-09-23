@@ -846,7 +846,7 @@ module.exports = function (app) {
             // editInDeskTop
             {
                 type: 'action',
-                icon: 'book-open-variant',
+                icon: 'desktop-classic',
                 text: 'grid_action_edit_in_desktop',
                 shortcut: true,
                 hide: false,
@@ -862,7 +862,7 @@ module.exports = function (app) {
                         hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
                     }
                     else if(info.documentClass === 'internal') {
-                        hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
+                        hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                     }
                     return self.checkToShowAction(action, model)
                         && !info.isPaper
