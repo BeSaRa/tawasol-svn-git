@@ -57,6 +57,34 @@ module.exports = function (app) {
             }]
         };
 
+        /**
+         * @description Contains the list of tabs that can be shown
+         * @type {string[]}
+         */
+        self.tabsToShow = [
+            'basic',
+            'ou',
+            'sub'
+        ];
+
+        self.showTab = function (tabName) {
+            return self.tabsToShow.indexOf(tabName) > -1;
+        };
+
+        /**
+         * @description Contains the selected tab name
+         * @type {string}
+         */
+        self.selectedTabName = "basic";
+
+        /**
+         * @description Set the current tab name
+         * @param tabName
+         */
+        self.setCurrentTab = function (tabName) {
+            self.selectedTabName = tabName;
+        };
+
         self.statusServices = {
             'activate': correspondenceSiteService.activateBulkCorrespondenceSites,
             'deactivate': correspondenceSiteService.deactivateBulkCorrespondenceSites,
@@ -399,7 +427,7 @@ module.exports = function (app) {
         self.changeBulkStatusCorrespondenceSites = function (status) {
             self.statusServices[status](self.selectedSubCorrespondenceSites).then(function () {
                 self.reloadCorrespondenceSites(self.grid.page).then(function () {
-                    toast.success(langService.get('selected_status_updated'));
+                    //toast.success(langService.get('selected_status_updated'));
                 });
             });
         };

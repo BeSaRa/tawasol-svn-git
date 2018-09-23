@@ -14,8 +14,8 @@
         </md-toolbar>
         <md-content scroll-directive>
             <form name="correspondenceSiteForm">
-                <md-tabs md-dynamic-height>
-                    <md-tab label="{{lang.basic_info}}">
+                <md-tabs md-dynamic-height md-selected="0" >
+                    <md-tab label="{{lang.basic_info}}" md-on-select="ctrl.setCurrentTab('basic')" ng-if="ctrl.showTab('basic')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row">
@@ -132,7 +132,8 @@
                         </md-content>
                     </md-tab>
                     <md-tab ng-disabled="ctrl.correspondenceSite.isGlobal || !ctrl.correspondenceSite.status"
-                            label="{{lang.organization_units}}">
+                            label="{{lang.organization_units}}" md-on-select="ctrl.setCurrentTab('ou')"
+                            ng-if="ctrl.showTab('ou')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row" layout-align="start center">
@@ -264,8 +265,8 @@
                             </div>
                         </md-content>
                     </md-tab>
-                    <md-tab ng-if="!ctrl.correspondenceSite.parent" ng-disabled="!ctrl.editMode"
-                            label="{{lang.sub_correspondence_sites}}">
+                    <md-tab ng-if="!ctrl.correspondenceSite.parent && ctrl.showTab('sub')" ng-disabled="!ctrl.editMode"
+                            label="{{lang.sub_correspondence_sites}}" md-on-select="ctrl.setCurrentTab('sub')">
                         <md-content>
                             <div layout="row" layout-align="center center">
                                 <md-button class="md-raised" ng-click="ctrl.addSubCorrespondenceSiteFromCtrl()">
@@ -375,18 +376,18 @@
             <div layout="row" layout-align="start center">
                 <md-button class="md-raised"
                            ng-disabled="correspondenceSiteForm.$invalid || (!ctrl.correspondenceSite.isGlobal && !ctrl.correspondenceSite.relatedOus.length)"
-                           ng-if="!ctrl.editMode"
+                           ng-if="!ctrl.editMode && ctrl.selectedTabName === 'basic'"
                            ng-click="ctrl.saveCorrespondenceSite()">
                     {{lang.add}}
                 </md-button>
                 <md-button class="md-raised"
                            ng-disabled="correspondenceSiteForm.$invalid || ctrl.correspondenceSite.cannotSave()"
-                           ng-if="ctrl.editMode"
+                           ng-if="ctrl.editMode && ctrl.selectedTabName === 'basic'"
                            ng-click="ctrl.saveCorrespondenceSite()">
                     {{lang.save}}
                 </md-button>
                 <span flex=""></span>
-                <md-button class="md-raised"
+                <md-button class="md-raised" ng-if="ctrl.selectedTabName === 'basic'"
                            ng-click="ctrl.resetModel(correspondenceSiteForm)">
                     {{lang.reset}}
                 </md-button>
