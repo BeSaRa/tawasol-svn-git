@@ -16,7 +16,7 @@
 
             // External Systems
             urlServiceProvider
-                .addSegment('desktopWord', 'http://localohst:4444') //  Edit in Desktop URL
+                .addSegment('desktopWord', 'http://localhost:4444') //  Edit in Desktop URL
                 .addSegment('icn', 'http://100.100.3.229:9080') //  ICN URL
                 .addSegment('report', 'http://100.100.3.201'); // Reporting Service URL
 
