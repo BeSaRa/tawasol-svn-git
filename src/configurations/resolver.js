@@ -371,6 +371,7 @@ module.exports = function (app) {
                     }
                 },
                 duplicateVersion: function ($timeout, $stateParams, correspondenceStorageService) {
+                    'ngInject';
                     var action = $stateParams.action;
                     if (action !== 'duplicateVersion') {
                         return $timeout(function () {
@@ -456,6 +457,7 @@ module.exports = function (app) {
                         });
                 },
                 duplicateVersion: function ($timeout, $stateParams, correspondenceStorageService) {
+                    'ngInject';
                     var action = $stateParams.action;
                     if (action !== 'duplicateVersion') {
                         return $timeout(function () {
