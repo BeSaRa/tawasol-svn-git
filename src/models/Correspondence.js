@@ -684,8 +684,8 @@ module.exports = function (app) {
                 return correspondenceService.duplicateCurrentCorrespondenceVersion(this);
             };
 
-            Correspondence.prototype.attacheContentUrl = function(contentInformation){
-                return correspondenceService.updateContentInformation(contentInformation);
+            Correspondence.prototype.attacheContentUrl = function (contentInformation) {
+                return correspondenceService.updateContentInformation(this, contentInformation);
             };
 
             // don't remove CMSModelInterceptor from last line
