@@ -87,7 +87,7 @@
                             <th ng-if="!ctrl.selectedEntities.length" md-column>
                                 <span>{{lang.entities_name}}</span>
                             </th>
-                            <th md-column>
+                            <th ng-if="!ctrl.selectedEntities.length" md-column>
                                 <span>{{lang.entities_type}}</span>
                             </th>
                             <th md-column ng-if="!ctrl.disableEverything">
@@ -104,7 +104,8 @@
                             ng-disabled="ctrl.disableEverything"
                             ng-repeat="entity in ctrl.linkedEntities  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                             <td md-cell>
-                                {{entity.getTranslatedName()}}
+                                <!--{{entity.getTranslatedName()}}-->
+                                <a href="" ng-click="ctrl.viewEntity(entity, $event)">{{entity.getTranslatedName()}}</a>
                             </td>
                             <td md-cell>
                                 {{entity.typeId.getTranslatedName()}}

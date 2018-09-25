@@ -691,6 +691,31 @@ module.exports = function (app) {
                 })
         };
 
+        // new view document
+        self.openNewViewDocument = function (workItem) {
+            if (!workItem)
+                self.workItems[0].viewNewInboxWorkItem(self.gridActions, true, true)
+                    .then(function () {
+                        self.reloadFolders(self.grid.page);
+                    })
+                    .catch(function () {
+                        self.reloadFolders(self.grid.page);
+                    });
+
+            else
+                workItem.viewNewInboxWorkItem({
+                    gridActions: self.gridActions,
+                    viewerActions: self.magazineQuickActions
+                }, true, true)
+                    .then(function () {
+                        self.reloadFolders(self.grid.page);
+                    })
+                    .catch(function () {
+                        self.reloadFolders(self.grid.page);
+                    });
+
+        };
+
         /**
          * @description edit word doucment in desktop
          * @param workItem

@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                             $timeout,
                                                             toast,
                                                             correspondenceService,
+                                                            cmsTemplate,
                                                             _) {
         'ngInject';
         var self = this;
@@ -229,8 +230,27 @@ module.exports = function (app) {
             } else {
                 dialog.infoMessage(langService.get('no_entity_types_to_add'), null, null, $event);
             }
-        }
+        };
 
+        /**
+         * @description Opens the entity in read-only mode
+         * @param linkedEntity
+         * @param $event
+         * @returns {promise|*}
+         */
+        self.viewEntity = function(linkedEntity, $event){
+            return dialog
+                .showDialog({
+                    targetEvent: $event,
+                    template: cmsTemplate.getPopup('view-linked-entity'),
+                    controller: 'viewLinkedEntityPopCtrl',
+                    controllerAs: 'ctrl',
+                    bindToController: true,
+                    locals: {
+                        linkedEntity: linkedEntity.preparedType()
+                    }
+                });
+        }
 
     });
 };
