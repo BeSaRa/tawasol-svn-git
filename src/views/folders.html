@@ -293,7 +293,8 @@
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>
-                    <div flex scroll-directive>
+                    <div flex scroll-directive
+                         ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid">
                         <magazine-layout-directive
                                 mark-as-read-unread="ctrl.markAsReadUnread"
                                 view-document="ctrl.openNewViewDocument"
@@ -304,7 +305,6 @@
                                 limit-options="ctrl.grid.limitOptions"
                                 page-limit="ctrl.grid.limit"
                                 page="ctrl.grid.page"
-                                ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid"
                                 forward-bulk="ctrl.forwardBulk"
                                 check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
                                 change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"

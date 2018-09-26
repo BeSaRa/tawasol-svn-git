@@ -29,7 +29,6 @@ module.exports = function (app) {
         self.promise = null;
         self.selecteds = [];
         self.addRankFromCtrl = function () {
-            self.rank.lookupStrkey = self.lookupStrKey;
             validationService
                 .createValidation('ADD_RANK')
                 .addStep('check_required', true, generator.checkRequiredFields, self.rank, function (result) {
@@ -61,6 +60,7 @@ module.exports = function (app) {
          *
          */
         self.editRankFromCtrl = function () {
+            self.rank.lookupStrKey = self.lookupStrKey;
             validationService
                 .createValidation('EDIT_RANK')
                 .addStep('check_required', true, generator.checkRequiredFields, self.rank, function (result) {

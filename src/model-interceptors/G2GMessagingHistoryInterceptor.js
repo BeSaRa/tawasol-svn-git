@@ -53,6 +53,7 @@ module.exports = function (app) {
             //delete model.lockedBy;
             //delete model.lockedDate;
             delete model.senderForTrackingSheet;
+            delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
 
             return model;
         });

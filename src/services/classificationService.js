@@ -273,6 +273,10 @@ module.exports = function (app) {
              * @param $event
              */
             classificationAdd: function (parentClassification, sub, $event) {
+                var subClassification = new Classification();
+                if(parentClassification){
+                    subClassification.securityLevels = parentClassification.securityLevels;
+                }
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -282,7 +286,7 @@ module.exports = function (app) {
                         escapeToClose: false,
                         locals: {
                             editMode: false,
-                            classification: new Classification(),
+                            classification: subClassification,
                             classifications: self.classifications,
                             parent: parentClassification,
                             sub: sub

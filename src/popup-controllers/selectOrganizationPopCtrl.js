@@ -77,7 +77,7 @@ module.exports = function (app) {
             dialog
                 .confirmMessage(langService.get('sure_you_leave_without_save_changes'))
                 .then(function () {
-                    self.saveSelectedOrganizations();
+                    dialog.cancel();
                 });
         };
         /**

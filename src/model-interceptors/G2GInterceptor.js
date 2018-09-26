@@ -20,6 +20,7 @@ module.exports = function (app) {
             delete model.recordInfo;
             //delete model.isLockedG2GIndicator;
             delete model.typeInfo;
+            delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
             return model;
         });
 

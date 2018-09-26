@@ -58,10 +58,10 @@
                 </md-menu-bar>
             </div>
         </div>
-        <form name="login_form" enter-submit-directive="login-button" novalidate>
+        <form name="login_form" enter-submit-directive="login-button" autocomplete="off" novalidate>
             <div layout="row">
                 <md-input-container flex>
-                    <input name="username" required ng-model="login.credentials.username"
+                    <input name="username" md-autofocus required ng-model="login.credentials.username"
                            placeholder="{{lang.username}}">
                     <div ng-messages="login_form.username.$error">
                         <div ng-message="required">{{lang.field_required}}</div>

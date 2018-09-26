@@ -627,10 +627,14 @@ module.exports = function (app) {
                 var mainSite, subSite;
                 if (this.siteInfo) {
                     mainSite = new Information(this.siteInfo.mainSite);
-                    subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : new Information();
-                    return this.siteInfo
-                        ? mainSite.getTranslatedName() + (subSite.getTranslatedName() ? (' - ' + subSite.getTranslatedName()) : '')
-                        : "";
+                    subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : null;
+
+                    this.mainSiteSubSiteString = new Information({
+                        arName : mainSite.getTranslatedNameByLang('ar') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('ar')) : ''),
+                        enName :mainSite.getTranslatedNameByLang('en') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('en')) : '')
+                    });
+
+                    return  mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : '');
                 }
                 return '';
             };

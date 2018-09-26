@@ -336,22 +336,25 @@ module.exports = function (app) {
             }
             else {
 
-                if (self.correspondenceSite.relatedOus.length === 1) {
-                    return dialog
-                        .confirmMessage(langService.get('last_organization_delete').change({name: self.correspondenceSite.getTranslatedName()}))
-                        .then(function () {
-                            return self
-                                .deleteOUCorrespondenceSiteConfirmed(ouCorrespondenceSite)
-                                .then(function () {
-                                    return self.correspondenceSite
-                                        .setIsGlobal(true)
-                                        .update()
-                                        .then(function () {
-                                            self.model = angular.copy(self.correspondenceSite);
-                                        });
-                                });
-                        })
-                }
+                /*  if (self.correspondenceSite.relatedOus.length === 1) {
+                      return dialog
+                          .confirmMessage(langService.get('last_organization_delete').change({name: self.correspondenceSite.getTranslatedName()}))
+                          .then(function () {
+                              return self
+                                  .deleteOUCorrespondenceSiteConfirmed(ouCorrespondenceSite)
+                                  .then(function () {
+                                      return self.correspondenceSite
+                                          .setIsGlobal(true)
+                                          .update()
+                                          .then(function () {
+                                              self.model = angular.copy(self.correspondenceSite);
+                                          });
+                                  });
+                          })
+                  }*/
+                if (self.correspondenceSite.relatedOus.length === 1)
+                    return dialog.errorMessage(langService.get('can_not_delete_all_ou'));
+
                 return self.deleteOUCorrespondenceSiteConfirmed(ouCorrespondenceSite);
             }
         };
@@ -383,12 +386,17 @@ module.exports = function (app) {
                 }
             }
             else {
-                self.correspondenceSite
-                    .deleteBulkFromOUCorrespondenceSites(self.selectedOUCorrespondenceSites)
-                    .then(function () {
-                        self.selectedOUCorrespondenceSites = [];
-                        toast.success(langService.get('related_organizations_deleted_success'));
-                    });
+                if (self.selectedOUCorrespondenceSites.length === self.correspondenceSite.relatedOus.length)
+                    dialog.errorMessage(langService.get('can_not_delete_all_ou'));
+
+                else {
+                    self.correspondenceSite
+                        .deleteBulkFromOUCorrespondenceSites(self.selectedOUCorrespondenceSites)
+                        .then(function () {
+                            self.selectedOUCorrespondenceSites = [];
+                            toast.success(langService.get('related_organizations_deleted_success'));
+                        });
+                }
             }
         };
 

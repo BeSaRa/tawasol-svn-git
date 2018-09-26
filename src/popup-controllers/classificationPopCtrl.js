@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                       $filter,
                                                       organizationService,
                                                       toast,
+                                                      _,
                                                       langService,
                                                       classificationService,
                                                       generator,
@@ -42,6 +43,35 @@ module.exports = function (app) {
          */
         self.getSortedData = function () {
             self.classification.children = $filter('orderBy')(self.classification.children, self.grid.order);
+        };
+
+
+        /**
+         * @description Contains the list of tabs that can be shown
+         * @type {string[]}
+         */
+        self.tabsToShow = [
+            'basic',
+            'ou',
+            'sub'
+        ];
+
+        self.showTab = function (tabName) {
+            return self.tabsToShow.indexOf(tabName) > -1;
+        };
+
+        /**
+         * @description Contains the selected tab name
+         * @type {string}
+         */
+        self.selectedTabName = "basic";
+
+        /**
+         * @description Set the current tab name
+         * @param tabName
+         */
+        self.setCurrentTab = function (tabName) {
+            self.selectedTabName = tabName;
         };
 
         self.grid = {
@@ -215,14 +245,14 @@ module.exports = function (app) {
                 .then(function () {
                     return classificationService
                         .loadClassifications()
-                        .then(function (classifications) {
-                            self.parentClassifications = classificationService.getMainClassifications(classifications);
+                        .then(function (result) {
+                            self.parentClassifications = classificationService.getMainClassifications(result);
                             self.classification = self.model = classificationService.getClassificationById(self.classification);
                             self.selectedSubClassifications = [];
                             defer.resolve(true);
                             if (pageNumber)
                                 self.grid.page = pageNumber;
-                            return classifications;
+                            return result;
                         });
                 });
         };
@@ -265,7 +295,7 @@ module.exports = function (app) {
         };
 
         self.removeBulkOUClassificationsFromCtrl = function () {
-            if(self.selectedOUClassifications.length === self.classification.relatedOus.length) {
+            if (self.selectedOUClassifications.length === self.classification.relatedOus.length) {
                 return dialog
                     .confirmMessage(langService.get('last_organization_delete').change({name: self.classification.getTranslatedName()}))
                     .then(function () {
@@ -279,11 +309,11 @@ module.exports = function (app) {
                         });
                     });
             }
-           return self.removeBulkOUClassificationsConfirmed();
+            return self.removeBulkOUClassificationsConfirmed();
         };
 
         self.removeBulkOUClassificationsConfirmed = function () {
-          return  self.classification
+            return self.classification
                 .deleteBulkFromOUClassifications(self.selectedOUClassifications)
                 .then(function () {
                     self.selectedOUClassifications = [];
@@ -329,6 +359,14 @@ module.exports = function (app) {
                     toast.success(langService.get('selected_status_updated'));
                 });
             });
+        };
+
+        self.setSubClassificationSecurityLevel = function ($event) {
+            if (self.classification.parent && !self.editMode) {
+                self.classification.securityLevels = _.find(self.parentClassifications, function (parentClassification) {
+                    return self.classification.parent.id === parentClassification.id;
+                }).securityLevels;
+            }
         };
 
         self.addSubClassificationFromCtrl = function ($event) {

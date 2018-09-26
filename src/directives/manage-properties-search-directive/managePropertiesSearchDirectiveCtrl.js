@@ -72,7 +72,7 @@ module.exports = function (app) {
 
         self.years = function () {
             var currentYear = new Date().getFullYear(), years = ['All'];
-            var lastYearForRange = currentYear - 10;
+            var lastYearForRange = 2000;
             while (lastYearForRange <= currentYear) {
                 years.push(currentYear--);
             }

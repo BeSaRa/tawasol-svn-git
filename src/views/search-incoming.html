@@ -123,7 +123,7 @@
                                         <span>{{lang.created_on}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length" md-column
-                                        md-order-by="">
+                                        md-order-by="{{ctrl.getSortingKey('mainSiteSubSiteString','Information')}}">
                                         <span>{{lang.correspondence_sites}}</span>
                                     </th>
                                     <th ng-if="!ctrl.selectedSearchedIncomingDocuments.length && ctrl.selectedSearchedIncomingDocuments.length < 2"

@@ -136,9 +136,8 @@ module.exports = function (app) {
             dialog.cancel();
         };
 
+        self.privateAnnouncement.startDate = new Date();
         self.currentDate = new Date();
-        self.startDate = new Date();
-        self.endDate = null;
 
         self.subOU = false;
         self.includedOrganization = null;
@@ -150,8 +149,6 @@ module.exports = function (app) {
             self.alwaysActive = true;
             if (self.model.startDate && self.model.endDate) {
                 self.alwaysActive = false;
-                self.startDate = self.model.startDate;
-                self.endDate = self.model.endDate;
             }
 
         //    var today = new Date();
@@ -205,7 +202,6 @@ module.exports = function (app) {
         };*/
 
         self.onEndDateChange = function () {
-            self.privateAnnouncement.endDate = self.endDate;
             if (self.editMode) {
                 self.isStatusDisabled = false;
                 if (self.privateAnnouncement.endDate) {
@@ -389,8 +385,7 @@ module.exports = function (app) {
             if (self.alwaysActive) {
                 self.privateAnnouncement.startDate = null;
                 self.privateAnnouncement.endDate = null;
-                self.startDate = null;
-                self.endDate = null;
+
             }
         };
 

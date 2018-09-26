@@ -83,8 +83,13 @@ module.exports = function (app) {
              */
             EventHistory.prototype.getTranslatedCorrespondenceSiteInfo = function () {
                 var mainSite = angular.isArray(this.mainSiteInfo) && this.mainSiteInfo.length > 0 ? new Information(this.mainSiteInfo[0]) : new Information();
-                var subSite = angular.isArray(this.subSiteInfo) && this.subSiteInfo.length > 0 ? new Information(this.subSiteInfo[0]) : new Information();
-                return mainSite.getTranslatedName() + ' - ' + subSite.getTranslatedName();
+                var subSite = angular.isArray(this.subSiteInfo) && this.subSiteInfo.length > 0 ? new Information(this.subSiteInfo[0]) : null;
+
+                this.mainSiteSubSiteString = new Information({
+                    arName: mainSite.getTranslatedNameByLang('ar') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('ar')) : ''),
+                    enName: mainSite.getTranslatedNameByLang('en') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('en')) : '')
+                });
+                return mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : '');
             };
 
             /**

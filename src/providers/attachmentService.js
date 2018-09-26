@@ -346,7 +346,9 @@ module.exports = function (app) {
 
                     var extension = file.name.split('.').pop().toLowerCase();
                     var position = _.findIndex(allowedExtensions, function (ext) {
-                        if (ext.startsWith('.'))
+                        // I removed startsWith because not supported in IE 11 .
+                        // Please Don't use it again in any where.
+                        if(ext.indexOf('.') === 0)
                             ext = ext.split('.').pop();
                         return ext === extension;
                     });

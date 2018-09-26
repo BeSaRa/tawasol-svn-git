@@ -80,7 +80,7 @@ module.exports = function (app) {
             };
 
             DistributionUserWFItem.prototype.isUserOutOfOffice = function () {
-                return this.proxyInfo && this.proxyInfo.outOfOffice && this.proxyInfo.proxyEndDate > Date.now();
+                return this.proxyInfo && this.proxyInfo.outOfOffice && this.proxyInfo.proxyEndDate >= Date.now() && this.proxyInfo.proxyStartDate <= Date.now();
             };
 
             DistributionUserWFItem.prototype.getTranslatedOrganizationName = function () {

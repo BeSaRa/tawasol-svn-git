@@ -534,6 +534,7 @@ module.exports = function (app) {
                     return model.fromCentralArchive() ? 'grid_action_send_to_central_archive' : 'grid_action_send_to_ready_to_export';
                 },
                 class: "action-green",
+                permissionKey: 'SEND_TO_READY_TO_EXPORT_QUEUE',
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && model.addMethod && model.hasContent();
                 }

@@ -8,11 +8,12 @@
         </md-toolbar>
         <md-content scroll-directive>
             <form name="classificationForm">
-                <md-tabs md-dynamic-height>
-                    <md-tab label="{{lang.basic_info}}">
+                <md-tabs md-dynamic-height md-selected="0">
+                    <md-tab label="{{lang.basic_info}}" md-on-select="ctrl.setCurrentTab('basic')" ng-if="ctrl.showTab('basic')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row">
+                                    <!-- Arabic Name -->
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>
                                         <input name="arName" id="arName" required minlength="4" maxlength="80"
@@ -24,6 +25,7 @@
                                             <div ng-message="ANS">{{lang.arabic_number_space}}</div>
                                         </div>
                                     </md-input-container>
+                                    <!-- English Name -->
                                     <md-input-container flex>
                                         <label for="enName">{{lang.english_name}}</label>
                                         <input name="enName" id="enName" required minlength="4" maxlength="80"
@@ -37,24 +39,11 @@
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
-                                    <md-input-container flex>
-                                        <label for="securityLevels">{{lang.security_levels}}</label>
-                                        <md-select required multiple ng-model-options="{trackBy: '$value.id'}"
-                                                   name="securityLevels" id="securityLevels"
-                                                   ng-model="ctrl.classification.securityLevels">
-                                            <md-option ng-value="securityLevel"
-                                                       ng-repeat="securityLevel in ctrl.securityLevels track by $index">
-                                                {{securityLevel.getTranslatedName()}}
-                                            </md-option>
-                                        </md-select>
-                                        <div ng-messages="classificationForm.securityLevels.$error">
-                                            <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="number">{{lang.positive_number_only}}</div>
-                                        </div>
-                                    </md-input-container>
+                                    <!-- Parent -->
                                     <md-input-container flex>
                                         <label for="parent">{{lang.parent_classification}}</label>
                                         <md-select aria-label="{{lang.parent_classification}}" id="parent"
+                                                   ng-change="ctrl.setSubClassificationSecurityLevel($event)"
                                                    ng-model-options="{trackBy: '$value.id'}"
                                                    ng-disabled="ctrl.classification.hasChildren() || ctrl.disableParent"
                                                    ng-model="ctrl.classification.parent">
@@ -69,8 +58,26 @@
                                             <div ng-message="number">{{lang.positive_number_only}}</div>
                                         </div>
                                     </md-input-container>
+                                    <!-- Security Level -->
+                                    <md-input-container flex>
+                                        <label for="securityLevels">{{lang.security_levels}}</label>
+                                        <md-select required multiple ng-model-options="{trackBy: '$value.id'}"
+                                                   name="securityLevels" id="securityLevels"
+                                                   ng-disabled="ctrl.classification.parent"
+                                                   ng-model="ctrl.classification.securityLevels">
+                                            <md-option ng-value="securityLevel"
+                                                       ng-repeat="securityLevel in ctrl.securityLevels track by $index">
+                                                {{securityLevel.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="classificationForm.securityLevels.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="number">{{lang.positive_number_only}}</div>
+                                        </div>
+                                    </md-input-container>
                                 </div>
                                 <div layout="row">
+                                    <!-- Status -->
                                     <div flex>
                                         <md-switch ng-model="ctrl.classification.status"
                                                    aria-label="{{lang.status}}">
@@ -78,6 +85,7 @@
                                                 {{ctrl.classification.getTranslatedStatus()}}</label>
                                         </md-switch>
                                     </div>
+                                    <!-- Global -->
                                     <div flex>
                                         <md-switch ng-change="ctrl.changeGlobalFromEdit()" ng-disabled="!ctrl.editMode"
                                                    ng-readonly="!ctrl.editMode"
@@ -92,7 +100,8 @@
                         </md-content>
                     </md-tab>
                     <md-tab ng-disabled="!ctrl.editMode || ctrl.classification.isGlobal"
-                            label="{{lang.organization_units}}">
+                            label="{{lang.organization_units}}" md-on-select="ctrl.setCurrentTab('ou')"
+                            ng-if="ctrl.showTab('ou')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row" layout-align="start center">
@@ -169,8 +178,8 @@
                             </div>
                         </md-content>
                     </md-tab>
-                    <md-tab ng-if="!ctrl.classification.parent" ng-disabled="!ctrl.editMode"
-                            label="{{lang.sub_classification}}">
+                    <md-tab ng-if="!ctrl.classification.parent && ctrl.showTab('sub')" ng-disabled="!ctrl.editMode"
+                            label="{{lang.sub_classification}}" md-on-select="ctrl.setCurrentTab('sub')">
                         <md-content>
                             <div layout="row" layout-align="center center">
                                 <md-button class="md-raised" ng-click="ctrl.addSubClassificationFromCtrl()">
@@ -281,18 +290,19 @@
         </md-content>
         <div>
             <div layout="row" layout-align="start center">
-                <md-button class="md-raised" ng-disabled="classificationForm.$invalid" ng-if="!ctrl.editMode"
+                <md-button class="md-raised" ng-disabled="classificationForm.$invalid"
+                           ng-if="!ctrl.editMode && ctrl.selectedTabName === 'basic'"
                            ng-click="ctrl.saveClassification()">
                     {{lang.add}}
                 </md-button>
                 <md-button class="md-raised"
                            ng-disabled="classificationForm.$invalid || ctrl.classification.cannotSave()"
-                           ng-if="ctrl.editMode"
+                           ng-if="ctrl.editMode && ctrl.selectedTabName === 'basic'"
                            ng-click="ctrl.saveClassification()">
                     {{lang.save}}
                 </md-button>
                 <span flex=""></span>
-                <md-button class="md-raised"
+                <md-button class="md-raised" ng-if="ctrl.selectedTabName === 'basic'"
                            ng-click="ctrl.resetModel()">
                     {{lang.reset}}
                 </md-button>

@@ -29,7 +29,6 @@ module.exports = function (app) {
         self.promise = null;
         self.selecteds = [];
         self.addJobTitleFromCtrl = function () {
-            self.jobTitle.lookupStrkey = self.lookupStrKey;
             validationService
                 .createValidation('ADD_JOB_TITLE')
                 .addStep('check_required', true, generator.checkRequiredFields, self.jobTitle, function (result) {
@@ -49,8 +48,8 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-                    jobTitleService.addJobTitle(self.jobTitle).then(function () {
-                        dialog.hide(self.jobTitle);
+                    jobTitleService.addJobTitle(self.jobTitle).then(function (result) {
+                        dialog.hide(result);
                     });
                 })
                 .catch(function () {
@@ -61,6 +60,7 @@ module.exports = function (app) {
          *
          */
         self.editJobTitleFromCtrl = function () {
+            self.jobTitle.lookupStrKey = self.lookupStrKey;
             validationService
                 .createValidation('EDIT_JOB_TITLE')
                 .addStep('check_required', true, generator.checkRequiredFields, self.jobTitle, function (result) {

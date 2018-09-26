@@ -82,6 +82,12 @@ module.exports = function (app) {
             G2G.prototype.getTranslatedCorrespondenceSiteInfo = function () {
                 var mainSite = new Information(this.siteInfo.mainSite);
                 var subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : null;
+
+                this.mainSiteSubSiteString = new Information({
+                    arName : mainSite.getTranslatedNameByLang('ar') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('ar')) : ''),
+                    enName : mainSite.getTranslatedNameByLang('en') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('en')) : '')
+                });
+
                 return mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : '');
             };
 

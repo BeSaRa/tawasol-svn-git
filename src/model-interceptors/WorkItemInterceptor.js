@@ -63,6 +63,7 @@ module.exports = function (app) {
             delete model.originalCopyIndicator;
             delete model.toOU;
             delete model.fromOU;
+            delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
             return model;
         });
 

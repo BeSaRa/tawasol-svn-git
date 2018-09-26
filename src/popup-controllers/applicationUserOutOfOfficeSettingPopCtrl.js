@@ -47,19 +47,19 @@ module.exports = function (app) {
         // tomorrow
         self.tomorrow = (new Date()).setDate(self.today.getDate() + 1);
 
-
         self.getMaxProxyStartDate = function(){
-            var endDate = new Date(self.ouApplicationUser.proxyEndDate);
+            var endDate = self.ouApplicationUser.proxyEndDate ? new Date(self.ouApplicationUser.proxyEndDate) : null;
             self.calculatedMaxProxyStartDate = endDate ? new Date(endDate.setDate(endDate.getDate() -1)) : null;
+            return self.calculatedMaxProxyStartDate;
         };
-        self.calculatedMaxProxyStartDate = self.ouApplicationUser.proxyStartDate ? self.ouApplicationUser.proxyStartDate : self.getMaxProxyStartDate();
+        self.calculatedMaxProxyStartDate = self.ouApplicationUser.proxyEndDate ? self.getMaxProxyStartDate() : null;
 
         self.getMinProxyEndDate = function () {
-            var startDate = new Date(self.ouApplicationUser.proxyStartDate);
+            var startDate = self.ouApplicationUser.proxyStartDate ? new Date(self.ouApplicationUser.proxyStartDate) : null;
             self.calculatedMinProxyEndDate = startDate ? new Date(startDate.setDate(startDate.getDate() + 1)) : null;
+            return self.calculatedMinProxyEndDate;
         };
-        self.calculatedMinProxyEndDate = self.ouApplicationUser.proxyEndDate ? self.ouApplicationUser.proxyEndDate : self.getMinProxyEndDate();
-
+        self.calculatedMinProxyEndDate = self.ouApplicationUser.proxyStartDate ? self.getMinProxyEndDate() : null;
 
 
         self.requiredFields = [

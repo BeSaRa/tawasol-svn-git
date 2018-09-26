@@ -65,6 +65,7 @@
                                     <md-switch aria-label="{{lang.global}}"
                                                title="{{correspondenceSite.getTranslatedGlobal()}}"
                                                ng-change="ctrl.changeGlobalCorrespondenceSite(correspondenceSite)"
+                                               ng-disabled="correspondenceSite.isGlobal"
                                                ng-model="correspondenceSite.isGlobal"></md-switch>
                                 </td>
                                 <td md-cell>

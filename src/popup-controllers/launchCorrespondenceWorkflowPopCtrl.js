@@ -28,7 +28,8 @@ module.exports = function (app) {
                                                                     selectedTab,
                                                                     dialog,
                                                                     correspondence,
-                                                                    isDeptIncoming) {
+                                                                    isDeptIncoming,
+                                                                    generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'launchCorrespondenceWorkflowPopCtrl';
@@ -604,8 +605,9 @@ module.exports = function (app) {
          * @private
          */
         function _getProxiesUsers(users) {
+           var currentDate = generator.getTimeStampFromDate(new Date());
             return _.filter(users, function (item) {
-                return item.isUserOutOfOffice();
+                return item.isUserOutOfOffice() && currentDate <= item.proxyInfo.proxyStartDate && currentDate >= item.proxyInfo.proxyEndDate;
             });
         }
 

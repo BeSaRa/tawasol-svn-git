@@ -309,6 +309,8 @@ Fix 11033:Business : Open Inbox Items from TAWASOL Banner : The pop up window is
 9/24/2018
 ----------------
 10383:Business : Manage Entities : View button isn't exist
+16167:Test && STGMDPS - There's no warning message appear when add private announcement without adding OU.
+10907:Admin: Add User (Suite ID: 3999 ): select added new job title view error message
 
 9/23/2018
 ----------------

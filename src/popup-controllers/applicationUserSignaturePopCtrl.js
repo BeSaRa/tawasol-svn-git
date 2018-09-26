@@ -156,10 +156,10 @@ module.exports = function (app) {
          * @description Edit signature
          */
         self.editApplicationUserSignatureFromCtrl = function () {
-            if (!self.selectedFile) {
+            /*if (!self.selectedFile) {
                 toast.error(langService.get('file_required'));
             }
-            else {
+            else {*/
                 //generator.replaceWithOriginalValues(self.applicationUserSignature, self.model, self.disabledFields);
                 validationService
                     .createValidation('EDIT_APPLICATION_USER_SIGNATURE')
@@ -172,7 +172,7 @@ module.exports = function (app) {
                         });
                         generator.generateErrorFields('check_this_fields', labels);
                     })
-                    .addStep('check_file_required', true, self.checkRequiredFile, function (result) {
+                    /*.addStep('check_file_required', true, self.checkRequiredFile, function (result) {
                         return !result.length;
                     })
                     .notifyFailure(function (step, result) {
@@ -180,7 +180,7 @@ module.exports = function (app) {
                             return self.validateLabels[label];
                         });
                         generator.generateErrorFields('check_this_fields', labels);
-                    })
+                    })*/
                     .addStep('check_duplicate', true, applicationUserSignatureService.checkDuplicateApplicationUserSignature, [self.applicationUserSignature, true], function (result) {
                         return !result;
                     }, true)
@@ -196,10 +196,7 @@ module.exports = function (app) {
                             });
 
                     });
-                /* .catch(function () {
-
-                 });*/
-            }
+            //}
         };
 
         /**

@@ -32,6 +32,15 @@ module.exports = function (app) {
                 return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
 
+            /**
+             * @description Get the arabic or english name according to language passed for entity name.
+             * @param lang
+             * @returns {string}
+             */
+            Information.prototype.getTranslatedNameByLang = function (lang) {
+                return lang === 'ar' ? this.arName : this.enName;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Information', 'init', this);

@@ -86,7 +86,7 @@
                     <span>{{lang.due_date}}</span>
                 </th>
                 <th ng-if="!ctrl.selectedWorkItems.length" md-column
-                    md-order-by="">
+                    md-order-by="{{ctrl.getSortingKey('mainSiteSubSiteString','Information')}}">
                     <span>{{lang.correspondence_sites}}</span>
                 </th>
                 <th ng-if="!ctrl.selectedWorkItems.length" md-column>

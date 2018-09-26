@@ -70,9 +70,9 @@
                         <md-input-container flex>
                             <label for="startDate">{{lang.start_date}}</label>
                             <md-datepicker id="startDate" ng-required="!ctrl.alwaysActive"
-                                           ng-model="ctrl.startDate"
+                                           ng-model="ctrl.publicAnnouncement.startDate"
                                            md-min-date="ctrl.currentDate"
-                                           md-max-date="ctrl.endDate"
+                                           md-max-date="ctrl.publicAnnouncement.endDate"
                                            name="startDate" ng-disabled="ctrl.alwaysActive" >
                             <!--ng-change="ctrl.onStartDateChange()"-->
                             </md-datepicker>
@@ -82,10 +82,10 @@
                         </md-input-container>
                         <md-input-container flex>
                             <label for="endDate">{{lang.end_date}}</label>
-                            <md-datepicker ng-required="!ctrl.alwaysActive || ctrl.startDate"
-                                           md-min-date="ctrl.startDate"
-                                           ng-model="ctrl.endDate" name="endDate" id="endDate"
-                                           ng-disabled="ctrl.alwaysActive || !ctrl.startDate"
+                            <md-datepicker ng-required="!ctrl.alwaysActive || ctrl.publicAnnouncement.startDate"
+                                           md-min-date="ctrl.publicAnnouncement.startDate"
+                                           ng-model="ctrl.publicAnnouncement.endDate" name="endDate" id="endDate"
+                                           ng-disabled="ctrl.alwaysActive || !ctrl.publicAnnouncement.startDate"
                                            ng-change="ctrl.onEndDateChange()"
                             ></md-datepicker>
                             <div ng-messages="publicAnnouncementForm.endDate.$error">

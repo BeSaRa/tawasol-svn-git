@@ -592,6 +592,7 @@ module.exports = function (app) {
                 text: 'grid_action_send_to_ready_to_export',
                 shortcut: true,
                 callback: self.sendToReadyToExport,
+                permissionKey: 'SEND_TO_READY_TO_EXPORT_QUEUE',
                 textCallback: function (model) {
                     return model.fromCentralArchive() ? 'grid_action_send_to_central_archive' : 'grid_action_send_to_ready_to_export';
                 },

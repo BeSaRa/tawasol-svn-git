@@ -34,6 +34,27 @@ module.exports = function (app) {
         self.getCorrespondenceSites = function () {
             return self.correspondenceSites.length ? $q.when(self.correspondenceSites) : self.loadCorrespondenceSites();
         };
+
+
+        /**
+         * @description load active correspondenceSites from server.
+         * @returns {Promise|activeCorrespondenceSites}
+         */
+        self.loadActiveCorrespondenceSites = function () {
+            return $http.get(urlService.correspondenceSites + '/active').then(function (result) {
+                self.activeCorrespondenceSites = generator.generateCollection(result.data.rs, CorrespondenceSite, self._sharedMethods);
+                self.activeCorrespondenceSites = generator.interceptReceivedCollection('CorrespondenceSite', self.activeCorrespondenceSites);
+                return self.activeCorrespondenceSites;
+            });
+        };
+        /**
+         * @description get active correspondenceSites from self.activeCorrespondenceSites if found and if not load it from server again.
+         * @returns {Promise|activeCorrespondenceSites}
+         */
+        self.getActiveCorrespondenceSites = function () {
+            return self.activeCorrespondenceSites.length ? $q.when(self.activeCorrespondenceSites) : self.loadActiveCorrespondenceSites();
+        };
+
         /**
          * @description add new correspondenceSite to service
          * @param correspondenceSite

@@ -218,8 +218,8 @@
                     </accordion-directive>
                 </div>
             </md-sidenav>
-            <div layout="row" class="relative" flex>
-                <iframe ng-if="ctrl.mainDocument" id="iframe-main-document" ng-src="{{ctrl.content.viewURL}}" flex
+            <div layout="column" class="relative" flex>
+                <iframe ng-if="ctrl.mainDocument" class="iframe-main-document" ng-src="{{ctrl.content.viewURL}}" flex
                         frameborder="0"></iframe>
 
                 <div ng-if="!ctrl.mainDocument" class="absolute-back-button">
@@ -246,7 +246,7 @@
                     </md-button>
                 </div>
 
-                <iframe ng-if="!ctrl.mainDocument" ng-src="{{ctrl.secondURL}}" flex frameborder="0"></iframe>
+                <iframe ng-if="!ctrl.mainDocument" class="iframe-main-document" ng-src="{{ctrl.secondURL}}" flex frameborder="0"></iframe>
 
             </div>
             <!--class="document-viewer-full-width-height"-->

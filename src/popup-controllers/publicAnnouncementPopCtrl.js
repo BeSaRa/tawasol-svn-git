@@ -26,17 +26,14 @@ module.exports = function (app) {
             status: 'status'
         };
 
+        self.publicAnnouncement.startDate = new Date();
         self.currentDate = new Date();
-        self.startDate = new Date();
-        self.endDate = null;
 
         self.alwaysActive = false;
         if (self.editMode) {
             self.alwaysActive = true;
             if (self.model.startDate && self.model.endDate) {
                 self.alwaysActive = false;
-                self.startDate = self.model.startDate;
-                self.endDate = self.model.endDate;
             }
 
             var today = new Date();
@@ -172,7 +169,6 @@ module.exports = function (app) {
         };*/
 
         self.onEndDateChange = function () {
-            self.publicAnnouncement.endDate = self.endDate;
             self.isStatusDisabled = false;
             if (self.publicAnnouncement.endDate) {
                 var today = new Date();
@@ -186,8 +182,6 @@ module.exports = function (app) {
             if (self.alwaysActive) {
                 self.publicAnnouncement.startDate = null;
                 self.publicAnnouncement.endDate = null;
-                self.startDate = null;
-                self.endDate = null;
             }
         };
 

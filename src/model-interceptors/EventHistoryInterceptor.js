@@ -25,6 +25,7 @@ module.exports = function (app) {
             delete model.documentCreationDate_vts;
             delete model.securityLevelLookup;
             delete model.securityLevelIndicator;
+            delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
             return model;
         });
 

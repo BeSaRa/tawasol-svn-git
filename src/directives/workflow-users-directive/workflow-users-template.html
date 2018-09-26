@@ -84,7 +84,7 @@
                         <md-button class="md-icon-button"
                                    ng-if="workflowUser.isUserOutOfOffice()"
                                    ng-click="ctrl.runOpenWorkflowUserOutOfOffice(workflowUser , $event)">
-                            <md-icon md-svg-icon="account-alert"></md-icon>
+                            <md-icon ng-if="workflowUser.isUserOutOfOffice()" md-svg-icon="account-alert"></md-icon>
                         </md-button>
                     </td>
                     <td md-cell>
@@ -153,7 +153,7 @@
                         <md-button class="md-icon-button"
                                    ng-if="workflowUser.isUserOutOfOffice()"
                                    ng-click="ctrl.runOpenWorkflowUserOutOfOffice(workflowUser , $event)">
-                            <md-icon md-svg-icon="account-alert"></md-icon>
+                            <md-icon ng-if="workflowUser.isUserOutOfOffice()" md-svg-icon="account-alert"></md-icon>
                         </md-button>
                     </td>
                     <td md-cell>

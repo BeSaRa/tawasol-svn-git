@@ -25,6 +25,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'folderCtrl';
         contextHelpService.setHelpTo('folders');
+        self.employeeService = employeeService;
 
         self.employeeService = employeeService;
 
@@ -914,6 +915,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.sendWorkItemToReadyToExport,
                 class: "action-green",
+                permissionKey: 'SEND_TO_READY_TO_EXPORT_QUEUE',
                 checkShow: function (action, model) {
                     //addMethod = 0 (Electronic/Digital) - hide the export button
                     //addMethod = 1 (Paper) - show the export button
