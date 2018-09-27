@@ -55,6 +55,7 @@ module.exports = function (app) {
             self.model = angular.copy(editAfterApproved.metaData);
         } else if (duplicateVersion) {
             self.model = angular.copy(duplicateVersion.metaData);
+            self.duplicateVersion = true;
         }
         self.editContent = false;
 
@@ -159,7 +160,7 @@ module.exports = function (app) {
                             self.contentFileSizeExist = true;
                             saveCorrespondenceFinished(status, newId);
                         });
-                }else {
+                } else {
                     self.contentFileExist = false;
                     self.contentFileSizeExist = false;
 

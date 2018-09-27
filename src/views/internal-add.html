@@ -19,7 +19,8 @@
                                     <md-icon md-svg-icon="file-document-box"></md-icon>
                                     <span> &nbsp;{{lang.document_properties}}</span>
                                     <span flex></span>
-                                    <md-switch ng-disabled="!!ctrl.internal.vsId" class="m0 top-switch-handler"
+                                    <md-switch ng-disabled="!!ctrl.internal.vsId || ctrl.duplicateVersion"
+                                               class="m0 top-switch-handler"
                                                ng-true-value="1" ng-false-value="0"
                                                ng-click="ctrl.preventPropagation($event)"
                                                ng-change="ctrl.checkChangeInternalType($event)"
@@ -80,7 +81,8 @@
                                 </div>
                             </accordion-content>
                         </accordion-item>
-                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.internal.attachments.length" ng-if="false">
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.internal.attachments.length"
+                                        ng-if="false">
                             <accordion-title>
                                 <md-icon md-svg-icon="attachment"></md-icon>
                                 <span>{{lang.internal_manage_attachments}}</span>
