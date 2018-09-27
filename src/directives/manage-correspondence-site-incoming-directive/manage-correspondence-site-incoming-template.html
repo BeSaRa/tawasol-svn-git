@@ -81,7 +81,7 @@
                     <table md-table md-progress="ctrl.progress">
                         <thead md-head md-order="ctrl.grid.subSearchResult.order">
                         <tr md-row>
-                            <th md-column md-order-by="mainEnSiteText">
+                            <th ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType" md-column md-order-by="mainEnSiteText">
                                 <span>{{lang.sites_main_site}}</span>
                             </th>
                             <th md-column md-order-by="mainArSiteText">
@@ -98,7 +98,7 @@
                         <tbody md-body>
                         <tr md-row
                             ng-repeat="site in ctrl.subSearchResult  | filter:ctrl.searchModel | limitTo: ctrl.grid.subSearchResult.limit: ((ctrl.grid.subSearchResult.page - 1) * ctrl.grid.subSearchResult.limit) |orderBy:ctrl.grid.subSearchResult.order  track by $index">
-                            <td md-cell>
+                            <td ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType" md-cell>
                                 <div flex layout="column">
                                     <span class="span-column">{{site.getTranslatedParentName()}}</span>
                                 </div>
@@ -219,7 +219,7 @@
                     <table md-table md-progress="ctrl.progress">
                         <thead md-head md-order="ctrl.grid.sitesInfoTo.order">
                         <tr md-row>
-                            <th md-column md-order-by="">
+                            <th ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType" md-column md-order-by="">
                                 <span>{{lang.sites_main_site}}</span>
                             </th>
                             <th md-column md-order-by="">
@@ -238,7 +238,7 @@
                         </thead>
                         <tbody md-body>
                         <tr md-row>
-                            <td md-cell>
+                            <td ng-if="!ctrl.isSimpleCorrespondenceSiteSearchType" md-cell>
                                 <div flex layout="column">
                                     <span class="span-column">{{ctrl.site.getTranslatedParentName()}}</span>
                                 </div>
