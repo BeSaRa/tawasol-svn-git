@@ -225,6 +225,7 @@ module.exports = function (app) {
                         return result.data.rs;
                     })
                     .then(function (result) {
+                        result.metaData.viewVersion = true;
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         self.popupNumber += 1;
                         return dialog.showDialog({

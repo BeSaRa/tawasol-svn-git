@@ -246,13 +246,14 @@
                     </md-button>
                 </div>
 
-                <iframe ng-if="!ctrl.mainDocument" class="iframe-main-document" ng-src="{{ctrl.secondURL}}" flex frameborder="0"></iframe>
+                <iframe ng-if="!ctrl.mainDocument" class="iframe-main-document" ng-src="{{ctrl.secondURL}}" flex
+                        frameborder="0"></iframe>
 
             </div>
             <!--class="document-viewer-full-width-height"-->
         </div>
         <div layout="row">
-            <div ng-if="ctrl.correspondence">
+            <div ng-if="ctrl.correspondence && !ctrl.correspondence.viewVersion">
                 <md-button class="md-raised" ng-click="ctrl.saveCorrespondenceChanges()"
                            ng-disabled="ctrl.checkDisabled()">{{lang.save}}
                 </md-button>
