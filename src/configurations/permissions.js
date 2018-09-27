@@ -57,7 +57,7 @@ module.exports = function (app) {
             // incoming mail
             .addMenuPermissionGroup('menu_item_incoming')
             .addMenuPermission('menu_item_incoming_add', 'ADD_NEW_INCOMING_DOCUMENT')
-            .addMenuPermission('menu_item_incoming_scan', 'SCAN_DOCUMENT')
+            .addMenuPermission('menu_item_incoming_scan', 'INCOMING_SCAN_DOCUMENT')
             .addMenuPermission('menu_item_incoming_review', 'REVIEW_INCOMING_DOCUMENT')
             .addMenuPermission('menu_item_incoming_ready_to_send', 'SEND_INCOMING_QUEUE')
             .addMenuPermission('menu_item_incoming_rejected', 'REJECTED_INCOMING_QUEUE')

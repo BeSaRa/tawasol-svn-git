@@ -16,6 +16,7 @@ module.exports = function (app) {
                                                            rootEntity,
                                                            attachmentService,
                                                            correspondenceService,
+                                                           employeeService,
                                                            $timeout) {
         'ngInject';
         var self = this;
@@ -117,6 +118,15 @@ module.exports = function (app) {
                         self.removeTemplateOrContentFile();
                     }
                 });
+        };
+
+        /**
+         * @description Checks whether to show/hide scan button
+         * @returns {boolean|*}
+         */
+        self.checkToShowScanButton = function () {
+            var docClass = self.document.getInfo().documentClass.toUpperCase();
+            return !self.displayPrepare && !self.receiveDocument && employeeService.hasPermissionTo(docClass + '_SCAN_DOCUMENT');
         };
 
         /**
@@ -229,8 +239,6 @@ module.exports = function (app) {
                 })
             }
         };
-
-
 
         /**
          * @description Remove the attached file from the file uploader
