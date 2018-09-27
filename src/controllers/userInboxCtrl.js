@@ -1591,7 +1591,7 @@ module.exports = function (app) {
                         && hasPermission;
                 }
             },
-            // versions
+            // show versions
             {
                 type: 'action',
                 icon: 'animation',
@@ -1614,6 +1614,7 @@ module.exports = function (app) {
                 hide: false,
                 callback: self.duplicateCurrentVersion,
                 class: "action-red",
+                permissionKey: 'DUPLICATE_BOOK_CURRENT',
                 showInView: false,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
@@ -1630,6 +1631,7 @@ module.exports = function (app) {
                 callback: self.duplicateVersion,
                 class: "action-red",
                 showInView: false,
+                permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
                 checkShow: function (action, model) {
                     return true;
                 }
