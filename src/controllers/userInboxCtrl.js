@@ -1068,21 +1068,31 @@ module.exports = function (app) {
             // Add To Folder
             {
                 type: 'action',
-                icon: 'folder-plus',
-                text: 'grid_action_add_to_folder',
-                callback: self.addToFolder,
+                icon: 'plus',
+                text: 'grid_action_add_to',
                 class: "action-green",
-                checkShow: self.checkToShowAction
-            },
-            // Add To Favorite
-            {
-                type: 'action',
-                icon: 'star',
-                text: 'grid_action_add_to_favorite',
-                permissionKey: "MANAGE_FAVORITE",
-                callback: self.addToFavorite,
-                class: "action-green",
-                checkShow: self.checkToShowAction
+                checkShow: self.checkToShowAction ,
+                subMenu : [
+                    // Add To Folder
+                    {
+                        type: 'action',
+                        icon: 'folder-plus',
+                        text: 'grid_action_to_folder',
+                        callback: self.addToFolder,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    },
+                    // Add To Favorite
+                    {
+                        type: 'action',
+                        icon: 'star',
+                        text: 'grid_action_to_favorite',
+                        permissionKey: "MANAGE_FAVORITE",
+                        callback: self.addToFavorite,
+                        class: "action-green",
+                        checkShow: self.checkToShowAction
+                    }
+                ]
             },
             // Create Reply
             {
