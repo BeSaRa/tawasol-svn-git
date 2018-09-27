@@ -218,7 +218,7 @@ module.exports = function (app) {
                     disabled.disableSites = true;
                     disabled.disableProperties = true;
                 }
-                return $http.get(_createUrlSchema(null, info.documentClass, 'id/' + info.id))
+                return $http.get(_createUrlSchema(null, info.documentClass, 'id/' + info.id + '/with-content'))
                     .then(function (result) {
                         var documentClass = result.data.rs.metaData.classDescription;
                         result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(documentClass), 'View' + _getModelName(documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(documentClass)));
