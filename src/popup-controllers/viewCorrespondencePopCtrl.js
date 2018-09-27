@@ -175,10 +175,8 @@ module.exports = function (app) {
          */
         self.isShowViewerAction = function (action) {
             if (action.hasOwnProperty('checkAnyPermission')) {
-                console.log("HIH");
                 return action.checkShow(action, self.workItem, action.checkAnyPermission);
             }
-            console.log("HI2");
             return action.checkShow(action, self.workItem);
         };
 

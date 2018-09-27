@@ -10,7 +10,7 @@
             <span class="property-key">{{lang.inbox_serial}}</span>
             <span class="property-value">{{ctrl.item.getFullSerial()}}</span>
         </li>
-        <li>
+        <li ng-if="ctrl.checkField('securityLevel','isMandatory')">
             <span class="property-key">{{lang.security_level}}</span>
             <span class="property-value">{{ctrl.item.securityLevelInfo.getTranslatedName()}}</span>
         </li>
@@ -27,15 +27,15 @@
             <span class="property-key">{{lang.document_date}}</span>
             <span class="property-value">{{ctrl.item.getDocumentDate()}}</span>
         </li>
-        <li>
+        <li ng-if="ctrl.checkField('priorityLevel','isMandatory')">
             <span class="property-key">{{lang.priority_level}}</span>
             <span class="property-value">{{ctrl.item.priorityLevelInfo.getTranslatedName()}}</span>
         </li>
-        <li>
+        <li ng-if="ctrl.checkField('mainClassification','isMandatory')">
             <span class="property-key">{{lang.main_classification}}</span>
             <span class="property-value">{{ctrl.item.mainClassification.getTranslatedName()}}</span>
         </li>
-        <li>
+        <li ng-if="ctrl.checkField('subClassification','isMandatory')">
             <span class="property-key">{{lang.classification}}</span>
             <span class="property-value">{{ctrl.item.subClassification.getTranslatedName()}}</span>
         </li>
