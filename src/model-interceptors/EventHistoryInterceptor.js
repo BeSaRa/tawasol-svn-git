@@ -50,6 +50,9 @@ module.exports = function (app) {
             model.dueDateStatusIndicator = model.dueDate ? model.getDueDateStatusIndicator(model.dueDate) : null;
 
             model.docClassIndicator = model.docClassName ? model.getDocClassIndicator(model.docClassName) : null;
+
+            model.setMainSiteSubSiteString();
+
             return model;
         });
 

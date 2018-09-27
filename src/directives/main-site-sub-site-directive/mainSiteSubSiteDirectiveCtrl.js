@@ -14,6 +14,9 @@ module.exports = function (app) {
 
         self.viewCorrespondenceSites = function ($event) {
             var info = self.item.getInfo();
+            if (info.documentClass === 'internal')
+                return;
+
             if (self.type && self.type.toLowerCase() === 'g2g') {
                 return dialog.showDialog({
                     template: cmsTemplate.getPopup('manage-grid-correspondence-sites'),
@@ -45,7 +48,8 @@ module.exports = function (app) {
                         sites: []
                     }
                 });
-            }else {
+            }
+            else {
                 var defer = $q.defer();
                 return dialog.showDialog({
                     template: cmsTemplate.getPopup('manage-grid-correspondence-sites'),

@@ -73,15 +73,27 @@ module.exports = function (app) {
             };
 
             G2GMessagingHistory.prototype.getTranslatedCorrespondenceSiteInfo = function () {
+                /*var mainSite = new Information(this.mainSiteTo);
+                var subSite = (this.subSiteTo) ? new Information(this.subSiteTo) : null;
+
+                return (mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : ''));*/
+                return this.mainSiteSubSiteString.getTranslatedName();
+            };
+
+            /**
+             * @description Set the main site sub site string to display/sort in the grid
+             * @returns {*}
+             */
+            G2GMessagingHistory.prototype.setMainSiteSubSiteString = function () {
                 var mainSite = new Information(this.mainSiteTo);
                 var subSite = (this.subSiteTo) ? new Information(this.subSiteTo) : null;
 
                 this.mainSiteSubSiteString = new Information({
-                    arName : mainSite.getTranslatedNameByLang('ar') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('ar')) : ''),
-                    enName :mainSite.getTranslatedNameByLang('en') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('en')) : '')
+                    arName: mainSite.getTranslatedNameByLang('ar') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('ar')) : ''),
+                    enName: mainSite.getTranslatedNameByLang('en') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('en')) : '')
                 });
 
-                return (mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : ''));
+                return this;
             };
 
             G2GMessagingHistory.prototype.viewDocument = function (actions, queueName, $event) {

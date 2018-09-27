@@ -83,6 +83,8 @@ module.exports = function (app) {
             model.mainSiteTo = new Information(model.mainSiteTo);
             model.subSiteTo = new Information(model.subSiteTo);
 
+            model.setMainSiteSubSiteString();
+
             return model;
         });
     })

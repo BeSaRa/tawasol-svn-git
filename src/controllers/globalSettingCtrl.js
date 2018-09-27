@@ -327,5 +327,9 @@ module.exports = function (app) {
             };
             reader.readAsArrayBuffer(file);
         };
+
+        self.getMaxSearchAmountLimit = function () {
+            return Number(self.globalSetting.searchAmountLimit || 0) + 1;
+        }
     });
 };

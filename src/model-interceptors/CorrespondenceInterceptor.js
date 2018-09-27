@@ -232,6 +232,9 @@ module.exports = function (app) {
             model.linkedDocsIndicator = linkedDocs.length ? model.getLinkedDocumentsIndicator() : null;
             model.tagsIndicator = (model.tags && model.tags.length) ? model.getTagsIndicator(model.tags.length) : null;
             model.isPaperIndicator = model.getInfo().documentClass !== 'incoming' ? model.getIsPaperIndicator(model.hasOwnProperty('addMethod') ? model.addMethod : 1) : null;
+
+            model.setMainSiteSubSiteString();
+
             return model;
         });
 

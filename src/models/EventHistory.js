@@ -82,14 +82,30 @@ module.exports = function (app) {
              * @returns {string}
              */
             EventHistory.prototype.getTranslatedCorrespondenceSiteInfo = function () {
-                var mainSite = angular.isArray(this.mainSiteInfo) && this.mainSiteInfo.length > 0 ? new Information(this.mainSiteInfo[0]) : new Information();
+                /*var mainSite = angular.isArray(this.mainSiteInfo) && this.mainSiteInfo.length > 0 ? new Information(this.mainSiteInfo[0]) : new Information();
                 var subSite = angular.isArray(this.subSiteInfo) && this.subSiteInfo.length > 0 ? new Information(this.subSiteInfo[0]) : null;
 
+                return mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : '');*/
+                return this.mainSiteSubSiteString.getTranslatedName();
+            };
+
+            /**
+             * @description Set the main site sub site string to display/sort in the grid
+             * @returns {*}
+             */
+            EventHistory.prototype.setMainSiteSubSiteString = function () {
                 this.mainSiteSubSiteString = new Information({
-                    arName: mainSite.getTranslatedNameByLang('ar') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('ar')) : ''),
-                    enName: mainSite.getTranslatedNameByLang('en') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('en')) : '')
+                    arName: '',
+                    enName: ''
                 });
-                return mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : '');
+                if (this.getInfo().documentClass !== 'internal') {
+                    var mainSite = angular.isArray(this.mainSiteInfo) && this.mainSiteInfo.length > 0 ? new Information(this.mainSiteInfo[0]) : new Information();
+                    var subSite = angular.isArray(this.subSiteInfo) && this.subSiteInfo.length > 0 ? new Information(this.subSiteInfo[0]) : null;
+
+                    this.mainSiteSubSiteString.arName = mainSite.getTranslatedNameByLang('ar') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('ar')) : '');
+                    this.mainSiteSubSiteString.enName = mainSite.getTranslatedNameByLang('en') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('en')) : '');
+                }
+                return this;
             };
 
             /**

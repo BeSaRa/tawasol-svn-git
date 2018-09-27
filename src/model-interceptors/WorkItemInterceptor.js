@@ -111,6 +111,9 @@ module.exports = function (app) {
             model.sender = new Information(model.senderInfo);
             model.registeryOu = new Information(model.registeryOu);
             model.fromOuInfo = new Information(model.fromOuInfo);
+
+            model.setMainSiteSubSiteString();
+
             return model;
         });
 

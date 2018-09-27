@@ -80,15 +80,30 @@ module.exports = function (app) {
              * @returns {string}
              */
             G2G.prototype.getTranslatedCorrespondenceSiteInfo = function () {
-                var mainSite = new Information(this.siteInfo.mainSite);
+                /*var mainSite = new Information(this.siteInfo.mainSite);
                 var subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : null;
 
-                this.mainSiteSubSiteString = new Information({
-                    arName : mainSite.getTranslatedNameByLang('ar') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('ar')) : ''),
-                    enName : mainSite.getTranslatedNameByLang('en') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('en')) : '')
-                });
+                return mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : '');*/
+                return this.mainSiteSubSiteString.getTranslatedName();
+            };
 
-                return mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : '');
+            /**
+             * @description Set the main site sub site string to display/sort in the grid
+             * @returns {*}
+             */
+            G2G.prototype.setMainSiteSubSiteString = function () {
+                this.mainSiteSubSiteString = new Information({
+                    arName: '',
+                    enName: ''
+                });
+                if (this.siteInfo) {
+                    var mainSite = new Information(this.siteInfo.mainSite);
+                    var subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : null;
+
+                    this.mainSiteSubSiteString.arName = mainSite.getTranslatedNameByLang('ar') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('ar')) : '');
+                    this.mainSiteSubSiteString.enName = mainSite.getTranslatedNameByLang('en') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('en')) : '');
+                }
+                return this;
             };
 
             /**

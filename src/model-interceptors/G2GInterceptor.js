@@ -45,6 +45,9 @@ module.exports = function (app) {
             model.recordInfo = correspondenceService.getCorrespondenceInformation(model.correspondence);
             //todo: type info is binded to siteType property until confirmed by Hussam from Abu Al Nassr
             model.typeInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.copyOrOriginal.name, model.correspondence.siteType);
+
+            model.setMainSiteSubSiteString();
+
             return model;
         });
 

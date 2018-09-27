@@ -147,14 +147,13 @@ module.exports = function (app) {
 
             /**
              * @description Get the concatenated document subject.
-             * @param separator
              * @returns {string}
              */
-            Correspondence.prototype.getTranslatedName = function (separator) {
+            Correspondence.prototype.getTranslatedName = function () {
                 return this.docSubject;
             };
 
-            Correspondence.prototype.getNames = function (separator) {
+            Correspondence.prototype.getNames = function () {
                 return this.docSubject;
             };
 
@@ -183,7 +182,7 @@ module.exports = function (app) {
             };
 
 
-            Correspondence.prototype.getPriorityLevels = function (separator) {
+            Correspondence.prototype.getPriorityLevels = function () {
                 var lang = langService.current.charAt(0).toUpperCase() + langService.current.substr(1);
                 return (this.priorityLevel) ? this.priorityLevel['default' + lang + 'Name'] : "";
                 // return _.map(this.priorityLevel, ('default' + lang + 'Name')).join(separator || ',  ');
@@ -278,7 +277,7 @@ module.exports = function (app) {
                         promises.push(self.deleteAttachedFile(attachment));
                     })(attachments[i])
                 }
-                $q.all(promises).then(function (value) {
+                $q.all(promises).then(function () {
                     defer.resolve(true);
                 });
                 return defer.promise;
@@ -612,7 +611,7 @@ module.exports = function (app) {
             };
 
             Correspondence.prototype.getFullSerial = function () {
-                return this.docFullSerial;
+                return this.docFullSerial || this.refDocNumber;
             };
 
             Correspondence.prototype.getDocumentDate = function () {
@@ -624,20 +623,36 @@ module.exports = function (app) {
              * @returns {string}
              */
             Correspondence.prototype.getTranslatedCorrespondenceSiteInfo = function () {
-                var mainSite, subSite;
+                /*var mainSite, subSite;
                 if (this.siteInfo) {
                     mainSite = new Information(this.siteInfo.mainSite);
                     subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : null;
 
-                    this.mainSiteSubSiteString = new Information({
-                        arName : mainSite.getTranslatedNameByLang('ar') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('ar')) : ''),
-                        enName :mainSite.getTranslatedNameByLang('en') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('en')) : '')
-                    });
-
                     return  mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : '');
                 }
-                return '';
+                return '';*/
+                return this.mainSiteSubSiteString.getTranslatedName();
             };
+
+            /**
+             * @description Set the main site sub site string to display/sort in the grid
+             * @returns {*}
+             */
+            Correspondence.prototype.setMainSiteSubSiteString = function () {
+                this.mainSiteSubSiteString = new Information({
+                    arName: '',
+                    enName: ''
+                });
+                if (this.getInfo().documentClass !== 'internal' && this.siteInfo) {
+                    var mainSite = new Information(this.siteInfo.mainSite);
+                    var subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : null;
+
+                    this.mainSiteSubSiteString.arName = mainSite.getTranslatedNameByLang('ar') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('ar')) : '');
+                    this.mainSiteSubSiteString.enName = mainSite.getTranslatedNameByLang('en') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('en')) : '');
+                }
+                return this;
+            };
+
             Correspondence.prototype.checkIncomingSites = function () {
                 return !!this.mainSiteId || !!(this.site && this.site.mainSiteId);
             };

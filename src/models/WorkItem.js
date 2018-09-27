@@ -83,19 +83,33 @@ module.exports = function (app) {
              * @returns {string}
              */
             WorkItem.prototype.getTranslatedCorrespondenceSiteInfo = function () {
-                var mainSite, subSite;
+                /*var mainSite, subSite;
                 if (this.siteInfo) {
                     mainSite = new Information(this.siteInfo.mainSite);
                     subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : null;
-
-                    this.mainSiteSubSiteString = new Information({
-                        arName : mainSite.getTranslatedNameByLang('ar') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('ar')) : ''),
-                        enName :mainSite.getTranslatedNameByLang('en') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('en')) : '')
-                    });
-
                     return mainSite.getTranslatedName() + (subSite ? (' - ' + subSite.getTranslatedName()) : '');
                 }
-                return '';
+                return '';*/
+                return this.mainSiteSubSiteString.getTranslatedName();
+            };
+
+            /**
+             * @description Set the main site sub site string to display/sort in the grid
+             * @returns {*}
+             */
+            WorkItem.prototype.setMainSiteSubSiteString = function () {
+                this.mainSiteSubSiteString = new Information({
+                    arName: '',
+                    enName: ''
+                });
+                if (this.getInfo().documentClass !== 'internal' && this.siteInfo) {
+                   var mainSite = new Information(this.siteInfo.mainSite);
+                   var subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : null;
+
+                    this.mainSiteSubSiteString.arName = mainSite.getTranslatedNameByLang('ar') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('ar')) : '');
+                    this.mainSiteSubSiteString.enName = mainSite.getTranslatedNameByLang('en') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('en')) : '');
+                }
+                return this;
             };
 
             WorkItem.prototype.setCorrespondenceService = function (service) {
