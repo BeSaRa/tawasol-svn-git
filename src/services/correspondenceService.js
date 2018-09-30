@@ -292,7 +292,7 @@ module.exports = function (app) {
         }
 
         function _getWorkFlow(correspondence) {
-            return correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm ? correspondence.generalStepElm.workFlowName.toLowerCase() : null;
+            return correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm && correspondence.generalStepElm.workFlowName ? correspondence.generalStepElm.workFlowName.toLowerCase() : null;
         }
 
         function _getWobNumber(correspondence) {

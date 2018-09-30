@@ -862,6 +862,7 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.createReplyProxyMailInboxIncoming,
                 class: "action-green",
+                permissionKey: 'CREATE_REPLY',
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model) && info.documentClass === "incoming";

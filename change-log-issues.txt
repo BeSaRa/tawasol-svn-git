@@ -298,6 +298,9 @@ Fix 11033:Business : Open Inbox Items from TAWASOL Banner : The pop up window is
 9/23/2018
 ----------------
 10841: Admin: Add sub Correspondence Sites: when adding a sub correspondence Site and closing the popup window without saving the saystem adds it to the sub correspondence Sites list.
+
+9/23/2018
+----------------
 10239:Admin : Manage Global Settings : The "Usage Terms and Conditions" Do not appear in the login page
 16229:TEST : Public Announcement : can add new Public Announcement with previous start date
 10971:Admin: Add Main Classification: When Remove The Last Organization From Main Classification, Yes Button of the Message Appear has no response.
@@ -310,5 +313,9 @@ Fix 11033:Business : Open Inbox Items from TAWASOL Banner : The pop up window is
 16167:Test && STGMDPS - There's no warning message appear when add private announcement without adding OU.
 10907:Admin: Add User (Suite ID: 3999 ): select added new job title view error message
 
+9/30/2018
+-----------------
+11345:Permissions : Manage linked entities is permitted for user who don't have permission
+10740:Business: Create Replay : Replay to Incoming Document permission doesn't exist
 Added permission for duplicate current and duplicate specific version
 

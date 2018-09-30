@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                              $controller,
                                                              $interval,
                                                              $http,
+                                                             WorkItem,
                                                              correspondenceService,
                                                              userInboxService,
                                                              followupEmployeeInboxService) {
@@ -61,7 +62,16 @@ module.exports = function (app) {
         self.openNotificationItem = function (item, $event) {
             $event.preventDefault();
             var wobNumber = item.workObjectNumber;
-            correspondenceService.viewCorrespondence(item, self.gridActions, checkIfEditPropertiesAllowed(item, true), checkIfEditCorrespondenceSiteAllowed(item, true))
+            var info = item.getInfo();
+            var workItem = new WorkItem({
+                generalStepElm: {
+                    docType: item.docType,
+                    docSubject: info.title,
+                    vsId: info.vsId,
+                    workObjectNumber: info.wobNumber
+                }
+            });
+            correspondenceService.viewCorrespondence(workItem, self.gridActions, checkIfEditPropertiesAllowed(item, true), checkIfEditCorrespondenceSiteAllowed(item, true))
                 .then(function () {
                     self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount);
                     _.map(userInboxService.userInboxes, function (workItem) {

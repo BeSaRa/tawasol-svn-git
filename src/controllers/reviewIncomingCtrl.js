@@ -776,7 +776,7 @@ module.exports = function (app) {
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
                     "MANAGE_ATTACHMENTS",
-                    "",  // Linked Entities permission not available in database
+                    "MANAGE_LINKED_ENTITIES",
                     "MANAGE_LINKED_DOCUMENTS",
                     "MANAGE_DESTINATIONS"
                 ],
@@ -822,6 +822,7 @@ module.exports = function (app) {
                         text: 'grid_action_linked_entities',
                         shortcut: false,
                         callback: self.manageLinkedEntities,
+                        permissionKey: "MANAGE_LINKED_ENTITIES",
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     },

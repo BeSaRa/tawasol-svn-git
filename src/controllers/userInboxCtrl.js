@@ -1101,6 +1101,7 @@ module.exports = function (app) {
                 text: 'grid_action_create_reply',
                 callback: self.createReplyIncoming,
                 class: "action-green",
+                permissionKey: 'CREATE_REPLY',
                 //hide: true,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
@@ -1228,7 +1229,7 @@ module.exports = function (app) {
                     "MANAGE_TASKS",
                     "MANAGE_ATTACHMENTS",
                     "MANAGE_LINKED_DOCUMENTS",
-                    "",// linked entities permission not available in database
+                    "MANAGE_LINKED_ENTITIES",
                     "MANAGE_DESTINATIONS"
                 ],
                 checkAnyPermission: true,
@@ -1293,6 +1294,7 @@ module.exports = function (app) {
                         text: 'grid_action_linked_entities',
                         callback: self.manageLinkedEntities,
                         class: "action-green",
+                        permissionKey: "MANAGE_LINKED_ENTITIES",
                         checkShow: self.checkToShowAction
                     },
                     // Destinations

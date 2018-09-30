@@ -613,7 +613,7 @@ module.exports = function (app) {
                     "MANAGE_TASKS",
                     "MANAGE_ATTACHMENTS",
                     "MANAGE_LINKED_DOCUMENTS",
-                    ""// Linked Entities
+                    "MANAGE_LINKED_ENTITIES"
                 ],
                 checkAnyPermission: true,
                 subMenu: [
@@ -680,6 +680,7 @@ module.exports = function (app) {
                         text: 'grid_action_linked_entities',
                         shortcut: false,
                         callback: self.manageLinkedEntities,
+                        permissionKey: "MANAGE_LINKED_ENTITIES",
                         class: "action-green",
                         checkShow: self.checkToShowAction
                     }

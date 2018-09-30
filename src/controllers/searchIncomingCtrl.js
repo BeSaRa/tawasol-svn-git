@@ -791,6 +791,7 @@ module.exports = function (app) {
                 icon: 'pen',
                 text: 'grid_action_create_reply',
                 shortcut: false,
+                permissionKey: 'CREATE_REPLY',
                 callback: self.createReply,
                 class: "action-green",
                 //hide: true, //TODO: Need service from Issawi
@@ -857,7 +858,7 @@ module.exports = function (app) {
                     "MANAGE_TASKS",
                     "MANAGE_ATTACHMENTS",
                     "MANAGE_LINKED_DOCUMENTS",
-                    "",  // Linked Entities permission not available in database
+                    "MANAGE_LINKED_ENTITIES",
                     "MANAGE_DESTINATIONS"
                 ],
                 checkAnyPermission: true,
@@ -927,6 +928,7 @@ module.exports = function (app) {
                         shortcut: false,
                         callback: self.manageLinkedEntities,
                         class: "action-green",
+                        permissionKey: "MANAGE_LINKED_ENTITIES",
                         checkShow: self.checkToShowAction
                     },
                     // Destinations
