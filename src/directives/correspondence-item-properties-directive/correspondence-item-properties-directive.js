@@ -24,7 +24,7 @@ module.exports = function (app) {
                 };
 
                 self.checkField = function (propertyName, fieldName) {
-                    return properties[propertyName.toLowerCase()][fieldName];
+                    return Object.keys(properties).length && properties[propertyName.toLowerCase()][fieldName];
                 }
             },
             controllerAs: 'ctrl',
