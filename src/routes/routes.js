@@ -257,6 +257,10 @@ module.exports = function (app) {
                     globalCorrespondenceSitesForG2GId: function (correspondenceViewService) {
                         'ngInject';
                         return correspondenceViewService.getGlobalCorrespondenceSitesForG2GId();
+                    },
+                    globalCorrespondenceSitesForInternalG2GId: function (correspondenceViewService) {
+                        'ngInject';
+                        return correspondenceViewService.getGlobalCorrespondenceSitesForInternalG2GId();
                     }
                 }
             })

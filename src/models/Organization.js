@@ -57,6 +57,7 @@ module.exports = function (app) {
             self.relationship = null; // add by default must removed when i send the object
             self.parentId = null; // add by default must removed when i send the object
             self.g2gId = null;
+            self.internalG2gId = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

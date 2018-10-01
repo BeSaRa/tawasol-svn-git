@@ -190,7 +190,29 @@ module.exports = function (app) {
                     $timeout(function () {
                         dialog.confirmMessage(html[0].innerHTML)
                             .then(function (result) {
-                                form.$setUntouched();
+                                // form.$setUntouched();
+                                dialog
+                                    .showDialog({
+                                        targetEvent: null,
+                                        template: cmsTemplate.getPopup('update-manager-proxy'),
+                                        controller: 'updateManagerProxyPopCtrl',
+                                        controllerAs: 'ctrl',
+                                        locals: {
+                                            currentUser: self.ouApplicationUser,
+                                            availableProxies: availableProxies
+                                        },
+                                        resolve: {
+                                            usersWhoSetProxy: function (ouApplicationUserService) {
+                                                'ngInject';
+                                                return ouApplicationUserService.getUsersWhoSetYouAsProxy(self.applicationUser)
+                                            }
+                                        }
+                                    })
+                                    .then(function (result) {
+                                        form.$setUntouched();
+                                    }).catch(function (error) {
+                                    self.isOutOfOffice = !self.isOutOfOffice;
+                                })
                             })
                             .catch(function () {
                                 self.isOutOfOffice = !self.isOutOfOffice;

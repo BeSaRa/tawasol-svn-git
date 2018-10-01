@@ -323,6 +323,8 @@
                 .addToAllWithBase('userSubscriptions', 'cms-entity/user/user-subscription')
                 // all users who set this user as proxy
                 .addToAllWithBase('usersWhoSetYouAsProxy', 'cms-entity/admin/ou-application-user/proxy/')
+                // update manager proxy
+                .addToAllWithBase('updateManagerProxy', 'cms-entity/admin/ou-application-user/update-manager-proxy')
                 // G2G inbox
                 .addToAllWithBase('g2gInbox', '/g2g/')
                 // document security in global settings

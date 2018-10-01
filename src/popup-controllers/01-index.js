@@ -98,6 +98,7 @@ module.exports = function (app) {
     require('./manageGridCorrespondenceSitesPopCtrl')(app);
     require('./manageSubscriptionsPopCtrl')(app);
     require('./viewLinkedEntityPopCtrl')(app);
+    require('./updateManagerProxyPopCtrl')(app);
     require('./attachmentThumbnailPopCtrl')(app);
     require('./versionPopCtrl')(app);
     require('./duplicateOptionPopCtrl')(app);

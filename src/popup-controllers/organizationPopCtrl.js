@@ -77,6 +77,8 @@ module.exports = function (app) {
         self.selectedDocumentClass = null;
         // get global correspondence sites for g2gId
         self.globalCorrespondenceSitesForG2GId = correspondenceViewService.globalCorrespondenceSitesForG2GId;
+        // get global correspondence sites for internal g2gId
+        self.globalCorrespondenceSitesForInternalG2GId = correspondenceViewService.globalCorrespondenceSitesForInternalG2GId;
         // get job titles
         self.jobTitles = jobTitleService.jobTitles;
         //get ranks

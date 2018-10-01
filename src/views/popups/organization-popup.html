@@ -311,7 +311,8 @@
                                             </div>
                                         </div>
                                     </md-input-container>
-                                </div><!-- row -->
+                                </div>
+
                                 <div layout="row">
                                     <!-- Old CMS Reference -->
                                     <md-input-container flex>
@@ -333,6 +334,23 @@
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!-- Internal G2G Id-->
+                                    <md-input-container flex>
+                                        <label for="internalG2gId">{{lang.g2g_id}}</label>
+                                        <md-select name="internalG2gId" id="internalG2gId"
+                                                   ng-model="ctrl.organization.internalG2gId">
+                                            <md-option
+                                                    ng-repeat="globalCorrespondenceSite in ctrl.globalCorrespondenceSitesForInternalG2GId track by $index"
+                                                    tooltip="{{globalCorrespondenceSite.getTranslatedName(true)}}"
+                                                    ng-value="globalCorrespondenceSite.exactId">
+                                                {{globalCorrespondenceSite.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <!-- Empty Container -->
+                                    <md-input-container flex></md-input-container>
                                 </div>
                             </div><!-- column container -->
                         </md-content>

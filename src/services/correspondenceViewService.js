@@ -15,6 +15,7 @@ module.exports = function (app) {
         self.children = {};
 
         self.globalCorrespondenceSitesForG2GId = [];
+        self.globalCorrespondenceSitesForInternalG2GId = [];
 
         function _createSearchUrl(searchType, details) {
             var url = [];
@@ -102,6 +103,22 @@ module.exports = function (app) {
                 .then(function (result) {
                     result = generator.generateCollection(result.data.rs, SiteView);
                     self.globalCorrespondenceSitesForG2GId = generator.interceptReceivedCollection('SiteView', result);
+                    return result;
+                })
+                .catch(function (error) {
+                    return [];
+                });
+        };
+
+        /**
+         * @description Get the global correspondence sites.
+         * Used in organization structure for binding internal g2g Id(Code).
+         */
+        self.getGlobalCorrespondenceSitesForInternalG2GId = function () {
+            $http.get(urlService.correspondenceViews + '/internal-g2g-codes')
+                .then(function (result) {
+                    result = generator.generateCollection(result.data.rs, SiteView);
+                    self.globalCorrespondenceSitesForInternalG2GId = generator.interceptReceivedCollection('SiteView', result);
                     return result;
                 })
                 .catch(function (error) {

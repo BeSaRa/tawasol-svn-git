@@ -29,6 +29,17 @@ module.exports = function (app) {
             ProxyInfo.prototype.getRequiredFields = function () {
                 return requiredFields;
             };
+
+
+            /**
+             * @description Get the translated arabic or english name according to current language for proxy user. If reverse is passed, it will return the name in language other than current language
+             * @param reverse
+             * @returns {string}
+             */
+            ProxyInfo.prototype.getTranslatedName = function (reverse) {
+                return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
+            };
+
             /**
              * @description Get the translated true/false as active/inactive or yes/no
              * @param fieldName

@@ -668,16 +668,35 @@ module.exports = function (app) {
          * @param includeChildOus
          */
         self.getAvailableProxies = function (registryOuId, includeChildOus) {
-            return self.searchByCriteria({regOu: registryOuId, includeChildOus: includeChildOus}).then(function (result) {
-                result = _.filter(result, function (ouAppUser) {
+            return self.searchByCriteria({
+                regOu: registryOuId,
+                includeChildOus: includeChildOus,
+                outOfOffice: false
+            }).then(function (result) {
+                /*result = _.filter(result, function (ouAppUser) {
                     return !ouAppUser.applicationUser.outOfOffice;
-                });
+                });*/
                 return _mapProxyUser(result);
+            })
+        };
+
+        /**
+         * @description Updates the manager proxy before user want to set out of office
+         */
+        self.updateManagersProxy = function (proxyManagers, $event) {
+            proxyManagers = _.map(proxyManagers, function (proxyManager) {
+                delete proxyManager.selectedProxyUser;
+                delete proxyManager.name;
+                return proxyManager;
+            });
+            return $http.put(urlService.updateManagerProxy, proxyManagers)
+                .then(function (result) {
+                    return result.data.rs;
+                }).catch(function (error) {
+                return false;
             })
         }
 
 
-    })
-    ;
-}
-;
+    });
+};
