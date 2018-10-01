@@ -288,10 +288,19 @@ module.exports = function (app) {
         };
 
         self.showThumbnails = function ($event, workItem) {
-            workItem.loadThumbnails();
+            if (!angular.element($event.target).hasClass('md-truncate flex') && !angular.element($event.target).hasClass('magazine-from flex')) {
+                return;
+            }
+            if (!workItem.isActiveThumbnails) {
+                workItem.loadThumbnails().then(function () {
+                    workItem.isActiveThumbnails = true;
+                });
+            } else {
+                workItem.isActiveThumbnails = false;
+            }
         };
 
-        self.showAttachmentViwer = function (image, workItem, $event) {
+        self.showAttachmentViewer = function (image, workItem, $event) {
             $event.stopPropagation();
 
             image.isMainDocument(true)

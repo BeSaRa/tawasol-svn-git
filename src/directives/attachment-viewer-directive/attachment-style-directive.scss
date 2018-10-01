@@ -1,0 +1,62 @@
+.thumbnail-container-popup-hover {
+  position: absolute;
+  min-width: 100px;
+  min-height: 120px;
+  z-index: 300;
+  background-color: grey;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+
+/********* thumbnails ******/
+.thumbnail-item {
+  //width: 100px;
+  //height: 100px;
+  float: left;
+  border: 1px solid #EEE;
+  margin: 5px 2.5px;
+  border-radius: 10px;
+  img {
+    border-radius: 10px;
+  }
+}
+
+.thumbnail-item-link {
+  width: 100px;
+  height: 100px;
+  float: left;
+  border: 1px solid #EEE;
+  margin: 5px 7px;
+  border-radius: 10px;
+}
+
+html.rtl {
+  .thumbnail-item-link {
+    float: right;
+  }
+}
+
+#attachment-thumbnails-popup {
+  background-color: white;
+  height: 100%;
+  width: 100%;
+  max-height: 100% !important;
+  max-width: 100% !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+}
+
+.thumbnail-footer {
+  background-color: #EEE;
+}
+
+.thumbnail-controller {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  button {
+
+  }
+}

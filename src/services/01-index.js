@@ -110,4 +110,5 @@ module.exports = function (app) {
 	require('./reportService')(app);
 	require('./documentSecurityService')(app);
 	require('./gridSortingService')(app);
+	require('./thumbnailService')(app);
 };

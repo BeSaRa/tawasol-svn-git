@@ -92,4 +92,5 @@ module.exports = function (app) {
     require('./document-security-watermark-directive/01-index')(app);
     require('./document-security-co-ordinates-directive/01-index')(app);
     require('./manage-correspondence-site-g2g-messaging-history-directive/01-index')(app);
+    require('./attachment-viewer-directive/01-index')(app);
 };

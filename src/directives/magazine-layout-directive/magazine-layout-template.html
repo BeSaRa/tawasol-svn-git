@@ -76,8 +76,7 @@
         </div>
     </div>
     <div layout="column" class="magazine-layout card-overlay">
-        <!--ng-click="ctrl.showThumbnails(  $event , workItem)"-->
-        <div magazine-right-click-directive layout="column"
+        <div ng-click="ctrl.showThumbnails($event , workItem)" magazine-right-click-directive layout="column"
              model="workItem"
              ng-class="{'selected':ctrl.isWorkItemSelected(workItem)}"
              magazine-item-directive="workItem" selected-length="ctrl.selectedWorkItems.length" md-whiteframe="1"
@@ -204,13 +203,12 @@
                     </div>
                 </div>-->
             </div>
-            <!--<div layout="row">-->
-                <!--<div class="thumbnail-wrapper" flex>-->
-                    <!--<a class="thumbnail-item" style="background-image: url({{image.url}})"-->
-                       <!--ng-repeat="image in workItem.thumbnails "-->
-                       <!--ng-click="ctrl.showAttachmentViwer(image , workItem , $event)"></a>-->
-                <!--</div>-->
-            <!--</div>-->
+            <div ng-if="workItem.isActiveThumbnails" layout="row">
+                <div class="thumbnail-wrapper" flex>
+                    <a attachment-viewer-directive="image" class="thumbnail-item-link" style="background-image: url({{image.url}})"
+                       ng-repeat="image in workItem.thumbnails "></a>
+                </div>
+            </div>
         </div><!-- magazine-item-->
     </div><!-- magazine-layout-->
 </div>

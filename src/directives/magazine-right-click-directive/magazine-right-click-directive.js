@@ -53,6 +53,13 @@ module.exports = function (app) {
                 element.append(wrapper);
                 // wait ms to trigger click event for the button to open the menu.
                 $timeout(function () {
+                    // prevent bubbling.
+                    angular
+                        .element('.menu-handler')
+                        .click(function ($event) {
+                            $event.stopPropagation();
+                        });
+                    // trigger a click button to open the menu.
                     wrapper.find('.menu-handler').click();
                 });
 
