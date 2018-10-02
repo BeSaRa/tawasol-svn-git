@@ -25,5 +25,6 @@ Fixed issues :
 fixed Issues:
 13510: Can't search by Linked entity from General Search.
 13514: Regression - Serial number - The order of the serial number displayed inside the document in serial number key.
+16681:V2.1.1 -view versions- There is no permission for viewing the document versions in the admin
 
 

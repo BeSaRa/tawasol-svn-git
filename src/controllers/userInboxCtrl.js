@@ -1601,6 +1601,7 @@ module.exports = function (app) {
                 shortcut: true,
                 hide: false,
                 callback: self.getDocumentVersions,
+                permissionKey: "VIEW_DOCUMENT_VERSION",
                 class: "action-red",
                 showInView: false,
                 checkShow: function (action, model) {
