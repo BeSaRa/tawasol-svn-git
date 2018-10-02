@@ -11,6 +11,7 @@ module.exports = function (app) {
                                                                               $timeout,
                                                                               $q,
                                                                               _,
+                                                                              generator,
                                                                               correspondenceService,
                                                                               toast,
                                                                               rootEntity) {
@@ -602,6 +603,10 @@ module.exports = function (app) {
                 self.emptySubRecords = false;
             }
         });
+
+        self.getSortingKey = function (property, modelType) {
+            generator.getColumnSortingKey(property, modelType);
+        }
 
     });
 };

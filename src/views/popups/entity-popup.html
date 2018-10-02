@@ -273,7 +273,7 @@
                                     </div>
                                 </fieldset>
                                 <!-- TAWASOL SUPPORTING DATABASE -->
-                                <fieldset >
+                                <fieldset>
                                     <legend class="md-accent">{{lang.tawasol_supporting_database}}</legend>
                                     <div layout="row">
                                         <md-input-container flex>
@@ -301,7 +301,7 @@
                                     </div>
                                 </fieldset>
                                 <!-- SMTP -->
-                                <fieldset >
+                                <fieldset>
                                     <legend class="md-accent">{{lang.smtp}}</legend>
                                     <div layout="row">
                                         <md-input-container flex>
@@ -390,7 +390,7 @@
                                         <label for="g2gServerAddress">{{lang.server_address}}</label>
                                         <input name="g2gServerAddress" id="g2gServerAddress"
                                                ng-model="ctrl.entity.g2gServerAddress"
-                                               ng-required="ctrl.checkG2GRequired(entityForm)">
+                                               ng-required="ctrl.checkG2GRequired(false,entityForm)">
                                         <div ng-messages="entityForm.g2gServerAddress.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
@@ -400,7 +400,7 @@
                                     <md-input-container flex>
                                         <label for="g2gUserName">{{lang.username}}</label>
                                         <input name="g2gUserName" id="g2gUserName" ng-model="ctrl.entity.g2gUserName"
-                                               ng-required="ctrl.checkG2GRequired(entityForm)">
+                                               ng-required="ctrl.checkG2GRequired(false,entityForm)">
                                         <div ng-messages="entityForm.g2gUserName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
@@ -408,8 +408,18 @@
                                     <md-input-container flex>
                                         <label for="g2gPassword">{{lang.password}}</label>
                                         <input name="g2gPassword" id="g2gPassword" ng-model="ctrl.entity.g2gPassword"
-                                               ng-required="ctrl.checkG2GRequired(entityForm)">
+                                               ng-required="ctrl.checkG2GRequired(false,entityForm)">
                                         <div ng-messages="entityForm.g2gPassword.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="g2gPrivateKey">{{lang.private_key}}</label>
+                                        <textarea name="g2gPrivateKey" id="g2gPrivateKey"
+                                                  ng-model="ctrl.entity.g2gPrivateKey"></textarea>
+                                        <div ng-messages="entityForm.g2gPrivateKey.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
@@ -420,8 +430,58 @@
                                         <input name="g2gGECode" id="g2gGECode"
                                                ng-model="ctrl.entity.g2gGECode"
                                                custom-validate-directive="number"
-                                               ng-required="ctrl.checkG2GRequired(entityForm)">
+                                               ng-required="ctrl.checkG2GRequired(false,entityForm)">
                                         <div ng-messages="entityForm.g2gGECode.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="{{lang.internal_g2g_settings}}">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="internalG2gServerAddress">{{lang.server_address}}</label>
+                                        <input name="internalG2gServerAddress" id="internalG2gServerAddress"
+                                               ng-model="ctrl.entity.internalG2gServerAddress"
+                                               ng-required="ctrl.checkG2GRequired(true,entityForm)">
+                                        <div ng-messages="entityForm.internalG2gServerAddress.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="internalG2gUserName">{{lang.username}}</label>
+                                        <input name="internalG2gUserName" id="internalG2gUserName"
+                                               ng-model="ctrl.entity.internalG2gUserName"
+                                               ng-required="ctrl.checkG2GRequired(true,entityForm)">
+                                        <div ng-messages="entityForm.internalG2gUserName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="internalG2gPassword">{{lang.password}}</label>
+                                        <input name="internalG2gPassword" id="internalG2gPassword"
+                                               ng-model="ctrl.entity.internalG2gPassword"
+                                               ng-required="ctrl.checkG2GRequired(true,entityForm)">
+                                        <div ng-messages="entityForm.internalG2gPassword.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container>
+                                        <label for="internalG2gGECode">{{lang.internal_g2g_ge_code}}</label>
+                                        <input name="internalG2gGECode" id="internalG2gGECode"
+                                               ng-model="ctrl.entity.internalG2gGECode"
+                                               custom-validate-directive="number"
+                                               ng-required="ctrl.checkG2GRequired(true,entityForm)">
+                                        <div ng-messages="entityForm.internalG2gGECode.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="number">{{lang.numberonly}}</div>
                                         </div>

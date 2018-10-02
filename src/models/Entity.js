@@ -28,11 +28,18 @@ module.exports = function (app) {
             self.smtpSubject = null;
             self.smtpPort = null;
             self.ldapProviders = [];
-            // new properties for GTG
+            // new properties for G2G
+            self.g2gPrivateKey = null;
             self.g2gServerAddress = null;
             self.g2gPassword = null;
             self.g2gGECode = null;
             self.g2gUserName = null;
+            //internal G2g properties
+            self.internalG2gServerAddress = null;
+            self.internalg2gPassword = null;
+            self.internalG2gGECode = null;
+            self.internalG2gUserName = null;
+
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [

@@ -182,8 +182,11 @@ module.exports = function (app) {
             })
         };
 
-        self.checkG2GRequired = function (entityForm) {
-            var g2gFields = ["g2gServerAddress", "g2gUserName", "g2gPassword", "g2gGECode"];
+        self.checkG2GRequired = function (isInternalG2g,entityForm) {
+            var g2gFields = (isInternalG2g) ?
+                ["internalG2gServerAddress", "internalG2gUserName", "internalG2gPassword", "internalG2gGECode"] :
+                ["g2gServerAddress", "g2gUserName", "g2gPassword", "g2gGECode"];
+
             var isRequired = false;
 
             for (var i = 0; i <= g2gFields.length; i++) {
