@@ -135,3 +135,12 @@
                         .change({name:ctrl.record.stepElm.lockingInfo.displayName})}}"
     ></md-icon>
 </span>
+<!-- Has Content (Document Version) -->
+<span ng-if="ctrl.indicatorType === 'versionHasContent'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.isLockedG2GIndicator}">
+    <md-icon ng-if="ctrl.record.versionHasContentIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.versionHasContentIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.versionHasContentIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.versionHasContentIndicator.tooltip)}}"
+    ></md-icon>
+</span>

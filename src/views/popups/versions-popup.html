@@ -23,6 +23,9 @@
                         <thead md-head md-order="ctrl.grid.order"
                                md-on-reorder="ctrl.getSortedData">
                         <tr md-row>
+                            <th md-column md-order-by="">
+                                <!-- Has Content Indicator -->
+                            </th>
                             <th md-column md-order-by="docSubject">
                                 <span>{{lang.subject}}</span>
                             </th>
@@ -44,6 +47,12 @@
                         <tr md-select="item" md-row
                             ng-class="item.isCurrentVersion() ? 'current-version': ''"
                             ng-repeat="item in ctrl.versions | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  track by $index">
+                            <td md-cell class="indicator-td">
+                                <!-- Version Has Content -->
+                                <grid-indicator-directive record="item"
+                                                          indicator-type="versionHasContent">
+                                </grid-indicator-directive>
+                            </td>
                             <td md-cell md-truncate class="subject">
                                 <a href="" class="view-doc" md-truncate
                                    title="{{item.docSubject}}"

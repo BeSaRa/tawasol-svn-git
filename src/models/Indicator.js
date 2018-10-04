@@ -51,6 +51,7 @@ module.exports = function (app) {
             icons['due_date'] = 'calendar';
             icons['copy'] = 'content-copy';
             icons['locked_g2g'] = 'lock';
+            icons['version_has_content'] = 'file-check';
 
 
             /**
@@ -326,6 +327,20 @@ module.exports = function (app) {
                     text: 'indicator_locked_by',
                     icon: self.getIndicatorIcons('locked_g2g'),
                     tooltip: 'indicator_locked_by'
+                }) : false;
+            };
+
+            /**
+             * @description Returns the record has content indicator and description
+             * @returns {Indicator}
+             * @param hasContent
+             */
+            Indicator.prototype.getVersionHasContentIndicator = function (hasContent) {
+                return hasContent ? new Indicator({
+                    class: 'indicator',
+                    text: 'indicator_version_has_content',
+                    icon: self.getIndicatorIcons('version_has_content'),
+                    tooltip: 'indicator_version_has_content'
                 }) : false;
             };
 
