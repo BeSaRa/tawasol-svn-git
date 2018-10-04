@@ -323,4 +323,4 @@ Added permission for duplicate current and duplicate specific version
 -----------------
 16826:V2.1.1- composite document - Composite checkbox doesn't reset to NO when change one of the two Original Correspondence sites to copy
 16827:V2.1.1- composite document - Composite checkbox doesn't reset to NO when Delete one of the two Original Correspondence sites
-
+17005:Kuwait - Proxy chain - The OOF dialog name is not displayed and the title name is not correct
