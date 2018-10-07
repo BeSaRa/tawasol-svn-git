@@ -104,7 +104,7 @@ module.exports = function (app) {
         } else if (duplicateVersion) {
             self.outgoing = duplicateVersion.metaData;
             self.documentInformation = self.outgoing.hasContent() ? duplicateVersion.content : null;
-            self.editContent = true;
+            self.editContent = self.outgoing.hasContent();// true;
             self.duplicateVersion = true;
         }
 
