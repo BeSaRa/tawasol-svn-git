@@ -150,7 +150,7 @@ module.exports = function (app) {
             return g2gSentItemsService.recallG2G(g2gItem, $event)
                 .then(function (result) {
                     if (result) {
-                        self.reloadG2gItems(self.page.grid)
+                        self.reloadG2gItems(self.grid.page)
                             .then(function () {
                                 toast.success(langService.get('recall_success').change({name: g2gItem.getTranslatedName()}));
                             });

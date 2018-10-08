@@ -2,8 +2,9 @@
     <div layout="column" class="content">
         <!-- page-header -->
         <div layout="row" layout-align="start center" class="page-header padding-header nmb small">
-            <div>
-                <md-input-container id="layoutInputContainer" ng-class="{'disabled-container':ctrl.editMode}" flex ng-if="!ctrl.currentEdit">
+            <div ng-if="ctrl.employeeService.hasPermissionTo('LANDING_PAGE')">
+                <md-input-container id="layoutInputContainer" ng-class="{'disabled-container':ctrl.editMode}" flex
+                                    ng-if="!ctrl.currentEdit">
                     <label for="layout">{{lang.dashboard_current_layout}}</label>
                     <md-select id="layout"
                                ng-model="ctrl.layout"
@@ -33,10 +34,12 @@
             </div>
             <div flex></div>
             <md-button tooltip="{{lang.dashboard_add_layout}}" ng-disabled="ctrl.editMode" class="md-icon-button"
+                       ng-if="ctrl.employeeService.hasPermissionTo('LANDING_PAGE')"
                        ng-click="ctrl.displayAddLayoutPopup($event)">
                 <md-icon md-svg-icon="plus"></md-icon>
             </md-button>
-            <md-button ng-if="ctrl.layout" ng-click="ctrl.toggleEditMode()"
+            <md-button ng-if="ctrl.layout && ctrl.employeeService.hasPermissionTo('LANDING_PAGE')"
+                       ng-click="ctrl.toggleEditMode()"
                        tooltip="{{ctrl.editMode ? lang.get('dashboard_view_mode') : lang.get('dashboard_edit_mode')}}"
                        class="md-icon-button">
                 <md-icon md-svg-icon="{{ctrl.editMode ? 'view-dashboard':'widgets'}}"></md-icon>
@@ -47,11 +50,12 @@
                 <div layout-sortable
                      layout-droppable
                      ng-class="{'layout-edit-mode':ctrl.editMode,'layout-xs':mediaSize('xs')}" layout="column"
-                     ng-if="!!ctrl.layout || ctrl.layouts.length"
+                     ng-if="(!!ctrl.layout || ctrl.layouts.length)"
                      id="layout-container"
                      class="page-padding-15 layout-root-builder">
                 </div>
-                <div layout="row" layout-align="center center" ng-if="!ctrl.layout && !ctrl.layouts.length">
+                <div layout="row" layout-align="center center"
+                     ng-if="!ctrl.layout && !ctrl.layouts.length && ctrl.employeeService.hasPermissionTo('LANDING_PAGE')">
                     <div layout-align="column">
                         <div flex layout="row" layout-align="center center">
                             <md-icon class="landing-page-not-found" md-svg-icon="view-dashboard"></md-icon>

@@ -26,7 +26,7 @@ module.exports = function (app) {
                 self.g2gItems = generator.generateCollection(result.data.rs, G2G, self._sharedMethods);
                 self.g2gItems = generator.interceptReceivedCollection('G2G', self.g2gItems);
                 return self.g2gItems;
-            }).catch(function(error){
+            }).catch(function (error) {
                 return [];
             });
         };
@@ -87,6 +87,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.returnG2G = function (g2gCorrespondence, $event) {
+            var isInternalG2G = angular.copy(g2gCorrespondence.isInternalG2G());
             // get correspondence from G2G object
             g2gCorrespondence = g2gCorrespondence.hasOwnProperty('correspondence') ? g2gCorrespondence.correspondence : g2gCorrespondence;
             // intercept send instance for Correspondence, Incoming, ViewIncoming
@@ -97,7 +98,7 @@ module.exports = function (app) {
                 .then(function (reason) {
 
                     return $http
-                        .put(urlService.g2gInbox + "return-to-sender", {
+                        .put(urlService.g2gInbox + "return-to-sender/" + isInternalG2G, {
                             first: g2gCorrespondence,
                             second: reason
                         })

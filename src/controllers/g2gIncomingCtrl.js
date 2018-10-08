@@ -111,7 +111,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-
+            self.openedRecord = angular.copy(g2gItem);
             return correspondenceService.viewCorrespondenceG2G(g2gItem, self.gridActions, 'G2G', $event)
                 .then(function (result) {
                     if (result !== 'receive') {
@@ -120,9 +120,11 @@ module.exports = function (app) {
                             self.replaceRecord(g2gItem);
                         }
                     }
+                    self.openedRecord = null;
                     //self.reloadG2gItems(self.grid.page);
                 })
             /*.catch(function (error) {
+                self.openedRecord = null;
                 if (!g2gItem.getInfo().vsId) {
                     g2gItem.correspondence.vsId = error.metaData.vsId;
                     self.replaceRecord(g2gItem);
@@ -136,11 +138,13 @@ module.exports = function (app) {
          * @param g2gItem
          * @param $event
          */
+        self.openedRecord = null;
         self.viewDocument = function (g2gItem, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+            self.openedRecord = angular.copy(g2gItem);
             g2gItem.viewDocument(self.gridActions, 'g2gIncoming', $event)
                 .then(function (result) {
                     if (result !== 'receive') {
@@ -149,9 +153,11 @@ module.exports = function (app) {
                             self.replaceRecord(g2gItem);
                         }
                     }
+                    self.openedRecord = null;
                     //self.reloadG2gItems(self.grid.page);
                 })
             /*.catch(function (error) {
+                self.openedRecord = null;
                 if (!g2gItem.getInfo().vsId) {
                     g2gItem.correspondence.vsId = error.metaData.vsId;
                     self.replaceRecord(g2gItem);
@@ -170,7 +176,7 @@ module.exports = function (app) {
         self.receiveDocument = function (g2gItem, $event) {
             var info = g2gItem.getInfo();
             dialog.hide('receive');
-            $state.go('app.incoming.add', {action: 'receiveg2g', vsId: info.vsId});
+            $state.go('app.incoming.add', {action: 'receiveg2g', vsId: info.vsId, internalg2g: self.openedRecord.isInternalG2G()});
         };
 
         /**

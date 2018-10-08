@@ -10,6 +10,7 @@ module.exports = function (app) {
         self.serviceName = 'g2gLookupService';
 
         self.g2gLookups = {};
+        self.g2gInternalLookups = {};
 
         self.lookupCategory = {
             securityLevel: {name: 'securityLevel', lKey: 0},
@@ -44,6 +45,19 @@ module.exports = function (app) {
             }
         };
 
+        self.categorizeInternalLookups = function (g2gInternalLookups) {
+            self.g2gInternalLookups = {};
+            var category, record;
+            for (var i = 0; i < g2gInternalLookups.length; i++) {
+                record = g2gInternalLookups[i];
+                category = _.findKey(self.lookupCategory, ['lKey', record.category]);
+                //category = findKeyByValue(self.lookupCategory, record.category);
+                if (!self.g2gInternalLookups.hasOwnProperty(category))
+                    self.g2gInternalLookups[category] = [];
+                self.g2gInternalLookups[category].push(record);
+            }
+        };
+
         /**
          * @description Load the lookups from server.
          * @returns {Promise|g2gLookups}
@@ -71,14 +85,41 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Load the internal lookups from server.
+         * @returns {Promise|g2gInternalLookups}
+         */
+        self.loadG2gInternalLookups = function () {
+            return $http.get(urlService.g2gInbox + 'load-internal-lookups')
+                .then(function (result) {
+                    result = generator.generateCollection(result.data.rs, LookupG2G, self._sharedMethods);
+                    result = generator.interceptReceivedCollection('LookupG2G', result);
+                    self.categorizeInternalLookups(result);
+                    //console.log('g2g lookups', self.g2gLookups);
+                    return self.g2gInternalLookups;
+                }).catch(function(error){
+                    return {};
+                });
+        };
+
+        /**
+         * @description Get internal lookups from self.g2gInternalLookups if found and if not load it from server again.
+         * @returns {Promise|g2gInternalLookups}
+         */
+        self.getG2gInternalLookups = function () {
+            return Object.keys(self.g2gInternalLookups).length ? $q.when(self.g2gInternalLookups) : self.loadG2gInternalLookups();
+        };
+
+        /**
          * @description Get lookup by lkey
          * @param category
          * @param lKey
+         * @param isInternalG2G
          * @returns {LookupG2G|undefined} return G2gLookup Model or undefined if not found.
          */
-        self.getG2gLookupByCategoryAndLookupKey = function (category, lKey) {
+        self.getG2gLookupByCategoryAndLookupKey = function (category, lKey, isInternalG2G) {
             lKey = lKey instanceof LookupG2G ? lKey.lkey : lKey;
-            return _.find(self.g2gLookups[category], function (g2gLookup) {
+            var lookups = isInternalG2G ? self.g2gInternalLookups : self.g2gLookups;
+            return _.find(lookups[category], function (g2gLookup) {
                 return Number(g2gLookup.lkey) === Number(lKey);
             });
         };
@@ -87,20 +128,21 @@ module.exports = function (app) {
          * @description get lookup by lookupId
          * @param category
          * @param lookupId
+         * @param isInternalG2G
          * @returns {Lookup|undefined} return Lookup Model or undefined if not found.
          */
-        self.getG2gLookupByCategoryAndId = function (category, lookupId) {
+        self.getG2gLookupByCategoryAndId = function (category, lookupId, isInternalG2G) {
             lookupId = lookupId instanceof LookupG2G ? lookupId.id : lookupId;
-            return _.find(self.lookups[category], function (lookup) {
+            var lookups = isInternalG2G ? self.g2gInternalLookups : self.g2gLookups;
+            return _.find(lookups[category], function (lookup) {
                 return Number(lookup.id) === Number(lookupId)
             });
         };
 
-
-        self.getG2gLookupsByCategory = function (category) {
-            return self.lookups[category];
+        self.getG2gLookupsByCategory = function (category, isInternalG2G) {
+            var lookups = isInternalG2G ? self.g2gInternalLookups : self.g2gLookups;
+            return lookups[category];
         }
-
 
     });
 };

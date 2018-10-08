@@ -23,12 +23,16 @@
                                        md-progress="ctrl.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
-                                        <th colspan="{{ctrl.selectedG2gItems.length > 1 ? 11 : 12}}"
+                                        <th colspan="{{ctrl.selectedG2gItems.length > 1 ? 7 : 8}}"
                                             ng-if="ctrl.selectedG2gItems.length" md-column>
                                             <div layout="row" layout-align="start center">
                                                 <span>{{ctrl.selectedG2gItems.length}} {{lang.items_selected}} </span>
                                                 <span flex></span>
                                             </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedG2gItems.length" md-column
+                                            md-order-by="">
+                                            <!--Indicators-->
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
                                             md-order-by="subject">
@@ -65,6 +69,11 @@
                                         model="g2gItem"
                                         selected-length="{{ctrl.selectedG2gItems.length ? ctrl.selectedG2gItems.length : 0}}"
                                         ng-repeat="g2gItem in ctrl.g2gItems | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                        <td md-cell class="indicator-td">
+                                            <grid-indicator-directive record="g2gItem"
+                                                                      indicator-type="isInternalG2G"
+                                                                      record-type="g2gmessaginghistory"></grid-indicator-directive>
+                                        </td>
                                         <td md-cell md-truncate class="subject">
                                             <a href="" class="view-doc" md-truncate
                                                title="{{g2gItem.subject}}"

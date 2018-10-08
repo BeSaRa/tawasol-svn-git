@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.factory('G2GMessagingHistory', function (CMSModelInterceptor,
                                                  Information,
                                                  viewDocumentService,
+                                                 Indicator,
                                                  langService) {
         'ngInject';
         return function G2GMessagingHistory(model) {
@@ -40,6 +41,7 @@ module.exports = function (app) {
             self.creationDocDate = null;
             self.lockedBy = null;
             self.lockedDate = null;
+            self.internal = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -98,6 +100,19 @@ module.exports = function (app) {
 
             G2GMessagingHistory.prototype.viewDocument = function (actions, queueName, $event) {
                 return viewDocumentService.viewG2GHistoryDocument(this, actions, queueName, $event);
+            };
+
+            /**
+             * @description Checks if G2G record is internal G2G record
+             * @returns {boolean}
+             */
+            G2GMessagingHistory.prototype.isInternalG2G = function () {
+                return this.internal;
+            };
+
+            var indicator = new Indicator();
+            G2GMessagingHistory.prototype.getIsInternalG2GIndicator = function () {
+                return indicator.getIsInternalG2GIndicator(this.internal);
             };
 
             // don't remove CMSModelInterceptor from last line

@@ -144,3 +144,13 @@
              tooltip="{{ctrl.langService.get(ctrl.record.versionHasContentIndicator.tooltip)}}"
     ></md-icon>
 </span>
+<!-- Is Internal (G2G) -->
+<span ng-if="ctrl.indicatorType === 'isInternalG2G'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.isInternalG2GIndicator}">
+    <md-icon ng-if="ctrl.record.isInternalG2GIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.isInternalG2GIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.isInternalG2GIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.isInternalG2GIndicator.tooltip)
+                        .change({name:ctrl.record.stepElm.isInternalG2GIndicator.displayName})}}"
+    ></md-icon>
+</span>

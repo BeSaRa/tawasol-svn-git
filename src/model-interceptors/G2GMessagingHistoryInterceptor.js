@@ -54,6 +54,8 @@ module.exports = function (app) {
             //delete model.lockedDate;
             delete model.senderForTrackingSheet;
             delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
+            delete model.isInternalG2GIndicator;
+            delete model.internal;
 
             return model;
         });
@@ -68,20 +70,21 @@ module.exports = function (app) {
             model.updateDate = generator.getDateFromTimeStamp(model.updateDate, generator.defaultDateTimeFormat);
 
             model.recordInfo = correspondenceService.getCorrespondenceInformation(model);
-            model.statusInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.trackingActions.name, model.status);
-            model.typeInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.copyOrOriginal.name, model.type);
+            model.statusInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.trackingActions.name, model.status, model.internal);
+            model.typeInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.copyOrOriginal.name, model.type, model.internal);
             model.senderForTrackingSheet = null;
-            if(model.sentByOrg){
-                if(generator.isJsonString(model.sentByOrg)){
+            if (model.sentByOrg) {
+                if (generator.isJsonString(model.sentByOrg)) {
                     model.senderForTrackingSheet = JSON.parse(model.sentByOrg).name;
                 }
-                else{
+                else {
                     model.senderForTrackingSheet = model.sentByOrg;
                 }
             }
 
             model.mainSiteTo = new Information(model.mainSiteTo);
             model.subSiteTo = new Information(model.subSiteTo);
+            model.isInternalG2GIndicator = model.getIsInternalG2GIndicator();
 
             model.setMainSiteSubSiteString();
 

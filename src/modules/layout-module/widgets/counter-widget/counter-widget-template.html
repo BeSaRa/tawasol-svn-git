@@ -1,6 +1,6 @@
 <md-card id="{{widget.getWidgetTagId()}}" flex
          class="card-color widget {{ctrl.options.color.optionValue ? ctrl.options.color.optionValue : ctrl.default}} counter-widget">
-    <md-menu-bar class="widget-options">
+    <md-menu-bar class="widget-options" ng-if="ctrl.employeeService.hasPermissionTo('LANDING_PAGE')">
         <md-menu>
             <md-button ng-click="$mdMenu.open()" class="md-icon-button">
                 <md-icon md-svg-icon="dots-vertical"></md-icon>
@@ -41,7 +41,8 @@
             </md-menu-content>
         </md-menu>
     </md-menu-bar>
-    <md-button class="md-icon-button counter-refresh" ng-click="ctrl.reloadCounter()">
+    <md-button ng-if="ctrl.employeeService.hasPermissionTo('LANDING_PAGE')"
+            class="md-icon-button counter-refresh" ng-click="ctrl.reloadCounter()">
         <md-icon md-svg-icon="refresh"></md-icon>
     </md-button>
     <div class="counter-widget-content" layout="column">

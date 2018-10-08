@@ -56,7 +56,8 @@ module.exports = function (app) {
                                                    G2G,
                                                    G2GMessagingHistory,
                                                    DocumentComment,
-                                                   userFolderService) {
+                                                   userFolderService,
+                                                   $stateParams) {
         'ngInject';
         var self = this, managerService, correspondenceStorageService;
         self.serviceName = 'correspondenceService';
@@ -1414,17 +1415,18 @@ module.exports = function (app) {
         self.viewCorrespondenceG2G = function (g2gItem, actions, model, $event) {
             /*var site = null,*/
             var url;
+            var isInternal = g2gItem.isInternalG2G();
             if (model.toLowerCase() === 'g2g') {
                 // site = angular.copy(g2gItem.correspondence.site);
                 // intercept send instance for G2G
                 g2gItem = g2gItem instanceof G2G ? generator.interceptSendInstance('G2G', g2gItem) : g2gItem;
                 // get correspondence from G2G object
                 g2gItem = g2gItem.hasOwnProperty('correspondence') ? g2gItem.correspondence : g2gItem;
-                url = urlService.g2gInbox + 'open';
+                url = urlService.g2gInbox + 'open/' + isInternal;
             }
             else if (model.toLowerCase() === 'g2gmessaginghistory') {
                 g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
-                url = urlService.g2gInbox + 'open-sent-return';
+                url = urlService.g2gInbox + 'open-sent-return/' + isInternal;
             }
             return $http
                 .put(url, g2gItem)
@@ -1545,8 +1547,9 @@ module.exports = function (app) {
          * @param correspondence
          */
         self.receiveG2GIncoming = function (correspondence) {
+            var isInternalG2G = $stateParams.internalg2g;
             return $http
-                .put(urlService.g2gInbox + 'receive',
+                .put(urlService.g2gInbox + 'receive/' + isInternalG2G,
                     generator.interceptSendInstance(['Correspondence', 'Incoming'], correspondence))
                 .then(function () {
                     return correspondence;

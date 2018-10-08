@@ -1099,7 +1099,7 @@ module.exports = function (app) {
             })
             // add incoming
             .state('app.incoming.add', {
-                url: '/add?action?workItem?vsId',
+                url: '/add?action?workItem?vsId?internalg2g',
                 template: templateProvider.getView('incoming-add'),
                 controller: 'incomingCtrl',
                 controllerAs: 'ctrl'
@@ -1439,7 +1439,19 @@ module.exports = function (app) {
                     lookups: function (correspondenceService) {
                         'ngInject';
                         return correspondenceService.getCorrespondenceLookups('common');
-                    }
+                    },
+                    g2gLookups: function (g2gLookupService) {
+                        'ngInject';
+                        return g2gLookupService.getG2gLookups();
+                    },
+                    g2gInternalLookups: function(g2gLookupService){
+                        'ngInject';
+                        return g2gLookupService.getG2gInternalLookups();
+                    },
+                    organizations: function (organizationService) {
+                        'ngInject';
+                        return organizationService.getOrganizations();
+                    },
                 }
             })
             .state('app.g2g.incoming', {
@@ -1448,10 +1460,10 @@ module.exports = function (app) {
                 controller: 'g2gIncomingCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
-                    lookups: function (g2gLookupService) {
+                    /*lookups: function (g2gLookupService) {
                         'ngInject';
                         return g2gLookupService.getG2gLookups();
-                    },
+                    },*/
                     g2gItems: function (g2gIncomingService) {
                         'ngInject';
                         return g2gIncomingService.loadG2gItems();
@@ -1464,10 +1476,10 @@ module.exports = function (app) {
                 controller: 'g2gReturnedCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
-                    lookups: function (g2gLookupService) {
+                    /*lookups: function (g2gLookupService) {
                         'ngInject';
                         return g2gLookupService.getG2gLookups();
-                    },
+                    },*/
                     g2gItems: function (g2gReturnedService) {
                         'ngInject';
                         return g2gReturnedService.loadG2gItems();
@@ -1480,10 +1492,10 @@ module.exports = function (app) {
                 controller: 'g2gSentItemsCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
-                    lookups: function (g2gLookupService) {
+                    /*lookups: function (g2gLookupService) {
                         'ngInject';
                         return g2gLookupService.getG2gLookups();
-                    }/*,
+                    }*//*,
                     g2gItems: function (g2gSentItemsService) {
                         'ngInject';
                         return g2gSentItemsService.loadG2gItems();

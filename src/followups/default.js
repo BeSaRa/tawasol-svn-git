@@ -20,6 +20,9 @@ module.exports = function (app) {
                       exception,
                       // $templateRequest,
                       dialog,
+                      $cookies,
+                      localStorageService,
+                      tokenService,
                       langService) {
         'ngInject';
         // start watching when the app runs. also starts the Keepalive service by default.
@@ -31,7 +34,18 @@ module.exports = function (app) {
                 dialog
                     .errorMessage(langService.get('access_denied'))
             } else {
-                loadingIndicatorService.forceEndLoading();
+                if (xhr.data.ec === 9002) {
+                    localStorageService.remove('CR');
+                    tokenService.destroy(); // destroy the current sessions
+                    employeeService.destroyEmployee(); // destroy current user data
+                    loadingIndicatorService.forceEndLoading();
+                    $cookies.put(authenticationService.logoutBySessionsKey, 'true');
+                    dialog.alertMessage(langService.get('session_expired_login_again'));
+                    $state.go('login', {identifier: rootEntity.getRootEntityIdentifier()});
+                }
+                else {
+                    loadingIndicatorService.forceEndLoading();
+                }
             }
         });
 

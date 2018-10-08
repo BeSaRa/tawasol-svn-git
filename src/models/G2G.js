@@ -24,6 +24,7 @@ module.exports = function (app) {
             self.stepElm = null;
             self.action = null;
             self.siteInfo = null;
+            self.isInternal = false;
 
 
             // every model has required fields
@@ -114,10 +115,22 @@ module.exports = function (app) {
                 return this.recordInfo;
             };
 
-            /*var indicator = new Indicator();
-            G2G.prototype.getIsLockedG2GIndicator = function(){
+            /**
+             * @description Checks if G2G record is internal G2G record
+             * @returns {boolean}
+             */
+            G2G.prototype.isInternalG2G = function () {
+                return this.internal;
+            };
+
+            var indicator = new Indicator();
+            /*G2G.prototype.getIsLockedG2GIndicator = function(){
                   return indicator.getIsLockedG2GIndicator(this.stepElm.lockedStatus);
             };*/
+
+            G2G.prototype.getIsInternalG2GIndicator = function(){
+                return indicator.getIsInternalG2GIndicator(this.internal);
+            };
 
             G2G.prototype.viewDocument = function(actions, queueName, $event){
                 return viewDocumentService.viewG2GDocument(this, actions, queueName, $event);

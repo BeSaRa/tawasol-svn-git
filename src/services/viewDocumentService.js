@@ -1120,7 +1120,7 @@ module.exports = function (app) {
              */
             self.viewG2GDocument = function (g2gIncoming, actions, pageName, $event) {
                 var disabled = _checkDisabled(pageName, g2gIncoming);
-
+                var isInternal = g2gIncoming.isInternalG2G();
                 if (disabled.disableAll) {
                     disabled.disableSites = true;
                     disabled.disableProperties = true;
@@ -1133,7 +1133,7 @@ module.exports = function (app) {
                 g2gIncoming = g2gIncoming.hasOwnProperty('correspondence') ? g2gIncoming.correspondence : g2gIncoming;
 
                 return $http
-                    .put(urlService.g2gInbox + 'open', g2gIncoming)
+                    .put(urlService.g2gInbox + 'open/' + isInternal, g2gIncoming)
                     .then(function (result) {
                         var metaData = result.data.rs.metaData;
                         //metaData.site = site;
@@ -1195,6 +1195,7 @@ module.exports = function (app) {
              */
             self.viewG2GHistoryDocument = function (g2gItem, actions, pageName, $event) {
                 var disabled = _checkDisabled(pageName, g2gItem);
+                var isInternal = g2gItem.isInternalG2G();
 
                 if (disabled.disableAll) {
                     disabled.disableSites = true;
@@ -1207,7 +1208,7 @@ module.exports = function (app) {
                 };*/
                 g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
                 return $http
-                    .put(urlService.g2gInbox + 'open-sent-return', g2gItem)
+                    .put(urlService.g2gInbox + 'open-sent-return/' + isInternal, g2gItem)
                     .then(function (result) {
                         var metaData = result.data.rs.metaData;
                         metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming', 'ViewIncoming'], generator.generateInstance(metaData, Incoming));

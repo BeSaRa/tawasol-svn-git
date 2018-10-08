@@ -19,8 +19,8 @@ module.exports = function (app) {
          * @description Load the entity names from server.
          * @returns {Promise|viewDeliveryReports}
          */
-        self.loadDeliveryReport = function (recordId) {
-            return $http.get(urlService.g2gInbox + 'get-delivery-report/' + recordId).then(function (result) {
+        self.loadDeliveryReport = function (recordId, isInternal) {
+            return $http.get(urlService.g2gInbox + 'get-delivery-report/' + isInternal + '/' + recordId).then(function (result) {
                 var viewDeliveryReports = generator.generateCollection(result.data.rs, G2GMessagingHistory);
                 viewDeliveryReports = generator.interceptReceivedCollection('G2GMessagingHistory', viewDeliveryReports);
                 return viewDeliveryReports;
@@ -29,7 +29,7 @@ module.exports = function (app) {
 
         self.viewDeliveryReport = function (record, $event) {
             var id = record.hasOwnProperty('docId') ? record.docId : record;
-
+            var isInternal = record.isInternalG2G();
             return dialog
                 .showDialog({
                     targetEvent: $event,
@@ -42,7 +42,7 @@ module.exports = function (app) {
                     },
                     resolve: {
                         records: function () {
-                            return self.loadDeliveryReport(id);
+                            return self.loadDeliveryReport(id, isInternal);
                         }
                     }
                 });

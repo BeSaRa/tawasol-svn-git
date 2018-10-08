@@ -52,6 +52,7 @@ module.exports = function (app) {
             icons['copy'] = 'content-copy';
             icons['locked_g2g'] = 'lock';
             icons['version_has_content'] = 'file-check';
+            icons['internal_g2g'] = 'recycle';
 
 
             /**
@@ -341,6 +342,21 @@ module.exports = function (app) {
                     text: 'indicator_version_has_content',
                     icon: self.getIndicatorIcons('version_has_content'),
                     tooltip: 'indicator_version_has_content'
+                }) : false;
+            };
+
+
+            /**
+             * @description Returns the is internal g2g record indicator and description
+             * @returns {Indicator}
+             * @param isInternalG2G
+             */
+            Indicator.prototype.getIsInternalG2GIndicator = function (isInternalG2G) {
+                return isInternalG2G ? new Indicator({
+                    class: 'indicator',
+                    text: 'indicator_internal_g2g',
+                    icon: self.getIndicatorIcons('internal_g2g'),
+                    tooltip: 'indicator_internal_g2g'
                 }) : false;
             };
 

@@ -18,6 +18,7 @@ module.exports = function (app) {
                                                   $http,
                                                   cmsTemplate,
                                                   $mdMedia,
+                                                  rootEntity,
                                                   $scope) {
         'ngInject';
         var self = this;
@@ -68,7 +69,7 @@ module.exports = function (app) {
                 authenticationService.logout().then(function () {
                     $timeout(function () {
                         $cookies.put(authenticationService.logoutBySessionsKey, 'true');
-                        $state.go('login');
+                        $state.go('login', {identifier: rootEntity.getRootEntityIdentifier()});
                     });
                 });
             });

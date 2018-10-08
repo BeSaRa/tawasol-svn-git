@@ -124,8 +124,8 @@ module.exports = function (app) {
          * @description Checks whether to show/hide scan button
          * @returns {boolean|*}
          */
-        self.checkToShowScanButton = function () {
-            var docClass = self.document.getInfo().documentClass.toUpperCase();
+        self.checkToShowScanButton = function (document) {
+            var docClass = document.getInfo().documentClass.toUpperCase();
             return !self.displayPrepare && !self.receiveDocument && employeeService.hasPermissionTo(docClass + '_SCAN_DOCUMENT');
         };
 

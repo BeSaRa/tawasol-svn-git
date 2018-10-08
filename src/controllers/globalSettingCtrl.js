@@ -217,7 +217,6 @@ module.exports = function (app) {
          * @description Edit global setting
          */
         self.editGlobalSettingFromCtrl = function () {
-            debugger;
             generator.replaceWithOriginalValues(self.globalSetting, self.entityForGlobalSetting, self.entityProperties);
             validationService
                 .createValidation('EDIT_GLOBAL_SETTING')

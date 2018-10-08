@@ -21,6 +21,7 @@ module.exports = function (app) {
             //delete model.isLockedG2GIndicator;
             delete model.typeInfo;
             delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
+            delete model.isInternalG2GIndicator;
             return model;
         });
 
@@ -44,8 +45,9 @@ module.exports = function (app) {
             //model.isLockedG2GIndicator = model.getIsLockedG2GIndicator();
             model.recordInfo = correspondenceService.getCorrespondenceInformation(model.correspondence);
             //todo: type info is binded to siteType property until confirmed by Hussam from Abu Al Nassr
-            model.typeInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.copyOrOriginal.name, model.correspondence.siteType);
 
+            model.typeInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.copyOrOriginal.name, model.correspondence.siteType, model.isInternalG2G());
+            model.isInternalG2GIndicator = model.getIsInternalG2GIndicator();
             model.setMainSiteSubSiteString();
 
             return model;

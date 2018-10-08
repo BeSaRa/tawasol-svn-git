@@ -4,10 +4,12 @@ module.exports = function (app) {
                                                   langService,
                                                   counterService,
                                                   LayoutWidgetOption,
+                                                  employeeService,
                                                   $scope) {
         'ngInject';
         var self = this;
         self.controllerName = 'counterWidgetCtrl';
+        self.employeeService = employeeService;
 
         self.colors = [
             'bg-red',
@@ -90,6 +92,8 @@ module.exports = function (app) {
         }
 
         self.onHideLabel = function () {
+            if (!self.employeeService.hasPermissionTo('LANDING_PAGE'))
+                return false;
             self.hideLabel = true;
             $timeout(function () {
                 $('#title-' + $scope.widget.id).focus();

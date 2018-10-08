@@ -9,7 +9,8 @@ module.exports = function (app) {
                                                 dialog,
                                                 $scope,
                                                 $element,
-                                                $timeout) {
+                                                $timeout,
+                                                employeeService) {
         'ngInject';
         var self = this,
             layoutContainer = '#layout-container',
@@ -25,7 +26,7 @@ module.exports = function (app) {
         self.editMode = false;
 
         self.layout = layoutService.getCurrentLayout();
-
+        self.employeeService = employeeService;
 
         self.options = {
             from: 0,

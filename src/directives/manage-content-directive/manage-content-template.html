@@ -19,7 +19,7 @@
                    ng-model="ctrl.document.contentFile" aria-label="{{lang.content_upload}}"
                    id="upload-file-content" name="upload-file-content">
         </label>
-        <div ng-if="ctrl.checkToShowScanButton()">
+        <div ng-if="ctrl.checkToShowScanButton(ctrl.document)">
             <md-button ng-click="ctrl.openScannerDialog('scanner',$event)"
                        class="md-raised">
                 <div layout="row" layout-align="start center">
