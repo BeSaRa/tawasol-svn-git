@@ -331,3 +331,5 @@ Added the has content indicator in versions popup.
 16796:V2.1.1 - Duplicate specific - for all paper documents, the content does not exist in the duplicated document from an old version with different content
 17031: Test - permissions - users without landing page permission should not open the dashboard after login
 17033:session is timedout and login page is not opened, i have to logout and login again
+
+16922:V2.1.1- composite document -Notification doesn't sent when subscribe composite document by receive and change in status
