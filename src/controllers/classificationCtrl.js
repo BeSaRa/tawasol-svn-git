@@ -189,7 +189,10 @@ module.exports = function (app) {
         self.changeStatusClassification = function (classification) {
             classification.updateStatus()
                 .then(function () {
-                    toast.success(langService.get('status_success'));
+                    self.reloadClassifications(self.grid.page)
+                        .then(function () {
+                            toast.success(langService.get('status_success'));
+                        })
                 })
                 .catch(function () {
                     classification.status = !classification.status;
