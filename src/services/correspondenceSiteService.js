@@ -337,9 +337,15 @@ module.exports = function (app) {
                         locals: {
                             editMode: false,
                             correspondenceSite: new CorrespondenceSite(),
-                            correspondenceSites: self.correspondenceSites,
+                            //correspondenceSites: self.correspondenceSites,
                             parent: parentCorrespondenceSite,
                             sub: sub
+                        },
+                        resolve: {
+                            correspondenceSites: function(){
+                                'ngInject';
+                                return self.loadCorrespondenceSites();
+                            }
                         }
                     });
             },

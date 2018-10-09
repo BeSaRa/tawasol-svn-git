@@ -148,6 +148,7 @@ module.exports = function (app) {
                             }
                         }
                         else {
+                            self.correspondenceSite.relatedOus = relatedOus;
                             self.model = angular.copy(self.correspondenceSite);
                             self.disableParent = false;
                             dialog.hide(self.correspondenceSite);
