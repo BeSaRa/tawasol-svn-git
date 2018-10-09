@@ -34,7 +34,7 @@ module.exports = function (app) {
                 dialog
                     .errorMessage(langService.get('access_denied'))
             } else {
-                if (xhr.data.ec === 9002) {
+                if (xhr.data.ec === 9002 && localStorageService.get('CR')) {
                     localStorageService.remove('CR');
                     tokenService.destroy(); // destroy the current sessions
                     employeeService.destroyEmployee(); // destroy current user data

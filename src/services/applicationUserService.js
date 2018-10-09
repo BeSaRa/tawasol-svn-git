@@ -434,7 +434,6 @@ module.exports = function (app) {
                                 return ouApplicationUserService
                                     .getAvailableProxies(ouApplicationUser.getRegistryOUID(), true)
                                     .then(function (result) {
-                                        console.log('available proxies', result);
                                         return result
                                     })
                             }
