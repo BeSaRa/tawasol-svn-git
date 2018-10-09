@@ -601,6 +601,11 @@ module.exports = function (app) {
             if (value) {
                 self.subRecords = _concatCorrespondenceSites(true);
                 self.emptySubRecords = false;
+                self.selectedSiteType = null;
+                self.selectedMainSite = null;
+                self.selectedType = null;
+                self.mainSearch = '';
+                self.subSearch = '';
             }
         });
 

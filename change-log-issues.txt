@@ -332,4 +332,7 @@ Added the has content indicator in versions popup.
 17031: Test - permissions - users without landing page permission should not open the dashboard after login
 17033:session is timedout and login page is not opened, i have to logout and login again
 
+10/09/2018
+------------------
 16922:V2.1.1- composite document -Notification doesn't sent when subscribe composite document by receive and change in status
+reset correspondence sites when add form is reset.

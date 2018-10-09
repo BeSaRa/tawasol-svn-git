@@ -764,6 +764,13 @@ module.exports = function (app) {
             if (value) {
                 self.subSearchResult = [];
                 self.emptySiteSearch = false;
+                self.selectedSiteType = null;
+                self.selectedMainSite = null;
+                self.selectedType = null;
+                self.mainSearch = '';
+                self.subSearch = '';
+                self.selectedDistributionList = null;
+                self.subSearchResult_DL = [];
             }
         });
 
