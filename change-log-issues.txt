@@ -340,3 +340,7 @@ reset correspondence sites when add form is reset.
 16536:Test - Correspondence Site is not found When Create Reply from Incoming Search.
 16668:Kuwait - Correspondece fields still appear in simple view for incoming document
 16922:V2.1.1- composite document -Notification doesn't sent when subscribe composite document by receive and change in status
+
+10/10/2018
+-----------------
+15877:Full document view - Department Inbox - Time / Serial should appears in Incoming Mail from General Information full document

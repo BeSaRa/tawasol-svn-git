@@ -591,15 +591,30 @@ module.exports = function (app) {
 
         /**
          * @description Gets the date in default format
-         * @param timestamp
+         * @param timeStamp
          * @param dateAndTime
          * @returns {string | null}
          */
-        self.getDateFromTimeStamp = function (timestamp, dateAndTime) {
-            if (timestamp) {
+        self.getDateFromTimeStamp = function (timeStamp, dateAndTime) {
+            if (timeStamp) {
                 // in case of long numbers, they will be having L at last. so remove L and change timestamp to moment date.
-                timestamp = Number(timestamp.toString().split('L')[0]);
-                return moment(timestamp).format(dateAndTime ? self.defaultDateTimeFormat : self.defaultDateFormat);
+                timeStamp = Number(timeStamp.toString().split('L')[0]);
+                return moment(timeStamp).format(dateAndTime ? self.defaultDateTimeFormat : self.defaultDateFormat);
+            }
+            return null;
+        };
+
+        /**
+         * @description Gets the time from timestamp
+         * @param timeStamp
+         * @param isTwentyFourHour
+         * @returns {string | null}
+         */
+        self.getTimeFromTimeStamp = function (timeStamp, isTwentyFourHour) {
+            if (timeStamp) {
+                // in case of long numbers, they will be having L at last. so remove L and change timestamp to moment time.
+                timeStamp = Number(timeStamp.toString().split('L')[0]);
+                return moment(timeStamp).format(isTwentyFourHour ? 'HH:mm' : 'hh:mm A');
             }
             return null;
         };

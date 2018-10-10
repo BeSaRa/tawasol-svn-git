@@ -16,7 +16,8 @@ module.exports = function (app) {
                       downloadService,
                       WorkItemType,
                       lookupService,
-                      Information) {
+                      Information,
+                      generator) {
         'ngInject';
 
         var modelName = 'WorkItem';
@@ -64,11 +65,13 @@ module.exports = function (app) {
             delete model.toOU;
             delete model.fromOU;
             delete model.mainSiteSubSiteString;   // added in model when binding main-site-sub-site directive value in grid
+            delete model.generalStepElm.receivedTime;
             return model;
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.generalStepElm.numberOfDays = getNumberOfDays(model.generalStepElm.receivedDate);
+            model.generalStepElm.receivedTime = generator.getTimeFromTimeStamp(angular.copy(model.generalStepElm.receivedDate));
             model.generalStepElm.receivedDate ? getDateFromUnixTimeStamp(model.generalStepElm, ["receivedDate"]) : "";
 
             model.dueDateOriginal = angular.copy(model.generalStepElm.dueDate);

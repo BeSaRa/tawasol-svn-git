@@ -249,6 +249,9 @@ module.exports = function (app) {
             WorkItem.prototype.getReceivedDate = function () {
                 return this.generalStepElm.receivedDate;
             };
+            WorkItem.prototype.getReceivedTime = function () {
+                return this.generalStepElm.receivedTime;
+            };
 
             WorkItem.prototype.hasDocumentClass = function (documentClass) {
                 return this.getInfo().documentClass.toLowerCase() === documentClass.toLowerCase();
