@@ -934,22 +934,24 @@ module.exports = function (app) {
                         })
                 })
         };
+
         // new view document
         self.openNewViewDocument = function (workItem) {
-            if (!workItem)
-                self.userInboxes[0].viewNewInboxWorkItem(self.gridActions, true, true)
+            if (!workItem) {
+                workItem = self.userInboxes[0];
+                workItem.viewNewInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
                     .then(function () {
                         self.reloadUserInboxes(self.grid.page);
                     })
                     .catch(function () {
                         self.reloadUserInboxes(self.grid.page);
                     });
-
+            }
             else
                 workItem.viewNewInboxWorkItem({
                     gridActions: self.gridActions,
                     viewerActions: self.magazineQuickActions
-                }, true, true)
+                }, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
                     .then(function () {
                         self.reloadUserInboxes(self.grid.page);
                     })
