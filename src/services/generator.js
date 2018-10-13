@@ -597,7 +597,7 @@ module.exports = function (app) {
          */
         self.getDateFromTimeStamp = function (timeStamp, dateAndTime) {
             if (timeStamp) {
-                // in case of long numbers, they will be having L at last. so remove L and change timestamp to moment date.
+                // in case of long numbers, they will be having L at last. so remove L and change timeStamp to moment date.
                 timeStamp = Number(timeStamp.toString().split('L')[0]);
                 return moment(timeStamp).format(dateAndTime ? self.defaultDateTimeFormat : self.defaultDateFormat);
             }
@@ -605,14 +605,14 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Gets the time from timestamp
+         * @description Gets the time from timeStamp
          * @param timeStamp
          * @param isTwentyFourHour
          * @returns {string | null}
          */
         self.getTimeFromTimeStamp = function (timeStamp, isTwentyFourHour) {
             if (timeStamp) {
-                // in case of long numbers, they will be having L at last. so remove L and change timestamp to moment time.
+                // in case of long numbers, they will be having L at last. so remove L and change timeStamp to moment time.
                 timeStamp = Number(timeStamp.toString().split('L')[0]);
                 return moment(timeStamp).format(isTwentyFourHour ? 'HH:mm' : 'hh:mm A');
             }
@@ -620,7 +620,7 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Gets timestamp from the provided date
+         * @description Gets timeStamp from the provided date
          * @param date
          * @param addL
          * @returns {string | null}
