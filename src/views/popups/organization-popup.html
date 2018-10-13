@@ -326,6 +326,7 @@
                                         <label for="g2gId">{{lang.g2g_id}}</label>
                                         <md-select name="g2gId" id="g2gId"
                                                    ng-model="ctrl.organization.g2gId">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option
                                                     ng-repeat="globalCorrespondenceSite in ctrl.globalCorrespondenceSitesForG2GId track by $index"
                                                     tooltip="{{globalCorrespondenceSite.getTranslatedName(true)}}"
@@ -341,6 +342,7 @@
                                         <label for="internalG2gId">{{lang.internal_g2g_id}}</label>
                                         <md-select name="internalG2gId" id="internalG2gId"
                                                    ng-model="ctrl.organization.internalG2gId">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
                                             <md-option
                                                     ng-repeat="globalCorrespondenceSite in ctrl.globalCorrespondenceSitesForInternalG2GId track by $index"
                                                     tooltip="{{globalCorrespondenceSite.getTranslatedName(true)}}"
