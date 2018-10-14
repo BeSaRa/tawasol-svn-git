@@ -227,13 +227,14 @@ module.exports = function (app) {
             dialog
                 .confirmMessage(langService.get('confirm_delete').change({name: attachment.documentTitle}))
                 .then(function () {
-                    /**
-                     attachmentService
-                     .deleteAttachment(vsId, documentClass, attachment)
-                     .then(function () {
+                    attachmentService
+                        .deleteAttachment(info.vsId, info.documentClass, attachment)
+                        .then(function () {
+                            self.successFilesUploaded = _.filter(self.successFilesUploaded, function (uploadedFile) {
+                                return uploadedFile.vsId !== attachment.vsId;
+                            });
                             toast.success(langService.get('delete_success').change({name: attachment.documentTitle}));
                         });
-                     */
                 });
 
         }

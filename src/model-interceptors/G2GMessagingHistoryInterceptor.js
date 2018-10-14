@@ -64,14 +64,14 @@ module.exports = function (app) {
             model.mainSiteFrom = new Information(model.mainSiteFrom);
             model.subSiteFrom = new Information(model.subSiteFrom);
 
-            model.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
+            model.securityLevel = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.securityLevel.name, model.securityLevel, model.isInternalG2G());
             model.deliveryDate = generator.getDateFromTimeStamp(model.deliveryDate, generator.defaultDateTimeFormat);
             model.sentDate = generator.getDateFromTimeStamp(model.sentDate, generator.defaultDateTimeFormat);
             model.updateDate = generator.getDateFromTimeStamp(model.updateDate, generator.defaultDateTimeFormat);
 
             model.recordInfo = correspondenceService.getCorrespondenceInformation(model);
-            model.statusInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.trackingActions.name, model.status, model.internal);
-            model.typeInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.copyOrOriginal.name, model.type, model.internal);
+            model.statusInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.trackingActions.name, model.status, model.isInternalG2G());
+            model.typeInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.copyOrOriginal.name, model.type, model.isInternalG2G());
             model.senderForTrackingSheet = null;
             if (model.sentByOrg) {
                 if (generator.isJsonString(model.sentByOrg)) {

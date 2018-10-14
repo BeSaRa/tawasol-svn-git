@@ -120,7 +120,8 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_reports_system_usage_report','SYSTEM_USAGE_BOARD')
             .addMenuPermission('menu_item_reports_message_board_response','FOLLOWUP_BOARD')
             .addMenuPermission('menu_item_reports_user_performance_panel','USER_PERFORMANCE_BOARD')
-            .addMenuPermission('menu_item_reports_monitoring_correspondence_documentary_panel','REALTIME_MONITORING_BOARD');
+            .addMenuPermission('menu_item_reports_monitoring_correspondence_documentary_panel','REALTIME_MONITORING_BOARD')
+            .addMenuPermission('menu_item_reports_processed_documents','PROCESSED_DOCUMENT_REPORT');
 
 
     })

@@ -239,7 +239,7 @@ module.exports = function (app) {
         self.selectFilter = function (filter, $index) {
 
             if (!filter.status) {
-                toast.info('This Filter is disabled and make it active first to get the data');
+                toast.info(langService.get('filter_disabled_activate_to_get_data'));
                 self.workItemsFilters[$index] = [];
                 return;
             }

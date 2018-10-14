@@ -2851,7 +2851,7 @@ module.exports = function (app) {
                 .desktopEdit
                 .replace('{type}', 'docx')
                 .replace('{vsId}', info.vsId)
-                .replace('{subject}', info.title)
+                .replace('{subject}', encodeURIComponent(info.title))
                 .replace('{token}', tokenService.getToken())
                 .replace('{documentClass}', info.documentClass);
             return $http.get(url, {

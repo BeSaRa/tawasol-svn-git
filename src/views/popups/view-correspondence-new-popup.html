@@ -221,7 +221,7 @@
                 </div>
             </md-sidenav>
             <div layout="column" class="relative" flex>
-                <iframe ng-if="ctrl.mainDocument" class="iframe-main-document" ng-src="{{ctrl.content.viewURL}}" flex
+                <iframe ng-if="ctrl.mainDocument" id="iframe-main-document" class="iframe-main-document" ng-src="{{ctrl.content.viewURL}}" flex
                         frameborder="0"></iframe>
 
                 <div ng-if="!ctrl.mainDocument" class="absolute-back-button">

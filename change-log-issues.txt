@@ -353,3 +353,9 @@ reset correspondence sites when add form is reset.
 10/13/2018
 ------------------
 17118:Test : Previous comment didn't display
+17082:Test : cannot delete attached added by drag and drop option
+
+10/14/2018
+------------------
+17145:Edit in desktop - Document with arabic name is not displayed properly in the edit desktop list of document
+save issue in new view popup
