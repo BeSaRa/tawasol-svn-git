@@ -39,8 +39,9 @@ module.exports = function (app) {
                     tokenService.destroy(); // destroy the current sessions
                     employeeService.destroyEmployee(); // destroy current user data
                     loadingIndicatorService.forceEndLoading();
-                    $cookies.put(authenticationService.logoutBySessionsKey, 'true');
-                    dialog.alertMessage(langService.get('session_expired_login_again'));
+                    if ($cookies.get(authenticationService.logoutBySessionsKey) !== 'true') {
+                        dialog.alertMessage(langService.get('session_expired_login_again'));
+                    }
                     $state.go('login', {identifier: rootEntity.getRootEntityIdentifier()});
                 }
                 else {

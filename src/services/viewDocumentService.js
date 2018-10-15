@@ -1255,6 +1255,11 @@ module.exports = function (app) {
                             self.popupNumber -= 1;
                             return error;
                         });
+                    })
+                    .catch(function (error) {
+                        errorCode.checkIf(error, 'G2G_ERROR_FETCH_SENT_OR_RETURN_BOOK', function () {
+                            dialog.errorMessage(langService.get('g2g_error_fetch_sent_return_book'));
+                        });
                     });
             };
 

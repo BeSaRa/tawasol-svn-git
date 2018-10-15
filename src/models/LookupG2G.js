@@ -2,7 +2,7 @@ module.exports = function (app) {
     app.factory('LookupG2G', function (CMSModelInterceptor,
                                             langService) {
         'ngInject';
-        return function InformationG2G(model) {
+        return function LookupG2G(model) {
             var self = this;
             self.id = null;
             self.category = null;
@@ -23,7 +23,7 @@ module.exports = function (app) {
              * @description Get all required fields
              * @return {Array|requiredFields}
              */
-            InformationG2G.prototype.getRequiredFields = function () {
+            LookupG2G.prototype.getRequiredFields = function () {
                 return requiredFields;
             };
 
@@ -32,7 +32,7 @@ module.exports = function (app) {
              * @param separator
              * @returns {string}
              */
-            InformationG2G.prototype.getNames = function (separator) {
+            LookupG2G.prototype.getNames = function (separator) {
                 return this.arvalue + ' ' + (separator ? separator : '-') + ' ' + this.envalue;
             };
 
@@ -41,13 +41,13 @@ module.exports = function (app) {
              * @param reverse
              * @returns {string}
              */
-            InformationG2G.prototype.getTranslatedName = function (reverse) {
+            LookupG2G.prototype.getTranslatedName = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.envalue : this.arvalue ) : (reverse ? this.arvalue : this.envalue);
             };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
-            CMSModelInterceptor.runEvent('InformationG2G', 'init', this);
+            CMSModelInterceptor.runEvent('LookupG2G', 'init', this);
         }
     })
 };

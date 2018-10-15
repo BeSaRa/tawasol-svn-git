@@ -359,3 +359,4 @@ reset correspondence sites when add form is reset.
 ------------------
 17145:Edit in desktop - Document with arabic name is not displayed properly in the edit desktop list of document
 save issue in new view popup
+17116:Mini G2G - The export type for mini G2G sites is not correct

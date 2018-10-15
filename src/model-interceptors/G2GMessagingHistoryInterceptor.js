@@ -13,10 +13,11 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            model.securityLevel = model.securityLevel.hasOwnProperty('id') ? model.securityLevel.lookupKey : model.securityLevel;
+            model.securityLevel = model.securityLevel.hasOwnProperty('id') ? model.securityLevel.lkey : model.securityLevel;
             model.deliveryDate = generator.getTimeStampFromDate(model.deliveryDate);
             model.sentDate = generator.getTimeStampFromDate(model.sentDate);
             model.updateDate = generator.getTimeStampFromDate(model.updateDate);
+            model.followupStatus = model.followupStatus.hasOwnProperty('id') ? model.followupStatus.lkey : model.followupStatus;
 
             delete model.recordInfo;
             delete model.statusInfo;
@@ -63,6 +64,7 @@ module.exports = function (app) {
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.mainSiteFrom = new Information(model.mainSiteFrom);
             model.subSiteFrom = new Information(model.subSiteFrom);
+            model.followupStatus = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.followupType.name, model.followupStatus,  model.isInternalG2G());
 
             model.securityLevel = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.securityLevel.name, model.securityLevel, model.isInternalG2G());
             model.deliveryDate = generator.getDateFromTimeStamp(model.deliveryDate, generator.defaultDateTimeFormat);
@@ -71,6 +73,7 @@ module.exports = function (app) {
 
             model.recordInfo = correspondenceService.getCorrespondenceInformation(model);
             model.statusInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.trackingActions.name, model.status, model.isInternalG2G());
+            model.type = 1 - model.type; //Todo: this is the temporary invert of value as discussed with Hussam
             model.typeInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.copyOrOriginal.name, model.type, model.isInternalG2G());
             model.senderForTrackingSheet = null;
             if (model.sentByOrg) {
@@ -84,6 +87,8 @@ module.exports = function (app) {
 
             model.mainSiteTo = new Information(model.mainSiteTo);
             model.subSiteTo = new Information(model.subSiteTo);
+
+
             model.isInternalG2GIndicator = model.getIsInternalG2GIndicator();
 
             model.setMainSiteSubSiteString();

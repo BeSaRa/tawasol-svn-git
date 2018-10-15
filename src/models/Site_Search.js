@@ -7,8 +7,9 @@ module.exports = function (app) {
             var self = this, exportTypes = {
                     1: 'export_electronic',
                     2: 'export_manual',
-                    3: 'export_g_tow_g'
-                    // 4: 'export_private'
+                    3: 'export_g_tow_g',
+                    4: 'export_manual', // 4: 'export_private'//Todo: mentioned by Issawi
+                    5: 'export_internal_g2g'
                 },
                 maps = {
                     mainSiteId: ['parentInfo', 'id'],
