@@ -67,7 +67,8 @@ module.exports = function (app) {
         self.getWatermarkTextStyle = function () {
             self.watermarkTextStyle = {
                 'font-size': self.documentSecuritySetting.textSize * self.documentSecurityBarcodeBox.whRatio + 'px',
-                'margin-left': -($element.find('#security-text').width() / 2) + 'px'
+                'margin-left': -($element.find('#security-text').width() / 2) + 'px',
+                'opacity': (self.documentSecurity.opacity * 0.1)
             };
             return self.watermarkTextStyle;
         };

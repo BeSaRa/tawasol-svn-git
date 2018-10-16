@@ -3,12 +3,16 @@
         <ng-form name="documentSecurityForm" ng-if="ctrl.documentSecurity">
             <div layout="column" layout-gt-md="row">
                 <!-- Show Watermark -->
-                <md-switch flex ng-model="ctrl.documentSecurity.status"
+                <md-switch  ng-model="ctrl.documentSecurity.status"
                            aria-label="{{lang.apply_document_protection}}">
                     <span>{{lang.apply_document_protection}} : </span>
                     {{ctrl.documentSecurity.getTranslatedYesNo('status')}}
                 </md-switch>
-                <div flex layout="row">
+
+
+                <span flex="1"></span>
+
+                <div flex layout="row" layout-align="center center">
                     <!-- Barcode X location -->
                     <md-input-container>
                         <label for="locationX2D">{{lang.document_security_barcode_x_location}}</label>
@@ -33,6 +37,13 @@
                             <div ng-message="max">{{lang.max_number.change({number: 641})}}</div>
                         </div>
                     </md-input-container>
+                    <span flex="1"></span>
+                    <md-slider-container>
+                        <label for="opacity-slider">{{lang.opacity}}</label>
+                        <md-slider flex min="1" max="10" step="1" ng-model="ctrl.documentSecurity.opacity"
+                                   aria-label="{{lang.opacity}}" md-discrete id="opacity-slider">
+                        </md-slider>
+                    </md-slider-container>
                 </div>
             </div>
             <md-tabs flex md-selected="0" class="content white-bg">

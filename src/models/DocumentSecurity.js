@@ -7,6 +7,7 @@ module.exports = function (app) {
             self.id = null;
             self.ouId = -1;
             self.status = true;
+            self.opacity = 10;
             self.locationX2D = 716;// 816 px is A4 page width and 100 px is barcode width(816-100=716)
             self.locationY2D = 0;// 0 is bottom of page
             self.settingDetails = [];

@@ -78,6 +78,15 @@ module.exports = function (app) {
                             scope.ctrl.getWatermarkTextStyle();
                         }
                     });
+                    scope.$watch(function () {
+                        return scope.ctrl.documentSecurity.opacity;
+                    }, function (oldValue, newValue) {
+                        if ((oldValue !== newValue)) {
+                            scope.ctrl.makeDocumentSecurityCopy();
+                            scope.ctrl.getWatermarkTextClass();
+                            scope.ctrl.getWatermarkTextStyle();
+                        }
+                    });
                 })
             }
         }
