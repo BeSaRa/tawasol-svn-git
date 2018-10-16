@@ -957,19 +957,20 @@ module.exports = function (app) {
                     }
                 ]
             },
-            //Edit After Export (Electronic Only)
+            //Edit After Export
             {
                 type: 'action',
                 icon: 'eraser-variant',
-                text: 'grid_action_edit_after_export',//langKey not added yet in localization
+                text: 'grid_action_edit_after_export',
                 shortcut: false,
                 showInView: false,
                 class: 'action-green',
                 callback: self.editAfterExport, //TODO: Service is not available yet
                 checkShow: function (action, model) {
-                    var info = model.getInfo();
+                    // var info = model.getInfo();
                     var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
-                    return self.checkToShowAction(action, model) && hasPermission && !info.isPaper;
+                    // return self.checkToShowAction(action, model) && hasPermission && !info.isPaper;
+                    return self.checkToShowAction(action, model) && hasPermission; //TODO: Check with Besara as its enabled for paper by Issawi on 16 Oct, 2018
                 }
             },
             // Edit (Paper Only)

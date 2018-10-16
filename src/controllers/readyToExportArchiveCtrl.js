@@ -744,7 +744,7 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
-            // Edit After Approve (Only electronic only)
+            // Edit After Approve (Only electronic)
             {
                 type: 'action',
                 icon: 'eraser-variant',

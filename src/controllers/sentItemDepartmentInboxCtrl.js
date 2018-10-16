@@ -588,10 +588,11 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: false,
                 hide: true,
-                permissionKey: "EDIT_OUTGOING_CONTENT", //TODO: Apply correct permission when added to database.
                 checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && !info.isPaper;
+                    // var info = model.getInfo();
+                    var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
+                    // return self.checkToShowAction(action, model) && !info.isPaper;
+                    return self.checkToShowAction(action, model) && hasPermission; //TODO: Check with Besara as its enabled for paper by Issawi on 16 Oct, 2018
                 }
             },
             // Recall
