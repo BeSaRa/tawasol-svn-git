@@ -456,7 +456,7 @@ module.exports = function (app) {
          */
         self.editAfterExport = function (returnedDepartmentInbox, $event) {
             var info = returnedDepartmentInbox.getInfo(), list = listGeneratorService.createUnOrderList(),
-                langKeys = ['signature_serial_will_removed', 'the_book_will_go_to_audit', 'serial_retained'];
+                langKeys = ['signature_serial_will_removed', 'the_book_will_go_to_audit', 'serial_retained', 'exported_not_received_documents_will_be_recalled'];
             _.map(langKeys, function (item) {
                 list.addItemToList(langService.get(item));
             });
@@ -980,6 +980,7 @@ module.exports = function (app) {
                 text: 'grid_action_edit',
                 shortcut: false,
                 showInView: false,
+                hide: true, //TODO: as mentioned by Issawi on 16 Oct, 2018 as we have edit after export enabled for paper document too. (TFS - 17249)
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));

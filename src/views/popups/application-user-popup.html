@@ -108,7 +108,7 @@
                                                 <div ng-message="minlength">{{lang.short}}</div>
                                                 <div ng-message="maxlength">{{lang.max_length.change({length:20})}}
                                                 </div>
-                                                <div ng-message="EN_DOT">{{lang.english_number}}</div>
+                                                <div ng-message="EN_DOT_DASH">{{lang.english_number}}</div>
                                             </div>
                                         </md-input-container>
                                         <md-input-container ng-if="!ctrl.applicationUser.id">
@@ -924,6 +924,7 @@
                                     <md-input-container flex>
                                         <label for="customRoleId">{{lang.role}}</label>
                                         <md-select id="customRoleId" name="customRoleId"
+                                                   ng-disabled="ctrl.ouApplicationUser.id"
                                                    ng-model="ctrl.ouApplicationUser.customRoleId">
                                             <md-option ng-if="role.status" ng-value="role"
                                                        ng-repeat="role in ctrl.roles track by $index">

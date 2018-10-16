@@ -360,3 +360,11 @@ reset correspondence sites when add form is reset.
 17145:Edit in desktop - Document with arabic name is not displayed properly in the edit desktop list of document
 save issue in new view popup
 17116:Mini G2G - The export type for mini G2G sites is not correct
+
+10/16/2018
+------------------
+fixed loginName and domainName errors in application user popup.
+enabled edit after export for paper documents.
+17249:The paper document content is not updated in the department incoming mail
+17250: Edit after export - warning should mention that the exported not received documents will be recalled when user edit after export a document
+11374:Integration : Edit Role from user applications takes only Permission Name without Permissions
