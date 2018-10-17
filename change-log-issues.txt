@@ -361,6 +361,10 @@ reset correspondence sites when add form is reset.
 save issue in new view popup
 17116:Mini G2G - The export type for mini G2G sites is not correct
 
+10/15/2018
+------------------
+Added opacity field in document security.
+
 10/16/2018
 ------------------
 fixed loginName and domainName errors in application user popup.

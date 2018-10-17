@@ -1211,7 +1211,7 @@ module.exports = function (app) {
                     .put(urlService.g2gInbox + 'open-sent-return/' + isInternal, g2gItem)
                     .then(function (result) {
                         var metaData = result.data.rs.metaData;
-                        metaData = generator.interceptReceivedInstance(['Correspondence', 'Incoming', 'ViewIncoming'], generator.generateInstance(metaData, Incoming));
+                        metaData = generator.interceptReceivedInstance(['Correspondence', 'Outgoing', 'ViewOutgoing'], generator.generateInstance(metaData, Outgoing));
 
                         metaData.documentComments = _.map(metaData.linkedCommentsList, function (item) {
                             return generator.interceptReceivedInstance('DocumentComment', new DocumentComment(item));
