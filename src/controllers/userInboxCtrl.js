@@ -1604,7 +1604,7 @@ module.exports = function (app) {
                 hide: false,
                 callback: self.getDocumentVersions,
                 permissionKey: "VIEW_DOCUMENT_VERSION",
-                class: "action-red",
+                class: "action-green",
                 showInView: false,
                 checkShow: function (action, model) {
                     return true;
@@ -1618,7 +1618,7 @@ module.exports = function (app) {
                 shortcut: true,
                 hide: false,
                 callback: self.duplicateCurrentVersion,
-                class: "action-red",
+                class: "action-green",
                 permissionKey: 'DUPLICATE_BOOK_CURRENT',
                 showInView: false,
                 checkShow: function (action, model) {
@@ -1634,7 +1634,7 @@ module.exports = function (app) {
                 shortcut: true,
                 hide: false,
                 callback: self.duplicateVersion,
-                class: "action-red",
+                class: "action-green",
                 showInView: false,
                 permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
                 checkShow: function (action, model) {
