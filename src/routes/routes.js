@@ -1440,14 +1440,14 @@ module.exports = function (app) {
                         'ngInject';
                         return correspondenceService.getCorrespondenceLookups('common');
                     },
-                    g2gLookups: function (g2gLookupService) {
+                    /*g2gLookups: function (g2gLookupService) {
                         'ngInject';
                         return g2gLookupService.getG2gLookups();
                     },
                     g2gInternalLookups: function(g2gLookupService){
                         'ngInject';
                         return g2gLookupService.getG2gInternalLookups();
-                    },
+                    },*/
                     organizations: function (organizationService) {
                         'ngInject';
                         return organizationService.getOrganizations();
@@ -1460,10 +1460,6 @@ module.exports = function (app) {
                 controller: 'g2gIncomingCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
-                    /*lookups: function (g2gLookupService) {
-                        'ngInject';
-                        return g2gLookupService.getG2gLookups();
-                    },*/
                     g2gItems: function (g2gIncomingService) {
                         'ngInject';
                         return g2gIncomingService.loadG2gItems();
@@ -1476,10 +1472,6 @@ module.exports = function (app) {
                 controller: 'g2gReturnedCtrl',
                 controllerAs: 'ctrl',
                 resolve: {
-                    /*lookups: function (g2gLookupService) {
-                        'ngInject';
-                        return g2gLookupService.getG2gLookups();
-                    },*/
                     g2gItems: function (g2gReturnedService) {
                         'ngInject';
                         return g2gReturnedService.loadG2gItems();
@@ -1490,17 +1482,7 @@ module.exports = function (app) {
                 url: '/sent-items',
                 template: cmsTemplateProvider.getView('g2g-sent-items'),
                 controller: 'g2gSentItemsCtrl',
-                controllerAs: 'ctrl',
-                resolve: {
-                    /*lookups: function (g2gLookupService) {
-                        'ngInject';
-                        return g2gLookupService.getG2gLookups();
-                    }*//*,
-                    g2gItems: function (g2gSentItemsService) {
-                        'ngInject';
-                        return g2gSentItemsService.loadG2gItems();
-                    }*/
-                }
+                controllerAs: 'ctrl'
             })
     });
 };

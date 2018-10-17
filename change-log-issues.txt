@@ -372,3 +372,6 @@ enabled edit after export for paper documents.
 17249:The paper document content is not updated in the department incoming mail
 17250: Edit after export - warning should mention that the exported not received documents will be recalled when user edit after export a document
 11374:Integration : Edit Role from user applications takes only Permission Name without Permissions
+
+changed g2g messaging history from incoming to outgoing when open.
+changed the g2g screens to use lookups from CMS instead of G2G lookups.

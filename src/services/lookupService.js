@@ -28,6 +28,7 @@ module.exports = function (app) {
         self.themeKey = 'themeKey';
         self.gender = 'gender';
         self.waterMarkTextOrientation = 'waterMarkTextOrientation';
+        self.messageStatus = 'messageStatus';
 
         // this propertyConfiguration related to the property configurations Service.
         self.propertyConfigurations = {

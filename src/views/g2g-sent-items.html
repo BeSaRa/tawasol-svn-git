@@ -44,11 +44,11 @@
                                             <span>{{lang.subject}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('typeInfo', 'LookupG2G')}}">
+                                            md-order-by="{{ctrl.getSortingKey('typeInfo', 'Information')}}">
                                             <span>{{lang.document_type}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('securityLevel', 'Information')}}">
+                                            md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
                                             <span>{{lang.security_level}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
@@ -68,7 +68,7 @@
                                             <span>{{lang.received_date}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column
-                                            md-order-by="{{ctrl.getSortingKey('statusInfo', 'LookupG2G')}}">
+                                            md-order-by="{{ctrl.getSortingKey('statusInfo', 'Lookup')}}">
                                             <span>{{lang.status}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedG2gItems.length" md-column

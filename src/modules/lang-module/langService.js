@@ -157,6 +157,12 @@ module.exports = function (app) {
                 (ignoreError) ? false : 'LANG: ' + langKey;
         };
 
+        self.getByLangKey = function (langKey, lang, ignoreError) {
+            return self.langKeys.hasOwnProperty(lang) ?
+                self.langKeys[lang][langKey] :
+                (ignoreError) ? false : 'LANG: ' + langKey;
+        };
+
         self.getKey = function (langKey, lang, ignoreError) {
             return self.langKeys.hasOwnProperty(lang) ?
                 self.langKeys[lang][langKey] :

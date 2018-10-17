@@ -4,8 +4,9 @@ module.exports = function (app) {
                       generator,
                       correspondenceService,
                       Incoming,
-                      Site,
-                      g2gLookupService) {
+                      Site/*,
+                      g2gLookupService*/
+    ) {
 
         var modelName = 'G2G';
 
@@ -46,7 +47,8 @@ module.exports = function (app) {
             model.recordInfo = correspondenceService.getCorrespondenceInformation(model.correspondence);
             //todo: type info is binded to siteType property until confirmed by Hussam from Abu Al Nassr
 
-            model.typeInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.copyOrOriginal.name, model.correspondence.siteType, model.isInternalG2G());
+            //model.typeInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.copyOrOriginal.name, model.correspondence.siteType, model.isInternalG2G());
+            model.typeInfo = model.getTranslatedOriginalCopy();
             model.isInternalG2GIndicator = model.getIsInternalG2GIndicator();
             model.setMainSiteSubSiteString();
 

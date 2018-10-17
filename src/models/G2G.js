@@ -128,12 +128,18 @@ module.exports = function (app) {
                   return indicator.getIsLockedG2GIndicator(this.stepElm.lockedStatus);
             };*/
 
-            G2G.prototype.getIsInternalG2GIndicator = function(){
+            G2G.prototype.getIsInternalG2GIndicator = function () {
                 return indicator.getIsInternalG2GIndicator(this.internal);
             };
 
-            G2G.prototype.viewDocument = function(actions, queueName, $event){
+            G2G.prototype.viewDocument = function (actions, queueName, $event) {
                 return viewDocumentService.viewG2GDocument(this, actions, queueName, $event);
+            };
+
+            G2G.prototype.getTranslatedOriginalCopy = function () {
+                return this.correspondence.siteType === 0
+                    ? new Information({enName: langService.getByLangKey('original', 'en'), arName: langService.getByLangKey('original', 'ar')})
+                    : new Information({enName: langService.getByLangKey('copy', 'en'), arName: langService.getByLangKey('copy', 'ar')});
             };
 
 
