@@ -13,7 +13,8 @@ module.exports = function (app) {
             "dc",
             "tawasolOU",
             "userName",
-            "password"
+            "password",
+            "isSSL"
         ];
 
         /**
@@ -46,9 +47,18 @@ module.exports = function (app) {
                     "dc": model.dc,
                     "tawasolOU": model.tawasolOU,
                     "userName": model.userName,
-                    "password": model.password
+                    "password": model.password,
+                    "isSSL": model.isSSL
                 }
             ];
+            // In case of edit, the g2gPassword and internalG2gPassword will only be sent if entered by user to override.
+            // If not entered, properties will be removed from object.
+            if (model.id) {
+                if (model.g2gServerAddress && !model.g2gPassword)
+                    delete model.g2gPassword;
+                if (model.internalG2gServerAddress && !model.internalG2gPassword)
+                    delete model.internalG2gPassword;
+            }
             removeTemporaryProperties(model, ldapProperties);
             return model;
         });
@@ -60,6 +70,7 @@ module.exports = function (app) {
                 }
             }
             removeTemporaryProperties(model, 'ldapProviders');
+
             return model;
         });
 

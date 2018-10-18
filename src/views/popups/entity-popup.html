@@ -1,4 +1,5 @@
-<md-dialog class="dialog-extend" ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_entity: ctrl.model.getTranslatedName()}}">
+<md-dialog class="dialog-extend"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_entity: ctrl.model.getTranslatedName()}}">
     <div layout="column">
         <md-toolbar layout="row" layout-align="start center">
             <span class="p20" ng-if="!ctrl.editMode">{{lang.add_new_entity}}</span>
@@ -9,6 +10,7 @@
         <md-content scroll-directive>
             <form name="entityForm" autocomplete="off">
                 <md-tabs md-dynamic-height>
+                    <!-- Basic Info -->
                     <md-tab label="{{lang.basic_info}}">
                         <md-content>
                             <div layout="column" class="p20">
@@ -111,6 +113,7 @@
                             </div>
                         </md-content>
                     </md-tab>
+                    <!-- Connection Settings -->
                     <md-tab label="{{lang.connection_settings}}">
                         <md-content>
                             <div layout="column" class="p20">
@@ -178,6 +181,11 @@
                                                 </div>
                                             </div>
                                         </md-input-container>
+                                        <md-input-container>
+                                            <md-switch flex ng-model="ctrl.entity.isSSL" aria-label="{{lang.use_ssl}}">
+                                                <label>{{lang.use_ssl}} : {{ctrl.entity.getTranslatedIsSSL(ctrl.entity.isSSL)}}</label>
+                                            </md-switch>
+                                        </md-input-container>
                                     </div>
                                     <div layout="row">
                                         <md-button class="md-raised" ng-if="ctrl.editMode"
@@ -187,7 +195,7 @@
                                     </div>
                                 </fieldset>
                                 <!-- FILE NET -->
-                                <fieldset >
+                                <fieldset>
                                     <legend class="md-accent">{{lang.filenet}}</legend>
                                     <div layout="row">
                                         <md-input-container flex>
@@ -382,6 +390,7 @@
                             </div>
                         </md-content>
                     </md-tab>
+                    <!-- G2G Settings -->
                     <md-tab label="{{lang.g2g_settings}}">
                         <md-content>
                             <div layout="column" class="p20">
@@ -389,8 +398,8 @@
                                     <md-input-container flex>
                                         <label for="g2gServerAddress">{{lang.server_address}}</label>
                                         <input name="g2gServerAddress" id="g2gServerAddress"
-                                               ng-model="ctrl.entity.g2gServerAddress"
-                                               ng-required="ctrl.checkG2GRequired(false,entityForm)">
+                                               ng-change="ctrl.changeG2GServerAddress('g2gServerAddress', $event)"
+                                               ng-model="ctrl.entity.g2gServerAddress">
                                         <div ng-messages="entityForm.g2gServerAddress.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
@@ -400,25 +409,31 @@
                                     <md-input-container flex>
                                         <label for="g2gUserName">{{lang.username}}</label>
                                         <input name="g2gUserName" id="g2gUserName" ng-model="ctrl.entity.g2gUserName"
-                                               ng-required="ctrl.checkG2GRequired(false,entityForm)">
+                                               ng-required="ctrl.entity.g2gServerAddress"
+                                               ng-disabled="!ctrl.entity.g2gServerAddress">
                                         <div ng-messages="entityForm.g2gUserName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
                                     <md-input-container flex>
                                         <label for="g2gPassword">{{lang.password}}</label>
-                                        <input name="g2gPassword" id="g2gPassword" ng-model="ctrl.entity.g2gPassword"
-                                               ng-required="ctrl.checkG2GRequired(false,entityForm)">
+                                        <input type="password" name="g2gPassword" id="g2gPassword"
+                                               ng-model="ctrl.entity.g2gPassword"
+                                               ng-required="ctrl.entity.g2gServerAddress && !ctrl.entity.id"
+                                               ng-disabled="!ctrl.entity.g2gServerAddress">
                                         <div ng-messages="entityForm.g2gPassword.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
+                                        <div class="help-text-div" ng-if="ctrl.entity.id && ctrl.entity.g2gServerAddress">{{lang.enter_password_to_override}}</div>
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="g2gPrivateKey">{{lang.private_key}}</label>
                                         <textarea name="g2gPrivateKey" id="g2gPrivateKey"
-                                                  ng-model="ctrl.entity.g2gPrivateKey"></textarea>
+                                                  class="textarea-height"
+                                                  ng-model="ctrl.entity.g2gPrivateKey"
+                                                  ng-disabled="!ctrl.entity.g2gServerAddress"></textarea>
                                         <div ng-messages="entityForm.g2gPrivateKey.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
@@ -430,7 +445,8 @@
                                         <input name="g2gGECode" id="g2gGECode"
                                                ng-model="ctrl.entity.g2gGECode"
                                                custom-validate-directive="number"
-                                               ng-required="ctrl.checkG2GRequired(false,entityForm)">
+                                               ng-required="ctrl.entity.g2gServerAddress"
+                                               ng-disabled="!ctrl.entity.g2gServerAddress">
                                         <div ng-messages="entityForm.g2gGECode.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="number">{{lang.numberonly}}</div>
@@ -440,6 +456,7 @@
                             </div>
                         </md-content>
                     </md-tab>
+                    <!-- Internal G2G Settings -->
                     <md-tab label="{{lang.internal_g2g_settings}}">
                         <md-content>
                             <div layout="column" class="p20">
@@ -448,7 +465,7 @@
                                         <label for="internalG2gServerAddress">{{lang.server_address}}</label>
                                         <input name="internalG2gServerAddress" id="internalG2gServerAddress"
                                                ng-model="ctrl.entity.internalG2gServerAddress"
-                                               ng-required="ctrl.checkG2GRequired(true,entityForm)">
+                                               ng-change="ctrl.changeG2GServerAddress('internalG2gServerAddress', $event)">
                                         <div ng-messages="entityForm.internalG2gServerAddress.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
@@ -459,19 +476,22 @@
                                         <label for="internalG2gUserName">{{lang.username}}</label>
                                         <input name="internalG2gUserName" id="internalG2gUserName"
                                                ng-model="ctrl.entity.internalG2gUserName"
-                                               ng-required="ctrl.checkG2GRequired(true,entityForm)">
+                                               ng-required="ctrl.entity.internalG2gServerAddress"
+                                               ng-disabled="!ctrl.entity.internalG2gServerAddress">
                                         <div ng-messages="entityForm.internalG2gUserName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
                                     <md-input-container flex>
                                         <label for="internalG2gPassword">{{lang.password}}</label>
-                                        <input name="internalG2gPassword" id="internalG2gPassword"
+                                        <input type="password" name="internalG2gPassword" id="internalG2gPassword"
                                                ng-model="ctrl.entity.internalG2gPassword"
-                                               ng-required="ctrl.checkG2GRequired(true,entityForm)">
+                                               ng-required="ctrl.entity.internalG2gServerAddress && !ctrl.entity.id"
+                                               ng-disabled="!ctrl.entity.internalG2gServerAddress">
                                         <div ng-messages="entityForm.internalG2gPassword.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
+                                        <div class="help-text-div" ng-if="ctrl.entity.id && ctrl.entity.internalG2gServerAddress">{{lang.enter_password_to_override}}</div>
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
@@ -480,7 +500,8 @@
                                         <input name="internalG2gGECode" id="internalG2gGECode"
                                                ng-model="ctrl.entity.internalG2gGECode"
                                                custom-validate-directive="number"
-                                               ng-required="ctrl.checkG2GRequired(true,entityForm)">
+                                               ng-required="ctrl.entity.internalG2gServerAddress"
+                                               ng-disabled="!ctrl.entity.internalG2gServerAddress">
                                         <div ng-messages="entityForm.internalG2gGECode.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="number">{{lang.numberonly}}</div>

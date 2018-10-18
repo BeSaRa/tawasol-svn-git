@@ -188,7 +188,6 @@ module.exports = function (app) {
                 ["g2gServerAddress", "g2gUserName", "g2gPassword", "g2gGECode"];
 
             var isRequired = false;
-
             for (var i = 0; i <= g2gFields.length; i++) {
 
                 if (self.entity[g2gFields[i]]) {
@@ -198,6 +197,24 @@ module.exports = function (app) {
             }
             return isRequired;
         };
+
+        self.changeG2GServerAddress = function (field, $event) {
+            if (field === 'internalG2gServerAddress'){
+                if (!self.entity.g2gServerAddress) {
+                    self.entity.internalG2gUserName = null;
+                    self.entity.internalG2gPassword = null;
+                    self.entity.internalG2gGECode = null;
+                }
+            }
+            else if (field === 'g2gServerAddress') {
+                if (!self.entity.g2gServerAddress) {
+                    self.entity.g2gUserName = null;
+                    self.entity.g2gPassword = null;
+                    self.entity.g2gGECode = null;
+                    self.entity.g2gPrivateKey = null;
+                }
+            }
+        }
 
     });
 };

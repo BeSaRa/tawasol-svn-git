@@ -101,6 +101,9 @@ module.exports = function (app) {
             Entity.prototype.getNameByKey = function (langKey) {
                 return this[langKey + 'Name'];
             };
+            Entity.prototype.getTranslatedIsSSL = function (isSSL) {
+                return isSSL ? langService.get('yes') : langService.get('no');
+            };
 
             /*/!**
              * @description Get the globalization of entity as Yes or No instead of true or false.
