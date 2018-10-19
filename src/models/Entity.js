@@ -105,6 +105,15 @@ module.exports = function (app) {
                 return isSSL ? langService.get('yes') : langService.get('no');
             };
 
+            Entity.prototype.removeAllPasswords = function () {
+                delete this.password;
+                delete this.cmPassword;
+                delete this.smtpPassword;
+                delete this.g2gPassword;
+                delete this.internalG2gPassword;
+                return this;
+            };
+
             /*/!**
              * @description Get the globalization of entity as Yes or No instead of true or false.
              * @returns {string}

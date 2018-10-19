@@ -54,6 +54,12 @@ module.exports = function (app) {
             // In case of edit, the g2gPassword and internalG2gPassword will only be sent if entered by user to override.
             // If not entered, properties will be removed from object.
             if (model.id) {
+                if (model.serverAddress && !model.password)
+                    delete model.password;
+                if (model.cmUserName && !model.cmPassword)
+                    delete model.cmPassword;
+                if (model.smtpServerAddress && !model.smtpPassword)
+                    delete model.smtpPassword;
                 if (model.g2gServerAddress && !model.g2gPassword)
                     delete model.g2gPassword;
                 if (model.internalG2gServerAddress && !model.internalG2gPassword)
@@ -70,7 +76,7 @@ module.exports = function (app) {
                 }
             }
             removeTemporaryProperties(model, 'ldapProviders');
-
+            model.removeAllPasswords();
             return model;
         });
 

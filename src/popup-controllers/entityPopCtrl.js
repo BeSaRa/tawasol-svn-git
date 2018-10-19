@@ -49,12 +49,44 @@ module.exports = function (app) {
         }
 
         /**
+         * this method to check if the given args has value or not
+         * note the 0 not defined as no value this means if value equal to 0 will pass and return true
+         * @param value
+         * @return {boolean}
+         */
+        self.validRequired = function (value) {
+            return (
+                (typeof value === 'string') ? (value.trim() !== '') : (value !== null && typeof value !== 'undefined')
+            );
+        };
+        /**
+         * check validation of required fields
+         * @param model
+         * @return {Array}
+         */
+        self.checkRequiredFields = function (model) {
+            var required = model.getRequiredFields(), result = [];
+            if (model.id) {
+                required.splice(required.indexOf('password'), 1);
+                required.splice(required.indexOf('cmPassword'), 1);
+                required.splice(required.indexOf('smtpPassword'), 1);
+                required.splice(required.indexOf('g2gPassword'), 1);
+                required.splice(required.indexOf('internalG2gPassword'), 1);
+            }
+            _.map(required, function (property) {
+                if (!generator.validRequired(model[property]))
+                    result.push(property);
+            });
+            return result;
+        };
+
+        /**
          * @description Add new entity
          */
         self.addEntityFromCtrl = function () {
             validationService
                 .createValidation('ADD_ENTITY')
-                .addStep('check_required', true, generator.checkRequiredFields, self.entity, function (result) {
+                .addStep('check_required', true, self.checkRequiredFields, self.entity, function (result) {
                     return !result.length;
                 })
                 .notifyFailure(function (step, result) {
@@ -105,7 +137,7 @@ module.exports = function (app) {
         self.editEntityFromCtrl = function () {
             validationService
                 .createValidation('EDIT_ENTITY')
-                .addStep('check_required', true, generator.checkRequiredFields, self.entity, function (result) {
+                .addStep('check_required', true, self.checkRequiredFields, self.entity, function (result) {
                     return !result.length;
                 })
                 .notifyFailure(function (step, result) {
@@ -146,9 +178,9 @@ module.exports = function (app) {
                         });
                     });
                 });
-                /*.catch(function () {
+            /*.catch(function () {
 
-                });*/
+            });*/
         };
 
         /**
@@ -157,6 +189,14 @@ module.exports = function (app) {
         self.closeEntityPopupFromCtrl = function () {
             dialog.cancel();
         };
+
+        self.checkTestLdapConnectionEnabled = function () {
+            var isEnabled = self.entity.serverAddress && self.entity.dc && self.entity.userName && self.entity.tawasolOU;
+            if (!self.entity.id)
+                return isEnabled && self.entity.password;
+            return isEnabled;
+        };
+
         /**
          * @description test LDAP connection
          */
@@ -165,6 +205,13 @@ module.exports = function (app) {
                 _connectionResult(result);
             })
         };
+
+        self.checkTestFileNetConnectionEnabled = function () {
+            var isEnabled = self.entity.cmUserName && self.entity.cmEJBaddress && self.entity.cmStanza && self.entity.osName && self.entity.peRouterName;
+            if (!self.entity.id)
+                return isEnabled && self.entity.cmPassword;
+            return isEnabled;
+        };
         /**
          * @description test file net connection
          */
@@ -172,6 +219,13 @@ module.exports = function (app) {
             entityService.fileNetConnectionTest(self.entity).then(function (result) {
                 _connectionResult(result);
             })
+        };
+
+        self.checkTestSmtpConnectionEnabled = function () {
+            var isEnabled = self.entity.smtpServerAddress && self.entity.smtpUserName && self.entity.smtpFromEmail && self.entity.smtpSubject && self.entity.smtpPort;
+            if (!self.entity.id)
+                return isEnabled && self.entity.smtpPassword;
+            return isEnabled;
         };
         /**
          * @description test SMTP connection
@@ -182,7 +236,7 @@ module.exports = function (app) {
             })
         };
 
-        self.checkG2GRequired = function (isInternalG2g,entityForm) {
+        self.checkG2GRequired = function (isInternalG2g, entityForm) {
             var g2gFields = (isInternalG2g) ?
                 ["internalG2gServerAddress", "internalG2gUserName", "internalG2gPassword", "internalG2gGECode"] :
                 ["g2gServerAddress", "g2gUserName", "g2gPassword", "g2gGECode"];
@@ -199,7 +253,7 @@ module.exports = function (app) {
         };
 
         self.changeG2GServerAddress = function (field, $event) {
-            if (field === 'internalG2gServerAddress'){
+            if (field === 'internalG2gServerAddress') {
                 if (!self.entity.g2gServerAddress) {
                     self.entity.internalG2gUserName = null;
                     self.entity.internalG2gPassword = null;
