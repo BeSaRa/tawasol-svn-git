@@ -23,7 +23,6 @@ module.exports = function (app) {
             //model.virtualVersionNumber = index;
             var indicator = new Indicator();
             model.versionHasContentIndicator = indicator.getVersionHasContentIndicator(model.contentSize);
-            debugger;
             return model;
         });
 

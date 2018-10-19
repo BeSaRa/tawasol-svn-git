@@ -1115,6 +1115,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('quick-search'),
                 controller: 'quickSearchCorrespondenceCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_quick_search',
                 resolve: {
                     quickSearchCorrespondence: function (quickSearchCorrespondenceService, $stateParams) {
                         'ngInject';
@@ -1456,7 +1457,6 @@ module.exports = function (app) {
                     var reportName = $stateParams.reportName,
                         reportUrl = urlService.reports.replace('{reportName}', encodeURIComponent(reportName)).replace('{token}', tokenService.getToken()),
                         url = urlService.portal.replace('{reportUrl}', reportUrl);
-                    console.log(url);
                     self.url = $sce.trustAsResourceUrl(url);
                 },
                 controllerAs: 'ctrl'
