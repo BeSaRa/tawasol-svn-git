@@ -191,10 +191,7 @@ module.exports = function (app) {
         };
 
         self.checkTestLdapConnectionEnabled = function () {
-            var isEnabled = self.entity.serverAddress && self.entity.dc && self.entity.userName && self.entity.tawasolOU;
-            if (!self.entity.id)
-                return isEnabled && self.entity.password;
-            return isEnabled;
+            return self.entity.serverAddress && self.entity.dc && self.entity.userName && self.entity.password && self.entity.tawasolOU;
         };
 
         /**
@@ -203,14 +200,13 @@ module.exports = function (app) {
         self.testLdapConnection = function () {
             entityService.ldapConnectionTest(self.entity).then(function (result) {
                 _connectionResult(result);
+            }).catch(function (error) {
+                _connectionResult(false);
             })
         };
 
         self.checkTestFileNetConnectionEnabled = function () {
-            var isEnabled = self.entity.cmUserName && self.entity.cmEJBaddress && self.entity.cmStanza && self.entity.osName && self.entity.peRouterName;
-            if (!self.entity.id)
-                return isEnabled && self.entity.cmPassword;
-            return isEnabled;
+            return self.entity.cmUserName && self.entity.cmPassword && self.entity.cmEJBaddress && self.entity.cmStanza && self.entity.osName && self.entity.peRouterName;
         };
         /**
          * @description test file net connection
@@ -218,14 +214,13 @@ module.exports = function (app) {
         self.testFileNetConnection = function () {
             entityService.fileNetConnectionTest(self.entity).then(function (result) {
                 _connectionResult(result);
+            }).catch(function (error) {
+                _connectionResult(false);
             })
         };
 
         self.checkTestSmtpConnectionEnabled = function () {
-            var isEnabled = self.entity.smtpServerAddress && self.entity.smtpUserName && self.entity.smtpFromEmail && self.entity.smtpSubject && self.entity.smtpPort;
-            if (!self.entity.id)
-                return isEnabled && self.entity.smtpPassword;
-            return isEnabled;
+            return self.entity.smtpServerAddress && self.entity.smtpUserName && self.entity.smtpPassword && self.entity.smtpFromEmail && self.entity.smtpSubject && self.entity.smtpPort;
         };
         /**
          * @description test SMTP connection
@@ -233,6 +228,8 @@ module.exports = function (app) {
         self.testSmtpConnection = function () {
             entityService.smtpConnectionTest(self.entity).then(function (result) {
                 _connectionResult(result);
+            }).catch(function (error) {
+                _connectionResult(false);
             })
         };
 
