@@ -142,16 +142,10 @@ module.exports = function (app) {
         });
 
         $transitions.onBefore({}, function (transition) {
-            var permission = transition.to().permission;
-            if (!permission) {
+            if (!transition.to().permission) {
                 return;
             }
-
-            /*if (typeof permission === 'function')
-                permission = permission();
-            else
-                permission = permission;*/
-            if (employeeService && !employeeService.employeeHasPermissionTo(permission)) {
+            if (employeeService && !employeeService.employeeHasPermissionTo(transition.to().permission)) {
                 // redirect to the 'access-denied' state
                 return transition.router.stateService.target('access-denied');
             }
