@@ -29,6 +29,10 @@ module.exports = function (app) {
                 url: '/404',
                 template: templateProvider.getView('404')
             })
+            .state('access-denied', {
+                url: '/access-denied',
+                template: templateProvider.getView('access-denied')
+            })
             .state('password', {
                 url: '/password-encrypt',
                 template: templateProvider.getView('password-encrypt'),
@@ -84,6 +88,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('document-types'),
                 controller: 'documentTypeCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_document_types',
                 resolve: {
                     documentTypes: function (documentTypeService) {
                         'ngInject';
@@ -97,6 +102,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('roles'),
                 controller: 'roleCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_manage_roles',
                 resolve: {
                     roles: function (roleService) {
                         'ngInject';
@@ -147,6 +153,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('organization-types'),
                 controller: 'organizationTypeCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_organization_types',
                 resolve: {
                     organizationTypes: function (organizationTypeService) {
                         'ngInject';
@@ -160,6 +167,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('document-status'),
                 controller: 'documentStatusCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_document_status',
                 resolve: {
                     documentStatuses: function (documentStatusService) {
                         'ngInject';
@@ -173,6 +181,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('workflow-groups'),
                 controller: 'workflowGroupCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_manage_workflow_group',
                 resolve: {
                     organizations: function (organizationService) {
                         'ngInject';
@@ -190,6 +199,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('sms-templates'),
                 controller: 'smsTemplateCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_sms_template',
                 resolve: {
                     smsTemplates: function (smsTemplateService) {
                         'ngInject';
@@ -202,7 +212,8 @@ module.exports = function (app) {
                 url: '/classifications',
                 template: templateProvider.getView('classifications'),
                 controller: 'classificationCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                permission: 'menu_item_classifications'
             })
             //private-announcements
             .state('app.administration.private-announcements', {
@@ -210,6 +221,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('private-announcements'),
                 controller: 'privateAnnouncementCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_private_announcements',
                 resolve: {
                     privateAnnouncements: function (privateAnnouncementService) {
                         'ngInject';
@@ -233,6 +245,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('organizations'),
                 controller: 'organizationsCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_organization_chart',
                 resolve: {
                     jobTitles: function (jobTitleService) {
                         'ngInject';
@@ -270,6 +283,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('correspondence-site-types'),
                 controller: 'correspondenceSiteTypeCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_correspondence_site_type',
                 resolve: {
                     correspondenceSiteTypes: function (correspondenceSiteTypeService) {
                         'ngInject';
@@ -283,6 +297,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('entity-types'),
                 controller: 'entityTypeCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_entity_type',
                 resolve: {
                     entityTypes: function (entityTypeService) {
                         'ngInject';
@@ -296,6 +311,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('job-title'),
                 controller: 'jobTitleCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_job_title',
                 resolve: {
                     jobTitles: function (jobTitleService) {
                         'ngInject';
@@ -309,6 +325,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('rank'),
                 controller: 'rankCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_ranks',
                 resolve: {
                     ranks: function (rankService) {
                         'ngInject';
@@ -322,6 +339,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('theme'),
                 controller: 'themeCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_themes',
                 resolve: {
                     themes: function (themeService) {
                         'ngInject';
@@ -335,6 +353,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('entities'),
                 controller: 'entityCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_government_entities',
                 resolve: {
                     entities: function (entityService) {
                         'ngInject';
@@ -348,6 +367,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('public-announcements'),
                 controller: 'publicAnnouncementCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_public_announcements',
                 resolve: {
                     publicAnnouncements: function (publicAnnouncementService) {
                         'ngInject';
@@ -361,6 +381,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('document-files'),
                 controller: 'documentFileCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_document_files',
                 resolve: {
                     organizations: function (organizationService) {
                         'ngInject';
@@ -382,6 +403,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('global-setting'),
                 controller: 'globalSettingCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_global_settings',
                 resolve: {
                     fileTypes: function (fileTypeService) {
                         'ngInject';
@@ -439,6 +461,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('application-user'),
                 controller: 'applicationUserCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_application_users',
                 resolve: {
                     jobTitles: function (jobTitleService) {
                         'ngInject';
@@ -490,6 +513,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('distribution-lists'),
                 controller: 'distributionListCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_distribution_lists',
                 resolve: {
                     organizations: function (organizationService) {
                         'ngInject';
@@ -515,6 +539,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('workflow-action'),
                 controller: 'workflowActionCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_workflow_actions',
                 resolve: {
                     workflowActions: function (workflowActionService, userWorkflowActions, applicationUserService) {
                         'ngInject';
@@ -537,6 +562,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('reference-plan-number'),
                 controller: 'referencePlanNumberCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_reference_number_plans',
                 resolve: {
                     referencePlanNumbers: function (referencePlanNumberService) {
                         'ngInject';
@@ -549,7 +575,8 @@ module.exports = function (app) {
                 url: '/correspondence-sites',
                 template: templateProvider.getView('correspondence-sites'),
                 controller: 'correspondenceSiteCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                permission: 'menu_item_cross_site_management'
             })
             //global-settings
             .state('app.administration.global-settings', {
@@ -557,6 +584,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('global-setting'),
                 controller: 'globalSettingCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_global_settings',
                 resolve: {
                     fileTypes: function (fileTypeService) {
                         'ngInject';
@@ -596,6 +624,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('global-localization-lookups'),
                 controller: 'globalLocalizationLookupCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_localization',
                 resolve: {
                     globalLocalizationLookups: function (globalLocalizationLookupService) {
                         'ngInject';
@@ -609,6 +638,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('attachment-types'),
                 controller: 'attachmentTypeCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_attachment_types',
                 resolve: {
                     attachmentTypes: function (attachmentTypeService) {
                         'ngInject';
@@ -633,6 +663,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('search-outgoing'),
                 controller: 'searchOutgoingCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_search_module_outgoing',
                 resolve: {
                     organizations: function (organizationService) {
                         'ngInject';
@@ -672,6 +703,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('search-incoming'),
                 controller: 'searchIncomingCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_search_module_incoming',
                 resolve: {
                     organizations: function (organizationService) {
                         'ngInject';
@@ -724,6 +756,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('search-internal'),
                 controller: 'searchInternalCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_search_module_internal',
                 resolve: {
                     organizations: function (organizationService) {
                         'ngInject';
@@ -781,6 +814,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('search-general'),
                 controller: 'searchGeneralCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_search_module_general',
                 resolve: {
                     organizations: function (organizationService) {
                         'ngInject';
@@ -848,14 +882,16 @@ module.exports = function (app) {
                 url: '/add?vsId?workItem?action',
                 template: templateProvider.getView('outgoing-add'),
                 controller: 'outgoingCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                permission: 'menu_item_add_outgoing'
             })
             // add simple outgoing
             .state('app.outgoing.simple-add', {
                 url: '/simpleAdd?vsId?workItem?action',
                 template: templateProvider.getView('outgoing-simple-add'),
                 controller: 'simpleOutgoingCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                permission: 'menu_item_outgoing_simple_add'
             })
             // prepare outgoing
             .state('app.outgoing.prepare', {
@@ -863,6 +899,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('outgoing-prepare'),
                 controller: 'prepareOutgoingCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_outgoing_prepare',
                 resolve: {
                     prepareOutgoings: function (prepareOutgoingService) {
                         'ngInject';
@@ -876,6 +913,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('outgoing-draft'),
                 controller: 'draftOutgoingCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_outgoing_draft',
                 resolve: {
                     draftOutgoings: function (draftOutgoingService) {
                         'ngInject';
@@ -889,6 +927,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('outgoing-review'),
                 controller: 'reviewOutgoingCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_outgoing_review',
                 resolve: {
                     reviewOutgoings: function (reviewOutgoingService) {
                         'ngInject';
@@ -902,6 +941,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('outgoing-ready-to-send'),
                 controller: 'readyToSendOutgoingCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_outgoing_ready_to_send',
                 resolve: {
                     readyToSendOutgoings: function (readyToSendOutgoingService, employeeService) {
                         'ngInject';
@@ -915,6 +955,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('outgoing-rejected'),
                 controller: 'rejectedOutgoingCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_outgoing_rejected',
                 resolve: {
                     rejectedOutgoings: function (rejectedOutgoingService) {
                         'ngInject';
@@ -928,6 +969,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('document-template'),
                 controller: 'documentTemplateCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_document_templates',
                 resolve: {
                     organizations: function (organizationService) {
                         'ngInject';
@@ -975,6 +1017,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('user-inbox'),
                 controller: 'userInboxCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_user_inbox',
                 resolve: {
                     userInboxes: function (userInboxService) {
                         'ngInject';
@@ -1022,6 +1065,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('department-inbox-incoming'),
                 controller: 'incomingDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_dep_incoming',
                 resolve: {
                     incomingDepartmentInboxes: function (incomingDepartmentInboxService) {
                         'ngInject';
@@ -1035,6 +1079,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('department-inbox-returned'),
                 controller: 'returnedDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_dep_returned',
                 resolve: {
                     returnedDepartmentInboxes: function (returnedDepartmentInboxService) {
                         'ngInject';
@@ -1048,6 +1093,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('department-inbox-ready-to-export'),
                 controller: 'readyToExportDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_dep_ready_to_export',
                 resolve: {
                     readyToExports: function (readyToExportService) {
                         'ngInject';
@@ -1060,7 +1106,8 @@ module.exports = function (app) {
                 url: '/sent-items',
                 template: templateProvider.getView('department-inbox-sent-items'),
                 controller: 'sentItemDepartmentInboxCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                permission: 'menu_item_dep_sent_items'
             })
             // quick search
             .state('app.search.quick-search', {
@@ -1102,14 +1149,16 @@ module.exports = function (app) {
                 url: '/add?action?workItem?vsId?internalg2g',
                 template: templateProvider.getView('incoming-add'),
                 controller: 'incomingCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                permission: 'menu_item_incoming_add'
             })
             // add simple incoming
             .state('app.incoming.simple-add', {
                 url: '/simpleAdd?action?workItem?vsId',
                 template: templateProvider.getView('incoming-simple-add'),
                 controller: 'simpleIncomingCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                permission: 'menu_item_incoming_simple_add'
             })
             // scan incoming
             .state('app.incoming.scan', {
@@ -1117,6 +1166,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('incoming-scan'),
                 controller: 'scanIncomingCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_incoming_scan',
                 resolve: {
                     scanIncomings: function (scanIncomingService) {
                         'ngInject';
@@ -1130,6 +1180,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('incoming-review'),
                 controller: 'reviewIncomingCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_incoming_review',
                 resolve: {
                     reviewIncomings: function (reviewIncomingService) {
                         'ngInject';
@@ -1143,6 +1194,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('incoming-ready-to-send'),
                 controller: 'readyToSendIncomingCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_incoming_ready_to_send',
                 resolve: {
                     readyToSendIncomings: function (readyToSendIncomingService) {
                         'ngInject';
@@ -1156,6 +1208,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('incoming-rejected'),
                 controller: 'rejectedIncomingCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_incoming_rejected',
                 resolve: {
                     rejectedIncomings: function (rejectedIncomingService) {
                         'ngInject';
@@ -1185,7 +1238,8 @@ module.exports = function (app) {
                 url: '/add?vsId?workItem?action',
                 template: templateProvider.getView('internal-add'),
                 controller: 'internalCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                permission: 'menu_item_internal_add'
             })
 
             // add simple internal
@@ -1193,7 +1247,8 @@ module.exports = function (app) {
                 url: '/simpleAdd?vsId?workItem?action',
                 template: templateProvider.getView('internal-simple-add'),
                 controller: 'simpleInternalCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                permission: 'menu_item_internal_simple_add'
             })
 
             // prepare internal
@@ -1202,6 +1257,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('internal-prepare'),
                 controller: 'prepareInternalCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_internal_prepare',
                 resolve: {
                     prepareInternals: function (prepareInternalService) {
                         'ngInject';
@@ -1215,6 +1271,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('internal-draft'),
                 controller: 'draftInternalCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_internal_draft',
                 resolve: {
                     draftInternals: function (draftInternalService) {
                         'ngInject';
@@ -1228,6 +1285,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('internal-review'),
                 controller: 'reviewInternalCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_internal_review',
                 resolve: {
                     reviewInternals: function (reviewInternalService) {
                         'ngInject';
@@ -1241,6 +1299,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('internal-ready-to-send'),
                 controller: 'readyToSendInternalCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_internal_ready_to_send',
                 resolve: {
                     readyToSendInternals: function (readyToSendInternalService) {
                         'ngInject';
@@ -1254,6 +1313,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('internal-rejected'),
                 controller: 'rejectedInternalCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_internal_rejected',
                 resolve: {
                     rejectedInternals: function (rejectedInternalService) {
                         'ngInject';
@@ -1267,6 +1327,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('internal-approved'),
                 controller: 'approvedInternalCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_approved_internal_queue',
                 resolve: {
                     approvedInternals: function (approvedInternalService) {
                         'ngInject';
@@ -1285,6 +1346,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('followup-employee-inbox'),
                 controller: 'followupEmployeeInboxCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_followup_employee_inbox'
                 /*resolve: {
                     userFolders: function (userFolderService) {
                         'ngInject';
@@ -1298,6 +1360,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('proxy-mail-inbox'),
                 controller: 'proxyMailInboxCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_proxy_mail_inbox',
                 resolve: {
                     userFolders: function (userFolderService) {
                         'ngInject';
@@ -1315,6 +1378,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('user-sent-items'),
                 controller: 'userSentItemCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_sent_items',
                 resolve: {
                     userSentItems: function (userSentItemService, rootEntity) {
                         'ngInject';
@@ -1329,6 +1393,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('favorite-documents'),
                 controller: 'favoriteDocumentsCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_user_favorite_documents',
                 resolve: {
                     favoriteDocuments: function (favoriteDocumentsService, rootEntity) {
                         'ngInject';
@@ -1347,13 +1412,15 @@ module.exports = function (app) {
                 url: '/group-inbox',
                 template: templateProvider.getView('group-inbox'),
                 controller: 'groupInboxCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                permission: 'menu_item_group_inbox'
             })
             .state('app.inbox.folders', {
                 url: '/folders?folder',
                 template: templateProvider.getView('folders'),
                 controller: 'folderCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                permission: 'menu_item_folders'
             })
             .state('app.central-archive', {
                 abstract: true,
@@ -1375,7 +1442,8 @@ module.exports = function (app) {
                 url: '/ready-to-export',
                 template: templateProvider.getView('central-archive-ready-to-export'),
                 controller: 'readyToExportArchiveCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                permission: 'menu_item_central_archive_ready_to_export'
             })
 
             // temporary route for reports
@@ -1415,6 +1483,7 @@ module.exports = function (app) {
                 url: '/add',
                 template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_icn_archive_add',
                 controller: function (urlService, $sce) {
                     'ngInject';
                     var self = this;
@@ -1425,6 +1494,7 @@ module.exports = function (app) {
                 url: '/search',
                 template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_icn_archive_search',
                 controller: function (urlService, $sce) {
                     'ngInject';
                     var self = this;
@@ -1459,6 +1529,7 @@ module.exports = function (app) {
                 template: cmsTemplateProvider.getView('g2g-incoming'),
                 controller: 'g2gIncomingCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_g2g',
                 resolve: {
                     g2gItems: function (g2gIncomingService) {
                         'ngInject';
@@ -1471,6 +1542,7 @@ module.exports = function (app) {
                 template: cmsTemplateProvider.getView('g2g-returned'),
                 controller: 'g2gReturnedCtrl',
                 controllerAs: 'ctrl',
+                permission: 'menu_item_g2g',
                 resolve: {
                     g2gItems: function (g2gReturnedService) {
                         'ngInject';
@@ -1482,7 +1554,8 @@ module.exports = function (app) {
                 url: '/sent-items',
                 template: cmsTemplateProvider.getView('g2g-sent-items'),
                 controller: 'g2gSentItemsCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                permission: 'menu_item_g2g'
             })
     });
 };

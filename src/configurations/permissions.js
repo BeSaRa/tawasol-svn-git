@@ -48,6 +48,7 @@ module.exports = function (app) {
             // outgoing mail
             .addMenuPermissionGroup('menu_item_outgoing')
             .addMenuPermission('menu_item_add_outgoing', 'ADD_NEW_OUTGOING')
+            .addMenuPermission('menu_item_outgoing_simple_add', 'ADD_NEW_OUTGOING')
             .addMenuPermission('menu_item_outgoing_prepare', 'PREPARE_OUTGOING_DOCUMENTS')
             .addMenuPermission('menu_item_outgoing_draft', 'COMPLETE_DRAFT_OUTGOING_DOCUMENTS')
             .addMenuPermission('menu_item_outgoing_review', 'REVIEW_OUTGOING_DOCUMENTS')
@@ -57,6 +58,7 @@ module.exports = function (app) {
             // incoming mail
             .addMenuPermissionGroup('menu_item_incoming')
             .addMenuPermission('menu_item_incoming_add', 'ADD_NEW_INCOMING_DOCUMENT')
+            .addMenuPermission('menu_item_incoming_simple_add', 'ADD_NEW_INCOMING_DOCUMENT')
             .addMenuPermission('menu_item_incoming_scan', 'INCOMING_SCAN_DOCUMENT')
             .addMenuPermission('menu_item_incoming_review', 'REVIEW_INCOMING_DOCUMENT')
             .addMenuPermission('menu_item_incoming_ready_to_send', 'SEND_INCOMING_QUEUE')
@@ -65,6 +67,7 @@ module.exports = function (app) {
             // internal mail
             .addMenuPermissionGroup('menu_item_internal')
             .addMenuPermission('menu_item_internal_add', 'ADD_NEW_INTERNAL_DOCUMENT')
+            .addMenuPermission('menu_item_internal_simple_add', 'ADD_NEW_INTERNAL_DOCUMENT')
             .addMenuPermission('menu_item_internal_prepare', 'PREPARE_INTERNAL')
             .addMenuPermission('menu_item_internal_draft', 'DRAFT_INTERNAL')
             .addMenuPermission('menu_item_internal_review', 'REVIEW_INTERNAL')

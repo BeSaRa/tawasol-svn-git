@@ -18,6 +18,7 @@ module.exports = function (app) {
         self.progress = null;
 
         contextHelpService.setHelpTo('entities');
+        self.employeeService = employeeService;
 
         /**
          * @description All entities

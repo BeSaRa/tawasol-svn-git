@@ -85,6 +85,7 @@
                                                     <md-icon md-svg-icon="delete"></md-icon>
                                                 </md-button>-->
                                                 <md-button tooltip="{{lang.menu_item_global_settings}}"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_GLOBAL_SETTINGS')"
                                                            class="md-icon-button"
                                                            ng-click="ctrl.openGlobalSetting(entity)">
                                                     <md-icon md-svg-icon="settings"></md-icon>

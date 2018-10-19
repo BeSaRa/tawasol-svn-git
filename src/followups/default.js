@@ -141,5 +141,16 @@ module.exports = function (app) {
             }, 100).catch(angular.noop);
         });
 
+        $transitions.onBefore({}, function (transition) {
+            debugger;
+            if (!transition.to().permission) {
+                return;
+            }
+            if (employeeService && !employeeService.employeeHasPermissionTo(transition.to().permission)) {
+                // redirect to the 'access-denied' state
+                return transition.router.stateService.target('access-denied');
+            }
+        })
+
     });
 };
