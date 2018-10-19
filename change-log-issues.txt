@@ -375,3 +375,9 @@ enabled edit after export for paper documents.
 
 changed g2g messaging history from incoming to outgoing when open.
 changed the g2g screens to use lookups from CMS instead of G2G lookups.
+
+10/19/2018
+-------------------
+permission check on routes
+
+17322:permissions- user without view specific version and duplicate book from existing version can see both actions in userinbox

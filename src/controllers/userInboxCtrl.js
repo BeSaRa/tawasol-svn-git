@@ -980,7 +980,7 @@ module.exports = function (app) {
                 .viewSpecificVersion(self.gridActions, $event);
         };
         /**
-         * @description deuplicate current version
+         * @description duplicate current version
          * @param workItem
          * @param $event
          */
@@ -1606,9 +1606,7 @@ module.exports = function (app) {
                 permissionKey: "VIEW_DOCUMENT_VERSION",
                 class: "action-green",
                 showInView: false,
-                checkShow: function (action, model) {
-                    return true;
-                }
+                checkShow: self.checkToShowAction
             },
             // duplicate current version
             {
@@ -1637,9 +1635,7 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: false,
                 permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
-                checkShow: function (action, model) {
-                    return true;
-                }
+                checkShow: self.checkToShowAction
             }
         ];
 
