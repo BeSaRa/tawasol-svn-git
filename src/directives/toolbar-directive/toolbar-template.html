@@ -60,7 +60,7 @@
                        ng-click="toolbar.logoutEmployee($event)">
                 <md-icon md-svg-icon="logout"></md-icon>
             </md-button>
-            <documents-notify-directive></documents-notify-directive>
+            <documents-notify-directive ng-if="toolbar.employeeService.hasPermissionTo('USER_INBOX')""></documents-notify-directive>
 
             <private-announcement-directive></private-announcement-directive>
 

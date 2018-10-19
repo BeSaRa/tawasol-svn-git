@@ -294,7 +294,6 @@ Added g2gId field to the organization popup.
 ----------------
 Fix 11033:Business : Open Inbox Items from TAWASOL Banner : The pop up window is missing the sender name and date is incorrect
 
-
 9/23/2018
 ----------------
 10841: Admin: Add sub Correspondence Sites: when adding a sub correspondence Site and closing the popup window without saving the saystem adds it to the sub correspondence Sites list.
@@ -373,11 +372,13 @@ enabled edit after export for paper documents.
 17250: Edit after export - warning should mention that the exported not received documents will be recalled when user edit after export a document
 11374:Integration : Edit Role from user applications takes only Permission Name without Permissions
 
+10/17/2018
+-------------------
 changed g2g messaging history from incoming to outgoing when open.
 changed the g2g screens to use lookups from CMS instead of G2G lookups.
 
 10/19/2018
--------------------
+---------------------
 permission check on routes
-
 17322:permissions- user without view specific version and duplicate book from existing version can see both actions in userinbox
+17260: Add-in - Paper outgoing document added from Add-in( Word / outlook )should not send to Ready to Export queue if there is no correspondence site added

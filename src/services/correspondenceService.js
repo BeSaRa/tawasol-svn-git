@@ -1014,11 +1014,7 @@ module.exports = function (app) {
                     }
                 });
         };
-        /**
-         * @description send correspondence to ready to export queue.
-         * @param correspondence
-         */
-        self.sendCorrespondenceToReadyToExport = function (correspondence) {
+        var _sendToReadyToExport = function(correspondence, $event){
             var info = correspondence.getInfo();
             var parts = info.wobNumber ? ('vsid/' + info.vsId + '/wob-num/' + info.wobNumber + '/to-ready-export') : 'vsid/' + info.vsId + '/to-ready-export';
             var url = info.wobNumber ? _createUrlSchema(null, info.documentClass, parts).replace('/correspondence', '/correspondence/wf') : _createUrlSchema(null, info.documentClass, parts);
@@ -1028,11 +1024,33 @@ module.exports = function (app) {
                 });
         };
         /**
-         * @description send correspondence to central archive from review.
+         * @description send correspondence to ready to export queue.
          * @param correspondence
-         * @param ignoreMessage
          */
-        self.sendToCentralArchiveReadyToExport = function (correspondence, ignoreMessage) {
+        self.sendCorrespondenceToReadyToExport = function (correspondence) {
+            var normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
+            var count = angular.isArray(correspondence) ? correspondence.length : 1;
+            if (normalCorrespondence) {
+                var sitesValidation = self.validateBeforeSend(correspondence);
+                if (sitesValidation.length && sitesValidation.length === count && count === 1) {
+                    var info = correspondence.getInfo();
+                    return dialog
+                        .confirmMessage(langService.get('no_sites_cannot_send'), 'add', 'cancel', $event)
+                        .then(function () {
+                            return managerService
+                                .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
+                                .then(function (result) {
+                                    return result.hasSite() ? _sendToReadyToExport(correspondence, $event) : null;
+                                })
+                        })
+                } else {
+                    return _sendToReadyToExport(correspondence, $event);
+                }
+            }
+            return _sendToReadyToExport(correspondence, $event);
+        };
+
+        var _sendToCentralArchiveReadyToExport = function(correspondence, ignoreMessage){
             var info = correspondence.getInfo();
             return $http
                 .put(_createUrlSchema(null, info.documentClass, ['vsid', info.vsId, 'to-ready-export-central-archive'].join('/')))
@@ -1044,6 +1062,33 @@ module.exports = function (app) {
                     }
                     return correspondence;
                 });
+        };
+        /**
+         * @description send correspondence to central archive from review.
+         * @param correspondence
+         * @param ignoreMessage
+         */
+        self.sendToCentralArchiveReadyToExport = function (correspondence, ignoreMessage) {
+            var normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
+            var count = angular.isArray(correspondence) ? correspondence.length : 1;
+            if (normalCorrespondence) {
+                var sitesValidation = self.validateBeforeSend(correspondence);
+                if (sitesValidation.length && sitesValidation.length === count && count === 1) {
+                    var info = correspondence.getInfo();
+                    return dialog
+                        .confirmMessage(langService.get('no_sites_cannot_send'), 'add', 'cancel', $event)
+                        .then(function () {
+                            return managerService
+                                .manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
+                                .then(function (result) {
+                                    return result.hasSite() ? _sendToCentralArchiveReadyToExport(correspondence, ignoreMessage) : null;
+                                })
+                        })
+                } else {
+                    return _sendToCentralArchiveReadyToExport(correspondence, ignoreMessage);
+                }
+            }
+            return _sendToCentralArchiveReadyToExport(correspondence, ignoreMessage);
         };
         /**
          * create reply from workItem.
