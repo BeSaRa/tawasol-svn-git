@@ -1600,12 +1600,12 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'animation',
                 text: 'grid_action_view_specific_version',
-                shortcut: true,
+                shortcut: false,
                 hide: false,
                 callback: self.getDocumentVersions,
                 permissionKey: "VIEW_DOCUMENT_VERSION",
                 class: "action-green",
-                showInView: false,
+                showInView: true,
                 checkShow: self.checkToShowAction
             },
             // duplicate current version
@@ -1613,12 +1613,12 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'content-copy',
                 text: 'grid_action_duplication_current_version',
-                shortcut: true,
+                shortcut: false,
                 hide: false,
                 callback: self.duplicateCurrentVersion,
                 class: "action-green",
                 permissionKey: 'DUPLICATE_BOOK_CURRENT',
-                showInView: false,
+                showInView: true,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper
@@ -1629,11 +1629,11 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'content-duplicate',
                 text: 'grid_action_duplication_specific_version',
-                shortcut: true,
+                shortcut: false,
                 hide: false,
                 callback: self.duplicateVersion,
                 class: "action-green",
-                showInView: false,
+                showInView: true,
                 permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
                 checkShow: self.checkToShowAction
             }
