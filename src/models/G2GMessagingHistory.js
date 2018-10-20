@@ -116,7 +116,7 @@ module.exports = function (app) {
             };
 
             G2GMessagingHistory.prototype.getTranslatedOriginalCopy = function () {
-                return this.correspondence.siteType === 0
+                return this.type === 0
                     ? new Information({enName: langService.getByLangKey('original', 'en'), arName: langService.getByLangKey('original', 'ar')})
                     : new Information({enName: langService.getByLangKey('copy', 'en'), arName: langService.getByLangKey('copy', 'ar')});
             };

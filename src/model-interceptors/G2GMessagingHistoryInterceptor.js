@@ -67,10 +67,10 @@ module.exports = function (app) {
             model.mainSiteFrom = new Information(model.mainSiteFrom);
             model.subSiteFrom = new Information(model.subSiteFrom);
             //model.followupStatus = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.followupType.name, model.followupStatus,  model.isInternalG2G());
-            model.followupStatus = lookupService.getLookupByLookupKey(lookupService.followupStatus, model.followupStatus);;
+            model.followupStatus = lookupService.getLookupByLookupKey(lookupService.followupStatus, model.followupStatus);
 
             //model.securityLevel = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.securityLevel.name, model.securityLevel, model.isInternalG2G());
-            model.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);;
+            model.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
 
             model.deliveryDate = generator.getDateFromTimeStamp(model.deliveryDate, generator.defaultDateTimeFormat);
             model.sentDate = generator.getDateFromTimeStamp(model.sentDate, generator.defaultDateTimeFormat);
