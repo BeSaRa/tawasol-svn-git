@@ -40,7 +40,7 @@ module.exports = function (app) {
                 {
                     label: langService.get('all'),
                     value: function () {
-                        return (self.signatures.length + 21);
+                        return ( self.signatures.length + 21);
                     }
                 }
             ]
@@ -52,7 +52,17 @@ module.exports = function (app) {
          * @param $event
          */
         self.setSelectedSignature = function (signature, $event) {
-            self.selectedSignature = signature
+            if (self.selectedSignature && self.selectedSignature.vsId === signature.vsId) {
+                self.selectedSignature = null;
+            } else {
+                self.selectedSignature = signature;
+            }
+        };
+
+        self.isSignatureSelected = function (signature) {
+            if (!self.selectedSignature)
+                return false;
+            return self.selectedSignature.vsId === signature.vsId;
         };
 
         /**

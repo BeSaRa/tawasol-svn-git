@@ -1357,19 +1357,32 @@ fieldset {
   height: 80%;
 }
 
-// SELECT AN IMAGE AS RADIO
-label > input { /* HIDE RADIO */
-  visibility: hidden; /* Makes input not-clickable */
-  position: absolute; /* Remove input from document flow */
+/*// SELECT AN IMAGE AS RADIO
+label > input { !* HIDE RADIO *!
+  visibility: hidden; !* Makes input not-clickable *!
+  position: absolute; !* Remove input from document flow *!
 }
 
-label > input + img { /* IMAGE STYLES */
+label > input + img { !* IMAGE STYLES *!
   cursor: pointer;
   border: 2px solid transparent;
 }
 
-label > input:checked + img { /* (RADIO CHECKED) IMAGE STYLES */
+label > input:checked + img { !* (RADIO CHECKED) IMAGE STYLES *!
   border: 2px solid #f00;
+}*/
+
+form#signature-form {
+  img {
+    border: 2px solid transparent;
+    outline: 0 !important;
+    img:focus, img:active, img:hover {
+      outline: 0 !important;
+    }
+  }
+  img.selected {
+    border: 2px solid #ff0000 !important;
+  }
 }
 
 .hidden {
