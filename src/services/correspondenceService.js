@@ -1027,7 +1027,7 @@ module.exports = function (app) {
          * @description send correspondence to ready to export queue.
          * @param correspondence
          */
-        self.sendCorrespondenceToReadyToExport = function (correspondence) {
+        self.sendCorrespondenceToReadyToExport = function (correspondence, $event) {
             var normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
             var count = angular.isArray(correspondence) ? correspondence.length : 1;
             if (normalCorrespondence) {
@@ -1068,7 +1068,7 @@ module.exports = function (app) {
          * @param correspondence
          * @param ignoreMessage
          */
-        self.sendToCentralArchiveReadyToExport = function (correspondence, ignoreMessage) {
+        self.sendToCentralArchiveReadyToExport = function (correspondence, ignoreMessage, $event) {
             var normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
             var count = angular.isArray(correspondence) ? correspondence.length : 1;
             if (normalCorrespondence) {

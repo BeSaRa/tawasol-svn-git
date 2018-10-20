@@ -399,7 +399,7 @@ module.exports = function (app) {
              * @param defer
              */
             self.sendWorkItemToReadyToExport = function (workItem, $event, defer) {
-                workItem.sendToReadyToExport().then(function () {
+                workItem.sendToReadyToExport($event).then(function () {
                     self.reloadGroupInbox(self.grid.page)
                         .then(function () {
                             toast.success(langService.get('export_success'));

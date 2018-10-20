@@ -372,7 +372,7 @@ module.exports = function (app) {
                     new ResolveDefer(defer);
                 });
             }
-            workItem.sendToReadyToExport().then(function () {
+            workItem.sendToReadyToExport($event).then(function () {
                 self.reloadProxyMailInboxes(self.grid.page)
                     .then(function () {
                         toast.success(langService.get('export_success'));

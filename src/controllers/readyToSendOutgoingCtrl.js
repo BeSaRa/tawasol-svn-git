@@ -364,12 +364,12 @@ module.exports = function (app) {
          */
         self.sentToReadyToExport = function (model, $event, defer) {
             if (model.fromCentralArchive())
-                return model.sendToCentralArchive().then(function () {
+                return model.sendToCentralArchive(false, $event).then(function () {
                     self.reloadReadyToSendOutgoings(self.grid.page);
                     new ResolveDefer(defer);
                 });
 
-            model.sendToReadyToExport()
+            model.sendToReadyToExport($event)
                 .then(function () {
                     self.reloadReadyToSendOutgoings(self.grid.page)
                         .then(function () {

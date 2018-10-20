@@ -438,12 +438,12 @@ module.exports = function (app) {
          */
         self.sendToReadyToExport = function (model, $event, defer) {
             if (model.fromCentralArchive())
-                return model.sendToCentralArchive().then(function () {
+                return model.sendToCentralArchive(false, $event).then(function () {
                     self.reloadReviewOutgoings(self.grid.page);
                     new ResolveDefer(defer);
                 });
 
-            model.sendToReadyToExport()
+            model.sendToReadyToExport($event)
                 .then(function () {
                     self.reloadReviewOutgoings(self.grid.page)
                         .then(function () {

@@ -471,8 +471,11 @@ module.exports = function (app) {
                                 action: 'editAfterExport'
                             });
                         })
-                        .catch(function () {
-                            dialog.errorMessage(langService.get('error_messages'));
+                        .catch(function (error) {
+                            //dialog.errorMessage(langService.get('error_messages'));
+                            errorCode.checkIf(error, 'CANNOT_EDIT_AFTER_EXPORT_DUE_TO_RECEIVED_G2G_INTERNAL_G2G_OLD_SYSTEM_CORRESPONDENCE_SITES', function () {
+                                dialog.errorMessage(langService.get('can_not_edit_after_export_due_to_received_g2g_internal_g2g_old_system_correspondence_sites'));
+                            });
                         });
 
                 });

@@ -449,8 +449,8 @@ module.exports = function (app) {
              * @description send correspondence to Ready to export;
              * @returns {*}
              */
-            Correspondence.prototype.sendToReadyToExport = function () {
-                return correspondenceService.sendCorrespondenceToReadyToExport(this);
+            Correspondence.prototype.sendToReadyToExport = function ($event) {
+                return correspondenceService.sendCorrespondenceToReadyToExport(this, $event);
             };
 
             Correspondence.prototype.barcodePrint = function ($event) {
@@ -588,8 +588,8 @@ module.exports = function (app) {
             Correspondence.prototype.fromCentralArchive = function () {
                 return !!this.centralArchiveId;
             };
-            Correspondence.prototype.sendToCentralArchive = function (ignoreMessage) {
-                return correspondenceService.sendToCentralArchiveReadyToExport(this, ignoreMessage);
+            Correspondence.prototype.sendToCentralArchive = function (ignoreMessage, $event) {
+                return correspondenceService.sendToCentralArchiveReadyToExport(this, ignoreMessage, $event);
             };
             Correspondence.prototype.getMainProperties = function () {
                 return [

@@ -234,8 +234,8 @@ module.exports = function (app) {
                 return this.generalStepElm.commentsNO ? this.generalStepElm.commentsNO : 0;
             };
 
-            WorkItem.prototype.sendToReadyToExport = function () {
-                return correspondenceService.sendCorrespondenceToReadyToExport(this);
+            WorkItem.prototype.sendToReadyToExport = function ($event) {
+                return correspondenceService.sendCorrespondenceToReadyToExport(this, $event);
             };
 
             WorkItem.prototype.correspondenceBroadcast = function ($event) {
