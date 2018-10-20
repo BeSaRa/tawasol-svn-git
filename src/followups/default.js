@@ -69,7 +69,7 @@ module.exports = function (app) {
             var stateName = transition.to().name;
             if (!application.isReadyStatus() && stateName !== 'loading' && stateName !== 'password') {
                 var Identifier = transition.injector().get('$stateParams').identifier;
-                if ($location.path().indexOf('404') === -1) {
+                if ($location.path().indexOf('404') === -1 && $location.path().indexOf('access-denied') === -1) {
                     application.setUrl($location.path());
                 }
                 return transition.router.stateService.target('loading', {identifier: Identifier});
@@ -111,6 +111,7 @@ module.exports = function (app) {
         });
 
         $transitions.onStart({to: 'app.**'}, function (transition) {
+            debugger;
             var spinnerService = transition.injector().get('loadingIndicatorService');
             var tokenService = transition.injector().get('tokenService');
             var loginDialogService = transition.injector().get('loginDialogService');
@@ -141,7 +142,7 @@ module.exports = function (app) {
             }, 100).catch(angular.noop);
         });
 
-        $transitions.onBefore({}, function (transition) {
+        $transitions.onEnter({to: 'app.**'}, function (transition) {
             var permission = transition.to().permission,
                 params = transition.injector().get('$stateParams');
 
