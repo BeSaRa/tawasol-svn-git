@@ -29,10 +29,6 @@ module.exports = function (app) {
                 url: '/404',
                 template: templateProvider.getView('404')
             })
-            .state('access-denied', {
-                url: '/access-denied',
-                template: templateProvider.getView('access-denied')
-            })
             .state('password', {
                 url: '/password-encrypt',
                 template: templateProvider.getView('password-encrypt'),
@@ -68,6 +64,10 @@ module.exports = function (app) {
                         return !employeeService.isAdminUser() ? counterService.loadCounters() : [];
                     }
                 }
+            })
+            .state('app.access-denied', {
+                url: '/access-denied',
+                template: templateProvider.getView('access-denied')
             })
             // landing page
             .state('app.landing-page', {

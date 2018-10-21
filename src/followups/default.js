@@ -154,7 +154,7 @@ module.exports = function (app) {
 
             if (employeeService && !employeeService.employeeHasPermissionTo(permission)) {
                 // redirect to the 'access-denied' state
-                return transition.router.stateService.target('access-denied');
+                return transition.router.stateService.target('app.access-denied');
             }
         })
 
