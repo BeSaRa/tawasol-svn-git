@@ -922,7 +922,9 @@ module.exports = function (app) {
                         WinPrint.document.write($element.find("#barcode-area")[0].innerHTML);
                         $timeout(function () {
                             WinPrint.print();
-                            WinPrint.close();
+                            setTimeout(function () {
+                                WinPrint.close();
+                            }, 100);
                         });
 
                     }
@@ -1014,7 +1016,7 @@ module.exports = function (app) {
                     }
                 });
         };
-        var _sendToReadyToExport = function(correspondence, $event){
+        var _sendToReadyToExport = function (correspondence, $event) {
             var info = correspondence.getInfo();
             var parts = info.wobNumber ? ('vsid/' + info.vsId + '/wob-num/' + info.wobNumber + '/to-ready-export') : 'vsid/' + info.vsId + '/to-ready-export';
             var url = info.wobNumber ? _createUrlSchema(null, info.documentClass, parts).replace('/correspondence', '/correspondence/wf') : _createUrlSchema(null, info.documentClass, parts);
@@ -1050,7 +1052,7 @@ module.exports = function (app) {
             return _sendToReadyToExport(correspondence, $event);
         };
 
-        var _sendToCentralArchiveReadyToExport = function(correspondence, ignoreMessage){
+        var _sendToCentralArchiveReadyToExport = function (correspondence, ignoreMessage) {
             var info = correspondence.getInfo();
             return $http
                 .put(_createUrlSchema(null, info.documentClass, ['vsid', info.vsId, 'to-ready-export-central-archive'].join('/')))
