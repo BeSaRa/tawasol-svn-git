@@ -16,7 +16,7 @@
                                     <label for="arName">{{lang.arabic_name}}</label>
                                     <input name="arName" id="arName" required minlength="1"
                                            ng-model="ctrl.filter.arName"
-                                           maxlength="10" custom-validate-directive="A1NS">
+                                           custom-validate-directive="A1NS">
                                     <div ng-messages="userFilter.arName.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
                                         <div ng-message="minlength">{{lang.short}}</div>
@@ -29,7 +29,7 @@
                                     <label for="enName">{{lang.english_name}}</label>
                                     <input name="enName" id="enName" required minlength="1"
                                            ng-model="ctrl.filter.enName"
-                                           maxlength="10" custom-validate-directive="E1NS">
+                                           custom-validate-directive="E1NS">
                                     <div ng-messages="userFilter.enName.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
                                         <div ng-message="minlength">{{lang.short}}</div>
@@ -82,6 +82,32 @@
                                     <md-input-container flex>
                                         <label for="docSubject">{{lang.user_inbox_filter_doc_subject}}</label>
                                         <input id="docSubject" name="docSubject" ng-model="ctrl.filter.ui.key_3.value">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!-- Security Level -->
+                                    <md-input-container flex>
+                                        <label for="securityLevel">{{lang.user_inbox_filter_security_level}}</label>
+                                        <md-select name="securityLevel" id="securityLevel"
+                                                   ng-model="ctrl.filter.ui.key_14.value">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option ng-value="securityLevel.lookupKey"
+                                                       ng-repeat="securityLevel in ctrl.securityLevels">
+                                                {{securityLevel.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <!-- Priority Level -->
+                                    <md-input-container flex>
+                                        <label for="priorityLevel">{{lang.user_inbox_filter_priority_level}}</label>
+                                        <md-select name="priorityLevel" id="priorityLevel"
+                                                   ng-model="ctrl.filter.ui.key_15.value">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option ng-value="priorityLevel.lookupKey"
+                                                       ng-repeat="priorityLevel in ctrl.priorityLevels">
+                                                {{priorityLevel.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
                                     </md-input-container>
                                 </div>
                                 <div layout="row">

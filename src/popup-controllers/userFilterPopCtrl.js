@@ -22,6 +22,8 @@ module.exports = function (app) {
         self.senders = senders;
         self.actions = actions;
         self.documentTypes = lookupService.returnLookups(lookupService.documentClass);
+        self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
 
         //console.log(lookupService.returnLookups(lookupService.inboxFilterKey));
 
@@ -121,8 +123,8 @@ module.exports = function (app) {
                     continue;
 
                 record = self.filter.ui[key];
-                // if single value key and key has value or key is for document type === 0 (outgoing)
-                if (record.hasOwnProperty('value') && (record.value || (record.value === 0 && key === 'key_2'))) {
+                // if single value key and key has value or key is for document type === 0 (outgoing, security level, priority level)
+                if (record.hasOwnProperty('value') && (record.value || (record.value === 0 && key === 'key_2') || (record.value === 0 && key === 'key_14') || (record.value === 0 && key === 'key_15'))) {
                     typeOfRecord = typeof record.value;
                     recordValue = record.value;
                 }

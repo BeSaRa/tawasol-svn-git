@@ -53,10 +53,16 @@ module.exports = function (app) {
                 },
                 key_13: {
                     value: null
+                },
+                key_14: {
+                    value: null
+                },
+                key_15: {
+                    value: null
                 }
             };
             // this is available keys for the current ui model
-            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -132,6 +138,12 @@ module.exports = function (app) {
 
                 //Doc full serial
                 self.ui.key_13.value = self.ui.key_13.value ? self.ui.key_13.value : null;
+
+                // Security Level
+                self.ui.key_14.value = self.ui.key_14.value ? self.ui.key_14.value : null;
+
+                // Priority Level
+                self.ui.key_15.value = self.ui.key_15.value ? self.ui.key_15.value : null;
 
                 self.filterCriteria = self.filterCriteria || {};
                 _.map(availableKeys, function (number) {
