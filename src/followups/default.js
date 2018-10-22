@@ -111,7 +111,6 @@ module.exports = function (app) {
         });
 
         $transitions.onStart({to: 'app.**'}, function (transition) {
-            debugger;
             var spinnerService = transition.injector().get('loadingIndicatorService');
             var tokenService = transition.injector().get('tokenService');
             var loginDialogService = transition.injector().get('loginDialogService');

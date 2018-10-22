@@ -6,7 +6,11 @@ module.exports = function (app) {
             replace: true,
             controller: 'organizationChartDirectiveCtrl',
             controllerAs: 'orgCtrl',
-            bindToController: true
+            bindToController: true,
+            scope: {
+                organizations: '=',
+                hasChanges: '='
+            }
         }
     })
 };

@@ -25,15 +25,42 @@
                     <!--<md-button id="full-screen-view" ng-click="orgCtrl.fullScreenMode()" class="md-icon-button">-->
                     <!--<md-icon md-svg-icon="fullscreen"></md-icon>-->
                     <!--</md-button>-->
+                    <div layout-align="center center" flex layout="row">
+                        <div flex="25"></div>
+                        <div flex>
+                            <md-autocomplete
+                                    flex
+                                    ng-model-options="{debounce: 500}"
+                                    ng-disabled="ctrl.isDisabled"
+                                    md-no-cache="ctrl.noCache"
+                                    md-selected-item="ctrl.selectedItem"
+                                    md-search-text="ctrl.searchText"
+                                    md-items="item in ctrl.querySearch(ctrl.searchText)"
+                                    md-item-text="item[lang.current + 'Name']"
+                                    md-min-length="0"
+                                    placeholder="search for department!">
+                                <md-item-template>
+                                    <span md-highlight-text="ctrl.searchText"
+                                          md-highlight-flags="i">{{item['arName'] + ' - ' + item['enName'] }}</span>
+                                </md-item-template>
+                                <md-not-found>
+                                    No states matching "{{ctrl.searchText}}" were found.
+                                    <!--<a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>-->
+                                </md-not-found>
+                            </md-autocomplete>
+                        </div>
+                        <div flex="25"></div>
+                    </div>
                     <organization-chart-directive
+                            organizations="ctrl.selectedFilter"
                             id="organization-chart">
                     </organization-chart-directive>
                 </md-content>
             </md-tab>
             <!--<md-tab label="{{lang.hierarchy_view}}">-->
-                <!--<md-content scroll-directive class="block-content over-flow-hidden">-->
-                    <!--<organization-hierarchy-view-directive></organization-hierarchy-view-directive>-->
-                <!--</md-content>-->
+            <!--<md-content scroll-directive class="block-content over-flow-hidden">-->
+            <!--<organization-hierarchy-view-directive></organization-hierarchy-view-directive>-->
+            <!--</md-content>-->
             <!--</md-tab>-->
             <!--<md-tab label="{{lang.grid_view}}"></md-tab>-->
         </md-tabs>

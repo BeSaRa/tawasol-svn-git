@@ -1,8 +1,11 @@
 module.exports = function (app) {
     app.controller('organizationsCtrl', function (organizationService,
+                                                  _,
                                                   cmsTemplate,
+                                                  $scope,
                                                   dialog,
                                                   organizations,
+                                                  organizationChartService,
                                                   referencePlanNumberService,
                                                   contextHelpService,
                                                   permissions,
@@ -10,8 +13,11 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'organizationsCtrl';
+        organizationChartService.createHierarchy(organizations);
+        self.organizations = organizationChartService.organizations;
 
-        self.organizations = organizations;
+        self.selectedFilter = self.organizations;
+
         contextHelpService.setHelpTo('organizations');
 
         self.reloadOrganizations = function () {
@@ -51,7 +57,31 @@ module.exports = function (app) {
                 .then(function (result) {
 
                 });
-        }
+        };
+
+        self.selectedItemChange = function (selected) {
+            if (selected) {
+                self.selectedFilter = [selected];
+            } else {
+                self.selectedFilter = self.organizations;
+            }
+        };
+
+        self.querySearch = function (searchText) {
+            if (!searchText)
+                return self.organizations;
+            searchText = searchText.toLowerCase();
+            return _.filter(self.organizations, function (item) {
+                return item.arName.toLowerCase().indexOf(searchText) !== -1 || item.enName.toLowerCase().indexOf(searchText) !== -1
+            });
+        };
+
+        $scope.$watch(function () {
+            return self.selectedItem;
+        }, function (newVal) {
+            self.selectedItemChange(newVal);
+        })
+
 
     });
 };

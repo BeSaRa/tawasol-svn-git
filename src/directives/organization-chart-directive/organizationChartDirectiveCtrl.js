@@ -11,7 +11,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'organizationChartDirectiveCtrl';
         $scope.nodeList = [];
-
+        self.organizations = [];
 
         self.resetView = function () {
             $element.find('.orgchart').css('transform', '');
@@ -28,9 +28,9 @@ module.exports = function (app) {
             });
             $element.empty();
             $element.append(angular.element('<div/>', {style: 'text-align:center'}));
-
-            // set the nodes to bind it later  with the orgChat directive.
-            nodes = organizationChartService.createHierarchy(nodes);
+            // console.log("NODES", nodes);
+            // // set the nodes to bind it later  with the orgChat directive.
+            // nodes = organizationChartService.createHierarchy(nodes);
             // add fake root entity organization;
             var root = angular.copy(rootEntity.returnRootEntity().rootEntity);
             root.children = nodes;
@@ -98,16 +98,15 @@ module.exports = function (app) {
             }, 500);
         };
 
-        self.render(organizationService.organizations);
+        $timeout(function () {
+            self.render(self.organizations);
+        });
 
         $scope.$watch(function () {
-            return organizationService.organizations
+            return self.organizations;
         }, function (value) {
-            if (value === 'undefined')
-                return;
-
-            self.render(organizationService.organizations);
-        })
+            self.render(self.organizations);
+        });
 
     });
 };
