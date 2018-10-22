@@ -910,6 +910,7 @@ module.exports = function (app) {
          * @returns {promise|*}
          */
         self.correspondencePrintBarcode = function (correspondence, $event) {
+            var defer = $q.defer();
             return dialog.showDialog({
                 template: cmsTemplate.getPopup('print-barcode'),
                 bindToController: true,
@@ -919,21 +920,42 @@ module.exports = function (app) {
                     'ngInject';
                     this.printCorrespondenceBarcodeFromCtrl = function () {
                         var WinPrint = window.open('', '', 'left=0,top=0,width=0,height=0,toolbar=0,scrollbars=0,status=0');
-                        WinPrint.document.body.innerHTML = ($element.find("#barcode-area")[0].innerHTML);
+                        WinPrint.document.write($element.find("#barcode-area")[0].innerHTML);
+                        WinPrint.document.close();
+                        WinPrint.focus();
                         WinPrint.print();
-                        $timeout(function () {
-                            WinPrint.close();
-                        },1000);
-
+                        WinPrint.close();
                     }
                 },
                 locals: {
                     title: correspondence.getInfo().title
                 },
                 resolve: {
+                    loadBarcode: function () {
+                        return self
+                            .correspondenceGetBarcode(correspondence)
+                            .then(function (result) {
+                                return result.replace('\\', '');
+                            }).then(function (result) {
+                                defer.resolve(result);
+                            });
+                    },
                     barcode: function () {
                         'ngInject';
-                        return self.correspondenceGetBarcode(correspondence);
+                        return defer.promise.then(function (url) {
+                            var image = new Image(), defer2 = $q.defer();
+                            var canvas = document.createElement("canvas");
+                            var ctx = canvas.getContext("2d");
+                            image.crossOrigin = "anonymous";
+                            image.onload = function (ev) {
+                                canvas.width = image.width;
+                                canvas.height = image.height;
+                                ctx.drawImage(image, 0, 0);
+                                defer2.resolve(canvas.toDataURL());
+                            };
+                            image.src = url;
+                            return defer2.promise;
+                        });
                     }
                 }
             })
