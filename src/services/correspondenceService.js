@@ -919,13 +919,11 @@ module.exports = function (app) {
                     'ngInject';
                     this.printCorrespondenceBarcodeFromCtrl = function () {
                         var WinPrint = window.open('', '', 'left=0,top=0,width=0,height=0,toolbar=0,scrollbars=0,status=0');
-                        WinPrint.document.write($element.find("#barcode-area")[0].innerHTML);
+                        WinPrint.document.body.innerHTML = ($element.find("#barcode-area")[0].innerHTML);
+                        WinPrint.print();
                         $timeout(function () {
-                            WinPrint.print();
-                            setTimeout(function () {
-                                WinPrint.close();
-                            }, 100);
-                        });
+                            WinPrint.close();
+                        },1000);
 
                     }
                 },
