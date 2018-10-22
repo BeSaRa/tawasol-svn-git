@@ -9,13 +9,5 @@ module.exports = function (app) {
             return model;
         });
 
-        CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            return model;
-        });
-
-        CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            return model;
-        });
-
     })
 };

@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.service('langService', function (Language, cmsTemplate, $window, $rootScope, Localization, generator, $http, urlService, $q, $cookies, _) {
+    app.service('langService', function (Language, CMSModelInterceptor, $timeout, titleService, cmsTemplate, $window, $rootScope, Localization, generator, $http, urlService, $q, $cookies, _) {
         'ngInject';
         var self = this, toast, dialog, addKeyOpend = false, rootEntity;
         self.cookiesKey = 'lang';
@@ -245,6 +245,7 @@ module.exports = function (app) {
 
             self.selectedLanguage = self.languages[result];
             self.current = self.selectedLanguage.code;
+            titleService.setTitle(rootEntity.returnRootEntity().getTranslatedAppName());
             self.setCurrentLang(self.current);
         };
         self.getCurrentTranslate = function () {
@@ -450,6 +451,10 @@ module.exports = function (app) {
             }
         };
 
+        self.setRootEntityService = function (service) {
+            rootEntity = service;
+        };
+
         angular
             .element($window)
             .on('keypress keydown', function (e) {
@@ -458,7 +463,11 @@ module.exports = function (app) {
                     if (!addKeyOpend)
                         self.controllerMethod.addNewLocalizationKey();
                 }
-            })
+            });
+
+        $timeout(function () {
+            CMSModelInterceptor.runEvent('langService', 'init', self);
+        }, 100);
 
 
     });
