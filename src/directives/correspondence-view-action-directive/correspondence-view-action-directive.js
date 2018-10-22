@@ -11,7 +11,8 @@ module.exports = function (app) {
             scope: {
                 actions: '=',
                 workItem: '=',
-                correspondence: '='
+                correspondence: '=',
+                g2gItemCopy: '=?'
             }
         }
     })

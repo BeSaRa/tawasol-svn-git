@@ -16,10 +16,11 @@ module.exports = function (app) {
             defer.promise.then(function () {
                 dialog.cancel();
             });
+            var record = self.g2gItemCopy ? self.g2gItemCopy : (workItem || correspondence);
             if (action.hasOwnProperty('params') && action.params) {
-                return action.callback((workItem || correspondence), action.params, $event, defer);
+                return action.callback(record, action.params, $event, defer);
             }
-            return action.callback((workItem || correspondence), $event, defer);
+            return action.callback(record, $event, defer);
         };
 
 

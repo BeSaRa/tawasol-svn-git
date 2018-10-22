@@ -1177,7 +1177,8 @@ module.exports = function (app) {
                                 popupNumber: self.popupNumber,
                                 disableEverything: true,
                                 disableProperties: true,
-                                disableCorrespondence: true
+                                disableCorrespondence: true,
+                                g2gItemCopy: null
                             }
                         }).then(function (result) {
                             self.popupNumber -= 1;
@@ -1197,6 +1198,7 @@ module.exports = function (app) {
              * @param pageName
              */
             self.viewG2GHistoryDocument = function (g2gItem, actions, pageName, $event) {
+                var g2gItemCopy = angular.copy(g2gItem);
                 var disabled = _checkDisabled(pageName, g2gItem);
                 var isInternal = g2gItem.isInternalG2G();
 
@@ -1205,10 +1207,6 @@ module.exports = function (app) {
                     disabled.disableProperties = true;
                 }
 
-                /*g2gItem = {
-                    //incomingDocId: g2gItem.incomingDocId
-                    g2gVSID: g2gItem.incomingDocId
-                };*/
                 g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
                 return $http
                     .put(urlService.g2gInbox + 'open-sent-return/' + isInternal, g2gItem)
@@ -1251,7 +1249,8 @@ module.exports = function (app) {
                                 popupNumber: self.popupNumber,
                                 disableEverything: disabled.disableAll,
                                 disableProperties: disabled.disableProperties,
-                                disableCorrespondence: disabled.disableSites
+                                disableCorrespondence: disabled.disableSites,
+                                g2gItemCopy: g2gItemCopy
                             }
                         }).then(function (result) {
                             self.popupNumber -= 1;

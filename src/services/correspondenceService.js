@@ -1462,6 +1462,7 @@ module.exports = function (app) {
         self.viewCorrespondenceG2G = function (g2gItem, actions, model, $event) {
             /*var site = null,*/
             var url;
+            var g2gItemCopy = null;
             var isInternal = g2gItem.isInternalG2G();
             if (model.toLowerCase() === 'g2g') {
                 // site = angular.copy(g2gItem.correspondence.site);
@@ -1470,8 +1471,10 @@ module.exports = function (app) {
                 // get correspondence from G2G object
                 g2gItem = g2gItem.hasOwnProperty('correspondence') ? g2gItem.correspondence : g2gItem;
                 url = urlService.g2gInbox + 'open/' + isInternal;
+                // only required in case of g2gMessagingHistory
             }
             else if (model.toLowerCase() === 'g2gmessaginghistory') {
+                g2gItemCopy = angular.copy(g2gItem);
                 g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
                 url = urlService.g2gInbox + 'open-sent-return/' + isInternal;
             }
@@ -1515,7 +1518,8 @@ module.exports = function (app) {
                             popupNumber: self.popupNumber,
                             disableEverything: true,
                             disableProperties: true,
-                            disableCorrespondence: true
+                            disableCorrespondence: true,
+                            g2gItemCopy: g2gItemCopy
                         }
                     }).then(function (result) {
                         self.popupNumber -= 1;

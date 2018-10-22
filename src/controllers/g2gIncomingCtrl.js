@@ -147,7 +147,6 @@ module.exports = function (app) {
             self.openedRecord = angular.copy(g2gItem);
             g2gItem.viewDocument(self.gridActions, 'g2gIncoming', $event)
                 .then(function (result) {
-                    debugger;
                     if (result !== 'receive' && result !== 'return') {
                         if (!g2gItem.getInfo().vsId) {
                             g2gItem.correspondence.vsId = result.vsId;

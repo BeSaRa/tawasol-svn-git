@@ -9,7 +9,8 @@
                 </md-button>
                 <correspondence-view-action-directive ng-if="ctrl.actions.length" actions="ctrl.actions"
                                                       work-item="ctrl.workItem"
-                                                      correspondence="ctrl.correspondence"></correspondence-view-action-directive>
+                                                      correspondence="ctrl.correspondence"
+                                                      g2g-item-copy="ctrl.g2gItemCopy"></correspondence-view-action-directive>
                 <div flex layout-align="center center" layout="row">
                     <span>{{::ctrl.correspondence.getTranslatedName()}}</span>
                 </div>
