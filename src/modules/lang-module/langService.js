@@ -1,7 +1,7 @@
 module.exports = function (app) {
     app.service('langService', function (Language, cmsTemplate, $window, $rootScope, Localization, generator, $http, urlService, $q, $cookies, _) {
         'ngInject';
-        var self = this, toast, dialog, addKeyOpend = false;
+        var self = this, toast, dialog, addKeyOpend = false, rootEntity;
         self.cookiesKey = 'lang';
         self.current = null;
         self.defaultLanguages = {};

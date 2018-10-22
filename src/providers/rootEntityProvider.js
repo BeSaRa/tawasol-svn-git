@@ -36,7 +36,7 @@ module.exports = function (app) {
             return self;
         };
 
-        self.$get = function (RootEntity, $rootScope, $sce, errorCode, $cookies, $stateParams, $http, $location, urlService, dialog, $q) {
+        self.$get = function (RootEntity, titleService , $rootScope, $sce, errorCode, $cookies, $stateParams, $http, $location, urlService, dialog, $q) {
             'ngInject';
             return {
                 loadInformation: function (rootIdentifier) {
@@ -51,10 +51,10 @@ module.exports = function (app) {
                         })
                         .then(function (result) {
                             self.setLoaded(true);
-
                             $cookies.put(privateKey, rootIdentifier);
                             dialog.cancel();
                             self.setRootEntity(new RootEntity(result.data.rs));
+                            titleService.setTitle(self.getRootEntity().getTranslatedAppName());
                             return self.getRootEntity();
                         })
 
@@ -73,6 +73,7 @@ module.exports = function (app) {
                             $cookies.put(privateKey, rootIdentifier);
                             //dialog.cancel();
                             self.setRootEntity(new RootEntity(result.data.rs));
+                            titleService.setTitle(self.getRootEntity().getTranslatedAppName());
                             return self.getRootEntity();
                         })
 

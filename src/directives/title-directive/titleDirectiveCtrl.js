@@ -8,9 +8,5 @@ module.exports = function (app) {
             titleService.setTitle("CMS PACKAGING");
         }, 1000);
 
-        // {{titleCtrl.service.prefix}} {{titleCtrl.service.title}} {{titleCtrl.service.suffix}}
-
-        // $compile($element.html('<span>{{titleCtrl.service.prefix}} {{titleCtrl.service.title}} {{titleCtrl.service.suffix}}</span>'))($scope);
-
     });
 };
