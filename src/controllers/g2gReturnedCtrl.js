@@ -133,10 +133,12 @@ module.exports = function (app) {
         self.resend = function (g2gItem, $event) {
             return g2gReturnedService.resendG2G(g2gItem)
                 .then(function (result) {
-                    self.reloadG2gItems(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get('resend_specific_success').change({name: g2gItem.getTranslatedName()}));
-                        });
+                    if (result) {
+                        self.reloadG2gItems(self.grid.page)
+                            .then(function () {
+                                toast.success(langService.get('resend_specific_success').change({name: g2gItem.getTranslatedName()}));
+                            });
+                    }
                 })
         };
 

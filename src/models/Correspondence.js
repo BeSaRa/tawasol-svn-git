@@ -682,6 +682,10 @@ module.exports = function (app) {
                 return this.classDescription.toLowerCase() === 'outgoing' ? (this.sitesInfoTo[0] || this.sitesInfoCC[0]) : null;
             };
 
+            Correspondence.prototype.isInternalG2G = function () {
+                return this.internalG2G;
+            };
+
             Correspondence.prototype.loadThumbnails = function () {
                 return correspondenceService.loadDocumentThumbnails(this);
             };

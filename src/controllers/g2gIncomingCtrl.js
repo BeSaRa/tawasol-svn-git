@@ -114,7 +114,7 @@ module.exports = function (app) {
             self.openedRecord = angular.copy(g2gItem);
             return correspondenceService.viewCorrespondenceG2G(g2gItem, self.gridActions, 'G2G', $event)
                 .then(function (result) {
-                    if (result !== 'receive') {
+                    if (result !== 'receive' && result !== 'return') {
                         if (!g2gItem.getInfo().vsId) {
                             g2gItem.correspondence.vsId = result.vsId;
                             self.replaceRecord(g2gItem);
@@ -147,7 +147,8 @@ module.exports = function (app) {
             self.openedRecord = angular.copy(g2gItem);
             g2gItem.viewDocument(self.gridActions, 'g2gIncoming', $event)
                 .then(function (result) {
-                    if (result !== 'receive') {
+                    debugger;
+                    if (result !== 'receive' && result !== 'return') {
                         if (!g2gItem.getInfo().vsId) {
                             g2gItem.correspondence.vsId = result.vsId;
                             self.replaceRecord(g2gItem);
@@ -189,7 +190,8 @@ module.exports = function (app) {
         self.returnDocument = function (g2gItem, $event, defer) {
             return g2gIncomingService.returnG2G(g2gItem)
                 .then(function (result) {
-                    new ResolveDefer(defer);
+                    //new ResolveDefer(defer);
+                    dialog.hide('return');
                     self.reloadG2gItems(self.grid.page)
                         .then(function () {
                             toast.success(langService.get("return_specific_success").change({name: g2gItem.correspondence.docSubject}));

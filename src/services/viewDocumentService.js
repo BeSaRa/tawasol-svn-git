@@ -1152,11 +1152,14 @@ module.exports = function (app) {
                             return generator.interceptReceivedInstance('LinkedObject', new LinkedObject(item));
                         });
 
+                        // temporary property added to correspondence(will be removed before send)
+                        metaData.internalG2G = isInternal;
+
                         result.data.rs.metaData = metaData;
                         return result.data.rs;
                     })
                     .then(function (result) {
-                        result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL)
+                        result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         self.popupNumber += 1;
                         return dialog.showDialog({
                             /*template: cmsTemplate.getPopup('view-correspondence-g2g'),
@@ -1227,6 +1230,8 @@ module.exports = function (app) {
                         });
 
                         result.data.rs.metaData = metaData;
+                        // temporary property added to correspondence(will be removed before send)
+                        metaData.internalG2G = isInternal;
                         return result.data.rs;
                     })
                     .then(function (result) {

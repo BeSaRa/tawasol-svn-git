@@ -86,6 +86,9 @@ module.exports = function (app) {
                 errorCode.checkIf(error, 'G2G_USER_NOT_AUTHENTICATED', function () {
                     dialog.errorMessage(langService.get('g2g_not_authenticated'));
                 });
+                errorCode.checkIf(error, 'G2G_ERROR_FETCH_SENT_OR_RETURN_BOOK', function () {
+                    dialog.errorMessage(langService.get('g2g_error_fetch_sent_return_book'));
+                });
                 errorCode.checkIf(error, 'G2G_USER_NOT_AUTHORIZED', function () {
                     dialog.errorMessage(langService.get('g2g_not_authorized'));
                 });
