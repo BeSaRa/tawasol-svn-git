@@ -37,11 +37,13 @@
                                                 </md-button>
                                                 <md-button class="md-icon-button"
                                                            tooltip="{{lang.accept}}"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('ACCEPT_INTERNAL')"
                                                            ng-click="ctrl.acceptInternalBulk($event)">
                                                     <md-icon md-svg-icon="check" class="action-green"></md-icon>
                                                 </md-button>
                                                 <md-button class="md-icon-button"
                                                            tooltip="{{lang.reject}}"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('REJECT_INTERNAL')"
                                                            ng-click="ctrl.rejectInternalBulk($event)">
                                                     <md-icon md-svg-icon="close" class="action-green"></md-icon>
                                                 </md-button>

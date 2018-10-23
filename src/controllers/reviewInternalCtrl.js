@@ -672,6 +672,7 @@ module.exports = function (app) {
                 text: 'grid_action_reject',
                 shortcut: true,
                 callback: self.rejectInternal,
+                permissionKey: "REJECT_INTERNAL",
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
@@ -682,6 +683,7 @@ module.exports = function (app) {
                 text: 'grid_action_accept',
                 shortcut: true,
                 callback: self.acceptInternal,
+                permissionKey: "ACCEPT_INTERNAL",
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
