@@ -20,7 +20,14 @@ module.exports = function (app) {
          * @type {*}
          */
         self.signatures = signatures;
-        self.signatureChunks = _.chunk(signatures, 5);
+
+        var signatureChunkLength = 5;
+        self.signatureChunks = _.chunk(signatures, signatureChunkLength);
+
+        self.getEmptySigns = function (chunk) {
+            var diff = signatureChunkLength - chunk.length;
+            return (new Array(diff));
+        };
 
         /**
          * @description Contains the selected signatures
