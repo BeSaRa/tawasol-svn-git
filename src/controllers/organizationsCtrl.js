@@ -14,7 +14,7 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'organizationsCtrl';
         organizationChartService.createHierarchy(organizations);
-        self.organizations = organizationChartService.organizations;
+        self.organizations = organizationChartService.rootOrganizations;
 
         self.selectedFilter = self.organizations;
 
@@ -69,9 +69,9 @@ module.exports = function (app) {
 
         self.querySearch = function (searchText) {
             if (!searchText)
-                return self.organizations;
+                return organizationService.organizations;
             searchText = searchText.toLowerCase();
-            return _.filter(self.organizations, function (item) {
+            return _.filter(organizationService.organizations, function (item) {
                 return item.arName.toLowerCase().indexOf(searchText) !== -1 || item.enName.toLowerCase().indexOf(searchText) !== -1
             });
         };
