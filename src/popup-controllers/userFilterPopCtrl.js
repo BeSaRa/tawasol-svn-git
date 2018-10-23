@@ -9,6 +9,8 @@ module.exports = function (app) {
                                               lookupService,
                                               editMode,
                                               toast,
+                                              generator,
+                                              employeeService,
                                               validationService,
                                               userFilterService) {
         'ngInject';
@@ -22,7 +24,7 @@ module.exports = function (app) {
         self.senders = senders;
         self.actions = actions;
         self.documentTypes = lookupService.returnLookups(lookupService.documentClass);
-        self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        self.securityLevels = generator.getSelectedCollectionFromResult(lookupService.returnLookups(lookupService.securityLevel), employeeService.getEmployee().organization.securityLevels, 'lookupKey');//lookupService.returnLookups(lookupService.securityLevel);
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
 
         //console.log(lookupService.returnLookups(lookupService.inboxFilterKey));
