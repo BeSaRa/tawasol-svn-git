@@ -38,7 +38,7 @@
                                     md-items="item in ctrl.querySearch(ctrl.searchText)"
                                     md-item-text="item[lang.current + 'Name']"
                                     md-min-length="0"
-                                    placeholder="search for department!">
+                                    placeholder="{{lang.search_department}}">
                                 <md-item-template>
                                     <span md-highlight-text="ctrl.searchText"
                                           md-highlight-flags="i">{{item['arName'] + ' - ' + item['enName'] }}</span>
