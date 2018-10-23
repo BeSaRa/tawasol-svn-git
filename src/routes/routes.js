@@ -1459,6 +1459,7 @@ module.exports = function (app) {
                         url = urlService.portal.replace('{reportUrl}', reportUrl);
                     self.url = $sce.trustAsResourceUrl(url);
                 },
+                isReport: true,
                 controllerAs: 'ctrl'
             })
             .state('app.icn', {

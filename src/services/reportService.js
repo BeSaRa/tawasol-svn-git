@@ -76,6 +76,15 @@ module.exports = function (app) {
             return _.find(self.reports, function (report) {
                 return report.langKey.toLowerCase() === langKey.toLowerCase();
             });
+        };
+        /**
+         * @description get report by report name.
+         * @param reportName
+         */
+        self.getReportByReportName = function (reportName) {
+            return _.find(self.reports, function (report) {
+                return report.reportName === reportName;
+            });
         }
 
     });

@@ -4,6 +4,7 @@ module.exports = function (app) {
                       employeeService,
                       $stateParams,
                       loginDialogService,
+                      reportService,
                       loadingIndicatorService,
                       stateHelperService,
                       $transitions,
@@ -143,17 +144,21 @@ module.exports = function (app) {
 
         $transitions.onEnter({to: 'app.**'}, function (transition) {
             var permission = transition.to().permission,
-                params = transition.injector().get('$stateParams');
+                params = transition.injector().get('$stateParams'),
+                isReport = transition.to().isReport,
+                report = isReport ? reportService.getReportByReportName(params.reportName) : false;
 
-            /*if (params.hasOwnProperty('reportName'))
-                permission = permission(reportName);*/
+            if (isReport && report) {
+                permission = report.langKey;
+            }
+
 
             if (!permission)
                 return;
 
             if (employeeService && !employeeService.employeeHasPermissionTo(permission)) {
                 // redirect to the 'access-denied' state
-                return transition.router.stateService.target('app.access-denied',params);
+                return transition.router.stateService.target('app.access-denied', params);
             }
         })
 
