@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                    counterService,
                                                    langService,
                                                    toast,
+                                                   $state,
                                                    dialog,
                                                    viewDocumentService,
                                                    employeeService,
@@ -585,6 +586,36 @@ module.exports = function (app) {
         };
 
         /**
+         * @description get document versions
+         * @param correspondence
+         * @param $event
+         * @return {*}
+         */
+        self.getDocumentVersions = function (correspondence, $event) {
+            return correspondence
+                .viewSpecificVersion(self.gridActions, $event);
+        };
+
+        /**
+         * @description duplicate specific version
+         * @param correspondence
+         * @param $event
+         * @return {*}
+         */
+        self.duplicateVersion = function (correspondence, $event) {
+            var info = correspondence.getInfo();
+            return correspondence
+                .duplicateSpecificVersion($event)
+                .then(function () {
+                    $state.go('app.incoming.add', {
+                        vsId: info.vsId,
+                        action: 'duplicateVersion',
+                        workItem: info.wobNum
+                    });
+                });
+        };
+
+        /**
          * @description Check if action will be shown on grid or not
          * @param action
          * @param model
@@ -891,6 +922,32 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && (model.getSecurityLevelLookup().lookupKey !== 4);
                 }
+            },
+            // show versions
+            {
+                type: 'action',
+                icon: 'animation',
+                text: 'grid_action_view_specific_version',
+                shortcut: false,
+                hide: false,
+                callback: self.getDocumentVersions,
+                permissionKey: "VIEW_DOCUMENT_VERSION",
+                class: "action-green",
+                showInView: true,
+                checkShow: self.checkToShowAction
+            },
+            // duplicate specific version
+            {
+                type: 'action',
+                icon: 'content-duplicate',
+                text: 'grid_action_duplication_specific_version',
+                shortcut: false,
+                hide: false,
+                callback: self.duplicateVersion,
+                class: "action-green",
+                showInView: true,
+                permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
+                checkShow: self.checkToShowAction
             }
         ];
     });

@@ -176,7 +176,11 @@ module.exports = function (app) {
         self.receiveDocument = function (g2gItem, $event) {
             var info = g2gItem.getInfo();
             dialog.hide('receive');
-            $state.go('app.incoming.add', {action: 'receiveg2g', vsId: info.vsId, internalg2g: self.openedRecord.isInternalG2G()});
+            $state.go('app.incoming.add', {
+                action: 'receiveg2g',
+                vsId: info.vsId,
+                internalg2g: self.openedRecord.isInternalG2G()
+            });
         };
 
         /**
@@ -190,11 +194,13 @@ module.exports = function (app) {
             return g2gIncomingService.returnG2G(g2gItem)
                 .then(function (result) {
                     //new ResolveDefer(defer);
-                    dialog.hide('return');
-                    self.reloadG2gItems(self.grid.page)
-                        .then(function () {
-                            toast.success(langService.get("return_specific_success").change({name: g2gItem.correspondence.docSubject}));
-                        });
+                    if (result) {
+                        dialog.hide('return');
+                        self.reloadG2gItems(self.grid.page)
+                            .then(function () {
+                                toast.success(langService.get("return_specific_success").change({name: g2gItem.getTranslatedName()}));
+                            });
+                    }
                 })
         };
 

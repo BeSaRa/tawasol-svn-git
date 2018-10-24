@@ -969,6 +969,7 @@ module.exports = function (app) {
         self.editInDesktop = function (workItem) {
             return correspondenceService.editWordInDesktop(workItem);
         };
+
         /**
          * @description get document versions
          * @param workItem

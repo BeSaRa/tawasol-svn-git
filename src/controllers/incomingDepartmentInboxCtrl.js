@@ -310,6 +310,52 @@ module.exports = function (app) {
         };
 
         /**
+         * @description get document versions
+         * @param workItem
+         * @param $event
+         * @return {*}
+         */
+        self.getDocumentVersions = function (workItem, $event) {
+            return workItem
+                .viewSpecificVersion(self.gridActions, $event);
+        };
+        /**
+         * @description duplicate current version
+         * @param workItem
+         * @param $event
+         */
+        self.duplicateCurrentVersion = function (workItem, $event) {
+            var info = workItem.getInfo();
+            return workItem
+                .duplicateVersion($event)
+                .then(function () {
+                    $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
+                        vsId: info.vsId,
+                        action: 'duplicateVersion',
+                        workItem: info.wobNum
+                    });
+                });
+        };
+        /**
+         * @description duplicate specific version
+         * @param workItem
+         * @param $event
+         * @return {*}
+         */
+        self.duplicateVersion = function (workItem, $event) {
+            var info = workItem.getInfo();
+            return workItem
+                .duplicateSpecificVersion($event)
+                .then(function () {
+                    $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
+                        vsId: info.vsId,
+                        action: 'duplicateVersion',
+                        workItem: info.wobNum
+                    });
+                });
+        };
+
+        /**
          * @description Check if action will be shown on grid or not
          * @param action
          * @param model
@@ -550,6 +596,45 @@ module.exports = function (app) {
                     //var info = model.getInfo();
                     return self.checkToShowAction(action, model) && model.generalStepElm.isReassigned;//!info.incomingVsId;
                 }
+            },
+            // show versions
+            {
+                type: 'action',
+                icon: 'animation',
+                text: 'grid_action_view_specific_version',
+                shortcut: false,
+                callback: self.getDocumentVersions,
+                permissionKey: "VIEW_DOCUMENT_VERSION",
+                class: "action-green",
+                showInView: true,
+                checkShow: self.checkToShowAction
+            },
+            // duplicate current version
+            {
+                type: 'action',
+                icon: 'content-copy',
+                text: 'grid_action_duplication_current_version',
+                shortcut: false,
+                callback: self.duplicateCurrentVersion,
+                class: "action-green",
+                permissionKey: 'DUPLICATE_BOOK_CURRENT',
+                showInView: true,
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper;
+                }
+            },
+            // duplicate specific version
+            {
+                type: 'action',
+                icon: 'content-duplicate',
+                text: 'grid_action_duplication_specific_version',
+                shortcut: false,
+                callback: self.duplicateVersion,
+                class: "action-green",
+                showInView: true,
+                permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
+                checkShow: self.checkToShowAction
             },
             // Manage (Not in SRS)
             /*{

@@ -387,3 +387,7 @@ permission check on routes
 ---------------------
 17256: Edit after export - proper message should appear for a user when try to edit after export a documnet that was already received by another OU
 Fixed IE Issue for select signature for approve
+
+10/24/2018
+---------------------
+Added the document version actions in all grids

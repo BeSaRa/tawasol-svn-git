@@ -129,7 +129,6 @@ module.exports = function (app) {
 
 
                 ngModelCtrl.$asyncValidators[type] = function (modelValue, viewValue) {
-                    debugger;
                     var defer = $q.defer();
                     var typesList = type.split('|');
                     var validationPassed = false;

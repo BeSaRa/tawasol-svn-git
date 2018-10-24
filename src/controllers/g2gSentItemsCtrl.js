@@ -144,12 +144,15 @@ module.exports = function (app) {
          * @description Recall the sent item
          * @param g2gItem
          * @param $event
+         * @param defer
          * @returns {*}
          */
-        self.recall = function (g2gItem, $event) {
+        self.recall = function (g2gItem, $event, defer) {
             return g2gSentItemsService.recallG2G(g2gItem, $event)
                 .then(function (result) {
+                    //new ResolveDefer(defer);
                     if (result) {
+                        dialog.hide('return');
                         self.reloadG2gItems(self.grid.page)
                             .then(function () {
                                 toast.success(langService.get('recall_success').change({name: g2gItem.getTranslatedName()}));

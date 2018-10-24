@@ -11,6 +11,7 @@ module.exports = function (app) {
                                                    langService,
                                                    toast,
                                                    dialog,
+                                                   $state,
                                                    viewDocumentService,
                                                    employeeService,
                                                    managerService,
@@ -520,6 +521,52 @@ module.exports = function (app) {
         };
 
         /**
+         * @description get document versions
+         * @param correspondence
+         * @param $event
+         * @return {*}
+         */
+        self.getDocumentVersions = function (correspondence, $event) {
+            return correspondence
+                .viewSpecificVersion(self.gridActions, $event);
+        };
+        /**
+         * @description duplicate current version
+         * @param correspondence
+         * @param $event
+         */
+        self.duplicateCurrentVersion = function (correspondence, $event) {
+            var info = correspondence.getInfo();
+            return correspondence
+                .duplicateVersion($event)
+                .then(function () {
+                    $state.go('app.outgoing.add', {
+                        vsId: info.vsId,
+                        action: 'duplicateVersion',
+                        workItem: info.wobNum
+                    });
+                });
+        };
+        /**
+         * @description duplicate specific version
+         * @param correspondence
+         * @param $event
+         * @return {*}
+         */
+        self.duplicateVersion = function (correspondence, $event) {
+            var info = correspondence.getInfo();
+            return correspondence
+                .duplicateSpecificVersion($event)
+                .then(function () {
+                    $state.go('app.outgoing.add', {
+                        vsId: info.vsId,
+                        action: 'duplicateVersion',
+                        workItem: info.wobNum
+                    });
+                });
+        };
+
+        /**
          * @description Check if action will be shown on grid or not
          * @param action
          * @param model
@@ -860,12 +907,12 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     var hasPermission = false;
-                    if(info.documentClass === 'outgoing'){
+                    if (info.documentClass === 'outgoing') {
                         hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
-                    } else if(info.documentClass === 'incoming'){
+                    } else if (info.documentClass === 'incoming') {
                         hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
                     }
-                    else if(info.documentClass === 'internal') {
+                    else if (info.documentClass === 'internal') {
                         hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                     }
                     return self.checkToShowAction(action, model)
@@ -874,6 +921,45 @@ module.exports = function (app) {
                         && model.needApprove()
                         && hasPermission;
                 }
+            },
+            // show versions
+            {
+                type: 'action',
+                icon: 'animation',
+                text: 'grid_action_view_specific_version',
+                shortcut: false,
+                callback: self.getDocumentVersions,
+                permissionKey: "VIEW_DOCUMENT_VERSION",
+                class: "action-green",
+                showInView: true,
+                checkShow: self.checkToShowAction
+            },
+            // duplicate current version
+            {
+                type: 'action',
+                icon: 'content-copy',
+                text: 'grid_action_duplication_current_version',
+                shortcut: false,
+                callback: self.duplicateCurrentVersion,
+                class: "action-green",
+                permissionKey: 'DUPLICATE_BOOK_CURRENT',
+                showInView: true,
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && !info.isPaper;
+                }
+            },
+            // duplicate specific version
+            {
+                type: 'action',
+                icon: 'content-duplicate',
+                text: 'grid_action_duplication_specific_version',
+                shortcut: false,
+                callback: self.duplicateVersion,
+                class: "action-green",
+                showInView: true,
+                permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
+                checkShow: self.checkToShowAction
             }
         ];
     });

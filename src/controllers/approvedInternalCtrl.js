@@ -259,8 +259,8 @@ module.exports = function (app) {
              * @param $event
              */
             self.launchDistributionWorkflowBulk = function ($event) {
-                var contentNotExist = _.filter(self.selectedApprovedInternals, function (draftOutgoing) {
-                    return !draftOutgoing.hasContent();
+                var contentNotExist = _.filter(self.selectedApprovedInternals, function (approvedInternal) {
+                    return !approvedInternal.hasContent();
                 });
                 if (contentNotExist.length > 0) {
                     dialog.alertMessage(langService.get("content_not_found_bulk"));
@@ -410,6 +410,52 @@ module.exports = function (app) {
                     })
                     .catch(function () {
                         self.reloadApprovedInternals(self.grid.page);
+                    });
+            };
+
+            /**
+             * @description get document versions
+             * @param workItem
+             * @param $event
+             * @return {*}
+             */
+            self.getDocumentVersions = function (workItem, $event) {
+                return workItem
+                    .viewSpecificVersion(self.gridActions, $event);
+            };
+            /**
+             * @description duplicate current version
+             * @param workItem
+             * @param $event
+             */
+            self.duplicateCurrentVersion = function (workItem, $event) {
+                var info = workItem.getInfo();
+                return workItem
+                    .duplicateVersion($event)
+                    .then(function () {
+                        $state.go('app.internal.add', {
+                            vsId: info.vsId,
+                            action: 'duplicateVersion',
+                            workItem: info.wobNum
+                        });
+                    });
+            };
+            /**
+             * @description duplicate specific version
+             * @param workItem
+             * @param $event
+             * @return {*}
+             */
+            self.duplicateVersion = function (workItem, $event) {
+                var info = workItem.getInfo();
+                return workItem
+                    .duplicateSpecificVersion($event)
+                    .then(function () {
+                        $state.go('app.internal.add', {
+                            vsId: info.vsId,
+                            action: 'duplicateVersion',
+                            workItem: info.wobNum
+                        });
                     });
             };
 
@@ -599,7 +645,7 @@ module.exports = function (app) {
                     callback: self.editAfterApprove,
                     class: "action-green",
                     showInView: false,
-                    permissionKey: "EDIT_OUTGOING_CONTENT", //TODO: Apply correct permission when added to database.
+                    permissionKey: "EDIT_INTERNAL_CONTENT", //TODO: Apply correct permission when added to database.
                     checkShow: function (action, model) {
                         var info = model.getInfo();
                         return self.checkToShowAction(action, model) && !info.isPaper;
@@ -687,6 +733,45 @@ module.exports = function (app) {
                             checkShow: self.checkToShowAction
                         }
                     ]
+                },
+                // show versions
+                {
+                    type: 'action',
+                    icon: 'animation',
+                    text: 'grid_action_view_specific_version',
+                    shortcut: false,
+                    callback: self.getDocumentVersions,
+                    permissionKey: "VIEW_DOCUMENT_VERSION",
+                    class: "action-green",
+                    showInView: true,
+                    checkShow: self.checkToShowAction
+                },
+                // duplicate current version
+                {
+                    type: 'action',
+                    icon: 'content-copy',
+                    text: 'grid_action_duplication_current_version',
+                    shortcut: false,
+                    callback: self.duplicateCurrentVersion,
+                    class: "action-green",
+                    permissionKey: 'DUPLICATE_BOOK_CURRENT',
+                    showInView: true,
+                    checkShow: function (action, model) {
+                        var info = model.getInfo();
+                        return self.checkToShowAction(action, model) && !info.isPaper;
+                    }
+                },
+                // duplicate specific version
+                {
+                    type: 'action',
+                    icon: 'content-duplicate',
+                    text: 'grid_action_duplication_specific_version',
+                    shortcut: false,
+                    callback: self.duplicateVersion,
+                    class: "action-green",
+                    showInView: true,
+                    permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
+                    checkShow: self.checkToShowAction
                 }
             ];
 

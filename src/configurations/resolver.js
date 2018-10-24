@@ -215,7 +215,6 @@ module.exports = function (app) {
                 duplicateVersion: function ($timeout, $stateParams, correspondenceStorageService) {
                     'ngInject';
                     var action = $stateParams.action;
-                    console.log(action);
                     if (action !== 'duplicateVersion') {
                         return $timeout(function () {
                             return false;
