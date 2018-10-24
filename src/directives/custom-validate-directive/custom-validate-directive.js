@@ -80,7 +80,8 @@ module.exports = function (app) {
                     /**
                      * @description Allows at least 1 arabic character and can contain digits, space(not in end of string and no 2 consecutive spaces)
                      */
-                    A1NS: /^(?=.*[ء-ي])[0-9ء-ي]?( ?[0-9ء-ي]+)+$/,
+                    // A1NS: /^(?=.*[ء-ي])[0-9ء-ي]?( ?[0-9ء-ي]+)+$/,
+                    A1NS: /(^[\u0621-\u064A]+)([\u0621-\u064A ?1-9]*)$/,
 
                     /**
                      * @description Allows english, digits, space(not in end of string and no 2 consecutive spaces)
@@ -125,7 +126,10 @@ module.exports = function (app) {
                     EN_DOT: /^[a-zA-Z0-9_.]+$/,
                     EN_DOT_DASH: /^[a-zA-Z0-9_.\-]+$/
                 };
+
+
                 ngModelCtrl.$asyncValidators[type] = function (modelValue, viewValue) {
+                    debugger;
                     var defer = $q.defer();
                     var typesList = type.split('|');
                     var validationPassed = false;
