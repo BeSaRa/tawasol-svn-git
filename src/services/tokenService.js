@@ -120,7 +120,7 @@ module.exports = function (app) {
                             .then(function (result) {
                                 result = result.data.rs;
                                 if (result.hasOwnProperty('token')) {
-                                    // rootEntity.setGlobalSetting(result.globalSetting);
+                                    lookupService.setLookups(result.globalLookup); // set lookups
                                     var themeId = result.userInfo.defaultThemeID;
                                     var promise = $q.defer();
                                     $timeout(function () {
