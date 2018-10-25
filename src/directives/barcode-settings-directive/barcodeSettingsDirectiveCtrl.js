@@ -53,9 +53,11 @@ module.exports = function (app) {
 
         function _updateStructure() {
             self.globalSetting.barcodeElements.rows = [];
+            self.globalSetting.barcodeElements.isElectronic = [];
             self.elements = [];
             self.$generatorElement.children('.barcode-row').each(function (idx, row) {
                 self.globalSetting.barcodeElements.rows[idx] = [];
+                self.globalSetting.barcodeElements.isElectronic.push(!!angular.element(row).find('.isElectronic').hasClass('md-checked'));
                 angular.element(row).children('.barcode-item').each(function (index, item) {
                     angular.element(item).data('rowIndex', idx);
                     self.globalSetting.barcodeElements.rows[idx].push(angular.element(item).data('item'));
@@ -86,6 +88,7 @@ module.exports = function (app) {
             var scope = $rootScope.$new(true);
             scope.row = row;
             scope.ctrl = self;
+            LangWatcher(scope);
             return self.compileElement(element, scope);
         };
 
@@ -109,6 +112,16 @@ module.exports = function (app) {
                 })));
         };
 
+        self.createRowCheckBox = function (idx) {
+            return angular.element('<md-checkbox aria-label="check-box" tooltip="{{lang.outgoing_electronic}}" class="check-box-with-no-padding isElectronic"   ng-click="ctrl.checkRow($event)"></md-checkbox>')
+        };
+
+        self.checkRow = function ($event) {
+            $timeout(function () {
+                _updateStructure();
+            });
+        };
+
         self.createRow = function (row, idx) {
             return angular
                 .element('<div />', {
@@ -117,6 +130,7 @@ module.exports = function (app) {
                     'bc-sortable': ''
                 })
                 .append(self.createDeleteButton('row'))
+                .append(self.createRowCheckBox(idx))
                 .data('rowIndex', idx);
         };
 

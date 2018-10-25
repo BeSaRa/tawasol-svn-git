@@ -10,6 +10,7 @@ module.exports = function (app) {
             self.barcodeText = null;
             self.barcodeLabelLoc = null;
             self.rows = [];
+            self.isElectronic = [];
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
@@ -59,7 +60,7 @@ module.exports = function (app) {
                 if (typeof self.rows === 'string')
                     self.rows = angular.fromJson(self.rows);
 
-                self.rows = _.map(self.rows, function (row) {
+                self.rows = _.map(self.rows, function (row ,idx) {
                     var rowItems = row.split('|');
                     return _.map(rowItems, function (item) {
                         if (item.split(':')[0] === 'id') {
@@ -71,6 +72,7 @@ module.exports = function (app) {
                         });
                     })
                 });
+                console.log(this);
                 return this;
             };
 
