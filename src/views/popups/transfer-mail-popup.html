@@ -9,13 +9,29 @@
                 <div layout="column" class="p20">
                     <div layout="row">
                         <md-input-container flex>
+                            <label for="selectedApplicationUser">{{lang.organization_unit}}</label>
+                            <md-select name="organization" id="organization" required
+                                       ng-change="ctrl.getApplicationUsersForOU($event)"
+                                       aria-label="{{lang.organization_unit}}"
+                                       ng-model="ctrl.selectedOrganization">
+                                <md-option ng-value="ou.id" ng-repeat="ou in ctrl.organizations track by $index">
+                                    {{ou.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex>
                             <label for="selectedApplicationUser">{{lang.select_user}}</label>
-                            <md-select ng-required="true" ng-change="ctrl.setSelectedUser()"
-                                       id="selectedApplicationUser"
+                            <md-select name="selectedApplicationUser" id="selectedApplicationUser"
+                                       ng-change="ctrl.setSelectedUser()"
+                                       ng-required="ctrl.selectedOrganization"
+                                       ng-disabled="!ctrl.selectedOrganization"
+                                       aria-label="{{lang.select_user}}"
                                        ng-model="ctrl.selectedApplicationUser">
-                                <md-option ng-repeat="applicationUser in ctrl.applicationUsers"
-                                           ng-value="applicationUser">
-                                    {{applicationUser.getTranslatedName()}}
+                                <md-option ng-value="user.applicationUser"
+                                           ng-repeat="user in ctrl.ouApplicationUsers track by $index">
+                                    {{user.getTranslatedApplicationUserName()}}
                                 </md-option>
                             </md-select>
                         </md-input-container>
@@ -24,6 +40,7 @@
                         <md-input-container flex>
                             <label for="comment">{{lang.comment}}</label>
                             <md-select ng-change="ctrl.setSelectedReason()" id="comment"
+                                       ng-disabled="!ctrl.selectedOrganization"
                                        ng-model="ctrl.selectedComment">
                                 <md-option ng-repeat="comment in ctrl.comments" ng-value="comment">
                                     {{comment.getCommentTitle()}}
@@ -34,7 +51,9 @@
                     <div ng-if="ctrl.isArray" layout="row">
                         <md-input-container flex>
                             <label for="reason">{{lang.reason}}</label>
-                            <textarea required id="reason" maxlength="200" minlength="3" name="reason"
+                            <textarea id="reason" maxlength="200" minlength="3" name="reason"
+                                      ng-required="ctrl.selectedOrganization"
+                                      ng-disabled="!ctrl.selectedOrganization"
                                       ng-model="ctrl.reason">
                             </textarea>
                             <div ng-messages="reason_form.reason.$error">
@@ -47,7 +66,9 @@
                     <div ng-if="!ctrl.isArray" layout="row">
                         <md-input-container flex>
                             <label for="reason">{{lang.reason}}</label>
-                            <textarea required id="reason" maxlength="200" minlength="3" name="reason"
+                            <textarea id="reason" maxlength="200" minlength="3" name="reason"
+                                      ng-required="ctrl.selectedOrganization"
+                                      ng-disabled="!ctrl.selectedOrganization"
                                       ng-model="ctrl.reason">
                             </textarea>
                             <div ng-messages="reason_form.reason.$error">
@@ -94,9 +115,9 @@
                                             <md-input-container>
                                                 <label>{{lang.select_user}}</label>
                                                 <md-select ng-model="workItem.domainName">
-                                                    <md-option ng-value="user.domainName"
-                                                               ng-repeat="user in ctrl.applicationUsers">
-                                                        {{user.getTranslatedName()}}
+                                                    <md-option ng-value="user.applicationUser.domainName"
+                                                               ng-repeat="user in ctrl.ouApplicationUsers">
+                                                        {{user.applicationUser.getTranslatedName()}}
                                                     </md-option>
                                                 </md-select>
                                             </md-input-container>

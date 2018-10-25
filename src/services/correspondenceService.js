@@ -965,16 +965,11 @@ module.exports = function (app) {
         /**
          * @description open transfer dialog to select user to transfer.
          * @param workItems
-         * @param applicationUser
-         * @param availableUsers
+         * @param currentFollowedUpUser
          * @param $event
          */
-        self.openTransferDialog = function (workItems, applicationUser, availableUsers, $event) {
+        self.openTransferDialog = function (workItems, currentFollowedUpUser, $event) {
             var isArray = angular.isArray(workItems);
-
-            function _filterApplicationUSer(user) {
-                return applicationUser.domainName !== user.domainName;
-            }
 
             return dialog
                 .showDialog({
@@ -984,24 +979,20 @@ module.exports = function (app) {
                     targetEvent: $event,
                     locals: {
                         workItems: workItems,
-                        isArray: isArray
+                        isArray: isArray,
+                        currentFollowedUpUser: currentFollowedUpUser
                     },
                     resolve: {
+                        organizations: function (organizationService) {
+                            'ngInject';
+                            return organizationService.getOrganizationsByRegOU(employeeService.getEmployee().getRegistryOUID());
+                        },
                         comments: function (userCommentService) {
                             'ngInject';
                             return userCommentService.getUserComments()
                                 .then(function (result) {
                                     return _.filter(result, 'status');
                                 });
-                        },
-                        applicationUsers: function () {
-                            'ngInject';
-                            return _.filter(_.map(availableUsers, 'applicationUser'), _filterApplicationUSer);
-                            // return ouApplicationUserService
-                            //     .searchByCriteria({ou: employeeService.getEmployee().getRegistryOUID()})
-                            //     .then(function (result) {
-                            //         return _.filter(_.map(result, 'applicationUser'), _filterApplicationUSer);
-                            //     });
                         }
                     }
                 })

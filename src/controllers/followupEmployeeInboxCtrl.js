@@ -565,7 +565,7 @@ module.exports = function (app) {
          */
         self.transferToAnotherEmployee = function (workItem, $event, defer) {
             correspondenceService
-                .openTransferDialog(workItem, self.currentSelectedUser, self.availableUsers, $event)
+                .openTransferDialog(workItem, self.currentSelectedUser, $event)
                 .then(function () {
                     self.reloadFollowupEmployeeInboxes(self.grid.page)
                         .then(function () {
@@ -577,7 +577,7 @@ module.exports = function (app) {
 
         self.transferToAnotherEmployeeBulk = function ($event) {
             correspondenceService
-                .openTransferDialog(self.selectedFollowupEmployeeInboxes, self.currentSelectedUser, self.availableUsers, $event)
+                .openTransferDialog(self.selectedFollowupEmployeeInboxes, self.currentSelectedUser, $event)
                 .then(function () {
                     self.reloadFollowupEmployeeInboxes(self.grid.page)
                         .then(function () {
