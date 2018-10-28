@@ -15,7 +15,7 @@ module.exports = function (app) {
                 $(element)
                     .sortable({
                         tolerance: "pointer",
-                        cancel: '.add-row',
+                        cancel: '.sort-cancel',
                         receive: function (e, ui) {
                             var idx = element.data('rowIndex');
                             if (element.hasClass('barcode-row')) {
@@ -26,6 +26,7 @@ module.exports = function (app) {
                             }
                         },
                         update: function () {
+                            self.updateIsElectronicStatus();
                             self.updateRows();
                         }
                     })

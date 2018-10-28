@@ -53,11 +53,9 @@ module.exports = function (app) {
 
         function _updateStructure() {
             self.globalSetting.barcodeElements.rows = [];
-            self.globalSetting.barcodeElements.isElectronic = [];
             self.elements = [];
             self.$generatorElement.children('.barcode-row').each(function (idx, row) {
                 self.globalSetting.barcodeElements.rows[idx] = [];
-                self.globalSetting.barcodeElements.isElectronic.push(!!angular.element(row).find('.isElectronic').hasClass('md-checked'));
                 angular.element(row).children('.barcode-item').each(function (index, item) {
                     angular.element(item).data('rowIndex', idx);
                     self.globalSetting.barcodeElements.rows[idx].push(angular.element(item).data('item'));
@@ -113,13 +111,10 @@ module.exports = function (app) {
         };
 
         self.createRowCheckBox = function (idx) {
-            return angular.element('<md-checkbox aria-label="check-box" tooltip="{{lang.outgoing_electronic}}" class="check-box-with-no-padding isElectronic"   ng-click="ctrl.checkRow($event)"></md-checkbox>')
-        };
-
-        self.checkRow = function ($event) {
-            $timeout(function () {
-                _updateStructure();
-            });
+            if (typeof self.globalSetting.barcodeElements.isElectronic[idx] === 'undefined') {
+                self.globalSetting.barcodeElements.isElectronic[idx] = true;
+            }
+            return angular.element('<md-checkbox aria-label="check-box" tooltip="{{lang.outgoing_electronic}}" ng-model="ctrl.globalSetting.barcodeElements.isElectronic[' + idx + ']" class="sort-cancel check-box-with-no-padding isElectronic" ng-change="ctrl.checkRow($event)"></md-checkbox>')
         };
 
         self.createRow = function (row, idx) {
@@ -183,6 +178,16 @@ module.exports = function (app) {
                 self.elements.push(angular.element(element).data('item'));
             }
             _updateStructure();
+        };
+
+        self.updateIsElectronicStatus = function () {
+            self.$generatorElement.find('md-checkbox').each(function (idx, item) {
+                self.globalSetting.barcodeElements.isElectronic[idx] = angular.element(item).hasClass('md-checked');
+                var scope = $rootScope.$new(true);
+                scope.ctrl = self;
+                LangWatcher(scope);
+                angular.element(item).replaceWith($compile(self.createRowCheckBox(idx))(scope));
+            });
         };
 
         self.setSelectedRow = function (element) {

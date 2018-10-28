@@ -18,19 +18,6 @@ module.exports = function (app) {
             model.securityLevels = generator.getResultFromSelectedCollection(model.securityLevels, 'lookupKey');
             model.excludedUsersFromAudit = JSON.stringify(_.map(model.excludedUsersFromAudit, 'id'));
             model.fileType = angular.toJson(model.fileType);
-
-            // if (model.barcodeElements.hasOwnProperty('rows')) {
-            //     model.barcodeElements.rows = _.map(model.barcodeElements.rows, function (item, idx) {
-            //         return model.barcodeElements.rows[idx] = _.map(model.barcodeElements.rows[idx], function (item) {
-            //             if (item.lookupKey !== 'STATIC_WORD') {
-            //                 item = 'id:' + item.lookupKey;
-            //             } else {
-            //                 item = 'none:' + item.lookupStrKey;
-            //             }
-            //             return item;
-            //         });
-            //     })
-            // }
             model.barcodeElements = model.barcodeElements.mapSend();
 
             delete model.bannerLogo;
