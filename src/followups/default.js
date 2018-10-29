@@ -30,6 +30,7 @@ module.exports = function (app) {
         Idle.watch();
 
         exception.addGeneralExceptionHandler(401, function (xhr) {
+            debugger;
             var url = xhr.config.url;
             if (url === urlService.login) {
                 dialog

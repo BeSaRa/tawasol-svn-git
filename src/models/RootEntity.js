@@ -3,6 +3,7 @@ module.exports = function (app) {
                                         _,
                                         $sce,
                                         generator,
+                                        Idle,
                                         $rootScope,
                                         lookupService,
                                         langService,
@@ -40,6 +41,8 @@ module.exports = function (app) {
                     a.enBody = $sce.trustAsHtml(a.enBody);
                     return a;
                 });
+                // set the timeout for the current session to start count the
+                Idle.setIdle((self.settings.sessionTimeout - 1) * 60);
             }
 
             /**
