@@ -44,6 +44,7 @@ module.exports = function (app) {
             dialog.showDialog({
                 template: cmsTemplate.getPopup('idle'),
                 controller: function (idleCounterService) { // for binding purpose
+                    'ngInject';
                     var ctrl = this;
                     ctrl.counter = idleCounterService;
                 },

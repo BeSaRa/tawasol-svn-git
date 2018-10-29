@@ -41,7 +41,6 @@ module.exports = function (app) {
             })
         ];
 
-        //console.log(self.barcodeTypes[0].getTranslatedName());
 
         function _getRow(rowIdx) {
             return typeof self.globalSetting.barcodeElements.rows[rowIdx] !== 'undefined' ? rowIdx : -1;

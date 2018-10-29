@@ -118,13 +118,13 @@
                                 <md-input-container flex>
                                     <label for="sessionTimeout">{{lang.session_time_out}} ({{lang.minutes}})</label>
                                     <input id="sessionTimeout" required name="sessionTimeout"
-                                           min="5" min-max-number-directive
+                                           min="2" min-max-number-directive
                                            max="60"
                                            custom-validate-directive="number" maxlength="5"
                                            ng-model="ctrl.globalSetting.sessionTimeout">
                                     <div ng-messages="globalSettingForm.sessionTimeout.$error">
                                         <div ng-message="required">{{lang.field_required}}</div>
-                                        <div ng-message="min">{{lang.min_number.change({number:4})}}</div>
+                                        <div ng-message="min">{{lang.min_number.change({number:1})}}</div>
                                         <div ng-message="max">{{lang.max_number.change({number:61})}}</div>
                                         <div ng-message="number">{{lang.numberonly}}</div>
                                     </div>
