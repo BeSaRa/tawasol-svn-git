@@ -70,6 +70,7 @@ module.exports = function (app) {
             authenticationService
                 .selectDepartmentToLogin(organization)
                 .then(function () {
+                    self.employee = employeeService.getEmployee();
                     $state.reload();
                 })
                 .catch(function (error) {
