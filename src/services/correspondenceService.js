@@ -20,6 +20,7 @@ module.exports = function (app) {
                                                    LinkedObject,
                                                    Classification,
                                                    CorrespondenceSiteType,
+                                                   localStorageService,
                                                    DocumentTemplate,
                                                    Lookup,
                                                    DocumentType,
@@ -1475,7 +1476,7 @@ module.exports = function (app) {
         self.viewCorrespondenceG2G = function (g2gItem, actions, model, $event) {
             /*var site = null,*/
             var url;
-            var g2gItemCopy = null;
+            var g2gItemCopy = angular.copy(g2gItem);
             var isInternal = g2gItem.isInternalG2G();
             if (model.toLowerCase() === 'g2g') {
                 // site = angular.copy(g2gItem.correspondence.site);
@@ -1511,6 +1512,7 @@ module.exports = function (app) {
                     });
 
                     result.data.rs.metaData = metaData;
+                    localStorageService.set('vsid',metaData.vsId);
                     return result.data.rs;
                 })
                 .then(function (result) {

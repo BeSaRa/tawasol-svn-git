@@ -14,6 +14,7 @@ module.exports = function (app) {
                                           rootEntity,
                                           themeService,
                                           $sce,
+                                          titleService,
                                           $location,
                                           $cookies,
                                           generator,
@@ -147,6 +148,7 @@ module.exports = function (app) {
             authenticationService
                 .authenticate(self.credentials)
                 .then(function (result) {
+                    titleService.setTitle(rootEntity.returnRootEntity().getTranslatedAppName());
                     _hideFixOverlay();
                     _completeLogin(callback, result);
                 })

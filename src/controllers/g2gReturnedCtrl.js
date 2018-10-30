@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                 langService,
                                                 toast,
                                                 dialog,
+                                                ResolveDefer,
                                                 employeeService,
                                                 generator,
                                                 correspondenceService,
@@ -128,12 +129,14 @@ module.exports = function (app) {
          * @description Resend the document
          * @param g2gItem
          * @param $event
+         * @param defer
          * @returns {*}
          */
-        self.resend = function (g2gItem, $event) {
+        self.resend = function (g2gItem, $event, defer) {
             return g2gReturnedService.resendG2G(g2gItem)
                 .then(function (result) {
                     if (result) {
+                        new ResolveDefer(defer);
                         self.reloadG2gItems(self.grid.page)
                             .then(function () {
                                 toast.success(langService.get('resend_specific_success').change({name: g2gItem.getTranslatedName()}));
@@ -146,11 +149,13 @@ module.exports = function (app) {
          * @description Terminate the document
          * @param g2gItem
          * @param $event
+         * @param defer
          * @returns {*}
          */
-        self.terminate = function (g2gItem, $event) {
+        self.terminate = function (g2gItem, $event, defer) {
             return g2gReturnedService.terminateG2G(g2gItem)
                 .then(function (result) {
+                    new ResolveDefer(defer);
                     self.reloadG2gItems(self.grid.page)
                         .then(function () {
                             toast.success(langService.get('terminate_success'));

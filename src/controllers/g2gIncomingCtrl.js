@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                 toast,
                                                 dialog,
                                                 employeeService,
+                                                localStorageService,
                                                 generator,
                                                 correspondenceService,
                                                 mailNotificationService,
@@ -120,6 +121,7 @@ module.exports = function (app) {
                             self.replaceRecord(g2gItem);
                         }
                     }
+                    localStorageService.remove('vsid');
                     self.openedRecord = null;
                     //self.reloadG2gItems(self.grid.page);
                 })
@@ -153,6 +155,7 @@ module.exports = function (app) {
                             self.replaceRecord(g2gItem);
                         }
                     }
+                    localStorageService.remove('vsid');
                     self.openedRecord = null;
                     //self.reloadG2gItems(self.grid.page);
                 })
@@ -168,17 +171,17 @@ module.exports = function (app) {
 
 
         /**
-         * @description Receive Document
+         * @description Receive Document(Only from popup)
          * @param g2gItem
          * @param $event
          * @returns {*}
          */
         self.receiveDocument = function (g2gItem, $event) {
-            var info = g2gItem.getInfo();
+            //var info = self.openedRecord.getInfo();
             dialog.hide('receive');
             $state.go('app.incoming.add', {
                 action: 'receiveg2g',
-                vsId: info.vsId,
+                vsId: localStorageService.get('vsid'),
                 internalg2g: self.openedRecord.isInternalG2G()
             });
         };

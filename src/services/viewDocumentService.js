@@ -32,6 +32,7 @@ module.exports = function (app) {
                                   Internal,
                                   Incoming,
                                   DocumentComment,
+                                  localStorageService,
                                   Attachment,
                                   LinkedObject) {
             'ngInject';
@@ -1119,6 +1120,7 @@ module.exports = function (app) {
              * @param pageName
              */
             self.viewG2GDocument = function (g2gIncoming, actions, pageName, $event) {
+                var g2gItemCopy = angular.copy(g2gIncoming);
                 var disabled = _checkDisabled(pageName, g2gIncoming);
                 var isInternal = g2gIncoming.isInternalG2G();
                 if (disabled.disableAll) {
@@ -1156,6 +1158,8 @@ module.exports = function (app) {
                         metaData.internalG2G = isInternal;
 
                         result.data.rs.metaData = metaData;
+                        localStorageService.remove('vsid');
+                        localStorageService.set('vsid',metaData.vsId);
                         return result.data.rs;
                     })
                     .then(function (result) {
@@ -1178,7 +1182,7 @@ module.exports = function (app) {
                                 disableEverything: true,
                                 disableProperties: true,
                                 disableCorrespondence: true,
-                                g2gItemCopy: null
+                                g2gItemCopy: g2gItemCopy
                             }
                         }).then(function (result) {
                             self.popupNumber -= 1;
@@ -1228,8 +1232,11 @@ module.exports = function (app) {
                         });
 
                         result.data.rs.metaData = metaData;
+                        localStorageService.remove('vsid');
+                        localStorageService.set('vsid',metaData.vsId);
                         // temporary property added to correspondence(will be removed before send)
                         metaData.internalG2G = isInternal;
+
                         return result.data.rs;
                     })
                     .then(function (result) {
