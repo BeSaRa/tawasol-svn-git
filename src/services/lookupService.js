@@ -29,6 +29,7 @@ module.exports = function (app) {
         self.gender = 'gender';
         self.waterMarkTextOrientation = 'waterMarkTextOrientation';
         self.messageStatus = 'messageStatus';
+        self.thumbnailMode = 'thumbnailMode';
 
         // this propertyConfiguration related to the property configurations Service.
         self.propertyConfigurations = {

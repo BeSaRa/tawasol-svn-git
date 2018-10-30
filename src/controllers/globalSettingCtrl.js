@@ -44,6 +44,7 @@ module.exports = function (app) {
         self.documentSecuritySchemas = lookupService.returnLookups(lookupService.securitySchema);
         self.workFlowSecurities = lookupService.returnLookups(lookupService.workflowSecurity);
         self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
+        self.thumbnailModes = lookupService.returnLookups(lookupService.thumbnailMode);
         self.correspondenceSiteSearchTypeOptions = [
             {
                 key: 'search_type_simple',
@@ -109,6 +110,7 @@ module.exports = function (app) {
             searchAmountLimit: 'limited_max_row_search',
             inboxRefreshInterval: 'inbox_refresh_interval',
             sessionTimeout: 'session_time_out',
+            thumbnailMode: 'thumbnail_mode',
             enableMobileAccess: 'enable_mobile_access',
             canChangePassword: 'can_change_password',
             showCopyrightText: 'show_copyright',

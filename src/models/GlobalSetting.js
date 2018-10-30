@@ -49,6 +49,7 @@ module.exports = function (app) {
             //required
             self.barcodeElements = new BarcodeSetting();
             self.deadlineReminderDays = null;
+            self.thumbnailMode = null;
             //endregion
 
             // every model has required fields
@@ -58,6 +59,7 @@ module.exports = function (app) {
                 'searchAmountLimit',
                 'inboxRefreshInterval',
                 'sessionTimeout',
+                'thumbnailMode',
                 'enableMobileAccess',
                 'canChangePassword',
                 'showCopyrightText',
@@ -83,7 +85,7 @@ module.exports = function (app) {
                 'useCentralArchiveInternally',
                 'escalationProcess',
                 'simpleCorsSiteSearch',
-                'theme'
+                'theme',
             ];
 
             if (model)
