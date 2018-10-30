@@ -69,14 +69,15 @@ module.exports = function (app) {
         ];
         var required = {};
 
-
-        self.years = function () {
+        self.getYears = function () {
             var currentYear = new Date().getFullYear(), years = ['All'];
+            self.document.year = currentYear;
             var lastYearForRange = 2000;
             while (lastYearForRange <= currentYear) {
                 years.push(currentYear--);
             }
-            return years;
+            self.yearsList = years;
+            self.setSelectedYear(true);
         };
 
         $timeout(function () {
@@ -100,6 +101,8 @@ module.exports = function (app) {
             self.entityTypes = correspondenceService.getCustomEntityTypesForDocumentClass(docClass.toLowerCase() === 'correspondence' ? 'Outgoing' : docClass);
 
             self.entityTypesArray = self.defaultEntityTypes.concat(self.entityTypes);
+
+            self.getYears();
         });
         // current employee
         self.employee = employeeService.getEmployee();

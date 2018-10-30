@@ -28,3 +28,7 @@ fixed Issues:
 16681:V2.1.1 -view versions- There is no permission for viewing the document versions in the admin
 
 
+10/30/2018
+-------------
+1. added docFullSerial column in central archive and department ready to export
+2. set the search year to be current year in all search pages.

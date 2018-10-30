@@ -104,7 +104,7 @@
                                ng-change="ctrl.setSelectedYear(true, $event)"
                                ng-model="ctrl.document.year">
                         <md-option ng-value="year"
-                                   ng-repeat="year in ctrl.years() track by $index">
+                                   ng-repeat="year in ctrl.yearsList track by $index">
                             {{year}}
                         </md-option>
                     </md-select>
