@@ -34,3 +34,4 @@ fixed Issues:
 2. set the search year to be current year in all search pages.
 3. changed the department column name to sender reg ou in department incoming grid
 4. hide the version actions in department incoming, returned and sent items.
+5. added thumbnailMode property to global settings
