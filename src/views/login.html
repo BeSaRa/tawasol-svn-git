@@ -92,6 +92,11 @@
                            class="md-raised md-primary">{{lang.login}}
                 </md-button>
             </div>
+            <br/>
+            <br/>
+            <div ng-if="login.loginStatus" layout="row">
+                <md-progress-linear md-mode="intermediate"></md-progress-linear>
+            </div>
         </form>
         <login-announcement-directive ng-hide="mediaSize('gt-sm')"
                                       announcements="[1,2,3,4,5]"></login-announcement-directive>
