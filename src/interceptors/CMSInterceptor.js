@@ -1,7 +1,7 @@
 module.exports = function (app) {
     app.factory('CMSInterceptor', function (tokenService, loadingIndicatorService, exception, $q) {
         'ngInject';
-        var countRequests = {}, id = 0 ;
+        var countRequests = {}, id = 0;
 
         function RequestItem(url) {
             this.url = url;

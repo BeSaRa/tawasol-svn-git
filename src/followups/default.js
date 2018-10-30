@@ -58,6 +58,7 @@ module.exports = function (app) {
                 dialog
                     .errorMessage(langService.get('internal_server_error'))
             }
+            console.log('500', xhr);
         });
 
         exception.addGeneralExceptionHandler(500, function (xhr) {
