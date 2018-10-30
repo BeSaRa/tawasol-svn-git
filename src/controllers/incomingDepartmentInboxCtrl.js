@@ -607,6 +607,7 @@ module.exports = function (app) {
                 permissionKey: "VIEW_DOCUMENT_VERSION",
                 class: "action-green",
                 showInView: true,
+                hide: true,
                 checkShow: self.checkToShowAction
             },
             // duplicate current version
@@ -619,6 +620,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'DUPLICATE_BOOK_CURRENT',
                 showInView: true,
+                hide: true,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper;
@@ -633,6 +635,7 @@ module.exports = function (app) {
                 callback: self.duplicateVersion,
                 class: "action-green",
                 showInView: true,
+                hide: true,
                 permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
                 checkShow: self.checkToShowAction
             },
