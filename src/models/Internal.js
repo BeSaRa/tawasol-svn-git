@@ -12,6 +12,7 @@ module.exports = function (app) {
                 self.classDescription = 'Internal';
                 self.internalDocType = null;
                 self.docStatus = 2; // by default
+                self.fromEditOnDesktop = false;
 
                 /*These fields come from common correspondence model. The below fields are not in Internal model*/
                 delete self.exportInfo;
