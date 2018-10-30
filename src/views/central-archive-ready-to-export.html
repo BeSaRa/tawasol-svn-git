@@ -119,7 +119,7 @@
                                             ></star-unstar-directive>
                                         </td>-->
 
-                                        <td md-cell>{{workItem.generalStepElm.docFullSerial}}</td>
+                                        <td md-cell class="serial-td">{{workItem.generalStepElm.docFullSerial}}</td>
                                         <td md-cell class="td-data">
                                             <a href="" class="view-doc" ng-if="workItem.hasContent()"
                                                ng-click="ctrl.viewDocument(workItem, $event)">{{workItem.generalStepElm.docSubject}}</a>
