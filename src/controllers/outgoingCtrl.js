@@ -25,6 +25,7 @@ module.exports = function (app) {
                                              organizations,
                                              cmsTemplate,
                                              dialog,
+                                             $q,
                                              distributionWorkflowService,
                                              draftOutgoingService,
                                              replyTo,
@@ -91,6 +92,7 @@ module.exports = function (app) {
 
         if (replyTo) {
             self.outgoing = replyTo;
+            self.replyToOriginalName = angular.copy(replyTo.getTranslatedName());
         }
 
         if (editAfterApproved) {
@@ -159,49 +161,66 @@ module.exports = function (app) {
                 return;
             }
             var promise = null;
+            var defer = $q.defer();
             //var isDocHasVsId = angular.copy(self.outgoing).hasVsId();
-
-            /*No document information(No prepare document selected)*/
-            if (self.documentInformation && !self.outgoing.addMethod) {
-                if (status) {
-                    self.outgoing.docStatus = queueStatusService.getDocumentStatus(status);
-                }
-                promise = self.outgoing
-                    .saveDocumentWithContent(self.documentInformation);
-            } else {
-                promise = self.outgoing
-                    .saveDocument(status)
+            if (replyTo && $stateParams.workItem) {
+                dialog.confirmMessage(langService.get('prompt_terminate').change({name: self.replyToOriginalName}), 'yes', 'no')
+                    .then(function () {
+                        self.terminateAfterCreateReply = true;
+                        defer.resolve(true);
+                    })
+                    .catch(function (error) {
+                        self.terminateAfterCreateReply = false;
+                        defer.resolve(true);
+                    })
             }
-            promise.then(function (result) {
-                self.outgoing = result;
-                self.model = angular.copy(self.outgoing);
-                self.documentInformationExist = !!angular.copy(self.documentInformation);
-
-                var newId = self.model.vsId;
-
-                /*If content file was attached */
-                if (self.outgoing.contentFile) {
-                    self.outgoing.addDocumentContentFile()
-                        .then(function () {
-                            self.contentFileExist = !!(self.outgoing.hasOwnProperty('contentFile') && self.outgoing.contentFile);
-                            self.contentFileSizeExist = !!(self.contentFileExist && self.outgoing.contentFile.size);
-
-                            saveCorrespondenceFinished(status, newId);
-                        })
-                } else if (duplicateVersion && self.outgoing.hasContent() && self.outgoing.addMethod) {
-                    self.outgoing
-                        .attacheContentUrl(self.documentInformation)
-                        .then(function () {
-                            self.contentFileExist = true;
-                            self.contentFileSizeExist = true;
-                            saveCorrespondenceFinished(status, newId);
-                        });
+            else {
+                self.terminateAfterCreateReply = false;
+                defer.resolve(true);
+            }
+            defer.promise.then(function () {
+                /*No document information(No prepare document selected)*/
+                if (self.documentInformation && !self.outgoing.addMethod) {
+                    if (status) {
+                        self.outgoing.docStatus = queueStatusService.getDocumentStatus(status);
+                    }
+                    promise = self.outgoing
+                        .saveDocumentWithContent(self.documentInformation);
                 } else {
-                    self.contentFileExist = false;
-                    self.contentFileSizeExist = false;
-                    saveCorrespondenceFinished(status, newId);
+                    promise = self.outgoing
+                        .saveDocument(status)
                 }
-            });
+                promise.then(function (result) {
+                    self.outgoing = result;
+                    self.model = angular.copy(self.outgoing);
+                    self.documentInformationExist = !!angular.copy(self.documentInformation);
+
+                    var newId = self.model.vsId;
+
+                    /*If content file was attached */
+                    if (self.outgoing.contentFile) {
+                        self.outgoing.addDocumentContentFile()
+                            .then(function () {
+                                self.contentFileExist = !!(self.outgoing.hasOwnProperty('contentFile') && self.outgoing.contentFile);
+                                self.contentFileSizeExist = !!(self.contentFileExist && self.outgoing.contentFile.size);
+
+                                saveCorrespondenceFinished(status, newId);
+                            })
+                    } else if (duplicateVersion && self.outgoing.hasContent() && self.outgoing.addMethod) {
+                        self.outgoing
+                            .attacheContentUrl(self.documentInformation)
+                            .then(function () {
+                                self.contentFileExist = true;
+                                self.contentFileSizeExist = true;
+                                saveCorrespondenceFinished(status, newId);
+                            });
+                    } else {
+                        self.contentFileExist = false;
+                        self.contentFileSizeExist = false;
+                        saveCorrespondenceFinished(status, newId);
+                    }
+                });
+            })
         };
 
         var saveCorrespondenceFinished = function (status, newId) {
@@ -209,6 +228,9 @@ module.exports = function (app) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             if (replyTo) {
                 userSubscriptionService.loadUserSubscriptions();
+            }
+            if (self.terminateAfterCreateReply) {
+                correspondenceService.terminateWorkItemBehindScene($stateParams.workItem, 'incoming', langService.get('terminated_after_create_reply'))
             }
             if (status) {// || (self.outgoing.contentFile)
                 toast.success(langService.get('save_success'));

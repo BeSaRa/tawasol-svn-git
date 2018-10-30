@@ -2053,6 +2053,21 @@ module.exports = function (app) {
                 });
 
         };
+
+        self.terminateWorkItemBehindScene = function(wobNumber, documentClass, reason){
+            return $http
+                .put(urlService.userInboxActions + "/" + documentClass.toLowerCase() + "/terminate/wob-num", {
+                    first: wobNumber,
+                    second: reason
+                })
+                .then(function () {
+                    return true;
+                })
+                .catch(function(error){
+                    return false;
+                });
+        };
+
         /**
          * @description terminate bulk workItems.
          * @param workItems

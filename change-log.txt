@@ -36,3 +36,4 @@ fixed Issues:
 4. hide the version actions in department incoming, returned and sent items.
 5. added thumbnailMode property to global settings
 6. added "fromEditOnDesktop" in outgoing and internal models.
+7. terminate on create reply for workitem.
