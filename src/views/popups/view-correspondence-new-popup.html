@@ -63,7 +63,7 @@
                                     ng-repeat="attachment in ctrl.correspondence.attachments track by $index">
                                     <a flex href="#" ng-click="ctrl.showAttachment(attachment , $index , $event)">{{attachment.getTranslatedName()}}</a>
                                     <md-button class="md-icon-button view-icon-button"
-                                               ng-click="ctrl.showAttachment(attachment)">
+                                               ng-click="ctrl.showAttachment(attachment , $index , $event)">
                                         <md-icon md-svg-icon="eye"></md-icon>
                                     </md-button>
                                 </li>
@@ -77,7 +77,7 @@
                                     ng-repeat="doc in ctrl.correspondence.linkedDocs track by $index">
                                     <a flex href="#" ng-click="ctrl.showLinkedDocument(doc , $index ,  $event)">{{doc.getTranslatedName()}}</a>
                                     <md-button class="md-icon-button view-icon-button"
-                                               ng-click="ctrl.showLinkedDocument(doc)">
+                                               ng-click="ctrl.showLinkedDocument(doc, $index ,  $event , true)">
                                         <md-icon md-svg-icon="eye"></md-icon>
                                     </md-button>
                                 </li>

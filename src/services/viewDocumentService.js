@@ -42,8 +42,6 @@ module.exports = function (app) {
                 EventHistory,
                 SentItemDepartmentInbox;
             self.serviceName = 'viewDocumentService';
-            // number of opened popup
-            self.popupNumber = 0;
 
             function _getPage(pageName) {
                 return provider.getPageByName(pageName);
@@ -228,7 +226,7 @@ module.exports = function (app) {
                     .then(function (result) {
                         result.metaData.viewVersion = true;
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
@@ -243,7 +241,7 @@ module.exports = function (app) {
                                 workItem: false,
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
-                                popupNumber: self.popupNumber,
+                                popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll
                             },
                             resolve: {
@@ -257,10 +255,10 @@ module.exports = function (app) {
                                 }
                             }
                         }).then(function () {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return true;
                         }).catch(function () {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return false;
                         });
                     });
@@ -289,7 +287,7 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
@@ -303,7 +301,7 @@ module.exports = function (app) {
                                 workItem: false,
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
-                                popupNumber: self.popupNumber,
+                                popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll
                             },
                             resolve: {
@@ -317,10 +315,10 @@ module.exports = function (app) {
                                 }
                             }
                         }).then(function () {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return true;
                         }).catch(function () {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return false;
                         });
                     });
@@ -356,7 +354,7 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
@@ -370,7 +368,7 @@ module.exports = function (app) {
                                 workItem: false,
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
-                                popupNumber: self.popupNumber,
+                                popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll
                             },
                             resolve: {
@@ -384,10 +382,10 @@ module.exports = function (app) {
                                 }
                             }
                         }).then(function () {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return true;
                         }).catch(function () {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return false;
                         });
                     });
@@ -414,7 +412,7 @@ module.exports = function (app) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
@@ -430,7 +428,7 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
-                                popupNumber: self.popupNumber
+                                popupNumber: generator.getPopupNumber()
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -444,11 +442,11 @@ module.exports = function (app) {
                             }
                         })
                             .then(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
                                 return true;
                             })
                             .catch(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
                                 return false;
                             });
                     })
@@ -481,7 +479,7 @@ module.exports = function (app) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
@@ -497,7 +495,7 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: false,
-                                popupNumber: self.popupNumber
+                                popupNumber: generator.getPopupNumber()
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -511,11 +509,11 @@ module.exports = function (app) {
                             }
                         })
                             .then(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
                                 return true;
                             })
                             .catch(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
                                 return false;
                             });
                     })
@@ -549,7 +547,7 @@ module.exports = function (app) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
@@ -565,7 +563,7 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: false,
-                                popupNumber: self.popupNumber
+                                popupNumber: generator.getPopupNumber()
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -579,11 +577,11 @@ module.exports = function (app) {
                             }
                         })
                             .then(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
                                 return true;
                             })
                             .catch(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
                                 return false;
                             });
                     })
@@ -617,7 +615,7 @@ module.exports = function (app) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
@@ -633,7 +631,7 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
-                                popupNumber: self.popupNumber
+                                popupNumber: generator.getPopupNumber()
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -647,12 +645,12 @@ module.exports = function (app) {
                             }
                         })
                             .then(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
 
                                 return true;
                             })
                             .catch(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
                                 return false;
                             });
                     });
@@ -682,7 +680,7 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
@@ -696,7 +694,7 @@ module.exports = function (app) {
                                 workItem: false,
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
-                                popupNumber: self.popupNumber
+                                popupNumber: generator.getPopupNumber()
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -709,10 +707,10 @@ module.exports = function (app) {
                                 }
                             }
                         }).then(function () {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return true;
                         }).catch(function () {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return false;
                         });
                     });
@@ -739,7 +737,7 @@ module.exports = function (app) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
@@ -755,7 +753,7 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
-                                popupNumber: self.popupNumber
+                                popupNumber: generator.getPopupNumber()
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -769,11 +767,11 @@ module.exports = function (app) {
                             }
                         })
                             .then(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
                                 return true;
                             })
                             .catch(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
                                 return false;
                             });
                     })
@@ -807,7 +805,7 @@ module.exports = function (app) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
@@ -823,7 +821,7 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
-                                popupNumber: self.popupNumber
+                                popupNumber: generator.getPopupNumber()
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -837,11 +835,11 @@ module.exports = function (app) {
                             }
                         })
                             .then(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
                                 return true;
                             })
                             .catch(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
                                 return false;
                             });
                     })
@@ -881,7 +879,7 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
@@ -895,7 +893,7 @@ module.exports = function (app) {
                                 workItem: workItem,
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
-                                popupNumber: self.popupNumber
+                                popupNumber: generator.getPopupNumber()
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -908,10 +906,10 @@ module.exports = function (app) {
                                 }
                             }
                         }).then(function () {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return true;
                         }).catch(function () {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return false;
                         });
                     });
@@ -939,7 +937,7 @@ module.exports = function (app) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
@@ -955,7 +953,7 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: false,
-                                popupNumber: self.popupNumber
+                                popupNumber: generator.getPopupNumber()
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -969,11 +967,11 @@ module.exports = function (app) {
                             }
                         })
                             .then(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
                                 return true;
                             })
                             .catch(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
                                 return false;
                             });
                     })
@@ -1008,7 +1006,7 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
@@ -1022,7 +1020,7 @@ module.exports = function (app) {
                                 workItem: false,
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
-                                popupNumber: self.popupNumber,
+                                popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll
                             },
                             resolve: {
@@ -1036,10 +1034,10 @@ module.exports = function (app) {
                                 }
                             }
                         }).then(function () {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return true;
                         }).catch(function () {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return false;
                         });
                     });
@@ -1066,7 +1064,7 @@ module.exports = function (app) {
                         return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
                     })
                     .then(function (generalStepElementView) {
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
@@ -1082,7 +1080,7 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
-                                popupNumber: self.popupNumber
+                                popupNumber: generator.getPopupNumber()
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1096,11 +1094,11 @@ module.exports = function (app) {
                             }
                         })
                             .then(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
                                 return true;
                             })
                             .catch(function () {
-                                self.popupNumber -= 1;
+                                generator.removePopupNumber();
                                 return false;
                             });
                     })
@@ -1164,7 +1162,7 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             /*template: cmsTemplate.getPopup('view-correspondence-g2g'),
                             controller: 'viewCorrespondenceG2GPopCtrl',*/
@@ -1178,17 +1176,17 @@ module.exports = function (app) {
                                 content: result.content,
                                 actions: actions,
                                 workItem: false,
-                                popupNumber: self.popupNumber,
+                                popupNumber: generator.getPopupNumber(),
                                 disableEverything: true,
                                 disableProperties: true,
                                 disableCorrespondence: true,
                                 g2gItemCopy: g2gItemCopy
                             }
                         }).then(function (result) {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return result;
                         }).catch(function (error) {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return error;
                         });
                     });
@@ -1241,7 +1239,7 @@ module.exports = function (app) {
                     })
                     .then(function (result) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
-                        self.popupNumber += 1;
+                        generator.addPopupNumber();
                         return dialog.showDialog({
                             template: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
@@ -1253,17 +1251,17 @@ module.exports = function (app) {
                                 content: result.content,
                                 actions: actions,
                                 workItem: false,
-                                popupNumber: self.popupNumber,
+                                popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 g2gItemCopy: g2gItemCopy
                             }
                         }).then(function (result) {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return result;
                         }).catch(function (error) {
-                            self.popupNumber -= 1;
+                            generator.removePopupNumber();
                             return error;
                         });
                     })

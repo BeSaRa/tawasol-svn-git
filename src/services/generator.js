@@ -9,6 +9,21 @@ module.exports = function (app) {
         //TODO: This property is just added to show/hide feature according for demo build. It will be removed soon.
         self.isDemoBuild = false;
 
+        var popupNumber = 0;
+
+        self.addPopupNumber = function () {
+            ++popupNumber;
+        };
+
+        self.removePopupNumber = function () {
+            --popupNumber;
+        };
+
+        self.getPopupNumber = function () {
+            return popupNumber;
+        };
+
+
         var documentClassMap = {
             OUTGOING: 1,
             INCOMING: 2,

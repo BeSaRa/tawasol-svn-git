@@ -123,14 +123,20 @@ module.exports = function (app) {
                 });
         };
 
-        self.showLinkedDocument = function (linkedDoc, $index, $event) {
+        self.showLinkedDocument = function (linkedDoc, $index, $event, popup) {
             $event && $event.preventDefault();
             self.listIndex = $index;
-            correspondenceService
+
+            // view linked document in popup.
+            if (popup) {
+                return linkedDoc.viewFromQueue([],'g2gReturned',$event);
+            }
+
+            return correspondenceService
                 .getLinkedDocumentViewURL(linkedDoc)
                 .then(function (result) {
                     _changeSecondURL(result, 'linkedDocs', $index);
-                })
+                });
 
         };
 
