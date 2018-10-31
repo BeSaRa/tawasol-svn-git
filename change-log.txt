@@ -37,3 +37,7 @@ fixed Issues:
 5. added thumbnailMode property to global settings
 6. added "fromEditOnDesktop" in outgoing and internal models.
 7. terminate on create reply for workitem.
+
+10/31/2018
+-------------
+1. added gridService to save paging in localStorage.

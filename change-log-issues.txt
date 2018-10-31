@@ -395,3 +395,7 @@ Added the document version actions in all grids
 10/30/2018
 ---------------------
 1. fixed sorting for correspondence site in department returned mail
+
+10/31/2018
+---------------------
+1. removed followup status from search screens if search by main site only

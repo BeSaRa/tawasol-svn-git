@@ -1381,10 +1381,11 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_sent_items',
                 resolve: {
-                    userSentItems: function (userSentItemService, rootEntity) {
+                    userSentItems: function (userSentItemService, rootEntity, gridService) {
                         'ngInject';
-                        var globalSetting = rootEntity.returnRootEntity().settings;
-                        return userSentItemService.loadUserSentItems(1, 5);
+                        //var globalSetting = rootEntity.returnRootEntity().settings;
+                        var limit = gridService.getGridPagingLimitByGridName(gridService.grids.inbox.sentItem) || 5;
+                        return userSentItemService.loadUserSentItems(1, limit);
                     }
                 }
             })
@@ -1396,10 +1397,11 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_user_favorite_documents',
                 resolve: {
-                    favoriteDocuments: function (favoriteDocumentsService, rootEntity) {
+                    favoriteDocuments: function (favoriteDocumentsService, rootEntity, gridService) {
                         'ngInject';
-                        var globalSetting = rootEntity.returnRootEntity().settings;
-                        return favoriteDocumentsService.loadFavoriteDocuments(1, 5);
+                        //var globalSetting = rootEntity.returnRootEntity().settings;
+                        var limit = gridService.getGridPagingLimitByGridName(gridService.grids.inbox.favorite) || 5;
+                        return favoriteDocumentsService.loadFavoriteDocuments(1, limit);
                     }
                 }
             })

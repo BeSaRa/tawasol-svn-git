@@ -10,27 +10,6 @@ module.exports = function (app) {
         var currentUser = employeeService.getEmployee().id;
 
         /**
-         * @description Gets the grid limit options(records per page options)
-         * @param records
-         * @returns {*[]}
-         */
-        self.getGridLimitOptions = function (records) {
-            return (
-                [
-                    5,
-                    10,
-                    20,
-                    {
-                        label: langService.get('all'),
-                        value: function () {
-                            return (records.length + 21);
-                        }
-                    }
-                ]
-            );
-        };
-
-        /**
          * @description Local storage key for all the grid level values
          * @type {string}
          */
@@ -169,10 +148,13 @@ module.exports = function (app) {
 
 
         function _removeGridSortingKey(gridName) {
+            // get all the saved sorting
             var sortingStorage = self.getGridSortingKey();
+            // if found saved sorting, remove the given grid sorting
             if (sortingStorage) {
                 delete sortingStorage[gridName];
             }
+            // after delete, if the sorting still has any other grids, save the sorting again to update.
             if (sortingStorage && Object.keys(sortingStorage).length) {
                 localStorageService.set(self.storageKeys.sorting, JSON.stringify(sortingStorage));
                 return 1;
@@ -184,13 +166,18 @@ module.exports = function (app) {
         /**
          * @description Delete the sorting key for the grid
          * @param {string | string[]}gridName
+         * if passed, it will remove sorting key for given grid
+         * otherwise, remove the sorting keys for all grids
          */
         self.removeGridSortingKey = function (gridName) {
+            if (!gridName)
+                self.removeAllSorting();
             if (typeof gridName === 'string') {
                 _removeGridSortingKey(gridName);
             }
             else if (angular.isArray(gridName) && gridName.length) {
                 for (var i = 0; i < gridName.length; i++) {
+                    // remove the saved sorting one by one and if saved sorting finished and removed from storage, break the loop.
                     if (_removeGridSortingKey(gridName[i]) === -1)
                         break;
                 }
@@ -206,22 +193,53 @@ module.exports = function (app) {
 
 
         /**
+         * @description Gets the grid limit options(records per page options)
+         * @param records
+         * @param gridName
+         * Used to differentiate between grids in case of overrided values
+         * @returns {*[]}
+         */
+        self.getGridLimitOptions = function (gridName, records) {
+            var count = (typeof records === "number") ? records : records.length;
+            if (gridName === self.grids.inbox.sentItem) {
+                return [5, 10, 20, 100, 200];
+            }
+            return (
+                [
+                    5, 10, 20,
+                    {
+                        label: langService.get('all'),
+                        value: function () {
+                            return (count + 21);
+                        }
+                    }
+                ]
+            );
+        };
+
+        /**
          * @description Gets the pagination limit by grid name
          * @param gridName
          * If passed, return paging key by gridName.
          * Otherwise, returns all paging keys.
+         * @param returnObjectIfGridName
+         * Use only when gridName is passed
          * @returns {*}
          */
-        self.getGridPagingLimitByGridName = function (gridName) {
+        self.getGridPagingLimitByGridName = function (gridName, returnObjectIfGridName) {
             var pagingStorage = localStorageService.get(_getStorageKey(self.storageKeys.pagingLimit));
             if (pagingStorage && generator.isJsonString(pagingStorage)) {
                 pagingStorage = JSON.parse(pagingStorage);
                 if (pagingStorage && Object.keys(pagingStorage).length) {
                     if (gridName) {
-                        debugger;
-                        var gridPaging = {};
-                        gridPaging[gridName] = pagingStorage[gridName];
-                        return gridPaging;
+                        if (returnObjectIfGridName) {
+                            var gridPaging = {};
+                            gridPaging[gridName] = pagingStorage[gridName];
+                            return gridPaging;
+                        }
+                        else {
+                            return Number(pagingStorage[gridName]);
+                        }
                     }
                     return pagingStorage;
                 }
@@ -236,7 +254,6 @@ module.exports = function (app) {
          */
         self.setGridPagingLimitByGridName = function (gridName, value) {
             var pagingStorage = self.getGridPagingLimitByGridName();
-            debugger;
             if (!pagingStorage) {
                 pagingStorage = {};
                 pagingStorage[gridName] = value;
@@ -251,10 +268,13 @@ module.exports = function (app) {
 
 
         function _removeGridPagingLimitByGridName(gridName) {
+            // get all the saved paging
             var pagingStorage = self.getGridPagingLimitByGridName();
+            // if found saved paging, remove the given grid paging
             if (pagingStorage) {
                 delete pagingStorage[gridName];
             }
+            // after delete, if the paging still has any other grids, save the paging again to update.
             if (pagingStorage && Object.keys(pagingStorage).length) {
                 localStorageService.set(_getStorageKey(self.storageKeys.pagingLimit), JSON.stringify(pagingStorage));
                 return 1;
@@ -266,13 +286,18 @@ module.exports = function (app) {
         /**
          * @description Delete the paging limit for the grid
          * @param {string | string[]}gridName
+         * if passed, it will remove paging key for given grid or array of grids
+         * otherwise, remove the paging keys for all grids
          */
         self.removeGridPagingLimitByGridName = function (gridName) {
+            if (!gridName)
+                self.removeAllPagingLimit();
             if (typeof gridName === 'string') {
                 _removeGridPagingLimitByGridName(gridName);
             }
             else if (angular.isArray(gridName) && gridName.length) {
                 for (var i = 0; i < gridName.length; i++) {
+                    // remove the saved paging one by one and if saved paging finished and removed from storage, break the loop.
                     if (_removeGridPagingLimitByGridName(gridName[i]) === -1)
                         break;
                 }

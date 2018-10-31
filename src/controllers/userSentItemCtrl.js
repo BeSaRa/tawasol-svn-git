@@ -18,6 +18,7 @@ module.exports = function (app) {
                                                  toast,
                                                  mailNotificationService,
                                                  counterService,
+                                                 gridService,
                                                  correspondenceSiteService,
                                                  WorkItem,
                                                  ResolveDefer,
@@ -48,13 +49,17 @@ module.exports = function (app) {
 
         /**
          * @description Contains options for grid configuration
-         * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
-            limit: 5, //self.globalSetting.searchAmount, //5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.sentItem) || 5, //self.globalSetting.searchAmount, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, 100, 200]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.sentItem, self.userSentItems), //[5, 10, 20, 100, 200]
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.inbox.sentItem, limit);
+                self.reloadUserSentItems(page);
+            }
             /*limitOptions: [5, 10, 20, // limit options
                 {
                     /!*label: self.globalSetting.searchAmountLimit.toString(),
