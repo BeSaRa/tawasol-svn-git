@@ -27,11 +27,15 @@ module.exports = function (app) {
             model.subSiteId = model.subSiteId && model.subSiteId.hasOwnProperty('id') ? model.subSiteId.id : model.subSiteId;
             model.siteType = model.siteType && model.siteType.hasOwnProperty('id') ? model.siteType.lookupKey : model.siteType;
             //model.followupStatus = model.followupStatus.hasOwnProperty('id') ? model.followupStatus.lookupKey : model.followupStatus;
-            if(model.followupStatus.hasOwnProperty('lookupKey')){
-                model.followupStatus = model.followupStatus.lookupKey;
-            }
-            else if(model.followupStatus.hasOwnProperty('id')){
-                model.followupStatus = model.followupStatus.id;
+
+            // the only case when there is no followupStatus property is when search by main site only in search screens
+            if (model.hasOwnProperty('followupStatus')) {
+                if (model.followupStatus.hasOwnProperty('lookupKey')) {
+                    model.followupStatus = model.followupStatus.lookupKey;
+                }
+                else if (model.followupStatus.hasOwnProperty('id')) {
+                    model.followupStatus = model.followupStatus.id;
+                }
             }
             model.followupDate = model.followupDate ? _getDate(model.followupDate) : null;
             delete model.mainEnSiteText;

@@ -265,10 +265,12 @@ module.exports = function (app) {
          * @private
          */
         function _mapMainSite(siteView) {
-            return (new Site_Search())
+            var site = (new Site_Search())
                 .mapFromMainSiteView(siteView)
-                .setFollowupStatus(self.followUpStatuses[1])
+                // .setFollowupStatus(self.followUpStatuses[1])
                 .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
+            delete site.followupStatus;
+            return site;
         }
 
         /**
@@ -504,7 +506,7 @@ module.exports = function (app) {
         };
 
         self.searchByMainChange = function () {
-            if (self.searchByMain) {
+            /*if (self.searchByMain) {
                 self.subSearchResult = [];
                 self.subSearchResultCopy = [];
             } else {
@@ -514,7 +516,19 @@ module.exports = function (app) {
             }
             self.selectedSiteType = null;
             self.selectedMainSite = null;
+            self.selectedMain = null;*/
+
+            self.mainSearch = '';
+            self.subSearch = '';
+            self.selectedSiteType = null;
+            self.selectedMainSite = null;
             self.selectedMain = null;
+            self.subSearchResult = [];
+            self.subSearchResultCopy = [];
+            self.sitesInfoTo = [];
+            self.sitesInfoCC = [];
+            self.sitesInfoIncoming = [];
+            self.subRecords = _concatCorrespondenceSites(true);
             self.onMainChange(self.selectedMain);
         };
         /**
@@ -744,8 +758,11 @@ module.exports = function (app) {
             if (value) {
                 self.mainSearch = '';
                 self.subSearch = '';
+                self.selectedSiteType = null;
                 self.selectedMainSite = null;
+                self.selectedMain = null;
                 self.subSearchResult = [];
+                self.subSearchResultCopy = [];
                 self.sitesInfoTo = [];
                 self.sitesInfoCC = [];
                 self.sitesInfoIncoming = [];
