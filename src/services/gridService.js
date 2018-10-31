@@ -7,7 +7,6 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.serviceName = 'gridService';
-        var currentUser = employeeService.getEmployee().id;
 
         /**
          * @description Local storage key for all the grid level values
@@ -105,7 +104,7 @@ module.exports = function (app) {
 
         var _getStorageKey = function (storageKey, skipUserId) {
             if (!skipUserId)
-                return currentUser + '_' + storageKey;
+                return employeeService.getEmployee().id + '_' + storageKey;
             return storageKey;
         };
 

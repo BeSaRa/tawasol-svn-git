@@ -9,7 +9,7 @@ module.exports = function (app) {
                                                    urlService,
                                                    rootEntity,
                                                    Credentials,
-                                                   gridSortingService) {
+                                                   gridService) {
         'ngInject';
         var self = this, cacheCredentials = new Credentials();
         self.logoutBySessionsKey = 'logoutSession';
@@ -39,7 +39,7 @@ module.exports = function (app) {
             // call backend service to login.
             return $http.post(urlService.login, credentials).then(function (result) {
                 _saveToStorage(credentials);
-                gridSortingService.removeAllSorting();
+                gridService.removeAllSorting();
                 if (result.data.hasOwnProperty('rs') && result.data.rs.hasOwnProperty('token')) {
                     tokenService.setToken(result.data.rs.token);
                 }
@@ -103,7 +103,7 @@ module.exports = function (app) {
          */
         self.logout = function () {
             localStorageService.remove('CR');
-            gridSortingService.removeAllSorting();
+            gridService.removeAllSorting();
             return $http.post(urlService.logout, null)
                 .then(function (result) {
                     tokenService.destroy(); // destroy the current sessions
