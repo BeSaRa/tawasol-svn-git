@@ -16,7 +16,8 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'documentTemplateCtrl';
-        self.organizations = (angular.copy(organizations));
+        self.organizations = _.filter((angular.copy(organizations)), 'hasRegistry');
+
         self.organizations.unshift(new Organization({
             id: -1,
             arName: langService.getKey('global_templates', 'ar'),

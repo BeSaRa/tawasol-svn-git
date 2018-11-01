@@ -372,7 +372,7 @@ module.exports = function (app) {
                 resolve: {
                     templates: function (documentTemplateService, employeeService) {
                         'ngInject';
-                        return documentTemplateService.loadDocumentTemplates(employeeService.getCurrentOUApplicationUser().ouid);
+                        return documentTemplateService.loadDocumentTemplates(employeeService.getEmployee().getRegistryOUID());
                     },
                     correspondence: function () {
                         'ngInject';
