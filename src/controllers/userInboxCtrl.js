@@ -940,28 +940,14 @@ module.exports = function (app) {
 
         // new view document
         self.openNewViewDocument = function (workItem) {
-            if (!workItem) {
-                workItem = self.userInboxes[0];
-                workItem.viewNewInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
-                    .then(function () {
-                        self.reloadUserInboxes(self.grid.page);
-                    })
-                    .catch(function () {
-                        self.reloadUserInboxes(self.grid.page);
-                    });
-            }
-            else
-                workItem.viewNewInboxWorkItem({
-                    gridActions: self.gridActions,
-                    viewerActions: self.magazineQuickActions
-                }, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
-                    .then(function () {
-                        self.reloadUserInboxes(self.grid.page);
-                    })
-                    .catch(function () {
-                        self.reloadUserInboxes(self.grid.page);
-                    });
-
+            workItem = self.userInboxes[0];
+            workItem.viewNewWorkItemDocument(self.gridActions, 'userInbox')
+                .then(function () {
+                    self.reloadUserInboxes(self.grid.page);
+                })
+                .catch(function () {
+                    self.reloadUserInboxes(self.grid.page);
+                });
         };
 
         /**
@@ -989,7 +975,7 @@ module.exports = function (app) {
          * @param $event
          * @param defer
          */
-        self.duplicateCurrentVersion = function (workItem, $event , defer) {
+        self.duplicateCurrentVersion = function (workItem, $event, defer) {
             var info = workItem.getInfo();
             return workItem
                 .duplicateVersion($event)
@@ -1009,7 +995,7 @@ module.exports = function (app) {
          * @param defer
          * @return {*}
          */
-        self.duplicateVersion = function (workItem, $event , defer) {
+        self.duplicateVersion = function (workItem, $event, defer) {
             var info = workItem.getInfo();
             return workItem
                 .duplicateSpecificVersion($event)
