@@ -130,6 +130,10 @@ module.exports = function (app) {
                     var info = model.getInfo();
                     var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
                     return !(hasPermission && info.documentClass !== "internal");
+                },
+                disableAll: function (model) {
+                    var info = model.getInfo();
+                    return (info.docStatus >= 24 && !info.isPaper);
                 }
             })
             .getPageNameOverride('followupEmployeeInbox', 'draftOutgoing')
