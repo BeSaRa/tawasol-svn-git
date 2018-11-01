@@ -68,10 +68,12 @@ module.exports = function (app) {
                     docType: item.docType,
                     docSubject: info.title,
                     vsId: info.vsId,
-                    workObjectNumber: info.wobNumber
+                    workObjectNumber: info.wobNumber,
+                    securityLevel: item.securityLevel
                 }
             });
-            correspondenceService.viewCorrespondence(workItem, self.gridActions, checkIfEditPropertiesAllowed(item, true), checkIfEditCorrespondenceSiteAllowed(item, true))
+
+            workItem.viewNewWorkItemDocument(self.gridActions, 'userInbox', $event)
                 .then(function () {
                     self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount);
                     _.map(userInboxService.userInboxes, function (workItem) {
@@ -97,8 +99,35 @@ module.exports = function (app) {
                             workItem.generalStepElm.isOpen = true;
                         return workItem;
                     });
-
                 });
+            // correspondenceService.viewCorrespondence(workItem, self.gridActions, checkIfEditPropertiesAllowed(item, true), checkIfEditCorrespondenceSiteAllowed(item, true))
+            //     .then(function () {
+            //         self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount);
+            //         _.map(userInboxService.userInboxes, function (workItem) {
+            //             if (workItem.generalStepElm.workObjectNumber === wobNumber)
+            //                 workItem.generalStepElm.isOpen = true;
+            //             return workItem;
+            //         });
+            //         _.map(followupEmployeeInboxService.followupEmployeeInboxes, function (workItem) {
+            //             if (workItem.generalStepElm.workObjectNumber === wobNumber)
+            //                 workItem.generalStepElm.isOpen = true;
+            //             return workItem;
+            //         });
+            //     })
+            //     .catch(function () {
+            //         self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount);
+            //         _.map(userInboxService.userInboxes, function (workItem) {
+            //             if (workItem.generalStepElm.workObjectNumber === wobNumber)
+            //                 workItem.generalStepElm.isOpen = true;
+            //             return workItem;
+            //         });
+            //         _.map(followupEmployeeInboxService.followupEmployeeInboxes, function (workItem) {
+            //             if (workItem.generalStepElm.workObjectNumber === wobNumber)
+            //                 workItem.generalStepElm.isOpen = true;
+            //             return workItem;
+            //         });
+            //
+            //     });
         };
         var interval;
 
