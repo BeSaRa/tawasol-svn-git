@@ -402,4 +402,5 @@ Added the document version actions in all grids
 
 11/01/2018
 ---------------------
-1. search pages - remove empty followup status when searching
+1. search pages - remove empty followup status when searching.
+2. update title when login

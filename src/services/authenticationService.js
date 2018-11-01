@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                    urlService,
                                                    rootEntity,
                                                    Credentials,
+                                                   titleService,
                                                    gridService) {
         'ngInject';
         var self = this, cacheCredentials = new Credentials();
@@ -38,6 +39,7 @@ module.exports = function (app) {
             cacheCredentials = angular.copy(credentials);
             // call backend service to login.
             return $http.post(urlService.login, credentials).then(function (result) {
+                titleService.setTitle(rootEntity.returnRootEntity().getTranslatedAppName());
                 _saveToStorage(credentials);
                 gridService.removeAllSorting();
                 if (result.data.hasOwnProperty('rs') && result.data.rs.hasOwnProperty('token')) {
