@@ -45,7 +45,6 @@ module.exports = function (app) {
             model.correspondence.lastModifiedString = generator.getDateFromTimeStamp(model.correspondence.lastModified, true);
             //model.isLockedG2GIndicator = model.getIsLockedG2GIndicator();
             model.recordInfo = correspondenceService.getCorrespondenceInformation(model.correspondence);
-            //todo: type info is binded to siteType property until confirmed by Hussam from Abu Al Nassr
 
             //model.typeInfo = g2gLookupService.getG2gLookupByCategoryAndLookupKey(g2gLookupService.lookupCategory.copyOrOriginal.name, model.correspondence.siteType, model.isInternalG2G());
             model.typeInfo = model.getTranslatedOriginalCopy();

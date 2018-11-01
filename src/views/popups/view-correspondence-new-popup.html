@@ -257,12 +257,12 @@
             <!--class="document-viewer-full-width-height"-->
         </div>
         <div layout="row">
-            <div ng-if="ctrl.correspondence && !ctrl.correspondence.viewVersion">
+            <div ng-if="ctrl.correspondence && !ctrl.correspondence.viewVersion && !ctrl.g2gItemCopy">
                 <md-button class="md-raised" ng-click="ctrl.saveCorrespondenceChanges()"
                            ng-disabled="ctrl.checkDisabled()">{{lang.save}}
                 </md-button>
             </div>
-            <div ng-if="!ctrl.correspondence">
+            <div ng-if="!ctrl.correspondence && !ctrl.g2gItemCopy">
                 <md-button class="md-raised" ng-click="ctrl.returnBackCorrespondenceInformation()">{{lang.save}}
                 </md-button>
             </div>
