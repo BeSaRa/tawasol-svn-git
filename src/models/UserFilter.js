@@ -143,7 +143,9 @@ module.exports = function (app) {
                 self.ui.key_14.value = self.ui.key_14.value ? self.ui.key_14.value : null;
 
                 // Priority Level
-                self.ui.key_15.value = self.ui.key_15.value ? self.ui.key_15.value : null;
+                var priorityLevel = self.ui.key_15.value;
+                if (typeof  priorityLevel === 'undefined' || priorityLevel === null && priorityLevel === '')
+                    self.ui.key_15.value = null;
 
                 self.filterCriteria = self.filterCriteria || {};
                 _.map(availableKeys, function (number) {
