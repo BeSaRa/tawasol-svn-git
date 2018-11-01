@@ -399,3 +399,7 @@ Added the document version actions in all grids
 10/31/2018
 ---------------------
 1. removed followup status from search screens if search by main site only
+
+11/01/2018
+---------------------
+1. search pages - remove empty followup status when searching

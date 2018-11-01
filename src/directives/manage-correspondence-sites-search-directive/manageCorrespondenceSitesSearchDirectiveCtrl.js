@@ -11,6 +11,7 @@ module.exports = function (app) {
                                                                              $timeout,
                                                                              $q,
                                                                              _,
+                                                                             Lookup,
                                                                              correspondenceService,
                                                                              generator,
                                                                              SiteView,
@@ -58,8 +59,13 @@ module.exports = function (app) {
         self.vsId = null;
         // followup statuses
         self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
+        var noneLookup = new Lookup({
+            defaultEnName: langService.getByLangKey('none', 'en'),
+            defaultArName: langService.getByLangKey('none', 'ar')
+        });
+        self.followUpStatuses.splice(0, 0, noneLookup);
         // selected followup Status.
-        self.followupStatus = null;
+        self.followupStatus = noneLookup;
         // current for need reply
         self.minDate = _createCurrentDate(1);
         // all sub correspondence sites
@@ -254,7 +260,7 @@ module.exports = function (app) {
         function _mapSubSites(siteView) {
             return (new Site_Search())
                 .mapFromSiteView(siteView)
-                .setFollowupStatus(self.followUpStatuses[1])
+                .setFollowupStatus(noneLookup)
                 .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
         }
 
@@ -267,9 +273,8 @@ module.exports = function (app) {
         function _mapMainSite(siteView) {
             var site = (new Site_Search())
                 .mapFromMainSiteView(siteView)
-                // .setFollowupStatus(self.followUpStatuses[1])
+                .setFollowupStatus(noneLookup)
                 .setCorrespondenceSiteType(_getTypeByLookupKey(siteView.correspondenceSiteTypeId));
-            delete site.followupStatus;
             return site;
         }
 
@@ -338,8 +343,6 @@ module.exports = function (app) {
                     } else {
                         self['sitesInfo' + to].push(site);
                     }
-
-
                     return true;
                 });
             }
@@ -409,7 +412,7 @@ module.exports = function (app) {
             });
 
             self.followUpStatusDate = null;
-            self.followupStatus = null;
+            self.followupStatus = noneLookup;
             self.subSearchSelected = [];
 
         };
@@ -582,7 +585,7 @@ module.exports = function (app) {
             }
         };
         /**
-         * check if need replay
+         * check if need reply
          * @return {boolean}
          */
         self.needReply = function (status) {

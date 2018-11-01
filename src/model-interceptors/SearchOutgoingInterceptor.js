@@ -47,6 +47,10 @@ module.exports = function (app) {
 
             if (angular.isArray(model.sitesInfoTo) && model.sitesInfoTo.length) {
                 model.sitesInfoTo = model.sitesInfoTo[0];
+                // if followupStatus = none, delete it
+                if (!model.sitesInfoTo.followupStatus.lookupKey){
+                    delete model.sitesInfoTo.followupStatus;
+                }
                 //console.log(model.sitesInfoTo);
                 if (model.sitesInfoTo.followupDate1 && model.sitesInfoTo.followupDate2) {
                     model.sitesInfoTo.followupDates = {
@@ -66,7 +70,10 @@ module.exports = function (app) {
             }
             if (angular.isArray(model.sitesInfoCC) && model.sitesInfoCC.length) {
                 model.sitesInfoCC = model.sitesInfoCC[0];
-
+                // if followupStatus = none, delete it
+                if (!model.sitesInfoCC.followupStatus.lookupKey){
+                    delete model.sitesInfoCC.followupStatus;
+                }
                 if (model.sitesInfoCC.followupDate1 && model.sitesInfoCC.followupDate2) {
                     model.sitesInfoCC.followupDates = {
                         first: generator.getTimeStampFromDate(model.sitesInfoCC.followupDate1),

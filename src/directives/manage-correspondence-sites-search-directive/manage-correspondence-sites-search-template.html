@@ -66,6 +66,7 @@
     <!-- Search Results -->
     <div flex layout="column" ng-if="ctrl.subSearchResult.length">
         <md-card md-whiteframe="3" layout="column" class="card-overlay">
+            <!-- Search results toolbar -->
             <md-toolbar class="md-table-toolbar md-default"
                         ng-class="{'selected':ctrl.subSearchSelected.length}">
                 <div class="md-toolbar-tools">
@@ -127,7 +128,7 @@
                                         <md-menu>
                                             <md-button ng-click="$mdMenu.open()">
                                                 {{site.followupStatus.getTranslatedName() ||
-                                                lang.sites_follow_up_status}}
+                                                lang.none}}
                                             </md-button>
                                             <md-menu-content width="3">
                                                 <md-menu-item ng-repeat="status in ctrl.followUpStatuses">
