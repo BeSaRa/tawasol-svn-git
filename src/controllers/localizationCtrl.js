@@ -22,7 +22,7 @@ module.exports = function (app) {
             page: 1, // first page
             //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.localization, self.localizations),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.localization),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.localization, limit);
             }

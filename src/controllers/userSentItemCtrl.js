@@ -55,7 +55,7 @@ module.exports = function (app) {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.sentItem) || 5, //self.globalSetting.searchAmount, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.sentItem, self.userSentItems), //[5, 10, 20, 100, 200]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.sentItem), //[5, 10, 20, 100, 200]
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.sentItem, limit);
                 self.reloadUserSentItems(page);

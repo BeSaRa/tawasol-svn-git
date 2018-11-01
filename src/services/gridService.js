@@ -201,7 +201,10 @@ module.exports = function (app) {
          * @returns {*[]}
          */
         self.getGridLimitOptions = function (gridName, records) {
-            var count = (typeof records === "number") ? records : records.length;
+            var count = null;
+            if (typeof records !== 'undefined' && records !== null)
+                count = (typeof records === "number") ? records : records.length;
+
             if (gridName === self.grids.inbox.sentItem) {
                 return [5, 10, 20, 100, 200];
             }
@@ -211,19 +214,27 @@ module.exports = function (app) {
             else if (gridName === self.grids.inbox.inboxFilter) {
                 return [5, 10, 20, 200];
             }
-            else if (gridName === self.grids.administration.localization)
+            else if (gridName === self.grids.administration.localization) {
                 return [5, 10, 20, 40, 50, 80, 100];
-            return (
-                [
-                    5, 10, 20,
-                    {
-                        label: langService.get('all'),
-                        value: function () {
-                            return (count + 21);
+            }
+            else {
+                return (
+                    [
+                        5, 10, 20,
+                        {
+                            label: langService.get('all'),
+                            value: function () {
+                                // if count is not null, return (count + 21) records
+                                // if count is null, return the (max number + 21) records
+                                if (count !== null)
+                                    return (count + 21);
+                                else
+                                    return (20 + 21);
+                            }
                         }
-                    }
-                ]
-            );
+                    ]
+                );
+            }
         };
 
         /**

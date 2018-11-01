@@ -117,7 +117,7 @@ module.exports = function (app) {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.userInbox) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.userInbox, self.userInboxes),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.userInbox),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.inbox.userInbox, limit);
             }
@@ -167,10 +167,13 @@ module.exports = function (app) {
             self.workItemsFilters = new Array(self.userFilters.length);
             for (var i = 0; i < self.userFilters.length; i++) {
                 self.filterGrid.push({
-                    limit: 5, //self.globalSetting.searchAmount, // default limit
+                    limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.inboxFilter) || 5, //self.globalSetting.searchAmount, // default limit
                     page: 1, // first page
                     order: '', // default sorting order
-                    limitOptions: [5, 10, 20, 200]
+                    limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.inboxFilter),
+                    pagingCallback: function (page, limit) {
+                        gridService.setGridPagingLimitByGridName(gridService.grids.inbox.inboxFilter, limit);
+                    }
                 })
             }
         }
