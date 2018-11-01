@@ -27,7 +27,8 @@ module.exports = function (app) {
                                                favoriteDocumentsService,
                                                Information,
                                                mailNotificationService,
-                                               workItems) {
+                                               workItems,
+                                               gridService) {
             'ngInject';
             var self = this;
             self.controllerName = 'groupInboxCtrl';
@@ -42,20 +43,16 @@ module.exports = function (app) {
             contextHelpService.setHelpTo('group-inbox');
             /**
              * @description Contains options for grid configuration
-             * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
+             * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
              */
             self.grid = {
-                limit: 5,
+                limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.group) || 5, // default limit
                 page: 1,
                 order: '',
-                limitOptions: [5, 10, 20, // limit options
-                    {
-                        label: langService.get('all'),
-                        value: function () {
-                            return (self.workItems.length + 21);
-                        }
-                    }
-                ]
+                limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.group, self.workItems),
+                pagingCallback: function (page, limit) {
+                    gridService.setGridPagingLimitByGridName(gridService.grids.inbox.group, limit);
+                }
             };
 
             /**

@@ -10,7 +10,8 @@ module.exports = function (app) {
                                                        toast,
                                                        ouCorrespondenceSiteService,
                                                        contextHelpService,
-                                                       correspondenceSiteService) {
+                                                       correspondenceSiteService,
+                                                       gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'correspondenceSiteCtrl';
@@ -29,16 +30,14 @@ module.exports = function (app) {
         self.selectedCorrespondenceSites = [];
 
         self.grid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.correspondenceSite) || 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, {
-                label: langService.get('all'),
-                value: function () {
-                    return (self.correspondenceSites.length + 21);
-                }
-            }]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.correspondenceSite, self.correspondenceSites),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.administration.correspondenceSite, limit);
+            }
         };
 
         self.statusServices = {

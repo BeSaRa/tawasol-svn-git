@@ -20,7 +20,8 @@ module.exports = function (app) {
                                            userInboxService,
                                            errorCode,
                                            contextHelpService,
-                                           generator) {
+                                           generator,
+                                           gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'folderCtrl';
@@ -41,19 +42,18 @@ module.exports = function (app) {
             id: 0
         }).setChildren(self.folders)];
 
-
+        /**
+         * @description
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
+         */
         self.grid = {
-            limit: 5, //self.globalSetting.searchAmount, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.folder) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.workItems.length + 21);
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.folder, self.folders),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.inbox.folder, limit);
+            }
         };
 
 

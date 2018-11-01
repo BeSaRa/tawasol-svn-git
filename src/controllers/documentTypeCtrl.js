@@ -8,7 +8,8 @@ module.exports = function (app) {
                                                  errorCode,
                                                  toast,
                                                  contextHelpService,
-                                                 dialog) {
+                                                 dialog,
+                                                 gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'documentTypeCtrl';
@@ -27,19 +28,19 @@ module.exports = function (app) {
          */
         self.selectedDocumentTypes = [];
 
+        /**
+         * @description
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
+         */
         self.grid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.documentType) || 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.documentTypes.length + 21);
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.documentType, self.documentTypes),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.administration.documentType, limit);
+            }
         };
 
         self.statusServices = {

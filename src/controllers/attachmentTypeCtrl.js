@@ -7,7 +7,8 @@ module.exports = function (app) {
                                                    langService,
                                                    toast,
                                                    contextHelpService,
-                                                   dialog) {
+                                                   dialog,
+                                                   gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'attachmentTypeCtrl';
@@ -22,24 +23,20 @@ module.exports = function (app) {
         self.attachmentTypes = attachmentTypes;
 
         /**
-         * @description Contains the selected attachment types
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          * @type {Array}
          */
         self.selectedAttachmentTypes = [];
 
         self.grid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.attachmentType) || 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.attachmentTypes.length + 21);
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.attachmentType, self.attachmentTypes),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.administration.attachmentType, limit);
+            }
         };
 
         self.statusServices = {

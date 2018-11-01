@@ -8,7 +8,8 @@ module.exports = function (app) {
                                           toast,
                                           contextHelpService,
                                           dialog,
-                                          rootEntity) {
+                                          rootEntity,
+                                          gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'themeCtrl';
@@ -24,20 +25,17 @@ module.exports = function (app) {
         self.selectedThemes = [];
         /**
          *@description Grid Bind
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.theme) || 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.themes.length + 21);
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.theme, self.themes),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.administration.theme, limit);
+            }
         };
         /**
          *@description Contains methods for CRUD operations for themes

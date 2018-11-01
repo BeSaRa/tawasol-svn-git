@@ -9,7 +9,7 @@
         </div>
 
         <ng-form class="white-bg" name="searchIncomingForm" id="searchIncomingForm" flex layout="column"
-              autocomplete="off" enter-submit-directive="btn_SearchIncoming">
+                 autocomplete="off" enter-submit-directive="btn_SearchIncoming">
             <md-tabs class="content white-bg" md-selected="ctrl.selectedTab">
                 <!-- EDIT/NEW SEARCH TAB -->
                 <md-tab label="{{lang.search}}" md-on-select="ctrl.setCurrentTab('search')">
@@ -169,7 +169,8 @@
                                     <td md-cell>{{searchedIncomingDocument.creatorInfo.getTranslatedName()}}</td>
                                     <td md-cell>{{searchedIncomingDocument.createdOn}}</td>
                                     <td md-cell class="td-data">
-                                        <main-site-sub-site-directive item="searchedIncomingDocument"></main-site-sub-site-directive>
+                                        <main-site-sub-site-directive
+                                                item="searchedIncomingDocument"></main-site-sub-site-directive>
                                     </td>
                                     <td md-cell ng-if="ctrl.selectedSearchedIncomingDocuments.length < 2">
                                         <div layout-align="start center" ng-if="!ctrl.selectedSearchedIncomingDocuments.length
@@ -198,7 +199,8 @@
                                 md-limit-options="ctrl.grid.limitOptions"
                                 md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
                                 md-total="{{(ctrl.searchedIncomingDocuments | filter:ctrl.searchModel).length}}"
-                                md-page-select>
+                                md-page-select
+                                md-on-paginate="ctrl.grid.pagingCallback">
                         </md-table-pagination>
                     </md-table-container>
                 </md-tab>

@@ -9,7 +9,7 @@
         </div>
 
         <ng-form class="white-bg" name="searchInternalForm" id="searchInternalForm" flex layout="column"
-              autocomplete="off" enter-submit-directive="btn_SearchInternal">
+                 autocomplete="off" enter-submit-directive="btn_SearchInternal">
             <md-tabs class="content white-bg" md-selected="ctrl.selectedTab">
                 <!-- EDIT/NEW SEARCH TAB -->
                 <md-tab label="{{lang.search}}" md-on-select="ctrl.setCurrentTab('search')">
@@ -53,7 +53,8 @@
                         </accordion-directive>
                         <div layout="row" ng-if="ctrl.selectedTab===0" layout-align="start center">
                             <!--ng-class="{'static-button':ctrl.showAdvancedSearch }"-->
-                            <md-button ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}" class="md-raised" ng-disabled="searchInternalForm.$invalid"
+                            <md-button ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}"
+                                       class="md-raised" ng-disabled="searchInternalForm.$invalid"
                                        id="btn_SearchInternal"
                                        ng-click="ctrl.search()">{{lang.search}}
                             </md-button>
@@ -195,7 +196,8 @@
                                 md-limit-options="ctrl.grid.limitOptions"
                                 md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
                                 md-total="{{(ctrl.searchedInternalDocuments | filter:ctrl.searchModel).length}}"
-                                md-page-select>
+                                md-page-select
+                                md-on-paginate="ctrl.grid.pagingCallback">
                         </md-table-pagination>
                     </md-table-container>
                 </md-tab>

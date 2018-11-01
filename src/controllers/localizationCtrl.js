@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('localizationCtrl', function (lookupService, _, toast, $rootScope, dialog, langService, cmsTemplate, $q, $filter) {
+    app.controller('localizationCtrl', function (lookupService, _, toast, $rootScope, dialog, langService, cmsTemplate, $q, $filter, gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'localizationCtrl';
@@ -18,11 +18,14 @@ module.exports = function (app) {
 
 
         self.grid = {
-            limit: 20, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.localization) || 20, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, 40, 50, 80, 100]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.localization, self.localizations),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.administration.localization, limit);
+            }
         };
 
         function _openSelectLocalizationModule($event) {

@@ -7,7 +7,8 @@ module.exports = function (app) {
                                                      toast,
                                                      errorCode,
                                                      contextHelpService,
-                                                     organizationTypeService) {
+                                                     organizationTypeService,
+                                                     gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'organizationTypeCtrl';
@@ -22,23 +23,19 @@ module.exports = function (app) {
 
         /**
          * @description Contains the selected organization types
-         * @type {Array}
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.selectedOrganizationTypes = [];
 
         self.grid = {
-            limit: 10, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.organizationType) || 10, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.organizationTypes.length + 21);
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.organizationType, self.organizationTypes),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.administration.organizationType, limit);
+            }
         };
 
         self.statusServices = {

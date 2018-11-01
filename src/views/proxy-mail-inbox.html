@@ -97,7 +97,8 @@
                                             md-order-by="generalStepElm.dueDate">
                                             <span>{{lang.due_date}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column md-order-by="{{ctrl.getSortingKey('mainSiteSubSiteString','Information')}}">
+                                        <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('mainSiteSubSiteString','Information')}}">
                                             <span>{{lang.correspondence_sites}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedProxyMailInboxes.length" md-column
@@ -189,7 +190,8 @@
                                                 ></md-icon>
                                             </md-button>-->
                                         </td>
-                                        <td class="serial-td" md-cell>{{proxyMailInbox.generalStepElm.docFullSerial}}</td>
+                                        <td class="serial-td" md-cell>{{proxyMailInbox.generalStepElm.docFullSerial}}
+                                        </td>
                                         <td md-cell class="indicator-td text-right"
                                             style="padding-right:0 !important; padding-left:0 !important;">
                                             <!-- Priority Level -->
@@ -257,7 +259,8 @@
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
                                     md-total="{{(ctrl.proxyMailInboxes | filter:ctrl.searchModel).length}}"
-                                    md-page-select>
+                                    md-page-select
+                                    md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

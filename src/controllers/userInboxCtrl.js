@@ -36,7 +36,8 @@ module.exports = function (app) {
                                               Information,
                                               mailNotificationService,
                                               UserSubscription,
-                                              userSubscriptionService) {
+                                              userSubscriptionService,
+                                              gridService) {
         'ngInject';
         var self = this;
 
@@ -110,27 +111,26 @@ module.exports = function (app) {
 
         /**
          * @description Contains options for grid configuration
-         * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
-            limit: 5, //self.globalSetting.searchAmount, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.userInbox) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, 50, 70, 90, 100, 200]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.userInbox, self.userInboxes),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.inbox.userInbox, limit);
+            }
         };
 
         self.starredGrid = {
-            limit: 5, //self.globalSetting.searchAmount, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.starred) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.starredUserInboxes.length + 21);
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.starred, self.starredUserInboxes),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.inbox.starred, limit);
+            }
         };
 
         self.fixedTabsCount = 1;
@@ -1074,8 +1074,8 @@ module.exports = function (app) {
                 icon: 'plus',
                 text: 'grid_action_add_to',
                 class: "action-green",
-                checkShow: self.checkToShowAction ,
-                subMenu : [
+                checkShow: self.checkToShowAction,
+                subMenu: [
                     // Add To Folder
                     {
                         type: 'action',

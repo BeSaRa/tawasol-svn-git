@@ -8,7 +8,8 @@ module.exports = function (app) {
                                                langService,
                                                toast,
                                                contextHelpService,
-                                               dialog) {
+                                               dialog,
+                                               gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'entityTypeCtrl';
@@ -21,19 +22,19 @@ module.exports = function (app) {
         self.promise = null;
         self.selectedEntityTypes = [];
 
+        /**
+         * @description
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
+         */
         self.grid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.entityType) || 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.entityTypes.length + 21);
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.entityType, self.entityTypes),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.administration.entityType, limit);
+            }
         };
         /**
          *@description Contains methods for CRUD operations for entity types

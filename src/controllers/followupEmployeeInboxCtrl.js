@@ -26,7 +26,8 @@ module.exports = function (app) {
                                                           mailNotificationService,
                                                           $timeout,
                                                           favoriteDocumentsService,
-                                                          generator) {
+                                                          generator,
+                                                          gridService) {
         'ngInject';
         var self = this;
 
@@ -63,24 +64,16 @@ module.exports = function (app) {
 
         /**
          * @description Contains options for grid configuration
-         * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
-            limit: 5, //self.globalSetting.searchAmount, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.followupEmp) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    /*label: self.globalSetting.searchAmountLimit.toString(),
-                     value: function () {
-                     return self.globalSetting.searchAmountLimit
-                     }*/
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.followupEmployeeInboxes.length + 21);
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.followupEmp, self.followupEmployeeInboxes),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.inbox.followupEmp, limit);
+            }
         };
 
         /**
@@ -585,7 +578,6 @@ module.exports = function (app) {
                         });
                 });
         };
-
 
 
         /**

@@ -13,7 +13,8 @@ module.exports = function (app) {
                                                 correspondenceService,
                                                 mailNotificationService,
                                                 ResolveDefer,
-                                                $state) {
+                                                $state,
+                                                gridService) {
         var self = this;
 
         self.controllerName = 'g2gIncomingCtrl';
@@ -34,20 +35,16 @@ module.exports = function (app) {
 
         /**
          * @description Contains options for grid configuration
-         * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.g2g.incoming) || 5, // default limit
             page: 1, // first page
             order: 'arName', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.g2gItems.length + 21);
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.g2g.incoming, self.g2gItems),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.g2g.incoming, limit);
+            }
         };
 
         /**

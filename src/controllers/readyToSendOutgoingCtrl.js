@@ -19,7 +19,8 @@ module.exports = function (app) {
                                                         broadcastService,
                                                         correspondenceService,
                                                         ResolveDefer,
-                                                        mailNotificationService) {
+                                                        mailNotificationService,
+                                                        gridService) {
         'ngInject';
         var self = this;
 
@@ -51,18 +52,14 @@ module.exports = function (app) {
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
          */
         self.grid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.outgoing.readyToSend) || 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.readyToSendOutgoings.length + 21);
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.outgoing.readyToSend, self.readyToSendOutgoings),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.outgoing.readyToSend, limit);
+            }
         };
 
         /**
@@ -811,12 +808,12 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     var hasPermission = false;
-                    if(info.documentClass === 'outgoing'){
+                    if (info.documentClass === 'outgoing') {
                         hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
-                    } else if(info.documentClass === 'incoming'){
+                    } else if (info.documentClass === 'incoming') {
                         hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
                     }
-                    else if(info.documentClass === 'internal') {
+                    else if (info.documentClass === 'internal') {
                         hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                     }
                     return self.checkToShowAction(action, model)

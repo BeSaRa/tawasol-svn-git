@@ -119,7 +119,8 @@
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
                                     md-total="{{(ctrl.readyToSendOutgoings | filter:ctrl.searchModel).length}}"
-                                    md-page-select>
+                                    md-page-select
+                                    md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

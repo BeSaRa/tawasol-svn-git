@@ -22,7 +22,8 @@ module.exports = function (app) {
                                                   broadcastService,
                                                   ResolveDefer,
                                                   correspondenceService,
-                                                  mailNotificationService) {
+                                                  mailNotificationService,
+                                                  gridService) {
             'ngInject';
             var self = this;
 
@@ -51,21 +52,17 @@ module.exports = function (app) {
 
             /**
              * @description Contains options for grid configuration
-             * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
+             * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
              */
             self.grid = {
-                limit: 5, // default limit
+                limit: gridService.getGridPagingLimitByGridName(gridService.grids.outgoing.draft) || 5, // default limit
                 page: 1, // first page
                 //order: 'arName', // default sorting order
                 order: '', // default sorting order
-                limitOptions: [5, 10, 20, // limit options
-                    {
-                        label: langService.get('all'),
-                        value: function () {
-                            return (self.draftOutgoings.length + 21);
-                        }
-                    }
-                ]
+                limitOptions: gridService.getGridLimitOptions(gridService.grids.outgoing.draft, self.draftOutgoings),
+                pagingCallback: function (page, limit) {
+                    gridService.setGridPagingLimitByGridName(gridService.grids.outgoing.draft, limit);
+                }
             };
 
             /**

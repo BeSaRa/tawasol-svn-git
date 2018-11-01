@@ -49,7 +49,9 @@ module.exports = function (app) {
                 favorite: 'userFavorite',
                 folder: 'userFolder',
                 proxy: 'userProxy',
-                group: 'userGroup'
+                group: 'userGroup',
+                starred: 'starred',
+                inboxFilter: 'inboxFilter'
             },
             department: {
                 incoming: 'depInc',
@@ -203,6 +205,14 @@ module.exports = function (app) {
             if (gridName === self.grids.inbox.sentItem) {
                 return [5, 10, 20, 100, 200];
             }
+            else if (gridName === self.grids.inbox.userInbox) {
+                return [5, 10, 20, 50, 70, 90, 100, 200];
+            }
+            else if (gridName === self.grids.inbox.inboxFilter) {
+                return [5, 10, 20, 200];
+            }
+            else if (gridName === self.grids.administration.localization)
+                return [5, 10, 20, 40, 50, 80, 100];
             return (
                 [
                     5, 10, 20,

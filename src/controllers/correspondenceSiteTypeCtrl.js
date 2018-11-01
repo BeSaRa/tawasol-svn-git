@@ -8,13 +8,15 @@ module.exports = function (app) {
                                                            langService,
                                                            toast,
                                                            contextHelpService,
-                                                           dialog) {
+                                                           dialog,
+                                                           gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'correspondenceSiteTypeCtrl';
         contextHelpService.setHelpTo('correspondence-site-types');
         /**
          *@description All correspondence site types
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
 
         self.correspondenceSiteTypes = correspondenceSiteTypes;
@@ -22,18 +24,14 @@ module.exports = function (app) {
         self.promise = null;
         self.selectedCorrespondenceSiteTypes = [];
         self.grid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.correspondenceSiteType) || 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.correspondenceSiteTypes.length + 21)
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.correspondenceSiteType, self.correspondenceSiteTypes),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.administration.correspondenceSiteType, limit);
+            }
         };
         /**
          *@description Contains methods for CRUD operations for correspondence site types

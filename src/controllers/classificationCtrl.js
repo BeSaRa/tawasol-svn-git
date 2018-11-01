@@ -9,7 +9,8 @@ module.exports = function (app) {
                                                    toast,
                                                    ouClassificationService,
                                                    classificationService,
-                                                   contextHelpService) {
+                                                   contextHelpService,
+                                                   gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'classificationCtrl';
@@ -24,22 +25,20 @@ module.exports = function (app) {
         self.classifications = classificationService.getMainClassifications(classifications);
 
         /**
-         * @description Contains the selected classification
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          * @type {Array}
          */
         self.selectedClassifications = [];
 
         self.grid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.classification) || 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, {
-                label: langService.get('all'),
-                value: function () {
-                    return (self.classifications.length) + 21;
-                }
-            }]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.classification, self.classifications),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.administration.classification, limit);
+            }
         };
 
         self.statusServices = {

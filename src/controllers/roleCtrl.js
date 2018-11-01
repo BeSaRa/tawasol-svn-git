@@ -8,7 +8,8 @@ module.exports = function (app) {
                                          toast,
                                          ouApplicationUsers,
                                          contextHelpService,
-                                         dialog) {
+                                         dialog,
+                                         gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'roleCtrl';
@@ -22,18 +23,14 @@ module.exports = function (app) {
         self.selectedRoles = [];
 
         self.grid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.role) || 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.roles.length + 21);
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.role, self.roles),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.administration.role, limit);
+            }
         };
 
         function _prepareRoleMemebers() {

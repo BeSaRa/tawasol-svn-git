@@ -134,7 +134,8 @@
                                         </td>
                                         <!--<td md-cell>{{workItem.generalStepElm.dueDate}}</td>-->
                                         <td md-cell>
-                                            <main-site-sub-site-directive item="workItem"></main-site-sub-site-directive>
+                                            <main-site-sub-site-directive
+                                                    item="workItem"></main-site-sub-site-directive>
                                         </td>
                                         <!--<td md-cell>{{workItem.subCoreSite.getTranslatedName()}}</td>-->
                                         <!--<td md-cell>{{workItem.generalStepElm.docType}}</td>-->
@@ -168,7 +169,8 @@
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
                                     md-total="{{(ctrl.workItems | filter:ctrl.searchModel).length}}"
-                                    md-page-select>
+                                    md-page-select
+                                    md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>

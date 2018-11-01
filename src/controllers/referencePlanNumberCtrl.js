@@ -7,7 +7,8 @@ module.exports = function (app) {
                                                         langService,
                                                         toast,
                                                         contextHelpService,
-                                                        dialog) {
+                                                        dialog,
+                                                        gridService) {
         'ngInject';
         var self = this;
 
@@ -29,21 +30,17 @@ module.exports = function (app) {
 
         /**
          * @description Contains options for grid configuration
-         * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
-            limit: 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.referenceNumberPlan) || 5, // default limit
             page: 1, // first page
             //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.referencePlanNumbers.length + 21);
-                    }
-                }
-            ]
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.referenceNumberPlan, self.referencePlanNumbers),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.administration.referenceNumberPlan, limit);
+            }
         };
 
         /**
