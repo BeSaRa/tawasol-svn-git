@@ -987,12 +987,14 @@ module.exports = function (app) {
          * @description duplicate current version
          * @param workItem
          * @param $event
+         * @param defer
          */
-        self.duplicateCurrentVersion = function (workItem, $event) {
+        self.duplicateCurrentVersion = function (workItem, $event , defer) {
             var info = workItem.getInfo();
             return workItem
                 .duplicateVersion($event)
                 .then(function () {
+                    new ResolveDefer(defer);
                     $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
@@ -1004,13 +1006,15 @@ module.exports = function (app) {
          * @description duplicate specific version
          * @param workItem
          * @param $event
+         * @param defer
          * @return {*}
          */
-        self.duplicateVersion = function (workItem, $event) {
+        self.duplicateVersion = function (workItem, $event , defer) {
             var info = workItem.getInfo();
             return workItem
                 .duplicateSpecificVersion($event)
                 .then(function () {
+                    new ResolveDefer(defer);
                     $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
                         vsId: info.vsId,
                         action: 'duplicateVersion',
