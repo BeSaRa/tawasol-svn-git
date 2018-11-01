@@ -39,8 +39,9 @@ module.exports = function (app) {
 
         self.setSelectedUser = function () {
             self.selectedUserDomain = null;
-            if (self.selectedApplicationUser)
+            if (self.selectedApplicationUser) {
                 self.selectedUserDomain = self.selectedApplicationUser.domainName;
+            }
         };
 
         self.itemNeedReason = function () {
@@ -75,7 +76,8 @@ module.exports = function (app) {
                 return dialog.hide({
                     wobNumber: info.wobNumber,
                     comment: self.reason,
-                    user: self.selectedUserDomain
+                    user: self.selectedUserDomain,
+                    appUserOUID: self.selectedOrganization
                 });
             } else {
                 dialog.hide(_.map(self.workItems, function (workItem) {
@@ -86,9 +88,10 @@ module.exports = function (app) {
                     if (!self.hasCustomUser(workItem)) {
                         workItem.user = self.selectedUserDomain
                     }
-                    else{
+                    else {
                         workItem.user = workItem.domainName;
                     }
+                    workItem.appUserOUID = self.selectedOrganization;
                     return workItem;
                 }));
             }

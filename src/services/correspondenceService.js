@@ -880,7 +880,8 @@ module.exports = function (app) {
             return $http
                 .put((urlService.userInbox + '/' + workItem.wobNumber + '/reassign'), {
                     user: workItem.user,
-                    comment: workItem.comment
+                    comment: workItem.comment,
+                    appUserOUID: workItem.appUserOUID
                 })
                 .then(function (result) {
                     return result.data.rs;
@@ -894,9 +895,10 @@ module.exports = function (app) {
             return $http
                 .put(urlService.userInbox + '/reassign/bulk', _.map(workItems, function (workItem) {
                     return {
-                        wobNumber: workItem.getInfo().wobNumber,
+                        wobNum: workItem.getInfo().wobNumber,
                         comment: workItem.comment,
-                        user: workItem.user
+                        user: workItem.user,
+                        appUserOUID: workItem.appUserOUID
                     }
                 }))
                 .then(function (result) {

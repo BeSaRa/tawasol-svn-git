@@ -557,6 +557,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.transferToAnotherEmployee = function (workItem, $event, defer) {
+            
             correspondenceService
                 .openTransferDialog(workItem, self.currentSelectedUser, $event)
                 .then(function () {
