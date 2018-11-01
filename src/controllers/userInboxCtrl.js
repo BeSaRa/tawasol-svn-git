@@ -951,7 +951,7 @@ module.exports = function (app) {
         };
 
         /**
-         * @description edit word doucment in desktop
+         * @description edit word document in desktop
          * @param workItem
          * @return {Promise}
          */
