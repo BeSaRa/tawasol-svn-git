@@ -1,7 +1,8 @@
 module.exports = function (app) {
     app.service('downloadService', function (urlService,
                                              $http,
-                                             tokenService) {
+                                             tokenService,
+                                             generator) {
         'ngInject';
         var self = this;
         self.serviceName = 'downloadService';
@@ -15,8 +16,8 @@ module.exports = function (app) {
             mainDocumentDownload: function (vsId, $event) {
                 vsId = typeof vsId.getInfo === 'function' ? vsId.getInfo().vsId : vsId;
                 return self.downloadMainDocument(vsId).then(function (result) {
-                    console.log("EX" , vsId);
                     window.open(result);
+                    //generator.checkIfBrowserPopupBlocked(window);
                     return true;
                 });
             },

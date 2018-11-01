@@ -3,7 +3,8 @@ module.exports = function (app) {
                                        CMSModelInterceptor,
                                        tableGeneratorService,
                                        listGeneratorService,
-                                       moment) {
+                                       moment,
+                                       $location) {
         'ngInject';
         var self = this, dialog, langService, toast, rootEntity;
         //TODO: This property is just added to show/hide feature according for demo build. It will be removed soon.
@@ -697,6 +698,18 @@ module.exports = function (app) {
                 return false;
             }
             return true;
+        };
+
+        /**
+         * @description Checks if the browser popup is blocked
+         * @param window
+         */
+        self.checkIfBrowserPopupBlocked = function (window) {
+            // alert to user if popup is blocked in browser settings
+            if (!window || window.closed || typeof window.closed == 'undefined') {
+                var domain = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/";
+                dialog.infoMessage("Popup is blocked. Please allow the popup in browser settings for <b>" + domain + "</b>");
+            }
         }
     })
 };
