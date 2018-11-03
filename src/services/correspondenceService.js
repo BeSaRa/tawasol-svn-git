@@ -1044,6 +1044,7 @@ module.exports = function (app) {
         /**
          * @description send correspondence to ready to export queue.
          * @param correspondence
+         * @param $event
          */
         self.sendCorrespondenceToReadyToExport = function (correspondence, $event) {
             var normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
@@ -1085,6 +1086,7 @@ module.exports = function (app) {
          * @description send correspondence to central archive from review.
          * @param correspondence
          * @param ignoreMessage
+         * @param $event
          */
         self.sendToCentralArchiveReadyToExport = function (correspondence, ignoreMessage, $event) {
             var normalCorrespondence = angular.isArray(correspondence) ? !correspondence[0].isWorkItem() : !correspondence.isWorkItem();
@@ -3001,7 +3003,7 @@ module.exports = function (app) {
         self.duplicateCorrespondenceVersion = function (correspondence, duplicateOption, majorVersion) {
             var info = correspondence.getInfo();
             return $http
-                .put(_createUrlSchema(null, info.documentClass, 'duplicate/vsid/' + info.vsId + (majorVersion !== false ? '/major-version-number/' + majorVersion : '')), duplicateOption)
+                .put(_createUrlSchema(null, info.documentClass, 'duplicate/vsid/' + info.vsId + (typeof majorVersion !== 'undefined' ? '/major-version-number/' + majorVersion : '')), duplicateOption)
                 .then(function (result) {
                     result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(info.documentClass), 'View' + _getModelName(info.documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(info.documentClass)));
                     result.data.rs.metaData.docStatus = 2; // by default
