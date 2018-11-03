@@ -3001,7 +3001,7 @@ module.exports = function (app) {
         self.duplicateCorrespondenceVersion = function (correspondence, duplicateOption, majorVersion) {
             var info = correspondence.getInfo();
             return $http
-                .put(_createUrlSchema(null, info.documentClass, 'duplicate/vsid/' + info.vsId + (majorVersion ? '/major-version-number/' + majorVersion : '')), duplicateOption)
+                .put(_createUrlSchema(null, info.documentClass, 'duplicate/vsid/' + info.vsId + (majorVersion !== false ? '/major-version-number/' + majorVersion : '')), duplicateOption)
                 .then(function (result) {
                     result.data.rs.metaData = generator.interceptReceivedInstance(['Correspondence', _getModelName(info.documentClass), 'View' + _getModelName(info.documentClass)], generator.generateInstance(result.data.rs.metaData, _getModel(info.documentClass)));
                     result.data.rs.metaData.docStatus = 2; // by default
@@ -3051,7 +3051,6 @@ module.exports = function (app) {
         self.updateContentInformation = function (correspondence, contentInformation) {
             var info = correspondence.getInfo();
             return $http.post(_createUrlSchema(info.vsId, info.documentClass, 'with-content-view-url'), contentInformation).then(function (result) {
-                console.log("RESULT", result.data.rs);
                 return result.data.rs;
             });
         };
