@@ -940,7 +940,6 @@ module.exports = function (app) {
 
         // new view document
         self.openNewViewDocument = function (workItem) {
-            workItem = self.userInboxes[0];
             workItem.viewNewWorkItemDocument(self.gridActions, 'userInbox')
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page);
