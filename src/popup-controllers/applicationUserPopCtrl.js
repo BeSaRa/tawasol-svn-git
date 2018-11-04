@@ -482,7 +482,7 @@ module.exports = function (app) {
             else {
                 defer.resolve(tabName);
             }
-            return defer.promise.then(function(tab){
+            return defer.promise.then(function (tab) {
                 self.selectedTab = tab;
             });
         };
@@ -1006,7 +1006,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.openWorkflowParticipationDialog = function (ouApplicationUser, $event) {
-            ouApplicationUser.wfsecurity = ouApplicationUser.wfsecurity || self.globalSetting.wfsecurity;
+            ouApplicationUser.wfsecurity = (typeof ouApplicationUser.wfsecurity === 'undefined') ? self.globalSetting.wfsecurity : ouApplicationUser.wfsecurity;
             return dialog
                 .showDialog({
                     targetEvent: $event,
@@ -1022,7 +1022,7 @@ module.exports = function (app) {
                             return organizationService.loadOrganizations();
                         },
                         privateUsers: function (ouApplicationUserService) {
-                            'ngInject'
+                            'ngInject';
                             return ouApplicationUserService.loadAllPrivateUsers();
                         }
                     }

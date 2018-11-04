@@ -35,7 +35,7 @@ module.exports = function (app) {
             self.organizationsWithPrivateUsers[index].privateUsers.push(privateUser);
         });
 
-        self.workFlowSecurities = self.workFlowSecurities = lookupService.returnLookups(lookupService.workflowSecurity);
+        self.workFlowSecurities = angular.copy(lookupService.returnLookups(lookupService.workflowSecurity));
 
         self.ouApplicationUser.privateUsers = _.filter(self.ouApplicationUser.privateUsers, function (privateUser) {
             return _.map(privateUsers, 'id').indexOf(privateUser.id) > -1;
@@ -54,7 +54,6 @@ module.exports = function (app) {
         };
 
 
-
         self.getSelectedManagersText = function () {
             if (self.ouApplicationUser.managers && self.ouApplicationUser.managers.length) {
                 var map = _.map(self.ouApplicationUser.managers, function (manager) {
@@ -67,7 +66,6 @@ module.exports = function (app) {
 
         self.getSelectedPrivateUsersText();
         self.getSelectedManagersText();
-
 
 
         var requiredFields = [
