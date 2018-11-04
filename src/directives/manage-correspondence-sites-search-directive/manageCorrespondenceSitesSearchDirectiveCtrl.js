@@ -58,7 +58,7 @@ module.exports = function (app) {
         // book vsId
         self.vsId = null;
         // followup statuses
-        self.followUpStatuses = lookupService.returnLookups(lookupService.followupStatus);
+        self.followUpStatuses = angular.copy(lookupService.returnLookups(lookupService.followupStatus));
         var noneLookup = new Lookup({
             defaultEnName: langService.getByLangKey('none', 'en'),
             defaultArName: langService.getByLangKey('none', 'ar')
