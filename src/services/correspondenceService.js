@@ -54,6 +54,7 @@ module.exports = function (app) {
                                                    IncomingSearch,
                                                    InternalSearch,
                                                    GeneralSearch,
+                                                   OutgoingIncomingSearch,
                                                    G2G,
                                                    G2GMessagingHistory,
                                                    DocumentComment,
@@ -77,6 +78,7 @@ module.exports = function (app) {
         util.inherits(IncomingSearch, Outgoing);
         util.inherits(InternalSearch, Outgoing);
         util.inherits(GeneralSearch, Correspondence);
+        util.inherits(OutgoingIncomingSearch, IncomingSearch);
 
 
         /**

@@ -93,4 +93,5 @@ module.exports = function (app) {
     require('./DocumentSecurityInterceptor')(app);
     require('./DocumentSecuritySettingInterceptor')(app);
     require('./CorrespondenceVersionInterceptor')(app);
+    require('./SearchOutgoingIncomingInterceptor')(app);
 };

@@ -70,4 +70,5 @@ module.exports = function (app) {
     require('./simpleInternalCtrl')(app);
     require('./simpleOutgoingCtrl')(app);
     require('./simpleIncomingCtrl')(app);
+    require('./searchOutgoingIncomingCtrl')(app);
 };

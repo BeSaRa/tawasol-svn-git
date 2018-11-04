@@ -111,4 +111,5 @@ module.exports = function (app) {
 	require('./documentSecurityService')(app);
 	require('./thumbnailService')(app);
 	require('./gridService')(app);
+	require('./searchOutgoingIncomingService')(app);
 };

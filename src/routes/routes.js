@@ -860,6 +860,35 @@ module.exports = function (app) {
                     }*/
                 }
             })
+            //Outgoing Incoming Search
+            .state('app.search.outgoing-incoming', {
+                url: '/outgoing-incoming',
+                template: templateProvider.getView('search-outgoing-incoming'),
+                controller: 'searchOutgoingIncomingCtrl',
+                controllerAs: 'ctrl',
+                permission: '',
+                resolve: {
+                    organizations: function (organizationService) {
+                        'ngInject';
+                        return organizationService.loadOrganizations()
+                            .then(function (result) {
+                                return _.filter(result, function (organization) {
+                                    return organization.hasRegistry;
+                                })
+                            });
+                    },
+                    correspondenceSiteTypes: function (correspondenceSiteTypeService) {
+                        'ngInject';
+                        return correspondenceSiteTypeService.loadCorrespondenceSiteTypes();
+                    },
+                    propertyConfigurations: function (propertyConfigurationService, employeeService) {
+                        'ngInject';
+                        var ouId = employeeService.getEmployee().organization.ouid;
+                        return propertyConfigurationService
+                            .loadPropertyConfigurationsByDocumentClassAndOU('incoming', ouId);
+                    }
+                }
+            })
             // outgoing
             .state('app.outgoing', {
                 abstract: true,

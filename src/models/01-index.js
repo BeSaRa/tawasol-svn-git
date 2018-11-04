@@ -156,4 +156,5 @@ module.exports = function (app) {
     require('./DocumentSecurityPage')(app);
     require('./ImageThumbnail')(app);
     require('./DuplicateOption')(app);
+    require('./OutgoingIncomingSearch')(app);
 };

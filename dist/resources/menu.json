@@ -468,6 +468,18 @@
         "state": "app.search.general"
     },
     {
+        "ID": 107,
+        "lang_key": "menu_item_search_module_outgoing_incoming",
+        "icon": "magnify",
+        "parent": 47,
+        "link": "",
+        "icon_type": "font",
+        "sort_order": 5,
+        "active": true,
+        "sort_value": 0,
+        "state": "app.search.outgoing-incoming"
+    },
+    {
         "ID": 85,
         "lang_key": "menu_item_document_templates",
         "icon": "arrow-up-box",
