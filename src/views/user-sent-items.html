@@ -68,6 +68,10 @@
                                             md-order-by="{{ctrl.getSortingKey('userFromInfo', 'Information')}}">
                                             <span>{{lang.sent_items_sender}}</span>
                                         </th>
+                                        <th ng-if="!ctrl.selectedUserSentItems.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('receiverInfo', 'Information')}}">
+                                            <span>{{lang.sent_items_receiver}}</span>
+                                        </th>
                                         <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="dueDate">
                                             <span>{{lang.sent_items_due_date}}</span>
                                         </th>
@@ -128,6 +132,7 @@
                                         <!--<td md-cell>{{userSentItem.getTranslatedAction()}}</td>-->
                                         <td md-cell>{{userSentItem.action.getTranslatedName()}}</td>
                                         <td md-cell>{{userSentItem.userFromInfo.getTranslatedName()}}</td>
+                                        <td md-cell>{{userSentItem.receiverInfo.getTranslatedName()}}</td>
                                         <td md-cell class="td-data">
                                             <grid-indicator-directive record="userSentItem"
                                                                       indicator-type="dueDate"
