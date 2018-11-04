@@ -6,7 +6,7 @@ module.exports = function (app) {
             // just to bind controller properties
             controller: function ($scope) {
                 'ngInject';
-                this.name = 'Ahmed Mostafa';
+
             },
             controllerAs: 'itemCtrl',
             bindToController: true,

@@ -232,15 +232,20 @@ module.exports = function (app) {
             }
         };
 
-        self.filterActionsByProperty = function (propertyKey, propertyValue, listOfActions) {
+        self.filterActionsByProperty = function (model, actions, propertyKey, propertyValue, listOfActions) {
             var flatActions = listOfActions ? listOfActions : [];
-            for (var i = 0; i < self.gridActions.length; i++) {
-                var mainAction = self.gridActions[i];
-                if (mainAction.hasOwnProperty(propertyKey) && mainAction[propertyKey] === propertyValue) {
+            for (var i = 0; i < actions.length; i++) {
+                var mainAction = actions[i];
+                if (mainAction.text === 'grid_action_approve' && model.getInfo().title === 'check from outlook') {
+                    debugger;
+                    console.log("mainAction.checkShow(mainAction, model)", mainAction.checkShow(mainAction, model));
+                }
+
+                if (mainAction.hasOwnProperty(propertyKey) && mainAction[propertyKey] === propertyValue && mainAction.checkShow(mainAction, model)) {
                     flatActions.push(mainAction);
                 }
-                if (mainAction.hasOwnProperty('subMenu') && mainAction.subMenu.length) {
-                    self.filterActionsByProperty(propertyKey, propertyValue, flatActions);
+                if (mainAction.hasOwnProperty('subMenu') && mainAction.subMenu.length &&  mainAction.checkShow(mainAction, model)) {
+                    self.filterActionsByProperty(model, mainAction.subMenu, propertyKey, propertyValue, flatActions);
                 }
             }
             // the returned flat actions for the viewer
