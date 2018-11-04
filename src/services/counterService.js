@@ -10,6 +10,7 @@ module.exports = function (app) {
         var self = this;
         self.serviceName = 'counterService';
         self.counter = {};
+        self.folderCount = {};
         /**
          * load all counters for service
          */
@@ -19,7 +20,9 @@ module.exports = function (app) {
                     excludeLoading: true
                 })
                 .then(function (folder) {
-                    var folderCount = _.reduce(folder.data.rs, function (oldValue, currentValue) {
+                    self.folderCount = folder.data.rs;
+
+                    var folderCount = _.reduce(self.folderCount, function (oldValue, currentValue) {
                         return oldValue + currentValue;
                     }, 0);
                     return $http.get(urlService.counters, {
@@ -31,7 +34,7 @@ module.exports = function (app) {
                     }).catch(function (error) {
                         return errorCode.checkIf(error, 'ENTITY_NOT_FOUND', function () {
                             return $q.resolve({});
-                        })
+                        });
                     });
                 });
 

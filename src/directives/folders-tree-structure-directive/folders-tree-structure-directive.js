@@ -18,7 +18,8 @@ module.exports = function (app) {
                 allowControl: '=?',
                 addCallback: '=?',
                 deleteCallback: '=?',
-                editCallback: '=?'
+                editCallback: '=?',
+                count: '='
             }
         }
     })
