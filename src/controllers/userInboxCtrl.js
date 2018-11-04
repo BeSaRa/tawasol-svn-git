@@ -940,7 +940,10 @@ module.exports = function (app) {
 
         // new view document
         self.openNewViewDocument = function (workItem) {
-            workItem.viewNewWorkItemDocument(self.gridActions, 'userInbox')
+            workItem.viewNewInboxWorkItem({
+                gridActions: self.gridActions,
+                viewerActions: self.magazineQuickActions
+            }, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page);
                 })
