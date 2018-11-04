@@ -239,7 +239,7 @@ module.exports = function (app) {
                 if (mainAction.hasOwnProperty(propertyKey) && mainAction[propertyKey] === propertyValue) {
                     flatActions.push(mainAction);
                 }
-                if (mainAction.hasOwnProperty('children') && mainAction.children.length) {
+                if (mainAction.hasOwnProperty('subMenu') && mainAction.subMenu.length) {
                     self.filterActionsByProperty(propertyKey, propertyValue, flatActions);
                 }
             }
