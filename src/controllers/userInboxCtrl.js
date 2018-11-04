@@ -1472,7 +1472,7 @@ module.exports = function (app) {
                     {
                         type: 'action',
                         icon: 'approval',
-                        text: 'grid_action_electronic',//e_signature
+                        text: 'grid_action_electronic_approve',//e_signature
                         callback: self.signESignature,
                         class: "action-green",
                         sticky: true,
