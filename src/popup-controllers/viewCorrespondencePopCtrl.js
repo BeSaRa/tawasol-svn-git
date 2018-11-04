@@ -129,7 +129,7 @@ module.exports = function (app) {
 
             // view linked document in popup.
             if (popup) {
-                return linkedDoc.viewFromQueue([],'g2gReturned',$event);
+                return linkedDoc.viewFromQueue([], 'g2gReturned', $event);
             }
 
             return correspondenceService
@@ -230,56 +230,21 @@ module.exports = function (app) {
         /**
          * @description Filters the action buttons for showing/hiding shortcut actions
          * It will skip the separators
-         * @param direction
          * @returns {Array}
          */
-        self.filterViewerActionShortcuts = function (direction) {
-            var mainAction, subAction;
-            var shortcutActions = [];
-            if (!!self.shortcut) {
-                for (var i = 0; i < self.viewerActions.length; i++) {
-                    mainAction = self.viewerActions[i];
-                    if (mainAction.type.toLowerCase() === "action" && !mainAction.hide) {
-                        /*
-                        * If action has property (shortcut) and it has value = true
-                        * Else if action don't has property (shortcut) or has property (shortcut) but value = false and has subMenu property with array value
-                        * */
-                        if (mainAction.hasOwnProperty('shortcut') && mainAction.shortcut) {
-                            shortcutActions.push(mainAction);
-                        }
-                        else if (
-                            (!mainAction.hasOwnProperty('shortcut') || (mainAction.hasOwnProperty('shortcut') && !mainAction.shortcut))
-                            && (mainAction.hasOwnProperty('subMenu') && angular.isArray(mainAction.subMenu))
-                        ) {
-                            for (var j = 0; j < mainAction.subMenu.length; j++) {
-                                subAction = mainAction.subMenu[j];
-
-                                /*If sub menu has separator, show it in vertical only. not in horizontal*/
-                                if (direction === 'vertical') {
-                                    if (subAction.type.toLowerCase() === "action" && !subAction.hide
-                                        && (subAction.hasOwnProperty('shortcut') && subAction.shortcut)
-                                    ) {
-                                        shortcutActions.push(mainAction);
-                                    }
-                                    else if (subAction.type.toLowerCase() === "separator" && !subAction.hide)
-                                        shortcutActions.push(mainAction);
-                                }
-                                else if (direction === 'horizontal') {
-                                    if (subAction.type.toLowerCase() === "action" && !subAction.hide && subAction.hasOwnProperty('shortcut') && subAction.shortcut) {
-                                        shortcutActions.push(subAction);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    //skip the separators in shortcut menu
-                    /*else if (mainAction.type.toLowerCase() === "separator" && !mainAction.hide) {
-                        shortcutActions.push(mainAction)
-                    }*/
+        self.filterActionsByProperty = function (propertyKey, propertyValue, listOfActions) {
+            var flatActions = listOfActions ? listOfActions : [];
+            for (var i = 0; i < self.actions.length; i++) {
+                var mainAction = self.actions[i];
+                if (mainAction.hasOwnProperty(propertyKey) && mainAction[propertyKey] === propertyValue) {
+                    flatActions.push(mainAction);
                 }
-                return shortcutActions;
+                if (mainAction.hasOwnProperty('children') && mainAction.children.length) {
+                    self.filterActionsByProperty(propertyKey, propertyValue, flatActions);
+                }
             }
-            return self.viewerActions;
+            // the returned flat actions for the viewer
+            return flatActions;
         };
 
     });

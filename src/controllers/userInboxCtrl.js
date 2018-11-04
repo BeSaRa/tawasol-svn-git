@@ -939,11 +939,20 @@ module.exports = function (app) {
         };
 
         // new view document
-        self.openNewViewDocument = function (workItem) {
-            workItem.viewNewInboxWorkItem({
-                gridActions: self.gridActions,
-                viewerActions: self.magazineQuickActions
-            }, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
+        self.openNewViewDocument = function (workItem, $event) {
+            // don't remove the current commented
+            // workItem.viewNewInboxWorkItem({
+            //     gridActions: self.gridActions,
+            //     viewerActions: self.magazineQuickActions
+            // }, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
+            //     .then(function () {
+            //         self.reloadUserInboxes(self.grid.page);
+            //     })
+            //     .catch(function () {
+            //         self.reloadUserInboxes(self.grid.page);
+            //     });
+
+            workItem.viewNewWorkItemDocument(self.gridActions, 'userInbox', $event)
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page);
                 })
@@ -1061,6 +1070,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.terminate,
                 class: "action-green",
+                sticky: true,
                 checkShow: self.checkToShowAction
             },
             // Add To Folder
@@ -1113,6 +1123,7 @@ module.exports = function (app) {
                 text: 'grid_action_forward',
                 shortcut: true,
                 callback: self.forward,
+                sticky: true,
                 class: "action-green",
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model)
@@ -1141,6 +1152,7 @@ module.exports = function (app) {
                 icon: 'reply',
                 text: 'grid_action_reply',
                 callback: self.reply,
+                sticky: true,
                 class: "action-green",
                 checkShow: function (action, model) {
                     return self.checkToShowAction(action, model) && !model.isBroadcasted();
@@ -1463,6 +1475,7 @@ module.exports = function (app) {
                         text: 'grid_action_electronic',//e_signature
                         callback: self.signESignature,
                         class: "action-green",
+                        sticky: true,
                         permissionKey: "ELECTRONIC_SIGNATURE",
                         checkShow: self.checkToShowAction
                     },

@@ -121,7 +121,7 @@
                         </span>
                         </div>
                         <div class="magazine-fix-actions">
-                        <span ng-repeat="quickAction in ctrl.filterQuickActionShortcuts('horizontal') track by $index"
+                        <span ng-repeat="quickAction in ctrl.filterActionsByProperty('sticky' , true) track by $index"
                               ng-if="ctrl.isShowQuickAction(quickAction, workItem)">
                             <md-icon md-svg-icon="{{quickAction.icon}}" class="cursor-pointer {{quickAction.class}}"
                                      tooltip="{{ctrl.getQuickActionText(quickAction, true)}}"
@@ -205,7 +205,8 @@
             </div>
             <div ng-if="workItem.isActiveThumbnails" layout="row">
                 <div class="thumbnail-wrapper" flex>
-                    <a attachment-viewer-directive="image" class="thumbnail-item-link" style="background-image: url({{image.url}})"
+                    <a attachment-viewer-directive="image" class="thumbnail-item-link"
+                       style="background-image: url({{image.url}})"
                        ng-repeat="image in workItem.thumbnails "></a>
                 </div>
             </div>
