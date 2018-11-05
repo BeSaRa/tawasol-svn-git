@@ -69,7 +69,8 @@ module.exports = function (app) {
                     docSubject: info.title,
                     vsId: info.vsId,
                     workObjectNumber: info.wobNumber,
-                    securityLevel: item.securityLevel
+                    securityLevel: item.securityLevel,
+                    docStatus: info.docStatus
                 }
             });
 

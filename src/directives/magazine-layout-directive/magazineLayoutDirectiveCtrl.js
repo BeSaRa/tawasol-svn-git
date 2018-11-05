@@ -236,11 +236,6 @@ module.exports = function (app) {
             var flatActions = listOfActions ? listOfActions : [];
             for (var i = 0; i < actions.length; i++) {
                 var mainAction = actions[i];
-                if (mainAction.text === 'grid_action_approve' && model.getInfo().title === 'check from outlook') {
-                    debugger;
-                    console.log("mainAction.checkShow(mainAction, model)", mainAction.checkShow(mainAction, model));
-                }
-
                 if (mainAction.hasOwnProperty(propertyKey) && mainAction[propertyKey] === propertyValue && mainAction.checkShow(mainAction, model)) {
                     flatActions.push(mainAction);
                 }
