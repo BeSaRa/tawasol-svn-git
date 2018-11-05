@@ -9,7 +9,6 @@ module.exports = function (app) {
                     var formInScope = scope[attrs.name];
                     if (code === 13 && formInScope.$valid) {
                         e.preventDefault();
-                        console.log(scope[attrs.name]);
                         angular.element('#' + attrs['enterSubmitDirective']).click();
                     }
                 });
