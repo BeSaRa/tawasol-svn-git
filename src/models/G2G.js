@@ -137,10 +137,10 @@ module.exports = function (app) {
             };
 
             G2G.prototype.getTranslatedOriginalCopy = function () {
-                /*return this.stepElm.orginality === 0
+                return this.stepElm.orginality === 0
                     ? new Information({enName: langService.getByLangKey('original', 'en'), arName: langService.getByLangKey('original', 'ar')})
-                    : new Information({enName: langService.getByLangKey('copy', 'en'), arName: langService.getByLangKey('copy', 'ar')});*/
-                return this.stepElm.orginality === 0 ? langService.get('original'): langService.get('copy');
+                    : new Information({enName: langService.getByLangKey('copy', 'en'), arName: langService.getByLangKey('copy', 'ar')});
+
             };
 
 
