@@ -141,6 +141,12 @@ module.exports = function (app) {
                     ? new Information({enName: langService.getByLangKey('original', 'en'), arName: langService.getByLangKey('original', 'ar')})
                     : new Information({enName: langService.getByLangKey('copy', 'en'), arName: langService.getByLangKey('copy', 'ar')});
             };
+
+
+
+
+
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('G2G', 'init', this);
