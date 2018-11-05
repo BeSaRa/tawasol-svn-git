@@ -154,12 +154,13 @@ module.exports = function (app) {
 
 
         self.requestCompleted = false;
-
+        self.saveInProgress= false;
         self.saveCorrespondence = function (status) {
             if (status && !self.documentInformation) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
                 return;
             }
+            self.saveInProgress= true;
             var promise = null;
             var defer = $q.defer();
             //var isDocHasVsId = angular.copy(self.outgoing).hasVsId();
@@ -219,7 +220,10 @@ module.exports = function (app) {
                         self.contentFileSizeExist = false;
                         saveCorrespondenceFinished(status, newId);
                     }
-                });
+                })
+                    .catch(function (error) {
+                        self.saveInProgress= false;
+                    });
             })
         };
 
@@ -229,6 +233,7 @@ module.exports = function (app) {
             if (replyTo) {
                 userSubscriptionService.loadUserSubscriptions();
             }
+
             if (self.terminateAfterCreateReply) {
                 correspondenceService.terminateWorkItemBehindScene($stateParams.workItem, 'incoming', langService.get('terminated_after_create_reply'))
             }
@@ -249,6 +254,7 @@ module.exports = function (app) {
                     successKey = 'save_success'
                 }
                 self.requestCompleted = true;
+                self.saveInProgress= false;
                 toast.success(langService.get(successKey));
             }
         };

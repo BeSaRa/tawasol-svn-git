@@ -103,12 +103,14 @@ module.exports = function (app) {
             $event.stopPropagation();
         };
 
-
+        self.requestCompleted = false;
+        self.saveInProgress = false;
         self.saveCorrespondence = function (status) {
             if (status && !self.documentInformation) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
                 return;
             }
+            self.saveInProgress = true;
             var promise = null;
             //var isDocHasVsId = angular.copy(self.incoming).hasVsId();
             if (self.receive) {
@@ -153,10 +155,12 @@ module.exports = function (app) {
                     saveCorrespondenceFinished(status, newId);
                 }
 
-            });
+            })
+                .catch(function (error) {
+                    self.saveInProgress = false;
+                });
         };
 
-        self.requestCompleted = false;
         var saveCorrespondenceFinished = function (status, newId) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
             counterService.loadCounters();
@@ -165,6 +169,8 @@ module.exports = function (app) {
                 /*$timeout(function () {
                     $state.go('app.incoming.draft');
                 })*/
+                self.requestCompleted = true;
+                self.saveInProgress = false;
             }
             else {
                 var successKey = 'incoming_metadata_saved_success';
@@ -177,6 +183,7 @@ module.exports = function (app) {
                     successKey = 'save_success';
                 }
                 self.requestCompleted = true;
+                self.saveInProgress = false;
                 toast.success(langService.get(successKey));
             }
         };

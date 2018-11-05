@@ -151,19 +151,19 @@
                     <div layout="row">
                         <div>
                             <md-button
-                                    ng-disabled="ctrl.document_properties.$invalid || !ctrl.incoming.site || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.incoming.contentFile))"
+                                    ng-disabled="ctrl.saveInProgress || ctrl.document_properties.$invalid || !ctrl.incoming.site || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist)) && !(ctrl.documentInformation || ctrl.incoming.contentFile))"
                                     ng-click="ctrl.saveCorrespondence()" class="md-raised"
                                     ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
                                 {{lang.incoming_save}}
                             </md-button>
                         </div>
                         <div>
-                            <md-button ng-click="ctrl.resetAddCorrespondence($event)" class="md-raised">
+                            <md-button ng-disabled="ctrl.saveInProgress"  ng-click="ctrl.resetAddCorrespondence($event)" class="md-raised">
                                 {{lang.incoming_new}}
                             </md-button>
                         </div>
                         <div>
-                            <md-button ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
+                            <md-button ng-disabled="ctrl.saveInProgress" ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
                                 {{lang.incoming_cancel}}
                             </md-button>
                         </div>
@@ -171,7 +171,7 @@
                             <md-input-container>
                                 <label for="documentAction">{{lang.document_action}}</label>
                                 <md-select name="documentAction" id="documentAction"
-                                           ng-disabled="!ctrl.isActionsAvailable"
+                                           ng-disabled="!ctrl.isActionsAvailable || ctrl.saveInProgress"
                                            ng-model="ctrl.documentAction">
                                     <md-option ng-value="action" class="{{action.class}}"
                                                ng-if="action.checkShow(action, ctrl.incoming, $index)"
@@ -182,7 +182,7 @@
                             </md-input-container>
                         </div>
                         <div ng-if="ctrl.incoming.hasVsId() && ctrl.requestCompleted">
-                            <md-button class="md-raised" ng-disabled="!ctrl.documentAction"
+                            <md-button class="md-raised" ng-disabled="!ctrl.documentAction || ctrl.saveInProgress"
                                        ng-click="ctrl.performDocumentAction($event)">{{lang.action_submit}}
                             </md-button>
                         </div>
