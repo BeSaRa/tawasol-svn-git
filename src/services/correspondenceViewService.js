@@ -35,6 +35,9 @@ module.exports = function (app) {
          * @param details
          */
         self.correspondenceSiteSearch = function (searchType, details) {
+            if (!details.hasOwnProperty('includeDisabled')) {
+                details.includeDisabled = false;
+            }
             var url = _createSearchUrl(searchType, details);
             return $http.post(url, details).then(function (result) {
                 var siteViews = generator.generateCollection(result.data.rs, SiteView, self._sharedMethods);

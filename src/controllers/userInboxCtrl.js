@@ -795,12 +795,13 @@ module.exports = function (app) {
                             self.reloadUserInboxes(self.grid.page)
                                 .then(function () {
                                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                                    userSubscriptionService.loadUserSubscriptions();
                                 });
-                        });
-                    self.reloadUserInboxes(self.grid.page)
-                        .then(function () {
-                            userSubscriptionService.loadUserSubscriptions();
+                        })
+                        .catch(function () {
+                            self.reloadUserInboxes(self.grid.page)
+                                .then(function () {
+                                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                                });
                         });
                 });
         };

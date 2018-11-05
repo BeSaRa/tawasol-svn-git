@@ -472,7 +472,8 @@ module.exports = function (app) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                     criteria: null,
-                    excludeOuSites: false
+                    excludeOuSites: false,
+                    includeDisabled: true
                 }).then(function (result) {
                     self.subSearchResult = [];
                     self.mainSites = result;
@@ -501,7 +502,8 @@ module.exports = function (app) {
                 type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                 parent: self.selectedMainSite ? self.selectedMainSite.id : null,
                 criteria: null,
-                excludeOuSites: false
+                excludeOuSites: false,
+                includeDisabled: true
             }).then(function (result) {
                 self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                 self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
@@ -552,7 +554,8 @@ module.exports = function (app) {
                         refreshDebounce();
                         correspondenceViewService.correspondenceSiteSearch('main', {
                             type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
-                            criteria: mainSearch
+                            criteria: mainSearch,
+                            includeDisabled: true
                         }).then(function (result) {
                             resolve(_.map(result, _mapSite));
                         });
@@ -739,7 +742,8 @@ module.exports = function (app) {
                         correspondenceViewService.correspondenceSiteSearch('sub', {
                             type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
                             parent: self.selectedMain ? self.selectedMain.id : null,
-                            criteria: self.subSearch
+                            criteria: self.subSearch,
+                            includeDisabled: true
                         }).then(function (result) {
                             if (self.subSearch.length < 3) {
                                 self.subSearchResult = [];
