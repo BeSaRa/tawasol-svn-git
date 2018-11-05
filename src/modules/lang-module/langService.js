@@ -153,7 +153,7 @@ module.exports = function (app) {
 
         self.get = function (langKey, ignoreError) {
             return self.langKeys.hasOwnProperty(self.current) ?
-                ((self.langKeys[self.current][langKey]) ? self.langKeys[self.current][langKey] : 'LANG: ' + langKey ) :
+                ((self.langKeys[self.current][langKey]) ? self.langKeys[self.current][langKey] : 'LANG: (' + langKey + ') is Missing!') :
                 (ignoreError) ? false : 'LANG: ' + langKey;
         };
 
