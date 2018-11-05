@@ -616,16 +616,26 @@ module.exports = function (app) {
          * @param defer
          */
         self.signProxyMailInboxESignature = function (workItem, $event, defer) {
-            proxyMailInboxService
-                .controllerMethod
-                .proxyMailInboxSignaturePopup(workItem, $event)
+            workItem
+                .approveWorkItem($event, defer)
                 .then(function (result) {
-                    if (result)
-                        self.reloadProxyMailInboxes(self.grid.page)
-                            .then(function () {
-                                toast.success(langService.get('sign_specific_success').change({name: workItem.getTranslatedName()}));
-                                new ResolveDefer(defer);
-                            });
+                    workItem
+                        .launchWorkFlowCondition($event, 'reply', null, true, function () {
+                            return result === 'INTERNAL_PERSONAL'
+                        })
+                        .then(function () {
+                            self.reloadProxyMailInboxes(self.grid.page)
+                                .then(function () {
+                                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                                });
+                        })
+                        .catch(function () {
+                            self.reloadProxyMailInboxes(self.grid.page)
+                                .then(function () {
+                                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                                });
+                        });
+
                 });
         };
 
