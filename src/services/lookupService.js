@@ -30,6 +30,7 @@ module.exports = function (app) {
         self.waterMarkTextOrientation = 'waterMarkTextOrientation';
         self.messageStatus = 'messageStatus';
         self.thumbnailMode = 'thumbnailMode';
+        self.attachmentUpdateAction = 'attachmentUpdateAction';
 
         // this propertyConfiguration related to the property configurations Service.
         self.propertyConfigurations = {
