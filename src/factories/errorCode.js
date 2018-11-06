@@ -33,7 +33,8 @@ module.exports = function (app) {
             G2G_ERROR_WHILE_RECALLING: 14027,
             G2G_ERROR_WHILE_TERMINATE: 14028,
             NO_DOCUMENT_SECURITY: 13006,
-            FAIL_DUPLICATION : 2053
+            FAIL_DUPLICATION: 2053,
+            INVALID_REFERENCE_FORMAT: 3025
         };
 
         return {

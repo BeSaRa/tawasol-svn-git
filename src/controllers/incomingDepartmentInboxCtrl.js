@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                             correspondenceService,
                                                             managerService,
                                                             $state,
+                                                            errorCode,
                                                             $q,
                                                             $filter,
                                                             langService,
@@ -220,6 +221,15 @@ module.exports = function (app) {
                                 });
                         });
 
+                })
+                .catch(function (error) {
+                    errorCode.checkIf(error, 'INVALID_REFERENCE_FORMAT', function () {
+                        dialog
+                            .confirmMessage(langService.get('quick_receive_failed_missing_properties'))
+                            .then(function () {
+                                return self.receiveWorkItem(incomingDepartmentInbox, $event);
+                            });
+                    });
                 });
         };
 
