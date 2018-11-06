@@ -23,6 +23,7 @@ module.exports = function (app) {
             self.attachmentType = null;
             self.securityLevel = null;
             self.updateActionStatus = null;
+            self.isDeletable = null;
             self.refVSID = null;//This is for the linked Exported Documents
             // will removed when send to backend.
             self.file = null;

@@ -19,6 +19,21 @@
                         </md-select>
                     </md-input-container>
                     <md-input-container flex>
+                        <label for="updateActionStatus">{{lang.attachment_update_action_status}}</label>
+                        <md-select id="updateActionStatus"
+                                   name="updateActionStatus"
+                                   ng-required="true"
+                                   ng-change="ctrl.changeValueOf('updateActionStatus',ctrl.updateActionStatus)"
+                                   ng-model="ctrl.updateActionStatus">
+                            <md-option ng-value="updateAction" ng-repeat="updateAction in ctrl.attachmentUpdateActions track by $index">
+                                {{updateAction.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="attachment_from.updateActionStatus.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex>
                         <label>{{lang.attachment_attachment_type}}</label>
                         <md-select ng-change="ctrl.changeValueOf('attachmentType',ctrl.attachmentType)"
                                    ng-model="ctrl.attachmentType">
@@ -46,7 +61,28 @@
                                     <div md-truncate>{{attachment.documentTitle}}</div>
                                 </div>
                                 <div flex>
-                                    <md-menu-bar>
+                                    <!--<md-menu-bar>
+                                        <md-menu>
+                                            <md-button ng-click="$mdMenu.open()">
+                                                {{attachment.updateActionStatus.getTranslatedName()}}
+                                            </md-button>
+                                            <md-menu-content>
+                                                <md-menu-item ng-repeat="updateActionStatus in ctrl.attachmentUpdateActions track by $index">
+                                                    <md-button
+                                                            ng-click="ctrl.changeValueOfFor('updateActionStatus',attachment , updateActionStatus)"
+                                                            ng-class="{'menu-select':updateActionStatus.currentId(ctrl.updateActionStatus)}">
+                                                        {{updateActionStatus.getTranslatedName()}}
+                                                    </md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                    </md-menu-bar>-->
+                                    <md-button>
+                                        {{attachment.updateActionStatus.getTranslatedName()}}
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <!--<md-menu-bar>
                                         <md-menu>
                                             <md-button ng-click="$mdMenu.open()">
                                                 {{attachment.attachmentType.getTranslatedName()}}
@@ -61,10 +97,13 @@
                                                 </md-menu-item>
                                             </md-menu-content>
                                         </md-menu>
-                                    </md-menu-bar>
+                                    </md-menu-bar>-->
+                                    <md-button>
+                                        {{attachment.attachmentType.getTranslatedName()}}
+                                    </md-button>
                                 </div>
                                 <div ng-if="!ctrl.inheritSecurity">
-                                    <md-menu-bar>
+                                    <!--<md-menu-bar>
                                         <md-menu>
                                             <md-button ng-click="$mdMenu.open()">
                                                 {{attachment.securityLevel.getTranslatedName()}}
@@ -79,10 +118,13 @@
                                                 </md-menu-item>
                                             </md-menu-content>
                                         </md-menu>
-                                    </md-menu-bar>
+                                    </md-menu-bar>-->
+                                    <md-button>
+                                        {{attachment.securityLevel.getTranslatedName()}}
+                                    </md-button>
                                 </div>
                                 <div>
-                                    <md-button ng-click="ctrl.deleteDragAttachment(attachment)" class="md-icon">
+                                    <md-button ng-if="attachment.isDeletable" ng-click="ctrl.deleteDragAttachment(attachment)" class="md-icon">
                                         <md-icon md-svg-icon="delete"></md-icon>
                                     </md-button>
                                 </div>
@@ -101,6 +143,24 @@
                                     <div md-truncate>{{attachment.documentTitle}}</div>
                                 </div>
                                 <div flex>
+                                    <md-menu-bar>
+                                        <md-menu>
+                                            <md-button ng-click="$mdMenu.open()">
+                                                {{attachment.updateActionStatus.getTranslatedName()}}
+                                            </md-button>
+                                            <md-menu-content>
+                                                <md-menu-item ng-repeat="updateActionStatus in ctrl.attachmentUpdateActions track by $index">
+                                                    <md-button md-truncate
+                                                               ng-click="ctrl.changeValueOfFor('updateActionStatus',attachment , updateActionStatus)"
+                                                               ng-class="{'menu-select':updateActionStatus.currentId(ctrl.updateActionStatus)}">
+                                                        {{updateActionStatus.getTranslatedName()}}
+                                                    </md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                    </md-menu-bar>
+                                </div>
+                                <div>
                                     <md-menu-bar>
                                         <md-menu>
                                             <md-button ng-click="$mdMenu.open()">

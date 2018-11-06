@@ -48,6 +48,20 @@
                     <input ng-model="ctrl.attachment.documentTitle" name="documentTitle" id="documentTitle">
                 </md-input-container>
                 <md-input-container flex>
+                    <label for="updateActionStatus">{{lang.attachment_update_action_status}}</label>
+                    <md-select id="updateActionStatus"
+                               name="updateActionStatus"
+                               ng-required="true"
+                               ng-model="ctrl.attachment.updateActionStatus">
+                        <md-option ng-value="updateAction" ng-repeat="updateAction in ctrl.attachmentUpdateActions track by $index">
+                            {{updateAction.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="attachment_from.updateActionStatus.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <md-input-container flex>
                     <label for="attachmentType">{{lang.attachment_attachment_type}}</label>
                     <md-select
                             ng-required="true"
@@ -162,7 +176,7 @@
                                     <!--<md-icon md-svg-icon="pencil"></md-icon>-->
                                     <!--</md-button>-->
                                     <md-button class="md-icon-button" title="{{lang.attachment_delete}}"
-                                               ng-if="!ctrl.disableEverything && !attachment.refVSID"
+                                               ng-if="!ctrl.disableEverything && !attachment.refVSID && attachment.isDeletable"
                                                ng-click="ctrl.deleteDocumentAttachment(attachment, $event)">
                                         <md-icon md-svg-icon="delete"></md-icon>
                                     </md-button>

@@ -15,6 +15,7 @@ module.exports = function (app) {
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             var file = model.type === 'scanner' ? model.file.file : model.file, formData = new FormData();
             model.attachmentType = model.attachmentType.lookupKey;
+            model.updateActionStatus = model.updateActionStatus.lookupKey;
             // model.securityLevel = .hasOwnProperty('id') ? model.securityLevel.lookupKey : model.securityLevel;
             //model.securityLevel = self.document.securityLevel;
             if (model.securityLevel instanceof Lookup) {
@@ -47,6 +48,8 @@ module.exports = function (app) {
                 model.securityLevel = model.securityLevel.id;
             }
             model.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
+            if (typeof model.updateActionStatus === 'undefined' && model.updateActionStatus !== null && model.updateActionStatus !== '')
+                model.updateActionStatus = lookupService.getLookupByLookupKey(lookupService.attachmentUpdateAction, model.updateActionStatus);
             return model;
         });
 

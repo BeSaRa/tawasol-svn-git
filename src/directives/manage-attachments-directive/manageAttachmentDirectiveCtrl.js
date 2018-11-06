@@ -15,6 +15,7 @@ module.exports = function (app) {
                                                               correspondenceService,
                                                               errorCode,
                                                               $filter,
+                                                              lookupService,
                                                               generator) {
         'ngInject';
         var self = this;
@@ -32,6 +33,7 @@ module.exports = function (app) {
         $timeout(function () {
             // all security level
             self.securityLevel = correspondenceService.getLookup(self.document.getInfo().documentClass, 'securityLevels');
+            self.attachmentUpdateActions= lookupService.returnLookups(lookupService.attachmentUpdateAction);
         });
 
         // to hide buttons when one of the process work.

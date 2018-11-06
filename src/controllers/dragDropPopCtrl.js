@@ -37,6 +37,10 @@ module.exports = function (app) {
 
         // the selected attachment type.
         self.attachmentType = self.attachmentTypes[0];
+        // all update action status
+        self.attachmentUpdateActions = lookupService.returnLookups(lookupService.attachmentUpdateAction);
+        // the selected updateActionStatus
+        self.updateActionStatus = self.attachmentUpdateActions[0];
         // the uploaded Files
         self.successFilesUploaded = [];
         // the failed uploaded.
@@ -117,6 +121,7 @@ module.exports = function (app) {
                             file: files[i],
                             securityLevel: self.securityLevel,
                             attachmentType: self.attachmentType,
+                            updateActionStatus: self.updateActionStatus,
                             documentTitle: files[i].name,
                             docSubject: files[i].name,
                             progress: 0
