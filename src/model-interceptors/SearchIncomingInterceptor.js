@@ -52,10 +52,15 @@ module.exports = function (app) {
                 }
             }
 
+
             if (angular.isArray(model.sitesInfoIncoming) && model.sitesInfoIncoming.length) {
                 model.sitesInfoIncoming = model.sitesInfoIncoming[0];
                 model.sitesInfoIncoming.getSiteToIncoming(model);
+            } else {
+                model.siteType = model.siteType ? model.siteType.lookupKey : null;
             }
+
+
             delete model.sitesInfoIncoming;
 
             //because we select only one linked entity. so, it can't be array

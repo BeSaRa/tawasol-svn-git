@@ -1132,8 +1132,8 @@ module.exports = function (app) {
             }
         ];
 
-        console.log('outgoing search',_.map(self.gridActions ,function (action) {
-            return langService.get(action.text)
-        }))
+        // console.log('outgoing search',_.map(self.gridActions ,function (action) {
+        //     return langService.get(action.text)
+        // }))
     });
 };

@@ -11,6 +11,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            debugger;
             if (model.year === 'All' && model.docDateFrom && model.docDateTo) {
                 model.docDate = {
                     From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),
@@ -48,7 +49,7 @@ module.exports = function (app) {
             if (angular.isArray(model.sitesInfoTo) && model.sitesInfoTo.length) {
                 model.sitesInfoTo = model.sitesInfoTo[0];
                 // if followupStatus = none, delete it
-                if (!model.sitesInfoTo.followupStatus.lookupKey){
+                if (!model.sitesInfoTo.followupStatus.lookupKey) {
                     delete model.sitesInfoTo.followupStatus;
                 }
                 //console.log(model.sitesInfoTo);
@@ -71,7 +72,7 @@ module.exports = function (app) {
             if (angular.isArray(model.sitesInfoCC) && model.sitesInfoCC.length) {
                 model.sitesInfoCC = model.sitesInfoCC[0];
                 // if followupStatus = none, delete it
-                if (!model.sitesInfoCC.followupStatus.lookupKey){
+                if (!model.sitesInfoCC.followupStatus.lookupKey) {
                     delete model.sitesInfoCC.followupStatus;
                 }
                 if (model.sitesInfoCC.followupDate1 && model.sitesInfoCC.followupDate2) {
@@ -99,15 +100,6 @@ module.exports = function (app) {
                 model.linkedEntities = null;
             }
 
-            // model.approvers = model.approvers ? angular.toJson({
-            //     userId: model.approvers.applicationUser.id,
-            //     userOuId: model.approvers.ouid.id,
-            //     approveDate: {
-            //         first: generator.getTimeStampFromDate(model.approveDateFrom),
-            //         second: generator.getTimeStampFromDate(model.approveDateTo)
-            //     }
-            // }) : null;
-
             typeof model.prepareApproved === 'function' ? model.prepareApproved() : null;
 
             if (model.docDate.From)
@@ -116,6 +108,12 @@ module.exports = function (app) {
             if (model.docDate.To)
                 model.docDate.To = '' + model.docDate.To;
             model.docDate = angular.toJson(model.docDate);
+
+            // just when user select the correspondence type without select main or sub site
+            if (!model.sitesInfoCC && !model.sitesInfoTo && !!model.siteType) {
+                model.sitesInfoTo = angular.toJson({siteType:model.siteType.lookupKey,mainSiteId:null,subSiteId:null});
+            }
+
 
             delete model.selectedEntityType;
             delete model.docStatus;
