@@ -149,7 +149,7 @@
         <div>
             <div layout="row">
                 <md-button class="md-raised"
-                           ng-disabled="referencePlanNumberForm.$invalid || !ctrl.referencePlanNumber.isValidReferencePlan()"
+                           ng-disabled="referencePlanNumberForm.$invalid"
                            ng-if="!ctrl.editMode"
                            ng-click="ctrl.addReferencePlanNumberFromCtrl()">
                     {{lang.add}}

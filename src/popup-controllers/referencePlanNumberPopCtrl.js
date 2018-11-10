@@ -60,6 +60,14 @@ module.exports = function (app) {
                 .notifyFailure(function () {
                     toast.error(langService.get('name_duplication_message'));
                 })
+                .addStep('check_is_reference_valid', true, function () {
+                    return self.referencePlanNumber.isValidReferencePlan();
+                }, function (result) {
+                    return result;
+                })
+                .notifyFailure(function (step, result) {
+                    return dialog.errorMessage(langService.get('invalid_reference_plan_has_not_all_item'))
+                })
                 .validate()
                 .then(function () {
                     referencePlanNumberService
@@ -99,6 +107,14 @@ module.exports = function (app) {
                 .notifyFailure(function () {
                     toast.error(langService.get('name_duplication_message'));
                 })
+                .addStep('check_is_reference_valid', true, function () {
+                    return self.referencePlanNumber.isValidReferencePlan();
+                }, function (result) {
+                    return result;
+                })
+                .notifyFailure(function (step, result) {
+                    return dialog.errorMessage(langService.get('invalid_reference_plan_has_not_all_item'))
+                })
                 .validate()
                 .then(function () {
                     referencePlanNumberService
@@ -107,8 +123,7 @@ module.exports = function (app) {
                             dialog.hide(self.referencePlanNumber);
                         });
                 })
-                .catch(function () {
-
+                .catch(function (errors) {
                 });
         };
 
@@ -142,6 +157,7 @@ module.exports = function (app) {
         /**
          * edit reference plan item
          * @param referenceItem
+         * @param index
          */
         self.editReferenceItem = function (referenceItem, index) {
             self.referencePlanItem = referenceItem;
@@ -163,7 +179,6 @@ module.exports = function (app) {
                     }
                 })
                 .then(function (referencePlanItem) {
-                    console.log('referencePlanItem', referencePlanItem);
                     self.referencePlanNumber.referencePlanItems.splice(self.referencePlanItemIndex, 1, referencePlanItem);
                 });
         };

@@ -645,7 +645,7 @@ module.exports = function (app) {
                 hide: true,
                 permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
                 checkShow: self.checkToShowAction
-            },
+            }
             // Manage (Not in SRS)
             /*{
              type: 'action',

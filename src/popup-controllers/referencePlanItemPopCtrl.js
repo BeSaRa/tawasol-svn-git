@@ -33,10 +33,11 @@ module.exports = function (app) {
 
         var lookup = new Lookup({
             defaultArName: langService.getKey('all', 'ar'),
-            defaultErName: langService.getKey('all', 'en'),
+            defaultEnName: langService.getKey('all', 'en'),
             lookupKey: null,
             lookupStrKey: ''
         });
+        console.log(self.documentTypes, self.securityLevels);
 
         self.documentTypes.unshift(
             new DocumentType({
@@ -57,9 +58,11 @@ module.exports = function (app) {
          * @description save reference plan Item
          */
         self.saveReferencePlanItem = function () {
+            debugger;
             self.referencePlanItem.retrieveItemComponent();
             return validationService
                 .createValidation('CHECK_REFERENCE_PLAN_ITEM')
+                // to check if at least has one reference planItem not Separator.
                 .addStep('check_format', true, self.referencePlanItem, function (result) {
                     return result.hasFormat();
                 })
@@ -72,7 +75,7 @@ module.exports = function (app) {
                 .notifyFailure(function () {
                     dialog.errorMessage(langService.get('reference_plan_item_duplicated'));
                 })
-                .addStep('check_serial_required',true, self.referencePlanItem,function (result) {
+                .addStep('check_serial_required', true, self.referencePlanItem, function (result) {
                     return result.hasSerialComponent();
                 })
                 .notifyFailure(function () {

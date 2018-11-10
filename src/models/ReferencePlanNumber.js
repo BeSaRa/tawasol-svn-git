@@ -102,10 +102,11 @@ module.exports = function (app) {
              * @returns {ReferencePlanItem|undefined}
              */
             ReferencePlanNumber.prototype.hasAtLeastItemForAll = function () {
-                return _.find(this.referencePlanItems, function (item) {
+                return !!(_.find(this.referencePlanItems, function (item) {
                     return item.isItemForAll();
-                });
+                }));
             };
+
             /**
              * @description to check if the reference plan has an duplicated referencePlanItem.
              * @param referencePlanItem
