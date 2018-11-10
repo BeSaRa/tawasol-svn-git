@@ -95,6 +95,7 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_search_module_incoming', 'SEARCH_INCOMING')
             .addMenuPermission('menu_item_search_module_internal', 'SEARCH_INTERNAL_DOCUMENT')
             .addMenuPermission('menu_item_search_module_general', 'GENERAL_SEARCH')
+            .addMenuPermission('menu_item_search_module_outgoing_incoming', 'SEARCH_IN_INCOMING_OUTGOING')
             .addMenuPermission('menu_item_quick_search', 'QUICK_SEARCH')
             .end()
             .addMenuPermission('menu_item_user_favorite_documents', function (employee) {

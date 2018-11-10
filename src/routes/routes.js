@@ -866,7 +866,7 @@ module.exports = function (app) {
                 template: templateProvider.getView('search-outgoing-incoming'),
                 controller: 'searchOutgoingIncomingCtrl',
                 controllerAs: 'ctrl',
-                permission: '',
+                permission: 'menu_item_search_module_outgoing_incoming',
                 resolve: {
                     organizations: function (organizationService) {
                         'ngInject';
