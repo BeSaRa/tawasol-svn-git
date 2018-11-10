@@ -106,10 +106,10 @@
                                         md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                         <span>{{lang.priority_level}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedSearchedOutgoingIncomingDocuments.length" md-column
+                                    <!--<th ng-if="!ctrl.selectedSearchedOutgoingIncomingDocuments.length" md-column
                                         md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
                                         <span>{{lang.security_level}}</span>
-                                    </th>
+                                    </th>-->
                                     <th ng-if="!ctrl.selectedSearchedOutgoingIncomingDocuments.length" md-column
                                         md-order-by="{{ctrl.getSortingKey('docTypeForSearchGrid', 'DocumentType')}}">
                                         <span>{{lang.label_document_type}}</span>
@@ -171,8 +171,7 @@
                                         <span ng-if="!searchedOutgoingIncomingDocument.hasContent()">{{searchedOutgoingIncomingDocument.docSubject}}</span>
                                     </td>
                                     <td md-cell>{{searchedOutgoingIncomingDocument.priorityLevel.getTranslatedName()}}</td>
-                                    <td md-cell>{{searchedOutgoingIncomingDocument.securityLevel.getTranslatedName()}}</td>
-                                    <!--<td md-cell>{{lang[searchedOutgoingIncomingDocument.getInfo().documentClass +"_document_class"]}}</td>-->
+                                    <!--<td md-cell>{{searchedOutgoingIncomingDocument.securityLevel.getTranslatedName()}}</td>-->
                                     <td md-cell>{{searchedOutgoingIncomingDocument.docTypeInfo.getTranslatedName()}}
                                     </td>
                                     <td md-cell>{{searchedOutgoingIncomingDocument.creatorInfo.getTranslatedName()}}</td>
