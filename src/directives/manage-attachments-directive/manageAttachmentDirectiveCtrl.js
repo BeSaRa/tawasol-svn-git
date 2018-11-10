@@ -99,7 +99,6 @@ module.exports = function (app) {
                 .openScanner(false, $event)
                 .then(function () {
                     var result = scannerService.getStoredImages();
-                    console.log('result', result);
                     self.attachment = _createAttachmentFile(result.file);
                 })
                 .catch(function (error) {

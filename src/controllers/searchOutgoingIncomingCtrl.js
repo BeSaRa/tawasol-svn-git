@@ -177,9 +177,27 @@ module.exports = function (app) {
 
         function _mapResultToAvoidCorrespondenceCheck(result) {
             return _.map(result, function (item) {
-                item.mainSiteId = true;
+                var docClass = item.getInfo().documentClass.toLowerCase();
+                switch (docClass) {
+                    case 'outgoing':
+                        _outgoingCorrespondence(item);
+                        break;
+                    case 'incoming':
+                        _incomingCorrespondence(item);
+                        break;
+                }
                 return item;
             });
+        }
+
+        function _incomingCorrespondence(correspondence) {
+            correspondence.mainSiteId = true;
+            return correspondence;
+        }
+
+        function _outgoingCorrespondence(correspondence) {
+            correspondence.sitesInfoTo = [true];
+            return correspondence;
         }
 
 

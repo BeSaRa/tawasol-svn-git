@@ -57,6 +57,7 @@ module.exports = function (app) {
         self.requiredFieldsSearchGeneral = self.getSearchGeneralRequiredFields();
 
         self.validateLabelsSearchGeneral = {};
+
         /*
                 // in case of central archive.
                 self.registryOrganizations = centralArchives;
@@ -93,6 +94,31 @@ module.exports = function (app) {
                     /!*self.isSearchByRegOU = false;
                      self.searchGeneral.regOu = null;*!/
                 };*/
+
+        function _mapResultToAvoidCorrespondenceCheck(result) {
+            return _.map(result, function (item) {
+                var docClass = item.getInfo().documentClass.toLowerCase();
+                switch (docClass) {
+                    case 'outgoing':
+                        _outgoingCorrespondence(item);
+                        break;
+                    case 'incoming':
+                        _incomingCorrespondence(item);
+                        break;
+                }
+                return item;
+            });
+        }
+
+        function _incomingCorrespondence(correspondence) {
+            correspondence.mainSiteId = true;
+            return correspondence;
+        }
+
+        function _outgoingCorrespondence(correspondence) {
+            correspondence.sitesInfoTo = [true];
+            return correspondence;
+        }
 
         /**
          * @description Checks if the field is mandatory
@@ -287,7 +313,8 @@ module.exports = function (app) {
                 .searchGeneralDocuments(self.searchGeneralModel, self.propertyConfigurations)
                 .then(function (result) {
                     counterService.loadCounters();
-                    self.searchedGeneralDocuments = result;
+                    self.searchedGeneralDocuments = _mapResultToAvoidCorrespondenceCheck(result);
+                    // self.searchedGeneralDocuments = result;
                     self.selectedSearchedGeneralDocuments = [];
                     defer.resolve(true);
                     if (pageNumber)
@@ -359,7 +386,8 @@ module.exports = function (app) {
                 return;
             }
 
-            searchedGeneralDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
+            searchedGeneralDocument
+                .launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
                     self.reloadSearchedGeneralDocuments(self.grid.page)
                         .then(function () {
