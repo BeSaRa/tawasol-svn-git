@@ -53,7 +53,9 @@
                                name="updateActionStatus"
                                ng-required="true"
                                ng-model="ctrl.attachment.updateActionStatus">
-                        <md-option ng-value="updateAction" ng-repeat="updateAction in ctrl.attachmentUpdateActions track by $index">
+                        <md-option
+                                ng-repeat="updateAction in ctrl.attachmentUpdateActions track by $index"
+                                ng-value="updateAction">
                             {{updateAction.getTranslatedName()}}
                         </md-option>
                     </md-select>

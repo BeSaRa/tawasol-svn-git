@@ -33,7 +33,7 @@ module.exports = function (app) {
         $timeout(function () {
             // all security level
             self.securityLevel = correspondenceService.getLookup(self.document.getInfo().documentClass, 'securityLevels');
-            self.attachmentUpdateActions= lookupService.returnLookups(lookupService.attachmentUpdateAction);
+            self.attachmentUpdateActions = lookupService.returnLookups(lookupService.attachmentUpdateAction);
         });
 
         // to hide buttons when one of the process work.
@@ -234,6 +234,7 @@ module.exports = function (app) {
                 .validateBeforeUpload('attachmentUpload', files[0])
                 .then(function (file) {
                     self.attachment = _createAttachmentFile(file);
+                    self.attachment.updateActionStatus = self.attachmentUpdateActions[0];
                 })
                 .catch(function (availableExtensions) {
                     dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
