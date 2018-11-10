@@ -692,10 +692,6 @@ module.exports = function (app) {
             Correspondence.prototype.loadVersions = function () {
                 return correspondenceService.loadDocumentVersions(this);
             };
-
-            Correspondence.prototype.viewSpecificVersion = function (actions, $event) {
-                return correspondenceService.viewSpecificCorrespondenceVersion(this, actions, $event);
-            };
             Correspondence.prototype.isCurrentVersion = function () {
                 return this.isCurrent;
             };
@@ -703,17 +699,21 @@ module.exports = function (app) {
             Correspondence.prototype.isBroadcasted = function () {
                 return false;
             };
+
+            Correspondence.prototype.viewSpecificVersion = function ($event) {
+                return correspondenceService.viewSpecificCorrespondenceVersion(this, false, $event);
+            };
             Correspondence.prototype.duplicateVersion = function ($event) {
-                return correspondenceService.duplicateCurrentCorrespondenceVersion(this);
+                return correspondenceService.duplicateCurrentCorrespondenceVersion(this, $event);
+            };
+            Correspondence.prototype.duplicateSpecificVersion = function ($event) {
+                return correspondenceService.duplicateSpecificCorrespondenceVersion(this, $event);
             };
 
             Correspondence.prototype.attacheContentUrl = function (contentInformation) {
                 return correspondenceService.updateContentInformation(this, contentInformation);
             };
 
-            Correspondence.prototype.duplicateSpecificVersion = function ($event) {
-                return correspondenceService.duplicateSpecificCorrespondenceVersion(this, $event);
-            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
