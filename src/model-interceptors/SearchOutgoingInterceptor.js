@@ -137,6 +137,8 @@ module.exports = function (app) {
             delete model.followupStatus;
             delete model.siteType;
 
+            delete model.dummySearchDocClass;
+
             return model;
         });
 

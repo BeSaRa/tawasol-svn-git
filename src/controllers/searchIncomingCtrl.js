@@ -36,7 +36,7 @@ module.exports = function (app) {
         // employee service to check the permission in html
         self.employeeService = employeeService;
 
-        self.searchIncoming = new IncomingSearch();
+        self.searchIncoming = new IncomingSearch({dummySearchDocClass: 'incoming'});
         self.searchIncomingModel = angular.copy(self.searchIncoming);
 
         self.propertyConfigurations = propertyConfigurations;

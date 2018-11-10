@@ -56,7 +56,7 @@
                     </div>
                 </md-input-container>
                 <!-- Document Number -->
-                <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "incoming"'>
+                <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "incoming" && ctrl.document.dummySearchDocClass.toLowerCase() !== "outgoingincoming"'>
                     <label for="refDocNumber">{{lang.document_number}}</label>
                     <input name="refDocNumber" id="refDocNumber"
                            ng-required="ctrl.checkMandatory('refDocNumber')"

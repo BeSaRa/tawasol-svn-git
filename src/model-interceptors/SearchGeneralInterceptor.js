@@ -74,6 +74,7 @@ module.exports = function (app) {
             if(model.docDate.To)
                 model.docDate.To = ''+ model.docDate.To;
             model.docDate = angular.toJson(model.docDate);
+            delete model.dummySearchDocClass;
             return model;
         });
 

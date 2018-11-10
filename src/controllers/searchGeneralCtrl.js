@@ -37,7 +37,7 @@ module.exports = function (app) {
         // employee service to check the permission in html
         self.employeeService = employeeService;
 
-        self.searchGeneral = new GeneralSearch();
+        self.searchGeneral = new GeneralSearch({dummySearchDocClass: 'correspondence'});
         self.searchGeneralModel = angular.copy(self.searchGeneral);
 
         self.propertyConfigurations = propertyConfigurations;

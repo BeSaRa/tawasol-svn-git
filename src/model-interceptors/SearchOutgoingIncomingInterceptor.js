@@ -89,6 +89,7 @@ module.exports = function (app) {
             delete model.docDateTo;
             delete model.year;
 
+            delete model.dummySearchDocClass;
             return model;
         });
 

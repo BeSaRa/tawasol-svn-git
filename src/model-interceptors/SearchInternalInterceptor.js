@@ -89,6 +89,7 @@ module.exports = function (app) {
             delete model.sitesInfoTo;
             delete model.sitesInfoCC;
             delete model.sitesInfoIncoming;
+            delete model.dummySearchDocClass;
             return model;
         });
 

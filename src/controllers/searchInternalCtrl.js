@@ -35,7 +35,7 @@ module.exports = function (app) {
         // employee service to check the permission in html
         self.employeeService = employeeService;
 
-        self.searchInternal = new InternalSearch();
+        self.searchInternal = new InternalSearch({dummySearchDocClass: 'internal'});
         self.searchInternalModel = angular.copy(self.searchInternal);
         self.approvers = approvers;
         self.propertyConfigurations = propertyConfigurations;
