@@ -105,6 +105,7 @@ module.exports = function (app) {
                 return !!(_.find(this.referencePlanItems, function (item) {
                     return item.isItemForAll();
                 }));
+
             };
 
             /**
