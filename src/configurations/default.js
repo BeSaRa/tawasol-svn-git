@@ -44,6 +44,7 @@ module.exports = function (app) {
             .addPageName('searchInternal')
             .addPageName('searchGeneral')
             .addPageName('quickSearch')
+            .addPageName('searchOutgoingIncoming')
             // User Inbox
             .addPageName('proxyMail')
             .addPageName('userInbox')

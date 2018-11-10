@@ -847,6 +847,7 @@ module.exports = function (app) {
                     "MANAGE_LINKED_ENTITIES"
                 ],
                 checkAnyPermission: true,
+                showInView: false,
                 subMenu: [
                     // Tags
                     {

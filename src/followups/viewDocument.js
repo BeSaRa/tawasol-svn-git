@@ -67,6 +67,18 @@ module.exports = function (app) {
                     return !allowed
                 }
             })
+            .getPageNameOverride('searchOutgoingIncoming', 'draftOutgoing', {
+                disableProperties: function () {
+                    return true;
+                },
+                disableSites: function (model) {
+                    var info = model.getInfo();
+                    var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+                    var allowedByDocClass = (info.documentClass === 'outgoing') ? (info.docStatus < 25) : (info.documentClass === 'incoming');
+                    var allowed = (hasPermission && info.documentClass !== "internal") && allowedByDocClass;
+                    return !allowed
+                }
+            })
             .getPageNameOverride('quickSearch', 'draftOutgoing', {
                 disableProperties: function () {
                     return true;

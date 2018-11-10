@@ -884,6 +884,7 @@ module.exports = function (app) {
                     "MANAGE_DESTINATIONS"
                 ],
                 checkAnyPermission: true,
+                showInView: false,
                 subMenu: [
                     // Tags
                     {
@@ -1126,5 +1127,9 @@ module.exports = function (app) {
                 checkShow: self.checkToShowAction
             }
         ];
+
+        console.log('incoming search',_.map(self.gridActions ,function (action) {
+            return langService.get(action.text)
+        }))
     });
 };

@@ -880,6 +880,7 @@ module.exports = function (app) {
                     "MANAGE_DESTINATIONS"
                 ],
                 checkAnyPermission: true,
+                showInView: false,
                 subMenu: [
                     // Tags
                     {
