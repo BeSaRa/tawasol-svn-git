@@ -14,6 +14,7 @@ module.exports = function (app) {
                                                                     documentStatusService,
                                                                     cmsTemplate,
                                                                     dialog,
+                                                                    rootEntity,
                                                                     correspondenceSiteTypeService,
                                                                     generator) {
         'ngInject';
@@ -85,14 +86,20 @@ module.exports = function (app) {
             self.organizations = self.centralArchives ? self.centralArchives : organizationService.organizations;
             // all document types
             var docClass = self.document.docClassName;
-            if (docClass.toLowerCase() === 'correspondence') {
+            var dummySearchDocClass = self.document.dummySearchDocClass.toLowerCase();
+            if (dummySearchDocClass === 'correspondence') {
                 self.documentTypes = correspondenceService.getLookupUnionByLookupName('docTypes');
-                self.securityLevels = generator.getSelectedCollectionFromResult(lookupService.returnLookups(lookupService.securityLevel), employeeService.getEmployee().organization.securityLevels, 'lookupKey');
+                //self.securityLevels = generator.getSelectedCollectionFromResult(lookupService.returnLookups(lookupService.securityLevel), employeeService.getEmployee().organization.securityLevels, 'lookupKey');
+            }
+            else if (dummySearchDocClass === 'outgoingincoming') {
+                self.documentTypes = correspondenceService.getLookup(docClass, 'docTypes');
+                //self.securityLevels = rootEntity.getGlobalSettings().securityLevels;
             }
             else {
                 self.documentTypes = correspondenceService.getLookup(docClass, 'docTypes');
-                self.securityLevels = correspondenceService.getLookup(docClass, 'securityLevels');
+                //self.securityLevels = correspondenceService.getLookup(docClass, 'securityLevels');
             }
+            self.securityLevels = rootEntity.getGlobalSettings().securityLevels;
             properties = lookupService.getPropertyConfigurations(docClass);
             _getClassifications(false);
             _getDocumentFiles(false);
