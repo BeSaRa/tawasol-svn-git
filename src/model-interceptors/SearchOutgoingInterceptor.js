@@ -11,7 +11,6 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            debugger;
             if (model.year === 'All' && model.docDateFrom && model.docDateTo) {
                 model.docDate = {
                     From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),
@@ -111,7 +110,8 @@ module.exports = function (app) {
 
             // just when user select the correspondence type without select main or sub site
             if (!model.sitesInfoCC && !model.sitesInfoTo && !!model.siteType) {
-                model.sitesInfoTo = angular.toJson({siteType:model.siteType.lookupKey,mainSiteId:null,subSiteId:null});
+                // model.sitesInfoTo = angular.toJson({siteType:model.siteType.lookupKey,mainSiteId:null,subSiteId:null});
+                model.sitesInfoTo = angular.toJson({siteType:model.siteType.lookupKey});
             }
 
 
