@@ -160,7 +160,7 @@
                                     <md-select name="thumbnailMode" required
                                                ng-model="ctrl.globalSetting.thumbnailMode">
                                         <md-option ng-repeat="thumbnailMode in ctrl.thumbnailModes track by $index"
-                                                   ng-value="thumbnailMode.id">
+                                                   ng-value="thumbnailMode.lookupKey">
                                             {{thumbnailMode.getTranslatedName()}}
                                         </md-option>
                                     </md-select>
