@@ -366,6 +366,52 @@ module.exports = function (app) {
         };
 
         /**
+         * @description get document versions
+         * @param correspondence
+         * @param $event
+         * @return {*}
+         */
+        self.getDocumentVersions = function (correspondence, $event) {
+            return correspondence
+                .viewSpecificVersion(self.gridActions, $event);
+        };
+        /**
+         * @description duplicate current version
+         * @param correspondence
+         * @param $event
+         */
+        self.duplicateCurrentVersion = function (correspondence, $event) {
+            var info = correspondence.getInfo();
+            return correspondence
+                .duplicateVersion($event)
+                .then(function () {
+                    $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
+                        vsId: info.vsId,
+                        action: 'duplicateVersion',
+                        workItem: info.wobNum
+                    });
+                });
+        };
+        /**
+         * @description duplicate specific version
+         * @param correspondence
+         * @param $event
+         * @return {*}
+         */
+        self.duplicateVersion = function (correspondence, $event) {
+            var info = correspondence.getInfo();
+            return correspondence
+                .duplicateSpecificVersion($event)
+                .then(function () {
+                    $state.go('app.' + info.documentClass.toLowerCase() + '.add', {
+                        vsId: info.vsId,
+                        action: 'duplicateVersion',
+                        workItem: info.wobNum
+                    });
+                });
+        };
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
