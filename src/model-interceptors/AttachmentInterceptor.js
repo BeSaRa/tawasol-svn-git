@@ -50,6 +50,9 @@ module.exports = function (app) {
             model.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             if (typeof model.updateActionStatus === 'undefined' && model.updateActionStatus !== null && model.updateActionStatus !== '')
                 model.updateActionStatus = lookupService.getLookupByLookupKey(lookupService.attachmentUpdateAction, model.updateActionStatus);
+
+
+
             return model;
         });
 

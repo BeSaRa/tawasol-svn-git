@@ -184,6 +184,10 @@ module.exports = function (app) {
                     }
                 }).then(function (result) {
                     attachment.vsId = result.data.rs;
+                    var updateActionStatus = attachment.updateActionStatus.hasOwnProperty('lookupKey') ? attachment.updateActionStatus.lookupKey : attachment.updateActionStatus;
+                    if (updateActionStatus === 0 || updateActionStatus === 2) {
+                        attachment.isDeletable = true;
+                    }
                     attachment = generator.generateInstance(attachment, Attachment, self._sharedMethods);
                     attachment = generator.interceptReceivedInstance('Attachment', attachment);
                     return attachment;//generator.generateInstance(attachment, Attachment, self._sharedMethods);
@@ -348,7 +352,7 @@ module.exports = function (app) {
                     var position = _.findIndex(allowedExtensions, function (ext) {
                         // I removed startsWith because not supported in IE 11 .
                         // Please Don't use it again in any where.
-                        if(ext.indexOf('.') === 0)
+                        if (ext.indexOf('.') === 0)
                             ext = ext.split('.').pop();
                         return ext === extension;
                     });
