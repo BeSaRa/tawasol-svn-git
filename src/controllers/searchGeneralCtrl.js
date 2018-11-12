@@ -375,6 +375,17 @@ module.exports = function (app) {
          };*/
 
         /**
+         * @description Create Reply
+         * @param correspondence
+         * @param $event
+         */
+        self.createReply = function (correspondence, $event) {
+            var info = correspondence.getInfo();
+            dialog.hide();
+            $state.go('app.outgoing.add', {vsId: info.vsId, action: 'reply'});
+        };
+
+        /**
          * @description Launch distribution workflow for internal item
          * @param searchedGeneralDocument
          * @param $event
@@ -836,6 +847,21 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
+                }
+            },
+            // Create Reply
+            {
+                type: 'action',
+                icon: 'pen',
+                text: 'grid_action_create_reply',
+                shortcut: false,
+                permissionKey: 'CREATE_REPLY',
+                callback: self.createReply,
+                class: "action-green",
+                //hide: true, //TODO: Need service from Issawi
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && info.documentClass === 'incoming';
                 }
             },
             // Launch Distribution Workflow
