@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('bodyDirective', function ($compile, stateHelperService) {
+    app.directive('bodyDirective', function ($compile, stateHelperService, toast, $window) {
         'ngInject';
         return {
             restrict: 'A',
@@ -12,8 +12,9 @@ module.exports = function (app) {
                     class: 'bundle-version',
                     layout: 'row',
                     'layout-align': 'center center'
-                }).html('{{"version: " + bundleVersion}}');
+                }).html('{{"version: " + bundleVersion}} - {{buildNumber}}');
                 element.append($compile(div)(scope));
+
             }
         }
     })

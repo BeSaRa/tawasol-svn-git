@@ -83,5 +83,6 @@ module.exports = function (app) {
         });
 
         $scope.bundleVersion = '2.1.1';
+        $scope.buildNumber = ' T#2807';
     });
 };
