@@ -99,7 +99,6 @@ module.exports = function (app) {
                     self.deleteListener(xhr.config.url);
                 },
                 responseError: function (xhr) {
-                    console.log(xhr);
                     self.runListener(xhr.config.url, xhr);
                 }
             },self);

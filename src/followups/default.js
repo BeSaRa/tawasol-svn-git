@@ -56,13 +56,17 @@ module.exports = function (app) {
             if (url === urlService.login) {
                 dialog
                     .errorMessage(langService.get('internal_server_error'))
+            } else {
+                if (!errorCode.hasErrorCode(xhr)) {
+                    dialog
+                        .errorMessage(langService.get('internal_server_error'));
+                }
             }
-            console.log('500', xhr);
         });
 
         exception.addGeneralExceptionHandler(500, function (xhr) {
-            var errorCode = xhr.data.ec;
-            if (errorCode === 1005 && xhr.config.method === 'DELETE')
+            var ec = xhr.data.ec;
+            if (ec === 1005 && xhr.config.method === 'DELETE')
                 dialog.errorMessage(langService.get('record_has_related_records'));
 
         });

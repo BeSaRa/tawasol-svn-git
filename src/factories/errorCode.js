@@ -46,6 +46,15 @@ module.exports = function (app) {
                     return true;
                 }
                 return $q.reject(error);
+            },
+            /**
+             * @description to check if the error code exists or not
+             * @param error
+             * @return {boolean}
+             */
+            hasErrorCode: function (error) {
+                var code = error.hasOwnProperty('data') && error.data ? error.data.ec : error;
+                return Object.values(errorCodes).indexOf(code) !== -1;
             }
         }
     })
