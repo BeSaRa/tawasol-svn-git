@@ -893,7 +893,8 @@ module.exports = function (app) {
                                 workItem: workItem,
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
-                                popupNumber: generator.getPopupNumber()
+                                popupNumber: generator.getPopupNumber(),
+                                disableEverything: disabled.disableAll
                             },
                             resolve: {
                                 organizations: function (organizationService) {

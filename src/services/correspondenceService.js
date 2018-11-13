@@ -1244,7 +1244,8 @@ module.exports = function (app) {
                             workItem: info.workFlow === 'internal' ? correspondence : workItem,
                             disableProperties: disableProperties,
                             disableCorrespondence: disableCorrespondence,
-                            popupNumber: generator.getPopupNumber()
+                            popupNumber: generator.getPopupNumber(),
+                            disableEverything: !!departmentIncoming
                         },
                         resolve: {
                             organizations: function (organizationService) {
