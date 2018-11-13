@@ -177,12 +177,12 @@
                                     <md-input-container flex>
                                         <label for="mobile">{{lang.mobile_number}}</label>
                                         <input name="mobile" id="mobile" required
-                                               placeholder="+974xxxxxxxx"
+                                               placeholder="00974xxxxxxxx"
                                                ng-model="ctrl.applicationUser.mobile" maxlength="15"
-                                               custom-validate-directive="phone_mobile">
+                                               custom-validate-directive="number">
                                         <div ng-messages="applicationUserForm.mobile.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="phone_mobile">
+                                            <div ng-message="number">
                                                 {{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}
                                             </div>
                                             <div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>
