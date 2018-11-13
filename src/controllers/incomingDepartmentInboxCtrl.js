@@ -343,6 +343,7 @@ module.exports = function (app) {
                     });
                 });
         };
+
         /**
          * @description duplicate specific version
          * @param workItem
