@@ -192,6 +192,16 @@ module.exports = function (app) {
                 return viewDocumentService.viewUserSentDocument(this, actions, gridName, $event);
             };
 
+            EventHistory.prototype.viewSpecificVersion = function ($event) {
+                return correspondenceService.viewSpecificCorrespondenceVersion(this, false, $event);
+            };
+            EventHistory.prototype.duplicateVersion = function ($event) {
+                return correspondenceService.duplicateCurrentCorrespondenceVersion(this, $event);
+            };
+            EventHistory.prototype.duplicateSpecificVersion = function ($event) {
+                return correspondenceService.duplicateSpecificCorrespondenceVersion(this, $event);
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('EventHistory', 'init', this);
