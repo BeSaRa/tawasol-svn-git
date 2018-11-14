@@ -6,7 +6,12 @@ module.exports = function (app) {
 
         self.customValidations = [];
 
-        self.regex = {
+        var regex = {
+            /**
+             * @description allow only dates with format YYYY-MM-dd
+             **/
+            Date: /([1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/,
+
             /**
              * @description Allows url format with http or https or www
              */
@@ -63,7 +68,8 @@ module.exports = function (app) {
             /**
              * @description Allows at least 1 arabic character and can contain digits, space(not in end of string and no 2 consecutive spaces)
              */
-            A1NS: /^(?=.*[ء-ي])[0-9ء-ي]?( ?[0-9ء-ي]+)+$/,
+            // A1NS: /^(?=.*[ء-ي])[0-9ء-ي]?( ?[0-9ء-ي]+)+$/,
+            A1NS: /(^[\u0621-\u064A]+)([\u0621-\u064A ?0-9]*)$/,
 
             /**
              * @description Allows english, digits, space(not in end of string and no 2 consecutive spaces)
@@ -82,6 +88,7 @@ module.exports = function (app) {
             /**
              * @description Allows Arabic, english, digits, hyphen, forward slash
              */
+            // AEN: /^[0-9ء-يA-Za-z.]?([ \/-]?[0-9ء-يA-Za-z]+)+$/,
             AEN: /^[0-9ء-يA-Za-z.]?([ \-]?[0-9ء-يA-Za-z.]+)+$/,
             /**
              * @description Allows Arabic, english, space(not in end of string and no 2 consecutive spaces)
@@ -103,7 +110,9 @@ module.exports = function (app) {
             /**
              * @description Allows integer value from 1 to 65535
              */
-            port: /^(([1-9]\d{0,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))$/
+            port: /^(([1-9]\d{0,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))$/,
+            EN_DOT: /^[a-zA-Z0-9_.]+$/,
+            EN_DOT_DASH: /^[a-zA-Z0-9_.\-]+$/
         };
 
         /**
