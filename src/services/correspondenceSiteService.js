@@ -371,7 +371,7 @@ module.exports = function (app) {
                         }
                     });
             },
-            subCorrespondenceSiteEdit: function (correspondenceSite, $event) {
+            subCorrespondenceSiteEdit: function (correspondenceSite , parent, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -383,8 +383,8 @@ module.exports = function (app) {
                             editMode: true,
                             correspondenceSite: correspondenceSite,
                             correspondenceSites: self.correspondenceSites,
-                            parent: correspondenceSite.parent,
-                            sub: false
+                            parent: parent,
+                            sub: true
                         }
                     });
             },

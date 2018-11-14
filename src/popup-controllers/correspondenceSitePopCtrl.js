@@ -144,7 +144,7 @@ module.exports = function (app) {
                             else {
                                 self.correspondenceSite.relatedOus = relatedOus;
                                 self.model = angular.copy(self.correspondenceSite);
-                                self.disableParent = false;
+                                self.disableParent = true;
                                 self.editMode = true;
                                 toast.success(langService.get('add_success').change({name: self.correspondenceSite.getNames()}));
                             }
@@ -275,7 +275,7 @@ module.exports = function (app) {
         self.editSubCorrespondenceSite = function (correspondenceSite, $event) {
             correspondenceSiteService
                 .controllerMethod
-                .subCorrespondenceSiteEdit(correspondenceSite, $event)
+                .subCorrespondenceSiteEdit(correspondenceSite, self.correspondenceSite ,  $event)
                 .then(function (correspondenceSite) {
                     self.behindScene(correspondenceSite)
                         .then(function (correspondenceSite) {
