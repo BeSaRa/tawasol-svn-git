@@ -40,7 +40,17 @@ module.exports = {
                     }
                 )
             },
-            {test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/, loaders: ['file-loader']},
+            {
+                test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/,
+                use : {
+                    loader: 'file-loader',
+                    options: {
+                        name: '../../dist/fonts/[name].[ext]',
+                        useRelativePath: false
+                    }
+                }
+
+            },
             {
                 test: /\.(gif|svg|png|jpg)$/i,
                 use: {
