@@ -333,7 +333,6 @@ Added the has content indicator in versions popup.
 
 10/09/2018
 ------------------
-16922:V2.1.1- composite document -Notification doesn't sent when subscribe composite document by receive and change in status
 reset correspondence sites when add form is reset.
 17045:Add outgoing - Save button is not enabled after adding the properties and correspondence sites only
 16536:Test - Correspondence Site is not found When Create Reply from Incoming Search.
@@ -387,6 +386,13 @@ permission check on routes
 ---------------------
 17256: Edit after export - proper message should appear for a user when try to edit after export a documnet that was already received by another OU
 Fixed IE Issue for select signature for approve
+Test connection fixes in entity popup.
+
+
+10/29/2018
+---------------------
+10974: Enhancement - Add Sub Correspondence Site: The System Accepts Setting the Sub Site Type different from the Main Site Type.
+
 
 10/24/2018
 ---------------------

@@ -32,6 +32,7 @@ module.exports = function (app) {
 
         if (sub) {
             self.correspondenceSite.parent = parent;
+            self.correspondenceSite.correspondenceTypeId = parent.correspondenceTypeId;
             self.disableParent = true;
         }
 
