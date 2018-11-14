@@ -190,51 +190,17 @@ module.exports = function (app) {
          */
         self.removeBulkRejectedInternals = function (rejectedInternals) {
             var bulkVsIds = rejectedInternals[0].hasOwnProperty('vsId') ? _.map(rejectedInternals, 'vsId') : rejectedInternals;
-            /* return $http.put(urlService.outgoings+'/remove/bulk', bulkVsIds).then(function (result) {
-                 result = result.data.rs;
-                 var failedRejectedInternals = [];
-                 _.map(result, function (value, key) {
-                     if (!value)
-                         failedRejectedInternals.push(key);
-                 });
-                 return _.filter(rejectedInternals, function (rejectedInternal) {
-                     return (failedRejectedInternals.indexOf(rejectedInternal.vsId) > -1);
-                 });
-             });*/
-        };
-
-        /**
-         * @description Send to review of rejected internal mail
-         * @param rejectedInternal
-         */
-        self.sendToReviewRejectedInternal = function (rejectedInternal) {
-            var vsId = rejectedInternal.hasOwnProperty('vsId') ? rejectedInternal.vsId : rejectedInternal;
-            /* return $http
-                 .put(urlService.outgoings + '/' + vsId + '/send-to-review')
-                 .then(function () {
-                     return rejectedInternal;
-                 });*/
-        };
-
-        /**
-         * @description Send to review of bulk rejected internal mail
-         * @param rejectedInternals
-         */
-        self.bulkSendToReviewRejectedInternal = function (rejectedInternals) {
-            var bulkVsIds = rejectedInternals[0].hasOwnProperty('vsId') ? _.map(rejectedInternals, 'vsId') : rejectedInternals;
-            /*return $http
-                .put(urlService.outgoings + '/send-to-review/bulk', bulkVsIds)
-                .then(function (result) {
-                    result = result.data.rs;
-                    var failedRejectedInternals = [];
-                    _.map(result, function (value, key) {
-                        if (!value)
-                            failedRejectedInternals.push(key);
-                    });
-                    return _.filter(rejectedInternals, function (rejectedInternal) {
-                        return (failedRejectedInternals.indexOf(rejectedInternal.vsId) > -1);
-                    });
-                });*/
+            return $http.put(urlService.internals + '/remove/bulk', bulkVsIds).then(function (result) {
+                result = result.data.rs;
+                var failedRejectedInternals = [];
+                _.map(result, function (value, key) {
+                    if (!value)
+                        failedRejectedInternals.push(key);
+                });
+                return _.filter(rejectedInternals, function (rejectedInternal) {
+                    return (failedRejectedInternals.indexOf(rejectedInternal.vsId) > -1);
+                });
+            });
         };
 
         /**
@@ -290,19 +256,19 @@ module.exports = function (app) {
          */
         self.bulkSendToReviewRejectedInternal = function (rejectedInternals) {
             var bulkVsIds = rejectedInternals[0].hasOwnProperty('vsId') ? _.map(rejectedInternals, 'vsId') : rejectedInternals;
-            /* return $http
-                 .put(urlService.outgoings + '/send-to-review/bulk', bulkVsIds)
-                 .then(function (result) {
-                     result = result.data.rs;
-                     var failedRejectedInternals = [];
-                     _.map(result, function (value, key) {
-                         if (!value)
-                             failedRejectedInternals.push(key);
-                     });
-                     return _.filter(rejectedInternals, function (rejectedInternal) {
-                         return (failedRejectedInternals.indexOf(rejectedInternal.vsId) > -1);
-                     });
-                 });*/
+            return $http
+                .put(urlService.internals + '/send-to-review/bulk', bulkVsIds)
+                .then(function (result) {
+                    result = result.data.rs;
+                    var failedRejectedInternals = [];
+                    _.map(result, function (value, key) {
+                        if (!value)
+                            failedRejectedInternals.push(key);
+                    });
+                    return _.filter(rejectedInternals, function (rejectedInternal) {
+                        return (failedRejectedInternals.indexOf(rejectedInternal.vsId) > -1);
+                    });
+                });
         };
 
         /**

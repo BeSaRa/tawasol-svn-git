@@ -107,13 +107,6 @@ module.exports = function (app) {
                 });
         };
 
-        /**
-         * @description Delete multiple selected ready to send incoming mails
-         * @param $event
-         */
-        self.removeBulkReadyToSendIncomings = function ($event) {
-            console.log('delete ready to send incoming mails bulk : ', self.selectedReadyToSendIncomings);
-        };
 
         /**
          * @description Change the status of ready to send incoming mail

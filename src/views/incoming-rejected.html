@@ -47,6 +47,7 @@
                                                 </md-button>
                                                 <md-button class="md-icon-button"
                                                            tooltip="{{lang.remove}}"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('DELETE_INCOMING')"
                                                            ng-click="ctrl.removeBulkRejectedIncomings($event)">
                                                     <md-icon md-svg-icon="delete" class="action-green"></md-icon>
                                                 </md-button>

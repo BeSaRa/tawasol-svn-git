@@ -121,7 +121,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.removeReviewInternal = function (reviewInternal, $event, defer) {
-            //console.log('remove review internal mail : ', reviewInternal);
             reviewInternalService
                 .controllerMethod
                 .reviewInternalRemove(reviewInternal, $event)
@@ -138,7 +137,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkReviewInternals = function ($event) {
-            //console.log('remove review internal mails bulk : ', self.selectedReviewInternals);
             reviewInternalService
                 .controllerMethod
                 .reviewInternalRemoveBulk(self.selectedReviewInternals, $event)
@@ -629,6 +627,7 @@ module.exports = function (app) {
                 icon: 'delete',
                 text: 'grid_action_remove',
                 shortcut: false,
+                permissionKey: 'DELETE_INTERNAL',
                 callback: self.removeReviewInternal,
                 class: "action-green",
                 checkShow: self.checkToShowAction

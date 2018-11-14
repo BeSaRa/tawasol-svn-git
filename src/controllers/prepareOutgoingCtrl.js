@@ -26,6 +26,8 @@ module.exports = function (app) {
         self.controllerName = 'prepareOutgoingCtrl';
         self.currentEmployee = employeeService.getEmployee();
         self.progress = null;
+        // employee service to check the permission in html
+        self.employeeService = employeeService;
 
         contextHelpService.setHelpTo('outgoing-prepare');
         /**
@@ -411,6 +413,7 @@ module.exports = function (app) {
                 icon: 'delete',
                 text: 'grid_action_remove',
                 shortcut: true,
+                permissionKey: "DELETE_OUTGOING",
                 callback: self.removePrepareOutgoing,
                 class: "action-green",
                 checkShow: self.checkToShowAction

@@ -33,6 +33,7 @@
 
                                                 <!--ng-if="ctrl.selectedDraftInternals.length > 1"-->
                                                 <md-button class="md-icon-button"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('DELETE_INTERNAL')"
                                                            tooltip="{{lang.remove}}"
                                                            ng-click="ctrl.removeBulkDraftInternals($event)">
                                                     <md-icon md-svg-icon="delete" class="action-green"></md-icon>

@@ -22,6 +22,8 @@ module.exports = function (app) {
         self.controllerName = 'scanIncomingCtrl';
         self.currentEmployee = employeeService.getEmployee();
         self.progress = null;
+        // employee service to check the permission in html
+        self.employeeService = employeeService;
 
         contextHelpService.setHelpTo('incoming-scan');
 
@@ -401,6 +403,7 @@ module.exports = function (app) {
                 icon: 'delete',
                 text: 'grid_action_remove',
                 shortcut: true,
+                permissionKey: 'DELETE_INCOMING',
                 callback: self.removeScanIncoming,
                 class: "action-green",
                 checkShow: self.checkToShowAction

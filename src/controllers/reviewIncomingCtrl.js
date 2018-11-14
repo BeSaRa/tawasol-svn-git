@@ -686,6 +686,7 @@ module.exports = function (app) {
                 icon: 'delete',
                 text: 'grid_action_remove',
                 shortcut: false,
+                permissionKey: 'DELETE_INCOMING',
                 callback: self.removeReviewIncoming,
                 class: "action-green",
                 checkShow: self.checkToShowAction

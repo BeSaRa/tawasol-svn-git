@@ -34,6 +34,7 @@
 
                                                 <!--ng-if="ctrl.selectedPrepareOutgoings.length > 1"-->
                                                 <md-button class="md-icon-button"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('DELETE_OUTGOING')"
                                                            tooltip="{{lang.remove}}"
                                                            ng-click="ctrl.removeBulkPrepareOutgoings($event)">
                                                     <md-icon md-svg-icon="delete" class="action-green"></md-icon>

@@ -33,7 +33,7 @@
                                                            ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
                                                            tooltip="{{lang.grid_action_launch_distribution_workflow}}"
                                                            ng-click="ctrl.launchDistributionWorkflowBulk($event)">
-                                                    <md-icon md-svg-icon="sitemap" class="action-red"></md-icon>
+                                                    <md-icon md-svg-icon="sitemap" class="action-green"></md-icon>
                                                 </md-button>
                                                 <md-button class="md-icon-button"
                                                            tooltip="{{lang.grid_action_archive}}"
@@ -47,6 +47,7 @@
                                                 </md-button>
                                                 <md-button class="md-icon-button"
                                                            tooltip="{{lang.remove}}"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('DELETE_INTERNAL')"
                                                            ng-click="ctrl.removeBulkRejectedInternals($event)">
                                                     <md-icon md-svg-icon="delete" class="action-green"></md-icon>
                                                 </md-button>

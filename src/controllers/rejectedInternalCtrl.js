@@ -136,12 +136,12 @@ module.exports = function (app) {
          */
         self.removeBulkRejectedInternals = function ($event) {
             console.log('remove rejected internal mails bulk : ', self.selectedRejectedInternals);
-            /* rejectedInternalService
+             rejectedInternalService
                  .controllerMethod
                  .rejectedInternalRemoveBulk(self.selectedRejectedInternals, $event)
                  .then(function () {
                      self.reloadRejectedInternals(self.grid.page);
-                 });*/
+                 });
         };
 
         /**
@@ -197,12 +197,12 @@ module.exports = function (app) {
          */
         self.sendToReviewBulk = function ($event) {
             console.log('send to review rejected internal mails bulk : ', self.selectedRejectedInternals);
-            /* rejectedInternalService
+             rejectedInternalService
                  .controllerMethod
                  .rejectedInternalSendToReviewBulk(self.selectedRejectedInternals, $event)
                  .then(function () {
                      self.reloadRejectedInternals(self.grid.page);
-                 });*/
+                 });
         };
 
 
@@ -563,6 +563,7 @@ module.exports = function (app) {
                 icon: 'delete',
                 text: 'grid_action_remove',
                 shortcut: true,
+                permissionKey: 'DELETE_INTERNAL',
                 callback: self.removeRejectedInternal,
                 class: "action-green",
                 checkShow: self.checkToShowAction

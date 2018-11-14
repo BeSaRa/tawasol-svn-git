@@ -22,6 +22,8 @@ module.exports = function (app) {
         self.controllerName = 'prepareInternalCtrl';
         self.currentEmployee = employeeService.getEmployee();
         self.progress = null;
+        // employee service to check the permission in html
+        self.employeeService = employeeService;
 
         /**
          * @description All prepare internal items
@@ -393,6 +395,7 @@ module.exports = function (app) {
                 icon: 'delete',
                 text: 'grid_action_remove',
                 shortcut: true,
+                permissionKey: 'DELETE_INTERNAL',
                 callback: self.removePrepareInternal,
                 class: "action-green",
                 checkShow: self.checkToShowAction

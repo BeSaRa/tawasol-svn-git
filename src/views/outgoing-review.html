@@ -48,6 +48,7 @@
                                                 </md-button>
                                                 <md-button class="md-icon-button"
                                                            tooltip="{{lang.remove}}"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('DELETE_OUTGOING')"
                                                            ng-click="ctrl.removeBulkReviewOutgoings($event)">
                                                     <md-icon md-svg-icon="delete" class="action-green"></md-icon>
                                                 </md-button>

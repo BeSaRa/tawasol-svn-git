@@ -563,6 +563,7 @@ module.exports = function (app) {
                 icon: 'delete',
                 text: 'grid_action_remove',
                 shortcut: true,
+                permissionKey: 'DELETE_INTERNAL',
                 callback: self.removeDraftInternal,
                 class: "action-green",
                 checkShow: self.checkToShowAction
