@@ -45,7 +45,7 @@
                             </accordion-title>
                             <accordion-content>
                                 <div>
-                                    <md-checkbox ng-if="!ctrl.outgoing.addMethod"
+                                    <md-checkbox ng-if="!ctrl.outgoing.addMethod && ctrl.employeeService.hasPermissionTo('COMPOSITE_OUTGOING')"
                                                  ng-change="ctrl.compositeChange()"
                                                  ng-disabled="ctrl.outgoing.sitesInfoTo.length < 2"
                                                  ng-model="ctrl.outgoing.isComposite">
