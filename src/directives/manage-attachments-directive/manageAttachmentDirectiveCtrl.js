@@ -75,7 +75,8 @@ module.exports = function (app) {
             }
             return new Attachment({
                 file: file,
-                securityLevel: self.document ? securityLevel : null
+                securityLevel: self.document ? securityLevel : null,
+                updateActionStatus: self.attachmentUpdateActions[0]
             });
         }
 
@@ -233,7 +234,6 @@ module.exports = function (app) {
                 .validateBeforeUpload('attachmentUpload', files[0])
                 .then(function (file) {
                     self.attachment = _createAttachmentFile(file);
-                    self.attachment.updateActionStatus = self.attachmentUpdateActions[0];
                 })
                 .catch(function (availableExtensions) {
                     dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
