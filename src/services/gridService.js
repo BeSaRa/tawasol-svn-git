@@ -3,7 +3,8 @@ module.exports = function (app) {
                                          employeeService,
                                          localStorageService,
                                          generator,
-                                         langService) {
+                                         langService,
+                                         $filter) {
         'ngInject';
         var self = this;
         self.serviceName = 'gridService';
@@ -147,7 +148,6 @@ module.exports = function (app) {
             localStorageService.set(self.storageKeys.sorting, JSON.stringify(sortingStorage));
         };
 
-
         function _removeGridSortingKey(gridName) {
             // get all the saved sorting
             var sortingStorage = self.getGridSortingKey();
@@ -191,7 +191,6 @@ module.exports = function (app) {
         self.removeAllSorting = function () {
             localStorageService.remove(self.storageKeys.sorting);
         };
-
 
         /**
          * @description Gets the grid limit options(records per page options)
@@ -286,7 +285,6 @@ module.exports = function (app) {
             localStorageService.set(_getStorageKey(self.storageKeys.pagingLimit), JSON.stringify(pagingStorage));
         };
 
-
         function _removeGridPagingLimitByGridName(gridName) {
             // get all the saved paging
             var pagingStorage = self.getGridPagingLimitByGridName();
@@ -329,6 +327,45 @@ module.exports = function (app) {
          */
         self.removeAllPagingLimit = function () {
             localStorageService.remove(_getStorageKey(self.storageKeys.pagingLimit));
+        };
+
+        /**
+         * @description Search the text in the grid data
+         * @param grid
+         * @param recordsCopy
+         * copy of original records which will be returned in case search is empty.
+         * @returns {*}
+         */
+        self.searchGridData = function (grid, recordsCopy) {
+            if (!grid.searchText)
+                return recordsCopy;
+            else {
+                self.gridToSearch = grid;
+                return $filter('filter')(recordsCopy, _searchRecords);
+            }
+        };
+
+        var _searchRecords = function (item, index, records) {
+            var searchTextCopy = angular.copy(self.gridToSearch.searchText.trim().toLowerCase());
+            var propertyToSearch, propertyValue, result;
+            for (var property in self.gridToSearch.searchColumns) {
+                propertyToSearch = self.gridToSearch.searchColumns[property];
+                if (typeof propertyToSearch === 'function') {
+                    propertyToSearch = propertyToSearch();
+                }
+                // if property to search has value(property name defined), then search, otherwise, skip search
+                if (propertyToSearch) {
+                    // propertyValue = _.result(item, propertyToSearch);
+                    propertyValue = generator.getNestedPropertyValue(item, propertyToSearch);
+                    if (propertyValue && propertyValue.toString().toLowerCase().indexOf(searchTextCopy) > -1) {
+                        result = true;
+                        break;
+                    }
+                    result = false;
+                }
+                result = false;
+            }
+            return result;
         };
 
     });

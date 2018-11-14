@@ -36,7 +36,8 @@ module.exports = function (app) {
          * @type {*}
          */
         self.userSentItems = userSentItems;
-
+        self.userSentItemsCopy = angular.copy(userSentItems);
+        self.totalRecords = userSentItemService.totalCount;
         self.userSentItemService = userSentItemService;
 
 
@@ -46,34 +47,6 @@ module.exports = function (app) {
          */
         self.selectedUserSentItems = [];
         self.globalSetting = rootEntity.returnRootEntity().settings;
-
-        /**
-         * @description Contains options for grid configuration
-         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
-         */
-        self.grid = {
-            limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.sentItem) || 5, //self.globalSetting.searchAmount, // default limit
-            page: 1, // first page
-            order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.sentItem), //[5, 10, 20, 100, 200]
-            pagingCallback: function (page, limit) {
-                gridService.setGridPagingLimitByGridName(gridService.grids.inbox.sentItem, limit);
-                self.reloadUserSentItems(page);
-            }
-            /*limitOptions: [5, 10, 20, // limit options
-                {
-                    /!*label: self.globalSetting.searchAmountLimit.toString(),
-                    value: function () {
-                        return self.globalSetting.searchAmountLimit
-                    }*!/
-                    label: langService.get('all'),
-                    value: function () {
-                        return (userSentItemService.totalCount + 21);
-                    }
-                }
-            ]*/
-        };
-
 
         /**
          * @description Get the sorting key for information or lookup model
@@ -93,6 +66,45 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Contains options for grid configuration
+         * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
+         */
+        self.grid = {
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.sentItem) || 5, //self.globalSetting.searchAmount, // default limit
+            page: 1, // first page
+            order: '', // default sorting order
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.sentItem, self.totalRecords), //[5, 10, 20, 100, 200]
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.inbox.sentItem, limit);
+                self.reloadUserSentItems(page);
+            },
+            searchColumns: {
+                securityLevel: function () {
+                    return self.getSortingKey('securityLevelIndicator.value', 'Lookup')
+                },
+                docFullSerial: 'docFullSerial',
+                docSubject: 'docSubject',
+                actionDate: 'actionDate',
+                action: function () {
+                    return self.getSortingKey('action', 'WorkflowAction');
+                },
+                receiverInfo: function () {
+                    return self.getSortingKey('receiverInfo', 'Information');
+                },
+                dueDate: 'dueDate',
+                mainSiteSubSiteString: function () {
+                    return self.getSortingKey('mainSiteSubSiteString', 'Information');
+                },
+                docClass: 'docClassIndicator.text'
+            },
+            searchText: '',
+            searchCallback: function () {
+                self.userSentItems = gridService.searchGridData(self.grid, self.userSentItemsCopy);
+                self.totalRecords = self.userSentItems.length;
+            }
+        };
+
+        /**
          * @description Reload the grid of user sent item
          * @param pageNumber
          * @return {*|Promise<U>}
@@ -104,6 +116,9 @@ module.exports = function (app) {
                 .loadUserSentItems(self.grid.page, self.grid.limit)
                 .then(function (result) {
                     self.userSentItems = result;
+                    self.userSentItemsCopy = angular.copy(self.userSentItems);
+                    self.totalRecords = userSentItemService.totalRecords;
+
                     self.selectedUserSentItems = [];
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);

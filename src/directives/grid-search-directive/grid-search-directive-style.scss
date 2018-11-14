@@ -1,0 +1,54 @@
+
+#filter_icons {
+  md-icon {
+    color: #FFF;
+  }
+}
+#search_header {
+  z-index: 3;
+  background-color: white;
+  overflow: hidden;
+  transition: all .2s ease;
+  width: 320px;
+  padding: 0 8px 0 0;
+  button {
+    margin: 0;
+    padding: 0;
+  }
+  input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    height: 40px;
+  }
+  &.close {
+    background-color: transparent;
+    md-icon {
+      color: #FFF;
+    }
+    box-shadow: none;
+    width: 50px;
+    input {
+      display: none;
+    }
+  }
+}
+
+html.rtl {
+  #search_header {
+    padding: 0 0 0 8px;
+  }
+}
+
+::placeholder {
+  color: #9B9B9B !important;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #9B9B9B !important;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: #9B9B9B !important;
+}

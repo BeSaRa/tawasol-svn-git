@@ -701,6 +701,31 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Deletes property/properties from the model
+         * @param record
+         * @param property
+         */
+        self.getNestedPropertyValue = function (record, property) {
+            var recordCopy = angular.copy(record);
+            return _getPropertyValue(recordCopy, property);
+        };
+
+        var _getPropertyValue = function (record, property) {
+            if (property.indexOf('.') > -1) {
+                var arr = property.split('.');
+                for (var i = 0; i < arr.length; i++) {
+                    var prop = arr.shift();
+                    return self.getNestedPropertyValue(record[prop], arr.join('.'))
+                }
+            }
+            else {
+                if (typeof record === 'string' || typeof record === 'number')
+                    return record;
+                return record[property];
+            }
+        };
+
+        /**
          * @description Checks if the browser popup is blocked
          * @param window
          */
