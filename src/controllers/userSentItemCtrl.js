@@ -100,7 +100,7 @@ module.exports = function (app) {
             searchText: '',
             searchCallback: function () {
                 self.userSentItems = gridService.searchGridData(self.grid, self.userSentItemsCopy);
-                self.totalRecords = self.userSentItems.length;
+                self.totalRecords = self.grid.searchText ? self.userSentItems.length : userSentItemService.totalCount;
             }
         };
 
@@ -117,7 +117,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.userSentItems = result;
                     self.userSentItemsCopy = angular.copy(self.userSentItems);
-                    self.totalRecords = userSentItemService.totalRecords;
+                    self.totalRecords = userSentItemService.totalCount;
 
                     self.selectedUserSentItems = [];
                     counterService.loadCounters();
