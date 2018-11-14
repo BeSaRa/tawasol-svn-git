@@ -46,6 +46,7 @@
                             <accordion-content>
                                 <div>
                                     <md-checkbox ng-if="!ctrl.outgoing.addMethod"
+                                                 ng-change="ctrl.compositeChange()"
                                                  ng-disabled="ctrl.outgoing.sitesInfoTo.length < 2"
                                                  ng-model="ctrl.outgoing.isComposite">
                                         {{lang.version_for_each_site}} : {{ctrl.outgoing.isComposite ? lang.yes :

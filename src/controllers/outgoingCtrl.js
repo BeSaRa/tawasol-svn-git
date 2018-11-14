@@ -154,13 +154,13 @@ module.exports = function (app) {
 
 
         self.requestCompleted = false;
-        self.saveInProgress= false;
+        self.saveInProgress = false;
         self.saveCorrespondence = function (status) {
             if (status && !self.documentInformation) {
                 toast.error(langService.get('cannot_save_as_draft_without_content'));
                 return;
             }
-            self.saveInProgress= true;
+            self.saveInProgress = true;
             var promise = null;
             var defer = $q.defer();
             //var isDocHasVsId = angular.copy(self.outgoing).hasVsId();
@@ -222,7 +222,7 @@ module.exports = function (app) {
                     }
                 })
                     .catch(function (error) {
-                        self.saveInProgress= false;
+                        self.saveInProgress = false;
                     });
             })
         };
@@ -254,7 +254,7 @@ module.exports = function (app) {
                     successKey = 'save_success'
                 }
                 self.requestCompleted = true;
-                self.saveInProgress= false;
+                self.saveInProgress = false;
                 toast.success(langService.get(successKey));
             }
         };
@@ -524,6 +524,14 @@ module.exports = function (app) {
             self.contentFileExist = false;
             self.contentFileSizeExist = false;
             self.document_properties.$setUntouched();
+        };
+
+        self.compositeChange = function () {
+            dialog
+                .infoMessage(langService.get('please_reselect_content'))
+                .then(function () {
+                    self.documentInformation = null;
+                });
         };
 
         /**
