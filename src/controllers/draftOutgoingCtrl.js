@@ -831,7 +831,7 @@ module.exports = function (app) {
                 // editInDeskTop
                 {
                     type: 'action',
-                    icon: 'book-open-variant',
+                    icon: 'desktop-classic',
                     text: 'grid_action_edit_in_desktop',
                     shortcut: true,
                     hide: false,

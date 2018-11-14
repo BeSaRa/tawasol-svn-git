@@ -684,6 +684,7 @@ module.exports = function (app) {
                     return self.checkToShowAction(action, model) && model.hasContent();
                 }
             },
+            // editInDeskTop
             {
                 type: 'action',
                 icon: 'desktop-classic',

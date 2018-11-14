@@ -1379,6 +1379,7 @@ module.exports = function (app) {
                     }
                 ]
             },
+            // editInDeskTop
             {
                 type: 'action',
                 icon: 'desktop-classic',
