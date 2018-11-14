@@ -107,10 +107,10 @@
                                         md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
                                         <span>{{lang.priority_level}}</span>
                                     </th>
-                                    <th ng-if="!ctrl.selectedSearchedOutgoingDocuments.length" md-column
+                                    <!--<th ng-if="!ctrl.selectedSearchedOutgoingDocuments.length" md-column
                                         md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
                                         <span>{{lang.security_level}}</span>
-                                    </th>
+                                    </th>-->
                                     <th ng-if="!ctrl.selectedSearchedOutgoingDocuments.length" md-column
                                         md-order-by="{{ctrl.getSortingKey('docTypeForSearchGrid', 'DocumentType')}}">
                                         <span>{{lang.label_document_type}}</span>
@@ -179,7 +179,7 @@
                                         <span ng-if="!searchedOutgoingDocument.hasContent()">{{searchedOutgoingDocument.docSubject}}</span>
                                     </td>
                                     <td md-cell>{{searchedOutgoingDocument.priorityLevel.getTranslatedName()}}</td>
-                                    <td md-cell>{{searchedOutgoingDocument.securityLevel.getTranslatedName()}}</td>
+                                    <!--<td md-cell>{{searchedOutgoingDocument.securityLevel.getTranslatedName()}}</td>-->
                                     <!--<td md-cell>{{lang[searchedOutgoingDocument.getInfo().documentClass +"_document_class"]}}</td>-->
                                     <td md-cell>{{searchedOutgoingDocument.docTypeInfo.getTranslatedName()}}
                                     </td>
