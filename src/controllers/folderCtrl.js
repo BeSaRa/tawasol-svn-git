@@ -21,7 +21,8 @@ module.exports = function (app) {
                                            errorCode,
                                            contextHelpService,
                                            generator,
-                                           gridService) {
+                                           gridService,
+                                           $scope) {
         'ngInject';
         var self = this;
         self.controllerName = 'folderCtrl';
@@ -1555,6 +1556,12 @@ module.exports = function (app) {
                 }
             }
         ];
+
+        $scope.$on('$folder_deleted', function (event) {
+            if (self.controllerName === 'folderCtrl') {
+                self.reloadFolders(self.grid.page);
+            }
+        });
 
         // self.refreshInbox = function (time) {
         //     $timeout(function () {

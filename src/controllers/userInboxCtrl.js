@@ -43,11 +43,6 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'userInboxCtrl';
         self.employeeService = employeeService;
-        $scope.$on('$folder_deleted', function (event) {
-            if (self.controllerName === 'userInboxCtrl') {
-                self.reloadUserInboxes();
-            }
-        });
         self.progress = null;
         contextHelpService.setHelpTo('user-inbox');
         var timeoutRefresh = false;
@@ -244,7 +239,6 @@ module.exports = function (app) {
          * @param $index
          */
         self.selectFilter = function (filter, $index) {
-
             if (!filter.status) {
                 toast.info(langService.get('filter_disabled_activate_to_get_data'));
                 self.workItemsFilters[$index] = [];
@@ -1739,5 +1733,13 @@ module.exports = function (app) {
         }
         // TODO: just for test.
         //self.openNewViewDocument();
+        $scope.$on('$folder_deleted', function (event) {
+            if (self.controllerName === 'userInboxCtrl') {
+                if (self.selectedFilter) {
+                    self.selectFilter(self.selectedFilter.filter, self.selectedFilter.index);
+                }
+                self.reloadUserInboxes();
+            }
+        });
     });
 };

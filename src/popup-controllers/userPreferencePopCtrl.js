@@ -87,8 +87,6 @@ module.exports = function (app) {
             }
         ];
 
-        //console.log(self.globalSetting.getSecurityLevels());
-
         var currentDate = new Date();
 
         self.today = new Date(

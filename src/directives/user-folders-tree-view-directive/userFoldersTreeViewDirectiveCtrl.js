@@ -19,7 +19,6 @@ module.exports = function (app) {
             userFolderService
                 .getUserFoldersForApplicationUser()
                 .then(function (result) {
-                    console.log('reload result', result);
                     self.folders = result;
                 });
         };
