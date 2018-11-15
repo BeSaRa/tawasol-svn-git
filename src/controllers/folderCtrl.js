@@ -1562,21 +1562,5 @@ module.exports = function (app) {
                 self.reloadFolders(self.grid.page);
             }
         });
-
-        // self.refreshInbox = function (time) {
-        //     $timeout(function () {
-        //         $state.is('app.inbox.user-inbox') && self.reloadFolders(self.grid.page);
-        //     }, time)
-        //         .then(function () {
-        //             $state.is('app.inbox.user-inbox') && self.refreshInbox(time);
-        //         });
-        // };
-        //
-        // if (self.globalSetting.inboxRefreshInterval) {
-        //     var timer = (self.globalSetting.inboxRefreshInterval * 60 * 100 * 10);
-        //     self.refreshInbox(timer);
-        // }
-
-
     });
 };

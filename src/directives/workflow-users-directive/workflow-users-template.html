@@ -36,10 +36,10 @@
                         md-order-by="{{ctrl.getTranslatedKey()}}">
                         {{lang.name}}
                     </th>
-<!--                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length && lang.current === 'en'"
-                        md-order-by="enName">
-                        {{lang.english_name}}
-                    </th>-->
+                    <!-- <th md-column ng-if="!ctrl.selectedWorkflowItems.length && lang.current === 'en'"
+                                            md-order-by="enName">
+                                            {{lang.english_name}}
+                                        </th>-->
                     <th ng-if="!ctrl.selectedWorkflowItems.length" md-column>
                         {{lang.organization_unit}}
                     </th>
@@ -160,9 +160,9 @@
                                                 <span md-highlight-text="ctrl.gridItemsCriteria[ctrl.getTranslatedKey()]"
                                                       md-highlight-flags="i">{{workflowUser.getTranslatedName()}}</span>
                     </td>
-<!--                    <td ng-if="lang.current === 'en'" md-cell>
-                                                <span md-highlight-text="ctrl.gridItemsCriteria.enName"
-                                                      md-highlight-flags="i">{{workflowUser.getFullNameByKey('en')}}</span>-->
+                    <!--                    <td ng-if="lang.current === 'en'" md-cell>
+                                                                    <span md-highlight-text="ctrl.gridItemsCriteria.enName"
+                                                                          md-highlight-flags="i">{{workflowUser.getFullNameByKey('en')}}</span>-->
                     </td>
                     <td md-cell>
                         <span>{{workflowUser.getTranslatedOrganizationName()}}</span>

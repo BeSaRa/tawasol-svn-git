@@ -605,9 +605,8 @@ module.exports = function (app) {
          * @private
          */
         function _getProxiesUsers(users) {
-           var currentDate = generator.getTimeStampFromDate(new Date());
             return _.filter(users, function (item) {
-                return item.isUserOutOfOffice() && currentDate <= item.proxyInfo.proxyStartDate && currentDate >= item.proxyInfo.proxyEndDate;
+                return item.isUserOutOfOffice();
             });
         }
 

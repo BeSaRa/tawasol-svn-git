@@ -1731,13 +1731,9 @@ module.exports = function (app) {
             var timer = (self.globalSetting.inboxRefreshInterval * 60 * 100 * 10);
             self.refreshInbox(timer);
         }
-        // TODO: just for test.
-        //self.openNewViewDocument();
+
         $scope.$on('$folder_deleted', function (event) {
             if (self.controllerName === 'userInboxCtrl') {
-                if (self.selectedFilter) {
-                    self.selectFilter(self.selectedFilter.filter, self.selectedFilter.index);
-                }
                 self.reloadUserInboxes();
             }
         });
