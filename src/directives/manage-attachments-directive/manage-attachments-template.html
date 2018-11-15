@@ -121,6 +121,7 @@
                                     <span>{{ctrl.selectedAttachments.length}} {{lang.items_selected}} </span>
                                     <span flex></span>
                                     <md-button class="md-icon-button"
+                                               ng-if="ctrl.isEnabledDeleteBulkAttachments($event)"
                                                ng-click="ctrl.deleteBulkAttachments($event)">
                                         <md-icon md-svg-icon="delete"></md-icon>
                                     </md-button>

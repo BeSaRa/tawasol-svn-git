@@ -191,9 +191,16 @@ module.exports = function (app) {
                         self.attachments = attachments;
                         self.linkedExportedAttachments = linkedExportedAttachments;
                         self.model = angular.copy(self.attachments);
+                        self.selectedAttachments = [];
                     });
                 });
 
+        };
+
+        self.isEnabledDeleteBulkAttachments = function ($event) {
+            return _.every(self.selectedAttachments, function (attachment) {
+                return attachment.isDeletable;
+            })
         };
 
         self.deleteBulkAttachments = function ($event) {
