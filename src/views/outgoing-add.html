@@ -200,7 +200,7 @@
                                     <md-option ng-value="action" class="{{action.class}}"
                                                ng-if="action.checkShow(action, ctrl.outgoing, $index)"
                                                ng-repeat="action in ctrl.documentActions track by $index">
-                                        {{action.text}}
+                                        {{ ctrl.getActionText(action) }}
                                     </md-option>
                                 </md-select>
                             </md-input-container>

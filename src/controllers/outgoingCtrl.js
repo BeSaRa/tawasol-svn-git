@@ -36,7 +36,8 @@ module.exports = function (app) {
                                              mailNotificationService,
                                              userSubscriptionService,
                                              lookups, // new injector for all lookups can user access
-                                             correspondenceService) {
+                                             correspondenceService,
+                                             ResolveDefer) {
         'ngInject';
         var self = this;
         self.controllerName = 'outgoingCtrl';
@@ -361,6 +362,19 @@ module.exports = function (app) {
                 });
         };
 
+        self.docActionSendToReadyToExport = function (model, $event, defer) {
+            if (model.fromCentralArchive())
+                return model.sendToCentralArchive(false, $event).then(function () {
+                    new ResolveDefer(defer);
+                });
+
+            model.sendToReadyToExport($event)
+                .then(function () {
+                    toast.success(langService.get('export_success'));
+                    new ResolveDefer(defer);
+                })
+        };
+
         self.docActionManageTasks = function (document, $event) {
             console.log('manage tasks', document);
         };
@@ -481,6 +495,22 @@ module.exports = function (app) {
                     self.setDropdownAvailability(index, isVisible);
                     return isVisible;
                 }
+            },
+            // Export (Send to ready to export)
+            {
+                text: langService.get('grid_action_send_to_ready_to_export'),
+                callback: self.docActionSendToReadyToExport,
+                class: "action-green",
+                permissionKey: 'SEND_TO_READY_TO_EXPORT_QUEUE',
+                textCallback: function (model) {
+                    return model.fromCentralArchive() ? 'grid_action_send_to_central_archive' : 'grid_action_send_to_ready_to_export';
+                },
+                checkShow: function (action, model, index) {
+                    var info = model.getInfo();
+                    isVisible = self.checkToShowAction(action, model) && info.isPaper && (!!self.documentInformationExist || !!(self.contentFileExist && self.contentFileSizeExist));
+                    self.setDropdownAvailability(index, isVisible);
+                    return isVisible;
+                }
             }
         ];
 
@@ -544,5 +574,21 @@ module.exports = function (app) {
             })
         };
 
+
+        /**
+         * @description Get the text of action according to selected language
+         * @param action
+         */
+        self.getActionText = function (action) {
+            if (typeof action !== 'undefined') {
+                if (action.hasOwnProperty('textCallback') && angular.isFunction(action.textCallback)) {
+                    return langService.get(action.textCallback(self.model));
+                }
+                else {
+                    return action.text;
+                }
+            }
+
+        };
     });
 };
