@@ -12,7 +12,7 @@ html.rtl {
     margin-left: 0;
     margin-right: 32px;
   }
-  .md-table-pagination > .buttons:not(:first-child), html.rtl .md-table-pagination > .limit-select:not(:first-child) {
+  .md-table-pagination > .buttons:not(:first-child), .md-table-pagination > .limit-select:not(:first-child) {
     button {
       transform: rotate(180deg);
     }
@@ -41,4 +41,9 @@ html.rtl {
 
 md-dialog {
 
+}
+
+.md-table-pagination > .buttons:not(:first-child), .md-table-pagination > .limit-select:not(:first-child) {
+  margin-left: 10px !important;
+  margin-right: 0;
 }
