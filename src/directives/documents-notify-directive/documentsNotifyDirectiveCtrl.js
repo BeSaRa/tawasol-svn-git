@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                              employeeService,
                                                              $controller,
                                                              $interval,
+                                                             $scope,
                                                              $http,
                                                              WorkItem,
                                                              correspondenceService,
@@ -10,15 +11,18 @@ module.exports = function (app) {
                                                              followupEmployeeInboxService) {
         'ngInject';
         var self = this;
-        self.controllerName = 'documentsNotifyDirectiveCtrl';
+
 
         self.mailService = mailNotificationService;
 
-        angular.extend(this, $controller('userInboxCtrl', {
+        var userInboxCtrl = $controller('userInboxCtrl', {
             userInboxes: [],
             userFolders: [],
-            userFilters: []
-        }));
+            userFilters: [],
+            $scope: $scope
+        });
+        userInboxCtrl.controllerName = 'documentsNotifyDirectiveCtrl';
+        angular.extend(this, userInboxCtrl);
 
         self.openNotificationMenu = function ($mdMenu) {
             if (self.mailService.notifications.length)
@@ -101,34 +105,6 @@ module.exports = function (app) {
                         return workItem;
                     });
                 });
-            // correspondenceService.viewCorrespondence(workItem, self.gridActions, checkIfEditPropertiesAllowed(item, true), checkIfEditCorrespondenceSiteAllowed(item, true))
-            //     .then(function () {
-            //         self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount);
-            //         _.map(userInboxService.userInboxes, function (workItem) {
-            //             if (workItem.generalStepElm.workObjectNumber === wobNumber)
-            //                 workItem.generalStepElm.isOpen = true;
-            //             return workItem;
-            //         });
-            //         _.map(followupEmployeeInboxService.followupEmployeeInboxes, function (workItem) {
-            //             if (workItem.generalStepElm.workObjectNumber === wobNumber)
-            //                 workItem.generalStepElm.isOpen = true;
-            //             return workItem;
-            //         });
-            //     })
-            //     .catch(function () {
-            //         self.mailService.loadMailNotifications(self.mailService.notificationsRequestCount);
-            //         _.map(userInboxService.userInboxes, function (workItem) {
-            //             if (workItem.generalStepElm.workObjectNumber === wobNumber)
-            //                 workItem.generalStepElm.isOpen = true;
-            //             return workItem;
-            //         });
-            //         _.map(followupEmployeeInboxService.followupEmployeeInboxes, function (workItem) {
-            //             if (workItem.generalStepElm.workObjectNumber === wobNumber)
-            //                 workItem.generalStepElm.isOpen = true;
-            //             return workItem;
-            //         });
-            //
-            //     });
         };
         var interval;
 

@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.controller('userInboxCtrl', function (lookupService,
                                               userInboxService,
+                                              $scope,
                                               userInboxes,
                                               $filter,
                                               errorCode,
@@ -40,10 +41,13 @@ module.exports = function (app) {
                                               gridService) {
         'ngInject';
         var self = this;
-
         self.controllerName = 'userInboxCtrl';
         self.employeeService = employeeService;
-
+        $scope.$on('$folder_deleted', function (event) {
+            if (self.controllerName === 'userInboxCtrl') {
+                self.reloadUserInboxes();
+            }
+        });
         self.progress = null;
         contextHelpService.setHelpTo('user-inbox');
         var timeoutRefresh = false;

@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('userFoldersTreeViewDirectiveCtrl', function (lookupService,
                                                                  userFolderService,
                                                                  $q,
+                                                                 $rootScope,
                                                                  langService,
                                                                  toast,
                                                                  dialog) {
@@ -45,11 +46,11 @@ module.exports = function (app) {
         self.removeUserFolder = function (userFolder, $event) {
             var array = [userFolder.id];
             getChildIds(userFolder, array);
-
             userFolderService
                 .controllerMethod
                 .userFolderDeleteBulk(array.reverse(), $event)
                 .then(function () {
+                    $rootScope.$broadcast('$folder_deleted');
                     self.reloadUserFolders();
                 });
         };
