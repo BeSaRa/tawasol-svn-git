@@ -25,7 +25,8 @@
                     </div>
                 </li>
             </ul>
-            <sidebar-menu-directive search="sidebar.search" items="sidebar.items" lang="lang"
+            <sidebar-menu-directive ng-class="{'open-children':sidebar.search.length}" search="sidebar.search"
+                                    items="sidebar.items" lang="lang"
                                     level="1"></sidebar-menu-directive>
         </div>
     </div>

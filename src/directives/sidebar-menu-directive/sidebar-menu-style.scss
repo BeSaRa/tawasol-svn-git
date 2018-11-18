@@ -47,6 +47,9 @@
     margin: 0;
     display: block;
     font-size: 13px;
+    &.open-children ul {
+      display: block !important;
+    }
     &.menu-level-2 {
       background-color: darken($main-bg, 10);
       a {
