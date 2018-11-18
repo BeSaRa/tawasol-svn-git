@@ -3,6 +3,8 @@ var path = require('path'),
     NGAnnotate = require('ng-annotate-webpack-plugin'),
     ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+
+
 module.exports = {
     context: path.resolve(__dirname),
     entry: './src/app.js',
