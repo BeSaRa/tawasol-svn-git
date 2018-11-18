@@ -6,7 +6,7 @@ module.exports = function (app) {
 
         self.customValidations = [];
 
-        var regex = {
+        self.regex = {
             /**
              * @description allow only dates with format YYYY-MM-dd
              **/
