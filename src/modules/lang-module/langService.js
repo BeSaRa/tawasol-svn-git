@@ -7,6 +7,7 @@ module.exports = function (app) {
         self.defaultLanguages = {};
         self.selectedLanguage = null;
         self.currentSelectedLanguage = null;
+        self.langChangerNotifier = $q.defer();
 
         self.languages = [
             new Language({
@@ -186,6 +187,7 @@ module.exports = function (app) {
             });
             self.current = langKey;
             self.currentLangTitleCase = _.startCase(_.toLower(langKey));
+            self.langChangerNotifier.notify(self.current);
             return self.current;
         };
 
@@ -453,6 +455,19 @@ module.exports = function (app) {
 
         self.setRootEntityService = function (service) {
             rootEntity = service;
+        };
+        /**
+         * @description new method the check the current lang as a watcher.
+         * @param callback
+         */
+        self.listeningToChange = function (callback) {
+            self.langChangerNotifier.promise.then(function () {
+                // resolve not needed
+            }, function () {
+                // reject not needed
+            }, function (current) {
+                callback(current)
+            });
         };
 
         angular

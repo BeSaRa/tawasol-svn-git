@@ -3,15 +3,9 @@ module.exports = function (app) {
         'ngInject';
         return function LangWatcher(scope) {
             scope.lang = langService.getCurrentTranslate();
-            scope.$watch(function () {
-                return langService.current;
-            }, function (newVal) {
+            langService.listeningToChange(function (current) {
                 scope.lang = langService.getCurrentTranslate();
             });
-
-            scope.$on('$languagePrepared',function () {
-                scope.lang = langService.getCurrentTranslate();
-            })
         }
     });
 };
