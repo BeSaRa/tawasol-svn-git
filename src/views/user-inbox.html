@@ -29,7 +29,6 @@
                        aria-label="{{lang.create_filter}}"
                        class="md-icon-button" tooltip="{{lang.create_filter}}">
                 <md-icon md-svg-icon="add-filter"></md-icon>
-                <!--<md-icon md-svg-src="assets/icon-set/mdi.svg"></md-icon>-->
             </md-button>
             <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
         </div>
@@ -39,7 +38,7 @@
             <!-- User filters -->
 
             <!-- Hide it unless confirmed again to show -->
-            <div class="z-index-4" ng-if="false">
+            <!--<div class="z-index-4" ng-if="false">
                 <md-sidenav id="sidebar-folder-structure" md-is-open="ctrl.sidebarFilter"
                             ng-class="{'md-sidenav-right':lang.current === 'ar'}">
                     <div class="p20 first-folder-list" layout="column">
@@ -50,7 +49,8 @@
                                                           folders="ctrl.userFilters"></folders-tree-structure-directive>
                     </div>
                 </md-sidenav>
-            </div>
+            </div>-->
+
             <!-- Grid/Magazine view -->
             <div scroll-directive>
                 <div class="page-padding">
@@ -104,7 +104,6 @@
                                 </md-tab>
                                 <md-tab ng-repeat="filter in ctrl.userFilters"
                                         md-on-select="ctrl.selectFilter(filter, $index)">
-                                    <!--| orderBy : 'sortOptionId'-->
                                     <md-tab-label>
                                         <div layout="row" layout-align="start center">
                                             <div class="tab-title">{{filter.getTranslatedName()}}</div>

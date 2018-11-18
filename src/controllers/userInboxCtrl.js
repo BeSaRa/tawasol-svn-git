@@ -1,5 +1,6 @@
 module.exports = function (app) {
-    app.controller('userInboxCtrl', function (lookupService,
+    app.controller('userInboxCtrl', function (_,
+                                              lookupService,
                                               userInboxService,
                                               $scope,
                                               userInboxes,
@@ -163,6 +164,7 @@ module.exports = function (app) {
 
         // just for start
         function _prepareFilters() {
+            self.filterGrid = [];
             self.workItemsFilters = new Array(self.userFilters.length);
             for (var i = 0; i < self.userFilters.length; i++) {
                 self.filterGrid.push({
@@ -200,6 +202,17 @@ module.exports = function (app) {
             });
         }
 
+        var _updateFilterProperties = function (originalFilter, updatedFilter, properties) {
+            _.map(self.userFilters, function (userFilter) {
+                if (userFilter.id === originalFilter.id) {
+                    for (var i = 0; i < properties.length; i++) {
+                        userFilter[properties[i]] = updatedFilter[properties[i]];
+                    }
+                }
+                return userFilter;
+            })
+        };
+
         /**
          * @description edit filter.
          * @param filter
@@ -209,7 +222,8 @@ module.exports = function (app) {
          */
         self.userFilterEdit = function (filter, $index, $event) {
             return userFilterService.editUserFilterDialog(filter, $event).then(function (result) {
-                self.userFilters[_getFilterIndex(result)] = result;
+                // self.userFilters[_getFilterIndex(result)] = result;
+                _updateFilterProperties(filter, result, ['sortOptionId', 'arName', 'enName', 'status']);
                 self.userFilters = $filter('orderBy')(self.userFilters, 'sortOptionId');
 
                 if (self.selectedFilter && self.selectedFilter.filter.id === result.id) {
@@ -239,22 +253,22 @@ module.exports = function (app) {
          * @param $index
          */
         self.selectFilter = function (filter, $index) {
-            if (!filter.status) {
-                toast.info(langService.get('filter_disabled_activate_to_get_data'));
-                self.workItemsFilters[$index] = [];
-                return;
-            }
-
             self.selectedTab = ($index + self.fixedTabsCount);
-
             self.selectedFilter = {
                 index: $index,
                 filter: angular.copy(filter)
             };
             _prepareFilters();
-            correspondenceService.loadWorkItemsByFilterID(filter).then(function (workItems) {
-                self.workItemsFilters[$index] = workItems;
-            });
+            if (!filter.status) {
+                toast.info(langService.get('filter_disabled_activate_to_get_data'));
+                self.workItemsFilters[$index] = [];
+                return false;
+            }
+            else {
+                correspondenceService.loadWorkItemsByFilterID(filter).then(function (workItems) {
+                    self.workItemsFilters[$index] = workItems;
+                });
+            }
         };
 
         self.resetSelectedFilter = function ($index) {

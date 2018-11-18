@@ -49,7 +49,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.filter.saveUserFilter().then(function (filter) {
                         filter.sortOptionId = Number(filter.sortOptionId);
-                        self.filter = angular.copy(self.filter);
+                        //self.filter = angular.copy(self.filter);
                         dialog.hide(filter);
                     });
                 });
