@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                                      toast,
                                                                      $rootScope,
                                                                      validationService,
+                                                                     $filter,
                                                                      generator,
                                                                      dialog,
                                                                      tokenService,
@@ -28,6 +29,15 @@ module.exports = function (app) {
 
         self.validateLabels = {};
 
+        self.search = '';
+        self.permissions = {};
+
+        function _getPermissions(current) {
+            return current === 'en' ? self.permissionsList[0] : self.permissionsList[1];
+        }
+
+        // for the first time the controller initialize
+        self.permissions = _getPermissions(langService.current);
 
         function _savePermissionsSuccess() {
             toast.success(langService.get('update_success'));
@@ -138,6 +148,12 @@ module.exports = function (app) {
                 return true;
             }
         }
+
+        self.searchChanges = function () {
+            self.permissions = $filter('permissionFilter')(_getPermissions(), self.search);
+        };
+        // for any change happened in language rebuild the permissions with the current corrected key.
+        langService.listeningToChange(_getPermissions);
 
     });
 };

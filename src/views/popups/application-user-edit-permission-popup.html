@@ -6,8 +6,15 @@
         </md-toolbar>
         <md-content scroll-directive>
             <div class="p20">
+                <div layout="row">
+                    <md-input-container flex>
+                        <label for="search">{{lang.search_in_permissions}}</label>
+                        <input ng-change="ctrl.searchChanges()" ng-model-options="{debounce: 300}"
+                               ng-model="ctrl.search" id="search">
+                    </md-input-container>
+                </div>
                 <div layout="column"
-                     ng-repeat="(key, permissionHeading) in (lang.current ==='en' ? ctrl.permissionsList[0]: ctrl.permissionsList[1]) track by $index">
+                     ng-repeat="(key, permissionHeading) in ctrl.permissions track by $index">
                     <md-checkbox ng-model="ctrl[key]"
                                  ng-checked="ctrl.selectParentCheckbox(permissionHeading)"
                                  ng-click="ctrl.selectAllGroupPermissions(permissionHeading,key)"
