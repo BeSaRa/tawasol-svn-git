@@ -18,7 +18,8 @@
                     <md-checkbox ng-model="ctrl[key]"
                                  ng-checked="ctrl.selectParentCheckbox(permissionHeading)"
                                  ng-click="ctrl.selectAllGroupPermissions(permissionHeading,key)"
-                                 aria-label="{{key}}">{{key}}
+                                 aria-label="{{key}}"><span md-highlight-text="ctrl.search"
+                                                            md-highlight-flags="i">{{key}}</span>
                     </md-checkbox>
                     <div class="p20">
                         <div flex layout="row"
@@ -28,7 +29,9 @@
                                          ng-checked="ctrl.userOUPermissionsExists(permission)"
                                          ng-click="ctrl.toggleUserOuPermission(permission)"
                                          flex aria-label="{{permission.arName}}">
-                                {{lang.current==='en'? permission.enName :permission.arName}}
+                                <span md-highlight-text="ctrl.search"
+                                      md-highlight-flags="i">{{lang.current==='en'? permission.enName
+                                      :permission.arName}}</span>
                             </md-checkbox>
 
                             <div flex ng-if="permission===null" class="emptyPermissionCheckboxMargin"
