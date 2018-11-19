@@ -157,10 +157,10 @@ module.exports = function (app) {
             if ((count + 1) === allGroupPermissions.length) {
                 return true;
             }
-        }
+        };
 
         self.searchChanges = function () {
-            self.permissions = $filter('permissionFilter')(_getPermissions(), self.search);
+            self.permissions = $filter('permissionFilter')(_getPermissions(langService.current), self.search);
         };
         // for any change happened in language rebuild the permissions with the current corrected key.
         langService.listeningToChange(_getPermissions);
