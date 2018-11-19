@@ -6,7 +6,16 @@
         </md-toolbar>
         <md-content scroll-directive>
             <div class="p20">
-                <div layout="row">
+                <div layout="row" layout-align="start center">
+                    <div flex>
+                        <md-checkbox aria-label="Select All"
+                                     ng-checked="ctrl.isChecked()"
+                                     md-indeterminate="ctrl.isIndeterminate()"
+                                     ng-click="ctrl.toggleAll()"
+                                     ng-disabled="ctrl.search">
+                        </md-checkbox>
+                        <span ng-if="ctrl.isChecked()">Un-</span>Select All
+                    </div>
                     <md-input-container flex>
                         <label for="search">{{lang.search_in_permissions}}</label>
                         <input ng-change="ctrl.searchChanges()" ng-model-options="{debounce: 300}"

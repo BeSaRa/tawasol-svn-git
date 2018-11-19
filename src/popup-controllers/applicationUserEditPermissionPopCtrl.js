@@ -31,6 +31,7 @@ module.exports = function (app) {
 
         self.search = '';
         self.permissions = {};
+        self.totalPermissionsCount = 0;
 
         function _getPermissions(current) {
             return current === 'en' ? self.permissionsList[0] : self.permissionsList[1];
@@ -38,6 +39,15 @@ module.exports = function (app) {
 
         // for the first time the controller initialize
         self.permissions = _getPermissions(langService.current);
+
+        _.map(self.permissions, function (keys) {
+            _.map(keys, function (permissionsArr) {
+                _.map(permissionsArr, function (value) {
+                    if (value)
+                        self.totalPermissionsCount++;
+                })
+            })
+        });
 
         function _savePermissionsSuccess() {
             toast.success(langService.get('update_success'));
@@ -154,6 +164,36 @@ module.exports = function (app) {
         };
         // for any change happened in language rebuild the permissions with the current corrected key.
         langService.listeningToChange(_getPermissions);
+
+        self.isIndeterminate = function () {
+            return (self.userOuPermissionsIds.length !== 0 && self.userOuPermissionsIds.length !== self.totalPermissionsCount);
+        };
+
+        self.isChecked = function () {
+            return self.userOuPermissionsIds.length === self.totalPermissionsCount;
+        };
+
+        /**
+         * @description parent checkbox
+         */
+        self.toggleAll = function () {
+            if (self.isChecked()) {
+                self.userOuPermissionsIds = [];
+            }
+            else  {
+                for (var key in self.permissions) {
+                    var permission = self.permissions[key];
+                    for (var i = 0; i < permission.length; i++) {
+                        for (var j = 0; j < permission[i].length; j++) {
+                            if (permission[i][j]) {
+                                if (self.userOuPermissionsIds.indexOf(permission[i][j]['id']) === -1)
+                                    self.userOuPermissionsIds.push(permission[i][j]['id']);
+                            }
+                        }
+                    }
+                }
+            }
+        };
 
     });
 };
