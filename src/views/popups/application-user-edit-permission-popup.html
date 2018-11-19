@@ -13,8 +13,8 @@
                                      md-indeterminate="ctrl.isIndeterminate()"
                                      ng-click="ctrl.toggleAll()"
                                      ng-disabled="ctrl.search">
+                            <span>{{ctrl.isChecked() ? lang.un_select_all : lang.select_all}}</span>
                         </md-checkbox>
-                        <span ng-if="ctrl.isChecked()">Un-</span>Select All
                     </div>
                     <md-input-container flex>
                         <label for="search">{{lang.search_in_permissions}}</label>
