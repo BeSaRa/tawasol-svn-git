@@ -266,6 +266,9 @@ module.exports = function (app) {
             if ((self.document.hasVsId() && $stateParams.action !== 'receiveg2g') || !self.employee.inCentralArchive()) {
                 return true;
             }
+            /*if ((self.document.hasVsId() && self.receiveG2g) || !self.employee.inCentralArchive()) {
+                return true;
+            }*/
             // if this document new and internal or outgoing electronic disable the select organization.
             return !!(self.document.hasDocumentClass('internal') || (self.document.hasDocumentClass('outgoing') && !self.document.addMethod));
 

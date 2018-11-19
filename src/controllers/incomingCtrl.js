@@ -75,12 +75,16 @@ module.exports = function (app) {
             registryOU: centralArchives ? null : self.employee.getRegistryOUID(),
             securityLevel: lookups.securityLevels[0]
         });
+
+        self.isReceiveG2G = false;
+
         if (receive) {
             self.receive = true;
             self.receiveG2G = false;
             self.incoming = receive.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = receive.content;
+            self.isReceiveG2G = false;
         }
         if (receiveG2G) {
             self.receiveG2G = true;
@@ -88,6 +92,7 @@ module.exports = function (app) {
             self.incoming = receiveG2G.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = receiveG2G.content;
+            self.isReceiveG2G = true;
         }
 
         if (duplicateVersion) {
@@ -96,6 +101,7 @@ module.exports = function (app) {
             self.incoming = duplicateVersion.metaData;
             self.model = angular.copy(self.incoming);
             self.documentInformation = self.incoming.hasContent() ? duplicateVersion.content : null;
+            self.isReceiveG2G = false;
         }
 
 
@@ -409,6 +415,7 @@ module.exports = function (app) {
             self.contentFileExist = false;
             self.contentFileSizeExist = false;
             self.document_properties.$setUntouched();
+            self.isReceiveG2G = false;
         };
 
         /**

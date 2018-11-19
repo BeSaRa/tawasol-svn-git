@@ -84,7 +84,7 @@
                     </div>
                 </md-input-container>
                 <!-- Document Number -->
-                <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "incoming" && ctrl.checkStatus("refDocNumber")'>
+                <md-input-container flex ng-if='!ctrl.receiveG2g && ctrl.document.docClassName.toLowerCase() === "incoming" && ctrl.checkStatus("refDocNumber")'>
                     <label for="refDocNumber">{{lang.document_number}}</label>
                     <input name="refDocNumber" id="refDocNumber"
                            ng-required="ctrl.checkMandatory('refDocNumber')"
