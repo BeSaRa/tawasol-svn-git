@@ -858,10 +858,10 @@ module.exports = function (app) {
          */
         self.createCCSession = function (loadSameScanner) {
             var defer = $q.defer();
-            //J4SFG-CVXS8-Y9E64-FSBZH
-            //9JBF8-9JKE8-DDE64-XRC22
+            // Ebla Computer Consultancy Company_2AD47-APRQ8-Y9E64-FSBZH
+            // EBLA Computer Consultancy Co-CMS_9JBF8-9JKE8-DDE64-XRC22
             CCToolkit.createSession({
-                licenseId: "EBLA Computer Consultancy Co-CMS_9JBF8-9JKE8-DDE64-XRC22",
+                licenseId: "Ebla Computer Consultancy Company_2AD47-APRQ8-Y9E64-FSBZH",
                 applicationId: "CMS-PACKAGING",
                 closeExistingSessions: true,
                 locale: "en-us",
