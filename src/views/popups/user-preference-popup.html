@@ -1204,11 +1204,11 @@
                            ng-if="ctrl.selectedTab==='ooos'"
                            ng-click="ctrl.saveOutOfOfficeSettingsFromCtrl()">{{lang.save}}
                 </md-button>
-                <md-button class="md-raised" ng-disabled="userCommentsForm.$invalid"
+                <md-button class="md-raised" ng-disabled="userPreferencesForm.userCommentsForm.$invalid"
                            ng-if="ctrl.selectedTab==='uc' &&  ctrl.isUserCommentForm && !ctrl.userComment.id"
                            ng-click="ctrl.addUserCommentFromCtrl()">{{lang.add}}
                 </md-button>
-                <md-button class="md-raised" ng-disabled="userCommentsForm.$invalid"
+                <md-button class="md-raised" ng-disabled="userPreferencesForm.userCommentsForm.$invalid"
                            ng-if="ctrl.selectedTab==='uc' &&  ctrl.isUserCommentForm && ctrl.userComment.id"
                            ng-click="ctrl.editUserCommentFromCtrl()">{{lang.save}}
                 </md-button>
