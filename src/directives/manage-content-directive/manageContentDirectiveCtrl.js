@@ -269,7 +269,7 @@ module.exports = function (app) {
 
         self.openScannerDialog = function (buttonType, $event) {
             scannerService
-                .openScanner(false, $event)
+                .openScanner(true, $event)
                 .then(function () {
                     var result = scannerService.getStoredImages();
                     result.file.name = result.file.name + '.pdf';

@@ -7,10 +7,8 @@ module.exports = function (app) {
                 element.bind('error', function () {
                     var self = angular.copy(this);
                     scope.$apply(function () {
-                        console.log("FIRST");
                         $(element).attr('src', self.src + 'x');
                         $timeout(function () {
-                            console.log("SECOND");
                             $(element).attr('src', self.src);
                         }, 2);
                     });

@@ -97,7 +97,7 @@ module.exports = function (app) {
         self.openScannerDialog = function (buttonType, $event) {
             self.hideButton(buttonType);
             scannerService
-                .openScanner(false, $event)
+                .openScanner(true, $event)
                 .then(function () {
                     var result = scannerService.getStoredImages();
                     self.attachment = _createAttachmentFile(result.file);
