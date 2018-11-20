@@ -59,17 +59,13 @@ module.exports = function (app) {
                 return defer.promise;
             })
             .bulkResolveToState('app.administration.classifications', {
-                classifications: function (classificationService, organizations, ouClassifications) {
+                classifications: function (classificationService, organizations) {
                     'ngInject';
-                    return classificationService.loadClassifications();
+                    return classificationService.loadClassificationsWithLimit(50);
                 },
                 organizations: function (organizationService) {
                     'ngInject';
                     return organizationService.getOrganizations();
-                },
-                ouClassifications: function (ouClassificationService, organizations) {
-                    'ngInject';
-                    return ouClassificationService.getOUClassifications();
                 }
             })
             .bulkResolveToState('app.administration.correspondence-sites', {

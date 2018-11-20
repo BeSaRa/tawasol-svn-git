@@ -328,7 +328,11 @@
                 // G2G inbox
                 .addToAllWithBase('g2gInbox', '/g2g/')
                 // document security in global settings
-                .addToAllWithBase('documentSecurity', 'cms-entity/admin/documentsecurity');
+                .addToAllWithBase('documentSecurity', 'cms-entity/admin/documentsecurity')
+                // url for pagination for the users.
+                .addToAllWithBase('entityWithlimit', 'cms-entity/admin/{entityName}/limit/{number}')
+                // get children for the mainEntities
+                .addToAllWithBase('childrenEntities', 'cms-entity/admin/{entityName}/childs/{entityId}');
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

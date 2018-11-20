@@ -5,6 +5,8 @@ module.exports = function (app) {
                                                    langService,
                                                    dialog,
                                                    $http,
+                                                   Pair,
+                                                   OUClassification,
                                                    $q,
                                                    generator,
                                                    Classification,
@@ -14,6 +16,8 @@ module.exports = function (app) {
         self.serviceName = 'classificationService';
 
         self.classifications = [];
+
+        self.ouClassifications = [];
 
         /**
          * @description load classifications from server.
@@ -253,7 +257,7 @@ module.exports = function (app) {
         };
 
         self.getSubClassifications = function (mainClassification) {
-            mainClassification = mainClassification.hasOwnProperty('id')? mainClassification.id : mainClassification;
+            mainClassification = mainClassification.hasOwnProperty('id') ? mainClassification.id : mainClassification;
             return _.filter(self.classifications, function (classification) {
                 if (classification.parent instanceof Classification)
                     return classification.parent.id === mainClassification;
@@ -274,7 +278,7 @@ module.exports = function (app) {
              */
             classificationAdd: function (parentClassification, sub, $event) {
                 var subClassification = new Classification();
-                if(parentClassification){
+                if (parentClassification) {
                     subClassification.securityLevels = parentClassification.securityLevels;
                 }
                 return dialog
@@ -392,6 +396,11 @@ module.exports = function (app) {
                         locals: {
                             classification: classification,
                             classifications: self.getMainClassifications(self.classifications)
+                        },
+                        resolve: {
+                            subClassifications: function () {
+                                return self.loadSubClassifications(classification);
+                            }
                         }
                     });
             },
@@ -406,5 +415,50 @@ module.exports = function (app) {
                 });
             }
         };
+
+        /**
+         * @description load classifications with limit up to 50
+         * @param limit
+         * @return {*}
+         */
+        self.loadClassificationsWithLimit = function (limit) {
+            return $http
+                .get(urlService.entityWithlimit.replace('{entityName}', 'classification').replace('{number}', limit ? limit : 50))
+                .then(function (result) {
+                    self.classifications = generator.generateCollection(result.data.rs, Classification, self._sharedMethods);
+                    self.classifications = generator.interceptReceivedCollection('Classification', self.classifications);
+                    return self.classifications;
+                });
+        };
+
+        /**
+         * @description load sub classification by parent Id
+         * @param classification
+         * @return {*}
+         */
+        self.loadSubClassifications = function (classification) {
+            var id = classification.hasOwnProperty('id') ? classification.id : classification;
+            return $http
+                .get(urlService.childrenEntities.replace('{entityName}', 'classification').replace('{entityId}', id))
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('Classification', generator.generateCollection(result.data.rs, Classification, self._sharedMethods));
+                });
+        };
+        /**
+         * @description search in classifications .
+         * @param searchText
+         * @param parent
+         * @return {*}
+         */
+        self.classificationSearch = function (searchText, parent) {
+            return $http.get(urlService.classifications + '/criteria', {
+                params: {
+                    criteria: searchText,
+                    parent: typeof parent !== 'undefined' ? (parent.hasOwnProperty('id') ? parent.id : parent) : null
+                }
+            }).then(function (result) {
+                return generator.interceptReceivedCollection('Classification', generator.generateCollection(result.data.rs, Classification, self._sharedMethods));
+            });
+        }
     });
 };

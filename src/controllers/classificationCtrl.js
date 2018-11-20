@@ -18,6 +18,9 @@ module.exports = function (app) {
         self.progress = null;
         contextHelpService.setHelpTo('classifications');
         self.searchModel = '';
+
+        self.searchMode = false;
+
         /**
          * @description All classifications
          * @type {*}
@@ -85,9 +88,9 @@ module.exports = function (app) {
                 .then(function (classification) {
                     self.behindScene(classification)
                         .then(function (classification) {
-                            self.reloadClassifications(self.grid.page).then(function () {
-                                toast.success(langService.get('edit_success').change({name: classification.getTranslatedName()}));
-                            });
+                            // self.reloadClassifications(self.grid.page).then(function () {
+                            toast.success(langService.get('edit_success').change({name: classification.getTranslatedName()}));
+                            // });
                         });
                 })
                 .catch(function (classification) {
@@ -111,27 +114,28 @@ module.exports = function (app) {
         /**
          * reload the grid again and if the pageNumber provide the current grid will be on it.
          * @param pageNumber
-         * @return {*|Promise<U>}
+         * @return {*|Promise<Classification>}
          */
         self.reloadClassifications = function (pageNumber) {
             var defer = $q.defer();
             self.progress = defer.promise;
-
-            return ouClassificationService
-                .loadOUClassifications()
-                .then(function () {
-                    return classificationService
-                        .loadClassifications()
-                        .then(function (classifications) {
-                            self.classifications = classificationService.getMainClassifications(classifications);
-                            self.selectedClassifications = [];
-                            defer.resolve(true);
-                            if (pageNumber)
-                                self.grid.page = pageNumber;
-                            self.getSortedData();
-                            return classifications;
-                        });
+            self.searchMode = false;
+            self.searchModel = '';
+            // return ouClassificationService
+            //     .loadOUClassifications()
+            //     .then(function () {
+            return classificationService
+                .loadClassificationsWithLimit()
+                .then(function (classifications) {
+                    self.classifications = classificationService.getMainClassifications(classifications);
+                    self.selectedClassifications = [];
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.grid.page = pageNumber;
+                    self.getSortedData();
+                    return classifications;
                 });
+            // });
         };
 
         /**
@@ -283,6 +287,21 @@ module.exports = function (app) {
          */
         self.behindScene = function (classification) {
             return classification.repairGlobalStatus();
+        };
+        /**
+         * @description search in classification.
+         * @param searchText
+         * @return {*}
+         */
+        self.searchInClassification = function (searchText) {
+            if (!searchText)
+                return;
+            self.searchMode = true;
+            return classificationService
+                .classificationSearch(searchText)
+                .then(function (result) {
+                    self.classifications = result;
+                })
         }
 
     });

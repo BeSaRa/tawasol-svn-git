@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                              toast,
                                                              classification,
                                                              classifications,
+                                                             subClassifications,
                                                              classificationService,
                                                              langService,
                                                              ouClassificationService) {
@@ -14,7 +15,8 @@ module.exports = function (app) {
         // current classification to view his sub classifications
         self.classification = classification;
 
-        self.classifications = self.classification.children;
+        // self.classifications = self.classification.children;
+        self.classifications = subClassifications;
 
         self.parentClassifications = classifications;
 

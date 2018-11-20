@@ -1,8 +1,8 @@
 module.exports = function (app) {
-    app.factory('Classification', function (CMSModelInterceptor, 
-                                            OUClassification, 
-                                            $q, 
-                                            langService, 
+    app.factory('Classification', function (CMSModelInterceptor,
+                                            OUClassification,
+                                            $q,
+                                            langService,
                                             _) {
         'ngInject';
         return function Classification(model) {
@@ -13,10 +13,12 @@ module.exports = function (app) {
             self.groupPrefix = null;
             self.id = null;
             self.parent = null;
+            self.childCount = 0;
             self.relatedOus = []; // null
             self.securityLevels = null;
             self.status = true;
             self.children = [];
+
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

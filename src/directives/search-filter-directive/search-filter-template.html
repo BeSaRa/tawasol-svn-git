@@ -1,11 +1,21 @@
 <div layout="row" layout-align="start center">
     <!--<md-button id="filter-icon" class="md-icon-button">-->
-        <!--<md-icon md-svg-icon="filter"></md-icon>-->
+    <!--<md-icon md-svg-icon="filter"></md-icon>-->
     <!--</md-button>-->
     <div md-whiteframe="3" layout="row" id="search_header">
-        <md-button class="md-icon-button">
-            <md-icon md-svg-icon="magnify"></md-icon>
-        </md-button>
-        <input flex ng-model="searchFilter.model" name="search_header_query" id="search_header_query">
+        <form name="filterGrid" autocomplete="off" enter-submit-directive="filterButton" novalidate>
+            <md-button ng-if="!searchFilter.changeIconModel" id="filterButton"
+                       ng-click="searchFilter.changeCallback(searchFilter.model)"
+                       class="md-icon-button">
+                <md-icon md-svg-icon="magnify"></md-icon>
+            </md-button>
+            <md-button ng-if="searchFilter.changeIconModel" ng-click="searchFilter.cancelCallback()"
+                       class="md-icon-button">
+                <md-icon md-svg-icon="magnify-close"></md-icon>
+            </md-button>
+            <input flex ng-model="searchFilter.model" ng-change="searchFilter.checkLength(searchFilter.model)" name="search_header_query" id="search_header_query">
+        </form>
+
+
     </div>
 </div>

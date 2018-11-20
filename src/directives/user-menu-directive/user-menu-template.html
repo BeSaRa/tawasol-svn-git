@@ -19,7 +19,7 @@
                     ng-if="!userMenu.employeeService.isAdminUser() && userMenu.employeeService.hasPermissionTo('MANAGE_PREFERENCES')">
                 <md-button ng-click="userMenu.userPreferences($event)">
                     <div layout="row" layout-align="start center">
-                        <md-icon md-svg-icon="account-settings-variant"></md-icon>
+                        <md-icon md-svg-icon="account-settings"></md-icon>
                         <span>{{lang.user_preferences}}</span>
                     </div>
                 </md-button>

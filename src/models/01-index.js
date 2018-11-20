@@ -157,4 +157,5 @@ module.exports = function (app) {
     require('./ImageThumbnail')(app);
     require('./DuplicateOption')(app);
     require('./OutgoingIncomingSearch')(app);
+    require('./Pair')(app);
 };

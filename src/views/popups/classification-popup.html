@@ -9,7 +9,8 @@
         <md-content scroll-directive>
             <form name="classificationForm">
                 <md-tabs md-dynamic-height md-selected="0">
-                    <md-tab label="{{lang.basic_info}}" md-on-select="ctrl.setCurrentTab('basic')" ng-if="ctrl.showTab('basic')">
+                    <md-tab label="{{lang.basic_info}}" md-on-select="ctrl.setCurrentTab('basic')"
+                            ng-if="ctrl.showTab('basic')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row">
@@ -99,9 +100,9 @@
                             </div>
                         </md-content>
                     </md-tab>
-                    <md-tab ng-disabled="!ctrl.editMode || ctrl.classification.isGlobal"
-                            label="{{lang.organization_units}}" md-on-select="ctrl.setCurrentTab('ou')"
-                            ng-if="ctrl.showTab('ou')">
+                    <md-tab ng-click="ctrl.getOrganizationForClassification()"
+                            ng-disabled="!ctrl.editMode || ctrl.classification.isGlobal"
+                            label="{{lang.organization_units}}" ng-if="ctrl.showTab('ou')">
                         <md-content>
                             <div layout="column" class="p20">
                                 <div layout="row" layout-align="start center">
@@ -178,8 +179,9 @@
                             </div>
                         </md-content>
                     </md-tab>
-                    <md-tab ng-if="!ctrl.classification.parent && ctrl.showTab('sub')" ng-disabled="!ctrl.editMode"
-                            label="{{lang.sub_classification}}" md-on-select="ctrl.setCurrentTab('sub')">
+                    <md-tab ng-click="ctrl.getSubClassification()"
+                            ng-disabled="!ctrl.editMode" label="{{lang.sub_classification}}"
+                            ng-if="!ctrl.classification.parent && ctrl.showTab('sub')">
                         <md-content>
                             <div layout="row" layout-align="center center">
                                 <md-button class="md-raised" ng-click="ctrl.addSubClassificationFromCtrl()">
@@ -195,7 +197,8 @@
                                         <table md-table md-row-select multiple
                                                ng-model="ctrl.selectedSubClassifications"
                                                md-progress="ctrl.progress">
-                                            <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                            <thead md-head md-order="ctrl.grid.order"
+                                                   md-on-reorder="ctrl.getSortedData">
                                             <tr md-row>
                                                 <th class="table-selector-header"
                                                     ng-if="ctrl.selectedSubClassifications.length" md-column>

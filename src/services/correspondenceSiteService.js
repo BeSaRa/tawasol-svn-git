@@ -342,7 +342,7 @@ module.exports = function (app) {
                             sub: sub
                         },
                         resolve: {
-                            correspondenceSites: function(){
+                            correspondenceSites: function () {
                                 'ngInject';
                                 return self.loadCorrespondenceSites();
                             }
@@ -371,7 +371,7 @@ module.exports = function (app) {
                         }
                     });
             },
-            subCorrespondenceSiteEdit: function (correspondenceSite , parent, $event) {
+            subCorrespondenceSiteEdit: function (correspondenceSite, parent, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -414,22 +414,22 @@ module.exports = function (app) {
                     .confirmMessage(langService.get('confirm_delete_selected_multiple'), null, null, $event || null)
                     .then(function () {
                         return self.deleteBulkCorrespondenceSites(correspondenceSites);
-                            /*.then(function (result) {
-                                var response = false;
-                                if (result.length === correspondenceSites.length) {
-                                    toast.error(langService.get("failed_delete_selected"));
-                                    response = false;
-                                } else if (result.length) {
-                                    generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (correspondenceSite) {
-                                        return correspondenceSite.getNames();
-                                    }));
-                                    response = true;
-                                } else {
-                                    toast.success(langService.get("delete_success"));
-                                    response = true;
-                                }
-                                return response;
-                            });*/
+                        /*.then(function (result) {
+                            var response = false;
+                            if (result.length === correspondenceSites.length) {
+                                toast.error(langService.get("failed_delete_selected"));
+                                response = false;
+                            } else if (result.length) {
+                                generator.generateFailedBulkActionRecords('delete_success_except_following', _.map(result, function (correspondenceSite) {
+                                    return correspondenceSite.getNames();
+                                }));
+                                response = true;
+                            } else {
+                                toast.success(langService.get("delete_success"));
+                                response = true;
+                            }
+                            return response;
+                        });*/
                     });
             },
             /**

@@ -6,7 +6,10 @@ module.exports = function (app) {
             template: require('./search-filter-template.html'),
             replace: true,
             scope: {
-                model: '='
+                model: '=',
+                onChange: '=',
+                cancelCallback: '&',
+                changeIconModel: '='
             },
             bindToController: true,
             controller: 'searchFilterDirectiveCtrl',

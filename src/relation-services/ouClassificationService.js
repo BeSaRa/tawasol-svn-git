@@ -13,10 +13,26 @@ module.exports = function (app) {
         self.returnOUClassifications = function () {
             return self.ouClassifications;
         };
-
+        /**
+         * @description load OUClassification for the given organization by Id.
+         * @param organization
+         * @return {*}
+         */
         self.loadOUClassificationsByOuId = function (organization) {
             var id = organization.hasOwnProperty('id') ? organization.id : organization;
             return $http.get((urlService.ouClassifications + '/ou/' + id))
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('OUClassification', generator.generateCollection(result.data.rs, OUClassification, self._sharedMethods));
+                });
+        };
+        /**
+         * @description load OUClassification for the given classification by Id.
+         * @param classification
+         * @return {*}
+         */
+        self.loadOUClassificationsByClassificationId = function (classification) {
+            var id = classification.hasOwnProperty('id') ? classification.id : classification;
+            return $http.get((urlService.ouClassifications + '/ou-classification/' + id))
                 .then(function (result) {
                     return generator.interceptReceivedCollection('OUClassification', generator.generateCollection(result.data.rs, OUClassification, self._sharedMethods));
                 });
@@ -219,7 +235,6 @@ module.exports = function (app) {
                     return ouClassifications;
                 });
         };
-
 
 
     });

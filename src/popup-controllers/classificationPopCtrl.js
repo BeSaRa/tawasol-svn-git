@@ -217,9 +217,10 @@ module.exports = function (app) {
                 .then(function (classification) {
                     self.behindScene(classification)
                         .then(function (classification) {
-                            self.reloadClassifications(self.grid.page).then(function () {
-                                toast.success(langService.get('edit_success').change({name: classification.getTranslatedName()}));
-                            });
+                            toast.success(langService.get('edit_success').change({name: classification.getTranslatedName()}));
+                            // self.reloadClassifications(self.grid.page).then(function () {
+                            //
+                            // });
                         });
                 })
                 .catch(function (classification) {
@@ -232,7 +233,7 @@ module.exports = function (app) {
         };
 
         self.replaceRecordFromGrid = function (classification) {
-            self.classification.children.splice(_.findIndex(classification.children, function (item) {
+            self.classification.children.splice(_.findIndex(self.classification.children, function (item) {
                 return item.id === classification.id;
             }), 1, classification);
         };
@@ -240,21 +241,21 @@ module.exports = function (app) {
         self.reloadClassifications = function (pageNumber) {
             var defer = $q.defer();
             self.progress = defer.promise;
-            return ouClassificationService
-                .loadOUClassifications()
-                .then(function () {
-                    return classificationService
-                        .loadClassifications()
-                        .then(function (result) {
-                            self.parentClassifications = classificationService.getMainClassifications(result);
-                            self.classification = self.model = classificationService.getClassificationById(self.classification);
-                            self.selectedSubClassifications = [];
-                            defer.resolve(true);
-                            if (pageNumber)
-                                self.grid.page = pageNumber;
-                            return result;
-                        });
+            // return ouClassificationService
+            //     .loadOUClassifications()
+            //     .then(function () {
+            return classificationService
+                .loadClassificationsWithLimit()
+                .then(function (result) {
+                    self.parentClassifications = classificationService.getMainClassifications(result);
+                    self.classification = self.model = classificationService.getClassificationById(self.classification);
+                    self.selectedSubClassifications = [];
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.grid.page = pageNumber;
+                    return result;
                 });
+            // });
         };
 
         self.addOrganizationToClassification = function () {
@@ -325,6 +326,28 @@ module.exports = function (app) {
             return _.find(self.classification.relatedOus, function (ou) {
                 return ou.ouid.id === organization.id;
             });
+        };
+        /**
+         * @description load organization for the current classification.
+         * @return {*}
+         */
+        self.getOrganizationForClassification = function () {
+            return ouClassificationService
+                .loadOUClassificationsByClassificationId(self.classification)
+                .then(function (result) {
+                    self.classification.relatedOus = result;
+                });
+        };
+        /**
+         * @description load sub classifications for the current classification.
+         * @return {*}
+         */
+        self.getSubClassification = function () {
+            return classificationService
+                .loadSubClassifications(self.classification)
+                .then(function (result) {
+                    self.classification.children = result;
+                });
         };
 
         /**
