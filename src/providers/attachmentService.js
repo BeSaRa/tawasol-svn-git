@@ -107,6 +107,7 @@ module.exports = function (app) {
                                   generator,
                                   $timeout,
                                   Attachment,
+                                  employeeService,
                                   _,
                                   $sce,
                                   rootEntity,
@@ -118,6 +119,10 @@ module.exports = function (app) {
 
             self.attachments = [];
 
+            var _getEmployeeDomainName = function () {
+                return employeeService.getEmployee().domainName;
+            };
+
             /**
              * @description generate attachment url for add and update
              * @param document
@@ -125,7 +130,7 @@ module.exports = function (app) {
              * @private
              */
             function _generateAttachmentUrl(document) {
-                var documentClass = (document.hasOwnProperty('docClassName') ? document.docClassName : documentClass).toLowerCase();
+                var documentClass = (document.hasOwnProperty('docClassName') ? document.docClassName : document.documentClass).toLowerCase();
                 var vsId = document.hasOwnProperty('vsId') ? document.vsId : false;
                 var url = null;
                 if (vsId && documentClass) {
@@ -161,6 +166,28 @@ module.exports = function (app) {
                 };
                 return self.loadDocumentAttachmentsByVsId(document);
             };
+
+            self.checkAttachmentIsDeletable = function (documentInfo, attachment) {
+                // if no vsId for document, means, document is not added yet. so user can edit/delete
+                if (!documentInfo.vsId) {
+                    return true;
+                }
+                var updateActionStatus = attachment.updateActionStatus;
+                if (attachment.updateActionStatus.hasOwnProperty('lookupKey')) {
+                    updateActionStatus = updateActionStatus.lookupKey;
+                }
+                // if attachment is free to edit or edit by author of attachment, allow delete and edit
+                // if not edit mode, allow delete and edit
+                /*if (!documentInfo.vsId || updateActionStatus === 0 || updateActionStatus === 2) {
+                    return true;
+                }*/
+                if (updateActionStatus === 0 || (updateActionStatus === 2 && attachment.createdBy === _getEmployeeDomainName())) {
+                    return true;
+                }
+                var isApproved = !!(documentInfo.isPaper || documentInfo.docStatus >= 24);
+                return (updateActionStatus === 1 && !isApproved)
+            };
+
             /**
              * @description add new attachment to service
              * @param document
@@ -184,10 +211,8 @@ module.exports = function (app) {
                     }
                 }).then(function (result) {
                     attachment.vsId = result.data.rs;
-                    var updateActionStatus = attachment.updateActionStatus.hasOwnProperty('lookupKey') ? attachment.updateActionStatus.lookupKey : attachment.updateActionStatus;
-                    if (updateActionStatus === 0 || updateActionStatus === 2) {
-                        attachment.isDeletable = true;
-                    }
+                    attachment.isDeletable = self.checkAttachmentIsDeletable(document, attachment);
+                    attachment.createdBy = _getEmployeeDomainName();
                     attachment = generator.generateInstance(attachment, Attachment, self._sharedMethods);
                     attachment = generator.interceptReceivedInstance('Attachment', attachment);
                     return attachment;//generator.generateInstance(attachment, Attachment, self._sharedMethods);
@@ -212,6 +237,22 @@ module.exports = function (app) {
                 };
                 return self.addAttachment(document, attachment, callback);
             };
+
+            /**
+             * add attachment without vsId
+             * @param documentClass
+             * @param attachment
+             * @param callback
+             * @return {Promise|Attachment}
+             */
+            self.addAttachmentWithOutVsId = function (documentClass, attachment, callback) {
+                var document = {
+                    vsId: null,
+                    docClassName: documentClass
+                };
+                return self.addAttachment(document, attachment, callback);
+            };
+
             /**
              * update current attachments keys for document
              * @param vsId
@@ -228,31 +269,67 @@ module.exports = function (app) {
                     return generator.generateCollection(attachments, Attachment, self._sharedMethods);
                 });
             };
+
             /**
-             * add attachment without
+             * @description update attachment for existing document
+             * @param vsId
              * @param documentClass
              * @param attachment
              * @param callback
              * @return {Promise|Attachment}
              */
-            self.addAttachmentWithOutVsId = function (documentClass, attachment, callback) {
+            self.updateAttachmentForDocWithVsId = function (vsId, documentClass, attachment, callback) {
+                // mock the document
+                var document = {
+                    vsId: vsId,
+                    docClassName: documentClass
+                };
+                return self.updateAttachment(document, attachment, callback);
+            };
+            /**
+             * @description updates attachment for document without vsId
+             * @param documentClass
+             * @param attachment
+             * @param callback
+             * @return {Promise|Attachment}
+             */
+            self.updateAttachmentForDocWithoutVsId = function (documentClass, attachment, callback) {
                 var document = {
                     vsId: null,
                     docClassName: documentClass
                 };
-                return self.addAttachment(document, attachment, callback);
+                return self.updateAttachment(document, attachment, callback);
             };
+
             /**
              * @description make an update for given attachment.
+             * @param document
              * @param attachment
+             * @param callback
              * @return {Promise|Attachment}
              */
-            self.updateAttachment = function (attachment) {
-                return $http
-                    .put(urlService.attachments,
-                        generator.interceptSendInstance('Attachment', attachment))
-                    .then(function () {
-                        return generator.generateInstance(attachment, Attachment, self._sharedMethods);
+            self.updateAttachment = function (document, attachment, callback) {
+                var url = _generateAttachmentUrl(document) + '/update';
+                return $http({
+                    url: url,
+                    method: 'POST',
+                    data: generator.interceptSendInstance('Attachment', attachment),
+                    headers: {'Content-Type': undefined},
+                    uploadEventHandlers: {
+                        progress: function (e) {
+                            if (callback) {
+                                callback(Math.floor((e.loaded * 100 / e.total)))
+                            }
+                        }
+                    }
+                }).then(function (result) {
+                    attachment.isDeletable = self.checkAttachmentIsDeletable(document, attachment);
+                    attachment = generator.generateInstance(attachment, Attachment, self._sharedMethods);
+                    attachment = generator.interceptReceivedInstance('Attachment', attachment);
+                    return attachment;
+                })
+                    .catch(function (error) {
+                        return $q.reject(error);
                     });
             };
             /**
@@ -397,17 +474,19 @@ module.exports = function (app) {
             /**
              * @description open drag and drop dialog to upload files with drag&drop.
              * @param correspondence
+             * @param attachment
              * @param $event
              * @return {promise}
              */
-            self.dragDropDialog = function (correspondence, $event) {
+            self.dragDropDialog = function (correspondence, attachment, $event) {
                 return dialog.showDialog({
                     template: cmsTemplate.getPopup('drag-drop-files'),
                     controller: 'dragDropPopCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event || null,
                     locals: {
-                        correspondence: correspondence
+                        correspondence: correspondence,
+                        attachment: attachment && attachment.vsId ? attachment : null
                     }
                 })
             };

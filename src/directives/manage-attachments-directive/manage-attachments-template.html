@@ -52,9 +52,10 @@
                     <md-select id="updateActionStatus"
                                name="updateActionStatus"
                                ng-required="true"
+                               ng-model-options="{trackBy:'$value.lookupKey'}"
                                ng-model="ctrl.attachment.updateActionStatus">
                         <md-option
-                                ng-repeat="updateAction in ctrl.attachmentUpdateActions track by $index"
+                                ng-repeat="updateAction in ctrl.attachmentUpdateActions"
                                 ng-value="updateAction">
                             {{updateAction.getTranslatedName()}}
                         </md-option>
@@ -69,8 +70,11 @@
                             ng-required="true"
                             id="attachmentType"
                             name="attachmentType"
+                            ng-model-options="{trackBy:'$value.lookupKey'}"
                             ng-model="ctrl.attachment.attachmentType">
-                        <md-option ng-value="type" ng-repeat="type in ctrl.attachmentTypes">{{type.getTranslatedName()}}
+                        <md-option ng-repeat="type in ctrl.attachmentTypes"
+                                   ng-value="type" >
+                            {{type.getTranslatedName()}}
                         </md-option>
                     </md-select>
                     <div ng-messages="attachment_from.attachmentType.$error">
@@ -93,20 +97,33 @@
                     </div>
                 </md-input-container>
                 <div>
-                    <md-button ng-disabled="attachment_from.$invalid" ng-click="ctrl.addFileToAttachments()"
+                    <md-button ng-if="!ctrl.attachment.vsId"
+                               ng-disabled="attachment_from.$invalid" ng-click="ctrl.addFileToAttachments()"
                                class="md-primary md-raised alongside-input">
                         {{lang.attachment_add}}
                     </md-button>
+                    <md-button ng-if="ctrl.attachment.vsId"
+                               ng-disabled="attachment_from.$invalid" ng-click="ctrl.updateAttachment()"
+                               class="md-primary md-raised alongside-input">
+                        {{lang.save}}
+                    </md-button>
                 </div>
                 <div>
-                    <md-button ng-click="ctrl.removeCurrentAttachedFile()"
+                    <md-button ng-if="!ctrl.attachment.vsId"
+                               ng-click="ctrl.removeCurrentAttachedFile()"
                                class="md-raised alongside-input">
                         {{lang.attachment_remove}}
+                    </md-button>
+                    <md-button ng-if="ctrl.attachment.vsId"
+                               ng-click="ctrl.cancelEditAttachment()"
+                               class="md-raised alongside-input">
+                        {{lang.cancel}}
                     </md-button>
                 </div>
             </div>
         </ng-form>
     </div>
+
     <div ng-if="!!ctrl.attachments.length" flex>
         <md-card layout="column">
             <md-table-container>
@@ -155,15 +172,6 @@
                                 <grid-indicator-directive record="attachment"
                                                           indicator-type="isLinkedExportedDoc"
                                                           record-type="Attachment"></grid-indicator-directive>
-
-                                <!--<span flex
-                                      ng-class="{'indicator-content': attachment.isLinkedExportedDocIndicator}">
-                                                <md-icon ng-if="attachment.isLinkedExportedDocIndicator"
-                                                         class="{{attachment.isLinkedExportedDocIndicator.class}}"
-                                                         md-svg-icon="{{attachment.isLinkedExportedDocIndicator.icon}}"
-                                                         tooltip="{{lang[attachment.isLinkedExportedDocIndicator.tooltip]}}"
-                                                ></md-icon>
-                                            </span>-->
                             </td>
                             <td md-cell>{{attachment.getTranslatedName()}}</td>
                             <td md-cell>{{attachment.attachmentType.getTranslatedName()}}</td>
@@ -174,12 +182,13 @@
                                                ng-click="ctrl.openViewDocumentAttachment(attachment, $event)">
                                         <md-icon md-svg-icon="eye"></md-icon>
                                     </md-button>
-                                    <!--<md-button class="md-icon-button" title="{{lang.attachment_edit}}"-->
-                                    <!--ng-click="ctrl.openEditDocumentAttahment(attachment, $event)">-->
-                                    <!--<md-icon md-svg-icon="pencil"></md-icon>-->
-                                    <!--</md-button>-->
+                                    <md-button class="md-icon-button" title="{{lang.attachment_edit}}"
+                                               ng-if="!ctrl.disableEverything && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment)"
+                                               ng-click="ctrl.openEditDocumentAttachment(attachment, $event)">
+                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                    </md-button>
                                     <md-button class="md-icon-button" title="{{lang.attachment_delete}}"
-                                               ng-if="!ctrl.disableEverything && !attachment.refVSID && attachment.isDeletable"
+                                               ng-if="!ctrl.disableEverything && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment)"
                                                ng-click="ctrl.deleteDocumentAttachment(attachment, $event)">
                                         <md-icon md-svg-icon="delete"></md-icon>
                                     </md-button>

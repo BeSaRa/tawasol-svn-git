@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                 FileIcon,
                                                 toast,
                                                 correspondence,
+                                                attachment,
                                                 Attachment,
                                                 attachmentTypeService,
                                                 lookupService,
@@ -16,10 +17,12 @@ module.exports = function (app) {
                                                 rootEntity,
                                                 $timeout,
                                                 errorCode,
+                                                employeeService,
                                                 $q) {
         'ngInject';
         var self = this;
         self.controllerName = 'dragDropPopCtrl';
+        self.attachment = attachment;
         // dop area element
         self.dropArea = $element.find('#drop-area');
         // valid files in array
@@ -69,7 +72,6 @@ module.exports = function (app) {
             unknown: 'folder-remove'*/
         };
 
-
         function _getExtension(file) {
             return {
                 ext: file.name.split('.').pop(),
@@ -109,23 +111,38 @@ module.exports = function (app) {
                 e.preventDefault();
             }
         });
+
         // when drop files on the drop area.
         self.dropArea[0].addEventListener('drop', function (e) {
             e.preventDefault();
             var files = e.dataTransfer.files;
             $scope.$apply(function () {
                 //self.emptyFiles(['validFiles', 'invalidFiles']);
-                for (var i = 0; i < files.length; i++) {
-                    if (attachmentService.validateBeforeUpload('attachmentUpload', files[i], true)) {
-                        self.validFiles.push(new Attachment({
-                            file: files[i],
-                            securityLevel: self.securityLevel,
-                            attachmentType: self.attachmentType,
-                            updateActionStatus: self.updateActionStatus,
-                            documentTitle: files[i].name,
-                            docSubject: files[i].name,
-                            progress: 0
-                        }));
+
+                // if edit attachment, accept only one attachment
+                if (self.attachment) {
+                    if (files.length > 1) {
+                        toast.info(langService.get('only_one_file_accepted').change({filename: files[0].name}));
+                    }
+                    if (attachmentService.validateBeforeUpload('attachmentUpload', files[0], true)) {
+                        var attachment = self.attachment;
+                        attachment.file = files[0];
+                        self.validFiles.push(attachment);
+                    }
+                }
+                else {
+                    for (var i = 0; i < files.length; i++) {
+                        if (attachmentService.validateBeforeUpload('attachmentUpload', files[i], true)) {
+                            self.validFiles.push(new Attachment({
+                                file: files[i],
+                                securityLevel: self.securityLevel,
+                                attachmentType: self.attachmentType,
+                                updateActionStatus: self.updateActionStatus,
+                                documentTitle: files[i].name,
+                                docSubject: files[i].name,
+                                progress: 0
+                            }));
+                        }
                     }
                 }
             });
@@ -159,6 +176,10 @@ module.exports = function (app) {
             return _fileIcon(attachment);
         };
 
+        self.isAttachmentDeletable = function (attachment) {
+            return attachmentService.checkAttachmentIsDeletable(correspondence.getInfo(), attachment);
+        };
+
         /**
          * @description start upload bulk files
          */
@@ -187,41 +208,99 @@ module.exports = function (app) {
          */
         self.startUploadAttachment = function (attachment, single) {
             return (function (attachment) {
-                //return attachmentService.addAttachment(correspondence, attachment, function (progress) {
                 var info = correspondence.getInfo();
-                var document = {
+                /*var document = {
                     vsId: info.vsId,
                     docClassName: info.documentClass
-                };
-                return attachmentService.addAttachment(document, attachment, function (progress) {
+                };*/
+                return attachmentService.addAttachment(info, attachment, function (progress) {
                     attachment.progress = progress;
                 }).then(function (attachment) {
                     if (single)
                         toast.success(langService.get('add_success').change({name: attachment.documentTitle}));
 
+                    // push the successfully uploaded file to the successFilesUploaded array and remove from validFiles array
                     self.validFiles = _.filter(self.validFiles, function (item) {
                         if (item.vsId === attachment.vsId) {
+                            item.isDeletable = self.isAttachmentDeletable(attachment);
                             self.successFilesUploaded.push(item);
                             return false;
                         }
                         return true;
                     });
-                })
-                    .catch(function (error) {
-                        if (single)
-                            errorCode.checkIf(error, 'SIZE_EXTENSION_NOT_ALLOWED', function () {
-                                dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
-                            });
-                        else
-                            return $q.reject(error);
-                    });
+                }).catch(function (error) {
+                    if (single)
+                        errorCode.checkIf(error, 'SIZE_EXTENSION_NOT_ALLOWED', function () {
+                            dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
+                        });
+                    else
+                        return $q.reject(error);
+                });
             })(attachment);
         };
+
+
+        self.setNameToAttachment = function (attachment) {
+            var name = langService.get('attachment_file');
+
+            if (attachment.documentTitle.trim() === '') {
+                var count = 1;
+                while (self.attachmentNameExists(name + ' ' + count)) {
+                    count++;
+                }
+                attachment.documentTitle = name + ' ' + count;
+            }
+            attachment.docSubject = attachment.documentTitle;
+            return attachment;
+        };
+
+        self.editDragAttachment = function (attachment) {
+            var file = attachment.file;
+            self.attachment = angular.copy(attachment);
+            self.attachment.file = file;
+        };
+
+        self.cancelUpdate = function () {
+            self.attachment = null;
+        };
+
+        self.updateAttachment = function () {
+            var info = correspondence.getInfo();
+            /*var document = {
+                vsId: info.vsId,
+                docClassName: info.documentClass
+            };*/
+
+            self.attachment = self.setNameToAttachment(self.attachment);
+            return attachmentService.updateAttachment(info, self.attachment, function (progress) {
+                self.attachment.progress = progress;
+            }).then(function (updatedAttachment) {
+                toast.success(langService.get('edit_success').change({name: updatedAttachment.documentTitle}));
+                if (attachment) {
+                    self.attachment = null;
+                    self.closeDrag(updatedAttachment);
+                }
+                else {
+                    //replace the attachment in successFilesUploaded array
+                    var index = _.findIndex(self.successFilesUploaded, function (attachment) {
+                        return (updatedAttachment.vsId === attachment.vsId);
+                    });
+                    self.successFilesUploaded.splice(index, 1, updatedAttachment);
+                    self.attachment = null;
+                }
+            }).catch(function (error) {
+                errorCode.checkIf(error, 'SIZE_EXTENSION_NOT_ALLOWED', function () {
+                    dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
+                });
+            });
+        };
+
         /**
          * close drag and drop dialog
          */
-        self.closeDrag = function () {
-            dialog.hide(self.successFilesUploaded);
+        self.closeDrag = function (updatedAttachment) {
+            updatedAttachment = updatedAttachment ? [updatedAttachment] : self.successFilesUploaded;
+            dialog.hide(updatedAttachment);
         };
         /**
          * @description delete dragged attachments.
@@ -243,7 +322,5 @@ module.exports = function (app) {
                 });
 
         }
-
-
     });
 };

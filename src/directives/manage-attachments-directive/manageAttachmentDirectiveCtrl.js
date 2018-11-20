@@ -16,7 +16,8 @@ module.exports = function (app) {
                                                               errorCode,
                                                               $filter,
                                                               lookupService,
-                                                              generator) {
+                                                              generator,
+                                                              _) {
         'ngInject';
         var self = this;
         self.controllerName = 'manageAttachmentDirectiveCtrl';
@@ -73,11 +74,18 @@ module.exports = function (app) {
             else if (securityLevel.hasOwnProperty('id')) {
                 securityLevel = securityLevel.id;
             }
-            return new Attachment({
-                file: file,
-                securityLevel: self.document ? securityLevel : null,
-                updateActionStatus: self.attachmentUpdateActions[0]
-            });
+            if (self.attachment && self.attachment.vsId) {
+                var attachment = new Attachment(self.attachment);
+                attachment.file = file;
+                return attachment;
+            }
+            else {
+                return new Attachment({
+                    file: file,
+                    securityLevel: self.document ? securityLevel : null,
+                    updateActionStatus: self.attachmentUpdateActions[0]
+                });
+            }
         }
 
         self.hideButton = function (buttonType) {
@@ -111,9 +119,25 @@ module.exports = function (app) {
          */
         self.openDragDropDialog = function ($event) {
             attachmentService
-                .dragDropDialog(self.document, $event)
+                .dragDropDialog(self.document, self.attachment, $event)
                 .then(function (attachments) {
-                    self.attachments = self.attachments.concat(attachments);
+                    if (self.vsId) {
+                        self.reloadAttachments()
+                            .then(function (result) {
+                                self.attachment = null;
+                            })
+                    }
+                    else {
+                        if (self.attachment) {
+                            var index = _.findIndex(self.attachments, function (existingAttachment) {
+                                return attachments[0].vsId === existingAttachment.vsId;
+                            });
+                            self.attachments.splice(index, 1, attachments[0]);
+                        }
+                        else {
+                            self.attachments = self.attachments.concat(attachments);
+                        }
+                    }
                 });
         };
 
@@ -140,24 +164,48 @@ module.exports = function (app) {
             attachment.docSubject = attachment.documentTitle;
             return attachment;
         };
+
+        self.reloadAttachments = function () {
+            return attachmentService.loadDocumentAttachments(self.vsId, self.documentClass)
+                .then(function (result) {
+                    self.attachments = result;
+                    self.model = angular.copy(self.attachments);
+                    self.selectedAttachments = [];
+                    return result;
+                });
+        };
+
         /**
          * send the document to the grid
          */
         self.addFileToAttachments = function () {
             self.attachment = self.setNameToAttachment(self.attachment);
             var promise = null;
-            if (self.vsId) {
+
+            /*if (self.vsId) {
                 promise = attachmentService.addAttachmentWithVsId(self.vsId, self.documentClass, self.attachment);
             } else {
                 promise = attachmentService.addAttachmentWithOutVsId(self.documentClass, self.attachment);
-            }
+            }*/
+            var info = self.document.getInfo();
+            promise = attachmentService.addAttachment(info, self.attachment);
 
             promise
                 .then(function (attachment) {
-                    toast.success(langService.get('add_success').change({name: attachment.documentTitle}));
-                    self.attachments.push(attachment);
-                    self.model = angular.copy(self.attachments);
-                    self.attachment = null;
+                    if (self.vsId) {
+                        self.reloadAttachments()
+                            .then(function (result) {
+                                toast.success(langService.get('add_success').change({name: attachment.documentTitle}));
+                                self.attachment = null;
+                            })
+                    }
+                    else {
+                        toast.success(langService.get('add_success').change({name: attachment.documentTitle}));
+                        attachment.isDeletable = self.isAttachmentDeletable(attachment);
+                        self.attachments.push(attachment);
+                        self.model = angular.copy(self.attachments);
+                        self.attachment = null;
+                    }
                 })
                 .catch(function (error) {
                     errorCode.checkIf(error, 'SIZE_EXTENSION_NOT_ALLOWED', function () {
@@ -221,22 +269,26 @@ module.exports = function (app) {
                             toast.success(langService.get('delete_success'));
                             self.attachments = attachments;
                             self.linkedExportedAttachments = linkedExportedAttachments;
+                            self.selectedAttachments = [];
                             self.model = angular.copy(self.attachments);
                         });
                 });
         };
 
         self.openViewDocumentAttachment = function (attachment, $event) {
-            //correspondenceService.viewAttachment(attachment, self.documentClass);
             attachmentService.viewAttachment(attachment, self.documentClass);
         };
+
+        self.isAttachmentDeletable = function (attachment) {
+            return attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment);
+        };
+
         /**
          * to upload the files
          * @param files
          * @param element
          */
         self.uploadAttachmentFile = function (files, element) {
-            console.log(files);
             attachmentService
                 .validateBeforeUpload('attachmentUpload', files[0])
                 .then(function (file) {
@@ -255,6 +307,55 @@ module.exports = function (app) {
                     self.attachment = null;
                 })
 
+        };
+
+        self.openEditDocumentAttachment = function (attachment) {
+            var file = attachment.file;
+            self.attachment = angular.copy(attachment);
+            self.attachment.file = file;
+        };
+
+        self.cancelEditAttachment = function () {
+            self.attachment = null;
+        };
+
+        self.updateAttachment = function () {
+            self.attachment = self.setNameToAttachment(self.attachment);
+            var promise = null;
+            /*if (self.vsId) {
+                promise = attachmentService.updateAttachmentForDocWithVsId(self.vsId, self.documentClass, self.attachment);
+            } else {
+                promise = attachmentService.updateAttachmentForDocWithoutVsId(self.documentClass, self.attachment);
+            }*/
+            var info = self.document.getInfo();
+            promise = attachmentService.updateAttachment(info, self.attachment);
+
+            promise
+                .then(function (attachment) {
+                    if (self.vsId) {
+                        self.reloadAttachments()
+                            .then(function (result) {
+                                toast.success(langService.get('edit_success').change({name: attachment.documentTitle}));
+                                self.attachment = null;
+                            })
+                    } else {
+                        toast.success(langService.get('edit_success').change({name: attachment.documentTitle}));
+                        var existingAttachmentIndex = _.findIndex(self.attachments, function (existingAttachment) {
+                            return existingAttachment.vsId === attachment.vsId;
+                        });
+                        self.attachments.splice(existingAttachmentIndex, 1, attachment);
+                        self.model = angular.copy(self.attachments);
+                        self.attachment = null;
+                    }
+                })
+                .catch(function (error) {
+                    errorCode.checkIf(error, 'SIZE_EXTENSION_NOT_ALLOWED', function () {
+                        dialog.errorMessage(langService.get('file_with_size_extension_not_allowed'));
+                    });
+                })
+                .finally(function () {
+                    self.showButtons();
+                });
         };
 
         $scope.$watch(function () {

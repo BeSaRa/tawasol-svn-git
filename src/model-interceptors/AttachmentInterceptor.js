@@ -24,6 +24,7 @@ module.exports = function (app) {
             else if (typeof model.securityLevel !== 'number' && model.securityLevel.hasOwnProperty('id')) {
                 model.securityLevel = model.securityLevel.id;
             }
+
             delete model.file;
             delete model.refVSID;
             delete model.source;
@@ -31,7 +32,10 @@ module.exports = function (app) {
             delete model.isLinkedExportedDocIndicator;
 
             formData.append('entity', JSON.stringify(model));
-            formData.append('content', file);
+            formData.append('content', file || null);
+            if (model.vsId){
+                formData.append('withProtect', true);
+            }
             return formData;
         });
 
@@ -48,10 +52,8 @@ module.exports = function (app) {
                 model.securityLevel = model.securityLevel.id;
             }
             model.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
-            if (typeof model.updateActionStatus === 'undefined' && model.updateActionStatus !== null && model.updateActionStatus !== '')
+            if (typeof model.updateActionStatus !== 'undefined' && model.updateActionStatus !== null && model.updateActionStatus !== '')
                 model.updateActionStatus = lookupService.getLookupByLookupKey(lookupService.attachmentUpdateAction, model.updateActionStatus);
-
-
 
             return model;
         });
