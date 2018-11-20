@@ -26,8 +26,8 @@ module.exports = function (app) {
             status: 'status'
         };
 
-        self.publicAnnouncement.startDate = new Date();
-        self.currentDate = new Date();
+        var today = new Date();
+        self.currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
         self.alwaysActive = false;
         if (self.editMode) {
@@ -36,10 +36,10 @@ module.exports = function (app) {
                 self.alwaysActive = false;
             }
 
-            var today = new Date();
+            // var today = new Date();
             self.isStatusDisabled = moment(self.model.endDate, "YYYY-MM-DD").valueOf() < moment(new Date(today.getFullYear(), today.getMonth(), today.getDate()), "YYYY-MM-DD").valueOf();
 
-            self.currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            // self.currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
             var currentDate = self.currentDate.getFullYear() + "-" + (self.currentDate.getMonth() + 1) + "-" + self.currentDate.getDate();
 
             if (self.model.startDate && typeof self.model.startDate !== "string") {

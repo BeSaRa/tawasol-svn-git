@@ -60,7 +60,8 @@ module.exports = function (app) {
                             editMode: false,
                             privateAnnouncement: new PrivateAnnouncement(
                                 {
-                                    itemOrder: generator.createNewID(self.privateAnnouncements, 'itemOrder')
+                                    itemOrder: generator.createNewID(self.privateAnnouncements, 'itemOrder'),
+                                    startDate: new Date()
                                 }),
                             privateAnnouncements: self.privateAnnouncements,
                             organizations: organizations,

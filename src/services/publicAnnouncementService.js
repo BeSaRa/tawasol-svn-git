@@ -58,7 +58,8 @@ module.exports = function (app) {
                             editMode: false,
                             publicAnnouncement: new PublicAnnouncement(
                                 {
-                                    itemOrder: generator.createNewID(self.publicAnnouncements, 'itemOrder')
+                                    itemOrder: generator.createNewID(self.publicAnnouncements, 'itemOrder'),
+                                    startDate: new Date()
                                 }),
                             publicAnnouncements: self.publicAnnouncements
                         }
