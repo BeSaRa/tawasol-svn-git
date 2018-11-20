@@ -8,7 +8,7 @@ module.exports = function (app) {
                     return langService
                         .checkLangKeyIfExists(viewValue)
                         .then(function (result) {
-                            if (!result)
+                            if (result)
                                 return $q.reject('Lang Key Exists');
                             return true;
                         });
