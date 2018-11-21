@@ -464,6 +464,18 @@ module.exports = function (app) {
                 })
         };
 
+        /**
+         * @description Create Reply
+         * @param correspondence
+         * @param $event
+         */
+        self.createReplyIncoming = function (correspondence, $event) {
+            var info = correspondence.getInfo();
+            dialog.hide();
+            $state.go('app.outgoing.add', {vsId: info.vsId, action: 'reply'});
+        };
+
+
         self.launchDistributionWorkflow = function (correspondence, $event, defer) {
             if (!correspondence.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
@@ -591,6 +603,19 @@ module.exports = function (app) {
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
+                }
+            },
+            // Create Reply
+            {
+                type: 'action',
+                icon: 'pen',
+                text: 'grid_action_create_reply',
+                callback: self.createReplyIncoming,
+                class: "action-green",
+                permissionKey: 'CREATE_REPLY',
+                checkShow: function (action, model) {
+                    var info = model.getInfo();
+                    return self.checkToShowAction(action, model) && info.documentClass === "incoming" && !model.isBroadcasted();
                 }
             },
             // Broadcast
