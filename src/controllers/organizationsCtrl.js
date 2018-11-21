@@ -7,15 +7,12 @@ module.exports = function (app) {
                                                   organizations,
                                                   organizationChartService,
                                                   referencePlanNumberService,
-                                                  contextHelpService,
-                                                  permissions,
-                                                  $window) {
+                                                  contextHelpService) {
         'ngInject';
         var self = this;
         self.controllerName = 'organizationsCtrl';
         organizationChartService.createHierarchy(organizations);
         self.organizations = organizationChartService.rootOrganizations;
-
         self.selectedFilter = self.organizations;
 
         contextHelpService.setHelpTo('organizations');
@@ -27,7 +24,9 @@ module.exports = function (app) {
                     organizationService
                         .loadOrganizations()
                         .then(function (result) {
-                            self.organizations = result;
+                            organizationChartService.createHierarchy(result);
+                            self.organizations = organizationChartService.rootOrganizations;
+                            self.selectedFilter = self.organizations;
                         });
                 })
         };
