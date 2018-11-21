@@ -1005,7 +1005,7 @@ module.exports = function (app) {
                 icon: 'eraser-variant',
                 text: 'grid_action_edit_after_export',
                 shortcut: false,
-                showInView: false,
+                showInView: true,
                 class: 'action-green',
                 callback: self.editAfterExport, //TODO: Service is not available yet
                 checkShow: function (action, model) {
