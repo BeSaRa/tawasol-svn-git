@@ -273,6 +273,15 @@ module.exports = function (app) {
             return !!(self.document.hasDocumentClass('internal') || (self.document.hasDocumentClass('outgoing') && !self.document.addMethod));
 
         };
+
+        /**
+         * @description check if document received from incoming department
+         * @returns {*|boolean}
+         */
+        self.checkDepartmentalReceived = function(){
+            return self.document.hasVsId() && $stateParams.action === 'receive';
+        };
+
         /**
          * @description on registry change.
          * @param organizationId
