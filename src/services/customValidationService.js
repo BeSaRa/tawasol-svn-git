@@ -69,7 +69,7 @@ module.exports = function (app) {
              * @description Allows at least 1 arabic character and can contain digits, space(not in end of string and no 2 consecutive spaces)
              */
             // A1NS: /^(?=.*[ء-ي])[0-9ء-ي]?( ?[0-9ء-ي]+)+$/,
-            A1NS: /(^[\u0621-\u064A]+)([\u0621-\u064A ?0-9]*)$/,
+            A1NS: /(^[\u0621-\u064A0-9]+)([\u0621-\u064A ?0-9]*)$/,
 
             /**
              * @description Allows english, digits, space(not in end of string and no 2 consecutive spaces)
