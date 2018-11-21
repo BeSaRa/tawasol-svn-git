@@ -640,7 +640,7 @@ module.exports = function (app) {
                 icon: 'tag',
                 text: 'grid_action_recall',
                 shortcut: true,
-                showInView: false,
+                showInView: true,
                 callback: self.recall,
                 class: "action-green",
                 hide: false, /*In Phase 2*/
