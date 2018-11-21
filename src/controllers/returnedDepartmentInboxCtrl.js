@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                             userInboxService,
                                                             $q,
                                                             $filter,
+                                                            errorCode,
                                                             $state,
                                                             $timeout,
                                                             langService,
@@ -458,6 +459,7 @@ module.exports = function (app) {
                     correspondenceStorageService
                         .runEditAfter('Export', returnedDepartmentInbox)
                         .then(function () {
+                            dialog.hide();
                             $state.go('app.outgoing.add', {
                                 workItem: info.wobNumber,
                                 vsId: info.vsId,
