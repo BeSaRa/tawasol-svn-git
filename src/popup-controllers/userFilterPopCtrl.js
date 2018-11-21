@@ -49,8 +49,10 @@ module.exports = function (app) {
                 .then(function () {
                     self.filter.saveUserFilter().then(function (filter) {
                         filter.sortOptionId = Number(filter.sortOptionId);
-                        //self.filter = angular.copy(self.filter);
-                        dialog.hide(filter);
+                        self.model = angular.copy(filter);
+                        self.editMode = true;
+                        // self.filter = angular.copy(filter);
+                        //  dialog.hide(filter);
                     });
                 });
         };
@@ -166,7 +168,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.closeFilterForm = function ($event) {
-            dialog.cancel();
+            dialog.close();
         };
     });
 };

@@ -192,6 +192,7 @@ module.exports = function (app) {
                 .then(function () {
                     userFilterService.loadUserFilters().then(function (result) {
                         self.userFilters = result;
+                        self.userFilters = $filter('orderBy')(self.userFilters, 'sortOptionId');
                     })
                 });
         };
@@ -245,6 +246,7 @@ module.exports = function (app) {
             return filter.deleteFilter($event).then(function () {
                 self.userFilters.splice($index, 1);
                 self.filterGrid.splice($index, 1);
+                userFilterService.loadUserFilters();
             });
         };
         /**
