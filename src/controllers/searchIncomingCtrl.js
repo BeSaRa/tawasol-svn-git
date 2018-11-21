@@ -462,7 +462,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (searchedIncomingDocument, $event) {
-            searchedIncomingDocument.manageDocumentAttachments($event);
+            searchedIncomingDocument.manageDocumentAttachments($event).then(function () {
+                self.reloadSearchedIncomingDocument(self.grid.page)
+            }).catch(function () {
+                self.reloadSearchedIncomingDocument(self.grid.page);
+            });
         };
 
         /**

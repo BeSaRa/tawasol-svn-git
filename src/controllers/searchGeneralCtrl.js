@@ -491,7 +491,13 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (searchedGeneralDocument, $event) {
-            searchedGeneralDocument.manageDocumentAttachments($event);
+            searchedGeneralDocument.manageDocumentAttachments($event)
+                .then(function () {
+                    self.reloadSearchedGeneralDocuments(self.grid.page);
+                })
+                .catch(function () {
+                    self.reloadSearchedGeneralDocuments(self.grid.page);
+                });
         };
 
         /**

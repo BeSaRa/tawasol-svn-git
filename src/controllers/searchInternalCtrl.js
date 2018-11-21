@@ -442,7 +442,14 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (searchedInternalDocument, $event) {
-            searchedInternalDocument.manageDocumentAttachments($event);
+            searchedInternalDocument.manageDocumentAttachments($event)
+                .then(function () {
+                    self.reloadSearchedInternalDocuments(self.grid.page);
+                })
+                .catch(function () {
+                    self.reloadSearchedInternalDocuments(self.grid.page);
+                })
+            ;
         };
 
         /**

@@ -462,7 +462,13 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (correspondence, $event) {
-            correspondence.manageDocumentAttachments($event);
+            correspondence.manageDocumentAttachments($event)
+                .then(function () {
+                    self.reloadSearchedOutgoingIncomingDocument(self.grid.page);
+                })
+                .catch(function () {
+                    self.reloadSearchedOutgoingIncomingDocument(self.grid.page);
+                });
         };
 
         /**
