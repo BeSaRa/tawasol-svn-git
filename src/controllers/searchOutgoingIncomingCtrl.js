@@ -11,7 +11,7 @@ module.exports = function (app) {
                                                            propertyConfigurations,
                                                            validationService,
                                                            generator,
-                                                           rootEntity,
+                                                           //rootEntity,
                                                            managerService,
                                                            contextHelpService,
                                                            toast,
@@ -24,7 +24,8 @@ module.exports = function (app) {
                                                            $state,
                                                            dialog,
                                                            mailNotificationService,
-                                                           favoriteDocumentsService//,
+                                                           favoriteDocumentsService,
+                                                           gridService//,
                                                            //centralArchives
     ) {
         'ngInject';
@@ -266,28 +267,19 @@ module.exports = function (app) {
 
         };
 
-        self.globalSetting = rootEntity.returnRootEntity().settings;
+        //self.globalSetting = rootEntity.returnRootEntity().settings;
         /**
          * @description Contains options for grid configuration
          * @type {{limit: number, page: number, order: string, limitOptions: [*]}}
          */
         self.grid = {
-            limit: 5, //self.globalSetting.searchAmount, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.search.outgoingIncoming) || 5, // default limit
             page: 1, // first page
-            //order: 'arName', // default sorting order
             order: '', // default sorting order
-            limitOptions: [5, 10, 20, // limit options
-                {
-                    /*label: self.globalSetting.searchAmountLimit.toString(),
-                     value: function () {
-                     return self.globalSetting.searchAmountLimit
-                     }*/
-                    label: langService.get('all'),
-                    value: function () {
-                        return (self.searchedOutgoingIncomingDocuments.length + 21);
-                    }
-                }
-            ],
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.search.outgoingIncoming, self.searchedOutgoingIncomingDocuments),
+            pagingCallback: function (page, limit) {
+                gridService.setGridPagingLimitByGridName(gridService.grids.search.outgoingIncoming, limit);
+            },
             filter: {search: {}}
         };
 

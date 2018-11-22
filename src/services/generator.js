@@ -621,6 +621,33 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Gets the date in default format
+         * @param timeStamp
+         * @param skipTime
+         * @returns {Date | null }
+         */
+        self.getDateObjectFromTimeStamp = function (timeStamp, skipTime) {
+            /*if (timeStamp) {
+                // in case of long numbers, they will be having L at last. so remove L and change timeStamp to moment date.
+                timeStamp = Number(timeStamp.toString().split('L')[0]);
+                return moment(timeStamp).format(dateAndTime ? self.defaultDateTimeFormat : self.defaultDateFormat);
+            }
+            return null;*/
+            if (timeStamp) {
+                if (!isNaN(timeStamp)) {
+                    // in case of long numbers, they will be having L at last. so remove L and change timeStamp to moment date.
+                    timeStamp = Number(timeStamp.toString().split('L')[0]);
+                    if (skipTime) {
+                        return moment(timeStamp).startOf('day').toDate();
+                    }
+                    return moment(timeStamp).toDate();
+                }
+                return timeStamp;
+            }
+            return null;
+        };
+
+        /**
          * @description Gets the time from timeStamp
          * @param timeStamp
          * @param isTwentyFourHour

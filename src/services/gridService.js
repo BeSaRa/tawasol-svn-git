@@ -4,7 +4,8 @@ module.exports = function (app) {
                                          localStorageService,
                                          generator,
                                          langService,
-                                         $filter) {
+                                         $filter,
+                                         rootEntity) {
         'ngInject';
         var self = this;
         self.serviceName = 'gridService';
@@ -197,9 +198,11 @@ module.exports = function (app) {
          * @param records
          * @param gridName
          * Used to differentiate between grids in case of overrided values
+         * @param useSearchAmountLimit
+         * Used to set the highest records per page limit for any grid from global settings
          * @returns {*[]}
          */
-        self.getGridLimitOptions = function (gridName, records) {
+        self.getGridLimitOptions = function (gridName, records, useSearchAmountLimit) {
             var count = null;
             if (typeof records !== 'undefined' && records !== null)
                 count = (typeof records === "number") ? records : records.length;
@@ -221,14 +224,19 @@ module.exports = function (app) {
                     [
                         5, 10, 20,
                         {
-                            label: langService.get('all'),
+                            label: useSearchAmountLimit ? rootEntity.returnRootEntity().settings.searchAmountLimit.toString() : langService.get('all'),
                             value: function () {
-                                // if count is not null, return (count + 21) records
-                                // if count is null, return the (max number + 21) records
-                                if (count !== null)
-                                    return (count + 21);
-                                else
-                                    return (20 + 21);
+                                if (useSearchAmountLimit) {
+                                    return (rootEntity.returnRootEntity().settings.searchAmountLimit);
+                                }
+                                else {
+                                    // if count is not null, return (count + 21) records
+                                    // if count is null, return the (max number + 21) records
+                                    if (count !== null)
+                                        return (count + 21);
+                                    else
+                                        return (20 + 21);
+                                }
                             }
                         }
                     ]
