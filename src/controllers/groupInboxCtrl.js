@@ -47,8 +47,8 @@ module.exports = function (app) {
              */
             self.grid = {
                 limit: gridService.getGridPagingLimitByGridName(gridService.grids.inbox.group) || 5, // default limit
-                page: 1,
-                order: '',
+                page: 1, // first page
+                order: '', // default sorting order
                 limitOptions: gridService.getGridLimitOptions(gridService.grids.inbox.group, self.workItems),
                 pagingCallback: function (page, limit) {
                     gridService.setGridPagingLimitByGridName(gridService.grids.inbox.group, limit);

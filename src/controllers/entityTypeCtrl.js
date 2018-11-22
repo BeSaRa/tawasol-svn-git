@@ -29,7 +29,6 @@ module.exports = function (app) {
         self.grid = {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.entityType) || 5, // default limit
             page: 1, // first page
-            //order: 'arName', // default sorting order
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.entityType, self.entityTypes),
             pagingCallback: function (page, limit) {

@@ -57,7 +57,6 @@ module.exports = function (app) {
         self.grid = {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.outgoing.review) || 5, // default limit
             page: 1, // first page
-            //order: 'arName', // default sorting order
             order: '', // default sorting order,
             limitOptions: gridService.getGridLimitOptions(gridService.grids.outgoing.review, self.reviewOutgoings),
             pagingCallback: function (page, limit) {

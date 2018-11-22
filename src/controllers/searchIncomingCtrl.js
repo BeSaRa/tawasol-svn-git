@@ -257,7 +257,6 @@ module.exports = function (app) {
         self.grid = {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.search.incoming) || 5, // default limit
             page: 1, // first page
-            //order: 'arName', // default sorting order
             order: '', // default sorting order
             limitOptions: gridService.getGridLimitOptions(gridService.grids.search.incoming, self.searchedIncomingDocuments),
             pagingCallback: function (page, limit) {
