@@ -189,10 +189,11 @@ module.exports = function (app) {
         self.userFilterCreate = function ($event) {
             return userFilterService
                 .createUserFilterDialog($event)
-                .then(function () {
+                .then(function (filter) {
                     userFilterService.loadUserFilters().then(function (result) {
                         self.userFilters = result;
                         self.userFilters = $filter('orderBy')(self.userFilters, 'sortOptionId');
+                        self.selectFilter(filter, _getFilterIndex(filter));
                     })
                 });
         };
@@ -246,6 +247,7 @@ module.exports = function (app) {
             return filter.deleteFilter($event).then(function () {
                 self.userFilters.splice($index, 1);
                 self.filterGrid.splice($index, 1);
+                // for updating item order
                 userFilterService.loadUserFilters();
             });
         };
@@ -255,7 +257,9 @@ module.exports = function (app) {
          * @param $index
          */
         self.selectFilter = function (filter, $index) {
-            self.selectedTab = ($index + self.fixedTabsCount);
+            $timeout(function () {
+                self.selectedTab = ($index + self.fixedTabsCount);
+            });
             self.selectedFilter = {
                 index: $index,
                 filter: angular.copy(filter)
