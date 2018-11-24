@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('searchFilterDirectiveCtrl', function () {
+    app.controller('searchFilterDirectiveCtrl', function ($rootScope) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchFilterDirectiveCtrl';
@@ -7,6 +7,7 @@ module.exports = function (app) {
         self.closeStatus = true;
 
         self.changeCallback = function () {
+            // TODO: broadcast an event to tell the listeners the user click on search or enter
             if (typeof self.onChange === 'function') {
                 self.onChange(self.model);
             }

@@ -275,7 +275,7 @@ module.exports = function (app) {
         self.editSubCorrespondenceSite = function (correspondenceSite, $event) {
             correspondenceSiteService
                 .controllerMethod
-                .subCorrespondenceSiteEdit(correspondenceSite, self.correspondenceSite ,  $event)
+                .subCorrespondenceSiteEdit(correspondenceSite, self.correspondenceSite, $event)
                 .then(function (correspondenceSite) {
                     self.behindScene(correspondenceSite)
                         .then(function (correspondenceSite) {
@@ -510,6 +510,28 @@ module.exports = function (app) {
             generator.resetFields(self.correspondenceSite, self.model);
             form.$setUntouched();
         };
+        /**
+         * @description get sub correspondence sites  for given correspondence site.
+         * @return {*}
+         */
+        self.getSubCorrespondenceSite = function () {
+            return correspondenceSiteService
+                .loadSubCorrespondenceSites(self.correspondenceSite)
+                .then(function (result) {
+                    self.correspondenceSite.children = result;
+                });
+        };
+        /**
+         * @description get related ous for the current correspondence site.
+         * @return {*}
+         */
+        self.getOUCorrespondenceSite = function () {
+            return ouCorrespondenceSiteService
+                .loadOUCorrespondenceSitesByCorrespondenceSiteId(self.correspondenceSite)
+                .then(function (result) {
+                    self.correspondenceSite.relatedOus = result;
+                });
+        }
 
     });
 };

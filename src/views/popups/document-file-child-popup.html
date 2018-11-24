@@ -35,8 +35,6 @@
                                 </th>
                                 <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.security_levels}}</span>
                                 </th>
-                                <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.organization_units}}</span>
-                                </th>
                                 <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.children}}</span>
                                 </th>
                                 <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.actions}}</span>
@@ -57,21 +55,11 @@
                                 <td md-cell>{{documentFile.getSecurityLevels(documentFile)}}</td>
                                 <td md-cell>
                                     <md-button
-                                            ng-click="ctrl.openOrganizationDialog(documentFile.relatedOus, documentFile, $event)"
+                                            ng-click="ctrl.openChildDocumentFilesDialog(documentFile, $event)"
                                             class="md-icon-button"
-                                            tooltip="{{documentFile.relatedOus.length + ' ' + lang.organizations}}"
-                                            ng-class="{'md-raised':documentFile.relatedOus.length}"
-                                            ng-disabled="!documentFile.relatedOus.length">
-                                        <md-icon md-svg-icon="coins"></md-icon>
-                                    </md-button>
-                                </td>
-                                <td md-cell>
-                                    <md-button
-                                            ng-click="ctrl.openChildDocumentFilesDialog(documentFile.children, documentFile, $event)"
-                                            class="md-icon-button"
-                                            tooltip="{{documentFile.children.length + ' ' + (documentFile.children.length > 1?lang.children:lang.child)}}"
-                                            ng-class="{'md-raised':documentFile.children.length}"
-                                            ng-disabled="!documentFile.children.length">
+                                            tooltip="{{documentFile.childCount+ ' ' + (documentFile.childCount > 1?lang.children:lang.child)}}"
+                                            ng-class="{'md-raised':!!documentFile.childCount}"
+                                            ng-disabled="!documentFile.childCount">
                                         <md-icon md-svg-icon="coins"></md-icon>
                                     </md-button>
                                 </td>

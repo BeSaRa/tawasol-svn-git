@@ -25,6 +25,9 @@ module.exports = function (app) {
         self.promise = null;
         self.selectedDocumentFiles = [];
 
+        self.searchMode = '';
+        self.searchMode = false;
+
         /**
          * @description
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
@@ -74,13 +77,12 @@ module.exports = function (app) {
                 .documentFileEdit(documentFile, $event)
                 .then(function (result) {
                     self.reloadDocumentFiles(self.grid.page);
-                    /*.then(function () {
-                        toast.success(langService.get('edit_success').change({name: result.getTranslatedName()}));
-                    });*/
-                }).catch(function () {
-                self.reloadDocumentFiles(self.grid.page);
-            });
+                })
+                .catch(function (result) {
+                    self.replaceRecordFromGrid(result);
+                })
         };
+
 
         /**
          * @description Gets the grid records by sorting
@@ -97,20 +99,19 @@ module.exports = function (app) {
         self.reloadDocumentFiles = function (pageNumber) {
             var defer = $q.defer();
             self.progress = defer.promise;
-            return ouDocumentFileService
-                .loadOUDocumentFiles()
-                .then(function () {
-                    return documentFileService
-                        .loadDocumentFiles()
-                        .then(function (result) {
-                            self.selectedDocumentFiles = [];
-                            self.documentFiles = documentFileService.getParentDocumentFiles(result);
-                            defer.resolve(true);
-                            if (pageNumber)
-                                self.grid.page = pageNumber;
-                            self.getSortedData();
-                            return result;
-                        });
+            self.searchMode = false;
+            self.searchModel = '';
+
+            return documentFileService
+                .loadDocumentFilesWithLimit()
+                .then(function (result) {
+                    self.selectedDocumentFiles = [];
+                    self.documentFiles = documentFileService.getParentDocumentFiles(result);
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.grid.page = pageNumber;
+                    self.getSortedData();
+                    return result;
                 });
         };
 
@@ -197,19 +198,37 @@ module.exports = function (app) {
                     self.reloadDocumentFiles(self.grid.page);
                 });
         };
-
         /**
          * @description show child documentFiles
+         * @param documentFile
+         * @param $event
          */
-        self.openChildDocumentFilesDialog = function (documentFiles, documentfile, $event) {
+        self.openChildDocumentFilesDialog = function (documentFile, $event) {
             documentFileService
                 .controllerMethod
-                .openChildDocumentFilesPopup(documentFiles, documentfile, $event)
-                .then(function () {
-                    self.reloadDocumentFiles(self.grid.page);
-                }).catch(function () {
-                self.reloadDocumentFiles(self.grid.page);
-            });
+                .openChildDocumentFilesPopup(documentFile, $event)
+        };
+
+        /**
+         * @description search in classification.
+         * @param searchText
+         * @return {*}
+         */
+        self.searchInDocumentFiles = function (searchText) {
+            if (!searchText)
+                return;
+            self.searchMode = true;
+            return documentFileService
+                .documentFileSearch(searchText)
+                .then(function (result) {
+                    self.documentFiles = result;
+                });
+        };
+
+        self.replaceRecordFromGrid = function (documentFile) {
+            self.documentFiles.splice(_.findIndex(self.documentFiles, function (item) {
+                return item.id === documentFile.id;
+            }), 1, documentFile);
         };
     });
 };

@@ -13,6 +13,7 @@ module.exports = function (app) {
             self.arName = null;
             self.enName = null;
             self.status = false;
+            self.childCount = 0;
             self.relatedOus = [];
 
             // every model has required fields

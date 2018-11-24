@@ -43,10 +43,10 @@ module.exports = function (app) {
         self.addRelatedOUDocumentFile = function (relatedOUDocumentFile) {
             return $http
                 .post(urlService.relatedOUDocumentFiles,
-                    generator.interceptSendInstance('RelatedOUDocumentFile', relatedOUDocumentFile))
+                    generator.interceptSendInstance('OUDocumentFile', relatedOUDocumentFile))
                 .then(function (result) {
                     relatedOUDocumentFile.id = result.data.rs;
-                     return generator.interceptReceivedInstance('RelatedOUDocumentFile', generator.generateInstance(relatedOUDocumentFile, RelatedOUDocumentFile, self._sharedMethods));
+                     return generator.interceptReceivedInstance('OUDocumentFile', generator.generateInstance(relatedOUDocumentFile, RelatedOUDocumentFile, self._sharedMethods));
                 });
         };
 
@@ -56,7 +56,7 @@ module.exports = function (app) {
          * @return {Promise|null}
          */
         self.deleteRelatedOUDocumentFile = function (relatedOUDocumentFile) {
-            var id = relatedOUDocumentFile.hasOwnProperty('selectedOUId') ? relatedOUDocumentFile.selectedOUId : relatedOUDocumentFile;
+            var id = relatedOUDocumentFile.hasOwnProperty('id') ? relatedOUDocumentFile.id : relatedOUDocumentFile;
             return $http.delete(urlService.relatedOUDocumentFiles + '/' + id).then(function(result){
                 return relatedOUDocumentFile;
             });

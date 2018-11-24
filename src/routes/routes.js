@@ -387,13 +387,9 @@ module.exports = function (app) {
                         'ngInject';
                         return organizationService.loadOrganizations();
                     },
-                    ouDocumentFiles: function (relatedOUDocumentFileService, ouDocumentFileService, organizations) {
+                    documentFiles: function (documentFileService, organizations) {
                         'ngInject';
-                        return ouDocumentFileService.loadOUDocumentFiles();
-                    },
-                    documentFiles: function (documentFileService, ouDocumentFiles, organizations) {
-                        'ngInject';
-                        return documentFileService.loadDocumentFiles();
+                        return documentFileService.loadDocumentFilesWithLimit();
                     }
                 }
             })

@@ -9,9 +9,10 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <search-filter-directive change-icon-model="ctrl.searchMode" cancel-callback="ctrl.reloadDocumentFiles()"
+                                     on-change="ctrl.searchInDocumentFiles"
+                                     model="ctrl.searchModel"></search-filter-directive>
         </div>
-        <pre>{{ctrl.documentFiles[0].defaultEnName | json}}</pre>
         <div layout="column" flex>
             <div scroll-directive>
                 <div class="page-padding">
@@ -48,8 +49,6 @@
                                         </th>
                                         <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.security_levels}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.organization_units}}</span>
-                                        </th>
                                         <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.children}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedDocumentFiles.length" md-column md-order-by=""><span>{{lang.actions}}</span>
@@ -58,7 +57,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-select="documentFile" md-row
-                                        ng-repeat="documentFile in ctrl.documentFiles | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                        ng-repeat="documentFile in ctrl.documentFiles | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{documentFile.arName}}</td>
                                         <td md-cell>{{documentFile.enName}}</td>
                                         <td md-cell>
@@ -70,21 +69,11 @@
                                         <td md-cell>{{documentFile.getSecurityLevels(documentFile)}}</td>
                                         <td md-cell>
                                             <md-button
-                                                    ng-click="ctrl.openOrganizationDialog(documentFile.relatedOus, documentFile, $event)"
+                                                    ng-click="ctrl.openChildDocumentFilesDialog(documentFile, $event)"
                                                     class="md-icon-button"
-                                                    tooltip="{{documentFile.relatedOus.length + ' ' + lang.organizations}}"
-                                                    ng-class="{'md-raised':documentFile.relatedOus.length}"
-                                                    ng-disabled="!documentFile.relatedOus.length">
-                                                <md-icon md-svg-icon="coins"></md-icon>
-                                            </md-button>
-                                        </td>
-                                        <td md-cell>
-                                            <md-button
-                                                    ng-click="ctrl.openChildDocumentFilesDialog(documentFile.children, documentFile, $event)"
-                                                    class="md-icon-button"
-                                                    tooltip="{{documentFile.children.length + ' ' + (documentFile.children.length > 1?lang.children:lang.child)}}"
-                                                    ng-class="{'md-raised':documentFile.children.length}"
-                                                    ng-disabled="!documentFile.children.length">
+                                                    tooltip="{{documentFile.childCount + ' ' + (documentFile.childCount > 1?lang.children:lang.child)}}"
+                                                    ng-class="{'md-raised':documentFile.childCount}"
+                                                    ng-disabled="!documentFile.childCount">
                                                 <md-icon md-svg-icon="coins"></md-icon>
                                             </md-button>
                                         </td>

@@ -12,7 +12,9 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <search-filter-directive change-icon-model="ctrl.searchMode" cancel-callback="ctrl.reloadCorrespondenceSites()"
+                                     on-change="ctrl.searchInCorrespondenceSites"
+                                     model="ctrl.searchModel"></search-filter-directive>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
@@ -65,7 +67,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="correspondenceSite"
-                                        ng-repeat="correspondenceSite in ctrl.correspondenceSites  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                        ng-repeat="correspondenceSite in ctrl.correspondenceSites  | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{correspondenceSite.arName}}</td>
                                         <td md-cell>{{correspondenceSite.enName}}</td>
                                         <td md-cell>
@@ -86,9 +88,9 @@
                                             <md-button
                                                     ng-click="ctrl.openSubCorrespondenceSiteDialog(correspondenceSite , $event)"
                                                     class="md-icon-button"
-                                                    tooltip="{{correspondenceSite.children.length + ' ' + lang.sub_correspondence_site}}"
-                                                    ng-class="{'md-raised':correspondenceSite.children.length}"
-                                                    ng-disabled="!correspondenceSite.children.length">
+                                                    tooltip="{{correspondenceSite.childCount + ' ' + lang.sub_correspondence_site}}"
+                                                    ng-class="{'md-raised':correspondenceSite.childCount}"
+                                                    ng-disabled="!correspondenceSite.childCount">
                                                 <md-icon md-svg-icon="coins"></md-icon>
                                             </md-button>
                                         </td>
@@ -112,7 +114,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.correspondenceSites | filter:ctrl.searchModel).length}}"
+                                    md-total="{{ctrl.correspondenceSites.length}}"
                                     md-page-select
                                     md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>

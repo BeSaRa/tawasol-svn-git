@@ -1,26 +1,26 @@
 module.exports = function (app) {
     app.controller('documentFileChildrenPopCtrl', function (lookupService,
                                                             documentFileService,
-                                                            documentFiles,
                                                             $q,
                                                             $filter,
                                                             DocumentFile,
                                                             langService,
                                                             toast,
+                                                            subDocumentFiles,
                                                             dialog,
                                                             relatedOUDocumentFileService,
-                                                            documentFileParent,
+                                                            documentFile,
                                                             organizationService) {
         'ngInject';
         var self = this;
         self.controllerName = 'documentFileChildrenPopCtrl';
         self.organizations = organizationService.loadOrganizations();
-        self.documentFile = documentFileParent;
+        self.documentFile = documentFile;
 
         /**
          *@description All child document files of selected parent
          */
-        self.documentFiles = angular.copy(documentFiles);
+        self.documentFiles = subDocumentFiles;
         self.promise = null;
         self.selectedDocumentFiles = [];
 
@@ -83,12 +83,10 @@ module.exports = function (app) {
                 .documentFileEdit(documentFile, $event)
                 .then(function (result) {
                     self.reloadDocumentFiles(self.grid.page);
-                        /*.then(function () {
-                            toast.success(langService.get('edit_success').change({name: result.getTranslatedName()}));
-                        });*/
-                }).catch(function () {
-                self.reloadDocumentFiles(self.grid.page);
-            });
+                })
+                .catch(function () {
+                    self.reloadDocumentFiles(self.grid.page);
+                });
         };
 
         /**
@@ -206,17 +204,10 @@ module.exports = function (app) {
         /**
          * @description show child documentFiles
          */
-        self.openChildDocumentFilesDialog = function (documentFiles, documentfile, $event) {
+        self.openChildDocumentFilesDialog = function (documentFile, $event) {
             documentFileService
                 .controllerMethod
-                .openChildDocumentFilesPopup(documentFiles, documentfile, $event)
-                .then(function () {
-                    self.reloadDocumentFiles(self.grid.page).then(function () {
-                    });
-                }).catch(function () {
-                self.reloadDocumentFiles(self.grid.page).then(function () {
-                });
-            });
+                .openChildDocumentFilesPopup(documentFile, $event);
         };
     });
 };

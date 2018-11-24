@@ -8,21 +8,24 @@ module.exports = function (app) {
                                                     dialog,
                                                     editMode,
                                                     documentFile,
+                                                    ouDocumentFiles,
                                                     validationService,
                                                     generator,
                                                     organizationService,
                                                     RelatedOUDocumentFile,
                                                     relatedOUDocumentFileService,
                                                     parent,
-                                                    rootEntity,
-                                                    sub) {
+                                                    rootEntity) {
         'ngInject';
         var self = this;
         self.controllerName = 'documentFilePopCtrl';
         self.editMode = editMode;
         self.organization = [];
+        documentFile.relatedOus = ouDocumentFiles;
+        console.log(documentFile.relatedOus);
+
         self.documentFile = angular.copy(documentFile);
-        self.model = angular.copy(self.documentFile);
+        self.model = angular.copy(documentFile);
         //self.securityLevels = lookupService.returnLookups(lookupService.securityLevel);
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
         self.organizations = [];
@@ -40,10 +43,6 @@ module.exports = function (app) {
         self.hideRelatedOUFrm = function () {
             self.enableAdd = false;
         };
-        /*if (sub) {
-        self.parentDocumentFiles.parent = parent;
-        self.disableParent = true;
-        }*/
         /**
          * Select Tab Name
          * @param tabName
@@ -126,10 +125,12 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-                    documentFileService.updateDocumentFile(self.documentFile).then(function (result) {
-                        toast.success(langService.get('edit_success').change({name: result.getTranslatedName()}));
-                        dialog.hide(self.documentFile);
-                    });
+                    documentFileService
+                        .updateDocumentFile(self.documentFile)
+                        .then(function (result) {
+                            toast.success(langService.get('edit_success').change({name: result.getTranslatedName()}));
+                            dialog.hide(self.documentFile);
+                        });
                 })
                 .catch(function () {
 
@@ -139,7 +140,7 @@ module.exports = function (app) {
          * @description close the popup
          */
         self.closeDocumentFilePopupFromCtrl = function () {
-            dialog.cancel();
+            dialog.cancel(self.model);
         };
         self.resetModel = function () {
             generator.resetFields(self.documentFile, self.model);
@@ -168,32 +169,17 @@ module.exports = function (app) {
                 relatedOU.itemOrder = self.relatedOUItemOrder;
                 relatedOU.serial = self.serial;
                 var allRelatedOUs = self.documentFile.relatedOus;
-                relatedOUDocumentFileService.addRelatedOUDocumentFile(relatedOU).then(function (result) {
-
-                    self.selectedOrganizationId = null;
-                    if (result) {
-                        organizationService.loadOrganizations().then(function (orResult) {
-                            _.filter(_.map(orResult, function (data) {
-                                if (data.id === result.ouid) {
-                                    data['selectedOUId'] = result.id;
-                                    return data;
-                                }
-                            }), function (combinedResult) {
-                                if (combinedResult) {
-                                    allRelatedOUs.push(combinedResult);
-                                }
-                            });
-                        });
-                        self.documentFile.relatedOus = allRelatedOUs;
-                        relatedOUDocumentFileService.loadRelatedOUDocumentFiles().then(function () {
-                            documentFileService.updateDocumentFile(self.documentFile).then(function () {
-                                toast.success(langService.get('save_success'));
-                                self.enableAdd = false;
-                            });
-                        });
-                    }
-                    self.documentFile.global = false;
-                });
+                relatedOUDocumentFileService
+                    .addRelatedOUDocumentFile(relatedOU)
+                    .then(function (result) {
+                        self.selectedOrganizationId = null;
+                        if (result) {
+                            self.documentFile.relatedOus.push(result);
+                            toast.success(langService.get('save_success'));
+                            self.enableAdd = false;
+                        }
+                        self.documentFile.global = false;
+                    });
             }
         };
         /**

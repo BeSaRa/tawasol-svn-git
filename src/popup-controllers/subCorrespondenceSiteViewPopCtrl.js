@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                                  correspondenceSites,
                                                                  correspondenceSiteService,
                                                                  langService,
+                                                                 subCorrespondenceSites,
                                                                  ouCorrespondenceSiteService) {
         'ngInject';
         var self = this;
@@ -15,7 +16,7 @@ module.exports = function (app) {
         // current correspondenceSite to view his sub correspondenceSites
         self.correspondenceSite = correspondenceSite;
 
-        self.correspondenceSites = self.correspondenceSite.children;
+        self.correspondenceSites = subCorrespondenceSites;
 
         self.parentCorrespondenceSites = correspondenceSites;
 
@@ -78,40 +79,37 @@ module.exports = function (app) {
                     });
                 })
                 .catch(function (correspondenceSite) {
-                    self.behindScene(correspondenceSite)
-                        .then(function () {
-                            self.reloadCorrespondenceSites(self.grid.page);
-                        });
+                    self.replaceRecordFromGrid(correspondenceSite);
                 });
+        };
+
+        self.replaceRecordFromGrid = function (correspondenceSite) {
+            self.correspondenceSite.children.splice(_.findIndex(self.correspondenceSite.children, function (item) {
+                return item.id === correspondenceSite.id;
+            }), 1, correspondenceSite);
         };
         /**
          * reload the grid again and if the pageNumber provide the current grid will be on it.
          * @param pageNumber
-         * @return {*|Promise<U>}
+         * @return {*|Promise<Correspondence sites>}
          */
         self.reloadCorrespondenceSites = function (pageNumber) {
             var defer = $q.defer();
             self.progress = defer.promise;
-            return ouCorrespondenceSiteService
-                .loadOUCorrespondenceSites()
-                .then(function () {
-                    return correspondenceSiteService
-                        .loadCorrespondenceSites()
-                        .then(function (result) {
-                            self.parentCorrespondenceSites = correspondenceSiteService.getMainCorrespondenceSites(result);
-                            self.correspondenceSite = correspondenceSiteService.getCorrespondenceSiteById(self.correspondenceSite);
-                            self.correspondenceSites = self.correspondenceSite.children;
-                            if (!self.correspondenceSites.length) {
-                                dialog.hide(self.parentCorrespondenceSites);
-                            }
+            return correspondenceSiteService
+                .loadSubCorrespondenceSites(self.correspondenceSite)
+                .then(function (result) {
+                    self.correspondenceSites = result;
+                    if (!self.correspondenceSites.length) {
+                        dialog.hide(self.parentCorrespondenceSites);
+                    }
 
-                            self.selectedCorrespondenceSites = [];
-                            defer.resolve(true);
-                            if (pageNumber)
-                                self.grid.page = pageNumber;
-                            self.getSortedData();
-                            return result;
-                        });
+                    self.selectedCorrespondenceSites = [];
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.grid.page = pageNumber;
+                    self.getSortedData();
+                    return result;
                 });
         };
 

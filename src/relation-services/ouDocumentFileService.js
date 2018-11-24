@@ -40,7 +40,7 @@ module.exports = function (app) {
                     generator.interceptSendInstance('OUDocumentFile', ouDocumentFile))
                 .then(function (result) {
                     ouDocumentFile.id = result.data.rs;
-                    return generator.generateInstance(ouDocumentFile, OUDocumentFile, self._sharedMethods);
+                    return generator.interceptReceivedInstance('OUDocumentFile', generator.generateInstance(ouDocumentFile, OUDocumentFile, self._sharedMethods));
                 });
         };
         /**
@@ -94,6 +94,15 @@ module.exports = function (app) {
             return _.filter(self.ouDocumentFiles, function (ouDocumentFile) {
                 return Number(ouDocumentFile.file.id) === Number(fileId);
             });
+        };
+
+        self.loadOUDocumentFilesByDocumentFileId = function (documentFile) {
+            var id = documentFile.hasOwnProperty('id') ? documentFile.id : documentFile;
+            return $http
+                .get(urlService.ouDocumentFiles + '/ou-document-file/' + id)
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('OUDocumentFile', generator.generateCollection(result.data.rs, OUDocumentFile, self._sharedMethods));
+                });
         }
 
     });

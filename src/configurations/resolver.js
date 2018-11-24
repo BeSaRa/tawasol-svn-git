@@ -69,9 +69,9 @@ module.exports = function (app) {
                 }
             })
             .bulkResolveToState('app.administration.correspondence-sites', {
-                correspondenceSites: function (correspondenceSiteService, correspondenceTypes, ouCorrespondenceSites, organizations) {
+                correspondenceSites: function (correspondenceSiteService, correspondenceTypes, organizations) {
                     'ngInject';
-                    return correspondenceSiteService.loadCorrespondenceSites();
+                    return correspondenceSiteService.loadCorrespondenceSitesWithLimit();
                 },
                 correspondenceTypes: function (correspondenceSiteTypeService) {
                     'ngInject';
@@ -80,11 +80,11 @@ module.exports = function (app) {
                 organizations: function (organizationService) {
                     'ngInject';
                     return organizationService.getOrganizations();
-                },
+                }/*,
                 ouCorrespondenceSites: function (ouCorrespondenceSiteService, organizations) {
                     'ngInject';
                     return ouCorrespondenceSiteService.getOUCorrespondenceSites();
-                }
+                }*/
             })
             .bulkResolveToState('app.administration.organizations', {
                 escalationProcess: function (lookupService) {

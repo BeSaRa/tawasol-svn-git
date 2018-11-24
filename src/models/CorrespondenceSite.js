@@ -13,6 +13,7 @@ module.exports = function (app) {
             self.arName = null;
             self.enName = null;
             self.status = true;
+            self.childCount = 0;
             self.arDisplayName = null;
             self.enDisplayName = null;
             self.relatedOus = [];

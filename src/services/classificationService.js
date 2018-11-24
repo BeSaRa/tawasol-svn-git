@@ -6,7 +6,6 @@ module.exports = function (app) {
                                                    dialog,
                                                    $http,
                                                    Pair,
-                                                   OUClassification,
                                                    $q,
                                                    generator,
                                                    Classification,
@@ -16,8 +15,6 @@ module.exports = function (app) {
         self.serviceName = 'classificationService';
 
         self.classifications = [];
-
-        self.ouClassifications = [];
 
         /**
          * @description load classifications from server.
@@ -399,6 +396,7 @@ module.exports = function (app) {
                         },
                         resolve: {
                             subClassifications: function () {
+                                'ngInject';
                                 return self.loadSubClassifications(classification);
                             }
                         }

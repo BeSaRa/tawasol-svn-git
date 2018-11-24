@@ -29,6 +29,9 @@ module.exports = function (app) {
          */
         self.selectedCorrespondenceSites = [];
 
+        self.searchMode = '';
+        self.searchMode = false;
+
         self.grid = {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.correspondenceSite) || 5, // default limit
             page: 1, // first page
@@ -55,21 +58,12 @@ module.exports = function (app) {
                 .controllerMethod
                 .correspondenceSiteAdd(null, false, $event)
                 .then(function (correspondenceSite) {
-                    /*self.behindScene(correspondenceSite)
-                        .then(function () {
-                            self.reloadCorrespondenceSites(self.grid.page);
-                        });*/
                     self.reloadCorrespondenceSites(self.grid.page);
                 })
                 .catch(function (correspondenceSite) {
                     self.reloadCorrespondenceSites(self.grid.page);
                     if (!correspondenceSite.id)
                         return;
-
-                    // self.behindScene(correspondenceSite)
-                    //     .then(function () {
-                    //         self.reloadCorrespondenceSites(self.grid.page);
-                    //     });
                 });
         };
 
@@ -83,12 +77,6 @@ module.exports = function (app) {
                 .controllerMethod
                 .correspondenceSiteEdit(correspondenceSite, $event)
                 .then(function (correspondenceSite) {
-                    /*self.behindScene(correspondenceSite)
-                        .then(function (correspondenceSite) {
-                            self.reloadCorrespondenceSites(self.grid.page).then(function () {
-                                toast.success(langService.get('edit_success').change({name: correspondenceSite.getTranslatedName()}));
-                            });
-                        });*/
                     self.reloadCorrespondenceSites(self.grid.page).then(function () {
                         toast.success(langService.get('edit_success').change({name: correspondenceSite.getTranslatedName()}));
                     });
@@ -120,21 +108,20 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.progress = defer.promise;
 
-            return ouCorrespondenceSiteService
-                .loadOUCorrespondenceSites()
-                .then(function () {
-                    return correspondenceSiteService
-                        .loadCorrespondenceSites()
-                        .then(function (correspondenceSites) {
-                            self.correspondenceSites = correspondenceSiteService.getMainCorrespondenceSites(correspondenceSites);
-                            self.selectedCorrespondenceSites = [];
-                            defer.resolve(true);
-                            if (pageNumber)
-                                self.grid.page = pageNumber;
-                            self.getSortedData();
-                            return correspondenceSites;
-                        });
+            self.searchMode = false;
+            self.searchModel = '';
+            return correspondenceSiteService
+                .loadCorrespondenceSitesWithLimit()
+                .then(function (correspondenceSites) {
+                    self.correspondenceSites = correspondenceSiteService.getMainCorrespondenceSites(correspondenceSites);
+                    self.selectedCorrespondenceSites = [];
+                    defer.resolve(true);
+                    if (pageNumber)
+                        self.grid.page = pageNumber;
+                    self.getSortedData();
+                    return correspondenceSites;
                 });
+
         };
 
         /**
@@ -268,15 +255,12 @@ module.exports = function (app) {
         self.changeBulkStatusCorrespondenceSites = function (status) {
             var statusCheck = (status === 'activate');
             if (!generator.checkCollectionStatus(self.selectedCorrespondenceSites, statusCheck)) {
-                //toast.error(langService.get('the_status_already_changed'));
                 toast.success(langService.get(statusCheck ? 'success_activate_selected' : 'success_deactivate_selected'));
                 return;
             }
 
             self.statusServices[status](self.selectedCorrespondenceSites).then(function () {
-                self.reloadCorrespondenceSites(self.grid.page).then(function () {
-                    //toast.success(langService.get('selected_status_updated'));
-                });
+                self.reloadCorrespondenceSites(self.grid.page);
             });
         };
         /**
@@ -287,10 +271,7 @@ module.exports = function (app) {
         self.openSubCorrespondenceSiteDialog = function (correspondenceSite, $event) {
             correspondenceSiteService
                 .controllerMethod
-                .viewSubCorrespondenceSites(correspondenceSite, $event)
-                .then(function (result) {
-                    self.correspondenceSites = result;
-                });
+                .viewSubCorrespondenceSites(correspondenceSite, $event);
         };
         /**
          * @description this method call when the user take action then close the popup.
@@ -299,7 +280,24 @@ module.exports = function (app) {
          */
         self.behindScene = function (correspondenceSite) {
             return correspondenceSite.repairGlobalStatus();
+        };
+
+        /**
+         * @description search in classification.
+         * @param searchText
+         * @return {*}
+         */
+        self.searchInCorrespondenceSites = function (searchText) {
+            if (!searchText)
+                return;
+            self.searchMode = true;
+            return correspondenceSiteService
+                .correspondenceSiteSearch(searchText)
+                .then(function (result) {
+                    self.correspondenceSites = result;
+                });
         }
+
 
     });
 };

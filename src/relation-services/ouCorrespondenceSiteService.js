@@ -215,5 +215,14 @@ module.exports = function (app) {
                 });
         };
 
+        self.loadOUCorrespondenceSitesByCorrespondenceSiteId = function (correspondenceSite) {
+            var id = correspondenceSite.hasOwnProperty('id') ? correspondenceSite.id : correspondenceSite;
+            return $http
+                .get(urlService.ouCorrespondenceSites + '/ou-correspondence-site/' + id)
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('OUCorrespondenceSite', generator.generateCollection(result.data.rs, OUCorrespondenceSite, self._sharedMethods));
+                });
+        }
+
     });
 };

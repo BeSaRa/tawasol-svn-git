@@ -448,6 +448,12 @@ module.exports = function (app) {
                         locals: {
                             correspondenceSite: correspondenceSite,
                             correspondenceSites: self.getMainCorrespondenceSites(self.correspondenceSites)
+                        },
+                        resolve: {
+                            subCorrespondenceSites: function () {
+                                'ngInject';
+                                return self.loadSubCorrespondenceSites(correspondenceSite);
+                            }
                         }
                     });
             },
@@ -462,5 +468,51 @@ module.exports = function (app) {
                 });
             }
         };
+
+        /**
+         * @description search in classifications .
+         * @param searchText
+         * @param parent
+         * @return {*}
+         */
+        self.correspondenceSiteSearch = function (searchText, parent) {
+            return $http.get(urlService.correspondenceSites + '/criteria', {
+                params: {
+                    criteria: searchText,
+                    parent: typeof parent !== 'undefined' ? (parent.hasOwnProperty('id') ? parent.id : parent) : null
+                }
+            }).then(function (result) {
+                return generator.interceptReceivedCollection('CorrespondenceSite', generator.generateCollection(result.data.rs, CorrespondenceSite, self._sharedMethods));
+            });
+        };
+
+        /**
+         * @description load classifications with limit up to 50
+         * @param limit
+         * @return {*}
+         */
+        self.loadCorrespondenceSitesWithLimit = function (limit) {
+            return $http
+                .get(urlService.entityWithlimit.replace('{entityName}', 'correspondence-site').replace('{number}', limit ? limit : 50))
+                .then(function (result) {
+                    self.correspondenceSites = generator.generateCollection(result.data.rs, CorrespondenceSite, self._sharedMethods);
+                    self.correspondenceSites = generator.interceptReceivedCollection('CorrespondenceSite', self.correspondenceSites);
+                    return self.correspondenceSites;
+                });
+        };
+        /**
+         * @description load sub correspondence sites for the given correspondence site.
+         * @param correspondenceSite
+         * @return {*}
+         */
+
+        self.loadSubCorrespondenceSites = function (correspondenceSite) {
+            var id = correspondenceSite.hasOwnProperty('id') ? correspondenceSite.id : correspondenceSite;
+            return $http
+                .get(urlService.childrenEntities.replace('{entityName}', 'correspondence-site').replace('{entityId}', id))
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('CorrespondenceSite', generator.generateCollection(result.data.rs, CorrespondenceSite, self._sharedMethods));
+                });
+        }
     });
 };

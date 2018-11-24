@@ -69,6 +69,12 @@ module.exports = function (app) {
                             documentFile: documentFile,
                             parent: self.documentFiles,
                             sub: false
+                        },
+                        resolve: {
+                            ouDocumentFiles: function (ouDocumentFileService) {
+                                'ngInject';
+                                return ouDocumentFileService.loadOUDocumentFilesByDocumentFileId(documentFile);
+                            }
                         }
                     });
             },
@@ -86,7 +92,7 @@ module.exports = function (app) {
                         }
                     });
             },
-            openChildDocumentFilesPopup: function (documentFiles, documentFile, $event) {
+            openChildDocumentFilesPopup: function (documentFile, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -95,8 +101,12 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         locals: {
                             editMode: true,
-                            documentFiles: documentFiles,
-                            documentFileParent: documentFile
+                            documentFile: documentFile
+                        },
+                        resolve: {
+                            subDocumentFiles: function () {
+                                return self.loadSubDocumentFiles(documentFile);
+                            }
                         }
                     });
             },
@@ -211,8 +221,8 @@ module.exports = function (app) {
         };
         /**
          * @description get document file by lookupKey
-         * @param documentFileId
          * @returns {DocumentFile|undefined} return DocumentFile Model or undefined if not found.
+         * @param lookupKey
          */
         self.getDocumentFileByLookupKey = function (lookupKey) {
             lookupKey = lookupKey instanceof DocumentFile ? lookupKey.lookupKey : lookupKey;
@@ -369,8 +379,8 @@ module.exports = function (app) {
             _.map(self.documentFiles, function (doc) {
                 if (doc.parent) {
                     if (documentFile.id === doc.parent.id && !_.find(array, function (x) {
-                            return x.id === doc.id
-                        })) {
+                        return x.id === doc.id
+                    })) {
                         array.push(doc);
                         self.getDocumentFileChildren(doc, array);
                     }
@@ -420,6 +430,53 @@ module.exports = function (app) {
                 var parentId = (item.parent && item.parent.hasOwnProperty('id')) ? item.parent.id : item.parent;
                 return Number(parentId) === Number(fileId);
             });
+        };
+
+        /**
+         * @description search in classifications .
+         * @param searchText
+         * @param parent
+         * @return {*}
+         */
+        self.documentFileSearch = function (searchText, parent) {
+            return $http.get(urlService.documentFiles + '/criteria', {
+                params: {
+                    criteria: searchText,
+                    parent: typeof parent !== 'undefined' ? (parent.hasOwnProperty('id') ? parent.id : parent) : null
+                }
+            }).then(function (result) {
+                return generator.interceptReceivedCollection('DocumentFile', generator.generateCollection(result.data.rs, DocumentFile, self._sharedMethods));
+            });
+        };
+
+        /**
+         * @description load classifications with limit up to 50
+         * @param limit
+         * @return {*}
+         */
+        self.loadDocumentFilesWithLimit = function (limit) {
+            return $http
+                .get(urlService.entityWithlimit.replace('{entityName}', 'document-file').replace('{number}', limit ? limit : 50))
+                .then(function (result) {
+                    self.documentFiles = generator.generateCollection(result.data.rs, DocumentFile, self._sharedMethods);
+                    self.documentFiles = generator.interceptReceivedCollection('DocumentFile', self.documentFiles);
+                    return self.documentFiles;
+                });
+        };
+        /**
+         * @description load sub correspondence sites for the given correspondence site.
+         * @param documentFile
+         * @return {*}
+         */
+
+        self.loadSubDocumentFiles = function (documentFile) {
+            console.log('documentFile', documentFile);
+            var id = documentFile.hasOwnProperty('id') ? documentFile.id : documentFile;
+            return $http
+                .get(urlService.childrenEntities.replace('{entityName}', 'document-file').replace('{entityId}', id))
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('DocumentFile', generator.generateCollection(result.data.rs, DocumentFile, self._sharedMethods));
+                });
         }
     });
 };
