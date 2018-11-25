@@ -232,7 +232,6 @@ module.exports = function (app) {
 
         self.isRelatedOuFormValid = function () {
             return self.ouDocumentFile.ouid
-                && self.ouDocumentFile.code
                 && self.ouDocumentFile.itemOrder;
         };
 
