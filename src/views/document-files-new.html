@@ -72,8 +72,8 @@
                                                     ng-click="ctrl.openChildDocumentFilesDialog(documentFile, $event)"
                                                     class="md-icon-button"
                                                     tooltip="{{documentFile.childCount + ' ' + (documentFile.childCount > 1?lang.children:lang.child)}}"
-                                                    ng-class="{'md-raised':documentFile.childCount}"
-                                                    ng-disabled="!documentFile.childCount">
+                                                    ng-class="{'md-raised':documentFile.childCount}">
+                                                <!--ng-disabled="!documentFile.childCount"-->
                                                 <md-icon md-svg-icon="coins"></md-icon>
                                             </md-button>
                                         </td>
