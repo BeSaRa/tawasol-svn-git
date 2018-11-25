@@ -274,10 +274,7 @@ module.exports = function (app) {
         self.openSubClassificationDialog = function (classification, $event) {
             classificationService
                 .controllerMethod
-                .viewSubClassifications(classification, $event)
-                .then(function (result) {
-                    self.classifications = result;
-                });
+                .viewSubClassifications(classification, $event);
         };
         /**
          * @description this method call when the user take action then close the popup.
