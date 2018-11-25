@@ -342,7 +342,9 @@ module.exports = function (app) {
          * @description load sub classifications for the current classification.
          * @return {*}
          */
-        self.getSubClassification = function () {
+        self.getSubClassification = function (tabName) {
+            if (tabName) 
+            self.setCurrentTab(tabName);
             return classificationService
                 .loadSubClassifications(self.classification)
                 .then(function (result) {
