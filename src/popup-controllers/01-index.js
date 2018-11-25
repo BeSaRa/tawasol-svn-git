@@ -102,4 +102,6 @@ module.exports = function (app) {
     require('./attachmentThumbnailPopCtrl')(app);
     require('./versionPopCtrl')(app);
     require('./duplicateOptionPopCtrl')(app);
+    require('./documentFileNewPopCtrl')(app);
+    require('./documentFileChildrenNewPopCtrl')(app);
 };

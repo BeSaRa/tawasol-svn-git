@@ -376,7 +376,7 @@ module.exports = function (app) {
                 }
             })
             //public document file
-            .state('app.administration.document-files', {
+            /*.state('app.administration.document-files', {
                 url: '/document-files',
                 template: templateProvider.getView('document-files'),
                 controller: 'documentFileCtrl',
@@ -390,6 +390,24 @@ module.exports = function (app) {
                     documentFiles: function (documentFileService, organizations) {
                         'ngInject';
                         return documentFileService.loadDocumentFilesWithLimit();
+                    }
+                }
+            })*/
+            //document files new
+            .state('app.administration.document-files', {
+                url: '/document-files',
+                template: templateProvider.getView('document-files-new'),
+                controller: 'documentFileNewCtrl',
+                controllerAs: 'ctrl',
+                permission: 'menu_item_document_files',
+                resolve: {
+                    organizations: function (organizationService) {
+                        'ngInject';
+                        return organizationService.loadOrganizations();
+                    },
+                    documentFiles: function (documentFileNewService, organizations) {
+                        'ngInject';
+                        return documentFileNewService.loadDocumentFilesWithLimit();
                     }
                 }
             })

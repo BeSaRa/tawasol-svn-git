@@ -112,4 +112,5 @@ module.exports = function (app) {
 	require('./thumbnailService')(app);
 	require('./gridService')(app);
 	require('./searchOutgoingIncomingService')(app);
+	require('./documentFileNewService')(app);
 };

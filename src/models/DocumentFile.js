@@ -6,8 +6,6 @@ module.exports = function (app) {
         return function DocumentFile(model) {
             var self = this, documentFileService, ouDocumentFileService, organizationService;
 
-            // every model has required fields
-            // if you don't need to make any required fields leave it as an empty array
             self.securityLevels = null;
             self.global = true;
             self.arName = null;
@@ -15,6 +13,10 @@ module.exports = function (app) {
             self.status = false;
             self.childCount = 0;
             self.relatedOus = [];
+
+            self.cmsRefId = null;
+            self.id = null;
+            self.parent = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

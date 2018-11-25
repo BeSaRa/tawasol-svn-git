@@ -4,7 +4,6 @@ module.exports = function (app) {
                       documentFileService,
                       $location,
                       generator,
-                      relatedOUDocumentFileService,
                       ouDocumentFileService,
                       organizationService) {
         'ngInject';
@@ -23,18 +22,18 @@ module.exports = function (app) {
             if (model.global)
                 model.relatedOus = [];
 
-            if (model.parent) {
+            /*if (model.parent) {
                 model.parent = model.parent.id;
-            }
+            }*/
             delete model.relatedOus;
             delete model.children;
             return model;
         });
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            model.getRelatedOUDocumentFiles();
+            //model.getRelatedOUDocumentFiles();
             model.securityLevels = generator.getSelectedCollectionFromResult(lookupService.returnLookups(lookupService.securityLevel), model.securityLevels, 'lookupKey');
             model.getChildren();
-            model.parent = documentFileService.getDocumentFileById(model.parent);
+            //model.parent = documentFileService.getDocumentFileById(model.parent);
             return model;
         });
     })

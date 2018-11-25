@@ -17,7 +17,6 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            debugger;
             model.file = generator.interceptReceivedInstance('DocumentFile', new DocumentFile(model.file));
             model.ouid = organizationService.getOrganizationById(model.ouid);
             return model;

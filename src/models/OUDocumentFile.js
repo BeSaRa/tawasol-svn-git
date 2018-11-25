@@ -20,6 +20,9 @@ module.exports = function (app) {
             OUDocumentFile.prototype.getOUTranslate = function (lang) {
                 return this.ouid.hasOwnProperty('id') ? this.ouid[lang + 'Name'] : null;
             };
+            OUDocumentFile.prototype.getTranslatedStatus = function () {
+                return this.status ? langService.get('active') : langService.get('inactive');
+            };
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

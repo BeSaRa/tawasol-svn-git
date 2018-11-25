@@ -71,4 +71,5 @@ module.exports = function (app) {
     require('./simpleOutgoingCtrl')(app);
     require('./simpleIncomingCtrl')(app);
     require('./searchOutgoingIncomingCtrl')(app);
+    require('./documentFileNewCtrl')(app);
 };
