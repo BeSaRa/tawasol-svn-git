@@ -191,7 +191,7 @@ module.exports = function (app) {
                 return;
             self.searchMode = true;
             return documentFileNewService
-                .documentFileSearch(searchText)
+                .documentFileSearch(searchText, self.parentDocumentFile.id)
                 .then(function (result) {
                     self.subDocumentFiles = result;
                 });

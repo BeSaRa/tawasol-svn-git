@@ -6,6 +6,8 @@ module.exports = function (app) {
 
         self.closeStatus = true;
 
+        self.randomId = new Date().valueOf();
+
         self.changeCallback = function () {
             // TODO: broadcast an event to tell the listeners the user click on search or enter
             if (typeof self.onChange === 'function') {
