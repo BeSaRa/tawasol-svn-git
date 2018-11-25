@@ -84,6 +84,7 @@ module.exports = function (app) {
 
         self.setSelectedKey = function (menuItem) {
             self.searchCriteria = menuItem;
+            console.log(menuItem);
         };
 
         self.onKeyPressSearch = function (event) {

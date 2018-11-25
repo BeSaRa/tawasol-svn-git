@@ -5,7 +5,7 @@
             <md-icon md-svg-icon="magnify"></md-icon>
         </md-button>
     </label>
-    <input placeholder="{{search.labels.search|lang}}" ng-if="search.quick.searchForm" md-autofocus class="no-style"
+    <input placeholder="{{lang.get('search_by').replace(':type',lang.get(search.searchCriteria.value))}}" ng-if="search.quick.searchForm" md-autofocus class="no-style"
            id="query"
            ng-model="search.query"
            ng-keydown="search.onKeyPressSearch($event)"
