@@ -4,7 +4,9 @@
     //require('./../dist/resources/menu.json'); // to watch the menus and reload if any changes happened.
     require('./sass/style.scss');
     require('./require/libs');
-
+    angular.lowercase = function (text) {
+        return text ? text.toLowerCase() : text;
+    };
     var app = angular
         .module('app',
             [
@@ -23,7 +25,6 @@
                 'CMSScanner',
                 'LocalStorageModule',
                 'ui.mask',
-                // 'angular-sanitize',
                 'textAngular'
             ]
         );
