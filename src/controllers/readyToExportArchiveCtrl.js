@@ -690,7 +690,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.unlockWorkItem = function (workItem, $event) {
-            return workItem.unlockWorkItem($event)
+            return workItem.unlockWorkItem(false, $event)
                 .then(function (result) {
                     if (result)
                         self.reloadReadyToExports(self.grid.page);
@@ -733,7 +733,7 @@ module.exports = function (app) {
 
         var _unlockBulk = function (selectedItems, $event) {
             correspondenceService
-                .unlockBulkWorkItems(selectedItems, $event)
+                .unlockBulkWorkItems(selectedItems, false, $event)
                 .then(function () {
                     self.reloadReadyToExports(self.grid.page);
                 });

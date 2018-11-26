@@ -663,8 +663,8 @@ module.exports = function (app) {
                 return indicator.getLockedWorkItemIndicator(this);
             };
 
-            WorkItem.prototype.unlockWorkItem = function ($event) {
-                return correspondenceService.unlockWorkItem(this, $event);
+            WorkItem.prototype.unlockWorkItem = function (isGroupMail, $event) {
+                return correspondenceService.unlockWorkItem(this, isGroupMail,$event);
             };
 
 
