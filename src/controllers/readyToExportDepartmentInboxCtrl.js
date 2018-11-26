@@ -12,6 +12,7 @@ module.exports = function (app) {
                                                                  $filter,
                                                                  langService,
                                                                  toast,
+                                                                 _,
                                                                  counterService,
                                                                  viewDocumentService,
                                                                  managerService,

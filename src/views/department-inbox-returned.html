@@ -148,6 +148,10 @@
                                                                       record-type="workItem"></grid-indicator-directive>
                                         </td>
                                         <td md-cell md-truncate class="subject">
+                                            <grid-indicator-directive record-type="WorkItem"
+                                                                      record="returnedDepartmentInbox"
+                                                                      indicator-type="isLockedWorkItem">
+                                            </grid-indicator-directive>
                                             <a href="" class="view-doc" ng-if="returnedDepartmentInbox.hasContent()"
                                                title="{{returnedDepartmentInbox.generalStepElm.docSubject}}"
                                                ng-click="ctrl.viewDocument(returnedDepartmentInbox, $event)">{{returnedDepartmentInbox.generalStepElm.docSubject}}</a>

@@ -81,6 +81,10 @@
                                             {{approvedInternal.generalStepElm.docFullSerial}}
                                         </td>
                                         <td md-cell md-truncate class="subject">
+                                            <grid-indicator-directive record-type="WorkItem"
+                                                                      record="approvedInternal"
+                                                                      indicator-type="isLockedWorkItem">
+                                            </grid-indicator-directive>
                                             <a href="" class="view-doc" md-truncate
                                                ng-click="ctrl.viewDocument(approvedInternal, $event)">
                                                 <!--tooltip="{{approvedInternal.generalStepElm.docSubject}}"-->

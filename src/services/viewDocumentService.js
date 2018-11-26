@@ -655,6 +655,14 @@ module.exports = function (app) {
                                 generator.removePopupNumber();
                                 return false;
                             });
+                    })
+                    .catch(function(error){
+                        if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                            var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
+                            dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                            return $q.reject('itemLocked');
+                        }
+                        return $q.reject(error);
                     });
             };
 

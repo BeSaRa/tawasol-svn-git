@@ -1302,7 +1302,6 @@ module.exports = function (app) {
          */
         self.viewCorrespondenceGroupMail = function (correspondence, actions, disableProperties, disableCorrespondence) {
             var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : _createInstance(correspondence).getInfo();
-            // var workItem = info.isWorkItem() ? correspondence : false;
             return $http.get([urlService.correspondence, 'ou-queue', 'wob-num', info.wobNumber].join('/'))
                 .then(function (result) {
                     return generator.interceptReceivedInstance('GeneralStepElementView', generator.generateInstance(result.data.rs, GeneralStepElementView));
@@ -1346,6 +1345,14 @@ module.exports = function (app) {
                             generator.removePopupNumber();
                             return false;
                         });
+                })
+                .catch(function(error){
+                    if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                        var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
+                        dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                        return $q.reject('itemLocked');
+                    }
+                    return $q.reject(error);
                 });
         };
         /**

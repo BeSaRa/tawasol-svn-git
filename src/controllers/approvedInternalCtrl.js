@@ -11,6 +11,7 @@ module.exports = function (app) {
                                           toast,
                                           dialog,
                                           rootEntity,
+                                          _,
                                           viewDocumentService,
                                           //managerService,
                                           distributionWorkflowService,
@@ -382,8 +383,9 @@ module.exports = function (app) {
                     .then(function () {
                         return self.reloadApprovedInternals(self.grid.page);
                     })
-                    .catch(function () {
-                        return self.reloadApprovedInternals(self.grid.page);
+                    .catch(function (error) {
+                        if (error !== 'itemLocked')
+                            return self.reloadApprovedInternals(self.grid.page);
                     });
             };
 
@@ -401,8 +403,9 @@ module.exports = function (app) {
                     .then(function () {
                         self.reloadApprovedInternals(self.grid.page);
                     })
-                    .catch(function () {
-                        self.reloadApprovedInternals(self.grid.page);
+                    .catch(function (error) {
+                        if (error !== 'itemLocked')
+                            self.reloadApprovedInternals(self.grid.page);
                     });
             };
 
@@ -515,6 +518,63 @@ module.exports = function (app) {
                     });
 
             };
+
+            /**
+             * @description Unlocks the workItem
+             * @param workItem
+             * @param $event
+             * @returns {*}
+             */
+            self.unlockWorkItem = function (workItem, $event) {
+                return workItem.unlockWorkItem(false, $event)
+                    .then(function (result) {
+                        if (result)
+                            self.reloadApprovedInternals(self.grid.page);
+                    });
+            };
+
+            self.checkIfUnlockBulkAvailable = function () {
+                self.itemsWithoutUnlock = [];
+                _.map(self.selectedApprovedInternals, function (workItem) {
+                    if (!workItem.isLocked())
+                        self.itemsWithoutUnlock.push(workItem.generalStepElm.vsId);
+                });
+                return !(self.itemsWithoutUnlock && self.itemsWithoutUnlock.length);
+            };
+
+            /**
+             * @description Unlocks the selected workItems
+             * @param $event
+             * @returns {*}
+             */
+            self.unlockWorkItemsBulk = function ($event) {
+                var selectedItems = angular.copy(self.selectedApprovedInternals);
+                if (!self.checkIfUnlockBulkAvailable()) {
+                    if (self.itemsWithoutUnlock.length === selectedItems.length) {
+                        dialog.alertMessage(langService.get('selected_items_can_not_be_unlocked'));
+                        return false;
+                    }
+                    dialog.confirmMessage(langService.get('some_items_cannot_be_unlocked_skip_and_unlock'), null, null, $event).then(function () {
+                        self.selectedApprovedInternals = selectedItems = _.filter(self.selectedApprovedInternals, function (workItem) {
+                            return self.itemsWithoutUnlock.indexOf(workItem.generalStepElm.vsId) === -1;
+                        });
+                        if (self.selectedApprovedInternals.length)
+                            _unlockBulk(selectedItems, $event);
+                    })
+                }
+                else {
+                    _unlockBulk(selectedItems, $event);
+                }
+            };
+
+            var _unlockBulk = function (selectedItems, $event) {
+                correspondenceService
+                    .unlockBulkWorkItems(selectedItems, false, $event)
+                    .then(function () {
+                        self.reloadApprovedInternals(self.grid.page);
+                    });
+            };
+
 
             /**
              * @description Array of actions that can be performed on grid
@@ -765,6 +825,20 @@ module.exports = function (app) {
                     showInView: true,
                     permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
                     checkShow: self.checkToShowAction
+                },
+                // Unlock
+                {
+                    type: 'action',
+                    icon: 'lock-open',
+                    text: 'grid_action_unlock',
+                    shortcut: false,
+                    callback: self.unlockWorkItem,
+                    class: "action-green",
+                    showInView: true,
+                    permissionKey: '',
+                    checkShow: function (action, model) {
+                        return self.checkToShowAction(action, model) && model.isLocked();
+                    }
                 }
             ];
 
