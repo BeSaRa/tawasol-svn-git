@@ -635,7 +635,6 @@ module.exports = function (app) {
                 });
         };
 
-
         /**
          * @description Unlocks the workItem
          * @param workItem
@@ -648,6 +647,15 @@ module.exports = function (app) {
                     if (result)
                         self.reloadReadyToExports(self.grid.page);
                 });
+        };
+
+        self.checkIfUnlockBulkAvailable = function () {
+            self.itemsWithoutUnlock = [];
+            _.map(self.selectedReadyToExports, function (workItem) {
+                if (!workItem.isLocked())
+                    self.itemsWithoutUnlock.push(workItem.generalStepElm.vsId);
+            });
+            return !(self.itemsWithoutUnlock && self.itemsWithoutUnlock.length);
         };
 
         /**

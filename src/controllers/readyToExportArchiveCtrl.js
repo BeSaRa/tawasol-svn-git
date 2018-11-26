@@ -13,6 +13,7 @@ module.exports = function (app) {
                                                          langService,
                                                          toast,
                                                          counterService,
+                                                         _,
                                                          viewDocumentService,
                                                          managerService,
                                                          contextHelpService,
@@ -563,8 +564,9 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReadyToExports(self.grid.page);
                 })
-                .catch(function () {
-                    self.reloadReadyToExports(self.grid.page);
+                .catch(function (error) {
+                    if (error !== 'itemLocked')
+                        self.reloadReadyToExports(self.grid.page);
                 });
         };
 
@@ -582,8 +584,9 @@ module.exports = function (app) {
                 .then(function () {
                     return self.reloadReadyToExports(self.grid.page);
                 })
-                .catch(function () {
-                    return self.reloadReadyToExports(self.grid.page);
+                .catch(function (error) {
+                    if (error !== 'itemLocked')
+                        self.reloadReadyToExports(self.grid.page);
                 });
         };
 
@@ -678,6 +681,62 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReadyToExports();
                 })
+        };
+
+        /**
+         * @description Unlocks the workItem
+         * @param workItem
+         * @param $event
+         * @returns {*}
+         */
+        self.unlockWorkItem = function (workItem, $event) {
+            return workItem.unlockWorkItem($event)
+                .then(function (result) {
+                    if (result)
+                        self.reloadReadyToExports(self.grid.page);
+                });
+        };
+
+        self.checkIfUnlockBulkAvailable = function () {
+            self.itemsWithoutUnlock = [];
+            _.map(self.selectedWorkItems, function (workItem) {
+                if (!workItem.isLocked())
+                    self.itemsWithoutUnlock.push(workItem.generalStepElm.vsId);
+            });
+            return !(self.itemsWithoutUnlock && self.itemsWithoutUnlock.length);
+        };
+
+        /**
+         * @description Unlocks the selected workItems
+         * @param $event
+         * @returns {*}
+         */
+        self.unlockWorkItemsBulk = function ($event) {
+            var selectedItems = angular.copy(self.selectedWorkItems);
+            if (!self.checkIfUnlockBulkAvailable()) {
+                if (self.itemsWithoutUnlock.length === selectedItems.length) {
+                    dialog.alertMessage(langService.get('selected_items_can_not_be_unlocked'));
+                    return false;
+                }
+                dialog.confirmMessage(langService.get('some_items_cannot_be_unlocked_skip_and_unlock'), null, null, $event).then(function () {
+                    self.selectedWorkItems = selectedItems = _.filter(self.selectedWorkItems, function (workItem) {
+                        return self.itemsWithoutUnlock.indexOf(workItem.generalStepElm.vsId) === -1;
+                    });
+                    if (self.selectedWorkItems.length)
+                        _unlockBulk(selectedItems, $event);
+                })
+            }
+            else {
+                _unlockBulk(selectedItems, $event);
+            }
+        };
+
+        var _unlockBulk = function (selectedItems, $event) {
+            correspondenceService
+                .unlockBulkWorkItems(selectedItems, $event)
+                .then(function () {
+                    self.reloadReadyToExports(self.grid.page);
+                });
         };
 
         /**
@@ -1076,6 +1135,20 @@ module.exports = function (app) {
                 showInView: true,
                 permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
                 checkShow: self.checkToShowAction
+            },
+            // Unlock
+            {
+                type: 'action',
+                icon: 'lock-open',
+                text: 'grid_action_unlock',
+                shortcut: false,
+                callback: self.unlockWorkItem,
+                class: "action-green",
+                showInView: true,
+                permissionKey: '',
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && model.isLocked();
+                }
             }
         ];
 

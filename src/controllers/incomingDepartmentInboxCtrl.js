@@ -110,15 +110,6 @@ module.exports = function (app) {
             return !(self.itemsWithoutReturn && self.itemsWithoutReturn.length);
         };
 
-        self.checkIfUnlockBulkAvailable = function () {
-            self.itemsWithoutUnlock = [];
-            _.map(self.selectedIncomingDepartmentInboxes, function (workItem) {
-                if (!workItem.isLocked())
-                    self.itemsWithoutUnlock.push(workItem.generalStepElm.vsId);
-            });
-            return !(self.itemsWithoutUnlock && self.itemsWithoutUnlock.length);
-        };
-
         /**
          * @description Return the bulk incoming department inbox items
          * @param $event
@@ -406,6 +397,15 @@ module.exports = function (app) {
                     if (result)
                         self.reloadIncomingDepartmentInboxes(self.grid.page);
                 });
+        };
+
+        self.checkIfUnlockBulkAvailable = function () {
+            self.itemsWithoutUnlock = [];
+            _.map(self.selectedIncomingDepartmentInboxes, function (workItem) {
+                if (!workItem.isLocked())
+                    self.itemsWithoutUnlock.push(workItem.generalStepElm.vsId);
+            });
+            return !(self.itemsWithoutUnlock && self.itemsWithoutUnlock.length);
         };
 
         /**

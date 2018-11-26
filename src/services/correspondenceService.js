@@ -2909,10 +2909,20 @@ module.exports = function (app) {
                         });
                 })
                 .catch(function (error) {
-                    return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                    if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                         dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                         return $q.reject('WORK_ITEM_NOT_FOUND');
-                    })
+                    }
+                    else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                        var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
+                        dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                        return $q.reject('itemLocked');
+                    }
+                    return $q.reject(error);
+                    /*return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                        dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                        return $q.reject('WORK_ITEM_NOT_FOUND');
+                    })*/
                 });
         };
 
@@ -3075,7 +3085,20 @@ module.exports = function (app) {
             });
         };
 
-        self.unlockWorkItem = function (workItem, $event) {
+        var _getUnlockUrl = function (isGroupMail, info, bulkOperation) {
+            if (isGroupMail) {
+                if (bulkOperation)
+                    return urlService.groupMailUnlock + 'bulk';
+                return urlService.groupMailUnlock + info.wobNumber;
+            }
+            else {
+                if (bulkOperation)
+                    return urlService.departmentInboxes + '/un-lock/bulk';
+                return urlService.departmentInboxes + '/un-lock/wob-num/' + info.wobNumber;
+            }
+        };
+
+        self.unlockWorkItem = function (workItem, isGroupMail, $event) {
             var confirmMsg = langService.get('unlock_confirmation_msg').change({
                 user: workItem.getLockingUserInfo().getTranslatedName(),
                 date: workItem.getLockingInfo().lockingTime
@@ -3086,7 +3109,7 @@ module.exports = function (app) {
             confirmMsg += langService.get('confirm_continue_message');
             return dialog.confirmMessage(confirmMsg).then(function () {
                 var info = workItem.getInfo();
-                return $http.put(urlService.departmentInboxes + '/un-lock/wob-num/' + info.wobNumber)
+                return $http.put(_getUnlockUrl(isGroupMail, info))
                     .then(function (result) {
                         result = result.data.rs;
                         if (result) {
@@ -3103,7 +3126,7 @@ module.exports = function (app) {
             });
         };
 
-        self.unlockBulkWorkItems = function (workItems, $event) {
+        self.unlockBulkWorkItems = function (workItems, isGroupMail, $event) {
             // if the selected workItem has just one record.
             if (workItems.length === 1)
                 return self.unlockWorkItem(workItems[0], $event);
@@ -3111,9 +3134,8 @@ module.exports = function (app) {
                 var items = _.map(workItems, function (workItem) {
                     return workItem.getInfo().wobNumber;
                 });
-
                 return $http
-                    .put((urlService.departmentInboxes + '/un-lock/bulk'), items)
+                    .put(_getUnlockUrl(isGroupMail, null, true), items)
                     .then(function (result) {
                         return _bulkMessages(result, workItems, false, 'failed_unlock_selected', 'selected_unlock_success', 'unlock_success_except_following');
                     });

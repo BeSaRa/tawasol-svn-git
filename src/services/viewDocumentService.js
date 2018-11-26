@@ -778,10 +778,20 @@ module.exports = function (app) {
                             });
                     })
                     .catch(function (error) {
-                        return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                        if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
-                        })
+                        }
+                        else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                            var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
+                            dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                            return $q.reject('itemLocked');
+                        }
+                        return $q.reject(error);
+                        /*return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                            return $q.reject('WORK_ITEM_NOT_FOUND');
+                        })*/
                     });
             };
 
@@ -997,10 +1007,20 @@ module.exports = function (app) {
                             });
                     })
                     .catch(function (error) {
-                        return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                        if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
-                        })
+                        }
+                        else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                            var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
+                            dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                            return $q.reject('itemLocked');
+                        }
+                        return $q.reject(error);
+                        /*return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                            return $q.reject('WORK_ITEM_NOT_FOUND');
+                        })*/
                     });
             };
 

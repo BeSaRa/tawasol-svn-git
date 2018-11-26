@@ -332,7 +332,9 @@
                 // url for pagination for the users.
                 .addToAllWithBase('entityWithlimit', 'cms-entity/admin/{entityName}/limit/{number}')
                 // get children for the mainEntities
-                .addToAllWithBase('childrenEntities', 'cms-entity/admin/{entityName}/childs/{entityId}');
+                .addToAllWithBase('childrenEntities', 'cms-entity/admin/{entityName}/childs/{entityId}')
+                // group mail unlock
+                .addToAllWithBase('groupMailUnlock', 'cms-entity/correspondence/ou-queue/un-lock/');
         })
         .config(function (tokenServiceProvider, urlServiceProvider, themeServiceProvider, attachmentServiceProvider) {
             var urlService = urlServiceProvider.$get();

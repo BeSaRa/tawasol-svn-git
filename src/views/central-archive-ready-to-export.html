@@ -120,7 +120,11 @@
                                         </td>-->
 
                                         <td md-cell class="serial-td">{{workItem.generalStepElm.docFullSerial}}</td>
-                                        <td md-cell class="td-data">
+                                        <td md-cell class="subject">
+                                            <grid-indicator-directive record-type="WorkItem"
+                                                                      record="workItem"
+                                                                      indicator-type="isLockedWorkItem">
+                                            </grid-indicator-directive>
                                             <a href="" class="view-doc" ng-if="workItem.hasContent()"
                                                ng-click="ctrl.viewDocument(workItem, $event)">{{workItem.generalStepElm.docSubject}}</a>
                                             <span ng-if="!workItem.hasContent()">{{workItem.generalStepElm.docSubject}}</span>
