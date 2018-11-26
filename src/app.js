@@ -22,7 +22,9 @@
                 'angularTrix',
                 'CMSScanner',
                 'LocalStorageModule',
-                'ui.mask'
+                'ui.mask',
+                // 'angular-sanitize',
+                'textAngular'
             ]
         );
 

@@ -158,5 +158,25 @@ html.rtl {
   .text-right {
     text-align: left !important;
   }
+
+  .ta-toolbar {
+    margin-left: auto;
+    margin-right: 0;
+
+    button.cms-button {
+      margin-left: auto;
+      margin-right: 0;
+    }
+    button.cms-icon-button {
+      margin-left: auto;
+      margin-right: 0;
+    }
+  }
+  .ta-text-editor {
+    blockquote {
+      border-right: 5px solid #FF4081;
+      border-left: 0;
+    }
+  }
 }
 

@@ -228,4 +228,12 @@ module.exports = (function () {
 
     require('owl.carousel');
     require('owl.carousel/dist/assets/owl.carousel.css');
+
+    // textAngular
+    require('textangular/dist/textAngular.css');
+    //require('textangular/dist/textAngular-rangy.min.js');
+    require('rangy/lib/rangy-core.js');
+    require('rangy/lib/rangy-selectionsaverestore.js');
+    require('textangular/dist/textAngular-sanitize.min.js');
+    require('textangular/dist/textAngular.min.js');
 })();

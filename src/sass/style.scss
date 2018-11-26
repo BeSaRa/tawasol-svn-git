@@ -2015,3 +2015,89 @@ html.rtl {
 .check-box-with-no-padding {
   margin-bottom: 0;
 }
+
+$ta-disabled-color: rgba(0, 0, 0, 0.38) !important;
+$ta-white-color: #ffffff !important;
+$ta-md-primary: #3f51b5 !important;
+$ta-md-text-secondary: rgba(0, 0, 0, 0.54) !important;
+$ta-background-transparent: transparent !important;
+.ta-toolbar {
+  background-color: #F0F0F0;
+  //padding: 10px 10px 5px;
+  margin-left: 0;
+  border: 1px solid #EEE;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  .ta-button-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    button.cms-button {
+      min-width: 0;
+      min-height: 0;
+      line-height: normal;
+      margin-left: 0;
+      margin-right: auto;
+      font-weight: bold;
+      color: $ta-md-text-secondary;
+      background-color: $ta-background-transparent;
+      cursor: pointer;
+      &.active {
+        background-color: $ta-md-primary;
+        color: $ta-white-color;
+      }
+    }
+
+    button.cms-icon-button {
+      min-width: 0;
+      min-height: 0;
+      line-height: normal;
+      margin-left: 0;
+      margin-right: auto;
+      background-color: $ta-background-transparent;
+      cursor: pointer;
+      md-icon {
+        color: $ta-disabled-color;
+      }
+      &.active {
+        background-color: $ta-md-primary;
+        md-icon {
+          color: $ta-white-color;
+        }
+      }
+    }
+
+    button.cms-button:disabled,
+    button.cms-icon-button:disabled {
+      background-color: $ta-background-transparent;
+      color: $ta-disabled-color;
+      cursor: not-allowed;
+      md-icon {
+        color: $ta-disabled-color;
+      }
+    }
+  }
+}
+
+.ta-text-editor {
+  .ta-bind {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.117647);
+    min-height: 0 !important;
+    &:focus {
+      border-bottom: 2px solid $ta-md-primary;
+      outline: none;
+    }
+  }
+
+  blockquote {
+    padding: 10px 20px;
+    margin: 0 0 20px;
+    font-size: 17.5px;
+    border-left: 5px solid #FF4081;
+  }
+  blockquote:before, blockquote:after{
+    content: '';
+  }
+}
