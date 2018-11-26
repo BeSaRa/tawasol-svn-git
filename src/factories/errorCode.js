@@ -7,6 +7,7 @@ module.exports = function (app) {
             CAN_NOT_DELETE_LOOKUP: 3014,
             WORK_ITEM_NOT_FOUND: 2043,
             FAILED_DELETE_DOCUMENT: 2034,
+            ITEM_LOCKED: 2058,
             ENTITY_NOT_FOUND: 12000,
             AUTHORIZE_FAILED: 3008,
             ROOT_ENTITY_NOT_FOUND: 1001,

@@ -35,7 +35,8 @@
     ></md-icon>
 </span>
 <!-- Paper/Electronic -->
-<span ng-if="ctrl.indicatorType === 'paperElectronic' && ctrl.record.getInfo().documentClass!=='incoming'" class="{{ctrl.spanClass}}"
+<span ng-if="ctrl.indicatorType === 'paperElectronic' && ctrl.record.getInfo().documentClass!=='incoming'"
+      class="{{ctrl.spanClass}}"
       ng-class="{'indicator-content': ctrl.record.isPaperIndicator}">
     <md-icon ng-if="ctrl.record.isPaperIndicator && ctrl.isShowIndicator()"
              class="{{ctrl.record.isPaperIndicator.class}} {{ctrl.iconClass}}"
@@ -152,5 +153,15 @@
              md-svg-icon="{{ctrl.record.isInternalG2GIndicator.icon}}"
              tooltip="{{ctrl.langService.get(ctrl.record.isInternalG2GIndicator.tooltip)
                         .change({name:ctrl.record.stepElm.isInternalG2GIndicator.displayName})}}"
+    ></md-icon>
+</span>
+<!-- Is Locked (WorkItem) -->
+<span ng-if="ctrl.indicatorType === 'isLockedWorkItem'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.isLockedWorkItemIndicator}">
+    <md-icon ng-if="ctrl.record.isLockedWorkItemIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.isLockedWorkItemIndicator.class}} {{ctrl.iconClass}}"
+             md-svg-icon="{{ctrl.record.isLockedWorkItemIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.isLockedWorkItemIndicator.tooltip)
+                        .change({name: ctrl.record.isLockedWorkItemIndicator.value.getTranslatedName()})}}"
     ></md-icon>
 </span>

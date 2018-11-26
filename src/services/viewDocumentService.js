@@ -34,7 +34,9 @@ module.exports = function (app) {
                                   DocumentComment,
                                   localStorageService,
                                   Attachment,
-                                  LinkedObject) {
+                                  LinkedObject,
+                                  errorCode,
+                                  Information) {
             'ngInject';
             var self = this,
                 GeneralStepElementView,
@@ -844,10 +846,16 @@ module.exports = function (app) {
                             });
                     })
                     .catch(function (error) {
-                        return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                        if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
-                        })
+                        }
+                        else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                            var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
+                            dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                            return $q.reject('itemLocked');
+                        }
+                        return $q.reject(error);
                     });
             };
 
@@ -913,6 +921,18 @@ module.exports = function (app) {
                             generator.removePopupNumber();
                             return false;
                         });
+                    })
+                    .catch(function(error){
+                        if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                            return $q.reject('WORK_ITEM_NOT_FOUND');
+                        }
+                        else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                            var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
+                            dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                            return $q.reject('itemLocked');
+                        }
+                        return $q.reject(error);
                     });
 
             };
@@ -1104,10 +1124,20 @@ module.exports = function (app) {
                             });
                     })
                     .catch(function (error) {
-                        return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                        /*return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
-                        })
+                        })*/
+                        if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                            dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
+                            return $q.reject('WORK_ITEM_NOT_FOUND');
+                        }
+                        else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                            var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
+                            dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                            return $q.reject('itemLocked');
+                        }
+                        return $q.reject(error);
                     });
             };
 
@@ -1158,7 +1188,7 @@ module.exports = function (app) {
 
                         result.data.rs.metaData = metaData;
                         localStorageService.remove('vsid');
-                        localStorageService.set('vsid',metaData.vsId);
+                        localStorageService.set('vsid', metaData.vsId);
                         return result.data.rs;
                     })
                     .then(function (result) {
@@ -1232,7 +1262,7 @@ module.exports = function (app) {
 
                         result.data.rs.metaData = metaData;
                         localStorageService.remove('vsid');
-                        localStorageService.set('vsid',metaData.vsId);
+                        localStorageService.set('vsid', metaData.vsId);
                         // temporary property added to correspondence(will be removed before send)
                         metaData.internalG2G = isInternal;
 

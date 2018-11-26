@@ -36,6 +36,14 @@
                                                            ng-click="ctrl.returnWorkItemsBulk($event)">
                                                     <md-icon md-svg-icon="undo-variant" class="action-green"></md-icon>
                                                 </md-button>
+                                                <md-button class="md-icon-button"
+                                                           aria-label="{{lang.grid_action_unlock}}"
+                                                           ng-if="false"
+                                                           tooltip="{{lang.grid_action_unlock}}"
+                                                           ng-click="ctrl.unlockWorkItemsBulk($event)">
+                                                    <!--ctrl.checkIfUnlockBulkAvailable()-->
+                                                    <md-icon md-svg-icon="lock-open" class="action-green"></md-icon>
+                                                </md-button>
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
@@ -80,7 +88,12 @@
                                         <td class="serial-td" md-cell>
                                             {{incomingDepartmentInbox.generalStepElm.docFullSerial}}
                                         </td>
-                                        <td md-cell><a href="" class="view-doc"
+                                        <td md-cell class="subject">
+                                            <grid-indicator-directive record-type="WorkItem"
+                                                                      record="incomingDepartmentInbox"
+                                                                      indicator-type="isLockedWorkItem">
+                                            </grid-indicator-directive>
+                                            <a href="" class="view-doc"
                                                        ng-click="ctrl.viewDocument(incomingDepartmentInbox, $event)">{{incomingDepartmentInbox.generalStepElm.docSubject}}</a>
                                         </td>
                                         <td md-cell>{{incomingDepartmentInbox.generalStepElm.receivedDate}}</td>

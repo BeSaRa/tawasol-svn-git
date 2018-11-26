@@ -33,6 +33,7 @@ module.exports = function (app) {
                                                    Outgoing,
                                                    Internal,
                                                    Incoming,
+                                                   Information,
                                                    GeneralStepElementView,
                                                    WorkItem,
                                                    toast,
@@ -1264,6 +1265,15 @@ module.exports = function (app) {
                         generator.removePopupNumber();
                         return false;
                     });
+                })
+                .catch(function (error) {
+                    if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                        var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
+                        dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                        return $q.reject('itemLocked');
+                    }
+                    return $q.reject(error);
+
                 });
         };
         /**
@@ -1386,10 +1396,15 @@ module.exports = function (app) {
                         });
                 })
                 .catch(function (error) {
-                    return errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                    if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                         dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                         return $q.reject('WORK_ITEM_NOT_FOUND');
-                    })
+                    } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                        var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
+                        dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
+                        return $q.reject('itemLocked');
+                    }
+                    return $q.reject(error);
                 });
         };
 
@@ -3058,6 +3073,51 @@ module.exports = function (app) {
             return $http.post(_createUrlSchema(info.vsId, info.documentClass, 'with-content-view-url'), contentInformation).then(function (result) {
                 return result.data.rs;
             });
+        };
+
+        self.unlockWorkItem = function (workItem, $event) {
+            var confirmMsg = langService.get('unlock_confirmation_msg').change({
+                user: workItem.getLockingUserInfo().getTranslatedName(),
+                date: workItem.getLockingInfo().lockingTime
+            });
+            confirmMsg += '<br />' + langService.get('unlock_note_msg').change({
+                user: workItem.getLockingUserInfo().getTranslatedName()
+            });
+            confirmMsg += langService.get('confirm_continue_message');
+            return dialog.confirmMessage(confirmMsg).then(function () {
+                var info = workItem.getInfo();
+                return $http.put(urlService.departmentInboxes + '/un-lock/wob-num/' + info.wobNumber)
+                    .then(function (result) {
+                        result = result.data.rs;
+                        if (result) {
+                            toast.success(langService.get('unlock_specific_success').change({name: info.title}));
+                        }
+                        else {
+                            toast.error(langService.get('unlock_specific_fail').change({name: info.title}));
+                        }
+                        return result;
+                    }).catch(function (error) {
+                        toast.error(langService.get('unlock_specific_fail').change({name: info.title}));
+                        return false;
+                    });
+            });
+        };
+
+        self.unlockBulkWorkItems = function (workItems, $event) {
+            // if the selected workItem has just one record.
+            if (workItems.length === 1)
+                return self.unlockWorkItem(workItems[0], $event);
+            return dialog.confirmMessage('confirm unlock').then(function () {
+                var items = _.map(workItems, function (workItem) {
+                    return workItem.getInfo().wobNumber;
+                });
+
+                return $http
+                    .put((urlService.departmentInboxes + '/un-lock/bulk'), items)
+                    .then(function (result) {
+                        return _bulkMessages(result, workItems, false, 'failed_unlock_selected', 'selected_unlock_success', 'unlock_success_except_following');
+                    });
+            })
         };
 
         $timeout(function () {

@@ -8,6 +8,7 @@ module.exports = function (app) {
                                       viewDocumentService,
                                       $q,
                                       dialog,
+                                      generator,
                                       moment,
                                       lookupService) {
         'ngInject';
@@ -103,8 +104,8 @@ module.exports = function (app) {
                     enName: ''
                 });
                 if (this.getInfo().documentClass !== 'internal' && this.siteInfo) {
-                   var mainSite = new Information(this.siteInfo.mainSite);
-                   var subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : null;
+                    var mainSite = new Information(this.siteInfo.mainSite);
+                    var subSite = (this.siteInfo.subSite) ? new Information(this.siteInfo.subSite) : null;
 
                     this.mainSiteSubSiteString.arName = mainSite.getTranslatedNameByLang('ar') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('ar')) : '');
                     this.mainSiteSubSiteString.enName = mainSite.getTranslatedNameByLang('en') + (subSite ? (' - ' + subSite.getTranslatedNameByLang('en')) : '');
@@ -387,7 +388,6 @@ module.exports = function (app) {
                 return viewDocumentService.viewCentralArchiveReadyToExportDocument(this, actions, queueName, $event);
             };
 
-
             /**
              * @description Opens the new viewer for department incoming as workItem
              * @param actions
@@ -639,6 +639,32 @@ module.exports = function (app) {
 
             WorkItem.prototype.isComposite = function () {
                 return this.generalStepElm.isComposite;
+            };
+
+            WorkItem.prototype.isLocked = function () {
+                return this.generalStepElm.lockingInfo;
+            };
+
+            WorkItem.prototype.getLockingInfo = function () {
+                if (this.isLocked()) {
+                    this.generalStepElm.lockingInfo.lockingTime = generator.getDateFromTimeStamp(this.generalStepElm.lockingInfo.lockingTime);
+                    return this.generalStepElm.lockingInfo;
+                }
+                return null;
+            };
+
+            WorkItem.prototype.getLockingUserInfo = function () {
+                return (this.isLocked() && this.generalStepElm.lockingInfo.lockingUserInfo)
+                    ? new Information(this.generalStepElm.lockingInfo.lockingUserInfo)
+                    : new Information();
+            };
+
+            WorkItem.prototype.getLockedWorkItemIndicator = function () {
+                return indicator.getLockedWorkItemIndicator(this);
+            };
+
+            WorkItem.prototype.unlockWorkItem = function ($event) {
+                return correspondenceService.unlockWorkItem(this, $event);
             };
 
 

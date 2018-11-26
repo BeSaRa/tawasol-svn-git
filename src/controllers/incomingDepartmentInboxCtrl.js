@@ -12,6 +12,7 @@ module.exports = function (app) {
                                                             viewDocumentService,
                                                             toast,
                                                             dialog,
+                                                            Information,
                                                             contextHelpService,
                                                             counterService,
                                                             employeeService,
@@ -19,6 +20,7 @@ module.exports = function (app) {
                                                             generator,
                                                             listGeneratorService,
                                                             Incoming,
+                                                            _,
                                                             mailNotificationService,
                                                             gridService) {
         'ngInject';
@@ -102,12 +104,19 @@ module.exports = function (app) {
         self.checkIfReturnBulkAvailable = function () {
             self.itemsWithoutReturn = [];
             _.map(self.selectedIncomingDepartmentInboxes, function (workItem) {
-                //info = workItem.getInfo();
-                //if (!info.incomingVsId)
                 if (workItem.generalStepElm.isReassigned)
                     self.itemsWithoutReturn.push(workItem.generalStepElm.vsId);
             });
             return !(self.itemsWithoutReturn && self.itemsWithoutReturn.length);
+        };
+
+        self.checkIfUnlockBulkAvailable = function () {
+            self.itemsWithoutUnlock = [];
+            _.map(self.selectedIncomingDepartmentInboxes, function (workItem) {
+                if (!workItem.isLocked())
+                    self.itemsWithoutUnlock.push(workItem.generalStepElm.vsId);
+            });
+            return !(self.itemsWithoutUnlock && self.itemsWithoutUnlock.length);
         };
 
         /**
@@ -271,12 +280,24 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            correspondenceService.viewCorrespondence(incomingDepartmentInbox, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true, false, false, true)
+            /*correspondenceService.viewCorrespondence(incomingDepartmentInbox, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true, false, false, true)
                 .then(function () {
                     return self.reloadIncomingDepartmentInboxes(self.grid.page);
                 })
-                .catch(function () {
+                .catch(function (error) {
+                    debugger;
+                    if (error !== 'exception') {
+                        return self.reloadIncomingDepartmentInboxes(self.grid.page);
+                    }
+                });*/
+            correspondenceService.viewCorrespondenceWorkItem(incomingDepartmentInbox.getInfo(), self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true, false, false, true)
+                .then(function () {
                     return self.reloadIncomingDepartmentInboxes(self.grid.page);
+                })
+                .catch(function (error) {
+                    if (error !== 'itemLocked') {
+                        return self.reloadIncomingDepartmentInboxes(self.grid.page);
+                    }
                 });
         };
 
@@ -288,31 +309,42 @@ module.exports = function (app) {
         self.viewDocument = function (workItem, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
-                return;
+                return false;
             }
-            var info = workItem.getInfo();
-            /*
-                If document is sent to regOu from launchScreen
-                else document is exported from ready to export
-            */
-            if (!info.incomingVsId && info.docType !== 1) {
-                workItem.viewNewDepartmentIncomingAsWorkItem(self.gridActions, 'departmentIncoming', $event)
-                    .then(function () {
+            workItem.viewNewDepartmentIncomingAsWorkItem(self.gridActions, 'departmentIncoming', $event)
+                .then(function () {
+                    self.reloadIncomingDepartmentInboxes(self.grid.page);
+                })
+                .catch(function (error) {
+                    if (error !== 'itemLocked')
                         self.reloadIncomingDepartmentInboxes(self.grid.page);
-                    })
-                    .catch(function () {
-                        self.reloadIncomingDepartmentInboxes(self.grid.page);
-                    });
-            }
-            else {
-                workItem.viewNewDepartmentIncomingAsCorrespondence(self.gridActions, 'departmentIncoming', $event)
-                    .then(function () {
-                        self.reloadIncomingDepartmentInboxes(self.grid.page);
-                    })
-                    .catch(function () {
-                        self.reloadIncomingDepartmentInboxes(self.grid.page);
-                    });
-            }
+                });
+
+            /*  var info = workItem.getInfo();
+              /!*
+                  If document is sent to regOu from launchScreen
+                  else document is exported from ready to export
+              *!/
+              if (!info.incomingVsId && info.docType !== 1) {
+                  workItem.viewNewDepartmentIncomingAsWorkItem(self.gridActions, 'departmentIncoming', $event)
+                      .then(function () {
+                          self.reloadIncomingDepartmentInboxes(self.grid.page);
+                      })
+                      .catch(function (error) {
+                          if (error !== 'itemIsLocked')
+                              self.reloadIncomingDepartmentInboxes(self.grid.page);
+                      });
+              }
+              else {
+                  workItem.viewNewDepartmentIncomingAsCorrespondence(self.gridActions, 'departmentIncoming', $event)
+                      .then(function () {
+                          self.reloadIncomingDepartmentInboxes(self.grid.page);
+                      })
+                      .catch(function (error) {
+                          if (error !== 'itemIsLocked')
+                              self.reloadIncomingDepartmentInboxes(self.grid.page);
+                      });
+              }*/
         };
 
         /**
@@ -359,6 +391,53 @@ module.exports = function (app) {
                         action: 'duplicateVersion',
                         workItem: info.wobNum
                     });
+                });
+        };
+
+        /**
+         * @description Unlocks the workItem
+         * @param workItem
+         * @param $event
+         * @returns {*}
+         */
+        self.unlockWorkItem = function (workItem, $event) {
+            return workItem.unlockWorkItem($event)
+                .then(function (result) {
+                    if (result)
+                        self.reloadIncomingDepartmentInboxes(self.grid.page);
+                });
+        };
+
+        /**
+         * @description Unlocks the selected workItems
+         * @param $event
+         * @returns {*}
+         */
+        self.unlockWorkItemsBulk = function ($event) {
+            var selectedItems = angular.copy(self.selectedIncomingDepartmentInboxes);
+            if (!self.checkIfUnlockBulkAvailable()) {
+                if (self.itemsWithoutUnlock.length === selectedItems.length) {
+                    dialog.alertMessage(langService.get('selected_items_can_not_be_unlocked'));
+                    return false;
+                }
+                dialog.confirmMessage(langService.get('some_items_cannot_be_unlocked_skip_and_unlock'), null, null, $event).then(function () {
+                    self.selectedIncomingDepartmentInboxes = selectedItems = _.filter(self.selectedIncomingDepartmentInboxes, function (workItem) {
+                        return self.itemsWithoutUnlock.indexOf(workItem.generalStepElm.vsId) === -1;
+                    });
+                    if (self.selectedIncomingDepartmentInboxes.length)
+                        _unlockBulk(selectedItems, $event);
+                })
+            }
+            else {
+                _unlockBulk(selectedItems, $event);
+            }
+        };
+
+        var _unlockBulk = function (selectedItems, $event) {
+            correspondenceService
+                .unlockBulkWorkItems(selectedItems, $event)
+                .then(function () {
+                    self.reloadIncomingDepartmentInboxes(self.grid.page);
                 });
         };
 
@@ -539,6 +618,20 @@ module.exports = function (app) {
                 hide: true,
                 permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
                 checkShow: self.checkToShowAction
+            },
+            // Unlock
+            {
+                type: 'action',
+                icon: 'lock-open',
+                text: 'grid_action_unlock',
+                shortcut: false,
+                callback: self.unlockWorkItem,
+                class: "action-green",
+                showInView: true,
+                permissionKey: '',
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && model.isLocked();
+                }
             }
         ];
     });

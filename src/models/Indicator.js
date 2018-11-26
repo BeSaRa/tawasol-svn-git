@@ -53,6 +53,7 @@ module.exports = function (app) {
             icons['locked_g2g'] = 'lock';
             icons['version_has_content'] = 'file-check';
             icons['internal_g2g'] = 'recycle';
+            icons['indicator_locked_workitem'] = 'lock';
 
 
             /**
@@ -345,7 +346,6 @@ module.exports = function (app) {
                 }) : false;
             };
 
-
             /**
              * @description Returns the is internal g2g record indicator and description
              * @returns {Indicator}
@@ -360,6 +360,20 @@ module.exports = function (app) {
                 }) : false;
             };
 
+            /**
+             * @description Returns the is locked record indicator and description
+             * @returns {Indicator}
+             * @param record
+             */
+            Indicator.prototype.getLockedWorkItemIndicator = function (record) {
+                return record.isLocked() ? new Indicator({
+                    class: 'indicator',
+                    text: 'indicator_locked_item_by',
+                    icon: self.getIndicatorIcons('indicator_locked_workitem'),
+                    tooltip: 'indicator_locked_item_by',
+                    value: record.getLockingUserInfo()
+                }) : false;
+            };
 
 
             // don't remove CMSModelInterceptor from last line
