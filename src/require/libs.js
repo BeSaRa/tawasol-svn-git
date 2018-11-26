@@ -218,9 +218,6 @@ module.exports = (function () {
     require('md-color-picker/dist/mdColorPicker.css');
     require('md-color-picker');
     // angular trix
-    require('trix');
-    require('trix/dist/trix.css');
-    require('angular-trix');
     require('chart.js');
     require('animate.css/animate.css');
     // angular ui mask

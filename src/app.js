@@ -26,7 +26,7 @@
                 'md.data.table',
                 'tooltips',
                 'mdColorPicker',
-                'angularTrix',
+                // 'angularTrix',
                 'CMSScanner',
                 'LocalStorageModule',
                 'ui.mask',
