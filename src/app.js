@@ -4,8 +4,13 @@
     //require('./../dist/resources/menu.json'); // to watch the menus and reload if any changes happened.
     require('./sass/style.scss');
     require('./require/libs');
+
+    // this is as a workaround to avoid the exception till get the update for angualr-text
     angular.lowercase = function (text) {
         return text ? text.toLowerCase() : text;
+    };
+    angular.uppercase = function (text) {
+        return text ? text.toUpperCase() : text;
     };
     var app = angular
         .module('app',
@@ -36,7 +41,7 @@
         'ngInject';
         $mdIconProvider
             .defaultIconSet('assets/icon-set/mdi.svg')
-            .icon('add-filter','assets/icon-set/add-filter.svg');
+            .icon('add-filter', 'assets/icon-set/add-filter.svg');
         $compileProvider.debugInfoEnabled(false);
         // $qProvider.errorOnUnhandledRejections(false);
     });
