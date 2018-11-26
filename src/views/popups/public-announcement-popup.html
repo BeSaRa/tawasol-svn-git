@@ -73,8 +73,8 @@
                                            ng-model="ctrl.publicAnnouncement.startDate"
                                            md-min-date="ctrl.currentDate"
                                            md-max-date="ctrl.publicAnnouncement.endDate"
-                                           name="startDate" ng-disabled="ctrl.alwaysActive" >
-                            <!--ng-change="ctrl.onStartDateChange()"-->
+                                           name="startDate" ng-disabled="ctrl.alwaysActive">
+                                <!--ng-change="ctrl.onStartDateChange()"-->
                             </md-datepicker>
                             <div ng-messages="publicAnnouncementForm.startDate.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
@@ -94,21 +94,29 @@
                         </md-input-container>
                     </div>
 
-                    <div layout="row">
+                    <div layout="row" class="p20">
                         <div flex>
                             <label>{{$parent.lang.arabic_body_text }} <span class="red-text">*</span></label>
-                            <trix-editor required angular-trix ng-model="ctrl.publicAnnouncement.arBody" name="arBody"
+                            <text-angular name="arBody" id="arBody" flex
+                                          ng-model="ctrl.publicAnnouncement.arBody"
+                                          required
+                            ></text-angular>
+                            <!--<trix-editor required angular-trix ng-model="ctrl.publicAnnouncement.arBody" name="arBody"
                                          id="arBody" maxlength="4000"
-                                         prevent-trix-file-accept="true"></trix-editor>
+                                         prevent-trix-file-accept="true"></trix-editor>-->
                         </div>
                     </div>
 
-                    <div layout="row">
+                    <div layout="row" class="p20">
                         <div flex>
                             <label>{{$parent.lang.english_body_text }} <span class="red-text">*</span></label>
-                            <trix-editor required angular-trix ng-model="ctrl.publicAnnouncement.enBody" name="enBody"
+                            <text-angular name="enBody" id="enBody" flex
+                                          ng-model="ctrl.publicAnnouncement.enBody"
+                                          required
+                            ></text-angular>
+                            <!-- <trix-editor required angular-trix ng-model="ctrl.publicAnnouncement.enBody" name="enBody"
                                          id="enBody" maxlength="4000"
-                                         prevent-trix-file-accept="true"></trix-editor>
+                                         prevent-trix-file-accept="true"></trix-editor>-->
                         </div>
                     </div>
 

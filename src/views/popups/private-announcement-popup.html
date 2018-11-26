@@ -79,7 +79,7 @@
                                                        md-max-date="ctrl.privateAnnouncement.endDate"
                                                        ng-model="ctrl.privateAnnouncement.startDate"
                                                        name="startDate" ng-disabled="ctrl.alwaysActive">
-                                                       <!--ng-change="ctrl.onStartDateChange()"-->
+                                            <!--ng-change="ctrl.onStartDateChange()"-->
                                         </md-datepicker>
                                         <div ng-messages="privateAnnouncementForm.startDate.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
@@ -87,11 +87,12 @@
                                     </md-input-container>
                                     <md-input-container flex>
                                         <label for="endDate">{{lang.end_date}}</label>
-                                        <md-datepicker ng-required="!ctrl.alwaysActive || ctrl.privateAnnouncement.startDate"
-                                                       md-min-date="ctrl.privateAnnouncement.startDate"
-                                                       ng-model="ctrl.privateAnnouncement.endDate" name="endDate" id="endDate"
-                                                       ng-disabled="ctrl.alwaysActive || !ctrl.privateAnnouncement.startDate"
-                                                       ng-change="ctrl.onEndDateChange()"
+                                        <md-datepicker
+                                                ng-required="!ctrl.alwaysActive || ctrl.privateAnnouncement.startDate"
+                                                md-min-date="ctrl.privateAnnouncement.startDate"
+                                                ng-model="ctrl.privateAnnouncement.endDate" name="endDate" id="endDate"
+                                                ng-disabled="ctrl.alwaysActive || !ctrl.privateAnnouncement.startDate"
+                                                ng-change="ctrl.onEndDateChange()"
                                         ></md-datepicker>
                                         <div ng-messages="privateAnnouncementForm.endDate.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
@@ -99,25 +100,33 @@
                                     </md-input-container>
                                 </div>
 
-                                <div layout="row">
+                                <div layout="row" class="p20">
                                     <div flex>
                                         <label>{{$parent.lang.arabic_body_text }} <span
                                                 class="red-text">*</span></label>
-                                        <trix-editor required angular-trix ng-model="ctrl.privateAnnouncement.arBody"
+                                        <text-angular name="arBody" id="arBody" flex
+                                                      ng-model="ctrl.privateAnnouncement.arBody"
+                                                      required
+                                        ></text-angular>
+                                        <!--<trix-editor required angular-trix ng-model="ctrl.privateAnnouncement.arBody"
                                                      name="arBody"
                                                      id="arBody" maxlength="4000"
-                                                     prevent-trix-file-accept="true"></trix-editor>
+                                                     prevent-trix-file-accept="true"></trix-editor>-->
                                     </div>
                                 </div>
 
-                                <div layout="row">
+                                <div layout="row" class="p20">
                                     <div flex>
                                         <label>{{$parent.lang.english_body_text }} <span
                                                 class="red-text">*</span></label>
-                                        <trix-editor required angular-trix ng-model="ctrl.privateAnnouncement.enBody"
-                                                     name="enBody"
-                                                     id="enBody" maxlength="4000"
-                                                     prevent-trix-file-accept="true"></trix-editor>
+                                        <text-angular name="enBody" id="enBody" flex
+                                                      ng-model="ctrl.privateAnnouncement.enBody"
+                                                      required
+                                        ></text-angular>
+                                        <!-- <trix-editor required angular-trix ng-model="ctrl.privateAnnouncement.enBody"
+                                                      name="enBody"
+                                                      id="enBody" maxlength="4000"
+                                                      prevent-trix-file-accept="true"></trix-editor>-->
                                     </div>
                                 </div>
                             </div>
@@ -200,12 +209,14 @@
         </md-content>
         <div>
             <div layout="row">
-                <md-button class="md-raised" ng-disabled="privateAnnouncementForm.$invalid || !ctrl.privateAnnouncement.subscribers.length"
+                <md-button class="md-raised"
+                           ng-disabled="privateAnnouncementForm.$invalid || !ctrl.privateAnnouncement.subscribers.length"
                            ng-if="!ctrl.editMode"
                            ng-click="ctrl.addPrivateAnnouncementFromCtrl()">
                     {{lang.add}}
                 </md-button>
-                <md-button class="md-raised" ng-disabled="privateAnnouncementForm.$invalid || !ctrl.privateAnnouncement.subscribers.length"
+                <md-button class="md-raised"
+                           ng-disabled="privateAnnouncementForm.$invalid || !ctrl.privateAnnouncement.subscribers.length"
                            ng-if="ctrl.editMode"
                            ng-click="ctrl.editPrivateAnnouncementFromCtrl()">
                     {{lang.save}}

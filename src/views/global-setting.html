@@ -306,11 +306,15 @@
                             </div>-->
                             <div layout="row" class="p20">
                                 <!--  Usage Terms and Condition -->
-                                <text-angular name="tamcontent" id="tamcontent" flex
-                                              ng-model="ctrl.globalSetting.tamcontent"
-                                              required placeholder="{{lang.usage_terms_and_condition}}"
-                                ></text-angular>
+                                <div flex>
+                                    <label>{{$parent.lang.usage_terms_and_condition }} <span
+                                            class="red-text">*</span></label>
+                                    <text-angular name="tamcontent" id="tamcontent" flex
+                                                  ng-model="ctrl.globalSetting.tamcontent"
+                                    ></text-angular>
+                                </div>
                             </div>
+
                         </div>
                         <br/>
                         <br/>
