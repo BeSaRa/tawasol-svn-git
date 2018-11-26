@@ -629,7 +629,7 @@ module.exports = function (app) {
              * @returns {*}
              */
             self.unlockWorkItem = function (workItem, $event) {
-                return workItem.unlockWorkItem(true, $event)
+                return workItem.unlockWorkItem($event)
                     .then(function (result) {
                         if (result)
                             self.reloadGroupInbox(self.grid.page);
@@ -672,7 +672,7 @@ module.exports = function (app) {
 
             var _unlockBulk = function (selectedItems, $event) {
                 correspondenceService
-                    .unlockBulkWorkItems(selectedItems, true, $event)
+                    .unlockBulkWorkItems(selectedItems, $event)
                     .then(function () {
                         self.reloadGroupInbox(self.grid.page);
                     });

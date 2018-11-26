@@ -1,5 +1,10 @@
 module.exports = function (app) {
-    app.controller('correspondenceViewActionDirectiveCtrl', function (LangWatcher, langService, dialog, $q, $scope) {
+    app.controller('correspondenceViewActionDirectiveCtrl', function (LangWatcher,
+                                                                      langService,
+                                                                      dialog,
+                                                                      $q,
+                                                                      $scope,
+                                                                      correspondenceService) {
         'ngInject';
         var self = this;
         self.controllerName = 'correspondenceViewActionDirectiveCtrl';
@@ -14,6 +19,14 @@ module.exports = function (app) {
         self.runActionCallback = function (action, workItem, correspondence, $event) {
             var defer = $q.defer();
             defer.promise.then(function () {
+                if (workItem) {
+                    try {
+                        correspondenceService.unlockWorkItem(workItem, true, $event)
+                    }
+                    catch (e) {
+                        console.log('ਆਈਟਮ ਅਨਲੌਕ ਅਸਫਲ');
+                    }
+                }
                 dialog.cancel();
             });
             var record = self.g2gItemCopy ? self.g2gItemCopy : (workItem || correspondence);

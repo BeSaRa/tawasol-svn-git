@@ -562,9 +562,7 @@ module.exports = function (app) {
             }
             correspondenceService.viewCorrespondence(readyToExport, self.gridActions, checkIfEditPropertiesAllowed(readyToExport, true), false, true, true)
                 .then(function () {
-                    readyToExport.unlockWorkItem(false, $event).then(function () {
-                        self.reloadReadyToExports(self.grid.page);
-                    })
+                    self.reloadReadyToExports(self.grid.page);
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -583,10 +581,8 @@ module.exports = function (app) {
                 return;
             }
             workItem.viewNewDepartmentReadyToExport(self.gridActions, 'departmentReadyToExport', $event)
-                .then(function (result) {
-                    workItem.unlockWorkItem(false, $event).then(function () {
-                        self.reloadReadyToExports(self.grid.page);
-                    });
+                .then(function () {
+                    self.reloadReadyToExports(self.grid.page);
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -647,7 +643,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.unlockWorkItem = function (workItem, $event) {
-            return workItem.unlockWorkItem(false, $event)
+            return workItem.unlockWorkItem($event)
                 .then(function (result) {
                     if (result)
                         self.reloadReadyToExports(self.grid.page);
@@ -690,7 +686,7 @@ module.exports = function (app) {
 
         var _unlockBulk = function (selectedItems, $event) {
             correspondenceService
-                .unlockBulkWorkItems(selectedItems, false, $event)
+                .unlockBulkWorkItems(selectedItems, $event)
                 .then(function () {
                     self.reloadReadyToExports(self.grid.page);
                 });

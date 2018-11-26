@@ -283,9 +283,7 @@ module.exports = function (app) {
                 });*/
             correspondenceService.viewCorrespondenceWorkItem(incomingDepartmentInbox.getInfo(), self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true, false, false, true)
                 .then(function () {
-                    incomingDepartmentInbox.unlockWorkItem(false, $event).then(function () {
-                        return self.reloadIncomingDepartmentInboxes(self.grid.page);
-                    })
+                    return self.reloadIncomingDepartmentInboxes(self.grid.page);
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked') {
@@ -306,9 +304,7 @@ module.exports = function (app) {
             }
             workItem.viewNewDepartmentIncomingAsWorkItem(self.gridActions, 'departmentIncoming', $event)
                 .then(function () {
-                    workItem.unlockWorkItem(false, $event).then(function () {
-                        self.reloadIncomingDepartmentInboxes(self.grid.page);
-                    });
+                    self.reloadIncomingDepartmentInboxes(self.grid.page);
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -396,7 +392,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.unlockWorkItem = function (workItem, $event) {
-            return workItem.unlockWorkItem(false, $event)
+            return workItem.unlockWorkItem($event)
                 .then(function (result) {
                     if (result)
                         self.reloadIncomingDepartmentInboxes(self.grid.page);
@@ -439,7 +435,7 @@ module.exports = function (app) {
 
         var _unlockBulk = function (selectedItems, $event) {
             correspondenceService
-                .unlockBulkWorkItems(selectedItems, false, $event)
+                .unlockBulkWorkItems(selectedItems, $event)
                 .then(function () {
                     self.reloadIncomingDepartmentInboxes(self.grid.page);
                 });

@@ -552,9 +552,7 @@ module.exports = function (app) {
             var info = returnedDepartmentInbox.getInfo();
             correspondenceService.viewCorrespondenceReturnedWorkItem(info, self.gridActions, checkIfEditPropertiesAllowed(returnedDepartmentInbox, true), true, true)
                 .then(function () {
-                    returnedDepartmentInbox.unlockWorkItem(false, $event).then(function () {
-                        self.reloadReturnedDepartmentInboxes(self.grid.page);
-                    })
+                    self.reloadReturnedDepartmentInboxes(self.grid.page);
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -575,9 +573,7 @@ module.exports = function (app) {
             }
             workItem.viewNewDepartmentReturned(self.gridActions, 'departmentReturned', $event)
                 .then(function () {
-                    workItem.unlockWorkItem(false, $event).then(function () {
-                        self.reloadReturnedDepartmentInboxes(self.grid.page);
-                    });
+                    self.reloadReturnedDepartmentInboxes(self.grid.page);
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -683,7 +679,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.unlockWorkItem = function (workItem, $event) {
-            return workItem.unlockWorkItem(false, $event)
+            return workItem.unlockWorkItem($event)
                 .then(function (result) {
                     if (result)
                         self.reloadReturnedDepartmentInboxes(self.grid.page);
@@ -726,7 +722,7 @@ module.exports = function (app) {
 
         var _unlockBulk = function (selectedItems, $event) {
             correspondenceService
-                .unlockBulkWorkItems(selectedItems, false, $event)
+                .unlockBulkWorkItems(selectedItems, $event)
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page);
                 });

@@ -5,7 +5,7 @@
     require('./sass/style.scss');
     require('./require/libs');
 
-    // this is as a workaround to avoid the exception till get the update for angualr-text
+    // this is as a workaround to avoid the exception till get the update for text-angular plugin
     angular.lowercase = function (text) {
         return text ? text.toLowerCase() : text;
     };

@@ -1346,7 +1346,7 @@ module.exports = function (app) {
                             return false;
                         });
                 })
-                .catch(function(error){
+                .catch(function (error) {
                     if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
                         var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
                         dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
@@ -3092,57 +3092,43 @@ module.exports = function (app) {
             });
         };
 
-        var _getUnlockUrl = function (isGroupMail, info, bulkOperation) {
-            if (isGroupMail) {
-                if (bulkOperation)
-                    return urlService.groupMailUnlock + 'bulk';
-                return urlService.groupMailUnlock + info.wobNumber;
-            }
-            else {
-                if (bulkOperation)
-                    return urlService.departmentInboxes + '/un-lock/bulk';
-                return urlService.departmentInboxes + '/un-lock/wob-num/' + info.wobNumber;
-            }
-        };
-
-        self.unlockWorkItem = function (workItem, isGroupMail, $event) {
+        self.unlockWorkItem = function (workItem, ignoreMessage, $event) {
+            debugger;
             var confirmMsg = langService.get('unlock_confirmation_msg').change({
                 user: workItem.getLockingUserInfo().getTranslatedName(),
                 date: workItem.getLockingInfo().lockingTime
             });
-            confirmMsg += '<br />' + langService.get('unlock_note_msg').change({
-                user: workItem.getLockingUserInfo().getTranslatedName()
-            });
-            confirmMsg += langService.get('confirm_continue_message');
+            confirmMsg += '<br />' + langService.get('unlock_note_msg').change({user: workItem.getLockingUserInfo().getTranslatedName()});
+            confirmMsg += '<br />' + langService.get('confirm_continue_message');
             return dialog.confirmMessage(confirmMsg).then(function () {
                 var info = workItem.getInfo();
-                return $http.put(_getUnlockUrl(isGroupMail, info))
+                return $http.put(urlService.departmentInboxes + '/un-lock/wob-num/' + info.wobNumber)
                     .then(function (result) {
                         result = result.data.rs;
-                        if (result) {
-                            toast.success(langService.get('unlock_specific_success').change({name: info.title}));
-                        }
-                        else {
-                            toast.error(langService.get('unlock_specific_fail').change({name: info.title}));
+                        if (!ignoreMessage) {
+                            if (result) {
+                                toast.success(langService.get('unlock_specific_success').change({name: info.title}));
+                            }
+                            else {
+                                toast.error(langService.get('unlock_specific_fail').change({name: info.title}));
+                            }
                         }
                         return result;
                     }).catch(function (error) {
-                        toast.error(langService.get('unlock_specific_fail').change({name: info.title}));
+                        if (!ignoreMessage)
+                            toast.error(langService.get('unlock_specific_fail').change({name: info.title}));
                         return false;
                     });
             });
         };
 
-        self.unlockBulkWorkItems = function (workItems, isGroupMail, $event) {
-            // if the selected workItem has just one record.
-            if (workItems.length === 1)
-                return self.unlockWorkItem(workItems[0], $event);
+        self.unlockBulkWorkItems = function (workItems, $event) {
             return dialog.confirmMessage('confirm unlock').then(function () {
                 var items = _.map(workItems, function (workItem) {
                     return workItem.getInfo().wobNumber;
                 });
                 return $http
-                    .put(_getUnlockUrl(isGroupMail, null, true), items)
+                    .put(urlService.departmentInboxes + '/un-lock/bulk', items)
                     .then(function (result) {
                         return _bulkMessages(result, workItems, false, 'failed_unlock_selected', 'selected_unlock_success', 'unlock_success_except_following');
                     });
