@@ -3,6 +3,7 @@ module.exports = function (app) {
                                        lookupService,
                                        Lookup,
                                        moment,
+                                       employeeService,
                                        langService) {
         'ngInject';
         return function Indicator(model) {
@@ -366,13 +367,14 @@ module.exports = function (app) {
              * @param record
              */
             Indicator.prototype.getLockedWorkItemIndicator = function (record) {
-                return record.isLocked() ? new Indicator({
-                    class: 'indicator',
-                    text: 'indicator_locked_item_by',
-                    icon: self.getIndicatorIcons('indicator_locked_workitem'),
-                    tooltip: 'indicator_locked_item_by',
-                    value: record.getLockingUserInfo()
-                }) : false;
+                return (record.isLocked() && record.getLockingInfo().domainName !== employeeService.getEmployee().domainName)
+                    ? new Indicator({
+                        class: 'indicator',
+                        text: 'indicator_locked_item_by',
+                        icon: self.getIndicatorIcons('indicator_locked_workitem'),
+                        tooltip: 'indicator_locked_item_by',
+                        value: record.getLockingUserInfo()
+                    }) : false;
             };
 
 
