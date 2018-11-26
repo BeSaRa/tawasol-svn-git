@@ -552,7 +552,9 @@ module.exports = function (app) {
             var info = returnedDepartmentInbox.getInfo();
             correspondenceService.viewCorrespondenceReturnedWorkItem(info, self.gridActions, checkIfEditPropertiesAllowed(returnedDepartmentInbox, true), true, true)
                 .then(function () {
-                    self.reloadReturnedDepartmentInboxes(self.grid.page);
+                    returnedDepartmentInbox.unlockWorkItem(false, $event).then(function () {
+                        self.reloadReturnedDepartmentInboxes(self.grid.page);
+                    })
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -573,7 +575,9 @@ module.exports = function (app) {
             }
             workItem.viewNewDepartmentReturned(self.gridActions, 'departmentReturned', $event)
                 .then(function () {
-                    self.reloadReturnedDepartmentInboxes(self.grid.page);
+                    workItem.unlockWorkItem(false, $event).then(function () {
+                        self.reloadReturnedDepartmentInboxes(self.grid.page);
+                    });
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')

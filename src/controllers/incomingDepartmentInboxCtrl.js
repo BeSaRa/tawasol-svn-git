@@ -283,7 +283,9 @@ module.exports = function (app) {
                 });*/
             correspondenceService.viewCorrespondenceWorkItem(incomingDepartmentInbox.getInfo(), self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true, false, false, true)
                 .then(function () {
-                    return self.reloadIncomingDepartmentInboxes(self.grid.page);
+                    incomingDepartmentInbox.unlockWorkItem(false, $event).then(function () {
+                        return self.reloadIncomingDepartmentInboxes(self.grid.page);
+                    })
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked') {
@@ -304,7 +306,9 @@ module.exports = function (app) {
             }
             workItem.viewNewDepartmentIncomingAsWorkItem(self.gridActions, 'departmentIncoming', $event)
                 .then(function () {
-                    self.reloadIncomingDepartmentInboxes(self.grid.page);
+                    workItem.unlockWorkItem(false, $event).then(function () {
+                        self.reloadIncomingDepartmentInboxes(self.grid.page);
+                    });
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')

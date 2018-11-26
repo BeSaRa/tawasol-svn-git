@@ -562,7 +562,9 @@ module.exports = function (app) {
             }
             correspondenceService.viewCorrespondence(readyToExport, self.gridActions, checkIfEditPropertiesAllowed(readyToExport, true), false, true, true)
                 .then(function () {
-                    self.reloadReadyToExports(self.grid.page);
+                    readyToExport.unlockWorkItem(false, $event).then(function () {
+                        self.reloadReadyToExports(self.grid.page);
+                    })
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
@@ -581,8 +583,10 @@ module.exports = function (app) {
                 return;
             }
             workItem.viewNewDepartmentReadyToExport(self.gridActions, 'departmentReadyToExport', $event)
-                .then(function () {
-                    self.reloadReadyToExports(self.grid.page);
+                .then(function (result) {
+                    workItem.unlockWorkItem(false, $event).then(function () {
+                        self.reloadReadyToExports(self.grid.page);
+                    });
                 })
                 .catch(function (error) {
                     if (error !== 'itemLocked')
