@@ -1464,7 +1464,7 @@ module.exports = function (app) {
             // Sign(Approve)
             {
                 type: 'action',
-                icon: 'approval',
+                icon: 'check-decagram',
                 text: 'grid_action_approve',//signature
                 checkShow: function (action, model) {
                     //addMethod = 0 (Electronic/Digital) - show the button
@@ -1490,7 +1490,7 @@ module.exports = function (app) {
                     // e-Signature
                     {
                         type: 'action',
-                        icon: 'approval',
+                        icon: 'check-decagram',
                         text: 'grid_action_electronic_approve',//e_signature
                         callback: self.signESignature,
                         class: "action-green",
@@ -1710,7 +1710,7 @@ module.exports = function (app) {
         //     // Approve(e-Signature)
         //     {
         //         type: 'action',
-        //         icon: 'approval',
+        //         icon: 'check-decagram',
         //         text: 'grid_action_electronic_approve',//e_signature
         //         callback: self.signESignature,
         //         class: "",

@@ -1253,7 +1253,7 @@ module.exports = function (app) {
             // Sign(Approve)
             {
                 type: 'action',
-                icon: 'approval',
+                icon: 'check-decagram',
                 text: 'grid_action_approve',//signature
                 shortcut: false,
                 checkShow: function (action, model) {
@@ -1541,7 +1541,7 @@ module.exports = function (app) {
             // Approve(e-Signature)
             {
                 type: 'action',
-                icon: 'approval',
+                icon: 'check-decagram',
                 text: 'grid_action_electronic',//e_signature
                 shortcut: true,
                 callback: self.signESignature,
