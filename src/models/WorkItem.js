@@ -647,8 +647,9 @@ module.exports = function (app) {
 
             WorkItem.prototype.getLockingInfo = function () {
                 if (this.isLocked()) {
-                    this.generalStepElm.lockingInfo.lockingTime = generator.getDateFromTimeStamp(this.generalStepElm.lockingInfo.lockingTime);
-                    return this.generalStepElm.lockingInfo;
+                    var info = angular.copy(this.generalStepElm.lockingInfo);
+                    info.lockingTime = generator.getDateFromTimeStamp(info.lockingTime, true);
+                    return info;
                 }
                 return null;
             };
