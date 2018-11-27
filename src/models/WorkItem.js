@@ -642,7 +642,7 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.isLocked = function () {
-                return this.generalStepElm.lockingInfo;
+                return !!this.generalStepElm.lockingInfo;
             };
 
             WorkItem.prototype.getLockingInfo = function () {

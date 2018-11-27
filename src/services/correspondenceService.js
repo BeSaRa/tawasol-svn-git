@@ -3093,33 +3093,41 @@ module.exports = function (app) {
         };
 
         self.unlockWorkItem = function (workItem, ignoreMessage, $event) {
-            debugger;
-            var confirmMsg = langService.get('unlock_confirmation_msg').change({
-                user: workItem.getLockingUserInfo().getTranslatedName(),
-                date: workItem.getLockingInfo().lockingTime
-            });
-            confirmMsg += '<br />' + langService.get('unlock_note_msg').change({user: workItem.getLockingUserInfo().getTranslatedName()});
-            confirmMsg += '<br />' + langService.get('confirm_continue_message');
-            return dialog.confirmMessage(confirmMsg).then(function () {
-                var info = workItem.getInfo();
-                return $http.put(urlService.departmentInboxes + '/un-lock/wob-num/' + info.wobNumber)
-                    .then(function (result) {
-                        result = result.data.rs;
-                        if (!ignoreMessage) {
-                            if (result) {
-                                toast.success(langService.get('unlock_specific_success').change({name: info.title}));
-                            }
-                            else {
-                                toast.error(langService.get('unlock_specific_fail').change({name: info.title}));
-                            }
+            if (ignoreMessage){
+              return _unlockWorkItem(workItem, ignoreMessage)
+            }
+            else{
+                var confirmMsg = langService.get('unlock_confirmation_msg').change({
+                    user: workItem.getLockingUserInfo().getTranslatedName(),
+                    date: workItem.getLockingInfo().lockingTime
+                });
+                confirmMsg += '<br />' + langService.get('unlock_note_msg').change({user: workItem.getLockingUserInfo().getTranslatedName()});
+                confirmMsg += '<br />' + langService.get('confirm_continue_message');
+                return dialog.confirmMessage(confirmMsg).then(function () {
+                    _unlockWorkItem(workItem, ignoreMessage);
+                });
+            }
+        };
+
+        var _unlockWorkItem = function(workItem, ignoreMessage){
+            var info = workItem.getInfo();
+            return $http.put(urlService.departmentInboxes + '/un-lock/wob-num/' + info.wobNumber)
+                .then(function (result) {
+                    result = result.data.rs;
+                    if (!ignoreMessage) {
+                        if (result) {
+                            toast.success(langService.get('unlock_specific_success').change({name: info.title}));
                         }
-                        return result;
-                    }).catch(function (error) {
-                        if (!ignoreMessage)
+                        else {
                             toast.error(langService.get('unlock_specific_fail').change({name: info.title}));
-                        return false;
-                    });
-            });
+                        }
+                    }
+                    return result;
+                }).catch(function (error) {
+                    if (!ignoreMessage)
+                        toast.error(langService.get('unlock_specific_fail').change({name: info.title}));
+                    return false;
+                });
         };
 
         self.unlockBulkWorkItems = function (workItems, $event) {

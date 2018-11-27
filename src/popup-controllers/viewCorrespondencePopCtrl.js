@@ -46,8 +46,17 @@ module.exports = function (app) {
         self.toggleFullScreen = function () {
             self.fullScreen = !self.fullScreen;
         };
+
         self.closeCorrespondenceDialog = function () {
-            dialog.hide(self.workItem);
+            if (self.workItem) {
+                correspondenceService.unlockWorkItem(self.workItem, true)
+                    .then(function () {
+                        dialog.hide(self.workItem);
+                    });
+            }
+            else {
+                dialog.hide(self.workItem);
+            }
         };
         /**
          * @description save correspondence Changes for content.
