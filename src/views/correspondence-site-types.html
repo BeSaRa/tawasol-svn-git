@@ -33,7 +33,8 @@
                                                 <table-status-directive
                                                         when-close="ctrl.changeStatusBulkCorrespondenceSiteTypes"></table-status-directive>
                                                 <md-button class="md-icon-button"
-                                                           ng-click="ctrl.removeBulkCorrespondenceSiteTypes()">
+                                                           ng-click="ctrl.removeBulkCorrespondenceSiteTypes()"
+                                                           ng-if="ctrl.isPreventDeleteBulk($event)">
                                                     <md-icon md-svg-icon="delete"></md-icon>
                                                 </md-button>
                                             </div>
@@ -79,7 +80,8 @@
                                                 </md-button>
                                                 <md-button class="md-icon-button"
                                                            ng-click="ctrl.removeCorrespondenceSiteType(correspondenceSiteType)"
-                                                           title="{{lang.delete}}">
+                                                           title="{{lang.delete}}"
+                                                           ng-if="ctrl.isPreventDelete(correspondenceSiteType)">
                                                     <md-icon md-svg-icon="delete"></md-icon>
                                                 </md-button>
 
