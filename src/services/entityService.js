@@ -335,8 +335,6 @@ module.exports = function (app) {
                 .post((urlService.connectionTest + '/' + 'ldap'), ldapConnection)
                 .then(function (result) {
                     return result.data.rs;
-                }).catch(function (error) {
-                    return error;
                 });
         };
         /**
@@ -355,8 +353,6 @@ module.exports = function (app) {
                 .post((urlService.connectionTest + '/' + 'filenet'), fileNetConnection)
                 .then(function (result) {
                     return result.data.rs;
-                }).catch(function (error) {
-                    return error;
                 });
         };
         /**
@@ -375,8 +371,6 @@ module.exports = function (app) {
                 .post((urlService.connectionTest + '/' + 'smtp'), smtpConnection)
                 .then(function (result) {
                     return result.data.rs;
-                }).catch(function (error) {
-                    return error;
                 });
         };
     });

@@ -46,6 +46,17 @@ module.exports = function (app) {
             var message = result ? 'connection_success' : 'connection_fail';
             var method = result ? 'successMessage' : 'errorMessage';
             dialog[method](langService.get(message));
+            /*if (result)
+                dialog.successMessage(langService.get('connection_success'));
+            else {
+                if (errorCode.checkIf(result, 'SEC_LDAP_ADDING_ENTITY')
+                    || errorCode.checkIf(result, 'SEC_LDAP_OU_NOT_AVAILABLE')
+                    || errorCode.checkIf(result, 'SEC_LDAP_INVALID_SERVER_ADDRESS')
+                    || errorCode.checkIf(result, 'SEC_LDAP_INVALID_OP')
+                    || errorCode.checkIf(result, 'SEC_ERROR_USER_UN_AUHTORIZED_FOR_SERVICE')) {
+
+                }
+            }*/
         }
 
         /**

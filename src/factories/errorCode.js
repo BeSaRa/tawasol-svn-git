@@ -36,7 +36,14 @@ module.exports = function (app) {
             G2G_ERROR_WHILE_TERMINATE: 14028,
             NO_DOCUMENT_SECURITY: 13006,
             FAIL_DUPLICATION: 2053,
-            INVALID_REFERENCE_FORMAT: 3025
+            INVALID_REFERENCE_FORMAT: 3025,
+            // entity connection errors
+            SEC_LDAP_ADDING_ENTITY: 13008,
+            SEC_LDAP_OU_NOT_AVAILABLE: 13009,
+            SEC_LDAP_INVALID_SERVER_ADDRESS: 13010,
+            SEC_LDAP_INVALID_OP: 13011,
+            SEC_ERROR_USER_UN_AUHTORIZED_FOR_SERVICE: 13012
+            // entity connection errors end
         };
 
         return {
