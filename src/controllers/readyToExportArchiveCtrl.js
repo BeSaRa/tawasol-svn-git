@@ -1147,7 +1147,7 @@ module.exports = function (app) {
                 showInView: true,
                 permissionKey: '',
                 checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && model.isLocked();
+                    return self.checkToShowAction(action, model) && model.isLocked() && model.getLockingInfo().domainName !== employeeService.getEmployee().domainName;
                 }
             }
         ];
