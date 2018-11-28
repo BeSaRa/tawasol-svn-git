@@ -799,7 +799,7 @@ module.exports = function (app) {
          */
         self.editUserComment = function (userComment, userCommentForm, $event) {
             self.isUserCommentForm = true;
-            self.userComment = userComment;
+            self.userComment = angular.copy(userComment);
             userCommentForm.$setUntouched();
         };
 
