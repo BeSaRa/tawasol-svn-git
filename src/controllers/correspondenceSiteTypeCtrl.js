@@ -165,24 +165,12 @@ module.exports = function (app) {
         };
 
         /**
-         * @description prevent correspondence site types with lookupkeys [1..5] from delete
-         * @param correspondenceSiteType
+         * @description can bulk delete
          * @returns {boolean}
          */
-        self.isPreventDelete = function (correspondenceSiteType) {
-            return !_.some([1, 2, 3, 4, 5], function (key) {
-                return (correspondenceSiteType.lookupKey === key);
-            });
-        };
-
-        /**
-         * @description prevent correspondence site types bulk with lookupkeys [1..5] from delete
-         * @param $event
-         * @returns {boolean}
-         */
-        self.isPreventDeleteBulk = function ($event) {
+        self.canDeleteBulk = function () {
             return _.every(self.selectedCorrespondenceSiteTypes, function (correspondenceSiteType) {
-                return self.isPreventDelete(correspondenceSiteType);
+                return correspondenceSiteType.canDelete();
             })
         }
     });

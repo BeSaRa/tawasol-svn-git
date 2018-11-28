@@ -1,6 +1,6 @@
 module.exports = function (app) {
-    app.factory('CorrespondenceSiteType', function (CMSModelInterceptor, 
-                                                    langService, 
+    app.factory('CorrespondenceSiteType', function (CMSModelInterceptor,
+                                                    langService,
                                                     _) {
         'ngInject';
         return function CorrespondenceSiteType(model) {
@@ -40,6 +40,12 @@ module.exports = function (app) {
             CorrespondenceSiteType.prototype.getTranslatedStatus = function () {
                 return this.status ? langService.get('active') : langService.get('inactive');
             };
+
+            CorrespondenceSiteType.prototype.canDelete = function () {
+                var defaultValues = [1, 2, 3, 4, 5];
+                return defaultValues.indexOf(this.lookupKey) === -1;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('CorrespondenceSiteType', 'init', this);
