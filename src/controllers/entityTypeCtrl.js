@@ -143,6 +143,16 @@ module.exports = function (app) {
         };
 
         /**
+         * @description can bulk delete
+         * @returns {boolean}
+         */
+        self.canDeleteBulk = function () {
+            return _.every(self.selectedEntityTypes, function (entityType) {
+                return entityType.canDelete();
+            })
+        };
+
+        /**
          * @description Change the status of entity type from grid
          * @param entityType
          */

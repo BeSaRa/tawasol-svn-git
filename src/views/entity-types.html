@@ -33,7 +33,8 @@
                                                 <table-status-directive
                                                         when-close="ctrl.changeStatusBulkEntityTypes"></table-status-directive>
                                                 <md-button class="md-icon-button"
-                                                           ng-click="ctrl.removeBulkEntityTypes()">
+                                                           ng-click="ctrl.removeBulkEntityTypes()"
+                                                           ng-if="ctrl.canDeleteBulk()">
                                                     <md-icon md-svg-icon="delete"></md-icon>
                                                 </md-button>
                                             </div>
