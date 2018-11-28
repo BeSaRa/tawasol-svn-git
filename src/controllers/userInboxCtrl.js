@@ -725,13 +725,14 @@ module.exports = function (app) {
          */
         self.sendLinkToDocumentByEmail = function (userInbox, $event) {
             var info = userInbox.getInfo();
-            downloadService.getMainDocumentEmailContent(info.vsId).then(function (result) {
+            /*downloadService.getMainDocumentEmailContent(info.vsId).then(function (result) {
                 dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
                     result: result,
                     filename: 'Tawasol.msg'
                 }));
                 return true;
-            });
+            });*/
+            downloadService.getMainDocumentEmailContent(info.vsId);
         };
 
         /**

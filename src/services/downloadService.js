@@ -70,10 +70,13 @@ module.exports = function (app) {
          * @description get main document email content from server
          */
         self.getMainDocumentEmailContent = function (vsId) {
-            return $http
+            //return
+            $http
                 .get(urlService.getDocumentEmailContent + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
                 .then(function (result) {
-                    return result.data.rs;
+                    _download(result.data.rs, 'Tawasol.msg');
+
+                    //return result.data.rs;
                 })
         };
 
@@ -88,5 +91,12 @@ module.exports = function (app) {
                 })
         };
 
+        var _download = function (url, name) {
+            var link = document.createElement('a');
+            link.download = name || 'cms-download';
+            link.href = url;
+            link.target = '_blank';
+            link.click();
+        }
     });
 };
