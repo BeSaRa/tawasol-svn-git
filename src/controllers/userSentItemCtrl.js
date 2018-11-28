@@ -316,13 +316,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendLinkToDocumentByEmail = function (userSentItem, $event) {
-            downloadService.getMainDocumentEmailContent(userSentItem.documentVSID).then(function (result) {
-                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
-                    result: result,
-                    filename: 'Tawasol.msg'
-                }));
-                return true;
-            });
+            downloadService.getMainDocumentEmailContent(userSentItem.getInfo().vsId);
         };
 
         /**
@@ -331,13 +325,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendCompositeDocumentAsAttachmentByEmail = function (userSentItem, $event) {
-            downloadService.getCompositeDocumentEmailContent(userSentItem.documentVSID).then(function (result) {
-                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
-                    result: result,
-                    filename: 'Tawasol.msg'
-                }));
-                return true;
-            });
+            downloadService.getCompositeDocumentEmailContent(userSentItem.getInfo().vsId);
         };
 
         /**

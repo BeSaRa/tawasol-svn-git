@@ -70,13 +70,15 @@ module.exports = function (app) {
          * @description get main document email content from server
          */
         self.getMainDocumentEmailContent = function (vsId) {
-            //return
+            /*return $http
+                 .get(urlService.getDocumentEmailContent + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
+                 .then(function (result) {
+                     return result.data.rs;
+                 });*/
             $http
                 .get(urlService.getDocumentEmailContent + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
                 .then(function (result) {
                     _download(result.data.rs, 'Tawasol.msg');
-
-                    //return result.data.rs;
                 })
         };
 
@@ -84,10 +86,15 @@ module.exports = function (app) {
          * @description get composite document email content from server
          */
         self.getCompositeDocumentEmailContent = function (vsId) {
+            /*return $http
+                .get(urlService.getDocumentCompositeEmailContent + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
+                .then(function (result) {
+                   return result.data.rs;
+                })*/
             return $http
                 .get(urlService.getDocumentCompositeEmailContent + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
                 .then(function (result) {
-                    return result.data.rs;
+                    _download(result.data.rs, 'Tawasol.msg');
                 })
         };
 
@@ -95,7 +102,7 @@ module.exports = function (app) {
             var link = document.createElement('a');
             link.download = name || 'cms-download';
             link.href = url;
-            link.target = '_blank';
+            //link.target = '_blank';
             link.click();
         }
     });

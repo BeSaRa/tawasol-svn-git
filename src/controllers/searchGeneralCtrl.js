@@ -572,13 +572,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendLinkToDocumentByEmail = function (searchedGeneralDocument, $event) {
-            downloadService.getMainDocumentEmailContent(searchedGeneralDocument.vsId).then(function (result) {
-                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
-                    result: result,
-                    filename: 'Tawasol.msg'
-                }));
-                return true;
-            });
+            downloadService.getMainDocumentEmailContent(searchedGeneralDocument.getInfo().vsId);
         };
 
         /**
@@ -587,13 +581,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendCompositeDocumentAsAttachmentByEmail = function (searchedGeneralDocument, $event) {
-            downloadService.getCompositeDocumentEmailContent(searchedGeneralDocument.vsId).then(function (result) {
-                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
-                    result: result,
-                    filename: 'Tawasol.msg'
-                }));
-                return true;
-            });
+            downloadService.getCompositeDocumentEmailContent(searchedGeneralDocument.getInfo().vsId);
         };
 
         /**

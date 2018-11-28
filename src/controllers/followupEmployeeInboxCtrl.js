@@ -398,14 +398,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendFollowupEmployeeInboxLinkToDocumentByEmail = function (followupEmployeeInbox, $event) {
-            var info = followupEmployeeInbox.getInfo();
-            downloadService.getMainDocumentEmailContent(info.vsId).then(function (result) {
-                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
-                    result: result,
-                    filename: 'Tawasol.msg'
-                }));
-                return true;
-            });
+            downloadService.getMainDocumentEmailContent(followupEmployeeInbox.getInfo().vsId);
         };
 
         /**
@@ -414,14 +407,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendFollowupEmployeeInboxCompositeDocumentAsAttachmentByEmail = function (followupEmployeeInbox, $event) {
-            var info = followupEmployeeInbox.getInfo();
-            downloadService.getCompositeDocumentEmailContent(info.vsId).then(function (result) {
-                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
-                    result: result,
-                    filename: 'Tawasol.msg'
-                }));
-                return true;
-            });
+            downloadService.getCompositeDocumentEmailContent(followupEmployeeInbox.getInfo().vsId);
         };
 
         /**

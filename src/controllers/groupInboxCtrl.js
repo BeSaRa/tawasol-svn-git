@@ -431,34 +431,20 @@ module.exports = function (app) {
 
             /**
              * @description Send Link To Document By Email
-             * @param userSentItem
+             * @param workItem
              * @param $event
              */
             self.sendLinkToDocumentByEmail = function (workItem, $event) {
-                var info = workItem.getInfo();
-                downloadService.getMainDocumentEmailContent(info.vsId).then(function (result) {
-                    dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
-                        result: result,
-                        filename: 'Tawasol.msg'
-                    }));
-                    return true;
-                });
+                downloadService.getMainDocumentEmailContent(workItem.getInfo().vsId);
             };
 
             /**
              * @description Send Composite Document As Attachment By Email
-             * @param userSentItem
+             * @param workItem
              * @param $event
              */
             self.sendCompositeDocumentAsAttachmentByEmail = function (workItem, $event) {
-                var info = workItem.getInfo();
-                downloadService.getCompositeDocumentEmailContent(info.vsId).then(function (result) {
-                    dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
-                        result: result,
-                        filename: 'Tawasol.msg'
-                    }));
-                    return true;
-                });
+                downloadService.getCompositeDocumentEmailContent(workItem.getInfo().vsId);
             };
 
             /**

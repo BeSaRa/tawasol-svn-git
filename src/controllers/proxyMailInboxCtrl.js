@@ -538,14 +538,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendProxyMailInboxLinkToDocumentByEmail = function (workItem, $event) {
-            var info = workItem.getInfo();
-            downloadService.getMainDocumentEmailContent(info.vsId).then(function (result) {
-                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
-                    result: result,
-                    filename: 'Tawasol.msg'
-                }));
-                return true;
-            });
+            downloadService.getMainDocumentEmailContent(workItem.getInfo().vsId);
         };
 
         /**
@@ -563,14 +556,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendProxyMailInboxCompositeDocumentAsAttachmentByEmail = function (workItem, $event) {
-            var info = workItem.getInfo();
-            downloadService.getCompositeDocumentEmailContent(info.vsId).then(function (result) {
-                dialog.successMessage(langService.get('right_click_and_save_link_as') + langService.get('download_message_file').change({
-                    result: result,
-                    filename: 'Tawasol.msg'
-                }));
-                return true;
-            });
+            downloadService.getCompositeDocumentEmailContent(workItem.getInfo().vsId);
         };
 
         /**
