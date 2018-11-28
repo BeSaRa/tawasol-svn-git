@@ -366,12 +366,14 @@ module.exports = function (app) {
             if (model.fromCentralArchive())
                 return model.sendToCentralArchive(false, $event).then(function () {
                     new ResolveDefer(defer);
+                    self.resetAddCorrespondence();
                 });
 
             model.sendToReadyToExport($event)
                 .then(function () {
                     toast.success(langService.get('export_success'));
                     new ResolveDefer(defer);
+                    self.resetAddCorrespondence();
                 })
         };
 
