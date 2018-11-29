@@ -443,7 +443,7 @@ module.exports = function (app) {
                         _resolveFile(extensionDefer, file);
                     } else {
                         rejectFile(extensionDefer, allowedExtensions.map(function (item) {
-                            if (!item.startsWith("."))
+                            if (item.indexOf(".") !== 0)
                                 item = '.' + item;
                             return item
                         }));

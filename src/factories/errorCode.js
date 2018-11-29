@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('errorCode', function ($q) {
+    app.factory('errorCode', function ($q , _) {
         'ngInject';
 
         var errorCodes = {
@@ -63,7 +63,8 @@ module.exports = function (app) {
              */
             hasErrorCode: function (error) {
                 var code = error.hasOwnProperty('data') && error.data ? error.data.ec : error;
-                return Object.values(errorCodes).indexOf(code) !== -1;
+                // Object.values changed to _.values as Object.values not supported in IE
+                return _.values(errorCodes).indexOf(code) !== -1;
             }
         }
     })
