@@ -9,7 +9,8 @@ module.exports = function (app) {
                                                             $element,
                                                             $mdMedia,
                                                             sidebarService,
-                                                            langService) {
+                                                            langService,
+                                                            generator) {
         'ngInject';
         var self = this;
         LangWatcher($scope);
@@ -239,7 +240,7 @@ module.exports = function (app) {
                 if (mainAction.hasOwnProperty(propertyKey) && mainAction[propertyKey] === propertyValue && mainAction.checkShow(mainAction, model)) {
                     flatActions.push(mainAction);
                 }
-                if (mainAction.hasOwnProperty('subMenu') && mainAction.subMenu.length &&  mainAction.checkShow(mainAction, model)) {
+                if (mainAction.hasOwnProperty('subMenu') && mainAction.subMenu.length && mainAction.checkShow(mainAction, model)) {
                     self.filterActionsByProperty(model, mainAction.subMenu, propertyKey, propertyValue, flatActions);
                 }
             }
@@ -270,8 +271,151 @@ module.exports = function (app) {
                 .catch(function () {
                     attachmentService.showAttachmentWithThumbnails(workItem, image, $event);
                 });
-        }
+        };
 
+        /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function (property, modelType) {
+            return generator.getColumnSortingKey(property, modelType);
+        };
+
+        self.sortingOptions = [
+            {
+                column: 'serial_asc',
+                text: function () {
+                    return langService.get('inbox_serial') + ' - '+ langService.get('ascending')
+                },
+                value: function () {
+                    return 'generalStepElm.docFullSerial'
+                }
+            },
+            {
+                column: 'serial_desc',
+                text: function () {
+                    return langService.get('inbox_serial') + ' - '+ langService.get('descending')
+                },
+                value: function () {
+                    return '-generalStepElm.docFullSerial'
+                }
+            },
+            {
+                column: 'subject_asc',
+                text: function () {
+                    return langService.get('subject') + ' - '+ langService.get('ascending')
+                },
+                value: function () {
+                    return 'generalStepElm.docSubject'
+                }
+            },
+            {
+                column: 'subject_desc',
+                text: function () {
+                    return langService.get('subject') + ' - '+ langService.get('descending')
+                },
+                value: function () {
+                    return '-generalStepElm.docSubject'
+                }
+            },
+            {
+                column: 'receivedDate_asc',
+                text: function () {
+                    return langService.get('received_date') + ' - '+ langService.get('ascending')
+                },
+                value: function () {
+                    return 'generalStepElm.receivedDate'
+                }
+            },
+            {
+                column: 'receivedDate_desc',
+                text: function () {
+                    return langService.get('received_date') + ' - '+ langService.get('descending')
+                },
+                value: function () {
+                    return '-generalStepElm.receivedDate'
+                }
+            },
+            {
+                column: 'action_asc',
+                text: function () {
+                    return langService.get('action') + ' - '+ langService.get('ascending')
+                },
+                value: function () {
+                    return 'generalStepElm.action'
+                }
+            },
+            {
+                column: 'action_desc',
+                text: function () {
+                    return langService.get('action') + ' - '+ langService.get('descending')
+                },
+                value: function () {
+                    return '-generalStepElm.action'
+                }
+            },
+            {
+                column: 'sender_asc',
+                text: function () {
+                    return langService.get('sender') + ' - '+ langService.get('ascending')
+                },
+                value: function () {
+                    return 'generalStepElm.sender'
+                }
+            },
+            {
+                column: 'sender_desc',
+                text: function () {
+                    return langService.get('sender') + ' - '+ langService.get('descending')
+                },
+                value: function () {
+                    return '-generalStepElm.sender'
+                }
+            },
+            {
+                column: 'dueDate_asc',
+                text: function () {
+                    return langService.get('due_date') + ' - '+ langService.get('ascending')
+                },
+                value: function () {
+                    return 'generalStepElm.dueDate'
+                }
+            },
+            {
+                column: 'dueDate_desc',
+                text: function () {
+                    return langService.get('due_date') + ' - '+ langService.get('descending')
+                },
+                value: function () {
+                    return '-generalStepElm.dueDate'
+                }
+            },
+            {
+                column: 'correspondenceSites_asc',
+                text: function () {
+                    return langService.get('correspondence_sites') + ' - '+ langService.get('ascending')
+                },
+                value: function () {
+                    return self.getSortingKey('mainSiteSubSiteString', 'Information')
+                }
+            },
+            {
+                column: 'correspondenceSites_desc',
+                text: function () {
+                    return langService.get('correspondence_sites') + ' - '+ langService.get('descending')
+                },
+                value: function () {
+                    return  '-' + self.getSortingKey('mainSiteSubSiteString', 'Information')
+                }
+            }
+        ];
+
+        self.getSortedMagazineData = function () {
+            self.sortOrder = self.sortOrder && self.sortOrder.hasOwnProperty('value') ? self.sortOrder.value() : self.sortOrder;
+            self.sortingCallback(self.sortOrder);
+        }
 
     });
 };

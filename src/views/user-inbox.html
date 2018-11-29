@@ -189,7 +189,9 @@
                                         terminate-user-inbox-bulk="ctrl.terminateBulk"
                                         allow-selection="true"
                                         selected-work-items="ctrl.selectedUserInboxes"
-                                        work-items="ctrl.userInboxes">
+                                        work-items="ctrl.userInboxes"
+                                        sorting-callback="ctrl.getSortedDataForInbox"
+                                        sort-order="ctrl.grid.order">
                                 </magazine-layout-directive>
                             </md-content>
                         </md-tab>
@@ -214,7 +216,9 @@
                                         terminate-user-inbox-bulk="ctrl.terminateBulk"
                                         allow-selection="true"
                                         selected-work-items="ctrl.selectedUserInboxes"
-                                        work-items="ctrl.starredUserInboxes">
+                                        work-items="ctrl.starredUserInboxes"
+                                        sorting-callback="ctrl.getSortedDataForStarred"
+                                        sort-order="ctrl.starredGrid.order">
                                 </magazine-layout-directive>
                             </md-content>
                         </md-tab>
@@ -275,7 +279,9 @@
                                             terminate-user-inbox-bulk="ctrl.terminateBulk"
                                             allow-selection="true"
                                             selected-work-items="ctrl.selectedUserInboxes"
-                                            work-items="ctrl.workItemsFilters[$index]"></magazine-layout-directive>
+                                            work-items="ctrl.workItemsFilters[$index]"
+                                            sorting-callback="ctrl.getSortedDataForFilter"
+                                            sort-order="ctrl.filterGrid[$index].order"></magazine-layout-directive>
                                 </md-content>
                             </md-tab-body>
                         </md-tab>

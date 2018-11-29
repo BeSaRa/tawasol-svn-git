@@ -28,7 +28,9 @@ module.exports = function (app) {
                 markAsReadUnread: '=',
                 changeUserInboxStar: '=',
                 quickActions: '=',
-                moveToFolderBulk: '=?'
+                moveToFolderBulk: '=?',
+                sortingCallback: '=',
+                sortOrder: '='
             }
         }
     })

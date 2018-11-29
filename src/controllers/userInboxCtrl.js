@@ -301,7 +301,7 @@ module.exports = function (app) {
             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
         };
 
-        self.getSortedDataForInbox = function () {
+        /*self.getSortedDataForInbox = function () {
             self.userInboxes = $filter('orderBy')(self.userInboxes, self.grid.order);
         };
 
@@ -310,6 +310,20 @@ module.exports = function (app) {
         };
         self.getSortedDataForFilter = function () {
             self.workItemsFilters[self.selectedFilter.index] = $filter('orderBy')(self.workItemsFilters[self.selectedFilter.index], self.filterGrid[self.selectedFilter.index].order);
+        };*/
+        self.getSortedDataForInbox = function (order) {
+            order = order ? order : '';
+            self.userInboxes = $filter('orderBy')(self.userInboxes, order);
+        };
+
+        self.getSortedDataForStarred = function (order) {
+            order = order ? order : '';
+            self.starredUserInboxes = $filter('orderBy')(self.starredUserInboxes, order);
+        };
+        self.getSortedDataForFilter = function (order) {
+            order = order ? order : '';
+            if (self.selectedFilter)
+                self.workItemsFilters[self.selectedFilter.index] = $filter('orderBy')(self.workItemsFilters[self.selectedFilter.index], order);
         };
 
         /**

@@ -18,6 +18,16 @@
                                 md-total="{{ctrl.workItems.length}}" md-page-select>
                         </md-table-pagination>
                     </div>
+                    <md-input-container class="m0">
+                        <label for="sortBy">{{lang.sort_by}}</label>
+                        <md-select id="sortBy" aria-label="sortBy"
+                                   ng-model="ctrl.sortOrder"
+                                   ng-change="ctrl.getSortedMagazineData()">
+                            <md-option ng-repeat="option in ctrl.sortingOptions track by $index"
+                                       ng-value="option.value()">{{option.text()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
                 </div>
                 <div layout="row">
                     <div ng-if="ctrl.selectedWorkItems.length">
