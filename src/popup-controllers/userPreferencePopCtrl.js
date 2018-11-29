@@ -120,7 +120,7 @@ module.exports = function (app) {
          * @description Current ou application user
          */
 
-        self.ouApplicationUser = generator.interceptReceivedInstance('OUApplicationUser', employeeService.getCurrentOUApplicationUser());
+        self.ouApplicationUser = generator.interceptReceivedInstance('OUApplicationUser', angular.copy(employeeService.getCurrentOUApplicationUser()));
         // security levels for current OUApplicationUser
         self.securityLevels = self.ouApplicationUser.getSecurityLevels();
         self.availableProxies = availableProxies;
