@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                            organizations,
                                                            searchOutgoingIncomingService,
                                                            $q,
+                                                           _,
                                                            $filter,
                                                            OutgoingIncomingSearch,
                                                            propertyConfigurations,
@@ -25,8 +26,7 @@ module.exports = function (app) {
                                                            dialog,
                                                            mailNotificationService,
                                                            favoriteDocumentsService,
-                                                           gridService//,
-                                                           //centralArchives
+                                                           gridService
     ) {
         'ngInject';
         var self = this;
@@ -534,7 +534,7 @@ module.exports = function (app) {
          * @description send link to document for searched document
          * @param correspondence
          * @param $event
-         */``
+         */
         self.sendLinkToDocumentByEmail = function (correspondence, $event) {
             downloadService.getMainDocumentEmailContent(correspondence.getInfo().vsId);
         };
