@@ -71,7 +71,6 @@
                             <label for="startDate">{{lang.start_date}}</label>
                             <md-datepicker id="startDate" ng-required="!ctrl.alwaysActive"
                                            ng-model="ctrl.publicAnnouncement.startDate"
-                                           md-min-date="ctrl.currentDate"
                                            md-max-date="ctrl.publicAnnouncement.endDate"
                                            name="startDate" ng-disabled="ctrl.alwaysActive">
                                 <!--ng-change="ctrl.onStartDateChange()"-->

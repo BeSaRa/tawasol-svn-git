@@ -75,6 +75,13 @@ module.exports = function (app) {
                 .notifyFailure(function () {
                     toast.error(langService.get('name_duplication_message'));
                 })
+                .addStep('check_start_date', true, self.checkStartDate, self.publicAnnouncement, function (result) {
+                    return result;
+                })
+                .notifyFailure(function (step, result) {
+                    var currentDate = self.currentDate.getFullYear() + "-" + (self.currentDate.getMonth() + 1) + "-" + self.currentDate.getDate();
+                    toast.error(langService.get('max_current_date').replace(':today', currentDate));
+                })
                 .validate()
                 .then(function () {
                     if (self.alwaysActive) {
@@ -112,6 +119,13 @@ module.exports = function (app) {
                 .notifyFailure(function () {
                     toast.error(langService.get('name_duplication_message'));
                 })
+                .addStep('check_start_date', true, self.checkStartDate, self.publicAnnouncement, function (result) {
+                    return result;
+                })
+                .notifyFailure(function (step, result) {
+                    var currentDate = self.currentDate.getFullYear() + "-" + (self.currentDate.getMonth() + 1) + "-" + self.currentDate.getDate();
+                    toast.error(langService.get('max_current_date').replace(':today', currentDate));
+                })
                 .validate()
                 .then(function () {
                     if (self.alwaysActive) {
@@ -126,6 +140,15 @@ module.exports = function (app) {
                 .catch(function () {
 
                 });
+        };
+
+        /**
+         * @description check if start date greeter or equal than today
+         * @param announcement
+         * @returns {boolean}
+         */
+        self.checkStartDate = function (announcement) {
+            return moment(announcement.startDate, "YYYY-MM-DD").valueOf() >= moment(new Date(today.getFullYear(), today.getMonth(), today.getDate()), "YYYY-MM-DD").valueOf();
         };
 
         /**

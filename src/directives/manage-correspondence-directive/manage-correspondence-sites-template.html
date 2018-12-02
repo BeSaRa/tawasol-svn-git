@@ -74,6 +74,7 @@
                                 <div layout="row" ng-if="!ctrl.subSearchSelected.length" flex layout-align="start center">
                                     <div flex>{{lang.sites_search_results}}</div>
                                     <div ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence" flex>
+                                        <!--sub site simple search-->
                                         <md-autocomplete
                                                 flex
                                                 md-autoselect
@@ -105,6 +106,7 @@
                                     <div>{{ctrl.subSearchSelected.length}} {{lang.items_selected}}</div>
                                     <span flex></span>
                                     <div ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence" flex>
+                                        <!--sub site simple search-->
                                         <md-autocomplete
                                                 flex
                                                 md-autoselect
