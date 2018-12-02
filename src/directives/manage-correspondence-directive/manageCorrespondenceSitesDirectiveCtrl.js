@@ -52,8 +52,12 @@ module.exports = function (app) {
         self.selectedType = null;
         // model for search on main correspondence sites
         self.mainSearch = '';
+        // model for search on sub correspondence sites
+        self.simpleSubSearch = '';
         // selected mainCorrespondence sites
         self.selectedMain = null;
+        // selected subCorrespondence sites
+        self.selectedSimpleSub = null;
         // model for search on sub correspondence sites
         self.subSearch = '';
         // sub Search result
@@ -501,6 +505,12 @@ module.exports = function (app) {
             }).then(function (result) {
                 self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                 self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+                // bind sub site search
+                if (self.isSimpleCorrespondenceSiteSearchType) {
+                    self.simpleSubSearch = '';
+                    self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
+                    self.onSimpleSubSearch(self.simpleSubSearch);
+                }
             });
         };
 
@@ -531,6 +541,24 @@ module.exports = function (app) {
             }
             return pendingSearch;
         };
+
+        /**
+         * @description drop down values for sub site search
+         * @param simpleSubSearch
+         * @returns {Array}
+         */
+        self.onSimpleSubSearch = function (simpleSubSearch) {
+            var simpleSubSiteSearchResult = _.filter(self.simpleSubSiteSearchCopy, function (simpleSearchSite) {
+                return simpleSearchSite.getTranslatedName().toLowerCase().indexOf(simpleSubSearch.toLowerCase()) !== -1;
+            });
+
+            /*if (!simpleSubSiteSearchResult.length)
+                self.subSearchResult = [];*/
+
+            return simpleSubSiteSearchResult;
+        };
+
+
         /**
          * @description set selected type when not selected after select main site.
          * @param main
@@ -539,6 +567,17 @@ module.exports = function (app) {
             if (main && !self.selectedType)
                 self.selectedType = _mapTypes(_getTypeByLookupKey(main.correspondenceSiteTypeId));
         };
+
+        self.onSimpleSubChange = function (subSite) {
+            if (subSite) {
+                self.subSearchResult = _.filter(self.subSearchResultCopy, function (resultCopy) {
+                    return resultCopy.subSiteId === subSite.subSiteId;
+                });
+            }
+            else
+                self.subSearchResult = self.subSearchResultCopy;
+        };
+
         /**
          * check if need replay
          * @return {boolean}

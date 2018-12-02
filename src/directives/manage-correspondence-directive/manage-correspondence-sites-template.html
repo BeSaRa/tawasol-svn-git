@@ -71,8 +71,25 @@
                                     ng-class="{'selected':ctrl.subSearchSelected.length}">
                             <div class="md-toolbar-tools">
                                 <!-- Close search results -->
-                                <div layout="row" ng-if="!ctrl.subSearchSelected.length" flex>
+                                <div layout="row" ng-if="!ctrl.subSearchSelected.length" flex layout-align="start center">
                                     <div flex>{{lang.sites_search_results}}</div>
+                                    <div ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence" flex>
+                                        <md-autocomplete
+                                                flex
+                                                md-autoselect
+                                                md-no-cache="true"
+                                                md-clear-button="true"
+                                                md-select-on-match="true"
+                                                md-selected-item="ctrl.selectedSimpleSub"
+                                                md-search-text="ctrl.simpleSubSearch"
+                                                md-selected-item-change="ctrl.onSimpleSubChange(item)"
+                                                md-items="item in ctrl.onSimpleSubSearch(ctrl.simpleSubSearch)"
+                                                md-item-text="item.getTranslatedName()"
+                                                md-min-length="0"
+                                                placeholder="{{lang.sites_sub_site}}">
+                                            <span>{{item.getTranslatedName()}}</span>
+                                        </md-autocomplete>
+                                    </div>
                                     <div>
                                         <md-button tooltip="{{lang.sites_hide_search}}"
                                                    class="md-icon-button close-search-button"
@@ -87,6 +104,21 @@
                                      layout-align="start center">
                                     <div>{{ctrl.subSearchSelected.length}} {{lang.items_selected}}</div>
                                     <span flex></span>
+                                    <div ng-if="ctrl.isSimpleCorrespondenceSiteSearchType && !ctrl.disableCorrespondence" flex>
+                                        <md-autocomplete
+                                                flex
+                                                md-autoselect
+                                                md-no-cache="true"
+                                                md-clear-button="true"
+                                                md-select-on-match="true"
+                                                md-selected-item="ctrl.selectedSimpleSub"
+                                                md-search-text="ctrl.simpleSubSearch"
+                                                md-selected-item-change="ctrl.onSimpleSubChange(item)"
+                                                md-items="item in ctrl.onSimpleSubSearch(ctrl.simpleSubSearch)"
+                                                md-item-text="item.getTranslatedName()"
+                                                md-min-length="0"
+                                                placeholder="{{lang.sites_sub_site}}">
+                                    </div>
                                     <div layout="row">
                                         <div>
                                             <md-menu-bar class="follow-up-menu-bar">
