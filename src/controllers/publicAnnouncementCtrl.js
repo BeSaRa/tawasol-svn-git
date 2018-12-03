@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                        publicAnnouncements,
                                                        $q,
                                                        $filter,
+                                                       moment,
                                                        langService,
                                                        toast,
                                                        contextHelpService,
@@ -159,6 +160,20 @@ module.exports = function (app) {
                     toast.success(langService.get('selected_status_updated'));
                 });
             });
+        };
+
+
+        /**
+         * @description to disable status switch if end date < current date
+         * @param publicAnnouncement
+         * @returns {boolean}
+         */
+        self.disableStatus = function (publicAnnouncement) {
+            var today = new Date();
+            if (publicAnnouncement.endDate)
+                return moment(publicAnnouncement.endDate, "YYYY-MM-DD").valueOf() < moment(new Date(today.getFullYear(), today.getMonth(), today.getDate()), "YYYY-MM-DD").valueOf();
+            else
+                return false;
         };
 
         self.openAnnouncementMessageBodyDialog = function (publicAnnouncement, $event) {

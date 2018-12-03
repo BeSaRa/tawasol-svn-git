@@ -23,6 +23,14 @@ module.exports = function (app) {
         self.organizations = organizations;
         self.organizationsHasRegistry = organizationsHasRegistry;
 
+        var today = new Date();
+        self.currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        self.alwaysActive = false;
+        if (self.editMode) {
+            self.alwaysActive = !(self.model.startDate && self.model.endDate);
+            self.isStatusDisabled = moment(self.model.endDate, "YYYY-MM-DD").valueOf() < moment(self.currentDate, "YYYY-MM-DD").valueOf();
+        }
+
         function _checkCurrentOu(model) {
             var ouId = employeeService.getEmployee().organization.ouid;
             return _.some(model.subscribers, function (item) {
@@ -70,8 +78,7 @@ module.exports = function (app) {
                     return result;
                 })
                 .notifyFailure(function (step, result) {
-                    var currentDate = self.currentDate.getFullYear() + "-" + (self.currentDate.getMonth() + 1) + "-" + self.currentDate.getDate();
-                    toast.error(langService.get('max_current_date').replace(':today', currentDate));
+                    toast.error(langService.get('max_current_date').change({today: generator.convertDateToString(self.currentDate)}));
                 })
                 .validate()
                 .then(function () {
@@ -80,7 +87,7 @@ module.exports = function (app) {
                         self.privateAnnouncement.endDate = null;
                     }
                     privateAnnouncementService.addPrivateAnnouncement(self.privateAnnouncement).then(function () {
-                        if(_checkCurrentOu(self.privateAnnouncement)){
+                        if (_checkCurrentOu(self.privateAnnouncement)) {
                             privateAnnouncementService.getPrivateAnnouncementByOUID();
                         }
                         toast.success(langService.get('add_success').change({name: self.privateAnnouncement.getNames()}));
@@ -117,8 +124,7 @@ module.exports = function (app) {
                     return result;
                 })
                 .notifyFailure(function (step, result) {
-                    var currentDate = self.currentDate.getFullYear() + "-" + (self.currentDate.getMonth() + 1) + "-" + self.currentDate.getDate();
-                    toast.error(langService.get('max_current_date').replace(':today', currentDate));
+                    toast.error(langService.get('max_current_date').change({today: generator.convertDateToString(self.currentDate)}));
                 })
                 .validate()
                 .then(function () {
@@ -128,11 +134,11 @@ module.exports = function (app) {
                     }
                     privateAnnouncementService.updatePrivateAnnouncement(self.privateAnnouncement).then(function () {
                         toast.success(langService.get('edit_success').change({name: self.privateAnnouncement.getNames()}));
-                        if(hasCurrentOu && !_checkCurrentOu(self.privateAnnouncement)){
+                        if (hasCurrentOu && !_checkCurrentOu(self.privateAnnouncement)) {
                             privateAnnouncementService.getPrivateAnnouncementByOUID();
                         }
 
-                        if(!hasCurrentOu && _checkCurrentOu(self.privateAnnouncement)){
+                        if (!hasCurrentOu && _checkCurrentOu(self.privateAnnouncement)) {
                             privateAnnouncementService.getPrivateAnnouncementByOUID();
                         }
                         dialog.hide();
@@ -144,12 +150,12 @@ module.exports = function (app) {
         };
 
         /**
-         * @description check if start date greeter or equal than today
+         * @description check if start date greater or equal than today
          * @param announcement
          * @returns {boolean}
          */
         self.checkStartDate = function (announcement) {
-            return moment(announcement.startDate, "YYYY-MM-DD").valueOf() >= moment(new Date(today.getFullYear(), today.getMonth(), today.getDate()), "YYYY-MM-DD").valueOf();
+            return moment(announcement.startDate, "YYYY-MM-DD").valueOf() >= moment(self.currentDate, "YYYY-MM-DD").valueOf();
         };
 
         /**
@@ -159,83 +165,8 @@ module.exports = function (app) {
             dialog.cancel();
         };
 
-        /*self.privateAnnouncement.startDate = new Date();
-        self.currentDate = new Date();*/
-
         self.subOU = false;
         self.includedOrganization = null;
-
-        self.alwaysActive = false;
-        var today = new Date();
-        self.currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-        if (self.editMode) {
-            self.alwaysActive = true;
-            if (self.model.startDate && self.model.endDate) {
-                self.alwaysActive = false;
-            }
-
-        //    var today = new Date();
-            self.isStatusDisabled = moment(self.model.endDate, "YYYY-MM-DD").valueOf() < moment(new Date(today.getFullYear(), today.getMonth(), today.getDate()), "YYYY-MM-DD").valueOf();
-
-            //self.currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-            var currentDate = self.currentDate.getFullYear() + "-" + (self.currentDate.getMonth() + 1) + "-" + self.currentDate.getDate();
-
-            if (self.model.startDate && typeof self.model.startDate !== "string") {
-                self.model.startDate = moment(self.model.startDate).format('YYYY-MM-DD');
-            }
-
-            var IsStartDateGreaterThanCurrentDate = (self.model.startDate ? moment(self.model.startDate, "YYYY-MM-DD").valueOf() : null) > (moment(currentDate, "YYYY-MM-DD").valueOf());
-            if (IsStartDateGreaterThanCurrentDate) {
-                self.currentDate = new Date(self.model.startDate);
-            }
-        }
-
-        //on change of start date if date is null or start date is greater than end date, then end date will become null//
-        /*self.onStartDateChange = function () {
-            self.privateAnnouncement.startDate = self.startDate;
-
-            var today = new Date();
-            self.currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-            if (self.privateAnnouncement.startDate && typeof self.privateAnnouncement.startDate !== "string") {
-                self.privateAnnouncement.startDate = moment(self.privateAnnouncement.startDate).format('YYYY-MM-DD');
-            }
-
-            /!*var currentDate = self.currentDate.getFullYear() + "-" + (self.currentDate.getMonth() + 1) + "-" + self.currentDate.getDate();
-             var IsStartDateGreaterThanCurrentDate = (self.privateAnnouncement.startDate ? moment(self.privateAnnouncement.startDate, "YYYY-MM-DD").valueOf() : null) > (moment(currentDate, "YYYY-MM-DD").valueOf());
-             if (IsStartDateGreaterThanCurrentDate) {
-             self.currentDate = new Date(self.privateAnnouncement.startDate);
-             }
-             *!/
-            if (self.privateAnnouncement.startDateGreaterThanCurrentDate()) {
-                self.currentDate = new Date(self.privateAnnouncement.startDate);
-            }
-
-            /!*var IsStartDateGreater = self.compareDate(self.privateAnnouncement, "startDate", "endDate");
-             if (!self.privateAnnouncement.startDate || (!IsStartDateGreater && self.privateAnnouncement.startDateGreaterThanCurrentDate())) {
-             self.privateAnnouncement.endDate = null;
-             self.endDate = null;
-             }*!/
-
-            if (!self.privateAnnouncement.startDate || (!self.privateAnnouncement.endDateGreaterThanStartDate() && self.privateAnnouncement.startDateGreaterThanCurrentDate())) {
-                self.privateAnnouncement.endDate = null;
-                self.endDate = null;
-            }
-
-        };*/
-
-        self.onEndDateChange = function () {
-            if (self.editMode) {
-                self.isStatusDisabled = false;
-                if (self.privateAnnouncement.endDate) {
-                    var today = new Date();
-                    self.isStatusDisabled = moment(self.privateAnnouncement.endDate, "YYYY-MM-DD").valueOf() < moment(new Date(today.getFullYear(), today.getMonth(), today.getDate()), "YYYY-MM-DD").valueOf();
-                    if (self.isStatusDisabled)
-                        self.privateAnnouncement.status = false;
-                }
-            }
-
-        };
 
         //Include organization in grid on click of Add button after selecting organization from select dropdown
         self.includeSelectedOrganization = function () {
@@ -329,12 +260,12 @@ module.exports = function (app) {
                 .controllerMethod
                 .privateAnnouncementExcludeOrganization(getSubOrgUnits, selectedOrganizationToExclude, $event)
                 .then(function (result) {
-                    var isSubscriberExist , indexOfSubOrgUnit;
+                    var isSubscriberExist, indexOfSubOrgUnit;
                     //result has all the selected records from excluded org units grid
                     for (var index = 0; index < result.length; index++) {
 
                         //check if excluded record already exist in main list which will be sent to API (self.privateAnnouncement.subscribers)
-                         isSubscriberExist = self.privateAnnouncement.subscribers.filter(function (subscriber) {
+                        isSubscriberExist = self.privateAnnouncement.subscribers.filter(function (subscriber) {
                             return result[index].id === subscriber.ouId;
                         })[0];
 
@@ -370,7 +301,7 @@ module.exports = function (app) {
 
                     //loop all the child org units for parent org unit to check if record do not exist in new selected Excluded org unit list (result) then remove from main list
                     for (var j = 0; j < getSubOrgUnits.length; j++) {
-                         isSubscriberExist = self.privateAnnouncement.subscribers.filter(function (subscriber) {
+                        isSubscriberExist = self.privateAnnouncement.subscribers.filter(function (subscriber) {
                             return (getSubOrgUnits[j].id === subscriber.ouId) && (subscriber.announcementType === 1);
                         })[0];
 
@@ -380,7 +311,7 @@ module.exports = function (app) {
                             })[0];
 
                             if (!isSubscriberExistInSelectedOrgUnits) {
-                                 indexOfSubOrgUnit = _.findIndex(self.privateAnnouncement.subscribers, function (x) {
+                                indexOfSubOrgUnit = _.findIndex(self.privateAnnouncement.subscribers, function (x) {
                                     return x.ouId === isSubscriberExist.ouId;
                                 });
                                 self.privateAnnouncement.subscribers.splice(indexOfSubOrgUnit, 1);
@@ -392,14 +323,13 @@ module.exports = function (app) {
         };
 
         /**
-         * function to disable status switch if date < current date
+         * @description to disable status switch if end date < current date
          * @param privateAnnouncement
          * @returns {boolean}
          */
         self.disableStatus = function (privateAnnouncement) {
-            var today = new Date();
             if (privateAnnouncement.endDate)
-                return moment(privateAnnouncement.endDate, "YYYY-MM-DD").valueOf() < moment(new Date(today.getFullYear(), today.getMonth(), today.getDate()), "YYYY-MM-DD").valueOf();
+                return moment(privateAnnouncement.endDate, "YYYY-MM-DD").valueOf() < moment(self.currentDate, "YYYY-MM-DD").valueOf();
             else
                 return false;
         };
@@ -411,23 +341,5 @@ module.exports = function (app) {
 
             }
         };
-
-        /* /!**
-         * common function to compare start date and end date, if date1 is greater than date2 then it will return true else false
-         * @param model
-         * @param date1
-         * @param date2
-         * @returns {boolean}
-         *!/
-         self.compareDate = function (model, date1, date2) {
-         var startDate = model[date1] ? new moment(model[date1]) : null;
-         var endDate = model[date2] ? new moment(model[date2]) : null;
-
-         if (!startDate || !endDate)
-         return false;
-
-         return moment(startDate, "YYYY-MM-DD").valueOf() <= moment(endDate, "YYYY-MM-DD").valueOf();
-         };
-         */
     });
 };

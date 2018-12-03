@@ -200,7 +200,7 @@ module.exports = function (app) {
         };
 
         /**
-         * function to disable status switch if date < current date
+         * @description to disable status switch if end date < current date
          * @param privateAnnouncement
          * @returns {boolean}
          */

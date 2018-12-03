@@ -71,7 +71,8 @@
                                         <td md-cell>
                                             <md-switch aria-label="{{lang.status}}" ng-model="publicAnnouncement.status"
                                                        title="{{publicAnnouncement.getTranslatedStatus()}}"
-                                                       ng-change="ctrl.changeStatusPublicAnnouncement(publicAnnouncement)"></md-switch>
+                                                       ng-change="ctrl.changeStatusPublicAnnouncement(publicAnnouncement)"
+                                                       ng-disabled="ctrl.disableStatus(publicAnnouncement)"></md-switch>
                                         </td>
 
                                         <td md-cell>

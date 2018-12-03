@@ -73,7 +73,6 @@
                                            ng-model="ctrl.publicAnnouncement.startDate"
                                            md-max-date="ctrl.publicAnnouncement.endDate"
                                            name="startDate" ng-disabled="ctrl.alwaysActive">
-                                <!--ng-change="ctrl.onStartDateChange()"-->
                             </md-datepicker>
                             <div ng-messages="publicAnnouncementForm.startDate.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>
@@ -85,7 +84,6 @@
                                            md-min-date="ctrl.publicAnnouncement.startDate"
                                            ng-model="ctrl.publicAnnouncement.endDate" name="endDate" id="endDate"
                                            ng-disabled="ctrl.alwaysActive || !ctrl.publicAnnouncement.startDate"
-                                           ng-change="ctrl.onEndDateChange()"
                             ></md-datepicker>
                             <div ng-messages="publicAnnouncementForm.endDate.$error">
                                 <div ng-message="required">{{lang.field_required}}</div>

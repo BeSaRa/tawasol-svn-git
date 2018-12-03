@@ -58,7 +58,6 @@ module.exports = function (app) {
          * @description save reference plan Item
          */
         self.saveReferencePlanItem = function () {
-            debugger;
             self.referencePlanItem.retrieveItemComponent();
             return validationService
                 .createValidation('CHECK_REFERENCE_PLAN_ITEM')

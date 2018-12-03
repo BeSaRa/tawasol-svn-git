@@ -1,6 +1,6 @@
 module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
-                      moment) {
+                      generator) {
         'ngInject';
 
         var modelName = 'PrivateAnnouncement';
@@ -10,48 +10,17 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            getUnixTimeStamp(model, ["startDate", "endDate"]);
+            model.startDate = generator.getTimeStampFromDate(model.startDate);
+            model.endDate = generator.getTimeStampFromDate(model.endDate);
             return model;
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            getDateFromUnixTimeStamp(model, ["startDate", "endDate"]);
+            if (model.startDate)
+                model.startDate = generator.getDateObjectFromTimeStamp(model.startDate, true);
+            if (model.endDate)
+                model.endDate = generator.getDateObjectFromTimeStamp(model.endDate, true);
             return model;
         });
-
-        /**
-         * convert Date to Unix Timestamp
-         * @param model
-         * @param modelProperties
-         * @returns {*}
-         */
-        var getUnixTimeStamp = function (model, modelProperties) {
-            for (var i = 0; i < modelProperties.length; i++) {
-                if (typeof model[modelProperties[i]] !== "string" && typeof model[modelProperties[i]] !== "number" && model[modelProperties[i]]) {
-                    var getDate = model[modelProperties[i]].getDate();
-                    var getMonth = model[modelProperties[i]].getMonth() + 1;
-                    var getFullYear = model[modelProperties[i]].getFullYear();
-                    model[modelProperties[i]] = getFullYear + "-" + getMonth + "-" + getDate;
-                }
-                if (typeof model[modelProperties[i]] === "string" || typeof model[modelProperties[i]] === "object") {
-                    model[modelProperties[i]] = model[modelProperties[i]] ? moment(model[modelProperties[i]], "YYYY-MM-DD").valueOf() : null;
-                }
-            }
-            return model;
-        };
-
-        /**
-         * convert unix timestamp to Original Date Format (YYYY-MM-DD)
-         * @param model
-         * @param modelProperties
-         * @returns {*}
-         */
-        var getDateFromUnixTimeStamp = function (model, modelProperties) {
-            for (var i = 0; i < modelProperties.length; i++) {
-                model[modelProperties[i]] = model[modelProperties[i]] ? moment(model[modelProperties[i]]).format('YYYY-MM-DD') : null;
-            }
-            return model;
-        };
-
     })
 };
