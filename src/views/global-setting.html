@@ -575,7 +575,7 @@
                                     <label>{{$parent.lang.choose_escalation_process}}</label>
                                     <md-select required name="escalationProcess"
                                                ng-model="ctrl.globalSetting.escalationProcess">
-                                        <md-option
+                                        <md-option tooltip="{{escalationProcess.getTranslatedName(true)}}"
                                                 ng-repeat="escalationProcess in ctrl.escalationProcesses track by $index"
                                                 ng-value="escalationProcess.lookupKey">
                                             {{escalationProcess.getTranslatedName()}}
