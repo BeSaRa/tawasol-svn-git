@@ -40,7 +40,6 @@ module.exports = function (app) {
          * @return {Array}
          */
         self.themePropertiesLength = function (model) {
-
             var required = model.getRequiredFields(), result = [];
             _.map(required, function (property) {
                 if (property === 'properties') {
@@ -49,9 +48,11 @@ module.exports = function (app) {
                         if (model.themeKeys[i].parent)
                             count = count + 1;
                     }
-                    if (count < 9) {
+                    /*if (count < 9) {
                         result.push(property);
-                    }
+                    }*/
+                    if (count < model.themeKeys.length)
+                        result.push(property);
                 }
             });
             return result;

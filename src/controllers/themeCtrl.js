@@ -127,7 +127,7 @@ module.exports = function (app) {
                 .themeDelete(theme, $event)
                 .then(function (result) {
                     self.reloadThemes(self.grid.page).then(function () {
-                        toast.success(langService.get('edit_success').change({name: result.getNames()}));
+                        toast.success(langService.get('delete_specific_success').change({name: theme.getNames()}));
                     });
                 })
         };
@@ -174,13 +174,17 @@ module.exports = function (app) {
         /**
          * @description copy theme to add
          * @param theme/event
+         * @param $event
          */
         self.copyThemeToAdd = function (theme, $event) {
             themeService
                 .controllerMethod
                 .themeCopyToAdd(theme, $event)
                 .then(function () {
-                    self.reloadThemes(self.grid.page);
+                    self.reloadThemes(self.grid.page)
+                        .then(function () {
+                            toast.success(langService.get('copy_theme_success'));
+                        });
                 })
         };
 
