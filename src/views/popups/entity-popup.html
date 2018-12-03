@@ -224,7 +224,7 @@
                                         </md-input-container>
                                         <md-input-container flex>
                                             <label for="cmPassword">{{lang.filenet_content_manager_password}}</label>
-                                            <input type="cmPassword" name="cmPassword" id="cmPassword"
+                                            <input type="password" name="cmPassword" id="cmPassword"
                                                    no-space-directive
                                                    minlength="2" ng-model="ctrl.entity.cmPassword" maxlength="50"
                                                    ng-required="ctrl.entity.cmUserName && !ctrl.entity.id"
@@ -364,7 +364,7 @@
                                     <div layout="row">
                                         <md-input-container flex>
                                             <label for="smtpPassword">{{lang.password}}</label>
-                                            <input type="smtpPassword" name="smtpPassword" id="smtpPassword"
+                                            <input type="password" name="smtpPassword" id="smtpPassword"
                                                    no-space-directive
                                                    minlength="2" ng-model="ctrl.entity.smtpPassword" maxlength="50"
                                                    ng-required="ctrl.entity.smtpServerAddress && !ctrl.entity.id"
