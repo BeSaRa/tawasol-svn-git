@@ -126,9 +126,7 @@ module.exports = function (app) {
                 .controllerMethod
                 .themeDelete(theme, $event)
                 .then(function (result) {
-                    self.reloadThemes(self.grid.page).then(function () {
-                        toast.success(langService.get('delete_specific_success').change({name: theme.getNames()}));
-                    });
+                    self.reloadThemes(self.grid.page);
                 })
         };
 
