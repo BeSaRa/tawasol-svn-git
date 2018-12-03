@@ -267,7 +267,7 @@ module.exports = function (app) {
                         }
                     })
                     .then(function (workItems) {
-                        self.terminateBulkReadyToExport(workItems)
+                        return self.terminateBulkReadyToExport(workItems)
                             .then(function (result) {
                                 var response = false;
                                 if (result.length === workItems.length) {
@@ -284,7 +284,6 @@ module.exports = function (app) {
                                 }
                                 return response;
                             });
-
                     });
 
 

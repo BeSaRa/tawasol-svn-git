@@ -205,7 +205,7 @@ module.exports = function (app) {
                         }
                     })
                     .then(function (workItems) {
-                        self.terminateBulkUserInboxes(workItems)
+                       return self.terminateBulkUserInboxes(workItems)
                             .then(function (result) {
                                 var response = false;
                                 if (result.length === workItems.length) {

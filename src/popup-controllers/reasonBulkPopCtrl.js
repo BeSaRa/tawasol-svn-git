@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('reasonBulkPopCtrl', function (comments, dialog, workItems, userInboxService) {
+    app.controller('reasonBulkPopCtrl', function (comments, dialog, workItems, _, userInboxService) {
         'ngInject';
         var self = this;
         self.controllerName = 'reasonBulkPopCtrl';
