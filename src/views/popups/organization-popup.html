@@ -1095,11 +1095,6 @@
                                                                     <span>{{lang.label_document_type}}</span>
                                                                 </th>
                                                                 <th ng-if="!ctrl.selectedDocumentTemplates.length"
-                                                                    md-column
-                                                                    md-order-by="templateType">
-                                                                    <span>{{lang.template_type}}</span>
-                                                                </th>
-                                                                <th ng-if="!ctrl.selectedDocumentTemplates.length"
                                                                     md-column>
                                                                     <span>{{lang.actions}}</span>
                                                                 </th>
@@ -1112,9 +1107,6 @@
                                                                 <td md-cell>{{documentTemplate.documentTitle}}</td>
                                                                 <td md-cell>
                                                                     {{ctrl.getDocumentTypeName_OU(documentTemplate.docType)}}
-                                                                </td>
-                                                                <td md-cell>
-                                                                    {{ctrl.getTemplateTypeName_OU(documentTemplate.templateType)}}
                                                                 </td>
                                                                 <td md-cell>
                                                                     <div flex layout="row" layout-align="start center">

@@ -995,6 +995,8 @@ module.exports = function (app) {
             });
             if (matchedDocumentType.length)
                 return matchedDocumentType[0].text;
+            else
+                return _.find(self.documentTypes, {'value': -1}).text; // if null return Both
         };
 
         self.getTemplateTypeName_OU = function (templateId) {
