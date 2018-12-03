@@ -186,6 +186,18 @@ module.exports = function (app) {
         };
 
         self.removeBulkOUDistributionLists = function () {
+            if (self.selectedOUDistributionLists.length === self.distributionList.relatedOus.length) {
+                dialog.confirmMessage(langService.get('related_organization_confirm'))
+                    .then(function () {
+                        _removeBulkOUDistribution();
+                        self.distributionList.global = true;
+                        self.distributionList.update();
+                    });
+            }
+            else _removeBulkOUDistribution();
+        };
+
+        var _removeBulkOUDistribution = function () {
             self.distributionList
                 .deleteBulkFromOUDistributionLists(self.selectedOUDistributionLists)
                 .then(function () {
@@ -195,7 +207,22 @@ module.exports = function (app) {
         };
 
         self.deleteOUDistributionListFromCtrl = function (ouDistributionList) {
-            return ouDistributionListService.deleteOUDistributionList(ouDistributionList).then(function () {
+            if (self.distributionList.relatedOus.length === 1) {
+                return dialog.confirmMessage(langService.get('related_organization_confirm'))
+                    .then(function () {
+                        return ouDistributionListService.deleteOUDistributionList(ouDistributionList).then(function () {
+                            _deleteOUDistributionList(ouDistributionList);
+                            self.distributionList.global = true;
+                            self.distributionList.update();
+                        });
+                    });
+            }
+            else
+                return _deleteOUDistributionList(ouDistributionList);
+        };
+
+        var _deleteOUDistributionList = function (ouDistributionList) {
+            ouDistributionListService.deleteOUDistributionList(ouDistributionList).then(function () {
                 toast.success(langService.get('delete_success'));
                 var index = self.distributionList.relatedOus.indexOf(ouDistributionList);
                 self.distributionList.relatedOus.splice(index, 1);
