@@ -148,7 +148,14 @@ module.exports = function (app) {
                     return (info.docStatus >= 24 && !info.isPaper);
                 }
             })
-            .getPageNameOverride('followupEmployeeInbox', 'draftOutgoing')
+            .getPageNameOverride('followupEmployeeInbox', 'draftOutgoing', {
+                disableProperties: function () {
+                    return true;
+                },
+                disableSites: function () {
+                    return true;
+                }
+            })
             .getPageNameOverride('favoriteDocument', 'draftOutgoing', {
                 disableProperties: function (model) {
                     var info = model.getInfo();

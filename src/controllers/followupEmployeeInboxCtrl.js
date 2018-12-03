@@ -477,7 +477,7 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-            followupEmployeeInbox.viewInboxWorkItem(self.gridActions, checkIfEditPropertiesAllowed(followupEmployeeInbox, true), true)
+            followupEmployeeInbox.viewInboxWorkItem(self.gridActions, true, true)
                 .then(function () {
                     // if (followupEmployeeInbox.getInfo().documentClass === 'incoming' && !followupEmployeeInbox.generalStepElm.isOpen) {
                     //     self.markAsReadUnread(followupEmployeeInbox, true)
