@@ -1491,7 +1491,6 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_central_archive_ready_to_export'
             })
-
             // temporary route for reports
             .state('app.reports', {
                 url: '/reports/:reportName',
@@ -1567,7 +1566,7 @@ module.exports = function (app) {
                     organizations: function (organizationService) {
                         'ngInject';
                         return organizationService.getOrganizations();
-                    },
+                    }
                 }
             })
             .state('app.g2g.incoming', {

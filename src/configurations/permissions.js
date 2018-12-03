@@ -129,5 +129,5 @@ module.exports = function (app) {
             .addMenuPermission('menu_item_reports_processed_documents','PROCESSED_DOCUMENT_REPORT');
 
 
-    })
+    });
 };

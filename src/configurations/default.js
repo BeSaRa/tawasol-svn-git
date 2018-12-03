@@ -12,7 +12,7 @@ module.exports = function (app) {
         var urlService = urlServiceProvider.$get();
         localStorageServiceProvider.setPrefix('CMS_');
         // if you do not need to flip login background set it to false
-        loginPageProvider.flipLoginBackground(true);
+        loginPageProvider.flipLoginBackground(false);
         // add default CMSInterceptor
         $httpProvider.interceptors.push('CMSInterceptor');
         // set last login organization key
@@ -63,8 +63,7 @@ module.exports = function (app) {
             // G2G
             .addPageName('g2gIncoming')
             .addPageName('g2gSentItem')
-            .addPageName('g2gReturned')
-        ;
+            .addPageName('g2gReturned');
 
     });
 };
