@@ -27,11 +27,11 @@ module.exports = function (app) {
         self.dropArea = $element.find('#drop-area');
         // valid files in array
         self.validFiles = [];
-        // all attachment types
-        self.attachmentTypes = attachmentTypeService.returnAttachmentTypes();
 
         var info = correspondence.getInfo();
         self.securityLevels = correspondenceService.getLookup(info.documentClass, 'securityLevels');
+        // all attachment types
+        self.attachmentTypes = attachmentTypeService.returnAttachmentTypes(info.documentClass);
         // the selected security level.
         //self.securityLevel = correspondence.securityLevel;
         self.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, correspondence.securityLevel);

@@ -25,13 +25,13 @@ module.exports = function (app) {
         self.allowScanner = true;
         self.allowUpload = true;
         self.attachment = null;
-        // all attachments types
-        self.attachmentTypes = attachmentTypeService.returnAttachmentTypes();
 
         // current document file
         self.document = null;
 
         $timeout(function () {
+            // all attachments types
+            self.attachmentTypes = attachmentTypeService.returnAttachmentTypes(self.document.getInfo().documentClass);
             // all security level
             self.securityLevel = correspondenceService.getLookup(self.document.getInfo().documentClass, 'securityLevels');
             self.attachmentUpdateActions = lookupService.returnLookups(lookupService.attachmentUpdateAction);
