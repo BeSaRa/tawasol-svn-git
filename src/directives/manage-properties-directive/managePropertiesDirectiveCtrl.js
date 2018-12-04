@@ -284,6 +284,14 @@ module.exports = function (app) {
         };
 
         /**
+         * @description check if document received from incoming department
+         * @returns {*|boolean}
+         */
+        self.checkG2gReceived = function(){
+            return (self.document.hasVsId() && $stateParams.action === 'receiveg2g');
+        };
+
+        /**
          * @description on registry change.
          * @param organizationId
          */
