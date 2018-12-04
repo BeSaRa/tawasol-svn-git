@@ -31,6 +31,7 @@
                                                 <span>{{ctrl.selectedCorrespondenceSiteTypes.length}} {{lang.items_selected}} </span>
                                                 <span flex></span>
                                                 <table-status-directive
+                                                        ng-if="ctrl.canDeleteBulk()"
                                                         when-close="ctrl.changeStatusBulkCorrespondenceSiteTypes"></table-status-directive>
                                                 <md-button class="md-icon-button"
                                                            ng-click="ctrl.removeBulkCorrespondenceSiteTypes()"
@@ -67,6 +68,7 @@
                                             <md-switch aria-label="{{lang.status}}"
                                                        ng-model="correspondenceSiteType.status"
                                                        ng-change="ctrl.changeStatusCorrespondenceSiteType(correspondenceSiteType)"
+                                                       ng-disabled="!correspondenceSiteType.canDelete()"
                                                        title="{{correspondenceSiteType.getTranslatedStatus()}}"></md-switch>
                                         </td>
                                         <!-- <td md-cell>{{correspondenceSiteType.lookupStrKey}}</td>-->
