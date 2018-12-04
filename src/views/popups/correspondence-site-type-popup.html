@@ -60,7 +60,8 @@
                     </div>
                     <div layout="row">
                         <div flex class="p20">
-                            <md-switch ng-model="ctrl.correspondenceSiteType.status">
+                            <md-switch ng-model="ctrl.correspondenceSiteType.status"
+                                        ng-disabled="ctrl.editMode && !ctrl.correspondenceSiteType.canDelete()">
                                 <label>{{lang.status}} : {{ctrl.correspondenceSiteType.getTranslatedStatus()}}</label>
                             </md-switch>
                         </div>
