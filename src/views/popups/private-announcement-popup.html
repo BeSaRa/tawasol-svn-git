@@ -139,6 +139,7 @@
                                             <md-option ng-model-options="{trackBy: '$value.id'}"
                                                        ng-repeat="organization in ctrl.organizationsHasRegistry track by $index"
                                                        ng-value="organization.id"
+                                                       ng-if="ctrl.isOuNotIncluded(organization)"
                                                        tooltip="{{organization.getTranslatedName(true)}}">
                                                 {{ organization.getTranslatedName() }}
                                             </md-option>

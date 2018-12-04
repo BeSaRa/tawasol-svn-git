@@ -341,5 +341,11 @@ module.exports = function (app) {
 
             }
         };
+
+        self.isOuNotIncluded = function (ou) {
+            return (_.findIndex(self.privateAnnouncement.subscribers, function (subscriber) {
+                return subscriber.ouId === ou.id;
+            }) < 0);
+        }
     });
 };
