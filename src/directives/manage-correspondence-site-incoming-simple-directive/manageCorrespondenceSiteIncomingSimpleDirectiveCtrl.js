@@ -342,6 +342,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.onSiteTypeChange = function ($event) {
+            self.selectedMainSite = null;
+            self.selectedItem = null;
+
             if (self.selectedSiteType.id) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: self.selectedSiteType ? self.selectedSiteType.lookupKey : null,
@@ -371,6 +374,7 @@ module.exports = function (app) {
             }).then(function (result) {
                 self.subSearchResultCopy = angular.copy(_.map(result, _mapSubSites));
                 self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
+                self.selectedItem = null;
             });
         };
 
@@ -624,6 +628,11 @@ module.exports = function (app) {
             if (value) {
                 self.subRecords = _concatCorrespondenceSites(true);
                 self.emptySubRecords = false;
+
+                self.selectedSiteType = null;
+                self.selectedMainSite = null;
+                self.selectedItem = null;
+                self.subSearchResult = [];
             }
         });
 
