@@ -43,7 +43,7 @@
                                        ng-model="ctrl.documentTemplate.docType">
                                 <md-option ng-value="docType.value"
                                            ng-repeat="docType in ctrl.documentTypes track by $index">
-                                    {{docType.text}}
+                                    {{lang[docType.langKey]}}
                                 </md-option>
                             </md-select>
                             <div ng-messages="documentTemplateForm.docType.$error">

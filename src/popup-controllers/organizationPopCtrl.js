@@ -31,6 +31,7 @@ module.exports = function (app) {
                                                     allPropertyConfigurations,
                                                     propertyConfigurationService,
                                                     $q,
+                                                    _,
                                                     $filter,
                                                     jobTitleService,
                                                     rankService,
@@ -978,33 +979,17 @@ module.exports = function (app) {
             ]
         };
 
-        self.documentTypes = [
-            {text: "Internal", value: 0},
-            {text: "External", value: 1},
-            {text: "Both", value: -1}
-        ];
+        self.documentTypes = documentTemplateService.documentTypes;
 
-        self.templateTypes = [
-            {text: "Type 1", value: 270},
-            {text: "Type 2", value: 271}
-        ];
+        self.templateTypes = documentTemplateService.templateTypes;
 
         self.getDocumentTypeName_OU = function (documentTypeId) {
-            var matchedDocumentType = _.filter(self.documentTypes, function (documentType) {
+            var matchedDocumentType = _.find(self.documentTypes, function (documentType) {
                 return (documentType.value === documentTypeId);
             });
-            if (matchedDocumentType.length)
-                return matchedDocumentType[0].text;
-            else
-                return _.find(self.documentTypes, {'value': -1}).text; // if null return Both
-        };
-
-        self.getTemplateTypeName_OU = function (templateId) {
-            var matchedTemplateType = _.filter(self.templateTypes, function (templateType) {
-                return (templateType.value === templateId);
-            });
-            if (matchedTemplateType.length)
-                return matchedTemplateType[0].text;
+            if (matchedDocumentType)
+                return langService.get(matchedDocumentType.langKey);
+            return '';
         };
 
         /**
@@ -1014,7 +999,7 @@ module.exports = function (app) {
         self.openAddDocumentTemplateDialog = function ($event) {
             documentTemplateService
                 .controllerMethod
-                .documentTemplateAdd(organization.id, null, self.documentTypes, self.templateTypes, $event)
+                .documentTemplateAdd(organization.id, $event)
                 .then(function (result) {
                     self.reloadDocumentTemplates(self.documentTemplateGrid.page)
                         .then(function () {
@@ -1031,7 +1016,7 @@ module.exports = function (app) {
         self.openEditDocumentTemplateDialog = function (documentTemplate, $event) {
             documentTemplateService
                 .controllerMethod
-                .documentTemplateEdit(documentTemplate, organization.id, null, self.documentTypes, self.templateTypes, $event)
+                .documentTemplateEdit(documentTemplate, $event)
                 .then(function (result) {
                     self.reloadDocumentTemplates(self.documentTemplateGrid.page)
                         .then(function () {
@@ -1130,13 +1115,13 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.allPropertyConfigurations[docClass.toLowerCase()] = result;
                     self.propertyConfigurations = result;
+                    defer.resolve(true);
                     var currentUserOrg = employeeService.getEmployee().userOrganization;
                     var loggedInOuId = currentUserOrg.hasOwnProperty('id') ? currentUserOrg.id : currentUserOrg;
                     if (self.organization.id === loggedInOuId) {
                         return lookupService.replacePropertyConfigurationsByDocumentClass(result, docClass.toLowerCase());
                     }
                     self.selectedPropertyConfigurations = [];
-                    defer.resolve(true);
                     if (pageNumber)
                         self.propertyConfigurationGrid.page = pageNumber;
                     self.getSortedDataPropertyConfiguration();

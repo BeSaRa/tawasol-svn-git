@@ -10,10 +10,8 @@ module.exports = function (app) {
                                                         dialog,
                                                         langService,
                                                         documentTemplate,
-                                                        organizations,
                                                         documentTypes,
                                                         templateTypes,
-                                                        selectedOrganization,
                                                         $timeout) {
         'ngInject';
         var self = this;
@@ -21,7 +19,6 @@ module.exports = function (app) {
         self.editMode = editMode;
         self.documentTemplate = angular.copy(documentTemplate);
         self.model = angular.copy(documentTemplate);
-        self.organizations = organizations;
         self.documentTypes = documentTypes;
         self.templateTypes = templateTypes;
 
@@ -42,16 +39,6 @@ module.exports = function (app) {
          * @description Contains the names of disabled fields
          */
         self.disabledFields = [];
-
-
-        /*self.changeGlobal = function () {
-            if (self.documentTemplate.global) {
-                self.documentTemplate.ou = null;
-            }
-            else {
-                self.documentTemplate.ou = selectedOrganization;
-            }
-        };*/
 
         self.docTemplateFile = null;
         self.allowedDocTemplateFormats = "application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document";

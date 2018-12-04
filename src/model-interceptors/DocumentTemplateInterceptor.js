@@ -16,6 +16,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
+            model.docType = model.docType === -1 ? null : model.docType;
             return model;
         });
 

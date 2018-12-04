@@ -14,6 +14,16 @@ module.exports = function (app) {
         self.serviceName = 'documentTemplateService';
 
         self.documentTemplates = [];
+        self.documentTypes = [
+            {langKey: 'outgoing', value: 0},
+            {langKey: 'internal', value: 2},
+            {langKey: 'both', value: null}
+        ];
+
+        self.templateTypes = [
+            {text: "Type 1", value: 270},
+            {text: "Type 2", value: 271}
+        ];
 
         /**
          * @description Load the document templates from server.
@@ -51,9 +61,20 @@ module.exports = function (app) {
         self.controllerMethod = {
             /**
              * @description Opens popup to add new document template
+             * @param selectedOrganization
              * @param $event
              */
-            documentTemplateAdd: function (selectedOrganization, organizations, documentTypes, templateTypes, $event) {
+            documentTemplateAdd: function (selectedOrganization, $event) {
+                var documentTemplate = new DocumentTemplate();
+                if (selectedOrganization > 0) {
+                    documentTemplate.ou = selectedOrganization;
+                    documentTemplate.isGlobal = false;
+                }
+                else {
+                    documentTemplate.ou = null;
+                    documentTemplate.isGlobal = true;
+                }
+
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -62,15 +83,10 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         locals: {
                             editMode: false,
-                            documentTemplate: new DocumentTemplate({
-                                ou: selectedOrganization,
-                                isGlobal: (selectedOrganization < 0)
-                            }),
+                            documentTemplate: documentTemplate,
                             documentTemplates: self.documentTemplates,
-                            organizations: organizations,
-                            documentTypes: documentTypes,
-                            templateTypes: templateTypes,
-                            selectedOrganization: selectedOrganization
+                            documentTypes: self.documentTypes,
+                            templateTypes: self.templateTypes
                         }
                     });
             },
@@ -79,7 +95,7 @@ module.exports = function (app) {
              * @param documentTemplate
              * @param $event
              */
-            documentTemplateEdit: function (documentTemplate, selectedOrganization, organizations, documentTypes, templateTypes, $event) {
+            documentTemplateEdit: function (documentTemplate, $event) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
@@ -90,10 +106,8 @@ module.exports = function (app) {
                             editMode: true,
                             documentTemplate: documentTemplate,
                             documentTemplates: self.documentTemplates,
-                            organizations: organizations,
-                            documentTypes: documentTypes,
-                            templateTypes: templateTypes,
-                            selectedOrganization: selectedOrganization
+                            documentTypes: self.documentTypes,
+                            templateTypes: self.templateTypes
                         }
                     });
             },

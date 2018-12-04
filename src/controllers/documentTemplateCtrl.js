@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                      documentTemplateService,
                                                      documentTemplates,
                                                      $q,
+                                                     _,
                                                      $filter,
                                                      langService,
                                                      toast,
@@ -67,16 +68,8 @@ module.exports = function (app) {
             'false': documentTemplateService.deactivateDocumentTemplate
         };
 
-        self.documentTypes = [
-            {text: "Outgoing", langKey: 'outgoing', value: 0},
-            {text: "Internal", langKey: 'internal', value: 2},
-            {text: "Both", langKey: 'both', value: null}
-        ];
-
-        self.templateTypes = [
-            {text: "Type 1", value: 270},
-            {text: "Type 2", value: 271}
-        ];
+        self.documentTypes = documentTemplateService.documentTypes;
+        self.templateTypes = documentTemplateService.templateTypes;
 
         self.getDocumentTypeName = function (documentTypeId) {
             return langService.get(_.find(self.documentTypes, function (documentType) {
@@ -84,23 +77,10 @@ module.exports = function (app) {
             }).langKey);
         };
 
-        self.getTemplateTypeName = function (templateId) {
-            var matchedTemplateType = _.filter(self.templateTypes, function (templateType) {
-                return (templateType.value === templateId);
-            });
-            if (matchedTemplateType.length)
-                return matchedTemplateType[0].text;
-        };
-
         /**
          * @description Gets the document templates for selected organization unit
          */
         self.getDocumentTemplates = function () {
-            // documentTemplateService
-            //     .getDocumentTemplatesByOU(self.selectedOrganization)
-            //     .then(function(result){
-            //        self.documentTemplates = result;
-            //     });
             self.reloadDocumentTemplates(self.grid.page);
         };
 
@@ -111,7 +91,7 @@ module.exports = function (app) {
         self.openAddDocumentTemplateDialog = function ($event) {
             documentTemplateService
                 .controllerMethod
-                .documentTemplateAdd(self.selectedOrganization, self.organizations, self.documentTypes, self.templateTypes, $event)
+                .documentTemplateAdd(self.selectedOrganization, $event)
                 .then(function (result) {
                     self.reloadDocumentTemplates(self.grid.page)
                         .then(function () {
@@ -128,7 +108,7 @@ module.exports = function (app) {
         self.openEditDocumentTemplateDialog = function (documentTemplate, $event) {
             documentTemplateService
                 .controllerMethod
-                .documentTemplateEdit(documentTemplate, self.selectedOrganization, self.organizations, self.documentTypes, self.templateTypes, $event)
+                .documentTemplateEdit(documentTemplate, $event)
                 .then(function (result) {
                     self.reloadDocumentTemplates(self.grid.page)
                         .then(function () {

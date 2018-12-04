@@ -23,32 +23,6 @@ module.exports = function (app) {
         self.rootOrganization = {};
         self.childrenOrganizations = {};
 
-        self.documentTypes = [
-            {text: "Internal", value: 0},
-            {text: "External", value: 1},
-            {text: "Both", value: -1}
-        ];
-
-        self.templateTypes = [
-            {text: "Type 1", value: 270},
-            {text: "Type 2", value: 271}
-        ];
-
-        self.getDocumentTypeName_OU = function (documentTypeId) {
-            var matchedDocumentType = _.filter(self.documentTypes, function (documentType) {
-                return (documentType.value === documentTypeId);
-            });
-            if (matchedDocumentType.length)
-                return matchedDocumentType[0].text;
-        };
-
-        self.getTemplateTypeName_OU = function (templateId) {
-            var matchedTemplateType = _.filter(self.templateTypes, function (templateType) {
-                return (templateType.value === templateId);
-            });
-            if (matchedTemplateType.length)
-                return matchedTemplateType[0].text;
-        };
         /**
          * @description load organization by id.
          * @param organizationId
