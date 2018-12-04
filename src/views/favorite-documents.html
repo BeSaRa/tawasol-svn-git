@@ -38,6 +38,10 @@
                                             <!-- Security Level, Document type Indicators -->
                                         </th>
                                         <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column
+                                            md-order-by="docFullSerial">
+                                            <span>{{lang.inbox_serial}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedFavoriteDocuments.length" md-column
                                             md-order-by="docSubject">
                                             <span>{{lang.document_subject}}</span>
                                         </th>
@@ -83,6 +87,7 @@
                                                                       indicator-type="priorityLevel"
                                                                       record-type="correspondence"></grid-indicator-directive>
                                         </td>
+                                        <td class="serial-td" md-cell>{{favoriteDocument.docFullSerial}}</td>
                                         <td md-cell class="td-data">
                                             <a href="" ng-if="favoriteDocument.hasContent()" class="view-doc"
                                                ng-click="ctrl.viewDocument(favoriteDocument, $event)">{{favoriteDocument.docSubject}}</a>
