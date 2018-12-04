@@ -112,7 +112,8 @@
                         </md-input-container>
                     </div>
                     <div layout="row">
-                        <md-switch flex ng-model="ctrl.propertyConfiguration.isMandatory">
+                        <md-switch flex ng-model="ctrl.propertyConfiguration.isMandatory"
+                                   ng-change="ctrl.onMandatoryChange($event)">
                             {{lang.is_mandatory}}
                         </md-switch>
                         <md-switch flex ng-model="ctrl.propertyConfiguration.isList">
@@ -121,7 +122,9 @@
                         <md-switch flex ng-model="ctrl.propertyConfiguration.isSequence">
                             {{lang.is_sequence}}
                         </md-switch>
-                        <md-switch flex ng-if="ctrl.propertyConfiguration.isMandatory == false" ng-model="ctrl.propertyConfiguration.status">
+                        <md-switch flex ng-model="ctrl.propertyConfiguration.status"
+                                   ng-if="!ctrl.propertyConfiguration.isMandatory"
+                                   ng-disabled="ctrl.propertyConfiguration.isMandatory">
                             {{lang.status}}
                         </md-switch>
                     </div>

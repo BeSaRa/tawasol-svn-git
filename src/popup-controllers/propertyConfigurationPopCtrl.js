@@ -78,6 +78,12 @@ module.exports = function (app) {
             }*/
         ];
 
+        self.onMandatoryChange = function($event){
+            if (self.propertyConfiguration.isMandatory) {
+                self.propertyConfiguration.status = true;
+            }
+        };
+
         /**
          * Add new Property Configuration
          */
