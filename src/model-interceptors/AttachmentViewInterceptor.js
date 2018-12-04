@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor) {
+    app.run(function (CMSModelInterceptor, lookupService) {
         'ngInject';
         var modelName = 'AttachmentView';
 
@@ -20,6 +20,10 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
+            if (typeof model.updateActionStatus === 'undefined' || model.updateActionStatus === null && model.updateActionStatus === '') {
+                // if no value, set FREE_TO_EDIT by default
+                model.updateActionStatus = lookupService.getLookupByLookupKey(lookupService.attachmentUpdateAction, 0);
+            }
             return model;
         });
 

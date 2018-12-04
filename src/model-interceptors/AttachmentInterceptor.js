@@ -33,7 +33,7 @@ module.exports = function (app) {
 
             formData.append('entity', JSON.stringify(model));
             formData.append('content', file || null);
-            if (model.vsId){
+            if (model.vsId) {
                 formData.append('withProtect', true);
             }
             return formData;
@@ -54,6 +54,10 @@ module.exports = function (app) {
             model.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             if (typeof model.updateActionStatus !== 'undefined' && model.updateActionStatus !== null && model.updateActionStatus !== '')
                 model.updateActionStatus = lookupService.getLookupByLookupKey(lookupService.attachmentUpdateAction, model.updateActionStatus);
+            else {
+                // if no value, set FREE_TO_EDIT by default
+                model.updateActionStatus = lookupService.getLookupByLookupKey(lookupService.attachmentUpdateAction, 0);
+            }
 
             return model;
         });
