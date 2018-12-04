@@ -543,7 +543,7 @@ module.exports = function (app) {
                     });
             };
             /**
-             * @description load attchemnt by vsId and documentClass.
+             * @description load attachment by vsId and documentClass.
              * @param attachmentVsId
              * @param documentClass
              * @return {*}

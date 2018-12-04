@@ -39,7 +39,10 @@ module.exports = function (app) {
         self.attachmentTitle = null;
 
         // the selected attachment type.
-        self.attachmentType = self.attachmentTypes[0];
+        var availableAttachmentTypes = _.filter(self.attachmentTypes, function (attachmentType) {
+            return attachmentType.status;
+        });
+        self.attachmentType = availableAttachmentTypes.length ? availableAttachmentTypes[0] : null;
         // all update action status
         self.attachmentUpdateActions = lookupService.returnLookups(lookupService.attachmentUpdateAction);
         // the selected updateActionStatus
@@ -124,6 +127,7 @@ module.exports = function (app) {
                     if (files.length > 1) {
                         toast.info(langService.get('only_one_file_accepted').change({filename: files[0].name}));
                     }
+                    self.validFiles = [];
                     if (attachmentService.validateBeforeUpload('attachmentUpload', files[0], true)) {
                         var attachment = self.attachment;
                         attachment.file = files[0];
@@ -320,6 +324,27 @@ module.exports = function (app) {
                             toast.success(langService.get('delete_success').change({name: attachment.documentTitle}));
                         });
                 });
+
+        };
+
+        /**
+         * @description Checks if attachment type will be available in drop down or not
+         * If edit mode for attachment, show the selected value and all other active attachment types only
+         * If add mode for attachment, show the active attachment types only
+         * @param type
+         * @returns {*}
+         */
+        self.checkAttachmentTypeIsAvailable = function (type) {
+            var attachmentType = angular.copy(self.attachment.attachmentType);
+            var typeCopy = angular.copy(type);
+            if (typeCopy.hasOwnProperty('lookupKey'))
+                typeCopy = typeCopy.lookupKey;
+            if (attachmentType && attachmentType.hasOwnProperty('lookupKey'))
+                attachmentType = attachmentType.lookupKey;
+
+            if (attachmentType)
+                return (attachmentType === typeCopy || type.status);
+            return type.status;
 
         }
     });

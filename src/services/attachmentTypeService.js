@@ -284,7 +284,7 @@ module.exports = function (app) {
 
         self.returnAttachmentTypes = function (documentClass) {
             return _.filter(self.attachmentTypes, function (attachmentType) {
-                return attachmentType.status && _.find(attachmentType.lookupStrKey, function (key) {
+                return _.find(attachmentType.lookupStrKey, function (key) {
                     return key.lookupStrKey.toLowerCase() === documentClass.toLowerCase();
                 });
             });

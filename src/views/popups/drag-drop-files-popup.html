@@ -45,7 +45,9 @@
                                    ng-required="true"
                                    ng-model-options="{trackBy:'$value.lookupKey'}"
                                    ng-model="ctrl.attachmentType">
-                            <md-option ng-value="type" ng-repeat="type in ctrl.attachmentTypes">
+                            <md-option ng-repeat="type in ctrl.attachmentTypes"
+                                       ng-value="type"
+                                       ng-if="type.status">
                                 {{type.getTranslatedName()}}
                             </md-option>
                         </md-select>
@@ -103,7 +105,10 @@
                                    ng-required="true"
                                    ng-model-options="{trackBy:'$value.lookupKey'}"
                                    ng-model="ctrl.attachment.attachmentType">
-                            <md-option ng-value="type" ng-repeat="type in ctrl.attachmentTypes">
+                            <md-option ng-repeat="type in ctrl.attachmentTypes"
+                                       ng-value="type"
+                                       ng-if="ctrl.checkAttachmentTypeIsAvailable(type)"
+                                       ng-disabled="!type.status">
                                 {{type.getTranslatedName()}}
                             </md-option>
                         </md-select>
@@ -202,7 +207,8 @@
                                                 {{attachment.attachmentType.getTranslatedName()}}
                                             </md-button>
                                             <md-menu-content>
-                                                <md-menu-item ng-repeat="type in ctrl.attachmentTypes track by $index">
+                                                <md-menu-item ng-repeat="type in ctrl.attachmentTypes track by $index"
+                                                              ng-if="type.status">
                                                     <md-button
                                                             ng-click="ctrl.changeValueOfFor('attachmentType',attachment , type)"
                                                             ng-class="{'menu-select':type.currentId(ctrl.attachmentType)}">
