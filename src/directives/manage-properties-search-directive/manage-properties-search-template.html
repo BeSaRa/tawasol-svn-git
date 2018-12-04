@@ -3,7 +3,8 @@
         <div layout="column" ng-if="ctrl.searchType === 'basic'">
             <div layout="row">
                 <!-- Paper/Electronic -->
-                <md-input-container flex ng-if="ctrl.document.docClassName.toLowerCase() !== 'incoming'">
+                <md-input-container flex
+                                    ng-if="ctrl.document.docClassName.toLowerCase() !== 'incoming' && ctrl.checkStatus('addMethod')">
                     <label for="addMethod">{{lang.document_format}}</label>
                     <md-select name="addMethod" id="addMethod"
                                ng-change="ctrl.onChangeAddMethod($event)"
@@ -19,7 +20,7 @@
                     </div>
                 </md-input-container>
                 <!-- Security Level -->
-                <md-input-container flex>
+                <md-input-container flex ng-if="ctrl.checkStatus('securityLevel')">
                     <label for="securityLevel">{{lang.security_level}}</label>
                     <md-select name="securityLevel"
                                id="securityLevel"
@@ -38,7 +39,7 @@
                     </div>
                 </md-input-container>
                 <!-- Priority Level -->
-                <md-input-container flex>
+                <md-input-container flex ng-if="ctrl.checkStatus('priorityLevel')">
                     <label for="priorityLevel">{{lang.outgoing_priority_level}}</label>
                     <md-select name="priorityLevel"
                                id="priorityLevel"
@@ -56,7 +57,8 @@
                     </div>
                 </md-input-container>
                 <!-- Document Number -->
-                <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "incoming" && ctrl.document.dummySearchDocClass.toLowerCase() !== "outgoingincoming"'>
+                <md-input-container flex
+                                    ng-if="ctrl.document.docClassName.toLowerCase() === 'incoming' && ctrl.checkStatus('refDocNumber') && ctrl.document.dummySearchDocClass.toLowerCase() !== 'outgoingincoming'">
                     <label for="refDocNumber">{{lang.document_number}}</label>
                     <input name="refDocNumber" id="refDocNumber"
                            ng-required="ctrl.checkMandatory('refDocNumber')"
@@ -66,7 +68,8 @@
                     </div>
                 </md-input-container>
                 <!-- Type -->
-                <md-input-container flex ng-if='ctrl.document.docClassName.toLowerCase() === "internal"'>
+                <md-input-container flex
+                                    ng-if="ctrl.document.docClassName.toLowerCase() === 'internal' && ctrl.checkStatus('internalDocType')">
                     <label for="type">{{lang.type}}</label>
                     <md-select name="type" id="type"
                                ng-model="ctrl.document.internalDocType"
@@ -84,7 +87,7 @@
             </div>
             <div layout="row">
                 <!-- Document Subject -->
-                <md-input-container flex>
+                <md-input-container flex ng-if="ctrl.checkStatus('docSubject')">
                     <label for="docSubject">{{lang.document_subject}}</label>
                     <!--custom-validate-directive="AEN" -->
                     <textarea name="docSubject"
@@ -97,7 +100,7 @@
                     </div>
                 </md-input-container>
                 <!-- Year -->
-                <md-input-container flex>
+                <md-input-container flex ng-if="ctrl.checkStatus('year')">
                     <label for="year">{{lang.search_module_year}}</label>
                     <md-select name="year" id="year"
                                ng-required="ctrl.checkMandatory('year')"
@@ -133,7 +136,7 @@
             </div>
             <div layout="row">
                 <!-- Main Classification -->
-                <md-input-container flex>
+                <md-input-container flex ng-if="ctrl.checkStatus('mainClassification')">
                     <label for="mainClassification">{{lang.outgoing_main_classification}}</label>
                     <md-select name="mainClassification"
                                id="mainClassification"
@@ -151,7 +154,7 @@
                     </div>
                 </md-input-container>
                 <!-- Sub Classification -->
-                <md-input-container flex>
+                <md-input-container flex ng-if="ctrl.checkStatus('subClassification')">
                     <label for="subClassification">{{lang.outgoing_sub_classification}}</label>
                     <md-select
                             ng-disabled="!ctrl.document.mainClassification"
@@ -170,7 +173,7 @@
                     </div>
                 </md-input-container>
                 <!-- Doc serial -->
-                <md-input-container flex>
+                <md-input-container flex ng-if="ctrl.checkStatus('docFullSerial')">
                     <label for="docFullSerial">{{lang.search_module_serial}}</label>
                     <input name="docFullSerial" id="docFullSerial"
                            ng-required="ctrl.checkMandatory('docFullSerial')"
@@ -183,7 +186,7 @@
             </div>
             <div layout="row">
                 <!-- Document Type -->
-                <md-input-container flex>
+                <md-input-container flex ng-if="ctrl.checkStatus('docType')">
                     <label for="docType">{{lang.outgoing_document_type}}</label>
                     <md-select name="docType"
                                id="docType"
@@ -202,7 +205,7 @@
             </div>
             <div layout="row">
                 <!-- File -->
-                <md-input-container flex>
+                <md-input-container flex ng-if="ctrl.checkStatus('fileId')">
                     <label for="fileId">{{lang.outgoing_file}}</label>
                     <md-select name="fileId"
                                id="fileId"
@@ -221,7 +224,7 @@
                     </div>
                 </md-input-container>
                 <!-- File Code -->
-                <md-input-container flex>
+                <md-input-container flex ng-if="ctrl.checkStatus('fileCode')">
                     <label for="fileCode">{{lang.outgoing_file_code}}</label>
                     <input name="fileCode"
                            id="fileCode"
@@ -233,7 +236,7 @@
                     </div>
                 </md-input-container>
                 <!-- File Serial -->
-                <md-input-container flex>
+                <md-input-container flex ng-if="ctrl.checkStatus('fileSerial')">
                     <label for="fileSerial">{{lang.outgoing_file_serial}}</label>
                     <input name="fileSerial" custom-validate-directive="number"
                            id="fileSerial"
@@ -247,7 +250,7 @@
             </div>
             <div layout="row">
                 <!-- Notes -->
-                <md-input-container flex>
+                <md-input-container flex ng-if="ctrl.checkStatus('docNotes')">
                     <label for="docNotes">{{lang.properties_notes}}</label>
                     <textarea ng-required="ctrl.checkMandatory('docNotes')" name="docNotes" id="docNotes"
                               ng-model="ctrl.document.docNotes" rows="5"></textarea>
@@ -271,7 +274,7 @@
             </div>
 
             <!-- Linked Entity -->
-            <div layout="row">
+            <div layout="row" ng-if="ctrl.checkStatus('linkedEntities')">
                 <!-- Entity Type Drop down -->
                 <md-input-container flex>
                     <label for="selectedEntityType">{{lang.linked_entity}}</label>
@@ -320,7 +323,7 @@
                  ng-if="ctrl.document.docClassName.toLowerCase() !== 'incoming'
                  && ctrl.document.docClassName.toLowerCase() !== 'general'
                  && ctrl.document.docClassName.toLowerCase() !== 'correspondence'
-                 && ctrl.document.addMethod !== 1">
+                 && ctrl.document.addMethod !== 1 && ctrl.checkStatus('approvers')">
                 <!-- Approver drop down -->
                 <md-input-container flex>
                     <label for="approvers">{{lang.approver}}</label>
@@ -365,7 +368,7 @@
                 </md-input-container>
             </div>
 
-            <div layout="row">
+            <div layout="row" ng-if="ctrl.checkStatus('docserial')">
                 <!-- Serial Number From -->
                 <md-input-container>
                     <label>{{lang.search_module_serial_from}}</label>

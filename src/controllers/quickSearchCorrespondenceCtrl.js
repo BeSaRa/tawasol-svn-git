@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                               quickSearchCorrespondence,
                                                               ResolveDefer,
                                                               $q,
+                                                              _,
                                                               $state,
                                                               $filter,
                                                               dialog,

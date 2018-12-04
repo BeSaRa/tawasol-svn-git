@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                    searchIncomingService,
                                                    $q,
                                                    $filter,
+                                                   _,
                                                    IncomingSearch,
                                                    propertyConfigurations,
                                                    validationService,

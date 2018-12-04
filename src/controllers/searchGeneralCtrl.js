@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                   organizations,
                                                   searchGeneralService,
                                                   $q,
+                                                  _,
                                                   $filter,
                                                   GeneralSearch,
                                                   propertyConfigurations,
@@ -39,6 +40,7 @@ module.exports = function (app) {
 
         self.searchGeneral = new GeneralSearch({dummySearchDocClass: 'correspondence'});
         self.searchGeneralModel = angular.copy(self.searchGeneral);
+        self.emptyResults = false;
 
         self.propertyConfigurations = propertyConfigurations;
 
@@ -256,6 +258,7 @@ module.exports = function (app) {
         self.resetFilters = function (form) {
             self.searchGeneral = new GeneralSearch();
             self.searchGeneralModel = angular.copy(self.searchGeneral);
+            self.emptyResults = true;
             form.$setUntouched();
         };
 

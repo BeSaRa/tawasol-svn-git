@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                               documentFileService,
                                                               $timeout,
                                                               toast,
+                                                              _,
                                                               correspondenceService,
                                                               LangWatcher,
                                                               generator) {

@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                    ResolveDefer,
                                                    searchInternalService,
                                                    $q,
+                                                   _,
                                                    $filter,
                                                    InternalSearch,
                                                    propertyConfigurations,
@@ -37,6 +38,8 @@ module.exports = function (app) {
 
         self.searchInternal = new InternalSearch({dummySearchDocClass: 'internal'});
         self.searchInternalModel = angular.copy(self.searchInternal);
+        self.emptyResults = false;
+
         self.approvers = approvers;
         self.propertyConfigurations = propertyConfigurations;
 
@@ -219,6 +222,7 @@ module.exports = function (app) {
         self.resetFilters = function (form) {
             self.searchInternal = new InternalSearch();
             self.searchInternalModel = angular.copy(self.searchInternal);
+            self.emptyResults = true;
             form.$setUntouched();
         };
 

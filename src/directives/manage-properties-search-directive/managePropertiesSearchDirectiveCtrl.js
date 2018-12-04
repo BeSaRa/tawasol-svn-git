@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                                     documentFileService,
                                                                     $timeout,
                                                                     toast,
+                                                                    _,
                                                                     correspondenceService,
                                                                     LangWatcher,
                                                                     DocumentStatus,
@@ -68,7 +69,6 @@ module.exports = function (app) {
                 key: "paper"
             }
         ];
-        var required = {};
 
         self.getYears = function () {
             var currentYear = new Date().getFullYear(), years = ['All'];
@@ -80,6 +80,9 @@ module.exports = function (app) {
             self.yearsList = years;
             self.setSelectedYear(true);
         };
+
+        // required fields for the current document class
+        self.required = {};
 
         $timeout(function () {
             // all system organizations
@@ -109,32 +112,40 @@ module.exports = function (app) {
 
             self.entityTypesArray = self.defaultEntityTypes.concat(self.entityTypes);
 
+            _.map(properties, function (item) {
+                self.required[item.symbolicName.toLowerCase()] = {
+                    isMandatory: null, //item.isMandatory,
+                    status: item.status
+                };
+            });
+            /* Year is mandatory always */
+            self.required.year = {
+                isMandatory: true,
+                status: true
+            };
+
             self.getYears();
         });
         // current employee
         self.employee = employeeService.getEmployee();
         // for sub organizations
         self.subOrganizations = [];
-        // required fields for the current document class
-        self.required = {};
 
-        // need  timeout here to start init each property mandatory.
-        $timeout(function () {
-            //TODO: Don't delete this map. Uncomment it when need to check mandatory fields from property configuration.
-            /*_.map(properties, function (item) {
-                self.required[item.symbolicName.toLowerCase()] = item.isMandatory;
-            });*/
-            /* Year is mandatory always */
-            self.required.year = true;
-        });
 
-        /**
-         * @description Checks if field is required or not
-         * @param fieldName
-         * @returns {*}
-         */
         self.checkMandatory = function (fieldName) {
-            return self.required[fieldName.toLowerCase()];
+            // year is always required
+            if (self.document.dummySearchDocClass === 'correspondence' || self.document.dummySearchDocClass === 'outgoingIncoming') {
+                return fieldName === 'year';
+            }
+            return self.required[fieldName.toLowerCase()] && self.required[fieldName.toLowerCase()].isMandatory;
+        };
+
+        self.checkStatus = function (fieldName) {
+            // year is always required
+            if (self.document.dummySearchDocClass === 'correspondence' || self.document.dummySearchDocClass === 'outgoingIncoming') {
+                return true;
+            }
+            return self.required[fieldName.toLowerCase()] && self.required[fieldName.toLowerCase()].status;
         };
 
 
@@ -152,14 +163,22 @@ module.exports = function (app) {
                 self.docDateToLabel = null;
             }
             if (self.selectedYear === 'All') {
-                self.required.docDateFrom = true;
-                self.required.docDateTo = true;
+                if (!self.required.hasOwnProperty('docDateFrom'))
+                    self.required.docDateFrom = {};
+                self.required.docDateFrom.isMandatory = true;
+                if (!self.required.hasOwnProperty('docDateTo'))
+                    self.required.docDateTo = {};
+                self.required.docDateTo.isMandatory = true;
 
                 self.changeYearRange();
             }
             else {
-                self.required.docDateFrom = false;
-                self.required.docDateTo = false;
+                if (!self.required.hasOwnProperty('docDateFrom'))
+                    self.required.docDateFrom = {};
+                self.required.docDateFrom.isMandatory = false;
+                if (!self.required.hasOwnProperty('docDateTo'))
+                    self.required.docDateTo = {};
+                self.required.docDateTo.isMandatory = false;
 
                 self.document.docDateFrom = new Date(self.selectedYear, 0, 1, 0, 0, 0, 0);
                 self.document.docDateTo = new Date(self.selectedYear, 11, 31, 23, 59, 59, 999);
@@ -195,8 +214,12 @@ module.exports = function (app) {
                     if (!(self.document.docDateFrom && self.document.docDateTo)) {
                         self.document.year = self.selectedYear = null;
 
-                        self.required.docDateFrom = false;
-                        self.required.docDateTo = false;
+                        if (!self.required.hasOwnProperty('docDateFrom'))
+                            self.required.docDateFrom = {};
+                        self.required.docDateFrom.isMandatory = false;
+                        if (!self.required.hasOwnProperty('docDateTo'))
+                            self.required.docDateTo = {};
+                        self.required.docDateTo.isMandatory = false;
                     }
                     self.docDateFromLabel = result.dateFromLabel;
                     self.docDateToLabel = result.dateToLabel;
@@ -209,7 +232,7 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.checkShowDateFields = function () {
-            return !!(self.document.year && self.docDateFromLabel && self.docDateToLabel);
+            return self.checkMandatory('year') && !!(self.document.year && self.docDateFromLabel && self.docDateToLabel);
         };
 
         /**
@@ -541,5 +564,15 @@ module.exports = function (app) {
             else
                 self.document.docSerial = null;
         };
+
+        $scope.$watch(function () {
+            return self.emptyResults;
+        }, function (newValue, oldValue) {
+            if (newValue) {
+                self.getYears();
+                self.emptyResults = false;
+            }
+        });
+
     });
 };

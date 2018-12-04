@@ -6,6 +6,7 @@ module.exports = function (app) {
                                                    ResolveDefer,
                                                    searchOutgoingService,
                                                    $q,
+                                                   _,
                                                    $filter,
                                                    OutgoingSearch,
                                                    propertyConfigurations,
