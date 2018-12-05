@@ -80,6 +80,9 @@ module.exports = function (app) {
                 return correspondenceService.receiveG2GIncoming(this);
             };
             Incoming.prototype.getIncomingDate = function () {
+                return this.docDate ? moment(this.docDate).format(langService.current === 'ar' ? 'DD-MM-YYYY' : 'YYYY-MM-DD') : '';
+            };
+            Incoming.prototype.getDocumentDate = function(){
                 return this.refDocDate ? moment(this.refDocDate).format(langService.current === 'ar' ? 'DD-MM-YYYY' : 'YYYY-MM-DD') : '';
             };
 

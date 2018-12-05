@@ -117,12 +117,25 @@
                 </md-input-container>
                 <!-- Date -->
                 <md-input-container ng-if="ctrl.checkStatus('docDate')">
-                    <label for="docDate">{{lang.date}}</label>
+                    <label for="docDate">{{ctrl.document.hasDocumentClass('outgoing') ? lang.document_date : lang.incoming_date }}</label>
                     <md-datepicker name="docDate" id="docDate"
                                    ng-disabled="!!ctrl.disableProperties"
                                    ng-model="ctrl.document.docDate"
                                    md-max-date="ctrl.maxCreateDate"
                                    ng-required="ctrl.checkMandatory('docDate')"
+                                   md-open-on-focus></md-datepicker>
+                    <!--md-placeholder="{{lang.document_date}}"-->
+                    <div ng-messages="outgoing_properties.docDate.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+                <md-input-container ng-if="ctrl.checkStatus('refDocDate') && ctrl.document.hasDocumentClass('incoming')">
+                    <label for="refDocDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.document_date : lang.incoming_date }}</label>
+                    <md-datepicker name="refDocDate" id="refDocDate"
+                                   ng-disabled="!!ctrl.disableProperties"
+                                   ng-model="ctrl.document.refDocDate"
+                                   md-max-date="ctrl.document.docDate"
+                                   ng-required="ctrl.checkMandatory('refDocDate')"
                                    md-open-on-focus></md-datepicker>
                     <!--md-placeholder="{{lang.document_date}}"-->
                     <div ng-messages="outgoing_properties.docDate.$error">

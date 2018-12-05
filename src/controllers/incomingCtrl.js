@@ -55,8 +55,6 @@ module.exports = function (app) {
         self.model = null;
 
         self.emptySubSites = false;
-
-        self.maxCreateDate = new Date();
         // all system organizations
         self.organizations = angular.copy(organizations);
         // in case of central archive.
@@ -102,6 +100,14 @@ module.exports = function (app) {
             self.model = angular.copy(self.incoming);
             self.documentInformation = self.incoming.hasContent() ? duplicateVersion.content : null;
             self.isReceiveG2G = false;
+        }
+
+
+        self.maxCreateDate = new Date();
+        // if the current incoming refDocDate not provided means it is a new incoming document
+        // we should put the same refDocDate as today
+        if (!self.incoming.refDocDate) {
+            self.incoming.refDocDate = self.maxCreateDate;
         }
 
 

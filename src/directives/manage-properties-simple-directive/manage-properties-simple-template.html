@@ -143,7 +143,9 @@
             <div layout="row">
                 <!-- Date -->
                 <md-input-container flex>
-                    <input id="docDate" tooltip="docDate" type="text" name="docDate"
+                    <input aria-label="docDate" id="docDate"
+                           tooltip="{{ctrl.document.hasDocumentClass('outgoing') ? lang.document_date : lang.incoming_date }}"
+                           type="text" name="docDate"
                            ng-model="ctrl.document.docDate"
                            ng-disabled="!!ctrl.disableProperties"
                            ng-required="ctrl.checkMandatory('docDate')"
@@ -152,12 +154,35 @@
                            ui-mask-placeholder-char="_"
                            model-view-value="true"
                            custom-validate-directive="Date"
-                           max-date-directive="{{ctrl.maxCreateDate}}"/>
+                           max-date-directive="ctrl.maxCreateDate"/>
 
                     <div ng-messages="outgoing_properties.docDate.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                         <div ng-message="Date">{{lang.dateonly}}</div>
                         <div ng-message="maxDate">{{lang.tadayMaxDate.change({date :ctrl.maxCreateDate})}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <!-- Date -->
+                <md-input-container flex>
+                    <input aria-label="refDocDate" id="refDocDat"
+                           tooltip="{{ctrl.document.hasDocumentClass('incoming') ? lang.document_date : lang.incoming_date }}"
+                           type="text" name="refDocDate"
+                           ng-model="ctrl.document.refDocDate"
+                           ng-disabled="!!ctrl.disableProperties"
+                           ng-required="ctrl.checkMandatory('refDocDate')"
+                           ui-mask="9999-99-99"
+                           ui-mask-placeholder="{{ctrl.defaultDateFormat}}"
+                           ui-mask-placeholder-char="_"
+                           model-view-value="true"
+                           custom-validate-directive="Date"
+                           max-date-directive="ctrl.document.docDate"/>
+
+                    <div ng-messages="outgoing_properties.refDocDate.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                        <div ng-message="Date">{{lang.dateonly}}</div>
+                        <div ng-message="maxDate">{{lang.tadayMaxDate.change({date :ctrl.document.docDate})}}</div>
                     </div>
                 </md-input-container>
             </div>

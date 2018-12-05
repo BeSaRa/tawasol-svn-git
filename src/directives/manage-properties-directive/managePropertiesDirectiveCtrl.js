@@ -53,11 +53,11 @@ module.exports = function (app) {
         });
 
         self.checkMandatory = function (fieldName) {
-            return  self.required[fieldName.toLowerCase()] && self.required[fieldName.toLowerCase()].isMandatory;
+            return self.required[fieldName.toLowerCase()] && self.required[fieldName.toLowerCase()].isMandatory;
         };
 
         self.checkStatus = function (fieldName) {
-            return  self.required[fieldName.toLowerCase()] && self.required[fieldName.toLowerCase()].status;
+            return self.required[fieldName.toLowerCase()] && self.required[fieldName.toLowerCase()].status;
         };
 
 
@@ -279,7 +279,7 @@ module.exports = function (app) {
          * @description check if document received from incoming department
          * @returns {*|boolean}
          */
-        self.checkDepartmentalReceived = function(){
+        self.checkDepartmentalReceived = function () {
             return self.document.hasVsId() && $stateParams.action === 'receive';
         };
 

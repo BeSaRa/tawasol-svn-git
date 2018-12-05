@@ -37,6 +37,10 @@ module.exports = function (app) {
             properties = lookupService.getPropertyConfigurations(self.document.docClassName);
             _getClassifications(false);
             _getDocumentFiles(false);
+
+            if (self.document && self.document.getInfo().documentClass.toLowerCase() === 'incoming' && !self.document.refDocDate) {
+                self.document.refDocDate = self.document.docDate;
+            }
         });
         // current employee
         self.employee = employeeService.getEmployee();
