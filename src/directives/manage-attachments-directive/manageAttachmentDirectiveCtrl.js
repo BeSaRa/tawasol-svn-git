@@ -312,7 +312,9 @@ module.exports = function (app) {
         self.openEditDocumentAttachment = function (attachment) {
             var file = attachment.file;
             self.attachment = angular.copy(attachment);
+            self.attachmentCopyBeforeEdit = angular.copy(attachment);
             self.attachment.file = file;
+            self.attachmentCopyBeforeEdit.file = file;
         };
 
         self.cancelEditAttachment = function () {
@@ -382,5 +384,26 @@ module.exports = function (app) {
             return generator.getColumnSortingKey(property, modelType);
         };
 
+
+        /**
+         * @description Checks if attachment type will be available in drop down or not
+         * If edit mode for attachment, show the selected value and all other active attachment types only
+         * If add mode for attachment, show the active attachment types only
+         * @param type
+         * @returns {*}
+         */
+        self.checkAttachmentTypeIsAvailable = function (type) {
+            var attachmentType = self.attachmentCopyBeforeEdit.attachmentType;
+            var typeCopy = angular.copy(type);
+            if (typeCopy.hasOwnProperty('lookupKey'))
+                typeCopy = typeCopy.lookupKey;
+            if (attachmentType && attachmentType.hasOwnProperty('lookupKey'))
+                attachmentType = attachmentType.lookupKey;
+
+            if (attachmentType)
+                return (attachmentType === typeCopy || type.status);
+            return type.status;
+
+        }
     });
 };

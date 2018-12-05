@@ -56,6 +56,7 @@
                     <div>
                         <!-- Add -->
                         <md-button class="md-raised md-primary"
+                                   ng-disabled="!ctrl.attachmentType"
                                    ng-click="ctrl.startUploadAttachments()">
                             {{lang.attachment_add}}
                         </md-button>
@@ -117,7 +118,8 @@
                     <div>
                         <!-- Save -->
                         <md-button class="md-raised md-primary"
-                                   ng-click="ctrl.updateAttachment()">
+                                   ng-click="ctrl.updateAttachment()"
+                                   ng-disabled="!ctrl.attachmentTypes.length">
                             {{lang.save}}
                         </md-button>
                         <!-- Cancel -->
@@ -240,11 +242,13 @@
                                 <div>
                                     <md-button ng-if="!ctrl.attachment"
                                                ng-click="ctrl.startUploadAttachment(attachment, true)"
+                                               ng-disabled="!attachment.attachmentType"
                                                class="md-raised md-primary">
                                         {{lang.attachment_add}}
                                     </md-button>
                                     <md-button ng-if="ctrl.attachment"
                                                ng-click="ctrl.updateAttachment()"
+                                               ng-disabled="!attachment.attachmentType"
                                                class="md-raised md-primary">
                                         {{lang.save}}
                                     </md-button>

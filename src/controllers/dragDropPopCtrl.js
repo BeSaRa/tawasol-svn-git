@@ -18,7 +18,8 @@ module.exports = function (app) {
                                                 $timeout,
                                                 errorCode,
                                                 employeeService,
-                                                $q) {
+                                                $q,
+                                                attachmentCopy) {
         'ngInject';
         var self = this;
         self.controllerName = 'dragDropPopCtrl';
@@ -39,10 +40,10 @@ module.exports = function (app) {
         self.attachmentTitle = null;
 
         // the selected attachment type.
-        var availableAttachmentTypes = _.filter(self.attachmentTypes, function (attachmentType) {
+        var activeAttachmentTypes = _.filter(self.attachmentTypes, function (attachmentType) {
             return attachmentType.status;
         });
-        self.attachmentType = availableAttachmentTypes.length ? availableAttachmentTypes[0] : null;
+        self.attachmentType = activeAttachmentTypes.length ? activeAttachmentTypes[0] : null;
         // all update action status
         self.attachmentUpdateActions = lookupService.returnLookups(lookupService.attachmentUpdateAction);
         // the selected updateActionStatus
@@ -127,12 +128,17 @@ module.exports = function (app) {
                     if (files.length > 1) {
                         toast.info(langService.get('only_one_file_accepted').change({filename: files[0].name}));
                     }
-                    self.validFiles = [];
-                    if (attachmentService.validateBeforeUpload('attachmentUpload', files[0], true)) {
-                        var attachment = self.attachment;
-                        attachment.file = files[0];
-                        self.validFiles.push(attachment);
-                    }
+                        if (attachmentService.validateBeforeUpload('attachmentUpload', files[0], true)) {var attachment = self.attachment;
+
+                            if (!_.find(activeAttachmentTypes, function (activeAttachmentType) {
+                                return activeAttachmentType.lookupKey === attachment.attachmentType.lookupKey
+                            })) {
+                                attachment.attachmentType = self.attachmentType;
+                            }
+
+                            attachment.file = files[0];
+                            self.validFiles = [];self.validFiles.push(attachment);
+                        }
                 }
                 else {
                     for (var i = 0; i < files.length; i++) {
@@ -335,7 +341,7 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.checkAttachmentTypeIsAvailable = function (type) {
-            var attachmentType = angular.copy(self.attachment.attachmentType);
+            var attachmentType = attachmentCopy.attachmentType;
             var typeCopy = angular.copy(type);
             if (typeCopy.hasOwnProperty('lookupKey'))
                 typeCopy = typeCopy.lookupKey;

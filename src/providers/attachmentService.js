@@ -486,7 +486,8 @@ module.exports = function (app) {
                     targetEvent: $event || null,
                     locals: {
                         correspondence: correspondence,
-                        attachment: attachment && attachment.vsId ? attachment : null
+                        attachment: attachment && attachment.vsId ? attachment : null,
+                        attachmentCopy: angular.copy(attachment)
                     }
                 })
             };

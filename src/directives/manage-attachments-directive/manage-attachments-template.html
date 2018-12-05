@@ -73,7 +73,14 @@
                             ng-model-options="{trackBy:'$value.lookupKey'}"
                             ng-model="ctrl.attachment.attachmentType">
                         <md-option ng-repeat="type in ctrl.attachmentTypes"
-                                   ng-value="type" >
+                                   ng-value="type"
+                                   ng-if="!ctrl.attachment.vsId && type.status">
+                            {{type.getTranslatedName()}}
+                        </md-option>
+                        <md-option ng-repeat="type in ctrl.attachmentTypes"
+                                   ng-value="type"
+                                   ng-if="ctrl.attachment.vsId && ctrl.checkAttachmentTypeIsAvailable(type)"
+                                   ng-disabled="!type.status">
                             {{type.getTranslatedName()}}
                         </md-option>
                     </md-select>
