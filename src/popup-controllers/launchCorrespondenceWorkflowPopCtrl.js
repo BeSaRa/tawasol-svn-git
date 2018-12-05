@@ -313,7 +313,7 @@ module.exports = function (app) {
             },
             heads_of_government_entities: {
                 lang: 'workflow_menu_item_heads_of_governments',
-                icon: 'security-account',
+                icon: 'shield-account',
                 show: _checkPermission('SEND_TO_HEAD_OF_GOVERNMENT_ENTITY'),
                 disabled: false,
                 modelName: 'governmentEntitiesHeads'
