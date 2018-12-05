@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                            $q,
                                                            langService,
                                                            toast,
+                                                           errorCode,
                                                            sites,
                                                            _,
                                                            resend,
@@ -133,24 +134,36 @@ module.exports = function (app) {
         self.exportCorrespondenceWorkItem = function () {
             if (self.resend) {
                 return correspondenceService
-                    .resendCorrespondenceWorkItem(self.readyToExport, self.exportType === 1 ? self.model : self.partialExportList)
+                    .resendCorrespondenceWorkItem(self.readyToExport, self.exportType === 1 ? self.validateExportOption(self.model) : self.partialExportList)
                     .then(function (result) {
                         dialog.hide(result);
                     })
-                    .catch(function () {
-                        toast.error(langService.get('export_failed'));
+                    .catch(function (error) {
+                        errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT', function () {
+                            dialog
+                                .errorMessage(langService.get('already_exported_please_refresh'))
+                                .then(function () {
+                                    dialog.hide(error)
+                                });
+                        });
                     });
             }
 
             if (self.exportType === 1) {
                 readyToExportService
-                    .exportReadyToExport(self.readyToExport, self.model)
+                    .exportReadyToExport(self.readyToExport, self.validateExportOption(self.model))
                     .then(function (result) {
                         toast.success(langService.get('export_success'));
                         dialog.hide(result);
                     })
-                    .catch(function () {
-                        toast.error(langService.get('export_failed'));
+                    .catch(function (error) {
+                        errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT', function () {
+                            dialog
+                                .errorMessage(langService.get('already_exported_please_refresh'))
+                                .then(function () {
+                                    dialog.hide(error)
+                                });
+                        });
                     });
             }
             else {
@@ -160,15 +173,21 @@ module.exports = function (app) {
                         toast.success(langService.get('export_success'));
                         dialog.hide(result);
                     })
-                    .catch(function () {
-                        toast.error(langService.get('export_failed'));
+                    .catch(function (error) {
+                        errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT', function () {
+                            dialog
+                                .errorMessage(langService.get('already_exported_please_refresh'))
+                                .then(function () {
+                                    dialog.hide(error)
+                                });
+                        });
                     });
             }
         };
 
         self.printWithTerminate = function () {
             readyToExportService
-                .exportReadyToExport(self.readyToExport, self.model)
+                .exportReadyToExport(self.readyToExport, self.validateExportOption(self.model))
                 .then(function (result) {
                     downloadService
                         .controllerMethod
@@ -178,9 +197,24 @@ module.exports = function (app) {
                             dialog.hide(result);
                         });
                 })
-                .catch(function () {
-                    toast.error(langService.get('export_failed'));
+                .catch(function (error) {
+                    errorCode.checkIf(error, 'INVALID_DOC_STATUS_TO_EXPORT', function () {
+                        dialog
+                            .errorMessage(langService.get('already_exported_please_refresh'))
+                            .then(function () {
+                                dialog.hide(error)
+                            });
+                    });
                 });
+        };
+        // validate before send to export
+        self.validateExportOption = function (exportOption) {
+            _.map(canExportOptions, function (value, key) {
+                if (!self.settings.canExport(value)) {
+                    exportOption.hasOwnProperty(key) ? exportOption[key] = false : null;
+                }
+            });
+            return exportOption
         };
 
         self.closeExportPopupFromCtrl = function () {

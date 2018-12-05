@@ -212,11 +212,17 @@ module.exports = function (app) {
          * @param defer
          */
         self.exportReadyToExport = function (readyToExport, $event, defer) {
+            // already_exported_please_refresh
+            //errorCode.checkIf(error,'')
+
             readyToExport
                 .exportWorkItem($event, true)
                 .then(function () {
                     self.reloadReadyToExports(self.grid.page);
                     new ResolveDefer(defer);
+                })
+                .catch(function (error) {
+                    console.log("ERROR", error);
                 });
         };
 
