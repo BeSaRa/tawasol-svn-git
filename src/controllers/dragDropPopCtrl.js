@@ -35,7 +35,15 @@ module.exports = function (app) {
         self.attachmentTypes = attachmentTypeService.returnAttachmentTypes(info.documentClass);
         // the selected security level.
         //self.securityLevel = correspondence.securityLevel;
-        self.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, correspondence.securityLevel);
+
+        var securityLevel = correspondence.securityLevel;
+        if (securityLevel) {
+            if (correspondence.securityLevel.hasOwnProperty('lookupKey'))
+                securityLevel = correspondence.securityLevel.lookupKey;
+            else if (correspondence.securityLevel.hasOwnProperty('id'))
+                securityLevel = correspondence.securityLevel.id;
+        }
+        self.securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel);
         // attachment title for all
         self.attachmentTitle = null;
 
@@ -142,17 +150,19 @@ module.exports = function (app) {
                     if (files.length > 1) {
                         toast.info(langService.get('only_one_file_accepted').change({filename: files[0].name}));
                     }
-                        if (attachmentService.validateBeforeUpload('attachmentUpload', files[0], true)) {var attachment = self.attachment;
+                    if (attachmentService.validateBeforeUpload('attachmentUpload', files[0], true)) {
+                        var attachment = self.attachment;
 
-                            if (!_.find(activeAttachmentTypes, function (activeAttachmentType) {
-                                return activeAttachmentType.lookupKey === attachment.attachmentType.lookupKey
-                            })) {
-                                attachment.attachmentType = self.attachmentType;
-                            }
-
-                            attachment.file = files[0];
-                            self.validFiles = [];self.validFiles.push(attachment);
+                        if (!_.find(activeAttachmentTypes, function (activeAttachmentType) {
+                            return activeAttachmentType.lookupKey === attachment.attachmentType.lookupKey
+                        })) {
+                            attachment.attachmentType = self.attachmentType;
                         }
+
+                        attachment.file = files[0];
+                        self.validFiles = [];
+                        self.validFiles.push(attachment);
+                    }
                 }
                 else {
                     for (var i = 0; i < files.length; i++) {
@@ -355,17 +365,25 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.checkAttachmentTypeIsAvailable = function (type) {
-            var attachmentType = attachmentCopy.attachmentType;
-            var typeCopy = angular.copy(type);
-            if (typeCopy.hasOwnProperty('lookupKey'))
-                typeCopy = typeCopy.lookupKey;
-            if (attachmentType && attachmentType.hasOwnProperty('lookupKey'))
-                attachmentType = attachmentType.lookupKey;
+            if (attachmentCopy) {
+                var attachmentType = attachmentCopy.attachmentType;
+                var typeCopy = angular.copy(type);
+                if (typeCopy.hasOwnProperty('lookupKey'))
+                    typeCopy = typeCopy.lookupKey;
+                if (attachmentType && attachmentType.hasOwnProperty('lookupKey'))
+                    attachmentType = attachmentType.lookupKey;
 
-            if (attachmentType)
-                return (attachmentType === typeCopy || type.status);
-            return type.status;
+                if (attachmentType)
+                    return (attachmentType === typeCopy || type.status);
+                return type.status;
+            }
+            return false;
+        };
 
+        self.checkValidAttachmentFields = function () {
+            return !!(self.attachmentType && self.updateActionStatus
+                && (!self.inheritSecurity && self.securityLevel)
+            );
         }
     });
 };

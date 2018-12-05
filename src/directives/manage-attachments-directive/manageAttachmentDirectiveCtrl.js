@@ -74,6 +74,7 @@ module.exports = function (app) {
             else if (securityLevel.hasOwnProperty('id')) {
                 securityLevel = securityLevel.id;
             }
+            securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel);
             if (self.attachment && self.attachment.vsId) {
                 var attachment = new Attachment(self.attachment);
                 attachment.file = file;
@@ -128,14 +129,16 @@ module.exports = function (app) {
                             })
                     }
                     else {
-                        if (self.attachment) {
-                            var index = _.findIndex(self.attachments, function (existingAttachment) {
-                                return attachments[0].vsId === existingAttachment.vsId;
-                            });
-                            self.attachments.splice(index, 1, attachments[0]);
-                        }
-                        else {
-                            self.attachments = self.attachments.concat(attachments);
+                        if (attachments && attachments.length) {
+                            if (self.attachment) {
+                                var index = _.findIndex(self.attachments, function (existingAttachment) {
+                                    return attachments[0].vsId === existingAttachment.vsId;
+                                });
+                                self.attachments.splice(index, 1, attachments[0]);
+                            }
+                            else {
+                                self.attachments = self.attachments.concat(attachments);
+                            }
                         }
                     }
                 });
@@ -193,10 +196,10 @@ module.exports = function (app) {
             promise
                 .then(function (attachment) {
                     if (self.vsId) {
+                        self.attachment = null;
                         self.reloadAttachments()
                             .then(function (result) {
                                 toast.success(langService.get('add_success').change({name: attachment.documentTitle}));
-                                self.attachment = null;
                             })
                     }
                     else {
@@ -242,7 +245,6 @@ module.exports = function (app) {
                         self.selectedAttachments = [];
                     });
                 });
-
         };
 
         self.isEnabledDeleteBulkAttachments = function ($event) {
@@ -393,17 +395,19 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.checkAttachmentTypeIsAvailable = function (type) {
-            var attachmentType = self.attachmentCopyBeforeEdit.attachmentType;
-            var typeCopy = angular.copy(type);
-            if (typeCopy.hasOwnProperty('lookupKey'))
-                typeCopy = typeCopy.lookupKey;
-            if (attachmentType && attachmentType.hasOwnProperty('lookupKey'))
-                attachmentType = attachmentType.lookupKey;
+            if (self.attachmentCopyBeforeEdit) {
+                var attachmentType = self.attachmentCopyBeforeEdit.attachmentType;
+                var typeCopy = angular.copy(type);
+                if (typeCopy.hasOwnProperty('lookupKey'))
+                    typeCopy = typeCopy.lookupKey;
+                if (attachmentType && attachmentType.hasOwnProperty('lookupKey'))
+                    attachmentType = attachmentType.lookupKey;
 
-            if (attachmentType)
-                return (attachmentType === typeCopy || type.status);
-            return type.status;
-
+                if (attachmentType)
+                    return (attachmentType === typeCopy || type.status);
+                return type.status;
+            }
+            return false;
         }
     });
 };

@@ -118,8 +118,8 @@ module.exports = function (app) {
         /**
          * @description validate input fields on click of add/save button.
          * @param inputValueToValidate
-         * @param inputType = url, ip, email, number, phone_mobile, ND, A, E, AN, EN, ANS, ENS, AE, AEN, AES, A_, E_, ALL, port
-         * @returns {boolean}
+         * @param inputType
+         * @returns {*}
          */
         self.validateInput = function (inputValueToValidate, inputType) {
             if (inputValueToValidate) {
