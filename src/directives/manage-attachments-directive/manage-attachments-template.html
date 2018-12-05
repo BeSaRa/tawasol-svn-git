@@ -196,7 +196,7 @@
                                         <md-icon md-svg-icon="eye"></md-icon>
                                     </md-button>
                                     <md-button class="md-icon-button" title="{{lang.attachment_edit}}"
-                                               ng-if="!ctrl.disableEverything && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment)"
+                                               ng-if="!ctrl.disableEverything && !ctrl.isLinkedExportedDocAttachment && !attachment.refVSID && ctrl.isAttachmentDeletable(attachment)"
                                                ng-click="ctrl.openEditDocumentAttachment(attachment, $event)">
                                         <md-icon md-svg-icon="pencil"></md-icon>
                                     </md-button>
