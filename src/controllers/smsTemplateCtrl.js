@@ -75,6 +75,9 @@ module.exports = function (app) {
                     /*.then(function () {
                         toast.success(langService.get('add_success').change({name: result.getNames()}));
                     });*/
+                })
+                .catch(function () {
+                    self.reloadSmsTemplates(self.grid.page);
                 });
         };
 
