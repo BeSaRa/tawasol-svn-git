@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.factory('FileIcon', function (CMSModelInterceptor) {
+    app.factory('FileIcon', function (CMSModelInterceptor, _) {
         'ngInject';
         return function FileIcon(model) {
             var self = this;

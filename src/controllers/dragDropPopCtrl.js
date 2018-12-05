@@ -70,10 +70,17 @@ module.exports = function (app) {
                 icon: 'file-word',
                 extensions: ['doc', 'docx'],
                 mimeTypes: ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
-            })/*,
-            excel: 'file-excel',
-            power: 'file-powerpoint',
-            unknown: 'folder-remove'*/
+            }),
+            excel: new FileIcon({
+                icon: 'file-excel',
+                extensions: ['xls', 'xlsx'],
+                mimeTypes: ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+            }),
+            unknownFile: new FileIcon({
+                icon: 'file',
+                extensions: [],
+                mimeTypes: []
+            })
         };
 
         function _getExtension(file) {
@@ -91,7 +98,14 @@ module.exports = function (app) {
         }
 
         function _fileIcon(attachment) {
-            return attachment.hasOwnProperty('file') ? _getFileIcon(attachment).icon : 'folder-remove';
+            if (attachment.hasOwnProperty('file')) {
+                var icon = _getFileIcon(attachment);
+                if (icon)
+                    return icon.icon;
+                return self.icons.unknownFile.icon;
+            }
+            return 'folder-remove';
+            //return attachment.hasOwnProperty('file') ? _getFileIcon(attachment).icon : 'folder-remove';
         }
 
         /**
