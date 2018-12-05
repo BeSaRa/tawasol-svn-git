@@ -1,5 +1,9 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor, Information, correspondenceService, Site,
+    app.run(function (CMSModelInterceptor,
+                      Information,
+                      correspondenceService,
+                      generator,
+                      Site,
                       lookupService) {
         'ngInject';
         var modelName = 'Incoming';
@@ -38,7 +42,7 @@ module.exports = function (app) {
             model.siteTypeInfo = model.siteTypeInfo ? new Information(model.siteTypeInfo) : new Information();
             model.subSiteInfo = model.subSiteInfo ? new Information(model.subSiteInfo) : new Information();
             model.mainSiteInfo = model.mainSiteInfo ? new Information(model.mainSiteInfo) : new Information();
-
+            model.refDocDate ? model.refDocDate = generator.getDateFromTimeStamp(model.refDocDate) : null;
 
             model.securityLevelLookup = lookupService.getLookupByLookupKey(lookupService.securityLevel, model.securityLevel);
             model.securityLevelIndicator = model.securityLevelLookup ? model.getSecurityLevelIndicator(model.securityLevelLookup) : null;
