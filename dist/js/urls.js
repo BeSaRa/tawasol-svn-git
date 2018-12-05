@@ -341,6 +341,7 @@
             tokenServiceProvider
                 .excludeTokenFromUrl(urlService.login)
                 .excludeUpdateToken(urlService.logut)
+                .excludeUpdateToken(urlService.information)
                 .excludeTokenFromUrl(urlService.information);
 
             // to allow theme render.
