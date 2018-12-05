@@ -27,7 +27,7 @@ module.exports = function (app) {
                       langService) {
         'ngInject';
         // start watching when the app runs. also starts the Keepalive service by default.
-        Idle.watch();
+        // Idle.watch();
 
         exception.addGeneralExceptionHandler(401, function (xhr) {
             var url = xhr.config.url;

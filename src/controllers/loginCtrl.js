@@ -77,7 +77,7 @@ module.exports = function (app) {
                 dialog
                     .infoMessage(langService.get('you_are_logged_out_by_session'))
                     .then(function () {
-                        Idle.watch();
+                        //Idle.watch();
                     })
             }
         }

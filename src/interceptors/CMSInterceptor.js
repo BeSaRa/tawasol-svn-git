@@ -38,6 +38,10 @@ module.exports = function (app) {
             },
             // after getting response
             response: function (result) {
+                // update the token to
+                if (tokenService.getToken() && tokenService.getExcludedUpdateTokenUrls().indexOf(result.config.url) === -1) {
+                    tokenService.setToken(tokenService.getToken());
+                }
                 exception.response(result);
                 if (!result.config.hasOwnProperty('excludeLoading')) {
                     delete countRequests[result.config.uniqID];

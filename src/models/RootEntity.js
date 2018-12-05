@@ -43,7 +43,7 @@ module.exports = function (app) {
                 });
                 // set the timeout for the current session to start count the
                 if (self.settings.sessionTimeout > 1) {
-                    Idle.setIdle((self.settings.sessionTimeout - 1) * 60);
+                    //Idle.setIdle((self.settings.sessionTimeout - 1) * 60);
                 }
             }
 

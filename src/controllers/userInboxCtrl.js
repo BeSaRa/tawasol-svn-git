@@ -932,10 +932,10 @@ module.exports = function (app) {
                 }
                 else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                     if (action.hasOwnProperty('checkAnyPermission')) {
-                        hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
+                        hasPermission = employeeService.getEmployee() && employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
                     }
                     else {
-                        hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
+                        hasPermission = employeeService.getEmployee() && employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
             }

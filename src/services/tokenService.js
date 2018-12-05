@@ -9,6 +9,7 @@ module.exports = function (app) {
             defaultExpiryValue = 60,
             refresh = true,
             urls = [],
+            excludedFromUpdateTokenUrls = [],
             $http = null, // set from langDirective
             authenticationService = null, // set from langDirective
             themeService = null,  // set from langDirective
@@ -97,6 +98,22 @@ module.exports = function (app) {
         self.excludeTokenFromUrl = function (url) {
             urls.push(url);
             return self;
+        };
+        /**
+         * to exclude url from update the token in cookies.
+         * @param url
+         * @return {*}
+         */
+        self.excludeUpdateToken = function (url) {
+            excludedFromUpdateTokenUrls.push(url);
+            return self;
+        };
+        /**
+         * to return the excluded from update token.
+         * @return {Array}
+         */
+        self.getExcludedUpdateTokenUrls = function () {
+            return excludedFromUpdateTokenUrls;
         };
         /**
          * get excluded urls token
@@ -190,6 +207,9 @@ module.exports = function (app) {
                 forceTokenRefresh: function () {
                     refresh = true;
                     return this.tokenRefresh();
+                },
+                getExcludedUpdateTokenUrls: function () {
+                    return self.getExcludedUpdateTokenUrls();
                 }
 
             }
