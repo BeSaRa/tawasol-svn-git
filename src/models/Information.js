@@ -38,6 +38,10 @@ module.exports = function (app) {
              * @returns {string}
              */
             Information.prototype.getTranslatedNameByLang = function (lang) {
+                if (typeof this.arName === 'undefined' || this.arName === null)
+                    this.arName = '';
+                if (typeof this.enName === 'undefined' || this.enName === null)
+                    this.enName = '';
                 return lang === 'ar' ? this.arName : this.enName;
             };
 
