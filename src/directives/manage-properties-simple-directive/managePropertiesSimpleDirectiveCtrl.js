@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                                     documentFileService,
                                                                     $timeout,
                                                                     toast,
+                                                                    customValidationService,
                                                                     correspondenceService,
                                                                     LangWatcher,
                                                                     generator,
@@ -286,6 +287,30 @@ module.exports = function (app) {
         self.showRegistryUnit = function () {
             return self.registryOrganizations && self.registryOrganizations.length && employeeService.isCentralArchive() && self.document && self.document.addMethod && (self.document.classDescription.toLowerCase() === 'outgoing' || self.document.classDescription.toLowerCase() === 'incoming');
         };
+
+        self.checkIncomingDateValid = function () {
+            if (self.document.hasDocumentClass('incoming')) {
+                var docDate = self.document.docDate,
+                    refDocDate = self.document.refDocDate,
+                    docDateValid = customValidationService.validateInput(docDate, 'Date'),
+                    refDocDateValid = customValidationService.validateInput(refDocDate, 'Date');
+
+                if ((docDate && docDateValid) && (refDocDate && refDocDateValid)) {
+                    if (new Date(docDate).getTime() < new Date(refDocDate).getTime())
+                        self.document.refDocDate = docDate;
+                }
+                else {
+                    self.document.refDocDate = null;
+                }
+            }
+        };
+
+        self.getMaxRefDocDateErrorMsg = function () {
+            if (self.document.docDate && customValidationService.validateInput(self.document.docDate, 'Date'))
+                return generator.convertDateToString(self.document.docDate, generator.defaultDateFormat);
+            return self.maxCreateDate;
+        };
+
         /**
          * @description Check if the document is approved. If yes, don't allow to change properties and correspondence sites
          * @param document

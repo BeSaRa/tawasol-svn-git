@@ -287,7 +287,7 @@ module.exports = function (app) {
          * @description check if document received from incoming department
          * @returns {*|boolean}
          */
-        self.checkG2gReceived = function(){
+        self.checkG2gReceived = function () {
             return (self.document.hasVsId() && $stateParams.action === 'receiveg2g');
         };
 
@@ -308,6 +308,22 @@ module.exports = function (app) {
         self.showRegistryUnit = function () {
             return self.registryOrganizations && self.registryOrganizations.length && employeeService.isCentralArchive() && self.document && self.document.addMethod && (self.document.classDescription.toLowerCase() === 'outgoing' || self.document.classDescription.toLowerCase() === 'incoming');
         };
+
+        self.checkIncomingDateValid = function () {
+            if (self.document.hasDocumentClass('incoming')) {
+                var docDate = self.document.docDate,
+                    refDocDate = self.document.refDocDate;
+
+                if (docDate && refDocDate) {
+                    if (new Date(docDate).getTime() < new Date(refDocDate).getTime())
+                        self.document.refDocDate = null;
+                }
+                else {
+                    self.document.refDocDate = null;
+                }
+            }
+        };
+
         /**
          * @description Check if the document is approved. If yes, don't allow to change properties and correspondence sites
          * @param document

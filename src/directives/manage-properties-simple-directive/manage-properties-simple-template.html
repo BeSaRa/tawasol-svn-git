@@ -143,9 +143,11 @@
             <div layout="row">
                 <!-- Date -->
                 <md-input-container flex>
+                    <label for="docDate">{{ctrl.document.hasDocumentClass('outgoing') ? lang.document_date : lang.incoming_date }} ({{ctrl.defaultDateFormat}})</label>
                     <input aria-label="docDate" id="docDate"
-                           tooltip="{{ctrl.document.hasDocumentClass('outgoing') ? lang.document_date : lang.incoming_date }}"
+                           tooltip="{{lang.document_date}}"
                            type="text" name="docDate"
+                           ng-change="ctrl.checkIncomingDateValid()"
                            ng-model="ctrl.document.docDate"
                            ng-disabled="!!ctrl.disableProperties"
                            ng-required="ctrl.checkMandatory('docDate')"
@@ -154,35 +156,40 @@
                            ui-mask-placeholder-char="_"
                            model-view-value="true"
                            custom-validate-directive="Date"
-                           max-date-directive="ctrl.maxCreateDate"/>
+                           max-date-directive="{{ctrl.maxCreateDate}}"/>
 
                     <div ng-messages="outgoing_properties.docDate.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                         <div ng-message="Date">{{lang.dateonly}}</div>
-                        <div ng-message="maxDate">{{lang.tadayMaxDate.change({date :ctrl.maxCreateDate})}}</div>
+                        <div ng-message="maxDate">{{lang.date_should_be_less_than_equal.change({date:
+                            ctrl.maxCreateDate})}}
+                        </div>
                     </div>
                 </md-input-container>
             </div>
-            <div layout="row">
-                <!-- Date -->
+            <div layout="row" ng-if="ctrl.document.hasDocumentClass('incoming')">
+                <!-- refDocDate (date of referenced document) -->
                 <md-input-container flex>
-                    <input aria-label="refDocDate" id="refDocDat"
-                           tooltip="{{ctrl.document.hasDocumentClass('incoming') ? lang.document_date : lang.incoming_date }}"
+                    <label for="refDocDate">{{ctrl.document.hasDocumentClass('incoming') ? lang.document_date : lang.incoming_date }} ({{ctrl.defaultDateFormat}})</label>
+                    <input aria-label="refDocDate" id="refDocDate"
+                           tooltip="{{lang.incoming_date}}"
                            type="text" name="refDocDate"
                            ng-model="ctrl.document.refDocDate"
-                           ng-disabled="!!ctrl.disableProperties"
+                           ng-disabled="!!ctrl.disableProperties || !ctrl.document.docDate"
                            ng-required="ctrl.checkMandatory('refDocDate')"
                            ui-mask="9999-99-99"
-                           ui-mask-placeholder="{{ctrl.defaultDateFormat}}"
-                           ui-mask-placeholder-char="_"
+                           ui-mask-placeholder=" "
+                           ui-mask-placeholder-char=" "
                            model-view-value="true"
                            custom-validate-directive="Date"
-                           max-date-directive="ctrl.document.docDate"/>
+                           max-date-directive="{{ctrl.document.docDate}}"/>
 
                     <div ng-messages="outgoing_properties.refDocDate.$error">
                         <div ng-message="required">{{lang.field_required}}</div>
                         <div ng-message="Date">{{lang.dateonly}}</div>
-                        <div ng-message="maxDate">{{lang.tadayMaxDate.change({date :ctrl.document.docDate})}}</div>
+                        <div ng-message="maxDate">{{lang.date_should_be_less_than_equal.change({date:
+                            ctrl.getMaxRefDocDateErrorMsg()})}}
+                        </div>
                     </div>
                 </md-input-container>
             </div>
