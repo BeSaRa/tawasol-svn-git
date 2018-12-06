@@ -7,6 +7,7 @@ module.exports = function (app) {
                       entityTypeService,
                       viewDocumentService,
                       generator,
+                      Information,
                       LinkedObject,
                       langService,
                       moment) {
@@ -85,6 +86,8 @@ module.exports = function (app) {
             model.followupStatusLookup = lookupService.getLookupByLookupKey(lookupService.followupStatus, model.followupStatus);
             model.followUpStatusIndicator = model.followupStatus ? model.getFollowUpStatusIndicator(model.followupStatusLookup) : null;
             model.originalCopyIndicator = model.getOriginalCopyIndicator();
+
+            model.messageStatus = new Information(model.messageStatus);
 
             return model;
         });

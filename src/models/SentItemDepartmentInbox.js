@@ -36,6 +36,7 @@ module.exports = function (app) {
             self.isToG2G = null;
             self.exportedAttchmentsVSIDs = null;
             self.exception = null;
+            self.messageStatus = null;
             self.mainSiteFromIdInfo = null;
             self.subSiteFromIdInfo = null;
             self.sentByIdInfo = null;

@@ -29,7 +29,7 @@
                                        md-progress="ctrl.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
-                                        <th colspan="{{ctrl.selectedSentItemDepartmentInboxes.length > 1 ? 11 : 12}}"
+                                        <th colspan="{{ctrl.selectedSentItemDepartmentInboxes.length > 1 ? 12 : 13}}"
                                             ng-if="ctrl.selectedSentItemDepartmentInboxes.length" md-column>
                                             <div layout="row" layout-align="start center">
                                                 <span>{{ctrl.selectedSentItemDepartmentInboxes.length}} {{lang.items_selected}} </span>
@@ -84,6 +84,10 @@
                                         <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
                                             md-order-by="deliveryDate">
                                             <span>{{lang.received_date}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('messageStatus', 'Information')}}">
+                                            <span>{{lang.status}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedSentItemDepartmentInboxes.length" md-column>
                                             <!-- Grid Actions -->
@@ -163,6 +167,7 @@
                                             </div>
                                         </td>
                                         <td md-cell>{{sentItemDepartmentInbox.deliveryDate}}</td>
+                                        <td md-cell>{{sentItemDepartmentInbox.messageStatus.getTranslatedName()}}</td>
                                         <td md-cell class="p-r0"
                                             ng-if="ctrl.selectedSentItemDepartmentInboxes.length < 2">
                                             <div layout-align="start center" flex ng-if="!ctrl.selectedSentItemDepartmentInboxes.length
