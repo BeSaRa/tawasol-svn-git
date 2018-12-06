@@ -338,7 +338,7 @@ module.exports = function (app) {
          * @return {Promise}
          */
         self.deleteOUApplicationUser = function (ouApplicationUser, $event) {
-            return dialog.confirmMessage(langService.get('confirm_delete').change({name: ouApplicationUser.ouid.getNames()}), null, null, $event)
+            return dialog.confirmMessage(langService.get('confirm_delete').change({name: ouApplicationUser.applicationUser.getNames()}), null, null, $event)
                 .then(function () {
                     var id = ouApplicationUser.hasOwnProperty('id') ? ouApplicationUser.id : ouApplicationUser;
                     return $http

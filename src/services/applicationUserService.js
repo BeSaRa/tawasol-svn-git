@@ -492,7 +492,7 @@ module.exports = function (app) {
                     if (result)
                         defer.resolve(result);
                     else
-                        defer.reject(result);
+                        defer.reject('LDAP_USER_MISSING');
                 });
             return defer.promise.then(function () {
                 return $http
@@ -501,9 +501,14 @@ module.exports = function (app) {
                     .then(function (result) {
                         applicationUser.id = result.data.rs;
                         return applicationUser;
+                    })
+                    .catch(function (error) {
+                        console.log('addUserFail', error);
+                        return $q.reject('addUserFail');
                     });
             }).catch(function (error) {
-                dialog.errorMessage(langService.get('ldap_user_doesnot_exist_add_please'));
+                if (error === 'LDAP_USER_MISSING')
+                    dialog.errorMessage(langService.get('ldap_user_doesnot_exist_add_please'));
                 return $q.reject(false);
             });
         };

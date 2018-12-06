@@ -284,9 +284,10 @@
                                     <md-input-container flex>
                                         <label for="ouSecurityLevel">{{lang.security_levels}}</label>
                                         <md-select id="ouSecurityLevel" name="ouSecurityLevel" multiple required
+                                                   ng-model-options="{trackBy:'$value.lookupKey'}"
                                                    ng-model="ctrl.ouApplicationUser.securityLevels">
                                             <md-option ng-value="securityLevel"
-                                                       ng-repeat="securityLevel in ctrl.securityLevels track by $index">
+                                                       ng-repeat="securityLevel in ctrl.securityLevels">
                                                 {{securityLevel.getTranslatedName()}}
                                             </md-option>
                                         </md-select>
