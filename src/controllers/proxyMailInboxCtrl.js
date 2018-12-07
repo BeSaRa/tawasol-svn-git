@@ -803,11 +803,11 @@ module.exports = function (app) {
          * @description Check if action will be shown on grid or not
          * @param action
          * @param model
-         * @param inViewOnly
+         * @param popupActionOnly
          * @returns {boolean}
          */
-        self.checkToShowAction = function (action, model, inViewOnly) {
-            var hasPermission = true;
+        self.checkToShowAction = function (action, model, popupActionOnly) {
+            /*var hasPermission = true;
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
                     hasPermission = employeeService.hasPermissionTo(action.permissionKey);
@@ -821,7 +821,39 @@ module.exports = function (app) {
                     }
                 }
             }
-            return !inViewOnly ? ((!action.hide) && hasPermission) : hasPermission;
+            return !inViewOnly ? ((!action.hide) && hasPermission) : hasPermission;*/
+
+
+            if (action.hasOwnProperty('permissionKey')) {
+                if (typeof action.permissionKey === 'string') {
+                    if (popupActionOnly)
+                        return (!action.hide && action.showInViewOnly) && employeeService.hasPermissionTo(action.permissionKey);
+                    return (!action.hide && !action.showInViewOnly) && employeeService.hasPermissionTo(action.permissionKey);
+                }
+                else if (angular.isArray(action.permissionKey)) {
+                    if (!action.permissionKey.length) {
+                        if (popupActionOnly)
+                            return (!action.hide && action.showInViewOnly);
+                        return (!action.hide && !action.showInViewOnly);
+                    }
+                    else {
+                        var hasPermissions = _.map(action.permissionKey, function (key) {
+                            return employeeService.hasPermissionTo(key);
+                        });
+                        if (popupActionOnly)
+                            return (!action.hide && action.showInViewOnly) && !(_.some(hasPermissions, function (isPermission) {
+                                return isPermission !== true;
+                            }));
+
+                        return (!action.hide && !action.showInViewOnly) && !(_.some(hasPermissions, function (isPermission) {
+                            return isPermission !== true;
+                        }));
+                    }
+                }
+            }
+            if (popupActionOnly)
+                return (!action.hide) && (action.showInViewOnly);
+            return (!action.hide && !action.showInViewOnly);
         };
 
         /**
@@ -875,6 +907,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.terminate,
                 class: "action-green",
+                showInViewOnly: true,
                 checkShow: self.checkToShowAction
             },
             // Add To Folder
@@ -885,6 +918,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.addToFolderProxyMailInbox,
                 class: "action-green",
+                showInViewOnly: true,
                 hide: true,
                 checkShow: self.checkToShowAction
             },
@@ -897,6 +931,7 @@ module.exports = function (app) {
                 callback: self.createReplyProxyMailInboxIncoming,
                 class: "action-green",
                 permissionKey: 'CREATE_REPLY',
+                showInViewOnly: true,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model) && info.documentClass === "incoming";
@@ -910,6 +945,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.forward,
                 class: "action-green",
+                showInViewOnly: true,
                 checkShow: self.checkToShowAction
             },
             // Reply
@@ -920,6 +956,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.reply,
                 class: "action-green",
+                showInViewOnly: true,
                 checkShow: self.checkToShowAction
             },
             // Get Link
@@ -932,6 +969,7 @@ module.exports = function (app) {
                 callback: self.getLink,
                 class: "action-green",
                 hide: false,
+                showInViewOnly: true,
                 checkShow: self.checkToShowAction
             },
             // Subscribe
@@ -943,6 +981,7 @@ module.exports = function (app) {
                 callback: self.subscribeProxyMailInbox,
                 class: "action-red",
                 hide: true,
+                showInViewOnly: true,
                 checkShow: self.checkToShowAction
             },
             /*// Export
@@ -954,6 +993,7 @@ module.exports = function (app) {
                 callback: self.exportProxyMailInbox,
                 class: "action-green",
                 showInView: false,
+                showInViewOnly: true,
                 checkShow: function (action, model) {
                     //addMethod = 0 (Electronic/Digital) - show the export button
                     //addMethod = 1 (Paper) - show the export button
@@ -973,6 +1013,7 @@ module.exports = function (app) {
                 permissionKey: 'SEND_TO_READY_TO_EXPORT_QUEUE',
                 callback: self.sendWorkItemToReadyToExport,
                 class: "action-green",
+                showInViewOnly: true,
                 checkShow: function (action, model) {
                     //addMethod = 0 (Electronic/Digital) - hide the export button
                     //addMethod = 1 (Paper) - show the export button
@@ -1118,6 +1159,7 @@ module.exports = function (app) {
                 shortcut: false,
                 checkShow: self.checkToShowAction,
                 hide: true,
+                showInViewOnly: true,
                 subMenu: [
                     // Direct Linked Documents
                     {
@@ -1147,6 +1189,7 @@ module.exports = function (app) {
                 icon: 'download',
                 text: 'grid_action_download',
                 shortcut: false,
+                showInViewOnly: true,
                 checkShow: self.checkToShowAction,
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
@@ -1183,6 +1226,7 @@ module.exports = function (app) {
                 icon: 'send',
                 text: 'grid_action_send',
                 shortcut: false,
+                showInViewOnly: true,
                 checkShow: self.checkToShowAction,
                 permissionKey: [
                     "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
@@ -1246,6 +1290,7 @@ module.exports = function (app) {
                 icon: 'pencil-lock',
                 text: 'grid_action_approve',//signature
                 shortcut: false,
+                showInViewOnly: true,
                 //docClass: "Outgoing",
                 checkShow: function (action, model) {
                     //addMethod = 0 (Electronic/Digital) - show the button
@@ -1300,6 +1345,7 @@ module.exports = function (app) {
                 text: 'grid_action_edit',
                 shortcut: false,
                 showInView: false,
+                showInViewOnly: true,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     var hasPermission = false;
@@ -1374,6 +1420,7 @@ module.exports = function (app) {
                 hide: false,
                 callback: self.editInDesktop,
                 class: "action-green",
+                showInViewOnly: true,
                 showInView: false,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
@@ -1400,6 +1447,7 @@ module.exports = function (app) {
                 text: 'grid_action_view_specific_version',
                 shortcut: false,
                 hide: false,
+                showInViewOnly: true,
                 callback: self.getDocumentVersions,
                 permissionKey: "VIEW_DOCUMENT_VERSION",
                 class: "action-green",
@@ -1413,6 +1461,7 @@ module.exports = function (app) {
                 text: 'grid_action_duplication_current_version',
                 shortcut: false,
                 hide: false,
+                showInViewOnly: true,
                 callback: self.duplicateCurrentVersion,
                 class: "action-green",
                 permissionKey: 'DUPLICATE_BOOK_CURRENT',
@@ -1432,6 +1481,7 @@ module.exports = function (app) {
                 callback: self.duplicateVersion,
                 class: "action-green",
                 showInView: true,
+                showInViewOnly: true,
                 permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
                 checkShow: self.checkToShowAction
             }
