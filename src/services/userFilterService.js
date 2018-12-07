@@ -135,7 +135,7 @@ module.exports = function (app) {
                             return defer.promise.then(function () {
                                 return ouApplicationUserService.searchByCriteria({regOu: employeeService.getEmployee().getRegistryOUID()})
                                     .then(function (result) {
-                                        return _.map(result, 'applicationUser');
+                                        return _.uniqBy(_.map(result, 'applicationUser'), 'domainName');
                                     });
                             });
                         },
@@ -176,7 +176,7 @@ module.exports = function (app) {
                             return defer.promise.then(function () {
                                 return ouApplicationUserService.searchByCriteria({regOu: employeeService.getEmployee().getRegistryOUID()})
                                     .then(function (result) {
-                                        return _.map(result, 'applicationUser');
+                                        return _.uniqBy(_.map(result, 'applicationUser'), 'domainName');
                                     });
                             });
                         },
