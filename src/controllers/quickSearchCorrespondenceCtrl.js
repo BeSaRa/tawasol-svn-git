@@ -581,7 +581,7 @@ module.exports = function (app) {
             // Open
             {
                 type: 'action',
-                icon: 'book-open-variant',
+                icon: 'book-open-page-variant',
                 text: 'grid_action_open',
                 showInView: false,
                 shortcut: true,
