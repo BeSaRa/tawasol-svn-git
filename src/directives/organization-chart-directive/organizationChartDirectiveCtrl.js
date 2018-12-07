@@ -61,10 +61,10 @@ module.exports = function (app) {
                         var title = angular.element('<span />');
                         title.html('{{nodeList[' + index + '].arName}}');
 
-                        var archive = angular.element('<div tooltip="{{lang.has_archive}}" />', {class: 'node-has-archive'});
+                        var archive = angular.element('<div tooltip="{{$root.lang.has_archive}}" />', {class: 'node-has-archive'});
                         archive.append(angular.element('<md-icon md-svg-icon="archive"></md-icon>'));
 
-                        var inbox = angular.element('<div  tooltip="{{lang.has_registry}}" />', {class: 'node-has-inbox'});
+                        var inbox = angular.element('<div  tooltip="{{$root.lang.has_registry}}" />', {class: 'node-has-inbox'});
                         inbox.append(angular.element('<md-icon md-svg-icon="inbox"></md-icon>'));
 
                         var iconsWrapper = angular.element('<div layout="row" layout-align="center center"  />', {class: 'node-icon-wrapper'});
