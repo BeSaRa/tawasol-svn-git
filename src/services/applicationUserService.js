@@ -454,8 +454,7 @@ module.exports = function (app) {
             return ouApplicationUserService
                 .getAvailableProxies(ouApplicationUser.getRegistryOUID(), true)
                 .then(function (result) {
-                    var proxyInfo = applicationUser.getProxyInformation();
-
+                    var proxyInfo = applicationUser.hasProxy() ? applicationUser.getProxyInformation() : null;
                     return applicationUser.hasProxy() ?
                         (applicationUser.currentProxyUserInCollection(result) ? result : ouApplicationUserService
                             .loadProxyUserByUserIdAndOUId(proxyInfo.userId, proxyInfo.ouId))
