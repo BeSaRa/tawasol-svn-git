@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                                          generator,
                                                                          availableProxies,
                                                                          toast,
+                                                                         $q,
                                                                          $rootScope,
                                                                          cmsTemplate,
                                                                          LangWatcher,
@@ -47,9 +48,9 @@ module.exports = function (app) {
         // tomorrow
         self.tomorrow = (new Date()).setDate(self.today.getDate() + 1);
 
-        self.getMaxProxyStartDate = function(){
+        self.getMaxProxyStartDate = function () {
             var endDate = self.ouApplicationUser.proxyEndDate ? new Date(self.ouApplicationUser.proxyEndDate) : null;
-            self.calculatedMaxProxyStartDate = endDate ? new Date(endDate.setDate(endDate.getDate() -1)) : null;
+            self.calculatedMaxProxyStartDate = endDate ? new Date(endDate.setDate(endDate.getDate() - 1)) : null;
             return self.calculatedMaxProxyStartDate;
         };
         self.calculatedMaxProxyStartDate = self.ouApplicationUser.proxyEndDate ? self.getMaxProxyStartDate() : null;
@@ -161,6 +162,25 @@ module.exports = function (app) {
         };
 
         //self.getSelectedDelegatedUserText();
+
+        self.searchTextProxyUser = '';
+        self.proxyUserSearch = function (searchText) {
+            var results = self.availableProxies;
+            if (searchText) {
+                results = _.filter(self.availableProxies, function (availableProxyUSer) {
+                    return availableProxyUSer.getTranslatedName().toLowerCase().indexOf(searchText.toLowerCase()) > -1;
+                })
+            }
+            var deferred = $q.defer();
+            $timeout(function () {
+                deferred.resolve(results);
+            }, Math.random() * 1000, false);
+            return deferred.promise;
+        };
+
+        self.selectedProxyUserChange = function (proxyUser) {
+            self.ouApplicationUser.proxyAuthorityLevels = null;
+        };
 
         /**
          * @description Saves the ou application user data when not out of office
