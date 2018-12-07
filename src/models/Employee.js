@@ -3,6 +3,7 @@ module.exports = function (app) {
                                       lookupService,
                                       generator,
                                       $q,
+                                      _,
                                       urlService,
                                       OUApplicationUser) {
         'ngInject';
@@ -284,6 +285,29 @@ module.exports = function (app) {
 
             Employee.prototype.hasProxy = function () {
                 return this.organization ? this.organization.proxyUser : false;
+            };
+            /**
+             * @description check if the current proxy user for the employee inside the given collection of proxyUsers.
+             * @param collectionOfProxyUsers
+             * @return {*|boolean}
+             */
+            Employee.prototype.currentProxyUserInCollection = function (collectionOfProxyUsers) {
+                var self = this;
+                return !!_.find(collectionOfProxyUsers, function (proxyUser) {
+                    var info = self.getProxyInformation();
+                    return info.userId === proxyUser.applicationUser.id && info.ouId === proxyUser.organization.id;
+                });
+            };
+            /**
+             * @description return proxy user information for the employee .. but should call this function if the user has proxy
+             * @return {{userId: *, ouId: null}}
+             */
+            Employee.prototype.getProxyInformation = function () {
+                return {
+                    userId: this.organization.proxyUser.id,
+                    ouId: this.organization.proxyOUId,
+                    securityLevels: this.proxyAuthorityLevels
+                };
             };
 
             Employee.prototype.inRegistry = function () {

@@ -409,19 +409,6 @@ module.exports = function (app) {
                                 'ngInject';
                                 return userWorkflowGroupService.getUserWorkflowGroupsByUser();
                             },
-                            /* // by BeSaRa to resolve the signature if found
-                             signature: function (applicationUserSignatureService, $q) {
-                                 'ngInject';
-                                 /!*if (applicationUser.hasOwnProperty('signature') && applicationUser.signature.length)
-                                     return $q.when(applicationUser.signature);*!/
-
-                                 return applicationUserSignatureService.loadApplicationUserSignatures(applicationUser.id)
-                                     .then(function (result) {
-                                         applicationUser.signature = result;
-                                         //deferDelay.resolve(applicationUser);
-                                         return result;
-                                     });
-                             },*/
                             userFolders: function (userFolderService) {
                                 'ngInject';
                                 return userFolderService.getUserFoldersForApplicationUser()
@@ -431,11 +418,9 @@ module.exports = function (app) {
                             },
                             availableProxies: function (ouApplicationUserService) {
                                 'ngInject';
-                                return ouApplicationUserService
-                                    .getAvailableProxies(ouApplicationUser.getRegistryOUID(), true)
-                                    .then(function (result) {
-                                        return result
-                                    })
+                                return resolveOuApplicationUsers.promise.then(function () {
+                                    return _getProxyUsers(ouApplicationUserService, applicationUser, ouApplicationUser);
+                                });
                             }
 
                         }
@@ -464,6 +449,22 @@ module.exports = function (app) {
                     });
             }
         };
+
+        function _getProxyUsers(ouApplicationUserService, applicationUser, ouApplicationUser) {
+            return ouApplicationUserService
+                .getAvailableProxies(ouApplicationUser.getRegistryOUID(), true)
+                .then(function (result) {
+                    var proxyInfo = applicationUser.getProxyInformation();
+
+                    return applicationUser.hasProxy() ?
+                        (applicationUser.currentProxyUserInCollection(result) ? result : ouApplicationUserService
+                            .loadProxyUserByUserIdAndOUId(proxyInfo.userId, proxyInfo.ouId))
+                            .then(function (proxyUser) {
+                                result.push(proxyUser);
+                                return result;
+                            }) : result;
+                });
+        }
 
         /**
          * @description Checks if ldap user exists

@@ -45,6 +45,31 @@ module.exports = function (app) {
                 return lang === 'ar' ? this.arName : this.enName;
             };
 
+            Information.prototype.setId = function (id) {
+                this.id = id;
+                return this;
+            };
+            Information.prototype.setArName = function (arName) {
+                this.arName = arName;
+                return this;
+            };
+            Information.prototype.setEnName = function (enName) {
+                this.enName = enName;
+                return this;
+            };
+            Information.prototype.setParent = function (parent) {
+                this.parent = parent;
+                return this;
+            };
+
+            Information.prototype.fillInfoFromOU = function (organization) {
+                this.setParent(organization.parent)
+                    .setArName(organization.arName)
+                    .setEnName(organization.enName)
+                    .setId(organization.id);
+                return this;
+            };
+
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('Information', 'init', this);

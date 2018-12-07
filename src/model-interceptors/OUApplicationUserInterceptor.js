@@ -74,12 +74,14 @@ module.exports = function (app) {
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
             model.applicationUser = new ApplicationUser(model.applicationUser);
             model.ouInfo = new Information(model.ouInfo);
+
             var defer = $q.defer();
             var organizations = [];
             organizationService.getOrganizations().then(function (result) {
                 organizations = result;
                 defer.resolve(true);
             });
+
 
             defer.promise.then(function () {
                 if (!model.ouid.hasOwnProperty('id')) {

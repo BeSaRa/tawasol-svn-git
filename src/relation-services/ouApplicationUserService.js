@@ -12,6 +12,7 @@ module.exports = function (app) {
                                                       OUApplicationUser,
                                                       _,
                                                       UserOuPermission,
+                                                      organizationService,
                                                       ApplicationUser,
                                                       ProxyInfo) {
         'ngInject';
@@ -30,7 +31,6 @@ module.exports = function (app) {
             return $http.get(urlService.unRelatedApplicationUsersByOUId.change({OUId: organization})).then(function (result) {
                 self.unAssignedUsers = generator.generateCollection(result.data.rs, ApplicationUser, self._sharedMethods);
                 self.unAssignedUsers = generator.interceptReceivedCollection('ApplicationUser', self.unAssignedUsers);
-
                 return self.unAssignedUsers;
             });
         };
@@ -140,7 +140,7 @@ module.exports = function (app) {
                         },
                         resolve: {
                             ouApplicationUsers: function () {
-                                'ngInject'
+                                'ngInject';
                                 return self.loadRelatedOUApplicationUsers(organization)
                                     .then(function (result) {
                                         return _.filter(result, function (ouApplicationUserResult) {
@@ -196,49 +196,6 @@ module.exports = function (app) {
                     });
             }
         };
-
-        /**
-         * @description Find OU application users by search text and search key
-         * @param searchText
-         * @param searchKey
-         * @return {*|Promise<U>}
-         */
-        /*self.findUsersByText = function (searchText, searchKey) {
-         // service-request: need service to return collection of users from backend-team based on search text.
-         searchText = searchText.toLowerCase().trim();
-         return self.loadOUApplicationUsers().then(function (result) {
-         return _.filter(result, function (ouApplicationUser) {
-         var properties = [
-         'arFullName',
-         'domainName',
-         'enFullName',
-         'employeeNo',
-         'email',
-         'loginName',
-         'mobile',
-         'qid'];
-
-         if (!searchKey) {
-         var found = false;
-         var value = "";
-         for (var i = 0; i < properties.length; i++) {
-         value = ouApplicationUser.applicationUser[properties[i]].toString().toLowerCase().trim();
-         if (value.indexOf(searchText) !== -1) {
-         found = true;
-         break;
-         }
-         }
-         return found;
-         }
-
-         if (searchKey.key !== 'employeeNo')
-         return ouApplicationUser.applicationUser[searchKey.key].toLowerCase().indexOf(searchText) !== -1;
-         else
-         return (Number(ouApplicationUser.applicationUser[searchKey.key]) === Number(searchText));
-         }
-         );
-         });
-         };*/
 
         /**
          * @description Find OU application users by search text and search key
@@ -673,9 +630,6 @@ module.exports = function (app) {
                 includeChildOus: includeChildOus,
                 outOfOffice: false
             }).then(function (result) {
-                /*result = _.filter(result, function (ouAppUser) {
-                    return !ouAppUser.applicationUser.outOfOffice;
-                });*/
                 return _mapProxyUser(result);
             })
         };
@@ -693,9 +647,46 @@ module.exports = function (app) {
                 .then(function (result) {
                     return result.data.rs;
                 }).catch(function (error) {
-                return false;
-            })
-        }
+                    return false;
+                })
+        };
+        /**
+         * @description load application user by ou id and user id to get all information related to given ides.
+         * @param userId
+         * @param ouId
+         */
+        self.loadOUApplicationUserByUserIdAndOUId = function (userId, ouId) {
+            var path = ('/composite/user/{userId}/ou/{ouId}').replace('{userId}', userId).replace('{ouId}', ouId);
+            return $http.get(urlService.ouApplicationUsers + path)
+                .then(function (result) {
+                    return generator.interceptReceivedInstance('OUApplicationUser', generator.generateInstance(result.data.rs, OUApplicationUser, self._sharedMethods));
+                });
+        };
+        /**
+         * @description load proxy user by given userId and ouId
+         * @param userId
+         * @param ouId
+         * @return {ProxyUser}
+         */
+        self.loadProxyUserByUserIdAndOUId = function (userId, ouId) {
+            return self
+                .loadOUApplicationUserByUserIdAndOUId(userId, ouId)
+                .then(function (ouApplicationUser) {
+                    //TODO: remove this workaround after backend return back for us the ouInfo
+                    if (!ouApplicationUser.ouInfo.id) {
+                        ouApplicationUser.ouInfo.fillInfoFromOU(organizationService.getOrganizationById(ouApplicationUser.ouid));
+                    }
+                    return self.mapProxyUsers(ouApplicationUser);
+                })
+        };
+        /**
+         * @description expose map proxy user to user it from outside the service.
+         * @param collection
+         * @return {Array|instance}
+         */
+        self.mapProxyUsers = function (collection) {
+            return angular.isArray(collection) ? _mapProxyUser(collection) : _mapProxyUser([collection])[0];
+        };
 
 
     });
