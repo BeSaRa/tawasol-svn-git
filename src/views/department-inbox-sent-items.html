@@ -25,8 +25,8 @@
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
                         <md-table-container>
                             <div flex scroll-directive>
-                                <table md-table md-row-select ng-model="ctrl.selectedSentItemDepartmentInboxes"
-                                       md-progress="ctrl.progress">
+                                <table md-table ng-model="ctrl.selectedSentItemDepartmentInboxes"
+                                       md-progress="ctrl.progress"><!--md-row-select--><!--md-row-select-->
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
                                         <th colspan="{{ctrl.selectedSentItemDepartmentInboxes.length > 1 ? 12 : 13}}"
