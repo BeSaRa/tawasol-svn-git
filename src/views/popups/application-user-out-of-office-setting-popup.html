@@ -48,46 +48,32 @@
                                         <div ng-message="required">{{lang.field_required}}</div>
                                     </div>
                                 </md-input-container>-->
+
                                 <!-- User On Behalf / Proxy User -->
-                                <!--<md-autocomplete flex
+                                <md-autocomplete flex md-input-name="proxyUser" md-input-id="proxyUser"
                                                  ng-required="ctrl.isOutOfOffice"
                                                  ng-disabled="!ctrl.isOutOfOffice"
-                                                 md-input-name="proxyUser"
-                                                 md-input-minlength="0"
                                                  md-no-cache="true"
                                                  md-selected-item="ctrl.selectedProxyUser"
+                                                 md-search-text-change="ctrl.proxyUserSearch(ctrl.searchTextProxyUser)"
                                                  md-search-text="ctrl.searchTextProxyUser"
+                                                 md-selected-item-change="ctrl.selectedProxyUserChange(item)"
                                                  md-items="item in ctrl.proxyUserSearch(ctrl.searchTextProxyUser)"
                                                  md-item-text="item.getTranslatedName()"
+                                                 md-min-length="0"
                                                  md-require-match
+                                                 placeholder="What is your favorite US state?"
                                                  md-floating-label="{{lang.user_on_behalf}}">
-                                    <md-item-template>
-                                        <span md-highlight-text="ctrl.searchTextProxyUser">{{item.getTranslatedName()}}</span>
-                                    </md-item-template>
-                                    <div ng-messages="outOfOfficeSettingsForm.proxyUser.$error" ng-if="outOfOfficeSettingsForm.proxyUser.$touched">
-                                        <div ng-message="required">{{lang.field_required}}</div>
-                                        <div ng-message="md-require-match">Please select an existing user.</div>
-                                    </div>
-                                </md-autocomplete>-->
-                                <md-autocomplete flex
-                                        ng-required="ctrl.isOutOfOffice"
-                                        ng-disabled="!ctrl.isOutOfOffice"
-                                        md-no-cache="true"
-                                        md-selected-item="ctrl.selectedProxyUser"
-                                        md-search-text-change="ctrl.proxyUserSearch(ctrl.searchTextProxyUser)"
-                                        md-search-text="ctrl.searchTextProxyUser"
-                                        md-selected-item-change="ctrl.selectedProxyUserChange(item)"
-                                        md-items="item in ctrl.proxyUserSearch(ctrl.searchTextProxyUser)"
-                                        md-item-text="item.getTranslatedName()"
-                                        md-min-length="0"
-                                        placeholder="What is your favorite US state?"
-                                        md-floating-label="{{lang.user_on_behalf}}">
                                     <md-item-template>
                                         <span md-highlight-text="ctrl.searchTextProxyUser" md-highlight-flags="i">{{item.getTranslatedName()}}</span>
                                     </md-item-template>
                                     <md-not-found>
-                                        No user matching "{{ctrl.searchTextProxyUser}}" were found.
+                                        {{lang.no_records_found_matching_search}}
                                     </md-not-found>
+                                    <div ng-messages="outOfOfficeSettingsForm.proxyUser.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                        <div ng-message="md-require-match">{{lang.field_required}}</div>
+                                    </div>
                                 </md-autocomplete>
 
 
