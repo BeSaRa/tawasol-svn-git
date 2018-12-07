@@ -22,5 +22,16 @@ module.exports = function (app) {
                 });
             }
         }
+    }).directive('ngAutoCompleteOff', function () {
+        'ngInject';
+        return {
+            restrict: 'A',
+            link: function ($scope, $element) {
+                $element.bind('input', function () {
+                    $(this).attr('autocomplete', 'off');
+                });
+            }
+        }
+
     })
 };
