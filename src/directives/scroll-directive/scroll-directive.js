@@ -44,13 +44,11 @@ module.exports = function (app) {
                     })
                 }
 
-                scope.$watch(function () {
-                    langService.current
-                }, function () {
+                langService.listeningToChange(function (current) {
                     _destroy().then(function () {
                         _create();
-                    });
-                });
+                    })
+                })
             }
         }
     })
