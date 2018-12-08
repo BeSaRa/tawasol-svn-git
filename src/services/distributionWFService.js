@@ -42,12 +42,12 @@ module.exports = function (app) {
         // all favorites segment urls.
         self.favoriteUrlMap = {
             users: {
-                url: 'UsersList',
+                url: 'users',
                 model: WFUser,
                 property: 'favoriteUsers'
             },
             organizations: {
-                url: 'OUsList',
+                url: 'ous',
                 model: WFOrganization,
                 property: 'favoriteOrganizations'
             }
@@ -283,7 +283,7 @@ module.exports = function (app) {
         self.addBulkWorkflowItemToFavorites = function (workflowItems, type) {
             var items = _mapBulkType(generator.interceptSendCollection('Fav' + type, workflowItems), type);
             return $http
-                .post(urlService.favoritesDWF + '/bulk' + (type === 'User' ? 'Users' : 'OUs'), items)
+                .post(urlService.favoritesDWF + '/' + (type === 'User' ? 'users' : 'ous') + '-bulk', items)
                 .then(function (result) {
                     result = result.data.rs;
                     _.map(workflowItems, function (item, index) {

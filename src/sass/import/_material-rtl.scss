@@ -37,6 +37,9 @@ html.rtl {
   .md-datepicker-input-container {
     margin-right: 0 !important;
   }
+  table.md-table th.md-column md-icon:not(:last-child) {
+    margin-right: 0 !important;
+  }
 }
 
 md-dialog {

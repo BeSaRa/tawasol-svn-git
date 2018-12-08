@@ -557,7 +557,7 @@ module.exports = function (app) {
          */
         self.addBulkFavoriteUser = function (bulkUserIds) {
             return $http
-                .post(urlService['favoriteUserDW'] + "/bulkUsers", bulkUserIds)
+                .post(urlService['favoriteUserDW'] + "/users-bulk", bulkUserIds)
                 .then(function (result) {
                     return result.data.rs;
                 });
