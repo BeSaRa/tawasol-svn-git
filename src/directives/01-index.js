@@ -94,4 +94,5 @@ module.exports = function (app) {
     require('./manage-correspondence-site-g2g-messaging-history-directive/01-index')(app);
     require('./attachment-viewer-directive/01-index')(app);
     require('./grid-search-directive/01-index')(app);
+    require('./overlay-scroll-bar-directive/overlay-scroll-bar-directive')(app);
 };
