@@ -581,6 +581,28 @@ module.exports = function (app) {
             }
         };
 
+
+        self.searchTextProxyUser = '';
+        self.proxyUserSearch = function (searchText) {
+            var results = self.availableProxies;
+            if (searchText) {
+                results = _.filter(self.availableProxies, function (availableProxyUSer) {
+                    return availableProxyUSer.getTranslatedName().toLowerCase().indexOf(searchText.toLowerCase()) > -1;
+                })
+            }
+            var deferred = $q.defer();
+            $timeout(function () {
+                deferred.resolve(results);
+            }, Math.random() * 1000, false);
+            return deferred.promise;
+        };
+
+        self.selectedProxyUserChange = function (proxyUser) {
+            self.ouApplicationUser.proxyAuthorityLevels = null;
+        };
+
+
+
         self.requiredFieldsOutOfOffice = [
             'proxyUser',
             'proxyAuthorityLevels',
