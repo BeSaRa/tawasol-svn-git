@@ -452,7 +452,7 @@ module.exports = function (app) {
 
         function _getProxyUsers(ouApplicationUserService, applicationUser, ouApplicationUser) {
             return ouApplicationUserService
-                .getAvailableProxies(ouApplicationUser.getRegistryOUID(), true)
+                .getAvailableProxies(ouApplicationUser.getRegistryOUID(), true, applicationUser.id)
                 .then(function (result) {
                     var proxyInfo = applicationUser.hasProxy() ? applicationUser.getProxyInformation() : null;
                     return applicationUser.hasProxy() ?

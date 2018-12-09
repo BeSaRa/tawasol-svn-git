@@ -620,17 +620,32 @@ module.exports = function (app) {
         }
 
         /**
+         * @default filter proxy users and exlcude the given user id.
+         * @param collection
+         * @param excludedId
+         * @return {Array}
+         * @private
+         */
+        function _filterProxy(collection, excludedId) {
+            excludedId = excludedId && excludedId.hasOwnProperty('id') ? excludedId.id : excludedId;
+            return !excludedId ? collection : _.filter(collection, function (proxyUser) {
+                return proxyUser.applicationUser.id !== excludedId;
+            });
+        }
+
+        /**
          * @description get available proxy users for given registry organization.
          * @param registryOuId
          * @param includeChildOus
+         * @param excludeApplicationUserId
          */
-        self.getAvailableProxies = function (registryOuId, includeChildOus) {
+        self.getAvailableProxies = function (registryOuId, includeChildOus, excludeApplicationUserId) {
             return self.searchByCriteria({
                 regOu: registryOuId,
                 includeChildOus: includeChildOus,
                 outOfOffice: false
             }).then(function (result) {
-                return _mapProxyUser(result);
+                return _filterProxy(_mapProxyUser(result), excludeApplicationUserId);
             })
         };
 
@@ -682,10 +697,13 @@ module.exports = function (app) {
         /**
          * @description expose map proxy user to user it from outside the service.
          * @param collection
+         * @param excludedId
          * @return {Array|instance}
          */
-        self.mapProxyUsers = function (collection) {
-            return angular.isArray(collection) ? _mapProxyUser(collection) : _mapProxyUser([collection])[0];
+        self.mapProxyUsers = function (collection, excludedId) {
+            var isArray = angular.isArray(collection), proxyUsers;
+            proxyUsers = _filterProxy(_mapProxyUser(isArray ? collection : [collection]), excludedId);
+            return isArray ? proxyUsers : proxyUsers[0];
         };
 
 

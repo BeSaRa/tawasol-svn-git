@@ -1000,10 +1000,10 @@ module.exports = function (app) {
                         availableProxies: function (ouApplicationUserService) {
                             'ngInject';
                             return ouApplicationUserService
-                                .getAvailableProxies(ouApplicationUser.getRegistryOUID(), true)
+                                .getAvailableProxies(ouApplicationUser.getRegistryOUID(), true, ouApplicationUser.applicationUser.id)
                                 .then(function (result) {
-                                    return result
-                                })
+                                    return result;
+                                });
                         },
                         usersWhoSetYouAsProxy: function (ouApplicationUserService) {
                             'ngInject';
