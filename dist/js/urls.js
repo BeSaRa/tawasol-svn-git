@@ -4,11 +4,11 @@
         .config(function (urlServiceProvider) {
             'ngInject';
             urlServiceProvider
-                .setEnvironment('stage')
+                .setEnvironment('test')
                 .setBaseUrl('dev', 'http://ibm-fn-http.moj.gov.qa/CMSServices/service')
                 .setBaseUrl('stage', 'http://100.100.3.220:9080/CMSServices/service')
                 .setBaseUrl('demo', 'http://78.100.174.133:9080/CMSServices/service')
-                .setBaseUrl('test', 'http://178.153.189.236:9081/CMSServices/service')
+                .setBaseUrl('test', 'http://eblaepm.no-ip.org:9081/CMSServices/service')
                 .setBaseUrl('training', 'http://100.100.3.142:9080/CMSServices/service')
                 .setBaseUrl('ibm', 'http://100.100.3.107:9080/CMSServices/service')
                 .setBaseUrl('moph', 'http://10.25.255.30:9080/CMSServices/service')
