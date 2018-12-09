@@ -2226,7 +2226,7 @@ module.exports = function (app) {
          * @param ignoreMessage
          * @returns {*}
          */
-        self.returnBulkCorrespondences = function (correspondences, $event, ignoreMessage) {
+        self.rejectBulkCorrespondences = function (correspondences, $event, ignoreMessage) {
             // if the selected correspondences has just one record.
             if (correspondences.length === 1)
                 return self.rejectCorrespondence(correspondences[0], $event);
@@ -2240,9 +2240,14 @@ module.exports = function (app) {
                             second: correspondence.reason
                         };
                     });
-
+                    var info = correspondences[0].getInfo(),
+                        url = urlService['outgoings'] + '/reject/bulk';
+                    if (info.documentClass === 'incoming')
+                        url = urlService['incomings'] + 'reject/bulk';
+                    else if (info.documentClass === 'internal')
+                        url = urlService['internals'] + '/reject/bulk';
                     return $http
-                        .put((urlService.outgoings + '/reject/bulk'), items)
+                        .put(url, items)
                         .then(function (result) {
                             return _bulkMessages(result, correspondences, ignoreMessage, 'failed_reject_selected', 'reject_success', 'reject_success_except_following');
                         });

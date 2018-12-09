@@ -204,7 +204,7 @@ module.exports = function (app) {
              //self.replaceRecord(result);
              });*/
             correspondenceService
-                .returnBulkCorrespondences(self.selectedReviewOutgoings, $event)
+                .rejectBulkCorrespondences(self.selectedReviewOutgoings, $event)
                 .then(function () {
                     self.reloadReviewOutgoings(self.grid.page);
                 });

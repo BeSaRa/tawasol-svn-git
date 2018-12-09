@@ -72,9 +72,12 @@ module.exports = function (app) {
         self.templateTypes = documentTemplateService.templateTypes;
 
         self.getDocumentTypeName = function (documentTypeId) {
-            return langService.get(_.find(self.documentTypes, function (documentType) {
+            var matchedDocumentType = _.find(self.documentTypes, function (documentType) {
                 return (documentType.value === documentTypeId);
-            }).langKey);
+            });
+            if (matchedDocumentType)
+                return langService.get(matchedDocumentType.langKey);
+            return '';
         };
 
         /**
@@ -127,7 +130,7 @@ module.exports = function (app) {
         /**
          * @description Reload the grid of document template
          * @param pageNumber
-         * @return {*|Promise<U>}
+         * @returns {Promise<any>}
          */
         self.reloadDocumentTemplates = function (pageNumber) {
             var defer = $q.defer();

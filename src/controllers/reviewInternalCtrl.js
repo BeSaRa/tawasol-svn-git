@@ -197,7 +197,7 @@ module.exports = function (app) {
                     //self.replaceRecord(result);
                 });*/
             correspondenceService
-                .returnBulkCorrespondences(self.selectedReviewInternals, $event)
+                .rejectBulkCorrespondences(self.selectedReviewInternals, $event)
                 .then(function () {
                     self.reloadReviewInternals(self.grid.page);
                 });

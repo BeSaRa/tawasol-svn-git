@@ -270,7 +270,7 @@ module.exports = function (app) {
                     //self.replaceRecord(result);
                 });*/
             correspondenceService
-                .returnBulkCorrespondences(self.selectedReviewIncomings, $event)
+                .rejectBulkCorrespondences(self.selectedReviewIncomings, $event)
                 .then(function () {
                     self.reloadReviewIncomings(self.grid.page);
                 });
