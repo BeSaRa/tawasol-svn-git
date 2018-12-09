@@ -11,7 +11,6 @@ module.exports = function (app) {
                                                    rootEntity,
                                                    viewDocumentService,
                                                    managerService,
-                                                   distributionWorkflowService,
                                                    userFolders,
                                                    $window,
                                                    tokenService,
@@ -260,18 +259,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.forward = function (workItem, $event, defer) {
-            /*distributionWorkflowService
-             .controllerMethod
-             .distributionWorkflowSend(workItem.generalStepElm, true, false, null, workItem.generalStepElm.workFlowName, $event)
-             .then(function (result) {
-             dialog.hide();
-             self.reloadProxyMailInboxes(self.grid.page).then(function () {
-             new ResolveDefer(defer);
-             });
-             })
-             .catch(function (result) {
-             self.reloadProxyMailInboxes(self.grid.page);
-             });*/
             workItem.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page)
@@ -290,18 +277,7 @@ module.exports = function (app) {
          * @param defer
          */
         self.reply = function (workItem, $event, defer) {
-            /*distributionWorkflowService
-             .controllerMethod
-             .distributionWorkflowSend(workItem.generalStepElm, false, true, workItem.senderInfo, workItem.generalStepElm.workFlowName, $event)
-             .then(function (result) {
-             dialog.hide();
-             self.reloadProxyMailInboxes(self.grid.page).then(function () {
-             new ResolveDefer(defer);
-             });
-             })
-             .catch(function (result) {
-             self.reloadProxyMailInboxes(self.grid.page);
-             });*/
+
             workItem.launchWorkFlow($event, 'reply')
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page)

@@ -14,7 +14,6 @@ module.exports = function (app) {
                                                       viewDocumentService,
                                                       viewTrackingSheetService,
                                                       managerService,
-                                                      distributionWorkflowService,
                                                       counterService,
                                                       ResolveDefer,
                                                       correspondenceService,
@@ -165,21 +164,6 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-
-            /*distributionWorkflowService
-             .controllerMethod
-             .distributionWorkflowSend(favoriteDocument, false, false, null, favoriteDocument.classDescription.toLowerCase(), $event)
-             .then(function (result) {
-             self.reloadFavoriteDocuments(self.grid.page)
-             .then(function () {
-             new ResolveDefer(defer);
-             });
-             //self.replaceRecord(result);
-             })
-             .catch(function (result) {
-             self.reloadFavoriteDocuments(self.grid.page);
-             //self.replaceRecord(result);
-             });*/
             favoriteDocument.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadFavoriteDocuments(self.grid.page)

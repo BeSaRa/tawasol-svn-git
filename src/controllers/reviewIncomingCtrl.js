@@ -17,7 +17,6 @@ module.exports = function (app) {
                                                    $timeout,
                                                    viewTrackingSheetService,
                                                    contextHelpService,
-                                                   distributionWorkflowService,
                                                    broadcastService,
                                                    correspondenceService,
                                                    ResolveDefer,
@@ -231,16 +230,6 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found_bulk"));
                 return;
             }
-
-            /*distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSendBulk(self.selectedReviewIncomings, "incoming", $event)
-                .then(function () {
-                    self.reloadReviewIncomings(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadReviewIncomings(self.grid.page);
-                });*/
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedReviewIncomings, $event, 'forward', 'favorites')
                 .then(function () {
@@ -333,20 +322,6 @@ module.exports = function (app) {
                 return;
             }
 
-            /*distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(reviewIncoming, false, false, null, "incoming", $event)
-                .then(function (result) {
-                    self.reloadReviewIncomings(self.grid.page)
-                        .then(function () {
-                            new ResolveDefer(defer);
-                        });
-                    //self.replaceRecord(result);
-                })
-                .catch(function (result) {
-                    self.reloadReviewIncomings(self.grid.page);
-                    //self.replaceRecord(result);
-                });*/
             reviewIncoming.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadReviewIncomings(self.grid.page)

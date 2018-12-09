@@ -18,7 +18,6 @@ module.exports = function (app) {
                                                   $timeout,
                                                   viewTrackingSheetService,
                                                   contextHelpService,
-                                                  distributionWorkflowService,
                                                   broadcastService,
                                                   ResolveDefer,
                                                   correspondenceService,
@@ -195,16 +194,6 @@ module.exports = function (app) {
                     dialog.alertMessage(langService.get("content_not_found_bulk"));
                     return;
                 }
-
-                /*distributionWorkflowService
-                    .controllerMethod
-                    .distributionWorkflowSendBulk(self.selectedDraftOutgoings, "outgoing", $event)
-                    .then(function () {
-                        self.reloadDraftOutgoings(self.grid.page);
-                    })
-                    .catch(function () {
-                        self.reloadDraftOutgoings(self.grid.page);
-                    });*/
                 return correspondenceService
                     .launchCorrespondenceWorkflow(self.selectedDraftOutgoings, $event, 'forward', 'favorites')
                     .then(function () {
@@ -298,20 +287,7 @@ module.exports = function (app) {
                     return;
                 }
 
-                /*distributionWorkflowService
-                    .controllerMethod
-                    .distributionWorkflowSend(draftOutgoing, false, false, null, "outgoing", $event)
-                    .then(function (result) {
-                        self.reloadDraftOutgoings(self.grid.page)
-                            .then(function () {
-                                new ResolveDefer(defer);
-                            });
-                        //self.replaceRecord(result);
-                    })
-                    .catch(function (result) {
-                        self.reloadDraftOutgoings(self.grid.page);
-                        //self.replaceRecord(result);
-                    });*/
+
 
                 draftOutgoing.launchWorkFlow($event, 'forward', 'favorites')
                     .then(function () {

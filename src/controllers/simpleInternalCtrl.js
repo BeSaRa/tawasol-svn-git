@@ -25,7 +25,6 @@ module.exports = function (app) {
                                                    cmsTemplate,
                                                    lookups,
                                                    dialog,
-                                                   distributionWorkflowService,
                                                    draftInternalService,
                                                    editAfterApproved,
                                                    mailNotificationService,
@@ -263,14 +262,6 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-
-            /*distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(self.internal, false, false, null, "internal", $event)
-                .then(function () {
-                    counterService.loadCounters();
-                    self.resetAddCorrespondence();
-                });*/
             document.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     counterService.loadCounters();

@@ -30,7 +30,6 @@ module.exports = function (app) {
                                                    receive, // available when the normal receive.
                                                    receiveG2G, // available when g2g receive
                                                    mailNotificationService,
-                                                   distributionWorkflowService,
                                                    correspondenceService) {
         'ngInject';
         var self = this;
@@ -240,14 +239,6 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-
-            /* distributionWorkflowService
-                 .controllerMethod
-                 .distributionWorkflowSend(self.incoming, false, false, null, "incoming", $event)
-                 .then(function () {
-                     counterService.loadCounters();
-                     self.resetAddCorrespondence();
-                 });*/
             document.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     counterService.loadCounters();

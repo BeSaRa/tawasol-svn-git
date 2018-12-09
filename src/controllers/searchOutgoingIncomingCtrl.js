@@ -18,7 +18,6 @@ module.exports = function (app) {
                                                            toast,
                                                            viewTrackingSheetService,
                                                            downloadService,
-                                                           distributionWorkflowService,
                                                            counterService,
                                                            employeeService,
                                                            correspondenceService,

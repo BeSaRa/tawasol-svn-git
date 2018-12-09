@@ -22,7 +22,6 @@ module.exports = function (app) {
                                                   DocumentStatus,
                                                   employeeService,
                                                   counterService,
-                                                  distributionWorkflowService,
                                                   correspondenceService,
                                                   dialog,
                                                   mailNotificationService,
@@ -407,22 +406,6 @@ module.exports = function (app) {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
                 });
-            // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
-            //     .then(function () {
-            //         /*distributionWorkflowService
-            //          .controllerMethod
-            //          .distributionWorkflowSend(searchedGeneralDocument, false, false, null, "internal", $event)
-            //          .then(function (result) {
-            //          self.reloadSearchedGeneralDocuments(self.grid.page);
-            //          })
-            //          .catch(function (result) {
-            //          self.reloadSearchedGeneralDocuments(self.grid.page);
-            //          });*/
-            //         searchedGeneralDocument.launchWorkFlow($event, 'forward', 'favorites')
-            //             .then(function () {
-            //                 self.reloadSearchedGeneralDocuments(self.grid.page);
-            //             });
-            //     });
         };
 
         /**

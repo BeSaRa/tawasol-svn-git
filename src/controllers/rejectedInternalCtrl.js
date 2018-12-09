@@ -15,7 +15,6 @@ module.exports = function (app) {
                                                      validationService,
                                                      employeeService,
                                                      viewTrackingSheetService,
-                                                     distributionWorkflowService,
                                                      contextHelpService,
                                                      correspondenceService,
                                                      ResolveDefer,
@@ -156,16 +155,6 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found_bulk"));
                 return;
             }
-
-            /*distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSendBulk(self.selectedRejectedInternals, "internal", $event)
-                .then(function () {
-                    self.reloadRejectedInternals(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadRejectedInternals(self.grid.page);
-                });*/
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedRejectedInternals, $event, 'forward', 'favorites')
                 .then(function () {
@@ -249,20 +238,6 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
-            /*distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(rejectedInternal, false, false, null, "internal", $event)
-                .then(function (result) {
-                    self.reloadRejectedInternals(self.grid.page)
-                        .then(function () {
-                            new ResolveDefer(defer);
-                        });
-                    //self.replaceRecord(result);
-                })
-                .catch(function (result) {
-                    self.reloadRejectedInternals(self.grid.page);
-                    //self.replaceRecord(result);
-                });*/
             rejectedInternal.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadRejectedInternals(self.grid.page)

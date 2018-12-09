@@ -26,7 +26,6 @@ module.exports = function (app) {
                                              cmsTemplate,
                                              dialog,
                                              $q,
-                                             distributionWorkflowService,
                                              draftOutgoingService,
                                              replyTo,
                                              editAfterApproved,
@@ -335,14 +334,6 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-
-            /*distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(self.outgoing, false, false, null, "outgoing", $event)
-                .then(function () {
-                    counterService.loadCounters();
-                    self.resetAddCorrespondence();
-                });*/
             document.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     counterService.loadCounters();

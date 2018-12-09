@@ -15,7 +15,6 @@ module.exports = function (app) {
                                                         $state,
                                                         viewTrackingSheetService,
                                                         contextHelpService,
-                                                        distributionWorkflowService,
                                                         broadcastService,
                                                         correspondenceService,
                                                         ResolveDefer,
@@ -112,16 +111,6 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found_bulk"));
                 return;
             }
-
-            /*distributionWorkflowService
-             .controllerMethod
-             .distributionWorkflowSendBulk(self.selectedReadyToSendOutgoings, "outgoing", $event)
-             .then(function () {
-             self.reloadReadyToSendOutgoings(self.grid.page);
-             })
-             .catch(function () {
-             self.reloadReadyToSendOutgoings(self.grid.page);
-             });*/
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedReadyToSendOutgoings, $event, 'forward', 'favorites')
                 .then(function () {
@@ -189,20 +178,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
-            /*distributionWorkflowService
-             .controllerMethod
-             .distributionWorkflowSend(readyToSendOutgoing, false, false, null, "outgoing", $event)
-             .then(function (result) {
-             self.reloadReadyToSendOutgoings(self.grid.page)
-             .then(function () {
-             new ResolveDefer(defer);
-             });
-             //self.replaceRecord(result);
-             })
-             .catch(function (result) {
-             self.reloadReadyToSendOutgoings(self.grid.page);
-             //self.replaceRecord(result);
-             });*/
+
             readyToSendOutgoing.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadReadyToSendOutgoings(self.grid.page)

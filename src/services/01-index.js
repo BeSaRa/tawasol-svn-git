@@ -58,7 +58,6 @@ module.exports = function (app) {
     require('./documentCommentService')(app);
     require('./searchOutgoingService')(app);
     require('./managerService')(app);
-    // require('./distributionWorkflowService')(app);
     require('./viewTrackingSheetService')(app);
     require('./userInboxService')(app);
     require('./incomingDepartmentInboxService')(app);

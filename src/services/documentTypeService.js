@@ -123,27 +123,7 @@ module.exports = function (app) {
                     });
             }
 
-            /*/!**
-             * @description Opens popup to add new document type
-             * @param $event
-             *!/
-             distributionWorkflowAdd: function ($event) {
-             return dialog
-             .showDialog({
-             targetEvent: $event,
-             template: cmsTemplate.getPopup('distribution-workflow'),
-             controller: 'distributionWorkflowPopCtrl',
-             controllerAs: 'ctrl',
-             locals: {
-             editMode: false/!*,
-             documentType: new DocumentType(
-             {
-             itemOrder: generator.createNewID(self.documentTypes, 'itemOrder')
-             }),
-             documentTypes: self.documentTypes*!/
-             }
-             });
-             }*/
+
         };
 
         /**

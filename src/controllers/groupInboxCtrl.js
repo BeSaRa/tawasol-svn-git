@@ -16,7 +16,6 @@ module.exports = function (app) {
                                                counterService,
                                                viewDocumentService,
                                                managerService,
-                                               distributionWorkflowService,
                                                $window,
                                                tokenService,
                                                contextHelpService,

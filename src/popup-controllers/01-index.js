@@ -40,7 +40,6 @@ module.exports = function (app) {
     require('./viewDocumentPopCtrl')(app);
     require('./documentTemplatePopCtrl')(app);
     require('./attachmentTypePopCtrl')(app);
-    require('./distributionWorkflowPopCtrl')(app);
     require('./applicationUserSignaturePopCtrl')(app);
     require('./viewAttachmentPopCtrl')(app);
     require('./propertyConfigurationPopCtrl')(app);

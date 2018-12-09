@@ -21,7 +21,6 @@ module.exports = function (app) {
                                                    viewTrackingSheetService,
                                                    contextHelpService,
                                                    distributionWFService,
-                                                   distributionWorkflowService,
                                                    broadcastService,
                                                    ResolveDefer,
                                                    mailNotificationService) {

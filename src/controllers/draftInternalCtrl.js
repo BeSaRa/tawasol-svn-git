@@ -17,7 +17,6 @@ module.exports = function (app) {
                                                   employeeService,
                                                   $timeout,
                                                   viewTrackingSheetService,
-                                                  distributionWorkflowService,
                                                   broadcastService,
                                                   correspondenceService,
                                                   ResolveDefer,
@@ -156,16 +155,6 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found_bulk"));
                 return;
             }
-
-            /*distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSendBulk(self.selectedDraftInternals, "internal", $event)
-                .then(function () {
-                    self.reloadDraftInternals(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadDraftInternals(self.grid.page);
-                });*/
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedDraftInternals, $event, 'forward', 'favorites')
                 .then(function () {
@@ -259,18 +248,7 @@ module.exports = function (app) {
                 return;
             }
 
-            /*distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(draftInternal, false, false, null, "internal", $event)
-                .then(function (result) {
-                    self.reloadDraftInternals(self.grid.page)
-                        .then(function () {
-                            new ResolveDefer(defer);
-                        });
-                })
-                .catch(function (result) {
-                    self.reloadDraftInternals(self.grid.page);
-                });*/
+
 
             draftInternal.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {

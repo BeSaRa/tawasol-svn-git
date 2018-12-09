@@ -13,7 +13,6 @@ module.exports = function (app) {
                                                             managerService,
                                                             rootEntity,
                                                             counterService,
-                                                            distributionWorkflowService,
                                                             downloadService,
                                                             contextHelpService,
                                                             employeeService,
@@ -206,20 +205,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.launchNewDistributionWorkflow = function (sentItemDepartmentInbox, $event, defer) {
-
-            //records will always come from outgoing so to Launch, create URL by passing outgoing
-            /*distributionWorkflowService
-             .controllerMethod
-             .distributionWorkflowSend(sentItemDepartmentInbox, false, false, null, "outgoing", $event)
-             .then(function (result) {
-             self.reloadSentItemDepartmentInboxes(self.grid.page)
-             .then(function () {
-             new ResolveDefer(defer);
-             });
-             })
-             .catch(function (result) {
-             self.reloadSentItemDepartmentInboxes(self.grid.page);
-             });*/
             sentItemDepartmentInbox.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadSentItemDepartmentInboxes(self.grid.page)

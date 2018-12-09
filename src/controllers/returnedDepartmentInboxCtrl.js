@@ -17,7 +17,6 @@ module.exports = function (app) {
                                                             dialog,
                                                             managerService,
                                                             viewDocumentService,
-                                                            distributionWorkflowService,
                                                             contextHelpService,
                                                             counterService,
                                                             viewTrackingSheetService,
@@ -483,33 +482,6 @@ module.exports = function (app) {
                 .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
                 .finally(function (document) {
                     self.reloadReturnedDepartmentInboxes(self.grid.page)
-                });
-        };
-
-        /**
-         * @description Launch distribution workflow for selected draft outgoing mails
-         * @param $event
-         */
-        self.launchDistributionWorkflowBulk = function ($event) {
-            var contentNotExist = _.filter(self.selectedReturnedDepartmentInboxes, function (returnedDepartmentInbox) {
-                return !returnedDepartmentInbox.hasContent();
-            });
-            if (contentNotExist.length > 0) {
-                dialog.alertMessage(langService.get("content_not_found_bulk"));
-                return;
-            }
-
-            distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSendBulk(self.selectedReturnedDepartmentInboxes, "outgoing", $event)
-                .then(function () {
-                    self.reloadReturnedDepartmentInboxes(self.grid.page)
-                        .then(function () {
-                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                        });
-                })
-                .catch(function () {
-                    self.reloadReturnedDepartmentInboxes(self.grid.page);
                 });
         };
 

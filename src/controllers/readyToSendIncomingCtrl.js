@@ -15,7 +15,6 @@ module.exports = function (app) {
                                                         managerService,
                                                         contextHelpService,
                                                         viewTrackingSheetService,
-                                                        distributionWorkflowService,
                                                         broadcastService,
                                                         correspondenceService,
                                                         ResolveDefer,
@@ -149,16 +148,6 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found_bulk"));
                 return;
             }
-
-            /*distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSendBulk(self.selectedReadyToSendIncomings, "incoming", $event)
-                .then(function () {
-                    self.reloadReadyToSendIncomings(self.grid.page);
-                })
-                .catch(function () {
-                    self.reloadReadyToSendIncomings(self.grid.page);
-                });*/
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedReadyToSendIncomings, $event, 'forward', 'favorites')
                 .then(function () {
@@ -230,18 +219,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
-            /* distributionWorkflowService
-                 .controllerMethod
-                 .distributionWorkflowSend(readyToSendIncoming, false, false, null, "incoming", $event)
-                 .then(function (result) {
-                     self.reloadReadyToSendIncomings(self.grid.page)
-                         .then(function () {
-                             new ResolveDefer(defer);
-                         });
-                 })
-                 .catch(function (result) {
-                     self.reloadReadyToSendIncomings(self.grid.page);
-                 });*/
+
             readyToSendIncoming.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadReadyToSendIncomings(self.grid.page)

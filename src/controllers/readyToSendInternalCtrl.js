@@ -14,7 +14,6 @@ module.exports = function (app) {
                                                         employeeService,
                                                         managerService,
                                                         viewTrackingSheetService,
-                                                        distributionWorkflowService,
                                                         contextHelpService,
                                                         broadcastService,
                                                         correspondenceService,
@@ -124,16 +123,6 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found_bulk"));
                 return;
             }
-
-            /* distributionWorkflowService
-                 .controllerMethod
-                 .distributionWorkflowSendBulk(self.selectedReadyToSendInternals, "internal", $event)
-                 .then(function () {
-                     self.reloadReadyToSendInternals(self.grid.page);
-                 })
-                 .catch(function () {
-                     self.reloadReadyToSendInternals(self.grid.page);
-                 });*/
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedReadyToSendInternals, $event, 'forward', 'favorites')
                 .then(function () {
@@ -209,18 +198,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get('content_not_found'));
                 return;
             }
-            /*distributionWorkflowService
-                .controllerMethod
-                .distributionWorkflowSend(readyToSendInternal, false, false, null, "internal", $event)
-                .then(function (result) {
-                    self.reloadReadyToSendInternals(self.grid.page)
-                        .then(function () {
-                            new ResolveDefer(defer);
-                        });
-                })
-                .catch(function (result) {
-                    self.reloadReadyToSendInternals(self.grid.page);
-                });*/
+
             readyToSendInternal.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadReadyToSendInternals(self.grid.page)

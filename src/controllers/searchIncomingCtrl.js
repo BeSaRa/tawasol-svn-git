@@ -18,7 +18,6 @@ module.exports = function (app) {
                                                    toast,
                                                    viewTrackingSheetService,
                                                    downloadService,
-                                                   distributionWorkflowService,
                                                    counterService,
                                                    employeeService,
                                                    correspondenceService,
@@ -374,25 +373,7 @@ module.exports = function (app) {
                         .then(function () {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
-                })
-            // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
-            //     .then(function () {
-            //         /*distributionWorkflowService
-            //          .controllerMethod
-            //          .distributionWorkflowSend(searchedIncomingDocument, false, false, null, "incoming", $event)
-            //          .then(function (result) {
-            //          self.reloadSearchedIncomingDocument(self.grid.page);
-            //          //self.replaceRecord(result);
-            //          })
-            //          .catch(function (result) {
-            //          self.reloadSearchedIncomingDocument(self.grid.page);
-            //          //self.replaceRecord(result);
-            //          });*/
-            //         searchedIncomingDocument.launchWorkFlow($event, 'forward', 'favorites')
-            //             .then(function () {
-            //                 self.reloadSearchedIncomingDocument(self.grid.page);
-            //             });
-            //     });
+                });
         };
 
         /**

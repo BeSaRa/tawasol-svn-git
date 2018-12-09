@@ -19,7 +19,6 @@ module.exports = function (app) {
                                                    $state,
                                                    viewTrackingSheetService,
                                                    downloadService,
-                                                   distributionWorkflowService,
                                                    counterService,
                                                    employeeService,
                                                    correspondenceService,
@@ -357,23 +356,6 @@ module.exports = function (app) {
                             mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
                 });
-
-            // return dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
-            //     .then(function () {
-            //         /*distributionWorkflowService
-            //          .controllerMethod
-            //          .distributionWorkflowSend(searchedInternalDocument, false, false, null, "internal", $event)
-            //          .then(function (result) {
-            //          self.reloadSearchedInternalDocuments(self.grid.page);
-            //          })
-            //          .catch(function (result) {
-            //          self.reloadSearchedInternalDocuments(self.grid.page);
-            //          });*/
-            //         searchedInternalDocument.launchWorkFlow($event, 'forward', 'favorites')
-            //             .then(function () {
-            //                 self.reloadSearchedInternalDocuments(self.grid.page);
-            //             });
-            //     });
         };
 
         /**

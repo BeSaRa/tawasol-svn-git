@@ -13,8 +13,6 @@ module.exports = function (app) {
                                           rootEntity,
                                           _,
                                           viewDocumentService,
-                                          //managerService,
-                                          distributionWorkflowService,
                                           userFolders,
                                           $window,
                                           tokenService,

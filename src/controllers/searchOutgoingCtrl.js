@@ -20,7 +20,6 @@ module.exports = function (app) {
                                                    viewTrackingSheetService,
                                                    downloadService,
                                                    employeeService,
-                                                   distributionWorkflowService,
                                                    dialog,
                                                    gridService,
                                                    counterService,
