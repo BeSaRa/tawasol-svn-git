@@ -456,12 +456,12 @@ module.exports = function (app) {
                 .then(function (result) {
                     var proxyInfo = applicationUser.hasProxy() ? applicationUser.getProxyInformation() : null;
                     return applicationUser.hasProxy() ?
-                        (applicationUser.currentProxyUserInCollection(result) ? result : ouApplicationUserService
+                        (applicationUser.currentProxyUserInCollection(result) ? result : (ouApplicationUserService
                             .loadProxyUserByUserIdAndOUId(proxyInfo.userId, proxyInfo.ouId))
                             .then(function (proxyUser) {
                                 result.push(proxyUser);
                                 return result;
-                            }) : result;
+                            })) : result;
                 });
         }
 
