@@ -55,5 +55,7 @@
         'ngInject';
         console.log("%c *** CMS LOADER START ***", "color:blue");
     });
-
+    window['GET_PRIVATE_BUILD'] = function () {
+        return app.$_privateBuildNumber;
+    }
 })(document);

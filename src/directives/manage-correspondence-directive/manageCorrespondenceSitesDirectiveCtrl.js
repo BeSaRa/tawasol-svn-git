@@ -324,12 +324,14 @@ module.exports = function (app) {
             _addSite('To', site)
                 .then(function () {
                     self.subSearchSelected = [];
+                    self.simpleSubSearch = '';
                     /*self['sitesInfoToFollowupStatus'] = null;
                     self['sitesInfoToFollowupStatusDate'] = null;*/
                     self.resetToStatusAndDate();
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                         self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
+                        self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
                     });
                 })
         };
@@ -343,12 +345,14 @@ module.exports = function (app) {
             _addSite('CC', site)
                 .then(function () {
                     self.subSearchSelected = [];
+                    self.simpleSubSearch = '';
                     /*self['sitesInfoCCFollowupStatus'] = null;
                     self['sitesInfoCCFollowupStatusDate'] = null;*/
                     self.resetCCStatusAndDate();
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                         self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
+                        self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
                     });
                 });
         };
@@ -687,6 +691,7 @@ module.exports = function (app) {
                     _concatCorrespondenceSites(true).then(function () {
                         self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
                         self.subSearchResult_DL = _.filter(self.subSearchResult_DL_Copy, _filterSubSites);
+                        self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
                     });
                 });
         };

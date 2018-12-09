@@ -26,6 +26,7 @@ module.exports = function (app) {
             self.proxyMessage = null;
             self.permissionList = null;
             self.ouViewPermissionList = null;
+            self.proxyOUId = null;
 
             self.ouInfo = null;
 

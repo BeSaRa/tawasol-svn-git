@@ -303,10 +303,11 @@ module.exports = function (app) {
              * @return {{userId: *, ouId: null}}
              */
             Employee.prototype.getProxyInformation = function () {
+                var self = this, proxyUser = !!self.organization.proxyUser.hasOwnProperty('applicationUser');
                 return {
-                    userId: this.organization.proxyUser.id,
-                    ouId: this.organization.proxyOUId,
-                    securityLevels: this.proxyAuthorityLevels
+                    userId: proxyUser ? self.organization.proxyUser.applicationUser.id : self.organization.proxyUser.id,
+                    ouId: proxyUser ? self.organization.proxyUser.organization.id : self.organization.proxyOUId,
+                    securityLevels: self.proxyAuthorityLevels
                 };
             };
 

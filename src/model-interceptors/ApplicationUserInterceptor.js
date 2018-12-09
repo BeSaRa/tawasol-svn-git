@@ -22,7 +22,7 @@ module.exports = function (app) {
             delete model.ouList;
             delete model.organization;
             delete model.signature;
-            
+            delete model.userOrganization;
             return model;
         });
 

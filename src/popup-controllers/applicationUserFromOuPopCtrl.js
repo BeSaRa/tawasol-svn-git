@@ -863,7 +863,7 @@ module.exports = function (app) {
                     .updateOUApplicationUser(ouApplicationUser)
                     .then(function () {
 
-                        if (employeeService.isCurrentEmployee(self.applicationUser)) {
+                        if (employeeService.isCurrentOUApplicationUser(ouApplicationUser)) {
                             employeeService.setCurrentOUApplicationUser(ouApplicationUser);
                             employeeService.setCurrentEmployee(self.ouApplicationUser.applicationUser);
                         }

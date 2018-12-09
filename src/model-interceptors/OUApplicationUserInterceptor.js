@@ -43,7 +43,6 @@ module.exports = function (app) {
             })) : "[]";
 
             if (model.proxyUser) {
-                // model.proxyUser = model.proxyUser.id;
                 getUnixTimeStamp(model, ["proxyStartDate", "proxyEndDate"]);
                 model.proxyOUId = model.proxyUser instanceof ProxyUser ? model.proxyUser.organization.id : model.proxyOUId;
                 model.proxyUser = generator.interceptSendInstance('ApplicationUser', model.proxyUser instanceof ProxyUser ? model.proxyUser.applicationUser : model.proxyUser);

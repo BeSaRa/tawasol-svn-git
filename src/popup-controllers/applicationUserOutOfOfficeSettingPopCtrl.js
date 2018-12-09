@@ -210,7 +210,6 @@ module.exports = function (app) {
                     $timeout(function () {
                         dialog.confirmMessage(html[0].innerHTML)
                             .then(function (result) {
-                                // form.$setUntouched();
                                 dialog
                                     .showDialog({
                                         targetEvent: null,

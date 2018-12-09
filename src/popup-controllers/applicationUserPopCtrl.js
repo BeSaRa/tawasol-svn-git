@@ -944,11 +944,8 @@ module.exports = function (app) {
                 return ouApplicationUserService
                     .updateOUApplicationUser(ouApplicationUser)
                     .then(function () {
-                        //if (!self.currentOrganization) {
                         toast.success(langService.get('edited_successfully'));
-                        //}
-                        if (employeeService.isCurrentEmployee(self.applicationUser)) {
-
+                        if (employeeService.isCurrentOUApplicationUser(ouApplicationUser)) {
                             employeeService.setCurrentOUApplicationUser(ouApplicationUser);
                             employeeService.setCurrentEmployee(self.ouApplicationUser.applicationUser);
                         }
