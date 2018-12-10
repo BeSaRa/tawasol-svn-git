@@ -268,7 +268,7 @@
                 // quick search
                 .addToAllWithBase('quickSearchCorrespondence', 'cms-entity/correspondence/search/quick')
                 // incoming
-                .addToAllWithBase('incomings', 'cms-entity/correspondence/incoming/')
+                .addToAllWithBase('incomings', 'cms-entity/correspondence/incoming')
                 // internal
                 .addToAllWithBase('internals', 'cms-entity/correspondence/internal')
                 // to manage any common correspondences

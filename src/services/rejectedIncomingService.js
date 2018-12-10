@@ -22,7 +22,7 @@ module.exports = function (app) {
          * @returns {Promise|rejectedIncoming}
          */
         self.loadRejectedIncomings = function () {
-            return $http.get(urlService.incomings + 'ou/' + employeeService.getEmployee().getOUID() + '/rejected').then(function (result) {
+            return $http.get(urlService.incomings + '/ou/' + employeeService.getEmployee().getOUID() + '/rejected').then(function (result) {
                 self.rejectedIncomings = generator.generateCollection(result.data.rs, Incoming, self._sharedMethods);
                 self.rejectedIncomings = generator.interceptReceivedCollection(['Correspondence', 'Incoming'], self.rejectedIncomings);
                 return self.rejectedIncomings;

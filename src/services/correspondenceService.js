@@ -2240,14 +2240,9 @@ module.exports = function (app) {
                             second: correspondence.reason
                         };
                     });
-                    var info = correspondences[0].getInfo(),
-                        url = urlService['outgoings'] + '/reject/bulk';
-                    if (info.documentClass === 'incoming')
-                        url = urlService['incomings'] + 'reject/bulk';
-                    else if (info.documentClass === 'internal')
-                        url = urlService['internals'] + '/reject/bulk';
+                    var info = correspondences[0].getInfo();
                     return $http
-                        .put(url, items)
+                        .put(_createUrlSchema(null, info.documentClass, ['reject', 'bulk'].join('/')), items)
                         .then(function (result) {
                             return _bulkMessages(result, correspondences, ignoreMessage, 'failed_reject_selected', 'reject_success', 'reject_success_except_following');
                         });
@@ -3098,10 +3093,10 @@ module.exports = function (app) {
         };
 
         self.unlockWorkItem = function (workItem, ignoreMessage, $event) {
-            if (ignoreMessage){
-              return _unlockWorkItem(workItem, ignoreMessage)
+            if (ignoreMessage) {
+                return _unlockWorkItem(workItem, ignoreMessage)
             }
-            else{
+            else {
                 var confirmMsg = langService.get('unlock_confirmation_msg').change({
                     user: workItem.getLockingUserInfo().getTranslatedName(),
                     date: workItem.getLockingInfo().lockingTime
@@ -3114,7 +3109,7 @@ module.exports = function (app) {
             }
         };
 
-        var _unlockWorkItem = function(workItem, ignoreMessage){
+        var _unlockWorkItem = function (workItem, ignoreMessage) {
             var info = workItem.getInfo();
             return $http.put(urlService.departmentInboxes + '/un-lock/wob-num/' + info.wobNumber)
                 .then(function (result) {

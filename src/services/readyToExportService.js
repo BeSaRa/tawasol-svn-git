@@ -285,25 +285,6 @@ module.exports = function (app) {
                                 return response;
                             });
                     });
-
-
-                /*return self.terminateBulkReadyToExport(readyToExport)
-                    .then(function (result) {
-                        var response = false;
-                        if (result.length === readyToExport.length) {
-                            toast.error(langService.get("failed_terminate_selected"));
-                            response = false;
-                        } else if (result.length) {
-                            generator.generateFailedBulkActionRecords('following_records_failed_to_terminate', _.map(result, function (readyToExport) {
-                                return readyToExport.getTranslatedName();
-                            }));
-                            response = true;
-                        } else {
-                            toast.success(langService.get("selected_terminate_success"));
-                            response = true;
-                        }
-                        return response;
-                    });*/
             },
             /**
              * @description open popup for ready to export options
@@ -312,9 +293,6 @@ module.exports = function (app) {
              */
             readyToExportOptions: function (workItem, $event) {
                 var exportOptions = rootEntity.getGlobalSettings().hasExportOptions();
-                // if (!exportOptions) {
-                //     return self.exportReadyToExport(workItem, new ReadyToExportOption());
-                // }
 
                 return dialog
                     .showDialog({

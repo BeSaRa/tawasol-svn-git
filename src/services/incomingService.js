@@ -79,7 +79,7 @@ module.exports = function (app) {
         self.addIncoming = function (incoming) {
             var route = incoming.docStatus === 3 ? '/draft' : '/metadata';
             return $http
-                .post((urlService.incomings + route), generator.interceptSendInstance('Incoming', incoming))
+                .post((urlService.incomings +'/'+ route), generator.interceptSendInstance('Incoming', incoming))
                 .then(function (result) {
                     incoming.vsId = result.data.rs;
                     return generator.generateInstance(incoming, Incoming, self._sharedMethods);

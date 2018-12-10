@@ -21,7 +21,7 @@ module.exports = function (app) {
          * @returns {Promise|Incoming}
          */
         self.loadReadyToSendIncomings = function () {
-            return $http.get(urlService.incomings + 'ou/' + employeeService.getEmployee().getOUID() + '/ready-to-sent').then(function (result) {
+            return $http.get(urlService.incomings + '/ou/' + employeeService.getEmployee().getOUID() + '/ready-to-sent').then(function (result) {
                 self.readyToSendIncomings = generator.generateCollection(result.data.rs, Incoming, self._sharedMethods);
                 self.readyToSendIncomings = generator.interceptReceivedCollection(['Correspondence', 'Incoming'], self.readyToSendIncomings);
                 return self.readyToSendIncomings;

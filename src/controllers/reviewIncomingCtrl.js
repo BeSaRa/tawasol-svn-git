@@ -258,17 +258,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.rejectIncomingBulk = function ($event) {
-            /*reviewIncomingService
-                .controllerMethod
-                .reviewIncomingRejectBulk(self.selectedReviewIncomings, $event)
-                .then(function (result) {
-                    self.reloadReviewIncomings(self.grid.page);
-                    //self.replaceRecord(result);
-                })
-                .catch(function (result) {
-                    self.reloadReviewIncomings(self.grid.page);
-                    //self.replaceRecord(result);
-                });*/
             correspondenceService
                 .rejectBulkCorrespondences(self.selectedReviewIncomings, $event)
                 .then(function () {

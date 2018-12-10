@@ -21,7 +21,7 @@ module.exports = function (app) {
          * @returns {Promise|reviewIncomings}
          */
         self.loadReviewIncomings = function () {
-            return $http.get(urlService.incomings + 'ou/' + employeeService.getEmployee().getOUID() + '/review').then(function (result) {
+            return $http.get(urlService.incomings + '/ou/' + employeeService.getEmployee().getOUID() + '/review').then(function (result) {
                 self.reviewIncomings = generator.generateCollection(result.data.rs, Incoming, self._sharedMethods);
                 self.reviewIncomings = generator.interceptReceivedCollection(['Correspondence', 'Incoming'], self.reviewIncomings);
                 return self.reviewIncomings;
@@ -338,6 +338,7 @@ module.exports = function (app) {
          */
         self.rejectIncomingBulk = function (reviewIncomings) {
             var vsIds = reviewIncomings[0].hasOwnProperty('vsId') ? _.map(reviewIncomings, 'vsId') : reviewIncomings;
+            console.log(urlService.incomings + '/reject/bulk', vsIds);
             return $http
                 .put(urlService.incomings + '/reject/bulk', vsIds)
                 .then(function (result) {
