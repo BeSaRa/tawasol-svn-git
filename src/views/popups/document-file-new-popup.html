@@ -57,8 +57,9 @@
                                     </md-input-container>
                                     <md-input-container flex>
                                         <label for="parent">{{lang.parent}}</label>
-                                        <!-- disable parent dropdown if add mode and parent is already available. means adding sub file from sub files popup-->
-                                        <md-select id="parent" ng-disabled="ctrl.model.parent && !ctrl.editMode"
+                                        <!-- disable parent dropdown if record has children or add mode and parent is already available. means adding sub file from sub files popup-->
+                                        <md-select id="parent"
+                                                   ng-disabled="ctrl.model.hasChildren() || (ctrl.model.parent && !ctrl.editMode)"
                                                    ng-model="ctrl.documentFile.parent">
                                             <md-option ng-value="">{{lang.no_parent}}</md-option>
                                             <md-option

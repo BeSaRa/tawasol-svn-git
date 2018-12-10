@@ -87,9 +87,8 @@ module.exports = function (app) {
                 .then(function (classification) {
                     self.behindScene(classification)
                         .then(function (classification) {
-                            // self.reloadClassifications(self.grid.page).then(function () {
+                            self.replaceRecordFromGrid(classification);
                             toast.success(langService.get('edit_success').change({name: classification.getTranslatedName()}));
-                            // });
                         });
                 })
                 .catch(function (classification) {

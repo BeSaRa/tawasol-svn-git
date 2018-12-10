@@ -342,10 +342,24 @@ module.exports = function (app) {
             }
         };
 
+        self.setMinEndDate = function () {
+            if (self.privateAnnouncement.startDate) {
+                var endDate = angular.copy(self.privateAnnouncement.startDate);
+                self.minEndDate = new Date(endDate.setDate(endDate.getDate() + 1));
+            }
+            else {
+                self.privateAnnouncement.endDate = null;
+                self.minEndDate = null;
+            }
+        };
+        self.setMinEndDate();
+
         self.isOuNotIncluded = function (ou) {
             return (_.findIndex(self.privateAnnouncement.subscribers, function (subscriber) {
                 return subscriber.ouId === ou.id;
             }) < 0);
         }
+
+
     });
 };

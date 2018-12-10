@@ -72,6 +72,7 @@
                             <md-datepicker id="startDate" ng-required="!ctrl.alwaysActive"
                                            ng-model="ctrl.publicAnnouncement.startDate"
                                            md-max-date="ctrl.publicAnnouncement.endDate"
+                                           ng-change="ctrl.setMinEndDate()"
                                            name="startDate" ng-disabled="ctrl.alwaysActive">
                             </md-datepicker>
                             <div ng-messages="publicAnnouncementForm.startDate.$error">
@@ -81,7 +82,7 @@
                         <md-input-container flex>
                             <label for="endDate">{{lang.end_date}}</label>
                             <md-datepicker ng-required="!ctrl.alwaysActive || ctrl.publicAnnouncement.startDate"
-                                           md-min-date="ctrl.publicAnnouncement.startDate"
+                                           md-min-date="ctrl.minEndDate"
                                            ng-model="ctrl.publicAnnouncement.endDate" name="endDate" id="endDate"
                                            ng-disabled="ctrl.alwaysActive || !ctrl.publicAnnouncement.startDate"
                             ></md-datepicker>

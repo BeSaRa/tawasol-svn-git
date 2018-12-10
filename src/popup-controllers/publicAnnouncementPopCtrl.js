@@ -155,5 +155,17 @@ module.exports = function (app) {
             }
         };
 
+        self.setMinEndDate = function () {
+            if (self.publicAnnouncement.startDate) {
+                var endDate = angular.copy(self.publicAnnouncement.startDate);
+                self.minEndDate = new Date(endDate.setDate(endDate.getDate() + 1));
+            }
+            else {
+                self.publicAnnouncement.endDate = null;
+                self.minEndDate = null;
+            }
+        };
+        self.setMinEndDate();
+
     });
 };

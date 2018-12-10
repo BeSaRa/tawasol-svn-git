@@ -79,6 +79,13 @@ module.exports = function (app) {
                 return this.children = documentFileService.getChildrenFromDocumentFile(this);
             };
 
+            /**
+             * @description checks if document file has children
+             */
+            DocumentFile.prototype.hasChildren = function () {
+                return this.childCount > 0;
+            };
+
             DocumentFile.prototype.getRelatedOUDocumentFiles = function () {
                 return this.relatedOus = _.map(ouDocumentFileService.getRelatedOUDocumentFile(this), function (item) {
                     var organization = organizationService.getOrganizationById(item.ouid);

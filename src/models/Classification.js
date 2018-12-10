@@ -76,7 +76,8 @@ module.exports = function (app) {
                 return this;
             };
             Classification.prototype.hasChildren = function () {
-                return this.children.length;
+                // return this.children.length;
+                return this.childCount > 0;
             };
 
             Classification.prototype.cannotSave = function () {

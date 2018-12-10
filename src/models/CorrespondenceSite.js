@@ -75,7 +75,8 @@ module.exports = function (app) {
                 return this;
             };
             CorrespondenceSite.prototype.hasChildren = function () {
-                return this.children.length;
+                // return this.children.length;
+                return this.childCount > 0;
             };
 
             CorrespondenceSite.prototype.cannotSave = function () {

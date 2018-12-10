@@ -275,6 +275,8 @@ module.exports = function (app) {
          * @param organizationId
          */
         self.onRegistryChange = function (organizationId) {
+            if(!organizationId)
+                return;
             self.subOrganizations = [];
             organizationService
                 .loadChildrenOrganizations(organizationId)
