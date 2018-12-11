@@ -10,6 +10,7 @@ module.exports = function (app) {
                                       dialog,
                                       generator,
                                       moment,
+                                      employeeService,
                                       lookupService) {
         'ngInject';
 
@@ -652,6 +653,12 @@ module.exports = function (app) {
                     return info;
                 }
                 return null;
+            };
+
+            WorkItem.prototype.isLockedByCurrentUser = function () {
+                var info = this.getLockingInfo();
+                if (!info) return false;
+                return (info && info.domainName === employeeService.getEmployee().domainName);
             };
 
             WorkItem.prototype.getLockingUserInfo = function () {

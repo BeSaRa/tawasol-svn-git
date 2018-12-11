@@ -141,6 +141,10 @@ module.exports = function (app) {
              * @param $event
              */
             self.changeApprovedInternalStar = function (approvedInternal, $event) {
+                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 self.starServices[approvedInternal.generalStepElm.starred](approvedInternal)
                     .then(function (result) {
                         if (result) {
@@ -168,6 +172,10 @@ module.exports = function (app) {
              * @param defer
              */
             self.terminate = function (approvedInternal, $event, defer) {
+                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 approvedInternalService.controllerMethod
                     .approvedInternalTerminate(approvedInternal, $event)
                     .then(function (result) {
@@ -185,6 +193,10 @@ module.exports = function (app) {
              * @param $event
              */
             self.addToFavorite = function (approvedInternal, $event) {
+                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 favoriteDocumentsService.controllerMethod
                     .favoriteDocumentAdd(approvedInternal.generalStepElm.vsId, $event)
                     .then(function (result) {
@@ -207,6 +219,10 @@ module.exports = function (app) {
              * @param $event
              */
             self.getApprovedInternalLink = function (approvedInternal, $event) {
+                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 console.log('getApprovedInternalLink', approvedInternal);
             };
 
@@ -233,6 +249,10 @@ module.exports = function (app) {
             self.launchDistributionWorkflow = function (approvedInternal, $event, defer) {
                 if (!approvedInternal.hasContent()) {
                     dialog.alertMessage(langService.get("content_not_found"));
+                    return;
+                }
+                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
                     return;
                 }
                 approvedInternal
@@ -277,8 +297,8 @@ module.exports = function (app) {
              * @param $event
              */
             self.viewApprovedInternalDirectLinkedDocuments = function (approvedInternal, $event) {
-                if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                    dialog.infoMessage(langService.get('no_view_permission'));
+                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
                     return;
                 }
                 console.log('viewApprovedInternalDirectLinkedDocuments : ', approvedInternal);
@@ -290,8 +310,8 @@ module.exports = function (app) {
              * @param $event
              */
             self.viewApprovedInternalCompleteLinkedDocuments = function (approvedInternal, $event) {
-                if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
-                    dialog.infoMessage(langService.get('no_view_permission'));
+                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
                     return;
                 }
                 console.log('viewApprovedInternalCompleteLinkedDocuments : ', approvedInternal);
@@ -303,6 +323,10 @@ module.exports = function (app) {
              * @param $event
              */
             self.sendApprovedInternalLinkToDocumentByEmail = function (approvedInternal, $event) {
+                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 console.log('sendApprovedInternalLinkToDocumentByEmail : ', approvedInternal);
             };
 
@@ -312,6 +336,10 @@ module.exports = function (app) {
              * @param $event
              */
             self.sendApprovedInternalCompositeDocumentAsAttachment = function (approvedInternal, $event) {
+                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 console.log('sendApprovedInternalCompositeDocumentAsAttachment : ', approvedInternal);
             };
 
@@ -321,6 +349,10 @@ module.exports = function (app) {
              * @param $event
              */
             self.sendApprovedInternalCompositeDocumentAsAttachmentByEmail = function (approvedInternal, $event) {
+                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 console.log('sendApprovedInternalCompositeDocumentAsAttachmentByEmail : ', approvedInternal);
             };
 
@@ -330,6 +362,10 @@ module.exports = function (app) {
              * @param $event
              */
             self.sendApprovedInternalMainDocumentFax = function (approvedInternal, $event) {
+                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 console.log('sendApprovedInternalMainDocumentFax : ', approvedInternal);
             };
 
@@ -339,6 +375,10 @@ module.exports = function (app) {
              * @param $event
              */
             self.sendApprovedInternalSMS = function (approvedInternal, $event) {
+                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 console.log('sendApprovedInternalSMS : ', approvedInternal);
             };
 
@@ -348,6 +388,10 @@ module.exports = function (app) {
              * @param $event
              */
             self.sendApprovedInternalMainDocumentAsAttachment = function (approvedInternal, $event) {
+                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 console.log('sendApprovedInternalMainDocumentAsAttachment : ', approvedInternal);
             };
 
@@ -357,6 +401,10 @@ module.exports = function (app) {
              * @param $event
              */
             self.sendApprovedInternalLink = function (approvedInternal, $event) {
+                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 console.log('sendApprovedInternalLink : ', approvedInternal);
             };
             var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
@@ -375,6 +423,10 @@ module.exports = function (app) {
             self.previewDocument = function (approvedInternal, $event) {
                 if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                     dialog.infoMessage(langService.get('no_view_permission'));
+                    return;
+                }
+                if (approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: approvedInternal.getLockingUserInfo().getTranslatedName()}));
                     return;
                 }
                 return correspondenceService.viewCorrespondence(approvedInternal, self.gridActions, checkIfEditPropertiesAllowed(approvedInternal, true), true, false, false, true)
@@ -397,6 +449,10 @@ module.exports = function (app) {
                     dialog.infoMessage(langService.get('no_view_permission'));
                     return;
                 }
+                if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 workItem.viewNewApprovedInternalWorkItemDocument(self.gridActions, 'approvedInternal', $event)
                     .then(function () {
                         self.reloadApprovedInternals(self.grid.page);
@@ -414,6 +470,10 @@ module.exports = function (app) {
              * @return {*}
              */
             self.getDocumentVersions = function (workItem, $event) {
+                if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 return workItem
                     .viewSpecificVersion(self.gridActions, $event);
             };
@@ -423,6 +483,10 @@ module.exports = function (app) {
              * @param $event
              */
             self.duplicateCurrentVersion = function (workItem, $event) {
+                if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 var info = workItem.getInfo();
                 return workItem
                     .duplicateVersion($event)
@@ -441,6 +505,10 @@ module.exports = function (app) {
              * @return {*}
              */
             self.duplicateVersion = function (workItem, $event) {
+                if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 var info = workItem.getInfo();
                 return workItem
                     .duplicateSpecificVersion($event)
@@ -480,6 +548,10 @@ module.exports = function (app) {
              * @description do broadcast for workItem.
              */
             self.broadcast = function (workItem, $event, defer) {
+                if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 workItem
                     .correspondenceBroadcast()
                     .then(function () {
@@ -496,6 +568,10 @@ module.exports = function (app) {
              * @param $event
              */
             self.editAfterApprove = function (model, $event) {
+                if (model.isLocked() && !model.isLockedByCurrentUser()) {
+                    dialog.infoMessage(langService.get('item_locked_by').change({name: model.getLockingUserInfo().getTranslatedName()}));
+                    return;
+                }
                 var info = model.getInfo(), list = listGeneratorService.createUnOrderList(),
                     langKeys = ['signature_serial_will_removed', 'the_book_will_go_to_audit', 'serial_retained'];
                 _.map(langKeys, function (item) {
@@ -606,6 +682,9 @@ module.exports = function (app) {
                     callback: self.previewDocument,
                     class: "action-green",
                     permissionKey: 'VIEW_DOCUMENT',
+                    disabled: function (model) {
+                        return model.isLocked() && !model.isLockedByCurrentUser();
+                    },
                     checkShow: function (action, model) {
                         //If no content or no view document permission, hide the button
                         return self.checkToShowAction(action, model) && model.hasContent();
@@ -625,6 +704,9 @@ module.exports = function (app) {
                     shortcut: true,
                     callback: self.terminate,
                     class: "action-green",
+                    disabled: function (model) {
+                        return model.isLocked() && !model.isLockedByCurrentUser();
+                    },
                     checkShow: self.checkToShowAction
                 },
                 // Add To Favorite
@@ -636,6 +718,9 @@ module.exports = function (app) {
                     shortcut: false,
                     callback: self.addToFavorite,
                     class: "action-green",
+                    disabled: function (model) {
+                        return model.isLocked() && !model.isLockedByCurrentUser();
+                    },
                     checkShow: self.checkToShowAction
                 },
                 // Open
@@ -648,6 +733,9 @@ module.exports = function (app) {
                     callback: self.viewDocument,
                     class: "action-green",
                     permissionKey: 'VIEW_DOCUMENT',
+                    disabled: function (model) {
+                        return model.isLocked() && !model.isLockedByCurrentUser();
+                    },
                     checkShow: function (action, model) {
                         //If no content or no view document permission, hide the button
                         return self.checkToShowAction(action, model) && model.hasContent();
@@ -662,6 +750,9 @@ module.exports = function (app) {
                     callback: self.launchDistributionWorkflow,
                     class: "action-green",
                     permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                    disabled: function (model) {
+                        return model.isLocked() && !model.isLockedByCurrentUser();
+                    },
                     checkShow: self.checkToShowAction
                 },
                 // View Tracking Sheet
@@ -683,6 +774,9 @@ module.exports = function (app) {
                     hide: false,
                     permissionKey: 'BROADCAST_DOCUMENT',
                     callback: self.broadcast,
+                    disabled: function (model) {
+                        return model.isLocked() && !model.isLockedByCurrentUser();
+                    },
                     checkShow: function (action, model) {
                         return self.checkToShowAction(action, model) && !model.isBroadcasted() && (model.getSecurityLevelLookup().lookupKey !== 4);
                     }
@@ -696,6 +790,9 @@ module.exports = function (app) {
                     callback: self.editAfterApprove,
                     class: "action-green",
                     showInView: false,
+                    disabled: function (model) {
+                        return model.isLocked() && !model.isLockedByCurrentUser();
+                    },
                     permissionKey: "EDIT_INTERNAL_CONTENT", //TODO: Apply correct permission when added to database.
                     checkShow: function (action, model) {
                         var info = model.getInfo();
@@ -709,6 +806,9 @@ module.exports = function (app) {
                     text: 'send',
                     shortcut: false,
                     hide: true,
+                    disabled: function (model) {
+                        return model.isLocked() && !model.isLockedByCurrentUser();
+                    },
                     checkShow: self.checkToShowAction,
                     permissionKey: [
                         "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
@@ -795,6 +895,9 @@ module.exports = function (app) {
                     permissionKey: "VIEW_DOCUMENT_VERSION",
                     class: "action-green",
                     showInView: true,
+                    disabled: function (model) {
+                        return model.isLocked() && !model.isLockedByCurrentUser();
+                    },
                     checkShow: self.checkToShowAction
                 },
                 // duplicate current version
@@ -807,6 +910,9 @@ module.exports = function (app) {
                     class: "action-green",
                     permissionKey: 'DUPLICATE_BOOK_CURRENT',
                     showInView: true,
+                    disabled: function (model) {
+                        return model.isLocked() && !model.isLockedByCurrentUser();
+                    },
                     checkShow: function (action, model) {
                         var info = model.getInfo();
                         return self.checkToShowAction(action, model) && !info.isPaper;
@@ -821,6 +927,9 @@ module.exports = function (app) {
                     callback: self.duplicateVersion,
                     class: "action-green",
                     showInView: true,
+                    disabled: function (model) {
+                        return model.isLocked() && !model.isLockedByCurrentUser();
+                    },
                     permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
                     checkShow: self.checkToShowAction
                 },

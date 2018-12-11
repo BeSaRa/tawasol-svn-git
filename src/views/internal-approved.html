@@ -73,6 +73,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="approvedInternal"
+                                        ng-disabled="approvedInternal.isLocked() && !approvedInternal.isLockedByCurrentUser()"
                                         grid-right-click-directive="approvedInternal"
                                         model="approvedInternal"
                                         selected-length="{{ctrl.selectedApprovedInternals.length ? ctrl.selectedApprovedInternals.length : 0}}"

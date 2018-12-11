@@ -52,9 +52,6 @@
                                                 </md-button>-->
                                             </div>
                                         </th>
-                                        <!--<th ng-if="!ctrl.selectedReadyToExports.length" md-column md-order-by="">
-                                            &lt;!&ndash; Indicators&ndash;&gt;
-                                        </th>-->
                                         <th ng-if="!ctrl.selectedReadyToExports.length" md-column
                                             md-order-by="generalStepElm.docFullSerial">
                                             <span>{{lang.label_serial}}</span>
@@ -102,24 +99,13 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="readyToExport"
+                                        ng-disabled="readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()"
                                         grid-right-click-directive="readyToExport"
                                         selected-length="{{ctrl.selectedReadyToExports.length ? ctrl.selectedReadyToExports.length : 0}}"
                                         model="readyToExport"
                                         ng-repeat="readyToExport in searchResults = (ctrl.readyToExports | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
-                                        <!--<td md-cell class="indicator-td text-right"
-                                            style="padding-right:0 !important; padding-left:0 !important;">
-                                            &lt;!&ndash; Central Archive Enabled &ndash;&gt;
-                                            <span flex
-                                                  ng-class="{'indicator-content': readyToExport.exportViaCentralArchiveIndicator}">
-                                                <md-icon ng-if="readyToExport.exportViaCentralArchiveIndicator"
-                                                         class="{{readyToExport.exportViaCentralArchiveIndicator.class}}"
-                                                         md-svg-icon="{{readyToExport.exportViaCentralArchiveIndicator.icon}}"
-                                                         tooltip="{{lang[readyToExport.exportViaCentralArchiveIndicator.tooltip]}}"
-                                                ></md-icon>
-                                            </span>
-                                        </td>-->
-
-                                        <td md-cell class="serial-td">{{readyToExport.generalStepElm.docFullSerial}}
+                                        <td md-cell class="serial-td">
+                                            {{readyToExport.generalStepElm.docFullSerial}}
                                         </td>
                                         <td md-cell class="subject">
                                             <grid-indicator-directive record-type="WorkItem"

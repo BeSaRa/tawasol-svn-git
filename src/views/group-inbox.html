@@ -101,6 +101,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="workItem" grid-right-click-directive="workItem"
+                                        ng-disabled="workItem.isLocked() && !workItem.isLockedByCurrentUser()"
                                         model="workItem"
                                         ng-class="!workItem.generalStepElm.isOpen? 'unread-row': 'read-row'"
                                         selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"

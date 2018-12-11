@@ -144,21 +144,16 @@ module.exports = function (app) {
 
         /**
          * @description Return the incoming department inbox item
-         * @param incomingDepartmentInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.returnWorkItem = function (incomingDepartmentInbox, $event, defer) {
-            /*incomingDepartmentInboxService
-             .controllerMethod
-             .incomingDepartmentInboxReturn(incomingDepartmentInbox, $event)
-             .then(function () {
-             self.reloadIncomingDepartmentInboxes(self.grid.page)
-             .then(function () {
-             new ResolveDefer(defer);
-             });
-             })*/
-            incomingDepartmentInbox
+        self.returnWorkItem = function (workItem, $event, defer) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
+            workItem
                 .returnWorkItem($event)
                 .then(function () {
                     new ResolveDefer(defer);
@@ -168,12 +163,16 @@ module.exports = function (app) {
 
         /**
          * @description Accept the incoming department inbox item
-         * @param incomingDepartmentInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.receiveWorkItem = function (incomingDepartmentInbox, $event, defer) {
-            var info = incomingDepartmentInbox.getInfo();
+        self.receiveWorkItem = function (workItem, $event, defer) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
+            var info = workItem.getInfo();
             dialog.hide();
             $state.go('app.incoming.add', {action: 'receive', workItem: info.wobNumber});
         };
@@ -185,6 +184,10 @@ module.exports = function (app) {
          * @param defer
          */
         self.quickReceiveWorkItem = function (incomingDepartmentInbox, $event, defer) {
+            if (incomingDepartmentInbox.isLocked() && !incomingDepartmentInbox.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: incomingDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var documentName = angular.copy(incomingDepartmentInbox.generalStepElm.docSubject);
             incomingDepartmentInboxService.controllerMethod
                 .incomingDepartmentInboxQuickReceive(incomingDepartmentInbox, $event)
@@ -239,6 +242,10 @@ module.exports = function (app) {
          * @param defer
          */
         self.launchDistributionWorkflow = function (workItem, $event, defer) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             workItem.launchWorkFlow($event, 'forward', 'favorites', true)
                 .then(function () {
                     self.reloadIncomingDepartmentInboxes(self.grid.page)
@@ -271,6 +278,10 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+            if (incomingDepartmentInbox.isLocked() && !incomingDepartmentInbox.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: incomingDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             /*correspondenceService.viewCorrespondence(incomingDepartmentInbox, self.gridActions, true, checkIfEditCorrespondenceSiteAllowed(incomingDepartmentInbox, true), true, false, false, true)
                 .then(function () {
                     return self.reloadIncomingDepartmentInboxes(self.grid.page);
@@ -301,6 +312,10 @@ module.exports = function (app) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return false;
+            }
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
             }
             workItem.viewNewDepartmentIncomingAsWorkItem(self.gridActions, 'departmentIncoming', $event)
                 .then(function () {
@@ -345,6 +360,10 @@ module.exports = function (app) {
          * @return {*}
          */
         self.getDocumentVersions = function (workItem, $event) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             return workItem
                 .viewSpecificVersion(self.gridActions, $event);
         };
@@ -354,6 +373,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.duplicateCurrentVersion = function (workItem, $event) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = workItem.getInfo();
             return workItem
                 .duplicateVersion($event)
@@ -373,6 +396,10 @@ module.exports = function (app) {
          * @return {*}
          */
         self.duplicateVersion = function (workItem, $event) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = workItem.getInfo();
             return workItem
                 .duplicateSpecificVersion($event)
@@ -497,6 +524,9 @@ module.exports = function (app) {
                 showInView: false,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
@@ -518,6 +548,9 @@ module.exports = function (app) {
                 showInView: false,
                 class: "action-green",
                 permissionKey: 'VIEW_DOCUMENT',
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
@@ -531,6 +564,9 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.returnWorkItem,
                 class: "action-green",
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: function (action, model) {
                     //var info = model.getInfo();
                     return self.checkToShowAction(action, model) && !model.generalStepElm.isReassigned;//!!info.incomingVsId;
@@ -544,6 +580,9 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.receiveWorkItem,
                 class: "action-green",
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: function (action, model) {
                     //var info = model.getInfo();
                     return self.checkToShowAction(action, model) && !model.generalStepElm.isReassigned;//!!info.incomingVsId;
@@ -558,6 +597,9 @@ module.exports = function (app) {
                 hide: false,
                 callback: self.quickReceiveWorkItem,
                 class: "action-green",
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: function (action, model) {
                     //var info = model.getInfo();
                     return self.checkToShowAction(action, model) && !model.generalStepElm.isReassigned;//!!info.incomingVsId;
@@ -572,6 +614,9 @@ module.exports = function (app) {
                 callback: self.launchDistributionWorkflow,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: function (action, model) {
                     //var info = model.getInfo();
                     return self.checkToShowAction(action, model) && model.generalStepElm.isReassigned;//!info.incomingVsId;
@@ -588,6 +633,9 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: true,
                 hide: true,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: self.checkToShowAction
             },
             // duplicate current version
@@ -601,6 +649,9 @@ module.exports = function (app) {
                 permissionKey: 'DUPLICATE_BOOK_CURRENT',
                 showInView: true,
                 hide: true,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper;
@@ -616,6 +667,9 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: true,
                 hide: true,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
                 checkShow: self.checkToShowAction
             },

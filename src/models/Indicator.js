@@ -367,7 +367,7 @@ module.exports = function (app) {
              * @param record
              */
             Indicator.prototype.getLockedWorkItemIndicator = function (record) {
-                return (record.isLocked() && record.getLockingInfo().domainName !== employeeService.getEmployee().domainName)
+                return (record.isLocked() && !record.isLockedByCurrentUser())
                     ? new Indicator({
                         class: 'indicator',
                         text: 'indicator_locked_item_by',

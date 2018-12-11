@@ -212,8 +212,10 @@ module.exports = function (app) {
          * @param defer
          */
         self.exportReadyToExport = function (readyToExport, $event, defer) {
-            // already_exported_please_refresh
-            //errorCode.checkIf(error,'')
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
 
             readyToExport
                 .exportWorkItem($event, true)
@@ -295,6 +297,10 @@ module.exports = function (app) {
          * @param defer
          */
         self.terminate = function (readyToExport, $event, defer) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             readyToExportService
                 .controllerMethod
                 .readyToExportTerminate(readyToExport, $event)
@@ -314,6 +320,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.addToFavorite = function (readyToExport, $event) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             favoriteDocumentsService.controllerMethod
                 .favoriteDocumentAdd(readyToExport.generalStepElm.vsId, $event)
                 .then(function (result) {
@@ -359,6 +369,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTags = function (readyToExport, $event) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = readyToExport.getInfo();
             managerService.manageDocumentTags(info.vsId, info.documentClass, readyToExport.getTranslatedName(), $event)
                 .then(function () {
@@ -375,6 +389,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (readyToExport, $event) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = readyToExport.getInfo();
             managerService.manageDocumentComments(info.vsId, info.documentClass, $event)
                 .then(function () {
@@ -391,6 +409,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (readyToExport, $event) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             console.log('manageReadyToExportTasks : ', readyToExport);
         };
 
@@ -400,6 +422,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (readyToExport, $event) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             readyToExport.manageDocumentAttachments($event);
         };
 
@@ -409,6 +435,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedDocuments = function (readyToExport, $event) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = readyToExport.getInfo();
             managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass, "welcome");
         };
@@ -419,6 +449,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedEntities = function (readyToExport, $event) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             managerService
                 .manageDocumentEntities(readyToExport.generalStepElm.vsId, readyToExport.generalStepElm.workFlowName, readyToExport.generalStepElm.docSubject, $event);
         };
@@ -429,6 +463,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageDestinations = function (readyToExport, $event) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = readyToExport.getInfo();
             managerService.manageDocumentCorrespondence(info.vsId, info.documentClass, info.title, $event)
                 .then(function () {
@@ -455,6 +493,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewReadyToExportDirectLinkedDocuments = function (readyToExport, $event) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             console.log('viewReadyToExportDirectLinkedDocuments : ', readyToExport);
         };
 
@@ -464,6 +506,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewReadyToExportCompleteLinkedDocuments = function (readyToExport, $event) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             console.log('viewReadyToExportCompleteLinkedDocuments : ', readyToExport);
         };
 
@@ -473,6 +519,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.editContent = function (readyToExport, $event) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = readyToExport.getInfo();
             managerService.manageDocumentContent(info.vsId, info.workFlow, info.title, $event);
         };
@@ -484,6 +534,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.editProperties = function (readyToExport, $event) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = readyToExport.getInfo();
             managerService
                 .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
@@ -498,6 +552,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.broadcast = function (readyToExport, $event) {
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             broadcastService
                 .controllerMethod
                 .broadcastSend(readyToExport, $event)
@@ -515,6 +573,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.editAfterApprove = function (model, $event) {
+            if (model.isLocked() && !model.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: model.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = model.getInfo(), list = listGeneratorService.createUnOrderList(),
                 langKeys = ['signature_serial_will_removed', 'the_book_will_go_to_audit', 'serial_retained'];
             _.map(langKeys, function (item) {
@@ -543,6 +605,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.printBarcode = function (model, $event) {
+            if (model.isLocked() && !model.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: model.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             model.barcodePrint($event);
         };
 
@@ -566,6 +632,10 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+            if (readyToExport.isLocked() && !readyToExport.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: readyToExport.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             correspondenceService.viewCorrespondence(readyToExport, self.gridActions, checkIfEditPropertiesAllowed(readyToExport, true), false, true, true)
                 .then(function () {
                     self.reloadReadyToExports(self.grid.page);
@@ -586,6 +656,10 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             workItem.viewNewDepartmentReadyToExport(self.gridActions, 'departmentReadyToExport', $event)
                 .then(function () {
                     self.reloadReadyToExports(self.grid.page);
@@ -603,6 +677,10 @@ module.exports = function (app) {
          * @return {*}
          */
         self.getDocumentVersions = function (workItem, $event) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             return workItem
                 .viewSpecificVersion(self.gridActions, $event);
         };
@@ -612,6 +690,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.duplicateCurrentVersion = function (workItem, $event) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = workItem.getInfo();
             return workItem
                 .duplicateVersion($event)
@@ -630,6 +712,10 @@ module.exports = function (app) {
          * @return {*}
          */
         self.duplicateVersion = function (workItem, $event) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = workItem.getInfo();
             return workItem
                 .duplicateSpecificVersion($event)
@@ -754,6 +840,9 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: false,
                 permissionKey: 'VIEW_DOCUMENT',
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
@@ -773,6 +862,9 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.terminate,
                 class: "action-green",
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: self.checkToShowAction
             },
             // Add To Favorite
@@ -784,6 +876,9 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.addToFavorite,
                 class: "action-green",
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: self.checkToShowAction
             },
             // Export
@@ -797,6 +892,9 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.exportReadyToExport,
                 class: "action-green",
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: self.checkToShowAction
             },
             // Print Barcode
@@ -808,6 +906,9 @@ module.exports = function (app) {
                 callback: self.printBarcode,
                 permissionKey: "PRINT_BARCODE",
                 class: "action-green",
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: self.checkToShowAction
             },
             // Open
@@ -820,6 +921,9 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: false,
                 permissionKey: 'VIEW_DOCUMENT',
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
                     return self.checkToShowAction(action, model) && model.hasContent();
@@ -835,6 +939,9 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: false,
                 permissionKey: "EDIT_OUTGOING_CONTENT", //TODO: Apply correct permission when added to database.
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model) && !info.isPaper;
@@ -858,6 +965,9 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 checkShow: self.checkToShowAction,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
                     "MANAGE_DOCUMENT’S_COMMENTS",
@@ -958,6 +1068,9 @@ module.exports = function (app) {
                 shortcut: false,
                 hide: true,
                 checkShow: self.checkToShowAction,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 subMenu: [
                     // Direct Linked Documents
                     {
@@ -1024,6 +1137,9 @@ module.exports = function (app) {
                 text: 'grid_action_edit',
                 shortcut: false,
                 showInView: false,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
@@ -1068,6 +1184,9 @@ module.exports = function (app) {
                 hide: true,
                 permissionKey: 'BROADCAST_DOCUMENT',
                 callback: self.broadcast,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: self.checkToShowAction
             },
             // show versions
@@ -1081,6 +1200,9 @@ module.exports = function (app) {
                 permissionKey: "VIEW_DOCUMENT_VERSION",
                 class: "action-green",
                 showInView: true,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: self.checkToShowAction
             },
             // duplicate current version
@@ -1094,6 +1216,9 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'DUPLICATE_BOOK_CURRENT',
                 showInView: true,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper
@@ -1110,6 +1235,9 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: true,
                 permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: self.checkToShowAction
             },
             // Unlock

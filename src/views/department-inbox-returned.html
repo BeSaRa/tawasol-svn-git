@@ -110,6 +110,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="returnedDepartmentInbox"
+                                        ng-disabled="returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()"
                                         grid-right-click-directive="returnedDepartmentInbox"
                                         model="returnedDepartmentInbox"
                                         selected-length="{{ctrl.selectedReturnedDepartmentInboxes.length ? ctrl.selectedReturnedDepartmentInboxes.length : 0}}"

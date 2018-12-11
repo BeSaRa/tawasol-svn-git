@@ -107,6 +107,7 @@
                                     </thead>
                                     <tbody md-body>
                                     <tr md-row md-select="workItem"
+                                        ng-disabled="workItem.isLocked() && !workItem.isLockedByCurrentUser()"
                                         grid-right-click-directive="workItem"
                                         selected-length="{{ctrl.selectedWorkItems.length ? ctrl.selectedWorkItems.length : 0}}"
                                         model="workItem"

@@ -83,6 +83,7 @@
                                     <tr md-row md-select="incomingDepartmentInbox"
                                         grid-right-click-directive="incomingDepartmentInbox"
                                         model="incomingDepartmentInbox"
+                                        ng-disabled="incomingDepartmentInbox.isLocked() && !incomingDepartmentInbox.isLockedByCurrentUser()"
                                         selected-length="{{ctrl.selectedIncomingDepartmentInboxes.length ? ctrl.selectedIncomingDepartmentInboxes.length : 0}}"
                                         ng-repeat="incomingDepartmentInbox in searchResults = (ctrl.incomingDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                         <td class="serial-td" md-cell>

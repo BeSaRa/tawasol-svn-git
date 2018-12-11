@@ -32,6 +32,31 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Checks if the action is disabled
+         * @param action
+         * @returns {boolean}
+         */
+        self.isActionDisabled = function (action) {
+            if (self.isShowAction(action) && action.hasOwnProperty('disabled')) {
+                if (typeof action.disabled === 'function')
+                    return !!action.disabled(self.model);
+                return !!action.disabled;
+            }
+            return false;
+        };
+
+        /**
+         * @description Opens the cascade menu if action is enabled
+         * @param $mdMenu
+         * @param action
+         */
+        self.openCascadeMenu = function ($mdMenu, action) {
+            if (self.isActionDisabled(action))
+                return;
+            $mdMenu.open();
+        };
+
+        /**
          * @description Get the text of action according to selected language
          * @param action
          * @param isShortcutRequest

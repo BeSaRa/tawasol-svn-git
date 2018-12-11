@@ -170,18 +170,22 @@ module.exports = function (app) {
 
         /**
          * @description add an item to the favorite documents
-         * @param followupEmployeeInbox
+         * @param workItem
          * @param $event
          */
-        self.addToFavorite = function (followupEmployeeInbox, $event) {
+        self.addToFavorite = function (workItem, $event) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             favoriteDocumentsService.controllerMethod
-                .favoriteDocumentAdd(followupEmployeeInbox.generalStepElm.vsId, $event)
+                .favoriteDocumentAdd(workItem.generalStepElm.vsId, $event)
                 .then(function (result) {
                     if (result.status) {
                         self.reloadReturnedDepartmentInboxes(self.grid.page)
                             .then(function () {
                                 toast.success(langService.get("add_to_favorite_specific_success").change({
-                                    name: followupEmployeeInbox.getTranslatedName()
+                                    name: workItem.getTranslatedName()
                                 }));
                             });
                     }
@@ -194,27 +198,22 @@ module.exports = function (app) {
 
         /**
          * @description Terminate returned department inbox item
-         * @param returnedDepartmentInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.terminate = function (returnedDepartmentInbox, $event, defer) {
-            /*returnedDepartmentInboxService.controllerMethod
-             .returnedDepartmentInboxTerminate(returnedDepartmentInbox, $event)
-             .then(function (result) {
-             self.reloadReturnedDepartmentInboxes(self.grid.page)
-             .then(function () {
-             toast.success(langService.get("terminate_specific_success").change({name: returnedDepartmentInbox.generalStepElm.docSubject}));
-             new ResolveDefer(defer);
-             });
-             });*/
+        self.terminate = function (workItem, $event, defer) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             returnedDepartmentInboxService
                 .controllerMethod
-                .returnedDepartmentInboxTerminate(returnedDepartmentInbox, $event)
+                .returnedDepartmentInboxTerminate(workItem, $event)
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page)
                         .then(function () {
-                            toast.success(langService.get("terminate_specific_success").change({name: returnedDepartmentInbox.getTranslatedName()}));
+                            toast.success(langService.get("terminate_specific_success").change({name: workItem.getTranslatedName()}));
                             new ResolveDefer(defer);
                         });
                 });
@@ -222,11 +221,15 @@ module.exports = function (app) {
 
         /**
          * @description Get Link
-         * @param returnedDepartmentInbox
+         * @param workItem
          * @param $event
          */
-        self.getLink = function (returnedDepartmentInbox, $event) {
-            var info = returnedDepartmentInbox.getInfo();
+        self.getLink = function (workItem, $event) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
+            var info = workItem.getInfo();
             viewDocumentService.loadDocumentViewUrlWithOutEdit(info.vsId).then(function (result) {
                 //var docLink = "<a target='_blank' href='" + result + "'>" + result + "</a>";
                 dialog.successMessage(langService.get('link_message').change({result: result}));
@@ -236,11 +239,15 @@ module.exports = function (app) {
 
         /**
          * @description Subscribe
-         * @param returnedDepartmentInbox
+         * @param workItem
          * @param $event
          */
-        self.subscribe = function (returnedDepartmentInbox, $event) {
-            console.log('subscribe for returned department inbox : ', returnedDepartmentInbox)
+        self.subscribe = function (workItem, $event) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
+            console.log('subscribe for returned department inbox : ', workItem)
         };
 
         /**
@@ -263,6 +270,10 @@ module.exports = function (app) {
          * @param defer
          */
         self.resend = function (workItem, $event, defer) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             workItem.resendWorkItem($event)
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page)
@@ -275,17 +286,20 @@ module.exports = function (app) {
 
         /**
          * @description Launch new distribution workflow for returned department inbox item
-         * @param returnedDepartmentInbox
+         * @param workItem
          * @param $event
          * @param defer
          */
-        self.launchNewDistributionWorkflow = function (returnedDepartmentInbox, $event, defer) {
-
+        self.launchNewDistributionWorkflow = function (workItem, $event, defer) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             //returnedDepartmentInbox.generalStepElm.workFlowName = Export,
             // but it need in DW popup to create URL, records will always come from Outgoing export
-            returnedDepartmentInbox.generalStepElm.workFlowName = "Outgoing";
+            workItem.generalStepElm.workFlowName = "Outgoing";
 
-            returnedDepartmentInbox.launchWorkFlow($event, 'forward', 'favorites')
+            workItem.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page)
                         .then(function () {
@@ -297,11 +311,15 @@ module.exports = function (app) {
 
         /**
          * @description Manage Tags for returned department inbox item
-         * @param returnedDepartmentInbox
+         * @param workItem
          * @param $event
          */
-        self.manageTags = function (returnedDepartmentInbox, $event) {
-            var info = returnedDepartmentInbox.getInfo();
+        self.manageTags = function (workItem, $event) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
+            var info = workItem.getInfo();
             var wfName = "outgoing";
             managerService.manageDocumentTags(info.vsId, wfName.toLowerCase(), info.title, $event)
                 .then(function () {
@@ -318,6 +336,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (returnedDepartmentInbox, $event) {
+            if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var wfName = 'outgoing';
             managerService.manageDocumentComments(returnedDepartmentInbox.getInfo().vsId, wfName, $event)
                 .then(function () {
@@ -334,6 +356,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageTasks = function (returnedDepartmentInbox, $event) {
+            if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             console.log('manageTasksReturnedDepartmentInbox', returnedDepartmentInbox);
         };
 
@@ -343,12 +369,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageAttachments = function (returnedDepartmentInbox, $event) {
+            if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             returnedDepartmentInbox.manageDocumentAttachments($event);
-            /*var vsId = returnedDepartmentInbox.hasOwnProperty('generalStepElm')
-                ? (returnedDepartmentInbox.generalStepElm.hasOwnProperty('vsId') ? returnedDepartmentInbox.generalStepElm.vsId : returnedDepartmentInbox.generalStepElm)
-                : (returnedDepartmentInbox.hasOwnProperty('vsId') ? returnedDepartmentInbox.vsId : returnedDepartmentInbox);
-            var wfName = 'outgoing';
-            managerService.manageDocumentAttachments(returnedDepartmentInbox, vsId, wfName.toLowerCase(), returnedDepartmentInbox.getTranslatedName(), $event);*/
         };
 
         /**
@@ -357,6 +382,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedDocuments = function (returnedDepartmentInbox, $event) {
+            if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = returnedDepartmentInbox.getInfo();
             managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass, "welcome");
         };
@@ -367,6 +396,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedEntities = function (returnedDepartmentInbox, $event) {
+            if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var wfName = 'outgoing';
             managerService
                 .manageDocumentEntities(returnedDepartmentInbox.generalStepElm.vsId, wfName.toLowerCase(), returnedDepartmentInbox.generalStepElm.docSubject, $event);
@@ -398,6 +431,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendLinkToDocumentByEmail = function (returnedDepartmentInbox, $event) {
+            if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             downloadService.getMainDocumentEmailContent(returnedDepartmentInbox.getInfo().vsId);
         };
 
@@ -407,6 +444,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendCompositeDocumentAsAttachmentByEmail = function (returnedDepartmentInbox, $event) {
+            if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             downloadService.getCompositeDocumentEmailContent(returnedDepartmentInbox.getInfo().vsId);
         };
 
@@ -416,6 +457,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendSMS = function (returnedDepartmentInbox, $event) {
+            if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             console.log('sendSMS : ', returnedDepartmentInbox);
         };
 
@@ -425,6 +470,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.sendMainDocumentFax = function (returnedDepartmentInbox, $event) {
+            if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             console.log('sendMainDocumentFax : ', returnedDepartmentInbox);
         };
 
@@ -434,6 +483,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.editAfterExport = function (returnedDepartmentInbox, $event) {
+            if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = returnedDepartmentInbox.getInfo(), list = listGeneratorService.createUnOrderList(),
                 langKeys = ['signature_serial_will_removed', 'the_book_will_go_to_audit', 'serial_retained', 'exported_not_received_documents_will_be_recalled'];
             _.map(langKeys, function (item) {
@@ -467,6 +520,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.editContent = function (returnedDepartmentInbox, $event) {
+            if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = returnedDepartmentInbox.getInfo();
             managerService.manageDocumentContent(info.vsId, 'outgoing', info.title, $event);//info.workFlow
         };
@@ -477,6 +534,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.editProperties = function (returnedDepartmentInbox, $event) {
+            if (returnedDepartmentInbox.isLocked() && !returnedDepartmentInbox.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = returnedDepartmentInbox.getInfo();
             managerService
                 .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
@@ -497,17 +558,20 @@ module.exports = function (app) {
 
         /**
          * @description Preview document
-         * @param returnedDepartmentInbox
+         * @param workItem
          * @param $event
          */
-        self.previewDocument = function (returnedDepartmentInbox, $event) {
+        self.previewDocument = function (workItem, $event) {
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
-
-            var info = returnedDepartmentInbox.getInfo();
-            correspondenceService.viewCorrespondenceReturnedWorkItem(info, self.gridActions, checkIfEditPropertiesAllowed(returnedDepartmentInbox, true), true, true)
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
+            var info = workItem.getInfo();
+            correspondenceService.viewCorrespondenceReturnedWorkItem(info, self.gridActions, checkIfEditPropertiesAllowed(workItem, true), true, true)
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page);
                 })
@@ -528,6 +592,10 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             workItem.viewNewDepartmentReturned(self.gridActions, 'departmentReturned', $event)
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page);
@@ -545,6 +613,10 @@ module.exports = function (app) {
          * @return {*}
          */
         self.getDocumentVersions = function (workItem, $event) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             return workItem
                 .viewSpecificVersion(self.gridActions, $event);
         };
@@ -554,6 +626,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.duplicateCurrentVersion = function (workItem, $event) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = workItem.getInfo();
             return workItem
                 .duplicateVersion($event)
@@ -572,6 +648,10 @@ module.exports = function (app) {
          * @return {*}
          */
         self.duplicateVersion = function (workItem, $event) {
+            if (workItem.isLocked() && !workItem.isLockedByCurrentUser()) {
+                dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
+                return;
+            }
             var info = workItem.getInfo();
             return workItem
                 .duplicateSpecificVersion($event)
@@ -716,6 +796,9 @@ module.exports = function (app) {
                 callback: self.previewDocument,
                 showInView: false,
                 class: "action-green",
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
@@ -735,6 +818,9 @@ module.exports = function (app) {
                 text: 'grid_action_add_to_favorite',
                 permissionKey: "MANAGE_FAVORITE",
                 shortcut: false,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 callback: self.addToFavorite,
                 class: "action-green",
                 checkShow: self.checkToShowAction
@@ -746,6 +832,9 @@ module.exports = function (app) {
                 text: 'grid_action_terminate',
                 shortcut: true,
                 callback: self.terminate,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
@@ -754,6 +843,9 @@ module.exports = function (app) {
                 type: 'action',
                 icon: 'link',
                 text: 'grid_action_get_link',
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 shortcut: false,
                 permissionKey: 'GET_A_LINK_TO_THE_DOCUMENT',
                 callback: self.getLink,
@@ -768,6 +860,9 @@ module.exports = function (app) {
                 text: 'grid_action_subscribe',
                 shortcut: false,
                 callback: self.subscribe,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 class: "action-red",
                 hide: true,
                 checkShow: self.checkToShowAction
@@ -781,6 +876,9 @@ module.exports = function (app) {
                 callback: self.viewDocument,
                 showInView: false,
                 class: "action-green",
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 permissionKey: 'VIEW_DOCUMENT',
                 checkShow: function (action, model) {
                     //If no content or no view document permission, hide the button
@@ -794,6 +892,9 @@ module.exports = function (app) {
                 text: 'grid_action_resend',
                 shortcut: true,
                 callback: self.resend,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
@@ -803,6 +904,9 @@ module.exports = function (app) {
                 icon: 'sitemap',
                 text: 'grid_action_launch_new_distribution_workflow',
                 shortcut: false,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 callback: self.launchNewDistributionWorkflow,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
@@ -826,6 +930,9 @@ module.exports = function (app) {
                 text: 'grid_action_manage',
                 shortcut: false,
                 showInView: false,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: self.checkToShowAction,
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
@@ -949,6 +1056,9 @@ module.exports = function (app) {
                 text: 'grid_action_send',
                 shortcut: false,
                 checkShow: self.checkToShowAction,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 permissionKey: [
                     "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
                     "SEND_COMPOSITE_DOCUMENT_BY_EMAIL",
@@ -1013,6 +1123,9 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: true,
                 class: 'action-green',
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 callback: self.editAfterExport, //TODO: Service is not available yet
                 checkShow: function (action, model) {
                     // var info = model.getInfo();
@@ -1029,6 +1142,9 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 hide: true, //TODO: as mentioned by Issawi on 16 Oct, 2018 as we have edit after export enabled for paper document too. (TFS - 17249)
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     var hasPermission = (employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES") || employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT"));
@@ -1075,6 +1191,9 @@ module.exports = function (app) {
                 permissionKey: "VIEW_DOCUMENT_VERSION",
                 class: "action-green",
                 showInView: true,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: self.checkToShowAction
             },
             // duplicate current version
@@ -1088,6 +1207,9 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'DUPLICATE_BOOK_CURRENT',
                 showInView: true,
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     return self.checkToShowAction(action, model) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper
@@ -1104,6 +1226,9 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: true,
                 permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
+                disabled: function (model) {
+                    return model.isLocked() && !model.isLockedByCurrentUser();
+                },
                 checkShow: self.checkToShowAction
             },
             // Unlock

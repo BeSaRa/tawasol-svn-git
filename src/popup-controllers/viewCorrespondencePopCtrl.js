@@ -63,7 +63,7 @@ module.exports = function (app) {
          */
         self.saveCorrespondenceChanges = function () {
             var info = self.correspondence.getInfo();
-            var method = info.documentClass !== 'incoming' ? 'saveDocumentWithContent' : 'saveDocument';
+            var method = info.needToApprove() ? 'saveDocumentWithContent' : 'saveDocument';
             if (method === 'saveDocumentWithContent') {
                 angular.element('iframe#iframe-main-document').remove();
                 $timeout(function () {
