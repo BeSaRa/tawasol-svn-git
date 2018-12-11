@@ -53,7 +53,7 @@ module.exports = function (app) {
         // model for search on main correspondence sites
         self.mainSearch = '';
         // model for search on sub correspondence sites
-        self.simpleSubSearch = '';
+        self.simpleSubSearchText = '';
         // selected mainCorrespondence sites
         self.selectedMain = null;
         // selected subCorrespondence sites
@@ -324,7 +324,7 @@ module.exports = function (app) {
             _addSite('To', site)
                 .then(function () {
                     self.subSearchSelected = [];
-                    self.simpleSubSearch = '';
+                    self.simpleSubSearchText = '';
                     /*self['sitesInfoToFollowupStatus'] = null;
                     self['sitesInfoToFollowupStatusDate'] = null;*/
                     self.resetToStatusAndDate();
@@ -345,7 +345,7 @@ module.exports = function (app) {
             _addSite('CC', site)
                 .then(function () {
                     self.subSearchSelected = [];
-                    self.simpleSubSearch = '';
+                    self.simpleSubSearchText = '';
                     /*self['sitesInfoCCFollowupStatus'] = null;
                     self['sitesInfoCCFollowupStatusDate'] = null;*/
                     self.resetCCStatusAndDate();
@@ -511,9 +511,9 @@ module.exports = function (app) {
                 self.subSearchResult = _.filter(_.map(result, _mapSubSites), _filterSubSites);
                 // bind sub site search
                 if (self.isSimpleCorrespondenceSiteSearchType) {
-                    self.simpleSubSearch = '';
+                    self.simpleSubSearchText = '';
                     self.simpleSubSiteSearchCopy = angular.copy(self.subSearchResult);
-                    self.onSimpleSubSearch(self.simpleSubSearch);
+                    //self.getSimpleSubSearchOptions(self.simpleSubSearchText);
                 }
             });
         };
@@ -548,18 +548,26 @@ module.exports = function (app) {
 
         /**
          * @description drop down values for sub site search
-         * @param simpleSubSearch
+         * @param searchText
          * @returns {Array}
          */
-        self.onSimpleSubSearch = function (simpleSubSearch) {
-            var simpleSubSiteSearchResult = _.filter(self.simpleSubSiteSearchCopy, function (simpleSearchSite) {
-                return simpleSearchSite.getTranslatedName().toLowerCase().indexOf(simpleSubSearch.toLowerCase()) !== -1;
-            });
+        self.getSimpleSubSearchOptions = function (searchText) {
+            if (searchText) {
+                return _.filter(self.simpleSubSiteSearchCopy, function (simpleSearchSite) {
+                    return simpleSearchSite.getTranslatedName().toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
+                });
+            }
+            return self.simpleSubSiteSearchCopy;
+        };
 
-            /*if (!simpleSubSiteSearchResult.length)
-                self.subSearchResult = [];*/
-
-            return simpleSubSiteSearchResult;
+        self.onSimpleSubChange = function (subSite) {
+            if (subSite) {
+                self.subSearchResult = _.filter(self.subSearchResultCopy, function (resultCopy) {
+                    return resultCopy.subSiteId === subSite.subSiteId;
+                });
+            }
+            else
+                self.subSearchResult = _.filter(self.subSearchResultCopy, _filterSubSites);
         };
 
 
@@ -570,16 +578,6 @@ module.exports = function (app) {
         self.onMainChange = function (main) {
             if (main && !self.selectedType)
                 self.selectedType = _mapTypes(_getTypeByLookupKey(main.correspondenceSiteTypeId));
-        };
-
-        self.onSimpleSubChange = function (subSite) {
-            if (subSite) {
-                self.subSearchResult = _.filter(self.subSearchResultCopy, function (resultCopy) {
-                    return resultCopy.subSiteId === subSite.subSiteId;
-                });
-            }
-            else
-                self.subSearchResult = self.subSearchResultCopy;
         };
 
         /**
