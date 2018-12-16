@@ -1,4 +1,5 @@
 module.exports = function (app) {
+    require('./workflow-items-style.scss');
     app.directive('workflowItemsDirective', function () {
         return {
             restrict: 'E',

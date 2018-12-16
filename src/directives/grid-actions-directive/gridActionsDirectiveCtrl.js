@@ -28,7 +28,9 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.isShowAction = function (action) {
-            return action.checkShow(action, self.model);
+            var actionCopy = angular.copy(action);
+            actionCopy.actionFromPopup = false;
+            return actionCopy.checkShow(actionCopy, self.model);
         };
 
         /**

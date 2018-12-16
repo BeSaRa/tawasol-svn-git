@@ -1,4 +1,5 @@
 module.exports = function (app) {
+    require('./selected-workflow-items-style.scss');
     app.directive('selectedWorkflowItemsDirective', function ($timeout) {
         'ngInject';
         return {

@@ -5,6 +5,7 @@ module.exports = function (app) {
                                          generator,
                                          langService,
                                          $filter,
+                                         _,
                                          rootEntity) {
         'ngInject';
         var self = this;
@@ -374,6 +375,40 @@ module.exports = function (app) {
                 result = false;
             }
             return result;
+        };
+
+        self.checkToShowAction = function (action) {
+            if (action.hide)
+                return false;
+            else {
+                var hasPermission = true;
+                // check if permission key(s) property available and user has permissions regarding the permission key(s)
+                if (action.hasOwnProperty('permissionKey')) {
+                    if (typeof action.permissionKey === 'string') {
+                        hasPermission = employeeService.hasPermissionTo(action.permissionKey);
+                    }
+                    else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                        if (action.hasOwnProperty('checkAnyPermission')) {
+                            hasPermission = employeeService.getEmployee() && employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
+                        }
+                        else {
+                            hasPermission = employeeService.getEmployee() && employeeService.getEmployee().hasThesePermissions(action.permissionKey);
+                        }
+                    }
+                }
+
+                var showInViewOnly = action.hasOwnProperty('showInViewOnly') && action.showInViewOnly,
+                    showInView = action.hasOwnProperty('showInView') && action.showInView;
+                if (action.actionFromPopup) {
+                    if (!showInView)
+                        hasPermission = false;
+                }
+                else {
+                    if (showInViewOnly)
+                        hasPermission = false;
+                }
+                return hasPermission;
+            }
         };
 
     });

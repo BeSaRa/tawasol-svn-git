@@ -39,24 +39,25 @@ module.exports = function (app) {
                 var file = e.target.files[0];
                 var _URL = window.URL || window.webkitURL;
                 var img = new Image();
-                img.src = _URL.createObjectURL(file);
-                img.onload = function () {
-                    var name = input[0].name;
-                    if (name === 'loginLogo' || name === 'bannerLogo') {
-                        var width = this.naturalWidth || this.width;
-                        var height = this.naturalHeight || this.height;
-                        if ((name === 'loginLogo' || name === 'bannerLogo') && width > 283 && height > 283) {
-                            toast.error(langService.get('image_dimensions_info').change({width: 283, height: 283}));
-                            input.val('');
-                            return false;
+                if (file) {
+                    img.src = _URL.createObjectURL(file);
+                    img.onload = function () {
+                        var name = input[0].name;
+                        if (name === 'loginLogo' || name === 'bannerLogo') {
+                            var width = this.naturalWidth || this.width;
+                            var height = this.naturalHeight || this.height;
+                            if ((name === 'loginLogo' || name === 'bannerLogo') && width > 283 && height > 283) {
+                                toast.error(langService.get('image_dimensions_info').change({width: 283, height: 283}));
+                                input.val('');
+                                return false;
+                            }
+                            else if (name === 'signatureImage' && width > 283 && height > 283) {
+                                toast.error(langService.get('image_dimensions_info')).change({width: 283, height: 283});
+                                input.val('');
+                                return false;
+                            }
                         }
-                        else if (name === 'signatureImage' && width > 283 && height > 283) {
-                            toast.error(langService.get('image_dimensions_info')).change({width: 283, height: 283});
-                            input.val('');
-                            return false;
-                        }
-                    }
-                    if (file) {
+
                         if (scope.selectedFileExtension) {
                             if (scope.selectedFileExtension.length > 0) {
                                 var fileExt = file.name.split('.').pop();
@@ -79,8 +80,9 @@ module.exports = function (app) {
                         }
 
                         scope.callBack(file, scope.modelName);
-                    }
-                };
+
+                    };
+                }
             });
         }
     }

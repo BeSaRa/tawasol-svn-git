@@ -155,6 +155,7 @@ module.exports = function (app) {
 
             self.maped = {};
 
+            var reversedMap = {};
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
@@ -174,12 +175,22 @@ module.exports = function (app) {
                 return self.maped.hasOwnProperty(propertyName) ? self.maped[propertyName] : null;
             };
 
+            Counter.prototype.reverseMap = function () {
+                return _.map(maps, function (item, key) {
+                    if (item.length === 1) {
+                        reversedMap[item[0]] = key;
+                    }
+                })
+            };
+
             Counter.prototype.mapCounter = function () {
                 var self = this;
+                self.reverseMap();
                 _.map(maps, function (items, property) {
-                    self.maped[property] = _.reduce(items, function (oldValue, currentValue) {
-                        return typeof currentValue === 'function' ? currentValue(oldValue, self, employeeService.getEmployee()) : (oldValue + self[currentValue]);
-                    }, 0);
+                    self.maped[property] = employeeService.employeeHasPermissionTo(property) ? (_.reduce(items, function (oldValue, currentValue) {
+                        var hasPermission = reversedMap.hasOwnProperty(currentValue) ? employeeService.employeeHasPermissionTo(reversedMap[currentValue]) : true;
+                        return typeof currentValue === 'function' ? currentValue(oldValue, self, employeeService.getEmployee()) : (hasPermission ? oldValue + self[currentValue] : oldValue);
+                    }, 0)) : 0;
                 });
             };
 

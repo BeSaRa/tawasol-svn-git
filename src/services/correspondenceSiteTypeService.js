@@ -278,10 +278,10 @@ module.exports = function (app) {
          * @param lookupKey
          */
         self.getCorrespondenceSiteTypeByLookupKey = function (lookupKey) {
-            lookupKey = lookupKey.hasOwnProperty('id') ? lookupKey.lookupKey : lookupKey;
+            lookupKey = lookupKey && lookupKey.hasOwnProperty('id') ? lookupKey.lookupKey : lookupKey;
             return _.find(self.correspondenceSiteTypes, function (item) {
                 return Number(lookupKey) === Number(item.lookupKey);
-            });
+            }) || lookupKey;
         }
 
     });

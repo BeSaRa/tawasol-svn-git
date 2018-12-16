@@ -99,7 +99,7 @@
                         <span>{{workflowUser.getTranslatedOrganizationName()}}</span>
                     </td>
                     <td md-cell>
-                        <md-menu-bar class="no-padding">
+                        <!--<md-menu-bar class="no-padding">
                             <md-menu>
                                 <md-button class="normal-case m0" ng-click="$mdMenu.open()">
                                     <span ng-class="{'red-color':!workflowUser.isWFComplete()}">{{workflowUser.isWFComplete() ? workflowUser.action.getTranslatedName() : workflowUser.getActionMessage()}}</span>
@@ -112,7 +112,27 @@
                                     </md-menu-item>
                                 </md-menu-content>
                             </md-menu>
-                        </md-menu-bar>
+                        </md-menu-bar>-->
+                        <md-select ng-model="workflowUser.selectedWFAction"
+                                   class="select-wf-action"
+                                   ng-change="ctrl.setWFAction(workflowUser, $event)"
+                                   aria-label="workflow action"
+                                   md-on-close="workflowUser.clearWFActionSearchText()"
+                                   data-md-container-class="select-header-container"
+                                   placeholder="{{workflowUser.getActionMessage()}}">
+                            <md-select-header class="select-header">
+                                <input ng-model="workflowUser.actionSearchText"
+                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option
+                                    ng-repeat="action in ctrl.workflowActions | translatedNameFilter: workflowUser.actionSearchText"
+                                    ng-value="action"
+                                    md-highlight-text="workflowUser.actionSearchText"
+                                    md-highlight-flags="i">{{action.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
                     </td>
                     <td md-cell>
                         <div layout="row">
@@ -162,13 +182,13 @@
                     </td>
                     <!--                    <td ng-if="lang.current === 'en'" md-cell>
                                                                     <span md-highlight-text="ctrl.gridItemsCriteria.enName"
-                                                                          md-highlight-flags="i">{{workflowUser.getFullNameByKey('en')}}</span>-->
-                    </td>
+                                                                          md-highlight-flags="i">{{workflowUser.getFullNameByKey('en')}}</span>
+                    </td>-->
                     <td md-cell>
                         <span>{{workflowUser.getTranslatedOrganizationName()}}</span>
                     </td>
                     <td md-cell>
-                        <md-menu-bar class="no-padding">
+                        <!--<md-menu-bar class="no-padding">
                             <md-menu>
                                 <md-button class="normal-case m0" ng-click="$mdMenu.open()">
                                     <span ng-class="{'red-color':!workflowUser.isWFComplete()}">{{workflowUser.isWFComplete() ? workflowUser.action.getTranslatedName() : workflowUser.getActionMessage()}}</span>
@@ -181,7 +201,27 @@
                                     </md-menu-item>
                                 </md-menu-content>
                             </md-menu>
-                        </md-menu-bar>
+                        </md-menu-bar>-->
+                        <md-select ng-model="workflowUser.selectedWFAction"
+                                   class="select-wf-action"
+                                   ng-change="ctrl.setWFAction(workflowUser, $event)"
+                                   aria-label="workflow action"
+                                   md-on-close="workflowUser.clearWFActionSearchText()"
+                                   data-md-container-class="select-header-container"
+                                   placeholder="{{workflowUser.getActionMessage()}}">
+                            <md-select-header class="select-header">
+                                <input ng-model="workflowUser.actionSearchText"
+                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option
+                                    ng-repeat="action in ctrl.workflowActions | translatedNameFilter: workflowUser.actionSearchText"
+                                    ng-value="action"
+                                    md-highlight-text="workflowUser.actionSearchText"
+                                    md-highlight-flags="i">{{action.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
                     </td>
                     <td md-cell>
                         <div layout="row">

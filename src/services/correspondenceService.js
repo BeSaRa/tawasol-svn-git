@@ -2617,7 +2617,7 @@ module.exports = function (app) {
         self.centralArchiveReturn = function (workItem, $event, ignoreMessage) {
             var info = workItem.getInfo();
             return self
-                .showReasonDialog($event)
+                .showReasonDialog('return_reason', $event)
                 .then(function (comment) {
                     return $http
                         .put(_createCorrespondenceWFSchema(['outgoing/return/to-ready-export-central-archive']), new CommentModel({
@@ -2647,7 +2647,7 @@ module.exports = function (app) {
             if (workItems.length === 1)
                 return self.centralArchiveReturn(workItems[0], $event, ignoreMessage);
             return self
-                .showReasonBulkDialog(workItems, $event)
+                .showReasonBulkDialog('return_reason', workItems, $event)
                 .then(function (workItems) {
                     return $http
                         .put(_createCorrespondenceWFSchema(['outgoing/bulk/return/to-ready-export-central-archive']), _.map(workItems, function (item) {
@@ -3104,7 +3104,7 @@ module.exports = function (app) {
                 confirmMsg += '<br />' + langService.get('unlock_note_msg').change({user: workItem.getLockingUserInfo().getTranslatedName()});
                 confirmMsg += '<br />' + langService.get('confirm_continue_message');
                 return dialog.confirmMessage(confirmMsg).then(function () {
-                    _unlockWorkItem(workItem, ignoreMessage);
+                    return _unlockWorkItem(workItem, ignoreMessage);
                 });
             }
         };

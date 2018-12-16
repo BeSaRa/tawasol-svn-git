@@ -109,8 +109,26 @@ module.exports = function (app) {
             _.map(workflowItems, function (item) {
                 self.addWorkflowItem(item);
             });
-        }
+        };
 
+        /**
+         * @description Sets the workflow action
+         * @param workflowItem
+         * @param $event
+         */
+        self.setWFAction = function (workflowItem, $event) {
+            workflowItem.setAction(workflowItem.selectedWFAction);
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of workflow action dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            var code = $event.which || $event.keyCode;
+            if (code !== 38 && code !== 40)
+                $event.stopPropagation();
+        };
 
     });
 };

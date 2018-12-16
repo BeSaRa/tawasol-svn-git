@@ -112,5 +112,34 @@ module.exports = function (app) {
                 });
         };
 
+        /**
+         * @description Sets the workflow action
+         * @param workflowItem
+         * @param $event
+         */
+        self.setWFAction = function (workflowItem, $event) {
+            workflowItem.setAction(workflowItem.selectedWFAction);
+        };
+
+        /**
+         * @description Sets the workflow comment
+         * @param workflowItem
+         * @param $event
+         */
+        self.setWFComment = function (workflowItem, $event) {
+            workflowItem.setComments(workflowItem.selectedWFComment);
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of workflow action dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            var code = $event.which || $event.keyCode;
+            if (code !== 38 && code !== 40)
+                $event.stopPropagation();
+        };
+
+
     });
 };

@@ -43,12 +43,21 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Get the name of record with passed language name
+             * @param lang
+             * @returns {string}
+             */
+            WorkflowAction.prototype.getNameByLanguage = function (lang) {
+                return this[lang + 'Name'];
+            };
+
+            /**
              * @description Get the translated arabic or english name according to current language for workflow action. If reverse is passed, it will return the name in language other than current language
              * @param reverse
              * @returns {string}
              */
             WorkflowAction.prototype.getTranslatedName = function (reverse) {
-                return langService.current === 'ar' ? (reverse ? this.enName : this.arName ) : (reverse ? this.arName : this.enName);
+                return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
 
             /**
@@ -74,7 +83,6 @@ module.exports = function (app) {
             WorkflowAction.prototype.getTranslatedExportable = function () {
                 return this.exportable ? langService.get('yes') : langService.get('no');
             };
-
 
 
             WorkflowAction.prototype.setUserWorkflowActionService = function (service) {

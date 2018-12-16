@@ -117,13 +117,7 @@ module.exports = function (app) {
                         locals: {
                             editMode: true,
                             documentFile: documentFile
-                        }/*,
-                        resolve: {
-                            ouDocumentFiles: function (ouDocumentFileService) {
-                                'ngInject';
-                                return ouDocumentFileService.loadOUDocumentFilesByDocumentFileId(documentFile);
-                            }
-                        }*/
+                        }
                     });
             },
             openOrganizationPopup: function (organizations, documentFile, $event) {

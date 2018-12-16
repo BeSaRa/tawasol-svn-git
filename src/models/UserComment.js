@@ -52,6 +52,10 @@ module.exports = function (app) {
                 return this.comment;
             };
 
+            UserComment.prototype.getNameByLanguage = function (language) {
+                return this.getCommentTitle();
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

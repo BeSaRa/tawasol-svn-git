@@ -1,0 +1,11 @@
+.select-wf-action {
+  .md-select-value span {
+    font-weight: bold !important;
+    font-size: 14px !important;
+  }
+  .md-select-value.md-select-placeholder span {
+    font-size: 14px !important;
+    color: red;
+    font-weight: bold !important;
+  }
+}

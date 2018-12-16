@@ -127,13 +127,19 @@ module.exports = function (app) {
                     self.correspondenceSite.relatedOus = [];
                     self.correspondenceSite.save().then(function (correspondenceSite) {
                         self.correspondenceSite = correspondenceSite;
+
+                        if (sub) {
+                            parent.children.push(self.correspondenceSite);
+                        } else {
+                            correspondenceSiteService.correspondenceSites.push(self.correspondenceSite);
+                        }
+
                         if (!self.editMode) {
                             if (!self.correspondenceSite.isGlobal && relatedOus.length) {
                                 self.correspondenceSite
                                     .addBulkToOUCorrespondenceSites(relatedOus)
                                     .then(function (ouCorrespondenceSites) {
                                         self.selectedOrganization = null;
-                                        //self.correspondenceSite = correspondenceSite;
                                         self.correspondenceSite.relatedOus = ouCorrespondenceSites;
                                         self.model = angular.copy(self.correspondenceSite);
                                         self.disableParent = false;
@@ -155,18 +161,6 @@ module.exports = function (app) {
                             self.disableParent = false;
                             dialog.hide(self.correspondenceSite);
                         }
-
-
-                        /*self.correspondenceSite = correspondenceSite;
-                         self.model = angular.copy(self.correspondenceSite);
-                         self.disableParent = false;
-                         if (self.editMode) {
-                         dialog.hide(self.correspondenceSite);
-
-                         } else {
-                         self.editMode = true;
-                         toast.success(langService.get('add_success').change({name: self.correspondenceSite.getNames()}));
-                         }*/
                     })
                 });
         };
@@ -277,12 +271,8 @@ module.exports = function (app) {
                 .controllerMethod
                 .subCorrespondenceSiteEdit(correspondenceSite, self.correspondenceSite, $event)
                 .then(function (correspondenceSite) {
-                    self.behindScene(correspondenceSite)
-                        .then(function (correspondenceSite) {
-                            self.reloadCorrespondenceSites(self.grid.page).then(function () {
-                                toast.success(langService.get('edit_success').change({name: correspondenceSite.getTranslatedName()}));
-                            });
-                        });
+                    self.replaceRecordFromGrid(correspondenceSite);
+                    toast.success(langService.get('edit_success').change({name: correspondenceSite.getTranslatedName()}));
                 })
                 .catch(function (correspondenceSite) {
                     self.replaceRecordFromGrid(correspondenceSite);
@@ -417,7 +407,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkCorrespondenceSites = function ($event) {
-
             if (self.selectedSubCorrespondenceSites.length === self.correspondenceSite.children.length) {
                 dialog.alertMessage(langService.get('can_not_delete_all_records'))
             }
@@ -447,12 +436,9 @@ module.exports = function (app) {
             correspondenceSiteService
                 .controllerMethod
                 .correspondenceSiteAdd(self.correspondenceSite, true, $event)
-                .then(function () {
-                    self.reloadCorrespondenceSites(self.grid.page);
+                .then(function (correspondenceSite) {
+                    self.correspondenceSite.children.push(correspondenceSite);
                 })
-                .catch(function () {
-                    self.reloadCorrespondenceSites(self.grid.page);
-                });
         };
         /**
          * @description Delete single correspondenceSite

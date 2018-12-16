@@ -131,6 +131,11 @@ module.exports = function (app) {
                 delete this.enName;
                 delete this.relationId;
                 delete this.gridName;
+                delete this.selectedWFAction;
+                delete this.actionSearchText;
+                delete this.selectedWFComment;
+                delete this.commentSearchText;
+
                 this.action = this.action.hasOwnProperty('id') ? this.action.id : this.action;
                 return this;
             };

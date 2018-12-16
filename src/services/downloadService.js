@@ -34,6 +34,18 @@ module.exports = function (app) {
                 });
             },
             /**
+             * @description Download Attachment
+             * @param vsId
+             * @param $event
+             */
+            attachmentDownload: function (vsId, $event) {
+                vsId = typeof vsId.getInfo === 'function' ? vsId.getInfo().vsId : vsId;
+                return self.downloadAttachment(vsId).then(function (result) {
+                    window.open(result);
+                    return true;
+                });
+            },
+            /**
              * @description Download File
              * @param path
              * @param $event
@@ -61,6 +73,17 @@ module.exports = function (app) {
         self.downloadCompositeDocument = function (vsId) {
             return $http
                 .get(urlService.downloadDocumentComposite + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
+                .then(function (result) {
+                    return result.data.rs;
+                })
+        };
+
+        /**
+         * @description download attachment from server
+         */
+        self.downloadAttachment = function (vsId) {
+            return $http
+                .get(urlService.downloadDocumentAttachment + '/' + vsId)
                 .then(function (result) {
                     return result.data.rs;
                 })

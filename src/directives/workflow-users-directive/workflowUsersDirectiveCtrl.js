@@ -1,5 +1,8 @@
 module.exports = function (app) {
-    app.controller('workflowUsersDirectiveCtrl', function ($scope, langService, DistributionWFItem, $timeout, LangWatcher) {
+    app.controller('workflowUsersDirectiveCtrl', function ($scope,
+                                                           langService,
+                                                           DistributionWFItem,
+                                                           LangWatcher) {
         'ngInject';
         var self = this;
         self.controllerName = 'workflowUsersDirectiveCtrl';
@@ -66,6 +69,25 @@ module.exports = function (app) {
 
         self.runDeleteFromSelected = function (workItem, $event) {
             return self.callbackDeleteFromSelected(workItem, $event);
+        };
+
+        /**
+         * @description Sets the workflow action
+         * @param workflowUser
+         * @param $event
+         */
+        self.setWFAction = function (workflowUser, $event) {
+            workflowUser.setAction(workflowUser.selectedWFAction);
+        };
+
+        /**
+         * @description Prevent the default dropdown behavior of keys inside the search box of workflow action dropdown
+         * @param $event
+         */
+        self.preventSearchKeyDown = function ($event) {
+            var code = $event.which || $event.keyCode;
+            if (code !== 38 && code !== 40)
+                $event.stopPropagation();
         };
 
     });

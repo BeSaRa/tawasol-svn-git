@@ -15,6 +15,11 @@ module.exports = function (app) {
             self.relationId = null;
             self.gridName = null;
 
+            self.selectedWFAction = null;
+            self.actionSearchText = '';
+            self.selectedWFComment = null;
+            self.commentSearchText = '';
+
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
@@ -57,6 +62,10 @@ module.exports = function (app) {
                 this.action = action;
                 return this;
             };
+            DistributionWFItem.prototype.clearWFActionSearchText = function () {
+                this.actionSearchText = '';
+                return this;
+            };
             DistributionWFItem.prototype.setEscalationUser = function (escalationUser) {
                 this.escalationUser = escalationUser;
                 return this;
@@ -67,6 +76,10 @@ module.exports = function (app) {
             };
             DistributionWFItem.prototype.setComments = function (comments) {
                 this.comments = comments && comments.hasOwnProperty('id') ? comments.comment : comments;
+                return this;
+            };
+            DistributionWFItem.prototype.clearWFCommentSearchText = function () {
+                this.commentSearchText = '';
                 return this;
             };
             DistributionWFItem.prototype.isUser = function () {

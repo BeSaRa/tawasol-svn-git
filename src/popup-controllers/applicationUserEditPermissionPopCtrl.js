@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                                      tokenService,
                                                                      employeeService,
                                                                      langService,
+                                                                     counterService,
                                                                      ouApplicationUser,
                                                                      permissions,
                                                                      userOuPermissions,
@@ -71,9 +72,10 @@ module.exports = function (app) {
             ouApplicationUserService
                 .addUserOuPermission(userOuPermissions)
                 .then(function () {
-                    if (employeeService.isCurrentEmployee(self.ouApplicationUser.applicationUser)) {
+                    if (employeeService.isCurrentOUApplicationUser(self.ouApplicationUser)) {
                         tokenService.forceTokenRefresh()
                             .then(function () {
+                                counterService.loadCounters();
                                 _savePermissionsSuccess();
                                 $rootScope.$broadcast('$currentEmployeePermissionsChanged');
                             })
@@ -180,7 +182,7 @@ module.exports = function (app) {
             if (self.isChecked()) {
                 self.userOuPermissionsIds = [];
             }
-            else  {
+            else {
                 for (var key in self.permissions) {
                     var permission = self.permissions[key];
                     for (var i = 0; i < permission.length; i++) {

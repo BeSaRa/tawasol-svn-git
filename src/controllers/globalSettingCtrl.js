@@ -37,7 +37,8 @@ module.exports = function (app) {
         self.globalSetting.rootEntityId = self.entityForGlobalSetting.id;
         self.applicationUsers = applicationUsers;
         self.themes = themes;
-
+        self.saveBanner = true;
+        self.saveLogo = true;
         self.fileTypes = fileTypes;
         self.fileSizes = lookupService.returnLookups(lookupService.fileSize);
         self.escalationProcesses = lookupService.returnLookups(lookupService.escalationProcess);

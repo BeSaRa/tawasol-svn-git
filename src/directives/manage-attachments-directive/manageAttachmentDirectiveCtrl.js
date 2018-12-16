@@ -17,6 +17,7 @@ module.exports = function (app) {
                                                               $filter,
                                                               lookupService,
                                                               generator,
+                                                              downloadService,
                                                               _) {
         'ngInject';
         var self = this;
@@ -281,9 +282,14 @@ module.exports = function (app) {
             attachmentService.viewAttachment(attachment, self.documentClass);
         };
 
-        self.isAttachmentDeletable = function (attachment) {
-            return attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment);
-        };
+            self.downloadAttachment = function (attachment, $event) {
+                downloadService.controllerMethod
+                    .attachmentDownload(attachment.vsId);
+            };
+
+            self.isAttachmentDeletable = function (attachment) {
+                return attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment);
+            };
 
         /**
          * to upload the files

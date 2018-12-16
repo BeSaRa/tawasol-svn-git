@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                    //userInboxes,
                                                    counterService,
                                                    $q,
+                                                   _,
                                                    $filter,
                                                    langService,
                                                    toast,
@@ -249,6 +250,7 @@ module.exports = function (app) {
          */
         self.createReplyProxyMailInboxIncoming = function (workItem, $event) {
             var info = workItem.getInfo();
+            dialog.hide();
             $state.go('app.outgoing.add', {workItem: info.wobNumber, action: 'reply'});
         };
 
@@ -783,22 +785,8 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.checkToShowAction = function (action, model, popupActionOnly) {
-            /*var hasPermission = true;
-            if (action.hasOwnProperty('permissionKey')) {
-                if (typeof action.permissionKey === 'string') {
-                    hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
-                    if (action.hasOwnProperty('checkAnyPermission')) {
-                        hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    }
-                    else {
-                        hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
-                    }
-                }
-            }
-            return !inViewOnly ? ((!action.hide) && hasPermission) : hasPermission;*/
-
+            if (action.hide)
+                return false;
 
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
@@ -806,25 +794,17 @@ module.exports = function (app) {
                         return (!action.hide && action.showInViewOnly) && employeeService.hasPermissionTo(action.permissionKey);
                     return (!action.hide && !action.showInViewOnly) && employeeService.hasPermissionTo(action.permissionKey);
                 }
-                else if (angular.isArray(action.permissionKey)) {
-                    if (!action.permissionKey.length) {
-                        if (popupActionOnly)
-                            return (!action.hide && action.showInViewOnly);
-                        return (!action.hide && !action.showInViewOnly);
+                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                    var hasPermission = true;
+                    if (action.hasOwnProperty('checkAnyPermission')) {
+                        hasPermission = employeeService.getEmployee() && employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
                     }
                     else {
-                        var hasPermissions = _.map(action.permissionKey, function (key) {
-                            return employeeService.hasPermissionTo(key);
-                        });
-                        if (popupActionOnly)
-                            return (!action.hide && action.showInViewOnly) && !(_.some(hasPermissions, function (isPermission) {
-                                return isPermission !== true;
-                            }));
-
-                        return (!action.hide && !action.showInViewOnly) && !(_.some(hasPermissions, function (isPermission) {
-                            return isPermission !== true;
-                        }));
+                        hasPermission = employeeService.getEmployee() && employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
+                    if (popupActionOnly)
+                        return (!action.hide && action.showInViewOnly) && hasPermission;
+                    return (!action.hide && !action.showInViewOnly) && hasPermission;
                 }
             }
             if (popupActionOnly)
@@ -908,9 +888,9 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'CREATE_REPLY',
                 showInViewOnly: true,
-                checkShow: function (action, model) {
+                checkShow: function (action, model, showInViewOnly) {
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && info.documentClass === "incoming";
+                    return self.checkToShowAction(action, model, showInViewOnly) && info.documentClass === "incoming" && !model.isBroadcasted();
                 }
             },
             // Forward
@@ -970,11 +950,11 @@ module.exports = function (app) {
                 class: "action-green",
                 showInView: false,
                 showInViewOnly: true,
-                checkShow: function (action, model) {
+                checkShow: function (action, model, showInViewOnly) {
                     //addMethod = 0 (Electronic/Digital) - show the export button
                     //addMethod = 1 (Paper) - show the export button
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && info.isPaper && info.documentClass === "outgoing";
+                    return self.checkToShowAction(action, model, showInViewOnly) && info.isPaper && info.documentClass === "outgoing";
                 }
             },*/
             // Export (Send to ready to export)
@@ -990,13 +970,13 @@ module.exports = function (app) {
                 callback: self.sendWorkItemToReadyToExport,
                 class: "action-green",
                 showInViewOnly: true,
-                checkShow: function (action, model) {
+                checkShow: function (action, model, showInViewOnly) {
                     //addMethod = 0 (Electronic/Digital) - hide the export button
                     //addMethod = 1 (Paper) - show the export button
                     var info = model.getInfo();
                     // If internal book, no export is allowed
                     // If incoming book, no addMethod will be available. So check workFlowName(if incoming) and show export button
-                    return self.checkToShowAction(action, model) && info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted() && (info.docStatus <= 22);
+                    return self.checkToShowAction(action, model, showInViewOnly) && info.isPaper && info.documentClass === 'outgoing' && !model.isBroadcasted() && (info.docStatus <= 22);
                     // (model.generalStepElm.addMethod && model.generalStepElm.workFlowName.toLowerCase() !== 'internal')
                     // || model.generalStepElm.workFlowName.toLowerCase() === 'incoming';
                 }
@@ -1032,7 +1012,7 @@ module.exports = function (app) {
                 icon: 'settings',
                 text: 'grid_action_manage',
                 shortcut: false,
-                showInViewOnly: true,
+                showInView: false,
                 hide: true,
                 checkShow: self.checkToShowAction,
                 permissionKey: [
@@ -1268,7 +1248,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInViewOnly: true,
                 //docClass: "Outgoing",
-                checkShow: function (action, model) {
+                checkShow: function (action, model, showInViewOnly) {
                     //addMethod = 0 (Electronic/Digital) - show the button
                     //addMethod = 1 (Paper) - hide the button
 
@@ -1278,7 +1258,7 @@ module.exports = function (app) {
                      docStatus = 24 is approved
                      */
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && !model.isBroadcasted()
+                    return self.checkToShowAction(action, model, showInViewOnly) && !model.isBroadcasted()
                         && !info.isPaper
                         && (info.documentClass !== 'incoming')
                         && model.needApprove();
@@ -1321,7 +1301,6 @@ module.exports = function (app) {
                 text: 'grid_action_edit',
                 shortcut: false,
                 showInView: false,
-                showInViewOnly: true,
                 checkShow: function (action, model) {
                     var info = model.getInfo();
                     var hasPermission = false;
@@ -1398,7 +1377,7 @@ module.exports = function (app) {
                 class: "action-green",
                 showInViewOnly: true,
                 showInView: false,
-                checkShow: function (action, model) {
+                checkShow: function (action, model, showInViewOnly) {
                     var info = model.getInfo();
                     var hasPermission = false;
                     if (info.documentClass === 'outgoing') {
@@ -1409,7 +1388,7 @@ module.exports = function (app) {
                     else if (info.documentClass === 'internal') {
                         hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                     }
-                    return self.checkToShowAction(action, model) && !model.isBroadcasted()
+                    return self.checkToShowAction(action, model, showInViewOnly) && !model.isBroadcasted()
                         && !info.isPaper
                         && (info.documentClass !== 'incoming')
                         && model.needApprove()
@@ -1442,9 +1421,9 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'DUPLICATE_BOOK_CURRENT',
                 showInView: true,
-                checkShow: function (action, model) {
+                checkShow: function (action, model, showInViewOnly) {
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper
+                    return self.checkToShowAction(action, model, showInViewOnly) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper
                 }
             },
             // duplicate specific version

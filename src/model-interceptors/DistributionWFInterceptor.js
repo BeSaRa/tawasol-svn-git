@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.run(function (CMSModelInterceptor) {
+    app.run(function (CMSModelInterceptor, _) {
         'ngInject';
         var modelName = 'DistributionWF';
 
