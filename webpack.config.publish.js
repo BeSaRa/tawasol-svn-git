@@ -4,14 +4,13 @@ var path = require('path'),
     ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 
-
 module.exports = {
     context: path.resolve(__dirname),
     entry: './src/app.js',
     devtool: false,
     output: {
         path: path.resolve(__dirname),
-        filename: '/dist/js/bundle.js',
+        filename: 'dist/js/bundle.js',
         publicPath: ''
     },
     devServer: {
@@ -44,10 +43,10 @@ module.exports = {
             },
             {
                 test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9=&.]+)?$/,
-                use : {
+                use: {
                     loader: 'file-loader',
                     options: {
-                        name: '../../dist/fonts/[name].[ext]',
+                        name: '/dist/fonts/[name].[ext]',
                         useRelativePath: false
                     }
                 }
@@ -58,7 +57,7 @@ module.exports = {
                 use: {
                     loader: 'file-loader',
                     options: {
-                        name: '../../assets/images/[name].[ext]',
+                        name: '/assets/images/[name].[ext]',
                         useRelativePath: false
                     }
                 }
@@ -80,7 +79,7 @@ module.exports = {
                 'NODE_ENV': JSON.stringify('production')
             }
         }),
-        new ExtractTextPlugin('dist/css/style.css'),
+        new ExtractTextPlugin('/dist/css/style.css'),
         new NGAnnotate(),
         new webpack.optimize.AggressiveMergingPlugin(),
         new webpack.optimize.UglifyJsPlugin({
