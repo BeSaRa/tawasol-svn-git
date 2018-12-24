@@ -39,6 +39,15 @@ module.exports = function (app) {
             WorkflowGroup.prototype.getNames = function (separator) {
                 return this.arName + ' ' + (separator ? separator : '-') + ' ' + this.enName;
             };
+
+            /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            WorkflowGroup.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'];
+            };
             WorkflowGroup.prototype.getTranslatedName = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };

@@ -137,6 +137,15 @@ module.exports = function (app) {
                 return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
 
+            /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            Organization.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'];
+            };
+
             Organization.prototype.setRegistryParentId = function (registryParentId) {
                 this.registryParentId = registryParentId;
                 return this;

@@ -44,11 +44,11 @@ module.exports = function (app) {
 
             /**
              * @description Get the name of record with passed language name
-             * @param lang
+             * @param language
              * @returns {string}
              */
-            WorkflowAction.prototype.getNameByLanguage = function (lang) {
-                return this[lang + 'Name'];
+            WorkflowAction.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'];
             };
 
             /**
