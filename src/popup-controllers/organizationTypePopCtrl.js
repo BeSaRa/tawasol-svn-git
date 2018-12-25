@@ -36,7 +36,7 @@ module.exports = function (app) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {
-                    toast.error(langService.get('name_duplication_message'));
+                    toast.error(langService.get('name_lookupstringkey_duplicate'));
                 })
                 .addStep('checkItemOrder', true, generator.checkDuplicateItemOrder, [self.organizationType, self.organizationTypes, false] , function(result){
                     return !result;
@@ -76,7 +76,7 @@ module.exports = function (app) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {
-                    toast.error(langService.get('name_duplication_message'));
+                    toast.error(langService.get('name_lookupstringkey_duplicate'));
                 })
                 .addStep('checkItemOrder', true, generator.checkDuplicateItemOrder, [self.organizationType, self.organizationTypes, true], function (result) {
                     return !result;

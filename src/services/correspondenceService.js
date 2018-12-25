@@ -380,6 +380,16 @@ module.exports = function (app) {
         }
 
         /**
+         * @description to get fromEditOnDesktop porperty value // note: it will not work from any model except Correspondence Model like [Outgoing,incoming,internal]
+         * @param correspondence
+         * @return {boolean}
+         * @private
+         */
+        function _getEditInDesktop(correspondence) {
+            return correspondence.hasOwnProperty('generalStepElm') ? false : (correspondence.hasOwnProperty('fromEditOnDesktop') ? correspondence.fromEditOnDesktop : false);
+        }
+
+        /**
          * @description bulk message for any bulk actions.
          * @param result
          * @param collection
@@ -461,7 +471,8 @@ module.exports = function (app) {
                 docStatus: _getDocumentStatus(correspondence),
                 docFullSerial: _getDocFullSerial(correspondence),
                 incomingVsId: _getIncomingVsId(correspondence),
-                docType: _getDocType(correspondence)
+                docType: _getDocType(correspondence),
+                editByDeskTop: _getEditInDesktop(correspondence)
             });
         };
         /**
@@ -2551,6 +2562,28 @@ module.exports = function (app) {
                     }
                 });
         };
+
+        /**
+         * @description open dialog for bulk export workItem.
+         * @param workItems
+         * @param $event
+         * @param resend
+         * @returns {promise|*}
+         */
+        self.openExportBulkCorrespondenceDialog = function (workItems, $event, resend) {
+            return dialog
+                .showDialog({
+                    targetEvent: $event,
+                    template: cmsTemplate.getPopup('bulk-export-option'),
+                    controller: 'bulkExportOptionPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        workItems: workItems,
+                        resend: resend
+                    }
+                });
+        };
+
         /**
          * @description resend the workItem again to correspondences sites
          * @param workItem
@@ -2569,6 +2602,33 @@ module.exports = function (app) {
                 .put(urlService.departmentInboxes + "/" + info.vsId + "/resend/" + info.wobNumber, resendModel)
                 .then(function () {
                     return workItem;
+                });
+        };
+        /**
+         * @description resend the bulk workItems again to correspondences sites
+         * @param workItems
+         */
+        self.resendBulkCorrespondenceWorkItems = function (workItems) {
+            var regular, resendOptions, resendModels = [];
+            for (var i = 0; i < workItems.length; i++) {
+                resendOptions = workItems[i].exportType === 1 ? workItems[i].model : workItems[i].partialExportList;
+                regular = !resendOptions.isSelective();
+                resendOptions = !regular ? generator.interceptSendInstance('PartialExportSelective', resendOptions) : resendOptions;
+                resendModels.push({
+                    vsId: workItems[i].getInfo().vsId,
+                    wobNum: workItems[i].getInfo().wobNumber,
+                    resendOptions: {
+                        type: regular,
+                        regularExport: regular ? resendOptions : {},
+                        selectiveExport: regular ? {} : resendOptions.prepareResendModel()
+                    }
+                });
+            }
+
+            return $http
+                .put(urlService.departmentInboxes + "/resend/bulk", resendModels)
+                .then(function (result) {
+                    return _bulkMessages(result, workItems, false, 'failed_resend_selected', 'selected_resend_success', 'following_records_failed_to_resend');
                 });
         };
         /**

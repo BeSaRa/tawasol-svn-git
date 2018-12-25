@@ -20,9 +20,6 @@ module.exports = function (app) {
             .addMenuPermissions('menu_item_application_users', ['MANAGE_APPLICATION_USERS'])
             .addMenuPermissions('menu_item_reference_number_plans', ['MANAGE_REFERENCE_NUMBER_PLANS'])
             .addMenuPermissions('menu_item_ranks', ['MANAGE_RANKS'])
-            // .addMenuPermissions('menu_item_reference_number_plans', function () {
-            //     return false;
-            // })
             .addMenuPermissions('menu_item_distribution_lists', ['MANAGE_DISTRIBUTION_LISTS'])
             .addMenuPermissions('menu_item_entity_type', ['MANAGE_ENTITY_TYPES'])
             .addMenuPermissions('menu_item_document_status', ['MANAGE_DOCUMENT_STATUS'])
@@ -98,9 +95,6 @@ module.exports = function (app) {
             .addMenuPermissions('menu_item_search_module_outgoing_incoming', ['SEARCH_OUTGOING', 'SEARCH_INCOMING'])
             .addMenuPermission('menu_item_quick_search', 'QUICK_SEARCH')
             .end()
-            .addMenuPermission('menu_item_user_favorite_documents', function (employee) {
-                return !employee.isAdmin;
-            })
             .addMenuPermissionGroup('menu_item_central_archive_mail')
             .addMenuPermission('menu_item_central_archive_ready_to_export', function (employee) {
                 return employee.userOrganization && employee.userOrganization.centralArchive;

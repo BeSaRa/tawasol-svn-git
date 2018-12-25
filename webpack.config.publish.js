@@ -46,7 +46,7 @@ module.exports = {
                 use: {
                     loader: 'file-loader',
                     options: {
-                        name: '/dist/fonts/[name].[ext]',
+                        name: '../fonts/[name].[ext]',
                         useRelativePath: false
                     }
                 }
@@ -57,7 +57,7 @@ module.exports = {
                 use: {
                     loader: 'file-loader',
                     options: {
-                        name: '/assets/images/[name].[ext]',
+                        name: '../../assets/images/[name].[ext]',
                         useRelativePath: false
                     }
                 }

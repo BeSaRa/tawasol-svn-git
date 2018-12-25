@@ -517,7 +517,7 @@ module.exports = function (app) {
          * @param model
          * @returns {boolean}
          */
-        self.checkToShowAction = function (action, model) {
+        /*self.checkToShowAction = function (action, model) {
             var hasPermission = true;
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
@@ -533,6 +533,33 @@ module.exports = function (app) {
                 }
             }
             return (!action.hide) && hasPermission;
+        };*/
+        self.checkToShowAction = function (action, model, popupActionOnly) {
+            if (action.hide)
+                return false;
+
+            if (action.hasOwnProperty('permissionKey')) {
+                if (typeof action.permissionKey === 'string') {
+                    if (popupActionOnly)
+                        return (!action.hide && action.showInViewOnly) && employeeService.hasPermissionTo(action.permissionKey);
+                    return (!action.hide && !action.showInViewOnly) && employeeService.hasPermissionTo(action.permissionKey);
+                }
+                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                    var hasPermission = true;
+                    if (action.hasOwnProperty('checkAnyPermission')) {
+                        hasPermission = employeeService.getEmployee() && employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
+                    }
+                    else {
+                        hasPermission = employeeService.getEmployee() && employeeService.getEmployee().hasThesePermissions(action.permissionKey);
+                    }
+                    if (popupActionOnly)
+                        return (!action.hide && action.showInViewOnly) && hasPermission;
+                    return (!action.hide && !action.showInViewOnly) && hasPermission;
+                }
+            }
+            if (popupActionOnly)
+                return (!action.hide) && (action.showInViewOnly);
+            return (!action.hide && !action.showInViewOnly);
         };
 
         /**
@@ -661,10 +688,11 @@ module.exports = function (app) {
                 text: 'grid_action_add_to_favorite',
                 permissionKey: "MANAGE_FAVORITE",
                 shortcut: false,
+                showInViewOnly: true,
                 callback: self.addToFavorite,
                 class: "action-green",
-                checkShow: function (action, model) {
-                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                checkShow: function (action, model, showInViewOnly) {
+                    return self.checkToShowAction(action, model, showInViewOnly) && !model.isBroadcasted();
                 }
             },
             // Manage
@@ -674,6 +702,7 @@ module.exports = function (app) {
                 text: 'grid_action_manage',
                 shortcut: false,
                 showInView: false,
+                showInViewOnly: true,
                 checkShow: self.checkToShowAction,
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",
@@ -760,6 +789,7 @@ module.exports = function (app) {
                 icon: 'download',
                 text: 'grid_action_download',
                 shortcut: false,
+                showInViewOnly: true,
                 checkShow: self.checkToShowAction,
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
@@ -796,6 +826,7 @@ module.exports = function (app) {
                 icon: 'send',
                 text: 'grid_action_send',
                 shortcut: false,
+                showInViewOnly: true,
                 checkShow: self.checkToShowAction,
                 permissionKey: [
                     "SEND_LINK_TO_THE_DOCUMENT_BY_EMAIL",
@@ -872,6 +903,7 @@ module.exports = function (app) {
                 shortcut: true,
                 callback: self.transferToAnotherEmployee,
                 class: "action-green",
+                showInView: true,
                 checkShow: self.checkToShowAction
             },
             /* // Move To Folder
@@ -910,6 +942,8 @@ module.exports = function (app) {
                 callback: self.getLink,
                 class: "action-green",
                 hide: false,
+                showInView: true,
+                showInViewOnly: true,
                 checkShow: self.checkToShowAction
             },
             // View Tracking Sheet
@@ -933,6 +967,7 @@ module.exports = function (app) {
                 permissionKey: "VIEW_DOCUMENT_VERSION",
                 class: "action-green",
                 showInView: true,
+                showInViewOnly: true,
                 checkShow: self.checkToShowAction
             },
             // duplicate current version
@@ -946,9 +981,10 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'DUPLICATE_BOOK_CURRENT',
                 showInView: true,
-                checkShow: function (action, model) {
+                showInViewOnly: true,
+                checkShow: function (action, model, showInViewOnly) {
                     var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper
+                    return self.checkToShowAction(action, model, showInViewOnly) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper
                 }
             },
             // duplicate specific version
@@ -961,6 +997,7 @@ module.exports = function (app) {
                 callback: self.duplicateVersion,
                 class: "action-green",
                 showInView: true,
+                showInViewOnly: true,
                 permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
                 checkShow: self.checkToShowAction
             }

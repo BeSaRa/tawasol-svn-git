@@ -9,8 +9,9 @@ module.exports = function (app) {
          * @param scanning
          * @param buttonCallback
          * @param CCToolkit
+         * @param message
          */
-        self.show = function (showValue, scanning, buttonCallback, CCToolkit) {
+        self.show = function (showValue, scanning, buttonCallback, CCToolkit, message) {
             if (showValue) {
                 self.waiting = true;
                 dialog
@@ -19,7 +20,8 @@ module.exports = function (app) {
                         locals: {
                             scanning: scanning,
                             buttonCallback: buttonCallback || false,
-                            CCToolkit: CCToolkit || false
+                            CCToolkit: CCToolkit || false,
+                            message: message || false
                         },
                         controller: function (dialog) {
                             'ngInject';

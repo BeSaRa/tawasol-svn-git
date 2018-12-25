@@ -120,6 +120,7 @@
                                     <md-input-container flex>
                                         <label for="lookupStrKey">{{lang.code}}</label>
                                         <input no-space-directive name="lookupStrKey"
+                                               ng-disabled="ctrl.editMode"
                                                id="lookupStrKey" minlength="3"
                                                ng-model="ctrl.ouDocumentFile.code"
                                                custom-validate-directive="EN_"

@@ -4,6 +4,7 @@ module.exports = function (app) {
                                       generator,
                                       $q,
                                       _,
+                                      singleNotifierService,
                                       urlService,
                                       OUApplicationUser) {
         'ngInject';
@@ -128,6 +129,7 @@ module.exports = function (app) {
              */
             Employee.prototype.setPermissions = function (permissions) {
                 this.permissions = permissions;
+                singleNotifierService.getNotifierByName('employeePermissionChange').notify(this);
                 return this;
             };
             /**
@@ -325,13 +327,27 @@ module.exports = function (app) {
             Employee.prototype.toggleInboxView = function () {
                 var self = this;
                 return $http.put(urlService.applicationUsers + '/change-inbox-view/' + (self.viewInboxAsGrid ? 0 : 1))
-                    .then(function (value) {
+                    .then(function () {
                         self.viewInboxAsGrid = !self.viewInboxAsGrid;
                     })
                     .catch(function (reason) {
                         self.viewInboxAsGrid = !self.viewInboxAsGrid;
                         return reason;
                     })
+            };
+            /**
+             * to listening to permissions changes for the current logged in  user.
+             * @param callback
+             */
+            Employee.prototype.listeningToPermissionsChanges = function (callback) {
+                singleNotifierService.getNotifierByName('employeePermissionChange').promise.then(function () {
+                    // for the resolve not needs
+                }, function () {
+                    // for the reject not needs
+                }, function (employee) {
+                    // for notify
+                    callback(employee);
+                });
             };
 
 

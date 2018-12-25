@@ -112,4 +112,5 @@ module.exports = function (app) {
 	require('./gridService')(app);
 	require('./searchOutgoingIncomingService')(app);
 	require('./documentFileNewService')(app);
+	require('./singleNotifierService')(app);
 };

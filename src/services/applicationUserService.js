@@ -303,7 +303,7 @@ module.exports = function (app) {
                         controllerAs: 'ctrl',
                         locals: {
                             singleMode: false,
-                            applicationUsers: !applicationUsers ? [] : applicationUsers,
+                            applicationUsers: !applicationUsers ? [] : angular.copy(applicationUsers),
                             label: label
                         }
                     });

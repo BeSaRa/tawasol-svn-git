@@ -674,6 +674,23 @@ module.exports = function (app) {
             WorkItem.prototype.unlockWorkItem = function ($event) {
                 return correspondenceService.unlockWorkItem(this, false, $event);
             };
+            /**
+             * @description Handle the export/resend properties
+             * @param $event
+             * @returns {*}
+             */
+            WorkItem.prototype.handleExportPropertiesForSend = function ($event) {
+                delete this.exportType;
+                delete this.relatedThings;
+                delete this.model;
+                delete this.partialExportList;
+                delete this.exportOptions;
+                return this;
+            };
+
+            WorkItem.prototype.editCorrespondenceInDesktop = function () {
+                return correspondenceService.editWordInDesktop(this);
+            };
 
 
             // don't remove CMSModelInterceptor from last line

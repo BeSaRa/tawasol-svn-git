@@ -39,25 +39,25 @@
                                 </div>
                                 <div layout="row">
                                     <md-input-container flex>
-                                        <label>{{$parent.lang.arabic_font_family}}</label>
+                                        <label>{{lang.arabic_font_family}}</label>
                                         <md-select required ng-model="ctrl.theme.arFontFamily"
                                                    aria-label="{{$parent.lang.arabic_font_family}}">
                                             <md-option ng-repeat="font in ctrl.theme.arFonts()" ng-value="font"><span
                                                     ng-style="{'font-family':font}">نموذج الخط</span> - {{font}}
                                             </md-option>
                                         </md-select>
-                                        <div ng-messages="doc.lookupStrKey.$error">
+                                        <div ng-messages="doc.arFontFamily.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                         </div>
                                     </md-input-container>
                                     <md-input-container flex>
-                                        <label>{{$parent.lang.english_font_family}}</label>
+                                        <label>{{lang.english_font_family}}</label>
                                         <md-select required ng-model="ctrl.theme.enFontFamily"
                                                    aria-label="{{$parent.lang.english_font_family}}">
                                             <md-option ng-repeat="font in ctrl.theme.enFonts()" ng-value="font"><span
                                                     ng-style="{'font-family':font}">{{font}}</span></md-option>
                                         </md-select>
-                                        <div ng-messages="edit_form.enFont.$error">
+                                        <div ng-messages="doc.enFontFamily.$error">
                                             <div ng-message="required">{{$parent.lang.field_required}}</div>
                                         </div>
                                     </md-input-container>

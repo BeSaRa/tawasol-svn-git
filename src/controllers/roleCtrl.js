@@ -17,7 +17,6 @@ module.exports = function (app) {
         self.permissions = permissions;
         // all roles
         self.roles = roles;
-        console.log('self.roles', self.roles);
         _prepareRoleMemebers(); // run prepareRoleMember for the first time.
         self.promise = null;
         self.selectedRoles = [];

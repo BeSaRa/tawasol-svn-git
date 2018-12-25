@@ -20,7 +20,7 @@ module.exports = function (app) {
         self.isUserPreference = isUserPreference;
         self.model = angular.copy(workflowGroup);
         self.workflowGroup = angular.copy(workflowGroup);
-        console.log('self.workflowGroup', self.workflowGroup);
+
         self.availableSearchCriteria = [
             {key: 'loginName', value: 'login_name'},
             {key: 'employeeNo', value: 'employee_number'},

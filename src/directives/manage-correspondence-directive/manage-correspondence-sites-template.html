@@ -86,9 +86,11 @@
                                                 md-selected-item-change="ctrl.onSimpleSubChange(item)"
                                                 md-items="item in ctrl.getSimpleSubSearchOptions(ctrl.simpleSubSearchText)"
                                                 md-item-text="item.getTranslatedName()"
-                                                md-min-length="0">
+                                                md-min-length="0"
+                                                placeholder="{{lang.search}}">
                                             <md-item-template>
-                                                <span md-highlight-text="ctrl.simpleSubSearchText" md-highlight-flags="^i">{{item.getTranslatedName()}}</span>
+                                                <span md-highlight-text="ctrl.simpleSubSearchText"
+                                                      md-highlight-flags="^i">{{item.getTranslatedName()}}</span>
                                             </md-item-template>
                                         </md-autocomplete>
                                     </div>
@@ -123,7 +125,8 @@
                                                 md-item-text="item.getTranslatedName()"
                                                 md-min-length="0">
                                             <md-item-template>
-                                                <span md-highlight-text="ctrl.simpleSubSearchText" md-highlight-flags="^i">{{item.getTranslatedName()}}</span>
+                                                <span md-highlight-text="ctrl.simpleSubSearchText"
+                                                      md-highlight-flags="^i">{{item.getTranslatedName()}}</span>
                                             </md-item-template>
                                         </md-autocomplete>
                                     </div>

@@ -216,6 +216,18 @@ module.exports = function (app) {
                 ((self.langKeys[self.current][langKey]) ? self.langKeys[self.current][langKey] : 'LANG: (' + langKey + ') is Missing!') :
                 (ignoreError) ? false : 'LANG: ' + langKey;
         };
+        /**
+         * @description get list of langkeys and concatenate them.
+         * @param langKeys
+         * @return {string}
+         */
+        self.getConcatenated = function (langKeys) {
+            var translate = [];
+            _.map(langKeys,function (langKey) {
+                translate.push(self.get(langKey));
+            });
+            return translate.join('');
+        };
 
         self.getByLangKey = function (langKey, lang, ignoreError) {
             return self.langKeys.hasOwnProperty(lang) ?

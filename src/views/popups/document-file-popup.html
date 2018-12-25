@@ -126,6 +126,7 @@
                                         <label for="lookupStrKey">{{lang.code}}</label>
                                         <input no-space-directive name="lookupStrKey"
                                                id="lookupStrKey"
+                                               ng-disabled="ctrl.editMode"
                                                minlength="3"
                                                ng-model="ctrl.relatedOUCode"
                                                custom-validate-directive="EN_"

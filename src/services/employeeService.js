@@ -201,6 +201,10 @@ module.exports = function (app) {
             applicationUserSignatureService = service;
         };
 
+        self.employeePermissionChanged = function(callback){
+            return employee ? employee.listeningToPermissionsChanges(callback) : null;
+        };
+
         $timeout(function () {
             CMSModelInterceptor.runEvent('employeeService', 'init', self);
         }, 100);

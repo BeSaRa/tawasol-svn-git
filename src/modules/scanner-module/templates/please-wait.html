@@ -5,6 +5,9 @@
         <div layout="row" layout-align="center center" ng-if="ctrl.scanning">
             <span>{{lang.number_of_pages}} : {{ctrl.CCToolkit.getDocument().pages.length}}</span>
         </div>
+        <div layout="row" layout-align="center center" ng-if="!ctrl.scanning && ctrl.message">
+            <span>{{ctrl.message}}</span>
+        </div>
         <br>
         <md-progress-linear></md-progress-linear>
         <br>

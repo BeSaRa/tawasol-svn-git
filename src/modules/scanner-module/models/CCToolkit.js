@@ -1,13 +1,14 @@
 module.exports = function (app) {
-    app.factory('CCToolkit', function (getDefaultRequest, 
-                                       ImageCompression, 
-                                       networkErrorCallback, 
-                                       Document, 
-                                       Page, 
-                                       TaskStatus, 
-                                       ajaxRequest, 
-                                       AsyncOperation, 
-                                       FileType, 
+    app.factory('CCToolkit', function (getDefaultRequest,
+                                       ImageCompression,
+                                       networkErrorCallback,
+                                       Document,
+                                       Page,
+                                       $q,
+                                       TaskStatus,
+                                       ajaxRequest,
+                                       AsyncOperation,
+                                       FileType,
                                        ISISWebErrorCode) {
         'ngInject';
         return function CCToolkit() {
@@ -95,7 +96,7 @@ module.exports = function (app) {
 
             this.existSession = function (callback, errorCallback) {
                 var self = this;
-                if (typeof(Storage) !== "undefined" && typeof(window.localStorage) !== "undefined") {
+                if (typeof (Storage) !== "undefined" && typeof (window.localStorage) !== "undefined") {
                     var lastSessionId = window.localStorage.getItem(_cctSessionIdKey);
                     if (lastSessionId === null || lastSessionId === 'undefined') {
                         callback(null, "");
@@ -118,8 +119,7 @@ module.exports = function (app) {
                                 });
                         });
                     }
-                }
-                else {
+                } else {
                     callback(null, "");
                 }
             };
@@ -178,10 +178,15 @@ module.exports = function (app) {
             };
 
             this.getTag = function (tagID, index, callback) {
+                var defer = $q.defer();
                 var request = getDefaultRequest();
                 request.url = _serviceURL + "gettag?session=" + _sessionID + "&tagid=" + tagID + "&index=" + index;
-                request.success = callback;
+                request.success = function (data) {
+                    callback(data);
+                    defer.resolve(data);
+                };
                 ajaxRequest(request);
+                return defer.promise;
             };
 
             this.setTagStringValue = function (tagID, value, callback) {
@@ -355,7 +360,7 @@ module.exports = function (app) {
                 request.success = function (data) {
                     if (data.SessionID && data.SessionID.length) {
                         _sessionID = data.SessionID;
-                        if (typeof(Storage) !== "undefined" && typeof(window.localStorage) !== "undefined") {
+                        if (typeof (Storage) !== "undefined" && typeof (window.localStorage) !== "undefined") {
                             window.localStorage.setItem(_cctSessionIdKey, _sessionID);
                         }
                     }

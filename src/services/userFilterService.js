@@ -99,6 +99,24 @@ module.exports = function (app) {
         };
 
         /**
+         * @description load userFilter by userFilterId from server
+         * @param userFilterId
+         * @returns {UserFilter|undefined} return UserFilter Model or undefined if not found.
+         */
+        self.loadUserFilterById = function (userFilterId) {
+            userFilterId = userFilterId instanceof UserFilter ? userFilterId.id : userFilterId;
+            return $http.get(urlService.userFilters + '/' + userFilterId)
+                .then(function (result) {
+                    result = generator.generateInstance(result.data.rs, UserFilter);
+                    result = generator.interceptReceivedInstance('UserFilter', result);
+                    var index = _.findIndex(function (filter) {
+                        return (self.userFilters.id === filter.id);
+                    });
+                    self.userFilters[index] = result;
+                    return result;
+                });
+        };
+        /**
          * @description get userFilter by userFilterId
          * @param userFilterId
          * @returns {UserFilter|undefined} return UserFilter Model or undefined if not found.

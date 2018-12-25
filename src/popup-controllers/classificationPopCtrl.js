@@ -343,7 +343,7 @@ module.exports = function (app) {
          * @return {*}
          */
         self.getSubClassification = function (tabName) {
-            if (tabName) 
+            if (tabName)
             self.setCurrentTab(tabName);
             return classificationService
                 .loadSubClassifications(self.classification)
@@ -370,7 +370,8 @@ module.exports = function (app) {
                 .controllerMethod
                 .classificationDeleteBulk(self.selectedSubClassifications, $event)
                 .then(function () {
-                    self.reloadClassifications(self.grid.page);
+                    self.getSubClassification();
+                    self.selectedSubClassifications = [];
                 });
         };
 
@@ -380,9 +381,11 @@ module.exports = function (app) {
          */
         self.changeBulkStatusClassifications = function (status) {
             self.statusServices[status](self.selectedSubClassifications).then(function () {
-                self.reloadClassifications(self.grid.page).then(function () {
-                    toast.success(langService.get('selected_status_updated'));
-                });
+                self.getSubClassification()
+                    .then(function () {
+                        self.selectedSubClassifications = [];
+                        toast.success(langService.get('selected_status_updated'));
+                    });
             });
         };
 
@@ -399,10 +402,10 @@ module.exports = function (app) {
                 .controllerMethod
                 .classificationAdd(self.classification, true, $event)
                 .then(function () {
-                    self.reloadClassifications(self.grid.page);
+                    self.getSubClassification();
                 })
                 .catch(function () {
-                    self.reloadClassifications(self.grid.page);
+                    self.getSubClassification();
                 });
         };
         /**

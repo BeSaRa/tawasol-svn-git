@@ -52,6 +52,11 @@ module.exports = function (app) {
                 return this.comment;
             };
 
+            /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
             UserComment.prototype.getNameByLanguage = function (language) {
                 return this.getCommentTitle();
             };

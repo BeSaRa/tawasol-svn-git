@@ -123,50 +123,11 @@ module.exports = function (app) {
          */
         self.resendBulkReturnedDepartmentInbox = function ($event) {
             returnedDepartmentInboxService
-                .controllerMethod.returnedDepartmentInboxesResendBulk(self.selectedReturnedDepartmentInboxes, $event)
+                .controllerMethod.resendBulk(self.selectedReturnedDepartmentInboxes, $event)
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page);
                 })
         };
-
-        /**
-         * @description Change the starred for returned department inbox
-         * @param returnedDepartmentInbox
-         * @param $event
-         */
-        /* self.changeStar = function (returnedDepartmentInbox, $event) {
-         self.starServices[returnedDepartmentInbox.generalStepElm.starred](returnedDepartmentInbox)
-         .then(function (result) {
-         if (result) {
-         self.reloadReturnedDepartmentInboxes(self.grid.page)
-         .then(function () {
-         if (!returnedDepartmentInbox.generalStepElm.starred)
-         toast.success(langService.get("star_specific_success").change({name: returnedDepartmentInbox.generalStepElm.docSubject}));
-         else
-         toast.success(langService.get("unstar_specific_success").change({name: returnedDepartmentInbox.generalStepElm.docSubject}));
-         });
-         }
-         else {
-         dialog.errorMessage(langService.get('something_happened_when_update_starred'));
-         }
-         })
-         .catch(function () {
-         dialog.errorMessage(langService.get('something_happened_when_update_starred'));
-         });
-         };*/
-
-        /**
-         * @description Change the starred for returned department inboxes Bulk
-         * @param starUnStar
-         * @param $event
-         */
-        /*self.changeStarBulk = function (starUnStar, $event) {
-         self.starServices[starUnStar](self.selectedReturnedDepartmentInboxes)
-         .then(function (result) {
-         self.reloadReturnedDepartmentInboxes(self.grid.page);
-         });
-         };*/
-
 
         /**
          * @description add an item to the favorite documents
@@ -178,21 +139,9 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
                 return;
             }
-            favoriteDocumentsService.controllerMethod
-                .favoriteDocumentAdd(workItem.generalStepElm.vsId, $event)
-                .then(function (result) {
-                    if (result.status) {
-                        self.reloadReturnedDepartmentInboxes(self.grid.page)
-                            .then(function () {
-                                toast.success(langService.get("add_to_favorite_specific_success").change({
-                                    name: workItem.getTranslatedName()
-                                }));
-                            });
-                    }
-                    else {
-                        dialog.alertMessage(langService.get(result.message));
-                    }
-                });
+            workItem.addToFavorite().then(function () {
+                self.reloadReturnedDepartmentInboxes(self.grid.page)
+            });
         };
 
 
@@ -207,13 +156,11 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('item_locked_by').change({name: workItem.getLockingUserInfo().getTranslatedName()}));
                 return;
             }
-            returnedDepartmentInboxService
-                .controllerMethod
-                .returnedDepartmentInboxTerminate(workItem, $event)
+            workItem
+                .terminate($event)
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page)
                         .then(function () {
-                            toast.success(langService.get("terminate_specific_success").change({name: workItem.getTranslatedName()}));
                             new ResolveDefer(defer);
                         });
                 });
@@ -373,7 +320,10 @@ module.exports = function (app) {
                 dialog.infoMessage(langService.get('item_locked_by').change({name: returnedDepartmentInbox.getLockingUserInfo().getTranslatedName()}));
                 return;
             }
-            returnedDepartmentInbox.manageDocumentAttachments($event);
+            returnedDepartmentInbox.manageDocumentAttachments($event)
+                .then(function () {
+                    self.reloadReturnedDepartmentInboxes(self.grid.page);
+                });
         };
 
         /**

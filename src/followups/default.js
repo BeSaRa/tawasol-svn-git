@@ -57,7 +57,7 @@ module.exports = function (app) {
                 dialog
                     .errorMessage(langService.get('internal_server_error'))
             } else {
-                if (!errorCode.hasErrorCode(xhr)) {
+                if (!errorCode.hasErrorCode(xhr) && (xhr.data.ec !== 1005 && xhr.config.method !== 'DELETE')) {
                     dialog
                         .errorMessage(langService.get('internal_server_error'));
                 }

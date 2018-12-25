@@ -42,7 +42,7 @@ module.exports = function (app) {
             };
 
             CorrespondenceSiteType.prototype.canDelete = function () {
-                var defaultValues = [1, 2, 3, 4, 5];
+                var defaultValues = [1, 3, 5];
                 return defaultValues.indexOf(this.lookupKey) === -1;
             };
 

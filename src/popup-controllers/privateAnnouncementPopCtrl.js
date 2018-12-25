@@ -155,6 +155,8 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.checkStartDate = function (announcement) {
+            if (self.alwaysActive)
+                return true;
             return moment(announcement.startDate, "YYYY-MM-DD").valueOf() >= moment(self.currentDate, "YYYY-MM-DD").valueOf();
         };
 

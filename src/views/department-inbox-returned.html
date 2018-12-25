@@ -46,21 +46,8 @@
                                                            ng-click="ctrl.launchDistributionWorkflowBulk($event)">
                                                     <md-icon md-svg-icon="sitemap" class="action-green"></md-icon>
                                                 </md-button>-->
-                                                <!--<md-button class="md-icon-button action-green" aria-label="{{lang.star}}"
-                                                           tooltip="{{lang.star}}"
-                                                           ng-click="ctrl.changeStarBulk('starBulk',$event)">
-                                                    <md-icon class="star-yellow" md-svg-icon="star"></md-icon>
-                                                </md-button>
-                                                <md-button class="md-icon-button action-green" aria-label="{{lang.un_star}}"
-                                                           tooltip="{{lang.un_star}}"
-                                                           ng-click="ctrl.changeStarBulk('unStarBulk' ,$event)">
-                                                    <md-icon class="star-yellow" md-svg-icon="star-outline"></md-icon>
-                                                </md-button>-->
                                             </div>
                                         </th>
-                                        <!--<th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column md-order-by="">
-                                            &lt;!&ndash; Star/Unstar &ndash;&gt;
-                                        </th>-->
                                         <th ng-if="!ctrl.selectedReturnedDepartmentInboxes.length" md-column>
                                             <!-- Indicators -->
                                         </th>
@@ -115,13 +102,6 @@
                                         model="returnedDepartmentInbox"
                                         selected-length="{{ctrl.selectedReturnedDepartmentInboxes.length ? ctrl.selectedReturnedDepartmentInboxes.length : 0}}"
                                         ng-repeat="returnedDepartmentInbox in searchResults = (ctrl.returnedDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
-                                        <!-- <td md-cell>
-                                            <star-unstar-directive record="returnedDepartmentInbox"
-                                                                   record-type="WorkItem"
-                                                                   callback="ctrl.changeStar"
-                                                                   selected-records="ctrl.selectedReturnedDepartmentInboxes"
-                                            ></star-unstar-directive>
-                                         </td>-->
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->
                                             <grid-indicator-directive record="returnedDepartmentInbox"

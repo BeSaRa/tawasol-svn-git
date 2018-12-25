@@ -12,6 +12,7 @@ module.exports = function (app) {
                                                    rootEntity,
                                                    viewDocumentService,
                                                    managerService,
+                                                   userSubscriptionService,
                                                    userFolders,
                                                    $window,
                                                    tokenService,
@@ -155,12 +156,11 @@ module.exports = function (app) {
          * @param $event
          */
         self.addToFolderProxyMailInboxBulk = function ($event) {
-            var itemsToAdd = _.map(self.selectedProxyMailInboxes, 'generalStepElm.workObjectNumber');
-            userFolderService
-                .controllerMethod
-                .addToUserFolderBulk(itemsToAdd, self.selectedProxyMailInboxes, $event)
+            return correspondenceService
+                .showAddBulkWorkItemsToFolder(self.selectedProxyMailInboxes, $event, false)
                 .then(function (result) {
-                    self.reloadProxyMailInboxes(self.grid.page);
+                    if (result)
+                        self.reloadProxyMailInboxes(self.grid.page);
                 });
         };
 
@@ -170,24 +170,9 @@ module.exports = function (app) {
          * @param $event
          */
         self.changeProxyMailInboxStar = function (workItem, $event) {
-            self.starServices[workItem.generalStepElm.starred](workItem)
-                .then(function (result) {
-                    if (result) {
-                        self.reloadProxyMailInboxes(self.grid.page)
-                            .then(function () {
-                                if (!workItem.generalStepElm.starred)
-                                    toast.success(langService.get("star_specific_success").change({name: workItem.generalStepElm.docSubject}));
-                                else
-                                    toast.success(langService.get("unstar_specific_success").change({name: workItem.generalStepElm.docSubject}));
-                            });
-                    }
-                    else {
-                        dialog.errorMessage(langService.get('something_happened_when_update_starred'));
-                    }
-                })
-                .catch(function () {
-                    dialog.errorMessage(langService.get('something_happened_when_update_starred'));
-                });
+            workItem.toggleStar().then(function () {
+                self.reloadProxyMailInboxes(self.grid.page);
+            });
         };
 
         /**
@@ -223,24 +208,10 @@ module.exports = function (app) {
          * @param $event
          */
         self.addToFolderProxyMailInbox = function (workItem, $event) {
-            userFolderService
-                .controllerMethod
-                .addToUserFolder(workItem.generalStepElm.workObjectNumber, workItem.generalStepElm["folderId"], workItem, $event)
-                .then(function (result) {
-                    if (result === -1) {
-                        toast.error(langService.get("inbox_failed_add_to_folder_selected"));
-                    }
-                    else {
-                        self.reloadProxyMailInboxes(self.grid.page)
-                            .then(function () {
-                                var currentFolder = _.find(userFolderService.allUserFolders, ['id', result]);
-                                toast.success(langService.get("inbox_add_to_folder_specific_success").change({
-                                    name: workItem.getTranslatedName(),
-                                    folder: currentFolder.getTranslatedName()
-                                }));
-                            });
-                    }
-                });
+            workItem.addToFolder($event, false).then(function (result) {
+                if (result)
+                    self.reloadProxyMailInboxes(self.grid.page);
+            });
         };
 
         /**
@@ -248,7 +219,7 @@ module.exports = function (app) {
          * @param workItem
          * @param $event
          */
-        self.createReplyProxyMailInboxIncoming = function (workItem, $event) {
+        self.createReplyIncoming = function (workItem, $event) {
             var info = workItem.getInfo();
             dialog.hide();
             $state.go('app.outgoing.add', {workItem: info.wobNumber, action: 'reply'});
@@ -279,7 +250,6 @@ module.exports = function (app) {
          * @param defer
          */
         self.reply = function (workItem, $event, defer) {
-
             workItem.launchWorkFlow($event, 'reply')
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page)
@@ -311,25 +281,9 @@ module.exports = function (app) {
          */
         self.subscribeProxyMailInbox = function (workItem, $event) {
             console.log('subscribeProxyMailInbox', workItem);
+            //userSubscriptionService.controllerMethod.openAddSubscriptionDialog(workItem, $event);
         };
 
-        /* /!**
-          * @description Export proxy Mail inbox
-          * @param workItem
-          * @param $event
-          * @param defer
-          *!/
-         self.exportProxyMailInbox = function (workItem, $event, defer) {
-             proxyMailInboxService
-                 .exportProxyMailInbox(workItem, $event)
-                 .then(function (result) {
-                     self.reloadProxyMailInboxes(self.grid.page)
-                         .then(function () {
-                             toast.success(langService.get('export_success'));
-                             new ResolveDefer(defer);
-                         });
-                 });
-         };*/
         /**
          * @description Export proxy workItem (export to ready to export)
          * @param workItem
@@ -388,17 +342,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageComments = function (workItem, $event) {
-            /*var vsId = workItem.hasOwnProperty('generalStepElm')
-                ? (workItem.generalStepElm.hasOwnProperty('vsId') ? workItem.generalStepElm.vsId : workItem.generalStepElm)
-                : (workItem.hasOwnProperty('vsId') ? workItem.vsId : workItem);
-            var wfName = workItem.hasOwnProperty('generalStepElm')
-                ? (workItem.generalStepElm.hasOwnProperty('workFlowName') ? workItem.generalStepElm.workFlowName : workItem.generalStepElm)
-                : (workItem.hasOwnProperty('workFlowName') ? workItem.workFlowName : workItem);
-
-            //var wfName = 'outgoing';
-            managerService.manageDocumentComments(vsId, wfName.toLowerCase(), $event);*/
-
-
             workItem.manageDocumentComments($event)
                 .then(function () {
                     self.reloadProxyMailInboxes(self.grid.page);
@@ -454,9 +397,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.manageLinkedEntities = function (workItem, $event) {
-            var info = workItem.getInfo();
-            managerService
-                .manageDocumentEntities(info.vsId, info.documentClass, info.title, $event);
+            workItem
+                .manageDocumentEntities($event);
         };
 
 
@@ -496,8 +438,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadMainDocument = function (workItem, $event) {
-            downloadService.controllerMethod
-                .mainDocumentDownload(workItem.generalStepElm.vsId);
+            workItem
+                .mainDocumentDownload($event);
         };
 
         /**
@@ -506,8 +448,8 @@ module.exports = function (app) {
          * @param $event
          */
         self.downloadCompositeDocument = function (workItem, $event) {
-            downloadService.controllerMethod
-                .compositeDocumentDownload(workItem.generalStepElm.vsId);
+            workItem
+                .compositeDocumentDownload($event);
         };
 
         /**
@@ -619,8 +561,12 @@ module.exports = function (app) {
          * @param $event
          */
         self.editContent = function (workItem, $event) {
-            var info = workItem.getInfo();
-            managerService.manageDocumentContent(info.vsId, info.documentClass, info.title, $event);
+            //var info = workItem.getInfo();
+            //managerService.manageDocumentContent(info.vsId, info.documentClass, info.title, $event);
+            workItem.manageDocumentContent($event)
+                .then(function () {
+                    userSubscriptionService.loadUserSubscriptions();
+                });
         };
 
 
@@ -635,6 +581,9 @@ module.exports = function (app) {
                 .manageDocumentProperties(info.vsId, info.documentClass, info.title, $event)
                 .finally(function () {
                     self.reloadProxyMailInboxes(self.grid.page)
+                        .then(function () {
+                            userSubscriptionService.loadUserSubscriptions();
+                        });
                 });
         };
 
@@ -664,8 +613,8 @@ module.exports = function (app) {
                     hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
             }
             if (checkForViewPopup)
-                return !hasPermission;
-            return hasPermission;
+                return !hasPermission || model.isBroadcasted();
+            return hasPermission && !model.isBroadcasted();
         };
 
         /**
@@ -884,7 +833,7 @@ module.exports = function (app) {
                 icon: 'pen',
                 text: 'grid_action_create_reply',
                 shortcut: false,
-                callback: self.createReplyProxyMailInboxIncoming,
+                callback: self.createReplyIncoming,
                 class: "action-green",
                 permissionKey: 'CREATE_REPLY',
                 showInViewOnly: true,
@@ -1014,6 +963,7 @@ module.exports = function (app) {
                 shortcut: false,
                 showInView: false,
                 hide: true,
+                showInViewOnly: true,
                 checkShow: self.checkToShowAction,
                 permissionKey: [
                     "MANAGE_DOCUMENT’S_TAGS",

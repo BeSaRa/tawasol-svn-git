@@ -80,7 +80,7 @@
                                         <md-select required ng-model-options="{trackBy: '$value.lookupKey'}"
                                                    name="correspondenceTypeId" id="correspondenceTypeId"
                                                    ng-model="ctrl.correspondenceSite.correspondenceTypeId"
-                                                   ng-disabled="ctrl.correspondenceSite.hasChildren() || ctrl.disableParent">
+                                                   ng-disabled="ctrl.disableParent">
                                             <md-option ng-value="correspondenceType"
                                                        ng-if="ctrl.includeIfEnabled(correspondenceType)"
                                                        ng-repeat="correspondenceType in ctrl.correspondenceTypes track by $index">

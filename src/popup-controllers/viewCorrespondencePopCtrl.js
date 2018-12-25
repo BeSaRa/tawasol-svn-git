@@ -23,6 +23,7 @@ module.exports = function (app) {
         self.secondURL = null;
         self.loadingIndicatorService = loadingIndicatorService;
         $timeout(function () {
+            _checkIfFromEditInDesktop(self.correspondence);
             self.detailsReady = true;
             self.model = angular.copy(self.correspondence);
         }, 100);
@@ -30,14 +31,31 @@ module.exports = function (app) {
         self.selectedList = null;
         self.listIndex = null;
 
-        //var mainInfo = self.correspondence.getInfo();
-        //self.sideNavId = "correspondence-details_" + mainInfo.vsId;
         self.sideNavId = "correspondence-details_" + popupNumber;
+
+        function _checkIfFromEditInDesktop(correspondence) {
+            var info = correspondence.getInfo(), message;
+            if (info.needToApprove() && info.editByDeskTop) {
+                message = langService.getConcatenated(['edit_in_desktop_confirmation_1', 'edit_in_desktop_confirmation_2', 'edit_in_desktop_confirmation_3'])
+                dialog
+                    .confirmMessage(message, langService.get('grid_action_edit_in_desktop'))
+                    .then(function () {
+                        correspondence
+                            .editCorrespondenceInDesktop()
+                            .then(function () {
+                                dialog.cancel();
+                            })
+                            .catch(function () {
+                                dialog.cancel();
+                            });
+                    });
+            }
+        }
+
         /**
          * @description toggle correspondence details sidebar
          */
         self.toggleCorrespondenceDetails = function () {
-            // $mdSidenav('correspondence-details').toggle();
             $mdSidenav(self.sideNavId).toggle();
         };
         /**

@@ -277,7 +277,8 @@ module.exports = function (app) {
             }
             return _.some(_.map(organizationTypesToFilter, function (existingOrganizationType) {
                 return existingOrganizationType.arName === organizationType.arName
-                    || existingOrganizationType.enName.toLowerCase() === organizationType.enName.toLowerCase();
+                    || existingOrganizationType.enName.toLowerCase() === organizationType.enName.toLowerCase()
+                    || existingOrganizationType.lookupStrKey.toLowerCase() === organizationType.lookupStrKey.toLowerCase();
             }), function (matchingResult) {
                 return matchingResult === true;
             });

@@ -103,4 +103,5 @@ module.exports = function (app) {
     require('./duplicateOptionPopCtrl')(app);
     require('./documentFileNewPopCtrl')(app);
     require('./documentFileChildrenNewPopCtrl')(app);
+    require('./bulkExportOptionPopCtrl')(app);
 };

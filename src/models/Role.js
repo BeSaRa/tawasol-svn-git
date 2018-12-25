@@ -12,7 +12,7 @@ module.exports = function (app) {
             self.arName = null;
             self.enName = null;
             self.description = null;
-            self.status = false;
+            self.status = true;
             self.clientData = null;
             self.customRolePermission = [];
             // every model has required fields

@@ -714,6 +714,10 @@ module.exports = function (app) {
                 return correspondenceService.updateContentInformation(this, contentInformation);
             };
 
+            Correspondence.prototype.editCorrespondenceInDesktop = function(){
+                return correspondenceService.editWordInDesktop(this);
+            };
+
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

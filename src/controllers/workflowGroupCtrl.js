@@ -7,16 +7,29 @@ module.exports = function (app) {
                                                   langService,
                                                   contextHelpService,
                                                   dialog,
-                                                  gridService) {
+                                                  gridService,
+                                                  generator) {
         'ngInject';
         var self = this;
         self.controllerName = 'workflowGroupCtrl';
         contextHelpService.setHelpTo('workflow-group');
 
         self.workflowGroups = workflowGroups;
+        self.workflowGroupsCopy = angular.copy(self.workflowGroups);
 
         self.promise = null;
         self.selectedWorkflowGroups = [];
+
+
+        /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function (property, modelType) {
+            return generator.getColumnSortingKey(property, modelType);
+        };
 
         self.grid = {
             limit: gridService.getGridPagingLimitByGridName(gridService.grids.administration.workflowGroup) || 5, // default limit
@@ -25,6 +38,21 @@ module.exports = function (app) {
             limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.workflowGroup, self.workflowGroups),
             pagingCallback: function (page, limit) {
                 gridService.setGridPagingLimitByGridName(gridService.grids.administration.workflowGroup, limit);
+            },
+            searchColumns: {
+                arName: 'arName',
+                enName: 'enName',
+                groupMembers: function (record) {
+                    if (record.groupMembers.length === 1) {
+                        return self.getSortingKey('groupMembers.0.applicationUser', 'ApplicationUser');
+                    }
+                    return '';
+                }
+            },
+            searchText: '',
+            searchCallback: function () {
+                self.workflowGroups = gridService.searchGridData(self.grid, self.workflowGroupsCopy);
+                //self.totalRecords = self.grid.searchText ? self.workflowGroups.length : self.workflowGroupsCopy.length;
             }
         };
 

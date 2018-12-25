@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                             correspondenceService,
                                                             managerService,
                                                             $state,
+                                                            viewTrackingSheetService,
                                                             errorCode,
                                                             $q,
                                                             $filter,
@@ -225,6 +226,10 @@ module.exports = function (app) {
 
                 })
                 .catch(function (error) {
+                    if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
+                        dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: incomingDepartmentInbox.getInfo().wobNumber}));
+                        return false;
+                    }
                     errorCode.checkIf(error, 'INVALID_REFERENCE_FORMAT', function () {
                         dialog
                             .confirmMessage(langService.get('quick_receive_failed_missing_properties'))
@@ -493,6 +498,21 @@ module.exports = function (app) {
         };
 
         /**
+         * @description View Tracking Sheet
+         * @param workItem
+         * @param params
+         * @param $event
+         */
+        self.viewTrackingSheet = function (workItem, params, $event) {
+            viewTrackingSheetService
+                .controllerMethod
+                .viewTrackingSheetPopup(workItem, params, $event)
+                .then(function (result) {
+
+                });
+        };
+
+        /**
          * @description Array of actions that can be performed on grid
          * @type {[*]}
          */
@@ -587,6 +607,32 @@ module.exports = function (app) {
                     //var info = model.getInfo();
                     return self.checkToShowAction(action, model) && !model.generalStepElm.isReassigned;//!!info.incomingVsId;
                 }
+            },
+            // View Tracking Sheet
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'grid_action_view_tracking_sheet',
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && model.generalStepElm.isReassigned;
+                },
+                subMenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
+            },
+            // View Tracking Sheet (Quick Action Only)
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'grid_action_view_tracking_sheet',
+                shortcut: true,
+                onlyShortcut: true,
+                showInView: false,
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && model.generalStepElm.isReassigned;
+                },
+                callback: self.viewTrackingSheet,
+                params: ['view_tracking_sheet', 'tabs']
             },
             // Quick Receive
             {

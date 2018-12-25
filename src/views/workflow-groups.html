@@ -11,7 +11,8 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <!--<search-filter-directive model="ctrl.searchModel"></search-filter-directive>-->
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div><!-- page-header -->
         <div layout="column" flex>
             <div scroll-directive>
@@ -59,7 +60,7 @@
                                     <tr md-row
                                         ng-if="workflowGroup.global"
                                         md-select="workflowGroup"
-                                        ng-repeat="workflowGroup in ctrl.workflowGroups  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                        ng-repeat="workflowGroup in ctrl.workflowGroups | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{workflowGroup.arName}}</td>
                                         <td md-cell>{{workflowGroup.enName}}</td>
 
@@ -77,13 +78,10 @@
                                                        aria-label="Workflow Group Global"></md-switch>
                                         </td>-->
 
-                                        <td md-cell
-                                            ng-if="workflowGroup.groupMembers.length==1 || workflowGroup.groupMembers.length==0">
-                                            {{workflowGroup.getFirstMember().getTranslatedName()}}
-                                        </td>
-
-                                        <td md-cell ng-if="workflowGroup.groupMembers.length>1">
-                                            <md-button tooltip="{{$parent.lang.group_members}}"
+                                        <td md-cell>
+                                            <span ng-if="workflowGroup.groupMembers.length <= 1">{{workflowGroup.getFirstMember().getTranslatedName()}}</span>
+                                            <md-button ng-if="workflowGroup.groupMembers.length>1"
+                                                       tooltip="{{lang.group_members}}"
                                                        ng-click="ctrl.openPopupWorkflowGroupMembers(workflowGroup.groupMembers, $event )"
                                                        aria-label="Show Group Members"
                                                        class="md-icon-button md-raised">
@@ -112,7 +110,7 @@
                                     md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
                                     md-limit-options="ctrl.grid.limitOptions"
                                     md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
-                                    md-total="{{(ctrl.workflowGroups | filter:ctrl.searchModel).length}}" md-page-select
+                                    md-total="{{ctrl.workflowGroups.length}}" md-page-select
                                     md-on-paginate="ctrl.grid.pagingCallback">
                             </md-table-pagination>
                         </md-table-container>

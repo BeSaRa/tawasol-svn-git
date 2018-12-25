@@ -12,7 +12,6 @@ module.exports = function (app) {
                 };
                 param.error = function (error) {
                     $rootScope.$apply(function () {
-                        console.log("ERROR: ", error);
                         errorCallback(error);
                     });
                 };

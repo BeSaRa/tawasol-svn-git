@@ -18,6 +18,7 @@ module.exports = function (app) {
                                             Uploader,
                                             FileType,
                                             Tags,
+                                            Page,
                                             PleaseWaitDialog,
                                             LoadScannerOption,
                                             CCToolkit) {
@@ -122,7 +123,7 @@ module.exports = function (app) {
         // TODO : enhance send method
         self.sendDocument = function () {
             PleaseWaitDialog.show(true, false);
-            self.cc.getDocument().save(FileType.Pdf, function () {
+            self.cc.getDocument().save(FileType.Pdf, function (page, data) {
 
             }, function (data) {
                 PleaseWaitDialog.show(false);
@@ -221,8 +222,7 @@ module.exports = function (app) {
             var choiceItems = [];
             if (data.Choices && Number(data.Choices.ChoiceKind) === 2 && data.Choices.IntegerList) {
                 choiceItems = data.Choices.IntegerList;
-            }
-            else if (data.Choices && Number(data.Choices.ChoiceKind) === 1) {
+            } else if (data.Choices && Number(data.Choices.ChoiceKind) === 1) {
                 choiceItems = getResolutionItems(data.Choices);
             }
             self.listResolution = choiceItems;
@@ -238,11 +238,9 @@ module.exports = function (app) {
 
                 if (choices.StepValue === 1 && i < 300) {
                     i += 25;
-                }
-                else if (choices.StepValue === 1 && i >= 300) {
+                } else if (choices.StepValue === 1 && i >= 300) {
                     i += 50;
-                }
-                else {
+                } else {
                     i += choices.StepValue;
                 }
             }
@@ -251,6 +249,7 @@ module.exports = function (app) {
         }
 
         function showScannerUI() {
+
             CCToolkit.showScannerConfigurationDialog(function () {
                 self.loadScannerSettings({ScannerModel: self.selectedScanner});
             });
@@ -319,7 +318,7 @@ module.exports = function (app) {
 
         function addImageToGallery(page) {
             // var imageUrl = page.getCurrent() ? page.getCurrent(100, 0) : page.getOriginal(100, 0);
-            var imageNumber = page.getPageNumber();
+            self.showPage(page, false);
         }
 
         function setRotation(rot) {
@@ -441,17 +440,20 @@ module.exports = function (app) {
             $("#imgDetails").show();
         }
 
-        function showImageDetailsCallback(page, data) {
+        function showImageDetailsCallback(page, data, showDialog) {
             showImageDetailsCallbackInternal(page, data);
             $timeout(function () {
-                PleaseWaitDialog.show(false);
+                if (showDialog !== false)
+                    PleaseWaitDialog.show(false);
             }, 500);
         }
 
-        function showImageDetails(imageNumber) {
+        function showImageDetails(imageNumber, showDialog) {
             var document = CCToolkit.getDocument();
             var page = document.getPage(imageNumber);
-            page.getImageInfo(showImageDetailsCallback);
+            page.getImageInfo(function (page, data) {
+                showImageDetailsCallback(page, data, showDialog);
+            });
         }
 
         function clearAllFilters() {
@@ -578,22 +580,25 @@ module.exports = function (app) {
             });
         }
 
-        function resolveShow(page) {
+        function resolveShow(page, showDialog) {
             var defer = $q.defer();
             var result = page.getImageInfo(function () {
-                defer.resolve(page.getPageNumber());
+                defer.resolve({
+                    pageNumber: page.getPageNumber(),
+                    showDialog: showDialog
+                });
             });
-            if (!result) {
+            if (!result && showDialog !== false) {
                 PleaseWaitDialog.show(true, false);
             }
             return defer.promise;
         }
 
-        self.showPage = function (page) {
-            resolveShow(page).then(function (imageNumber) {
-                showImageDetails(imageNumber);
-                configureFiltersUI(imageNumber);
-                selectPageThumbnail(imageNumber);
+        self.showPage = function (page, showDialog) {
+            resolveShow(page, showDialog).then(function (data) {
+                showImageDetails(data.pageNumber, data.showDialog);
+                configureFiltersUI(data.pageNumber);
+                selectPageThumbnail(data.pageNumber);
             });
         };
 
@@ -625,7 +630,8 @@ module.exports = function (app) {
             // TODO : need to hide progress bar
             PleaseWaitDialog.show(false);
             $timeout(function () {
-                self.showPage(document.pages[0]);
+                if (document.pages[0])
+                    self.showPage(document.pages[0]);
             }, 500);
         }
 
@@ -835,20 +841,28 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.disableAllProperties();
 
-            CCToolkit.getTag(Tags.TAG_PAGESIZE, 0, getTagCallback);
-            CCToolkit.getTag(Tags.TAG_SCANTYPE, 0, getTagCallback);
-            CCToolkit.getTag(Tags.TAG_XRESOLUTION, 0, getTagCallback);
-            CCToolkit.getTag(Tags.TAG_MODE_COMBO, 0, getTagCallback);
-
-            self.selectedScanner = selectedScanner.ScannerModel;
-            self.updateScope();
-            self.scannerLoaded = true;
-            defer.resolve(self.selectedScanner);
+            $q.all([
+                CCToolkit.getTag(Tags.TAG_PAGESIZE, 0, getTagCallback),
+                CCToolkit.getTag(Tags.TAG_SCANTYPE, 0, getTagCallback),
+                CCToolkit.getTag(Tags.TAG_XRESOLUTION, 0, getTagCallback),
+                CCToolkit.getTag(Tags.TAG_MODE_COMBO, 0, getTagCallback)
+            ]).then(function () {
+                self.selectedScanner = selectedScanner.ScannerModel;
+                self.scannerLoaded = true;
+                defer.resolve(self.selectedScanner);
+            });
             return defer.promise;
         };
 
         self.loadCCScanner = function (loadScannerOption) {
-            CCToolkit.loadScanner({loadScannerOption: loadScannerOption}, self.loadScannerSettings);
+            var defer = $q.defer();
+            CCToolkit.loadScanner({loadScannerOption: loadScannerOption}, function (selectedScanner) {
+                self.loadScannerSettings(selectedScanner)
+                    .then(function () {
+                        defer.resolve(selectedScanner);
+                    });
+            });
+            return defer.promise;
         };
 
 
@@ -870,7 +884,11 @@ module.exports = function (app) {
                 defer.resolve(sessionID);
                 self.sessionCreated = true;
                 if (loadSameScanner) {
+                    PleaseWaitDialog.show(true, false, false, false, langService.get('loading_scanner_settings'));
                     self.loadCCScanner(LoadScannerOption.UseLastConfiguration)
+                        .then(function () {
+                            PleaseWaitDialog.show(false);
+                        });
                 }
             });
             return defer.promise;

@@ -147,8 +147,7 @@ module.exports = function (app) {
                     var request = getDefaultRequest();
                     request.url = _serviceUrl + "getmultipageid?session=" + _sessionId + "&idlist=" + idList + "&filetype=" + fileType;
                     AsyncOperation(_serviceUrl, sessionId, request, pageSavedCallback, savingFinishedCallback);
-                }
-                else {
+                } else {
                     pageNumber++;
                     self.pages[pageNumber].getImageInfo(function (page, data) {
                         pageSavedCallback(page, data);
@@ -163,8 +162,7 @@ module.exports = function (app) {
                 _enhancePageNumber++;
                 if (_enhancePageNumber >= self.pages.length) {
                     _finishedProcessingCallback();
-                }
-                else {
+                } else {
                     self.pages[_enhancePageNumber].enhanceAndAnalize(filters, function (page, data) {
                         onPageProcessed.call(self, page, data)
                     });

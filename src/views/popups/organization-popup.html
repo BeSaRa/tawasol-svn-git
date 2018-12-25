@@ -301,14 +301,11 @@
                                     <md-input-container flex>
                                         <label for="mobile">{{lang.mobile}}</label>
                                         <input name="mobile" maxlength="15"
-                                               placeholder="+974xxxxxxxx"
-                                               custom-validate-directive="phone_mobile" id="mobile"
+                                               custom-validate-directive="number" id="mobile"
                                                ng-model="ctrl.organization.mobile">
                                         <div ng-messages="org_form.mobile.$error">
-                                            <!-- <div ng-message="number">{{lang.numberonly}}</div>-->
-                                            <div ng-message="phone_mobile">
-                                                {{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}
-                                            </div>
+                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>
                                         </div>
                                     </md-input-container>
                                 </div>
@@ -743,7 +740,8 @@
                                                         <table md-table md-row-select multiple
                                                                ng-model="ctrl.selectedOUClassifications"
                                                                md-progress="ctrl.progress">
-                                                            <thead md-head md-order="ctrl.grid.classifications.order" md-on-reorder="ctrl.getSortedDataClassifications">
+                                                            <thead md-head md-order="ctrl.grid.classifications.order"
+                                                                   md-on-reorder="ctrl.getSortedDataClassifications">
                                                             <tr md-row>
                                                                 <th colspan="6" class="table-selector-header"
                                                                     ng-if="ctrl.selectedOUClassifications.length"
@@ -938,7 +936,8 @@
                                                                ng-model="ctrl.selectedOUCorrespondenceSites"
                                                                md-progress="ctrl.progress">
                                                             <thead md-head
-                                                                   md-order="ctrl.grid.correspondenceSites.order" md-on-reorder="ctrl.getSortedDataCorrespondenceSites">
+                                                                   md-order="ctrl.grid.correspondenceSites.order"
+                                                                   md-on-reorder="ctrl.getSortedDataCorrespondenceSites">
                                                             <tr md-row>
 
                                                                 <th colspan="6" class="table-selector-header"
@@ -1059,7 +1058,7 @@
                                     <search-filter-directive
                                             model="ctrl.documentTemplateSearchModel"></search-filter-directive>
                                 </div>
-                                <div layout="column"  ng-if="ctrl.documentTemplates.length">
+                                <div layout="column" ng-if="ctrl.documentTemplates.length">
                                     <div scroll-directive>
                                         <div class="p20">
                                             <md-card md-whiteframe="3" layout="column" class="card-overlay">
@@ -1069,7 +1068,8 @@
                                                                multiple="true"
                                                                ng-model="ctrl.selectedDocumentTemplates"
                                                                md-progress="ctrl.documentTemplateProgress">
-                                                            <thead md-head md-order="ctrl.documentTemplateGrid.order" md-on-reorder="ctrl.getSortedDataTemplate">
+                                                            <thead md-head md-order="ctrl.documentTemplateGrid.order"
+                                                                   md-on-reorder="ctrl.getSortedDataTemplate">
                                                             <tr md-row>
                                                                 <th colspan="5" class="table-selector-header"
                                                                     ng-if="ctrl.selectedDocumentTemplates.length"
@@ -1191,7 +1191,8 @@
                                                                ng-model="ctrl.selectedPropertyConfigurations"
                                                                md-progress="ctrl.propertyConfigurationProgress">
                                                             <thead md-head
-                                                                   md-order="ctrl.propertyConfigurationGrid.order" md-on-reorder="ctrl.getSortedDataPropertyConfiguration">
+                                                                   md-order="ctrl.propertyConfigurationGrid.order"
+                                                                   md-on-reorder="ctrl.getSortedDataPropertyConfiguration">
                                                             <tr md-row>
                                                                 <th md-column
                                                                     md-order-by="dataType">
@@ -1308,7 +1309,8 @@
                                                         <table md-table md-row-select multiple
                                                                ng-model="ctrl.selectedOUApplicationUsers"
                                                                md-progress="ctrl.appUserProgress">
-                                                            <thead md-head md-order="ctrl.appUserGrid.order" md-on-reorder="ctrl.getSortedDataAppUser">
+                                                            <thead md-head md-order="ctrl.appUserGrid.order"
+                                                                   md-on-reorder="ctrl.getSortedDataAppUser">
                                                             <tr md-row>
                                                                 <th colspan="5"
                                                                     ng-if="ctrl.selectedOUApplicationUsers.length"

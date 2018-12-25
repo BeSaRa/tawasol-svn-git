@@ -32,7 +32,6 @@ module.exports = function (app) {
             self.smsLogs = [];
             self.destinationHistory = [];
             self.contentViewHistory = [];
-            self.smsLogs = [];
             self.outgoingDeliveryReports = [];
             self.mergedLinkedDocumentHistory = [];
             self.fullHistory = [];
@@ -258,11 +257,11 @@ module.exports = function (app) {
                             },
                             smsLogRecords: function () {
                                 'ngInject';
-                                return (heading === 'view_tracking_sheet_sms_logs' || gridType === 'tabs')
+                                return [];/*(heading === 'view_tracking_sheet_sms_logs' || gridType === 'tabs')
                                     ? self.loadSmsLogs(document)
                                         .then(function (result) {
                                             return result;
-                                        }) : [];
+                                        }) : [];*/
                             },
                             outgoingDeliveryReportRecords: function () {
                                 'ngInject';

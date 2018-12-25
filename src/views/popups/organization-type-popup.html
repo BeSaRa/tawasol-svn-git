@@ -43,6 +43,7 @@
                         <md-input-container flex>
                             <label for="lookupStrKey">{{lang.code}}</label>
                             <input name="lookupStrKey" id="lookupStrKey" required
+                                   ng-disabled="ctrl.editMode"
                                    ng-model="ctrl.organizationType.lookupStrKey"
                                    custom-validate-directive="EN_" minlength="4" no-space-directive>
                             <div ng-messages="organizationTypeForm.lookupStrKey.$error">

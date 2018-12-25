@@ -13,6 +13,7 @@
                             <md-select id="ou" name="ou"
                                        ng-change="ctrl.onSearchUsers()"
                                        ng-model="ctrl.usersCriteria.ou">
+                                <md-option ng-value="null">{{lang.all}}</md-option>
                                 <md-option required ng-value="organization"
                                            ng-repeat="organization in ctrl.organizationGroups">
                                     {{organization.getTranslatedName()}}

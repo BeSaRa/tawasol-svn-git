@@ -22,7 +22,8 @@ module.exports = function (app) {
                     }
                 }
 
-                image.ChunkSize = 65536; //64K
+                // image.ChunkSize = 65536; //64K
+                image.ChunkSize = 614400; //600K
                 _beginUpload.call(this, image);
             };
 
@@ -36,13 +37,11 @@ module.exports = function (app) {
                 request.error = _uploadErrorCallback;
                 request.jsonp = null;
                 request.data = '{ "imageID": "' + image.ImageID + '", "fileType":' + image.FileType + ' }';
-                // request.success = function (data) {
+
                 $timeout(function () {
                     _beginUploadCallback.call(self, {UploadID: 'BeSaRa'}, image)
-                });
+                },200);
 
-                // };
-                // ajaxRequest(request);
             };
 
             var _beginUploadCallback = function (data, image) {
@@ -64,28 +63,16 @@ module.exports = function (app) {
             var _getImageDataBytesCallback = function (data, image) {
                 _sendImageDataBytes.call(this, data, image);
             };
-            var count = 0;
             var _sendImageDataBytes = function (data, image) {
+                var self = this;
                 if (!data.Data || !data.Data.length) {
                     _endUpload.call(this, image);
                     return;
                 }
-
-                arrayOfData.push(data.Data);
-
-                var self = this;
-                var request = getDefaultRequest();
-                request.url = _uploadChunkUrl;
-                request.type = 'POST';
-                request.processData = false;
-                request.dataType = 'json';
-                request.error = _uploadErrorCallback;
-                request.jsonp = null;
-                request.data = '{ "uploadID": "' + image.UploadID + '", "offset":' + image.Offset + ', "data":"' + data.Data + '"}';
-                // request.success = function () {
-                _sendImageDataBytesCallback.call(this, image);
-                // };
-                // ajaxRequest(request);
+                $timeout(function () {
+                    arrayOfData.push(data.Data);
+                    _sendImageDataBytesCallback.call(self, image);
+                }, 200);
             };
 
             var _sendImageDataBytesCallback = function (image) {
@@ -95,7 +82,6 @@ module.exports = function (app) {
             };
 
             var _endUpload = function (image) {
-                var self = this;
                 var typesArray = {
                     196608: 'tiff',
                     720896: 'jpeg',
@@ -103,16 +89,6 @@ module.exports = function (app) {
                     1245184: 'png',
                     1310720: 'jpeg2000'
                 };
-
-                var request = getDefaultRequest();
-                request.url = _endUploadUrl;
-                request.type = 'POST';
-                request.processData = false;
-                request.dataType = 'json';
-                request.error = _uploadErrorCallback;
-                request.jsonp = null;
-                request.data = '{ "uploadID": "' + image.UploadID + '"}';
-                request.success = _completeCallback;
 
                 var binary = [];
                 for (var i = 0; i < arrayOfData.length; i++) {
@@ -135,11 +111,11 @@ module.exports = function (app) {
                     var file = angular.copy(theBlob);
                     file.lastModifiedDate = new Date();
                     file.name = fileName;
+
                     return file;
                 };
 
-
-                _completeCallback(blob, convertToFile(blob , 'Scanner'), url, image);
+                _completeCallback(blob, convertToFile(blob, 'Scanner'), url, image);
             };
         };
     })

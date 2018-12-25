@@ -602,6 +602,8 @@ module.exports = function (app) {
                 return property + '.' + (langService.current === 'ar' ? 'defaultArName' : 'defaultEnName');
             else if (modelType === 'lookupg2g')
                 return property + '.' + (langService.current === 'ar' ? 'arvalue' : 'envalue');
+            else if (modelType === 'applicationuser')
+                return property + '.' + (langService.current === 'ar' ? 'arFullName' : 'enFullName');
             return property;
         };
 

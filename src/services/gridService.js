@@ -360,7 +360,7 @@ module.exports = function (app) {
             for (var property in self.gridToSearch.searchColumns) {
                 propertyToSearch = self.gridToSearch.searchColumns[property];
                 if (typeof propertyToSearch === 'function') {
-                    propertyToSearch = propertyToSearch();
+                    propertyToSearch = propertyToSearch(item);
                 }
                 // if property to search has value(property name defined), then search, otherwise, skip search
                 if (propertyToSearch) {

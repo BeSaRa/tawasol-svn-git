@@ -214,25 +214,29 @@ module.exports = function (app) {
 
         /**
          * @description edit filter.
-         * @param filter
+         * @param filterToUpdate
          * @param $index
          * @param $event
          * @returns {*}
          */
-        self.userFilterEdit = function (filter, $index, $event) {
-            return userFilterService.editUserFilterDialog(filter, $event).then(function (result) {
-                // self.userFilters[_getFilterIndex(result)] = result;
-                _updateFilterProperties(filter, result, ['sortOptionId', 'arName', 'enName', 'status']);
-                self.userFilters = $filter('orderBy')(self.userFilters, 'sortOptionId');
+        self.userFilterEdit = function (filterToUpdate, $index, $event) {
+            // load filter from server to get latest values of all keys.
+            return userFilterService.loadUserFilterById(filterToUpdate)
+                .then(function (filter) {
+                    return userFilterService.editUserFilterDialog(filter, $event).then(function (result) {
+                        // self.userFilters[_getFilterIndex(result)] = result;
+                        _updateFilterProperties(filter, result, ['sortOptionId', 'arName', 'enName', 'status']);
+                        self.userFilters = $filter('orderBy')(self.userFilters, 'sortOptionId');
 
-                if (self.selectedFilter && self.selectedFilter.filter.id === result.id) {
-                    self.selectedFilter.filter = result;
-                    self.selectedFilter.index = _getFilterIndex(result);
-                }
+                        if (self.selectedFilter && self.selectedFilter.filter.id === result.id) {
+                            self.selectedFilter.filter = result;
+                            self.selectedFilter.index = _getFilterIndex(result);
+                        }
 
-                if (self.selectedFilter)
-                    self.selectFilter(self.selectedFilter.filter, self.selectedFilter.index);
-            });
+                        if (self.selectedFilter)
+                            self.selectFilter(self.selectedFilter.filter, self.selectedFilter.index);
+                    });
+                })
         };
         /**
          * @description delete filter
@@ -254,6 +258,7 @@ module.exports = function (app) {
          * @param $index
          */
         self.selectFilter = function (filter, $index) {
+            self.selectedUserInboxes = [];
             $timeout(function () {
                 self.selectedTab = ($index + self.fixedTabsCount);
             });
@@ -277,6 +282,7 @@ module.exports = function (app) {
         self.resetSelectedFilter = function ($index) {
             self.selectedFilter = null;
             self.selectedTab = $index;
+            self.selectedUserInboxes = [];
         };
         /**
          * @description Replaces the record in grid after update
@@ -956,18 +962,6 @@ module.exports = function (app) {
 
         // new view document
         self.openNewViewDocument = function (workItem, $event) {
-            // don't remove the current commented
-            // workItem.viewNewInboxWorkItem({
-            //     gridActions: self.gridActions,
-            //     viewerActions: self.magazineQuickActions
-            // }, checkIfEditPropertiesAllowed(workItem, true), checkIfEditCorrespondenceSiteAllowed(workItem, true))
-            //     .then(function () {
-            //         self.reloadUserInboxes(self.grid.page);
-            //     })
-            //     .catch(function () {
-            //         self.reloadUserInboxes(self.grid.page);
-            //     });
-
             workItem.viewNewWorkItemDocument(self.gridActions, 'userInbox', $event)
                 .then(function () {
                     self.reloadUserInboxes(self.grid.page);
@@ -983,7 +977,7 @@ module.exports = function (app) {
          * @return {Promise}
          */
         self.editInDesktop = function (workItem) {
-            return correspondenceService.editWordInDesktop(workItem);
+            return workItem.editCorrespondenceInDesktop();
         };
 
         /**

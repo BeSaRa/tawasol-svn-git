@@ -30,8 +30,6 @@ module.exports = function (app) {
             self.selectedUsers = [];
             self.users = [];
             self.onSearchUsers = function () {
-                if (!self.usersCriteria.ou)
-                    return;
                 return distributionWFService
                     .searchUsersByCriteria(self.usersCriteria)
                     .then(function (result) {

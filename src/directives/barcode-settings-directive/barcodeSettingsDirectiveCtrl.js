@@ -113,7 +113,7 @@ module.exports = function (app) {
             if (typeof self.globalSetting.barcodeElements.isElectronic[idx] === 'undefined') {
                 self.globalSetting.barcodeElements.isElectronic[idx] = true;
             }
-            return angular.element('<md-checkbox aria-label="check-box" tooltip="{{lang.outgoing_electronic}}" ng-model="ctrl.globalSetting.barcodeElements.isElectronic[' + idx + ']" class="sort-cancel check-box-with-no-padding isElectronic" ng-change="ctrl.checkRow($event)"></md-checkbox>')
+            return angular.element('<md-checkbox aria-label="check-box" tooltip="{{lang.electronic}}" ng-model="ctrl.globalSetting.barcodeElements.isElectronic[' + idx + ']" class="sort-cancel check-box-with-no-padding isElectronic" ng-change="ctrl.checkRow($event)"></md-checkbox>')
         };
 
         self.createRow = function (row, idx) {

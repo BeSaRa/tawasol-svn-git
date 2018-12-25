@@ -116,78 +116,13 @@ module.exports = function (app) {
                     });
             },
             /**
-             * @description Terminate returned department inbox
-             * @param returnedDepartmentInbox
-             * @param $event
-             * @param justReason
-             */
-            returnedDepartmentInboxTerminate: function (returnedDepartmentInbox, $event, justReason) {
-                /*return self.terminateReturnedDepartmentInbox(returnedDepartmentInbox)
-                    .then(function (result) {
-                        //toast.success(langService.get("terminate_specific_success").change({name: userInbox.docSubject}));
-                        return true;
-                    })*/
-                return dialog
-                    .showDialog({
-                        template: cmsTemplate.getPopup('reason'),
-                        controller: 'reasonPopCtrl',
-                        controllerAs: 'ctrl',
-                        bindToController: true,
-                        locals: {
-                            justReason: justReason
-                        },
-                        resolve: {
-                            comments: function (userCommentService) {
-                                'ngInject';
-                                return userCommentService.getUserComments()
-                                    .then(function(result){
-                                        return _.filter(result, 'status');
-                                    });
-                            }
-                        }
-                    }).then(function (reason) {
-                        // to check if you need to return just the reason and no operation.
-                        if (justReason)
-                            return reason;
-
-                        return self.terminateReturnedDepartmentInbox(returnedDepartmentInbox, reason)
-                            .then(function () {
-                                return true;
-                            })
-                    });
-            },
-            /**
-             * @description Resend returned department inbox
-             * @param returnedDepartmentInbox
-             * @param $event
-             */
-            returnedDepartmentInboxResend: function (returnedDepartmentInbox, $event) {
-                return correspondenceService
-                    .openExportCorrespondenceDialog(returnedDepartmentInbox , $event , true);
-            },
-            /**
              * @description UnStar bulk returned department inbox items
              * @param returnedDepartmentInboxes
              * @param $event
              */
-            returnedDepartmentInboxesResendBulk: function (returnedDepartmentInboxes, $event) {
-                return self.resendBulkReturnedDepartmentInboxes(returnedDepartmentInboxes)
-                    .then(function (result) {
-                        var response = false;
-                        if (result.length === returnedDepartmentInboxes.length) {
-                            toast.error(langService.get("failed_resend_selected"));
-                            response = false;
-                        } else if (result.length) {
-                            generator.generateFailedBulkActionRecords('resend_success_except_following', _.map(result, function (returnedDepartmentInbox) {
-                                return returnedDepartmentInbox.getTranslatedName();
-                            }));
-                            response = true;
-                        } else {
-                            toast.success(langService.get("selected_resend_success"));
-                            response = true;
-                        }
-                        return response;
-                    });
+            resendBulk: function (returnedDepartmentInboxes, $event) {
+                return correspondenceService
+                    .openExportBulkCorrespondenceDialog(returnedDepartmentInboxes, $event, true);
             }
         };
 
@@ -333,7 +268,7 @@ module.exports = function (app) {
          * @param returnedDepartmentInboxes
          */
         self.resendBulkReturnedDepartmentInboxes = function (returnedDepartmentInboxes) {
-            var pairToReturn = _.map(returnedDepartmentInboxes, function (returnedDepartmentInbox) {
+            var pairToResend = _.map(returnedDepartmentInboxes, function (returnedDepartmentInbox) {
                 var info = returnedDepartmentInbox.getInfo();
                 return {
                     first: info.wobNumber,
@@ -341,7 +276,7 @@ module.exports = function (app) {
                 }
             });
             return $http
-                .put(urlService.departmentInboxes + '/resend/bulk', pairToReturn)
+                .put(urlService.departmentInboxes + '/resend/bulk', pairToResend)
                 .then(function (result) {
                     result = result.data.rs;
                     var failedReturnedDepartmentInboxes = [];
@@ -349,7 +284,7 @@ module.exports = function (app) {
                         if (!value)
                             failedReturnedDepartmentInboxes.push(key);
                     });
-                    return _.filter(pairToReturn, function (pair) {
+                    return _.filter(pairToResend, function (pair) {
                         return (failedReturnedDepartmentInboxes.indexOf(pair.second) > -1);
                     });
                 });
