@@ -126,6 +126,7 @@ module.exports = function (app) {
                     if (pageNumber)
                         self.grid.page = pageNumber;
                     self.getSortedData();
+                    self.grid.searchCallback();
                     return result;
                 });
         };

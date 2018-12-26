@@ -12,7 +12,8 @@ module.exports = function (app) {
                                                      contextHelpService,
                                                      Organization,
                                                      selectedRegOU,
-                                                     gridService) {
+                                                     gridService,
+                                                     generator) {
         'ngInject';
         var self = this;
 
@@ -59,6 +60,16 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function (property, modelType) {
+            return generator.getColumnSortingKey(property, modelType);
+        };
+
+        /**
          * @description Contains methods for CRUD operations for document templates
          */
         self.statusServices = {
@@ -66,18 +77,6 @@ module.exports = function (app) {
             'deactivate': documentTemplateService.deactivateBulkDocumentTemplates,
             'true': documentTemplateService.activateDocumentTemplate,
             'false': documentTemplateService.deactivateDocumentTemplate
-        };
-
-        self.documentTypes = documentTemplateService.documentTypes;
-        self.templateTypes = documentTemplateService.templateTypes;
-
-        self.getDocumentTypeName = function (documentTypeId) {
-            var matchedDocumentType = _.find(self.documentTypes, function (documentType) {
-                return (documentType.value === documentTypeId);
-            });
-            if (matchedDocumentType)
-                return langService.get(matchedDocumentType.langKey);
-            return '';
         };
 
         /**
@@ -206,25 +205,5 @@ module.exports = function (app) {
                         });
                 });
         };
-
-        /*/!**
-         * @description Change the globalization of document template
-         * @param documentTemplate
-         *!/
-         self.changeGlobalDocumentTemplate = function (documentTemplate) {
-         if (documentTemplate.isGlobal) {
-         documentTemplateService.updateDocumentTemplate(documentTemplate)
-         .then(function () {
-         toast.success(langService.get('globalization_success'));
-         })
-         .catch(function () {
-         documentTemplate.isGlobal = !documentTemplate.isGlobal;
-         dialog.errorMessage(langService.get('something_happened_when_update_global'));
-         });
-         }
-         else {
-         console.log("Open the popup to add relation entities");
-         }
-         };*/
     });
 };

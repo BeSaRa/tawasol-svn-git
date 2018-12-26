@@ -52,7 +52,6 @@ module.exports = function (app) {
             searchText: '',
             searchCallback: function () {
                 self.workflowGroups = gridService.searchGridData(self.grid, self.workflowGroupsCopy);
-                //self.totalRecords = self.grid.searchText ? self.workflowGroups.length : self.workflowGroupsCopy.length;
             }
         };
 
@@ -90,6 +89,7 @@ module.exports = function (app) {
                 if (pageNumber)
                     self.grid.page = pageNumber;
                 self.getSortedData();
+                self.grid.searchCallback();
                 return result;
             });
         };

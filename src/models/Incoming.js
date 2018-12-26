@@ -82,8 +82,22 @@ module.exports = function (app) {
             Incoming.prototype.getIncomingDate = function () {
                 return this.docDate ? moment(this.docDate).format(langService.current === 'ar' ? 'DD-MM-YYYY' : 'YYYY-MM-DD') : '';
             };
-            Incoming.prototype.getDocumentDate = function(){
+            Incoming.prototype.getDocumentDate = function () {
                 return this.refDocDate ? moment(this.refDocDate).format(langService.current === 'ar' ? 'DD-MM-YYYY' : 'YYYY-MM-DD') : '';
+            };
+            Incoming.prototype.saveIncomingSite = function () {
+                correspondenceService = this.getCorrespondenceService();
+                return correspondenceService.saveIncomingCorrespondenceSite(this);
+            };
+            Incoming.prototype.getSiteInformation = function () {
+                var self = this;
+                return {
+                    followupDate: self.followupDate,
+                    followupStatus: self.followupStatus,
+                    siteType: self.siteType,
+                    mainSiteId: self.mainSiteId,
+                    subSiteId: self.subSiteId
+                }
             };
 
             // don't remove CMSModelInterceptor from last line

@@ -241,8 +241,7 @@ module.exports = function (app) {
             var isPaper = 1;
             if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) { /*WorkItem */
                 isPaper = correspondence.generalStepElm.hasOwnProperty('addMethod') ? correspondence.generalStepElm.addMethod : 1;
-            }
-            else if (correspondence.hasOwnProperty('addMethod')) { /* Correspondence */
+            } else if (correspondence.hasOwnProperty('addMethod')) { /* Correspondence */
                 isPaper = correspondence.addMethod;
             }
             return isPaper;
@@ -261,15 +260,13 @@ module.exports = function (app) {
             var vsId = "";
             if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) { /* WorkItem */
                 vsId = correspondence.generalStepElm.vsId;
-            }
-            else if (correspondence.hasOwnProperty('documentVSID') && correspondence.documentVSID) { /* Event History */
+            } else if (correspondence.hasOwnProperty('documentVSID') && correspondence.documentVSID) { /* Event History */
                 vsId = correspondence.documentVSID;
             }
             /*in case of G2G*/
             else if (correspondence.hasOwnProperty('correspondence')) {
                 vsId = correspondence.correspondence.vsId;
-            }
-            else {  /* Correspondence */
+            } else {  /* Correspondence */
                 vsId = correspondence.vsId;
             }
             return vsId;
@@ -304,11 +301,9 @@ module.exports = function (app) {
             var wobNumber = "";
             if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) { /* WorkItem */
                 wobNumber = correspondence.generalStepElm.workObjectNumber;
-            }
-            else if (correspondence.hasOwnProperty('wobNum') && correspondence.wobNum) { /* EventHistory */
+            } else if (correspondence.hasOwnProperty('wobNum') && correspondence.wobNum) { /* EventHistory */
                 wobNumber = correspondence.wobNum;
-            }
-            else {  /* Correspondence */
+            } else {  /* Correspondence */
                 wobNumber = correspondence.workObjectNumber;
             }
             return wobNumber;
@@ -329,8 +324,7 @@ module.exports = function (app) {
             //var allDocumentStatuses = documentStatusService.getDocumentStatuses();
             if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) {
                 documentStatus = correspondence.generalStepElm.docStatus;
-            }
-            else if (correspondence.hasOwnProperty('docStatus') && correspondence.docStatus) {
+            } else if (correspondence.hasOwnProperty('docStatus') && correspondence.docStatus) {
                 documentStatus = correspondence.docStatus;
             }
             /*else { // if notification Item
@@ -349,8 +343,7 @@ module.exports = function (app) {
             var docFullSerial = "";
             if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) {
                 docFullSerial = correspondence.generalStepElm.docFullSerial;
-            }
-            else if (correspondence.hasOwnProperty('docFullSerial') && correspondence.docFullSerial) {
+            } else if (correspondence.hasOwnProperty('docFullSerial') && correspondence.docFullSerial) {
                 docFullSerial = correspondence.docFullSerial;
             }
             /*else { // if notification Item
@@ -369,8 +362,7 @@ module.exports = function (app) {
             var docType = null;
             if (correspondence.hasOwnProperty('generalStepElm') && correspondence.generalStepElm) {
                 docType = correspondence.generalStepElm.docType;
-            }
-            else if (correspondence.hasOwnProperty('docType') && correspondence.docType) {
+            } else if (correspondence.hasOwnProperty('docType') && correspondence.docType) {
                 docType = correspondence.docType;
             }
             /*else { // if notification Item
@@ -1532,8 +1524,7 @@ module.exports = function (app) {
                 g2gItem = g2gItem.hasOwnProperty('correspondence') ? g2gItem.correspondence : g2gItem;
                 url = urlService.g2gInbox + 'open/' + isInternal;
                 // only required in case of g2gMessagingHistory
-            }
-            else if (model.toLowerCase() === 'g2gmessaginghistory') {
+            } else if (model.toLowerCase() === 'g2gmessaginghistory') {
                 g2gItemCopy = angular.copy(g2gItem);
                 g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
                 url = urlService.g2gInbox + 'open-sent-return/' + isInternal;
@@ -1953,8 +1944,7 @@ module.exports = function (app) {
                     .then(function () {
                         defer.resolve(true);
                     });
-            }
-            else {
+            } else {
                 $http
                     .put(url, new Array(wob))
                     .then(function () {
@@ -2438,8 +2428,7 @@ module.exports = function (app) {
                 if (!folders.length) {
                     toast.info(langService.get('no_folder_for_user'));
                     return false;
-                }
-                else {
+                } else {
                     return self.showFolderDialog(workItem, folders, $event, showInbox);
                 }
             });
@@ -2461,8 +2450,7 @@ module.exports = function (app) {
                 if (!folders.length) {
                     toast.info(langService.get('no_folder_for_user'));
                     return false;
-                }
-                else {
+                } else {
                     return self.showFolderDialog(workItems, folders, $event, showInbox);
                 }
             });
@@ -2979,8 +2967,7 @@ module.exports = function (app) {
                     if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                         dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                         return $q.reject('WORK_ITEM_NOT_FOUND');
-                    }
-                    else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                    } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
                         var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
                         dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
                         return $q.reject('itemLocked');
@@ -3155,8 +3142,7 @@ module.exports = function (app) {
         self.unlockWorkItem = function (workItem, ignoreMessage, $event) {
             if (ignoreMessage) {
                 return _unlockWorkItem(workItem, ignoreMessage)
-            }
-            else {
+            } else {
                 var confirmMsg = langService.get('unlock_confirmation_msg').change({
                     user: workItem.getLockingUserInfo().getTranslatedName(),
                     date: workItem.getLockingInfo().lockingTime
@@ -3177,8 +3163,7 @@ module.exports = function (app) {
                     if (!ignoreMessage) {
                         if (result) {
                             toast.success(langService.get('unlock_specific_success').change({name: info.title}));
-                        }
-                        else {
+                        } else {
                             toast.error(langService.get('unlock_specific_fail').change({name: info.title}));
                         }
                     }
@@ -3201,6 +3186,18 @@ module.exports = function (app) {
                         return _bulkMessages(result, workItems, false, 'failed_unlock_selected', 'selected_unlock_success', 'unlock_success_except_following');
                     });
             })
+        };
+        /**
+         * @description update correspondence site for incoming document.
+         * @param correspondence
+         */
+        self.saveIncomingCorrespondenceSite = function (correspondence) {
+            var info = correspondence.getInfo();
+            return $http
+                .put(_createUrlSchema(info.vsId, info.documentClass, 'correspondence-site'), correspondence.getSiteInformation())
+                .then(function () {
+                    return correspondence;
+                });
         };
 
         $timeout(function () {

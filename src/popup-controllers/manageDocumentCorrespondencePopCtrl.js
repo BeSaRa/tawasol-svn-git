@@ -48,8 +48,7 @@ module.exports = function (app) {
                     return !!inValidSitesCount;
                 }
                 return true;
-            }
-            else {
+            } else {
                 if (self.correspondence.site) {
                     record = self.correspondence.site;
                     return !!(self.needReply(record.followupStatus) && !record.followupDate);
@@ -57,7 +56,9 @@ module.exports = function (app) {
                 return true;
             }
         };
-
+        /**
+         * @description in case if outgoing
+         */
         self.saveCorrespondenceSites = function () {
             if (!self.correspondence.hasVsId())
                 return dialog.hide(self.correspondence);
@@ -68,13 +69,16 @@ module.exports = function (app) {
                     toast.success(langService.get('correspondence_sites_save_success'));
                 });
         };
-
+        /**
+         * @description in cas if incoming
+         */
         self.saveCorrespondenceSite = function () {
             if (!self.correspondence.hasVsId())
                 return dialog.hide(self.correspondence);
 
-            self.correspondence.saveDocument()
-                .then(function (result) {
+            self.correspondence
+                .saveIncomingSite()
+                .then(function () {
                     toast.success(langService.get('correspondence_sites_save_success'));
                 });
         };

@@ -44,15 +44,21 @@ module.exports = function (app) {
                 });
                 return true;
             })
-            .resolveToState('login', 'MUST_LOGGED_IN', function (tokenService, dialog, $timeout, $q, $state) {
+            .resolveToState('login', 'MUST_LOGGED_IN', function (tokenService, rootEntity, employeeService, dialog, $timeout, $q, $state) {
                 'ngInject';
                 var defer = $q.defer();
                 tokenService
                     .tokenRefresh()
                     .then(function () {
-                        $state.go('app');
+                        // $state.go('app');
+                        if (!employeeService.isAdminUser()) {
+                            $state.go('app.landing-page', {identifier: rootEntity.getRootEntityIdentifier()});
+                        } else {
+                            $state.go('app.administration.entities', {identifier: rootEntity.getRootEntityIdentifier()});
+                        }
                     })
-                    .catch(function () {
+                    .catch(function (error) {
+                        console.log("CATCH",error);
                         defer.resolve(true);
                         dialog.cancel();
                     });
@@ -336,8 +342,7 @@ module.exports = function (app) {
                                 defer.reject(false);
                                 //});
                             });
-                    }
-                    else {
+                    } else {
                         $timeout(function () {
                             defer.resolve(false);
                         });
@@ -360,8 +365,7 @@ module.exports = function (app) {
                                     return false;
                                 });
                             });
-                    }
-                    else {
+                    } else {
                         return $timeout(function () {
                             return false;
                         });
@@ -403,8 +407,7 @@ module.exports = function (app) {
                                     return false;
                                 });
                             });
-                    }
-                    else {
+                    } else {
                         return $timeout(function () {
                             return false;
                         });
@@ -420,8 +423,7 @@ module.exports = function (app) {
                                     return false;
                                 });
                             });
-                    }
-                    else {
+                    } else {
                         return $timeout(function () {
                             return false;
                         });

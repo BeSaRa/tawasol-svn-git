@@ -59,7 +59,7 @@
                                             <span>{{lang.english_name}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedDocumentTemplates.length" md-column
-                                            md-order-by="docType">
+                                            md-order-by="{{ctrl.getSortingKey('docTypeInfo', 'Information')}}">
                                             <span>{{lang.label_document_type}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedDocumentTemplates.length" md-column
@@ -76,7 +76,9 @@
                                         ng-repeat="documentTemplate in ctrl.documentTemplates | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{documentTemplate.docSubject}}</td>
                                         <td md-cell>{{documentTemplate.documentTitle}}</td>
-                                        <td md-cell>{{ctrl.getDocumentTypeName(documentTemplate.docType)}}</td>
+                                        <td md-cell>
+                                            {{documentTemplate.docTypeInfo.getTranslatedName()}}
+                                        </td>
                                         <td md-cell>
                                             <md-switch aria-label="{{lang.status}}"
                                                        title="{{documentTemplate.getTranslatedStatus()}}"

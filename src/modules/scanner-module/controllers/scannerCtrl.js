@@ -135,6 +135,8 @@ module.exports = function (app) {
                         file: file,
                         url: url
                     };
+                    window['LATEST_SCANNED_FILE'] = url;
+
                     scannerService.storeImages(images);
                     dialog.hide(images);
                 });
@@ -155,7 +157,6 @@ module.exports = function (app) {
             if (data.Choices && Number(data.Choices.ChoiceKind) === 2 && data.Choices.IntegerList) {
                 self.listColorFormat = data.Choices.IntegerList;
                 self.colorFormat = data.Value.IntegerValue;
-                // self.updateScope();
                 self.enableProperty('colorFormat');
 
             }
