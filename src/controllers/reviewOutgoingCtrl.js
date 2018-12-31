@@ -46,7 +46,11 @@ module.exports = function (app) {
         self.selectedReviewOutgoings = [];
 
         self.editInDesktop = function (workItem) {
-            correspondenceService.editWordInDesktop(workItem);
+            return correspondenceService.editWordInDesktop(workItem);
+        };
+
+        self.viewInDeskTop = function (workItem) {
+            return correspondenceService.viewWordInDesktop(workItem);
         };
 
         /**
@@ -572,12 +576,10 @@ module.exports = function (app) {
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
                     hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                     if (action.hasOwnProperty('checkAnyPermission')) {
                         hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    }
-                    else {
+                    } else {
                         hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
@@ -907,8 +909,7 @@ module.exports = function (app) {
                         hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
                     } else if (info.documentClass === 'incoming') {
                         hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
-                    }
-                    else if (info.documentClass === 'internal') {
+                    } else if (info.documentClass === 'internal') {
                         hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                     }
                     return self.checkToShowAction(action, model)
@@ -916,6 +917,20 @@ module.exports = function (app) {
                         && (info.documentClass !== 'incoming')
                         && model.needApprove()
                         && hasPermission;
+                }
+            },
+            // viewInDeskTop
+            {
+                type: 'action',
+                icon: 'monitor',
+                text: 'grid_action_edit_in_desktop',
+                shortcut: false,
+                hide: false,
+                callback: self.viewInDeskTop,
+                class: "action-green",
+                showInView: false,
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model);
                 }
             },
             // show versions

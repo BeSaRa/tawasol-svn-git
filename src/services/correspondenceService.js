@@ -3022,6 +3022,29 @@ module.exports = function (app) {
             var info = correspondence.getInfo();
             var url = urlService
                 .desktopEdit
+                .replace('{base_url}', urlService.BASE)
+                .replace('{mode}', 0)
+                .replace('{type}', 'docx')
+                .replace('{vsId}', info.vsId)
+                .replace('{subject}', encodeURIComponent(info.title))
+                .replace('{token}', tokenService.getToken())
+                .replace('{documentClass}', info.documentClass);
+            return $http.get(url, {
+                excludeLoading: true
+            });
+        };
+
+        /**
+         * @description open word in desktop application.
+         * @param correspondence
+         * @return {Promise}
+         */
+        self.viewWordInDesktop = function (correspondence) {
+            var info = correspondence.getInfo();
+            var url = urlService
+                .desktopEdit
+                .replace('{base_url}', urlService.BASE)
+                .replace('{mode}', 1)
                 .replace('{type}', 'docx')
                 .replace('{vsId}', info.vsId)
                 .replace('{subject}', encodeURIComponent(info.title))
