@@ -11,7 +11,7 @@ module.exports = function (app) {
             self.lookupStrKey = null;
             self.arName = null;
             self.enName = null;
-            self.status = false;
+            self.status = true;
             self.parent = null;
             self.itemOrder = 1;
             // every model has required fields

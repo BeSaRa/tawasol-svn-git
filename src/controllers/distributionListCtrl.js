@@ -25,7 +25,7 @@ module.exports = function (app) {
              * @type {*}
              */
             self.distributionLists = distributionLists;
-
+            self.distributionListsCopy = angular.copy(self.distributionLists);
             /**
              * @description Contains the selected Distribution Lists
              * @type {Array}
@@ -43,8 +43,17 @@ module.exports = function (app) {
                 limitOptions: gridService.getGridLimitOptions(gridService.grids.administration.distributionList, self.distributionLists),
                 pagingCallback: function (page, limit) {
                     gridService.setGridPagingLimitByGridName(gridService.grids.administration.distributionList, limit);
+                },
+                searchColumns: {
+                    arName: 'arName',
+                    enName: 'enName'
+                },
+                searchText: '',
+                searchCallback: function () {
+                    self.distributionLists = gridService.searchGridData(self.grid, self.distributionListsCopy);
                 }
             };
+
 
             /**
              * @description Contains methods for CRUD operations for Distribution Lists
@@ -119,15 +128,16 @@ module.exports = function (app) {
                             .loadDistributionLists()
                             .then(function (result) {
                                 self.distributionLists = result;
+                                self.distributionListsCopy = angular.copy(self.distributionLists);
                                 self.selectedDistributionLists = [];
                                 defer.resolve(true);
                                 if (pageNumber)
                                     self.grid.page = pageNumber;
                                 self.getSortedData();
+                                self.grid.searchCallback();
                                 return result;
                             });
                     });
-
             };
 
             /**

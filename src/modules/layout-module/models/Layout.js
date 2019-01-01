@@ -63,7 +63,21 @@ module.exports = function (app) {
                 return layoutService.setCurrentLayout(this);
             };
             Layout.prototype.getTranslatedName = function (reverse) {
-                return langService.current === 'ar' ? (reverse ? this.enName : this.arName ) : (reverse ? this.arName : this.enName);
+                var name = '';
+                if (langService.current === 'ar') {
+                    if (reverse)
+                        name = this.enName ? this.enName : this.arName;
+                    else
+                        name = this.arName ? this.arName : this.enName;
+                }
+                else if (langService.current === 'en') {
+                    if (reverse)
+                        name = this.arName ? this.arName : this.enName;
+                    else
+                        name = this.enName ? this.enName : this.arName;
+                }
+                return name;
+                //return langService.current === 'ar' ? (reverse ? this.enName : this.arName ) : (reverse ? this.arName : this.enName);
             };
             Layout.prototype.getTranslatedIsCurrent = function () {
                 return this.isCurrent ? langService.get('yes') : langService.get('no');

@@ -9,7 +9,8 @@ module.exports = function (app) {
                                               dialog,
                                               toast,
                                               $timeout,
-                                              editMode) {
+                                              editMode,
+                                              _) {
         'ngInject';
         var self = this;
         self.controllerName = 'layoutPopCtrl';
@@ -37,13 +38,27 @@ module.exports = function (app) {
         self.closeLayoutDialog = function () {
             dialog.cancel();
         };
+
+        self.checkRequiredFields = function (model) {
+            var required = model.getRequiredFields(), result = [];
+            _.map(required, function (property) {
+                if (!generator.validRequired(model[property])) {
+                    // if one of arName or enName is filled, skip the property from required;
+                    if ((property === 'arName' && !model['enName']) || (property === 'enName' && !model['arName']))
+                        result.push(property);
+                }
+            });
+            return result;
+        };
+
+
         /**
          * save current layout
          */
         self.saveLayout = function () {
             validationService
                 .createValidation('LAYOUT_VALIDATION')
-                .addStep('check_required', true, generator.checkRequiredFields, self.layout, function (result) {
+                .addStep('check_required', true, self.checkRequiredFields, self.layout, function (result) {
                     return !result.length;
                 })
                 .notifyFailure(function (step, result) {

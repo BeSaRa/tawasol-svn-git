@@ -57,6 +57,9 @@ module.exports = function (app) {
             delete model.updatedByInfo;
             delete model.updatedOn;
             delete model.relationship;
+
+            delete model.parentOrReportingToInfo;
+            delete model.organizationTypeInfo;
             return model;
         });
 
@@ -80,6 +83,11 @@ module.exports = function (app) {
                     return generator.interceptReceivedInstance('ReferencePlanItemStartSerial', (new ReferencePlanItemStartSerial(item)).getReferencePlanItem());
                 });
             }
+
+            if (model.parent)
+                model.parentOrReportingToInfo = model.getParent();
+            model.organizationTypeInfo = model.getType();
+
             return model;
         });
 

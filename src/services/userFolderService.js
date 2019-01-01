@@ -393,15 +393,28 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.checkDuplicateUserFolder = function (userFolder, editMode) {
-            var userFoldersToFilter = self.userFolders;
+            var userFoldersToFilter = angular.copy(self.userFolders);
             if (editMode) {
                 userFoldersToFilter = _.filter(userFoldersToFilter, function (userFolderToFilter) {
                     return userFolderToFilter.id !== userFolder.id;
                 });
             }
             return _.some(_.map(userFoldersToFilter, function (existingUserFolder) {
-                return existingUserFolder.arName === userFolder.arName
-                    || existingUserFolder.enName.toLowerCase() === userFolder.enName.toLowerCase();
+                // if existing folder doesn't have name, change them to empty strings
+                existingUserFolder.arName = existingUserFolder.arName ? existingUserFolder.arName : '';
+                existingUserFolder.enName = existingUserFolder.enName ? existingUserFolder.enName : '';
+
+                // if folder has arName and enName, check them
+                if (userFolder.arName && userFolder.enName) {
+                    return existingUserFolder.arName === userFolder.arName
+                        || existingUserFolder.enName.toLowerCase() === userFolder.enName.toLowerCase();
+                }
+                else if (!userFolder.arName && userFolder.enName) {
+                    return existingUserFolder.enName.toLowerCase() === userFolder.enName.toLowerCase();
+                }
+                else if (userFolder.arName && !userFolder.enName)
+                    return existingUserFolder.arName === userFolder.arName;
+
             }), function (matchingResult) {
                 return matchingResult === true;
             });

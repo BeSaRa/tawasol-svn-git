@@ -13,7 +13,8 @@ module.exports = function (app) {
                                               // generator,
                                               // employeeService,
                                               validationService,
-                                              userFilterService) {
+                                              userFilterService,
+                                              _) {
         'ngInject';
         var self = this;
         self.controllerName = 'userFilterPopCtrl';

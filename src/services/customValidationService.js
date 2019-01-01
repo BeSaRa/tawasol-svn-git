@@ -32,7 +32,8 @@ module.exports = function (app) {
             /**
              * @description Allows phone/mobile number starting with +974 followed by 8 digits
              */
-            phone_mobile: /^\+974\d{8}$/,
+            // phone_mobile: /^\+974\d{8}$/,
+            phone_mobile: /^[\\+]?[0-9]+$/,
             /**
              * @description Allows digits and decimals
              */
@@ -112,7 +113,8 @@ module.exports = function (app) {
              */
             port: /^(([1-9]\d{0,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5]))$/,
             EN_DOT: /^[a-zA-Z0-9_.]+$/,
-            EN_DOT_DASH: /^[a-zA-Z0-9_.\-]+$/
+            EN_DOT_DASH: /^[a-zA-Z0-9_.\-]+$/,
+            FILE_NET_USER: /^[\w]+[@.]*[\w.]+$/
         };
 
         /**

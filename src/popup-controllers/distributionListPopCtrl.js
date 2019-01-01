@@ -61,9 +61,10 @@ module.exports = function (app) {
                 .then(function () {
                     distributionListService.addDistributionList(self.distributionList).then(function (result) {
                         toast.success(langService.get('add_success').change({name: self.distributionList.getNames()}));
-                        self.editMode = true;
+                        /*self.editMode = true;
                         self.distributionList = angular.copy(result);
-                        self.model = angular.copy(self.distributionList);
+                        self.model = angular.copy(self.distributionList);*/
+                        dialog.hide(result);
                     });
                 })
                 .catch(function () {

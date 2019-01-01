@@ -61,7 +61,8 @@
                                         <label for="loginName">{{lang.login_name}}</label>
                                         <input name="loginName" id="loginName" required minlength="2"
                                                ng-model="ctrl.applicationUser.loginName"
-                                               no-space-directive custom-validate-directive="EN_DOT_DASH">
+                                               maxlength="50"
+                                               no-space-directive custom-validate-directive="FILE_NET_USER">
                                         <div ng-messages="applicationUserForm.loginName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
@@ -100,8 +101,8 @@
                                     <md-input-container flex>
                                         <label for="domainName">{{lang.domain_name}}</label>
                                         <input name="domainName" id="domainName" required minlength="2"
-                                               ng-model="ctrl.applicationUser.domainName" maxlength="20"
-                                               no-space-directive custom-validate-directive="EN_DOT_DASH">
+                                               ng-model="ctrl.applicationUser.domainName" maxlength="50"
+                                               no-space-directive custom-validate-directive="FILE_NET_USER">
                                         <div ng-messages="applicationUserForm.domainName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
@@ -167,10 +168,10 @@
                                         <label for="mobile">{{lang.mobile_number}}</label>
                                         <input name="mobile" id="mobile" required
                                                ng-model="ctrl.applicationUser.mobile" maxlength="15"
-                                               custom-validate-directive="number">
+                                               custom-validate-directive="phone_mobile">
                                         <div ng-messages="applicationUserForm.mobile.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                            <div ng-message="phone_mobile">{{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}</div>
                                             <div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>
                                         </div>
                                     </md-input-container>
@@ -178,7 +179,6 @@
                                     <!--<md-input-container flex> &lt;!&ndash;class=not-found&ndash;&gt;
                                         <label for="mobileOTP">{{lang.mobile_number_otp}}</label>
                                         <input name="mobileOTP" id="mobileOTP"
-                                               placeholder="+974xxxxxxxx"
                                                ng-model="ctrl.notFound.mobile" maxlength="15"
                                                custom-validate-directive="phone_mobile">
                                         <div ng-messages="applicationUserForm.mobileOTP.$error">

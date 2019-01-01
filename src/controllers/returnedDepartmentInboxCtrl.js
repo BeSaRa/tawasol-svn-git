@@ -323,7 +323,9 @@ module.exports = function (app) {
             returnedDepartmentInbox.manageDocumentAttachments($event)
                 .then(function () {
                     self.reloadReturnedDepartmentInboxes(self.grid.page);
-                });
+                }).catch(function () {
+                self.reloadReturnedDepartmentInboxes(self.grid.page);
+            });
         };
 
         /**
@@ -337,7 +339,12 @@ module.exports = function (app) {
                 return;
             }
             var info = returnedDepartmentInbox.getInfo();
-            managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass, "welcome");
+            managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass, "welcome")
+                .then(function () {
+                    self.reloadReturnedDepartmentInboxes(self.grid.page);
+                }).catch(function () {
+                self.reloadReturnedDepartmentInboxes(self.grid.page);
+            });
         };
 
         /**
@@ -972,7 +979,7 @@ module.exports = function (app) {
                 checkShow: self.checkToShowAction,
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
-                    "" // Composite Document
+                    "DOWNLOAD_COMPOSITE_BOOK" // Composite Document
                 ],
                 checkAnyPermission: true,
                 subMenu: [
@@ -992,6 +999,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_composite_document',
+                        permissionKey:'DOWNLOAD_COMPOSITE_BOOK',
                         shortcut: false,
                         callback: self.downloadCompositeDocument,
                         class: "action-green",

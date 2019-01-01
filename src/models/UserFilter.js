@@ -68,6 +68,8 @@ module.exports = function (app) {
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
 
+            var naValue = 'N/A';
+
             if (model)
                 angular.extend(this, model);
 
@@ -114,7 +116,8 @@ module.exports = function (app) {
             };
             UserFilter.prototype.prepareSendUserFilter = function () {
                 var self = this;
-
+                self.arName = self.arName ? self.arName : naValue;
+                self.enName = self.enName ? self.enName : naValue;
                 // Received date greater than
                 if (self.ui.key_4.value)
                     self.ui.key_4.value = generator.getTimeStampFromDate(self.ui.key_4.value, true);
@@ -164,6 +167,10 @@ module.exports = function (app) {
             UserFilter.prototype.prepareReceivedUserFilter = function () {
                 var criteria = angular.fromJson(this.parsedExpression),
                     self = this;
+
+                self.arName = (self.arName !== naValue) ? self.arName : null;
+                self.enName = (self.enName !== naValue) ? self.enName : null;
+
                 _.map(criteria, function (value, key) {
                     var count = Object.keys(self.ui['key_' + key]).length; // to get field count
                     if (count > 1) {
@@ -190,16 +197,25 @@ module.exports = function (app) {
 
                 // Due date exists
                 self.ui.key_8.value = (self.ui.key_8.value === '-2000000000000L');
-
                 return this;
             };
 
             UserFilter.prototype.getTranslatedName = function () {
-                return langService.current === 'ar' ? this.arName : this.enName;
+                if (langService.current === 'ar')
+                    return this.arName ? this.arName : this.enName;
+                else if (langService.current === 'en')
+                    return this.enName ? this.enName : this.arName;
+                else
+                    return langService.current === 'ar' ? this.arName : this.enName;
             };
 
             UserFilter.prototype.getNames = function (separator) {
-                return this.arName + ' ' + (separator ? separator : '-') + ' ' + this.enName;
+                if (this.arName && this.enName)
+                    return this.arName + ' ' + (separator ? separator : '-') + ' ' + this.enName;
+                else if (this.arName && !this.enName)
+                    return this.arName;
+                else if (!this.arName && this.enName)
+                    return this.enName;
             };
 
             UserFilter.prototype.deleteFilter = function ($event, ignoreMessage) {

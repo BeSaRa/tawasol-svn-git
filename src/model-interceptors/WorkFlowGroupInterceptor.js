@@ -6,13 +6,17 @@ module.exports = function (app) {
                       ApplicationUser) {
         'ngInject';
 
-        var modelName = 'WorkflowGroup';
+        var modelName = 'WorkflowGroup', naValue = 'N/A';
 
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
             return model;
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            if (!model.global) {
+                model.arName = model.arName ? model.arName : naValue;
+                model.enName = model.enName ? model.enName : naValue;
+            }
             model.groupMembers = _.map(model.groupMembers, function (item) {
                 return {
                     member: {id: item.applicationUser.id},
@@ -23,6 +27,10 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
+            if (!model.global) {
+                model.arName = (model.arName === naValue) ? null : model.arName;
+                model.enName = (model.enName === naValue) ? null : model.enName;
+            }
             var organizations = organizationService.returnOrganizations();
 
             model.groupMembers = _.map(model.groupMembers, function (item) {

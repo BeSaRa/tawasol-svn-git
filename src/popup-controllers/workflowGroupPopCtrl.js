@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                      validationService,
                                                      workflowGroupService,
                                                      toast,
+                                                     _,
                                                      dialog,
                                                      generator,
                                                      langService,
@@ -40,6 +41,22 @@ module.exports = function (app) {
             groupMembers: 'group_members'
         };
 
+        self.checkRequiredFields = function (model) {
+            var required = model.getRequiredFields(), result = [];
+            _.map(required, function (property) {
+                if (!generator.validRequired(model[property]))
+                    if (isUserPreference) {
+                        // if private wfGroup and one of arName or enName is filled, skip the property from required;
+                        if ((property === 'arName' && !model['enName']) || (property === 'enName' && !model['arName']))
+                            result.push(property);
+                    }
+                    else {
+                        result.push(property);
+                    }
+            });
+            return result;
+        };
+
         /**
          * Add new workflow Group
          */
@@ -49,7 +66,7 @@ module.exports = function (app) {
             }
             validationService
                 .createValidation('ADD_WORKFLOW_GROUP')
-                .addStep('check_required', true, generator.checkRequiredFields, self.workflowGroup, function (result) {
+                .addStep('check_required', true, self.checkRequiredFields, self.workflowGroup, function (result) {
                     return !result.length;
                 })
                 .notifyFailure(function (step, result) {
@@ -90,7 +107,7 @@ module.exports = function (app) {
         self.editWorkflowGroupFromCtrl = function () {
             validationService
                 .createValidation('EDIT_WORKFLOW_GROUP')
-                .addStep('check_required', true, generator.checkRequiredFields, self.workflowGroup, function (result) {
+                .addStep('check_required', true, self.checkRequiredFields, self.workflowGroup, function (result) {
                     return !result.length;
                 })
                 .notifyFailure(function (step, result) {
@@ -166,11 +183,11 @@ module.exports = function (app) {
         self.addSelectedUsersToArray = function (selectedUsers) {
             if (selectedUsers && selectedUsers.length) {
                 _.map(selectedUsers, function (selectedUser) {
-                    var isMemberExist = _.find(self.workflowGroup.groupMembers, function(member){
+                    var isMemberExist = _.find(self.workflowGroup.groupMembers, function (member) {
                         return member.applicationUser.id === selectedUser.toUserId
                             && member.ouid.id === selectedUser.appUserOUID
                     });
-                    if(!isMemberExist){
+                    if (!isMemberExist) {
                         var user = new OUApplicationUser({
                             applicationUser: new ApplicationUser({
                                 arFullName: selectedUser.arName,

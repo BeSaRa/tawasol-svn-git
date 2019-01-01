@@ -1,7 +1,7 @@
 <div layout="row" flex class="p20">
     <div flex layout="column">
         <ng-form name="documentSecurityForm" ng-if="ctrl.documentSecurity">
-            <div layout="column" layout-gt-md="row">
+            <div layout="column">
                 <!-- Show Watermark -->
                 <md-switch  ng-model="ctrl.documentSecurity.status"
                            aria-label="{{lang.apply_document_protection}}">
@@ -10,10 +10,10 @@
                 </md-switch>
 
 
-                <span flex="1"></span>
-                <div flex layout="column" >
 
-                    <div flex layout="row" layout-align="center center">
+                <div flex layout="column" layout-gt-md="row">
+
+                    <div layout="row">
                         <!-- Barcode X location -->
                         <md-input-container>
                             <label for="locationX2D">{{lang.document_security_barcode_x_location}}</label>
@@ -41,12 +41,13 @@
                         <span flex="1"></span>
                     </div>
 
-                    <md-slider-container>
+                    <md-slider-container flex>
                         <label for="opacity-slider">{{lang.opacity}}</label>
                         <md-slider flex min="1" max="10" step="1" ng-model="ctrl.documentSecurity.opacity"
                                    aria-label="{{lang.opacity}}" md-discrete id="opacity-slider">
                         </md-slider>
                     </md-slider-container>
+                    <!--<span flex></span>-->
                 </div>
             </div>
             <md-tabs flex md-selected="0" class="content white-bg">
@@ -55,7 +56,7 @@
                         md-on-select="ctrl.setCurrentWatermarkTab('outgoing', 0)">
                     <md-content class="white-bg">
                         <div layout="column" scroll-directive>
-                            <div layout="row" flex class="p20">
+                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Status -->
                                 <md-switch flex ng-model="ctrl.documentSecurityOutgoing.status"
                                            ng-disabled="!ctrl.documentSecurity.status"
@@ -89,7 +90,7 @@
                                     </div>
                                 </md-input-container>
                             </div>
-                            <div layout="row" flex class="p20">
+                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Text Watermark -->
                                 <md-input-container flex>
                                     <label for="textOrientationOutgoing">{{lang.document_security_text_watermark}}</label>
@@ -142,7 +143,7 @@
                         md-on-select="ctrl.setCurrentWatermarkTab('incoming', 1)">
                     <md-content class="white-bg">
                         <div layout="column" scroll-directive>
-                            <div layout="row" flex class="p20">
+                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Status -->
                                 <md-switch flex ng-model="ctrl.documentSecurityIncoming.status"
                                            ng-disabled="!ctrl.documentSecurity.status"
@@ -176,7 +177,7 @@
                                     </div>
                                 </md-input-container>
                             </div>
-                            <div layout="row" flex class="p20">
+                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Text Watermark -->
                                 <md-input-container flex>
                                     <label for="textOrientationIncoming">{{lang.document_security_text_watermark}}</label>
@@ -228,8 +229,8 @@
                 <md-tab label="{{lang.internal}}" ng-if="ctrl.showWatermarkTab('internal')"
                         md-on-select="ctrl.setCurrentWatermarkTab('internal', 2)">
                     <md-content class="white-bg">
-                        <div layout="column" scroll-directive>
-                            <div layout="row" flex class="p20">
+                        <div layout="column"  scroll-directive>
+                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Status -->
                                 <md-switch flex ng-model="ctrl.documentSecurityInternal.status"
                                            ng-disabled="!ctrl.documentSecurity.status"
@@ -263,7 +264,7 @@
                                     </div>
                                 </md-input-container>
                             </div>
-                            <div layout="row" flex class="p20">
+                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Text Watermark -->
                                 <md-input-container flex>
                                     <label for="textOrientationInternal">{{lang.document_security_text_watermark}}</label>
@@ -315,8 +316,8 @@
                 <md-tab label="{{lang.attachments}}" ng-if="ctrl.showWatermarkTab('tawasolattachment')"
                         md-on-select="ctrl.setCurrentWatermarkTab('tawasolattachment', 4)">
                     <md-content class="white-bg">
-                        <div layout="column" scroll-directive>
-                            <div layout="row" flex class="p20">
+                        <div layout="column"  scroll-directive>
+                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Status -->
                                 <md-switch flex ng-model="ctrl.documentSecurityTawasolAttachment.status"
                                            ng-disabled="!ctrl.documentSecurity.status"
@@ -350,7 +351,7 @@
                                     </div>
                                 </md-input-container>
                             </div>
-                            <div layout="row" flex class="p20">
+                            <div layout="column" layout-gt-md="row" flex class="p20">
                                 <!-- Text Watermark -->
                                 <md-input-container flex>
                                     <label for="textOrientationTawasolAttachment">{{lang.document_security_text_watermark}}</label>

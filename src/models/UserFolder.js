@@ -38,7 +38,13 @@ module.exports = function (app) {
              * @returns {string}
              */
             UserFolder.prototype.getNames = function (separator) {
-                return this.arName + ' ' + (separator ? separator : '-') + ' ' + this.enName;
+                if (this.arName && this.enName)
+                    return this.arName + ' ' + (separator ? separator : '-') + ' ' + this.enName;
+                else if (this.arName && !this.enName)
+                    return this.arName;
+                else if (!this.arName && this.enName)
+                    return this.enName;
+                //return this.arName + ' ' + (separator ? separator : '-') + ' ' + this.enName;
             };
 
             /**
@@ -47,7 +53,22 @@ module.exports = function (app) {
              * @returns {string}
              */
             UserFolder.prototype.getTranslatedName = function (reverse) {
-                return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
+                var name = '';
+                if (langService.current === 'ar') {
+                    if (reverse)
+                        name = this.enName ? this.enName : this.arName;
+                    else
+                        name = this.arName ? this.arName : this.enName;
+                }
+                else if (langService.current === 'en') {
+                    if (reverse)
+                        name = this.arName ? this.arName : this.enName;
+                    else
+                        name = this.enName ? this.enName : this.arName;
+                }
+                return name;
+
+                //return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
 
             /**

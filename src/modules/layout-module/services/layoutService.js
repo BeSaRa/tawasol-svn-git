@@ -190,15 +190,30 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.checkDuplicateLayout = function (layout, editMode) {
-            var layoutsToFilter = self.layouts;
+            var layoutsToFilter = angular.copy(self.layouts);
             if (editMode) {
                 layoutsToFilter = _.filter(layoutsToFilter, function (layoutToFilter) {
                     return layoutToFilter.id !== layout.id;
                 });
             }
             return _.some(_.map(layoutsToFilter, function (existingLayout) {
-                return existingLayout.arName === layout.arName
-                    || existingLayout.enName.toLowerCase() === layout.enName.toLowerCase();
+                // if existing layout doesn't have name, change them to empty strings
+                existingLayout.arName = existingLayout.arName ? existingLayout.arName : '';
+                existingLayout.enName = existingLayout.enName ? existingLayout.enName : '';
+
+                // if layout has arName and enName, check them
+                if (layout.arName && layout.enName) {
+                    return existingLayout.arName === layout.arName
+                        || existingLayout.enName.toLowerCase() === layout.enName.toLowerCase();
+                }
+                else if (!layout.arName && layout.enName) {
+                    return existingLayout.enName.toLowerCase() === layout.enName.toLowerCase();
+                }
+                else if (layout.arName && !layout.enName)
+                    return existingLayout.arName === layout.arName;
+
+                /*return existingLayout.arName === layout.arName
+                    || existingLayout.enName.toLowerCase() === layout.enName.toLowerCase();*/
             }), function (matchingResult) {
                 return matchingResult === true;
             });

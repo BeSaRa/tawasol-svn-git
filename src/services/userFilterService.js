@@ -218,16 +218,28 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.checkDuplicateUserFilter = function (userFilter, editMode) {
-            var userFiltersToFilter = self.userFilters;
+            var userFiltersToFilter = angular.copy(self.userFilters);
             if (editMode) {
                 userFiltersToFilter = _.filter(userFiltersToFilter, function (userFilterToFilter) {
                     return userFilterToFilter.id !== userFilter.id;
                 });
             }
             return _.some(_.map(userFiltersToFilter, function (existingUserFilter) {
-                return existingUserFilter.arName.toLowerCase() === userFilter.arName.toLowerCase()
-                    || existingUserFilter.enName.toLowerCase() === userFilter.enName.toLowerCase();
-                // || existingUserFilter.lookupStrKey.toLowerCase() === userFilter.lookupStrKey.toLowerCase();
+                // if existing user filter doesn't have name, change them to empty strings
+                existingUserFilter.arName = existingUserFilter.arName ? existingUserFilter.arName : '';
+                existingUserFilter.enName = existingUserFilter.enName ? existingUserFilter.enName : '';
+
+                // if user filter has arName and enName, check them
+                if (userFilter.arName && userFilter.enName) {
+                    return existingUserFilter.arName === userFilter.arName
+                        || existingUserFilter.enName.toLowerCase() === userFilter.enName.toLowerCase();
+                }
+                else if (!userFilter.arName && userFilter.enName) {
+                    return existingUserFilter.enName.toLowerCase() === userFilter.enName.toLowerCase();
+                }
+                else if (userFilter.arName && !userFilter.enName)
+                    return existingUserFilter.arName === userFilter.arName;
+
             }), function (matchingResult) {
                 return matchingResult === true;
             });

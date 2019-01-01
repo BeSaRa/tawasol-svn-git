@@ -8,54 +8,52 @@
         </md-toolbar>
         <md-content scroll-directive>
             <form name="userFolder_form" autocomplete="off">
-                        <div layout="column" class="p20">
-                            <div layout="row">
-                                <md-input-container flex>
-                                    <label for="arName">{{lang.arabic_name}}</label>
-                                    <input name="arName" id="arName" required minlength="4" maxlength="80"
-                                           ng-model="ctrl.userFolder.arName"
-                                           custom-validate-directive="ANS">
-                                    <div ng-messages="userFolder_form.arName.$error">
-                                        <div ng-message="required">{{lang.field_required}}</div>
-                                        <div ng-message="minlength">{{lang.short}}</div>
-                                        <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
-                                        <div ng-message="ANS">{{lang.arabic_number_space}}</div>
-                                    </div>
-                                </md-input-container>
-                                <md-input-container flex>
-                                    <label for="enName">{{lang.english_name}}</label>
-                                    <input name="enName" id="enName" required minlength="4" maxlength="80"
-                                           ng-model="ctrl.userFolder.enName"
-                                           custom-validate-directive="ENS">
-                                    <div ng-messages="userFolder_form.enName.$error">
-                                        <div ng-message="required">{{lang.field_required}}</div>
-                                        <div ng-message="minlength">{{lang.short}}</div>
-                                        <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
-                                        <div ng-message="ENS">{{lang.english_number_space}}</div>
-                                    </div>
-                                </md-input-container>
+                <div layout="column" class="p20">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="arName">{{lang.arabic_name}}</label>
+                            <input name="arName" id="arName" ng-required="!ctrl.userFolder.enName"
+                                   minlength="4" maxlength="80"
+                                   ng-model="ctrl.userFolder.arName">
+                            <div ng-messages="userFolder_form.arName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
                             </div>
-                            <div layout="row">
-                                <div flex class="p20">
-                                    <md-switch ng-model="ctrl.userFolder.status" aria-label="{{lang.status}}">
-                                        <label>{{lang.status}} : {{ctrl.userFolder.getTranslatedStatus()}}</label>
-                                    </md-switch>
-                                </div>
-                                <md-input-container flex ng-if="ctrl.editMode">
-                                    <label for="parent">{{lang.parent}}</label>
-                                    <md-select name="parent" id="parent" required
-                                           ng-model="ctrl.userFolder.parent">
-                                        <md-option ng-repeat="folder in ctrl.otherFolders"
-                                                   ng-value="folder.id">
-                                            {{folder.getTranslatedName()}}
-                                        </md-option>
-                                    </md-select>
-                                    <div ng-messages="userFolder_form.parent.$error">
-                                        <div ng-message="required">{{lang.field_required}}</div>
-                                    </div>
-                                </md-input-container>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="enName">{{lang.english_name}}</label>
+                            <input name="enName" id="enName" ng-required="!ctrl.userFolder.arName"
+                                   minlength="4" maxlength="80"
+                                   ng-model="ctrl.userFolder.enName">
+                            <div ng-messages="userFolder_form.enName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
                             </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <div flex class="p20">
+                            <md-switch ng-model="ctrl.userFolder.status" aria-label="{{lang.status}}">
+                                <label>{{lang.status}} : {{ctrl.userFolder.getTranslatedStatus()}}</label>
+                            </md-switch>
                         </div>
+                        <md-input-container flex ng-if="ctrl.editMode">
+                            <label for="parent">{{lang.parent}}</label>
+                            <md-select name="parent" id="parent" required
+                                       ng-model="ctrl.userFolder.parent">
+                                <md-option ng-repeat="folder in ctrl.otherFolders"
+                                           ng-value="folder.id">
+                                    {{folder.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="userFolder_form.parent.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
             </form>
         </md-content>
         <div>

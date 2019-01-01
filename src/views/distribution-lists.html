@@ -11,7 +11,8 @@
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
             <span flex></span>
-            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+            <!--<search-filter-directive model="ctrl.searchModel"></search-filter-directive>-->
+            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
         </div><!-- page-header -->
         <div layout="column" flex>
             <div scroll-directive>
@@ -61,7 +62,7 @@
                                     <tbody md-body>
                                     <tr md-row
                                         md-select="distributionList"
-                                        ng-repeat="distributionList in ctrl.distributionLists | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                        ng-repeat="distributionList in ctrl.distributionLists | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{distributionList.arName}}</td>
                                         <td md-cell>{{distributionList.enName}}</td>
 

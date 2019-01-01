@@ -367,6 +367,7 @@ module.exports = function (app) {
                 addMethod: 1,
                 createdOn: new Date(),
                 docDate: generator.convertDateToString(new Date(), self.defaultDateFormat),
+                refDocDate:generator.convertDateToString(new Date(), self.defaultDateFormat),
                 registryOU: centralArchives ? null : self.employee.getRegistryOUID(),
                 securityLevel: lookups.securityLevels[0],
                 site: null

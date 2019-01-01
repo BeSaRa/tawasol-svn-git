@@ -20,7 +20,7 @@ module.exports = function (app) {
          * @returns {Promise|workflowGroups}
          */
         self.loadWorkflowGroups = function () {
-            return $http.get(urlService.workflowGroups+'/all-global').then(function (result) {
+            return $http.get(urlService.workflowGroups + '/all-global').then(function (result) {
                 self.workflowGroups = generator.generateCollection(result.data.rs, WorkflowGroup, self._sharedMethods);
                 self.workflowGroups = generator.interceptReceivedCollection('WorkflowGroup', self.workflowGroups);
                 return self.workflowGroups;
@@ -250,15 +250,34 @@ module.exports = function (app) {
          * @returns {boolean}
          */
         self.checkDuplicateWorkflowGroup = function (workflowGroup, editMode) {
-            var workflowGroupsToFilter = self.workflowGroups;
+            var workflowGroupsToFilter = angular.copy(self.workflowGroups);
             if (editMode) {
                 workflowGroupsToFilter = _.filter(workflowGroupsToFilter, function (workflowGroupToFilter) {
                     return workflowGroupToFilter.id !== workflowGroup.id;
                 });
             }
             return _.some(_.map(workflowGroupsToFilter, function (existingWorkflowGroup) {
-                return existingWorkflowGroup.arName === workflowGroup.arName
-                    || existingWorkflowGroup.enName.toLowerCase() === workflowGroup.enName.toLowerCase();
+                // private/user workflow group accepts empty, so check with conditions
+                if (!workflowGroup.global) {
+                    // if existing workflow group doesn't have name, change them to empty strings
+                    existingWorkflowGroup.arName = existingWorkflowGroup.arName ? existingWorkflowGroup.arName : '';
+                    existingWorkflowGroup.enName = existingWorkflowGroup.enName ? existingWorkflowGroup.enName : '';
+
+                    // if workflow group has arName and enName, check them
+                    if (workflowGroup.arName && workflowGroup.enName) {
+                        return existingWorkflowGroup.arName === workflowGroup.arName
+                            || existingWorkflowGroup.enName.toLowerCase() === workflowGroup.enName.toLowerCase();
+                    }
+                    else if (!workflowGroup.arName && workflowGroup.enName) {
+                        return existingWorkflowGroup.enName.toLowerCase() === workflowGroup.enName.toLowerCase();
+                    }
+                    else if (workflowGroup.arName && !workflowGroup.enName)
+                        return existingWorkflowGroup.arName === workflowGroup.arName;
+                }
+                else {
+                    return existingWorkflowGroup.arName === workflowGroup.arName
+                        || existingWorkflowGroup.enName.toLowerCase() === workflowGroup.enName.toLowerCase();
+                }
             }), function (matchingResult) {
                 return matchingResult === true;
             });

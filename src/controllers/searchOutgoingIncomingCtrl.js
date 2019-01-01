@@ -970,7 +970,7 @@ module.exports = function (app) {
                 checkShow: self.checkToShowAction,
                 permissionKey: [
                     "DOWNLOAD_MAIN_DOCUMENT",
-                    "" //Composite Document permission not available in database
+                    "DOWNLOAD_COMPOSITE_BOOK"
                 ],
                 checkAnyPermission: true,
                 subMenu: [
@@ -990,6 +990,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_composite_document',
+                        permissionKey:'DOWNLOAD_COMPOSITE_BOOK',
                         shortcut: false,
                         callback: self.downloadCompositeDocument,
                         class: "action-green",

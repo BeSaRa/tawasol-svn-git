@@ -10,7 +10,7 @@ module.exports = function (app) {
             self.global = true;
             self.arName = null;
             self.enName = null;
-            self.status = false;
+            self.status = true;
             self.childCount = 0;
             self.relatedOus = [];
 

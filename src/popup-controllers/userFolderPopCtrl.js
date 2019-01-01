@@ -10,7 +10,8 @@ module.exports = function (app) {
                                                   userFolderService,
                                                   generator,
                                                   dialog,
-                                                  parent) {
+                                                  parent,
+                                                  _) {
         'ngInject';
         var self = this;
 
@@ -48,13 +49,25 @@ module.exports = function (app) {
         };
         self.getOtherFolders();
 
+        self.checkRequiredFields = function (model) {
+            var required = model.getRequiredFields(), result = [];
+            _.map(required, function (property) {
+                if (!generator.validRequired(model[property])) {
+                    // if one of arName or enName is filled, skip the property from required;
+                    if ((property === 'arName' && !model['enName']) || (property === 'enName' && !model['arName']))
+                        result.push(property);
+                }
+            });
+            return result;
+        };
+
         /**
          * Add new User Folder
          */
         self.addUserFolderFromCtrl = function () {
             validationService
                 .createValidation('ADD_USER_FOLDER')
-                .addStep('check_required', true, generator.checkRequiredFields, self.userFolder, function (result) {
+                .addStep('check_required', true, self.checkRequiredFields, self.userFolder, function (result) {
                     return !result.length;
                 })
                 .notifyFailure(function (step, result) {
@@ -87,7 +100,7 @@ module.exports = function (app) {
         self.editUserFolderFromCtrl = function () {
             validationService
                 .createValidation('EDIT_USER_FOLDER')
-                .addStep('check_required', true, generator.checkRequiredFields, self.userFolder, function (result) {
+                .addStep('check_required', true, self.checkRequiredFields, self.userFolder, function (result) {
                     return !result.length;
                 })
                 .notifyFailure(function (step, result) {

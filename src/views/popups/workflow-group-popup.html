@@ -15,28 +15,40 @@
                                 <div layout="row">
                                     <md-input-container flex>
                                         <label for="arName">{{lang.arabic_name}}</label>
-                                        <input name="arName" id="arName" required minlength="4" maxlength="80"
+                                        <!-- private workflow group doesn't have custom validation and required dependent on enName -->
+                                        <input ng-if="!ctrl.isUserPreference"
+                                               name="arName" id="arName" required
+                                               minlength="4" maxlength="80"
                                                ng-model="ctrl.workflowGroup.arName"
-                                               custom-validate-directive="A1NS"><!--ANS-->
+                                               custom-validate-directive="A1NS">
+                                        <input ng-if="ctrl.isUserPreference"
+                                               name="arName" id="arName" ng-required="!ctrl.workflowGroup.enName"
+                                               minlength="4" maxlength="80"
+                                               ng-model="ctrl.workflowGroup.arName">
                                         <div ng-messages="workflowGroup_form.arName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
                                             <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
-                                            <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div><!--ANS-->
-                                            <!--arabic_number_space-->
+                                            <div ng-message="A1NS">{{lang.one_arabic_number_space}}</div>
                                         </div>
                                     </md-input-container>
                                     <md-input-container flex>
                                         <label for="enName">{{lang.english_name}}</label>
-                                        <input name="enName" id="enName" required minlength="4" maxlength="80"
+                                        <!-- private workflow group doesn't have custom validation and required dependent on arName -->
+                                        <input ng-if="!ctrl.isUserPreference"
+                                               name="enName" id="enName" required
+                                               minlength="4" maxlength="80"
                                                ng-model="ctrl.workflowGroup.enName"
-                                               custom-validate-directive="E1NS"><!--ENS-->
+                                               custom-validate-directive="E1NS">
+                                        <input ng-if="ctrl.isUserPreference" ng-required="!ctrl.workflowGroup.arName"
+                                               name="enName" id="enName" required
+                                               minlength="4" maxlength="80"
+                                               ng-model="ctrl.workflowGroup.enName">
                                         <div ng-messages="workflowGroup_form.enName.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
                                             <div ng-message="minlength">{{lang.short}}</div>
                                             <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
-                                            <div ng-message="E1NS">{{lang.one_english_number_space}}</div><!--ENS-->
-                                            <!--english_number_space-->
+                                            <div ng-message="E1NS">{{lang.one_english_number_space}}</div>
                                         </div>
                                     </md-input-container>
                                 </div>
@@ -53,14 +65,6 @@
                     </md-tab>
                     <md-tab label="{{lang.group_members}}">
                         <md-content>
-                            <!--<md-button ng-if="!ctrl.isUserPreference" tooltip="{{lang.group_members}}" class="md-icon-button"
-                                       ng-click="ctrl.selectGroupMember($event)">
-                                <md-icon md-svg-icon="plus"></md-icon>
-                            </md-button>
-                            <md-button ng-if="ctrl.isUserPreference" tooltip="{{lang.group_members}}" class="md-icon-button"
-                                       ng-click="ctrl.selectGroupMemberUserWorkflowGroup($event)">
-                                <md-icon md-svg-icon="plus"></md-icon>
-                            </md-button>-->
                             <md-button tooltip="{{lang.group_members}}" class="md-icon-button"
                                        ng-click="ctrl.selectGroupMemberUserWorkflowGroup($event)">
                                 <md-icon md-svg-icon="plus"></md-icon>

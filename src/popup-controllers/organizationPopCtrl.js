@@ -47,7 +47,8 @@ module.exports = function (app) {
                                                     ApplicationUser,
                                                     cmsTemplate,
                                                     employeeService,
-                                                    correspondenceViewService) {
+                                                    correspondenceViewService,
+                                                    gridService) {
         'ngInject';
 
         var self = this;
@@ -116,12 +117,16 @@ module.exports = function (app) {
         self.escalationProcess = lookupService.returnLookups(lookupService.escalationProcess);
         // all children for current organization.
         self.organizationChildren = children;
+        self.organizationChildrenCopy = angular.copy(self.organizationChildren);
 
         self.ouClassifications = ouClassifications;
+        self.ouClassificationsCopy = angular.copy(self.ouClassifications);
 
         self.ouCorrespondenceSites = ouCorrespondenceSites;
+        self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
 
         self.documentTemplates = documentTemplates;
+        self.documentTemplatesCopy = angular.copy(self.documentTemplates);
 
         self.listParentsHasCentralArchive.push(new Organization({
             id: null,
@@ -209,6 +214,16 @@ module.exports = function (app) {
         self.correspondenceSiteEditMode = false;
 
         /**
+         * @description Get the sorting key for information or lookup model
+         * @param property
+         * @param modelType
+         * @returns {*}
+         */
+        self.getSortingKey = function (property, modelType) {
+            return generator.getColumnSortingKey(property, modelType);
+        };
+
+        /**
          * @description Gets the grid records by sorting
          */
         self.getSortedDataClassifications = function () {
@@ -233,7 +248,18 @@ module.exports = function (app) {
                     value: function () {
                         return (self.ouClassifications.length + 21);
                     }
-                }]
+                }],
+                searchColumns: {
+                    arabicName: 'classification.arName',
+                    englishName: 'classification.enName',
+                    code: 'code',
+                    itemOrder: 'itemOrder',
+                    status: ''
+                },
+                searchText: '',
+                searchCallback: function () {
+                    self.ouClassifications = gridService.searchGridData(self.grid.classifications, self.ouClassificationsCopy);
+                }
             },
             correspondenceSites: {
                 limit: 5, // default limit
@@ -245,7 +271,18 @@ module.exports = function (app) {
                     value: function () {
                         return (self.ouCorrespondenceSites.length + 21);
                     }
-                }]
+                }],
+                searchColumns: {
+                    arabicName: 'correspondenceSite.arName',
+                    englishName: 'correspondenceSite.enName',
+                    code: 'code',
+                    itemOrder: 'itemOrder',
+                    status: ''
+                },
+                searchText: '',
+                searchCallback: function () {
+                    self.ouCorrespondenceSites = gridService.searchGridData(self.grid.correspondenceSites, self.ouCorrespondenceSitesCopy);
+                }
             }
         };
 
@@ -499,6 +536,30 @@ module.exports = function (app) {
                     self.replaceChildOrganization(organization);
                 });
         };
+
+        self.childrenGrid = {
+            searchColumns: {
+                depNameAr: 'arName',
+                depNameEn: 'enName',
+                parentOrReportingToAr: function (record) {
+                    if (record.hasOwnProperty('parentOrReportingToInfo'))
+                        return 'parentOrReportingToInfo.arName';
+                    return '';
+                },
+                parentOrReportingToEn: function (record) {
+                    if (record.hasOwnProperty('parentOrReportingToInfo'))
+                        return 'parentOrReportingToInfo.enName';
+                    return '';
+                },
+                organizationTypeAr: 'organizationTypeInfo.arName',
+                organizationTypeEn: 'organizationTypeInfo.enName'
+            },
+            searchText: '',
+            searchCallback: function () {
+                self.organizationChildren = gridService.searchGridData(self.childrenGrid, self.organizationChildrenCopy);
+            }
+        };
+
         /**
          * to replace children organization after edit or update
          * @param replace
@@ -510,6 +571,7 @@ module.exports = function (app) {
 
                 return organization;
             });
+            self.organizationChildrenCopy = angular.copy(self.organizationChildren);
         };
         /**
          * @description to close the current dialog and send the current model to catch block.
@@ -578,12 +640,12 @@ module.exports = function (app) {
                     self.classificationEditMode = false;
                     self.selectedOUClassification = null;
                     self.ouClassifications = _.map(self.ouClassifications, function (ouClassification) {
-                        console.log(ouClassification.id, selectedOUClassification);
                         if (ouClassification.id === selectedOUClassification.id) {
                             ouClassification = selectedOUClassification;
                         }
                         return ouClassification;
                     });
+                    self.ouClassificationsCopy = angular.copy(self.ouClassifications);
                 });
         };
 
@@ -628,6 +690,7 @@ module.exports = function (app) {
                             self.ouClassifications = _.filter(self.ouClassifications, function (ouClassification) {
                                 return ouClassification.id !== id;
                             });
+                            self.ouClassificationsCopy = angular.copy(self.ouClassifications);
                         });
                 })
 
@@ -645,6 +708,7 @@ module.exports = function (app) {
                     }
                     return ouClassification;
                 });
+                self.ouClassificationsCopy = angular.copy(self.ouClassifications);
             })
         };
 
@@ -676,6 +740,7 @@ module.exports = function (app) {
                         self.ouClassifications = _.filter(self.ouClassifications, function (ouClassification) {
                             return ids.indexOf(ouClassification.id) === -1;
                         });
+                        self.ouClassificationsCopy = angular.copy(self.ouClassifications);
                     })
                 })
         };
@@ -695,6 +760,7 @@ module.exports = function (app) {
                         .assignClassifications(selectedClassifications)
                         .then(function (ouClassifications) {
                             self.ouClassifications = self.ouClassifications.concat(ouClassifications);
+                            self.ouClassificationsCopy = angular.copy(self.ouClassifications);
                             toast.success(langService.get('add_success').change({name: langService.get('classifications')}));
                         })
                 });
@@ -718,6 +784,7 @@ module.exports = function (app) {
                 .assignClassifications(classifications)
                 .then(function (ouClassifications) {
                     self.ouClassifications = self.ouClassifications.concat(ouClassifications);
+                    self.ouClassificationsCopy = angular.copy(self.ouClassifications);
                     toast.success(langService.get('add_success').change({name: langService.get('classifications')}));
                 });
         };
@@ -733,6 +800,7 @@ module.exports = function (app) {
                         .assignClassifications([classification])
                         .then(function (ouClassifications) {
                             self.ouClassifications = self.ouClassifications.concat(ouClassifications);
+                            self.ouClassificationsCopy = angular.copy(self.ouClassifications);
                             toast.success(langService.get('add_success').change({name: ouClassifications[0].getNames()}));
                         });
                 })
@@ -746,6 +814,7 @@ module.exports = function (app) {
                         .assignClassifications([classification])
                         .then(function (ouClassifications) {
                             self.ouClassifications = self.ouClassifications.concat(ouClassifications);
+                            self.ouClassificationsCopy = angular.copy(self.ouClassifications);
                             toast.success(langService.get('add_success').change({name: ouClassifications[0].getNames()}));
                         });
                 })
@@ -775,12 +844,12 @@ module.exports = function (app) {
                     self.correspondenceSiteEditMode = false;
                     self.selectedOUCorrespondenceSite = null;
                     self.ouCorrespondenceSites = _.map(self.ouCorrespondenceSites, function (ouCorrespondenceSite) {
-                        console.log(ouCorrespondenceSite.id, selectedOUCorrespondenceSite);
                         if (ouCorrespondenceSite.id === selectedOUCorrespondenceSite.id) {
                             ouCorrespondenceSite = selectedOUCorrespondenceSite;
                         }
                         return ouCorrespondenceSite;
                     });
+                    self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
                 });
         };
 
@@ -824,6 +893,7 @@ module.exports = function (app) {
                             self.ouCorrespondenceSites = _.filter(self.ouCorrespondenceSites, function (ouCorrespondenceSite) {
                                 return ouCorrespondenceSite.id !== id;
                             });
+                            self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
                         });
                 })
 
@@ -841,6 +911,7 @@ module.exports = function (app) {
                     }
                     return ouCorrespondenceSite;
                 });
+                self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
             })
         };
 
@@ -872,6 +943,7 @@ module.exports = function (app) {
                         self.ouCorrespondenceSites = _.filter(self.ouCorrespondenceSites, function (ouCorrespondenceSite) {
                             return ids.indexOf(ouCorrespondenceSite.id) === -1;
                         });
+                        self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
                     })
                 })
         };
@@ -891,6 +963,7 @@ module.exports = function (app) {
                         .assignCorrespondenceSites(selectedCorrespondenceSites)
                         .then(function (ouCorrespondenceSites) {
                             self.ouCorrespondenceSites = self.ouCorrespondenceSites.concat(ouCorrespondenceSites);
+                            self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
                             toast.success(langService.get('add_success').change({name: langService.get('correspondence_sites')}));
                         })
                 });
@@ -914,6 +987,7 @@ module.exports = function (app) {
                 .assignCorrespondenceSites(correspondenceSites)
                 .then(function (ouCorrespondenceSites) {
                     self.ouCorrespondenceSites = self.ouCorrespondenceSites.concat(ouCorrespondenceSites);
+                    self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
                     toast.success(langService.get('add_success').change({name: langService.get('correspondence_sites')}));
                 });
         };
@@ -929,6 +1003,7 @@ module.exports = function (app) {
                         .assignCorrespondenceSites([correspondenceSite])
                         .then(function (ouCorrespondenceSites) {
                             self.ouCorrespondenceSites = self.ouCorrespondenceSites.concat(ouCorrespondenceSites);
+                            self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
                             toast.success(langService.get('add_success').change({name: ouCorrespondenceSites[0].getNames()}));
                         });
                 })
@@ -942,6 +1017,7 @@ module.exports = function (app) {
                         .assignCorrespondenceSites([correspondenceSite])
                         .then(function (ouCorrespondenceSites) {
                             self.ouCorrespondenceSites = self.ouCorrespondenceSites.concat(ouCorrespondenceSites);
+                            self.ouCorrespondenceSitesCopy = angular.copy(self.ouCorrespondenceSites);
                             toast.success(langService.get('add_success').change({name: ouCorrespondenceSites[0].getNames()}));
                         });
                 })
@@ -976,20 +1052,18 @@ module.exports = function (app) {
                         return (self.documentTemplates.length + 21)
                     }
                 }
-            ]
-        };
-
-        self.documentTypes = documentTemplateService.documentTypes;
-
-        self.templateTypes = documentTemplateService.templateTypes;
-
-        self.getDocumentTypeName_OU = function (documentTypeId) {
-            var matchedDocumentType = _.find(self.documentTypes, function (documentType) {
-                return (documentType.value === documentTypeId);
-            });
-            if (matchedDocumentType)
-                return langService.get(matchedDocumentType.langKey);
-            return '';
+            ],
+            searchColumns: {
+                docSubject: 'docSubject',
+                documentTitle: 'documentTitle',
+                docType: function () {
+                    return self.getSortingKey('docTypeInfo', 'Information');
+                }
+            },
+            searchText: '',
+            searchCallback: function () {
+                self.documentTemplates = gridService.searchGridData(self.documentTemplateGrid, self.documentTemplatesCopy);
+            }
         };
 
         /**
@@ -1037,11 +1111,13 @@ module.exports = function (app) {
                 .loadDocumentTemplates(organization)
                 .then(function (result) {
                     self.documentTemplates = result;
+                    self.documentTemplatesCopy = angular.copy(self.documentTemplates);
                     self.selectedDocumentTemplates = [];
                     defer.resolve(true);
                     if (pageNumber)
                         self.documentTemplateGrid.page = pageNumber;
                     self.getSortedDataTemplate();
+                    self.documentTemplateGrid.searchCallback();
                     return result;
                 });
         };
@@ -1173,6 +1249,7 @@ module.exports = function (app) {
         self.appUserProgress = null;
 
         self.ouAssignedUsers = ouAssignedUsers;
+        self.ouAssignedUsersCopy = angular.copy(self.ouAssignedUsers);
         self.unAssignedUsers = unAssignedUsers;
         self.selectedUnassignedUser = null;
 
@@ -1201,7 +1278,16 @@ module.exports = function (app) {
                     }
                 }
             ],
-            filter: {search: {}}
+            searchColumns: {
+                arabicName: 'applicationUser.arFullName',
+                englishName: 'applicationUser.enFullName',
+                loginName: 'applicationUser.loginName',
+                domainName: 'applicationUser.domainName'
+            },
+            searchText: '',
+            searchCallback: function () {
+                self.ouAssignedUsers = gridService.searchGridData(self.appUserGrid, self.ouAssignedUsersCopy);
+            }
         };
 
         /**
@@ -1225,11 +1311,13 @@ module.exports = function (app) {
                 .loadRelatedOUApplicationUsers(organization.id)
                 .then(function (result) {
                     self.ouAssignedUsers = result;
+                    self.ouAssignedUsersCopy = angular.copy(self.ouAssignedUsers);
                     self.selectedOUApplicationUsers = [];
                     defer.resolve(true);
                     if (pageNumber)
                         self.appUserGrid.page = pageNumber;
                     self.getSortedDataAppUser();
+                    self.appUserGrid.searchCallback();
                 });
         };
 

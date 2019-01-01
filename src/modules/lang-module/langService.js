@@ -54,6 +54,9 @@ module.exports = function (app) {
                 app_english_name: 'أسم البرنامج أنجليزي',
                 status: 'الحالة',
                 add: 'أضف',
+                save: 'حفظ',
+                active: 'فعال',
+                inactive: 'غير فاعل',
                 help_url: 'رابط المساعدة',
                 basic_info: 'المعلومات الاساسية',
                 connection_settings: 'أعدادات الاتصال',
@@ -131,6 +134,9 @@ module.exports = function (app) {
                 app_english_name: 'Application English Name',
                 status: 'Status',
                 add: 'Add',
+                active: 'Active',
+                inactive: 'Inactive',
+                save: 'Save',
                 help_url: 'Help URL',
                 basic_info: 'Basic Information',
                 connection_settings: 'Connection Settings',
@@ -223,7 +229,7 @@ module.exports = function (app) {
          */
         self.getConcatenated = function (langKeys) {
             var translate = [];
-            _.map(langKeys,function (langKey) {
+            _.map(langKeys, function (langKey) {
                 translate.push(self.get(langKey));
             });
             return translate.join('');

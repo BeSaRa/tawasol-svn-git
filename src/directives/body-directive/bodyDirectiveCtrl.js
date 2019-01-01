@@ -83,7 +83,7 @@ module.exports = function (app) {
         });
 
         $scope.bundleVersion = '2.1.1';
-        $scope.buildNumber = ' F#3088';
-        app.$_privateBuildNumber = 'F#3088';
+        $scope.buildNumber = ' F#3118';
+        app.$_privateBuildNumber = 'F#3119';
     });
 };

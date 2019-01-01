@@ -1,31 +1,39 @@
 module.exports = function (app) {
-    app.directive('piechartDirective', function ($timeout, langService, $window) {
+    app.directive('piechartDirective', function ($timeout, counterService, langService, $window) {
         'ngInject';
         return {
             restrict: 'E',
             template: '<div class=\'max-width-100-percent\'><canvas class="pie-chart"></canvas></div>',
             replace: true,
+            scope: {
+                options: '='
+            },
             link: function (scope, element) {
+
                 var myChart;
                 var canvas = element.find('canvas');
+                console.log(counterService.counter.getCount('menu_item_dep_incoming'));
                 var config = {
                     type: 'pie',
                     data: {
-                        labels: ["Blue", "Yellow", "Green", "Purple"],
+
+                        labels: ["menu_item_dep_returned", "menu_item_dep_incoming", "menu_item_dep_ready_to_export"],
                         datasets: [{
                             label: '# of Votes',
-                            data: [30, 21, 9, 5],
+                            data: [
+                                counterService.counter.getCount('menu_item_dep_returned'),
+                                counterService.counter.getCount('menu_item_dep_incoming'),
+                                counterService.counter.getCount('menu_item_dep_ready_to_export')
+                            ],
                             backgroundColor: [
                                 'rgba(54, 162, 235, 0.7)',
                                 'rgba(255, 206, 86, 0.7)',
-                                'rgba(75, 192, 192, 0.7)',
-                                'rgba(255, 0, 0, 0.7)'
+                                'rgba(75, 192, 192, 0.7)'
                             ],
                             borderColor: [
                                 'rgba(54, 162, 235, 1)',
                                 'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(255, 0, 0, 1)'
+                                'rgba(75, 192, 192, 1)'
                             ]
                         }]
                     },
@@ -95,7 +103,7 @@ module.exports = function (app) {
                 // resize detector
                 $($window).on('resize', _resize);
 
-                var translations = ['approved_books', 'exported_books', 'returned_books', 'overdue_books'];
+                var translations = ["menu_item_dep_returned", "menu_item_dep_incoming", "menu_item_dep_ready_to_export"];
 
                 function _updateLabels() {
                     config.data.labels = _.map(config.data.labels, function (value, index) {
