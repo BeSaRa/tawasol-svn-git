@@ -15,7 +15,7 @@
             </div>-->
             <div layout="row" layout-align="start center" class="p25 small">
                 <span flex></span>
-                <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+                <grid-search-directive grid="ctrl.grid"></grid-search-directive>
             </div>
             <div layout="column" flex>
                 <div scroll-directive>
@@ -26,7 +26,7 @@
                                     <table md-table ng-model="ctrl.selectedRoleMembers"
                                            md-progress="ctrl.progress">
                                         <!--md-row-select multiple-->
-                                        <thead md-head md-order="ctrl.grid.order">
+                                        <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                         <tr md-row>
                                             <th md-column md-order-by="loginName">{{lang.login_name}}</th>
                                             <th md-column md-order-by="arFullName">{{lang.arabic_name}}</th>
@@ -35,7 +35,10 @@
                                             <th md-column md-order-by="employeeNo">
                                                 {{lang.employee_number}}
                                             </th>
-                                            <th md-column md-order-by="ouid">{{lang.organization_unit}}</th>
+                                            <th md-column
+                                                md-order-by="{{ctrl.getSortingKey('organization','Organization')}}">
+                                                {{lang.organization_unit}}
+                                            </th>
                                             <th md-column md-order-by="status">{{lang.status}}</th>
                                         </tr>
                                         </thead>
@@ -43,13 +46,19 @@
                                         <tr md-row md-select="member" md-row-select multiple
                                             ng-model="ctrl.selectedRoleMembers"
                                             md-progress="ctrl.progress"
-                                            ng-repeat="member in ctrl.roleMembers  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                            ng-repeat="member in ctrl.roleMembers  | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                                             <td md-cell>{{member.loginName}}</td>
                                             <td md-cell>{{member.arFullName}}</td>
                                             <td md-cell>{{member.enFullName}}</td>
                                             <td md-cell>{{member.employeeNo}}</td>
                                             <td md-cell>{{member.organization.getTranslatedName()}}</td>
-                                            <td md-cell>{{member.getTranslatedStatus()}}</td>
+                                            <td md-cell>
+                                                <md-switch aria-label="{{lang.status}}"
+                                                           ng-model="member.status"
+                                                           disabled
+                                                           title="{{member.getTranslatedStatus()}}"></md-switch>
+
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>

@@ -1,20 +1,21 @@
 module.exports = function (app) {
     app.controller('userFilterPopCtrl', function (filter,
-                                              dialog,
-                                              actions,
-                                              senders,
-                                              $scope,
-                                              langService,
-                                              LangWatcher,
-                                              lookupService,
-                                              editMode,
-                                              toast,
-                                              rootEntity,
-                                              // generator,
-                                              // employeeService,
-                                              validationService,
-                                              userFilterService,
-                                              _) {
+                                                  dialog,
+                                                  actions,
+                                                  senders,
+                                                  $scope,
+                                                  langService,
+                                                  LangWatcher,
+                                                  lookupService,
+                                                  editMode,
+                                                  toast,
+                                                  rootEntity,
+                                                  // generator,
+                                                  // employeeService,
+                                                  validationService,
+                                                  userFilterService,
+                                                  _,
+                                                  Information) {
         'ngInject';
         var self = this;
         self.controllerName = 'userFilterPopCtrl';
@@ -32,6 +33,16 @@ module.exports = function (app) {
         self.priorityLevels = lookupService.returnLookups(lookupService.priorityLevel);
 
         //console.log(lookupService.returnLookups(lookupService.inboxFilterKey));
+
+        self.lookupNames = {};
+        _.map(lookupService.returnLookups(lookupService.inboxFilterKey), function (lookup) {
+            self.lookupNames['key_' + lookup.lookupKey] = new Information({
+                arName: lookup.defaultArName,
+                enName: lookup.defaultEnName,
+                id: lookup.lookupKey
+            });
+            return lookup;
+        });
 
         /**
          * @description save user filter
@@ -56,22 +67,36 @@ module.exports = function (app) {
                 });
         };
 
-        self.receivedDateFilterTypes = [
+        var receivedDateKeys = [4, 6, 11],
+            linkedDocsKeys = [16, 18],
+            linkedAttachmentKeys = [19, 21],
+            linkedEntitiesKeys = [17, 22];
+        self.receivedDateFilterTypes = [];
+        self.linkedDocsOptions = [];
+        self.linkedAttachmentsOptions = [];
+        self.linkedEntitiesOptions = [];
+
+        for (var i = 0; i < receivedDateKeys.length; i++) {
+            self.receivedDateFilterTypes.push(self.lookupNames['key_' + receivedDateKeys[i]]);
+        }
+        for (var i = 0; i < linkedDocsKeys.length; i++) {
+            self.linkedDocsOptions.push(self.lookupNames['key_' + linkedDocsKeys[i]]);
+        }
+        for (var i = 0; i < linkedAttachmentKeys.length; i++) {
+            self.linkedAttachmentsOptions.push(self.lookupNames['key_' + linkedAttachmentKeys[i]]);
+        }
+        for (var i = 0; i < linkedEntitiesKeys.length; i++) {
+            self.linkedEntitiesOptions.push(self.lookupNames['key_' + linkedEntitiesKeys[i]]);
+        }
+
+        self.yesNoOptions = [
             {
-                optionLangKey: 'none',
-                optionValue: null
+                key: 'yes',
+                value: true
             },
             {
-                optionLangKey: 'user_inbox_filter_recieve_date_greater_than',
-                optionValue: 4
-            },
-            {
-                optionLangKey: 'user_inbox_recieve_date_less_than',
-                optionValue: 6
-            },
-            {
-                optionLangKey: 'user_inbox_filter_recieved_date_between',
-                optionValue: 11
+                key: 'no',
+                value: false
             }
         ];
 
@@ -130,7 +155,15 @@ module.exports = function (app) {
 
                 record = self.filter.ui[key];
                 // if single value key and key has value or key is for document type === 0 (outgoing, security level, priority level)
-                if (record.hasOwnProperty('value') && (record.value || (record.value === 0 && key === 'key_2') || (record.value === 0 && key === 'key_14') || (record.value === 0 && key === 'key_15'))) {
+                // adding exceptions for false/0 values
+                if (record.hasOwnProperty('value')
+                    && (record.value
+                        || (record.value === 0 && key === 'key_2') // doc type
+                        || (record.value === 0 && key === 'key_14') // security level
+                        || (record.value === 0 && key === 'key_15') // priority level
+                        || (record.value === false && key === 'key_20') // is open
+                    )
+                ) {
                     typeOfRecord = typeof record.value;
                     recordValue = record.value;
                 }

@@ -59,10 +59,41 @@ module.exports = function (app) {
                 },
                 key_15: {
                     value: null
-                }
+                },
+                key_16: {
+                    value: null
+                },
+                key_17: {
+                    value: null
+                },
+                key_18: {
+                    value: null
+                },
+                key_19: {
+                    value: null
+                },
+                key_20: {
+                    value: null
+                },
+                key_21: {
+                    value: null
+                },
+                key_22: {
+                    value: null
+                },
+                // anonymous properties - to be removed when sending
+                key_linkedAttachments: {
+                    value: null
+                },
+                key_linkedDocs: {
+                    value: null
+                },
+                key_linkedEntities: {
+                    value: null
+                },
             };
             // this is available keys for the current ui model
-            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+            var availableKeys = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -99,8 +130,11 @@ module.exports = function (app) {
                 userFilterService = service;
                 return this;
             };
-            UserFilter.prototype.getTranslatedDueDate = function ($event) {
+            /*UserFilter.prototype.getTranslatedDueDate = function ($event) {
                 return this.ui.key_8.value ? langService.get('yes') : langService.get('no');
+            };*/
+            UserFilter.prototype.getTranslatedYesNo = function (lookupKey, $event) {
+                return this.ui[lookupKey].value ? langService.get('yes') : langService.get('no');
             };
             UserFilter.prototype.saveUserFilter = function (ignoreMessage) {
                 return this.id ? this.modelUpdateUserFilter(ignoreMessage) : this.modelCreateUserFilter(ignoreMessage);
@@ -150,6 +184,51 @@ module.exports = function (app) {
                 if (typeof  priorityLevel === 'undefined' || priorityLevel === null && priorityLevel === '')
                     self.ui.key_15.value = null;
 
+                // Linked Docs
+                if (self.ui.key_linkedDocs.value === 16) {
+                    self.ui.key_16.value = 0;
+                    self.ui.key_18.value = null;
+                }
+                else if (self.ui.key_linkedDocs.value === 18) {
+                    self.ui.key_18.value = 0;
+                    self.ui.key_16.value = null;
+                }
+                else {
+                    self.ui.key_18.value = null;
+                    self.ui.key_16.value = null;
+                }
+
+                // Attachments
+                if (self.ui.key_linkedAttachments.value === 19) {
+                    self.ui.key_19.value = 0;
+                    self.ui.key_21.value = null;
+                }
+                else if (self.ui.key_linkedAttachments.value === 21) {
+                    self.ui.key_21.value = 0;
+                    self.ui.key_19.value = null;
+                }
+                else {
+                    self.ui.key_21.value = null;
+                    self.ui.key_19.value = null;
+                }
+
+                // Linked Entities
+                if (self.ui.key_linkedEntities.value === 17) {
+                    self.ui.key_17.value = 0;
+                    self.ui.key_22.value = null;
+                }
+                else if (self.ui.key_linkedEntities.value === 22) {
+                    self.ui.key_22.value = 0;
+                    self.ui.key_17.value = null;
+                }
+                else {
+                    self.ui.key_22.value = null;
+                    self.ui.key_17.value = null;
+                }
+
+                // Is Open (check for null value, because true, false, null are three values and both true and false are accepted
+                self.ui.key_20.value = (self.ui.key_20.value === null) ? null : self.ui.key_20.value;
+
                 self.filterCriteria = self.filterCriteria || {};
                 _.map(availableKeys, function (number) {
                     var two = Object.keys(self.ui['key_' + number]).length > 1;
@@ -197,6 +276,25 @@ module.exports = function (app) {
 
                 // Due date exists
                 self.ui.key_8.value = (self.ui.key_8.value === '-2000000000000L');
+
+                // linked docs
+                if (self.ui.key_16.value !== null)
+                    self.ui.key_linkedDocs.value = 16;
+                else if (self.ui.key_18.value !== null)
+                    self.ui.key_linkedDocs.value = 18;
+
+                // linked attachments
+                if (self.ui.key_19.value !== null)
+                    self.ui.key_linkedAttachments.value = 19;
+                else if (self.ui.key_21.value !== null)
+                    self.ui.key_linkedAttachments.value = 21;
+
+                // linked entities
+                if (self.ui.key_17.value !== null)
+                    self.ui.key_linkedEntities.value = 17;
+                else if (self.ui.key_22.value !== null)
+                    self.ui.key_linkedEntities.value = 22;
+
                 return this;
             };
 
