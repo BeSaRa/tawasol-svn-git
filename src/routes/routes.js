@@ -1602,5 +1602,11 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_g2g'
             })
+            .state('app.administration.menu-items', {
+                url: '/menu-items',
+                template: cmsTemplateProvider.getView('menu-items'),
+                controller: 'menuItemsCtrl',
+                controllerAs: 'ctrl'
+            })
     });
 };

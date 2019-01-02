@@ -1114,5 +1114,17 @@
         "sort_order": 1,
         "active": true,
         "sort_value": 0
+    },
+    {
+        "ID": 107,
+        "lang_key": "menu_item_menu_items",
+        "icon": "arrow-down-bold-box",
+        "parent": 8,
+        "link": "#add",
+        "state": "app.administration.menu-items",
+        "icon_type": "font",
+        "sort_order": 1,
+        "active": true,
+        "sort_value": 0
     }
 ]
