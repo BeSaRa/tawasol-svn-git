@@ -1062,6 +1062,9 @@ module.exports = function (app) {
                 controllerAs: 'ctrl',
                 permission: 'menu_item_user_inbox',
                 resolve: {
+                    fromNotification: function () {
+                        return false;
+                    },
                     userInboxes: function (userInboxService) {
                         'ngInject';
                         return userInboxService.loadUserInboxes();
@@ -1495,12 +1498,13 @@ module.exports = function (app) {
             .state('app.reports', {
                 url: '/reports/:reportName',
                 template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
-                controller: function ($sce, $stateParams, tokenService, urlService, employeeService) {
+                controller: function ($sce, $stateParams,  contextHelpService , tokenService, urlService, employeeService) {
                     'ngInject';
                     var self = this;
                     var reportName = $stateParams.reportName,
                         reportUrl = urlService.reports.replace('{reportName}', encodeURIComponent(reportName)).replace('{token}', tokenService.getToken()),
                         url = urlService.portal.replace('{reportUrl}', reportUrl);
+                    contextHelpService.setHelpTo('reports');
                     self.url = $sce.trustAsResourceUrl(url);
                 },
                 isReport: true,

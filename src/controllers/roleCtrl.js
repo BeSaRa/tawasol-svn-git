@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('roleCtrl', function (roles,
                                          roleService,
                                          $q,
+                                         _,
                                          $filter,
                                          permissions,
                                          langService,

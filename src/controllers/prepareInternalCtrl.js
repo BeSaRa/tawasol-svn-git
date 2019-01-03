@@ -14,6 +14,7 @@ module.exports = function (app) {
                                                     managerService,
                                                     broadcastService,
                                                     counterService,
+                                                    contextHelpService,
                                                     ResolveDefer,
                                                     gridService) {
         'ngInject';
@@ -24,6 +25,7 @@ module.exports = function (app) {
         self.progress = null;
         // employee service to check the permission in html
         self.employeeService = employeeService;
+        contextHelpService.setHelpTo('internal-prepare');
 
         /**
          * @description All prepare internal items

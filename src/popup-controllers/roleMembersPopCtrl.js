@@ -68,8 +68,7 @@ module.exports = function (app) {
                     return self.getSortingKey('organization', 'Organization');
                 },
                  status: function (model) {
-                    console.log(model);
-                    return ;
+                    return '';
                  }
             },
             searchText: '',

@@ -35,7 +35,7 @@ module.exports = function (app) {
          */
 
         self.progress = null;
-        contextHelpService.setHelpTo('department-inbox-ready-to-export');
+        contextHelpService.setHelpTo('central-archive-ready-to-export');
 
         /**
          * @description All ready To Exports

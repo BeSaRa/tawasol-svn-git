@@ -33,7 +33,7 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'simpleInternalCtrl';
-        contextHelpService.setHelpTo('add-internal');
+        contextHelpService.setHelpTo('simple-add-internal');
         self.employeeService = employeeService;
         // current employee
         self.employee = employeeService.getEmployee();

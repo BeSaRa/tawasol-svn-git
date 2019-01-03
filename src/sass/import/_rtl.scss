@@ -178,5 +178,10 @@ html.rtl {
       border-left: 0;
     }
   }
+
+  md-autocomplete[md-floating-label] .md-show-clear-button button {
+    left: 0;
+    right: auto;
+  }
 }
 

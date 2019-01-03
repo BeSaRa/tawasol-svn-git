@@ -112,7 +112,12 @@ module.exports = function (app) {
                 wyswyg_insert_image: 'اضافة صورة',
                 wyswyg_insert_video: 'اضافة فيديو',
                 wyswyg_word_count: 'كلمات',
-                wyswyg_char_count: 'أحرف'
+                wyswyg_char_count: 'أحرف',
+                yes: 'نعم',
+                no: 'لا',
+                confirm_logout: 'هل أنت متأكد أنك تريد تسجيل الخروج ?',
+                logout: 'تسجيل خروج',
+                user_guide: 'دليل المستخدم'
             },
             en: {
                 root_entity_not_found: 'No Entity has been provided, to contact through. <br /> Or that the entity does not exist for the connection',
@@ -192,7 +197,12 @@ module.exports = function (app) {
                 wyswyg_insert_image: 'Insert image',
                 wyswyg_insert_video: 'Insert video',
                 wyswyg_word_count: 'Words',
-                wyswyg_char_count: 'Characters'
+                wyswyg_char_count: 'Characters',
+                yes: 'Yes',
+                no: 'No',
+                confirm_logout: 'are you sure you want to logout ?',
+                logout: 'logout',
+                user_guide: 'User Guide'
             }
         };
 

@@ -8,6 +8,7 @@ module.exports = function (app) {
                                                 toast,
                                                 dialog,
                                                 ResolveDefer,
+                                                contextHelpService,
                                                 employeeService,
                                                 generator,
                                                 correspondenceService,
@@ -16,7 +17,7 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'g2gReturnedCtrl';
-
+        contextHelpService.setHelpTo('returned-g2g');
         self.progress = null;
 
         /**

@@ -34,7 +34,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'simpleIncomingCtrl';
-        contextHelpService.setHelpTo('add-incoming');
+        contextHelpService.setHelpTo('simple-add-incoming');
         self.employeeService = employeeService;
         // current employee
         self.employee = employeeService.getEmployee();

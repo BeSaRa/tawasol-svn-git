@@ -37,7 +37,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'simpleOutgoingCtrl';
-        contextHelpService.setHelpTo('add-outgoing');
+        contextHelpService.setHelpTo('simple-add-outgoing');
         self.employeeService = employeeService;
         self.emptySubSites = false;
         // current employee

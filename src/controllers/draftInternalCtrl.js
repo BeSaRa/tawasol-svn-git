@@ -15,6 +15,7 @@ module.exports = function (app) {
                                                   managerService,
                                                   validationService,
                                                   employeeService,
+                                                  contextHelpService,
                                                   $timeout,
                                                   viewTrackingSheetService,
                                                   broadcastService,
@@ -30,6 +31,8 @@ module.exports = function (app) {
         self.progress = null;
         // employee service to check the permission in html
         self.employeeService = employeeService;
+
+        contextHelpService.setHelpTo('internal-draft');
 
         /**
          * @description All draft internal mails

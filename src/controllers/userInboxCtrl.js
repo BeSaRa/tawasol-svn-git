@@ -36,13 +36,15 @@ module.exports = function (app) {
                                               mailNotificationService,
                                               UserSubscription,
                                               userSubscriptionService,
+                                              fromNotification,
                                               gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'userInboxCtrl';
         self.employeeService = employeeService;
         self.progress = null;
-        contextHelpService.setHelpTo('user-inbox');
+        self.excludeMe = fromNotification;
+        contextHelpService.setHelpTo('user-inbox' , self.excludeMe);
         var timeoutRefresh = false;
 
         self.langService = langService;

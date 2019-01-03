@@ -9,13 +9,14 @@ module.exports = function (app) {
                                                  dialog,
                                                  employeeService,
                                                  generator,
+                                                 contextHelpService,
                                                  correspondenceService,
                                                  viewDeliveryReportService,
                                                  gridService) {
         var self = this;
 
         self.controllerName = 'g2gSentItemsCtrl';
-
+        contextHelpService.setHelpTo('sent-items-g2g');
         self.progress = null;
 
         /**

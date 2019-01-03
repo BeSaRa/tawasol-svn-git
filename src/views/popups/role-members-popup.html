@@ -46,7 +46,7 @@
                                         <tr md-row md-select="member" md-row-select multiple
                                             ng-model="ctrl.selectedRoleMembers"
                                             md-progress="ctrl.progress"
-                                            ng-repeat="member in ctrl.roleMembers  | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
+                                            ng-repeat="member in ctrl.roleMembers | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order  track by $index">
                                             <td md-cell>{{member.loginName}}</td>
                                             <td md-cell>{{member.arFullName}}</td>
                                             <td md-cell>{{member.enFullName}}</td>
@@ -55,7 +55,7 @@
                                             <td md-cell>
                                                 <md-switch aria-label="{{lang.status}}"
                                                            ng-model="member.status"
-                                                           disabled
+                                                           ng-disabled="true" ng-readonly="true"
                                                            title="{{member.getTranslatedStatus()}}"></md-switch>
 
                                             </td>

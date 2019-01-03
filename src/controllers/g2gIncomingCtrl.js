@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                 employeeService,
                                                 localStorageService,
                                                 generator,
+                                                contextHelpService,
                                                 correspondenceService,
                                                 mailNotificationService,
                                                 ResolveDefer,
@@ -18,6 +19,7 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'g2gIncomingCtrl';
+        contextHelpService.setHelpTo('incoming-g2g');
 
         self.progress = null;
 
