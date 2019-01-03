@@ -6,8 +6,10 @@ module.exports = function (app) {
                                                    employeeService,
                                                    base64Factory,
                                                    localStorageService,
+                                                   GlobalSetting,
                                                    urlService,
                                                    rootEntity,
+                                                   generator,
                                                    Credentials,
                                                    titleService,
                                                    gridService) {
@@ -47,8 +49,11 @@ module.exports = function (app) {
                 }
 
                 lookupService.setLookups(result.data.rs.globalLookup);
-                if (!result.data.rs.isAdminUser)
+
+                if (!result.data.rs.isAdminUser) {
+                    rootEntity.setRootEntityGlobalSetting(result.data.rs.globalSetting, true);
                     self.setLastLoginOrganizationId(result.data.rs.ou);
+                }
                 return result.data.rs;
             });
         };

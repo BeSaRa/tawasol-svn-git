@@ -36,7 +36,7 @@ module.exports = function (app) {
             return self;
         };
 
-        self.$get = function (RootEntity, titleService , $rootScope, $sce, errorCode, $cookies, $stateParams, $http, $location, urlService, dialog, $q) {
+        self.$get = function (RootEntity, GlobalSetting, titleService, generator, lookupService, $rootScope, $sce, errorCode, $cookies, $stateParams, $http, $location, urlService, dialog, $q) {
             'ngInject';
             return {
                 loadInformation: function (rootIdentifier) {
@@ -118,8 +118,8 @@ module.exports = function (app) {
                 getGlobalSettings: function () {
                     return this.returnRootEntity().settings;
                 },
-                setRootEntityGlobalSetting: function (globalSetting) {
-                    rootEntity.setGlobalSetting(globalSetting);
+                setRootEntityGlobalSetting: function (globalSetting, interceptReceived) {
+                    rootEntity.setGlobalSetting(interceptReceived ? generator.interceptReceivedInstance('GlobalSetting', new GlobalSetting(globalSetting)) : globalSetting);
                 },
                 setFileTypesHashMap: function (map) {
                     rootEntity.setFileTypesHashMapToGlobalSettings(map);

@@ -85,7 +85,7 @@ module.exports = function (app) {
                 'useCentralArchiveInternally',
                 'escalationProcess',
                 'simpleCorsSiteSearch',
-                'theme',
+                'theme'
             ];
 
             if (model)

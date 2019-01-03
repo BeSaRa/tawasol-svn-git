@@ -138,6 +138,7 @@ module.exports = function (app) {
                                 result = result.data.rs;
                                 if (result.hasOwnProperty('token')) {
                                     lookupService.setLookups(result.globalLookup); // set lookups
+                                    rootEntity.setRootEntityGlobalSetting(result.globalSetting, true);
                                     var themeId = result.userInfo.defaultThemeID;
                                     var promise = $q.defer();
                                     $timeout(function () {

@@ -192,6 +192,7 @@ module.exports = function (app) {
 
         self.securityLevels = rootEntity.getGlobalSettings().securityLevels;
 
+        console.log(self.securityLevels);
         /**
          * @description Model for binding the fields in other organizations tab
          * @type {*}
@@ -217,8 +218,7 @@ module.exports = function (app) {
                 for (var i = 0; i < fields.length; i++) {
                     fields[i].$setUntouched();
                 }
-            }
-            else {
+            } else {
                 generator.replaceWithOriginalValues(self.applicationUser, self.model, resetProperties, true);
             }
         };
@@ -302,8 +302,7 @@ module.exports = function (app) {
                 self.applicationUser.newsmsEmailNotify = false;
                 self.applicationUser.deadlinesmsNotify = false;
                 self.applicationUser.reminderSmsnotify = false;
-            }
-            else {
+            } else {
                 generator.replaceWithOriginalValues(self.applicationUser, self.model, ['newsmsEmailNotify', 'deadlinesmsNotify', 'reminderSmsnotify']);
             }
             self.resetNotificationsAppUser('newsmsEmailNotify', 'newItemSmspriority', [applicationUserForm.newItemSmspriority]);
@@ -321,8 +320,7 @@ module.exports = function (app) {
                 self.applicationUser.newItemEmailNotify = false;
                 self.applicationUser.deadlineEmailNotify = false;
                 self.applicationUser.reminderEmailNotify = false;
-            }
-            else {
+            } else {
                 generator.replaceWithOriginalValues(self.applicationUser, self.model, ['newItemEmailNotify', 'deadlineEmailNotify', 'reminderEmailNotify']);
             }
             self.resetNotificationsAppUser('newItemEmailNotify', 'newItemEmailPriority', [applicationUserForm.newItemEmailPriority]);
@@ -342,8 +340,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     if (result) {
                         dialog.alertMessage(langService.get('ldap_user_exists'))
-                    }
-                    else {
+                    } else {
                         dialog.alertMessage(langService.get('ldap_user_doesnot_exist'))
                     }
                 });
@@ -478,8 +475,7 @@ module.exports = function (app) {
                         self.applicationUser.signature = result;
                         defer.resolve(tabName);
                     });
-            }
-            else {
+            } else {
                 defer.resolve(tabName);
             }
             return defer.promise.then(function (tab) {
@@ -719,8 +715,7 @@ module.exports = function (app) {
                     .catch(function () {
 
                     })
-            }
-            else {
+            } else {
                 toast.info(langService.get('select_classification_security_level'));
             }
         };
@@ -763,8 +758,7 @@ module.exports = function (app) {
                                 self.updateGridAndResetClassificationViewPermissionModel('classification_view_permission_update_success');
                             });
                     });
-            }
-            else {
+            } else {
                 toast.info(langService.get('select_classification_security_level'));
             }
         };
@@ -877,8 +871,7 @@ module.exports = function (app) {
                                     })
                             });
                     });
-            }
-            else {
+            } else {
                 toast.info(langService.get('select_ou_role_security_level'));
             }
         };
@@ -954,8 +947,7 @@ module.exports = function (app) {
 
                         return true;
                     });
-            }
-            else {
+            } else {
                 //ouApplicationUser.wfsecurity = self.globalSetting.wfsecurity;
                 return ouApplicationUserService
                     .addOUApplicationUser(ouApplicationUser)
@@ -1052,7 +1044,7 @@ module.exports = function (app) {
                         availableProxies: function (ouApplicationUserService) {
                             'ngInject';
                             return ouApplicationUserService
-                                .getAvailableProxies(null, true , ouApplicationUser.applicationUser.id)
+                                .getAvailableProxies(null, true, ouApplicationUser.applicationUser.id)
                                 .then(function (result) {
                                     return result
                                 })
