@@ -21,7 +21,6 @@ module.exports = function (app) {
             var requiredFields = [];
 
             if (model) {
-                lookupService.setLookups(model.globalLookup);
                 self.settings = generator.interceptReceivedInstance('GlobalSetting', new Settings(model.globalSetting));
                 self.rootEntity = model.tawasolEntity;
                 // hide it till finish the service

@@ -46,11 +46,9 @@ module.exports = function (app) {
                     tokenService.setToken(result.data.rs.token);
                 }
 
-                if (!result.data.rs.hasOwnProperty('ouList')) {
-                    lookupService.setLookups(result.data.rs.globalLookup);
-                    if (!result.data.rs.isAdminUser)
-                        self.setLastLoginOrganizationId(result.data.rs.ou);
-                }
+                lookupService.setLookups(result.data.rs.globalLookup);
+                if (!result.data.rs.isAdminUser)
+                    self.setLastLoginOrganizationId(result.data.rs.ou);
                 return result.data.rs;
             });
         };
