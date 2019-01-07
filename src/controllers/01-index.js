@@ -73,4 +73,5 @@ module.exports = function (app) {
     require('./searchOutgoingIncomingCtrl')(app);
     require('./documentFileNewCtrl')(app);
     require('./menuItemsCtrl')(app);
+    require('./centralArchiveSentItemCtrl')(app);
 };

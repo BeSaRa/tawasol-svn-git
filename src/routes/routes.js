@@ -1612,5 +1612,11 @@ module.exports = function (app) {
                 controller: 'menuItemsCtrl',
                 controllerAs: 'ctrl'
             })
+            .state('app.central-archive.sent-items',{
+                url: '/sent-items',
+                template: cmsTemplateProvider.getView('central-archive-sent-items'),
+                controller: 'centralArchiveSentItemCtrl',
+                controllerAs: 'ctrl'
+            })
     });
 };
