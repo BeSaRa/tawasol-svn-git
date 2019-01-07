@@ -50,12 +50,12 @@ module.exports = function (app) {
          * @type {{limit: (*|number), page: number, order: string, limitOptions: *[], pagingCallback: pagingCallback}}
          */
         self.grid = {
-            limit: gridService.getGridPagingLimitByGridName(gridService.grids.department.sentItem) || 5, // default limit
+            limit: gridService.getGridPagingLimitByGridName(gridService.grids.centralArchive.sentItem) || 5, // default limit
             page: 1, // first page
             order: '', // default sorting order
-            limitOptions: gridService.getGridLimitOptions(gridService.grids.department.sentItem, self.sentItemCentralArchives),
+            limitOptions: gridService.getGridLimitOptions(gridService.grids.centralArchive.sentItem, self.sentItemCentralArchives),
             pagingCallback: function (page, limit) {
-                gridService.setGridPagingLimitByGridName(gridService.grids.department.sentItem, limit);
+                gridService.setGridPagingLimitByGridName(gridService.grids.centralArchive.sentItem, limit);
             }
         };
 

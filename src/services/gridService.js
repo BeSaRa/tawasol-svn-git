@@ -68,7 +68,8 @@ module.exports = function (app) {
                 returned: 'g2gRet'
             },
             centralArchive: {
-                readyToExport: 'caReadyToExport'
+                readyToExport: 'caReadyToExport',
+                sentItem: 'caSent'
             },
             search: {
                 outgoing: 'searchOut',
