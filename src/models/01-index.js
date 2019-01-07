@@ -106,6 +106,7 @@ module.exports = function (app) {
     require('./Indicator')(app);
     require('./DistributionWorkflowBulk')(app);
     require('./SentItemDepartmentInbox')(app);
+    require('./SentItemCentralArchive')(app);
     require('./OUDocumentFile')(app);
     require('./Information')(app);
     require('./Member')(app);
