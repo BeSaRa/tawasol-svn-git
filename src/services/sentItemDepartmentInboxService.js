@@ -23,12 +23,16 @@ module.exports = function (app) {
          * @description Load the sent items from server.
          * @returns {Promise|sentItemDepartmentInboxes}
          */
-        self.loadSentItemDepartmentInboxes = function (month, year) {
+        self.loadSentItemDepartmentInboxes = function (month, year, centralArchive) {
             /*
             * Pending(0),Sent(1),Delivered(2),Returned(3),Removed(4)
             * */
             month = month.hasOwnProperty('value') ? month.value : month;
-            return $http.post(urlService.departmentInboxes + '/dept-sent-items/month/' + month + '/year/' + year, [0, 1, 2, 3]).then(function (result) {
+            return $http.post(urlService.departmentInboxes + '/dept-sent-items/month/' + month + '/year/' + year, [0, 1, 2, 3], {
+                params: {
+                    'is-central': !!centralArchive
+                }
+            }).then(function (result) {
                 self.sentItemDepartmentInboxes = generator.generateCollection(result.data.rs, SentItemDepartmentInbox, self._sharedMethods);
                 self.sentItemDepartmentInboxes = generator.interceptReceivedCollection('SentItemDepartmentInbox', self.sentItemDepartmentInboxes);
                 return self.sentItemDepartmentInboxes;

@@ -121,8 +121,7 @@ module.exports = function (app) {
                 });
         };
         self.selectedMonthText = generator.months[self.selectedMonth - 1].text;
-        self.reloadSentItemDepartmentInboxes(self.grid.page);
-        //self.getMonthYearForSentItems();
+        self.reloadSentItemDepartmentInboxes(self.grid.page); // he called it hear
 
         /**
          * @description Recall multiple selected sent items
@@ -232,8 +231,7 @@ module.exports = function (app) {
                                         name: sentItemDepartmentInbox.getTranslatedName()
                                     }));
                                 });
-                        }
-                        else {
+                        } else {
                             dialog.alertMessage(langService.get(result.message));
                         }
                     }
@@ -504,12 +502,10 @@ module.exports = function (app) {
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
                     hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                     if (action.hasOwnProperty('checkAnyPermission')) {
                         hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    }
-                    else {
+                    } else {
                         hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
@@ -778,7 +774,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_composite_document',
-                        permissionKey:'DOWNLOAD_COMPOSITE_BOOK',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         shortcut: false,
                         callback: self.downloadCompositeDocument,
                         class: "action-green",
