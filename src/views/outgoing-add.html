@@ -45,10 +45,11 @@
                             </accordion-title>
                             <accordion-content>
                                 <div>
-                                    <md-checkbox ng-if="!ctrl.outgoing.addMethod && ctrl.employeeService.hasPermissionTo('COMPOSITE_OUTGOING')"
-                                                 ng-change="ctrl.compositeChange()"
-                                                 ng-disabled="ctrl.outgoing.sitesInfoTo.length < 2"
-                                                 ng-model="ctrl.outgoing.isComposite">
+                                    <md-checkbox
+                                            ng-if="!ctrl.outgoing.addMethod && ctrl.employeeService.hasPermissionTo('COMPOSITE_OUTGOING')"
+                                            ng-change="ctrl.compositeChange()"
+                                            ng-disabled="ctrl.outgoing.sitesInfoTo.length < 2"
+                                            ng-model="ctrl.outgoing.isComposite">
                                         {{lang.version_for_each_site}} : {{ctrl.outgoing.isComposite ? lang.yes :
                                         lang.no}}
                                     </md-checkbox>
@@ -170,7 +171,7 @@
                                 {{lang.outgoing_save}}
                             </md-button>
                         </div>
-                        <div ng-if="!ctrl.outgoing.addMethod && !ctrl.editContent">
+                        <div ng-if="(!ctrl.outgoing.addMethod && ctrl.duplicateVersion) || (!ctrl.outgoing.addMethod && !ctrl.editContent)">
                             <md-button ng-disabled="ctrl.document_properties.$invalid
                                                     || !ctrl.outgoing.sitesInfoTo.length
                                                     || !(ctrl.documentInformation || ctrl.outgoing.contentFile)

@@ -48,7 +48,8 @@ module.exports = function (app) {
                                                     cmsTemplate,
                                                     employeeService,
                                                     correspondenceViewService,
-                                                    gridService) {
+                                                    gridService,
+                                                    singleNotifierService) {
         'ngInject';
 
         var self = this;
@@ -71,7 +72,6 @@ module.exports = function (app) {
             wfsecurity: lookupService.getLookupByLookupKey(lookupService.workflowSecurity, rootEntity.getGlobalSettings().wfsecurity),
             securitySchema: lookupService.getLookupByLookupKey(lookupService.securitySchema, rootEntity.getGlobalSettings().securitySchema)
         }) : angular.copy(organization);
-
         /////////////////////////// capture the current workflow security level before update //////////////////////////
         self.initialWFSecurity = self.organization.wfsecurity;
 
@@ -443,13 +443,13 @@ module.exports = function (app) {
                         .addOrganization(self.organization)
                         .then(function () {
                             self.model = angular.copy(self.organization);
-                            toast.success(langService.get('add_success').change({name: self.organization.getNames()}));
                             self.recreateAllNeeds(self.organization);
                             referencePlanNumberService.loadReferencePlanNumbers().then(function (result) {
                                 self.listReferencePlanNumbers = result;
                                 organizationService
                                     .loadOrganizations()
                                     .then(function () {
+                                        toast.success(langService.get('add_success').change({name: self.organization.getNames()}));
                                         if (self.editMode) {
                                             dialog.hide(self.model);
                                         }
@@ -606,8 +606,7 @@ module.exports = function (app) {
                     }).catch(function (result) {
                     defer.reject(false);
                 })
-            }
-            else {
+            } else {
                 defer.resolve(true);
             }
             defer.promise.then(function (response) {

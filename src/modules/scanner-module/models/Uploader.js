@@ -38,10 +38,7 @@ module.exports = function (app) {
                 request.jsonp = null;
                 request.data = '{ "imageID": "' + image.ImageID + '", "fileType":' + image.FileType + ' }';
 
-                $timeout(function () {
-                    _beginUploadCallback.call(self, {UploadID: 'BeSaRa'}, image)
-                },200);
-
+                _beginUploadCallback.call(self, {UploadID: 'BeSaRa'}, image);
             };
 
             var _beginUploadCallback = function (data, image) {
@@ -53,7 +50,7 @@ module.exports = function (app) {
                 var self = this;
                 var request = getDefaultRequest();
                 request.url = CCToolkit.getServiceUrl() + "getimagedatastring?session=" + CCToolkit.getSessionId() + "&imageID=" + image.ImageID + "&offset=" + image.Offset + "&size=" + image.ChunkSize + "&encoding=" + DataEncoding.Base64;
-                request.$ignore = true;
+                // request.$ignore = true;
                 request.success = function (data) {
                     _getImageDataBytesCallback.call(self, data, image);
                 };

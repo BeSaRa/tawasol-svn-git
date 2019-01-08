@@ -374,7 +374,6 @@ module.exports = function (app) {
              * @return {promise}
              */
             organizationAdd: function (organization, $event) {
-
                 return dialog.showDialog({
                     template: cmsTemplate.getPopup('organization'),
                     targetEvent: $event,

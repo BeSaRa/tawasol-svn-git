@@ -9,7 +9,8 @@ module.exports = function (app) {
             bindToController: true,
             scope: {
                 organizations: '=',
-                hasChanges: '='
+                hasChanges: '=',
+                reloadCallback: '&'
             }
         }
     })

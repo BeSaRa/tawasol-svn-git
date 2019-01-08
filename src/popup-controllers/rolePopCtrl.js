@@ -8,7 +8,9 @@ module.exports = function (app) {
                                             toast,
                                             dialog,
                                             generator,
-                                            langService) {
+                                            langService,
+                                            $filter,
+                                            _) {
         'ngInject';
         var self = this;
         self.controllerName = 'rolePopCtrl';
@@ -24,6 +26,24 @@ module.exports = function (app) {
             enName: 'english_name',
             customRolePermission: 'permissions'
         };
+
+        self.search = '';
+        self.permissions = {};
+        self.totalPermissionsCount = 0;
+
+        // for the first time the controller initialize
+        self.permissions = _getPermissions(langService.current);
+
+        _.map(self.permissions, function (keys) {
+            _.map(keys, function (permissionsArr) {
+                _.map(permissionsArr, function (value) {
+                    if (value)
+                        self.totalPermissionsCount++;
+                })
+            })
+        });
+        // for any change happened in language rebuild the permissions with the current corrected key.
+        langService.listeningToChange(_getPermissions);
 
         /**
          * Add new Role
@@ -214,6 +234,49 @@ module.exports = function (app) {
                 return true;
             }
         }
+
+
+        function _getPermissions(current) {
+            return current === 'en' ? self.permissionsList[0] : self.permissionsList[1];
+        }
+
+        self.searchChanges = function () {
+            self.permissions = $filter('permissionFilter')(_getPermissions(langService.current), self.search);
+        };
+
+        self.isIndeterminate = function () {
+            return (self.role.customRolePermission.length !== 0 && self.role.customRolePermission.length !== self.totalPermissionsCount);
+        };
+
+        self.isChecked = function () {
+            return self.role.customRolePermission.length === self.totalPermissionsCount;
+        };
+
+        /**
+         * @description parent checkbox
+         */
+        self.toggleAll = function () {
+            // debugger;
+            if (self.isChecked()) {
+                self.role.customRolePermission = [];
+            }
+            else {
+                for (var key in self.permissions) {
+                    var permission = self.permissions[key];
+                    for (var i = 0; i < permission.length; i++) {
+                        for (var j = 0; j < permission[i].length; j++) {
+                            if (permission[i][j]) {
+                                var customRolePermissionIds = _.map(self.role.customRolePermission,"id");
+                                if (customRolePermissionIds.indexOf(permission[i][j]['id']) === -1) {
+                                    self.role.customRolePermission.push(permission[i][j]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
 
     });
 };

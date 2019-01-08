@@ -12,8 +12,8 @@ module.exports = function (app) {
         var self = this;
         self.controllerName = 'organizationsCtrl';
         organizationChartService.createHierarchy(organizations);
-        self.organizations = organizationChartService.rootOrganizations;
-        self.selectedFilter = self.organizations;
+        self.organizationChartService = organizationChartService;
+        self.selectedFilter = self.organizationChartService.rootOrganizations;
 
         contextHelpService.setHelpTo('organizations');
 
@@ -25,8 +25,7 @@ module.exports = function (app) {
                         .loadOrganizations()
                         .then(function (result) {
                             organizationChartService.createHierarchy(result);
-                            self.organizations = organizationChartService.rootOrganizations;
-                            self.selectedFilter = self.organizations;
+                            self.selectedFilter = self.organizationChartService.rootOrganizations;
                         });
                 })
         };
@@ -62,7 +61,7 @@ module.exports = function (app) {
             if (selected) {
                 self.selectedFilter = [selected];
             } else {
-                self.selectedFilter = self.organizations;
+                self.selectedFilter = self.organizationChartService.rootOrganizations;
             }
         };
 

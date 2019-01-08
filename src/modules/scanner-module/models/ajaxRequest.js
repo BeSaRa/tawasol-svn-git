@@ -1,24 +1,19 @@
 module.exports = function (app) {
-    app.factory('ajaxRequest', function ($timeout, $rootScope, $sce) {
+    app.factory('ajaxRequest', function ($timeout, $http, $rootScope, $sce) {
         'ngInject';
         return function ajaxRequest(param) {
             var successCallback = param.success;
             var errorCallback = param.error;
-            if (!param.$ignore) {
-                param.success = function (data) {
-                    $rootScope.$apply(function () {
-                        successCallback(data);
-                    });
-                };
-                param.error = function (error) {
-                    $rootScope.$apply(function () {
-                        errorCallback(error);
-                    });
-                };
-            }
-            delete param.$ignore;
-
-            $.ajax(param);
+            $http.jsonp($sce.trustAsResourceUrl(param.url), {
+                jsonpCallbackParam: 'method',
+                params: {
+                    _: Math.random()
+                }
+            }).then(function (data) {
+                successCallback(data.data);
+            }, function (data) {
+                errorCallback(data.data);
+            });
         }
     });
-};
+}

@@ -12,5 +12,9 @@ module.exports = function (app) {
             array.splice(new_index, 0, array.splice(old_index, 1)[0]);
             return array;
         };
+
+        self.closest = function (el, fn) {
+            return el && ((fn(el) && el !== document.querySelector('org-chart')) ? el : self.closest(el.parentNode, fn));
+        }
     })
 };

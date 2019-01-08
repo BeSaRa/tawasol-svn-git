@@ -143,6 +143,7 @@ module.exports = function (app) {
                 var request = getDefaultRequest();
                 request.url = _serviceURL + "createscanjob?session=" + _sessionID + "&pages=" + 0 + "&filetype=" + FileType.AutoDetect + "&compression=" + ImageCompression.AutoDetect;
                 request.success = function (data) {
+                    console.log(data);
                     _onScanStarted(data, false);
                 };
                 ajaxRequest(request);
@@ -255,7 +256,6 @@ module.exports = function (app) {
             };
 
             var _pollScannerCallback = function (data) {
-
                 if (data.Status === 0 ||
                     data.Status === ISISWebErrorCode.ScanCancelError ||
                     data.Status === ISISWebErrorCode.InvalidLicenseScanRestriction) {
@@ -281,7 +281,6 @@ module.exports = function (app) {
             };
 
             var _discoverService = function (callback) {
-
                 _attemptsNumber = 0;
                 var serviceURLs = _getServiceURLs.call(this);
                 for (var i = 0; i < serviceURLs.length; i++) {

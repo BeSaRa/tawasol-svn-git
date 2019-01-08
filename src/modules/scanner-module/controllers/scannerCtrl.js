@@ -318,7 +318,6 @@ module.exports = function (app) {
         }
 
         function addImageToGallery(page) {
-            // var imageUrl = page.getCurrent() ? page.getCurrent(100, 0) : page.getOriginal(100, 0);
             self.showPage(page, false);
         }
 
@@ -872,7 +871,9 @@ module.exports = function (app) {
          * @param loadSameScanner
          */
         self.createCCSession = function (loadSameScanner) {
-            var defer = $q.defer(), licenseId = "Ebla Computer Consultancy Company_2AD47-APRQ8-Y9E64-FSBZH";
+            var defer = $q.defer(),
+                licenseId = "Ebla Computer Consultancy Company_2AD47-APRQ8-Y9E64-FSBZH";
+                // licenseId = "EBLA Computer Consultancy Co-CMS_9JBF8-9JKE8-DDE64-XRC22";
             window['SCANNER_LICENSE_ID'] = licenseId;
             CCToolkit.createSession({
                 licenseId: licenseId,

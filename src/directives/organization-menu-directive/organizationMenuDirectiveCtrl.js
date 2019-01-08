@@ -3,24 +3,21 @@ module.exports = function (app) {
                                                               langService,
                                                               referencePlanNumberService,
                                                               organizationService,
-                                                              $rootScope,
-                                                              $element) {
+                                                              organizationChartService,
+                                                              $element,
+                                                              helper,
+                                                              $q) {
         'ngInject';
         var self = this;
         self.controllerName = 'organizationMenuDirectiveCtrl';
         $scope.lang = langService.getCurrentTranslate();
 
         self.openAddDialog = function (organization, $event) {
-            self.chartElement = $element.parents('.orgchart');
-            self.style = self.chartElement.attr('style');
             organizationService
                 .controllerMethod
                 .organizationAdd(organization, $event)
-                .then(function () {
-                    self.chartElement.attr('style', self.style);
-                })
-                .catch(function () {
-                    self.chartElement.attr('style', self.style);
+                .finally(function () {
+                    self.reloadCallback();
                 });
         };
 
@@ -29,14 +26,7 @@ module.exports = function (app) {
                 .controllerMethod
                 .organizationEdit(organization, $event)
                 .then(function () {
-                    referencePlanNumberService
-                        .loadReferencePlanNumbers()
-                        .then(function () {
-                            organizationService.loadOrganizations();
-                        })
-                })
-                .catch(function () {
-
+                    self.reloadCallback();
                 })
         };
 
@@ -44,8 +34,12 @@ module.exports = function (app) {
             organizationService
                 .controllerMethod
                 .organizationDelete(organization, $event)
-        }
+        };
 
+
+        $scope.$on('$destroy', function () {
+            console.log("Destroy");
+        });
 
     });
 };

@@ -12,6 +12,7 @@ module.exports = function (app) {
         self.controllerName = 'organizationChartDirectiveCtrl';
         $scope.nodeList = [];
         self.organizations = [];
+        $scope.orgChart = null;
 
         self.resetView = function () {
             $element.find('.orgchart').css('transform', '');
@@ -26,7 +27,7 @@ module.exports = function (app) {
             $element.css({
                 direction: 'ltr'
             });
-            $element.empty();
+            $element.html('');
             $element.append(angular.element('<div/>', {style: 'text-align:center'}));
             // console.log("NODES", nodes);
             // // set the nodes to bind it later  with the orgChat directive.
@@ -36,12 +37,13 @@ module.exports = function (app) {
             root.children = nodes;
             root.itIsRoot = true;
             $timeout(function () {
-                $($element.children()).orgchart({
+                $scope.orgChart = $($element.children()).orgchart({
                     data: root,
                     pan: true,
                     nodeContent: 'enName',
                     nodeTitle: 'arName',
                     zoom: true,
+                    nodeID: 'id',
                     toggleSiblingsResp: true,
                     createNode: function ($node, data) {
                         if (!$scope.hasOwnProperty('nodeList'))
@@ -55,7 +57,9 @@ module.exports = function (app) {
                         var organizationMenuDirective = angular
                             .element('<organization-menu-directive>', {
                                 id: 'node-' + nodeId,
-                                node: 'nodeList[' + index + ']'
+                                node: 'nodeList[' + index + ']',
+                                'org-chart': 'orgChart',
+                                'reload-callback': 'orgCtrl.reloadCallback()'
                             });
 
                         var title = angular.element('<span />');
@@ -80,7 +84,7 @@ module.exports = function (app) {
                             .find('.title')
                             .attr('layout', 'row')
                             .attr('layout-align', 'center center')
-                            .html('')
+                            .html('') // empty node from anything
                             .append(title)
                             .append(organizationMenuDirective)
                             .end()
@@ -91,8 +95,7 @@ module.exports = function (app) {
                         if (data.hasRegistry || data.centralArchive) {
                             $node.append(iconsWrapper);
                         }
-
-                        $compile($node.attr('ng-click', 'orgCtrl.editNode(' + index + ')'))($scope);
+                        $compile($node)($scope);
                     }
                 });
             }, 500);
@@ -104,7 +107,7 @@ module.exports = function (app) {
 
         $scope.$watch(function () {
             return self.organizations;
-        }, function (value) {
+        }, function () {
             self.render(self.organizations);
         });
 

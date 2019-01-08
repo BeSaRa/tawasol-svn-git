@@ -6,7 +6,9 @@ module.exports = function (app) {
             replace: true,
             template: require('./organization-menu-template.html'),
             scope: {
-                node: '='
+                node: '=',
+                orgChart: '=',
+                reloadCallback: '&'
             },
             controller: 'organizationMenuDirectiveCtrl',
             controllerAs: 'orgMenuCtrl',

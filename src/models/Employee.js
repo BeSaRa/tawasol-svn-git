@@ -129,7 +129,7 @@ module.exports = function (app) {
              */
             Employee.prototype.setPermissions = function (permissions) {
                 this.permissions = permissions;
-                singleNotifierService.getNotifierByName('employeePermissionChange').notify(this);
+                singleNotifierService.getNotifierByName('EMPLOYEE_PERMISSION_CHANGE').notify(this);
                 return this;
             };
             /**
@@ -340,7 +340,7 @@ module.exports = function (app) {
              * @param callback
              */
             Employee.prototype.listeningToPermissionsChanges = function (callback) {
-                singleNotifierService.getNotifierByName('employeePermissionChange').promise.then(function () {
+                singleNotifierService.getNotifierByName('EMPLOYEE_PERMISSION_CHANGE').promise.then(function () {
                     // for the resolve not needs
                 }, function () {
                     // for the reject not needs
