@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.controller('centralArchiveSentItemCtrl', function (lookupService,
                                                            sentItemDepartmentInboxService,
                                                            SentItemCentralArchive,
+                                                           SentItemDepartmentInbox,
                                                            $q,
                                                            $filter,
                                                            $state,
@@ -378,7 +379,7 @@ module.exports = function (app) {
                 return;
             }
 
-            centralArchiveItem.viewNewCentralArchiveSentItem(self.gridActions, 'centralArchiveSentItem', $event)
+            centralArchiveItem.viewNewDepartmentSentItem(self.gridActions, 'centralArchiveSentItem', $event)
                 .then(function () {
                     self.reloadSentItemCentralArchives(self.grid.page);
                 })

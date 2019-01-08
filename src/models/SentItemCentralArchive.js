@@ -176,13 +176,13 @@ module.exports = function (app) {
              * @param $event
              * @returns {*}
              */
-            SentItemCentralArchive.prototype.viewNewCentralArchiveSentItem = function (actions, queueName, $event) {
+           /* SentItemCentralArchive.prototype.viewNewCentralArchiveSentItem = function (actions, queueName, $event) {
                 var model = {
                     vsId: this.vsId,
                     docClassName: 'outgoing'
                 };
                 return viewDocumentService.viewDepartmentSentItemDocument(model, actions, queueName, $event);
-            };
+            };*/
 
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
