@@ -1,9 +1,10 @@
 module.exports = function (app) {
-    app.controller('selectedWorkflowItemsDirectiveCtrl', function ($scope, _, dialog, cmsTemplate, langService, DistributionWFItem, LangWatcher) {
+    app.controller('selectedWorkflowItemsDirectiveCtrl', function ($scope, _, rootEntity, dialog, cmsTemplate, langService, DistributionWFItem, LangWatcher) {
         'ngInject';
         var self = this;
         self.controllerName = 'selectedWorkflowItemsDirectiveCtrl';
         LangWatcher($scope);
+        self.globalSettings = rootEntity.getGlobalSettings();
         // workflowItems users , organizations , workflowGroups
         self.workflowItems = [];
         // selected workflow items
@@ -41,7 +42,21 @@ module.exports = function (app) {
             distWorkflowItem
                 .setDueDate(result.dueDate)
                 .setComments(result.comments)
-                .setAction(result.action);
+                .setAction(result.action)
+                .setSendEmail(result.sendEmail)
+                .setSendSMS(result.sendSMS);
+        }
+
+        /**
+         * @description just for apply notifications settings
+         * @param distWorkflowItem
+         * @param result
+         * @private
+         */
+        function _applyNotificationSettings(distWorkflowItem, result) {
+            distWorkflowItem
+                .setSendSMS(result.sendSMS)
+                .setSendEmail(result.sendEmail);
         }
 
         /**
@@ -104,6 +119,13 @@ module.exports = function (app) {
                 });
         };
 
+        self.applyNotificationSettings = function ($event) {
+            _.map(self.workflowItems, function (item, index) {
+                _applyNotificationSettings(self.workflowItems[index], self.defaultWorkflowItemsSettings);
+            });
+        };
+
+
         self.setWorkflowItemSettings = function (workflowItem, $event) {
             return self
                 .workflowItemSettingDialog((langService.get('workflow_properties') + ' ' + workflowItem.getTranslatedName()), workflowItem, $event)
@@ -112,14 +134,14 @@ module.exports = function (app) {
                 });
         };
 
-        /**
-         * @description Sets the workflow action
-         * @param workflowItem
-         * @param $event
-         */
-        self.setWFAction = function (workflowItem, $event) {
-            workflowItem.setAction(workflowItem.selectedWFAction);
-        };
+        // /**
+        //  * @description Sets the workflow action
+        //  * @param workflowItem
+        //  * @param $event
+        //  */
+        // self.setWFAction = function (workflowItem, $event) {
+        //     workflowItem.setAction(workflowItem.selectedWFAction);
+        // };
 
         /**
          * @description Sets the workflow comment

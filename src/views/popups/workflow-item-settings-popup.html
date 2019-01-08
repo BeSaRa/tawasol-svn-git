@@ -4,7 +4,7 @@
             <div class="p20">{{ctrl.dialogTitle}}</div>
             <close-dialog-directive></close-dialog-directive>
         </md-toolbar>
-        <md-content scroll-directive>
+        <md-content scroll-directive="">
             <div class="p20" layout="column">
                 <form name="distWorkflowItem_form">
                     <div layout="row">
@@ -27,6 +27,18 @@
                                            ng-model="ctrl.distWorkflowItem.dueDate"></md-datepicker>
                         </md-input-container>
                     </div>
+                    <div ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification" layout="row">
+                        <div flex>
+                            <md-checkbox ng-disabled="!ctrl.globalSettings.enableSMSNotification" ng-model="ctrl.distWorkflowItem.sendSMS">
+                                {{lang.sms_workflow_notification}}
+                            </md-checkbox>
+                        </div>
+                        <div flex>
+                            <md-checkbox ng-disabled="!ctrl.globalSettings.enableEmailNotification" ng-model="ctrl.distWorkflowItem.sendEmail">
+                                {{lang.email_workflow_notification}}
+                            </md-checkbox>
+                        </div>
+                    </div>
                     <div layout="row">
                         <md-input-container flex>
                             <label for="comment">{{lang.select_comment}}</label>
@@ -48,18 +60,21 @@
                 </form>
             </div>
         </md-content>
-        <div layout="row">
-            <div>
-                <md-button class="md-raised" ng-disabled="distWorkflowItem_form.$invalid"
-                           ng-click="ctrl.setDistWorkflowItemProperties()">
-                    {{lang.set}}
-                </md-button>
-            </div>
-            <span flex></span>
-            <div>
-                <md-button class="md-raised" ng-click="ctrl.closeDistWorkflowItemProperties()">{{lang.close}}
-                </md-button>
+        <div>
+            <div layout="row">
+                <div>
+                    <md-button class="md-raised" ng-disabled="distWorkflowItem_form.$invalid"
+                               ng-click="ctrl.setDistWorkflowItemProperties()">
+                        {{lang.set}}
+                    </md-button>
+                </div>
+                <span flex></span>
+                <div>
+                    <md-button class="md-raised" ng-click="ctrl.closeDistWorkflowItemProperties()">{{lang.close}}
+                    </md-button>
+                </div>
             </div>
         </div>
+
     </div>
 </md-dialog>

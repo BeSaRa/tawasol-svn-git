@@ -29,7 +29,8 @@ module.exports = function (app) {
                 callbackAddSelectedUserWithIgnoreToGrid: '=',
                 callbackDeleteFromSelected: '=',
                 workflowActions: '=',
-                workflowComments: '='
+                workflowComments: '=',
+                applyNotificationSettings: '='
             }
         }
     });

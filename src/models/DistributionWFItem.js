@@ -8,6 +8,8 @@ module.exports = function (app) {
             self.escalationUser = null;
             self.escalationStatus = 0;
             self.comments = null;
+            self.sendSMS = false;
+            self.sendEmail = false;
 
             // delete it when send to service.
             self.arName = null;
@@ -76,6 +78,15 @@ module.exports = function (app) {
             };
             DistributionWFItem.prototype.setComments = function (comments) {
                 this.comments = comments && comments.hasOwnProperty('id') ? comments.comment : comments;
+                return this;
+            };
+
+            DistributionWFItem.prototype.setSendSMS = function (sendSMS) {
+                this.sendSMS = sendSMS;
+                return this;
+            };
+            DistributionWFItem.prototype.setSendEmail = function (sendEmail) {
+                this.sendEmail = sendEmail;
                 return this;
             };
             DistributionWFItem.prototype.clearWFCommentSearchText = function () {

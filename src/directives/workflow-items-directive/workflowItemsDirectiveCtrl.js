@@ -1,9 +1,11 @@
 module.exports = function (app) {
-    app.controller('workflowItemsDirectiveCtrl', function ($scope, dialog, cmsTemplate, DistributionWFItem, langService, LangWatcher) {
+    app.controller('workflowItemsDirectiveCtrl', function ($scope, dialog, rootEntity, cmsTemplate, DistributionWFItem, langService, LangWatcher) {
         'ngInject';
         var self = this;
         self.controllerName = 'workflowItemsDirectiveCtrl';
         LangWatcher($scope);
+
+        self.globalSettings = rootEntity.getGlobalSettings();
 
         self.workflowItems = [];
 
@@ -39,7 +41,21 @@ module.exports = function (app) {
             distWorkflowItem
                 .setDueDate(result.dueDate)
                 .setComments(result.comments)
-                .setAction(result.action);
+                .setAction(result.action)
+                .setSendSMS(result.sendSMS)
+                .setSendEmail(result.sendEmail);
+        }
+
+        /**
+         * @description just for apply notifications settings
+         * @param distWorkflowItem
+         * @param result
+         * @private
+         */
+        function _applyNotificationSettings(distWorkflowItem, result) {
+            distWorkflowItem
+                .setSendSMS(result.sendSMS)
+                .setSendEmail(result.sendEmail);
         }
 
         self.runItemNotExists = function (workflowItem) {
@@ -76,6 +92,13 @@ module.exports = function (app) {
                     });
                 });
         };
+
+        self.applyNotificationSettings = function ($event) {
+            _.map(self.workflowItems, function (item, index) {
+                _applyNotificationSettings(self.workflowItems[index], self.defaultWorkflowItemsSettings);
+            });
+        };
+
 
         self.setWorkflowItemSettings = function (workflowItem, $event) {
             return self
@@ -116,9 +139,9 @@ module.exports = function (app) {
          * @param workflowItem
          * @param $event
          */
-        self.setWFAction = function (workflowItem, $event) {
-            workflowItem.setAction(workflowItem.selectedWFAction);
-        };
+        // self.setWFAction = function (workflowItem, $event) {
+        //     workflowItem.setAction(workflowItem.selectedWFAction);
+        // };
 
         /**
          * @description Prevent the default dropdown behavior of keys inside the search box of workflow action dropdown

@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('workflowItemSettingPopCtrl', function (distWorkflowItem, _, comments, workflowActions, dialogTitle, dialog) {
+    app.controller('workflowItemSettingPopCtrl', function (distWorkflowItem, rootEntity ,_, comments, workflowActions, dialogTitle, dialog) {
         'ngInject';
         var self = this;
         self.controllerName = 'workflowItemSettingPopCtrl';
@@ -15,6 +15,8 @@ module.exports = function (app) {
         self.minDate = new Date();
         // selected comment
         self.comment = _getMatchedComment(self.distWorkflowItem);
+
+        self.globalSettings = rootEntity.getGlobalSettings();
 
         /**
          * @description find matched comment if not edited.

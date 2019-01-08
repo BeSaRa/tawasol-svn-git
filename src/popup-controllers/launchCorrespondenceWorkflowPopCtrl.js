@@ -245,8 +245,7 @@ module.exports = function (app) {
         // to display alert to inform the user this document not approved and will not send it to many users.
         if (!isDeptIncoming) {
             _justForYourInformationDialog(self.multiStatus, true);
-        }
-        else {
+        } else {
             approvedStatus = false;
         }
 
@@ -261,8 +260,7 @@ module.exports = function (app) {
                 }), function (matchingResult) {
                     return matchingResult === true;
                 }));
-            }
-            else {
+            } else {
                 return self.correspondence.getInfo().documentClass !== 'internal';
             }
         };
@@ -274,8 +272,7 @@ module.exports = function (app) {
                 }), function (matchingResult) {
                     return matchingResult === true;
                 }));
-            }
-            else {
+            } else {
                 return self.correspondence.getSecurityLevelLookup().lookupKey === 4;
             }
 
@@ -496,7 +493,21 @@ module.exports = function (app) {
             distWorkflowItem
                 .setDueDate(result.dueDate)
                 .setComments(result.comments)
-                .setAction(result.action);
+                .setAction(result.action)
+                .setSendSMS(result.sendSMS)
+                .setSendEmail(result.sendEmail);
+        }
+
+        /**
+         * @description just for apply notifications settings
+         * @param distWorkflowItem
+         * @param result
+         * @private
+         */
+        function _applyNotificationSettings(distWorkflowItem, result) {
+            distWorkflowItem
+                .setSendSMS(result.sendSMS)
+                .setSendEmail(result.sendEmail);
         }
 
         /**
@@ -996,6 +1007,13 @@ module.exports = function (app) {
                         _setDistWorkflowItem(collection[index], result);
                     });
                 });
+        };
+
+        self.applyNotificationSettings = function (collection, distWorkflowItem, $event) {
+            console.log(collection);
+            _.map(collection, function (item, index) {
+                _applyNotificationSettings(collection[index], distWorkflowItem);
+            });
         };
         /**
          * @description set setting to dist workflowItem.

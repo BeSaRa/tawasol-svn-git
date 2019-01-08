@@ -60,6 +60,7 @@
                                 <md-tab label="{{lang.users}}">
                                     <div>
                                         <workflow-users-directive
+                                                apply-notification-settings="ctrl.applyNotificationSettings"
                                                 exclude-selected="false"
                                                 allow-favorites="true"
                                                 callback-delete-from-selected="ctrl.deleteFromSelected"
@@ -164,6 +165,7 @@
                         </div>
 
                         <workflow-users-directive
+                                apply-notification-settings="ctrl.applyNotificationSettings"
                                 exclude-selected="true"
                                 allow-favorites="true"
                                 callback-delete-from-selected="ctrl.deleteFromSelected"
@@ -207,6 +209,7 @@
                             <br/>
                         </div>
                         <workflow-users-directive
+                                apply-notification-settings="ctrl.applyNotificationSettings"
                                 exclude-selected="false"
                                 allow-favorites="false"
                                 callback-delete-from-selected="ctrl.deleteFromSelected"
@@ -250,6 +253,7 @@
                             <br/>
                         </div>
                         <workflow-users-directive
+                                apply-notification-settings="ctrl.applyNotificationSettings"
                                 exclude-selected="false"
                                 allow-favorites="false"
                                 callback-delete-from-selected="ctrl.deleteFromSelected"
@@ -293,6 +297,7 @@
                             <br/>
                         </div>
                         <workflow-users-directive
+                                apply-notification-settings="ctrl.applyNotificationSettings"
                                 exclude-selected="false"
                                 allow-favorites="false"
                                 callback-delete-from-selected="ctrl.deleteFromSelected"

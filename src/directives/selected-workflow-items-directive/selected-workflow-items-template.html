@@ -21,6 +21,29 @@
                     <th ng-if="!ctrl.selectedWorkflowItems.length" md-column>
                         {{lang.comment}}
                     </th>
+                    <th md-column ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification">
+                        <md-menu>
+                            <md-button tooltip="{{lang.notification_settings}}" class="md-icon-button" ng-click="$mdMenu.open()">
+                                <md-icon md-svg-icon="bell-ring"></md-icon>
+                            </md-button>
+                            <md-menu-content>
+                                <md-menu-item>
+                                    <div>
+                                        <md-checkbox ng-disabled="!ctrl.globalSettings.enableSMSNotification" ng-change="ctrl.applyNotificationSettings($event)" ng-model="ctrl.defaultWorkflowItemsSettings.sendSMS">
+                                            {{lang.sms_workflow_notification}}
+                                        </md-checkbox>
+                                    </div>
+                                </md-menu-item>
+                                <md-menu-item>
+                                    <div>
+                                        <md-checkbox ng-disabled="!ctrl.globalSettings.enableEmailNotification" ng-change="ctrl.applyNotificationSettings($event)"  ng-model="ctrl.defaultWorkflowItemsSettings.sendEmail">
+                                            {{lang.email_workflow_notification}}
+                                        </md-checkbox>
+                                    </div>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </th>
                     <th md-column>
                         <div layout="row">
                             <div>
@@ -71,9 +94,10 @@
                                 </md-menu-content>
                             </md-menu>
                         </md-menu-bar>-->
-                        <md-select ng-model="workflowItem.selectedWFAction"
+                        <!--ng-change="ctrl.setWFAction(workflowItem, $event)"-->
+                        <md-select ng-model="workflowItem.action"
                                    class="select-wf-action"
-                                   ng-change="ctrl.setWFAction(workflowItem, $event)"
+                                   ng-model-options="{trackBy:'$value.id'}"
                                    aria-label="workflow action"
                                    md-on-close="workflowItem.clearWFActionSearchText()"
                                    data-md-container-class="select-header-container"
@@ -127,6 +151,29 @@
                                     md-highlight-flags="i">{{comment.getCommentTitle()}}
                             </md-option>
                         </md-select>
+                    </td>
+                    <td md-cell ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification">
+                        <md-menu>
+                            <md-button tooltip="{{lang.notification_settings}}" class="md-icon-button" ng-click="$mdMenu.open()">
+                                <md-icon md-svg-icon="bell-ring"></md-icon>
+                            </md-button>
+                            <md-menu-content>
+                                <md-menu-item>
+                                    <div>
+                                        <md-checkbox ng-disabled="!ctrl.globalSettings.enableSMSNotification" ng-model="workflowItem.sendSMS">
+                                            {{lang.sms_workflow_notification}}
+                                        </md-checkbox>
+                                    </div>
+                                </md-menu-item>
+                                <md-menu-item>
+                                    <div>
+                                        <md-checkbox ng-disabled="!ctrl.globalSettings.enableEmailNotification" ng-model="workflowItem.sendEmail">
+                                            {{lang.email_workflow_notification}}
+                                        </md-checkbox>
+                                    </div>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
                     </td>
                     <td md-cell>
                         <div layout="row">
