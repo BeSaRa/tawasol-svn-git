@@ -1010,7 +1010,6 @@ module.exports = function (app) {
         };
 
         self.applyNotificationSettings = function (collection, distWorkflowItem, $event) {
-            console.log(collection);
             _.map(collection, function (item, index) {
                 _applyNotificationSettings(collection[index], distWorkflowItem);
             });
