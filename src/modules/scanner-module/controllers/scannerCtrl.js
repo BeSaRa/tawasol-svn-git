@@ -432,7 +432,6 @@ module.exports = function (app) {
             self.width = width;
             self.height = height;
 
-            // console.log(page.getCurrent(width, height));
 
             // TODO here we can push the current images selected
             showImageInfo(data, page);
@@ -646,7 +645,6 @@ module.exports = function (app) {
                 var filters = getDefaultFiltersOrder();
                 _.map(filters, function (filter) {
                     self.filters.push(filter);
-                    console.log("HIHIHIHI");
                 });
             }
         }
