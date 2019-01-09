@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                        $q,
                                                        $filter,
                                                        moment,
+                                                       rootEntity,
                                                        langService,
                                                        toast,
                                                        contextHelpService,
@@ -95,6 +96,7 @@ module.exports = function (app) {
         self.reloadPublicAnnouncements = function (pageNumber) {
             var defer = $q.defer();
             self.progress = defer.promise;
+            rootEntity.loadInformation();
             return publicAnnouncementService
                 .loadPublicAnnouncements()
                 .then(function (result) {
