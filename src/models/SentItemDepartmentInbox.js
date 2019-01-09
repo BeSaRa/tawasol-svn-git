@@ -3,7 +3,8 @@ module.exports = function (app) {
                                                      Indicator,
                                                      langService,
                                                      managerService,
-                                                     lookupService) {
+                                                     lookupService,
+                                                     _) {
         'ngInject';
         return function SentItemDepartmentInbox(model) {
             var self = this, correspondenceService = null, viewDocumentService;
@@ -182,6 +183,13 @@ module.exports = function (app) {
                     docClassName: 'outgoing'
                 };
                 return viewDocumentService.viewDepartmentSentItemDocument(model, actions, queueName, $event);
+            };
+
+            /**
+             * @description check if subSiteTo internal RegOu
+             */
+            SentItemDepartmentInbox.prototype.isSubSiteToInternalRegOu = function () {
+                return _.startsWith(model.subSiteToId, "1");
             };
 
             // don't remove CMSModelInterceptor from last line

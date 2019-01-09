@@ -612,7 +612,9 @@ module.exports = function (app) {
                 callback: self.recall,
                 class: "action-green",
                 hide: false, /*In Phase 2*/
-                checkShow: self.checkToShowAction
+                checkShow: function (action, model) {
+                    return self.checkToShowAction && model.isSubSiteToInternalRegOu();
+                }
             },
             // Launch New Distribution Workflow
             {
