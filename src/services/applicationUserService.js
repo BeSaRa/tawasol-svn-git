@@ -11,6 +11,7 @@ module.exports = function (app) {
                                                     toast,
                                                     cmsTemplate,
                                                     employeeService,
+                                                    userClassificationViewPermissionService,
                                                     userSubscriptionService) {
         'ngInject';
         var self = this;
@@ -94,6 +95,9 @@ module.exports = function (app) {
              * @param $event
              */
             applicationUserEdit: function (applicationUser, jobTitles, ranks, organizations, classifications, themes, roles, permissions, userClassificationViewPermissions, currentOrganization, $event) {
+                var id = applicationUser.hasOwnProperty('id') ? applicationUser.id : applicationUser;
+                userClassificationViewPermissions = userClassificationViewPermissionService.getUserClassificationViewPermissionsByUserId(id);
+
                 var userClassificationViewPermissionsByUserId = _.filter(userClassificationViewPermissions, function (userClassificationViewPermission) {
                     return Number(userClassificationViewPermission.userId) === Number(applicationUser.id);
                 });
