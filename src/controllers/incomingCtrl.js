@@ -169,6 +169,7 @@ module.exports = function (app) {
             })
                 .catch(function (error) {
                     self.saveInProgress = false;
+                    toast.error(error);
                 });
         };
 

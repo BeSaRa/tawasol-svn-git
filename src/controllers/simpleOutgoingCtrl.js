@@ -180,6 +180,8 @@ module.exports = function (app) {
                     self.contentFileSizeExist = false;
                     saveCorrespondenceFinished(status, newId);
                 }
+            }).catch(function (error) {
+                toast.error(error);
             });
         };
 

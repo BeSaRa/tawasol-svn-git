@@ -225,7 +225,9 @@ module.exports = function (app) {
                     self.document = result;
                     toast.success(langService.get('outgoing_metadata_saved_success'));
                     self.model = angular.copy(self.document);
-                });
+                }).catch(function (error) {
+                toast.error(error);
+            });
         };
         // if we have source form
         $timeout(function () {

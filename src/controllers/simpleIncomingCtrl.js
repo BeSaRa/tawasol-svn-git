@@ -137,6 +137,8 @@ module.exports = function (app) {
                     saveCorrespondenceFinished(status, newId);
                 }
 
+            }).catch(function (error) {
+                toast.error(error);
             });
         };
 

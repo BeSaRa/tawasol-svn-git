@@ -532,6 +532,8 @@ module.exports = function (app) {
                     generator.interceptSendInstance(['Correspondence', _getModelName(correspondence.docClassName)], correspondence)
                 ).then(function () {
                     return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
+                }).catch(function (error) {
+                    return $q.reject(self.getTranslatedError(error));
                 });
         };
 
@@ -555,6 +557,8 @@ module.exports = function (app) {
                 .then(function (result) {
                     correspondence.vsId = result.data.rs;
                     return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
+                }).catch(function (error) {
+                    return $q.reject(self.getTranslatedError(error));
                 });
         };
         /**
@@ -573,6 +577,8 @@ module.exports = function (app) {
                 .then(function (result) {
                     correspondence.vsId = result.data.rs;
                     return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
+                }).catch(function (error) {
+                    return $q.reject(self.getTranslatedError(error));
                 });
         };
 
@@ -588,6 +594,8 @@ module.exports = function (app) {
                 .then(function (result) {
                     correspondence.vsId = result.data.rs;
                     return generator.generateInstance(correspondence, _getModel(correspondence.docClassName));
+                }).catch(function (error) {
+                    return $q.reject(self.getTranslatedError(error));
                 });
         };
 
@@ -3221,6 +3229,15 @@ module.exports = function (app) {
                 .then(function () {
                     return correspondence;
                 });
+        };
+
+        /**
+         * @description get error message
+         * @returns {string}
+         */
+        self.getTranslatedError = function (error) {
+            var errorObj = error.data.eo;
+            return langService.current === 'ar' ? errorObj.arName : errorObj.enName ;
         };
 
         $timeout(function () {

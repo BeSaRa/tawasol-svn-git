@@ -78,7 +78,9 @@ module.exports = function (app) {
                     self.outgoing = result;
                     toast.success(langService.get('outgoing_metadata_saved_success'));
                     self.model = angular.copy(self.outgoing);
-                });
+                }).catch(function (error) {
+                toast.error(error);
+            });
         };
 
         self.openManageDocumentTags = function ($event) {
