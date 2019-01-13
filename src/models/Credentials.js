@@ -9,7 +9,7 @@ module.exports = function (app) {
             self.tawasolEntityId = null;
             self.ouId = null;
             self.loginUsingDefaultOu = true;
-            self.isSSO = true;
+            self.isSSO = false;
 
             if (model)
                 angular.extend(this, model);
