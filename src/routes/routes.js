@@ -743,7 +743,7 @@ module.exports = function (app) {
                         var ouId = employeeService.getEmployee().organization.ouid;
                         return propertyConfigurationService
                             .loadPropertyConfigurationsByDocumentClassAndOU('incoming', ouId);
-                    },
+                    }
                     /*documentFiles: function (documentFileService) {
                         'ngInject';
                         return documentFileService.loadDocumentFiles();
@@ -854,7 +854,7 @@ module.exports = function (app) {
                         var ouId = employeeService.getEmployee().organization.ouid;
                         return propertyConfigurationService
                             .loadPropertyConfigurationsByDocumentClassAndOU('general', ouId);
-                    },
+                    }
                     /*documentFiles: function (documentFileService) {
                         'ngInject';
                         return documentFileService.loadDocumentFiles();
@@ -1504,7 +1504,7 @@ module.exports = function (app) {
             .state('app.reports', {
                 url: '/reports/:menuId',
                 template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
-                controller: function ($sce, $stateParams, sidebarService, contextHelpService, tokenService, urlService, employeeService) {
+                controller: function ($sce, $stateParams, sidebarService, contextHelpService) {
                     'ngInject';
                     contextHelpService.setHelpTo('reports');
                     var self = this;
@@ -1648,7 +1648,7 @@ module.exports = function (app) {
             .state('app.others', {
                 url: '/others/:menuId',
                 template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
-                controller: function ($sce, $stateParams, sidebarService, contextHelpService, tokenService, urlService, employeeService) {
+                controller: function ($sce, $stateParams, sidebarService, contextHelpService) {
                     'ngInject';
                     contextHelpService.setHelpTo('others');
                     var self = this;
