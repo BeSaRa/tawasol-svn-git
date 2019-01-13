@@ -1650,7 +1650,7 @@ module.exports = function (app) {
                 template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
                 controller: function ($sce, $stateParams, sidebarService, contextHelpService, tokenService, urlService, employeeService) {
                     'ngInject';
-                    contextHelpService.setHelpTo('reports');
+                    contextHelpService.setHelpTo('others');
                     var self = this;
                     var menuId = $stateParams.menuId;
                     var dynamicMenuItem = sidebarService.getDynamicMenuItemByID(menuId);
