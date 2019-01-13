@@ -1513,7 +1513,7 @@ module.exports = function (app) {
                     var url = dynamicMenuItem.dynamicMenuItem.getMenuUrlAfterReplacement();
                     self.url = $sce.trustAsResourceUrl(url);
                 },
-                isReport: true,
+                isDynamic: true,
                 controllerAs: 'ctrl'
             })
             .state('app.icn', {
@@ -1547,7 +1547,7 @@ module.exports = function (app) {
 
                 },
                 controllerAs: 'ctrl',
-                isICN: true,
+                isDynamic: true,
                 resolve: {
                     credentials: function (authenticationService) {
                         'ngInject';
@@ -1643,6 +1643,21 @@ module.exports = function (app) {
                 url: '/sent-items',
                 template: cmsTemplateProvider.getView('central-archive-sent-items'),
                 controller: 'centralArchiveSentItemCtrl',
+                controllerAs: 'ctrl'
+            })
+            .state('app.others', {
+                url: '/others/:menuId',
+                template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
+                controller: function ($sce, $stateParams, sidebarService, contextHelpService, tokenService, urlService, employeeService) {
+                    'ngInject';
+                    contextHelpService.setHelpTo('reports');
+                    var self = this;
+                    var menuId = $stateParams.menuId;
+                    var dynamicMenuItem = sidebarService.getDynamicMenuItemByID(menuId);
+                    var url = dynamicMenuItem.dynamicMenuItem.getMenuUrlAfterReplacement();
+                    self.url = $sce.trustAsResourceUrl(url);
+                },
+                isDynamic: true,
                 controllerAs: 'ctrl'
             })
     });

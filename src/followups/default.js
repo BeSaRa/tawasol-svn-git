@@ -150,23 +150,16 @@ module.exports = function (app) {
             var permission = transition.to().permission,
                 params = transition.injector().get('$stateParams'),
                 sidebarService = transition.injector().get('sidebarService'),
-                isReport = transition.to().isReport,
-                isICN = transition.to().isICN,
+                isDynamic = transition.to().isDynamic,
                 // report = isReport ? reportService.getReportByReportName(params.reportName) : false;
-                menuItem = isReport ? sidebarService.getDynamicMenuItemByID(params.menuId) : false,
-                icnMenuItem = isICN ? sidebarService.getDynamicMenuItemByID(params.menuId) : false;
+                menuItem = (isDynamic) ? sidebarService.getDynamicMenuItemByID(params.menuId) : false;
 
             // if (isReport && report) {
             //     permission = report.langKey;
             // }
             // TODO: to be refactor.
-            if (isReport) {
+            if (isDynamic) {
                 permission = menuItem ? false : 'PERMISSION_' + Math.random() + '_PERMISSION';
-                if (permission && !employeeService.hasPermissionTo(permission)) {
-                    return transition.router.stateService.target('app.access-denied', params);
-                }
-            } else if (isICN) {
-                permission = icnMenuItem ? false : 'PERMISSION_' + Math.random() + '_PERMISSION';
                 if (permission && !employeeService.hasPermissionTo(permission)) {
                     return transition.router.stateService.target('app.access-denied', params);
                 }
