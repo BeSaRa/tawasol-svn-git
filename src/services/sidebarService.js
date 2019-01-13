@@ -45,7 +45,8 @@ module.exports = function (app) {
                     lang_key: dynamicMenuItem.generateLangKey(),
                     active: dynamicMenuItem.status,
                     icon: dynamicMenuItem.getDynamicMenuIcon(),
-                    state: dynamicMenuItem.generateState()
+                    state: dynamicMenuItem.generateState(),
+                    sort_order: dynamicMenuItem.itemOrder
                 })
             });
             self.getMenuHierarchy();
