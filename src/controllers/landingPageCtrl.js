@@ -1,6 +1,5 @@
 module.exports = function (app) {
-    app.controller('landingPageCtrl', function (layouts,
-                                                _,
+    app.controller('landingPageCtrl', function (_,
                                                 layoutService,
                                                 layoutBuilderService,
                                                 langService,
@@ -19,7 +18,7 @@ module.exports = function (app) {
         contextHelpService.setHelpTo('landing-page');
         self.controllerName = 'landingPageCtrl';
         // all available layouts for current user
-        self.layouts = layouts;
+        self.layouts = layoutService.layouts;
 
         self.loading = false;
 

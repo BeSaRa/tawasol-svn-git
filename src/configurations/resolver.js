@@ -50,7 +50,6 @@ module.exports = function (app) {
                 tokenService
                     .tokenRefresh()
                     .then(function () {
-                        // $state.go('app');
                         if (!employeeService.isAdminUser()) {
                             $state.go('app.landing-page', {identifier: rootEntity.getRootEntityIdentifier()});
                         } else {
@@ -58,7 +57,6 @@ module.exports = function (app) {
                         }
                     })
                     .catch(function (error) {
-                        console.log("CATCH",error);
                         defer.resolve(true);
                         dialog.cancel();
                     });
@@ -494,18 +492,18 @@ module.exports = function (app) {
                         });
                 }
             })
-            .bulkResolveToState('app.landing-page', {
-                layouts: function (layoutService) {
-                    'ngInject';
-                    return layoutService.loadUserLayouts().catch(function () {
-                        return [];
-                    });
-                },
-                widgets: function (layoutService) {
-                    'ngInject';
-                    return layoutService.loadWidgets();
-                }
-            })
+            // .bulkResolveToState('app.landing-page', {
+            //     layouts: function (layoutService) {
+            //         'ngInject';
+            //         return layoutService.loadUserLayouts().catch(function () {
+            //             return [];
+            //         });
+            //     },
+            //     widgets: function (layoutService) {
+            //         'ngInject';
+            //         return layoutService.loadWidgets();
+            //     }
+            // })
             .bulkResolveToState('app', {
                 /*
                                 themes: function (themeService, employeeService) {
@@ -556,6 +554,12 @@ module.exports = function (app) {
                 workItems: function (correspondenceService) {
                     'ngInject';
                     return correspondenceService.loadCentralArchiveWorkItems();
+                }
+            })
+            .bulkResolveToState('app.administration.menu-items', {
+                dynamicMenuItems: function (dynamicMenuItemService) {
+                    'ngInject';
+                    return dynamicMenuItemService.loadParentDynamicMenuItems();
                 }
             })
             .registerResolver();

@@ -44,8 +44,7 @@ module.exports = function (app) {
                         dialog.alertMessage(langService.get('session_expired_login_again'));
                     }
                     $state.go('login', {identifier: rootEntity.getRootEntityIdentifier()});
-                }
-                else {
+                } else {
                     loadingIndicatorService.forceEndLoading();
                 }
             }
@@ -150,13 +149,28 @@ module.exports = function (app) {
         $transitions.onEnter({to: 'app.**'}, function (transition) {
             var permission = transition.to().permission,
                 params = transition.injector().get('$stateParams'),
+                sidebarService = transition.injector().get('sidebarService'),
                 isReport = transition.to().isReport,
-                report = isReport ? reportService.getReportByReportName(params.reportName) : false;
+                isICN = transition.to().isICN,
+                // report = isReport ? reportService.getReportByReportName(params.reportName) : false;
+                menuItem = isReport ? sidebarService.getDynamicMenuItemByID(params.menuId) : false,
+                icnMenuItem = isICN ? sidebarService.getDynamicMenuItemByID(params.menuId) : false;
 
-            if (isReport && report) {
-                permission = report.langKey;
+            // if (isReport && report) {
+            //     permission = report.langKey;
+            // }
+            // TODO: to be refactor.
+            if (isReport) {
+                permission = menuItem ? false : 'PERMISSION_' + Math.random() + '_PERMISSION';
+                if (permission && !employeeService.hasPermissionTo(permission)) {
+                    return transition.router.stateService.target('app.access-denied', params);
+                }
+            } else if (isICN) {
+                permission = icnMenuItem ? false : 'PERMISSION_' + Math.random() + '_PERMISSION';
+                if (permission && !employeeService.hasPermissionTo(permission)) {
+                    return transition.router.stateService.target('app.access-denied', params);
+                }
             }
-
 
             if (!permission)
                 return;

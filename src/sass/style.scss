@@ -12,6 +12,7 @@
 
 html {
   direction: ltr;
+
   body, button, select, html, textarea, input {
     font-family: Roboto, 'Noto Kufi Arabic', "Helvetica Neue", sans-serif;
     line-height: 1;
@@ -68,6 +69,7 @@ body, html, #main-view, #sub-view-wrapper {
 #loading-logo {
   width: 150px;
   margin: 100px auto 50px;
+
   img {
     max-width: 100%;
   }
@@ -80,6 +82,7 @@ body, html, #main-view, #sub-view-wrapper {
 #content-container {
   position: relative;
   padding-left: 64px;
+
   &.sidebar-open {
     padding-left: 0;
   }
@@ -101,16 +104,20 @@ body, html, #main-view, #sub-view-wrapper {
 
 .user-menu {
   padding: 0;
+
   & > md-menu > button {
     margin: 0;
     border-radius: 0;
+
     & .user-name {
       text-transform: none;
     }
   }
+
   &.hide-gt-xs {
     md-menu {
       width: 100%;
+
       button {
         width: 100%;
       }
@@ -166,6 +173,7 @@ body, html, #main-view, #sub-view-wrapper {
   min-height: 64px;
   position: absolute;
   top: 0;
+
   &.xs {
     min-height: 128px;
   }
@@ -184,9 +192,11 @@ body, html, #main-view, #sub-view-wrapper {
   md-menu-bar {
     padding: 0;
   }
+
   .language-flag {
     margin: 0 5px;
   }
+
   button {
     height: 64px;
     margin: 0;
@@ -217,15 +227,19 @@ body, html, #main-view, #sub-view-wrapper {
   padding: 3px 8px;
   border-radius: 20px;
   font-size: 12px;
+
   &.red {
     background-color: red;
   }
+
   &.green {
     background-color: lighten(green, 12);
   }
+
   &.orange {
     background-color: orange;
   }
+
   &.blue {
     background-color: lighten(blue, 20);
   }
@@ -302,17 +316,21 @@ md-sidenav {
 
 #main-view, .sub-view {
   transition: all .2s ease-in-out;
+
   &.ng-enter {
     top: 100%;
     opacity: 0;
   }
+
   &.ng-enter-active {
     top: 0;
     opacity: 1;
   }
+
   &.ng-leave {
     top: 0;
   }
+
   &.ng-leave-active {
     top: -100%;
   }
@@ -334,22 +352,27 @@ md-sidenav {
 #login-form-wrapper {
   padding: 20px 50px 50px;
   box-sizing: border-box;
+
   .login-title {
     font-weight: normal;
   }
+
   &.gt-sm {
     width: 400px;
     padding: 100px 50px 50px 50px;
   }
+
   &:not(.gt-sm) {
     .login-title {
       text-align: center;
     }
   }
+
   width: 100%;
   max-width: 100%;
   height: 100vh;
   background-color: white;
+
   #login-logo {
     max-width: 150px;
     margin: 0 auto;
@@ -374,6 +397,7 @@ md-sidenav {
 #login-meta-wrapper {
   position: relative;
   padding: 30px 30px 0 30px;
+
   &.md {
     padding: 150px 50px 0 50px;
   }
@@ -381,6 +405,7 @@ md-sidenav {
 
 .login-logo-side {
   max-width: 150px;
+
   img {
     max-width: 100%;
   }
@@ -388,9 +413,11 @@ md-sidenav {
 
 #application-meta {
   padding: 0 20px;
+
   h2, h4 {
     font-weight: normal;
   }
+
   h4 {
     margin-top: 0;
   }
@@ -400,9 +427,11 @@ md-sidenav {
   h2 {
     font-size: 17px;
   }
+
   h4 {
     font-size: 10px;
   }
+
   h2, h4 {
     margin-bottom: 0;
     padding-bottom: 5px;
@@ -412,6 +441,7 @@ md-sidenav {
 
 .small-h {
   font-weight: normal;
+
   h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
     padding-bottom: 5px;
@@ -425,6 +455,7 @@ md-sidenav {
   font-size: 13px;
   line-height: 1.8;
   padding: 10px 0;
+
   .announcement {
     position: relative;
     padding: 20px 20px 20px 40px;
@@ -437,21 +468,25 @@ md-sidenav {
       left: 10px;
       color: inherit;
     }
+
     &.success {
       color: #3c763d;
       background-color: #dff0d8;
       border-color: #d6e9c6;
     }
+
     &.info {
       color: #31708f;
       background-color: #d9edf7;
       border-color: #bce8f1;
     }
+
     &.alert {
       color: #8a6d3b;
       background-color: #fcf8e3;
       border-color: #faebcc;
     }
+
     &.danger {
       color: #a94442;
       background-color: #f2dede;
@@ -471,6 +506,7 @@ md-sidenav {
   background-color: lighten(gray, 20) !important;
   margin: 5px;
   border-radius: 50%;
+
   &.active {
     background-color: gray !important;
   }
@@ -478,6 +514,7 @@ md-sidenav {
 
 #select-organization-popup-to-login {
   padding: 0 20px;
+
   h3 {
     font-weight: normal;
   }
@@ -488,18 +525,22 @@ md-sidenav {
   padding: 20px;
   max-width: 420px;
   z-index: 101;
+
   h3, h4 {
     margin-top: 0;
   }
+
   #login-logo-popup {
     width: 120px;
     margin: 0 auto;
     overflow: hidden;
     display: inline-block;
+
     img {
       max-width: 100%;
     }
   }
+
   #login_form {
     width: 100%;
   }
@@ -516,6 +557,7 @@ md-sidenav {
 
 .padding-header {
   padding: 0 25px;
+
   & > div > button > md-icon, & > button > md-icon {
     color: white;
   }
@@ -528,14 +570,17 @@ md-sidenav {
   min-height: 200px;
   z-index: 2;
   color: #FFF;
+
   &:not(.nmb) {
     margin-bottom: 4px;
   }
+
   &.small {
     max-height: 65px;
     height: 65px;
     min-height: 65px;
   }
+
   span, label {
     color: white !important;
   }
@@ -593,11 +638,13 @@ md-tabs {
 
 #organization-chart {
   height: 100%;
+
   & > div, .orgchart {
     height: 100%;
     min-width: 100%;
     background-image: none;
   }
+
   .orgchart {
     border: 2px dashed #EEE;
   }
@@ -621,9 +668,11 @@ md-tabs {
 .orgchart .node {
   width: auto !important;
   outline: none;
+
   &.focused, &:hover {
     border-radius: 7px;
   }
+
   .title, .content {
     min-height: 40px;
     padding: 5px 40px;
@@ -633,13 +682,16 @@ md-tabs {
 .node-menu {
   position: absolute;
   right: 0;
+
   md-menu-bar {
     margin: 0;
     padding: 0;
   }
+
   md-menu-bar md-menu.md-open > button {
     background: transparent;
   }
+
   .md-button.md-icon-button {
     margin: 0;
     padding: 0;
@@ -683,6 +735,7 @@ md-tabs {
     height: auto;
     border-bottom: 1px solid #EEE;
   }
+
   .search-row {
     height: 30px;
   }
@@ -710,9 +763,11 @@ span.key, span.value {
   border-radius: 2px;
   padding: 8px;
   position: relative;
+
   .remove-user-tag {
     position: absolute;
   }
+
   md-icon {
     outline: none;
     cursor: pointer;
@@ -767,10 +822,12 @@ md-tabs-canvas {
 .error-table {
   border: 1px solid #EEE;
   margin-top: 10px;
+
   th, td {
     border-bottom: 1px solid #EEE;
     padding: 8px;
   }
+
   font-size: 12px;
 }
 
@@ -778,6 +835,7 @@ md-tabs-canvas {
   list-style: none;
   padding: 0;
   margin: 0;
+
   li {
     margin-bottom: 10px;
     color: red;
@@ -803,23 +861,29 @@ md-tabs-canvas {
   transition: all .2s ease;
   width: 320px;
   padding: 0 8px 0 0;
+
   button {
     margin: 0;
     padding: 0;
   }
+
   input {
     background-color: transparent;
     border: none;
     outline: none;
     height: 40px;
   }
+
   &.close {
     background-color: transparent;
+
     md-icon {
       color: #FFF;
     }
+
     box-shadow: none;
     width: 50px;
+
     input {
       display: none;
     }
@@ -1198,6 +1262,7 @@ md-chips.tags {
 .attachment-viewer-header {
   padding-bottom: 20px;
   position: relative;
+
   button {
     margin: 0 !important;
     padding: 0 !important;
@@ -1216,6 +1281,7 @@ md-chips.tags {
 
 #advanceSearch {
   background: #F2F2F2;
+
   #span_toggleAdvanceSearch {
     outline: none;
     padding: 0 10px;
@@ -1248,6 +1314,7 @@ fieldset {
 
 .search-fieldset {
   margin-bottom: 10px;
+
   md-input-container {
     margin: 5px auto !important;
   }
@@ -1263,6 +1330,7 @@ fieldset {
 
 .row-cursor {
   cursor: pointer;
+
   &:hover {
     background-color: rgba(158, 158, 158, 0.2);
   }
@@ -1275,6 +1343,7 @@ fieldset {
 
 .disabled-container {
   color: rgba(0, 0, 0, 0.38);
+
   md-select span {
     color: rgba(0, 0, 0, 0.38) !important;
   }
@@ -1297,6 +1366,7 @@ fieldset {
   color: #FFF;
   background: linear-gradient(60deg, #999999, #5e5e5e);
   box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 0, 0, 0.2);
+
   &.bg-purple {
     background: linear-gradient(60deg, #ab47bc, #8e24aa);
     box-shadow: 0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2);
@@ -1345,11 +1415,13 @@ fieldset {
   right: 20px;
   z-index: 2;
   border: none;
+
   button {
     margin: 0 !important;
     padding: 0 !important;
     float: left;
   }
+
   md-icon {
     color: #FFF;
   }
@@ -1379,10 +1451,12 @@ form#signature-form {
   img {
     border: 2px solid transparent;
     outline: 0 !important;
+
     img:focus, img:active, img:hover {
       outline: 0 !important;
     }
   }
+
   img.selected {
     border: 2px solid #ff0000 !important;
   }
@@ -1404,6 +1478,7 @@ form#signature-form {
 
 .max-width-100-percent {
   display: block !important;
+
   canvas {
     max-width: 100%;
   }
@@ -1418,6 +1493,7 @@ form#signature-form {
     //background-color: #e3f2fd;
     font-size: 16px;
     font-weight: normal;
+
     md-icon {
       fill: rgba(0, 0, 0, 0.54) !important;
     }
@@ -1485,6 +1561,7 @@ button.menu-select {
   border-radius: 50%;
   margin-left: 5px;
   margin-right: 5px;
+
   div, md-radio-button {
     margin: 0;
   }
@@ -1620,6 +1697,7 @@ tr.unread-row, tr.current-version {
   padding-right: 0 !important;
   position: relative !important;
   overflow: hidden !important;
+
   .status {
     content: '';
     position: absolute;
@@ -1628,9 +1706,11 @@ tr.unread-row, tr.current-version {
     bottom: 0;
     right: 0;
     width: 12px;
+
     &.read {
       background: #B1D6F0;
     }
+
     &.unread {
       background: #0067B0;
     }
@@ -1684,10 +1764,12 @@ tr.unread-row, tr.current-version {
 .background-warning:hover {
   //background: #ffeb8061 !important;
   background: rgba(255, 235, 128, 0.38) !important;
+
   div.sidebar:after {
     content: " *";
     color: red;
   }
+
   td, td:hover {
     //background: #ffeb8061 !important;
     background: rgba(255, 235, 128, 0.38) !important;
@@ -1703,6 +1785,7 @@ tr.unread-row, tr.current-version {
   height: 80% !important;
   max-width: 100%;
   max-height: 100%;
+
   &.fullscreen {
     width: 100% !important;
     height: 100% !important;
@@ -1764,26 +1847,33 @@ tr.unread-row, tr.current-version {
     border-radius: 5px;
     margin-bottom: 10px;
     border: 1px solid #EEE;
+
     &.linked {
       padding: 0;
+
       & > ul > li {
         padding: 8px;
         margin: 0;
       }
     }
+
     & > ul {
       padding: 0;
       margin: 0;
+
       & > li {
         padding-bottom: 5px;
         margin-bottom: 5px;
         border-bottom: 1px solid #EEE;
+
         &:last-child {
           margin-bottom: 0;
           border-bottom: none;
         }
+
         &.selected {
           background-color: #EEE;
+
           a {
             color: black;
           }
@@ -1791,15 +1881,18 @@ tr.unread-row, tr.current-version {
       }
     }
   }
+
   .property-value {
     padding-left: 7px;
     font-weight: bold;
   }
+
   .property-key:after {
     position: absolute;
     content: ':';
     margin-left: 4px;
   }
+
   .property-key.property-block {
     display: block;
   }
@@ -1807,18 +1900,22 @@ tr.unread-row, tr.current-version {
 
 .viewer-actions {
   margin-bottom: 10px;
+
   button.md-fab {
     background: none !important;
     height: 30px !important;
     width: 30px !important;
     min-height: 30px !important;
   }
+
   button.md-fab:active {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .4) !important;
   }
+
   button.md-fab:hover {
     background-color: #EEE !important;
   }
+
   md-icon {
     color: rgba(0, 0, 0, 0.54) !important;
     margin: -3px;
@@ -1830,11 +1927,13 @@ tr.unread-row, tr.current-version {
   z-index: 3;
   bottom: 0;
   left: 50%;
+
   &.navigate-next {
     right: 0;
     left: auto;
     top: 50%;
   }
+
   &.navigate-prev {
     right: auto;
     left: 0;
@@ -1853,6 +1952,7 @@ tr.unread-row, tr.current-version {
   height: 24px !important;
   padding: 0 !important;
   margin: 0 !important;
+
   md-icon {
     padding: 0;
     margin: 0;
@@ -1926,8 +2026,10 @@ table.md-table.md-row-select td.md-cell.no-padding:nth-child(n+3):nth-last-child
   left: 0;
   top: 3px;
   right: auto;
+
   md-menu-bar {
     padding: 0;
+
     & > md-menu > button {
       padding: 0 !important;
       margin: 0 !important;
@@ -1982,9 +2084,11 @@ trix-editor {
 
 .simple-padding {
   padding: 0 10px;
+
   & > .simple-properties {
     margin-right: 5px;
   }
+
   & > .simple-viewer {
     margin-left: 5px;
   }
@@ -1996,6 +2100,7 @@ html.rtl {
       margin-left: 5px;
       margin-right: 0;
     }
+
     & > .simple-viewer {
       margin-right: 5px;
       margin-left: 0;
@@ -2032,6 +2137,7 @@ $ta-background-transparent: transparent !important;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+
   .ta-button-group {
     display: flex;
     flex-direction: row;
@@ -2047,6 +2153,7 @@ $ta-background-transparent: transparent !important;
       color: $ta-md-text-secondary;
       background-color: $ta-background-transparent;
       cursor: pointer;
+
       &.active {
         background-color: $ta-md-primary;
         color: $ta-white-color;
@@ -2061,11 +2168,14 @@ $ta-background-transparent: transparent !important;
       margin-right: auto;
       background-color: $ta-background-transparent;
       cursor: pointer;
+
       md-icon {
         color: $ta-disabled-color;
       }
+
       &.active {
         background-color: $ta-md-primary;
+
         md-icon {
           color: $ta-white-color;
         }
@@ -2077,6 +2187,7 @@ $ta-background-transparent: transparent !important;
       background-color: $ta-background-transparent;
       color: $ta-disabled-color;
       cursor: not-allowed;
+
       md-icon {
         color: $ta-disabled-color;
       }
@@ -2088,6 +2199,7 @@ $ta-background-transparent: transparent !important;
   .ta-bind {
     border-bottom: 1px solid rgba(0, 0, 0, 0.117647);
     min-height: 0 !important;
+
     &:focus {
       border-bottom: 2px solid $ta-md-primary;
       outline: none;
@@ -2100,8 +2212,24 @@ $ta-background-transparent: transparent !important;
     font-size: 17.5px;
     border-left: 5px solid #FF4081;
   }
+
   blockquote:before, blockquote:after {
     content: '';
   }
+}
+
+#menu-item-dialog {
+  &.full-screen {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.full-screen-button-icon {
+  position: absolute;
+  right: 50px;
+  top: 10px;
 }
 

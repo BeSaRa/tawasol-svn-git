@@ -95,4 +95,7 @@ module.exports = function (app) {
     require('./attachment-viewer-directive/01-index')(app);
     require('./grid-search-directive/01-index')(app);
     require('./overlay-scroll-bar-directive/overlay-scroll-bar-directive')(app);
+    require('./url-parser-directive/01-index')(app);
+    require('./replacement-item-draggable/replacement-item-draggable')(app);
+    require('./replacement-item-droppable/replacement-item-droppable')(app);
 };

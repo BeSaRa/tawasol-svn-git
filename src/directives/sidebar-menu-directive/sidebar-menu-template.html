@@ -7,7 +7,7 @@
             <span class="sidebar-menu-item-header">{{menu.lang.user_folders}}</span>
         </div>
         <div ng-if="item.type !== 'header'" class="sidebar-menu-item-content">
-            <a ng-if="!item.isReport" ng-click="menu.navigateToLink(item , $event)"
+            <a ng-if="!item.isDynamic" ng-click="menu.navigateToLink(item , $event)"
                class="sidebar-menu-item-content-link {{item.lang_key}}" md-ink-ripple layout="row"
                layout-align="center center"
                ui-sref="{{item.state}}">
@@ -19,10 +19,10 @@
                 <span ng-if="item.children.length" class="arrow-down"><md-icon
                         md-svg-icon="chevron-right"></md-icon></span>
             </a>
-            <a ng-if="item.isReport" href="#" ng-click="menu.navigateToLink(item , $event)"
+            <a ng-if="item.isDynamic" href="#" ng-click="menu.navigateToLink(item , $event)"
                class="sidebar-menu-item-content-link {{item.lang_key}}" md-ink-ripple layout="row"
                layout-align="center center"
-               ui-sref="item.state({reportName:item.report.reportName})">
+               ui-sref="{{menu.getMenuState(item)}}">
                 <md-icon ng-if="menu.level == 1" class="sidebar-menu-icon" md-svg-icon="{{item.icon}}"></md-icon>
                 <span class="menu-item-text" md-truncate md-highlight-flags="i" md-highlight-text="menu.search" flex>{{lang[item.lang_key]}}</span>
                 <span ng-if="menu.counters.counter.getCount(item.lang_key)"

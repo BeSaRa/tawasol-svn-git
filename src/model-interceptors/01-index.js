@@ -94,4 +94,5 @@ module.exports = function (app) {
     require('./DocumentSecuritySettingInterceptor')(app);
     require('./CorrespondenceVersionInterceptor')(app);
     require('./SearchOutgoingIncomingInterceptor')(app);
+    require('./DynamicMenuItemInterceptor')(app);
 };

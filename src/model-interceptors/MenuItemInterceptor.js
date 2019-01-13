@@ -11,8 +11,16 @@ module.exports = function (app) {
         CMSModelInterceptor.whenInitModel(modelName, function (model) {
             model.translate = langService.get(model.lang_key);
             var report = reportService.getReportByKey(model.lang_key);
-            model.isReport = !!report;
-            model.report = report;
+
+            if (model.hasOwnProperty('dynamicMenuItem')) {
+                model.isDynamic = true;
+                model.isReport = model.dynamicMenuItem.isTypeEqual('reports');
+                model.state = model.dynamicMenuItem.generateState();
+                if (model.isReport && model.parent === null) {
+                    model.isReport = false;
+                }
+            }
+
             $rootScope.$watch(function () {
                 return langService.current;
             }, function () {

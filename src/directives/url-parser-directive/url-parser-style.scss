@@ -1,0 +1,43 @@
+.var-key, .var-value {
+  border: 1px dashed #EEE;
+  background-color: white;
+  padding: 8px;
+
+  &.header {
+    background-color: #CCC;
+  }
+}
+
+.var-value:not(.header) {
+  padding: 0 8px !important;
+}
+
+.replacement-item {
+  padding: 4px;
+  background-color: red;
+  color: white;
+  border: 1px dashed #EEE;
+}
+
+.url-parser-handler {
+  position: relative;
+
+  button.md-button.md-icon-button {
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    right: -20px;
+    top: -20px;
+    z-index: 2;
+  }
+}
+
+html.rtl {
+  .url-parser-handler {
+    button.md-button.md-icon-button {
+      left: -20px;
+      right: auto;
+      z-index: 2;
+    }
+  }
+}

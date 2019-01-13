@@ -10,6 +10,7 @@ module.exports = function (app) {
                                            cmsTemplate,
                                            dialog,
                                            Widget,
+                                           DynamicMenuItem,
                                            $http) {
         'ngInject';
         var self = this;
@@ -17,6 +18,7 @@ module.exports = function (app) {
         self.layouts = [];
         self.widgets = [];
         self.lastInsertedLayoutWidget = null;
+        self.menuItems = [];
 
         // temporary  headers
         var _currentOrganization = function () {
@@ -182,6 +184,23 @@ module.exports = function (app) {
                     return generator.generateInstance(layoutWidgetOption, LayoutWidgetOption);
                 });
         };
+        /**
+         * @description load layouts and widgets
+         * @return {*}
+         */
+        self.loadLandingPage = function () {
+            return $http
+                .get(urlService.layouts.replace('layouts', 'landing-page'))
+                .then(function (result) {
+                    self.layouts = generator.generateCollection(result.data.rs.layouts, Layout);
+                    self.layouts = generator.interceptReceivedCollection('Layout', self.layouts);
+                    self.widgets = generator.generateCollection(result.data.rs.widgets, Widget);
+                    self.widgets = generator.interceptReceivedCollection('Widget', self.widgets);
+                    // dynamic menu items
+                    self.menuItems = generator.generateCollection(result.data.rs.menuItems, DynamicMenuItem);
+                    self.menuItems = generator.interceptReceivedCollection('DynamicMenuItem', self.menuItems);
+                });
+        };
 
         /**
          * @description Check if record with same name exists. Returns true if exists
@@ -205,11 +224,9 @@ module.exports = function (app) {
                 if (layout.arName && layout.enName) {
                     return existingLayout.arName === layout.arName
                         || existingLayout.enName.toLowerCase() === layout.enName.toLowerCase();
-                }
-                else if (!layout.arName && layout.enName) {
+                } else if (!layout.arName && layout.enName) {
                     return existingLayout.enName.toLowerCase() === layout.enName.toLowerCase();
-                }
-                else if (layout.arName && !layout.enName)
+                } else if (layout.arName && !layout.enName)
                     return existingLayout.arName === layout.arName;
 
                 /*return existingLayout.arName === layout.arName

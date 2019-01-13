@@ -104,4 +104,6 @@ module.exports = function (app) {
     require('./documentFileNewPopCtrl')(app);
     require('./documentFileChildrenNewPopCtrl')(app);
     require('./bulkExportOptionPopCtrl')(app);
+    require('./dynamicMenuItemPopCtrl')(app);
+    require('./subDynamicMenuItemPopCtrl')(app);
 };

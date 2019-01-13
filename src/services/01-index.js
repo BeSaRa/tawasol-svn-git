@@ -113,4 +113,5 @@ module.exports = function (app) {
 	require('./searchOutgoingIncomingService')(app);
 	require('./documentFileNewService')(app);
 	require('./singleNotifierService')(app);
+	require('./dynamicMenuItemService')(app);
 };

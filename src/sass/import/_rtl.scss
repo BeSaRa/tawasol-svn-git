@@ -1,24 +1,30 @@
 html.rtl {
   direction: rtl;
+
   body, button, select, html, textarea, input {
     font-family: 'Noto Kufi Arabic', Roboto, "Helvetica Neue", sans-serif;
     line-height: 1.0;
+
     label, .md-text {
       line-height: 1.5;
     }
   }
+
   md-select-value {
     span {
       line-height: 1.5;
     }
   }
+
   #content-container {
     padding-right: 64px;
     padding-left: 0;
+
     &.sidebar-open {
       padding-right: 0;
     }
   }
+
   .profile-status {
     left: 0;
     right: auto;
@@ -28,36 +34,44 @@ html.rtl {
     left: auto;
     right: 0;
   }
+
   .md-sidenav-left.md-closed#main-sidebar, md-sidenav.md-closed#main-sidebar {
     -webkit-transform: translate3d(100%, 0, 0);
     transform: translate3d(100%, 0, 0);
   }
+
   md-sidenav.md-locked-open#main-sidebar, md-sidenav.md-locked-open.md-closed#main-sidebar {
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
   }
+
   .ps > .ps__scrollbar-y-rail {
     right: auto !important;
     left: 0 !important;
   }
+
   .ps > .ps__scrollbar-y-rail > .ps__scrollbar-y {
     left: 2px !important;
     right: auto !important;
   }
+
   #main-sidebar {
     .sidebar-menu-icon {
       margin-right: 0;
       margin-left: 15px;
     }
+
     .arrow-down {
       transform: rotate(180deg);
     }
   }
+
   #login-form-wrapper {
     #login-select-language {
       margin: 0 -50px 0 0px !important;
     }
   }
+
   #login-background.flip-bg {
     -webkit-transform: rotateY(180deg);
     -moz-transform: rotateY(180deg);
@@ -65,12 +79,14 @@ html.rtl {
     -o-transform: rotateY(180deg);
     transform: rotateY(180deg);
   }
+
   .login-announcements {
     //margin-top: 20px;
     //font-size: 13px;
     //line-height: 1.8;
     .announcement {
       padding: 20px 40px 20px 20px;
+
       .announcement-icon {
         left: auto;
         right: 10px;
@@ -78,18 +94,22 @@ html.rtl {
       }
     }
   }
+
   .node-menu {
     left: 0;
     right: auto;
   }
+
   .close-dialog-button {
     left: 0;
     right: auto;
   }
+
   #criteria-list {
     margin-left: 15px;
     margin-right: 0;
   }
+
   .hint {
     right: 2px;
     left: auto;
@@ -100,14 +120,18 @@ html.rtl {
       text-align: right;
     }
   }
+
   #search_header {
     padding: 0 0 0 8px;
   }
+
   .validation-title {
     text-align: right;
   }
+
   md-datepicker[name='followUpStatusDate'] {
     margin: 0 5px !important;
+
     .md-datepicker-input {
       margin: 0 5px !important;
       padding: 0 !important;
@@ -116,6 +140,7 @@ html.rtl {
 
   .indicator-td {
     padding-left: 0 !important;
+
     &.text-right {
       text-align: left !important;
     }
@@ -124,8 +149,10 @@ html.rtl {
       float: left !important;
     }
   }
+
   .read-td {
     padding-left: 0 !important;
+
     .status {
       float: left;
       left: 0;
@@ -152,9 +179,11 @@ html.rtl {
       padding-left: 0 !important;
     }
   }
+
   .text-left {
     text-align: right !important;
   }
+
   .text-right {
     text-align: left !important;
   }
@@ -167,11 +196,13 @@ html.rtl {
       margin-left: auto;
       margin-right: 0;
     }
+
     button.cms-icon-button {
       margin-left: auto;
       margin-right: 0;
     }
   }
+
   .ta-text-editor {
     blockquote {
       border-right: 5px solid #FF4081;
@@ -182,6 +213,12 @@ html.rtl {
   md-autocomplete[md-floating-label] .md-show-clear-button button {
     left: 0;
     right: auto;
+  }
+
+  .full-screen-button-icon {
+    position: absolute;
+    left: 50px;
+    right: auto !important;
   }
 }
 

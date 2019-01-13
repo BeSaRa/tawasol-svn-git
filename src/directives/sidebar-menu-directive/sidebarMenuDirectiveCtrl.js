@@ -19,12 +19,16 @@ module.exports = function (app) {
         self.navigateToLink = function (item, $event) {
             $event.preventDefault();
             if (!item.children.length) {
-                var report = reportService.getReportByKey(item.lang_key);
-                if (report) {
-                    $state.go(item.state, {
+                if (item.isDynamic) {
+                    var state = item.dynamicMenuItem.generateState();
+                    $state.go(state, {
                         identifier: rootEntity.getRootEntityIdentifier(),
-                        reportName: report.reportName
+                        menuId: item.ID
                     });
+                    // $state.go(item.state, {
+                    //     identifier: rootEntity.getRootEntityIdentifier(),
+                    //     reportName: report.reportName
+                    // });
                 } else {
                     $state.go(item.state, {identifier: rootEntity.getRootEntityIdentifier()});
                 }
@@ -36,11 +40,15 @@ module.exports = function (app) {
         };
 
         self.isCurrentState = function (item) {
-            if (item.isReport) {
-                return $state.includes(item.state, {reportName: item.report.reportName});
+            if (item.isDynamic) {
+                return $state.includes(item.state, {menuId: item.ID});
             } else {
                 return $state.includes(item.state);
             }
+        };
+
+        self.getMenuState = function (item) {
+            return item.dynamicMenuItem.generateState() + '({menuId:item.ID})';
         };
 
         self.showMenuItem = function (item) {

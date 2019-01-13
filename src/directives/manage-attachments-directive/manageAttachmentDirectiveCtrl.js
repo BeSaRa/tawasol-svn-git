@@ -71,8 +71,7 @@ module.exports = function (app) {
             var securityLevel = self.document.securityLevel;
             if (securityLevel.hasOwnProperty('lookupKey')) {
                 securityLevel = securityLevel.lookupKey;
-            }
-            else if (securityLevel.hasOwnProperty('id')) {
+            } else if (securityLevel.hasOwnProperty('id')) {
                 securityLevel = securityLevel.id;
             }
             securityLevel = lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel);
@@ -80,8 +79,7 @@ module.exports = function (app) {
                 var attachment = new Attachment(self.attachment);
                 attachment.file = file;
                 return attachment;
-            }
-            else {
+            } else {
                 return new Attachment({
                     file: file,
                     securityLevel: self.document ? securityLevel : null,
@@ -128,16 +126,14 @@ module.exports = function (app) {
                             .then(function (result) {
                                 self.attachment = null;
                             })
-                    }
-                    else {
+                    } else {
                         if (attachments && attachments.length) {
                             if (self.attachment) {
                                 var index = _.findIndex(self.attachments, function (existingAttachment) {
                                     return attachments[0].vsId === existingAttachment.vsId;
                                 });
                                 self.attachments.splice(index, 1, attachments[0]);
-                            }
-                            else {
+                            } else {
                                 self.attachments = self.attachments.concat(attachments);
                             }
                         }
@@ -202,8 +198,7 @@ module.exports = function (app) {
                             .then(function (result) {
                                 toast.success(langService.get('add_success').change({name: attachment.documentTitle}));
                             })
-                    }
-                    else {
+                    } else {
                         toast.success(langService.get('add_success').change({name: attachment.documentTitle}));
                         attachment.isDeletable = self.isAttachmentDeletable(attachment);
                         self.attachments.push(attachment);
@@ -282,14 +277,14 @@ module.exports = function (app) {
             attachmentService.viewAttachment(attachment, self.documentClass);
         };
 
-            self.downloadAttachment = function (attachment, $event) {
-                downloadService.controllerMethod
-                    .attachmentDownload(attachment.vsId);
-            };
+        self.downloadAttachment = function (attachment, $event) {
+            downloadService.controllerMethod
+                .attachmentDownload(attachment.vsId);
+        };
 
-            self.isAttachmentDeletable = function (attachment) {
-                return attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment);
-            };
+        self.isAttachmentDeletable = function (attachment) {
+            return attachmentService.checkAttachmentIsDeletable(self.document.getInfo(), attachment);
+        };
 
         /**
          * to upload the files
@@ -303,6 +298,7 @@ module.exports = function (app) {
                     self.attachment = _createAttachmentFile(file);
                 })
                 .catch(function (availableExtensions) {
+                    console.log(availableExtensions);
                     dialog.errorMessage(langService.get('invalid_uploaded_file').addLineBreak(availableExtensions.join(', ')));
                 })
 

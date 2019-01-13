@@ -207,6 +207,12 @@ module.exports = function (app) {
         };
 
 
+        self.insertRunTimeLangKey = function (keyName, arabic, english) {
+            self.langKeys['ar'][keyName] = arabic;
+            self.langKeys['en'][keyName] = english;
+        };
+
+
         self.setSelectedLanguageById = function (langId) {
             self.setSelectedLanguage(_.find(self.languages, function (lang) {
                 return lang.id === langId;

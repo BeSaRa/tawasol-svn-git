@@ -104,7 +104,8 @@ module.exports = function (app) {
                 workflowAction: 'wfAction',
                 documentFile: 'docFile',
                 documentTemplate: 'docTemplate',
-                attachmentType: 'attachType'
+                attachmentType: 'attachType',
+                dynamicMenuItem: 'dynamicMenu'
             }
         };
 
@@ -178,8 +179,7 @@ module.exports = function (app) {
                 self.removeAllSorting();
             if (typeof gridName === 'string') {
                 _removeGridSortingKey(gridName);
-            }
-            else if (angular.isArray(gridName) && gridName.length) {
+            } else if (angular.isArray(gridName) && gridName.length) {
                 for (var i = 0; i < gridName.length; i++) {
                     // remove the saved sorting one by one and if saved sorting finished and removed from storage, break the loop.
                     if (_removeGridSortingKey(gridName[i]) === -1)
@@ -211,17 +211,13 @@ module.exports = function (app) {
 
             if (gridName === self.grids.inbox.sentItem) {
                 return [5, 10, 20, 100, 200];
-            }
-            else if (gridName === self.grids.inbox.userInbox) {
+            } else if (gridName === self.grids.inbox.userInbox) {
                 return [5, 10, 20, 50, 70, 90, 100, 200];
-            }
-            else if (gridName === self.grids.inbox.inboxFilter) {
+            } else if (gridName === self.grids.inbox.inboxFilter) {
                 return [5, 10, 20, 200];
-            }
-            else if (gridName === self.grids.administration.localization) {
+            } else if (gridName === self.grids.administration.localization) {
                 return [5, 10, 20, 40, 50, 80, 100];
-            }
-            else {
+            } else {
                 return (
                     [
                         5, 10, 20,
@@ -230,8 +226,7 @@ module.exports = function (app) {
                             value: function () {
                                 if (useSearchAmountLimit) {
                                     return (rootEntity.returnRootEntity().settings.searchAmountLimit);
-                                }
-                                else {
+                                } else {
                                     // if count is not null, return (count + 21) records
                                     // if count is null, return the (max number + 21) records
                                     if (count !== null)
@@ -265,8 +260,7 @@ module.exports = function (app) {
                             var gridPaging = {};
                             gridPaging[gridName] = pagingStorage[gridName];
                             return gridPaging;
-                        }
-                        else {
+                        } else {
                             return Number(pagingStorage[gridName]);
                         }
                     }
@@ -286,8 +280,7 @@ module.exports = function (app) {
             if (!pagingStorage) {
                 pagingStorage = {};
                 pagingStorage[gridName] = value;
-            }
-            else {
+            } else {
                 if (pagingStorage[gridName] !== value)
                     pagingStorage[gridName] = value;
             }
@@ -322,8 +315,7 @@ module.exports = function (app) {
                 self.removeAllPagingLimit();
             if (typeof gridName === 'string') {
                 _removeGridPagingLimitByGridName(gridName);
-            }
-            else if (angular.isArray(gridName) && gridName.length) {
+            } else if (angular.isArray(gridName) && gridName.length) {
                 for (var i = 0; i < gridName.length; i++) {
                     // remove the saved paging one by one and if saved paging finished and removed from storage, break the loop.
                     if (_removeGridPagingLimitByGridName(gridName[i]) === -1)
@@ -387,12 +379,10 @@ module.exports = function (app) {
                 if (action.hasOwnProperty('permissionKey')) {
                     if (typeof action.permissionKey === 'string') {
                         hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                    }
-                    else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                    } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                         if (action.hasOwnProperty('checkAnyPermission')) {
                             hasPermission = employeeService.getEmployee() && employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                        }
-                        else {
+                        } else {
                             hasPermission = employeeService.getEmployee() && employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                         }
                     }
@@ -403,8 +393,7 @@ module.exports = function (app) {
                 if (action.actionFromPopup) {
                     if (!showInView)
                         hasPermission = false;
-                }
-                else {
+                } else {
                     if (showInViewOnly)
                         hasPermission = false;
                 }

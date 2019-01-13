@@ -3,8 +3,7 @@ module.exports = function (app) {
         'ngInject';
         var self = this;
         self.controllerName = 'sidebarLeftDirectiveCtrl';
-        self.items = sidebarService.getMenuHierarchy();
-        // self.itemFiltered = angular.copy(self.items);
+        self.items = sidebarService.prepareDynamicMenuItems();
         self.rootEntity = rootEntity;
         self.service = sidebarService;
         self.search = '';
@@ -28,7 +27,6 @@ module.exports = function (app) {
         $scope.$on('$currentEmployeePermissionsChanged', function () {
             self.items = sidebarService.getMenuHierarchy();
         });
-
 
 
     });

@@ -31,6 +31,8 @@ module.exports = function (app) {
         self.messageStatus = 'messageStatus';
         self.thumbnailMode = 'thumbnailMode';
         self.attachmentUpdateAction = 'attachmentUpdateAction';
+        self.menuItemType = 'menuItemType';
+        self.menuItemParam = 'menuItemParam';
 
         // this propertyConfiguration related to the property configurations Service.
         self.propertyConfigurations = {

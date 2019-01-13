@@ -159,4 +159,5 @@ module.exports = function (app) {
     require('./DuplicateOption')(app);
     require('./OutgoingIncomingSearch')(app);
     require('./Pair')(app);
+    require('./DynamicMenuItem')(app);
 };

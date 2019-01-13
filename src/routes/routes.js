@@ -59,9 +59,15 @@ module.exports = function (app) {
                     identifier: rootEntityProvider.getRootEntityIdentifier()
                 },
                 resolve: {
-                    counters: function (counterService, employeeService) {
+                    counters: function (counterService, sidebarService, employeeService) {
                         'ngInject';
                         return !employeeService.isAdminUser() ? counterService.loadCounters() : [];
+                    },
+                    landing: function (layoutService, sidebarService, employeeService) {
+                        'ngInject';
+                        return !employeeService.isCloudUser() && !employeeService.isAdminUser() ? (layoutService.loadLandingPage().then(function () {
+                            sidebarService.setDynamicMenuItems(layoutService.menuItems);
+                        })) : [];
                     }
                 }
             })
@@ -1496,31 +1502,52 @@ module.exports = function (app) {
             })
             // temporary route for reports
             .state('app.reports', {
-                url: '/reports/:reportName',
+                url: '/reports/:menuId',
                 template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
-                controller: function ($sce, $stateParams,  contextHelpService , tokenService, urlService, employeeService) {
+                controller: function ($sce, $stateParams, sidebarService, contextHelpService, tokenService, urlService, employeeService) {
                     'ngInject';
-                    var self = this;
-                    var reportName = $stateParams.reportName,
-                        reportUrl = urlService.reports.replace('{reportName}', encodeURIComponent(reportName)).replace('{token}', tokenService.getToken()),
-                        url = urlService.portal.replace('{reportUrl}', reportUrl);
                     contextHelpService.setHelpTo('reports');
+                    var self = this;
+                    var menuId = $stateParams.menuId;
+                    var dynamicMenuItem = sidebarService.getDynamicMenuItemByID(menuId);
+                    var url = dynamicMenuItem.dynamicMenuItem.getMenuUrlAfterReplacement();
                     self.url = $sce.trustAsResourceUrl(url);
                 },
                 isReport: true,
                 controllerAs: 'ctrl'
             })
             .state('app.icn', {
-                url: '/icn/archive',
+                url: '/icn/:menuId',
                 abstract: false,
-                template: '<iframe ng-hide="true" width="0" height="0" ng-src="{{ctrl.url}}"></iframe>' +
-                    '<div id="sub-view-wrapper"><ui-view flex layout="column" class="sub-view" /></div>',
-                controller: function (credentials, urlService, $sce) {
+                template: '<iframe id="icn-login" ng-hide="true" width="0" height="0" ng-src="{{ctrl.loginURL}}"></iframe>' +
+                    '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
+                controller: function ($scope, credentials, $stateParams, urlService, sidebarService, $timeout, $sce) {
                     'ngInject';
-                    var self = this;
-                    self.url = $sce.trustAsResourceUrl(urlService.icnLogin.replace('{{username}}', credentials.username).replace('{{password}}', credentials.password));
+                    var self = this, menuId = $stateParams.menuId,
+                        menuItem = sidebarService.getDynamicMenuItemByID(menuId),
+                        menuURL = menuItem.dynamicMenuItem.getMenuUrlAfterReplacement(),
+                        aLink = null;
+
+                    self.createLoginIframe = function () {
+                        aLink = angular.element('<a />').attr('href', menuURL);
+                        var loginLink = aLink[0].protocol + '//' + aLink[0].host + '/navigator/jaxrs/logon?userid={{username}}&password={{password}}';
+                        self.loginURL = $sce.trustAsResourceUrl(loginLink.replace('{{username}}', credentials.username).replace('{{password}}', credentials.password));
+                    };
+
+                    self.removeLoginIframe = function () {
+                        angular.element('#icn-login').remove();
+                    };
+                    self.createLoginIframe();
+
+                    $timeout(function () {
+                        self.removeLoginIframe();
+                        self.url = $sce.trustAsResourceUrl(menuURL);
+                    }, 2000);
+
+
                 },
                 controllerAs: 'ctrl',
+                isICN: true,
                 resolve: {
                     credentials: function (authenticationService) {
                         'ngInject';
@@ -1528,28 +1555,28 @@ module.exports = function (app) {
                     }
                 }
             })
-            .state('app.icn.add', {
-                url: '/add',
-                template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
-                controllerAs: 'ctrl',
-                permission: 'menu_item_icn_archive_add',
-                controller: function (urlService, $sce) {
-                    'ngInject';
-                    var self = this;
-                    self.url = $sce.trustAsResourceUrl(urlService.icnAdd);
-                }
-            })
-            .state('app.icn.search', {
-                url: '/search',
-                template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
-                controllerAs: 'ctrl',
-                permission: 'menu_item_icn_archive_search',
-                controller: function (urlService, $sce) {
-                    'ngInject';
-                    var self = this;
-                    self.url = $sce.trustAsResourceUrl(urlService.icnSearch);
-                }
-            })
+            // .state('app.icn.add', {
+            //     url: '/add',
+            //     template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
+            //     controllerAs: 'ctrl',
+            //     permission: 'menu_item_icn_archive_add',
+            //     controller: function (urlService, $sce) {
+            //         'ngInject';
+            //         var self = this;
+            //         self.url = $sce.trustAsResourceUrl(urlService.icnAdd);
+            //     }
+            // })
+            // .state('app.icn.search', {
+            //     url: '/search',
+            //     template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
+            //     controllerAs: 'ctrl',
+            //     permission: 'menu_item_icn_archive_search',
+            //     controller: function (urlService, $sce) {
+            //         'ngInject';
+            //         var self = this;
+            //         self.url = $sce.trustAsResourceUrl(urlService.icnSearch);
+            //     }
+            // })
             .state('app.g2g', {
                 abstract: true,
                 url: '/g2g',
@@ -1607,12 +1634,12 @@ module.exports = function (app) {
                 permission: 'menu_item_g2g'
             })
             .state('app.administration.menu-items', {
-                url: '/menu-items',
-                template: cmsTemplateProvider.getView('menu-items'),
-                controller: 'menuItemsCtrl',
+                url: '/dynamic-menu-items',
+                template: cmsTemplateProvider.getView('dynamic-menu-items'),
+                controller: 'dynamicMenuItemCtrl',
                 controllerAs: 'ctrl'
             })
-            .state('app.central-archive.sent-items',{
+            .state('app.central-archive.sent-items', {
                 url: '/sent-items',
                 template: cmsTemplateProvider.getView('central-archive-sent-items'),
                 controller: 'centralArchiveSentItemCtrl',
