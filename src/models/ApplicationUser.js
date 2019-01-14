@@ -44,6 +44,7 @@ module.exports = function (app) {
             self.actions = null;
             self.outOfOffice = false;
             self.viewInboxAsGrid = true;
+            self.defaultViewerLang = 1;
 
             var collectionResults = [
                 'reminderSmsPriority',

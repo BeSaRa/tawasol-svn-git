@@ -322,6 +322,21 @@
                                         </div>
                                     </md-input-container>
                                 </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="defaultViewerLang">{{lang.default_viewer_language}}</label>
+                                        <md-select id="defaultViewerLang" name="defaultViewerLang" required
+                                                   ng-model="ctrl.applicationUser.defaultViewerLang">
+                                            <md-option ng-value="language.lookupKey"
+                                                       ng-repeat="language in ctrl.languages track by $index">
+                                                {{language.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="userPreferencesForm.defaultViewerLang.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
                             </div>
                         </md-content>
                     </md-tab>

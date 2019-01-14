@@ -182,7 +182,9 @@
                                                custom-validate-directive="phone_mobile">
                                         <div ng-messages="applicationUserForm.mobile.$error">
                                             <div ng-message="required">{{lang.field_required}}</div>
-                                            <div ng-message="phone_mobile">{{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}</div>
+                                            <div ng-message="phone_mobile">
+                                                {{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}
+                                            </div>
                                             <div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>
                                         </div>
                                     </md-input-container>
@@ -353,6 +355,21 @@
                                     </md-input-container>
                                     <!-- Empty Container to cover the space when organization unit container is not displayed -->
                                     <md-input-container flex ng-if="!ctrl.editMode"></md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="defaultViewerLang">{{lang.default_viewer_language}}</label>
+                                        <md-select id="defaultViewerLang" name="defaultViewerLang" required
+                                                   ng-model="ctrl.applicationUser.defaultViewerLang">
+                                            <md-option ng-value="language.lookupKey"
+                                                       ng-repeat="language in ctrl.languages track by $index">
+                                                {{language.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="applicationUserForm.defaultViewerLang.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
                                 </div>
                             </div>
                         </md-content>

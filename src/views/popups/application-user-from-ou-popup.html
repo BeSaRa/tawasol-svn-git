@@ -293,9 +293,23 @@
                                         </div>
                                     </md-input-container>
                                 </div>
-                                <div layout="row" flex ng-if="ctrl.editMode">
-                                    <!-- Organization Unit -->
+                                <div layout="row" flex>
+                                    <!-- View Inbox -->
                                     <md-input-container flex>
+                                        <label for="viewInboxAsGrid">{{lang.view_inbox_as}}</label>
+                                        <md-select id="viewInboxAsGrid" name="viewInboxAsGrid" required
+                                                   ng-model="ctrl.applicationUser.viewInboxAsGrid">
+                                            <md-option ng-value="viewType.value"
+                                                       ng-repeat="viewType in ctrl.viewInboxAsOptions track by $index">
+                                                {{lang[viewType.key]}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="applicationUserForm.viewInboxAsGrid.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- Organization Unit -->
+                                    <md-input-container ng-if="ctrl.editMode" flex>
                                         <label for="defaultOUID">{{lang.organization_unit}}</label>
                                         <md-select id="defaultOUID" name="defaultOUID" required
                                                    ng-model="ctrl.applicationUser.defaultOUID">
@@ -312,6 +326,21 @@
                                     </md-input-container>
                                     <!-- Empty Container -->
                                     <md-input-container flex></md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="defaultViewerLang">{{lang.default_viewer_language}}</label>
+                                        <md-select id="defaultViewerLang" name="defaultViewerLang" required
+                                                   ng-model="ctrl.applicationUser.defaultViewerLang">
+                                            <md-option ng-value="language.lookupKey"
+                                                       ng-repeat="language in ctrl.languages track by $index">
+                                                {{language.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="applicationUserForm.defaultViewerLang.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
                                 </div>
                             </div>
                         </md-content>
