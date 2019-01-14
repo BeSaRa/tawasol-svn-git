@@ -416,7 +416,7 @@ module.exports = function (app) {
         self.exportReadyToExport = function (readyToExport, exportOptions) {
             var info = readyToExport.getInfo();
             return $http
-                .put((urlService.exportReadyToExports).replace('{{vsId}}', info.vsId).replace('{{wobNum}}', info.wobNumber), exportOptions)
+                .put((urlService.exportReadyToExports).replace('{{vsId}}', info.vsId).replace('{{wobNum}}', info.wobNumber), generator.interceptSendInstance('ReadyToExportOption', exportOptions))
                 .then(function () {
                     return readyToExport;
                 });
@@ -426,7 +426,7 @@ module.exports = function (app) {
          * @param readyToExport
          * @param exportOptions
          */
-        self.exportReadyToExportSelective = function(readyToExport, exportOptions){
+        self.exportReadyToExportSelective = function (readyToExport, exportOptions) {
             var info = readyToExport.getInfo();
             exportOptions = generator.interceptSendInstance('PartialExportSelective', exportOptions);
             return $http

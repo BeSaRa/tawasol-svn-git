@@ -106,4 +106,5 @@ module.exports = function (app) {
     require('./bulkExportOptionPopCtrl')(app);
     require('./dynamicMenuItemPopCtrl')(app);
     require('./subDynamicMenuItemPopCtrl')(app);
+    require('./linkedDocsAttachmentPopCtrl')(app);
 };

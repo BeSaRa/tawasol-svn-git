@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                            sites,
                                                            _,
                                                            resend,
+                                                           cmsTemplate,
                                                            downloadService,
                                                            readyToExport,
                                                            rootEntity,
@@ -74,8 +75,7 @@ module.exports = function (app) {
                 if (type)
                     return self.readyToExport.generalStepElm[linkedDataCount[type]];
                 return self.readyToExport.generalStepElm.attachementsNO || self.readyToExport.generalStepElm.linkedDocsNO || self.readyToExport.generalStepElm.linkedEntitiesNO;
-            }
-            else {
+            } else {
                 return true;
             }
         };
@@ -165,8 +165,7 @@ module.exports = function (app) {
                                 });
                         });
                     });
-            }
-            else {
+            } else {
                 readyToExportService
                     .exportReadyToExportSelective(self.readyToExport, self.partialExportList)
                     .then(function (result) {
@@ -220,6 +219,34 @@ module.exports = function (app) {
         self.closeExportPopupFromCtrl = function () {
             dialog.cancel();
         };
+
+
+        self.openLinkedDocsAttachmentDialog = function ($event) {
+            return dialog
+                .showDialog({
+                    template: cmsTemplate.getPopup('linked-docs-attachments'),
+                    controller: 'linkedDocsAttachmentPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        exportOptions: self.model,
+                        model: self.readyToExport
+                    },
+                    resolve: {
+                        linkedDocs: function (correspondenceService) {
+                            'ngInject';
+                            var info = self.readyToExport.getInfo();
+                            return correspondenceService
+                                .getLinkedDocumentsByVsIdClass(info.vsId, info.documentClass);
+                        }
+                    }
+                })
+                .then(function (selectedCorrespondences) {
+                    self.model.setAttachmentLinkedDocs(selectedCorrespondences);
+                })
+                .catch(function (selectedCorrespondences) {
+                    self.model.setAttachmentLinkedDocs(selectedCorrespondences);
+                })
+        }
 
     });
 };

@@ -95,4 +95,5 @@ module.exports = function (app) {
     require('./CorrespondenceVersionInterceptor')(app);
     require('./SearchOutgoingIncomingInterceptor')(app);
     require('./DynamicMenuItemInterceptor')(app);
+    require('./ReadyToExportOptionInterceptor')(app);
 };
