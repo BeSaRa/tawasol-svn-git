@@ -995,7 +995,6 @@ module.exports = function (app) {
                 icon: 'eye',
                 text: 'grid_action_view_tracking_sheet',
                 shortcut: false,
-                hide: true,
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: self.checkToShowAction,
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
