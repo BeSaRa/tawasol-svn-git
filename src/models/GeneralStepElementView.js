@@ -74,6 +74,7 @@ module.exports = function (app) {
                 self.correspondence = generator.interceptReceivedInstance(['Correspondence', className, 'View' + className], self.correspondence);
                 self.generalStepElm = self.stepElm;
                 self.documentViewInfo.viewURL = $sce.trustAsResourceUrl(self.documentViewInfo.viewURL);
+                self.documentViewInfo.editURL = $sce.trustAsResourceUrl(self.documentViewInfo.editURL);
                 delete self.stepElm;
                 return this;
             };
