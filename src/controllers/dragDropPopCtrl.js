@@ -163,8 +163,7 @@ module.exports = function (app) {
                         self.validFiles = [];
                         self.validFiles.push(attachment);
                     }
-                }
-                else {
+                } else {
                     for (var i = 0; i < files.length; i++) {
                         if (attachmentService.validateBeforeUpload('attachmentUpload', files[i], true)) {
                             self.validFiles.push(new Attachment({
@@ -313,8 +312,7 @@ module.exports = function (app) {
                 if (attachment) {
                     self.attachment = null;
                     self.closeDrag(updatedAttachment);
-                }
-                else {
+                } else {
                     //replace the attachment in successFilesUploaded array
                     var index = _.findIndex(self.successFilesUploaded, function (attachment) {
                         return (updatedAttachment.vsId === attachment.vsId);
@@ -365,8 +363,8 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.checkAttachmentTypeIsAvailable = function (type) {
-            if (attachmentCopy) {
-                var attachmentType = attachmentCopy.attachmentType;
+            if (self.attachment) {
+                var attachmentType = self.attachment.attachmentType;
                 var typeCopy = angular.copy(type);
                 if (typeCopy.hasOwnProperty('lookupKey'))
                     typeCopy = typeCopy.lookupKey;
@@ -381,9 +379,7 @@ module.exports = function (app) {
         };
 
         self.checkValidAttachmentFields = function () {
-            return !!(self.attachmentType && self.updateActionStatus
-                && (!self.inheritSecurity && self.securityLevel)
-            );
+            return !!(self.attachmentType && self.updateActionStatus && self.securityLevel);
         }
     });
 };
