@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                    organizations,
                                                    ResolveDefer,
                                                    searchOutgoingService,
+                                                   Organization,
                                                    $q,
                                                    _,
                                                    $filter,
@@ -16,6 +17,7 @@ module.exports = function (app) {
                                                    rootEntity,
                                                    managerService,
                                                    contextHelpService,
+                                                   organizationService,
                                                    toast,
                                                    viewTrackingSheetService,
                                                    downloadService,
@@ -26,6 +28,7 @@ module.exports = function (app) {
                                                    correspondenceService,
                                                    favoriteDocumentsService,
                                                    mailNotificationService,
+                                                   centralArchives,
                                                    approvers) {
         'ngInject';
         var self = this;
@@ -55,9 +58,18 @@ module.exports = function (app) {
         self.requiredFieldsSearchOutgoing = self.getSearchOutgoingRequiredFields();
 
         self.validateLabelsSearchOutgoing = {};
+
+        self.registryOrganizations = employeeService.isCentralArchive() ? angular.copy(centralArchives) : angular.copy(organizationService.getAllRegistryOrganizations());
+
+        self.registryOrganizations.unshift(new Organization({
+            id: null,
+            arName: langService.getKey('not_found', 'ar'),
+            enName: langService.getKey('not_found', 'en')
+        }));
+
         /*
                 // in case of central archive.
-                self.registryOrganizations = centralArchives;
+
 
                 self.isSearchByRegOU = true;
                 self.getTranslatedYesNo = function (fieldName) {
@@ -316,8 +328,7 @@ module.exports = function (app) {
                         toast.success(langService.get("add_to_favorite_specific_success").change({
                             name: searchedOutgoingDocument.getTranslatedName()
                         }));
-                    }
-                    else {
+                    } else {
                         dialog.alertMessage(langService.get(result.message));
                     }
                 });
@@ -656,12 +667,10 @@ module.exports = function (app) {
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
                     hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                     if (action.hasOwnProperty('checkAnyPermission')) {
                         hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    }
-                    else {
+                    } else {
                         hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
@@ -980,7 +989,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_composite_document',
-                        permissionKey:'DOWNLOAD_COMPOSITE_BOOK',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         shortcut: false,
                         callback: self.downloadCompositeDocument,
                         class: "action-green",

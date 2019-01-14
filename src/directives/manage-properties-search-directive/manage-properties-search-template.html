@@ -2,6 +2,20 @@
     <form name="docSearchForm">
         <div layout="column" ng-if="ctrl.searchType === 'basic'">
             <div layout="row">
+                <md-input-container ng-if="ctrl.employee.hasPermissionTo('SEARCH_IN_ALL_OU')" flex>
+                    <label for="registryOU">{{lang.select_organization}}</label>
+                    <md-select name="registryOU" id="registryOU"
+                               ng-model="ctrl.document.registryOU"
+                               ng-required="ctrl.checkMandatory('registryOU')">
+                        <md-option ng-value="organization.id"
+                                   ng-repeat="organization in ctrl.registryOrganizations">
+                            {{organization.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="docSearchForm.registryOU.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
                 <!-- Paper/Electronic -->
                 <md-input-container flex
                                     ng-if="ctrl.document.docClassName.toLowerCase() !== 'incoming' && ctrl.checkStatus('addMethod')">
@@ -251,7 +265,7 @@
                         </md-input-container>
                     </fieldset>
                 </div>
-          <!--      <span flex></span>-->
+                <!--      <span flex></span>-->
             </div>
             <div layout="row">
                 <!-- Document Type -->

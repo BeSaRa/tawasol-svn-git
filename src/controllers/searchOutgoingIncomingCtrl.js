@@ -13,6 +13,9 @@ module.exports = function (app) {
                                                            validationService,
                                                            generator,
                                                            //rootEntity,
+                                                           centralArchives,
+                                                           Organization,
+                                                           organizationService,
                                                            managerService,
                                                            contextHelpService,
                                                            toast,
@@ -55,6 +58,13 @@ module.exports = function (app) {
 
         self.validateLabelsSearchOutgoingIncoming = {};
 
+        self.registryOrganizations = employeeService.isCentralArchive() ? angular.copy(centralArchives) : angular.copy(organizationService.getAllRegistryOrganizations());
+
+        self.registryOrganizations.unshift(new Organization({
+            id: null,
+            arName: langService.getKey('not_found', 'ar'),
+            enName: langService.getKey('not_found', 'en')
+        }));
 
         /**
          * @description Checks if the field is mandatory
@@ -73,42 +83,7 @@ module.exports = function (app) {
             }
             return false;
         };
-        /*
-                // in case of central archive.
-                self.registryOrganizations = centralArchives;
 
-                self.isSearchByRegOU = true;
-                self.getTranslatedYesNo = function (fieldName) {
-                    return self[fieldName] ? langService.get('yes') : langService.get('no');
-                };
-
-                self.ouToggleDefaultDisabled = false;
-                self.regOuToggleDefaultDisabled = false;
-
-                self.checkRegOuToggleDisabled = function () {
-                    if (employeeService.isCentralArchive()) {
-                        return self.searchOutgoingOutgoingIncoming.ou;
-                    }
-                    return false;
-                };
-
-                self.checkOuToggleDisabled = function () {
-                    if (employeeService.isCentralArchive()) {
-                        return self.isSearchByRegOU;
-                    }
-                    return false;
-                };
-
-                self.changeRegOuToggle = function () {
-                    if (!self.isSearchByRegOU) {
-                        self.searchOutgoingOutgoingIncoming.regOu = null;
-                    }
-                };
-
-                self.changeOuToggle = function () {
-                    /!*self.isSearchByRegOU = false;
-                     self.searchOutgoingOutgoingIncoming.regOu = null;*!/
-                };*/
 
         /**
          * @description Checks the required fields validation

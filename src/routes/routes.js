@@ -710,11 +710,11 @@ module.exports = function (app) {
                             .searchByCriteria({
                                 regOu: employeeService.getEmployee().organization.ouRegistryID
                             });
-                    }/*,
+                    },
                     centralArchives: function ($q, organizations, employeeService, organizationService) {
                         'ngInject';
                         return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
-                    }*/
+                    }
                 }
             })
             //Incoming Search
@@ -743,6 +743,10 @@ module.exports = function (app) {
                         var ouId = employeeService.getEmployee().organization.ouid;
                         return propertyConfigurationService
                             .loadPropertyConfigurationsByDocumentClassAndOU('incoming', ouId);
+                    },
+                    centralArchives: function ($q, organizations, employeeService, organizationService) {
+                        'ngInject';
+                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
                     }
                     /*documentFiles: function (documentFileService) {
                         'ngInject';
@@ -761,12 +765,6 @@ module.exports = function (app) {
                     documentStatuses: function (documentStatusService) {
                         'ngInject';
                         return documentStatusService.getDocumentStatuses();
-                    }*/
-
-                    /*,
-                    centralArchives: function ($q, organizations, employeeService, organizationService) {
-                        'ngInject';
-                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
                     }*/
                 }
             })
@@ -821,11 +819,11 @@ module.exports = function (app) {
                             .searchByCriteria({
                                 regOu: employeeService.getEmployee().organization.ouRegistryID
                             });
-                    }/*,
+                    },
                     centralArchives: function ($q, organizations, employeeService, organizationService) {
                         'ngInject';
                         return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
-                    }*/
+                    }
                 }
             })
             //General Search
@@ -854,6 +852,10 @@ module.exports = function (app) {
                         var ouId = employeeService.getEmployee().organization.ouid;
                         return propertyConfigurationService
                             .loadPropertyConfigurationsByDocumentClassAndOU('general', ouId);
+                    },
+                    centralArchives: function ($q, organizations, employeeService, organizationService) {
+                        'ngInject';
+                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
                     }
                     /*documentFiles: function (documentFileService) {
                         'ngInject';
@@ -873,11 +875,7 @@ module.exports = function (app) {
                         'ngInject';
                         return documentStatusService.getDocumentStatuses();
                     }*/
-                    /*,
-                    centralArchives: function ($q, organizations, employeeService, organizationService) {
-                        'ngInject';
-                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
-                    }*/
+
                 }
             })
             //Outgoing Incoming Search
@@ -906,6 +904,10 @@ module.exports = function (app) {
                         var ouId = employeeService.getEmployee().organization.ouid;
                         return propertyConfigurationService
                             .loadPropertyConfigurationsByDocumentClassAndOU('incoming', ouId);
+                    },
+                    centralArchives: function ($q, organizations, employeeService, organizationService) {
+                        'ngInject';
+                        return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
                     }
                 }
             })

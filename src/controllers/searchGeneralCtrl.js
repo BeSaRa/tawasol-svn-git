@@ -15,6 +15,7 @@ module.exports = function (app) {
                                                   generator,
                                                   rootEntity,
                                                   managerService,
+                                                  organizationService,
                                                   contextHelpService,
                                                   toast,
                                                   viewTrackingSheetService,
@@ -22,13 +23,13 @@ module.exports = function (app) {
                                                   DocumentStatus,
                                                   employeeService,
                                                   counterService,
+                                                  Organization,
                                                   correspondenceService,
                                                   dialog,
                                                   mailNotificationService,
                                                   gridService,
-                                                  favoriteDocumentsService//,
-                                                  //centralArchives
-    ) {
+                                                  favoriteDocumentsService,
+                                                  centralArchives) {
         'ngInject';
 
         var self = this;
@@ -59,42 +60,13 @@ module.exports = function (app) {
 
         self.validateLabelsSearchGeneral = {};
 
-        /*
-                // in case of central archive.
-                self.registryOrganizations = centralArchives;
+        self.registryOrganizations = employeeService.isCentralArchive() ? angular.copy(centralArchives) : angular.copy(organizationService.getAllRegistryOrganizations());
 
-                self.isSearchByRegOU = true;
-                self.getTranslatedYesNo = function (fieldName) {
-                    return self[fieldName] ? langService.get('yes') : langService.get('no');
-                };
-
-                self.ouToggleDefaultDisabled = false;
-                self.regOuToggleDefaultDisabled = false;
-
-                self.checkRegOuToggleDisabled = function () {
-                    if (employeeService.isCentralArchive()) {
-                        return self.searchGeneral.ou;
-                    }
-                    return false;
-                };
-
-                self.checkOuToggleDisabled = function () {
-                    if (employeeService.isCentralArchive()) {
-                        return self.isSearchByRegOU;
-                    }
-                    return false;
-                };
-
-                self.changeRegOuToggle = function () {
-                    if (!self.isSearchByRegOU) {
-                        self.searchGeneral.regOu = null;
-                    }
-                };
-
-                self.changeOuToggle = function () {
-                    /!*self.isSearchByRegOU = false;
-                     self.searchGeneral.regOu = null;*!/
-                };*/
+        self.registryOrganizations.unshift(new Organization({
+            id: null,
+            arName: langService.getKey('not_found', 'ar'),
+            enName: langService.getKey('not_found', 'en')
+        }));
 
         function _mapResultToAvoidCorrespondenceCheck(result) {
             return _.map(result, function (item) {
@@ -350,8 +322,7 @@ module.exports = function (app) {
                         toast.success(langService.get("add_to_favorite_specific_success").change({
                             name: searchedGeneralDocument.getTranslatedName()
                         }));
-                    }
-                    else {
+                    } else {
                         dialog.alertMessage(langService.get(result.message));
                     }
                 });
@@ -718,12 +689,10 @@ module.exports = function (app) {
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
                     hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                     if (action.hasOwnProperty('checkAnyPermission')) {
                         hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    }
-                    else {
+                    } else {
                         hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
@@ -1026,7 +995,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_composite_document',
-                        permissionKey:'DOWNLOAD_COMPOSITE_BOOK',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         shortcut: false,
                         callback: self.downloadCompositeDocument,
                         class: "action-green",

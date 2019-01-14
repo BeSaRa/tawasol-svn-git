@@ -48,6 +48,15 @@ module.exports = function (app) {
             });
         };
         /**
+         * @description get all registry organizations
+         * @return {Array}
+         */
+        self.getAllRegistryOrganizations = function () {
+            return _.filter(self.organizations, function (organization) {
+                return organization.hasRegistry;
+            });
+        };
+        /**
          * @description get organizations from self.organizations if found and if not load it from server again.
          * @returns {Promise|organizations}
          */
@@ -566,7 +575,10 @@ module.exports = function (app) {
                     return organizations;
                 });
         };
-
+        /**
+         * @description load central archive organizations.
+         * @return {*}
+         */
         self.centralArchiveOrganizations = function () {
             return $http.get(urlService.availableCentralArchive)
                 .then(function (result) {
