@@ -131,7 +131,8 @@
                                         <td md-cell md-truncate class="subject">
                                             <grid-indicator-directive record-type="WorkItem"
                                                                       record="returnedDepartmentInbox"
-                                                                      indicator-type="isLockedWorkItem">
+                                                                      indicator-type="isLockedWorkItem"
+                                                                      callback="ctrl.unlockWorkItem">
                                             </grid-indicator-directive>
                                             <a href="" class="view-doc" ng-if="returnedDepartmentInbox.hasContent()"
                                                title="{{returnedDepartmentInbox.generalStepElm.docSubject}}"

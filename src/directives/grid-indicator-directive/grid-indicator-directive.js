@@ -15,7 +15,8 @@ module.exports = function (app) {
                 showIndicator: '@?',
                 spanClass: '@?',
                 iconClass: '@?',
-                displayType: '@?'
+                displayType: '@?',
+                callback: '='
             }
         }
     })

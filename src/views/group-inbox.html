@@ -186,7 +186,8 @@
                                         <td md-cell md-truncate class="subject">
                                             <grid-indicator-directive record-type="WorkItem"
                                                                       record="workItem"
-                                                                      indicator-type="isLockedWorkItem">
+                                                                      indicator-type="isLockedWorkItem"
+                                                                      callback="ctrl.unlockWorkItem">
                                             </grid-indicator-directive>
                                             <a href="" class="view-doc" md-truncate ng-if="workItem.hasContent()"
                                                ng-click="ctrl.viewDocument(workItem, $event)">{{workItem.generalStepElm.docSubject}}</a>

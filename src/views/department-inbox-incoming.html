@@ -92,7 +92,8 @@
                                         <td md-cell class="subject">
                                             <grid-indicator-directive record-type="WorkItem"
                                                                       record="incomingDepartmentInbox"
-                                                                      indicator-type="isLockedWorkItem">
+                                                                      indicator-type="isLockedWorkItem"
+                                                                      callback="ctrl.unlockWorkItem">
                                             </grid-indicator-directive>
                                             <a href="" class="view-doc"
                                                        ng-click="ctrl.viewDocument(incomingDepartmentInbox, $event)">{{incomingDepartmentInbox.generalStepElm.docSubject}}</a>

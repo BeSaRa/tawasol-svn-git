@@ -84,7 +84,8 @@
                                         <td md-cell md-truncate class="subject">
                                             <grid-indicator-directive record-type="WorkItem"
                                                                       record="approvedInternal"
-                                                                      indicator-type="isLockedWorkItem">
+                                                                      indicator-type="isLockedWorkItem"
+                                                                      callback="ctrl.unlockWorkItem">
                                             </grid-indicator-directive>
                                             <a href="" class="view-doc" md-truncate
                                                ng-click="ctrl.viewDocument(approvedInternal, $event)">

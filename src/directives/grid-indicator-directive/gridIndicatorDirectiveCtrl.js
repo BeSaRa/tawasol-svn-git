@@ -17,6 +17,11 @@ module.exports = function (app) {
             return !self.showIndicator;
         };
 
+
+        self.unlockWorkItem = function (record, $event) {
+            self.callback(record, $event);
+        };
+
         /* self.serviceMethods = {
              securityLevel: gridIndicatorDirectiveService.getSecurityLevelIndicator,
              docClass: gridIndicatorDirectiveService.getDocClassIndicator,

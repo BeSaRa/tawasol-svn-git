@@ -159,9 +159,10 @@
 <span ng-if="ctrl.indicatorType === 'isLockedWorkItem'" class="{{ctrl.spanClass}}"
       ng-class="{'indicator-content': ctrl.record.isLockedWorkItemIndicator}">
     <md-icon ng-if="ctrl.record.isLockedWorkItemIndicator && ctrl.isShowIndicator()"
-             class="{{ctrl.record.isLockedWorkItemIndicator.class}} {{ctrl.iconClass}}"
+             class="{{ctrl.record.isLockedWorkItemIndicator.class}} {{ctrl.iconClass}} cursor-pointer"
              md-svg-icon="{{ctrl.record.isLockedWorkItemIndicator.icon}}"
              tooltip="{{ctrl.langService.get(ctrl.record.isLockedWorkItemIndicator.tooltip)
                         .change({name: ctrl.record.isLockedWorkItemIndicator.value.getTranslatedName()})}}"
+             ng-click="ctrl.unlockWorkItem(ctrl.record, $event)"
     ></md-icon>
 </span>
