@@ -16,6 +16,10 @@
                     <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
                                           md-diameter="30"></md-progress-circular>
                 </div>
+                <md-button class="md-raised" ng-if="ctrl.info.needToApprove() && ctrl.employeeCanEditContent()"
+                           ng-click="ctrl.toggleCorrespondenceEditMode()">
+                    {{lang.edit_content}}
+                </md-button>
                 <md-button ng-click="ctrl.toggleFullScreen()" class="md-icon-button">
                     <md-icon md-svg-icon="fullscreen"></md-icon>
                 </md-button>
@@ -222,8 +226,14 @@
                 </div>
             </md-sidenav>
             <div layout="column" class="relative" flex>
-                <iframe ng-if="ctrl.mainDocument" id="iframe-main-document" class="iframe-main-document"
+                <iframe ng-if="ctrl.mainDocument && !ctrl.editMode" id="iframe-main-document"
+                        class="iframe-main-document"
                         ng-src="{{ctrl.content.viewURL}}" flex
+                        frameborder="0"></iframe>
+
+                <iframe ng-if="ctrl.mainDocument && ctrl.editMode" id="iframe-main-document"
+                        class="iframe-main-document"
+                        ng-src="{{ctrl.content.editURL}}" flex
                         frameborder="0"></iframe>
 
                 <div ng-if="!ctrl.mainDocument" class="absolute-back-button">

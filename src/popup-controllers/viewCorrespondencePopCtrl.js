@@ -22,10 +22,52 @@ module.exports = function (app) {
         self.mainDocument = true;
         self.secondURL = null;
         self.loadingIndicatorService = loadingIndicatorService;
+
+        self.editMode = false;
+
+        self.info = null;
+
+        self.documentClassPermissionMap = {
+            outgoing: 'EDIT_OUTGOING_CONTENT',
+            incoming: 'EDIT_INCOMING’S_CONTENT',
+            internal: 'EDIT_INTERNAL_CONTENT'
+        };
+
+        self.toggleCorrespondenceEditMode = function () {
+            var message;
+            if (self.info.needToApprove() && self.info.editByDeskTop) {
+                message = langService.getConcatenated(['edit_in_desktop_confirmation_1', 'edit_in_desktop_confirmation_2', 'edit_in_desktop_confirmation_3'])
+                dialog
+                    .confirmMessage(message, langService.get('grid_action_edit_in_desktop'))
+                    .then(function () {
+                        self.editMode = false;
+                        correspondence
+                            .editCorrespondenceInDesktop()
+                            .then(function () {
+                                dialog.cancel();
+                            })
+                            .catch(function () {
+                                dialog.cancel();
+                            });
+                    })
+                    .catch(function () {
+                        self.editMode = true;
+                    });
+            } else {
+                self.editMode = true;
+            }
+        };
+
+        self.employeeCanEditContent = function () {
+            var documentClass = (self.info.documentClass + '');
+            return !self.info ? false : self.employeeService.hasPermissionTo(self.documentClassPermissionMap[documentClass]);
+        };
+
         $timeout(function () {
-            _checkIfFromEditInDesktop(self.correspondence);
             self.detailsReady = true;
             self.model = angular.copy(self.correspondence);
+            // _checkIfFromEditInDesktop(self.correspondence);
+            self.info = self.correspondence.getInfo();
         }, 100);
 
         self.selectedList = null;
@@ -35,11 +77,12 @@ module.exports = function (app) {
 
         function _checkIfFromEditInDesktop(correspondence) {
             var info = correspondence.getInfo(), message;
-            if (info.needToApprove() && info.editByDeskTop) {
+            if (info.needApprove() && info.editByDeskTop) {
                 message = langService.getConcatenated(['edit_in_desktop_confirmation_1', 'edit_in_desktop_confirmation_2', 'edit_in_desktop_confirmation_3'])
                 dialog
                     .confirmMessage(message, langService.get('grid_action_edit_in_desktop'))
                     .then(function () {
+                        self.editMode = false;
                         correspondence
                             .editCorrespondenceInDesktop()
                             .then(function () {
@@ -48,6 +91,9 @@ module.exports = function (app) {
                             .catch(function () {
                                 dialog.cancel();
                             });
+                    })
+                    .catch(function () {
+                        self.editMode = true;
                     });
             }
         }
@@ -71,8 +117,7 @@ module.exports = function (app) {
                     .then(function () {
                         dialog.hide(self.workItem);
                     });
-            }
-            else {
+            } else {
                 dialog.hide(self.workItem);
             }
         };
@@ -81,7 +126,7 @@ module.exports = function (app) {
          */
         self.saveCorrespondenceChanges = function () {
             var info = self.correspondence.getInfo();
-            var method = info.needToApprove() ? 'saveDocumentWithContent' : 'saveDocument';
+            var method = info.needToApprove() && self.editMode ? 'saveDocumentWithContent' : 'saveDocument';
             if (method === 'saveDocumentWithContent') {
                 angular.element('iframe#iframe-main-document').remove();
                 $timeout(function () {
@@ -120,8 +165,7 @@ module.exports = function (app) {
         self.checkDisabled = function () {
             if (self.correspondence.docClassName === 'Incoming') {
                 return !self.correspondence.site;
-            }
-            else if (self.correspondence.docClassName === 'Outgoing') {
+            } else if (self.correspondence.docClassName === 'Outgoing') {
                 return !(self.correspondence.sitesInfoTo && self.correspondence.sitesInfoTo.length);
             }
             return false;
@@ -229,8 +273,7 @@ module.exports = function (app) {
                     langKey = action.text().shortcutText;
                 else
                     langKey = action.text().contextText;
-            }
-            else {
+            } else {
                 langKey = action.text;
             }
             return langService.get(langKey);
@@ -248,8 +291,7 @@ module.exports = function (app) {
             });
             if (action.hasOwnProperty('params') && action.params) {
                 action.callback(self.workItem, action.params, $event, defer);
-            }
-            else {
+            } else {
                 action.callback(self.workItem, $event, defer);
             }
         };

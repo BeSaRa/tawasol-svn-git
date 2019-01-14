@@ -288,6 +288,7 @@ module.exports = function (app) {
                         return result.data.rs;
                     })
                     .then(function (result) {
+                        result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         generator.addPopupNumber();
                         return dialog.showDialog({
@@ -523,8 +524,7 @@ module.exports = function (app) {
                         if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
-                        }
-                        else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                        } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
                             var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
                             dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
                             return $q.reject('itemLocked');
@@ -666,7 +666,7 @@ module.exports = function (app) {
                                 return false;
                             });
                     })
-                    .catch(function(error){
+                    .catch(function (error) {
                         if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
                             var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
                             dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
@@ -799,8 +799,7 @@ module.exports = function (app) {
                         if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
-                        }
-                        else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                        } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
                             var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
                             dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
                             return $q.reject('itemLocked');
@@ -877,8 +876,7 @@ module.exports = function (app) {
                         if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
-                        }
-                        else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                        } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
                             var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
                             dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
                             return $q.reject('itemLocked');
@@ -950,12 +948,11 @@ module.exports = function (app) {
                             return false;
                         });
                     })
-                    .catch(function(error){
+                    .catch(function (error) {
                         if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
-                        }
-                        else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                        } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
                             var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
                             dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
                             return $q.reject('itemLocked');
@@ -1028,8 +1025,7 @@ module.exports = function (app) {
                         if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
-                        }
-                        else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                        } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
                             var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
                             dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
                             return $q.reject('itemLocked');
@@ -1165,8 +1161,7 @@ module.exports = function (app) {
                         if (errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND') === true) {
                             dialog.errorMessage(langService.get('work_item_not_found').change({wobNumber: info.wobNumber}));
                             return $q.reject('WORK_ITEM_NOT_FOUND');
-                        }
-                        else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
+                        } else if (errorCode.checkIf(error, 'ITEM_LOCKED') === true) {
                             var lockingUserInfo = new Information(error.data.eo.lockingUserInfo);
                             dialog.alertMessage(langService.get('item_locked_by').change({name: lockingUserInfo.getTranslatedName()}));
                             return $q.reject('itemLocked');
