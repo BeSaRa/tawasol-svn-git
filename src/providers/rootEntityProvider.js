@@ -36,7 +36,7 @@ module.exports = function (app) {
             return self;
         };
 
-        self.$get = function (RootEntity, GlobalSetting, titleService, generator, lookupService, $rootScope, $sce, errorCode, $cookies, $stateParams, $http, $location, urlService, dialog, $q) {
+        self.$get = function (RootEntity, Credentials, GlobalSetting, titleService, generator, lookupService, $rootScope, $sce, errorCode, $cookies, $stateParams, $http, $location, urlService, dialog, $q) {
             'ngInject';
             return {
                 loadInformation: function (rootIdentifier) {
@@ -54,6 +54,17 @@ module.exports = function (app) {
                             $cookies.put(privateKey, rootIdentifier);
                             dialog.cancel();
                             self.setRootEntity(new RootEntity(result.data.rs));
+                            // single sign on
+                            rootEntity.checkSSO().then(function (authenticationService) {
+                                authenticationService
+                                    .authenticate(new Credentials())
+                                    .then(function () {
+
+                                    })
+                                    .catch(function () {
+
+                                    })
+                            });
                             titleService.setTitle(self.getRootEntity().getTranslatedAppName());
                             return self.getRootEntity();
                         })

@@ -3,6 +3,8 @@ module.exports = function (app) {
                                         _,
                                         $sce,
                                         generator,
+                                        $q,
+                                        $timeout,
                                         Idle,
                                         $rootScope,
                                         lookupService,
@@ -10,7 +12,7 @@ module.exports = function (app) {
                                         Settings) {
         'ngInject';
         return function RootEntity(model) {
-            var self = this;
+            var self = this, authenticationService;
             self.settings = null;
             self.publicAnnouncements = null;
             self.globalAnnouncements = null;
@@ -45,7 +47,10 @@ module.exports = function (app) {
                     //Idle.setIdle((self.settings.sessionTimeout - 1) * 60);
                 }
             }
-
+            RootEntity.prototype.setAuthenticationService = function (service) {
+                authenticationService = service;
+                return this;
+            };
             /**
              * get all required fields
              * @return {Array|requiredFields}
@@ -78,6 +83,13 @@ module.exports = function (app) {
             RootEntity.prototype.setFileTypesHashMapToGlobalSettings = function (map) {
                 this.settings.fileTypesMap = map;
                 return this;
+            };
+            RootEntity.prototype.checkSSO = function () {
+                var self = this, defer = $q.defer();
+                $timeout(function () {
+                    self.rootEntity.isSSO ? defer.resolve(authenticationService) : defer.reject(false);
+                });
+                return defer.promise;
             };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
