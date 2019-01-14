@@ -36,7 +36,7 @@ module.exports = function (app) {
         self.toggleCorrespondenceEditMode = function () {
             var message;
             if (self.info.needToApprove() && self.info.editByDeskTop) {
-                message = langService.getConcatenated(['edit_in_desktop_confirmation_1', 'edit_in_desktop_confirmation_2', 'edit_in_desktop_confirmation_3'])
+                message = langService.getConcatenated(['edit_in_desktop_confirmation_1', 'edit_in_desktop_confirmation_2', 'edit_in_desktop_confirmation_3']);
                 dialog
                     .confirmMessage(message, langService.get('grid_action_edit_in_desktop'))
                     .then(function () {
@@ -78,7 +78,7 @@ module.exports = function (app) {
         function _checkIfFromEditInDesktop(correspondence) {
             var info = correspondence.getInfo(), message;
             if (info.needApprove() && info.editByDeskTop) {
-                message = langService.getConcatenated(['edit_in_desktop_confirmation_1', 'edit_in_desktop_confirmation_2', 'edit_in_desktop_confirmation_3'])
+                message = langService.getConcatenated(['edit_in_desktop_confirmation_1', 'edit_in_desktop_confirmation_2', 'edit_in_desktop_confirmation_3']);
                 dialog
                     .confirmMessage(message, langService.get('grid_action_edit_in_desktop'))
                     .then(function () {
