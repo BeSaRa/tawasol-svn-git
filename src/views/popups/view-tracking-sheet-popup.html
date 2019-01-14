@@ -586,6 +586,8 @@
                                                         md-order-by="{{ctrl.getSortingKey('actionTypeInfo', 'Information')}}">
                                                         <span>{{lang.view_tracking_sheet_action_type}}</span>
                                                     </th>
+                                                    <th md-column md-order-by="comments"><span>{{lang.view_tracking_sheet_comments}}</span>
+                                                    </th>
                                                 </tr>
                                                 </thead>
                                                 <tbody md-body>
@@ -599,6 +601,7 @@
                                                     </td>
                                                     <td md-cell>{{fullHistoryRecord.actionTypeInfo.getTranslatedName()}}
                                                     </td>
+                                                    <td md-cell>{{fullHistoryRecord.comments}}</td>
                                                 </tr>
                                                 </tbody>
                                             </table>
