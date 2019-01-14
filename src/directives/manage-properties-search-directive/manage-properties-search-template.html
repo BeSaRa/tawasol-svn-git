@@ -115,24 +115,28 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-                <!-- Change Date Range -->
-                <md-input-container ng-if="ctrl.checkShowDateFields()">
-                    <md-button class="md-icon-button"
-                               tooltip="{{lang.change_date_range}}"
-                               ng-click="ctrl.changeYearRange($event)">
-                        <md-icon md-svg-icon="calendar"></md-icon>
-                    </md-button>
-                </md-input-container>
-                <!-- Date Label From -->
-                <md-input-container ng-if="ctrl.checkShowDateFields()">
-                    <label>{{lang.search_module_start_date}}</label>
-                    <input readonly="true" disabled="true" value="{{ctrl.docDateFromLabel}}">
-                </md-input-container>
-                <!-- Date Label To -->
-                <md-input-container ng-if="ctrl.checkShowDateFields()">
-                    <label>{{lang.search_module_end_date}}</label>
-                    <input readonly="true" disabled="true" value="{{ctrl.docDateToLabel}}">
-                </md-input-container>
+                <!--incoming Date-->
+                <fieldset>
+                    <legend class="md-accent">{{lang.incoming_date}}</legend>
+                    <!-- Change Date Range -->
+                    <md-input-container ng-if="ctrl.checkShowDateFields()">
+                        <md-button class="md-icon-button"
+                                   tooltip="{{lang.change_date_range}}"
+                                   ng-click="ctrl.changeYearRange($event)">
+                            <md-icon md-svg-icon="calendar"></md-icon>
+                        </md-button>
+                    </md-input-container>
+                    <!-- Date Label From -->
+                    <md-input-container ng-if="ctrl.checkShowDateFields()">
+                        <label>{{lang.search_module_start_date}}</label>
+                        <input readonly="true" disabled="true" value="{{ctrl.docDateFromLabel}}">
+                    </md-input-container>
+                    <!-- Date Label To -->
+                    <md-input-container ng-if="ctrl.checkShowDateFields()">
+                        <label>{{lang.search_module_end_date}}</label>
+                        <input readonly="true" disabled="true" value="{{ctrl.docDateToLabel}}">
+                    </md-input-container>
+                </fieldset>
             </div>
             <div layout="row">
                 <!-- Main Classification -->
@@ -183,6 +187,35 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+                <!-- ref document Date
+                 && ctrl.checkStatus('refDocNumber') &&-->
+                <fieldset ng-if="ctrl.document.docClassName.toLowerCase() === 'incoming' && ctrl.document.dummySearchDocClass.toLowerCase() !== 'outgoingincoming'">
+                    <legend class="md-accent">{{lang.document_date}}</legend>
+                    <!-- Date Label From -->
+                    <md-input-container>
+                        <label>{{lang.search_module_start_date}}</label>
+                        <md-datepicker id="refDocDateFrom" name="refDocDateFrom" md-open-on-focus
+                                       ng-required="ctrl.document.refDocDateTo"
+                                       ng-model="ctrl.document.refDocDateFrom"
+                                       md-max-date="ctrl.document.refDocDateTo"
+                        ></md-datepicker>
+                        <div ng-messages="docSearchForm.refDocDateFrom.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                    <!-- Date Label To -->
+                    <md-input-container>
+                        <label>{{lang.search_module_end_date}}</label>
+                        <md-datepicker id="refDocDateTo" name="refDocDateTo" md-open-on-focus
+                                       ng-required="ctrl.document.refDocDateFrom"
+                                       ng-model="ctrl.document.refDocDateTo"
+                                       md-min-date="ctrl.document.refDocDateFrom"
+                        ></md-datepicker>
+                        <div ng-messages="docSearchForm.refDocDateTo.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                </fieldset>
             </div>
             <div layout="row">
                 <!-- Document Type -->

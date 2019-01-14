@@ -52,6 +52,13 @@ module.exports = function (app) {
                 }
             }
 
+            // ref document date
+             if (model.refDocDateFrom && model.refDocDateTo) {
+                model.RefDocDate = {
+                    From: angular.copy(moment(model.refDocDateFrom).format("YYYY-MM-DD")),
+                    To: angular.copy(moment(model.refDocDateTo).format("YYYY-MM-DD"))
+                };
+            }
 
             if (angular.isArray(model.sitesInfoIncoming) && model.sitesInfoIncoming.length) {
                 model.sitesInfoIncoming = model.sitesInfoIncoming[0];
@@ -94,6 +101,11 @@ module.exports = function (app) {
             delete model.docDateFrom;
             delete model.docDateTo;
             delete model.year;
+
+            // delete refDocDate
+            delete model.refDocDateFrom;
+            delete model.refDocDateTo;
+            model.RefDocDate = (model.RefDocDate) ? angular.toJson(model.RefDocDate) : null;
 
             delete model.dummySearchDocClass;
             return model;
