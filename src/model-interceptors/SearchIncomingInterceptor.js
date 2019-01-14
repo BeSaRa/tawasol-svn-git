@@ -60,6 +60,14 @@ module.exports = function (app) {
                 };
             }
 
+            // ref document date
+            if (model.followUpFrom && model.followUpTo) {
+                model.FollowUpDate = {
+                    From: angular.copy(moment(model.refDocDateFrom).format("YYYY-MM-DD")),
+                    To: angular.copy(moment(model.refDocDateTo).format("YYYY-MM-DD"))
+                };
+            }
+
             if (angular.isArray(model.sitesInfoIncoming) && model.sitesInfoIncoming.length) {
                 model.sitesInfoIncoming = model.sitesInfoIncoming[0];
                 model.sitesInfoIncoming.getSiteToIncoming(model);
@@ -86,6 +94,7 @@ module.exports = function (app) {
 
             delete model.followUpFrom;
             delete model.followUpTo;
+            model.FollowUpDate = (model.FollowUpDate) ? angular.toJson(model.FollowUpDate) : null;
             //delete model.followUpDate;
             delete model.approvedBy;
             delete model.approveDateFrom;

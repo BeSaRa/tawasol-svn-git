@@ -187,35 +187,71 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
-                <!-- ref document Date
-                 && ctrl.checkStatus('refDocNumber') &&-->
-                <fieldset ng-if="ctrl.document.docClassName.toLowerCase() === 'incoming' && ctrl.document.dummySearchDocClass.toLowerCase() !== 'outgoingincoming'">
-                    <legend class="md-accent">{{lang.document_date}}</legend>
-                    <!-- Date Label From -->
-                    <md-input-container>
-                        <label>{{lang.search_module_start_date}}</label>
-                        <md-datepicker id="refDocDateFrom" name="refDocDateFrom" md-open-on-focus
-                                       ng-required="ctrl.document.refDocDateTo"
-                                       ng-model="ctrl.document.refDocDateFrom"
-                                       md-max-date="ctrl.document.refDocDateTo"
-                        ></md-datepicker>
-                        <div ng-messages="docSearchForm.refDocDateFrom.$error">
-                            <div ng-message="required">{{lang.field_required}}</div>
-                        </div>
-                    </md-input-container>
-                    <!-- Date Label To -->
-                    <md-input-container>
-                        <label>{{lang.search_module_end_date}}</label>
-                        <md-datepicker id="refDocDateTo" name="refDocDateTo" md-open-on-focus
-                                       ng-required="ctrl.document.refDocDateFrom"
-                                       ng-model="ctrl.document.refDocDateTo"
-                                       md-min-date="ctrl.document.refDocDateFrom"
-                        ></md-datepicker>
-                        <div ng-messages="docSearchForm.refDocDateTo.$error">
-                            <div ng-message="required">{{lang.field_required}}</div>
-                        </div>
-                    </md-input-container>
-                </fieldset>
+            </div>
+            <div layout="row"
+                 ng-if="ctrl.document.docClassName.toLowerCase() === 'incoming' && ctrl.document.dummySearchDocClass.toLowerCase() !== 'outgoingincoming'">
+                <div flex ng-if="ctrl.checkStatus('refDocDate')">
+                    <!-- ref document Date
+                    && ctrl.checkStatus('refDocNumber') &&-->
+                    <fieldset>
+                        <legend class="md-accent">{{lang.document_date}}</legend>
+                        <!-- Date Label From -->
+                        <md-input-container>
+                            <label>{{lang.search_module_start_date}}</label>
+                            <md-datepicker id="refDocDateFrom" name="refDocDateFrom" md-open-on-focus
+                                           ng-required="ctrl.document.refDocDateTo"
+                                           ng-model="ctrl.document.refDocDateFrom"
+                                           md-max-date="ctrl.document.refDocDateTo"
+                            ></md-datepicker>
+                            <div ng-messages="docSearchForm.refDocDateFrom.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- Date Label To -->
+                        <md-input-container>
+                            <label>{{lang.search_module_end_date}}</label>
+                            <md-datepicker id="refDocDateTo" name="refDocDateTo" md-open-on-focus
+                                           ng-required="ctrl.document.refDocDateFrom"
+                                           ng-model="ctrl.document.refDocDateTo"
+                                           md-min-date="ctrl.document.refDocDateFrom"
+                            ></md-datepicker>
+                            <div ng-messages="docSearchForm.refDocDateTo.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </fieldset>
+                </div>
+                <div flex ng-if="ctrl.checkStatus('followUpDate')">
+                    <!--followupDate-->
+                    <fieldset>
+                        <legend class="md-accent">{{lang.followup_date}}</legend>
+                        <!-- Date Label From -->
+                        <md-input-container>
+                            <label>{{lang.search_module_start_date}}</label>
+                            <md-datepicker id="followUpFrom" name="followUpFrom" md-open-on-focus
+                                           ng-required="ctrl.document.followUpTo"
+                                           ng-model="ctrl.document.followUpFrom"
+                                           md-max-date="ctrl.document.followUpTo"
+                            ></md-datepicker>
+                            <div ng-messages="docSearchForm.followUpFrom.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- Date Label To -->
+                        <md-input-container>
+                            <label>{{lang.search_module_end_date}}</label>
+                            <md-datepicker id="followUpTo" name="refDocDateTo" md-open-on-focus
+                                           ng-required="ctrl.document.followUpFrom"
+                                           ng-model="ctrl.document.followUpTo"
+                                           md-min-date="ctrl.document.followUpFrom"
+                            ></md-datepicker>
+                            <div ng-messages="docSearchForm.followUpTo.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </fieldset>
+                </div>
+          <!--      <span flex></span>-->
             </div>
             <div layout="row">
                 <!-- Document Type -->
