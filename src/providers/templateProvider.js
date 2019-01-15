@@ -2,12 +2,6 @@ module.exports = function (app) {
     app.provider('cmsTemplate', function () {
         'ngInject';
         var provider = this;
-
-        // function get(pathWithFileName, callback) {
-        //     var template = require('./../' + pathWithFileName);
-        //     return (callback || angular.identity)(template);
-        // }
-
         provider.getView = function (fileName, callback) {
             return 'views/' + fileName + '.html';
         };
@@ -18,12 +12,7 @@ module.exports = function (app) {
 
         provider.getDirective = function (fileName, callback) {
             var hasHTML = (fileName.indexOf('.html') !== -1);
-            var url = "views/directives/" + fileName + (hasHTML ? '' : '.html');
-            if (fileName === 'sidebar-left-template') {
-                console.log(hasHTML);
-                console.log(url);
-            }
-            return url;
+            return "views/directives/" + fileName + (hasHTML ? '' : '.html');
         };
 
         provider.$get = function () {

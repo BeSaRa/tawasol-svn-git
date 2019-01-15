@@ -191,8 +191,6 @@ module.exports = function (app) {
         self.getOrganizationsForAppUser();
 
         self.securityLevels = rootEntity.getGlobalSettings().securityLevels;
-
-        console.log(self.securityLevels);
         /**
          * @description Model for binding the fields in other organizations tab
          * @type {*}
@@ -983,6 +981,25 @@ module.exports = function (app) {
                                 ouApplicationUser: ouApplicationUser,
                                 permissions: permissions,
                                 userOuPermissions: userOuPermissions
+                            },
+                            resolve : {
+                                dynamicMenuItems: function (dynamicMenuItemService, UserMenuItem) {
+                                    'ngInject';
+                                    return dynamicMenuItemService.loadPrivateDynamicMenuItems()
+                                        .then(function (result) {
+                                            return _.map(result, function (item) {
+                                                return new UserMenuItem({
+                                                    menuItem: item,
+                                                    userId: ouApplicationUser.applicationUser.id,
+                                                    ouId: ouApplicationUser.ouid.id
+                                                });
+                                            })
+                                        });
+                                },
+                                userMenuItems: function (dynamicMenuItemService) {
+                                    'ngInject';
+                                    return dynamicMenuItemService.loadUserMenuItems(ouApplicationUser.applicationUser.id, ouApplicationUser.ouid.id);
+                                }
                             }
                         });
                 });
