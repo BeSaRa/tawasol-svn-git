@@ -33,11 +33,12 @@ module.exports = function (app) {
 
         self.setDynamicMenuItems = function (dynamicMenuItems) {
             self.dynamicMenuItems = dynamicMenuItems;
+            self.prepareDynamicMenuItems();
         };
 
 
         self.prepareDynamicMenuItems = function () {
-            self.dynamicMenuItems = _.map(self.dynamicMenuItems, function (dynamicMenuItem) {
+            var dynamicMenuItems = _.map(self.dynamicMenuItems, function (dynamicMenuItem) {
                 return new MenuItem({
                     ID: 'd' + dynamicMenuItem.id,
                     parent: dynamicMenuItem.parent ? 'd' + dynamicMenuItem.parent : null,
@@ -50,7 +51,7 @@ module.exports = function (app) {
                 })
             });
             self.getMenuHierarchy();
-            self.getDynamicMenuHierarchy(self.dynamicMenuItems);
+            self.getDynamicMenuHierarchy(dynamicMenuItems);
             self.allParents = self.menuParents.concat(self.dynamicMenuParents);
             return self.allParents;
         };
@@ -143,8 +144,9 @@ module.exports = function (app) {
         };
 
         self.getDynamicMenuItemByID = function (dynamicMenuItemId) {
+            dynamicMenuItemId = Number(dynamicMenuItemId.replace('d', ''));
             return _.find(self.dynamicMenuItems, function (item) {
-                return item.ID === dynamicMenuItemId;
+                return item.id === dynamicMenuItemId;
             });
         };
 

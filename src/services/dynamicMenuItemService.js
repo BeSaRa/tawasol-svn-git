@@ -1,5 +1,15 @@
 module.exports = function (app) {
-    app.service('dynamicMenuItemService', function (urlService, toast, langService, cmsTemplate, dialog, $http, $q, generator, DynamicMenuItem, _) {
+    app.service('dynamicMenuItemService', function (urlService,
+                                                    toast,
+                                                    langService,
+                                                    cmsTemplate,
+                                                    dialog,
+                                                    $http,
+                                                    $q,
+                                                    UserMenuItem,
+                                                    generator,
+                                                    DynamicMenuItem,
+                                                    _) {
         'ngInject';
         var self = this;
         self.serviceName = 'dynamicMenuItemService';
@@ -14,6 +24,32 @@ module.exports = function (app) {
                 self.dynamicMenuItems = generator.interceptReceivedCollection('DynamicMenuItem', self.dynamicMenuItems);
                 return self.dynamicMenuItems;
             });
+        };
+        /**
+         * @description load private Active dynamic menu items.
+         * @return {*}
+         */
+        self.loadPrivateDynamicMenuItems = function () {
+            return $http.get(urlService.dynamicMenuItems + '/active-not-global').then(function (result) {
+                var dynamicMenuItems = generator.generateCollection(result.data.rs, DynamicMenuItem, self._sharedMethods);
+                return generator.interceptReceivedCollection('DynamicMenuItem', dynamicMenuItems);
+            });
+        };
+        /**
+         * @description load user menu items by given userId and ouId
+         * @param userId
+         * @param ouId
+         * @return {*}
+         */
+        self.loadUserMenuItems = function (userId, ouId) {
+            return $http.get(urlService.dynamicMenuItems.replace('menu-item', 'user-menu-item') + ['/user-id', userId, 'ou-id', ouId].join('/'))
+                .then(function (result) {
+                    return generator.interceptReceivedCollection('UserMenuItem', generator.generateCollection(result.data.rs, UserMenuItem));
+                });
+        };
+
+        self.saveBulkUserMenuItems = function (userMenuItems) {
+            return $http.post(urlService.dynamicMenuItems.replace('menu-item', 'user-menu-item') + ['/bulk'], userMenuItems);
         };
         /**
          * @description load sub dynamic menu item for given menu item id.

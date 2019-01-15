@@ -1,5 +1,14 @@
 module.exports = function (app) {
-    app.controller('dynamicMenuItemCtrl', function (dynamicMenuItemService, errorCode, dynamicMenuItems, toast, $filter, $q, langService, gridService, contextHelpService) {
+    app.controller('dynamicMenuItemCtrl', function (dynamicMenuItemService,
+                                                    errorCode,
+                                                    dynamicMenuItems,
+                                                    toast,
+                                                    $filter,
+                                                    layoutService,
+                                                    $q,
+                                                    langService,
+                                                    gridService,
+                                                    contextHelpService) {
         'ngInject';
         var self = this;
         self.controllerName = 'dynamicMenuItemCtrl';
@@ -107,6 +116,7 @@ module.exports = function (app) {
             return dynamicMenuItemService
                 .loadParentDynamicMenuItems()
                 .then(function (result) {
+                    layoutService.loadLandingPage();
                     self.dynamicMenuItems = result;
                     self.selectedDynamicMenuItems = [];
                     defer.resolve(true);
@@ -127,7 +137,12 @@ module.exports = function (app) {
                 .controllerMethod
                 .dynamicMenuItemDelete(dynamicMenuItem, $event)
                 .then(function () {
-                    self.reloadDynamicMenuItems(self.grid.page);
+                    self.reloadDynamicMenuItems(self.grid.page)
+                        .then(function () {
+                            layoutService.loadLandingPage().then(function () {
+
+                            })
+                        });
                 })
                 .catch(function (error) {
                     errorCode.checkIf(error, 'CAN_NOT_DELETE_LOOKUP', function () {
@@ -159,6 +174,7 @@ module.exports = function (app) {
         self.changeStatusDynamicMenuItem = function (dynamicMenuItem) {
             self.statusServices[dynamicMenuItem.status](dynamicMenuItem)
                 .then(function () {
+                    self.reloadDynamicMenuItems(self.grid.page);
                     toast.success(langService.get('status_success'));
                 })
                 .catch(function () {
@@ -191,6 +207,7 @@ module.exports = function (app) {
                 .update(dynamicMenuItem)
                 .then(function () {
                     toast.success(langService.get('globalization_success'));
+                    self.reloadDynamicMenuItems(self.grid.page);
                 })
                 .catch(function () {
                     dynamicMenuItem.isGlobal = !dynamicMenuItem.isGlobal;

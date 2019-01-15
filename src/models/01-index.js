@@ -160,4 +160,5 @@ module.exports = function (app) {
     require('./OutgoingIncomingSearch')(app);
     require('./Pair')(app);
     require('./DynamicMenuItem')(app);
+    require('./UserMenuItem')(app);
 };

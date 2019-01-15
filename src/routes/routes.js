@@ -65,9 +65,7 @@ module.exports = function (app) {
                     },
                     landing: function (layoutService, sidebarService, employeeService) {
                         'ngInject';
-                        return !employeeService.isCloudUser() && !employeeService.isAdminUser() ? (layoutService.loadLandingPage().then(function () {
-                            sidebarService.setDynamicMenuItems(layoutService.menuItems);
-                        })) : [];
+                        return !employeeService.isCloudUser() && !employeeService.isAdminUser() ? layoutService.loadLandingPage() : [];
                     }
                 }
             })
@@ -1512,7 +1510,7 @@ module.exports = function (app) {
                     var self = this;
                     var menuId = $stateParams.menuId;
                     var dynamicMenuItem = sidebarService.getDynamicMenuItemByID(menuId);
-                    var url = dynamicMenuItem.dynamicMenuItem.getMenuUrlAfterReplacement();
+                    var url = dynamicMenuItem.getMenuUrlAfterReplacement();
                     self.url = $sce.trustAsResourceUrl(url);
                 },
                 isDynamic: true,
@@ -1527,7 +1525,7 @@ module.exports = function (app) {
                     'ngInject';
                     var self = this, menuId = $stateParams.menuId,
                         menuItem = sidebarService.getDynamicMenuItemByID(menuId),
-                        menuURL = menuItem.dynamicMenuItem.getMenuUrlAfterReplacement(),
+                        menuURL = menuItem.getMenuUrlAfterReplacement(),
                         aLink = null;
 
                     self.createLoginIframe = function () {
@@ -1656,7 +1654,7 @@ module.exports = function (app) {
                     var self = this;
                     var menuId = $stateParams.menuId;
                     var dynamicMenuItem = sidebarService.getDynamicMenuItemByID(menuId);
-                    var url = dynamicMenuItem.dynamicMenuItem.getMenuUrlAfterReplacement();
+                    var url = dynamicMenuItem.getMenuUrlAfterReplacement();
                     self.url = $sce.trustAsResourceUrl(url);
                 },
                 isDynamic: true,

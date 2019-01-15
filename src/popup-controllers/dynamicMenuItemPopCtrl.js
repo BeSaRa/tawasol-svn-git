@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                        gridService,
                                                        generator,
                                                        tabIndex,
+                                                       layoutService,
                                                        dialog,
                                                        langService,
                                                        dynamicMenuItem) {
@@ -152,7 +153,10 @@ module.exports = function (app) {
          * @description load sub menu items
          */
         self.reloadSubDynamicMenuItems = function () {
-            return self.dynamicMenuItem.loadSubDynamicMenuItems();
+            return self.dynamicMenuItem.loadSubDynamicMenuItems()
+                .then(function () {
+                    layoutService.loadLandingPage();
+                });
         };
         /**
          * @description add submenu item for current dynamic menu item.
@@ -174,6 +178,7 @@ module.exports = function (app) {
         self.changeStatusDynamicMenuItem = function (dynamicMenuItem) {
             self.statusServices[dynamicMenuItem.status](dynamicMenuItem)
                 .then(function () {
+                    layoutService.loadLandingPage();
                     toast.success(langService.get('status_success'));
                 })
                 .catch(function () {

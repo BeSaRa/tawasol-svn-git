@@ -1064,6 +1064,38 @@ module.exports = function (app) {
                 });
         };
 
+        self.openApplicationUserPrivateMenu = function (ouApplicationUser, $event, $index) {
+            return dialog
+                .showDialog({
+                    template: cmsTemplate.getPopup('application-user-private-menu'),
+                    controller: 'applicationUserPrivateMenuCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        ouApplicationUser: ouApplicationUser
+                    },
+                    resolve: {
+                        dynamicMenuItems: function (dynamicMenuItemService, UserMenuItem) {
+                            'ngInject';
+                            return dynamicMenuItemService.loadPrivateDynamicMenuItems()
+                                .then(function (result) {
+                                    return _.map(result, function (item) {
+                                        return new UserMenuItem({
+                                            menuItem: item,
+                                            userId: ouApplicationUser.applicationUser.id,
+                                            ouId: ouApplicationUser.ouid.id
+                                        });
+                                    })
+                                });
+
+                        },
+                        userMenuItems: function (dynamicMenuItemService) {
+                            'ngInject';
+                            return dynamicMenuItemService.loadUserMenuItems(ouApplicationUser.applicationUser.id, ouApplicationUser.ouid.id);
+                        }
+                    }
+                })
+        };
+
 
         /**
          * @description Opens dialog for add new job title

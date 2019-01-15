@@ -1,5 +1,14 @@
 module.exports = function (app) {
-    app.factory('DynamicMenuItem', function (CMSModelInterceptor, tokenService, _, rootEntity, employeeService, helper, $timeout, lookupService, langService, $q) {
+    app.factory('DynamicMenuItem', function (CMSModelInterceptor,
+                                             tokenService,
+                                             _,
+                                             rootEntity,
+                                             employeeService,
+                                             helper,
+                                             $timeout,
+                                             lookupService,
+                                             langService,
+                                             $q) {
         'ngInject';
         return function DynamicMenuItem(model) {
             var self = this, dynamicMenuItemService;
@@ -287,6 +296,10 @@ module.exports = function (app) {
                 } else {
                     return self.url;
                 }
+            };
+
+            DynamicMenuItem.prototype.getTranslatedName = function (reverse) {
+                return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
 
             // don't remove CMSModelInterceptor from last line

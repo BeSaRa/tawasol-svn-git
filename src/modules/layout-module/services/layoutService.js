@@ -9,6 +9,7 @@ module.exports = function (app) {
                                            urlService,
                                            cmsTemplate,
                                            dialog,
+                                           sidebarService,
                                            Widget,
                                            DynamicMenuItem,
                                            $http) {
@@ -199,6 +200,7 @@ module.exports = function (app) {
                     // dynamic menu items
                     self.menuItems = generator.generateCollection(result.data.rs.menuItems, DynamicMenuItem);
                     self.menuItems = generator.interceptReceivedCollection('DynamicMenuItem', self.menuItems);
+                    sidebarService.setDynamicMenuItems(self.menuItems);
                 });
         };
 

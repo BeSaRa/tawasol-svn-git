@@ -97,4 +97,5 @@ module.exports = function (app) {
     require('./DynamicMenuItemInterceptor')(app);
     require('./ReadyToExportOptionInterceptor')(app);
     require('./RootEntityInterceptor')(app);
+    require('./UserMenuItemInterceptor')(app);
 };

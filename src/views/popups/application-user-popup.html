@@ -1062,6 +1062,12 @@
                                                                             {{lang.grid_action_out_of_office_settings}}
                                                                         </md-button>
                                                                     </md-menu-item>
+                                                                    <md-menu-item>
+                                                                        <md-button
+                                                                                ng-click="ctrl.openApplicationUserPrivateMenu(ouApplicationUser, $event , $index)">
+                                                                            {{lang.grid_action_private_menus}}
+                                                                        </md-button>
+                                                                    </md-menu-item>
                                                                     <md-menu-divider
                                                                             ng-if="!ctrl.currentOrganization"></md-menu-divider>
                                                                     <md-menu-item ng-if="!ctrl.currentOrganization">
