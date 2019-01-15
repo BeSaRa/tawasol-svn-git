@@ -3114,6 +3114,7 @@ module.exports = function (app) {
          * @return {*}
          */
         self.duplicateCorrespondenceVersion = function (correspondence, duplicateOption, majorVersion) {
+            delete duplicateOption.ATTACHMENT_LINKED_DOCS;
             var info = correspondence.getInfo();
             return $http
                 .put(_createUrlSchema(null, info.documentClass, 'duplicate/vsid/' + info.vsId + (typeof majorVersion !== 'undefined' ? '/major-version-number/' + majorVersion : '')), duplicateOption)
@@ -3237,7 +3238,7 @@ module.exports = function (app) {
          */
         self.getTranslatedError = function (error) {
             var errorObj = error.data.eo;
-            return langService.current === 'ar' ? errorObj.arName : errorObj.enName ;
+            return langService.current === 'ar' ? errorObj.arName : errorObj.enName;
         };
 
         $timeout(function () {
