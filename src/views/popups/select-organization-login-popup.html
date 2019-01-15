@@ -1,9 +1,0 @@
-<div id="select-organization-popup-to-login" layout="column">
-    <div flex layout="row" layout-align="center center"><h3>{{lang.please_select_organization_to_login}}</h3></div>
-    <div layout="column">
-        <md-button class="md-raised" ng-click="ctrl.selectOrganization(organization)"
-                   ng-repeat="organization in ctrl.organizations track by $index">
-            {{organization.getNames()}}
-        </md-button>
-    </div>
-</div>
