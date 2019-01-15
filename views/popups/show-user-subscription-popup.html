@@ -1,0 +1,33 @@
+<md-dialog class="dialog-extend" id="show-user-subscriptions-dialog"
+           ng-attr-aria-label="show-user-subscriptions">
+
+    <div layout="row" layout-align="end center">
+        <md-button class="md-icon-button"
+                   tooltip="{{lang.close}}"
+                   ng-click="ctrl.closeShowUserSubscriptionsPopupFromCtrl()">
+            <md-icon md-svg-icon="close" class="action-green"></md-icon>
+        </md-button>
+    </div>
+
+    <login-subscriptions-directive ng-if="ctrl.userSubscriptions.length>0"
+                                   userSubscriptions="showUserSubscriptionsCtrl.userSubscriptions">
+    </login-subscriptions-directive>
+
+    <div scroll-directive class="notify-list-wrapper">
+        <ul>
+            <li ng-repeat="item in ctrl.userSubscriptions track by $index" layout="row">
+                <div class="task-body" flex layout="column">
+                    <div class="task-header" layout="row">
+                        <a href="" md-truncate flex
+                           class="notification-subject" ng-click="ctrl.viewDocument(item,$event)">{{item.docSubject}}</a>
+                    </div>
+                    <div layout="column">
+                        <div class="notification-subject" >{{ ctrl.getSubscriptionEventType(item.triggerId) }}</div>
+                        <div class="notification-subject serial-td" >{{ item.docFullSerial}}</div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+</md-dialog>

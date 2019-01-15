@@ -240,7 +240,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('role'),
+                        templateUrl: cmsTemplate.getPopup('role'),
                         controller: 'rolePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -255,7 +255,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('role'),
+                        templateUrl: cmsTemplate.getPopup('role'),
                         controller: 'rolePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -302,7 +302,7 @@ module.exports = function (app) {
             },
             multipleRolePermissions: function ($event, role) {
                 return dialog.showDialog({
-                    template: cmsTemplate.getPopup('show-multiple-permissions'),
+                    templateUrl: cmsTemplate.getPopup('show-multiple-permissions'),
                     bindToController: true,
                     escToCancel: true,
                     targetEvent: $event,
@@ -317,7 +317,7 @@ module.exports = function (app) {
             showRoleMembers: function ($event, role) {
                 // self.getCustomRoleMembers(role.id).then(function (roleMembers) {
                 dialog.showDialog({
-                    template: cmsTemplate.getPopup('role-members'),
+                    templateUrl: cmsTemplate.getPopup('role-members'),
                     //bindToController: true,
                     escToCancel: true,
                     targetEvent: $event,

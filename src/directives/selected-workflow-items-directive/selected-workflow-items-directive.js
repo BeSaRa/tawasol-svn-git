@@ -1,6 +1,6 @@
 module.exports = function (app) {
     require('./selected-workflow-items-style.scss');
-    app.directive('selectedWorkflowItemsDirective', function ($timeout) {
+    app.directive('selectedWorkflowItemsDirective', function ($timeout,cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
@@ -8,7 +8,7 @@ module.exports = function (app) {
             controller: 'selectedWorkflowItemsDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,
-            template: require('./selected-workflow-items-template.html'),
+            templateUrl: cmsTemplate.getDirective('selected-workflow-items-template.html'),
             scope: {
                 workflowItems: '=',
                 workflowActions: '=',

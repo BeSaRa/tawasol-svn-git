@@ -1,0 +1,85 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_signature: ctrl.model.getNames()}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20" ng-if="!ctrl.model.id">{{lang.add_new_signature}}</span>
+            <span class="p20" ng-if="ctrl.model.id">{{ctrl.model.getNames()}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="applicationUserSignatureForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="row" class="p20">
+                        <div flex="70">
+                            <div layout="row">
+                                <img ng-src="{{ctrl.fileUrl}}"
+                                     name="fileUrl_sign" id="fileUrl_sign"
+                                     class="upload-image" flex height="120">
+                            </div>
+                            <div layout="row">
+                                <!--<browse-file-directive
+                                        selected-file="ctrl.selectedFile"
+                                        call-back="ctrl.viewImage"
+                                        model-obj="ctrl.fileUrl"
+                                        button-label="{{lang.upload_signature}}"
+                                        selected-file-extension="ctrl.selectedExtension">
+                                </browse-file-directive>-->
+                                <label for="upload-sign"
+                                       class="md-button md-raised alongside-input">
+                                            <span layout="row" layout-align="start center">
+                                                <md-icon md-svg-icon="upload"></md-icon>
+                                                <span>{{lang.upload_signature}}</span>
+                                            </span>
+                                    <input reset-after-change="true"
+                                           catch-upload-file-directive="ctrl.viewImage"
+                                           class="hide-import-file" type="file"
+                                           id="upload-sign" name="upload-sign">
+                                </label>
+                            </div>
+                            <div class="help-text-div">{{ctrl.imageDimensionsInfo}}</div>
+                        </div>
+                        <div flex="30">
+                            <md-input-container flex>
+                                <label for="docSubject">{{lang.subject}}</label>
+                                <input name="docSubject" id="docSubject" required minlength="4"
+                                       ng-model="ctrl.applicationUserSignature.docSubject"
+                                       maxlength="80">
+                                <div ng-messages="applicationUserSignatureForm.docSubject.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                    <div ng-message="minlength">{{lang.short}}</div>
+                                    <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label for="documentTitle">{{lang.title}}</label>
+                                <input name="documentTitle" id="documentTitle" required minlength="4"
+                                       ng-model="ctrl.applicationUserSignature.documentTitle"
+                                       maxlength="80">
+                                <div ng-messages="applicationUserSignatureForm.documentTitle.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                    <div ng-message="minlength">{{lang.short}}</div>
+                                    <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                    </div>
+                </div>
+                <div layout="row">
+                    <md-button class="md-raised" ng-if="!ctrl.editMode"
+                               ng-disabled="applicationUserSignatureForm.$invalid || !ctrl.currentFileData"
+                               ng-click="ctrl.addDocumentTemplateFromCtrl()">
+                        {{lang.add}}
+                    </md-button>
+                    <md-button class="md-raised" ng-disabled="applicationUserSignatureForm.$invalid"
+                               ng-if="ctrl.editMode"
+                               ng-click="ctrl.editApplicationUserSignatureFromCtrl()">
+                        {{lang.save}}
+                    </md-button>
+                    <span flex></span>
+                    <md-button class="md-raised" ng-click="ctrl.closeApplicationUserSignaturePopupFromCtrl()">
+                        {{lang.close}}
+                    </md-button>
+                </div>
+            </form>
+        </md-content>
+    </div>
+</md-dialog>

@@ -1,0 +1,141 @@
+<md-dialog class="dialog-extend"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_public_announcement : ctrl.model.getNames()}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20" ng-if="!ctrl.model.id">{{lang.add_new_public_announcement}}</span>
+            <span class="p20" ng-if="ctrl.model.id">{{ctrl.model.getNames()}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="publicAnnouncementForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="arSubject">{{lang.arabic_subject}}</label>
+                            <input name="arSubject" id="arSubject" required minlength="4" maxlength="150"
+                                   ng-model="ctrl.publicAnnouncement.arSubject"
+                                   custom-validate-directive="ANS">
+                            <div ng-messages="publicAnnouncementForm.arSubject.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:150})}}</div>
+                                <div ng-message="ANS">{{lang.arabic_number_space}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="enSubject">{{lang.english_subject_name}}</label>
+                            <input name="enSubject" id="enSubject" required minlength="4" maxlength="150"
+                                   ng-model="ctrl.publicAnnouncement.enSubject"
+                                   custom-validate-directive="ENS">
+                            <div ng-messages="publicAnnouncementForm.enSubject.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:150})}}</div>
+                                <div ng-message="ENS">{{lang.english_number_space}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="itemOrder">{{lang.item_order}}</label>
+                            <input name="itemOrder" id="itemOrder" required maxlength="5"
+                                   ng-model="ctrl.publicAnnouncement.itemOrder"
+                                   custom-validate-directive="number">
+                            <div ng-messages="publicAnnouncementForm.itemOrder.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="number">{{lang.numberonly}}</div>
+                                <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+
+                    <div layout="row">
+                        <div flex class="p20">
+                            <md-switch ng-change="ctrl.onAlwaysActiveChange()" ng-model="ctrl.alwaysActive"
+                                       aria-label="{{lang.always_active}}">
+                                <span>{{lang.always_active}} : </span>
+                                {{ctrl.publicAnnouncement.getTranslatedAlwaysActive(ctrl.alwaysActive)}}
+                            </md-switch>
+                        </div>
+                        <div flex class="p20">
+                            <md-switch ng-model="ctrl.publicAnnouncement.status" ng-disabled="ctrl.isStatusDisabled"
+                                       aria-label="{{lang.status}}">
+                                <label>{{lang.status}} : {{ctrl.publicAnnouncement.getTranslatedStatus()}}</label>
+                            </md-switch>
+                        </div>
+                    </div>
+
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="startDate">{{lang.start_date}}</label>
+                            <md-datepicker id="startDate" ng-required="!ctrl.alwaysActive"
+                                           ng-model="ctrl.publicAnnouncement.startDate"
+                                           md-max-date="ctrl.publicAnnouncement.endDate"
+                                           ng-change="ctrl.setMinEndDate()"
+                                           name="startDate" ng-disabled="ctrl.alwaysActive">
+                            </md-datepicker>
+                            <div ng-messages="publicAnnouncementForm.startDate.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="endDate">{{lang.end_date}}</label>
+                            <md-datepicker ng-required="!ctrl.alwaysActive || ctrl.publicAnnouncement.startDate"
+                                           md-min-date="ctrl.minEndDate"
+                                           ng-model="ctrl.publicAnnouncement.endDate" name="endDate" id="endDate"
+                                           ng-disabled="ctrl.alwaysActive || !ctrl.publicAnnouncement.startDate"
+                            ></md-datepicker>
+                            <div ng-messages="publicAnnouncementForm.endDate.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+
+                    <div layout="row" class="p20">
+                        <div flex>
+                            <label>{{$parent.lang.arabic_body_text }} <span class="red-text">*</span></label>
+                            <text-angular name="arBody" id="arBody" flex
+                                          ng-model="ctrl.publicAnnouncement.arBody"
+                                          required
+                            ></text-angular>
+                            <!--<trix-editor required angular-trix ng-model="ctrl.publicAnnouncement.arBody" name="arBody"
+                                         id="arBody" maxlength="4000"
+                                         prevent-trix-file-accept="true"></trix-editor>-->
+                        </div>
+                    </div>
+
+                    <div layout="row" class="p20">
+                        <div flex>
+                            <label>{{$parent.lang.english_body_text }} <span class="red-text">*</span></label>
+                            <text-angular name="enBody" id="enBody" flex
+                                          ng-model="ctrl.publicAnnouncement.enBody"
+                                          required
+                            ></text-angular>
+                            <!-- <trix-editor required angular-trix ng-model="ctrl.publicAnnouncement.enBody" name="enBody"
+                                         id="enBody" maxlength="4000"
+                                         prevent-trix-file-accept="true"></trix-editor>-->
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-disabled="publicAnnouncementForm.$invalid" ng-if="!ctrl.editMode"
+                           ng-click="ctrl.addPublicAnnouncementFromCtrl()">
+                    {{lang.add}}
+                </md-button>
+                <md-button class="md-raised" ng-disabled="publicAnnouncementForm.$invalid" ng-if="ctrl.editMode"
+                           ng-click="ctrl.editPublicAnnouncementFromCtrl()">
+                    {{lang.save}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closePublicAnnouncementPopupFromCtrl()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

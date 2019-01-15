@@ -1,0 +1,36 @@
+<md-menu-bar class="notify-list">
+    <md-menu md-position-mode="left bottom" md-offset="0 12">
+        <div layout="column" class="notify">
+            <md-button class="md-icon-button" ng-click="ctrl.openSubscriptionMenu($mdMenu)"
+                       tooltip="{{$root.lang.user_subscriptions}}" fixed-position="true">
+                <md-icon md-svg-icon="bell-outline"></md-icon>
+            </md-button>
+            <span ng-if="ctrl.service.userSubscriptions.length > 0" ng-click="ctrl.openSubscriptionMenu($mdMenu)"
+                  class="counter blue">{{ctrl.service.userSubscriptions.length}}</span>
+        </div>
+        <md-menu-content class="toolbar-menu-content">
+            <div scroll-directive class="notify-list-wrapper">
+                <ul>
+                    <li ng-repeat="item in ctrl.service.userSubscriptions track by $index" layout="row">
+                        <div class="task-body" flex layout="column">
+                            <div class="task-header" layout="row">
+                                <a href="#" md-truncate flex
+                                   class="notification-subject" ng-click="ctrl.previewDocument(item,$event)">{{item.docSubject}}</a>
+
+                                <a ng-click="ctrl.viewTrackingSheet(item, $event)"
+                                   ng-if="ctrl.checkPermission(self.permissions.trackingSheet)">
+                                    <md-icon md-svg-icon="file" tooltip="{{lang.view_tracking_sheet}}"
+                                             tooltip-direction="{{lang.current === 'ar'? 'right': 'left'}}"></md-icon>
+                                </a>
+                            </div>
+                            <div layout="column">
+                                <div class="tasks-date-text">{{ctrl.getSubscriptionEventType(item)}}</div>
+                                <!--<div class="tasks-date-text" >{{item.docFullSerial}}</div>-->
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </md-menu-content>
+    </md-menu>
+</md-menu-bar>

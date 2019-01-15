@@ -1,0 +1,116 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.workflow_participation}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.workflow_participation}} : {{ctrl.model.ouid.getTranslatedName()}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="applicationUserWorkflowParticipationForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="row" flex>
+                        <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToPrivateUsers"
+                                     aria-label="{{lang.send_to_private_users}}"
+                                     ng-change="ctrl.sendToPrivateUsersChange()">
+                            {{lang.send_to_private_users}}
+                        </md-checkbox>
+                        <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToManagers"
+                                     aria-label="{{lang.send_to_managers}}"
+                                     ng-change="ctrl.sendToManagersChange()">
+                            {{lang.send_to_managers}}
+                        </md-checkbox>
+                    </div>
+                    <div layout="row" flex>
+                        <!-- Private Users -->
+                        <md-input-container flex>
+                            <label for="privateUsers">{{lang.private_users}}</label>
+                            <md-select ng-model-options="{trackBy: '$value.id'}" multiple name="privateUsers"
+                                       id="privateUsers"
+                                       ng-required="ctrl.ouApplicationUser.sendToPrivateUsers"
+                                       ng-model="ctrl.ouApplicationUser.privateUsers"
+                                       ng-disabled="!ctrl.ouApplicationUser.sendToPrivateUsers"
+                                       md-selected-text="ctrl.getSelectedPrivateUsersText()"
+                            >
+                                <md-optgroup label="{{ou.getTranslatedName()}}"
+                                             ng-repeat="ou in ctrl.organizationsWithPrivateUsers">
+                                    <md-option ng-value="privateUser"
+                                               ng-repeat="privateUser in ou.privateUsers">
+                                        {{privateUser.applicationUser.getTranslatedName()}}
+                                    </md-option>
+                                </md-optgroup>
+                            </md-select>
+                            <div ng-messages="applicationUserWorkflowParticipationForm.privateUsers.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- Managers -->
+                        <md-input-container flex>
+                            <label for="managers">{{lang.managers}}</label>
+                            <md-select multiple name="managers" id="managers"
+                                       ng-required="ctrl.ouApplicationUser.sendToManagers"
+                                       ng-model="ctrl.ouApplicationUser.managers"
+                                       ng-disabled="!ctrl.ouApplicationUser.sendToManagers"
+                                       md-selected-text="ctrl.getSelectedManagersText()"
+                                       ng-model-options="{trackBy: '$value.organization.id'}">
+                                <md-option ng-value="ou" ng-repeat="ou in ctrl.organizationsWithManager">
+                                    {{ou.organization.getTranslatedName() + ' - '+ ou.manager.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="applicationUserWorkflowParticipationForm.managers.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <!-- Workflow Security -->
+                    <div layout="row" flex>
+                        <md-input-container flex>
+                            <label for="wfsecurity">{{lang.workflow_governance_rules}}</label>
+                            <md-select name="wfsecurity"
+                                       id="wfsecurity"
+                                       required
+                                       ng-model="ctrl.ouApplicationUser.wfsecurity">
+                                <md-option ng-repeat="workflowSecurity in ctrl.workFlowSecurities"
+                                           ng-value="workflowSecurity.lookupKey">
+                                    {{workflowSecurity.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="applicationUserWorkflowParticipationForm.wfsecurity.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <!--<div layout="row" flex>
+                        &lt;!&ndash; Send to All Organization’s Users &ndash;&gt;
+                        <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToAllEntityUsers"
+                                     aria-label="{{lang.send_to_all_organizations_users}}">
+                            {{lang.send_to_all_organizations_users}}
+                        </md-checkbox>
+                        &lt;!&ndash; Send to any user in the same unit and to all units having the same correspondence register &ndash;&gt;
+                        <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToAllRegistryOUUsers"
+                                     aria-label="{{lang.send_to_any_user_in_same_unit_and_to_all_units}}">
+                            {{lang.send_to_any_user_in_same_unit_and_to_all_units}}
+                        </md-checkbox>
+                    </div>
+                    <div layout="row" flex>
+                        &lt;!&ndash; Send to any user in the same unit, parent unit, child units and units having the same parent &ndash;&gt;
+                        <md-checkbox flex ng-model="ctrl.ouApplicationUser.sendToAllParentOUUsers"
+                                     aria-label="{{lang.send_to_any_user_in_same_unit_parent_child_same_parent}}">
+                            {{lang.send_to_any_user_in_same_unit_parent_child_same_parent}}
+                        </md-checkbox>
+                        <span flex></span>
+                    </div>-->
+                </div>
+                <div layout="row">
+                    <md-button class="md-raised" ng-disabled="applicationUserWorkflowParticipationForm.$invalid"
+                               ng-click="ctrl.addApplicationUserWorkflowParticipationPopupFromCtrl()">
+                        {{lang.add}}
+                    </md-button>
+                    <span flex></span>
+                    <md-button class="md-raised"
+                               ng-click="ctrl.closeApplicationUserWorkflowParticipationPopupFromCtrl()">
+                        {{lang.close}}
+                    </md-button>
+                </div>
+            </form>
+        </md-content>
+    </div>
+</md-dialog>

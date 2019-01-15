@@ -48,7 +48,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('ready-to-send-outgoing'),
+                        templateUrl: cmsTemplate.getPopup('ready-to-send-outgoing'),
                         controller: 'readyToSendOutgoingPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -70,7 +70,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('ready-to-send-outgoing'),
+                        templateUrl: cmsTemplate.getPopup('ready-to-send-outgoing'),
                         controller: 'readyToSendOutgoingPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

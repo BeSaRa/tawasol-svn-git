@@ -90,7 +90,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('sub-dynamic-menu-item'),
+                        templateUrl: cmsTemplate.getPopup('sub-dynamic-menu-item'),
                         controller: 'subDynamicMenuItemPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -110,7 +110,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('sub-dynamic-menu-item'),
+                        templateUrl: cmsTemplate.getPopup('sub-dynamic-menu-item'),
                         controller: 'subDynamicMenuItemPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -128,7 +128,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('dynamic-menu-item'),
+                        templateUrl: cmsTemplate.getPopup('dynamic-menu-item'),
                         controller: 'dynamicMenuItemPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -151,7 +151,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('dynamic-menu-item'),
+                        templateUrl: cmsTemplate.getPopup('dynamic-menu-item'),
                         controller: 'dynamicMenuItemPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

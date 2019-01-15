@@ -1,0 +1,145 @@
+<!-- start of view -->
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_incoming}}</span>
+            <md-button ng-click="ctrl.reloadIncomingDepartmentInboxes()" class="md-icon-button"
+                       tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.selectedIncomingDepartmentInboxes"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                    <tr md-row>
+                                        <th colspan="{{ctrl.selectedIncomingDepartmentInboxes.length > 1 ? 7 : 8}}"
+                                            ng-if="ctrl.selectedIncomingDepartmentInboxes.length" md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedIncomingDepartmentInboxes.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
+                                                <!--ng-if="ctrl.selectedIncomingDepartmentInboxes.length > 1"-->
+                                                <md-button class="md-icon-button"
+                                                           aria-label="{{lang.grid_action_return}}"
+                                                           ng-if="ctrl.checkIfReturnBulkAvailable()"
+                                                           tooltip="{{lang.grid_action_return}}"
+                                                           ng-click="ctrl.returnWorkItemsBulk($event)">
+                                                    <md-icon md-svg-icon="undo-variant" class="action-green"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button"
+                                                           aria-label="{{lang.grid_action_unlock}}"
+                                                           ng-if="false"
+                                                           tooltip="{{lang.grid_action_unlock}}"
+                                                           ng-click="ctrl.unlockWorkItemsBulk($event)">
+                                                    <!--ctrl.checkIfUnlockBulkAvailable()-->
+                                                    <md-icon md-svg-icon="lock-open" class="action-green"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="generalStepElm.docFullSerial">
+                                            <span>{{lang.inbox_serial}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="generalStepElm.docSubject">
+                                            <span>{{lang.subject}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="generalStepElm.receivedDate">
+                                            <span>{{lang.received_date}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="type">
+                                            <span>{{lang.type}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('fromOU','Information')}}">
+                                            <span>{{lang.sender_reg_ou}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="generalStepElm.numberOfDays">
+                                            <span>{{lang.number_of_days}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('sender', 'Information')}}">
+                                            <span>{{lang.sender}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column>
+                                            <span></span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="incomingDepartmentInbox"
+                                        grid-right-click-directive="incomingDepartmentInbox"
+                                        model="incomingDepartmentInbox"
+                                        ng-disabled="incomingDepartmentInbox.isLocked() && !incomingDepartmentInbox.isLockedByCurrentUser()"
+                                        selected-length="{{ctrl.selectedIncomingDepartmentInboxes.length ? ctrl.selectedIncomingDepartmentInboxes.length : 0}}"
+                                        ng-repeat="incomingDepartmentInbox in searchResults = (ctrl.incomingDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        <td class="serial-td" md-cell>
+                                            {{incomingDepartmentInbox.generalStepElm.docFullSerial}}
+                                        </td>
+                                        <td md-cell class="subject">
+                                            <grid-indicator-directive record-type="WorkItem"
+                                                                      record="incomingDepartmentInbox"
+                                                                      indicator-type="isLockedWorkItem"
+                                                                      callback="ctrl.unlockWorkItem">
+                                            </grid-indicator-directive>
+                                            <a href="" class="view-doc"
+                                                       ng-click="ctrl.viewDocument(incomingDepartmentInbox, $event)">{{incomingDepartmentInbox.generalStepElm.docSubject}}</a>
+                                        </td>
+                                        <td md-cell>{{incomingDepartmentInbox.generalStepElm.receivedDate}}</td>
+                                        <td md-cell>{{incomingDepartmentInbox.type}}</td>
+                                        <td md-cell>{{incomingDepartmentInbox.fromOU.getTranslatedName()}}</td>
+                                        <td md-cell>{{incomingDepartmentInbox.generalStepElm.numberOfDays}}</td>
+                                        <td md-cell>{{incomingDepartmentInbox.sender.getTranslatedName()}}</td>
+                                        <td md-cell ng-if="ctrl.selectedIncomingDepartmentInboxes.length < 2">
+                                            <div layout-align="start center" ng-if="!ctrl.selectedIncomingDepartmentInboxes.length
+                                                      || ctrl.selectedIncomingDepartmentInboxes.length===1 && ctrl.selectedIncomingDepartmentInboxes[0].generalStepElm.workObjectNumber === incomingDepartmentInbox.generalStepElm.workObjectNumber">
+                                                <grid-actions-directive menu-direction="horizontal"
+                                                                        grid-actions="ctrl.gridActions"
+                                                                        model="incomingDepartmentInbox"
+                                                                        shortcut="true">
+                                                </grid-actions-directive>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="!ctrl.incomingDepartmentInboxes.length">
+                                        <td md-cell colspan="8" class="red-text text-center">{{lang.no_records_found}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.incomingDepartmentInboxes.length && !searchResults.length">
+                                        <td md-cell colspan="8" class="red-text text-center">
+                                            {{lang.no_records_found_matching_search}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{(ctrl.incomingDepartmentInboxes | filter:ctrl.searchModel).length}}"
+                                    md-page-select
+                                    md-on-paginate="ctrl.grid.pagingCallback">
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>
+<!-- end of view -->

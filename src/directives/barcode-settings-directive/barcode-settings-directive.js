@@ -1,9 +1,9 @@
 module.exports = function (app) {
     require('./barcode-settings-style.scss');
-    app.directive('barcodeSettingsDirective', function () {
+    app.directive('barcodeSettingsDirective', function (cmsTemplate) {
         'ngInject';
         return {
-            template: require('./barcode-settings-template.html'),
+            templateUrl: cmsTemplate.getDirective('barcode-settings-template.html'),
             controller: 'barcodeSettingsDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,

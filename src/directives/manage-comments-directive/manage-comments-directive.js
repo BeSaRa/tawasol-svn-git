@@ -1,10 +1,10 @@
 module.exports = function (app) {
     require('./manage-comments-style.scss');
-    app.directive('manageCommentsDirective', function () {
+    app.directive('manageCommentsDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
-            template: require('./manage-comments-template.html'),
+            templateUrl: cmsTemplate.getDirective('manage-comments-template.html'),
             controller: 'manageCommentsDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,

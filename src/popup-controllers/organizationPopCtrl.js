@@ -1382,7 +1382,7 @@ module.exports = function (app) {
             return dialog
                 .showDialog({
                     targetEvent: $event,
-                    template: cmsTemplate.getPopup('ou-unassigned-user'),
+                    templateUrl: cmsTemplate.getPopup('ou-unassigned-user'),
                     controller: 'ouUnassignedUserPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {
@@ -1458,7 +1458,7 @@ module.exports = function (app) {
         self.openStartSerialPopup = function () {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('start-serials'),
+                    templateUrl: cmsTemplate.getPopup('start-serials'),
                     controller: 'startSerialPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {

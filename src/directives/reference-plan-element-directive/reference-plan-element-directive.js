@@ -1,10 +1,10 @@
 module.exports = function (app) {
     require('./reference-plan-element-directive-style.scss');
-    app.directive('referencePlanElementDirective', function () {
+    app.directive('referencePlanElementDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
-            template: require('./reference-plan-element-template.html'),
+            templateUrl: cmsTemplate.getDirective('reference-plan-element-template.html'),
             scope: {
                 referenceItem: '='
             },

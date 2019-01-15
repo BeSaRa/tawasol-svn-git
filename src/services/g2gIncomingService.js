@@ -60,7 +60,7 @@ module.exports = function (app) {
         self.showReasonDialog = function (dialogTitle, $event) {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('reason'),
+                    templateUrl: cmsTemplate.getPopup('reason'),
                     controller: 'reasonPopCtrl',
                     controllerAs: 'ctrl',
                     bindToController: true,

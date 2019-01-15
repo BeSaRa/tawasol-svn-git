@@ -1,10 +1,10 @@
 module.exports = function (app) {
     require('./manage-attachment-style.scss');
-    app.directive('manageAttachmentDirective', function () {
+    app.directive('manageAttachmentDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
-            template: require('./manage-attachments-template.html'),
+            templateUrl: cmsTemplate.getDirective('manage-attachments-template.html'),
             controller: 'manageAttachmentDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,

@@ -1,0 +1,35 @@
+<div ng-if="ctrl.display">
+    <md-menu-bar class="no-padding" ng-if="!ctrl.displayButton">
+        <md-menu>
+            <md-button class="md-icon-button"
+                       ng-click="$mdMenu.open()">
+                <md-icon md-svg-icon="dots-vertical"></md-icon>
+            </md-button>
+            <md-menu-content width="3">
+                <md-menu-item>
+                    <md-button ng-click="ctrl.runCallback($event)">
+                        <div layout="row"
+                             layout-align="start center">
+                            <md-icon
+                                    md-svg-icon="plus-circle-outline"></md-icon>
+                            <span>{{lang.add}}</span>
+                        </div>
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                    <md-button ng-click="ctrl.runIgnoreCallback($event)">
+                        <div layout="row"
+                             layout-align="start center">
+                            <md-icon
+                                    md-svg-icon="plus-circle-multiple-outline"></md-icon>
+                            <span>{{lang.add_with_ignore_info_messages}}</span>
+                        </div>
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+    </md-menu-bar>
+    <md-button ng-if="ctrl.displayButton" class="md-icon-button" ng-click="ctrl.runCallback($event)">
+        <md-icon md-svg-icon="plus"></md-icon>
+    </md-button>
+</div>

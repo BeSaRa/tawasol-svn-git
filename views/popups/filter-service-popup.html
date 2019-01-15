@@ -1,0 +1,31 @@
+<md-dialog class="dialog-extend">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.get(Filter.title , true ) ? lang.get(Filter.title)  :  Filter.title }}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <div class="p20" ng-repeat="field in Filter.options track by $index" layout="column">
+                <md-input-container ng-if="field.type === 'text'">
+                    <label>{{lang.get(field.label , true) ? lang.get(field.label , true) : field.label }}</label>
+                    <input ng-model="Filter.filter[field.property]">
+                </md-input-container>
+                <md-switch ng-if="field.type === 'switch'" ng-model="Filter.filter[field.property]"
+                           ng-false-value="{{field.falseValue}}"
+                           ng-true-value="{{field.trueValue}}">
+                    <label>{{lang.get(field.label , true) ? lang.get(field.label , true) : field.label }}</label>
+                </md-switch>
+                <md-input-container ng-if="field.type === 'select'">
+                    <label>{{lang.get(field.label , true) ? lang.get(field.label , true) : field.label }}</label>
+                    <md-select ng-model="Filter.filter[field.property]">
+                        <md-option ng-value="">select</md-option>
+                        <md-option ng-value="value" ng-repeat="value in field.values">{{value}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+        </md-content>
+        <div>
+            <md-button ng-click="Filter.search()">Filter</md-button>
+        </div>
+    </div>
+</md-dialog>

@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('filterLabelDirective', function () {
+    app.directive('filterLabelDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
@@ -7,7 +7,7 @@ module.exports = function (app) {
             controllerAs: 'ctrl',
             bindToController: true,
             replace: true,
-            template: require('./filter-label-template.html'),
+            templateUrl: cmsTemplate.getDirective('filter-label-template.html'),
             scope: {
                 userFilterEdit: '=',
                 userFilterDelete: '=',

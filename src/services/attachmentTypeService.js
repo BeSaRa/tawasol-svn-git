@@ -46,7 +46,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('attachment-type'),
+                        templateUrl: cmsTemplate.getPopup('attachment-type'),
                         controller: 'attachmentTypePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -68,7 +68,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('attachment-type'),
+                        templateUrl: cmsTemplate.getPopup('attachment-type'),
                         controller: 'attachmentTypePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

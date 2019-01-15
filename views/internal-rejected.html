@@ -1,0 +1,144 @@
+<!-- start of view -->
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_internal_rejected}}</span>
+            <md-button ng-click="ctrl.reloadRejectedInternals()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.selectedRejectedInternals"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                    <tr md-row>
+                                        <th colspan="{{ctrl.selectedRejectedInternals.length > 1 ? 6 : 7}}"
+                                            ng-if="ctrl.selectedRejectedInternals.length" md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedRejectedInternals.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
+
+                                                <!--ng-if="ctrl.selectedRejectedInternals.length > 1"-->
+                                                <md-button class="md-icon-button"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('LAUNCH_DISTRIBUTION_WORKFLOW')"
+                                                           tooltip="{{lang.grid_action_launch_distribution_workflow}}"
+                                                           ng-click="ctrl.launchDistributionWorkflowBulk($event)">
+                                                    <md-icon md-svg-icon="sitemap" class="action-green"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button"
+                                                           tooltip="{{lang.grid_action_archive}}"
+                                                           ng-click="ctrl.archiveRejectedInternalBulk($event)">
+                                                    <md-icon md-svg-icon="archive" class="action-green"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button"
+                                                           tooltip="{{lang.grid_action_send_to_review}}"
+                                                           ng-click="ctrl.sendToReviewBulk($event)">
+                                                    <md-icon md-svg-icon="send" class="action-green"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button"
+                                                           tooltip="{{lang.remove}}"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('DELETE_INTERNAL')"
+                                                           ng-click="ctrl.removeBulkRejectedInternals($event)">
+                                                    <md-icon md-svg-icon="delete" class="action-green"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRejectedInternals.length" md-column md-order-by="">
+                                            <!-- Paper/Electronic Indicators -->
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRejectedInternals.length" md-column
+                                            md-order-by="docSubject">
+                                            <span>{{lang.subject}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRejectedInternals.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
+                                            <span>{{lang.priority_level}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRejectedInternals.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
+                                            <span>{{lang.security_level}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRejectedInternals.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
+                                            <span>{{lang.creator}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRejectedInternals.length" md-column
+                                            md-order-by="createdOn">
+                                            <span>{{lang.created_on}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRejectedInternals.length && ctrl.selectedRejectedInternals.length < 2"
+                                            md-column>
+                                            <span></span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="rejectedInternal" grid-right-click-directive
+                                        model="rejectedInternal"
+                                        selected-length="{{ctrl.selectedRejectedInternals.length ? ctrl.selectedRejectedInternals.length : 0}}"
+                                        ng-repeat="rejectedInternal in searchResults = (ctrl.rejectedInternals  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        <td md-cell class="indicator-td">
+                                            <!-- Electronic/Paper Document -->
+                                            <grid-indicator-directive record="rejectedInternal"
+                                                                      indicator-type="paperElectronic"
+                                                                      record-type="internal"></grid-indicator-directive>
+                                        </td>
+                                        <td md-cell class="td-data">
+                                            <a href="" ng-if="rejectedInternal.hasContent()" class="view-doc"
+                                               ng-click="ctrl.viewDocument(rejectedInternal, $event)">{{rejectedInternal.docSubject}}</a>
+                                            <span ng-if="!rejectedInternal.hasContent()">{{rejectedInternal.docSubject}}</span>
+                                        </td>
+                                        <td md-cell>{{rejectedInternal.priorityLevel.getTranslatedName()}}</td>
+                                        <td md-cell>{{rejectedInternal.securityLevel.getTranslatedName()}}</td>
+                                        <td md-cell>{{rejectedInternal.creatorInfo.getTranslatedName()}}</td>
+                                        <td md-cell>{{rejectedInternal.createdOn}}</td>
+                                        <td md-cell ng-if="ctrl.selectedRejectedInternals.length < 2">
+                                            <div layout-align="start center" ng-if="!ctrl.selectedRejectedInternals.length
+                                                  || ctrl.selectedRejectedInternals.length===1 && ctrl.selectedRejectedInternals[0].id === rejectedInternal.id">
+                                                <grid-actions-directive menu-direction="horizontal"
+                                                                        grid-actions="ctrl.gridActions"
+                                                                        model="rejectedInternal"
+                                                                        shortcut="true">
+                                                </grid-actions-directive>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="!ctrl.rejectedInternals.length">
+                                        <td md-cell colspan="7" class="red-text text-center">{{lang.no_records_found}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.rejectedInternals.length && !searchResults.length">
+                                        <td md-cell colspan="7" class="red-text text-center">
+                                            {{lang.no_records_found_matching_search}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{(ctrl.rejectedInternals  | filter:ctrl.searchModel).length}}"
+                                    md-page-select
+                                    md-on-paginate="ctrl.grid.pagingCallback">
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>
+<!-- end of view -->

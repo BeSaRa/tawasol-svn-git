@@ -1,12 +1,12 @@
 module.exports = function (app) {
-    app.directive('managePropertiesSearchDirective', function () {
+    app.directive('managePropertiesSearchDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
             controller: 'managePropertiesSearchDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,
-            template: require('./manage-properties-search-template.html'),
+            templateUrl: cmsTemplate.getDirective('manage-properties-search-template.html'),
             scope: {
                 document: '=',
                 searchType: '@',

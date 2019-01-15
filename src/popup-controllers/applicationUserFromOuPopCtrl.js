@@ -932,7 +932,7 @@ module.exports = function (app) {
                     return dialog
                         .showDialog({
                             targetEvent: $event,
-                            template: cmsTemplate.getPopup('application-user-edit-permission'),
+                            templateUrl: cmsTemplate.getPopup('application-user-edit-permission'),
                             controller: 'applicationUserEditPermissionPopCtrl',
                             controllerAs: 'ctrl',
                             locals: {
@@ -955,7 +955,7 @@ module.exports = function (app) {
             return dialog
                 .showDialog({
                     targetEvent: $event,
-                    template: cmsTemplate.getPopup('application-user-workflow-participation'),
+                    templateUrl: cmsTemplate.getPopup('application-user-workflow-participation'),
                     controller: 'applicationUserWorkflowParticipationPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {
@@ -990,7 +990,7 @@ module.exports = function (app) {
             return dialog
                 .showDialog({
                     targetEvent: $event,
-                    template: cmsTemplate.getPopup('application-user-out-of-office-setting'),
+                    templateUrl: cmsTemplate.getPopup('application-user-out-of-office-setting'),
                     controller: 'applicationUserOutOfOfficeSettingPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {

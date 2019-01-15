@@ -1,9 +1,9 @@
 module.exports = function (app) {
-    app.directive('tableStatusDirective', function () {
+    app.directive('tableStatusDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
-            template: require('./table-status-template.html'),
+            templateUrl: cmsTemplate.getDirective('table-status-template.html'),
             controller: 'tableStatusDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,

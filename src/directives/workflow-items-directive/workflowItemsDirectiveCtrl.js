@@ -68,7 +68,7 @@ module.exports = function (app) {
 
         self.workflowItemSettingDialog = function (dialogTitle, distWorkflowItem, $event) {
             return dialog.showDialog({
-                template: cmsTemplate.getPopup('workflow-item-settings'),
+                templateUrl: cmsTemplate.getPopup('workflow-item-settings'),
                 controller: 'workflowItemSettingPopCtrl',
                 controllerAs: 'ctrl',
                 targetEvent: $event,

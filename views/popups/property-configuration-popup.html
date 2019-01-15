@@ -1,0 +1,154 @@
+<md-dialog class="dialog-extend"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_property_configuration : ctrl.model.getNames()}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20" ng-if="!ctrl.editMode">{{lang.add_new_property_configuration}}</span>
+            <span class="p20" ng-if="ctrl.editMode">{{lang.edit_property_configuration}}</span>
+            <!--<span class="p20" ng-if="ctrl.editMode">{{ctrl.model.getNames()}}</span>-->
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="property_configuration_form" autocomplete="off">
+                <div layout="column" class="p20">
+
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="dataType">{{lang.data_type}}</label>
+                            <md-select name="dataType" id="dataType"
+                                       ng-change="ctrl.onDataTypeChange()"
+                                       ng-required="true"
+                                       ng-model="ctrl.propertyConfiguration.dataType">
+                                <md-option ng-value="dt.value"
+                                           ng-repeat="dt in ctrl.dataTypes track by $index">
+                                    {{dt.text}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="property_configuration_form.dataType.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="defaultOperator">{{lang.default_operator}}</label>
+                            <md-select name="defaultOperator" id="defaultOperator"
+                                       required
+                                       ng-required="true" ng-disabled="ctrl.isDefaultOperatorDisabled && !ctrl.editMode"
+                                       ng-model="ctrl.propertyConfiguration.defaultOperator">
+                                <md-option ng-repeat="do in ctrl.defaultOperators track by $index"
+                                           ng-if="do.display(ctrl.propertyConfiguration)" ng-value="do.value">
+                                    {{do.text}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="property_configuration_form.defaultOperator.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex ng-show="ctrl.propertyConfiguration.dataType!=='Date'">
+                            <label for="defaultValue">{{lang.default_value}}</label>
+                            <input id="defaultValue" name="defaultValue"
+                                   ng-show="ctrl.propertyConfiguration.dataType!=='Date'"
+                                   ng-minlength="1"
+                                   ng-disabled="ctrl.isDefaultValueDisabled && !ctrl.editMode"
+                                   ng-maxlength="150"
+                                   ng-model="ctrl.propertyConfiguration.defaultValue"
+                                   ng-pattern="ctrl.stringORNumber"
+                                   ng-required="ctrl.propertyConfiguration.dataType!=='Date'">
+                            <div ng-messages="property_configuration_form.defaultValue.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                                <div ng-message="minlength">{{lang.short}}</div>
+                                <div ng-if="ctrl.propertyConfiguration.dataType==='Integer'" ng-message="pattern">
+                                    {{lang.positive_number_only}}
+                                </div>
+                            </div>
+                        </md-input-container>
+
+                        <md-input-container flex ng-show="ctrl.propertyConfiguration.dataType==='Date'">
+                            <label for="defaultValueDatePicker">{{lang.default_value}}</label>
+                            <md-datepicker id="defaultValueDatePicker"
+                                           ng-change="ctrl.onDefaultValueDatePickerChange()"
+                                           ng-show="ctrl.propertyConfiguration.dataType==='Date'"
+                                           ng-model="ctrl.defaultValueDatePicker"
+                                           name="defaultValueDatePicker"
+                                           ng-required="ctrl.propertyConfiguration.dataType==='Date'"
+                            ></md-datepicker>
+                            <div ng-messages="property_configuration_form.defaultValueDatePicker.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="spName">{{lang.sp_name}}</label>
+                            <input id="spName" name="spName"
+                                   ng-minlength="1"
+                                   ng-maxlength="150"
+                                   ng-model="ctrl.propertyConfiguration.spName"
+                                   ng-required="true">
+                            <div ng-messages="property_configuration_form.spName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="spParameters">{{lang.sp_parameters}}</label>
+                            <input id="spParameters" name="spParameters"
+                                   ng-minlength="1"
+                                   ng-maxlength="150"
+                                   ng-model="ctrl.propertyConfiguration.spParameters"
+                                   ng-required="true">
+                            <div ng-messages="property_configuration_form.spParameters.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="symbolicName">{{lang.symbolic_name}}</label>
+                            <input id="symbolicName" name="symbolicName"
+                                   ng-minlength="1"
+                                   ng-maxlength="150"
+                                   ng-model="ctrl.propertyConfiguration.symbolicName"
+                                   ng-required="true">
+                            <div ng-messages="property_configuration_form.symbolicName.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-switch flex ng-model="ctrl.propertyConfiguration.isMandatory"
+                                   ng-change="ctrl.onMandatoryChange($event)">
+                            {{lang.is_mandatory}}
+                        </md-switch>
+                        <md-switch flex ng-model="ctrl.propertyConfiguration.isList">
+                            {{lang.is_list}}
+                        </md-switch>
+                        <md-switch flex ng-model="ctrl.propertyConfiguration.isSequence">
+                            {{lang.is_sequence}}
+                        </md-switch>
+                        <md-switch flex ng-model="ctrl.propertyConfiguration.status"
+                                   ng-if="!ctrl.propertyConfiguration.isMandatory"
+                                   ng-disabled="ctrl.propertyConfiguration.isMandatory">
+                            {{lang.status}}
+                        </md-switch>
+                    </div>
+
+                </div>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised"
+                           ng-disabled="property_configuration_form.$invalid"
+                           ng-if="!ctrl.editMode"
+                           ng-click="ctrl.addPropertyConfigurationFromCtrl()">{{lang.add}}
+                </md-button>
+                <md-button class="md-raised"
+                           ng-disabled="property_configuration_form.$invalid"
+                           ng-if="ctrl.editMode"
+                           ng-click="ctrl.editPropertyConfigurationFromCtrl()">{{lang.save}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closePropertyConfigurationPopupFromCtrl()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

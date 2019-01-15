@@ -242,7 +242,7 @@ module.exports = function (app) {
             return dialog
                 .showDialog({
                     targetEvent: $event,
-                    template: cmsTemplate.getPopup('view-linked-entity'),
+                    templateUrl: cmsTemplate.getPopup('view-linked-entity'),
                     controller: 'viewLinkedEntityPopCtrl',
                     controllerAs: 'ctrl',
                     bindToController: true,

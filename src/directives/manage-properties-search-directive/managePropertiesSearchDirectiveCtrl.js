@@ -192,7 +192,7 @@ module.exports = function (app) {
         self.changeYearRange = function () {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('search-doc-date-range'),
+                    templateUrl: cmsTemplate.getPopup('search-doc-date-range'),
                     controller: 'searchDocDateRangePopCtrl',
                     controllerAs: 'ctrl',
                     bindToController: true,
@@ -433,7 +433,7 @@ module.exports = function (app) {
             if (self.document.siteType || !resetSites) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('manage-correspondence-sites-search'),
+                        templateUrl: cmsTemplate.getPopup('manage-correspondence-sites-search'),
                         controller: 'manageCorrespondenceSitesSearchPopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,
@@ -470,7 +470,7 @@ module.exports = function (app) {
             if (self.document.selectedEntityType) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('manage-document-entities-search'),
+                        templateUrl: cmsTemplate.getPopup('manage-document-entities-search'),
                         controller: 'manageDocumentEntitiesSearchPopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,

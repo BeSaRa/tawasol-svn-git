@@ -1,9 +1,9 @@
 module.exports = function (app) {
-    app.directive('manageCorrespondenceSiteIncomingDirective', function () {
+    app.directive('manageCorrespondenceSiteIncomingDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
-            template: require('./manage-correspondence-site-incoming-template.html'),
+            templateUrl: cmsTemplate.getDirective('manage-correspondence-site-incoming-template.html'),
             controller: 'manageCorrespondenceSiteIncomingDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,

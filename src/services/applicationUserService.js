@@ -60,7 +60,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('application-user'),
+                        templateUrl: cmsTemplate.getPopup('application-user'),
                         controller: 'applicationUserPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -107,7 +107,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('application-user'),
+                        templateUrl: cmsTemplate.getPopup('application-user'),
                         controller: 'applicationUserPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -162,7 +162,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('application-user-from-ou'),
+                        templateUrl: cmsTemplate.getPopup('application-user-from-ou'),
                         controller: 'applicationUserFromOuPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -206,7 +206,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('application-user-from-ou'),
+                        templateUrl: cmsTemplate.getPopup('application-user-from-ou'),
                         controller: 'applicationUserFromOuPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -301,7 +301,7 @@ module.exports = function (app) {
             selectApplicationUsers: function (applicationUsers, label, $event) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('select-application-user'),
+                        templateUrl: cmsTemplate.getPopup('select-application-user'),
                         targetEvent: $event,
                         controller: 'selectApplicationUserPopCtrl',
                         controllerAs: 'ctrl',
@@ -322,7 +322,7 @@ module.exports = function (app) {
             selectApplicationUser: function (applicationUser, label, $event) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('select-application-user'),
+                        templateUrl: cmsTemplate.getPopup('select-application-user'),
                         targetEvent: $event,
                         controller: 'selectApplicationUserPopCtrl',
                         controllerAs: 'ctrl',
@@ -347,7 +347,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('user-preference'),
+                        templateUrl: cmsTemplate.getPopup('user-preference'),
                         controller: 'userPreferencePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -440,7 +440,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('manage-subscriptions'),
+                        templateUrl: cmsTemplate.getPopup('manage-subscriptions'),
                         controller: 'manageSubscriptionsPopCtrl',
                         controllerAs: 'ctrl',
                         //bindToController: true,

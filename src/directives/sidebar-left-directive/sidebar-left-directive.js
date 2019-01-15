@@ -6,7 +6,11 @@ module.exports = function (app) {
             replace: true,
             controller: 'sidebarLeftDirectiveCtrl',
             controllerAs: 'sidebar',
-            template: cmsTemplate.getDirective('sidebar-left-directive/sidebar-left-template')
+            templateUrl: function () {
+                var url = cmsTemplate.getDirective('sidebar-left-template');
+                console.log(url);
+                return url;
+            }
         }
     });
 };

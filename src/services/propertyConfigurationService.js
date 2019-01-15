@@ -61,7 +61,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('property-configuration'),
+                        templateUrl: cmsTemplate.getPopup('property-configuration'),
                         controller: 'propertyConfigurationPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -82,7 +82,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('property-configuration'),
+                        templateUrl: cmsTemplate.getPopup('property-configuration'),
                         controller: 'propertyConfigurationPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

@@ -1,6 +1,6 @@
 module.exports = function (app) {
     require('./folders-tree-structure-directive-style.scss');
-    app.directive('foldersTreeStructureDirective', function () {
+    app.directive('foldersTreeStructureDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
@@ -8,7 +8,7 @@ module.exports = function (app) {
             controllerAs: 'ctrl',
             bindToController: true,
             replace: true,
-            template: require('./folders-tree-structure-template.html'),
+            templateUrl: cmsTemplate.getDirective('folders-tree-structure-template.html'),
             scope: {
                 folders: '=',
                 clickCallback: '=',

@@ -311,7 +311,7 @@ module.exports = function (app) {
             layoutAdd: function ($event) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('layout'),
+                        templateUrl: cmsTemplate.getPopup('layout'),
                         controller: 'layoutPopCtrl',
                         controllerAs: 'ctrl',
                         targetEvent: $event,
@@ -324,7 +324,7 @@ module.exports = function (app) {
             layoutEdit: function (layout, $event) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('layout'),
+                        templateUrl: cmsTemplate.getPopup('layout'),
                         controller: 'layoutPopCtrl',
                         controllerAs: 'ctrl',
                         targetEvent: $event,

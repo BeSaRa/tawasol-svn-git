@@ -1,0 +1,221 @@
+<!-- start of view -->
+<div background-directive="short" flex class="page-content">
+    <div layout="column" class="content">
+        <!-- page-header -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span ng-if="!ctrl.outgoing.vsId">{{lang.menu_item_outgoing}} - {{lang.add_new}}</span>
+            <span ng-if="ctrl.outgoing.vsId">{{lang.menu_item_outgoing}} - {{ctrl.model.docSubject}}</span>
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <accordion-directive label-collapse="ctrl.collapse" validation="ctrl.validation">
+                        <accordion-item active fail-when="ctrl.document_properties.$invalid"
+                                        pass-when="ctrl.document_properties.$valid">
+                            <accordion-title>
+                                <div layout="row" layout-align="start center">
+                                    <md-icon md-svg-icon="file-document-box"></md-icon>
+                                    <span> &nbsp;{{lang.document_properties}}</span>
+                                    <span flex></span>
+                                    <md-switch ng-disabled="!!ctrl.outgoing.vsId || ctrl.duplicateVersion"
+                                               class="m0 top-switch-handler"
+                                               ng-true-value="1" ng-false-value="0"
+                                               ng-click="ctrl.preventPropagation($event)"
+                                               ng-change="ctrl.checkChangeOutgoingType()"
+                                               ng-model="ctrl.outgoing.addMethod">{{lang.outgoing_document_type}} :
+                                        {{ctrl.outgoing.getMethodType()}}
+                                    </md-switch>
+                                </div>
+                            </accordion-title>
+                            <accordion-content>
+                                <manage-properties-directive
+                                        registry-organizations="ctrl.registryOrganizations"
+                                        source-model="ctrl.model"
+                                        source-form="ctrl.document_properties"
+                                        document="ctrl.outgoing"></manage-properties-directive>
+                            </accordion-content>
+                        </accordion-item>
+                        <accordion-item fail-when="!ctrl.outgoing.sitesInfoTo.length"
+                                        pass-when="!!ctrl.outgoing.sitesInfoTo.length">
+                            <accordion-title>
+                                <md-icon md-svg-icon="arrange-send-backward"></md-icon>
+                                <span>{{lang.manage_correspondence_sites}}</span>
+                            </accordion-title>
+                            <accordion-content>
+                                <div>
+                                    <md-checkbox
+                                            ng-if="!ctrl.outgoing.addMethod && ctrl.employeeService.hasPermissionTo('COMPOSITE_OUTGOING')"
+                                            ng-change="ctrl.compositeChange()"
+                                            ng-disabled="ctrl.outgoing.sitesInfoTo.length < 2"
+                                            ng-model="ctrl.outgoing.isComposite">
+                                        {{lang.version_for_each_site}} : {{ctrl.outgoing.isComposite ? lang.yes :
+                                        lang.no}}
+                                    </md-checkbox>
+                                    <manage-correspondence-sites-directive
+                                            empty-site-search="ctrl.emptySiteSearch"
+                                            empty-sub-records="ctrl.emptySubSites"
+                                            vs-id="ctrl.outgoing.vsId"
+                                            document-class="ctrl.outgoing.docClassName"
+                                            sites-info-c-c="ctrl.outgoing.sitesInfoCC"
+                                            sites-info-to="ctrl.outgoing.sitesInfoTo"
+                                            is-composite-document="ctrl.outgoing.isComposite"></manage-correspondence-sites-directive>
+                                </div>
+                            </accordion-content>
+                        </accordion-item>
+                        <accordion-item pass-when="ctrl.documentInformation || ctrl.outgoing.contentFile">
+                            <accordion-title>
+                                <md-icon md-svg-icon="format-align-justify"></md-icon>
+                                <span>{{lang.outgoing_create_content}}</span>
+                            </accordion-title>
+                            <accordion-content>
+                                <div layout="row">
+                                    <manage-content-directive
+                                            edit-content="ctrl.editContent"
+                                            display-prepare="!ctrl.outgoing.addMethod"
+                                            document-information="ctrl.documentInformation"
+                                            vs-id="ctrl.outgoing.vsId"
+                                            document="ctrl.outgoing"
+                                            signatures-count="ctrl.outgoing.signaturesCount"
+                                            templates="ctrl.templates"></manage-content-directive>
+                                </div>
+                            </accordion-content>
+                        </accordion-item>
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.outgoing.tags.length"
+                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_TAGS')">
+                            <accordion-title>
+                                <md-icon md-svg-icon="tag-multiple"></md-icon>
+                                <span>{{lang.outgoing_manage_tags}}</span>
+                            </accordion-title>
+                            <accordion-content>
+                                <div>
+                                    <manage-tags-directive from-dialog="false"
+                                                           tags="ctrl.outgoing.tags"></manage-tags-directive>
+                                </div>
+                            </accordion-content>
+                        </accordion-item>
+                        <accordion-item pass-when="!!ctrl.outgoing.linkedDocs.length"
+                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_LINKED_DOCUMENTS')">
+                            <accordion-title>
+                                <md-icon md-svg-icon="note-multiple-outline"></md-icon>
+                                <span>{{lang.outgoing_manage_linked_document}}</span>
+                            </accordion-title>
+                            <accordion-content>
+                                <div>
+                                    <manage-linked-document-directive
+                                            linked-docs="ctrl.outgoing.linkedDocs"
+                                            vs-id="ctrl.outgoing.vsId"
+                                            document-class="ctrl.outgoing.docClassName"></manage-linked-document-directive>
+                                </div>
+                            </accordion-content>
+                        </accordion-item>
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.outgoing.attachments.length">
+                            <accordion-title>
+                                <md-icon md-svg-icon="attachment"></md-icon>
+                                <span>{{lang.outgoing_manage_attachments}}</span>
+                            </accordion-title>
+                            <accordion-content>
+                                <div layout="row">
+                                    <manage-attachment-directive
+                                            document="ctrl.outgoing"
+                                            attachments="ctrl.outgoing.attachments"
+                                            vs-id="ctrl.outgoing.vsId"
+                                            document-class="ctrl.outgoing.docClassName" flex>
+                                    </manage-attachment-directive>
+                                </div>
+                            </accordion-content>
+                        </accordion-item>
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.outgoing.documentComments.length"
+                                        ng-if="ctrl.employeeService.hasPermissionTo('MANAGE_DOCUMENT’S_COMMENTS') && ctrl.employeeService.hasPermissionTo('ADD_DOCUMENT_COMMENT')">
+                            <accordion-title>
+                                <md-icon md-svg-icon="comment"></md-icon>
+                                <span>{{lang.outgoing_manage_comments}}</span>
+                            </accordion-title>
+                            <accordion-content>
+                                <div layout="row">
+                                    <manage-comments-directive
+                                            vs-id="ctrl.outgoing.vsId"
+                                            document-comments="ctrl.outgoing.documentComments"
+                                            show-comment-form="ctrl.showDocumentComment"
+                                            flex>
+                                    </manage-comments-directive>
+                                </div>
+                            </accordion-content>
+                        </accordion-item>
+                        <accordion-item ng-if="!ctrl.isDemoBuild" pass-when="!!ctrl.outgoing.linkedEntities.length">
+                            <accordion-title>
+                                <md-icon md-svg-icon="vector-triangle"></md-icon>
+                                <span>{{lang.outgoing_linked_entities}}</span>
+                            </accordion-title>
+                            <accordion-content>
+                                <div>
+                                    <manage-entities-directive
+                                            vs-id="ctrl.outgoing.vsId"
+                                            linked-entities="ctrl.outgoing.linkedEntities"
+                                            document-class="ctrl.outgoing.docClassName"></manage-entities-directive>
+                                </div>
+                            </accordion-content>
+                        </accordion-item>
+                    </accordion-directive>
+                    <div layout="row">
+                        <div>
+                            <md-button ng-disabled="ctrl.saveInProgress
+                                                    || ctrl.document_properties.$invalid
+                                                    || !ctrl.outgoing.sitesInfoTo.length
+                                                    || ((ctrl.documentInformationExist || (ctrl.contentFileExist && ctrl.contentFileSizeExist))
+                                                    && !(ctrl.documentInformation || ctrl.outgoing.contentFile))"
+                                       ng-click="ctrl.saveCorrespondence()" class="md-raised"
+                                       ng-class="{'mr0':(lang.current == 'ar'),'ml0':(lang.current == 'en')}">
+                                <!--|| (ctrl.documentInformation || ctrl.outgoing.contentFile)-->
+                                {{lang.outgoing_save}}
+                            </md-button>
+                        </div>
+                        <div ng-if="(!ctrl.outgoing.addMethod && ctrl.duplicateVersion) || (!ctrl.outgoing.addMethod && !ctrl.editContent)">
+                            <md-button ng-disabled="ctrl.document_properties.$invalid
+                                                    || !ctrl.outgoing.sitesInfoTo.length
+                                                    || !(ctrl.documentInformation || ctrl.outgoing.contentFile)
+                                                    || ctrl.saveInProgress"
+                                       ng-click="ctrl.saveCorrespondence('draft')" class="md-raised">
+                                {{lang.outgoing_save_draft}}
+                            </md-button>
+                        </div>
+                        <div>
+                            <md-button ng-disabled="ctrl.saveInProgress"
+                                       ng-click="ctrl.resetAddCorrespondence($event)" class="md-raised">
+                                {{lang.outgoing_new}}
+                            </md-button>
+                        </div>
+                        <div>
+                            <md-button ng-disabled="ctrl.saveInProgress"
+                                       ng-click="ctrl.cancelAddCorrespondence($event)" class="md-raised">
+                                {{lang.outgoing_cancel}}
+                            </md-button>
+                        </div>
+                        <div ng-if="ctrl.outgoing.hasVsId() && ctrl.requestCompleted">
+                            <md-input-container>
+                                <label for="documentAction">{{lang.document_action}}</label>
+                                <md-select name="documentAction" id="documentAction"
+                                           ng-disabled="!ctrl.isActionsAvailable || ctrl.saveInProgress"
+                                           ng-model="ctrl.documentAction">
+                                    <md-option ng-value="action" class="{{action.class}}"
+                                               ng-if="action.checkShow(action, ctrl.outgoing, $index)"
+                                               ng-repeat="action in ctrl.documentActions track by $index">
+                                        {{ ctrl.getActionText(action) }}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div ng-if="ctrl.outgoing.hasVsId() && ctrl.requestCompleted">
+                            <md-button class="md-raised" ng-disabled="!ctrl.documentAction || ctrl.saveInProgress"
+                                       ng-click="ctrl.performDocumentAction($event)">{{lang.action_submit}}
+                            </md-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>
+<!-- end of view -->

@@ -1,0 +1,46 @@
+<ul class="folder-list">
+    <li class="folder" layout="column" ng-repeat="folder in ctrl.folders">
+        <div layout="column">
+            <div layout="row">
+                <div layout="column" flex>
+                    <md-button ng-class="{'selected': ctrl.checkSelected(folder)}"
+                               ng-disabled="ctrl.sameFolder(folder) || !folder.status"
+                               ng-click="ctrl.clickCallback(folder , $event)">
+                        <div layout="row" layout-align="start center"
+                             tooltip="{{(!folder.status) ? lang.folder_deactivated:''}}">
+                            <div class="folder-icon">
+                                <md-icon md-svg-icon="{{ctrl.icon ? ctrl.icon : 'folder'}}"></md-icon>
+                            </div>
+                            <div flex layout="row" layout-align="start center">{{folder.getTranslatedName()}} <span
+                                    ng-if="ctrl.count && ctrl.counterHasFolderId(folder)"> &nbsp;&nbsp; ( {{ctrl.counterService.folderCount[folder.id]}} ) &nbsp;&nbsp;</span>
+                            </div>
+                        </div>
+                    </md-button>
+                </div>
+                <div ng-if="ctrl.allowControl && ctrl.addCallback">
+                    <md-button ng-click="ctrl.addCallback(folder, $event)" class="folder-button-icon md-icon-button">
+                        <md-icon md-svg-icon="plus"></md-icon>
+                    </md-button>
+                </div>
+                <div ng-if="ctrl.allowControl && ctrl.editCallback">
+                    <md-button ng-click="ctrl.editCallback(folder, $event)" class="folder-button-icon md-icon-button">
+                        <md-icon md-svg-icon="pencil"></md-icon>
+                    </md-button>
+                </div>
+                <div ng-if="ctrl.allowControl && ctrl.deleteCallback">
+                    <md-button ng-click="ctrl.deleteCallback(folder, $event)" class="folder-button-icon md-icon-button">
+                        <md-icon md-svg-icon="delete"></md-icon>
+                    </md-button>
+                </div>
+            </div>
+        </div>
+        <folders-tree-structure-directive count="ctrl.count" highlight-selected="ctrl.highlightSelected"
+                                          disable-selected="ctrl.disableSelected" click-callback="ctrl.clickCallback"
+                                          ng-if="folder.children.length"
+                                          allow-control="ctrl.allowControl"
+                                          add-callback="ctrl.addCallback"
+                                          edit-callback="ctrl.editCallback"
+                                          delete-callback="ctrl.deleteCallback"
+                                          folders="folder.children"></folders-tree-structure-directive>
+    </li>
+</ul>

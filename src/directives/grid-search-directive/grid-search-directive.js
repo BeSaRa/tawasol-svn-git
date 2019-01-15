@@ -1,10 +1,10 @@
 module.exports = function (app) {
     require('./grid-search-directive-style.scss');
-    app.directive('gridSearchDirective', function () {
+    app.directive('gridSearchDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: "E",
-            template: require('./grid-search-template.html'),
+            templateUrl: cmsTemplate.getDirective('grid-search-template.html'),
             replace: true,
             scope: {
                 grid: '='

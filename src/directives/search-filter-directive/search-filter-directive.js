@@ -1,9 +1,9 @@
 module.exports = function (app) {
-    app.directive('searchFilterDirective', function () {
+    app.directive('searchFilterDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: "E",
-            template: require('./search-filter-template.html'),
+            templateUrl: cmsTemplate.getDirective('search-filter-template.html'),
             replace: true,
             scope: {
                 model: '=',

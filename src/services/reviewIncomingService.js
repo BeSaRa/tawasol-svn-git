@@ -48,7 +48,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('review-incoming'),
+                        templateUrl: cmsTemplate.getPopup('review-incoming'),
                         controller: 'reviewIncomingPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -70,7 +70,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('review-incoming'),
+                        templateUrl: cmsTemplate.getPopup('review-incoming'),
                         controller: 'reviewIncomingPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

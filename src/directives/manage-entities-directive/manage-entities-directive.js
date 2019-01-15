@@ -1,12 +1,12 @@
 module.exports = function (app) {
     require('./manage-entities-style.scss');
-    app.directive('manageEntitiesDirective', function () {
+    app.directive('manageEntitiesDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
             controller: 'manageEntitiesDirectiveCtrl',
             controllerAs: 'ctrl',
-            template: require('./manage-entities-template.html'),
+            templateUrl: cmsTemplate.getDirective('manage-entities-template.html'),
             bindToController: true,
             scope: {
                 fromDialog: '=?',

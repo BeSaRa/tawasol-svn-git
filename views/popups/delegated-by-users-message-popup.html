@@ -1,0 +1,38 @@
+<div layout="row" class="p20">
+    <p class="text-left">{{lang.you_are_delegated_by_following_users}}</p>
+    <md-card layout="column" flex class="card-overlay text-left">
+        <md-table-container>
+            <table md-table md-row-select="false">
+                <thead md-head>
+                <tr md-row>
+                    <th md-column>{{lang.arabic_name}}</th>
+                    <th md-column>{{lang.english_name}}</th>
+                    <th md-column>{{lang.domain_name}}</th>
+                    <th md-column>{{lang.organization_unit}}</th>
+                    <!--<th md-column>{{lang.out_of_office}}</th>-->
+                    <th md-column>{{lang.start_date}}</th>
+                    <th md-column>{{lang.end_date}}</th>
+                    <th md-column>{{lang.message}}</th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr md-row ng-repeat="user in ctrl.outOfOfficeUsers track by $index"
+                    ng-class="{'background-danger': user.outOfOffice}">
+                    <td md-cell>{{user.arName}}</td>
+                    <td md-cell>{{user.enName}}</td>
+                    <td md-cell>{{user.proxyDomain}}</td>
+                    <td md-cell>{{user.getTranslatedProxyOUName()}}</td>
+                    <!--<td md-cell>{{user.getTranslatedYesNo('outOfOffice')}}</td>-->
+                    <td md-cell>{{user.getProxyStartDate()}}</td>
+                    <td md-cell>{{user.getProxyEndDate()}}</td>
+                    <td md-cell>{{user.proxyMessage}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+    </md-card>
+    <p class="text-left red-color m0">{{lang.new_workitems_will_still_come_to_you}}</p>
+    <p class="text-left red-color m0">{{lang.no_one_can_take_actions_on_your_behalf}}</p>
+    <p class="text-left red-color m0">{{lang.if_needed_contact_admin_for_delegating_someone_else}}</p>
+    <p class="text-left">{{lang.are_you_sure_to_delegate_user}}</p>
+</div>

@@ -1,0 +1,213 @@
+<div layout="row">
+    <md-card layout="column" flex class="card-overlay">
+        <md-table-container>
+            <table md-table multiple ng-model="ctrl.selectedWorkflowItems"
+                   md-row-select="true">
+                <thead md-head md-order="ctrl.grid.order">
+                <tr md-row>
+                    <th colspan="4" ng-if="ctrl.selectedWorkflowItems.length" md-column>
+                        <span>{{ctrl.selectedWorkflowItems.length}} {{lang.items_selected}} </span>
+                    </th>
+                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length"
+                        md-order-by="{{ctrl.getTranslatedKey()}}">
+                        {{lang.name}}
+                    </th>
+                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length">
+                        {{lang.type}}
+                    </th>
+                    <th md-column ng-if="!ctrl.selectedWorkflowItems.length">
+                        {{lang.action}}
+                    </th>
+                    <th ng-if="!ctrl.selectedWorkflowItems.length" md-column>
+                        {{lang.comment}}
+                    </th>
+                    <th md-column ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification">
+                        <md-menu>
+                            <md-button tooltip="{{lang.notification_settings}}" class="md-icon-button" ng-click="$mdMenu.open()">
+                                <md-icon md-svg-icon="bell-ring"></md-icon>
+                            </md-button>
+                            <md-menu-content>
+                                <md-menu-item>
+                                    <div>
+                                        <md-checkbox ng-disabled="!ctrl.globalSettings.enableSMSNotification" ng-change="ctrl.applyNotificationSettings($event)" ng-model="ctrl.defaultWorkflowItemsSettings.sendSMS">
+                                            {{lang.sms_workflow_notification}}
+                                        </md-checkbox>
+                                    </div>
+                                </md-menu-item>
+                                <md-menu-item>
+                                    <div>
+                                        <md-checkbox ng-disabled="!ctrl.globalSettings.enableEmailNotification" ng-change="ctrl.applyNotificationSettings($event)"  ng-model="ctrl.defaultWorkflowItemsSettings.sendEmail">
+                                            {{lang.email_workflow_notification}}
+                                        </md-checkbox>
+                                    </div>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </th>
+                    <th md-column>
+                        <div layout="row">
+                            <div>
+                                <md-button ng-disabled="!ctrl.workflowItems.length" class="md-icon-button"
+                                           ng-click="ctrl.setBulkWorkflowItemSettings($event)">
+                                    <md-icon md-svg-icon="settings-box"></md-icon>
+                                </md-button>
+                            </div>
+                            <div>
+                                <md-button
+                                        ng-disabled="!ctrl.selectedWorkflowItems.length"
+                                        class="md-icon-button"
+                                        ng-click="ctrl.deleteSelectedBulk($event)">
+                                    <md-icon md-svg-icon="delete"></md-icon>
+                                </md-button>
+                            </div>
+                            <div ng-if="ctrl.checkAllComplete(ctrl.gridName)">
+                                <md-button tooltip="{{lang.all_completed}}" class="md-icon-button">
+                                    <md-icon md-svg-icon="checkbox-marked-circle-outline"></md-icon>
+                                </md-button>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                <tr md-row md-select="workflowItem"
+                    ng-repeat="workflowItem in ctrl.workflowItems |limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) |orderBy:ctrl.grid.order track by $index">
+                    <td md-cell>
+                        <span>{{workflowItem.getTranslatedName()}}</span>
+                    </td>
+                    <td md-cell>
+                        <md-icon tooltip="{{lang.get(workflowItem.getWorkflowItemType())}}"
+                                 md-svg-icon="{{workflowItem.getWorkflowItemIcon()}}"></md-icon>
+                    </td>
+                    <td md-cell>
+                        <!--<md-menu-bar class="no-padding">
+                            <md-menu>
+                                <md-button class="normal-case m0" ng-click="$mdMenu.open()">
+                                    <span ng-class="{'red-color':!workflowItem.isWFComplete()}">{{workflowItem.isWFComplete() ? workflowItem.action.getTranslatedName() : workflowItem.getActionMessage()}}</span>
+                                </md-button>
+                                <md-menu-content>
+                                    <md-menu-item ng-repeat="action in ctrl.workflowActions track by $index">
+                                        <md-button ng-click="workflowItem.setAction(action)">
+                                            {{action.getTranslatedName()}}
+                                        </md-button>
+                                    </md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+                        </md-menu-bar>-->
+                        <!--ng-change="ctrl.setWFAction(workflowItem, $event)"-->
+                        <md-select ng-model="workflowItem.action"
+                                   class="select-wf-action"
+                                   ng-model-options="{trackBy:'$value.id'}"
+                                   aria-label="workflow action"
+                                   md-on-close="workflowItem.clearWFActionSearchText()"
+                                   data-md-container-class="select-header-container"
+                                   placeholder="{{workflowItem.getActionMessage()}}">
+                            <md-select-header class="select-header">
+                                <input ng-model="workflowItem.actionSearchText"
+                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option
+                                    ng-repeat="action in ctrl.workflowActions | translatedNameFilter: workflowItem.actionSearchText"
+                                    ng-value="action"
+                                    md-highlight-text="workflowItem.actionSearchText"
+                                    md-highlight-flags="i">{{action.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </td>
+                    <td md-cell>
+                        <!--<md-menu-bar class="no-padding">
+                            <md-menu>
+                                <md-button class="normal-case max-width-200 m0" ng-click="$mdMenu.open()">
+                                    <span md-truncate>{{workflowItem.comments ? workflowItem.comments : workflowItem.getCommentMessage()}}</span>
+                                </md-button>
+                                <md-menu-content>
+                                    <md-menu-item ng-repeat="comment in ctrl.workflowComments track by $index">
+                                        <md-button ng-click="workflowItem.setComments(comment)">
+                                            {{comment.getCommentTitle()}}
+                                        </md-button>
+                                    </md-menu-item>
+                                </md-menu-content>
+                            </md-menu>
+                        </md-menu-bar>-->
+                        <md-select ng-model="workflowItem.selectedWFComment"
+                                   class="select-wf-action"
+                                   ng-change="ctrl.setWFComment(workflowItem, $event)"
+                                   aria-label="workflow action"
+                                   md-on-close="workflowItem.clearWFCommentSearchText()"
+                                   data-md-container-class="select-header-container"
+                                   placeholder="{{workflowItem.getCommentMessage()}}">
+                            <md-select-header class="select-header">
+                                <input ng-model="workflowItem.commentSearchText"
+                                       ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                       placeholder="{{lang.search}}"
+                                       class="select-header-input">
+                            </md-select-header>
+                            <md-option
+                                    ng-repeat="comment in ctrl.workflowComments | translatedNameFilter: workflowItem.commentSearchText"
+                                    ng-value="comment"
+                                    md-highlight-text="workflowItem.commentSearchText"
+                                    md-highlight-flags="i">{{comment.getCommentTitle()}}
+                            </md-option>
+                        </md-select>
+                    </td>
+                    <td md-cell ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification">
+                        <md-menu>
+                            <md-button tooltip="{{lang.notification_settings}}" class="md-icon-button" ng-click="$mdMenu.open()">
+                                <md-icon md-svg-icon="bell-ring"></md-icon>
+                            </md-button>
+                            <md-menu-content>
+                                <md-menu-item>
+                                    <div>
+                                        <md-checkbox ng-disabled="!ctrl.globalSettings.enableSMSNotification" ng-model="workflowItem.sendSMS">
+                                            {{lang.sms_workflow_notification}}
+                                        </md-checkbox>
+                                    </div>
+                                </md-menu-item>
+                                <md-menu-item>
+                                    <div>
+                                        <md-checkbox ng-disabled="!ctrl.globalSettings.enableEmailNotification" ng-model="workflowItem.sendEmail">
+                                            {{lang.email_workflow_notification}}
+                                        </md-checkbox>
+                                    </div>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </td>
+                    <td md-cell>
+                        <div layout="row">
+                            <div>
+                                <md-button
+                                        class="md-icon-button"
+                                        ng-click="ctrl.setWorkflowItemSettings(workflowItem,$event)">
+                                    <md-icon md-svg-icon="settings-box"></md-icon>
+                                </md-button>
+                            </div>
+                            <div>
+                                <md-button
+                                        class="md-icon-button"
+                                        ng-click="ctrl.deleteWorkflowItem(workflowItem,$event)">
+                                    <md-icon md-svg-icon="delete"></md-icon>
+                                </md-button>
+                            </div>
+                            <div ng-if="workflowItem.isWFComplete()">
+                                <md-button tooltip="{{lang.complete}}" class="md-icon-button">
+                                    <md-icon md-svg-icon="checkbox-marked-circle-outline"></md-icon>
+                                </md-button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <md-table-pagination
+                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                    md-limit-options="ctrl.grid.limitOptions"
+                    md-limit="ctrl.grid.limit"
+                    md-page="ctrl.grid.page"
+                    md-total="{{ctrl.workflowItems.length}}" md-page-select>
+            </md-table-pagination>
+        </md-table-container>
+    </md-card>
+</div>

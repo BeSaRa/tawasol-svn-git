@@ -1,6 +1,6 @@
 module.exports = function (app) {
     require('./url-parser-style.scss');
-    app.directive('urlParserDirective', function () {
+    app.directive('urlParserDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
@@ -8,7 +8,7 @@ module.exports = function (app) {
             controllerAs: 'ctrl',
             bindToController: true,
             replace: true,
-            template: require('./url-parser-template.html'),
+            templateUrl: cmsTemplate.getDirective('url-parser-template.html'),
             scope: {
                 dynamicMenuItem: '='
             }

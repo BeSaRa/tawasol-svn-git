@@ -42,7 +42,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('document-file'),
+                        templateUrl: cmsTemplate.getPopup('document-file'),
                         controller: 'documentFilePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -61,7 +61,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('document-file'),
+                        templateUrl: cmsTemplate.getPopup('document-file'),
                         controller: 'documentFilePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -82,7 +82,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('document-file-related-ou'),
+                        templateUrl: cmsTemplate.getPopup('document-file-related-ou'),
                         controller: 'documentFileRelatedOUPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -96,7 +96,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('document-file-child'),
+                        templateUrl: cmsTemplate.getPopup('document-file-child'),
                         controller: 'documentFileChildrenPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

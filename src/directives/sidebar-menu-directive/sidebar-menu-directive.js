@@ -1,11 +1,11 @@
 module.exports = function (app) {
     require('./sidebar-menu-style.scss');
-    app.directive('sidebarMenuDirective', function () {
+    app.directive('sidebarMenuDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: "E",
             replace: true,
-            template: require('./sidebar-menu-template.html'),
+            templateUrl: cmsTemplate.getDirective('sidebar-menu-template.html'),
             scope: {
                 items: '=',
                 lang: '=',

@@ -1,0 +1,13 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.terms_and_conditions}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.terms_and_conditions}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+                <div class="p20" ng-bind-html="ctrl.termsAndConditions">
+            </div>
+        </md-content>
+    </div>
+
+</md-dialog>

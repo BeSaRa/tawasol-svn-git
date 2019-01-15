@@ -1,0 +1,25 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.attachments_manage_document_attachments}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.attachments_manage_document_attachments}} : {{ctrl.documentSubject}}</span>
+            <close-dialog-directive when-close="ctrl.closeDocumentAttachments"></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <div>
+                <manage-attachment-directive
+                        document="ctrl.document"
+                        source-model="ctrl.model"
+                        document-class="ctrl.documentClass"
+                        vs-id="ctrl.vsId"
+                        from-dialog="ctrl.fromDialog"
+                        attachments="ctrl.attachments"></manage-attachment-directive>
+            </div>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-click="ctrl.closeDocumentAttachments()">{{lang.close}}</md-button>
+                <span flex></span>
+            </div>
+        </div>
+    </div>
+</md-dialog>

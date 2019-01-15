@@ -1,0 +1,15 @@
+<md-sidenav id="right-sidebar" md-component-id="right-sidebar">
+    <div scroll-directive>
+        <div class="p20">
+            <theme-preview-directive
+                    theme="theme"
+                    click-able="true"
+                    selected="ctrl.themeService.isSelectedTheme(theme)"
+                    ng-repeat="theme in ctrl.themeService.themes|orderBy:'id'">
+            </theme-preview-directive>
+            <div layout="row" layout-align="center center" flex ng-if="!ctrl.themeService.themes.length">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+        </div>
+    </div>
+</md-sidenav>

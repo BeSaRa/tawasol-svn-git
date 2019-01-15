@@ -281,7 +281,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('classification'),
+                        templateUrl: cmsTemplate.getPopup('classification'),
                         controller: 'classificationPopCtrl',
                         controllerAs: 'ctrl',
                         escapeToClose: false,
@@ -303,7 +303,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('classification'),
+                        templateUrl: cmsTemplate.getPopup('classification'),
                         controller: 'classificationPopCtrl',
                         controllerAs: 'ctrl',
                         escapeToClose: false,
@@ -320,7 +320,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('classification'),
+                        templateUrl: cmsTemplate.getPopup('classification'),
                         controller: 'classificationPopCtrl',
                         controllerAs: 'ctrl',
                         escapeToClose: false,
@@ -386,7 +386,7 @@ module.exports = function (app) {
             viewSubClassifications: function (classification, $event) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('sub-classification'),
+                        templateUrl: cmsTemplate.getPopup('sub-classification'),
                         controller: 'subClassificationViewPopCtrl',
                         controllerAs: 'ctrl',
                         targetEvent: $event,
@@ -404,7 +404,7 @@ module.exports = function (app) {
             },
             showClassificationSelector: function (excluded) {
                 return dialog.showDialog({
-                    template: cmsTemplate.getPopup('classifications-selector'),
+                    templateUrl: cmsTemplate.getPopup('classifications-selector'),
                     controller: 'classificationSelectorPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {

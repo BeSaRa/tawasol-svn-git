@@ -124,7 +124,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('move-to-folder'),
+                        templateUrl: cmsTemplate.getPopup('move-to-folder'),
                         controller: 'moveToFolderPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {},

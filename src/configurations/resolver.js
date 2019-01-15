@@ -84,11 +84,7 @@ module.exports = function (app) {
                 organizations: function (organizationService) {
                     'ngInject';
                     return organizationService.getOrganizations();
-                }/*,
-                ouCorrespondenceSites: function (ouCorrespondenceSiteService, organizations) {
-                    'ngInject';
-                    return ouCorrespondenceSiteService.getOUCorrespondenceSites();
-                }*/
+                }
             })
             .bulkResolveToState('app.administration.organizations', {
                 escalationProcess: function (lookupService) {
@@ -492,44 +488,11 @@ module.exports = function (app) {
                         });
                 }
             })
-            // .bulkResolveToState('app.landing-page', {
-            //     layouts: function (layoutService) {
-            //         'ngInject';
-            //         return layoutService.loadUserLayouts().catch(function () {
-            //             return [];
-            //         });
-            //     },
-            //     widgets: function (layoutService) {
-            //         'ngInject';
-            //         return layoutService.loadWidgets();
-            //     }
-            // })
             .bulkResolveToState('app', {
-                /*
-                                themes: function (themeService, employeeService) {
-                                    'ngInject';
-                                    return !employeeService.isCloudUser() ? themeService.getThemes() : [];
-                                },*/
-                /*attachmentTypes: function (attachmentTypeService, employeeService) {
-                    'ngInject';
-                    return !employeeService.isCloudUser() ? attachmentTypeService.getAttachmentTypes() : [];
-                },*/
-                // counters: function (counterService, employeeService) {
-                //     'ngInject';
-                //     return !employeeService.isAdminUser() ? counterService.loadCounters() : [];
-                // },
                 loadMenus: function (sidebarService) {
                     'ngInject';
                     return sidebarService.loadMenuItems();
-                }, /*
-                entityTypes: function (entityTypeService, employeeService) {
-                    'ngInject';
-                    return !employeeService.isCloudUser() ? entityTypeService.getEntityTypes() : [];
-                },*/
-                /*organizations: function (organizationService, employeeService) {
-                    'ngInject';
-                    return !employeeService.isCloudUser() ? organizationService.getOrganizations() : [];
-                },*/
+                },
                 language: function (employeeService, $timeout, langService) {
                     'ngInject';
                     $timeout(function () {

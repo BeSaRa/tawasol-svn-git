@@ -1,10 +1,10 @@
 module.exports = function (app) {
     require('./toolbar.scss');
-    app.directive('toolbarDirective', function () {
+    app.directive('toolbarDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
-            template: require('./toolbar-template.html'),
+            templateUrl: cmsTemplate.getDirective('toolbar-template.html'),
             controller: 'toolbarDirectiveCtrl',
             controllerAs: 'toolbar',
             replace: true

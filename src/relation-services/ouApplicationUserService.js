@@ -100,7 +100,7 @@ module.exports = function (app) {
             selectOUApplicationUsers: function (ouApplicationUsers, label, $event, isUserPreference) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('select-ou-application-users'),
+                        templateUrl: cmsTemplate.getPopup('select-ou-application-users'),
                         targetEvent: $event,
                         controller: 'selectOUApplicationUsersPopCtrl',
                         controllerAs: 'ctrl',
@@ -129,7 +129,7 @@ module.exports = function (app) {
             selectOUApplicationUserSingle: function (organization, property, label, $event) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('select-ou-application-user-single'),
+                        templateUrl: cmsTemplate.getPopup('select-ou-application-user-single'),
                         targetEvent: $event,
                         controller: 'selectOUApplicationUserSinglePopCtrl',
                         controllerAs: 'ctrl',
@@ -173,7 +173,7 @@ module.exports = function (app) {
             selectUsersForUserWFGroup: function (groupMembers, isUserPreference, $event) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('add-user-to-workflow-group'),
+                        templateUrl: cmsTemplate.getPopup('add-user-to-workflow-group'),
                         targetEvent: $event,
                         controller: 'addUserToWorkflowGroupPopCtrl',
                         controllerAs: 'ctrl',

@@ -28,7 +28,7 @@ module.exports = function (app) {
             dialog
                 .showDialog({
                     targetEvent: $event,
-                    template: cmsTemplate.getPopup('show-private-announcement'),
+                    templateUrl: cmsTemplate.getPopup('show-private-announcement'),
                     controller: 'showPrivateAnnouncementPopCtrl',
                     controllerAs: 'ctrl',
                     resolve: {

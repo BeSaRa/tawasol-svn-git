@@ -6,7 +6,7 @@ module.exports = function (app) {
             restrict: 'E',
             controller: 'languageSwitcherDirectiveCtrl',
             controllerAs: 'language',
-            template: cmsTemplate.getDirective('language-switcher-directive/language-switcher-template')
+            templateUrl: cmsTemplate.getDirective('language-switcher-template')
         }
     })
 };

@@ -1,12 +1,12 @@
 module.exports = function (app) {
     require('./organization-without-reg-tree-view-style.scss');
-    app.directive('organizationWithoutRegTreeViewDirective', function () {
+    app.directive('organizationWithoutRegTreeViewDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
             controller: 'organizationWithoutRegTreeViewDirectiveCtrl',
             controllerAs: 'ctrl',
-            template: require('./organization-without-reg-tree-view-template.html'),
+            templateUrl: cmsTemplate.getDirective('organization-without-reg-tree-view-template.html'),
             bindToController: true,
             scope: {
                 ouApplicationUsers: '=',

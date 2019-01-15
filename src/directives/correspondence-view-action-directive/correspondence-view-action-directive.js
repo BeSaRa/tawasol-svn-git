@@ -1,9 +1,9 @@
 module.exports = function (app) {
     require('./correspodnence-view-action-style.scss');
-    app.directive('correspondenceViewActionDirective', function () {
+    app.directive('correspondenceViewActionDirective', function (cmsTemplate) {
         'ngInject';
         return {
-            template: require('./correspondence-view-action-template.html'),
+            templateUrl: cmsTemplate.getDirective('correspondence-view-action-template.html'),
             controller: 'correspondenceViewActionDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,

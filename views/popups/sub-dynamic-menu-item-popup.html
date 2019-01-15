@@ -1,0 +1,240 @@
+<md-dialog id="menu-item-dialog" class="dialog-extend"
+           ng-class="{'full-screen':ctrl.fullScreen}"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_dynamic_menu_item : ctrl.model.getNames()}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20" ng-if="!ctrl.model.id">{{lang.add_new_dynamic_menu_item}}</span>
+            <span class="p20" ng-if="ctrl.model.id">{{ctrl.model.getNames()}}</span>
+            <div class="full-screen-button-icon">
+                <md-button class="md-icon-button" ng-click="ctrl.fullScreenToggle()">
+                    <md-icon md-svg-icon="{{ctrl.fullScreen ? 'fullscreen-exit': 'fullscreen' }}"></md-icon>
+                </md-button>
+            </div>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="dynamicMenuItemForm" autocomplete="off">
+                <md-tabs md-dynamic-height>
+                    <md-tab label="{{lang.basic_info}}">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="arName">{{lang.arabic_name}}</label>
+                                        <input name="arName" id="arName" required minlength="4"
+                                               ng-model="ctrl.dynamicMenuItem.arName"
+                                               maxlength="80" custom-validate-directive="ANS">
+                                        <div ng-messages="dynamicMenuItemForm.arName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="ANS">{{lang.arabic_number_space}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="enName">{{lang.english_name}}</label>
+                                        <input name="enName" id="enName" required minlength="4"
+                                               ng-model="ctrl.dynamicMenuItem.enName" maxlength="80"
+                                               maxlength="150" custom-validate-directive="ENS">
+                                        <div ng-messages="dynamicMenuItemForm.enName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                            <div ng-message="ENS">{{lang.english_number_space}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="itemOrder">{{lang.item_order}}</label>
+                                        <input name="itemOrder" id="itemOrder" required
+                                               ng-model="ctrl.dynamicMenuItem.itemOrder"
+                                               custom-validate-directive="number">
+                                        <div ng-messages="dynamicMenuItemForm.itemOrder.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="menuType">{{lang.menu_item_type}}</label>
+                                        <md-select id="menuType" ng-model="ctrl.dynamicMenuItem.menuType">
+                                            <md-option ng-value="menuType.lookupKey"
+                                                       ng-repeat="menuType in ctrl.menuTypes">
+                                                {{menuType.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <div flex class="p20">
+                                        <md-switch ng-model="ctrl.dynamicMenuItem.status" aria-label="{{lang.status}}">
+                                            <label>{{lang.status}} :
+                                                {{ctrl.dynamicMenuItem.getTranslatedStatus()}}</label>
+                                        </md-switch>
+                                    </div>
+                                    <div flex class="p20">
+                                        <md-switch ng-change="ctrl.checkGlobalParentStatus()"
+                                                   ng-model="ctrl.dynamicMenuItem.isGlobal"
+                                                   aria-label="{{lang.global}}">
+                                            <label>{{lang.global}} :
+                                                {{ctrl.dynamicMenuItem.getTranslatedGlobal()}}</label>
+                                        </md-switch>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="{{lang.url_settings}}">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="url">{{lang.menu_item_url}}</label>
+                                        <textarea id="url" ng-model="ctrl.dynamicMenuItem.url"
+                                                  aria-label="menu item link"
+                                                  rows="3"></textarea>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <url-parser-directive
+                                            dynamic-menu-item="ctrl.dynamicMenuItem"></url-parser-directive>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <md-tab ng-if="!ctrl.dynamicMenuItem.parent && ctrl.editMode" label="{{lang.sub_menu_items}}">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <div layout-align="center center" layout="row">
+                                    <md-button ng-click="ctrl.addSubDynamicMenuItem($event)" class="md-raised">
+                                        {{lang.add_new_sub_menu_item}}
+                                    </md-button>
+                                </div>
+                                <br/>
+                                <br/>
+                                <div ng-if="ctrl.dynamicMenuItem.children.length" layout="row">
+                                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                                        <md-table-container>
+                                            <div flex scroll-directive>
+                                                <table md-table md-row-select multiple
+                                                       ng-model="ctrl.selectedChildrenDynamicMenuItems"
+                                                       md-progress="ctrl.progress">
+                                                    <thead md-head md-order="ctrl.grid.order"
+                                                           md-on-reorder="ctrl.getSortedData">
+                                                    <tr md-row>
+                                                        <th colspan="6"
+                                                            ng-if="ctrl.selectedChildrenDynamicMenuItems.length"
+                                                            md-column>
+                                                            <div layout="row" layout-align="start center">
+                                                                <span>{{ctrl.selectedChildrenDynamicMenuItems.length}} {{lang.items_selected}} </span>
+                                                                <span flex></span>
+                                                                <table-status-directive
+                                                                        when-close="ctrl.changeStatusBulkDynamicMenuItems"></table-status-directive>
+                                                                <md-button class="md-icon-button"
+                                                                           ng-click="ctrl.removeBulkDynamicMenuItems($event)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>
+                                                            </div>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedChildrenDynamicMenuItems.length"
+                                                            md-column
+                                                            md-order-by="arName">
+                                                            <span>{{lang.arabic_name}}</span>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedChildrenDynamicMenuItems.length"
+                                                            md-column
+                                                            md-order-by="enName">
+                                                            <span>{{lang.english_name}}</span>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedChildrenDynamicMenuItems.length"
+                                                            md-column
+                                                            md-order-by="status">
+                                                            <span>{{lang.status}}</span>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedChildrenDynamicMenuItems.length"
+                                                            md-column
+                                                            md-order-by="isGlobal">
+                                                            <span>{{lang.global}}</span>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedChildrenDynamicMenuItems.length"
+                                                            md-column>
+                                                            <span>{{lang.actions}}</span>
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody md-body>
+                                                    <tr md-row md-select="dynamicMenuItem"
+                                                        ng-repeat="dynamicMenuItem in ctrl.dynamicMenuItem.children  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                                        <td md-cell>{{dynamicMenuItem.arName}}</td>
+                                                        <td md-cell>{{dynamicMenuItem.enName}}</td>
+                                                        <td md-cell>
+                                                            <md-switch aria-label="{{lang.status}}"
+                                                                       title="{{dynamicMenuItem.getTranslatedStatus()}}"
+                                                                       ng-change="ctrl.changeStatusDynamicMenuItem(dynamicMenuItem)"
+                                                                       ng-model="dynamicMenuItem.status">
+                                                            </md-switch>
+                                                        </td>
+                                                        <td md-cell>
+                                                            <md-switch aria-label="{{lang.global}}"
+                                                                       title="{{dynamicMenuItem.getTranslatedGlobal()}}"
+                                                                       ng-change="ctrl.changeGlobalDynamicMenuItem(dynamicMenuItem)"
+                                                                       ng-model="dynamicMenuItem.isGlobal">
+                                                            </md-switch>
+                                                        </td>
+                                                        <td md-cell>
+                                                            <div flex layout="row" layout-align="start center">
+                                                                <md-button class="md-icon-button"
+                                                                           title="{{lang.delete}}"
+                                                                           ng-click="ctrl.removeSubDynamicMenuItem(dynamicMenuItem, $event)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>
+                                                                <md-button class="md-icon-button" title="{{lang.edit}}"
+                                                                           ng-click="ctrl.openEditSubDynamicMenuItemDialog(dynamicMenuItem, $event)">
+                                                                    <md-icon md-svg-icon="pencil"></md-icon>
+                                                                </md-button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <md-table-pagination
+                                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                    md-limit-options="ctrl.grid.limitOptions"
+                                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                                    md-total="{{(ctrl.dynamicMenuItems | filter:ctrl.searchModel).length}}"
+                                                    md-page-select
+                                                    md-on-paginate="ctrl.grid.pagingCallback">
+                                            </md-table-pagination>
+                                        </md-table-container>
+                                    </md-card>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-disabled="dynamicMenuItemForm.$invalid" ng-if="!ctrl.editMode"
+                           ng-click="ctrl.addDynamicMenuItemFromCtrl()">
+                    {{lang.add}}
+                </md-button>
+                <md-button class="md-raised" ng-disabled="dynamicMenuItemForm.$invalid" ng-if="ctrl.editMode"
+                           ng-click="ctrl.editDynamicMenuItemFromCtrl()">
+                    {{lang.save}}
+                </md-button>
+                <span flex=""></span>
+                <md-button class="md-raised"
+                           ng-click="ctrl.resetModel()">
+                    {{lang.reset}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeDynamicMenuItemPopupFromCtrl()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

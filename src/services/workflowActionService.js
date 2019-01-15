@@ -45,7 +45,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('workflow-action'),
+                        templateUrl: cmsTemplate.getPopup('workflow-action'),
                         controller: 'workflowActionPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -68,7 +68,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('workflow-action'),
+                        templateUrl: cmsTemplate.getPopup('workflow-action'),
                         controller: 'workflowActionPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -130,7 +130,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('relation-app-user'),
+                        templateUrl: cmsTemplate.getPopup('relation-app-user'),
                         controller: 'relationAppUserPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

@@ -27,11 +27,11 @@ module.exports = function (app) {
         $stateProvider
             .state('error', {
                 url: '/404',
-                template: templateProvider.getView('404')
+                templateUrl: templateProvider.getView('404')
             })
             .state('password', {
                 url: '/password-encrypt',
-                template: templateProvider.getView('password-encrypt'),
+                templateUrl: templateProvider.getView('password-encrypt'),
                 controller: 'passwordEncryptCtrl',
                 controllerAs: 'ctrl'
             })
@@ -41,12 +41,12 @@ module.exports = function (app) {
                 params: {
                     identifier: null
                 },
-                template: templateProvider.getView('loading')
+                templateUrl: templateProvider.getView('loading')
             })
             // login page
             .state('login', {
                 url: '/login/entity/:identifier?',
-                template: templateProvider.getView('login'),
+                templateUrl: templateProvider.getView('login'),
                 controller: 'loginCtrl',
                 controllerAs: 'login'
             })
@@ -54,7 +54,7 @@ module.exports = function (app) {
             .state('app', {
                 abstract: true,
                 url: '/entity/:identifier?',
-                template: templateProvider.getView('home'),
+                templateUrl: templateProvider.getView('home'),
                 params: {
                     identifier: rootEntityProvider.getRootEntityIdentifier()
                 },
@@ -71,12 +71,12 @@ module.exports = function (app) {
             })
             .state('app.access-denied', {
                 url: '/access-denied',
-                template: templateProvider.getView('access-denied')
+                templateUrl: templateProvider.getView('access-denied')
             })
             // landing page
             .state('app.landing-page', {
                 url: '/landing-page',
-                template: templateProvider.getView('landing-page'),
+                templateUrl: templateProvider.getView('landing-page'),
                 controller: 'landingPageCtrl',
                 controllerAs: 'ctrl'
             })
@@ -89,7 +89,7 @@ module.exports = function (app) {
             // document types
             .state('app.administration.document-types', {
                 url: '/document-types',
-                template: templateProvider.getView('document-types'),
+                templateUrl: templateProvider.getView('document-types'),
                 controller: 'documentTypeCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_document_types',
@@ -103,7 +103,7 @@ module.exports = function (app) {
             // roles
             .state('app.administration.roles', {
                 url: '/roles',
-                template: templateProvider.getView('roles'),
+                templateUrl: templateProvider.getView('roles'),
                 controller: 'roleCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_manage_roles',
@@ -154,7 +154,7 @@ module.exports = function (app) {
             // organization-types
             .state('app.administration.organization-types', {
                 url: '/organization-types',
-                template: templateProvider.getView('organization-types'),
+                templateUrl: templateProvider.getView('organization-types'),
                 controller: 'organizationTypeCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_organization_types',
@@ -168,7 +168,7 @@ module.exports = function (app) {
             // document status
             .state('app.administration.document-status', {
                 url: '/document-status',
-                template: templateProvider.getView('document-status'),
+                templateUrl: templateProvider.getView('document-status'),
                 controller: 'documentStatusCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_document_status',
@@ -182,7 +182,7 @@ module.exports = function (app) {
             // workflow-group
             .state('app.administration.workflow-group', {
                 url: '/workflow-group',
-                template: templateProvider.getView('workflow-groups'),
+                templateUrl: templateProvider.getView('workflow-groups'),
                 controller: 'workflowGroupCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_manage_workflow_group',
@@ -200,7 +200,7 @@ module.exports = function (app) {
             // sms templates
             .state('app.administration.sms-templates', {
                 url: '/sms-templates',
-                template: templateProvider.getView('sms-templates'),
+                templateUrl: templateProvider.getView('sms-templates'),
                 controller: 'smsTemplateCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_sms_template',
@@ -214,7 +214,7 @@ module.exports = function (app) {
             //classifications
             .state('app.administration.classifications', {
                 url: '/classifications',
-                template: templateProvider.getView('classifications'),
+                templateUrl: templateProvider.getView('classifications'),
                 controller: 'classificationCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_classifications'
@@ -222,7 +222,7 @@ module.exports = function (app) {
             //private-announcements
             .state('app.administration.private-announcements', {
                 url: '/private-announcements',
-                template: templateProvider.getView('private-announcements'),
+                templateUrl: templateProvider.getView('private-announcements'),
                 controller: 'privateAnnouncementCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_private_announcements',
@@ -246,7 +246,7 @@ module.exports = function (app) {
             // organizations
             .state('app.administration.organizations', {
                 url: '/organizations',
-                template: templateProvider.getView('organizations'),
+                templateUrl: templateProvider.getView('organizations'),
                 controller: 'organizationsCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_organization_chart',
@@ -284,7 +284,7 @@ module.exports = function (app) {
             // correspondence site types
             .state('app.administration.correspondence-site-types', {
                 url: '/correspondence-site-types',
-                template: templateProvider.getView('correspondence-site-types'),
+                templateUrl: templateProvider.getView('correspondence-site-types'),
                 controller: 'correspondenceSiteTypeCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_correspondence_site_type',
@@ -298,7 +298,7 @@ module.exports = function (app) {
             // entity type
             .state('app.administration.entity-types', {
                 url: '/entity-types',
-                template: templateProvider.getView('entity-types'),
+                templateUrl: templateProvider.getView('entity-types'),
                 controller: 'entityTypeCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_entity_type',
@@ -312,7 +312,7 @@ module.exports = function (app) {
             // job title
             .state('app.administration.job-titles', {
                 url: '/job-titles',
-                template: templateProvider.getView('job-title'),
+                templateUrl: templateProvider.getView('job-title'),
                 controller: 'jobTitleCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_job_title',
@@ -326,7 +326,7 @@ module.exports = function (app) {
             // rank
             .state('app.administration.ranks', {
                 url: '/ranks',
-                template: templateProvider.getView('rank'),
+                templateUrl: templateProvider.getView('rank'),
                 controller: 'rankCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_ranks',
@@ -340,7 +340,7 @@ module.exports = function (app) {
             // theme
             .state('app.administration.themes', {
                 url: '/themes',
-                template: templateProvider.getView('theme'),
+                templateUrl: templateProvider.getView('theme'),
                 controller: 'themeCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_themes',
@@ -354,7 +354,7 @@ module.exports = function (app) {
             //entities
             .state('app.administration.entities', {
                 url: '/entities',
-                template: templateProvider.getView('entities'),
+                templateUrl: templateProvider.getView('entities'),
                 controller: 'entityCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_government_entities',
@@ -368,7 +368,7 @@ module.exports = function (app) {
             //public announcements
             .state('app.administration.public-announcements', {
                 url: '/public-announcements',
-                template: templateProvider.getView('public-announcements'),
+                templateUrl: templateProvider.getView('public-announcements'),
                 controller: 'publicAnnouncementCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_public_announcements',
@@ -382,7 +382,7 @@ module.exports = function (app) {
             //public document file
             /*.state('app.administration.document-files', {
                 url: '/document-files',
-                template: templateProvider.getView('document-files'),
+                templateUrl: templateProvider.getView('document-files'),
                 controller: 'documentFileCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_document_files',
@@ -400,7 +400,7 @@ module.exports = function (app) {
             //document files new
             .state('app.administration.document-files', {
                 url: '/document-files',
-                template: templateProvider.getView('document-files-new'),
+                templateUrl: templateProvider.getView('document-files-new'),
                 controller: 'documentFileNewCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_document_files',
@@ -418,7 +418,7 @@ module.exports = function (app) {
             // entity-global-settings
             .state('app.administration.entity-global-settings', {
                 url: '/root-entity/:entityId/global-settings',
-                template: templateProvider.getView('global-setting'),
+                templateUrl: templateProvider.getView('global-setting'),
                 controller: 'globalSettingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_global_settings',
@@ -476,7 +476,7 @@ module.exports = function (app) {
             //application users
             .state('app.administration.application-users', {
                 url: '/application-users',
-                template: templateProvider.getView('application-user'),
+                templateUrl: templateProvider.getView('application-user'),
                 controller: 'applicationUserCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_application_users',
@@ -528,7 +528,7 @@ module.exports = function (app) {
             //distribution lists
             .state('app.administration.distribution-lists', {
                 url: '/distribution-lists',
-                template: templateProvider.getView('distribution-lists'),
+                templateUrl: templateProvider.getView('distribution-lists'),
                 controller: 'distributionListCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_distribution_lists',
@@ -554,7 +554,7 @@ module.exports = function (app) {
             //workflow actions
             .state('app.administration.workflow-actions', {
                 url: '/workflow-actions',
-                template: templateProvider.getView('workflow-action'),
+                templateUrl: templateProvider.getView('workflow-action'),
                 controller: 'workflowActionCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_workflow_actions',
@@ -577,7 +577,7 @@ module.exports = function (app) {
             //reference plans
             .state('app.administration.reference-number-plans', {
                 url: '/reference-number-plans',
-                template: templateProvider.getView('reference-plan-number'),
+                templateUrl: templateProvider.getView('reference-plan-number'),
                 controller: 'referencePlanNumberCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_reference_number_plans',
@@ -591,7 +591,7 @@ module.exports = function (app) {
             //correspondence-sites
             .state('app.administration.correspondence-sites', {
                 url: '/correspondence-sites',
-                template: templateProvider.getView('correspondence-sites'),
+                templateUrl: templateProvider.getView('correspondence-sites'),
                 controller: 'correspondenceSiteCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_cross_site_management'
@@ -599,7 +599,7 @@ module.exports = function (app) {
             //global-settings
             .state('app.administration.global-settings', {
                 url: '/global-settings',
-                template: templateProvider.getView('global-setting'),
+                templateUrl: templateProvider.getView('global-setting'),
                 controller: 'globalSettingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_global_settings',
@@ -639,7 +639,7 @@ module.exports = function (app) {
             //global-localizations-lookups
             .state('app.administration.global-localizations-lookups', {
                 url: '/global-localization-lookups',
-                template: templateProvider.getView('global-localization-lookups'),
+                templateUrl: templateProvider.getView('global-localization-lookups'),
                 controller: 'globalLocalizationLookupCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_localization',
@@ -653,7 +653,7 @@ module.exports = function (app) {
             // attachment types
             .state('app.administration.attachment-types', {
                 url: '/attachment-types',
-                template: templateProvider.getView('attachment-types'),
+                templateUrl: templateProvider.getView('attachment-types'),
                 controller: 'attachmentTypeCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_attachment_types',
@@ -678,7 +678,7 @@ module.exports = function (app) {
             // Outgoing Search
             .state('app.search.outgoing', {
                 url: '/outgoing',
-                template: templateProvider.getView('search-outgoing'),
+                templateUrl: templateProvider.getView('search-outgoing'),
                 controller: 'searchOutgoingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_search_module_outgoing',
@@ -718,7 +718,7 @@ module.exports = function (app) {
             //Incoming Search
             .state('app.search.incoming', {
                 url: '/incoming',
-                template: templateProvider.getView('search-incoming'),
+                templateUrl: templateProvider.getView('search-incoming'),
                 controller: 'searchIncomingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_search_module_incoming',
@@ -769,7 +769,7 @@ module.exports = function (app) {
             // Internal Search
             .state('app.search.internal', {
                 url: '/internal',
-                template: templateProvider.getView('search-internal'),
+                templateUrl: templateProvider.getView('search-internal'),
                 controller: 'searchInternalCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_search_module_internal',
@@ -827,7 +827,7 @@ module.exports = function (app) {
             //General Search
             .state('app.search.general', {
                 url: '/general',
-                template: templateProvider.getView('search-general'),
+                templateUrl: templateProvider.getView('search-general'),
                 controller: 'searchGeneralCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_search_module_general',
@@ -879,7 +879,7 @@ module.exports = function (app) {
             //Outgoing Incoming Search
             .state('app.search.outgoing-incoming', {
                 url: '/outgoing-incoming',
-                template: templateProvider.getView('search-outgoing-incoming'),
+                templateUrl: templateProvider.getView('search-outgoing-incoming'),
                 controller: 'searchOutgoingIncomingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_search_module_outgoing_incoming',
@@ -929,7 +929,7 @@ module.exports = function (app) {
             // add-outgoing
             .state('app.outgoing.add', {
                 url: '/add?vsId?workItem?action',
-                template: templateProvider.getView('outgoing-add'),
+                templateUrl: templateProvider.getView('outgoing-add'),
                 controller: 'outgoingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_add_outgoing'
@@ -937,7 +937,7 @@ module.exports = function (app) {
             // add simple outgoing
             .state('app.outgoing.simple-add', {
                 url: '/simpleAdd?vsId?workItem?action',
-                template: templateProvider.getView('outgoing-simple-add'),
+                templateUrl: templateProvider.getView('outgoing-simple-add'),
                 controller: 'simpleOutgoingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_outgoing_simple_add'
@@ -945,7 +945,7 @@ module.exports = function (app) {
             // prepare outgoing
             .state('app.outgoing.prepare', {
                 url: '/prepare',
-                template: templateProvider.getView('outgoing-prepare'),
+                templateUrl: templateProvider.getView('outgoing-prepare'),
                 controller: 'prepareOutgoingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_outgoing_prepare',
@@ -959,7 +959,7 @@ module.exports = function (app) {
             // draft outgoing
             .state('app.outgoing.draft', {
                 url: '/draft',
-                template: templateProvider.getView('outgoing-draft'),
+                templateUrl: templateProvider.getView('outgoing-draft'),
                 controller: 'draftOutgoingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_outgoing_draft',
@@ -973,7 +973,7 @@ module.exports = function (app) {
             // review outgoing
             .state('app.outgoing.review', {
                 url: '/review',
-                template: templateProvider.getView('outgoing-review'),
+                templateUrl: templateProvider.getView('outgoing-review'),
                 controller: 'reviewOutgoingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_outgoing_review',
@@ -987,7 +987,7 @@ module.exports = function (app) {
             // send outgoing
             .state('app.outgoing.ready-to-send', {
                 url: '/ready-to-send',
-                template: templateProvider.getView('outgoing-ready-to-send'),
+                templateUrl: templateProvider.getView('outgoing-ready-to-send'),
                 controller: 'readyToSendOutgoingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_outgoing_ready_to_send',
@@ -1001,7 +1001,7 @@ module.exports = function (app) {
             // rejected outgoing
             .state('app.outgoing.rejected', {
                 url: '/rejected',
-                template: templateProvider.getView('outgoing-rejected'),
+                templateUrl: templateProvider.getView('outgoing-rejected'),
                 controller: 'rejectedOutgoingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_outgoing_rejected',
@@ -1015,7 +1015,7 @@ module.exports = function (app) {
             //document templates
             .state('app.administration.document-templates', {
                 url: '/document-templates',
-                template: templateProvider.getView('document-template'),
+                templateUrl: templateProvider.getView('document-template'),
                 controller: 'documentTemplateCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_document_templates',
@@ -1063,7 +1063,7 @@ module.exports = function (app) {
             // user inbox
             .state('app.inbox.user-inbox', {
                 url: '/user-inbox',
-                template: templateProvider.getView('user-inbox'),
+                templateUrl: templateProvider.getView('user-inbox'),
                 controller: 'userInboxCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_user_inbox',
@@ -1114,7 +1114,7 @@ module.exports = function (app) {
             // incoming department inbox
             .state('app.department-inbox.incoming', {
                 url: '/incoming',
-                template: templateProvider.getView('department-inbox-incoming'),
+                templateUrl: templateProvider.getView('department-inbox-incoming'),
                 controller: 'incomingDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_dep_incoming',
@@ -1128,7 +1128,7 @@ module.exports = function (app) {
             // returned department inbox
             .state('app.department-inbox.returned', {
                 url: '/returned',
-                template: templateProvider.getView('department-inbox-returned'),
+                templateUrl: templateProvider.getView('department-inbox-returned'),
                 controller: 'returnedDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_dep_returned',
@@ -1142,7 +1142,7 @@ module.exports = function (app) {
             // ready to export
             .state('app.department-inbox.ready-to-export', {
                 url: '/ready-to-export',
-                template: templateProvider.getView('department-inbox-ready-to-export'),
+                templateUrl: templateProvider.getView('department-inbox-ready-to-export'),
                 controller: 'readyToExportDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_dep_ready_to_export',
@@ -1156,7 +1156,7 @@ module.exports = function (app) {
             // sent items
             .state('app.department-inbox.sent-items', {
                 url: '/sent-items',
-                template: templateProvider.getView('department-inbox-sent-items'),
+                templateUrl: templateProvider.getView('department-inbox-sent-items'),
                 controller: 'sentItemDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_dep_sent_items'
@@ -1164,7 +1164,7 @@ module.exports = function (app) {
             // quick search
             .state('app.search.quick-search', {
                 url: '/quick-search?key&q&random',
-                template: templateProvider.getView('quick-search'),
+                templateUrl: templateProvider.getView('quick-search'),
                 controller: 'quickSearchCorrespondenceCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_quick_search',
@@ -1200,7 +1200,7 @@ module.exports = function (app) {
             // add incoming
             .state('app.incoming.add', {
                 url: '/add?action?workItem?vsId?internalg2g',
-                template: templateProvider.getView('incoming-add'),
+                templateUrl: templateProvider.getView('incoming-add'),
                 controller: 'incomingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_incoming_add'
@@ -1208,7 +1208,7 @@ module.exports = function (app) {
             // add simple incoming
             .state('app.incoming.simple-add', {
                 url: '/simpleAdd?action?workItem?vsId',
-                template: templateProvider.getView('incoming-simple-add'),
+                templateUrl: templateProvider.getView('incoming-simple-add'),
                 controller: 'simpleIncomingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_incoming_simple_add'
@@ -1216,7 +1216,7 @@ module.exports = function (app) {
             // scan incoming
             .state('app.incoming.scan', {
                 url: '/scan',
-                template: templateProvider.getView('incoming-scan'),
+                templateUrl: templateProvider.getView('incoming-scan'),
                 controller: 'scanIncomingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_incoming_scan',
@@ -1230,7 +1230,7 @@ module.exports = function (app) {
             // review incoming
             .state('app.incoming.review', {
                 url: '/review',
-                template: templateProvider.getView('incoming-review'),
+                templateUrl: templateProvider.getView('incoming-review'),
                 controller: 'reviewIncomingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_incoming_review',
@@ -1244,7 +1244,7 @@ module.exports = function (app) {
             // send incoming
             .state('app.incoming.ready-to-send', {
                 url: '/ready-to-send',
-                template: templateProvider.getView('incoming-ready-to-send'),
+                templateUrl: templateProvider.getView('incoming-ready-to-send'),
                 controller: 'readyToSendIncomingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_incoming_ready_to_send',
@@ -1258,7 +1258,7 @@ module.exports = function (app) {
             // rejected incoming
             .state('app.incoming.rejected', {
                 url: '/rejected',
-                template: templateProvider.getView('incoming-rejected'),
+                templateUrl: templateProvider.getView('incoming-rejected'),
                 controller: 'rejectedIncomingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_incoming_rejected',
@@ -1289,7 +1289,7 @@ module.exports = function (app) {
             // add-internal
             .state('app.internal.add', {
                 url: '/add?vsId?workItem?action',
-                template: templateProvider.getView('internal-add'),
+                templateUrl: templateProvider.getView('internal-add'),
                 controller: 'internalCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_internal_add'
@@ -1298,7 +1298,7 @@ module.exports = function (app) {
             // add simple internal
             .state('app.internal.simple-add', {
                 url: '/simpleAdd?vsId?workItem?action',
-                template: templateProvider.getView('internal-simple-add'),
+                templateUrl: templateProvider.getView('internal-simple-add'),
                 controller: 'simpleInternalCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_internal_simple_add'
@@ -1307,7 +1307,7 @@ module.exports = function (app) {
             // prepare internal
             .state('app.internal.prepare', {
                 url: '/prepare',
-                template: templateProvider.getView('internal-prepare'),
+                templateUrl: templateProvider.getView('internal-prepare'),
                 controller: 'prepareInternalCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_internal_prepare',
@@ -1321,7 +1321,7 @@ module.exports = function (app) {
             // draft internal
             .state('app.internal.draft', {
                 url: '/draft',
-                template: templateProvider.getView('internal-draft'),
+                templateUrl: templateProvider.getView('internal-draft'),
                 controller: 'draftInternalCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_internal_draft',
@@ -1335,7 +1335,7 @@ module.exports = function (app) {
             // review internal
             .state('app.internal.review', {
                 url: '/review',
-                template: templateProvider.getView('internal-review'),
+                templateUrl: templateProvider.getView('internal-review'),
                 controller: 'reviewInternalCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_internal_review',
@@ -1349,7 +1349,7 @@ module.exports = function (app) {
             // send internal
             .state('app.internal.ready-to-send', {
                 url: '/ready-to-send',
-                template: templateProvider.getView('internal-ready-to-send'),
+                templateUrl: templateProvider.getView('internal-ready-to-send'),
                 controller: 'readyToSendInternalCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_internal_ready_to_send',
@@ -1363,7 +1363,7 @@ module.exports = function (app) {
             // rejected internal
             .state('app.internal.rejected', {
                 url: '/rejected',
-                template: templateProvider.getView('internal-rejected'),
+                templateUrl: templateProvider.getView('internal-rejected'),
                 controller: 'rejectedInternalCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_internal_rejected',
@@ -1377,7 +1377,7 @@ module.exports = function (app) {
             // approved internal
             .state('app.internal.approved', {
                 url: '/approved',
-                template: templateProvider.getView('internal-approved'),
+                templateUrl: templateProvider.getView('internal-approved'),
                 controller: 'approvedInternalCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_approved_internal_queue',
@@ -1396,7 +1396,7 @@ module.exports = function (app) {
             // followup employee inbox
             .state('app.inbox.followup-employee-inbox', {
                 url: '/followup-employee-inbox',
-                template: templateProvider.getView('followup-employee-inbox'),
+                templateUrl: templateProvider.getView('followup-employee-inbox'),
                 controller: 'followupEmployeeInboxCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_followup_employee_inbox'
@@ -1410,7 +1410,7 @@ module.exports = function (app) {
             // proxy mail inbox
             .state('app.inbox.proxy-mail-inbox', {
                 url: '/proxy-mail-inbox',
-                template: templateProvider.getView('proxy-mail-inbox'),
+                templateUrl: templateProvider.getView('proxy-mail-inbox'),
                 controller: 'proxyMailInboxCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_proxy_mail_inbox',
@@ -1428,7 +1428,7 @@ module.exports = function (app) {
             // inbox - user sent items
             .state('app.inbox.sent-items', {
                 url: '/sent-items',
-                template: templateProvider.getView('user-sent-items'),
+                templateUrl: templateProvider.getView('user-sent-items'),
                 controller: 'userSentItemCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_sent_items',
@@ -1444,7 +1444,7 @@ module.exports = function (app) {
             //user favorite documents
             .state('app.inbox.favorite-documents', {
                 url: '/favorite-documents',
-                template: templateProvider.getView('favorite-documents'),
+                templateUrl: templateProvider.getView('favorite-documents'),
                 controller: 'favoriteDocumentsCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_user_favorite_documents',
@@ -1459,20 +1459,20 @@ module.exports = function (app) {
             })
             .state('app.administration.localization', {
                 url: '/localization',
-                template: templateProvider.getView('localization'),
+                templateUrl: templateProvider.getView('localization'),
                 controller: 'localizationCtrl',
                 controllerAs: 'ctrl'
             })
             .state('app.inbox.group-inbox', {
                 url: '/group-inbox',
-                template: templateProvider.getView('group-inbox'),
+                templateUrl: templateProvider.getView('group-inbox'),
                 controller: 'groupInboxCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_group_inbox'
             })
             .state('app.inbox.folders', {
                 url: '/folders?folder',
-                template: templateProvider.getView('folders'),
+                templateUrl: templateProvider.getView('folders'),
                 controller: 'folderCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_folders'
@@ -1495,7 +1495,7 @@ module.exports = function (app) {
             })
             .state('app.central-archive.ready-to-export', {
                 url: '/ready-to-export',
-                template: templateProvider.getView('central-archive-ready-to-export'),
+                templateUrl: templateProvider.getView('central-archive-ready-to-export'),
                 controller: 'readyToExportArchiveCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_central_archive_ready_to_export'
@@ -1602,7 +1602,7 @@ module.exports = function (app) {
             })
             .state('app.g2g.incoming', {
                 url: '/incoming',
-                template: cmsTemplateProvider.getView('g2g-incoming'),
+                templateUrl: cmsTemplateProvider.getView('g2g-incoming'),
                 controller: 'g2gIncomingCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_g2g',
@@ -1615,7 +1615,7 @@ module.exports = function (app) {
             })
             .state('app.g2g.returned', {
                 url: '/returned',
-                template: cmsTemplateProvider.getView('g2g-returned'),
+                templateUrl: cmsTemplateProvider.getView('g2g-returned'),
                 controller: 'g2gReturnedCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_g2g',
@@ -1628,20 +1628,20 @@ module.exports = function (app) {
             })
             .state('app.g2g.sent-items', {
                 url: '/sent-items',
-                template: cmsTemplateProvider.getView('g2g-sent-items'),
+                templateUrl: cmsTemplateProvider.getView('g2g-sent-items'),
                 controller: 'g2gSentItemsCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_g2g'
             })
             .state('app.administration.menu-items', {
                 url: '/dynamic-menu-items',
-                template: cmsTemplateProvider.getView('dynamic-menu-items'),
+                templateUrl: cmsTemplateProvider.getView('dynamic-menu-items'),
                 controller: 'dynamicMenuItemCtrl',
                 controllerAs: 'ctrl'
             })
             .state('app.central-archive.sent-items', {
                 url: '/sent-items',
-                template: cmsTemplateProvider.getView('central-archive-sent-items'),
+                templateUrl: cmsTemplateProvider.getView('central-archive-sent-items'),
                 controller: 'centralArchiveSentItemCtrl',
                 controllerAs: 'ctrl'
             })

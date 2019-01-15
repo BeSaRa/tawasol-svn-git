@@ -98,7 +98,7 @@ module.exports = function (app) {
             DistributionUserWFItem.prototype.openOutOfOfficeDialog = function ($event) {
                 var self = this;
                 return dialog.showDialog({
-                    template: cmsTemplate.getPopup('out-of-office-message'),
+                    templateUrl: cmsTemplate.getPopup('out-of-office-message'),
                     bindToController: true,
                     targetEvent: $event,
                     controller: function ($scope, LangWatcher) {

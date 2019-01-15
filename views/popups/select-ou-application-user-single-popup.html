@@ -1,0 +1,58 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{ctrl.label || lang.select_user}}">
+    <md-toolbar layout="row" layout-align="start center">
+        <span class="p20" flex ng-if="ctrl.label">{{lang.get(ctrl.label) ? lang.get(ctrl.label) : ctrl.label }}</span>
+        <span class="p20" flex ng-if="!ctrl.label">{{lang.select_user}}</span>
+        <close-dialog-directive when-close="ctrl.close"></close-dialog-directive>
+    </md-toolbar>
+    <md-content scroll-directive class="p20" layout="column">
+        <div layout="row" layout-align="start center" class="m8">
+            <span flex></span>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div>
+        <md-card>
+            <md-table-container>
+                <table md-table md-row-select ng-model="ctrl.ouApplicationUserSelected" md-progress="ctrl.progress">
+                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                    <tr md-row>
+                        <th md-column md-order-by="{{ctrl.getSortingKey('applicationUser', 'ApplicationUser')}}"><span>{{lang.name}}</span></th>
+                        <th md-column md-order-by="applicationUser.loginName"><span>{{lang.login_name}}</span></th>
+                        <th md-column md-order-by="applicationUser.domainName"><span>{{lang.domain_name}}</span></th>
+                    </tr>
+                    </thead>
+                    <tbody md-body>
+                    <tr ng-if="ctrl.ouApplicationUsers.length" md-row md-select="ouApplicationUser"
+                        ng-repeat="ouApplicationUser in ctrl.ouApplicationUsers | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  | filter:ctrl.searchModel track by $index">
+                        <td md-cell>
+                            <span tooltip="{{ouApplicationUser.applicationUser.getTranslatedName(true)}}">{{ouApplicationUser.applicationUser.getTranslatedName()}}</span>
+                        </td>
+                        <td md-cell>
+                            <span>{{ouApplicationUser.applicationUser.loginName}}</span>
+                        </td>
+                        <td md-cell>
+                            <span tooltip="{{ouApplicationUser.applicationUser.getDefaultOrganization().getNames()}}">{{ouApplicationUser.applicationUser.domainName}}</span>
+                        </td>
+                    </tr>
+                    <tr ng-if="!ctrl.ouApplicationUsers.length" md-row>
+                        <td colspan="3">
+                                <span layout="row" layout-align="center center">
+                                    {{lang.no_users_found_to_display}}
+                                </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <md-table-pagination
+                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                        md-limit-options="ctrl.grid.limitOptions"
+                        md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                        md-total="{{ctrl.ouApplicationUsers.length}}" md-page-select>
+                </md-table-pagination>
+            </md-table-container>
+        </md-card>
+        <div layout="row" layout-align="center center">
+            <md-button class="md-raised" ng-disabled="!ctrl.ouApplicationUserSelected.length" ng-click="ctrl.saveSelectedOuUser()">
+                {{lang.save}}
+            </md-button>
+        </div>
+    </md-content>
+</md-dialog>

@@ -224,7 +224,7 @@ module.exports = function (app) {
         self.openLinkedDocsAttachmentDialog = function ($event) {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('linked-docs-attachments'),
+                    templateUrl: cmsTemplate.getPopup('linked-docs-attachments'),
                     controller: 'linkedDocsAttachmentPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {

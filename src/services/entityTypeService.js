@@ -44,7 +44,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('entity-type'),
+                        templateUrl: cmsTemplate.getPopup('entity-type'),
                         controller: 'entityTypePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -61,7 +61,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('entity-type'),
+                        templateUrl: cmsTemplate.getPopup('entity-type'),
                         controller: 'entityTypePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

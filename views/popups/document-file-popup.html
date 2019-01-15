@@ -1,0 +1,234 @@
+<md-dialog class="dialog-extend"
+           ng-attr-aria-label="{{!ctrl.editMode ? lang.add_new_document_file : ctrl.model.getNames()}}">
+    <div layout="column">
+        <md-toolbar layout="row" layout-align="start center">
+            <span class="p20" ng-if="!ctrl.editMode">{{lang.add_new_document_file}}</span>
+            <span class="p20" ng-if="ctrl.editMode">{{ctrl.model.getNames()}}</span>
+            <close-dialog-directive when-close="ctrl.closeDocumentFilePopupFromCtrl"></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="documentFileForm" autocomplete="off">
+                <md-tabs md-dynamic-height md-selected="ctrl.tabIndex">
+                    <md-tab label="{{lang.basic_info}}" md-on-select="ctrl.changeTabName('basic_info')">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="arName">{{lang.arabic_name}}</label>
+                                        <input name="arName" id="arName" required minlength="4"
+                                               ng-model="ctrl.documentFile.arName"
+                                               custom-validate-directive="ANS" maxlength="80">
+                                        <div ng-messages="documentFileForm.arName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="ANS">{{lang.arabic_number_space}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="enName">{{lang.english_name}}</label>
+                                        <input name="enName" id="enName" required minlength="4"
+                                               ng-model="ctrl.documentFile.enName"
+                                               custom-validate-directive="ENS" maxlength="80">
+                                        <div ng-messages="documentFileForm.enName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="ENS">{{lang.english_number_space}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="securityLevels">{{lang.security_level}}</label>
+                                        <md-select name="securityLevels" ng-model-options="{trackBy:'$value.lookupKey'}"
+                                                   id="securityLevels" multiple
+                                                   ng-model="ctrl.documentFile.securityLevels">
+                                            <md-option ng-value="dc"
+                                                       ng-repeat="dc in ctrl.securityLevels track by $index">
+                                                {{dc.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+
+                                        <div ng-messages="documentFileForm.message.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="parent">{{lang.document_files}}</label>
+                                        <!--  ng-disabled="ctrl.documentFile.hasChildren() || ctrl.disableParent"-->
+                                        <md-select aria-label="{{lang.document_files}}" id="parent"
+                                                   ng-model-options="{trackBy: '$value.id'}"
+                                                   ng-model="ctrl.documentFile.parent">
+                                            <md-option ng-value="">{{lang.no_parent}}</md-option>
+                                            <md-option ng-value="documentFile"
+                                                       ng-repeat="documentFile in ctrl.parentDocumentFiles track by $index">
+                                                {{documentFile.getNames()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="documentFile.parent.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="number">{{lang.positive_number_only}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <div flex class="p20">
+                                        <md-switch ng-model="ctrl.documentFile.status" aria-label="{{lang.status}}">
+                                            <label>{{lang.status}} : {{ctrl.documentFile.getTranslatedStatus()}}</label>
+                                        </md-switch>
+                                    </div>
+                                    <div flex class="p20">
+                                        <md-switch ng-model="ctrl.documentFile.global" aria-label="{{lang.global}}"
+                                                   ng-disabled="!ctrl.editMode">
+                                            <span>{{lang.global}} : </span>{{ctrl.documentFile.getTranslatedGlobal()}}
+                                        </md-switch>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <md-tab md-on-select="ctrl.changeTabName('security')" label="{{lang.security}}"
+                            ng-disabled="ctrl.documentFile.global || !ctrl.editMode">
+                        <md-button class="md-icon-button" tooltip="{{!ctrl.enableAdd ? lang.add : lang.close}}"
+                                   ng-click="ctrl.enableAdd = !ctrl.enableAdd" ng-class="{spinnPlus:ctrl.enableAdd}">
+                            <md-icon md-svg-icon="plus"></md-icon>
+                        </md-button>
+                        <md-content>
+                            <div layout="column" class="p20" ng-show="ctrl.enableAdd">
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label>{{lang.organization_unit}}</label>
+                                        <md-select ng-model="ctrl.selectedOrganizationId">
+                                            <md-option ng-model-options="{trackBy: '$value.id'}"
+                                                       ng-repeat="organization in ctrl.organizations track by $index"
+                                                       ng-value="organization.id">
+                                                {{ organization.enName }}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label>{{lang.status}}</label>
+                                        <md-select
+                                                ng-model="ctrl.relatedOUStatus">
+                                            <md-option ng-value="true">
+                                                {{lang.active}}
+                                            </md-option>
+                                            <md-option ng-value="false">
+                                                {{lang.inactive}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="lookupStrKey">{{lang.code}}</label>
+                                        <input no-space-directive name="lookupStrKey"
+                                               id="lookupStrKey"
+                                               ng-disabled="ctrl.editMode"
+                                               minlength="3"
+                                               ng-model="ctrl.relatedOUCode"
+                                               custom-validate-directive="EN_"
+                                               maxlength="80">
+                                        <div ng-messages="doc.lookupStrKey.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="EN_">{{lang.english_number_under_score}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container flex>
+                                        <label for="itemOrder">{{lang.item_order}}</label>
+                                        <input name="itemOrder" id="itemOrder" required
+                                               ng-model="ctrl.relatedOUItemOrder"
+                                               custom-validate-directive="number" maxlength="5">
+                                        <div ng-messages="doc.itemOrder.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="lookupStrKey">{{lang.label_serial}}</label>
+                                        <input no-space-directive name="serial"
+                                               id="serial"
+                                               minlength="3"
+                                               ng-model="ctrl.serial"
+                                               custom-validate-directive="EN_"
+                                               maxlength="80">
+                                        <div ng-messages="doc.serial.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="EN_">{{lang.english_number_under_score}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-button class="md-raised" ng-disabled="!ctrl.selectedOrganizationId"
+                                               ng-click="ctrl.addSelectedOrganization()">
+                                        {{$root.lang.add}}
+                                    </md-button>
+                                    <!-- <span flex></span>
+                                     <md-button class="md-raised" ng-click="ctrl.hideRelatedOUFrm()">
+                                         {{lang.close}}
+                                     </md-button>-->
+                                </div>
+                            </div>
+
+                            <table md-table md-progress="promise">
+                                <thead md-head>
+                                <tr md-row>
+                                    <th>{{lang.arabic_name}}</th>
+                                    <th>{{lang.english_name}}</th>
+                                    <th>{{lang.action}}</th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row md-select="organization"
+                                    ng-repeat="ouDocumentFile in ctrl.documentFile.relatedOus track by $index">
+                                    <td md-cell>{{ouDocumentFile.getOUTranslate('ar')}}</td>
+                                    <td md-cell>{{ouDocumentFile.getOUTranslate('en')}}</td>
+                                    <td md-cell>
+                                        <md-button
+                                                tooltip="{{lang.delete}}"
+                                                ng-click="ctrl.removeSelectedOrganization(ouDocumentFile)"
+                                                aria-label="Delete"
+                                                class="md-icon-button">
+                                            <md-icon md-svg-icon="delete"></md-icon>
+                                        </md-button>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-if="!ctrl.editMode"
+                           ng-disabled="documentFileForm.$invalid"
+                           ng-click="ctrl.addDocumentFileFromCtrl()">{{lang.add}}
+                </md-button>
+                <md-button class="md-raised" ng-if="ctrl.editMode && ctrl.selectedTabName =='basic_info'"
+                           ng-disabled="documentFileForm.$invalid || (!ctrl.documentFile.global && (!ctrl.documentFile.relatedOus.length > 0))"
+                           ng-click="ctrl.editDocumentFileFromCtrl()">{{lang.save}}
+                </md-button>
+                <span flex=""></span>
+                <md-button class="md-raised"
+                           ng-click="ctrl.resetModel()">
+                    {{lang.reset}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeDocumentFilePopupFromCtrl()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

@@ -62,7 +62,7 @@ module.exports = function (app) {
             return dialog
                 .showDialog({
                     targetEvent: $event,
-                    template: cmsTemplate.getPopup('select-month-year'),
+                    templateUrl: cmsTemplate.getPopup('select-month-year'),
                     controller: 'selectMonthYearPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {
@@ -81,7 +81,7 @@ module.exports = function (app) {
         self.showReasonDialog = function (dialogTitle, $event) {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('reason'),
+                    templateUrl: cmsTemplate.getPopup('reason'),
                     controller: 'reasonPopCtrl',
                     controllerAs: 'ctrl',
                     bindToController: true,

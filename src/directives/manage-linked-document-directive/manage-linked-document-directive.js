@@ -1,9 +1,9 @@
 module.exports = function (app) {
-    app.directive('manageLinkedDocumentDirective', function ($interval) {
+    app.directive('manageLinkedDocumentDirective', function ($interval,cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
-            template: require('./manage-linked-document-template.html'),
+            templateUrl: cmsTemplate.getDirective('manage-linked-document-template.html'),
             controller: 'manageLinkedDocumentDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,

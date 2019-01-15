@@ -1,0 +1,73 @@
+<md-dialog class="dialog-extend" id="content-view-history-events-dialog"
+           ng-attr-aria-label="{{lang.view_tracking_sheet_viewers}}">
+    <div layout="column">
+        <md-toolbar layout="row" layout-align="start center">
+            <span class="p20">{{lang.view_tracking_sheet_viewers}} : {{ctrl.contentViewHistorySubject}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="contentViewHistoryViewersForm" autocomplete="off">
+                <div md-dynamic-height>
+                    <md-content>
+                        <div layout="column" class="p20">
+                            <md-card>
+                                <md-table-container>
+                                    <div flex scroll-directive>
+                                        <table md-table>
+                                            <thead md-head md-order="ctrl.grid.order"
+                                                   md-on-reorder="ctrl.getSortedData">
+                                            <tr md-row>
+                                                <th md-column md-order-by="{{ctrl.getSortingKey('actionByInfo', 'Information')}}"><span>{{lang.view_tracking_sheet_action_by}}</span>
+                                                </th>
+                                                <th md-column
+                                                    md-order-by="{{ctrl.getSortingKey('ouInfo','Information')}} "><span>{{lang.view_tracking_sheet_department}}</span>
+                                                </th>
+                                                <th md-column md-order-by="actionDate_vts"><span>{{lang.view_tracking_sheet_action_date}}</span>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody md-body>
+                                            <tr md-select="contentViewHistoryViewer" md-row
+                                                ng-repeat="contentViewHistoryViewer in ctrl.contentViewHistoryViewers | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                                <td md-cell>
+                                                    {{contentViewHistoryViewer.actionByInfo.getTranslatedName()}}
+                                                </td>
+                                                <td md-cell>{{contentViewHistoryViewer.ouInfo.getTranslatedName()}}</td>
+                                                <td md-cell>{{contentViewHistoryViewer.actionDate_vts}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <md-table-pagination
+                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                            md-limit-options="ctrl.grid.limitOptions"
+                                            md-limit="ctrl.grid.limit"
+                                            md-page="ctrl.grid.page"
+                                            md-total="{{ctrl.contentViewHistoryViewers.length}}"
+                                            md-page-select></md-table-pagination>
+                                </md-table-container>
+                            </md-card>
+                        </div>
+                    </md-content>
+                </div>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-click="ctrl.exportToExcel($event)"
+                           ng-disabled="!ctrl.contentViewHistoryViewers.length">
+                    {{lang.export_to_excel}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.printSheet($event)"
+                           ng-disabled="!ctrl.contentViewHistoryViewers.length">
+                    {{lang.print}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeContentViewHistoryViewersPopupFromCtrl()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

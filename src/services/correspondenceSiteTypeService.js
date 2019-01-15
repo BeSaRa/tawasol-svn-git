@@ -43,7 +43,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('correspondence-site-type'),
+                        templateUrl: cmsTemplate.getPopup('correspondence-site-type'),
                         controller: 'correspondenceSiteTypePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -60,7 +60,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('correspondence-site-type'),
+                        templateUrl: cmsTemplate.getPopup('correspondence-site-type'),
                         controller: 'correspondenceSiteTypePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

@@ -1,6 +1,6 @@
 module.exports = function (app) {
     require('./document-notify-style.scss');
-    app.directive('documentsNotifyDirective', function () {
+    app.directive('documentsNotifyDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
@@ -8,7 +8,7 @@ module.exports = function (app) {
             controllerAs: 'ctrl',
             replace: true,
             scope: {},
-            template: require('./documents-notify-template.html')
+            templateUrl: cmsTemplate.getDirective('documents-notify-template.html')
         }
     })
 };

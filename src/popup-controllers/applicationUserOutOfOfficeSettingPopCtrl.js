@@ -213,7 +213,7 @@ module.exports = function (app) {
                                 dialog
                                     .showDialog({
                                         targetEvent: null,
-                                        template: cmsTemplate.getPopup('update-manager-proxy'),
+                                        templateUrl: cmsTemplate.getPopup('update-manager-proxy'),
                                         controller: 'updateManagerProxyPopCtrl',
                                         controllerAs: 'ctrl',
                                         locals: {

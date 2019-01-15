@@ -70,7 +70,7 @@ module.exports = function (app) {
         self.openSearchDialog = function ($event) {
             dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('search-linked-document'),
+                    templateUrl: cmsTemplate.getPopup('search-linked-document'),
                     controller: 'searchLinkedDocumentPopCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event,

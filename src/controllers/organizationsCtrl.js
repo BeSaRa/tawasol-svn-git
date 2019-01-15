@@ -36,7 +36,7 @@ module.exports = function (app) {
                     controller: function () {
 
                     },
-                    template: cmsTemplate.getPopup('select-organization')
+                    templateUrl: cmsTemplate.getPopup('select-organization')
                 })
         };
 

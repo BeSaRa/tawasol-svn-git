@@ -1,0 +1,53 @@
+<div ng-if="ctrl.allowActions === 'true' && ctrl.addRootFolder === 'true'">
+    <md-button class="md-raised" ng-click="ctrl.openAddUserFolderDialog(false , $event)">
+        {{$root.lang.add_root_folder}}
+    </md-button>
+    <!--<md-button class="md-raised" ng-click="ctrl.reloadUserFolders()">
+        {{$root.lang.reload}}
+    </md-button>-->
+</div>
+
+<folders-tree-structure-directive disable-selected="0"
+                                  allow-control="true"
+                                  add-callback="ctrl.openAddUserFolderDialog"
+                                  delete-callback="ctrl.removeUserFolder"
+                                  edit-callback="ctrl.openEditUserFolderDialog"
+                                  folders="ctrl.folders"></folders-tree-structure-directive>
+
+
+
+<!--<ul>
+    <li ng-repeat="node in ctrl.folders track by $index">
+        <i class="collapsed" ng-show="node.children.length && node.collapsed"
+           ng-click="ctrl.toggleChildNodes(node)"></i>
+        <i class="expanded" ng-show="node.children.length && !node.collapsed"
+           ng-click="ctrl.toggleChildNodes(node)"></i>
+        <i class="normal" ng-hide="node.children.length"></i>
+        <span ng-if="!node.children.length" ng-class="{'selected' : ctrl.currentNode === node.id}"
+              ng-click="ctrl.selectCurrentNode(node)">{{ctrl.currentLang === 'en'? node.enName:node.arName}}</span>
+        <span ng-if="node.children.length" ng-class="{'selected' : ctrl.currentNode === node.id}"
+              ng-click="ctrl.selectCurrentNode(node)">{{ctrl.currentLang === 'en'? node.enName : node.arName }} ({{node.children.length}})</span>
+        <md-button title="{{$root.lang.add}}" class="md-icon-button"
+                   ng-if="ctrl.allowActions === 'true'"
+                   ng-click="ctrl.openAddUserFolderDialog(node, $event)">
+            <md-icon md-svg-icon="plus"></md-icon>
+        </md-button>
+        <md-button title="{{$root.lang.edit}}" class="md-icon-button"
+                   ng-if="ctrl.allowActions === 'true'"
+                   ng-click="ctrl.openEditUserFolderDialog(node, $event)">
+            <md-icon md-svg-icon="pencil"></md-icon>
+        </md-button>
+        <md-button title="{{$root.lang.delete}}" class="md-icon-button"
+                   ng-if="ctrl.allowActions === 'true'"
+                   ng-click="ctrl.removeUserFolder(node, $event)">
+            <md-icon md-svg-icon="delete"></md-icon>
+        </md-button>
+        <user-folders-tree-view-directive
+                folders="node.children"
+                current-node="ctrl.currentNode"
+                allow-actions={{ctrl.allowActions}}
+                add-root-folder="false"
+                ng-hide="node.collapsed">
+        </user-folders-tree-view-directive>
+    </li>
+</ul>-->

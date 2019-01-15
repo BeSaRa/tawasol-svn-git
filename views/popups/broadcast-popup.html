@@ -1,0 +1,176 @@
+<md-dialog id="broadcastDialog" class="dialog-extend" ng-attr-aria-label="{{lang.broadcast}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.broadcast}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <div layout="column">
+                <form name="broadcast_form" autocomplete="off">
+                    <div layout="column" class="p20" scroll-directive>
+                        <div layout="row" flex>
+                            <!-- Workflow Action -->
+                            <md-input-container flex>
+                                <label for="selectedAction">{{lang.dwf_label_selectaction}}</label>
+                                <md-select name="selectedAction" id="selectedAction" required
+                                           ng-model="ctrl.selectedAction">
+                                    <md-option ng-value="action"
+                                               ng-repeat="action in ctrl.actions track by $index">
+                                        {{action.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                                <div ng-messages="broadcast_form.selectedAction.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <div layout="row" flex>
+                            <!-- Organization Unit -->
+                            <md-input-container flex>
+                                <label>{{lang.organizations}}</label>
+                                <md-select ng-model-options="{trackBy: '$value.id'}"
+                                           multiple
+                                           ng-required="!ctrl.wfGroupBroadcast.length"
+                                           name="ouBroadcast" ng-model="ctrl.ouBroadcast">
+                                    <md-option
+                                            ng-repeat="organization in ctrl.organizations track by $index"
+                                            ng-if="ctrl.organizationNotExists(organization) && organization.status"
+                                            md-truncate ng-value="organization">
+                                        {{organization.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                                <div ng-messages="broadcast_form.ouBroadcast.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+                            <!-- Workflow Group -->
+                            <md-input-container flex>
+                                <label>{{lang.workflow_groups}}</label>
+                                <md-select ng-model-options="{trackBy: '$value.id'}"
+                                           multiple
+                                           ng-required="!ctrl.ouBroadcast.length"
+                                           name="workflowGroupBroadcast" ng-model="ctrl.wfGroupBroadcast">
+                                    <md-option md-truncate
+                                               ng-repeat="workflowGroup in ctrl.workflowGroups track by $index"
+                                               ng-value="workflowGroup"
+                                               ng-if="ctrl.workflowGroupNotExists(workflowGroup) && workflowGroup.status">
+                                        {{workflowGroup.getTranslatedName()}}
+                                    </md-option>
+                                </md-select>
+                                <div ng-messages="broadcast_form.workflowGroupBroadcast.$error">
+                                    <div ng-message="required">{{lang.field_required}}</div>
+                                </div>
+                            </md-input-container>
+                            <div>
+                                <div flex>
+                                    <md-button class="md-raised"
+                                               ng-disabled="broadcast_form.$invalid"
+                                               ng-click="ctrl.addToBroadcast(broadcast_form)">
+                                        {{lang.add}}
+                                    </md-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="p20">
+                    <md-card layout="column" class="card-overlay">
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table multiple md-row-select
+                                       ng-model="ctrl.selectedAddedOUAndWFGroupsToBroadcast">
+                                    <thead md-head md-order="ctrl.grid.order"
+                                           md-on-reorder="ctrl.getSortedData">
+                                    <tr md-row>
+                                        <th colspan="4" class="table-selector-header"
+                                            ng-if="ctrl.selectedAddedOUAndWFGroupsToBroadcast.length" md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedAddedOUAndWFGroupsToBroadcast.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
+                                                <md-button class="md-icon-button"
+                                                           ng-click="ctrl.removeBulkRecordsFromBroadcastGrid()">
+                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedAddedOUAndWFGroupsToBroadcast.length" md-column
+                                            md-order-by="arName">
+                                            {{lang.arabic_name}}
+                                        </th>
+                                        <th ng-if="!ctrl.selectedAddedOUAndWFGroupsToBroadcast.length" md-column
+                                            md-order-by="enName">
+                                            {{lang.english_name}}
+                                        </th>
+                                        <th ng-if="!ctrl.selectedAddedOUAndWFGroupsToBroadcast.length" md-column
+                                            md-order-by="">
+                                            {{lang.type}}
+                                        </th>
+                                        <th ng-if="!ctrl.selectedAddedOUAndWFGroupsToBroadcast.length" md-column>
+                                            <!--{{lang.with_sub}}-->
+                                        </th>
+                                        <th ng-if="!ctrl.selectedAddedOUAndWFGroupsToBroadcast.length" md-column>
+                                            {{lang.action}}
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row
+                                        ng-repeat="record in ctrl.addedOUAndWFGroupsToBroadcast | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index"
+                                        md-select="organization">
+                                        <td md-cell>
+                                            {{record.getNameByLanguage('ar')}}
+                                        </td>
+                                        <td md-cell>
+                                            {{record.getNameByLanguage('en')}}
+                                        </td>
+                                        <td md-cell>
+                                            <md-icon md-svg-icon="{{record.broadcastRecordType.icon}}"
+                                                     tooltip="{{lang[record.broadcastRecordType.text]}}">
+                                            </md-icon>
+                                        </td>
+                                        <td md-cell>
+                                            <md-checkbox
+                                                    ng-if="ctrl.checkBroadcastRecordType(record, ctrl.broadcastRecordType.organization)"
+                                                    aria-label="{{lang.with_sub}}"
+                                                    tooltip="{{lang.with_sub}}"
+                                                    ng-model="record.withSub"></md-checkbox>
+                                        </td>
+                                        <td md-cell>
+                                            <div flex layout="row" layout-align="start center">
+                                                <md-button class="md-icon-button" title="{{lang.delete}}"
+                                                           ng-click="ctrl.removeRecordFromBroadcastGrid(record)">
+                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit"
+                                    md-page="ctrl.grid.page"
+                                    md-total="{{ctrl.addedOUAndWFGroupsToBroadcast.length}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised"
+                           ng-disabled="ctrl.checkDisabled()"
+                           ng-click="ctrl.startBroadcast()">
+                    {{lang.broadcast}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closePopup()">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('workItemPropertiesDirective', function () {
+    app.directive('workItemPropertiesDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
@@ -16,7 +16,7 @@ module.exports = function (app) {
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            template: require('./workItem-properties-template.html'),
+            templateUrl: cmsTemplate.getDirective('workItem-properties-template.html'),
             scope: {
                 item: '=',
                 sectionTitle: '@'

@@ -1,6 +1,6 @@
 module.exports = function (app) {
     require('./magazine-layout-style.scss');
-    app.directive('magazineLayoutDirective', function () {
+    app.directive('magazineLayoutDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
@@ -8,7 +8,7 @@ module.exports = function (app) {
             controllerAs: 'ctrl',
             bindToController: true,
             replace: true,
-            template: require('./magazine-layout-template.html'),
+            templateUrl: cmsTemplate.getDirective('magazine-layout-template.html'),
             scope: {
                 workItems: '=',
                 selectedWorkItems: '=',

@@ -1,0 +1,109 @@
+<div id="login-page" layout="row">
+    <div id="login-background" ng-class="{'flip-bg':login.flipBg}"></div>
+    <div layout="column" flex ng-if="mediaSize('gt-sm')" ng-class="{'md':mediaSize('md')}" id="login-meta-wrapper">
+        <div layout="row">
+            <div class="login-logo-side">
+                <img ng-if="login.rootEntity.getLoginLogoUrl()" ng-src="{{login.rootEntity.getLoginLogoUrl()}}"
+                     alt="{{login.rootEntity.getTranslatedAppName()}}">
+                <img ng-if="!login.rootEntity.getLoginLogoUrl()" src="../../assets/images/ebla-logo.png"
+                     alt="{{login.rootEntity.getTranslatedAppName()}}">
+            </div>
+            <div id="application-meta" layout="column" flex>
+                <h2>{{login.rootEntity.getTranslatedName()}}</h2>
+                <h4>{{login.rootEntity.getTranslatedAppName()}} - {{ lang.application_description }}</h4>
+            </div>
+        </div>
+        <div flex>
+            <login-announcement-directive announcements="login.announcements"></login-announcement-directive>
+        </div>
+        <div class="copyright-text" layout="row" layout-align="center end"
+             ng-if="login.rootEntity.settings.showCopyrightText">
+            {{login.rootEntity.settings.copyrightText}}
+        </div>
+    </div>
+    <div scroll-directive md-whiteframe="3" layout="column" ng-class="{'gt-sm':mediaSize('gt-sm')}"
+         id="login-form-wrapper">
+        <div ng-if="!mediaSize('gt-sm')" id="login-logo" layout="column" layout-align="center center">
+            <img ng-if="login.rootEntity.getLoginLogoUrl()" ng-src="{{login.rootEntity.getLoginLogoUrl()}}"
+                 alt="{{login.rootEntity.getTranslatedAppName()}}">
+            <img ng-if="!login.rootEntity.getLoginLogoUrl()" src="../../assets/images/ebla-logo.png"
+                 alt="{{login.rootEntity.getTranslatedAppName()}}">
+        </div>
+        <div ng-if="!mediaSize('gt-sm')" class="small-h application-data" layout="column" layout-align="center center">
+            <h2>{{login.rootEntity.getTranslatedName()}}</h2>
+            <h4>{{login.rootEntity.getTranslatedAppName()}} - {{ lang.application_description }}</h4>
+        </div>
+        <div layout-align="start center" layout="row">
+
+            <h4 class="login-title" flex>{{lang.login_to_your_account}}</h4>
+            <div>
+                <md-menu-bar id="login-select-language">
+                    <md-menu>
+                        <md-button aria-label="{{lang.select_lang}}" class="md-icon-button" ng-click="$mdMenu.open()">
+                            <md-icon md-svg-icon="dots-vertical"></md-icon>
+                        </md-button>
+                        <md-menu-content id="login-select-language-content" width="3">
+                            <md-menu-item ng-class="{'selected':langService.is(language)}"
+                                          ng-repeat="language in languages track by $index">
+                                <md-button aria-label="{{language.title}}"
+                                           ng-click="langService.setSelectedLanguage(language)">
+                                    <div layout-align="start center" layout="row">
+                                        <div><img ng-src="../../assets/images/{{language.image}}.png"></div>
+                                        <span class="language-title">{{language.title}}</span>
+                                    </div>
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </md-menu-bar>
+            </div>
+        </div>
+        <form name="login_form" enter-submit-directive="login-button" autocomplete="off" novalidate>
+            <div layout="row">
+                <md-input-container flex>
+                    <input name="username" md-autofocus required ng-model="login.credentials.username"
+                           placeholder="{{lang.username}}">
+                    <div ng-messages="login_form.username.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <md-input-container flex>
+                    <input type="password" name="password" required ng-model="login.credentials.password"
+                           placeholder="{{lang.password}}">
+                    <div ng-messages="login_form.password.$error">
+                        <div ng-message="required">{{lang.field_required}}</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="column">
+                <!--<div layout="row">
+                    <md-checkbox ng-disabled="login.loginStatus" aria-label="Remember Me">
+                        {{lang.remember_me}}
+                    </md-checkbox>
+                    <span flex></span>
+                    <a id="forget-password-link" ng-disabled="login.loginStatus" href="#">{{lang.forget_password}}</a>
+                </div>
+                <br/>
+                <br/>-->
+                <md-button id="login-button" ng-disabled="login.loginStatus || login_form.$invalid"
+                           ng-click="login.login($event)"
+                           class="md-raised md-primary">{{lang.login}}
+                </md-button>
+            </div>
+            <br/>
+            <br/>
+            <div ng-if="login.loginStatus" layout="row">
+                <md-progress-linear md-mode="intermediate"></md-progress-linear>
+            </div>
+        </form>
+        <login-announcement-directive ng-hide="mediaSize('gt-sm')"
+                                      announcements="[1,2,3,4,5]"></login-announcement-directive>
+        <div class="help-text" layout="row" layout-align="center end">
+            <a ng-href="{{login.rootEntity.rootEntity.helpUrl}}">{{lang.help}}</a>
+            <span>&nbsp; | &nbsp;</span>
+            <a href="" ng-click="login.showTerms($event)">Terms</a>
+        </div>
+    </div>
+</div>

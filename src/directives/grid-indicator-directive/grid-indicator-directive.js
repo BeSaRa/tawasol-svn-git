@@ -1,10 +1,10 @@
 module.exports = function (app) {
     require('./grid-indicator-directive-style.scss');
-    app.directive('gridIndicatorDirective', function () {
+    app.directive('gridIndicatorDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
-            template: require('./grid-indicator-template.html'),
+            templateUrl: cmsTemplate.getDirective('grid-indicator-template.html'),
             controller: 'gridIndicatorDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,

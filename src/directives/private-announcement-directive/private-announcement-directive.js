@@ -1,9 +1,9 @@
 module.exports = function (app) {
-    app.directive('privateAnnouncementDirective', function () {
+    app.directive('privateAnnouncementDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
-            template: require('./private-announcement-template.html'),
+            templateUrl: cmsTemplate.getDirective('private-announcement-template.html'),
             replace: true,
             bindToController: true,
             controller: 'privateAnnouncementDirectiveCtrl',

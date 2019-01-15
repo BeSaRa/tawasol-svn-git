@@ -6,7 +6,7 @@ module.exports = function (app) {
             restrict: 'E',
             controller: 'userMenuDirectiveCtrl',
             controllerAs: 'userMenu',
-            template: cmsTemplate.getDirective('user-menu-directive/user-menu-template')
+            templateUrl: cmsTemplate.getDirective('user-menu-template')
         }
     });
 

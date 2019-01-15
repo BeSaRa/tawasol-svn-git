@@ -187,7 +187,7 @@ module.exports = function (app) {
                     var heading = params ? params[0].toLowerCase() : 'view_tracking_sheet';
                     var gridType = params ? params[1].toLowerCase() : 'grid';
                     return dialog.showDialog({
-                        template: cmsTemplate.getPopup('view-tracking-sheet'),
+                        templateUrl: cmsTemplate.getPopup('view-tracking-sheet'),
                         controller: 'viewTrackingSheetPopCtrl',
                         targetEvent: $event || false,
                         controllerAs: 'ctrl',
@@ -314,7 +314,7 @@ module.exports = function (app) {
                 viewMergedLinkedDocumentHistoryEvents: function (mergedLinkedDocumentHistory, $event) {
                     self.mergedLinkedDocumentEvents = mergedLinkedDocumentHistory.hasOwnProperty('events') ? mergedLinkedDocumentHistory.events : mergedLinkedDocumentHistory;
                     return dialog.showDialog({
-                        template: cmsTemplate.getPopup('merged-linked-document-history-events'),
+                        templateUrl: cmsTemplate.getPopup('merged-linked-document-history-events'),
                         controller: 'mergedLinkedDocHistoryEventsPopCtrl',
                         targetEvent: $event || false,
                         controllerAs: 'ctrl',
@@ -333,7 +333,7 @@ module.exports = function (app) {
                 viewContentViewHistoryViewers: function (contentViewHistory, $event) {
                     self.contentViewHistoryViewers = contentViewHistory.hasOwnProperty('events') ? contentViewHistory.events : contentViewHistory;
                     return dialog.showDialog({
-                        template: cmsTemplate.getPopup('content-view-history-viewers'),
+                        templateUrl: cmsTemplate.getPopup('content-view-history-viewers'),
                         controller: 'contentViewHistoryViewersPopCtrl',
                         targetEvent: $event || false,
                         controllerAs: 'ctrl',

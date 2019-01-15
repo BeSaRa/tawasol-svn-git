@@ -53,7 +53,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('private-announcement'),
+                        templateUrl: cmsTemplate.getPopup('private-announcement'),
                         controller: 'privateAnnouncementPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -80,7 +80,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('private-announcement'),
+                        templateUrl: cmsTemplate.getPopup('private-announcement'),
                         controller: 'privateAnnouncementPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -145,7 +145,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('exclude-organization'),
+                        templateUrl: cmsTemplate.getPopup('exclude-organization'),
                         controller: 'excludeOrganizationPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

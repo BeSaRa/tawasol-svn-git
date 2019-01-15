@@ -44,7 +44,7 @@ module.exports = function (app) {
 
             var defer = $q.defer();
             return dialog.showDialog({
-                template: cmsTemplate.getPopup('manage-document-tags'),
+                templateUrl: cmsTemplate.getPopup('manage-document-tags'),
                 controller: 'manageDocumentTagsPopCtrl',
                 targetEvent: $event || false,
                 controllerAs: 'ctrl',
@@ -88,7 +88,7 @@ module.exports = function (app) {
             var deferDoc = $q.defer();
             documentClass = _checkDocumentClass(documentClass);
             return dialog.showDialog({
-                template: cmsTemplate.getPopup('manage-document-attachments'),
+                templateUrl: cmsTemplate.getPopup('manage-document-attachments'),
                 controller: 'manageDocumentAttachmentsPopCtrl',
                 targetEvent: $event || false,
                 controllerAs: 'ctrl',
@@ -135,7 +135,7 @@ module.exports = function (app) {
         self.manageDocumentComments = function (vsId, documentSubject, $event) {
             var defer = $q.defer();
             return dialog.showDialog({
-                template: cmsTemplate.getPopup('manage-document-comments'),
+                templateUrl: cmsTemplate.getPopup('manage-document-comments'),
                 controller: 'manageDocumentCommentsPopCtrl',
                 targetEvent: $event || false,
                 controllerAs: 'ctrl',
@@ -186,7 +186,7 @@ module.exports = function (app) {
             documentClass = _checkDocumentClass(documentClass);
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('manage-document-properties'),
+                    templateUrl: cmsTemplate.getPopup('manage-document-properties'),
                     controller: 'manageDocumentPropertiesPopCtrl',
                     targetEvent: $event || false,
                     controllerAs: 'ctrl',
@@ -252,7 +252,7 @@ module.exports = function (app) {
             documentClass = _checkDocumentClass(documentClass);
             var defer = $q.defer();
             return dialog.showDialog({
-                template: cmsTemplate.getPopup('manage-document-entities'),
+                templateUrl: cmsTemplate.getPopup('manage-document-entities'),
                 controller: 'manageDocumentEntitiesPopCtrl',
                 targetEvent: $event || false,
                 controllerAs: 'ctrl',
@@ -292,7 +292,7 @@ module.exports = function (app) {
             documentClass = _checkDocumentClass(documentClass);
             var defer = $q.defer();
             return dialog.showDialog({
-                template: cmsTemplate.getPopup('manage-document-correspondence'),
+                templateUrl: cmsTemplate.getPopup('manage-document-correspondence'),
                 controller: 'manageDocumentCorrespondencePopCtrl',
                 targetEvent: $event || false,
                 controllerAs: 'ctrl',
@@ -336,7 +336,7 @@ module.exports = function (app) {
         self.manageSitesForDocument = function (correspondence, $event) {
             var info = correspondence.getInfo();
             return dialog.showDialog({
-                template: cmsTemplate.getPopup('manage-document-correspondence'),
+                templateUrl: cmsTemplate.getPopup('manage-document-correspondence'),
                 controller: 'manageDocumentCorrespondencePopCtrl',
                 targetEvent: $event || false,
                 controllerAs: 'ctrl',
@@ -357,7 +357,7 @@ module.exports = function (app) {
         self.manageDocumentContent = function (vsId, documentClass, documentSubject, $event) {
             documentClass = _checkDocumentClass(documentClass);
             return dialog.showDialog({
-                template: cmsTemplate.getPopup('manage-document-content'),
+                templateUrl: cmsTemplate.getPopup('manage-document-content'),
                 controller: 'manageDocumentContentPopCtrl',
                 targetEvent: $event || false,
                 controllerAs: 'ctrl',
@@ -386,7 +386,7 @@ module.exports = function (app) {
 
         self.manageDocumentLinkedDocuments = function (vsId, documentClass, documentSubject, $event) {
             return dialog.showDialog({
-                template: cmsTemplate.getPopup('manage-linked-documents'),
+                templateUrl: cmsTemplate.getPopup('manage-linked-documents'),
                 controller: 'manageLinkedDocumentPopCtrl',
                 targetEvent: $event || false,
                 controllerAs: 'ctrl',

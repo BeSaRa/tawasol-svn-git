@@ -111,7 +111,6 @@ module.exports = function (app) {
                                     });
                                 })
                         });
-                    // });
                 });
         });
 
@@ -122,7 +121,6 @@ module.exports = function (app) {
 
             spinnerService.startLoading();
             transition.promise.finally(spinnerService.endLoading);
-
             return tokenService
                 .tokenRefresh()
                 .then(function () {

@@ -1,9 +1,9 @@
 module.exports = function (app) {
-    app.directive('toolbarSearchDirective', function ($window) {
+    app.directive('toolbarSearchDirective', function ($window,cmsTemplate) {
         'ngInject';
         return {
             replace: true,
-            template: require('./toolbar-search-template.html'),
+            templateUrl: cmsTemplate.getDirective('toolbar-search-template.html'),
             bindToController: true,
             controller: 'toolbarSearchDirectiveCtrl',
             controllerAs: 'search',

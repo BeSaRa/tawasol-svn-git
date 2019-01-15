@@ -115,7 +115,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('document-status'),
+                        templateUrl: cmsTemplate.getPopup('document-status'),
                         controller: 'documentStatusPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -132,7 +132,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('document-status'),
+                        templateUrl: cmsTemplate.getPopup('document-status'),
                         controller: 'documentStatusPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

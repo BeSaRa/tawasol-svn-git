@@ -30,7 +30,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('broadcast'),
+                        templateUrl: cmsTemplate.getPopup('broadcast'),
                         controller: 'broadcastPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

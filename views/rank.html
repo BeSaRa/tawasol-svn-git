@@ -1,0 +1,101 @@
+<!-- start of view -->
+<div background-directive="tall" flex class="page-content">
+    <div layout="column" class="content">
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_ranks}}</span>
+            <md-button ng-click="ctrl.openAddRankDialog($event)" class="md-icon-button"
+                       tooltip="{{lang.add}}">
+                <md-icon md-svg-icon="plus"></md-icon>
+            </md-button>
+            <md-button ng-click="ctrl.reloadRanks()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div><!-- page-header -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select="true"
+                                       multiple="true"
+                                       ng-model="ctrl.selectedRanks"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                    <tr md-row>
+                                        <th colspan="6" class="table-selector-header"
+                                            ng-if="ctrl.selectedRanks.length" md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedRanks.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
+                                                <table-status-directive
+                                                        when-close="ctrl.changeStatusBulkRanks"></table-status-directive>
+                                                <md-button class="md-icon-button"
+                                                           ng-click="ctrl.removeBulkRanks()">
+                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRanks.length" md-column md-order-by="arName"><span>{{lang.arabic_name}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRanks.length" md-column md-order-by="enName"><span>{{lang.english_name}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRanks.length" md-column md-order-by="status"><span>{{lang.status}}</span>
+                                        </th>
+                                        <!-- <th ng-if="!ctrl.selectedRanks.length" md-column md-order-by=""><span>{{lang.label_document_class}}</span>-->
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRanks.length" md-column md-order-by="itemOrder"><span>{{lang.item_order}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedRanks.length" md-column md-order-by=""><span>{{lang.actions}}</span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-select="rank" md-row
+                                        ng-repeat="rank in ctrl.ranks | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                        <td md-cell>{{rank.arName}}</td>
+                                        <td md-cell>{{rank.enName}}</td>
+                                        <td md-cell>
+                                            <md-switch aria-label="{{lang.status}}"
+                                                       ng-model="rank.status"
+                                                       ng-change="ctrl.changeStatusRank(rank)"
+                                                       title="{{rank.getTranslatedStatus()}}"></md-switch>
+                                        </td>
+                                        <!-- <td md-cell>{{rank.lookupStrKey}}</td>-->
+                                        <td md-cell>{{rank.itemOrder}}</td>
+                                        <td md-cell>
+                                            <div flex layout="row" layout-align="start center">
+                                                <md-button class="md-icon-button"
+                                                           ng-click="ctrl.openEditRankDialog(rank, $event)"
+                                                           title="{{lang.edit}}">
+                                                    <md-icon md-svg-icon="pencil"></md-icon>
+                                                </md-button>
+                                                <md-button class="md-icon-button" ng-if="rank.lookupKey"
+                                                           ng-click="ctrl.removeRank(rank)"
+                                                           title="{{lang.delete}}">
+                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                </md-button>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{(ctrl.ranks | filter:ctrl.searchModel).length}}" md-page-select
+                                    md-on-paginate="ctrl.grid.pagingCallback"></md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div><!-- page-content-->
+    </div>
+</div>
+<!-- end of view -->

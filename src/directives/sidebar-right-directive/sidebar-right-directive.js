@@ -1,12 +1,12 @@
 module.exports = function (app) {
-    app.directive('sidebarRightDirective', function () {
+    app.directive('sidebarRightDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
             replace: true,
             controller: 'sidebarRightDirectiveCtrl',
             controllerAs: 'ctrl',
-            template: require('./sidebar-right-template.html')
+            templateUrl: cmsTemplate.getDirective('sidebar-right-template.html')
         }
     })
 };

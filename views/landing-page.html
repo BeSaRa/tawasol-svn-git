@@ -1,0 +1,118 @@
+<div background-directive="short" flex id="appender" class="page-content">
+    <div layout="column" class="content">
+        <!-- page-header -->
+        <div layout="row" layout-align="start center" class="page-header padding-header nmb small">
+            <div ng-if="ctrl.employeeService.hasPermissionTo('LANDING_PAGE')">
+                <md-input-container id="layoutInputContainer" ng-class="{'disabled-container':ctrl.editMode}" flex
+                                    ng-if="!ctrl.currentEdit">
+                    <label for="layout">{{lang.dashboard_current_layout}}</label>
+                    <md-select id="layout"
+                               ng-model="ctrl.layout"
+                               ng-disabled="ctrl.editMode"
+                               ng-change="ctrl.onCurrentLayoutChanged()">
+                        <md-option ng-value="layout"
+                                   ng-repeat="layout in ctrl.layouts">{{layout.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container flex ng-if="ctrl.currentEdit">
+                    <label for="layout">{{lang.dashboard_current_layout}}</label>
+                    <md-select ng-model="ctrl.layout">
+                        <md-option ng-value="layout"
+                                   ng-repeat="layout in ctrl.layouts">{{layout.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <md-button ng-disabled="ctrl.editMode" class="md-icon-button"
+                           ng-click="ctrl.displayEditLayoutPopup($event)">
+                    <md-icon md-svg-icon="pencil"></md-icon>
+                </md-button>
+                <md-button ng-disabled="ctrl.editMode" class="md-icon-button"
+                           ng-click="ctrl.displayDeleteLayoutPopup($event)">
+                    <md-icon md-svg-icon="delete"></md-icon>
+                </md-button>
+            </div>
+            <div flex></div>
+            <md-button tooltip="{{lang.dashboard_add_layout}}" ng-disabled="ctrl.editMode" class="md-icon-button"
+                       ng-if="ctrl.employeeService.hasPermissionTo('LANDING_PAGE')"
+                       ng-click="ctrl.displayAddLayoutPopup($event)">
+                <md-icon md-svg-icon="plus"></md-icon>
+            </md-button>
+            <md-button ng-if="ctrl.layout && ctrl.employeeService.hasPermissionTo('LANDING_PAGE')"
+                       ng-click="ctrl.toggleEditMode()"
+                       tooltip="{{ctrl.editMode ? lang.get('dashboard_view_mode') : lang.get('dashboard_edit_mode')}}"
+                       class="md-icon-button">
+                <md-icon md-svg-icon="{{ctrl.editMode ? 'view-dashboard':'widgets'}}"></md-icon>
+            </md-button>
+        </div>
+        <div layout="column" flex>
+            <div class="padding-bottom" flex scroll-directive>
+                <div layout-sortable
+                     layout-droppable
+                     ng-class="{'layout-edit-mode':ctrl.editMode,'layout-xs':mediaSize('xs')}" layout="column"
+                     ng-if="(!!ctrl.layout || ctrl.layouts.length)"
+                     id="layout-container"
+                     class="page-padding-15 layout-root-builder">
+                </div>
+                <div layout="row" layout-align="center center"
+                     ng-if="!ctrl.layout && !ctrl.layouts.length && ctrl.employeeService.hasPermissionTo('LANDING_PAGE')">
+                    <div layout-align="column">
+                        <div flex layout="row" layout-align="center center">
+                            <md-icon class="landing-page-not-found" md-svg-icon="view-dashboard"></md-icon>
+                        </div>
+                        <div flex layout="row" layout-align="center center">{{lang.dashboard_no_layouts_to_display}}
+                        </div>
+                        <br>
+                        <div flex layout="row" layout-align="center center">
+                            <md-button ng-click="ctrl.displayAddLayoutPopup($event)" class="md-raised md-primary">
+                                {{lang.dashboard_add_layout}}
+                            </md-button>
+                        </div>
+                        <br>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-class="{'hide-widgets':!ctrl.editMode}" id="element-container" class="z-index hide-widgets top-left">
+        <div id="align-arrow">
+            <md-button ng-click="ctrl.changeAlign('left')" class="md-icon-button layout-builder-left-arrow">
+                <md-icon md-svg-icon="arrow-left-drop-circle"></md-icon>
+            </md-button>
+            <!--<md-button ng-click="ctrl.changeAlign('top')" class="md-icon-button">
+                <md-icon md-svg-icon="arrow-up-drop-circle"></md-icon>
+            </md-button>
+            <md-button ng-click="ctrl.changeAlign('bottom')" class="md-icon-button">
+                <md-icon md-svg-icon="arrow-down-drop-circle"></md-icon>
+            </md-button>-->
+            <md-button ng-click="ctrl.changeAlign('right')" class="md-icon-button layout-builder-left-arrow">
+                <md-icon md-svg-icon="arrow-right-drop-circle"></md-icon>
+            </md-button>
+        </div>
+        <div id="inner-container">
+            <md-tabs>
+                <md-tab label="{{lang.dashboard_layout_elements}}">
+                    <md-content>
+                        <div class="p20">
+                            <div id="default-widgets-container">
+
+                            </div>
+                        </div>
+                    </md-content>
+                </md-tab>
+                <md-tab label="{{lang.dashboard_layout_widgets}}">
+                    <md-content>
+                        <div class="p20">
+                            <div layout="column" id="widgets-container">
+
+                            </div>
+                        </div>
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </div>
+    </div>
+</div>
+
+

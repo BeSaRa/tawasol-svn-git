@@ -1,10 +1,10 @@
 module.exports = function (app) {
-    app.directive('manageCorrespondenceSitesSimpleDirective', function () {
+    app.directive('manageCorrespondenceSitesSimpleDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
-            // template: require('./manage-correspondence-sites-simple-template.html'),
-            template: require('./manage-correspondence-sites-simple-add-template.html'),
+            // templateUrl: cmsTemplate.getDirective('manage-correspondence-sites-simple-template.html'),
+            templateUrl: cmsTemplate.getDirective('manage-correspondence-sites-simple-add-template.html'),
             controller: 'manageCorrespondenceSitesSimpleDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,

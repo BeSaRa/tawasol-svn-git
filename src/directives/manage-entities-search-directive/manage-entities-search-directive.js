@@ -1,12 +1,12 @@
 module.exports = function (app) {
     require('./manage-entities-search-style.scss');
-    app.directive('manageEntitiesSearchDirective', function () {
+    app.directive('manageEntitiesSearchDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
             controller: 'manageEntitiesSearchDirectiveCtrl',
             controllerAs: 'ctrl',
-            template: require('./manage-entities-search-template.html'),
+            templateUrl: cmsTemplate.getDirective('manage-entities-search-template.html'),
             bindToController: true,
             scope: {
                 linkedEntity: '=',

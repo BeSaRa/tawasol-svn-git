@@ -513,7 +513,7 @@ module.exports = function (app) {
             editLocalization: function (local, $event) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('localization'),
+                        templateUrl: cmsTemplate.getPopup('localization'),
                         controller: 'localizationPopCtrl',
                         controllerAs: 'ctrl',
                         targetEvent: $event,
@@ -527,7 +527,7 @@ module.exports = function (app) {
                 addKeyOpend = true;
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('localization'),
+                        templateUrl: cmsTemplate.getPopup('localization'),
                         controller: 'localizationPopCtrl',
                         controllerAs: 'ctrl',
                         targetEvent: $event,

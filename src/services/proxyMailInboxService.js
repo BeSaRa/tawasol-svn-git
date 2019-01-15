@@ -187,7 +187,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('signature'),
+                        templateUrl: cmsTemplate.getPopup('signature'),
                         controller: 'signaturePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

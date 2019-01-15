@@ -33,7 +33,7 @@ module.exports = function (app) {
             return dialog
                 .showDialog({
                     targetEvent: $event,
-                    template: cmsTemplate.getPopup('g2g-delivery-report'),
+                    templateUrl: cmsTemplate.getPopup('g2g-delivery-report'),
                     controller: 'g2gDeliveryReportPopCtrl',
                     controllerAs: 'ctrl',
                     bindToController: true,

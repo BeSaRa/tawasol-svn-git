@@ -73,9 +73,9 @@ module.exports = function (app) {
                 result = result.data.rs;
                 self.setLastLoginOrganizationId(organization); // after login success
                 lookupService.setLookups(result.globalLookup); // set global lookups
-                tokenService.setToken(result.token);
                 employeeService
                     .setEmployee(result);
+                tokenService.setToken(result.token);
                 return result;
             });
         };

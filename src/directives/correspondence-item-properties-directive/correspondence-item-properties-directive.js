@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('correspondenceItemPropertiesDirective', function () {
+    app.directive('correspondenceItemPropertiesDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
@@ -29,7 +29,7 @@ module.exports = function (app) {
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            template: require('./correspondence-item-properties-template.html'),
+            templateUrl: cmsTemplate.getDirective('correspondence-item-properties-template.html'),
             scope: {
                 sectionTitle: '@',
                 item: '='

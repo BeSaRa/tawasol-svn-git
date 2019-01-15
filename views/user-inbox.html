@@ -1,0 +1,295 @@
+<!-- start of view -->
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <!--<md-button ng-click="ctrl.openSidebarFilter()" class="md-icon-button" tooltip="{{lang.user_filters}}">
+                <md-icon md-svg-icon="file-tree"></md-icon>
+            </md-button>-->
+
+            <!-- Hide it unless confirmed again to show -->
+            <md-button layout="row" ng-if="false" class="md-icon-button list-button" ng-click="ctrl.openSidebarFilter()"
+                       tooltip="{{lang.user_filters}}">
+                <md-icon md-svg-icon="file-tree" id="list-icon"></md-icon>
+                <span class="list-counter">{{ctrl.userFilters.length}}</span>
+            </md-button>
+            <span>{{lang.menu_item_user_inbox}}</span>
+            <md-button ng-click="ctrl.reloadUserInboxes()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <div>
+                <div layout="row" tooltip="{{ctrl.showStarred ? lang.hide_starred: lang.show_starred}}"
+                     layout-align="start center">
+                    <md-checkbox class="m0" aria-label="show/hide starred grid" ng-model="ctrl.showStarred"
+                                 ng-change="ctrl.toggleStarredTab($event)"></md-checkbox>
+                </div>
+            </div>
+            <md-button ng-click="ctrl.userFilterCreate($event)"
+                       aria-label="{{lang.create_filter}}"
+                       class="md-icon-button" tooltip="{{lang.create_filter}}">
+                <md-icon md-svg-icon="add-filter"></md-icon>
+            </md-button>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <!-- User filters -->
+
+            <!-- Hide it unless confirmed again to show -->
+            <!--<div class="z-index-4" ng-if="false">
+                <md-sidenav id="sidebar-folder-structure" md-is-open="ctrl.sidebarFilter"
+                            ng-class="{'md-sidenav-right':lang.current === 'ar'}">
+                    <div class="p20 first-folder-list" layout="column">
+                        <p>{{lang.user_filters}}</p>
+                        <folders-tree-structure-directive icon="filter-variant" disable-selected="0"
+                                                          highlight-selected="ctrl.selectedFilter"
+                                                          click-callback="ctrl.getFolderContent"
+                                                          folders="ctrl.userFilters"></folders-tree-structure-directive>
+                    </div>
+                </md-sidenav>
+            </div>-->
+
+            <!-- Grid/Magazine view -->
+            <div scroll-directive>
+                <div class="page-padding">
+                    <!-- Grid View -->
+                    <md-card ng-if="ctrl.employeeService.getEmployee().viewInboxAsGrid" md-whiteframe="3"
+                             layout="column" class="card-overlay">
+                        <div>
+                            <md-tabs md-selected="ctrl.selectedTab" class="filter-tabs" md-dynamic-height>
+                                <md-tab md-on-select="ctrl.resetSelectedFilter(0)" label="{{lang.inbox}}">
+                                    <md-content class="white-bg">
+                                        <!-- Inbox Grid -->
+                                        <work-item-inbox-directive
+                                                grid="ctrl.grid"
+                                                change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
+                                                work-items="ctrl.userInboxes"
+                                                search-model="ctrl.searchModel"
+                                                view-document="ctrl.openNewViewDocument"
+                                                grid-actions="ctrl.gridActions"
+                                                change-user-inbox-star="ctrl.changeUserInboxStar"
+                                                forward-bulk="ctrl.forwardBulk"
+                                                add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
+                                                terminate-user-inbox-bulk="ctrl.terminateBulk"
+                                                mark-as-read-unread="ctrl.markAsReadUnread"
+                                                check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
+                                                selected-work-items="ctrl.selectedUserInboxes"
+                                                sorting-callback="ctrl.getSortedDataForInbox">
+                                        </work-item-inbox-directive>
+                                    </md-content>
+                                </md-tab>
+                                <md-tab md-on-select="ctrl.resetSelectedFilter(1)" label="{{lang.starred_tab}}"
+                                        ng-if="ctrl.showStarred">
+                                    <md-content class="white-bg">
+                                        <!-- Starred Grid -->
+                                        <work-item-inbox-directive
+                                                grid="ctrl.starredGrid"
+                                                search-model="ctrl.searchModel"
+                                                change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
+                                                work-items="ctrl.starredUserInboxes"
+                                                view-document="ctrl.openNewViewDocument"
+                                                grid-actions="ctrl.gridActions"
+                                                change-user-inbox-star="ctrl.changeUserInboxStar"
+                                                forward-bulk="ctrl.forwardBulk"
+                                                add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
+                                                terminate-user-inbox-bulk="ctrl.terminateBulk"
+                                                mark-as-read-unread="ctrl.markAsReadUnread"
+                                                check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
+                                                selected-work-items="ctrl.selectedUserInboxes"
+                                                sorting-callback="ctrl.getSortedDataForStarred">
+                                        </work-item-inbox-directive>
+                                    </md-content>
+                                </md-tab>
+                                <md-tab ng-repeat="filter in ctrl.userFilters"
+                                        md-on-select="ctrl.selectFilter(filter, $index)">
+                                    <md-tab-label>
+                                        <div layout="row" layout-align="start center">
+                                            <div class="tab-title">{{filter.getTranslatedName()}}</div>
+                                            <div class="filter-absolute">
+                                                <md-menu-bar class="filter-menu">
+                                                    <md-menu>
+                                                        <md-button ng-click="$mdMenu.open()"
+                                                                   class="md-icon-button filter-button">
+                                                            <md-icon md-svg-icon="dots-vertical"></md-icon>
+                                                        </md-button>
+                                                        <md-menu-content width="3">
+                                                            <md-menu-item>
+                                                                <md-button
+                                                                        ng-click="ctrl.userFilterEdit(filter , $index , $event)">
+                                                                    <div layout="row">
+                                                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                                                        <span flex>{{lang.edit_filter}}</span>
+                                                                    </div>
+                                                                </md-button>
+                                                            </md-menu-item>
+                                                            <md-menu-item>
+                                                                <md-button
+                                                                        ng-click="ctrl.userFilterDelete(filter , $index ,  $event)">
+                                                                    <div layout="row">
+                                                                        <md-icon md-svg-icon="delete"></md-icon>
+                                                                        <span flex>{{lang.delete_filter}}</span>
+                                                                    </div>
+                                                                </md-button>
+                                                            </md-menu-item>
+                                                        </md-menu-content>
+                                                    </md-menu>
+                                                </md-menu-bar>
+                                            </div>
+                                        </div>
+                                    </md-tab-label>
+                                    <md-tab-body>
+                                        <md-content class="white-bg">
+                                            <!-- Filter Grids -->
+                                            <work-item-inbox-directive
+                                                    grid="ctrl.filterGrid[$index]"
+                                                    change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
+                                                    work-items="ctrl.workItemsFilters[$index]"
+                                                    search-model="ctrl.searchModel"
+                                                    view-document="ctrl.openNewViewDocument"
+                                                    grid-actions="ctrl.gridActions"
+                                                    change-user-inbox-star="ctrl.changeUserInboxStar"
+                                                    forward-bulk="ctrl.forwardBulk"
+                                                    add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
+                                                    terminate-user-inbox-bulk="ctrl.terminateBulk"
+                                                    mark-as-read-unread="ctrl.markAsReadUnread"
+                                                    check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
+                                                    selected-work-items="ctrl.selectedUserInboxes"
+                                                    sorting-callback="ctrl.getSortedDataForFilter">
+                                            </work-item-inbox-directive>
+                                        </md-content>
+                                    </md-tab-body>
+                                </md-tab>
+                            </md-tabs>
+                        </div>
+                    </md-card>
+                    <!-- Magazine View -->
+                    <md-tabs ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid" md-selected="ctrl.selectedTab"
+                             class="z-index-3 filter-tabs"
+                             md-dynamic-height>
+                        <md-tab md-on-select="ctrl.resetSelectedFilter(0)" label="{{lang.inbox}}">
+                            <md-content class="transparent-bg">
+                                <!-- Inbox Magazine -->
+                                <magazine-layout-directive
+                                        mark-as-read-unread="ctrl.markAsReadUnread"
+                                        view-document="ctrl.openNewViewDocument"
+                                        change-user-inbox-star="ctrl.changeUserInboxStar"
+                                        search-model="ctrl.searchModel"
+                                        grid-actions="ctrl.gridActions"
+                                        quick-actions="ctrl.magazineQuickActions"
+                                        limit-options="ctrl.grid.limitOptions"
+                                        page-limit="ctrl.grid.limit"
+                                        page="ctrl.grid.page"
+                                        ng-if="!ctrl.employeeService.getEmployee().viewInboxAsGrid"
+                                        forward-bulk="ctrl.forwardBulk"
+                                        check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
+                                        change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
+                                        add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
+                                        terminate-user-inbox-bulk="ctrl.terminateBulk"
+                                        allow-selection="true"
+                                        selected-work-items="ctrl.selectedUserInboxes"
+                                        work-items="ctrl.userInboxes"
+                                        sorting-callback="ctrl.getSortedDataForInbox"
+                                        sort-order="ctrl.grid.order">
+                                </magazine-layout-directive>
+                            </md-content>
+                        </md-tab>
+                        <md-tab md-on-select="ctrl.resetSelectedFilter(1)" label="{{lang.starred_tab}}"
+                                ng-if="ctrl.showStarred">
+                            <md-content class="transparent-bg">
+                                <!-- Starred Magazine -->
+                                <magazine-layout-directive
+                                        mark-as-read-unread="ctrl.markAsReadUnread"
+                                        view-document="ctrl.openNewViewDocument"
+                                        change-user-inbox-star="ctrl.changeUserInboxStar"
+                                        search-model="ctrl.searchModel"
+                                        grid-actions="ctrl.gridActions"
+                                        quick-actions="ctrl.magazineQuickActions"
+                                        limit-options="ctrl.starredGrid.limitOptions"
+                                        page-limit="ctrl.starredGrid.limit"
+                                        page="ctrl.starredGrid.page"
+                                        forward-bulk="ctrl.forwardBulk"
+                                        check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
+                                        change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
+                                        add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
+                                        terminate-user-inbox-bulk="ctrl.terminateBulk"
+                                        allow-selection="true"
+                                        selected-work-items="ctrl.selectedUserInboxes"
+                                        work-items="ctrl.starredUserInboxes"
+                                        sorting-callback="ctrl.getSortedDataForStarred"
+                                        sort-order="ctrl.starredGrid.order">
+                                </magazine-layout-directive>
+                            </md-content>
+                        </md-tab>
+                        <md-tab ng-repeat="filter in ctrl.userFilters"
+                                md-on-select="ctrl.selectFilter(filter, $index)">
+                            <md-tab-label>
+                                <div layout="row" layout-align="start center">
+                                    <div class="tab-title">{{filter.getTranslatedName()}}</div>
+                                    <div class="filter-absolute">
+                                        <md-menu-bar class="filter-menu">
+                                            <md-menu>
+                                                <md-button ng-click="$mdMenu.open()"
+                                                           class="md-icon-button filter-button">
+                                                    <md-icon md-svg-icon="dots-vertical"></md-icon>
+                                                </md-button>
+                                                <md-menu-content width="3">
+                                                    <md-menu-item>
+                                                        <md-button
+                                                                ng-click="ctrl.userFilterEdit(filter , $index , $event)">
+                                                            <div layout="row">
+                                                                <md-icon md-svg-icon="pencil"></md-icon>
+                                                                <span flex>{{lang.edit_filter}}</span>
+                                                            </div>
+                                                        </md-button>
+                                                    </md-menu-item>
+                                                    <md-menu-item>
+                                                        <md-button
+                                                                ng-click="ctrl.userFilterDelete(filter , $index ,  $event)">
+                                                            <div layout="row">
+                                                                <md-icon md-svg-icon="delete"></md-icon>
+                                                                <span flex>{{lang.delete_filter}}</span>
+                                                            </div>
+                                                        </md-button>
+                                                    </md-menu-item>
+                                                </md-menu-content>
+                                            </md-menu>
+                                        </md-menu-bar>
+                                    </div>
+                                </div>
+                            </md-tab-label>
+                            <md-tab-body>
+                                <md-content class="transparent-bg">
+                                    <!-- Filter Magazines -->
+                                    <magazine-layout-directive
+                                            mark-as-read-unread="ctrl.markAsReadUnread"
+                                            view-document="ctrl.openNewViewDocument"
+                                            change-user-inbox-star="ctrl.changeUserInboxStar"
+                                            search-model="ctrl.searchModel"
+                                            grid-actions="ctrl.gridActions"
+                                            quick-actions="ctrl.magazineQuickActions"
+                                            limit-options="ctrl.filterGrid[$index].limitOptions"
+                                            page-limit="ctrl.filterGrid[$index].limit"
+                                            page="ctrl.filterGrid[$index].page"
+                                            forward-bulk="ctrl.forwardBulk"
+                                            check-if-forward-bulk-available="ctrl.checkIfForwardBulkAvailable"
+                                            change-user-inbox-star-bulk="ctrl.changeUserInboxStarBulk"
+                                            add-to-folder-user-inbox-bulk="ctrl.addToFolderUserInboxBulk"
+                                            terminate-user-inbox-bulk="ctrl.terminateBulk"
+                                            allow-selection="true"
+                                            selected-work-items="ctrl.selectedUserInboxes"
+                                            work-items="ctrl.workItemsFilters[$index]"
+                                            sorting-callback="ctrl.getSortedDataForFilter"
+                                            sort-order="ctrl.filterGrid[$index].order"></magazine-layout-directive>
+                                </md-content>
+                            </md-tab-body>
+                        </md-tab>
+                    </md-tabs>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>
+<!-- end of view -->

@@ -1,0 +1,38 @@
+<span ng-if="ctrl.recordType.toLowerCase() === 'workitem' && ctrl.isShowStar()">
+    <!-- Starred Enabled -->
+    <md-icon class="star-yellow cursor-pointer"
+             aria-label="{{lang.starred}}"
+             ng-if="ctrl.record.generalStepElm.starred
+                        && (!ctrl.selectedRecords.length || (ctrl.selectedRecords.length===1
+                            && ctrl.selectedRecords[0].generalStepElm.workObjectNumber === ctrl.record.generalStepElm.workObjectNumber))"
+             md-svg-icon="star"
+             ng-click="ctrl.changeStarUnstar(ctrl.record, $event)"
+    ></md-icon>
+    <!-- Starred Disabled -->
+    <md-icon class="star-yellow disabled"
+             aria-label="{{lang.starred}}"
+             ng-if="ctrl.record.generalStepElm.starred
+                     && ((ctrl.selectedRecords.length === 1
+                     && ctrl.selectedRecords[0].generalStepElm.workObjectNumber != ctrl.record.generalStepElm.workObjectNumber)
+                        || ctrl.selectedRecords.length > 1)"
+             md-svg-icon="star"
+    ></md-icon>
+    <!-- Un-starred Enabled -->
+    <md-icon class="star-yellow cursor-pointer"
+             aria-label="{{lang.starred}}"
+             ng-if="!ctrl.record.generalStepElm.starred
+                        && (!ctrl.selectedRecords.length || (ctrl.selectedRecords.length===1
+                            && ctrl.selectedRecords[0].generalStepElm.workObjectNumber === ctrl.record.generalStepElm.workObjectNumber))"
+             md-svg-icon="star-outline"
+             ng-click="ctrl.changeStarUnstar(ctrl.record, $event)"
+    ></md-icon>
+    <!-- Un-starred Disabled -->
+    <md-icon class="star-yellow disabled"
+             aria-label="{{lang.starred}}"
+             ng-if="!ctrl.record.generalStepElm.starred
+                     && ((ctrl.selectedRecords.length === 1
+                     && ctrl.selectedRecords[0].generalStepElm.workObjectNumber != ctrl.record.generalStepElm.workObjectNumber)
+                        || ctrl.selectedRecords.length > 1)"
+             md-svg-icon="star-outline"
+    ></md-icon>
+</span>

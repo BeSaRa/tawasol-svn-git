@@ -48,7 +48,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('scan-incoming'),
+                        templateUrl: cmsTemplate.getPopup('scan-incoming'),
                         controller: 'scanIncomingPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -70,7 +70,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('scan-incoming'),
+                        templateUrl: cmsTemplate.getPopup('scan-incoming'),
                         controller: 'scanIncomingPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

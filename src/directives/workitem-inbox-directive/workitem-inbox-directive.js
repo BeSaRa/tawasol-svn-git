@@ -1,12 +1,12 @@
 module.exports = function (app) {
-    app.directive('workItemInboxDirective', function () {
+    app.directive('workItemInboxDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
             controller: 'workItemInboxDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,
-            template: require('./work-item-inbox-template.html'),
+            templateUrl: cmsTemplate.getDirective('work-item-inbox-template.html'),
             scope: {
                 selectedWorkItems: '=',
                 workItems: '=',

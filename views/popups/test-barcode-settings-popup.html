@@ -1,0 +1,25 @@
+<md-dialog class="dialog-extend"
+           ng-attr-aria-label="{{lang.barcode_sample}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.barcode_sample}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <div class="p20" layout="column">
+                <div id="barcode-area" layout="row">
+                    <span flex></span>
+                    <img ng-src="{{ctrl.barcode}}">
+                    <span flex></span>
+                </div>
+                <div layout="row">
+                    <span flex></span>
+                    <md-button ng-click="ctrl.closeBarcodePopup($event)" class="md-raised">
+                        {{lang.close}}
+                    </md-button>
+                    <span flex></span>
+                </div>
+            </div>
+        </md-content>
+    </div>
+</md-dialog>

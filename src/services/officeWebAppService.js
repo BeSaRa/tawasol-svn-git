@@ -32,7 +32,7 @@ module.exports = function (app) {
          */
         self.displayTemplates = function (templates, $event) {
             return dialog.showDialog({
-                template: cmsTemplate.getPopup('prepare-template'),
+                templateUrl: cmsTemplate.getPopup('prepare-template'),
                 controller: 'prepareTemplatePopCtrl',
                 controllerAs: 'ctrl',
                 bindToController: true,

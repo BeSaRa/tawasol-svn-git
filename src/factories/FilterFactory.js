@@ -43,7 +43,7 @@ module.exports = function (app) {
                 var self = this;
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('filter-service'),
+                        templateUrl: cmsTemplate.getPopup('filter-service'),
                         controller: self.filterController,
                         bindToController: true,
                         controllerAs: 'Filter',

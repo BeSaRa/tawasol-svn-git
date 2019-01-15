@@ -1,12 +1,12 @@
 module.exports = function (app) {
-    app.directive('managePropertiesSimpleDirective', function () {
+    app.directive('managePropertiesSimpleDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
             controller: 'managePropertiesSimpleDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,
-            template: require('./manage-properties-simple-template.html'),
+            templateUrl: cmsTemplate.getDirective('manage-properties-simple-template.html'),
             scope: {
                 document: '=',
                 organizations: '=?',

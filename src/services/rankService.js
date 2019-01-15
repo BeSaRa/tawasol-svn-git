@@ -42,7 +42,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('rank'),
+                        templateUrl: cmsTemplate.getPopup('rank'),
                         controller: 'rankPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -59,7 +59,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('rank'),
+                        templateUrl: cmsTemplate.getPopup('rank'),
                         controller: 'rankPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

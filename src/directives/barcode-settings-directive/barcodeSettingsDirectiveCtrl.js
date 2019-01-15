@@ -201,7 +201,7 @@ module.exports = function (app) {
                         return dialog
                             .showDialog({
                                 targetEvent: $event,
-                                template: cmsTemplate.getPopup('test-barcode-settings'),
+                                templateUrl: cmsTemplate.getPopup('test-barcode-settings'),
                                 controller: function () {
                                     'ngInject';
                                     this.closeBarcodePopup = function ($event) {

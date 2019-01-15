@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('manageTagsDirective', function () {
+    app.directive('manageTagsDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
@@ -8,7 +8,7 @@ module.exports = function (app) {
                 tags: '=',
                 disableEverything: '=?'
             },
-            template: require('./manage-tags-template.html'),
+            templateUrl: cmsTemplate.getDirective('manage-tags-template.html'),
             controller: 'manageTagsDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true

@@ -1,0 +1,309 @@
+<md-dialog class="dialog-extend">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20" ng-if="!ctrl.editMode">{{ lang.create_filter }}</span>
+            <span class="p20" ng-if="ctrl.editMode">{{ ctrl.model.getNames() }}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="userFilter" autocomplete="off">
+                <md-tabs md-dynamic-height>
+                    <md-tab label="{{lang.basic_info}}">
+                        <md-content>
+                            <div layout="row" class="p20">
+                                <!-- Arabic Name-->
+                                <md-input-container flex>
+                                    <label for="arName">{{lang.arabic_name}}</label>
+                                    <input name="arName" id="arName" ng-required="!ctrl.filter.enName" minlength="1"
+                                           ng-model="ctrl.filter.arName">
+                                    <div ng-messages="userFilter.arName.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                        <div ng-message="minlength">{{lang.short}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length:10})}}</div>
+                                    </div>
+                                </md-input-container>
+                                <!-- English Name -->
+                                <md-input-container flex>
+                                    <label for="enName">{{lang.english_name}}</label>
+                                    <input name="enName" id="enName" ng-required="!ctrl.filter.arName" minlength="1"
+                                           ng-model="ctrl.filter.enName">
+                                    <div ng-messages="userFilter.enName.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                        <div ng-message="minlength">{{lang.short}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length:10})}}</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout="row" class="p20">
+                                <!-- Item order -->
+                                <md-input-container flex>
+                                    <label for="sortOptionId">{{lang.item_order}}</label>
+                                    <input name="sortOptionId" id="sortOptionId" required
+                                           ng-model="ctrl.filter.sortOptionId" min="0"
+                                           min-max-number-directive
+                                           maxlength="5" custom-validate-directive="number">
+                                    <div ng-messages="userFilter.sortOptionId.$error">
+                                        <div ng-message="required">{{lang.field_required}}</div>
+                                        <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
+                                        <div ng-message="min">{{lang.min_number.change({number:0})}}</div>
+                                        <div ng-message="number">{{lang.numberonly}}</div>
+                                    </div>
+                                </md-input-container>
+                                <!-- Status -->
+                                <div flex class="p20">
+                                    <md-switch ng-model="ctrl.filter.status">
+                                        <label>{{lang.status}} : {{ctrl.filter.getTranslatedStatus()}}</label>
+                                    </md-switch>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="{{lang.search_criteria}}">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <div layout="row">
+                                    <!-- Document Type -->
+                                    <md-input-container flex>
+                                        <label for="docType">{{ctrl.lookupNames['key_2'].getTranslatedName()}}</label>
+                                        <md-select name="docType" id="docType"
+                                                   ng-model="ctrl.filter.ui.key_2.value">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option ng-value="docType.lookupKey"
+                                                       ng-repeat="docType in ctrl.documentTypes">
+                                                {{docType.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <!-- Document Subject -->
+                                    <md-input-container flex>
+                                        <label for="docSubject">{{ctrl.lookupNames['key_3'].getTranslatedName()}}</label>
+                                        <input id="docSubject" name="docSubject" ng-model="ctrl.filter.ui.key_3.value">
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!-- Security Level -->
+                                    <md-input-container flex>
+                                        <label for="securityLevel">{{ctrl.lookupNames['key_14'].getTranslatedName()}}</label>
+                                        <md-select name="securityLevel" id="securityLevel"
+                                                   ng-model="ctrl.filter.ui.key_14.value">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option ng-value="securityLevel.lookupKey"
+                                                       ng-repeat="securityLevel in ctrl.securityLevels">
+                                                {{securityLevel.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <!-- Priority Level -->
+                                    <md-input-container flex>
+                                        <label for="priorityLevel">{{ctrl.lookupNames['key_15'].getTranslatedName()}}</label>
+                                        <md-select name="priorityLevel" id="priorityLevel"
+                                                   ng-model="ctrl.filter.ui.key_15.value">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option ng-value="priorityLevel.lookupKey"
+                                                       ng-repeat="priorityLevel in ctrl.priorityLevels">
+                                                {{priorityLevel.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!-- Sender -->
+                                    <md-input-container flex>
+                                        <label for="sender">{{ctrl.lookupNames['key_9'].getTranslatedName()}}</label>
+                                        <md-select name="sender" id="sender"
+                                                   ng-model="ctrl.filter.ui.key_9.value">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option ng-value="sender.domainName" ng-repeat="sender in ctrl.senders">
+                                                {{sender.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <!-- Action -->
+                                    <md-input-container flex>
+                                        <label for="action">{{ctrl.lookupNames['key_7'].getTranslatedName()}}</label>
+                                        <md-select name="action" id="action"
+                                                   ng-model="ctrl.filter.ui.key_7.value">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option ng-value="action.id" ng-repeat="action in ctrl.actions">
+                                                {{action.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <!-- Received Date -->
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="action">{{lang.user_inbox_filter_received_date}}</label>
+                                        <md-select ng-model="ctrl.filter.selectedReceivedDateFilterType"
+                                                   ng-change="ctrl.resetReceivedDateType($event)">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option ng-repeat="action in ctrl.receivedDateFilterTypes"
+                                                       ng-value="action.id">
+                                                {{action.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <!-- Received Date Greater Than -->
+                                    <md-input-container ng-if="ctrl.filter.selectedReceivedDateFilterType === 4" flex>
+                                        <label>{{lang.date}}</label>
+                                        <md-datepicker ng-model="ctrl.filter.ui.key_4.value"
+                                                       md-open-on-focus></md-datepicker>
+                                    </md-input-container>
+                                    <!-- Received Date Less Than -->
+                                    <md-input-container ng-if="ctrl.filter.selectedReceivedDateFilterType === 6" flex>
+                                        <label>{{lang.date}}</label>
+                                        <md-datepicker ng-model="ctrl.filter.ui.key_6.value"
+                                                       md-open-on-focus></md-datepicker>
+                                    </md-input-container>
+                                </div>
+                                <!-- Received Date Between -->
+                                <fieldset layout="column" class="search-fieldset"
+                                          ng-if="ctrl.filter.selectedReceivedDateFilterType === 11">
+                                    <legend class="md-accent">{{ctrl.lookupNames['key_11'].getTranslatedName()}}
+                                    </legend>
+                                    <div layout="row">
+                                        <!-- Received Date From -->
+                                        <md-input-container flex>
+                                            <label>{{lang.user_inbox_filter_from}}</label>
+                                            <md-datepicker ng-model="ctrl.filter.ui.key_11.value1"
+                                                           name="receivedDateStart" md-open-on-focus
+                                                           ng-change="ctrl.getMinReceivedEndDate($event)"
+                                                           md-max-date="ctrl.calculatedMaxReceivedStartDate"
+                                                           ng-required="ctrl.filter.ui.key_11.value2"></md-datepicker>
+                                            <div ng-messages="userFilter.receivedDateStart.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
+                                        </md-input-container>
+                                        <!-- Received Date To -->
+                                        <md-input-container flex>
+                                            <label>{{lang.user_inbox_filter_to}}</label>
+                                            <md-datepicker ng-model="ctrl.filter.ui.key_11.value2"
+                                                           name="receivedDateEnd" md-open-on-focus
+                                                           ng-change="ctrl.getMaxReceivedStartDate($event)"
+                                                           md-min-date="ctrl.calculatedMinReceivedEndDate"
+                                                           ng-required="ctrl.filter.ui.key_11.value1"></md-datepicker>
+                                            <div ng-messages="userFilter.receivedDateEnd.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset layout="column" class="search-fieldset">
+                                    <legend class="md-accent">{{ctrl.lookupNames['key_10'].getTranslatedName()}}
+                                    </legend>
+                                    <div layout="row">
+                                        <!-- Due Date From -->
+                                        <md-input-container flex>
+                                            <label>{{lang.user_inbox_filter_from}}</label>
+                                            <md-datepicker ng-model="ctrl.filter.ui.key_10.value1"
+                                                           name="dueDateStart" md-open-on-focus
+                                                           ng-change="ctrl.getMinDueEndDate($event)"
+                                                           md-max-date="ctrl.calculatedMaxDueStartDate"
+                                                           ng-required="ctrl.filter.ui.key_10.value2"></md-datepicker>
+                                            <div ng-messages="userFilter.dueDateStart.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
+                                        </md-input-container>
+                                        <!-- Due Date To -->
+                                        <md-input-container flex>
+                                            <label>{{lang.user_inbox_filter_to}}</label>
+                                            <md-datepicker ng-model="ctrl.filter.ui.key_10.value2"
+                                                           name="dueDateEnd" md-open-on-focus
+                                                           ng-change="ctrl.getMaxDueStartDate($event)"
+                                                           md-min-date="ctrl.calculatedMinDueEndDate"
+                                                           ng-required="ctrl.filter.ui.key_10.value1"></md-datepicker>
+                                            <div ng-messages="userFilter.dueDateEnd.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                </fieldset>
+                                <div layout="row">
+                                    <!-- Serial -->
+                                    <md-input-container flex>
+                                        <label for="docSerial">{{ctrl.lookupNames['key_13'].getTranslatedName()}}</label>
+                                        <input id="docSerial" name="docSerial" ng-model="ctrl.filter.ui.key_13.value">
+                                    </md-input-container>
+                                    <!-- Due Date -->
+                                    <md-switch flex ng-model="ctrl.filter.ui.key_8.value"
+                                               aria-label="{{ctrl.lookupNames['key_8'].getTranslatedName()}}">
+                                        <label>{{ctrl.lookupNames['key_8'].getTranslatedName()}} :
+                                            {{ctrl.filter.getTranslatedYesNo('key_8', $event)}}</label>
+                                    </md-switch>
+                                </div>
+                                <div layout="row">
+                                    <!-- Linked Docs -->
+                                    <md-input-container flex>
+                                        <label for="hasLinkedDocs">{{lang.linked_documents}}</label>
+                                        <md-select id="hasLinkedDocs" ng-model="ctrl.filter.ui.key_linkedDocs.value">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option ng-repeat="option in ctrl.linkedDocsOptions"
+                                                       ng-value="option.id">
+                                                {{option.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <!-- Linked Entities -->
+                                    <md-input-container flex>
+                                        <label for="hasLinkedEntities">{{lang.linked_entities}}</label>
+                                        <md-select id="hasLinkedEntities" ng-model="ctrl.filter.ui.key_linkedEntities.value">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option ng-repeat="option in ctrl.linkedEntitiesOptions"
+                                                       ng-value="option.id">
+                                                {{option.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!-- Linked Attachments -->
+                                    <md-input-container flex>
+                                        <label for="hasLinkedAttachments">{{lang.attachments}}</label>
+                                        <md-select id="hasLinkedAttachments" ng-model="ctrl.filter.ui.key_linkedAttachments.value">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option ng-repeat="option in ctrl.linkedAttachmentsOptions"
+                                                       ng-value="option.id">
+                                                {{option.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                    <!-- Is Open -->
+                                    <md-input-container flex>
+                                        <label for="isOpen">{{ctrl.lookupNames['key_20'].getTranslatedName()}}</label>
+                                        <md-select id="isOpen" ng-model="ctrl.filter.ui.key_20.value">
+                                            <md-option ng-value="null">{{lang.none}}</md-option>
+                                            <md-option ng-repeat="option in ctrl.yesNoOptions"
+                                                       ng-value="option.value">
+                                                {{lang[option.key]}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-if="!ctrl.editMode" ng-disabled="ctrl.checkDisabled(userFilter)"
+                           ng-click="ctrl.saveUserFilterFromCtrl()">{{lang.add}}
+                </md-button>
+                <md-button class="md-raised" ng-if="ctrl.editMode" ng-disabled="ctrl.checkDisabled(userFilter)"
+                           ng-click="ctrl.saveUserFilterFromCtrl()">
+                    {{lang.save}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.resetFilterForm(userFilter, $event)">
+                    {{lang.reset}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeFilterForm($event)">
+                    {{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

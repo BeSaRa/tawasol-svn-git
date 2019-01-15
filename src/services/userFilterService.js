@@ -136,7 +136,7 @@ module.exports = function (app) {
             var defer = $q.defer();
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('user-filters'),
+                    templateUrl: cmsTemplate.getPopup('user-filters'),
                     controller: 'userFilterPopCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event,
@@ -177,7 +177,7 @@ module.exports = function (app) {
             var defer = $q.defer();
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('user-filters'),
+                    templateUrl: cmsTemplate.getPopup('user-filters'),
                     controller: 'userFilterPopCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event,

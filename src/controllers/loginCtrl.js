@@ -163,7 +163,7 @@ module.exports = function (app) {
         self.selectOrganizationToLogin = function (result, event, callback) {
             dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('select-organization-login'),
+                    templateUrl: cmsTemplate.getPopup('select-organization-login'),
                     targetEvent: event,
                     bindToController: true,
                     multiple: true,
@@ -205,7 +205,7 @@ module.exports = function (app) {
 
         self.showTerms = function ($event) {
             dialog.showDialog({
-                template: cmsTemplate.getPopup('terms'),
+                templateUrl: cmsTemplate.getPopup('terms'),
                 escToCancel: true,
                 targetEvent: $event,
                 bindToController: true,

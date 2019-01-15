@@ -1,0 +1,84 @@
+<md-toolbar id="main-toolbar" ng-class="{'xs':mediaSize('xs')}" class="md-whiteframe-1dp md-menu-toolbar cms-toolbar">
+    <div layout="row" layout-xs="column" layout-align-xs="space-between stretch" flex layout-align="start center">
+        <!-- Start toolbar-left-side-->
+        <div layout="row" layout-align="start center" flex class="toolbar-left-side"
+             ng-class="{'toolbar-border-bottom relative':toolbar.sizeXS()}">
+            <toolbar-search-directive flex hide-gt-xs ng-if="toolbar.quickSearchPermission"></toolbar-search-directive>
+            <md-button hide-sm hide-xs ng-click="toolbar.toggleSidebarLocked('main-sidebar')"
+                       class="md-icon-button m015">
+                <md-icon md-svg-icon="menu"></md-icon>
+            </md-button>
+            <md-button hide-gt-sm hide-xs ng-click="toolbar.toggleSidebar('main-sidebar')" class="md-icon-button m015">
+                <md-icon md-svg-icon="menu"></md-icon>
+            </md-button>
+
+            <div class="separator"></div>
+            <div class="font-size-14" ng-if="!toolbar.employeeService.isAdminUser()">
+                <md-menu-bar class="user-menu">
+                    <md-menu flex md-position-mode="{{toolbar.getPositionMode($event)}}">
+                        <md-button ng-click="toolbar.openUserOrganizationMenu($mdMenu)"  >
+                            <div layout="row" flex layout-align="start center">
+                                <!--{{lang.administration}} :-->
+                                {{toolbar.employeeService.getEmployee().userOrganization.getTranslatedName()}}
+                                <md-icon md-svg-icon="chevron-down"></md-icon>
+                            </div>
+                        </md-button>
+                        <md-menu-content width="3">
+                            <md-menu-item ng-if="!toolbar.isCurrentOrganization(organization)"
+                                          ng-repeat="organization in toolbar.employee.ouList track by $index">
+                                <md-button ng-click="toolbar.switchOrganization(organization)">
+                                    {{organization.getTranslatedName()}}
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </md-menu-bar>
+
+            </div>
+            <user-menu-directive flex hide-gt-xs></user-menu-directive>
+            <div class="separator"></div>
+            <!--<md-button class="md-icon-button m015">-->
+            <!--<md-icon md-svg-icon="star" class="star-yellow"></md-icon>-->
+            <!--</md-button>-->
+            <md-progress-circular md-mode="indeterminate" ng-if="toolbar.loadingService.loading"></md-progress-circular>
+        </div>
+        <!-- End toolbar-left-side-->
+        <!-- Start toolbar-right-side-->
+        <div layout="row" layout-align="start center" layout-align-xs="space-around center" class="toolbar-right-side">
+            <md-button hide-gt-xs ng-click="toolbar.toggleSidebar('main-sidebar')" class="md-icon-button m015">
+                <md-icon md-svg-icon="menu"></md-icon>
+            </md-button>
+            <toolbar-search-directive flex hide-xs
+                                      ng-if="toolbar.employeeService.hasPermissionTo('QUICK_SEARCH')"></toolbar-search-directive>
+            <div class="separator"></div>
+            <span flex hide-gt-xs></span>
+            <user-menu-directive hide-xs></user-menu-directive>
+            <!--<div class="separator"></div>
+            <!--<tasks-notify-directive></tasks-notify-directive>&ndash;&gt;-->
+            <div class="separator"></div>
+            <md-button fixed-position="true" tooltip="{{lang.logout}}" class="md-icon-button"
+                       ng-click="toolbar.logoutEmployee($event)">
+                <md-icon md-svg-icon="logout"></md-icon>
+            </md-button>
+            <documents-notify-directive ng-if="toolbar.employeeService.hasPermissionTo('USER_INBOX')""></documents-notify-directive>
+
+            <private-announcement-directive></private-announcement-directive>
+
+            <user-subscription-directive></user-subscription-directive>
+
+            <md-button tooltip="{{lang.help}}" fixed-position="true"
+                       ng-click="toolbar.openHelp()" class="md-icon-button">
+                <md-icon md-svg-icon="help"></md-icon>
+            </md-button>
+
+            <div hide-xs class="separator"></div>
+            <language-switcher-directive></language-switcher-directive>
+            <div ng-if="toolbar.themeService.themes.length" class="separator"></div>
+            <md-button ng-click="toolbar.toggleSidebar('right-sidebar')"
+                       class="md-icon-button m015">
+                <md-icon md-svg-icon="format-list-bulleted"></md-icon>
+            </md-button>
+        </div>
+        <!-- End toolbar-right-side-->
+    </div>
+</md-toolbar>

@@ -2,11 +2,12 @@ module.exports = function (app) {
     require('./document-security-co-ordinates-style.scss');
     app.directive('documentSecurityCoOrdinatesDirective', function ($timeout,
                                                                     toast,
+                                                                    cmsTemplate,
                                                                     langService,
                                                                     $q) {
         'ngInject';
         return {
-            template: require('./document-security-co-ordinate-template.html'),
+            templateUrl: cmsTemplate.getDirective('document-security-co-ordinate-template.html'),
             controller: 'documentSecurityCoOrdinatesDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,

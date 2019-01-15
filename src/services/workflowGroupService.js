@@ -42,7 +42,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('workflow-group'),
+                        templateUrl: cmsTemplate.getPopup('workflow-group'),
                         controller: 'workflowGroupPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -56,7 +56,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('workflow-group'),
+                        templateUrl: cmsTemplate.getPopup('workflow-group'),
                         controller: 'workflowGroupPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -103,7 +103,7 @@ module.exports = function (app) {
             },
             showGroupMembers: function (groupMembers, $event) {
                 return dialog.showDialog({
-                    template: cmsTemplate.getPopup('group-members'),
+                    templateUrl: cmsTemplate.getPopup('group-members'),
                     bindToController: true,
                     escToCancel: true,
                     targetEvent: $event,

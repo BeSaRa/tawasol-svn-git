@@ -79,7 +79,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('document-template'),
+                        templateUrl: cmsTemplate.getPopup('document-template'),
                         controller: 'documentTemplatePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -100,7 +100,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('document-template'),
+                        templateUrl: cmsTemplate.getPopup('document-template'),
                         controller: 'documentTemplatePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -163,7 +163,7 @@ module.exports = function (app) {
              return dialog
              .showDialog({
              targetEvent: $event,
-             template: cmsTemplate.getPopup('relation-app-user'),
+             templateUrl: cmsTemplate.getPopup('relation-app-user'),
              controller: 'relationAppUserPopCtrl',
              controllerAs: 'ctrl',
              locals: {

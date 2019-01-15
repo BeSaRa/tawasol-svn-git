@@ -101,7 +101,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('add-to-user-folder'),
+                        templateUrl: cmsTemplate.getPopup('add-to-user-folder'),
                         controller: 'addToUserFolderPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -122,7 +122,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('add-to-user-folder'),
+                        templateUrl: cmsTemplate.getPopup('add-to-user-folder'),
                         controller: 'addToUserFolderPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -143,7 +143,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('user-folder'),
+                        templateUrl: cmsTemplate.getPopup('user-folder'),
                         controller: 'userFolderPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -166,7 +166,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('user-folder'),
+                        templateUrl: cmsTemplate.getPopup('user-folder'),
                         controller: 'userFolderPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

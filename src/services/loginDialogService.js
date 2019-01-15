@@ -25,7 +25,7 @@ module.exports = function (app) {
             scope._loginDialog = true;
             self.openStatus = true;
             return self.promise = dialog.showDialog({
-                template: cmsTemplate.getPopup('login'),
+                templateUrl: cmsTemplate.getPopup('login'),
                 controller: 'loginCtrl',
                 controllerAs: 'login',
                 scope: scope,

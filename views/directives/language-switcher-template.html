@@ -1,0 +1,26 @@
+<div id="language-switcher">
+    <div id="current-language">
+        <md-menu-bar>
+            <md-menu>
+                <md-button ng-click="$mdMenu.open()">
+                    <div layout="row" class="m015" layout-align="start center">
+                        <img class="language-flag"
+                             ng-src="../../../assets/images/{{language.service.selectedLanguage.image}}.png"/>
+                        <span class="language-title">{{language.service.selectedLanguage.code}}</span>
+                    </div>
+                </md-button>
+                <md-menu-content id="language-switcher-menu-content" width="3">
+                    <md-menu-item ng-repeat-start="lang in language.service.languages track by $index">
+                        <md-button ng-click="language.selectLanguage(lang)">
+                            <div layout="row" layout-align="start center">
+                                <img class="language-flag" ng-src="../../../assets/images/{{lang.image}}.png"/>
+                                <span class="language-title">{{lang.code}}</span>
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-divider ng-if="!$last" ng-repeat-end></md-menu-divider>
+                </md-menu-content>
+            </md-menu>
+        </md-menu-bar>
+    </div>
+</div>

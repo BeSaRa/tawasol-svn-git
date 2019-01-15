@@ -1,0 +1,1274 @@
+<md-dialog class="dialog-extend mw60" ng-attr-aria-label="{{lang.user_preferences}}">
+    <div layout="column">
+        <md-toolbar layout="row" layout-align="start center">
+            <span class="p20">{{lang.user_preferences}} : {{ctrl.model.getNames()}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="userPreferencesForm" autocomplete="off">
+                <md-tabs md-dynamic-height md-selected="ctrl.selectedTabIndex">
+                    <!-- General Tab -->
+                    <md-tab label="{{lang.general}}" ng-if="ctrl.showTab('general')"
+                            md-on-select="ctrl.setCurrentTab('general')">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <div layout="row">
+                                    <!-- Arabic Full Name -->
+                                    <md-input-container flex>
+                                        <label for="arFullName">{{lang.arabic_full_name}}</label>
+                                        <input name="arFullName" id="arFullName" required minlength="4"
+                                               ng-model="ctrl.applicationUser.arFullName"
+                                               ng-disabled="true" ng-readonly="true"
+                                               custom-validate-directive="ANS" maxlength="80">
+                                        <div ng-messages="userPreferencesForm.arFullName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="ANS">{{lang.arabic_number_space}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- English Full Name -->
+                                    <md-input-container flex>
+                                        <label for="enFullName">{{lang.english_full_name}}</label>
+                                        <input name="enFullName" id="enFullName" required minlength="4"
+                                               ng-model="ctrl.applicationUser.enFullName"
+                                               ng-disabled="true" ng-readonly="true"
+                                               custom-validate-directive="ENS" maxlength="80">
+                                        <div ng-messages="userPreferencesForm.enFullName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="ENS">{{lang.english_number_space}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:80})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!-- Gender -->
+                                    <md-input-container flex>
+                                        <label for="gender">{{lang.gender}}</label>
+                                        <md-select id="gender" name="gender" required
+                                                   ng-disabled="true" ng-readonly="true"
+                                                   ng-model="ctrl.applicationUser.gender">
+                                            <md-option ng-value="gender.lookupKey"
+                                                       ng-repeat="gender in ctrl.genders track by $index">
+                                                {{gender.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="userPreferencesForm.gender.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- Login Name -->
+                                    <md-input-container flex>
+                                        <label for="loginName">{{lang.login_name}}</label>
+                                        <input name="loginName" id="loginName" required minlength="4"
+                                               ng-disabled="true" ng-readonly="true"
+                                               ng-model="ctrl.applicationUser.loginName"
+                                               no-space-directive custom-validate-directive="EN_DOT_DASH">
+                                        <div ng-messages="userPreferencesForm.loginName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="EN_DOT_DASH">{{lang.english_number}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!-- Employee Number -->
+                                    <md-input-container flex>
+                                        <label for="employeeNo">{{lang.employee_number}}</label>
+                                        <input name="employeeNo" id="employeeNo" required
+                                               ng-disabled="true" ng-readonly="true"
+                                               ng-model="ctrl.applicationUser.employeeNo" maxlength="10"
+                                               custom-validate-directive="number">
+                                        <div ng-messages="userPreferencesForm.employeeNo.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:10})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- Qatari Id -->
+                                    <md-input-container flex>
+                                        <label for="qid">{{lang.qid}}</label>
+                                        <input name="qid" id="qid" required maxlength="11"
+                                               ng-disabled="true" ng-readonly="true"
+                                               ng-model="ctrl.applicationUser.qid"
+                                               custom-validate-directive="number">
+                                        <div ng-messages="userPreferencesForm.qid.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:11})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!-- Domain Name -->
+                                    <md-input-container flex>
+                                        <label for="domainName">{{lang.domain_name}}</label>
+                                        <input name="domainName" id="domainName" required minlength="4"
+                                               ng-disabled="true" ng-readonly="true"
+                                               ng-model="ctrl.applicationUser.domainName" maxlength="20"
+                                               no-space-directive custom-validate-directive="EN_DOT_DASH">
+                                        <div ng-messages="userPreferencesForm.domainName.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="minlength">{{lang.short}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:20})}}</div>
+                                            <div ng-message="EN_DOT_DASH">{{lang.english_number}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- Job Title -->
+                                    <div flex layout="row">
+                                        <md-input-container flex>
+                                            <label for="jobTitle">{{lang.job_title}}</label>
+                                            <md-select id="jobTitle" name="jobTitle" required
+                                                       ng-disabled="true" ng-readonly="true"
+                                                       ng-model="ctrl.applicationUser.jobTitle">
+                                                <md-option ng-value="jobTitle.lookupKey"
+                                                           ng-repeat="jobTitle in ctrl.jobTitles track by $index">
+                                                    {{jobTitle.getTranslatedName()}}
+                                                </md-option>
+                                            </md-select>
+                                            <div ng-messages="userPreferencesForm.jobTitle.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
+                                        </md-input-container>
+                                        <!--<md-input-container>
+                                            <md-button
+                                                    tooltip="{{lang.add_new_job_title}}"
+                                                    ng-click="ctrl.openAddJobTitleDialog($event)"
+                                                    class="md-icon-button">
+                                                <md-icon md-svg-icon="plus"></md-icon>
+                                            </md-button>
+                                        </md-input-container>-->
+                                    </div>
+                                </div>
+                                <div layout="row">
+                                    <!-- Rank -->
+                                    <div flex layout="row">
+                                        <md-input-container flex>
+                                            <label for="rank">{{lang.rank}}</label>
+                                            <md-select id="rank" name="rank"
+                                                       ng-model="ctrl.applicationUser.rank">
+                                                <!--required ng-disabled="true" ng-readonly="true"-->
+                                                <md-option ng-value="rank.lookupKey"
+                                                           ng-repeat="rank in ctrl.ranks track by $index">
+                                                    {{rank.getTranslatedName()}}
+                                                </md-option>
+                                            </md-select>
+                                            <div ng-messages="userPreferencesForm.rank.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
+                                        </md-input-container>
+                                        <!--<md-button
+                                                tooltip="{{lang.add_new_rank}}"
+                                                ng-click="ctrl.openAddRankDialog($event)"
+                                                class="md-icon-button">
+                                            <md-icon md-svg-icon="plus"></md-icon>
+                                        </md-button>-->
+                                    </div>
+                                    <!-- Mobile Number -->
+                                    <md-input-container flex>
+                                        <label for="mobile">{{lang.mobile_number}}</label>
+                                        <input name="mobile" id="mobile" required
+                                               ng-model="ctrl.applicationUser.mobile" maxlength="15"
+                                               custom-validate-directive="phone_mobile">
+                                        <div ng-messages="userPreferencesForm.mobile.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="phone_mobile">
+                                                {{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}
+                                            </div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- Registered Mobile Number for OTP -->
+                                    <!--<md-input-container flex>&lt;!&ndash; class=not-found&ndash;&gt;
+                                        <label for="mobileOTP">{{lang.mobile_number_otp}}</label>
+                                        <input name="mobileOTP" id="mobileOTP"
+                                               ng-model="ctrl.notFound.mobile" maxlength="15"
+                                               custom-validate-directive="phone_mobile">
+                                        <div ng-messages="userPreferencesForm.mobileOTP.$error">
+                                            <div ng-message="phone_mobile">
+                                                {{lang.invalid_phone_mobile.change({phonemob:lang.mobile})}}
+                                            </div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:15})}}</div>
+                                        </div>
+                                    </md-input-container>-->
+                                </div>
+                                <div layout="row">
+                                    <!-- Email -->
+                                    <md-input-container flex>
+                                        <label for="email">{{lang.email}}</label>
+                                        <input name="email" id="email" required maxlength="50"
+                                               ng-model="ctrl.applicationUser.email"
+                                               custom-validate-directive="email">
+                                        <div ng-messages="userPreferencesForm.email.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="email">
+                                                {{lang.invalid_email}}
+                                            </div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:50})}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- Language -->
+                                    <md-input-container flex>
+                                        <label for="defaultDisplayLang">{{lang.default_language}}</label>
+                                        <md-select id="defaultDisplayLang" name="defaultDisplayLang" required
+                                                   ng-model="ctrl.applicationUser.defaultDisplayLang">
+                                            <md-option ng-value="language.lookupKey"
+                                                       ng-repeat="language in ctrl.languages track by $index">
+                                                {{language.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="userPreferencesForm.defaultDisplayLang.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <!-- Search Amount Limit -->
+                                    <md-input-container flex>
+                                        <label for="searchAmountLimit">{{lang.default_max_row_search}}</label>
+                                        <input name="searchAmountLimit" id="searchAmountLimit" required
+                                               ng-model="ctrl.applicationUser.searchAmountLimit" maxlength="5"
+                                               min-max-number-directive min="0"
+                                               max="ctrl.rootEntity.returnRootEntity().settings.searchAmountLimit"
+                                               custom-validate-directive="number">
+                                        <div ng-messages="userPreferencesForm.searchAmountLimit.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                            <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
+                                            <div ng-message="number">{{lang.numberonly}}</div>
+                                            <div ng-message="min">{{lang.min_number.change({number:0})}}</div>
+                                            <div ng-message="max">
+                                                {{lang.max_number.change({number:ctrl.maxRowCount})}}
+                                            </div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- Theme -->
+                                    <div flex layout="row">
+                                        <md-input-container flex>
+                                            <label for="defaultThemeID">{{lang.default_theme}}</label>
+                                            <!--ng-disabled="true" ng-readonly="true"-->
+                                            <md-select id="defaultThemeID" name="defaultThemeID" required
+                                                       ng-model="ctrl.applicationUser.defaultThemeID">
+                                                <md-option ng-value="theme.id"
+                                                           ng-repeat="theme in ctrl.themes track by $index">
+                                                    {{theme.getTranslatedName()}}
+                                                </md-option>
+                                            </md-select>
+                                            <div ng-messages="userPreferencesForm.defaultThemeID.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container>
+                                            <md-button
+                                                    tooltip="{{lang.add_new_theme}}"
+                                                    ng-click="ctrl.openAddThemeDialog($event)"
+                                                    class="md-icon-button">
+                                                <md-icon md-svg-icon="plus"></md-icon>
+                                            </md-button>
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                                <!--<div layout="row" flex>
+                                    &lt;!&ndash; Subscription SMS &ndash;&gt;
+                                    <md-switch id="subscriptionsmsNotify" name="subscriptionsmsNotify"
+                                               flex ng-model="ctrl.applicationUser.subscriptionsmsNotify"
+                                               ng-change="ctrl.changeSMSNotifications(userPreferencesForm, $event)"
+                                               aria-label="{{lang.subscription_sms}}">
+                                        <label>{{lang.subscription_sms}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('subscriptionsmsNotify')}}</label>
+                                    </md-switch>
+                                    &lt;!&ndash; Subscription Email &ndash;&gt;
+                                    <md-switch flex ng-model="ctrl.applicationUser.subscriptionEmailNotify"
+                                               ng-change="ctrl.changeEmailNotifications($event)"
+                                               aria-label="{{lang.subscription_email}}">
+                                        <label>{{lang.subscription_email}} :
+                                            {{ctrl.applicationUser.getTranslatedYesNo('subscriptionEmailNotify')}}</label>
+                                    </md-switch>
+                                </div>-->
+                                <div layout="row" flex>
+                                    <!-- View Inbox -->
+                                    <md-input-container flex>
+                                        <label for="viewInboxAsGrid">{{lang.view_inbox_as}}</label>
+                                        <md-select id="viewInboxAsGrid" name="viewInboxAsGrid" required
+                                                   ng-model="ctrl.applicationUser.viewInboxAsGrid">
+                                            <md-option ng-value="viewType.value"
+                                                       ng-repeat="viewType in ctrl.viewInboxAsOptions track by $index">
+                                                {{lang[viewType.key]}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="applicationUserForm.viewInboxAsGrid.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                    <!-- Organization Unit -->
+                                    <md-input-container flex>
+                                        <label for="defaultOUID">{{lang.organization_unit}}</label>
+                                        <!--<md-select id="defaultOUID" name="defaultOUID" required
+                                                   ng-model="ctrl.applicationUser.defaultOUID">
+                                            <md-option ng-value="organization.id"
+                                                       ng-repeat="organization in ctrl.organizationsForAppUser track by $index">
+                                                {{organization.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>-->
+                                        <md-select id="defaultOUID" name="defaultOUID" required
+                                                   ng-model="ctrl.applicationUser.defaultOUID">
+                                            <md-option ng-value="organization.ou.id"
+                                                       ng-disabled="!organization.status"
+                                                       tooltip="{{(!organization.status) ? lang.inactive_organization : ''}}"
+                                                       ng-repeat="organization in ctrl.organizationsForAppUser track by $index">
+                                                {{organization.ou.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="userPreferencesForm.defaultOUID.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label for="defaultViewerLang">{{lang.default_viewer_language}}</label>
+                                        <md-select id="defaultViewerLang" name="defaultViewerLang" required
+                                                   ng-model="ctrl.applicationUser.defaultViewerLang">
+                                            <md-option ng-value="language.lookupKey"
+                                                       ng-repeat="language in ctrl.languages track by $index">
+                                                {{language.getTranslatedName()}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="userPreferencesForm.defaultViewerLang.$error">
+                                            <div ng-message="required">{{lang.field_required}}</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <!-- Notification Settings Tab -->
+                    <md-tab label="{{lang.notification_settings}}" ng-if="ctrl.showTab('ns')"
+                            md-on-select="ctrl.setCurrentTab('ns')">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <!-- SMS Notifications -->
+                                <fieldset>
+                                    <legend class="md-accent">
+                                        {{lang.sms_settings}}
+                                    </legend>
+                                    <div class="full-width-fieldset">
+                                        <span class="red-text" ng-if="!ctrl.globalSetting.enableSMSNotification">{{lang.setting_disabled_by_admin}}</span>
+                                        <div layout="row">
+                                            <!-- Subscription SMS Switch -->
+                                            <md-switch id="subscriptionsmsNotify" name="subscriptionsmsNotify"
+                                                       ng-disabled="!ctrl.globalSetting.enableSMSNotification"
+                                                       flex ng-model="ctrl.applicationUser.subscriptionsmsNotify"
+                                                       aria-label="{{lang.subscription_sms}}">
+                                                <label>{{lang.subscription_sms}} :
+                                                    {{ctrl.applicationUser.getTranslatedYesNo('subscriptionsmsNotify')}}</label>
+                                            </md-switch>
+                                        </div>
+                                        <div layout="row">
+                                            <!-- New Item SMS -->
+                                            <md-switch flex ng-model="ctrl.applicationUser.newsmsEmailNotify"
+                                                       ng-disabled="!ctrl.globalSetting.enableSMSNotification"
+                                                       ng-change="ctrl.resetNotificationsUserPreferences('newsmsEmailNotify','newItemSmspriority',[userPreferencesForm.newItemSmspriority])"
+                                                       aria-label="{{lang.new_item_sms}}">
+                                                <label>{{lang.new_item_sms}} :
+                                                    {{ctrl.applicationUser.getTranslatedYesNo('newsmsEmailNotify')}}</label>
+                                            </md-switch>
+                                            <!-- New Item SMS Priority -->
+                                            <md-input-container flex>
+                                                <label for="newItemSmspriority">{{lang.new_item_sms_priority}}</label>
+                                                <md-select multiple ng-required="ctrl.applicationUser.newsmsEmailNotify"
+                                                           ng-disabled="!ctrl.globalSetting.enableSMSNotification || !ctrl.applicationUser.newsmsEmailNotify"
+                                                           ng-readonly="!ctrl.applicationUser.newsmsEmailNotify"
+                                                           name="newItemSmspriority" id="newItemSmspriority"
+                                                           ng-model="ctrl.applicationUser.newItemSmspriority">
+                                                    <md-option ng-value="priorityLevel"
+                                                               ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
+                                                        {{priorityLevel.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="userPreferencesForm.newItemSmspriority.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                    <div ng-message="number">{{lang.numberonly}}</div>
+                                                    <div ng-message="maxlength">{{lang.max_length.change({length:5})}}
+                                                    </div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                        <!-- Deadline SMS and Priority -->
+                                        <div layout="row">
+                                            <!-- Deadline SMS -->
+                                            <md-switch flex ng-model="ctrl.applicationUser.deadlinesmsNotify"
+                                                       ng-disabled="!ctrl.globalSetting.enableSMSNotification"
+                                                       ng-change="ctrl.resetNotificationsUserPreferences('deadlinesmsNotify','deadlineSmspriority', [userPreferencesForm.deadlineSmspriority])"
+                                                       aria-label="{{lang.deadline_sms}}">
+                                                <label>{{lang.deadline_sms}} :
+                                                    {{ctrl.applicationUser.getTranslatedYesNo('deadlinesmsNotify')}}</label>
+                                            </md-switch>
+                                            <!-- Deadline SMS Priority -->
+                                            <md-input-container flex>
+                                                <label for="deadlineSmspriority">{{lang.deadline_sms_priority}}</label>
+                                                <md-select multiple ng-required="ctrl.applicationUser.deadlinesmsNotify"
+                                                           ng-disabled="!ctrl.globalSetting.enableSMSNotification || !ctrl.applicationUser.deadlinesmsNotify"
+                                                           ng-readonly="!ctrl.applicationUser.deadlinesmsNotify"
+                                                           name="deadlineSmspriority" id="deadlineSmspriority"
+                                                           ng-model="ctrl.applicationUser.deadlineSmspriority">
+                                                    <md-option ng-value="priorityLevel"
+                                                               ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
+                                                        {{priorityLevel.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="userPreferencesForm.deadlineSmspriority.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                    <div ng-message="number">{{lang.numberonly}}</div>
+                                                    <div ng-message="maxlength">{{lang.max_length.change({length:5})}}
+                                                    </div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                        <!-- Reminder SMS, Priority and Days -->
+                                        <div layout="row">
+                                            <!-- Reminder SMS -->
+                                            <md-switch flex ng-model="ctrl.applicationUser.reminderSmsnotify"
+                                                       ng-disabled="!ctrl.globalSetting.enableSMSNotification"
+                                                       ng-change="ctrl.resetNotificationsUserPreferences('reminderSmsnotify',['reminderSmsPriority', 'reminderSmsdays'], [userPreferencesForm.reminderSmsPriority, userPreferencesForm.reminderSmsdays])"
+                                                       aria-label="{{lang.reminder_sms}}">
+                                                <label>{{lang.reminder_sms}} :
+                                                    {{ctrl.applicationUser.getTranslatedYesNo('reminderSmsnotify')}}</label>
+                                            </md-switch>
+                                            <!-- Reminder SMS Priority and Days -->
+                                            <div layout="row" flex>
+                                                <!-- Reminder SMS Priority -->
+                                                <md-input-container flex>
+                                                    <label for="reminderSmsPriority">{{lang.reminder_sms_priority}}</label>
+                                                    <md-select multiple
+                                                               ng-required="ctrl.applicationUser.reminderSmsnotify"
+                                                               ng-disabled="!ctrl.globalSetting.enableSMSNotification || !ctrl.applicationUser.reminderSmsnotify"
+                                                               ng-readonly="!ctrl.applicationUser.reminderSmsnotify"
+                                                               name="reminderSmsPriority" id="reminderSmsPriority"
+                                                               ng-model="ctrl.applicationUser.reminderSmsPriority">
+                                                        <!--multiple ng-model-options="{trackBy: '$value.id'}"-->
+                                                        <md-option ng-value="priorityLevel"
+                                                                   ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
+                                                            {{priorityLevel.getTranslatedName()}}
+                                                        </md-option>
+                                                    </md-select>
+                                                    <div ng-messages="userPreferencesForm.reminderSmsPriority.$error">
+                                                        <div ng-message="required">{{lang.field_required}}</div>
+                                                        <div ng-message="number">{{lang.numberonly}}</div>
+                                                        <div ng-message="maxlength">
+                                                            {{lang.max_length.change({length:5})}}
+                                                        </div>
+                                                    </div>
+                                                </md-input-container>
+                                                <!-- Reminder SMS Days -->
+                                                <md-input-container flex>
+                                                    <label for="reminderSmsdays">{{lang.reminder_sms_days}}</label>
+                                                    <input ng-required="ctrl.applicationUser.reminderSmsnotify"
+                                                           ng-disabled="!ctrl.globalSetting.enableSMSNotification || !ctrl.applicationUser.reminderSmsnotify"
+                                                           ng-readonly="!ctrl.applicationUser.reminderSmsnotify"
+                                                           name="reminderSmsdays" id="reminderSmsdays"
+                                                           ng-model="ctrl.applicationUser.reminderSmsdays" maxlength="5"
+                                                           custom-validate-directive="number">
+                                                    <div ng-messages="userPreferencesForm.reminderSmsdays.$error">
+                                                        <div ng-message="required">{{lang.field_required}}</div>
+                                                        <div ng-message="number">{{lang.numberonly}}</div>
+                                                        <div ng-message="maxlength">
+                                                            {{lang.max_length.change({length:5})}}
+                                                        </div>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <!-- Email Notifications -->
+                                <fieldset>
+                                    <legend class="md-accent">
+                                        {{lang.email_settings}}
+                                    </legend>
+                                    <div class="full-width-fieldset">
+                                        <span class="red-text" ng-if="!ctrl.globalSetting.enableEmailNotification">{{lang.setting_disabled_by_admin}}</span>
+                                        <div layout="row">
+                                            <md-switch flex ng-model="ctrl.applicationUser.subscriptionEmailNotify"
+                                                       ng-disabled="!ctrl.globalSetting.enableEmailNotification"
+                                                       aria-label="{{lang.subscription_email}}">
+                                                <label>{{lang.subscription_email}}</label>
+                                            </md-switch>
+                                        </div>
+                                        <!-- New Item Email and Priority -->
+                                        <div layout="row">
+                                            <!-- New Item Email -->
+                                            <md-switch flex ng-model="ctrl.applicationUser.newItemEmailNotify"
+                                                       ng-disabled="!ctrl.globalSetting.enableEmailNotification"
+                                                       ng-change="ctrl.resetNotificationsUserPreferences('newItemEmailNotify','newItemEmailPriority', [userPreferencesForm.newItemEmailPriority])"
+                                                       aria-label="{{lang.new_item_email}}">
+                                                <label>{{lang.new_item_email}} :
+                                                    {{ctrl.applicationUser.getTranslatedYesNo('newItemEmailNotify')}}</label>
+                                            </md-switch>
+                                            <!-- New Item Email Priority -->
+                                            <md-input-container flex>
+                                                <label for="newItemEmailPriority">{{lang.new_item_email_priority}}</label>
+                                                <md-select multiple
+                                                           ng-required="ctrl.applicationUser.newItemEmailNotify"
+                                                           ng-disabled="!ctrl.globalSetting.enableEmailNotification || !ctrl.applicationUser.newItemEmailNotify"
+                                                           ng-readonly="!ctrl.applicationUser.newItemEmailNotify"
+                                                           name="newItemEmailPriority" id="newItemEmailPriority"
+                                                           ng-model="ctrl.applicationUser.newItemEmailPriority">
+                                                    <!--multiple ng-model-options="{trackBy: '$value.id'}"-->
+                                                    <md-option ng-value="priorityLevel"
+                                                               ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
+                                                        {{priorityLevel.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="userPreferencesForm.newItemEmailPriority.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                    <div ng-message="number">{{lang.numberonly}}</div>
+                                                    <div ng-message="maxlength">{{lang.max_length.change({length:5})}}
+                                                    </div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                        <!-- Deadline Email and Priority -->
+                                        <div layout="row">
+                                            <!-- Deadline Email -->
+                                            <md-switch flex ng-model="ctrl.applicationUser.deadlineEmailNotify"
+                                                       ng-disabled="!ctrl.globalSetting.enableEmailNotification"
+                                                       ng-change="ctrl.resetNotificationsUserPreferences('deadlineEmailNotify','deadlineEmailPriority', [userPreferencesForm.deadlineEmailPriority])"
+                                                       aria-label="{{lang.deadline_email}}">
+                                                <label>{{lang.deadline_email}} :
+                                                    {{ctrl.applicationUser.getTranslatedYesNo('deadlineEmailNotify')}}</label>
+                                            </md-switch>
+                                            <!-- Deadline Email Priority -->
+                                            <md-input-container flex>
+                                                <label for="deadlineEmailPriority">{{lang.deadline_email_priority}}</label>
+                                                <md-select multiple
+                                                           ng-required="ctrl.applicationUser.deadlineEmailNotify"
+                                                           ng-disabled="!ctrl.globalSetting.enableEmailNotification || !ctrl.applicationUser.deadlineEmailNotify"
+                                                           ng-readonly="!ctrl.applicationUser.deadlineEmailNotify"
+                                                           name="deadlineEmailPriority" id="deadlineEmailPriority"
+                                                           ng-model="ctrl.applicationUser.deadlineEmailPriority">
+                                                    <md-option ng-value="priorityLevel"
+                                                               ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
+                                                        {{priorityLevel.getTranslatedName()}}
+                                                    </md-option>
+                                                </md-select>
+                                                <div ng-messages="userPreferencesForm.deadlineEmailPriority.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                    <div ng-message="number">{{lang.numberonly}}</div>
+                                                    <div ng-message="maxlength">{{lang.max_length.change({length:5})}}
+                                                    </div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                        <!-- Reminder Email, Priority and Days -->
+                                        <div layout="row">
+                                            <!-- Reminder Email -->
+                                            <md-switch flex ng-model="ctrl.applicationUser.reminderEmailNotify"
+                                                       ng-disabled="!ctrl.globalSetting.enableEmailNotification"
+                                                       ng-change="ctrl.resetNotificationsUserPreferences('reminderEmailNotify',['reminderEmailPriority', 'reminderEmailDays'], [userPreferencesForm.reminderEmailPriority, userPreferencesForm.reminderEmailDays])"
+                                                       aria-label="{{lang.reminder_email}}">
+                                                <label>{{lang.reminder_email}} :
+                                                    {{ctrl.applicationUser.getTranslatedYesNo('reminderEmailNotify')}}</label>
+                                            </md-switch>
+                                            <!-- Reminder Email Priority and Days-->
+                                            <div layout="row" flex>
+                                                <!-- Reminder Email Priority -->
+                                                <md-input-container flex>
+                                                    <label for="reminderEmailPriority">{{lang.reminder_email_priority}}</label>
+                                                    <md-select multiple
+                                                               ng-required="ctrl.applicationUser.reminderEmailNotify"
+                                                               ng-disabled="!ctrl.globalSetting.enableEmailNotification || !ctrl.applicationUser.reminderEmailNotify"
+                                                               ng-readonly="!ctrl.applicationUser.reminderEmailNotify"
+                                                               name="reminderEmailPriority" id="reminderEmailPriority"
+                                                               ng-model="ctrl.applicationUser.reminderEmailPriority">
+                                                        <md-option ng-value="priorityLevel"
+                                                                   ng-repeat="priorityLevel in ctrl.priorityLevels track by $index">
+                                                            {{priorityLevel.getTranslatedName()}}
+                                                        </md-option>
+                                                    </md-select>
+                                                    <div ng-messages="userPreferencesForm.reminderEmailPriority.$error">
+                                                        <div ng-message="required">{{lang.field_required}}</div>
+                                                        <div ng-message="number">{{lang.numberonly}}</div>
+                                                        <div ng-message="maxlength">
+                                                            {{lang.max_length.change({length:5})}}
+                                                        </div>
+                                                    </div>
+                                                </md-input-container>
+                                                <!-- Reminder Email Days -->
+                                                <md-input-container flex>
+                                                    <label for="reminderEmailDays">{{lang.reminder_email_days}}</label>
+                                                    <input ng-required="ctrl.applicationUser.reminderEmailNotify"
+                                                           ng-disabled="!ctrl.globalSetting.enableEmailNotification || !ctrl.applicationUser.reminderEmailNotify"
+                                                           ng-readonly="!ctrl.applicationUser.reminderEmailNotify"
+                                                           name="reminderEmailDays" id="reminderEmailDays"
+                                                           ng-model="ctrl.applicationUser.reminderEmailDays"
+                                                           maxlength="5"
+                                                           custom-validate-directive="number">
+                                                    <div ng-messages="userPreferencesForm.reminderEmailDays.$error">
+                                                        <div ng-message="required">{{lang.field_required}}</div>
+                                                        <div ng-message="number">{{lang.numberonly}}</div>
+                                                        <div ng-message="maxlength">
+                                                            {{lang.max_length.change({length:5})}}
+                                                        </div>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <!-- Out Of Office Settings Tab -->
+                    <md-tab label="{{lang.out_of_office_settings}}" ng-if="ctrl.showTab('ooos')"
+                            md-on-select="ctrl.setCurrentTab('ooos')">
+                        <md-content>
+                            <ng-form name="outOfOfficeSettingsForm" autocomplete="off">
+                                <div layout="column" class="p20">
+                                    <!-- Out of Office -->
+                                    <fieldset>
+                                        <legend class="md-accent">
+                                            <!-- Determine Associate -->
+                                            <md-switch flex ng-model="ctrl.isOutOfOffice"
+                                                       ng-change="ctrl.changeOutOfOffice(outOfOfficeSettingsForm)"
+                                                       aria-label="{{lang.out_of_office_toggle_button}}">
+                                                <label>{{ctrl.isOutOfOffice ? (lang.out_of_office_settings + ' : ' +
+                                                    lang.active) : (lang.out_of_office_settings + ' : ' + lang.inactive)
+                                                    }}</label>
+                                            </md-switch>
+                                        </legend>
+                                        <div class="full-width-fieldset">
+                                            <div layout="row">
+                                                <!-- Out Of Office -->
+                                                <md-switch flex ng-model="ctrl.applicationUser.outOfOffice"
+                                                           ng-disabled="!ctrl.isOutOfOffice"
+                                                           aria-label="{{lang.out_of_office_toggle_button}}">
+                                                    <label>{{ctrl.ouApplicationUser.getOutOffOfficeTranslatedStatus(ctrl.applicationUser.outOfOffice)}}</label>
+                                                </md-switch>
+                                            </div>
+                                            <div layout="row">
+                                                <!-- User On Behalf / Proxy User -->
+                                                <!--<md-input-container flex>
+                                                    <label>{{lang.user_on_behalf}}</label>
+                                                    <md-select name="proxyUser" id="proxyUser"
+                                                               ng-required="ctrl.isOutOfOffice"
+                                                               ng-disabled="!ctrl.isOutOfOffice"
+                                                               md-selected-text="ctrl.getSelectedDelegatedUserText()"
+                                                               ng-model-options="{trackBy:'$value.id'}"
+                                                               ng-model="ctrl.selectedProxyUser">
+                                                        <md-option
+                                                                ng-if="!ctrl.currentUser(proxyUser)"
+                                                                ng-repeat="proxyUser in ctrl.availableProxies track by $index"
+                                                                ng-value="proxyUser">
+                                                            {{proxyUser.getTranslatedName()}}
+                                                        </md-option>
+                                                    </md-select>
+                                                    <div ng-messages="outOfOfficeSettingsForm.proxyUser.$error">
+                                                        <div ng-message="required">{{lang.field_required}}</div>
+                                                    </div>
+                                                </md-input-container>-->
+
+                                                <!-- User On Behalf / Proxy User -->
+                                                <md-autocomplete flex md-input-name="proxyUser" md-input-id="proxyUser"
+                                                                 ng-required="ctrl.isOutOfOffice"
+                                                                 ng-disabled="!ctrl.isOutOfOffice"
+                                                                 md-no-cache="true"
+                                                                 md-clear-button="true"
+                                                                 md-selected-item="ctrl.selectedProxyUser"
+                                                                 md-search-text-change="ctrl.proxyUserSearch(ctrl.searchTextProxyUser)"
+                                                                 md-search-text="ctrl.searchTextProxyUser"
+                                                                 md-selected-item-change="ctrl.selectedProxyUserChange(item)"
+                                                                 md-items="item in ctrl.proxyUserSearch(ctrl.searchTextProxyUser)"
+                                                                 md-item-text="item.getTranslatedName()"
+                                                                 md-min-length="0"
+                                                                 md-require-match
+                                                                 md-floating-label="{{lang.user_on_behalf}}">
+                                                    <md-item-template>
+                                                        <span md-highlight-text="ctrl.searchTextProxyUser"
+                                                              md-highlight-flags="i">{{item.getTranslatedName()}}</span>
+                                                    </md-item-template>
+                                                    <md-not-found>
+                                                        {{lang.no_records_found_matching_search}}
+                                                    </md-not-found>
+                                                    <div ng-messages="outOfOfficeSettingsForm.proxyUser.$error">
+                                                        <div ng-message="required">{{lang.field_required}}</div>
+                                                        <div ng-message="md-require-match">{{lang.field_required}}</div>
+                                                    </div>
+                                                </md-autocomplete>
+
+                                                <!-- Authority Levels -->
+                                                <md-input-container flex>
+                                                    <label>{{lang.authority_level}}</label>
+                                                    <md-select multiple name="proxyAuthorityLevels"
+                                                               ng-required="ctrl.isOutOfOffice"
+                                                               ng-disabled="!ctrl.isOutOfOffice"
+                                                               id="proxyAuthorityLevels"
+                                                               ng-model="ctrl.ouApplicationUser.proxyAuthorityLevels"
+                                                               ng-model-options="{trackBy: '$value.id'}">
+                                                        <md-option
+                                                                ng-if="ctrl.isSecurityLevelInclude(securityLevel)"
+                                                                ng-repeat="securityLevel in ctrl.securityLevels track by $index"
+                                                                ng-value="securityLevel">
+                                                            {{securityLevel.getTranslatedName()}}
+                                                        </md-option>
+                                                    </md-select>
+                                                    <div ng-messages="outOfOfficeSettingsForm.proxyAuthorityLevels.$error">
+                                                        <div ng-message="required">{{lang.field_required}}</div>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
+                                            <div layout="row">
+                                                <!-- Start Date -->
+                                                <md-input-container flex>
+                                                    <label for="proxyStartDate">{{lang.start_date}}</label>
+                                                    <md-datepicker id="proxyStartDate" name="proxyStartDate"
+                                                                   ng-required="ctrl.isOutOfOffice && (ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyEndDate)"
+                                                                   md-min-date="ctrl.today"
+                                                                   ng-model="ctrl.ouApplicationUser.proxyStartDate"
+                                                                   ng-change="ctrl.getMinProxyEndDate()"
+                                                                   md-max-date="ctrl.calculatedMaxProxyStartDate"
+                                                                   ng-disabled="!ctrl.isOutOfOffice"
+                                                    ></md-datepicker>
+                                                    <!--md-max-date="ctrl.ouApplicationUser.proxyEndDate"-->
+                                                    <div ng-messages="outOfOfficeSettingsForm.proxyStartDate.$error">
+                                                        <div ng-message="required">{{lang.field_required}}</div>
+                                                    </div>
+                                                </md-input-container>
+
+                                                <!-- End Date -->
+                                                <md-input-container flex>
+                                                    <label for="proxyEndDate">{{lang.end_date}}</label>
+                                                    <md-datepicker id="proxyEndDate" name="proxyEndDate"
+                                                                   ng-required="ctrl.isOutOfOffice && (ctrl.applicationUser.outOfOffice || ctrl.ouApplicationUser.proxyStartDate)"
+                                                                   ng-model="ctrl.ouApplicationUser.proxyEndDate"
+                                                                   md-min-date="ctrl.calculatedMinProxyEndDate"
+                                                                   ng-change="ctrl.getMaxProxyStartDate()"
+                                                                   ng-disabled="!ctrl.isOutOfOffice || !ctrl.ouApplicationUser.proxyStartDate"
+                                                    ></md-datepicker>
+                                                    <!--md-min-date="ctrl.ouApplicationUser.proxyStartDate"-->
+                                                    <div ng-messages="outOfOfficeSettingsForm.proxyEndDate.$error">
+                                                        <div ng-message="required">{{lang.field_required}}</div>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
+                                            <div layout="row">
+                                                <!-- View Proxy Message -->
+                                                <md-switch flex ng-model="ctrl.ouApplicationUser.viewProxyMessage"
+                                                           aria-label="{{lang.view_message_to_sender}}"
+                                                           ng-disabled="!ctrl.isOutOfOffice">
+                                                    <label>{{lang.view_message_to_sender}} :
+                                                        {{ctrl.ouApplicationUser.getTranslatedViewMessageToSender()}}</label>
+                                                </md-switch>
+                                                <!-- Out of office Message -->
+                                                <md-input-container flex
+                                                                    ng-if="ctrl.ouApplicationUser.viewProxyMessage">
+                                                    <label>{{lang.out_of_office_message}}</label>
+                                                    <textarea ng-model="ctrl.ouApplicationUser.proxyMessage"
+                                                              name="proxyMessage" id="proxyMessage" minlength="4"
+                                                              maxlength="265" required
+                                                              ng-required="ctrl.ouApplicationUser.viewProxyMessage"
+                                                              ng-disabled="!ctrl.isOutOfOffice">
+                                            </textarea>
+                                                    <div ng-messages="outOfOfficeSettingsForm.proxyMessage.$error">
+                                                        <div ng-message="required">{{lang.field_required}}</div>
+                                                        <div ng-message="minlength">{{lang.short}}</div>
+                                                        <div ng-message="maxlength">
+                                                            {{lang.max_length.change({length:300})}}
+                                                        </div>
+                                                    </div>
+                                                </md-input-container>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </ng-form>
+                        </md-content>
+                    </md-tab>
+                    <!-- User Comments Tab -->
+                    <md-tab label="{{lang.user_comments}}" ng-if="ctrl.showTab('uc')"
+                            md-on-select="ctrl.setCurrentTab('uc')">
+                        <md-content>
+                            <ng-form name="userCommentsForm" autocomplete="off">
+                                <div layout="column" class="p20" ng-if="ctrl.isUserCommentForm">
+                                    <div layout="row">
+                                        <!-- Organization Unit -->
+                                        <md-input-container flex>
+                                            <label>{{lang.organization_unit}}</label>
+                                            <md-select name="ouId" id="ouId"
+                                                       ng-required="ctrl.isUserCommentForm"
+                                                       ng-model="ctrl.userComment.ouId">
+                                                <md-option
+                                                        ng-repeat="organization in ctrl.organizationsForAppUser track by $index"
+                                                        ng-value="organization.ou.id">
+                                                    {{organization.ou.getTranslatedName()}}
+                                                </md-option>
+                                            </md-select>
+                                            <div ng-messages="userCommentsForm.ouId.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                            </div>
+                                        </md-input-container>
+
+                                        <!-- Item Order -->
+                                        <md-input-container flex>
+                                            <label>{{lang.item_order}}</label>
+                                            <input name="itemOrder" id="itemOrder" maxlength="5"
+                                                   ng-required="ctrl.isUserCommentForm"
+                                                   ng-model="ctrl.userComment.itemOrder"
+                                                   custom-validate-directive="number">
+                                            <div ng-messages="userCommentsForm.itemOrder.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="number">{{lang.numberonly}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:5})}}</div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row">
+                                        <!-- Short Comment -->
+                                        <md-input-container flex>
+                                            <label for="shortComment">{{lang.short_comment}}</label>
+                                            <input name="shortComment" id="shortComment" minlength="4"
+                                                   ng-required="ctrl.isUserCommentForm" maxlength="150"
+                                                   ng-model="ctrl.userComment.shortComment">
+                                            <div ng-messages="userCommentsForm.shortComment.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:150})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+
+                                    </div>
+                                    <div layout="row">
+                                        <!-- Comment -->
+                                        <md-input-container flex>
+                                            <label for="comment">{{lang.comment}}</label>
+                                            <textarea rows="5" name="comment" id="comment" minlength="4"
+                                                      ng-required="ctrl.isUserCommentForm" maxlength="1024"
+                                                      ng-model="ctrl.userComment.comment"></textarea>
+                                            <div ng-messages="userCommentsForm.comment.$error">
+                                                <div ng-message="required">{{lang.field_required}}</div>
+                                                <div ng-message="minlength">{{lang.short}}</div>
+                                                <div ng-message="maxlength">{{lang.max_length.change({length:1024})}}
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row">
+                                        <!-- Status -->
+                                        <md-switch flex ng-model="ctrl.userComment.status"
+                                                   aria-label="{{lang.status}}">
+                                            <label>{{lang.status}} : {{ctrl.userComment.getTranslatedStatus()}}</label>
+                                        </md-switch>
+                                        <md-input-container flex>
+
+                                        </md-input-container>
+                                    </div>
+                                </div>
+                            </ng-form>
+
+                            <div layout="column" class="content" ng-if="!ctrl.isUserCommentForm">
+                                <div layout="row" layout-align="start center" class="p25 small">
+                                    <!--<span>{{lang.user_comment}}</span>-->
+                                    <md-button ng-click="ctrl.openUserCommentForm(userCommentsForm, $event)"
+                                               class="md-icon-button"
+                                               tooltip="{{lang.add}}">
+                                        <md-icon md-svg-icon="plus"></md-icon>
+                                    </md-button>
+                                    <md-button ng-click="ctrl.reloadUserComments()" class="md-icon-button"
+                                               tooltip="{{lang.reload}}">
+                                        <md-icon md-svg-icon="refresh"></md-icon>
+                                    </md-button>
+                                    <span flex></span>
+                                    <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+                                </div>
+                                <div layout="column" flex>
+                                    <div scroll-directive>
+                                        <div class="page-padding">
+                                            <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                                                <md-table-container>
+                                                    <div flex scroll-directive>
+                                                        <table md-table md-row-select="true"
+                                                               multiple="true"
+                                                               ng-model="ctrl.selectedUserComments"
+                                                               md-progress="ctrl.progress">
+                                                            <thead md-head md-order="ctrl.grid.order"
+                                                                   md-on-reorder="ctrl.getSortedDataUserComments">
+                                                            <tr md-row>
+                                                                <th colspan="4" class="table-selector-header"
+                                                                    ng-if="ctrl.selectedUserComments.length" md-column>
+                                                                    <div layout="row" layout-align="start center">
+                                                                        <span>{{ctrl.selectedUserComments.length}} {{lang.items_selected}} </span>
+                                                                        <span flex></span>
+                                                                        <table-status-directive
+                                                                                when-close="ctrl.changeStatusBulkUserComments"></table-status-directive>
+                                                                        <md-button class="md-icon-button"
+                                                                                   ng-click="ctrl.removeBulkUserComments($event)">
+                                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                                        </md-button>
+                                                                    </div>
+                                                                </th>
+                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
+                                                                    md-order-by=""><span>{{lang.short_comment}}</span>
+                                                                </th>
+                                                                <!--<th ng-if="!ctrl.selectedUserComments.length" md-column-->
+                                                                <!--md-order-by=""><span>{{lang.comment}}</span>-->
+                                                                <!--</th>-->
+                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
+                                                                    md-order-by=""><span>{{lang.status}}</span>
+                                                                </th>
+                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
+                                                                    md-order-by=""><span>{{lang.item_order}}</span>
+                                                                </th>
+                                                                <th ng-if="!ctrl.selectedUserComments.length" md-column
+                                                                    md-order-by=""><span>{{lang.actions}}</span>
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody md-body>
+                                                            <tr md-select="userComment" md-row
+                                                                ng-repeat="userComment in ctrl.userComments | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                                                <td md-cell><a href=""
+                                                                               ng-click="ctrl.showComment(userComment, $event)">{{userComment.shortComment}}</a>
+                                                                </td>
+                                                                <!--<td md-cell>{{userComment.comment}}</td>-->
+                                                                <td md-cell>
+                                                                    <md-switch aria-label="{{lang.status}}"
+                                                                               ng-model="userComment.status"
+                                                                               ng-change="ctrl.changeStatusUserComment(userComment)"
+                                                                               title="{{userComment.getTranslatedStatus()}}"></md-switch>
+                                                                </td>
+                                                                <td md-cell>{{userComment.itemOrder}}</td>
+                                                                <td md-cell>
+                                                                    <div flex layout="row" layout-align="start center">
+                                                                        <md-button class="md-icon-button"
+                                                                                   ng-click="ctrl.editUserComment(userComment, userCommentsForm, $event)"
+                                                                                   title="{{lang.edit}}">
+                                                                            <md-icon md-svg-icon="pencil"></md-icon>
+                                                                        </md-button>
+                                                                        <md-button class="md-icon-button"
+                                                                                   ng-click="ctrl.removeUserComment(userComment, $event)"
+                                                                                   title="{{lang.delete}}">
+                                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                                        </md-button>
+
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <md-table-pagination
+                                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                            md-limit-options="ctrl.grid.limitOptions"
+                                                            md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                                            md-total="{{ctrl.userComments.length}}"
+                                                            md-page-select></md-table-pagination>
+                                                </md-table-container>
+                                            </md-card>
+                                        </div>
+                                    </div>
+                                </div><!-- page-content-->
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <!-- Workflow Groups Tab -->
+                    <md-tab label="{{lang.workflow_groups}}" ng-if="ctrl.showTab('wfg')"
+                            md-on-select="ctrl.setCurrentTab('wfg')">
+                        <md-content>
+                            <div layout="column" class="content">
+                                <div layout="row" layout-align="start center" class="p25 small">
+                                    <md-button ng-click="ctrl.openAddWorkflowGroupDialog($event)" class="md-icon-button"
+                                               tooltip="{{lang.add}}">
+                                        <md-icon md-svg-icon="plus"></md-icon>
+                                    </md-button>
+                                    <md-button ng-click="ctrl.reloadUserWorkflowGroups()" class="md-icon-button"
+                                               tooltip="{{lang.reload}}">
+                                        <md-icon md-svg-icon="refresh"></md-icon>
+                                    </md-button>
+                                    <span flex></span>
+                                    <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+                                </div>
+                                <div layout="column" flex ng-if="ctrl.userWorkflowGroups.length">
+                                    <div scroll-directive>
+                                        <div class="page-padding">
+                                            <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                                                <md-table-container>
+                                                    <div flex scroll-directive>
+                                                        <table md-table md-row-select="true"
+                                                               multiple="true"
+                                                               ng-model="ctrl.selectedUserWorkflowGroups"
+                                                               md-progress="ctrl.userWorkflowProgress">
+                                                            <thead md-head md-order="ctrl.userWorkflowGrid.order"
+                                                                   md-on-reorder="ctrl.getSortedDataUserWorkflow">
+                                                            <tr md-row>
+                                                                <th colspan="4" class="table-selector-header"
+                                                                    ng-if="ctrl.selectedUserWorkflowGroups.length"
+                                                                    md-column>
+                                                                    <div layout="row" layout-align="start center">
+                                                                        <span>{{ctrl.selectedUserWorkflowGroups.length}} {{lang.items_selected}} </span>
+                                                                        <span flex></span>
+                                                                        <table-status-directive
+                                                                                when-close="ctrl.changeStatusBulkUserWorkflowGroups"></table-status-directive>
+                                                                        <md-button class="md-icon-button"
+                                                                                   ng-click="ctrl.removeBulkUserWorkflowGroups($event)">
+                                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                                        </md-button>
+                                                                    </div>
+                                                                </th>
+                                                                <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
+                                                                    md-column
+                                                                    md-order-by=""><span>{{lang.arabic_name}}</span>
+                                                                </th>
+                                                                <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
+                                                                    md-column
+                                                                    md-order-by=""><span>{{lang.english_name}}</span>
+                                                                </th>
+                                                                <th ng-if="!ctrl.selectedUserWorkflowGroups.length"
+                                                                    md-column
+                                                                    md-order-by=""><span>{{lang.status}}</span>
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody md-body>
+                                                            <tr md-select="userWorkflowGroup" md-row
+                                                                ng-repeat="userWorkflowGroup in ctrl.userWorkflowGroups | translatedNameFilter:ctrl.searchModel | limitTo: ctrl.userWorkflowGrid.limit: ((ctrl.userWorkflowGrid.page - 1) * ctrl.userWorkflowGrid.limit)  track by $index">
+                                                                <td md-cell>{{userWorkflowGroup.wfgroup.arName}}</td>
+                                                                <td md-cell>{{userWorkflowGroup.wfgroup.enName}}</td>
+                                                                <td md-cell>
+                                                                    <md-switch aria-label="{{lang.status}}"
+                                                                               ng-model="userWorkflowGroup.wfgroup.status"
+                                                                               ng-change="ctrl.changeStatusUserWorkflowGroup(userWorkflowGroup.wfgroup)"
+                                                                               title="{{userWorkflowGroup.wfgroup.getTranslatedStatus()}}"></md-switch>
+                                                                </td>
+                                                                <td md-cell>
+                                                                    <div flex layout="row" layout-align="start center">
+                                                                        <md-button class="md-icon-button"
+                                                                                   ng-click="ctrl.openEditWorkflowGroupDialog(userWorkflowGroup.wfgroup, $event)"
+                                                                                   title="{{lang.edit}}">
+                                                                            <md-icon md-svg-icon="pencil"></md-icon>
+                                                                        </md-button>
+                                                                        <md-button class="md-icon-button"
+                                                                                   ng-click="ctrl.removeUserWorkflowGroup(userWorkflowGroup, userWorkflowGroup.wfgroup, $event)"
+                                                                                   title="{{lang.delete}}">
+                                                                            <md-icon md-svg-icon="delete"></md-icon>
+                                                                        </md-button>
+
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <md-table-pagination
+                                                            md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                            md-limit-options="ctrl.userWorkflowGrid.limitOptions"
+                                                            md-limit="ctrl.userWorkflowGrid.limit"
+                                                            md-page="ctrl.userWorkflowGrid.page"
+                                                            md-total="{{ctrl.userWorkflowGroups.length}}"
+                                                            md-page-select></md-table-pagination>
+                                                </md-table-container>
+                                            </md-card>
+                                        </div>
+                                    </div>
+                                </div><!-- page-content-->
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <!--User Folders -->
+                    <md-tab label="{{lang.folders}}" ng-if="ctrl.showTab('folders')"
+                            md-on-select="ctrl.setCurrentTab('folders')">
+                        <md-content layout-padding>
+                            <div>
+                                <user-folders-tree-view-directive
+                                        folders="ctrl.userFolderService.userFolders"
+                                        current-node="ctrl.currentNode"
+                                        allow-actions="true"
+                                        add-root-folder="true">
+                                </user-folders-tree-view-directive>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <!-- Signature -->
+                    <md-tab label="{{lang.signature}}" ng-if="ctrl.showTab('signature')"
+                            md-on-select="ctrl.setCurrentTab('signature')">
+                        <md-content>
+                            <div layout="column" class="p20">
+                                <ng-form layout="row" name="signatureForm">
+                                    <div layout="column" flex><!--class="p20"-->
+                                        <div layout="row">
+                                            <div>
+                                                <label for="add-sign" class="md-button md-raised alongside-input">
+                                                        <span layout="row" layout-align="start center">
+                                                            <md-icon md-svg-icon="upload"></md-icon>
+                                                            <span>{{lang.upload_signature}}</span>
+                                                        </span>
+                                                    <input reset-after-change="true"
+                                                           catch-upload-file-directive="ctrl.viewImage"
+                                                           class="hide-import-file" type="file"
+                                                           id="add-sign" name="add-sign">
+                                                </label>
+                                                <div class="help-text-div">{{ctrl.imageDimensionsInfo}}</div>
+                                            </div>
+                                            <md-input-container flex ng-if="ctrl.enableAdd">
+                                                <label for="docSubject">{{lang.subject}}</label>
+                                                <input name="docSubject" id="docSubject" minlength="4"
+                                                       ng-model="ctrl.signature.docSubject"
+                                                       ng-required="true"
+                                                       maxlength="80">
+                                                <div ng-messages="signatureForm.docSubject.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                    <div ng-message="minlength">{{lang.short}}</div>
+                                                    <div ng-message="maxlength">
+                                                        {{lang.max_length.change({length:80})}}
+                                                    </div>
+                                                </div>
+                                            </md-input-container>
+                                            <md-input-container flex ng-if="ctrl.enableAdd">
+                                                <label for="documentTitle">{{lang.title}}</label>
+                                                <input name="documentTitle" id="documentTitle" minlength="4"
+                                                       ng-model="ctrl.signature.documentTitle" required
+                                                       maxlength="80">
+                                                <div ng-messages="signatureForm.documentTitle.$error">
+                                                    <div ng-message="required">{{lang.field_required}}</div>
+                                                    <div ng-message="minlength">{{lang.short}}</div>
+                                                    <div ng-message="maxlength">
+                                                        {{lang.max_length.change({length:80})}}
+                                                    </div>
+                                                </div>
+                                            </md-input-container>
+                                        </div>
+                                        <div layout="row" ng-if="ctrl.enableAdd">
+                                            <div flex>
+                                                <img name="fileUrl" id="fileUrl" ng-if="ctrl.fileUrl"
+                                                     ng-src="{{ctrl.fileUrl}}"
+                                                     class="upload-image" height="85" flex>
+                                            </div>
+                                            <div layout="row" class="p20">
+                                                <md-button class="md-raised" ng-disabled="signatureForm.$invalid"
+                                                           ng-click="ctrl.addApplicationUserSignatureFromCtrl()">
+                                                    {{lang.add}}
+                                                </md-button>
+                                                <md-button class="md-raised"
+                                                           ng-click="ctrl.closeApplicationUserSignatureFromCtrl()">
+                                                    {{lang.close}}
+                                                </md-button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-form>
+
+                                <div layout="row" ng-if="ctrl.applicationUser.signature.length">
+                                    <md-card md-whiteframe="3" flex class="card-overlay">
+                                        <md-table-container>
+                                            <div flex scroll-directive>
+                                                <table md-table md-row-select
+                                                       ng-model="ctrl.selectedSignature"
+                                                       md-progress="ctrl.signatureProgress">
+                                                    <thead md-head md-order="ctrl.signatureGrid.order"
+                                                           md-on-reorder="ctrl.getSortedDataSignature">
+                                                    <tr md-row>
+                                                        <th colspan="5" ng-if="ctrl.selectedSignature.length"
+                                                            md-column>
+                                                            <div layout="row" layout-align="start center">
+                                                                <span>{{ctrl.selectedSignature.length}} {{lang.items_selected}} </span>
+                                                                <span flex></span>
+                                                                <!--<table-status-directive
+                                                                        when-close="ctrl.changeStatusBulkDocumentTemplates"></table-status-directive>-->
+                                                                <!--<md-button class="md-icon-button"
+                                                                           ng-click="ctrl.removeBulkSignatures($event)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>-->
+                                                            </div>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedSignature.length" md-column
+                                                            md-order-by="docSubject">
+                                                            <span>{{lang.subject}}</span>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedSignature.length" md-column
+                                                            md-order-by="documentTitle">
+                                                            <span>{{lang.title}}</span>
+                                                        </th>
+                                                        <!--<th ng-if="!ctrl.selectedSignature.length" md-column
+                                                            md-order-by="docType">
+                                                            <span>{{lang.label_document_type}}</span>
+                                                        </th>
+                                                        <th ng-if="!ctrl.selectedSignature.length" md-column
+                                                            md-order-by="templateType">
+                                                            <span>{{lang.template_type}}</span>
+                                                        </th>-->
+                                                        <th ng-if="!ctrl.selectedSignature.length" md-column>
+                                                            <span>{{lang.actions}}</span>
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody md-body>
+                                                    <tr md-row
+                                                        ng-repeat="signature in ctrl.applicationUser.signature | filter:ctrl.searchModel | limitTo: ctrl.signatureGrid.limit: ((ctrl.signatureGrid.page - 1) * ctrl.signatureGrid.limit) track by $index">
+                                                        <td md-cell>{{signature.docSubject}}</td>
+                                                        <td md-cell>{{signature.documentTitle}}</td>
+                                                        <!--<td md-cell>{{documentTemplate.docType}}</td>
+                                                        <td md-cell>{{documentTemplate.templateType}}</td>-->
+                                                        <td md-cell>
+                                                            <div flex layout="row" layout-align="start center">
+                                                                <md-button class="md-icon-button" title="{{lang.edit}}"
+                                                                           ng-click="ctrl.editSignature(signature, $event)">
+                                                                    <md-icon md-svg-icon="pencil"></md-icon>
+                                                                </md-button>
+                                                                <md-button class="md-icon-button"
+                                                                           title="{{lang.delete}}"
+                                                                           ng-click="ctrl.removeSignature(signature, $event)">
+                                                                    <md-icon md-svg-icon="delete"></md-icon>
+                                                                </md-button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <md-table-pagination
+                                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                                    md-limit-options="ctrl.signatureGrid.limitOptions"
+                                                    md-limit="ctrl.signatureGrid.limit"
+                                                    md-page="ctrl.signatureGrid.page"
+                                                    md-total="{{ctrl.applicationUser.signature.length}}" md-page-select>
+                                            </md-table-pagination>
+                                        </md-table-container>
+                                    </md-card>
+                                </div>
+
+                            </div>
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-disabled="userPreferencesForm.$invalid"
+                           ng-if="ctrl.selectedTab==='general' || ctrl.selectedTab==='ns'"
+                           ng-click="ctrl.editApplicationUserFromCtrl()">{{lang.save}}
+                </md-button>
+                <md-button class="md-raised" ng-disabled="outOfOfficeSettingsForm.$invalid || !ctrl.isOutOfOffice"
+                           ng-if="ctrl.selectedTab==='ooos'"
+                           ng-click="ctrl.saveOutOfOfficeSettingsFromCtrl()">{{lang.save}}
+                </md-button>
+                <md-button class="md-raised" ng-disabled="userPreferencesForm.userCommentsForm.$invalid"
+                           ng-if="ctrl.selectedTab==='uc' &&  ctrl.isUserCommentForm && !ctrl.userComment.id"
+                           ng-click="ctrl.addUserCommentFromCtrl()">{{lang.add}}
+                </md-button>
+                <md-button class="md-raised" ng-disabled="userPreferencesForm.userCommentsForm.$invalid"
+                           ng-if="ctrl.selectedTab==='uc' &&  ctrl.isUserCommentForm && ctrl.userComment.id"
+                           ng-click="ctrl.editUserCommentFromCtrl()">{{lang.save}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closeUserPreferencePopupFromCtrl()"
+                           ng-if="!ctrl.isUserCommentForm">
+                    {{lang.close}}
+                </md-button>
+                <md-button class="md-raised" ng-if="ctrl.selectedTab==='uc' && ctrl.isUserCommentForm"
+                           ng-click="ctrl.closeUserCommentForm($event)">{{lang.close}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

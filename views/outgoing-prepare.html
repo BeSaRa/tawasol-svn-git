@@ -1,0 +1,128 @@
+<!-- start of view -->
+<div background-directive="tall" class="page-content" flex="">
+    <div layout="column" class="content">
+        <!-- page-header start -->
+        <div layout="row" layout-align="start center" class="page-header padding-header small">
+            <span>{{lang.menu_item_outgoing_prepare}}</span>
+            <!--<md-button ng-click="ctrl.openAddPrepareOutgoingDialog($event)" class="md-icon-button"
+                       tooltip="{{lang.add}}">
+                <md-icon md-svg-icon="plus"></md-icon>
+            </md-button>-->
+            <md-button ng-click="ctrl.reloadPrepareOutgoings()" class="md-icon-button" tooltip="{{lang.reload}}">
+                <md-icon md-svg-icon="refresh"></md-icon>
+            </md-button>
+            <span flex></span>
+            <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+        </div>
+        <!-- end page-header -->
+        <!-- page-content -->
+        <div layout="column" flex>
+            <div scroll-directive>
+                <div class="page-padding">
+                    <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                        <md-table-container>
+                            <div flex scroll-directive>
+                                <table md-table md-row-select multiple ng-model="ctrl.selectedPrepareOutgoings"
+                                       md-progress="ctrl.progress">
+                                    <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                                    <tr md-row>
+                                        <th colspan="{{ctrl.selectedPrepareOutgoings.length > 1 ? 6 : 7}}"
+                                            ng-if="ctrl.selectedPrepareOutgoings.length" md-column>
+                                            <div layout="row" layout-align="start center">
+                                                <span>{{ctrl.selectedPrepareOutgoings.length}} {{lang.items_selected}} </span>
+                                                <span flex></span>
+
+                                                <!--ng-if="ctrl.selectedPrepareOutgoings.length > 1"-->
+                                                <md-button class="md-icon-button"
+                                                           ng-if="ctrl.employeeService.hasPermissionTo('DELETE_OUTGOING')"
+                                                           tooltip="{{lang.remove}}"
+                                                           ng-click="ctrl.removeBulkPrepareOutgoings($event)">
+                                                    <md-icon md-svg-icon="delete" class="action-green"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedPrepareOutgoings.length" md-column md-order-by="">
+                                            <!-- Is Paper / Electronic Indicators -->
+                                        </th>
+                                        <th ng-if="!ctrl.selectedPrepareOutgoings.length" md-column
+                                            md-order-by="docSubject">
+                                            <span>{{lang.subject}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedPrepareOutgoings.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('priorityLevel', 'Lookup')}}">
+                                            <span>{{lang.priority_level}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedPrepareOutgoings.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('securityLevel', 'Lookup')}}">
+                                            <span>{{lang.security_level}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedPrepareOutgoings.length" md-column
+                                            md-order-by="{{ctrl.getSortingKey('creatorInfo', 'Information')}}">
+                                            <span>{{lang.creator}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedPrepareOutgoings.length" md-column
+                                            md-order-by="createdOn">
+                                            <span>{{lang.created_on}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedPrepareOutgoings.length && ctrl.selectedPrepareOutgoings.length < 2"
+                                            md-column>
+                                            <span></span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody md-body>
+                                    <tr md-row md-select="prepareOutgoing" grid-right-click-directive
+                                        model="prepareOutgoing"
+                                        selected-length="{{ctrl.selectedPrepareOutgoings.length ? ctrl.selectedPrepareOutgoings.length : 0}}"
+                                        ng-repeat="prepareOutgoing in searchResults = (ctrl.prepareOutgoings | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit))  track by $index">
+                                        <td md-cell class="indicator-td">
+                                            <!-- Electronic/Paper Document -->
+                                            <grid-indicator-directive record="prepareOutgoing"
+                                                                      indicator-type="paperElectronic"
+                                                                      record-type="outgoing"></grid-indicator-directive>
+                                        </td>
+                                        <td md-cell>{{prepareOutgoing.docSubject}}</td>
+                                        <td md-cell>{{prepareOutgoing.priorityLevel.getTranslatedName()}}</td>
+                                        <td md-cell>{{prepareOutgoing.securityLevel.getTranslatedName()}}</td>
+                                        <td md-cell>{{prepareOutgoing.creatorInfo.getTranslatedName()}}</td>
+                                        <td md-cell>{{prepareOutgoing.createdOn}}</td>
+                                        <td md-cell ng-if="ctrl.selectedPrepareOutgoings.length < 2">
+                                            <div layout-align="start center" ng-if="!ctrl.selectedPrepareOutgoings.length
+                                                  || ctrl.selectedPrepareOutgoings.length===1 && ctrl.selectedPrepareOutgoings[0].id === prepareOutgoing.id">
+                                                <grid-actions-directive menu-direction="horizontal"
+                                                                        grid-actions="ctrl.gridActions"
+                                                                        model="prepareOutgoing"
+                                                                        shortcut="true"
+                                                ></grid-actions-directive>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="!ctrl.prepareOutgoings.length">
+                                        <td md-cell colspan="7" class="red-text text-center">{{lang.no_records_found}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.prepareOutgoings.length && !searchResults.length">
+                                        <td md-cell colspan="7" class="red-text text-center">
+                                            {{lang.no_records_found_matching_search}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.grid.limitOptions"
+                                    md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                    md-total="{{(ctrl.prepareOutgoings | filter:ctrl.searchModel).length}}"
+                                    md-page-select
+                                    md-on-paginate="ctrl.grid.pagingCallback">
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+            </div>
+        </div>
+        <!-- end page content -->
+    </div>
+</div>
+<!-- end of view -->

@@ -1,0 +1,271 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.attachment_attachments}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20" ng-if="!ctrl.model.id">{{lang.attachment_attachments}}</span>
+            <close-dialog-directive when-close="ctrl.closeDrag"></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <div class="p20">
+                <!-- Add attachment-->
+                <div layout="row" ng-if="!ctrl.attachment">
+                    <!-- Security Level -->
+                    <md-input-container ng-if="!ctrl.inheritSecurity" flex>
+                        <label>{{lang.attachment_attachment_security_level}}</label>
+                        <md-select ng-required="true"
+                                ng-model-options="{trackBy:'$value.lookupKey'}"
+                                ng-change="ctrl.changeValueOf('securityLevel',ctrl.securityLevel)"
+                                ng-model="ctrl.securityLevel">
+                            <md-option ng-value="level" ng-repeat="level in ctrl.securityLevels">
+                                {{level.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <!-- Update Action Status -->
+                    <md-input-container flex>
+                        <label for="updateActionStatus">{{lang.attachment_update_action_status}}</label>
+                        <md-select id="updateActionStatus"
+                                   name="updateActionStatus"
+                                   ng-required="true"
+                                   ng-model-options="{trackBy:'$value.lookupKey'}"
+                                   ng-change="ctrl.changeValueOf('updateActionStatus',ctrl.updateActionStatus)"
+                                   ng-model="ctrl.updateActionStatus">
+                            <md-option ng-value="updateAction"
+                                       ng-repeat="updateAction in ctrl.attachmentUpdateActions">
+                                {{updateAction.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="attachment_from.updateActionStatus.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                    <!-- Attachment Type -->
+                    <md-input-container flex>
+                        <label>{{lang.attachment_attachment_type}}</label>
+                        <md-select ng-change="ctrl.changeValueOf('attachmentType',ctrl.attachmentType)"
+                                   ng-required="true"
+                                   ng-model-options="{trackBy:'$value.lookupKey'}"
+                                   ng-model="ctrl.attachmentType">
+                            <md-option ng-repeat="type in ctrl.attachmentTypes"
+                                       ng-value="type"
+                                       ng-if="type.status">
+                                {{type.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <!-- Buttons -->
+                    <div>
+                        <!-- Add -->
+                        <md-button class="md-raised md-primary"
+                                   ng-disabled="!ctrl.checkValidAttachmentFields()"
+                                   ng-click="ctrl.startUploadAttachments()">
+                            {{lang.attachment_add}}
+                        </md-button>
+                    </div>
+                </div>
+                <!-- Edit attachment-->
+                <div layout="row" ng-if="ctrl.attachment">
+                    <!-- Title -->
+                    <md-input-container flex>
+                        <label for="documentTitle">{{lang.attachment_document_title}}</label>
+                        <input ng-model="ctrl.attachment.documentTitle" name="documentTitle" id="documentTitle">
+                    </md-input-container>
+                    <!-- Security Level -->
+                    <md-input-container ng-if="!ctrl.inheritSecurity" flex>
+                        <label>{{lang.attachment_attachment_security_level}}</label>
+                        <md-select ng-required="true"
+                                ng-model-options="{trackBy:'$value.lookupKey'}"
+                                ng-change="ctrl.changeValueOf('securityLevel',ctrl.securityLevel)"
+                                ng-model="ctrl.attachment.securityLevel">
+                            <md-option ng-value="level" ng-repeat="level in ctrl.securityLevels">
+                                {{level.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <!-- Update Action Status -->
+                    <md-input-container flex>
+                        <label for="updateActionStatus">{{lang.attachment_update_action_status}}</label>
+                        <md-select id="updateActionStatus"
+                                   name="updateActionStatus"
+                                   ng-required="true"
+                                   ng-model-options="{trackBy:'$value.lookupKey'}"
+                                   ng-change="ctrl.changeValueOf('updateActionStatus',ctrl.updateActionStatus)"
+                                   ng-model="ctrl.attachment.updateActionStatus">
+                            <md-option ng-value="updateAction"
+                                       ng-repeat="updateAction in ctrl.attachmentUpdateActions">
+                                {{updateAction.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                        <div ng-messages="attachment_from.updateActionStatus.$error">
+                            <div ng-message="required">{{lang.field_required}}</div>
+                        </div>
+                    </md-input-container>
+                    <!-- Attachment Type -->
+                    <md-input-container flex>
+                        <label>{{lang.attachment_attachment_type}}</label>
+                        <md-select ng-change="ctrl.changeValueOf('attachmentType',ctrl.attachmentType)"
+                                   ng-required="true"
+                                   ng-model-options="{trackBy:'$value.lookupKey'}"
+                                   ng-model="ctrl.attachment.attachmentType">
+                            <md-option ng-repeat="type in ctrl.attachmentTypes"
+                                       ng-value="type"
+                                       ng-if="ctrl.checkAttachmentTypeIsAvailable(type)"
+                                       ng-disabled="!type.status">
+                                {{type.getTranslatedName()}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <!-- Buttons -->
+                    <div>
+                        <!-- Save -->
+                        <md-button class="md-raised md-primary"
+                                   ng-click="ctrl.updateAttachment()"
+                                   ng-disabled="!ctrl.attachmentTypes.length">
+                            {{lang.save}}
+                        </md-button>
+                        <!-- Cancel -->
+                        <md-button class="md-raised"
+                                   ng-click="ctrl.cancelUpdate()">
+                            {{lang.cancel}}
+                        </md-button>
+                    </div>
+                </div>
+                <!-- Attachments list -->
+                <div layout="column" flex>
+                    <!-- Ready to upload Files -->
+                    <div layout="column" ng-if="ctrl.validFiles.length">
+                        <span>{{lang.attachment_ready_to_upload}}</span>
+                        <md-card layout="column"
+                                 ng-repeat="attachment in ctrl.validFiles track by $index">
+                            <div layout="row" layout-align="start center">
+                                <div class="file-icon">
+                                    <md-icon md-svg-icon="{{ctrl.getFileIcon(attachment)}}"></md-icon>
+                                </div>
+                                <div class="drag-attachment-title">
+                                    <div md-truncate>{{attachment.documentTitle}}</div>
+                                </div>
+                                <div flex>
+                                    <md-menu-bar>
+                                        <md-menu>
+                                            <md-button ng-click="$mdMenu.open()">
+                                                {{attachment.updateActionStatus.getTranslatedName()}}
+                                            </md-button>
+                                            <md-menu-content>
+                                                <md-menu-item
+                                                        ng-repeat="updateActionStatus in ctrl.attachmentUpdateActions track by $index">
+                                                    <md-button md-truncate
+                                                               ng-click="ctrl.changeValueOfFor('updateActionStatus',attachment , updateActionStatus)"
+                                                               ng-class="{'menu-select':updateActionStatus.currentId(ctrl.updateActionStatus)}">
+                                                        {{updateActionStatus.getTranslatedName()}}
+                                                    </md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                    </md-menu-bar>
+                                </div>
+                                <div>
+                                    <md-menu-bar>
+                                        <md-menu>
+                                            <md-button ng-click="$mdMenu.open()">
+                                                {{attachment.attachmentType.getTranslatedName()}}
+                                            </md-button>
+                                            <md-menu-content>
+                                                <md-menu-item ng-repeat="type in ctrl.attachmentTypes track by $index"
+                                                              ng-if="type.status">
+                                                    <md-button
+                                                            ng-click="ctrl.changeValueOfFor('attachmentType',attachment , type)"
+                                                            ng-class="{'menu-select':type.currentId(ctrl.attachmentType)}">
+                                                        {{type.getTranslatedName()}}
+                                                    </md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                    </md-menu-bar>
+                                </div>
+                                <div ng-if="!ctrl.inheritSecurity">
+                                    <md-menu-bar>
+                                        <md-menu>
+                                            <md-button ng-click="$mdMenu.open()">
+                                                {{attachment.securityLevel.getTranslatedName()}}
+                                            </md-button>
+                                            <md-menu-content>
+                                                <md-menu-item ng-repeat="level in ctrl.securityLevels track by $index">
+                                                    <md-button
+                                                            ng-click="ctrl.changeValueOfFor('securityLevel',attachment , level)"
+                                                            ng-class="{'menu-select':type.currentId(attachment.securityLevel)}">
+                                                        {{level.getTranslatedName()}}
+                                                    </md-button>
+                                                </md-menu-item>
+                                            </md-menu-content>
+                                        </md-menu>
+                                    </md-menu-bar>
+                                </div>
+                                <div>
+                                    <md-button ng-if="!ctrl.attachment"
+                                               ng-click="ctrl.startUploadAttachment(attachment, true)"
+                                               ng-disabled="(!ctrl.inheritSecurity && !attachment.securityLevel) || !attachment.updateActionStatus || !attachment.attachmentType"
+                                               class="md-raised md-primary">
+                                        {{lang.attachment_add}}
+                                    </md-button>
+                                    <md-button ng-if="ctrl.attachment"
+                                               ng-click="ctrl.updateAttachment()"
+                                               ng-disabled="(!ctrl.inheritSecurity && !attachment.securityLevel) || !attachment.updateActionStatus || !attachment.attachmentType"
+                                               class="md-raised md-primary">
+                                        {{lang.save}}
+                                    </md-button>
+                                </div>
+                            </div>
+                            <div layout="row">
+                                <md-progress-linear md-mode="determinate"
+                                                    ng-value="attachment.progress"></md-progress-linear>
+                            </div>
+                        </md-card>
+                    </div>
+                    <!-- Uploaded/Saved Files -->
+                    <div layout="column" ng-if="ctrl.successFilesUploaded.length">
+                        <span>{{lang.attachment_uploaded}}</span>
+                        <md-card layout="column"
+                                 ng-repeat="attachment in ctrl.successFilesUploaded track by $index">
+                            <div layout="row" layout-align="start center">
+                                <div class="file-icon">
+                                    <md-icon md-svg-icon="{{ctrl.getFileIcon(attachment)}}"></md-icon>
+                                </div>
+                                <div class="drag-attachment-title">
+                                    <div md-truncate>{{attachment.documentTitle}}</div>
+                                </div>
+                                <div flex>
+                                    <md-button>
+                                        {{attachment.updateActionStatus.getTranslatedName()}}
+                                    </md-button>
+                                </div>
+                                <div>
+                                    <md-button>
+                                        {{attachment.attachmentType.getTranslatedName()}}
+                                    </md-button>
+                                </div>
+                                <div ng-if="!ctrl.inheritSecurity">
+                                    <md-button>
+                                        {{attachment.securityLevel.getTranslatedName()}}
+                                    </md-button>
+                                </div>
+                                <div ng-if="!ctrl.attachment">
+                                    <md-button ng-if="ctrl.isAttachmentDeletable(attachment)"
+                                               ng-click="ctrl.editDragAttachment(attachment)" class="md-icon">
+                                        <md-icon md-svg-icon="pencil"></md-icon>
+                                    </md-button>
+                                    <md-button ng-if="ctrl.isAttachmentDeletable(attachment)"
+                                               ng-click="ctrl.deleteDragAttachment(attachment)" class="md-icon">
+                                        <md-icon md-svg-icon="delete"></md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </md-card>
+                    </div>
+                </div>
+                <!-- Drop zone -->
+                <div id="drop-area" layout="row" layout-align="center center" class="drag-dop">
+                    <p>{{ctrl.attachment ? lang.attachments_drop_one_file_only : lang.attachments_drop_your_file}}</p>
+                </div>
+            </div>
+        </md-content>
+    </div>
+</md-dialog>

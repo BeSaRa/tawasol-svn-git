@@ -1,9 +1,9 @@
 module.exports = function (app) {
-    app.directive('organizationHierarchyViewDirective', function () {
+    app.directive('organizationHierarchyViewDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
-            template: require('./organization-hierarchy-view-template.html'),
+            templateUrl: cmsTemplate.getDirective('organization-hierarchy-view-template.html'),
             controller: 'organizationHierarchyViewDirectiveCtrl',
             controllerAs: 'ctrl'
         }

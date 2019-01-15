@@ -1,12 +1,12 @@
 module.exports = function (app) {
-    app.directive('verticalMenuWorkflowItemDirective', function () {
+    app.directive('verticalMenuWorkflowItemDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
             controller: 'verticalMenuWorkflowItemDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,
-            template: require('./vertical-menu-workflow-item-template.html'),
+            templateUrl: cmsTemplate.getDirective('vertical-menu-workflow-item-template.html'),
             scope: {
                 item: '=',
                 callback: '=',

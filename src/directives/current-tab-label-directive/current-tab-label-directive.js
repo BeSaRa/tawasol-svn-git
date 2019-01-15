@@ -1,10 +1,10 @@
 module.exports = function (app) {
-    app.directive('currentTabLabelDirective', function () {
+    app.directive('currentTabLabelDirective', function (cmsTemplate) {
         'ngInject';
         return {
             replace: true,
             restrict: 'E',
-            template: require('./current-tab-label-template.html'),
+            templateUrl: cmsTemplate.getDirective('current-tab-label-template.html'),
             controller: 'currentTabLabelDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,

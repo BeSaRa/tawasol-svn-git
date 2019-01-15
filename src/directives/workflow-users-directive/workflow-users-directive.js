@@ -1,6 +1,6 @@
 module.exports = function (app) {
     require('./workflow-users-style.scss');
-    app.directive('workflowUsersDirective', function ($timeout) {
+    app.directive('workflowUsersDirective', function ($timeout , cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
@@ -8,7 +8,7 @@ module.exports = function (app) {
             controller: 'workflowUsersDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,
-            template: require('./workflow-users-template.html'),
+            templateUrl: cmsTemplate.getDirective('workflow-users-template.html'),
             scope: {
                 allowFavorites: '=',
                 gridItems: '=',

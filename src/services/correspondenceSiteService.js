@@ -330,7 +330,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('correspondence-site'),
+                        templateUrl: cmsTemplate.getPopup('correspondence-site'),
                         controller: 'correspondenceSitePopCtrl',
                         controllerAs: 'ctrl',
                         escapeToClose: false,
@@ -352,7 +352,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('correspondence-site'),
+                        templateUrl: cmsTemplate.getPopup('correspondence-site'),
                         controller: 'correspondenceSitePopCtrl',
                         controllerAs: 'ctrl',
                         escapeToClose: false,
@@ -369,7 +369,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('correspondence-site'),
+                        templateUrl: cmsTemplate.getPopup('correspondence-site'),
                         controller: 'correspondenceSitePopCtrl',
                         controllerAs: 'ctrl',
                         escapeToClose: false,
@@ -435,7 +435,7 @@ module.exports = function (app) {
             viewSubCorrespondenceSites: function (correspondenceSite, $event) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('sub-correspondence-site'),
+                        templateUrl: cmsTemplate.getPopup('sub-correspondence-site'),
                         controller: 'subCorrespondenceSiteViewPopCtrl',
                         controllerAs: 'ctrl',
                         targetEvent: $event,
@@ -453,7 +453,7 @@ module.exports = function (app) {
             },
             showCorrespondenceSiteSelector: function (excluded) {
                 return dialog.showDialog({
-                    template: cmsTemplate.getPopup('correspondence-sites-selector'),
+                    templateUrl: cmsTemplate.getPopup('correspondence-sites-selector'),
                     controller: 'correspondenceSiteSelectorPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {

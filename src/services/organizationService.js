@@ -358,7 +358,7 @@ module.exports = function (app) {
             selectOrganizations: function (label, $event, exclude) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('select-organization'),
+                        templateUrl: cmsTemplate.getPopup('select-organization'),
                         targetEvent: $event,
                         controller: 'selectOrganizationPopCtrl',
                         controllerAs: 'ctrl',
@@ -384,7 +384,7 @@ module.exports = function (app) {
              */
             organizationAdd: function (organization, $event) {
                 return dialog.showDialog({
-                    template: cmsTemplate.getPopup('organization'),
+                    templateUrl: cmsTemplate.getPopup('organization'),
                     targetEvent: $event,
                     controller: 'organizationPopCtrl',
                     controllerAs: 'ctrl',
@@ -429,7 +429,7 @@ module.exports = function (app) {
              */
             organizationEdit: function (organization, $event) {
                 return dialog.showDialog({
-                    template: cmsTemplate.getPopup('organization'),
+                    templateUrl: cmsTemplate.getPopup('organization'),
                     targetEvent: $event,
                     controller: 'organizationPopCtrl',
                     controllerAs: 'ctrl',
@@ -523,7 +523,7 @@ module.exports = function (app) {
             organizationImport: function ($event) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('import-organization'),
+                        templateUrl: cmsTemplate.getPopup('import-organization'),
                         targetEvent: $event,
                         controller: 'importOrganizationPopCtrl',
                         controllerAs: 'ctrl',

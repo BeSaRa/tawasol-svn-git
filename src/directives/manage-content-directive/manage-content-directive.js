@@ -1,11 +1,11 @@
 module.exports = function (app) {
-    app.directive('manageContentDirective', function () {
+    app.directive('manageContentDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
             controller: 'manageContentDirectiveCtrl',
             controllerAs: 'ctrl',
-            template: require('./manage-content-template.html'),
+            templateUrl: cmsTemplate.getDirective('manage-content-template.html'),
             bindToController: true,
             scope: {
                 fromDialog: '=',

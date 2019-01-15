@@ -48,7 +48,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('distribution-list'),
+                        templateUrl: cmsTemplate.getPopup('distribution-list'),
                         controller: 'distributionListPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -69,7 +69,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('distribution-list'),
+                        templateUrl: cmsTemplate.getPopup('distribution-list'),
                         controller: 'distributionListPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

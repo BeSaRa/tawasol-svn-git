@@ -1,9 +1,9 @@
 module.exports = function (app) {
-    app.directive('mainSiteSubSiteDirective', function () {
+    app.directive('mainSiteSubSiteDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
-            template: require('./main-site-sub-site-directive.html'),
+            templateUrl: cmsTemplate.getDirective('main-site-sub-site-directive.html'),
             controller: 'mainSiteSubSiteDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,

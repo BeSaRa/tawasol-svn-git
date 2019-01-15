@@ -1,0 +1,98 @@
+<md-dialog>
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20" md-truncate>{{lang.sub_correspondence_sites_to}}  {{ctrl.correspondenceSite.getTranslatedName()}}</span>
+            <close-dialog-directive when-close="ctrl.closeSubCorrespondenceSiteView"></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <div class="p20">
+                <md-card md-whiteframe="3" layout="column" class="card-overlay">
+                    <md-table-container flex scroll-directive>
+                        <table md-table md-row-select multiple ng-model="ctrl.selectedCorrespondenceSites"
+                               md-progress="ctrl.progress">
+                            <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
+                            <tr md-row>
+                                <th class="table-selector-header"
+                                    ng-if="ctrl.selectedCorrespondenceSites.length" md-column>
+                                    <div layout="row" layout-align="start center">
+                                        <span>{{ctrl.selectedCorrespondenceSites.length}} {{lang.items_selected}} </span>
+                                        <span flex></span>
+                                    </div>
+                                </th>
+                                <th ng-if="!ctrl.selectedCorrespondenceSites.length" md-column md-order-by="arName">
+                                    <span>{{lang.arabic_name}}</span>
+                                </th>
+                                <th ng-class="{'hide-table-header':ctrl.selectedCorrespondenceSites.length}" md-column
+                                    md-order-by="enName">
+                                    <span>{{lang.english_name}}</span>
+                                </th>
+                                <th ng-class="{'hide-table-header':ctrl.selectedCorrespondenceSites.length}" md-column
+                                    md-order-by="status">
+                                    <span>{{lang.status}}</span>
+                                </th>
+                                <th ng-class="{'hide-table-header':ctrl.selectedCorrespondenceSites.length}" md-column
+                                    md-order-by="global">
+                                    <span>{{lang.global}}</span>
+                                </th>
+                                <th ng-if="!ctrl.selectedCorrespondenceSites.length" md-column>
+                                    <span ng-if="!ctrl.selectedCorrespondenceSites.length">{{lang.actions}}</span>
+
+                                </th>
+                                <th colspan="3" ng-if="ctrl.selectedCorrespondenceSites.length" md-column>
+                                    <div layout="row">
+                                        <table-status-directive
+                                                when-close="ctrl.changeBulkStatusCorrespondenceSites"></table-status-directive>
+                                        <!--<md-button class="md-icon-button"
+                                                   ng-click="ctrl.removeBulkCorrespondenceSites($event)">
+                                            <md-icon md-svg-icon="delete"></md-icon>
+                                        </md-button>-->
+                                    </div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody md-body>
+                            <tr md-row md-select="correspondenceSite"
+                                ng-repeat="correspondenceSite in ctrl.correspondenceSites  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
+                                <td md-cell>{{correspondenceSite.arName}}</td>
+                                <td md-cell>{{correspondenceSite.enName}}</td>
+                                <td md-cell>
+                                    <md-switch aria-label="{{lang.status}}"
+                                               title="{{correspondenceSite.getTranslatedStatus()}}"
+                                               ng-change="ctrl.changeStatusCorrespondenceSite(correspondenceSite)"
+                                               ng-model="correspondenceSite.status"></md-switch>
+                                </td>
+                                <td md-cell>
+                                    <md-switch aria-label="{{lang.global}}"
+                                               title="{{correspondenceSite.getTranslatedGlobal()}}"
+                                               ng-change="ctrl.changeGlobalCorrespondenceSite(correspondenceSite)"
+                                               ng-disabled="correspondenceSite.isGlobal"
+                                               ng-model="correspondenceSite.isGlobal"></md-switch>
+                                </td>
+                                <td md-cell>
+                                    <div flex layout="row" layout-align="start center">
+                                        <!--<md-button class="md-icon-button" title="{{lang.delete}}"
+                                                   ng-click="ctrl.removeCorrespondenceSite(correspondenceSite, $event)">
+                                            <md-icon md-svg-icon="delete"></md-icon>
+                                        </md-button>-->
+                                        <md-button class="md-icon-button" title="{{lang.edit}}"
+                                                   ng-click="ctrl.openEditCorrespondenceSiteDialog(correspondenceSite, $event)">
+                                            <md-icon md-svg-icon="pencil"></md-icon>
+                                        </md-button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <md-table-pagination
+                                md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                md-limit-options="ctrl.grid.limitOptions"
+                                md-limit="ctrl.grid.limit" md-page="ctrl.grid.page"
+                                md-total="{{ctrl.correspondenceSites.length}}" md-page-select>
+                        </md-table-pagination>
+
+                    </md-table-container>
+                </md-card>
+            </div>
+        </md-content>
+    </div>
+</md-dialog>

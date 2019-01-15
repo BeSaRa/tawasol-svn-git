@@ -1,0 +1,249 @@
+<!-- Horizontal Menu -->
+<md-menu ng-if="ctrl.menuDirection==='horizontal' && ctrl.shortcutActions.length">
+    <md-button aria-label="Grid Actions"
+               class="md-icon-button"
+               ng-click="ctrl.openShortcutMenu($mdMenu)">
+        <md-icon md-menu-origin md-svg-icon="dots-vertical"></md-icon>
+    </md-button>
+    <md-menu-content class="grid-action-menu" width="2" layout="row">
+        <md-menu-item ng-repeat="gridAction in ctrl.shortcutActions track by $index">
+            <md-button aria-label="{{ctrl.getActionText(gridAction, true)}}"
+                       tooltip="{{ctrl.getActionText(gridAction, true)}}"
+                       tooltip-direction="{{$root.lang.current === 'en' ? 'left': 'right'}}"
+                       ng-if="gridAction.type==='action' && (!gridAction.subMenu || !gridAction.subMenu.length)"
+                       ng-click="ctrl.processMenu(gridAction, $event)"
+                       class="md-icon-button"
+                       ng-disabled="ctrl.isActionDisabled(gridAction)">
+                <md-icon md-menu-align-target
+                         class="{{gridAction.class}}"
+                         md-svg-icon="{{gridAction.icon}}"></md-icon>
+            </md-button>
+
+            <vertical-divider-directive
+                    ng-if="gridAction.type==='separator' && !$first && !$last"></vertical-divider-directive>
+        </md-menu-item>
+    </md-menu-content>
+</md-menu>
+
+<!-- Vertical Menu -->
+<md-menu-bar ng-if="ctrl.menuDirection === 'vertical' && ctrl.shortcutActions.length">
+    <md-menu>
+        <md-button aria-label="Grid Actions"
+                   class="md-icon-button"
+                   ng-click="$mdMenu.open()">
+            <md-icon md-menu-origin md-svg-icon="dots-vertical"></md-icon>
+        </md-button>
+        <md-menu-content class="grid-action-menu" width="4" layout="column">
+            <md-menu-item
+                    ng-repeat="gridAction in ctrl.shortcutActions track by $index"
+                    ng-class="{'gm-separator-horizontal':gridAction.type==='separator'}">
+                <!-- Main Menu Button -->
+                <md-button aria-label="{{ctrl.getActionText(gridAction, true)}}"
+                           ng-if="gridAction.type==='action' && (!gridAction.subMenu || !gridAction.subMenu.length)"
+                           ng-click="ctrl.processMenu(gridAction, $event)"
+                           ng-disabled="ctrl.isActionDisabled(gridAction)">
+                    <div layout="row" flex>
+                        <md-icon class="{{gridAction.class}}" ng-if="gridAction.icon" md-svg-icon="{{gridAction.icon}}"
+                                 md-menu-align-target></md-icon>
+                        <p flex class="{{gridAction.class}}">{{ctrl.getActionText(gridAction, true)}}</p>
+                    </div>
+                </md-button>
+                <!-- Cascade(Sub) Menu -->
+                <md-menu md-position-mode="cascade"
+                         ng-if="gridAction.type==='action' && gridAction.subMenu && gridAction.subMenu.length">
+                    <md-button ng-click="ctrl.openCascadeMenu($mdMenu, gridAction)"
+                               aria-label="{{ctrl.getActionText(gridAction)}}"
+                               ng-disabled="ctrl.isActionDisabled(gridAction)">
+                        <div layout="row" flex>
+                            <md-icon ng-if="gridAction.icon"
+                                     md-svg-icon="{{gridAction.icon}}"
+                                     md-menu-align-target></md-icon>
+                            <p flex class="m0">{{ctrl.getActionText(gridAction)}}</p>
+                        </div>
+                    </md-button>
+                    <md-menu-content ng-show="!ctrl.isActionDisabled(gridAction)"
+                                     class="grid-action-menu" width="4" layout="column">
+                        <md-menu-item ng-disabled="ctrl.isActionDisabled(gridAction)"
+                                      ng-repeat="gridSubAction in gridAction.subMenu track by $index"
+                                      ng-class="{'gm-separator-horizontal':gridSubAction.type.toLowerCase()==='separator', 'gm-info':gridSubAction.type.toLowerCase()==='info'}">
+                            <!-- Sub Menu Button -->
+                            <md-button aria-label="{{ctrl.getActionText(gridSubAction)}}" role="menuitem"
+                                       ng-if="gridSubAction.type.toLowerCase()==='action' && !gridSubAction.subMenu"
+                                       ng-click="ctrl.processMenu(gridSubAction, $event)"
+                                       ng-disabled="ctrl.isActionDisabled(gridAction)">
+                                <div layout="row" flex>
+                                    <!--<md-icon class="{{gridSubAction.class}}" ng-if="gridSubAction.icon"
+                                             md-svg-icon="{{gridSubAction.icon}}"
+                                             md-menu-align-target></md-icon>-->
+                                    <p flex class="{{gridSubAction.class}}">
+                                        {{ctrl.getActionText(gridSubAction)}}</p>
+                                </div>
+                            </md-button>
+                            <!-- Sub Menu Divider -->
+                            <md-menu-divider ng-if="gridSubAction.type.toLowerCase()==='separator'"
+                                             class="p0 m4_0"></md-menu-divider>
+                            <!-- Document Info Table-->
+                            <md-table-container flex ng-if="gridSubAction.type.toLowerCase()=='info'"
+                                                class="docInfoTable">
+                                <table md-table>
+                                    <tbody md-body>
+                                    <tr md-row>
+                                        <td md-cell>
+                                            <b>{{$root.lang.security_level}}</b>
+                                        </td>
+                                        <td md-cell>
+                                            {{ctrl.getDocumentInfo('securityLevel', gridSubAction.gridName)}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row>
+                                        <td md-cell><b>{{$root.lang.priority_level}}</b></td>
+                                        <td md-cell>
+                                            {{ctrl.getDocumentInfo('priorityLevel', gridSubAction.gridName)}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.showAuthorInfo(gridSubAction.gridName)">
+                                        <td md-cell><b>{{$root.lang.author}}</b></td>
+                                        <td md-cell>
+                                            {{ctrl.getDocumentInfo('author', gridSubAction.gridName)}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row>
+                                        <td md-cell><b>{{$root.lang.tags}}</b></td>
+                                        <td md-cell>
+                                            {{ctrl.getDocumentInfo('tags', gridSubAction.gridName)}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.showCommentsInfo(gridSubAction.gridName)">
+                                        <td md-cell><b>{{$root.lang.comments}}</b></td>
+                                        <td md-cell>
+                                            {{ctrl.getDocumentInfo('comments', gridSubAction.gridName)}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="gridSubAction.gridName === 'user-inbox'">
+                                        <td md-cell><b>{{$root.lang.broadcasted}}</b></td>
+                                        <td md-cell>
+                                            {{ctrl.getDocumentInfo('broadcasted', gridSubAction.gridName)}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </md-table-container>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+                <md-menu-divider ng-if="gridAction.type==='separator'" class="p0"></md-menu-divider>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+</md-menu-bar>
+
+<!-- Context Menu -->
+<md-menu-bar class="grid-context" ng-if="ctrl.menuDirection === 'context'">
+    <md-menu>
+        <button class="menu-handler" ng-click="$mdMenu.open()" ng-hide="true"></button>
+        <md-menu-content class="grid-action-menu context-menu" width="4" layout="column">
+            <md-menu-item ng-repeat="gridAction in ctrl.filterContextMenuItems() track by $index"
+                          ng-if="ctrl.isShowAction(gridAction)"
+                          ng-disabled="ctrl.isActionDisabled(gridAction)"
+                          ng-class="{'gm-separator-horizontal':gridAction.type === 'separator'}">
+                <!-- Main Menu Button -->
+                <md-button aria-label="{{ctrl.getActionText(gridAction)}}"
+                           ng-if="gridAction.type==='action' && (!gridAction.subMenu || !gridAction.subMenu.length)"
+                           ng-click="ctrl.processMenu(gridAction, $event)"
+                           ng-disabled="ctrl.isActionDisabled(gridAction)">
+                    <div layout="row">
+                        <md-icon class="{{gridAction.class}}" ng-if="gridAction.icon" md-svg-icon="{{gridAction.icon}}"
+                                 md-menu-align-target></md-icon>
+                        <p flex class="{{gridAction.class}}">{{ctrl.getActionText(gridAction)}}</p>
+                    </div>
+                </md-button>
+                <!-- Cascade(Sub) Menu -->
+                <md-menu md-position-mode="cascade"
+                         ng-if="gridAction.type==='action' && gridAction.subMenu && gridAction.subMenu.length">
+                    <md-button ng-click="ctrl.openCascadeMenu($mdMenu, gridAction)"
+                               aria-label="{{ctrl.getActionText(gridAction)}}"
+                               ng-disabled="ctrl.isActionDisabled(gridAction)">
+                        <div layout="row" flex>
+                            <md-icon ng-if="gridAction.icon"
+                                     md-svg-icon="{{gridAction.icon}}"
+                                     md-menu-align-target></md-icon>
+                            <p flex class="m0">{{ctrl.getActionText(gridAction)}}</p>
+                        </div>
+                    </md-button>
+                    <md-menu-content ng-show="!ctrl.isActionDisabled(gridAction)"
+                                     class="grid-action-menu context-sub-menu" width="4" layout="column">
+                        <md-menu-item ng-disabled="ctrl.isActionDisabled(gridAction)"
+                                      ng-repeat="gridSubAction in gridAction.subMenu track by $index"
+                                      ng-if="ctrl.isShowAction(gridSubAction)"
+                                      ng-class="{'gm-separator-horizontal':gridSubAction.type.toLowerCase()==='separator', 'gm-info':gridSubAction.type.toLowerCase()==='info'}">
+                            <!-- Sub Menu Button -->
+                            <md-button aria-label="{{ctrl.getActionText(gridSubAction)}}" role="menuitem"
+                                       ng-if="gridSubAction.type.toLowerCase()==='action' && !gridSubAction.subMenu"
+                                       ng-click="ctrl.processMenu(gridSubAction, $event)"
+                                       ng-disabled="ctrl.isActionDisabled(gridAction)">
+                                <div layout="row" flex>
+                                    <!--<md-icon class="{{gridSubAction.class}}" ng-if="gridSubAction.icon"
+                                             md-svg-icon="{{gridSubAction.icon}}"
+                                             md-menu-align-target></md-icon>-->
+                                    <p flex class="{{gridSubAction.class}}">
+                                        {{ctrl.getActionText(gridSubAction)}}</p>
+                                </div>
+                            </md-button>
+                            <!-- Sub Menu Divider -->
+                            <md-menu-divider ng-if="gridSubAction.type.toLowerCase()==='separator'"
+                                             class="p0 m4_0"></md-menu-divider>
+                            <!-- Document Info Table-->
+                            <md-table-container flex ng-if="gridSubAction.type.toLowerCase()=='info'"
+                                                class="docInfoTable">
+                                <table md-table>
+                                    <tbody md-body>
+                                    <tr md-row>
+                                        <td md-cell ng-if="ctrl.showSecurityLevelInfo(gridSubAction.gridName)">
+                                            <b>{{$root.lang.security_level}}</b>
+                                        </td>
+                                        <td md-cell>
+                                            {{ctrl.getDocumentInfo('securityLevel', gridSubAction.gridName)}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.showPriorityLevel(gridSubAction.gridName)">
+                                        <td md-cell><b>{{$root.lang.priority_level}}</b></td>
+                                        <td md-cell>
+                                            {{ctrl.getDocumentInfo('priorityLevel', gridSubAction.gridName)}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.showAuthorInfo(gridSubAction.gridName)">
+                                        <td md-cell><b>{{$root.lang.author}}</b></td>
+                                        <td md-cell>
+                                            {{ctrl.getDocumentInfo('author', gridSubAction.gridName)}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.showTagsInfo(gridSubAction.gridName)">
+                                        <td md-cell><b>{{$root.lang.tags}}</b></td>
+                                        <td md-cell>
+                                            {{ctrl.getDocumentInfo('tags', gridSubAction.gridName)}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.showCommentsInfo(gridSubAction.gridName)">
+                                        <td md-cell><b>{{$root.lang.comments}}</b></td>
+                                        <td md-cell>
+                                            {{ctrl.getDocumentInfo('comments', gridSubAction.gridName)}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row ng-if="ctrl.showBroadcastedInfo(gridSubAction.gridName)">
+                                        <td md-cell><b>{{$root.lang.broadcasted}}</b></td>
+                                        <td md-cell>
+                                            {{ctrl.getDocumentInfo('broadcasted', gridSubAction.gridName)}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </md-table-container>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+                <!-- Main Menu Divider -->
+                <md-menu-divider ng-if="gridAction.type==='separator'" class="p0 m4_0"></md-menu-divider>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+</md-menu-bar>

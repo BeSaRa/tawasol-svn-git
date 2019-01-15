@@ -1,9 +1,9 @@
 module.exports = function (app) {
-    app.directive('userSubscriptionDirective', function () {
+    app.directive('userSubscriptionDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
-            template: require('./user-subscription-template.html'),
+            templateUrl: cmsTemplate.getDirective('user-subscription-template.html'),
             replace: true,
             bindToController: true,
             controller: 'userSubscriptionDirectiveCtrl',

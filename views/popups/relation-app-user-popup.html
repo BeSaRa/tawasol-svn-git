@@ -1,0 +1,42 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.manage_application_users}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{ctrl.record.getNames()}} : {{lang.manage_application_users}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="relationAppUserForm">
+                <md-button tooltip="{{lang.manage_sms_template_subscribers}}" class="md-icon-button"
+                           ng-click="ctrl.selectRelationAppUsers($event)">
+                    <md-icon md-svg-icon="plus"></md-icon>
+                </md-button>
+                <table md-table>
+                    <thead md-head>
+                    <tr md-row>
+                        <th md-column>{{lang.arabic_name}}</th>
+                        <th md-column>{{lang.english_name}}</th>
+                        <th md-column>{{lang.login_name}}</th>
+                    </tr>
+                    </thead>
+                    <tbody md-body>
+                    <tr md-row ng-repeat="appUser in ctrl.record.smstemplateSubscribers track by $index">
+                        <td md-cell>{{appUser.arFullName}}</td>
+                        <td md-cell>{{appUser.enFullName}}</td>
+                        <td md-cell>{{appUser.loginName}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div layout="row">
+                    <md-button class="md-raised" ng-disabled="!ctrl.record.smstemplateSubscribers.length"
+                               ng-click="ctrl.addRelationAppUserFromCtrl()">
+                        {{lang.add}}
+                    </md-button>
+                    <span flex></span>
+                    <md-button class="md-raised" ng-click="ctrl.closeRelationAppUserPopupFromCtrl()">
+                        {{lang.close}}
+                    </md-button>
+                </div>
+            </form>
+        </md-content>
+    </div>
+</md-dialog>

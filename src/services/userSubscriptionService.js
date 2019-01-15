@@ -85,7 +85,7 @@ module.exports = function (app) {
                 var info = record.getInfo();
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('subscription-event-type'),
+                        templateUrl: cmsTemplate.getPopup('subscription-event-type'),
                         controller: 'subscriptionPopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,

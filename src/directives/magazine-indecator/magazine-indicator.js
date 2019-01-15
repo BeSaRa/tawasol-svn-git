@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.directive('magazineIndicator', function () {
+    app.directive('magazineIndicator', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
@@ -7,7 +7,7 @@ module.exports = function (app) {
             controllerAs: 'ctrl',
             bindToController: true,
             replace: true,
-            template: require('./magazine-indicator-template.html'),
+            templateUrl: cmsTemplate.getDirective('magazine-indicator-template.html'),
             scope: {
                 // the workItem or the Correspondence model
                 model: '=',

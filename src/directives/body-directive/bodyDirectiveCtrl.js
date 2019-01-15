@@ -42,7 +42,7 @@ module.exports = function (app) {
             }
 
             dialog.showDialog({
-                template: cmsTemplate.getPopup('idle'),
+                templateUrl: cmsTemplate.getPopup('idle'),
                 controller: function (idleCounterService) { // for binding purpose
                     'ngInject';
                     var ctrl = this;
@@ -84,6 +84,6 @@ module.exports = function (app) {
 
         $scope.bundleVersion = '2.1.2';
         $scope.buildNumber = ' F#3189';
-        app.$_privateBuildNumber = 'F#3189';
+        app.$_privateBuildNumber = 'F#3191';
     });
 };

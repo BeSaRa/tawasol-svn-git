@@ -1,9 +1,9 @@
 module.exports = function (app) {
-    app.directive('manageDistributionListDirective', function () {
+    app.directive('manageDistributionListDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
-            template: require('./manage-distribution-list-template.html'),
+            templateUrl: cmsTemplate.getDirective('manage-distribution-list-template.html'),
             controller: 'manageDistributionListDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,

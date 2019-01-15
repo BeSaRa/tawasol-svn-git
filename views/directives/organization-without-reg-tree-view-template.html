@@ -1,0 +1,27 @@
+<ul>
+    <li ng-repeat="node in ctrl.organizations track by $index"> <!--ng-show="ctrl.filterOrganizationTree(node)"-->
+        <md-checkbox class="reduce-bottom-margin" aria-label="node"
+                     ng-checked="ctrl.selectCheckbox(node)"
+                     ng-click="ctrl.addOrganization(node)">
+        </md-checkbox>
+        <i class="collapsed" ng-show="node.children.length && node.collapsed"
+           ng-click="ctrl.toggleChildNodes(node)"></i>
+        <i class="expanded" ng-show="node.children.length && !node.collapsed"
+           ng-click="ctrl.toggleChildNodes(node)"></i>
+        <span ng-if="!node.children.length" ng-class="{'selected' : ctrl.selectedNode === node.id}"
+              ng-click="ctrl.selectCurrentNode(node)">
+            {{ctrl.currentLang === 'en'? node.enName:node.arName}}
+        </span>
+        <span ng-if="node.children.length" ng-class="{'selected' : ctrl.selectedNode === node.id}"
+              ng-click="ctrl.selectCurrentNode(node)">
+            {{ctrl.currentLang === 'en'? node.enName : node.arName }} ({{node.children.length}})
+        </span>
+        <organization-without-reg-tree-view-directive
+                ou-application-users="ctrl.ouApplicationUsers"
+                selected-node="ctrl.selectedNode"
+                selected-organizations="ctrl.selectedOrganizations"
+                organizations="node.children"
+                ng-hide="node.collapsed">
+        </organization-without-reg-tree-view-directive>
+    </li>
+</ul>

@@ -1,0 +1,52 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.select_date_range}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{ctrl.popupLabel}}</span>
+            <close-dialog-directive when-close="ctrl.closeSearchDocDatePopup"></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="searchDocDateForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="docDateFrom">{{lang.search_module_start_date}}</label>
+                            <md-datepicker id="docDateFrom" name="docDateFrom" md-open-on-focus
+                                           ng-change="ctrl.setMinMaxDocDate('picker',$event)"
+                                           required md-open-on-focus
+                                           ng-model="ctrl.document.docDateFrom"
+                                           md-max-date="ctrl.maxDocDate"
+                                           md-min-date="ctrl.minDateForFrom"
+                            ></md-datepicker>
+                            <div ng-messages="searchDocDateForm.docDateFrom.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="docDateTo">{{lang.search_module_end_date}}</label>
+                            <md-datepicker id="docDateTo" name="docDateTo" md-open-on-focus
+                                           ng-change="ctrl.setMinMaxDocDate('picker',$event)"
+                                           required md-select-on-focus
+                                           ng-model="ctrl.document.docDateTo"
+                                           md-max-date="ctrl.maxDateForTo"
+                                           md-min-date="ctrl.minDocDate"
+                            ></md-datepicker>
+                            <div ng-messages="searchDocDateForm.docDateTo.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="row">
+                    <md-button class="md-raised" ng-disabled="searchDocDateForm.$invalid"
+                               ng-click="ctrl.returnSearchDocDates($event)">
+                        {{lang.set}}
+                    </md-button>
+                    <span flex></span>
+                    <md-button class="md-raised" ng-click="ctrl.closeSearchDocDatePopup($event)">
+                        {{lang.close}}
+                    </md-button>
+                </div>
+            </form>
+        </md-content>
+    </div>
+</md-dialog>

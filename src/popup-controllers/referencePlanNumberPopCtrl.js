@@ -164,7 +164,7 @@ module.exports = function (app) {
             self.referencePlanItemIndex = index;
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('reference-plan-item'),
+                    templateUrl: cmsTemplate.getPopup('reference-plan-item'),
                     controller: 'referencePlanItemPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {
@@ -186,7 +186,7 @@ module.exports = function (app) {
         self.addReferencePlanItem = function () {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('reference-plan-item'),
+                    templateUrl: cmsTemplate.getPopup('reference-plan-item'),
                     controller: 'referencePlanItemPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {

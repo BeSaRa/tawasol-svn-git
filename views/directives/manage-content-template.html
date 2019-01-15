@@ -1,0 +1,70 @@
+<div layout="column" flex>
+    <div layout="row" layout-align="start center">
+        <div>
+            <md-button ng-if="ctrl.displayPrepare && !ctrl.receiveDocument" class="md-raised" ng-click="ctrl.openPrepareTemplateDialog($event)">
+                <md-icon md-svg-icon="content-paste"></md-icon>
+                {{lang.prepare_document_content}}
+            </md-button>
+        </div>
+        <label for="upload-file-content"
+               class="md-button md-raised"
+               ng-if="!ctrl.receiveDocument">
+                <span layout="row" layout-align="start center">
+                    <md-icon md-svg-icon="upload"></md-icon>
+                    <span>{{lang.content_upload}}</span>
+                </span>
+            <input reset-after-change="true"
+                   catch-upload-file-directive="ctrl.checkContentFile"
+                   class="hide-import-file" type="file"
+                   ng-model="ctrl.document.contentFile" aria-label="{{lang.content_upload}}"
+                   id="upload-file-content" name="upload-file-content">
+        </label>
+        <div ng-if="ctrl.checkToShowScanButton(ctrl.document)">
+            <md-button ng-click="ctrl.openScannerDialog('scanner',$event)"
+                       class="md-raised">
+                <div layout="row" layout-align="start center">
+                    <md-icon md-svg-icon="scanner"></md-icon>
+                    <span>{{lang.attachment_scanner}}</span>
+                </div>
+            </md-button>
+        </div>
+        <div>
+            <md-button ng-if="ctrl.showEditContentInEditPopup()"
+                       class="md-raised" ng-click="ctrl.openEditContentInEditPopup()">
+                {{lang.edit_content}}
+            </md-button>
+        </div>
+
+            <span flex ng-if="ctrl.displayPrepare && ctrl.documentInformation && ctrl.templateOrFileName">{{ctrl.templateOrFileName}}</span>
+            <span flex ng-if="!ctrl.displayPrepare && ctrl.document.contentFile && ctrl.templateOrFileName">{{ctrl.templateOrFileName}}</span>
+            <!--<span flex ng-if="ctrl.document.contentFile">{{ctrl.document.contentFile.name}}</span>-->
+            <!--<span flex ng-if="ctrl.displayPrepare && ctrl.template">{{ctrl.template.getSubjectTitle()}}</span>-->
+
+        <div ng-if="!ctrl.receiveDocument">
+            <md-icon md-svg-icon="close" class="cursor-pointer red-text" tooltip="{{lang.remove_content}}"
+                     aria-label="{{lang.remove_content}}"
+                     ng-if="(ctrl.documentInformation || ctrl.document.contentFile) && ctrl.templateOrFileName"
+                     ng-click="ctrl.removeTemplateOrContentFile($event)">
+                <!--ng-if="ctrl.template || ctrl.document.contentFile"-->
+            </md-icon>
+        </div>
+        <div>
+            <md-button ng-if="ctrl.editContent && !ctrl.receiveDocument" class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
+                {{lang.edit_content}}
+            </md-button>
+            <md-button ng-if="ctrl.receiveDocument" class="md-raised" ng-click="ctrl.openCorrespondenceToEdit()">
+                {{lang.view}}
+            </md-button>
+        </div>
+        <!--<span flex></span>
+        <div ng-if="ctrl.simpleViewUrl">
+            &lt;!&ndash;save document &ndash;&gt;
+            <md-button ng-click="ctrl.savePreparedDocument()"
+                       class="md-icon-button"
+                       ng-disabled="!ctrl.simpleViewUrl"
+                       tooltip="{{lang.save}}">
+                <md-icon md-svg-icon="content-save"></md-icon>
+            </md-button>
+        </div>-->
+    </div>
+</div>

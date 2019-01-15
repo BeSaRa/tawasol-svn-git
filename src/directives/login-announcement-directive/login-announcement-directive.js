@@ -1,10 +1,10 @@
 module.exports = function (app) {
-    app.directive('loginAnnouncementDirective', function (LangWatcher, langService, $timeout) {
+    app.directive('loginAnnouncementDirective', function (LangWatcher, langService, $timeout,cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
             replace: true,
-            template: require('./login-announcement-template.html'),
+            templateUrl: cmsTemplate.getDirective('login-announcement-template.html'),
             scope: {
                 announcements: '='
             },

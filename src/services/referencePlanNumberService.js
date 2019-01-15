@@ -53,7 +53,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('reference-plan-number-related-ou'),
+                        templateUrl: cmsTemplate.getPopup('reference-plan-number-related-ou'),
                         controller: 'referencePlanNumberRelatedOUsPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -72,7 +72,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('reference-plan-number'),
+                        templateUrl: cmsTemplate.getPopup('reference-plan-number'),
                         controller: 'referencePlanNumberPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -91,7 +91,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('reference-plan-number'),
+                        templateUrl: cmsTemplate.getPopup('reference-plan-number'),
                         controller: 'referencePlanNumberPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -160,7 +160,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('relation-app-user'),
+                        templateUrl: cmsTemplate.getPopup('relation-app-user'),
                         controller: 'relationAppUserPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

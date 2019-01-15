@@ -1,0 +1,80 @@
+<md-dialog class="dialog-extend" aria-label="{{ctrl.dialogTitle}}">
+    <div layout="column">
+        <md-toolbar>
+            <div class="p20">{{ctrl.dialogTitle}}</div>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive="">
+            <div class="p20" layout="column">
+                <form name="distWorkflowItem_form">
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="action">{{lang.select_action}}</label>
+                            <md-select required id="action" ng-model-options="{trackBy:'$value.id'}" name="action"
+                                       ng-model="ctrl.distWorkflowItem.action">
+                                <md-option ng-value="action" ng-repeat="action in ctrl.workflowActions">
+                                    {{action.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="distWorkflowItem_form.action.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container>
+                            <label for="dueDate">{{lang.due_date}}</label>
+                            <md-datepicker id="dueDate" md-open-on-focus
+                                           md-min-date="ctrl.minDate"
+                                           ng-model="ctrl.distWorkflowItem.dueDate"></md-datepicker>
+                        </md-input-container>
+                    </div>
+                    <div ng-if="ctrl.globalSettings.enableEmailNotification || ctrl.globalSettings.enableSMSNotification" layout="row">
+                        <div flex>
+                            <md-checkbox ng-disabled="!ctrl.globalSettings.enableSMSNotification" ng-model="ctrl.distWorkflowItem.sendSMS">
+                                {{lang.sms_workflow_notification}}
+                            </md-checkbox>
+                        </div>
+                        <div flex>
+                            <md-checkbox ng-disabled="!ctrl.globalSettings.enableEmailNotification" ng-model="ctrl.distWorkflowItem.sendEmail">
+                                {{lang.email_workflow_notification}}
+                            </md-checkbox>
+                        </div>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="comment">{{lang.select_comment}}</label>
+                            <md-select id="comment" name="comment" ng-change="ctrl.onCommentChange()"
+                                       ng-model="ctrl.comment">
+                                <md-option ng-value="comment" ng-repeat="comment in ctrl.comments">
+                                    {{comment.getCommentTitle()}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label for="comments"> {{lang.type_your_comment}}</label>
+                            <textarea rows="5" id="comments" name="comments"
+                                      ng-model="ctrl.distWorkflowItem.comments"></textarea>
+                        </md-input-container>
+                    </div>
+                </form>
+            </div>
+        </md-content>
+        <div>
+            <div layout="row">
+                <div>
+                    <md-button class="md-raised" ng-disabled="distWorkflowItem_form.$invalid"
+                               ng-click="ctrl.setDistWorkflowItemProperties()">
+                        {{lang.set}}
+                    </md-button>
+                </div>
+                <span flex></span>
+                <div>
+                    <md-button class="md-raised" ng-click="ctrl.closeDistWorkflowItemProperties()">{{lang.close}}
+                    </md-button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</md-dialog>

@@ -31,7 +31,7 @@ module.exports = function (app) {
             self.selectedLocalization = [];
             dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('localization-module-selector'),
+                    templateUrl: cmsTemplate.getPopup('localization-module-selector'),
                     targetEvent: $event,
                     controller: function (dialog) {
                         'ngInject';

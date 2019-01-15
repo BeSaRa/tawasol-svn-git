@@ -56,7 +56,7 @@ module.exports = function (app) {
                     return dialog
                         .showDialog({
                             targetEvent: $event,
-                            template: cmsTemplate.getPopup('theme'),
+                            templateUrl: cmsTemplate.getPopup('theme'),
                             controller: 'themePopCtrl',
                             controllerAs: 'ctrl',
                             locals: {
@@ -75,7 +75,7 @@ module.exports = function (app) {
                     return dialog
                         .showDialog({
                             targetEvent: $event,
-                            template: cmsTemplate.getPopup('theme'),
+                            templateUrl: cmsTemplate.getPopup('theme'),
                             controller: 'themeCopyPopCtrl',
                             controllerAs: 'ctrl',
                             locals: {
@@ -91,7 +91,7 @@ module.exports = function (app) {
                     return dialog
                         .showDialog({
                             targetEvent: $event,
-                            template: cmsTemplate.getPopup('theme'),
+                            templateUrl: cmsTemplate.getPopup('theme'),
                             controller: 'themePopCtrl',
                             controllerAs: 'ctrl',
                             locals: {

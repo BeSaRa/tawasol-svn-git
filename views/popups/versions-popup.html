@@ -1,0 +1,90 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="Document Versions!">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.document_versions}} : {{ctrl.correspondence.getTranslatedName()}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <!--<div layout="row" ng-repeat="(key , version) in ctrl.versions">
+                <div layout="row" flex ng-repeat="(index , item) in version">
+                    <div flex layout="column">
+                        <md-button
+                                ng-click="ctrl.openVersion(item , $event)"
+                                ng-class="{'md-raised':item.isCurrentVersion(),'md-primary':item.isCurrentVersion()}">
+                            <span flex>{{(ctrl.length +1) - ctrl.getVersionNumber(key , index)}} - {{item.getTranslatedName()}}</span>
+                        </md-button>
+                    </div>
+                </div>
+            </div>-->
+            <md-table-container>
+                <div flex scroll-directive>
+                    <table md-table ng-model="ctrl.selectedVersions"
+                           md-progress="ctrl.progress">
+                        <thead md-head md-order="ctrl.grid.order"
+                               md-on-reorder="ctrl.getSortedData">
+                        <tr md-row>
+                            <th md-column md-order-by="">
+                                <!-- Has Content Indicator -->
+                            </th>
+                            <th md-column md-order-by="docSubject">
+                                <span>{{lang.subject}}</span>
+                            </th>
+                            <th md-column md-order-by="">
+                                <span>{{lang.version}}</span>
+                            </th>
+                            <th md-column md-order-by="{{ctrl.getSortingKey('lastModifierInfo', 'Information')}}">
+                                <span>{{lang.updated_by}}</span>
+                            </th>
+                            <th md-column md-order-by="lastModified">
+                                <span>{{lang.updated_on}}</span>
+                            </th>
+                            <th md-column ng-if="ctrl.allowDuplicateAction" md-order-by="lastModified">
+                                <span>{{lang.actions}}</span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody md-body>
+                        <tr md-select="item" md-row
+                            ng-class="item.isCurrentVersion() ? 'current-version': ''"
+                            ng-repeat="item in ctrl.versions | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)  track by $index">
+                            <td md-cell class="indicator-td">
+                                <!-- Version Has Content -->
+                                <grid-indicator-directive record="item"
+                                                          indicator-type="versionHasContent">
+                                </grid-indicator-directive>
+                            </td>
+                            <td md-cell md-truncate class="subject">
+                                <a href="" class="view-doc" md-truncate
+                                   title="{{item.docSubject}}"
+                                   ng-click="ctrl.openVersion(item , $event)">{{item.docSubject}}</a>
+                            </td>
+                            <td md-cell>
+                                {{item.majorVersionNumber}}
+                                <!--{{item.virtualVersionNumber}}-->
+                            </td>
+                            <td md-cell>
+                                {{item.lastModifierInfo.getTranslatedName()}}
+                            </td>
+                            <td md-cell>
+                                {{item.lastModifiedFormatted}}
+                            </td>
+                            <td md-cell ng-if="ctrl.allowDuplicateAction">
+                                <md-button ng-click="ctrl.duplicateThisVersion(item)" class="md-icon-button">
+                                    <md-icon md-svg-icon="content-copy" tooltip="{{lang.duplicate}}"></md-icon>
+                                </md-button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <md-table-pagination
+                        md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                        md-limit-options="ctrl.grid.limitOptions"
+                        md-limit="ctrl.grid.limit"
+                        md-page="ctrl.grid.page"
+                        md-total="{{ctrl.versions.length}}"
+                        md-page-select></md-table-pagination>
+            </md-table-container>
+        </md-content>
+    </div><!-- column-->
+</md-dialog>

@@ -51,7 +51,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('public-announcement'),
+                        templateUrl: cmsTemplate.getPopup('public-announcement'),
                         controller: 'publicAnnouncementPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -74,7 +74,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('public-announcement'),
+                        templateUrl: cmsTemplate.getPopup('public-announcement'),
                         controller: 'publicAnnouncementPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -127,7 +127,7 @@ module.exports = function (app) {
             },
             showAnnouncementMessageBody: function (publicAnnouncement, $event) {
                 dialog.showDialog({
-                    template: cmsTemplate.getPopup('announcement-message-body'),
+                    templateUrl: cmsTemplate.getPopup('announcement-message-body'),
                     bindToController: true,
                     escToCancel: true,
                     targetEvent: $event,

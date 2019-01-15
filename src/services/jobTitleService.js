@@ -42,7 +42,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('job-title'),
+                        templateUrl: cmsTemplate.getPopup('job-title'),
                         controller: 'jobTitlePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -59,7 +59,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        template: cmsTemplate.getPopup('job-title'),
+                        templateUrl: cmsTemplate.getPopup('job-title'),
                         controller: 'jobTitlePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {

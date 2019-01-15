@@ -147,7 +147,7 @@ module.exports = function (app) {
             userInboxTerminate: function (userInbox, $event, justReason) {
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('reason'),
+                        templateUrl: cmsTemplate.getPopup('reason'),
                         controller: 'reasonPopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,
@@ -187,7 +187,7 @@ module.exports = function (app) {
 
                 return dialog
                     .showDialog({
-                        template: cmsTemplate.getPopup('reason-bulk'),
+                        templateUrl: cmsTemplate.getPopup('reason-bulk'),
                         controller: 'reasonBulkPopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,
@@ -252,7 +252,7 @@ module.exports = function (app) {
                             return dialog
                                 .showDialog({
                                     targetEvent: $event,
-                                    template: cmsTemplate.getPopup('signature'),
+                                    templateUrl: cmsTemplate.getPopup('signature'),
                                     controller: 'signaturePopCtrl',
                                     controllerAs: 'ctrl',
                                     locals: {

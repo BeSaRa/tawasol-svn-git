@@ -1,8 +1,8 @@
 module.exports = function (app) {
-    app.directive('localizationModuleConverterDirective', function () {
+    app.directive('localizationModuleConverterDirective', function (cmsTemplate) {
         'ngInject';
         return {
-            template: require('./localization-module-converter-template.html'),
+            templateUrl: cmsTemplate.getDirective('localization-module-converter-template.html'),
             controller: 'localizationModuleConverterDirectiveCtrl',
             controllerAs: 'ctrl',
             bindToController: true,

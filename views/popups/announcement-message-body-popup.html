@@ -1,0 +1,21 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.announcement_message_body}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.announcement_message_body}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <div layout="column" class="p20">
+                <div>
+                    <md-subheader class="md-primary">{{lang.arabic_body_text}}</md-subheader>
+                    <div layout="column" layout-align="none end" class="p20"
+                          ng-bind-html="ctrl.arBody"></div>
+                </div>
+                <div>
+                    <md-subheader class="md-primary">{{lang.english_body_text}}</md-subheader>
+                    <div class="p20" ng-bind-html="ctrl.enBody"></div>
+                </div>
+            </div>
+        </md-content>
+    </div>
+</md-dialog>

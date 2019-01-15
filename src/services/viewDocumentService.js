@@ -230,7 +230,7 @@ module.exports = function (app) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             targetEvent: $event,
@@ -292,7 +292,7 @@ module.exports = function (app) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             bindToController: true,
@@ -359,7 +359,7 @@ module.exports = function (app) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             bindToController: true,
@@ -417,7 +417,7 @@ module.exports = function (app) {
                     .then(function (generalStepElementView) {
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             bindToController: true,
@@ -484,7 +484,7 @@ module.exports = function (app) {
                     .then(function (generalStepElementView) {
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             bindToController: true,
@@ -561,7 +561,7 @@ module.exports = function (app) {
                     .then(function (generalStepElementView) {
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             bindToController: true,
@@ -629,7 +629,7 @@ module.exports = function (app) {
                     .then(function (generalStepElementView) {
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             bindToController: true,
@@ -702,7 +702,7 @@ module.exports = function (app) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             bindToController: true,
@@ -759,7 +759,7 @@ module.exports = function (app) {
                     .then(function (generalStepElementView) {
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             bindToController: true,
@@ -836,7 +836,7 @@ module.exports = function (app) {
                     .then(function (generalStepElementView) {
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             bindToController: true,
@@ -915,7 +915,7 @@ module.exports = function (app) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             bindToController: true,
@@ -985,7 +985,7 @@ module.exports = function (app) {
                     .then(function (generalStepElementView) {
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             bindToController: true,
@@ -1063,7 +1063,7 @@ module.exports = function (app) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             bindToController: true,
@@ -1121,7 +1121,7 @@ module.exports = function (app) {
                     .then(function (generalStepElementView) {
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             bindToController: true,
@@ -1228,9 +1228,9 @@ module.exports = function (app) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            /*template: cmsTemplate.getPopup('view-correspondence-g2g'),
+                            /*templateUrl: cmsTemplate.getPopup('view-correspondence-g2g'),
                             controller: 'viewCorrespondenceG2GPopCtrl',*/
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             bindToController: true,
@@ -1305,7 +1305,7 @@ module.exports = function (app) {
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         generator.addPopupNumber();
                         return dialog.showDialog({
-                            template: cmsTemplate.getPopup('view-correspondence-new'),
+                            templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                             controller: 'viewCorrespondencePopCtrl',
                             controllerAs: 'ctrl',
                             bindToController: true,

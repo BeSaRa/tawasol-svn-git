@@ -1,10 +1,10 @@
 module.exports = function (app) {
-    app.directive('organizationMenuDirective', function () {
+    app.directive('organizationMenuDirective', function (cmsTemplate) {
         'ngInject';
         return {
             restrict: 'E',
             replace: true,
-            template: require('./organization-menu-template.html'),
+            templateUrl: cmsTemplate.getDirective('organization-menu-template.html'),
             scope: {
                 node: '=',
                 orgChart: '=',

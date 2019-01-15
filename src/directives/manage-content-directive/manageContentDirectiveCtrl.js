@@ -81,7 +81,7 @@ module.exports = function (app) {
         self.openPreparedTemplate = function (templateOrFileName, $event, information) {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('document-editor'),
+                    templateUrl: cmsTemplate.getPopup('document-editor'),
                     controller: 'documentEditorPopCtrl',
                     bindToController: true,
                     controllerAs: 'ctrl',

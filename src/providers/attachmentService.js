@@ -381,7 +381,7 @@ module.exports = function (app) {
 
             /* self.viewAttachment = function (attachment, $event) {
                  dialog.showDialog({
-                     template: cmsTemplate.getPopup('view-attachment'),
+                     templateUrl: cmsTemplate.getPopup('view-attachment'),
                      targetEvent: $event || false,
                      locals: {
                          attachment: attachment
@@ -480,7 +480,7 @@ module.exports = function (app) {
              */
             self.dragDropDialog = function (correspondence, attachment, $event) {
                 return dialog.showDialog({
-                    template: cmsTemplate.getPopup('drag-drop-files'),
+                    templateUrl: cmsTemplate.getPopup('drag-drop-files'),
                     controller: 'dragDropPopCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event || null,
@@ -531,7 +531,7 @@ module.exports = function (app) {
                     .then(function (attachment) {
                         return justUrl ? attachment.content.viewURL :
                             dialog.showDialog({
-                                template: cmsTemplate.getPopup('view-document-readonly'),
+                                templateUrl: cmsTemplate.getPopup('view-document-readonly'),
                                 controller: 'viewDocumentReadOnlyPopCtrl',
                                 controllerAs: 'ctrl',
                                 bindToController: true,
@@ -563,7 +563,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         controller: 'attachmentThumbnailPopCtrl',
-                        template: cmsTemplate.getPopup('attachment-thumbnail'),
+                        templateUrl: cmsTemplate.getPopup('attachment-thumbnail'),
                         controllerAs: 'ctrl',
                         targetEvent: $event,
                         locals: {

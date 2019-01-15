@@ -976,7 +976,7 @@ module.exports = function (app) {
                     return dialog
                         .showDialog({
                             targetEvent: $event,
-                            template: cmsTemplate.getPopup('application-user-edit-permission'),
+                            templateUrl: cmsTemplate.getPopup('application-user-edit-permission'),
                             controller: 'applicationUserEditPermissionPopCtrl',
                             controllerAs: 'ctrl',
                             locals: {
@@ -999,7 +999,7 @@ module.exports = function (app) {
             return dialog
                 .showDialog({
                     targetEvent: $event,
-                    template: cmsTemplate.getPopup('application-user-workflow-participation'),
+                    templateUrl: cmsTemplate.getPopup('application-user-workflow-participation'),
                     controller: 'applicationUserWorkflowParticipationPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {
@@ -1034,7 +1034,7 @@ module.exports = function (app) {
             return dialog
                 .showDialog({
                     targetEvent: $event,
-                    template: cmsTemplate.getPopup('application-user-out-of-office-setting'),
+                    templateUrl: cmsTemplate.getPopup('application-user-out-of-office-setting'),
                     controller: 'applicationUserOutOfOfficeSettingPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {
@@ -1067,7 +1067,7 @@ module.exports = function (app) {
         self.openApplicationUserPrivateMenu = function (ouApplicationUser, $event, $index) {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('application-user-private-menu'),
+                    templateUrl: cmsTemplate.getPopup('application-user-private-menu'),
                     controller: 'applicationUserPrivateMenuCtrl',
                     controllerAs: 'ctrl',
                     locals: {

@@ -929,7 +929,7 @@ module.exports = function (app) {
         self.correspondencePrintBarcode = function (correspondence, $event) {
             var defer = $q.defer();
             return dialog.showDialog({
-                template: cmsTemplate.getPopup('print-barcode'),
+                templateUrl: cmsTemplate.getPopup('print-barcode'),
                 bindToController: true,
                 controllerAs: 'ctrl',
                 eventTarget: $event,
@@ -990,7 +990,7 @@ module.exports = function (app) {
 
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('transfer-mail'),
+                    templateUrl: cmsTemplate.getPopup('transfer-mail'),
                     controller: 'transferMailPopCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event,
@@ -1030,7 +1030,7 @@ module.exports = function (app) {
         self.openCommentDialog = function () {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('reason'),
+                    templateUrl: cmsTemplate.getPopup('reason'),
                     controller: 'reasonPopCtrl',
                     controllerAs: 'ctrl',
                     bindToController: true,
@@ -1244,7 +1244,7 @@ module.exports = function (app) {
                     result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                     generator.addPopupNumber();
                     return dialog.showDialog({
-                        template: cmsTemplate.getPopup('view-correspondence'),
+                        templateUrl: cmsTemplate.getPopup('view-correspondence'),
                         controller: 'viewCorrespondencePopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,
@@ -1320,7 +1320,7 @@ module.exports = function (app) {
                 .then(function (generalStepElementView) {
                     generator.addPopupNumber();
                     return dialog.showDialog({
-                        template: cmsTemplate.getPopup('view-correspondence'),
+                        templateUrl: cmsTemplate.getPopup('view-correspondence'),
                         controller: 'viewCorrespondencePopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,
@@ -1377,7 +1377,7 @@ module.exports = function (app) {
                 .then(function (generalStepElementView) {
                     generator.addPopupNumber();
                     return dialog.showDialog({
-                        template: cmsTemplate.getPopup('view-correspondence'),
+                        templateUrl: cmsTemplate.getPopup('view-correspondence'),
                         controller: 'viewCorrespondencePopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,
@@ -1439,7 +1439,7 @@ module.exports = function (app) {
                 .then(function (generalStepElementView) {
                     generator.addPopupNumber();
                     return dialog.showDialog({
-                        template: cmsTemplate.getPopup('view-correspondence'),
+                        templateUrl: cmsTemplate.getPopup('view-correspondence'),
                         controller: 'viewCorrespondencePopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,
@@ -1500,7 +1500,7 @@ module.exports = function (app) {
                     generator.addPopupNumber();
                     result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                     return dialog.showDialog({
-                        template: cmsTemplate.getPopup('view-document-readonly'),
+                        templateUrl: cmsTemplate.getPopup('view-document-readonly'),
                         controller: 'viewDocumentReadOnlyPopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,
@@ -1564,7 +1564,7 @@ module.exports = function (app) {
                     result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                     generator.addPopupNumber();
                     return dialog.showDialog({
-                        template: cmsTemplate.getPopup('view-correspondence-g2g'),
+                        templateUrl: cmsTemplate.getPopup('view-correspondence-g2g'),
                         controller: 'viewCorrespondenceG2GPopCtrl',
                         controllerAs: 'ctrl',
                         targetEvent: $event,
@@ -1598,7 +1598,7 @@ module.exports = function (app) {
          */
         self.openCorrespondenceEditor = function (information) {
             return dialog.showDialog({
-                template: cmsTemplate.getPopup('view-correspondence'),
+                templateUrl: cmsTemplate.getPopup('view-correspondence'),
                 controller: 'viewCorrespondencePopCtrl',
                 controllerAs: 'ctrl',
                 bindToController: true,
@@ -1721,7 +1721,7 @@ module.exports = function (app) {
             return dialog
                 .showDialog({
                     targetEvent: $event,
-                    template: cmsTemplate.getPopup('broadcast'),
+                    templateUrl: cmsTemplate.getPopup('broadcast'),
                     controller: 'broadcastPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {
@@ -1795,7 +1795,7 @@ module.exports = function (app) {
             var errorMessage = [];
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('launch-correspondence-workflow'),
+                    templateUrl: cmsTemplate.getPopup('launch-correspondence-workflow'),
                     controller: 'launchCorrespondenceWorkflowPopCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event,
@@ -2267,7 +2267,7 @@ module.exports = function (app) {
         self.showReasonDialog = function (dialogTitle, $event) {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('reason'),
+                    templateUrl: cmsTemplate.getPopup('reason'),
                     controller: 'reasonPopCtrl',
                     controllerAs: 'ctrl',
                     bindToController: true,
@@ -2295,7 +2295,7 @@ module.exports = function (app) {
         self.showReasonBulkDialog = function (dialogTitle, workItems, $event) {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('reason-bulk'),
+                    templateUrl: cmsTemplate.getPopup('reason-bulk'),
                     controller: 'reasonBulkPopCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event,
@@ -2408,7 +2408,7 @@ module.exports = function (app) {
             workItems = angular.isArray(workItems) ? workItems : [workItems];
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('folder-tree-popup'),
+                    templateUrl: cmsTemplate.getPopup('folder-tree-popup'),
                     controller: 'folderTreePopCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event,
@@ -2537,7 +2537,7 @@ module.exports = function (app) {
             return dialog
                 .showDialog({
                     targetEvent: $event,
-                    template: cmsTemplate.getPopup('ready-to-export-option'),
+                    templateUrl: cmsTemplate.getPopup('ready-to-export-option'),
                     controller: 'readyToExportOptionPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {
@@ -2570,7 +2570,7 @@ module.exports = function (app) {
             return dialog
                 .showDialog({
                     targetEvent: $event,
-                    template: cmsTemplate.getPopup('bulk-export-option'),
+                    templateUrl: cmsTemplate.getPopup('bulk-export-option'),
                     controller: 'bulkExportOptionPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {
@@ -2771,7 +2771,7 @@ module.exports = function (app) {
                         return dialog
                             .showDialog({
                                 targetEvent: $event,
-                                template: cmsTemplate.getPopup('signature'),
+                                templateUrl: cmsTemplate.getPopup('signature'),
                                 controller: 'signaturePopCtrl',
                                 controllerAs: 'ctrl',
                                 locals: {
@@ -2831,7 +2831,7 @@ module.exports = function (app) {
         self.showPartialExportDialog = function (correspondence, $event, ignoreMessage) {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('partial-export'),
+                    templateUrl: cmsTemplate.getPopup('partial-export'),
                     controller: 'partialExportPopCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event,
@@ -2878,7 +2878,7 @@ module.exports = function (app) {
                 .then(function (generalStepElementView) {
                     generator.addPopupNumber();
                     return dialog.showDialog({
-                        template: cmsTemplate.getPopup('view-correspondence-new'),
+                        templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
                         controller: 'viewCorrespondencePopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,
@@ -2935,7 +2935,7 @@ module.exports = function (app) {
                 .then(function (generalStepElementView) {
                     generator.addPopupNumber();
                     return dialog.showDialog({
-                        template: cmsTemplate.getPopup('view-correspondence'),
+                        templateUrl: cmsTemplate.getPopup('view-correspondence'),
                         controller: 'viewCorrespondencePopCtrl',
                         controllerAs: 'ctrl',
                         bindToController: true,
@@ -3086,7 +3086,7 @@ module.exports = function (app) {
         self.viewSpecificCorrespondenceVersion = function (correspondence, allowDuplicateAction, $event) {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('versions'),
+                    templateUrl: cmsTemplate.getPopup('versions'),
                     controller: 'versionPopCtrl',
                     controllerAs: 'ctrl',
                     targetEvent: $event,
@@ -3137,7 +3137,7 @@ module.exports = function (app) {
         self.displayDuplicateOption = function (correspondence, $event) {
             return dialog
                 .showDialog({
-                    template: cmsTemplate.getPopup('duplicate-options'),
+                    templateUrl: cmsTemplate.getPopup('duplicate-options'),
                     controller: 'duplicateOptionPopCtrl',
                     targetEvent: $event,
                     controllerAs: 'ctrl',
