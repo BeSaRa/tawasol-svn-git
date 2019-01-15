@@ -82,8 +82,8 @@ module.exports = function (app) {
             dialog.hide();
         });
 
-        $scope.bundleVersion = '2.1.1';
-        $scope.buildNumber = ' F#3118';
-        app.$_privateBuildNumber = 'F#3119';
+        $scope.bundleVersion = '2.1.2';
+        $scope.buildNumber = ' F#3189';
+        app.$_privateBuildNumber = 'F#3189';
     });
 };
