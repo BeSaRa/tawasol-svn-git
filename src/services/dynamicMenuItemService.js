@@ -49,7 +49,7 @@ module.exports = function (app) {
         };
 
         self.saveBulkUserMenuItems = function (userMenuItems) {
-            return $http.post(urlService.dynamicMenuItems.replace('menu-item', 'user-menu-item') + ['/bulk'], userMenuItems);
+            return $http.post(urlService.dynamicMenuItems.replace('menu-item', 'user-menu-item') + ['/bulk'], generator.interceptSendCollection('UserMenuItem',userMenuItems));
         };
         /**
          * @description load sub dynamic menu item for given menu item id.

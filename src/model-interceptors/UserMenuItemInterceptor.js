@@ -9,6 +9,9 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             model.menuItem = generator.interceptSendInstance('DynamicMenuItem', model.menuItem);
+            model.id = null;
+            delete model.arName;
+            delete model.enName;
             return model;
         });
 

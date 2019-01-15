@@ -2,7 +2,9 @@ module.exports = function (app) {
     app.controller('applicationUserEditPermissionPopCtrl', function (_,
                                                                      toast,
                                                                      $rootScope,
+                                                                     layoutService,
                                                                      validationService,
+                                                                     dynamicMenuItemService,
                                                                      $filter,
                                                                      generator,
                                                                      dialog,
@@ -13,6 +15,8 @@ module.exports = function (app) {
                                                                      ouApplicationUser,
                                                                      permissions,
                                                                      userOuPermissions,
+                                                                     userMenuItems,
+                                                                     dynamicMenuItems,
                                                                      ouApplicationUserService,
                                                                      UserOuPermission) {
         'ngInject';
@@ -22,8 +26,27 @@ module.exports = function (app) {
         //self.permissionsChunkArray = _.chunk(permissions, 3);
         self.permissionsList = permissions;
 
+        if (dynamicMenuItems.length) {
+            self.permissionsList[0][langService.getKey('private_menu_items', 'en')] = _.chunk(_convertMenuItems(dynamicMenuItems), 3);
+            self.permissionsList[1][langService.getKey('private_menu_items', 'ar')] = _.chunk(_convertMenuItems(dynamicMenuItems), 3);
+        }
+
+        function _convertMenuItems(menuItems) {
+            return _.map(menuItems, function (item) {
+                item.arName = item.menuItem.arName;
+                item.enName = item.menuItem.enName;
+                item.id = 'dm' + item.menuItem.id;
+                return item;
+            });
+        }
+
+
         self.userOuPermissions = userOuPermissions;
         self.userOuPermissionsIds = _.map(userOuPermissions, 'permissionId');
+
+        if (userMenuItems.length) {
+            self.userOuPermissionsIds = self.userOuPermissionsIds.concat(_.map(_convertMenuItems(userMenuItems), 'id'))
+        }
 
         self.ouApplicationUser = angular.copy(ouApplicationUser);
         self.model = angular.copy(ouApplicationUser);
@@ -34,12 +57,14 @@ module.exports = function (app) {
         self.permissions = {};
         self.totalPermissionsCount = 0;
 
+
         function _getPermissions(current) {
             return current === 'en' ? self.permissionsList[0] : self.permissionsList[1];
         }
 
         // for the first time the controller initialize
         self.permissions = _getPermissions(langService.current);
+
 
         _.map(self.permissions, function (keys) {
             _.map(keys, function (permissionsArr) {
@@ -55,12 +80,37 @@ module.exports = function (app) {
             dialog.hide(true);
         }
 
+        function _getMenuItemById(menuItemId) {
+            menuItemId = Number(menuItemId.replace('dm', ''));
+            return _.find(dynamicMenuItems, function (item) {
+                return item.menuItem.id === menuItemId;
+            });
+        }
+
+        function _successMessage() {
+            if (employeeService.isCurrentOUApplicationUser(self.ouApplicationUser)) {
+                tokenService.forceTokenRefresh()
+                    .then(function () {
+                        counterService.loadCounters();
+                        layoutService.loadLandingPage();
+                        _savePermissionsSuccess();
+                        $rootScope.$broadcast('$currentEmployeePermissionsChanged');
+                    })
+            } else {
+                _savePermissionsSuccess();
+            }
+        }
+
         /**
          * @description add user ou permissions
          */
         self.saveUserOuPermissionsFromCtrl = function () {
-            var userOuPermissions = [];
+            var userOuPermissions = [], userMenuItemsIds = [];
             for (var i = 0; i < self.userOuPermissionsIds.length; i++) {
+                if (_.startsWith(self.userOuPermissionsIds[i], 'dm')) {
+                    userMenuItemsIds.push(_getMenuItemById(self.userOuPermissionsIds[i]));
+                    continue;
+                }
                 userOuPermissions.push(new UserOuPermission({
                     userId: self.ouApplicationUser.applicationUser.id,
                     ouId: self.ouApplicationUser.ouid.id,
@@ -68,22 +118,20 @@ module.exports = function (app) {
                     permissionId: self.userOuPermissionsIds[i]
                 }));
             }
-
-            ouApplicationUserService
+            return ouApplicationUserService
                 .addUserOuPermission(userOuPermissions)
                 .then(function () {
-                    if (employeeService.isCurrentOUApplicationUser(self.ouApplicationUser)) {
-                        tokenService.forceTokenRefresh()
-                            .then(function () {
-                                counterService.loadCounters();
-                                _savePermissionsSuccess();
-                                $rootScope.$broadcast('$currentEmployeePermissionsChanged');
-                            })
-                    } else {
-                        _savePermissionsSuccess();
+                    if (!dynamicMenuItems.length) {
+                        return _successMessage();
                     }
+                    return dynamicMenuItemService
+                        .saveBulkUserMenuItems(userMenuItemsIds)
+                        .then(function () {
+                            return _successMessage();
+                        });
                 });
         };
+
 
         /**
          * @description Close the popup
@@ -109,8 +157,7 @@ module.exports = function (app) {
             var index = self.userOuPermissionsIds.indexOf(permission.id);
             if (index > -1) {
                 self.userOuPermissionsIds.splice(index, 1);
-            }
-            else {
+            } else {
                 self.userOuPermissionsIds.push(permission.id);
             }
         };
@@ -181,8 +228,7 @@ module.exports = function (app) {
         self.toggleAll = function () {
             if (self.isChecked()) {
                 self.userOuPermissionsIds = [];
-            }
-            else {
+            } else {
                 for (var key in self.permissions) {
                     var permission = self.permissions[key];
                     for (var i = 0; i < permission.length; i++) {
