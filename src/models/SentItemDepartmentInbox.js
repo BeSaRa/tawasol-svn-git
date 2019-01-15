@@ -189,7 +189,7 @@ module.exports = function (app) {
              * @description check if subSiteTo internal RegOu
              */
             SentItemDepartmentInbox.prototype.isSubSiteToInternalRegOu = function () {
-                return _.startsWith(model.subSiteToId, "1");
+                return _.startsWith(this.subSiteToId, "1");
             };
 
             // don't remove CMSModelInterceptor from last line

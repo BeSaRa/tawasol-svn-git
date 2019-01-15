@@ -613,7 +613,7 @@ module.exports = function (app) {
                 class: "action-green",
                 hide: false, /*In Phase 2*/
                 checkShow: function (action, model) {
-                    return self.checkToShowAction && model.isSubSiteToInternalRegOu();
+                    return self.checkToShowAction(action, model) && model.isSubSiteToInternalRegOu();
                 }
             },
             // Launch New Distribution Workflow
