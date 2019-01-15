@@ -29,9 +29,10 @@ module.exports = function (app) {
          * @description Load the document templates from server.
          * @returns {Promise|documentTemplates}
          */
-        self.loadDocumentTemplates = function (organization) {
+        self.loadDocumentTemplates = function (organization, documentClass) {
             organization = organization.hasOwnProperty('id') ? organization.id : organization;
-            return $http.get(urlService.documentTemplates + '/ou/' + organization).then(function (result) {
+
+            return $http.get(urlService.documentTemplates + ((documentClass) ? ('/active/' + documentClass + '/ou/') : '/ou/') + organization).then(function (result) {
                 self.documentTemplates = generator.generateCollection(result.data.rs, DocumentTemplate, self._sharedMethods);
                 self.documentTemplates = generator.interceptReceivedCollection('DocumentTemplate', self.documentTemplates);
                 return self.documentTemplates;
