@@ -224,7 +224,8 @@ module.exports = function (app) {
                     new ResolveDefer(defer);
                 })
                 .catch(function (error) {
-                    console.log("ERROR", error);
+                    if (error)
+                        toast.error(langService.get('export_failed'));
                 });
         };
 
@@ -310,7 +311,10 @@ module.exports = function (app) {
                             toast.success(langService.get("terminate_specific_success").change({name: readyToExport.getTranslatedName()}));
                             new ResolveDefer(defer);
                         });
-                });
+                }).catch(function (error) {
+                if (error)
+                    toast.error(langService.get('failed_terminate_selected'));
+            });
         };
 
 
@@ -1123,7 +1127,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_composite_document',
-                        permissionKey:'DOWNLOAD_COMPOSITE_BOOK',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         shortcut: false,
                         callback: self.downloadCompositeDocument,
                         class: "action-green",
