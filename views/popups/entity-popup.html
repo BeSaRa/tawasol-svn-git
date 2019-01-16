@@ -212,7 +212,8 @@
                                         <md-input-container flex>
                                             <label for="cmUserName">{{lang.filenet_content_manager_username}}</label>
                                             <input name="cmUserName" id="cmUserName" required
-                                                   ng-model="ctrl.entity.cmUserName" custom-validate-directive="FILE_NET_USER"
+                                                   ng-model="ctrl.entity.cmUserName"
+                                                   custom-validate-directive="FILE_NET_USER"
                                                    minlength="2" maxlength="50">
                                             <div ng-messages="entityForm.cmUserName.$error">
                                                 <div ng-message="required">{{lang.field_required}}</div>
@@ -302,6 +303,10 @@
                                                    ng-disabled="!ctrl.checkTestFileNetConnectionEnabled()"
                                                    ng-click="ctrl.testFileNetConnection()">{{lang.test_connection}}
                                         </md-button>
+                                        <span flex></span>
+                                        <md-switch ng-model="ctrl.entity.isSSO">
+                                            {{lang.sso}} : {{ctrl.entity.getTranslatedIsSSL(ctrl.entity.isSSO)}}
+                                        </md-switch>
                                     </div>
                                 </fieldset>
                                 <!-- TAWASOL SUPPORTING DATABASE -->

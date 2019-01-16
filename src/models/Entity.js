@@ -28,6 +28,7 @@ module.exports = function (app) {
             self.smtpSubject = null;
             self.smtpPort = null;
             self.ldapProviders = [];
+            self.isSSO = false;
             // new properties for G2G
             self.g2gPrivateKey = null;
             self.g2gServerAddress = null;
