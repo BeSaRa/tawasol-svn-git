@@ -244,7 +244,8 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
-                                disableEverything: disabled.disableAll
+                                disableEverything: disabled.disableAll,
+                                pageName:pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -305,7 +306,8 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
-                                disableEverything: disabled.disableAll
+                                disableEverything: disabled.disableAll,
+                                pageName:pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -372,7 +374,8 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
-                                disableEverything: disabled.disableAll
+                                disableEverything: disabled.disableAll,
+                                pageName:pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -431,7 +434,8 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
-                                popupNumber: generator.getPopupNumber()
+                                popupNumber: generator.getPopupNumber(),
+                                pageName:pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -498,7 +502,8 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: false,
-                                popupNumber: generator.getPopupNumber()
+                                popupNumber: generator.getPopupNumber(),
+                                pageName:pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -575,7 +580,8 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: false,
-                                popupNumber: generator.getPopupNumber()
+                                popupNumber: generator.getPopupNumber(),
+                                pageName:pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -643,7 +649,8 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
-                                popupNumber: generator.getPopupNumber()
+                                popupNumber: generator.getPopupNumber(),
+                                pageName:pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -714,7 +721,8 @@ module.exports = function (app) {
                                 workItem: false,
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
-                                popupNumber: generator.getPopupNumber()
+                                popupNumber: generator.getPopupNumber(),
+                                pageName:pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -773,7 +781,8 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
-                                popupNumber: generator.getPopupNumber()
+                                popupNumber: generator.getPopupNumber(),
+                                pageName:pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -850,7 +859,8 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
-                                popupNumber: generator.getPopupNumber()
+                                popupNumber: generator.getPopupNumber(),
+                                pageName:pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -928,7 +938,8 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
-                                disableEverything: disabled.disableAll
+                                disableEverything: disabled.disableAll,
+                                pageName:pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -999,7 +1010,8 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: false,
-                                popupNumber: generator.getPopupNumber()
+                                popupNumber: generator.getPopupNumber(),
+                                pageName:pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1076,7 +1088,8 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
-                                disableEverything: disabled.disableAll
+                                disableEverything: disabled.disableAll,
+                                pageName:pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1135,7 +1148,8 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
-                                popupNumber: generator.getPopupNumber()
+                                popupNumber: generator.getPopupNumber(),
+                                pageName:pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1244,7 +1258,8 @@ module.exports = function (app) {
                                 disableEverything: true,
                                 disableProperties: true,
                                 disableCorrespondence: true,
-                                g2gItemCopy: g2gItemCopy
+                                g2gItemCopy: g2gItemCopy,
+                                pageName:pageName
                             }
                         }).then(function (result) {
                             generator.removePopupNumber();
@@ -1319,7 +1334,8 @@ module.exports = function (app) {
                                 disableEverything: disabled.disableAll,
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
-                                g2gItemCopy: g2gItemCopy
+                                g2gItemCopy: g2gItemCopy,
+                                pageName:pageName
                             }
                         }).then(function (result) {
                             generator.removePopupNumber();

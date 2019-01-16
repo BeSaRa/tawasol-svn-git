@@ -267,7 +267,7 @@
             <!--class="document-viewer-full-width-height"-->
         </div>
         <div layout="row">
-            <div ng-if="ctrl.correspondence && !ctrl.correspondence.viewVersion && !ctrl.g2gItemCopy">
+            <div ng-if="ctrl.correspondence && !ctrl.correspondence.viewVersion && !ctrl.g2gItemCopy && ctrl.pageName !=='departmentIncoming'">
                 <md-button class="md-raised" ng-click="ctrl.saveCorrespondenceChanges()"
                            ng-disabled="ctrl.checkDisabled()">{{lang.save}}
                 </md-button>

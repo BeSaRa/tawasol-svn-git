@@ -198,7 +198,7 @@ module.exports = function (app) {
             model.priorityLevel = model.priorityLevelLookup = lookupService.getLookupByLookupKey(lookupService.priorityLevel, model.priorityLevel);
 
             model.creatorInfo = model.creatorInfo ? new Information(model.creatorInfo) : new Information();
-            if (!angular.isDate(model.docDate)) {
+            if (model.docDate && !angular.isDate(model.docDate)) {
                 model.docDate = moment(model.docDate).format('YYYY-MM-DD');
                 model.createdOn = angular.copy(model.docDate);
             }

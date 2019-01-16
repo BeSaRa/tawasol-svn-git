@@ -1257,7 +1257,8 @@ module.exports = function (app) {
                             disableProperties: disableProperties,
                             disableCorrespondence: disableCorrespondence,
                             popupNumber: generator.getPopupNumber(),
-                            disableEverything: !!departmentIncoming
+                            disableEverything: !!departmentIncoming,
+                            pageName:'none'
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1391,7 +1392,8 @@ module.exports = function (app) {
                             disableProperties: disableProperties,
                             disableCorrespondence: disableCorrespondence,
                             disableEverything: departmentIncoming,
-                            popupNumber: generator.getPopupNumber()
+                            popupNumber: generator.getPopupNumber(),
+                            pageName:'none'
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1453,7 +1455,8 @@ module.exports = function (app) {
                             disableProperties: disableProperties,
                             disableCorrespondence: disableCorrespondence,
                             disableEverything: departmentIncoming,
-                            popupNumber: generator.getPopupNumber()
+                            popupNumber: generator.getPopupNumber(),
+                            pageName:'none'
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1579,7 +1582,8 @@ module.exports = function (app) {
                             disableEverything: true,
                             disableProperties: true,
                             disableCorrespondence: true,
-                            g2gItemCopy: g2gItemCopy
+                            g2gItemCopy: g2gItemCopy,
+                            pageName:'none'
                         }
                     }).then(function (result) {
                         generator.removePopupNumber();
