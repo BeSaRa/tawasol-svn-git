@@ -247,6 +247,18 @@ module.exports = function (app) {
             return managerService.manageDocumentLinkedDocuments(info.vsId, info.documentClass);
         };
 
+        /**
+         * @description Destinations
+         * @param favoriteDocument
+         * @param $event
+         */
+        self.manageDestinations = function (favoriteDocument, $event) {
+            favoriteDocument.manageDocumentCorrespondence($event)
+                .then(function () {
+                    self.reloadFavoriteDocuments(self.grid.page);
+                });
+        };
+
 
         var checkIfEditPropertiesAllowed = function (model, checkForViewPopup) {
             var info = model.getInfo();
@@ -270,6 +282,15 @@ module.exports = function (app) {
             if (checkForViewPopup)
                 return !hasPermission;
             return hasPermission;
+        };
+
+        var checkIfEditCorrespondenceSiteAllowed = function (model, checkForViewPopup) {
+            var info = model.getInfo();
+            var hasPermission = employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
+            var allowed = (hasPermission && info.documentClass !== "internal");
+            if (checkForViewPopup)
+                return !(allowed);
+            return allowed;
         };
 
         /**
@@ -640,17 +661,18 @@ module.exports = function (app) {
                         //hide: true,
                         checkShow: self.checkToShowAction
                     },
-                    /*{
-                     type: 'action',
-                     icon: 'stop',
-                     text: 'grid_action_destinations',
-                     shortcut: false,
-                     callback: self.manageDestinations,
-                     permissionKey: "MANAGE_DESTINATIONS",
-                     class: "action-red",
-                     hide: true,
-                     checkShow: self.checkToShowAction
-                     }*/
+                    // Destinations
+                    {
+                        type: 'action',
+                        icon: 'stop',
+                        text: 'grid_action_destinations',
+                        callback: self.manageDestinations,
+                        permissionKey: "MANAGE_DESTINATIONS",
+                        class: "action-green",
+                        checkShow: function (action, model) {
+                            return self.checkToShowAction(action, model) && checkIfEditCorrespondenceSiteAllowed(model, false);
+                        }
+                    }
                 ]
             },
             // Open
