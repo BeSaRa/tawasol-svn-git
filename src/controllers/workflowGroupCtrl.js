@@ -90,7 +90,7 @@ module.exports = function (app) {
                     self.grid.page = pageNumber;
                 self.getSortedData();
                 self.grid.searchCallback();
-                return result;
+                return self.workflowGroups = result;
             });
         };
 
