@@ -5,7 +5,7 @@
                 <md-button ng-click="$mdMenu.open()">
                     <div layout="row" class="m015" layout-align="start center">
                         <img class="language-flag"
-                             ng-src="../../../assets/images/{{language.service.selectedLanguage.image}}.png"/>
+                             ng-src="assets/images/{{language.service.selectedLanguage.image}}.png"/>
                         <span class="language-title">{{language.service.selectedLanguage.code}}</span>
                     </div>
                 </md-button>
@@ -13,7 +13,7 @@
                     <md-menu-item ng-repeat-start="lang in language.service.languages track by $index">
                         <md-button ng-click="language.selectLanguage(lang)">
                             <div layout="row" layout-align="start center">
-                                <img class="language-flag" ng-src="../../../assets/images/{{lang.image}}.png"/>
+                                <img class="language-flag" ng-src="assets/images/{{lang.image}}.png"/>
                                 <span class="language-title">{{lang.code}}</span>
                             </div>
                         </md-button>
