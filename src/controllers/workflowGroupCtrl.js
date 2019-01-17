@@ -84,13 +84,14 @@ module.exports = function (app) {
             return workflowGroupService.loadWorkflowGroups().then(function (result) {
                 self.selectedWorkflowGroups = [];
                 self.workflowGroups = result;
+                self.workflowGroupsCopy = angular.copy(self.workflowGroups);
                 defer.resolve(true);
 
                 if (pageNumber)
                     self.grid.page = pageNumber;
                 self.getSortedData();
                 self.grid.searchCallback();
-                return self.workflowGroups = result;
+                return result;
             });
         };
 
