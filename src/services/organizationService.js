@@ -585,6 +585,16 @@ module.exports = function (app) {
                     var organizations = generator.generateCollection(result.data.rs, WFOrganization);
                     return organizations.length ? organizations : false;
                 });
+        };
+        /**
+         * @description sync organizations
+         * @return {*}
+         */
+        self.syncFNOrganizations = function () {
+            return $http.put(urlService.organizations + '/sync-fn-groups')
+                .then(function (result) {
+                    return result.data.rs;
+                });
         }
 
     });

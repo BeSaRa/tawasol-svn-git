@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                                $scope,
                                                                rootEntity,
                                                                $rootScope,
+                                                               LangWatcher,
                                                                organizationChartService,
                                                                organizationService) {
         'ngInject';
@@ -13,6 +14,8 @@ module.exports = function (app) {
         $scope.nodeList = [];
         self.organizations = [];
         $scope.orgChart = null;
+
+        LangWatcher($scope);
 
         self.resetView = function () {
             $element.find('.orgchart').css('transform', '');
@@ -36,6 +39,8 @@ module.exports = function (app) {
             var root = angular.copy(rootEntity.returnRootEntity().rootEntity);
             root.children = nodes;
             root.itIsRoot = true;
+            root.isFnSynched = true;
+
             $timeout(function () {
                 $scope.orgChart = $($element.children()).orgchart({
                     data: root,
@@ -46,6 +51,7 @@ module.exports = function (app) {
                     nodeID: 'id',
                     toggleSiblingsResp: true,
                     createNode: function ($node, data) {
+                        angular.element($node).toggleClass('need-sync', (!data.isFnSynched));
                         if (!$scope.hasOwnProperty('nodeList'))
                             $scope.nodeList = [];
 
@@ -65,19 +71,27 @@ module.exports = function (app) {
                         var title = angular.element('<span />');
                         title.html('{{nodeList[' + index + '].arName}}');
 
-                        var archive = angular.element('<div tooltip="{{$root.lang.has_archive}}" />', {class: 'node-has-archive'});
+                        var archive = angular.element('<div tooltip="{{lang.has_archive}}" />', {class: 'node-has-archive'});
                         archive.append(angular.element('<md-icon md-svg-icon="archive"></md-icon>'));
 
-                        var inbox = angular.element('<div  tooltip="{{$root.lang.has_registry}}" />', {class: 'node-has-inbox'});
+                        var inbox = angular.element('<div  tooltip="{{lang.has_registry}}" />', {class: 'node-has-inbox'});
                         inbox.append(angular.element('<md-icon md-svg-icon="inbox"></md-icon>'));
 
                         var iconsWrapper = angular.element('<div layout="row" layout-align="center center"  />', {class: 'node-icon-wrapper'});
+
+                        var synced = angular.element('<div tooltip="{{lang.organization_not_synced}}" />', {class: 'node-need-sync'});
+                        synced.append(angular.element('<md-icon md-svg-icon="sync-alert"></md-icon>'));
 
                         if (data.hasRegistry)
                             iconsWrapper.append(inbox);
 
                         if (data.centralArchive)
                             iconsWrapper.append(archive);
+
+                        if (!data.isFnSynched) {
+                            iconsWrapper.append(synced);
+                            organizationMenuDirective = '';
+                        }
 
 
                         $node
@@ -92,7 +106,7 @@ module.exports = function (app) {
                             .attr('layout', 'row')
                             .attr('layout-align', 'center center');
 
-                        if (data.hasRegistry || data.centralArchive) {
+                        if (data.hasRegistry || data.centralArchive || !data.isFnSynched) {
                             $node.append(iconsWrapper);
                         }
                         $compile($node)($scope);

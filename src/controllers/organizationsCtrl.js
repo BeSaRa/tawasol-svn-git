@@ -4,8 +4,10 @@ module.exports = function (app) {
                                                   cmsTemplate,
                                                   $scope,
                                                   dialog,
+                                                  toast,
                                                   organizations,
                                                   organizationChartService,
+                                                  langService,
                                                   referencePlanNumberService,
                                                   contextHelpService) {
         'ngInject';
@@ -17,6 +19,16 @@ module.exports = function (app) {
 
         contextHelpService.setHelpTo('organizations');
 
+        self.needSync = _checkOrganizationsNeedSync(organizations);
+
+
+        function _checkOrganizationsNeedSync(organizations) {
+            return _.some(organizations, function (org) {
+                return !org.isFnSynched;
+            });
+        }
+
+
         self.reloadOrganizations = function () {
             return referencePlanNumberService
                 .loadReferencePlanNumbers()
@@ -24,6 +36,7 @@ module.exports = function (app) {
                     organizationService
                         .loadOrganizations()
                         .then(function (result) {
+                            self.needSync = _checkOrganizationsNeedSync(result);
                             organizationChartService.createHierarchy(result);
                             self.selectedFilter = self.organizationChartService.rootOrganizations;
                         });
@@ -72,6 +85,16 @@ module.exports = function (app) {
             return _.filter(organizationService.organizations, function (item) {
                 return item.arName.toLowerCase().indexOf(searchText) !== -1 || item.enName.toLowerCase().indexOf(searchText) !== -1
             });
+        };
+
+        self.syncOrganizations = function () {
+            organizationService.syncFNOrganizations().then(function () {
+                self.reloadOrganizations().then(function () {
+                    toast.success(langService.get('organizations_synced_done'));
+                });
+            }).catch(function (error) {
+                toast.error(error.data.eo[langService.current + 'Name']);
+            })
         };
 
         $scope.$watch(function () {

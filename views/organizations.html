@@ -9,6 +9,9 @@
             <md-button ng-click="ctrl.reloadOrganizations()" class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
+            <md-button ng-if="ctrl.needSync" ng-click="ctrl.syncOrganizations()" class="md-icon-button" tooltip="{{lang.sync_organizations}}">
+                <md-icon md-svg-icon="sync"></md-icon>
+            </md-button>
         </div>
         <md-tabs class="content white-bg">
             <md-tab label="{{lang.organization_view}}">
