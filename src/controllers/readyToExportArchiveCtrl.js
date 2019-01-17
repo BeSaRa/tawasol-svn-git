@@ -1006,7 +1006,6 @@ module.exports = function (app) {
                 text: 'grid_action_manage',
                 shortcut: false,
                 showInView: false,
-                hide: true,
                 disabled: function (model) {
                     return model.isLocked() && !model.isLockedByCurrentUser();
                 },
