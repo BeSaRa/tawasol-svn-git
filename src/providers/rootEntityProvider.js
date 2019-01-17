@@ -39,7 +39,7 @@ module.exports = function (app) {
         self.$get = function (RootEntity, employeeService, $state, Credentials, GlobalSetting, titleService, generator, lookupService, $rootScope, $sce, errorCode, $cookies, $stateParams, $http, $location, urlService, dialog, $q) {
             'ngInject';
             return {
-                loadInformation: function (rootIdentifier) {
+                loadInformation: function (rootIdentifier, ignoreSSO) {
                     if (rootIdentifier) // to set root entity Identifier
                         self.setRootEntityIdentifier(rootIdentifier);
 
@@ -56,6 +56,8 @@ module.exports = function (app) {
                             self.setRootEntity(new RootEntity(result.data.rs));
                             // single sign on
                             rootEntity.checkSSO().then(function (authenticationService) {
+                                if (ignoreSSO)
+                                    return;
                                 authenticationService
                                     .authenticate(new Credentials({
                                         isSSO: true

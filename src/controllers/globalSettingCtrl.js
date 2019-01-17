@@ -204,8 +204,7 @@ module.exports = function (app) {
                     }).catch(function (result) {
                     defer.reject(false);
                 })
-            }
-            else {
+            } else {
                 defer.resolve(true);
             }
             defer.promise.then(function (response) {
@@ -248,7 +247,7 @@ module.exports = function (app) {
                         .then(function () {
                             self.reloadGlobalSetting()
                                 .then(function () {
-                                    rootEntity.loadInformation(rootEntity.getRootEntityIdentifier());
+                                    rootEntity.loadInformation(rootEntity.getRootEntityIdentifier(), true);
                                     toast.success(langService.get('edited_successfully'));
                                 });
                         });
@@ -270,7 +269,7 @@ module.exports = function (app) {
                     self.reloadGlobalSetting()
                         .then(function () {
                             self.saveBanner = true;
-                            rootEntity.loadInformation(rootEntity.getRootEntityIdentifier()).then(function () {
+                            rootEntity.loadInformation(rootEntity.getRootEntityIdentifier(), true).then(function () {
                                 toast.success(langService.get('banner_logo_success'));
                             });
                         });
@@ -289,7 +288,7 @@ module.exports = function (app) {
                     self.reloadGlobalSetting()
                         .then(function () {
                             self.saveLogo = true;
-                            rootEntity.loadInformation(rootEntity.getRootEntityIdentifier()).then(function () {
+                            rootEntity.loadInformation(rootEntity.getRootEntityIdentifier(), true).then(function () {
                                 toast.success(langService.get('login_logo_success'));
                             });
                         });
@@ -319,8 +318,7 @@ module.exports = function (app) {
                 self[modelName] = URL.createObjectURL(image);
                 if (modelName === "loginLogo") {
                     self.saveLogo = false;
-                }
-                else {
+                } else {
                     self.saveBanner = false;
                 }
                 if (!$scope.$$phase) {
