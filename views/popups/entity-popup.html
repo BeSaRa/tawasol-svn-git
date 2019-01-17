@@ -255,6 +255,7 @@
                                                 <div ng-message="maxlength">{{lang.max_length.change({length:500})}}
                                                 </div>
                                             </div>
+                                            <div class="hint" ng-if="ctrl.entity.isSSO">{{lang.ejb_address_sso}}</div>
                                         </md-input-container>
                                         <md-input-container flex>
                                             <label for="cmStanza">{{lang.filenet_content_manager_stanza}}</label>
