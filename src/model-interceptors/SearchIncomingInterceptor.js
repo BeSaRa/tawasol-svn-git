@@ -1,7 +1,8 @@
 module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
                       generator,
-                      moment) {
+                      moment,
+                      _) {
         'ngInject';
 
         var modelName = 'SearchIncoming';
@@ -17,6 +18,9 @@ module.exports = function (app) {
                 model.createdTo = (model.createdTo) ? model.createdTo : moment().format("YYYY-MM-DD");
                 model.createdOn = {From: angular.copy(model.createdFrom), To: angular.copy(model.createdTo)};
             }*/
+
+            model.FollowupStatus = (model.followupStatus) ?
+                angular.toJson(_.map(model.followupStatus, "lookupKey")) : null;
 
             if (model.year === 'All' && model.docDateFrom && model.docDateTo) {
                 model.docDate = {
@@ -53,7 +57,7 @@ module.exports = function (app) {
             }
 
             // ref document date
-             if (model.refDocDateFrom && model.refDocDateTo) {
+            if (model.refDocDateFrom && model.refDocDateTo) {
                 model.RefDocDate = {
                     From: angular.copy(moment(model.refDocDateFrom).format("YYYY-MM-DD")),
                     To: angular.copy(moment(model.refDocDateTo).format("YYYY-MM-DD"))

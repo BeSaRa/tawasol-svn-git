@@ -201,6 +201,18 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+                <!-- followup status -->
+                <md-input-container flex ng-if="ctrl.checkStatus('followupStatus') &&
+                                ctrl.document.hasDocumentClass('incoming') && ctrl.document.dummySearchDocClass.toLowerCase() !== 'outgoingincoming'">
+                    <label for="followupStatus">{{lang.pc_followupstatus}}</label>
+                    <md-select multiple name="followupStatus" id="followupStatus"
+                               ng-model="ctrl.document.followupStatus"
+                               ng-model-options="{trackBy: '$value.id'}">
+                        <md-option ng-value="fus" ng-repeat="fus in ctrl.followupStatuses track by $index">
+                            {{fus.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
             </div>
             <div layout="row"
                  ng-if="ctrl.document.hasDocumentClass('incoming') && ctrl.document.dummySearchDocClass.toLowerCase() !== 'outgoingincoming'">
