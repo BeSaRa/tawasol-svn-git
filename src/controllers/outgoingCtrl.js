@@ -492,8 +492,7 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'SEND_TO_READY_TO_EXPORT_QUEUE',
                 textCallback: function (model) {
-                    var ouId = employeeService.getEmployee().getOUID();
-                    return model.fromCentralArchiveWhileAdd(ouId) ? 'grid_action_send_to_central_archive' : 'grid_action_send_to_ready_to_export';
+                    return model.fromCentralArchiveWhileAdd(employeeService.getEmployee().getOUID()) ? 'grid_action_send_to_central_archive' : 'grid_action_send_to_ready_to_export';
                 },
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();

@@ -82,7 +82,6 @@ module.exports = function (app) {
             self.reservedInt4 = null;
             self.reservedInt5 = null;
             self.reservedInt6 = null;
-            self.centralArchiveId = null;
             // new properties for GTG
             self.g2gRefNO = null;
             self.g2gVSID = null;
@@ -175,7 +174,8 @@ module.exports = function (app) {
                 var securityLevel = this.securityLevel;
                 if (securityLevel.hasOwnProperty('lookupKey')) {
                     return securityLevel;
-                } else if (securityLevel.hasOwnProperty('id')) {
+                }
+                else if (securityLevel.hasOwnProperty('id')) {
                     return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel.id);
                 }
                 return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel);
@@ -588,8 +588,9 @@ module.exports = function (app) {
             Correspondence.prototype.fromCentralArchive = function () {
                 return !!this.centralArchiveId;
             };
-            Correspondence.prototype.fromCentralArchiveWhileAdd = function (ouID) {
-                return this.ou !== ouID;
+
+            Correspondence.prototype.fromCentralArchiveWhileAdd = function (ouId) {
+                return this.ou !== ouId;
             };
             Correspondence.prototype.sendToCentralArchive = function (ignoreMessage, $event) {
                 return correspondenceService.sendToCentralArchiveReadyToExport(this, ignoreMessage, $event);
@@ -717,7 +718,7 @@ module.exports = function (app) {
                 return correspondenceService.updateContentInformation(this, contentInformation);
             };
 
-            Correspondence.prototype.editCorrespondenceInDesktop = function () {
+            Correspondence.prototype.editCorrespondenceInDesktop = function(){
                 return correspondenceService.editWordInDesktop(this);
             };
 
