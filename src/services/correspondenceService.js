@@ -1258,7 +1258,7 @@ module.exports = function (app) {
                             disableCorrespondence: disableCorrespondence,
                             popupNumber: generator.getPopupNumber(),
                             disableEverything: !!departmentIncoming,
-                            pageName:'none'
+                            pageName: 'none'
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1393,7 +1393,7 @@ module.exports = function (app) {
                             disableCorrespondence: disableCorrespondence,
                             disableEverything: departmentIncoming,
                             popupNumber: generator.getPopupNumber(),
-                            pageName:'none'
+                            pageName: 'none'
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1456,7 +1456,7 @@ module.exports = function (app) {
                             disableCorrespondence: disableCorrespondence,
                             disableEverything: departmentIncoming,
                             popupNumber: generator.getPopupNumber(),
-                            pageName:'none'
+                            pageName: 'none'
                         },
                         resolve: {
                             organizations: function (organizationService) {
@@ -1583,7 +1583,7 @@ module.exports = function (app) {
                             disableProperties: true,
                             disableCorrespondence: true,
                             g2gItemCopy: g2gItemCopy,
-                            pageName:'none'
+                            pageName: 'none'
                         }
                     }).then(function (result) {
                         generator.removePopupNumber();
@@ -2591,7 +2591,7 @@ module.exports = function (app) {
          */
         self.resendCorrespondenceWorkItem = function (workItem, resendOptions) {
             var regular = !resendOptions.isSelective();
-            resendOptions = !regular ? generator.interceptSendInstance('PartialExportSelective', resendOptions) : resendOptions;
+            resendOptions = !regular ? generator.interceptSendInstance('PartialExportSelective', resendOptions) : generator.interceptSendInstance('ReadyToExportOption', resendOptions);
             var resendModel = {
                 type: regular,
                 regularExport: regular ? resendOptions : {},
