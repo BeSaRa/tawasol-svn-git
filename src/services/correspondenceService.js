@@ -2613,6 +2613,7 @@ module.exports = function (app) {
             for (var i = 0; i < workItems.length; i++) {
                 resendOptions = workItems[i].exportType === 1 ? workItems[i].model : workItems[i].partialExportList;
                 regular = !resendOptions.isSelective();
+                delete resendOptions.ATTACHMENT_LINKED_DOCS;
                 resendOptions = !regular ? generator.interceptSendInstance('PartialExportSelective', resendOptions) : resendOptions;
                 resendModels.push({
                     vsId: workItems[i].getInfo().vsId,
