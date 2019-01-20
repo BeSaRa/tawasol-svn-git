@@ -174,8 +174,7 @@ module.exports = function (app) {
                         self.terminateAfterCreateReply = false;
                         defer.resolve(true);
                     })
-            }
-            else {
+            } else {
                 self.terminateAfterCreateReply = false;
                 defer.resolve(true);
             }
@@ -243,14 +242,12 @@ module.exports = function (app) {
                 $timeout(function () {
                     $state.go('app.outgoing.draft');
                 })
-            }
-            else {
+            } else {
                 var successKey = 'outgoing_metadata_saved_success';
                 if (self.documentInformation) {
                     self.outgoing.contentSize = 1;
                     successKey = 'save_success'
-                }
-                else if (self.outgoing.contentFile && self.outgoing.contentFile.size) {
+                } else if (self.outgoing.contentFile && self.outgoing.contentFile.size) {
                     self.outgoing.contentSize = self.outgoing.contentFile.size;
                     successKey = 'save_success'
                 }
@@ -355,7 +352,7 @@ module.exports = function (app) {
         };
 
         self.docActionSendToReadyToExport = function (model, $event, defer) {
-            if (model.fromCentralArchive())
+            if (model.fromCentralArchiveWhileAdd(employeeService.getEmployee().getOUID()))
                 return model.sendToCentralArchive(false, $event).then(function () {
                     new ResolveDefer(defer);
                     self.resetAddCorrespondence();
@@ -400,12 +397,10 @@ module.exports = function (app) {
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
                     hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                     if (action.hasOwnProperty('checkAnyPermission')) {
                         hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    }
-                    else {
+                    } else {
                         hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
@@ -497,7 +492,8 @@ module.exports = function (app) {
                 class: "action-green",
                 permissionKey: 'SEND_TO_READY_TO_EXPORT_QUEUE',
                 textCallback: function (model) {
-                    return model.fromCentralArchive() ? 'grid_action_send_to_central_archive' : 'grid_action_send_to_ready_to_export';
+                    var ouId = employeeService.getEmployee().getOUID();
+                    return model.fromCentralArchiveWhileAdd(ouId) ? 'grid_action_send_to_central_archive' : 'grid_action_send_to_ready_to_export';
                 },
                 checkShow: function (action, model, index) {
                     var info = model.getInfo();
@@ -577,8 +573,7 @@ module.exports = function (app) {
             if (typeof action !== 'undefined') {
                 if (action.hasOwnProperty('textCallback') && angular.isFunction(action.textCallback)) {
                     return langService.get(action.textCallback(self.model));
-                }
-                else {
+                } else {
                     return action.text;
                 }
             }
