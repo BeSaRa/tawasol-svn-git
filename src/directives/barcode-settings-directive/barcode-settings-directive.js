@@ -10,9 +10,6 @@ module.exports = function (app) {
             replace: true,
             scope: {
                 globalSetting: '='
-            },
-            link: function (scope, element, attrs) {
-
             }
         }
     })
