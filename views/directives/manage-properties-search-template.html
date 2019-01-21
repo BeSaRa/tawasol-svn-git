@@ -213,6 +213,17 @@
                         </md-option>
                     </md-select>
                 </md-input-container>
+                <!-- followup status -->
+                <md-input-container flex ng-if="ctrl.document.hasDocumentClass('outgoing')">
+                    <label for="followupStatus">{{lang.pc_followupstatus}}</label>
+                    <md-select multiple name="followupStatus" id="followupStatus"
+                               ng-model="ctrl.document.followupStatus"
+                               ng-model-options="{trackBy: '$value.id'}">
+                        <md-option ng-value="fus" ng-repeat="fus in ctrl.followupStatuses track by $index">
+                            {{fus.getTranslatedName()}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
             </div>
             <div layout="row"
                  ng-if="ctrl.document.hasDocumentClass('incoming') && ctrl.document.dummySearchDocClass.toLowerCase() !== 'outgoingincoming'">
@@ -297,6 +308,36 @@
                         <div ng-message="required">{{lang.field_required}}</div>
                     </div>
                 </md-input-container>
+                <div flex ng-if="ctrl.document.hasDocumentClass('outgoing')">
+                    <!--followupDate-->
+                    <fieldset>
+                        <legend class="md-accent">{{lang.followup_date}}</legend>
+                        <!-- Date Label From -->
+                        <md-input-container>
+                            <label>{{lang.search_module_start_date}}</label>
+                            <md-datepicker id="followUpFrom" name="followUpFrom" md-open-on-focus
+                                           ng-required="ctrl.document.followUpTo"
+                                           ng-model="ctrl.document.followUpFrom"
+                                           md-max-date="ctrl.document.followUpTo"
+                            ></md-datepicker>
+                            <div ng-messages="docSearchForm.followUpFrom.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- Date Label To -->
+                        <md-input-container>
+                            <label>{{lang.search_module_end_date}}</label>
+                            <md-datepicker id="followUpTo" name="refDocDateTo" md-open-on-focus
+                                           ng-required="ctrl.document.followUpFrom"
+                                           ng-model="ctrl.document.followUpTo"
+                                           md-min-date="ctrl.document.followUpFrom"
+                            ></md-datepicker>
+                            <div ng-messages="docSearchForm.followUpTo.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </fieldset>
+                </div>
             </div>
             <div layout="row">
                 <!-- File -->

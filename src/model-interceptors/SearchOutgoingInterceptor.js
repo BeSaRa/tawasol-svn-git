@@ -16,28 +16,24 @@ module.exports = function (app) {
                     From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),
                     To: angular.copy(moment(model.docDateTo).format("YYYY-MM-DD"))
                 };
-            }
-            else if (model.year !== 'All') {
+            } else if (model.year !== 'All') {
                 if (!model.docDateFrom && model.docDateTo) {
                     model.docDate = {
                         From: angular.copy(model.year),
                         To: angular.copy(moment(model.docDateTo).format("YYYY-MM-DD"))
                     };
-                }
-                else if (model.docDateFrom && !model.docDateTo) {
+                } else if (model.docDateFrom && !model.docDateTo) {
                     model.docDate = {
                         From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),
                         To: angular.copy(model.year)
                     };
-                }
-                else if (!model.docDateFrom && !model.docDateTo) {
+                } else if (!model.docDateFrom && !model.docDateTo) {
                     model.docDate = {
                         From: angular.copy(model.year),
                         //TODO : 11 Jan, 2018. This if condition is added for Iyad to check something.
                         To: angular.copy(model.year)
                     };
-                }
-                else if (model.docDateFrom && model.docDateTo) {
+                } else if (model.docDateFrom && model.docDateTo) {
                     model.docDate = {
                         From: angular.copy(moment(model.docDateFrom).format("YYYY-MM-DD")),
                         To: angular.copy(moment(model.docDateTo).format("YYYY-MM-DD"))
@@ -111,7 +107,49 @@ module.exports = function (app) {
             // just when user select the correspondence type without select main or sub site
             if (!model.sitesInfoCC && !model.sitesInfoTo && !!model.siteType) {
                 // model.sitesInfoTo = angular.toJson({siteType:model.siteType.lookupKey,mainSiteId:null,subSiteId:null});
-                model.sitesInfoTo = angular.toJson({siteType:model.siteType.lookupKey});
+                model.sitesInfoTo = angular.toJson({siteType: model.siteType.lookupKey});
+            }
+
+            if (model.followupStatus && model.followupStatus.length) {
+                var followUpStatusList = _.map(model.followupStatus, 'lookupKey');
+                followUpStatusList = {followupStatusList: followUpStatusList.join(',')};
+                // if user select siteInfoTo
+                if (model.sitesInfoTo) {
+                    model.sitesInfoTo = angular.extend(angular.fromJson(model.sitesInfoTo), followUpStatusList);
+                    model.sitesInfoTo = angular.toJson(model.sitesInfoTo);
+                }
+                // if user select siteInfoCC
+                if (model.sitesInfoCC) {
+                    model.sitesInfoCC = angular.extend(angular.fromJson(model.sitesInfoCC), followUpStatusList);
+                    model.sitesInfoCC = angular.toJson(model.sitesInfoCC);
+                }
+                // if user dos'nt select any sites
+                if (!model.sitesInfoCC && !model.sitesInfoTo) {
+                    model.sitesInfoTo = angular.toJson(followUpStatusList);
+                }
+            }
+
+            if (model.followUpFrom || model.followUpTo) {
+                var date = {
+                    followupDates: {
+                        first: generator.getTimeStampFromDate(model.followUpFrom),
+                        second: generator.getTimeStampFromDate(model.followUpTo)
+                    }
+                };
+                // if user select siteInfoTo
+                if (model.sitesInfoTo) {
+                    model.sitesInfoTo = angular.extend(angular.fromJson(model.sitesInfoTo), date);
+                    model.sitesInfoTo = angular.toJson(model.sitesInfoTo);
+                }
+                // if user select siteInfoCC
+                if (model.sitesInfoCC) {
+                    model.sitesInfoCC = angular.extend(angular.fromJson(model.sitesInfoCC), date);
+                    model.sitesInfoCC = angular.toJson(model.sitesInfoCC);
+                }
+                // if user dos'nt select any sites
+                if (!model.sitesInfoCC && !model.sitesInfoTo) {
+                    model.sitesInfoTo = angular.toJson(date);
+                }
             }
 
 

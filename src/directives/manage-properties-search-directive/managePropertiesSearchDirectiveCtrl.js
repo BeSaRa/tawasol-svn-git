@@ -93,12 +93,10 @@ module.exports = function (app) {
             if (dummySearchDocClass === 'correspondence') {
                 self.documentTypes = correspondenceService.getLookupUnionByLookupName('docTypes');
                 //self.securityLevels = generator.getSelectedCollectionFromResult(lookupService.returnLookups(lookupService.securityLevel), employeeService.getEmployee().organization.securityLevels, 'lookupKey');
-            }
-            else if (dummySearchDocClass === 'outgoingincoming') {
+            } else if (dummySearchDocClass === 'outgoingincoming') {
                 self.documentTypes = correspondenceService.getLookup(docClass, 'docTypes');
                 //self.securityLevels = rootEntity.getGlobalSettings().securityLevels;
-            }
-            else {
+            } else {
                 self.documentTypes = correspondenceService.getLookup(docClass, 'docTypes');
                 //self.securityLevels = correspondenceService.getLookup(docClass, 'securityLevels');
             }
@@ -171,8 +169,7 @@ module.exports = function (app) {
                 self.required.docDateTo.isMandatory = true;
 
                 self.changeYearRange();
-            }
-            else {
+            } else {
                 if (!self.required.hasOwnProperty('docDateFrom'))
                     self.required.docDateFrom = {};
                 self.required.docDateFrom.isMandatory = false;
@@ -490,8 +487,7 @@ module.exports = function (app) {
                         self.document.linkedEntities = result.linkedEntity;
                         self.linkedEntityValueName = result.linkedEntity ? result.linkedEntity.getName() : '';
                     });
-            }
-            else {
+            } else {
                 self.document.linkedEntities = null;
                 self.document.selectedEntityType = null;
                 self.linkedEntityValueName = '';
@@ -525,8 +521,7 @@ module.exports = function (app) {
                         value: 1,
                         errorValue: 0
                     };
-                }
-                else if (minOrMax === 'max') {
+                } else if (minOrMax === 'max') {
                     if (self.document.serialNoTo) {
                         return {
                             value: Number(self.document.serialNoTo) - 1,
@@ -534,8 +529,7 @@ module.exports = function (app) {
                         };
                     }
                 }
-            }
-            else if (field === 'to') {
+            } else if (field === 'to') {
                 if (minOrMax === 'min') {
                     if (self.document.serialNoFrom) {
                         return {
@@ -547,8 +541,7 @@ module.exports = function (app) {
                         value: 2,
                         errorValue: 1
                     }
-                }
-                else {
+                } else {
 
                 }
             }

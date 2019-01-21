@@ -64,7 +64,7 @@ module.exports = function (app) {
                 };
             }
 
-            // ref document date
+            // followUp status document date
             if (model.followUpFrom && model.followUpTo) {
                 model.FollowUpDate = {
                     From: angular.copy(moment(model.refDocDateFrom).format("YYYY-MM-DD")),
