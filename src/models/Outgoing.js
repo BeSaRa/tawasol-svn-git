@@ -6,7 +6,25 @@ module.exports = function (app) {
                                       Indicator) {
         'ngInject';
         return function Outgoing(model) {
-            var self = this, correspondenceService;
+            var self = this,
+                correspondenceService,
+                exportData = {
+                    label_serial: 'docFullSerial',
+                    subject: 'docSubject',
+                    priority_level: function () {
+                        return this.priorityLevel.getTranslatedName();
+                    },
+                    label_document_type: function () {
+                        return this.docTypeInfo.getTranslatedName();
+                    },
+                    creator: function () {
+                        return this.creatorInfo.getTranslatedName();
+                    },
+                    created_on: 'createdOn',
+                    correspondence_sites: function () {
+                        return this.getTranslatedCorrespondenceSiteInfo();
+                    }
+                };
             Correspondence.call(this);
             self.docClassName = 'Outgoing';
             self.classDescription = 'Outgoing';
@@ -24,6 +42,9 @@ module.exports = function (app) {
             if (model)
                 angular.extend(this, model);
 
+            Outgoing.prototype.getExportedData = function () {
+                return exportData;
+            };
 
             Outgoing.prototype.fetchOutgoingData = function () {
                 var info = this.getInfo();

@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                    ImageThumbnail,
                                                    cmsTemplate,
                                                    tokenService,
+                                                   downloadService,
                                                    CommentModel,
                                                    CMSModelInterceptor,
                                                    employeeService,
@@ -3244,6 +3245,77 @@ module.exports = function (app) {
         self.getTranslatedError = function (error) {
             var errorObj = error.data.eo;
             return langService.current === 'ar' ? errorObj.arName : errorObj.enName;
+        };
+
+        self.printData = function (correspondences, headers, title) {
+            var data = self.prepareExportedData(correspondences, headers, title);
+            return $http.post(urlService.exportToPdf, data)
+                .then(function (result) {
+                    var physicalPath = result.data.rs;
+                    if (!physicalPath) {
+                        toast.error(langService.get('error_export_to_pdf'));
+                        return $q.reject(langService.get('error_export_to_pdf'))
+                    } else {
+                        return $http.get(physicalPath, {
+                            responseType: 'blob'
+                        }).then(function (result) {
+                            var defer = $q.defer();
+                            return {
+                                url: window.URL.createObjectURL(result.data),
+                                blob: result.data,
+                                physicalPath: physicalPath
+                            };
+                        });
+                    }
+                })
+                .then(function (file) {
+                    var oldIframe = document.getElementById('iframe-print');
+                    oldIframe ? oldIframe.parentNode.removeChild(oldIframe) : null;
+                    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                        window.navigator.msSaveOrOpenBlob(file.blob);
+                    } else {
+                        var iframe = document.createElement('iframe');
+                        iframe.id = 'iframe-print';
+                        iframe.onload = function (ev) {
+                            iframe.contentWindow.focus();
+                            iframe.contentWindow.print();
+                        };
+                        iframe.src = file.url;
+                        document.body.appendChild(iframe);
+                    }
+                })
+                .catch(function () {
+                    toast.error(langService.get('error_export_to_pdf'));
+                });
+        };
+
+        self.prepareExportedData = function (correspondences, tableHeaders, title) {
+            var correspondence = correspondences[0],
+                exportedData = correspondence.getExportedData(),
+                correspondencesCount = correspondences.length,
+                data = {
+                    data: new Array(correspondencesCount),
+                    headerNames: [],
+                    headerText: title ? title : ''
+                },
+                headersCount = tableHeaders.length;
+
+            for (var i = 0; i < headersCount; i++) {
+                var exportedLabel = tableHeaders[i];
+                if (!exportedData.hasOwnProperty(exportedLabel))
+                    continue;
+                // to put the column header
+                data.headerNames.push(langService.get(exportedLabel));
+
+                for (var x = 0; x < correspondencesCount; x++) {
+                    if (!angular.isArray(data.data[x])) {
+                        data.data[x] = [];
+                    }
+                    data.data[x].push(typeof exportedData[exportedLabel] === 'function' ? exportedData[exportedLabel].call(correspondences[x]) : correspondences[x][exportedData[exportedLabel]]);
+                }
+            }
+
+            return data;
         };
 
         $timeout(function () {

@@ -6,7 +6,23 @@ module.exports = function (app) {
                                       Indicator) {
             'ngInject';
             return function Internal(model) {
-                var self = this;
+                var self = this, exportData = {
+                    label_serial: 'docFullSerial',
+                    subject: 'docSubject',
+                    priority_level: function () {
+                        return this.priorityLevel.getTranslatedName();
+                    },
+                    label_document_type: function () {
+                        return this.docTypeInfo.getTranslatedName();
+                    },
+                    creator: function () {
+                        return this.creatorInfo.getTranslatedName();
+                    },
+                    created_on: 'createdOn',
+                    correspondence_sites: function () {
+                        return this.getTranslatedCorrespondenceSiteInfo();
+                    }
+                };
                 Correspondence.call(this);
                 self.docClassName = 'Internal';
                 self.classDescription = 'Internal';
@@ -21,7 +37,18 @@ module.exports = function (app) {
                 // if you don't need to make any required fields leave it as an empty array
                 var requiredFields = [];
 
+
+                if (model)
+                    angular.extend(this, model);
+
+
                 var indicator = new Indicator();
+
+
+                Internal.prototype.getExportedData = function () {
+                    return exportData;
+                };
+
                 Internal.prototype.getIsPaperIndicator = function () {
                     return indicator.getIsPaperIndicator(this.addMethod);
                 };
@@ -38,9 +65,6 @@ module.exports = function (app) {
                     return indicator.getPriorityLevelIndicator(priorityLevel);
                 };
 
-
-                if (model)
-                    angular.extend(this, model);
 
                 // don't remove CMSModelInterceptor from last line
                 // should be always at last thing after all methods and properties.

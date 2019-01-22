@@ -67,43 +67,6 @@ module.exports = function (app) {
             enName: langService.getKey('not_found', 'en')
         }));
 
-        /*
-                // in case of central archive.
-
-
-                self.isSearchByRegOU = true;
-                self.getTranslatedYesNo = function (fieldName) {
-                    return self[fieldName] ? langService.get('yes') : langService.get('no');
-                };
-
-                self.ouToggleDefaultDisabled = false;
-                self.regOuToggleDefaultDisabled = false;
-
-                self.checkRegOuToggleDisabled = function () {
-                    if (employeeService.isCentralArchive()) {
-                        return self.searchOutgoing.ou;
-                    }
-                    return false;
-                };
-
-                self.checkOuToggleDisabled = function () {
-                    if (employeeService.isCentralArchive()) {
-                        return self.isSearchByRegOU;
-                    }
-                    return false;
-                };
-
-                self.changeRegOuToggle = function () {
-                    if (!self.isSearchByRegOU) {
-                        self.searchOutgoing.regOu = null;
-                    }
-                };
-
-                self.changeOuToggle = function () {
-                    /!*self.isSearchByRegOU = false;
-                     self.searchOutgoing.regOu = null;*!/
-                };*/
-
         /**
          * @description Checks if the field is mandatory
          * @param fieldName
@@ -708,6 +671,20 @@ module.exports = function (app) {
                             new ResolveDefer(defer);
                         })
                 });
+        };
+
+        self.printResult = function ($event) {
+            var headers = ['label_serial',
+                'subject',
+                'priority_level',
+                'label_document_type',
+                'creator',
+                'created_on',
+                'correspondence_sites'];
+
+            correspondenceService
+                .printData(self.searchedOutgoingDocuments, headers);
+
         };
 
         self.gridActions = [
