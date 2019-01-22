@@ -240,6 +240,20 @@ module.exports = function (app) {
             console.log('save search');
         };
 
+        self.printResult = function ($event) {
+            var headers = ['label_serial',
+                'subject',
+                'priority_level',
+                'label_document_type',
+                'creator',
+                'created_on'];
+
+            correspondenceService
+                .printData(self.searchedGeneralDocuments, headers);
+
+        };
+
+
         self.globalSetting = rootEntity.returnRootEntity().settings;
         /**
          * @description Contains options for grid configuration

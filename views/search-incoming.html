@@ -6,6 +6,9 @@
                        class="md-icon-button" tooltip="{{lang.reload}}">
                 <md-icon md-svg-icon="refresh"></md-icon>
             </md-button>
+            <md-button ng-if="ctrl.searchedIncomingDocuments.length" ng-click="ctrl.printResult($event)" class="md-icon-button" tooltip="{{lang.print}}">
+                <md-icon md-svg-icon="printer"></md-icon>
+            </md-button>
         </div>
 
         <ng-form class="white-bg" name="searchIncomingForm" id="searchIncomingForm" flex layout="column"

@@ -241,6 +241,21 @@ module.exports = function (app) {
 
         };
 
+        self.printResult = function ($event) {
+            var headers = ['label_serial',
+                'subject',
+                'priority_level',
+                'label_document_type',
+                'creator',
+                'created_on',
+                'correspondence_sites'];
+
+            correspondenceService
+                .printData(self.searchedOutgoingIncomingDocuments, headers);
+
+        };
+
+
         //self.globalSetting = rootEntity.returnRootEntity().settings;
         /**
          * @description Contains options for grid configuration

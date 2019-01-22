@@ -18,10 +18,7 @@ module.exports = function (app) {
                     creator: function () {
                         return this.creatorInfo.getTranslatedName();
                     },
-                    created_on: 'createdOn',
-                    correspondence_sites: function () {
-                        return this.getTranslatedCorrespondenceSiteInfo();
-                    }
+                    created_on: 'createdOn'
                 };
                 Correspondence.call(this);
                 self.docClassName = 'Internal';
