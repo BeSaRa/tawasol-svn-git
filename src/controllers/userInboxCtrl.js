@@ -44,7 +44,7 @@ module.exports = function (app) {
         self.employeeService = employeeService;
         self.progress = null;
         self.excludeMe = fromNotification;
-        contextHelpService.setHelpTo('user-inbox' , self.excludeMe);
+        contextHelpService.setHelpTo('user-inbox', self.excludeMe);
         var timeoutRefresh = false;
 
         self.langService = langService;
@@ -1053,20 +1053,66 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
-            // Preview
+            // view
             {
                 type: 'action',
                 icon: 'book-open-variant',
-                text: 'grid_action_preview_document',
-                shortcut: true,
+                text: 'grid_action_view',
+                shortcut: false,
                 callback: self.previewDocument,
                 class: "action-green",
-                permissionKey: 'VIEW_DOCUMENT',
                 showInView: false,
-                checkShow: function (action, model) {
-                    //If no content or no view document permission, hide the button
-                    return self.checkToShowAction(action, model) && model.hasContent();
-                }
+                permissionKey: [
+                    'VIEW_DOCUMENT',
+                    'VIEW_DOCUMENT_VERSION'
+                ],
+                checkAnyPermission: true,
+                checkShow: self.checkToShowAction,
+                subMenu: [
+                    // Preview
+                    {
+                        type: 'action',
+                        icon: 'book-open-variant',
+                        text: 'grid_action_preview_document',
+                        shortcut: true,
+                        callback: self.previewDocument,
+                        class: "action-green",
+                        permissionKey: 'VIEW_DOCUMENT',
+                        showInView: false,
+                        checkShow: function (action, model) {
+                            //If no content or no view document permission, hide the button
+                            return self.checkToShowAction(action, model) && model.hasContent();
+                        }
+                    },
+                    // Open
+                    {
+                        type: 'action',
+                        icon: 'book-open-page-variant',
+                        text: 'grid_action_open',
+                        shortcut: true,
+                        callback: self.openNewViewDocument,
+                        class: "action-green",
+                        permissionKey: 'VIEW_DOCUMENT',
+                        showInView: false,
+                        checkShow: function (action, model) {
+                            //If no content or no view document permission, hide the button
+                            return self.checkToShowAction(action, model) && model.hasContent();
+                        }
+                    },
+                    // show versions
+                    {
+                        type: 'action',
+                        icon: 'animation',
+                        text: 'grid_action_view_specific_version',
+                        shortcut: false,
+                        hide: false,
+                        callback: self.getDocumentVersions,
+                        permissionKey: "VIEW_DOCUMENT_VERSION",
+                        class: "action-green",
+                        showInView: true,
+                        checkShow: self.checkToShowAction
+                    }
+                ]
             },
             // Separator
             {
@@ -1388,7 +1434,7 @@ module.exports = function (app) {
                         type: 'action',
                         icon: 'file-document',
                         text: 'grid_action_composite_document',
-                        permissionKey:'DOWNLOAD_COMPOSITE_BOOK',
+                        permissionKey: 'DOWNLOAD_COMPOSITE_BOOK',
                         callback: self.downloadCompositeDocument,
                         class: "action-green",
                         checkShow: self.checkToShowAction
@@ -1571,93 +1617,81 @@ module.exports = function (app) {
                         checkShow: function (action, model) {
                             return self.checkToShowAction(action, model) && checkIfEditPropertiesAllowed(model);
                         }
+                    },
+                    // editInDeskTop
+                    {
+                        type: 'action',
+                        icon: 'desktop-classic',
+                        text: 'grid_action_edit_in_desktop',
+                        shortcut: true,
+                        hide: false,
+                        callback: self.editInDesktop,
+                        class: "action-green",
+                        showInView: false,
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            var hasPermission = false;
+                            if (info.documentClass === 'outgoing') {
+                                hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
+                            } else if (info.documentClass === 'incoming') {
+                                hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
+                            }
+                            else if (info.documentClass === 'internal') {
+                                hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
+                            }
+                            return self.checkToShowAction(action, model) && !model.isBroadcasted()
+                                && !info.isPaper
+                                && (info.documentClass !== 'incoming')
+                                && model.needApprove()
+                                && hasPermission;
+                        }
                     }
                 ]
             },
-            // Open
+            // Duplicate
             {
                 type: 'action',
-                icon: 'book-open-page-variant',
-                text: 'grid_action_open',
-                shortcut: true,
-                callback: self.openNewViewDocument,
-                class: "action-green",
-                permissionKey: 'VIEW_DOCUMENT',
+                icon: 'settings',
+                text: 'grid_action_duplicate',
+                shortcut: false,
                 showInView: false,
-                checkShow: function (action, model) {
-                    //If no content or no view document permission, hide the button
-                    return self.checkToShowAction(action, model) && model.hasContent();
-                }
-            },
-            // editInDeskTop
-            {
-                type: 'action',
-                icon: 'desktop-classic',
-                text: 'grid_action_edit_in_desktop',
-                shortcut: true,
-                hide: false,
-                callback: self.editInDesktop,
-                class: "action-green",
-                showInView: false,
-                checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    var hasPermission = false;
-                    if (info.documentClass === 'outgoing') {
-                        hasPermission = employeeService.hasPermissionTo("EDIT_OUTGOING_CONTENT");
-                    } else if (info.documentClass === 'incoming') {
-                        hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_CONTENT");
+                checkShow: self.checkToShowAction,
+                permissionKey: [
+                    "DUPLICATE_BOOK_CURRENT",
+                    "DUPLICATE_BOOK_FROM_VERSION"
+                ],
+                checkAnyPermission: true,
+                subMenu: [
+                    // duplicate current version
+                    {
+                        type: 'action',
+                        icon: 'content-copy',
+                        text: 'grid_action_duplication_current_version',
+                        shortcut: false,
+                        hide: false,
+                        callback: self.duplicateCurrentVersion,
+                        class: "action-green",
+                        permissionKey: 'DUPLICATE_BOOK_CURRENT',
+                        showInView: true,
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            return self.checkToShowAction(action, model) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper
+                        }
+                    },
+                    // duplicate specific version
+                    {
+                        type: 'action',
+                        icon: 'content-duplicate',
+                        text: 'grid_action_duplication_specific_version',
+                        shortcut: false,
+                        hide: false,
+                        callback: self.duplicateVersion,
+                        class: "action-green",
+                        showInView: true,
+                        permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
+                        checkShow: self.checkToShowAction
                     }
-                    else if (info.documentClass === 'internal') {
-                        hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
-                    }
-                    return self.checkToShowAction(action, model) && !model.isBroadcasted()
-                        && !info.isPaper
-                        && (info.documentClass !== 'incoming')
-                        && model.needApprove()
-                        && hasPermission;
-                }
-            },
-            // show versions
-            {
-                type: 'action',
-                icon: 'animation',
-                text: 'grid_action_view_specific_version',
-                shortcut: false,
-                hide: false,
-                callback: self.getDocumentVersions,
-                permissionKey: "VIEW_DOCUMENT_VERSION",
-                class: "action-green",
-                showInView: true,
-                checkShow: self.checkToShowAction
-            },
-            // duplicate current version
-            {
-                type: 'action',
-                icon: 'content-copy',
-                text: 'grid_action_duplication_current_version',
-                shortcut: false,
-                hide: false,
-                callback: self.duplicateCurrentVersion,
-                class: "action-green",
-                permissionKey: 'DUPLICATE_BOOK_CURRENT',
-                showInView: true,
-                checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper
-                }
-            },
-            // duplicate specific version
-            {
-                type: 'action',
-                icon: 'content-duplicate',
-                text: 'grid_action_duplication_specific_version',
-                shortcut: false,
-                hide: false,
-                callback: self.duplicateVersion,
-                class: "action-green",
-                showInView: true,
-                permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
-                checkShow: self.checkToShowAction
+                ]
             }
         ];
 
