@@ -47,7 +47,7 @@ module.exports = function (app) {
                     active: dynamicMenuItem.status,
                     icon: dynamicMenuItem.getDynamicMenuIcon(),
                     state: dynamicMenuItem.generateState(),
-                    sort_order: dynamicMenuItem.itemOrder
+                    sort_order: (dynamicMenuItem.itemOrder + 100)
                 })
             });
             self.getMenuHierarchy();
