@@ -82,13 +82,6 @@
                             </div>
                         </div>
 
-                        <div layout="row" ng-if="ctrl.exportType === 1">
-                            <span flex></span>
-                            <md-button class="md-raised" ng-click="ctrl.openLinkedDocsAttachmentDialog($event)">
-                                {{lang.export_attachments_related_to_linked_documents}}
-                            </md-button>
-                            <span flex></span>
-                        </div>
                         <!-- Individual selection -->
                         <div ng-if="ctrl.exportType !== 1" layout="row">
                             <div flex ng-repeat="option in ctrl.exportOptions" ng-if="ctrl.canExportRelatedData(option)"
@@ -102,6 +95,14 @@
                                     </md-checkbox>
                                 </div>
                             </div>
+                        </div>
+                        <div layout="row"
+                             ng-if="ctrl.exportType === 1 || (ctrl.exportType === 2 && ctrl.partialExportList.exportItems.RELATED_BOOKS.length)">
+                            <span flex></span>
+                            <md-button class="md-raised" ng-click="ctrl.openLinkedDocsAttachmentDialog($event)">
+                                {{lang.export_attachments_related_to_linked_documents}}
+                            </md-button>
+                            <span flex></span>
                         </div>
                     </div>
                 </div>

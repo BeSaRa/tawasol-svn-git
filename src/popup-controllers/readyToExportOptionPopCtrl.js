@@ -143,7 +143,7 @@ module.exports = function (app) {
                             dialog
                                 .errorMessage(langService.get('already_exported_please_refresh'))
                                 .then(function () {
-                                    dialog.hide(error)
+                                    dialog.hide(error);
                                 });
                         });
                     });
@@ -228,23 +228,26 @@ module.exports = function (app) {
                     controller: 'linkedDocsAttachmentPopCtrl',
                     controllerAs: 'ctrl',
                     locals: {
-                        exportOptions: self.model,
+                        exportOptions: self.exportType === 1 ? self.model : self.partialExportList,
                         model: self.readyToExport
                     },
                     resolve: {
                         linkedDocs: function (correspondenceService) {
                             'ngInject';
                             var info = self.readyToExport.getInfo();
-                            return correspondenceService
-                                .getLinkedDocumentsByVsIdClass(info.vsId, info.documentClass);
+                            return self.exportType === 1 ? correspondenceService
+                                .getLinkedDocumentsByVsIdClass(info.vsId, info.documentClass) : self.partialExportList.exportItems.RELATED_BOOKS;
                         }
                     }
                 })
                 .then(function (selectedCorrespondences) {
-                    self.model.setAttachmentLinkedDocs(selectedCorrespondences);
+                    console.log("SET");
+                    var currentModel = self.exportType === 1 ? self.model : self.partialExportList;
+                    currentModel.setAttachmentLinkedDocs(selectedCorrespondences);
                 })
                 .catch(function (selectedCorrespondences) {
-                    self.model.setAttachmentLinkedDocs(selectedCorrespondences);
+                    var currentModel = self.exportType === 1 ? self.model : self.partialExportList;
+                    currentModel.setAttachmentLinkedDocs(selectedCorrespondences);
                 })
         }
 

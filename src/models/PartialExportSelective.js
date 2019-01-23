@@ -2,12 +2,18 @@ module.exports = function (app) {
     app.factory('PartialExportSelective', function (CMSModelInterceptor, _, PartialExport) {
         'ngInject';
         return function PartialExportSelective(model) {
-            var self = this, PartialExportCollection;
+            var self = this, PartialExportCollection,
+                documentClassMap = {
+                    outgoing: 0,
+                    incoming: 1,
+                    internal: 2
+                };
             PartialExport.call(this);
             self.exportItems = {
                 ATTACHMENTS: [],
                 RELATED_BOOKS: [],
-                RELATED_OBJECTS: []
+                RELATED_OBJECTS: [],
+                ATTACHMENT_LINKED_DOCS: []
             };
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
@@ -42,6 +48,13 @@ module.exports = function (app) {
 
                 _.map(keys, function (key) {
                     self.exportItems[key] = _.map(self.exportItems[key], function (item) {
+                        if (key === 'ATTACHMENT_LINKED_DOCS') {
+                            var info = item.getInfo();
+                            return {
+                                vsId: info.vsId,
+                                docClassId: documentClassMap[info.documentClass.toLowerCase()]
+                            }
+                        }
                         return item.hasOwnProperty('vsId') ? item.vsId : item;
                     });
                 });
@@ -61,6 +74,10 @@ module.exports = function (app) {
                 });
                 delete self.exportItems;
                 return this;
+            };
+
+            PartialExportSelective.prototype.setAttachmentLinkedDocs = function (attachmentLinkedDocs) {
+                this.exportItems.ATTACHMENT_LINKED_DOCS = attachmentLinkedDocs;
             };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
