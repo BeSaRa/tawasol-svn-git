@@ -612,7 +612,7 @@ module.exports = function (app) {
                                 && model.needApprove()
                                 && hasPermission;
                         }
-                    },
+                    }
                 ]
             },
             // Send To Review
