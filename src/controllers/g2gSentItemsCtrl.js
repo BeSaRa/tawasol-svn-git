@@ -218,35 +218,52 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
-            // Preview
+            // view
             {
                 type: 'action',
                 icon: 'book-open-variant',
-                text: 'grid_action_preview_document',
-                shortcut: true,
+                text: 'grid_action_view',
+                shortcut: false,
                 callback: self.previewDocument,
                 class: "action-green",
-                permissionKey: 'VIEW_DOCUMENT',
                 showInView: false,
-                checkShow: self.checkToShowAction
+                permissionKey: [
+                    'VIEW_DOCUMENT'
+                ],
+                checkAnyPermission: true,
+                checkShow: self.checkToShowAction,
+                subMenu: [
+                    // Preview
+                    {
+                        type: 'action',
+                        icon: 'book-open-variant',
+                        text: 'grid_action_preview_document',
+                        shortcut: true,
+                        callback: self.previewDocument,
+                        class: "action-green",
+                        permissionKey: 'VIEW_DOCUMENT',
+                        showInView: false,
+                        checkShow: self.checkToShowAction
+                    },
+                    // Open
+                    {
+                        type: 'action',
+                        icon: 'book-open-page-variant',
+                        text: 'grid_action_open',
+                        shortcut: true,
+                        callback: self.viewDocument,
+                        class: "action-green",
+                        permissionKey: 'VIEW_DOCUMENT',
+                        showInView: false,
+                        checkShow: self.checkToShowAction
+                    },
+                ]
             },
             // Separator
             {
                 type: 'separator',
                 checkShow: self.checkToShowAction,
                 showInView: false
-            },
-            // Open
-            {
-                type: 'action',
-                icon: 'book-open-page-variant',
-                text: 'grid_action_open',
-                shortcut: true,
-                callback: self.viewDocument,
-                class: "action-green",
-                permissionKey: 'VIEW_DOCUMENT',
-                showInView: false,
-                checkShow: self.checkToShowAction
             },
             // Recall
             {
