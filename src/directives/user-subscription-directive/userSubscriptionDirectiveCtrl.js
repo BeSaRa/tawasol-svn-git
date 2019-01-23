@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                               correspondenceService,
                                                               generator,
                                                               viewTrackingSheetService,
+                                                              viewDocumentService,
                                                               Outgoing,
                                                               Incoming,
                                                               Internal,
@@ -53,16 +54,27 @@ module.exports = function (app) {
          * @param $event
          */
         self.previewDocument = function (item, $event) {
+
             $event.preventDefault();
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
                 return;
             }
+            var classname = generator.getDocumentClassName(item.docClassId);
 
-            correspondenceService.viewCorrespondence({
+            viewDocumentService.viewQueueDocument({
                 vsId: item.vsId,
-                docClassName: generator.getDocumentClassName(item.docClassId)
-            }, self.gridActions, false, true);
+                docClassName: classname,
+                addMethod: item.addMethod,
+                docStatus: item.docStatus
+            }, [], 'review' + generator.ucFirst(classname), $event);
+
+            // correspondenceService.viewCorrespondence({
+            //     vsId: item.vsId,
+            //     docClassName: generator.getDocumentClassName(item.docClassId),
+            //     addMethod: item.addMethod,
+            //     docStatus: item.docStatus
+            // }, self.gridActions, false, true);
         };
 
         /**
@@ -118,12 +130,10 @@ module.exports = function (app) {
             var hasPermission = true;
             if (typeof permissionKey === 'string') {
                 hasPermission = employeeService.hasPermissionTo(permissionKey);
-            }
-            else if (angular.isArray(permissionKey) && permissionKey.length) {
+            } else if (angular.isArray(permissionKey) && permissionKey.length) {
                 if (checkAtleastOne) {
                     hasPermission = employeeService.getEmployee().hasAnyPermissions(permissionKey);
-                }
-                else {
+                } else {
                     hasPermission = employeeService.getEmployee().hasThesePermissions(permissionKey);
                 }
             }

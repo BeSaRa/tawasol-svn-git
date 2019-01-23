@@ -11,8 +11,8 @@ module.exports = function (app) {
             self.isPaper = null;
             self.docStatus = null;
             self.docFullSerial = null;
-            self.incomingVsId =  null;
-            self.docType =  null;
+            self.incomingVsId = null;
+            self.docType = null;
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array
             var requiredFields = [];
