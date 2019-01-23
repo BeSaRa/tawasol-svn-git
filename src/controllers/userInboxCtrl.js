@@ -273,8 +273,7 @@ module.exports = function (app) {
                 toast.info(langService.get('filter_disabled_activate_to_get_data'));
                 self.workItemsFilters[$index] = [];
                 return false;
-            }
-            else {
+            } else {
                 correspondenceService.loadWorkItemsByFilterID(filter).then(function (workItems) {
                     self.workItemsFilters[$index] = workItems;
                 });
@@ -403,8 +402,7 @@ module.exports = function (app) {
                     if (self.selectedUserInboxes.length)
                         forwardBulk(selectedItems, $event);
                 })
-            }
-            else {
+            } else {
                 forwardBulk(selectedItems, $event);
             }
         };
@@ -879,8 +877,7 @@ module.exports = function (app) {
                     hasPermission = false;
                 else
                     hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-            }
-            else if (info.documentClass === "incoming")
+            } else if (info.documentClass === "incoming")
                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
             else if (info.documentClass === "outgoing") {
                 //If approved outgoing electronic, don't allow to edit
@@ -934,12 +931,10 @@ module.exports = function (app) {
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
                     hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                     if (action.hasOwnProperty('checkAnyPermission')) {
                         hasPermission = employeeService.getEmployee() && employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    }
-                    else {
+                    } else {
                         hasPermission = employeeService.getEmployee() && employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
@@ -1272,6 +1267,17 @@ module.exports = function (app) {
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
                 checkShow: self.checkToShowAction,
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
+            },
+            {
+                type: 'action',
+                icon: 'eye',
+                text: 'grid_action_view_tracking_sheet',
+                permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
+                checkShow: self.checkToShowAction,
+                sticky: true,
+                showInViewOnly: true,
+                callback: self.viewTrackingSheet,
+                params: ['view_tracking_sheet_full_history', 'grid']
             },
             // View Tracking Sheet (Quick Action Only)
             {

@@ -16,7 +16,8 @@
                     <md-progress-circular ng-if="ctrl.loadingIndicatorService.loading" md-mode="indeterminate"
                                           md-diameter="30"></md-progress-circular>
                 </div>
-                <md-button class="md-raised" ng-if="ctrl.info.needToApprove() && ctrl.employeeCanEditContent()"
+                <md-button ng-disabled="ctrl.editMode" class="md-raised"
+                           ng-if="ctrl.info.needToApprove() && ctrl.employeeCanEditContent()"
                            ng-click="ctrl.toggleCorrespondenceEditMode()">
                     {{lang.edit_content}}
                 </md-button>
