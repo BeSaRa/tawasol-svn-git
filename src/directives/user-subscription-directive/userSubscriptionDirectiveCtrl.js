@@ -68,13 +68,6 @@ module.exports = function (app) {
                 addMethod: item.addMethod,
                 docStatus: item.docStatus
             }, [], 'review' + generator.ucFirst(classname), $event);
-
-            // correspondenceService.viewCorrespondence({
-            //     vsId: item.vsId,
-            //     docClassName: generator.getDocumentClassName(item.docClassId),
-            //     addMethod: item.addMethod,
-            //     docStatus: item.docStatus
-            // }, self.gridActions, false, true);
         };
 
         /**
