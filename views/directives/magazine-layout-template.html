@@ -113,9 +113,7 @@
                         <star-unstar-directive record="workItem" record-type="workItem"
                                                callback="ctrl.changeUserInboxStar"
                                                selected-records="ctrl.selectedWorkItems"></star-unstar-directive>
-                        <div layout-align="center center" class="magazine-serial serial-td">
-                            {{workItem.getFullSerialText()}}
-                        </div>
+                        <div layout-align="center center" class="magazine-serial serial-td">{{workItem.getFullSerialText()}}</div>
                         <div flex class="magazine-from">
                         <span class="font-12">
                             <span>{{lang.from}}</span>
