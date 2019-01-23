@@ -16,7 +16,7 @@
                                     <!-- Arabic Full Name -->
                                     <md-input-container flex>
                                         <label for="arFullName">{{lang.arabic_full_name}}</label>
-                                        <input name="arFullName" id="arFullName" required minlength="4"
+                                        <input name="arFullName" id="arFullName" required minlength="2"
                                                ng-model="ctrl.applicationUser.arFullName"
                                                ng-disabled="true" ng-readonly="true"
                                                custom-validate-directive="ANS" maxlength="80">
@@ -30,7 +30,7 @@
                                     <!-- English Full Name -->
                                     <md-input-container flex>
                                         <label for="enFullName">{{lang.english_full_name}}</label>
-                                        <input name="enFullName" id="enFullName" required minlength="4"
+                                        <input name="enFullName" id="enFullName" required minlength="2"
                                                ng-model="ctrl.applicationUser.enFullName"
                                                ng-disabled="true" ng-readonly="true"
                                                custom-validate-directive="ENS" maxlength="80">
@@ -61,7 +61,7 @@
                                     <!-- Login Name -->
                                     <md-input-container flex>
                                         <label for="loginName">{{lang.login_name}}</label>
-                                        <input name="loginName" id="loginName" required minlength="4"
+                                        <input name="loginName" id="loginName" required minlength="2"
                                                ng-disabled="true" ng-readonly="true"
                                                ng-model="ctrl.applicationUser.loginName"
                                                no-space-directive custom-validate-directive="EN_DOT_DASH">
@@ -104,7 +104,7 @@
                                     <!-- Domain Name -->
                                     <md-input-container flex>
                                         <label for="domainName">{{lang.domain_name}}</label>
-                                        <input name="domainName" id="domainName" required minlength="4"
+                                        <input name="domainName" id="domainName" required minlength="2"
                                                ng-disabled="true" ng-readonly="true"
                                                ng-model="ctrl.applicationUser.domainName" maxlength="20"
                                                no-space-directive custom-validate-directive="EN_DOT_DASH">
@@ -764,7 +764,7 @@
                                                                     ng-if="ctrl.ouApplicationUser.viewProxyMessage">
                                                     <label>{{lang.out_of_office_message}}</label>
                                                     <textarea ng-model="ctrl.ouApplicationUser.proxyMessage"
-                                                              name="proxyMessage" id="proxyMessage" minlength="4"
+                                                              name="proxyMessage" id="proxyMessage" minlength="2"
                                                               maxlength="265" required
                                                               ng-required="ctrl.ouApplicationUser.viewProxyMessage"
                                                               ng-disabled="!ctrl.isOutOfOffice">
