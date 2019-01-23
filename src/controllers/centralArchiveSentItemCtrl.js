@@ -86,7 +86,7 @@ module.exports = function (app) {
             var defer = $q.defer();
             self.progress = defer.promise;
             return sentItemDepartmentInboxService
-                .loadSentItemDepartmentInboxes(self.selectedMonth, self.selectedYear,true)
+                .loadSentItemDepartmentInboxes(self.selectedMonth, self.selectedYear, true)
                 .then(function (result) {
                     counterService.loadCounters();
                     mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
@@ -500,17 +500,60 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
-            // Preview
+            // view
             {
                 type: 'action',
                 icon: 'book-open-variant',
-                text: 'grid_action_preview_document',
-                shortcut: true,
+                text: 'grid_action_view',
+                shortcut: false,
                 callback: self.previewDocument,
                 class: "action-green",
                 showInView: false,
-                permissionKey: 'VIEW_DOCUMENT',
-                checkShow: self.checkToShowAction
+                permissionKey: [
+                    'VIEW_DOCUMENT',
+                    'VIEW_DOCUMENT_VERSION'
+                ],
+                checkAnyPermission: true,
+                checkShow: self.checkToShowAction,
+                subMenu: [
+                    // Preview
+                    {
+                        type: 'action',
+                        icon: 'book-open-variant',
+                        text: 'grid_action_preview_document',
+                        shortcut: true,
+                        callback: self.previewDocument,
+                        class: "action-green",
+                        showInView: false,
+                        permissionKey: 'VIEW_DOCUMENT',
+                        checkShow: self.checkToShowAction
+                    },
+                    // Open
+                    {
+                        type: 'action',
+                        icon: 'book-open-page-variant',
+                        text: 'grid_action_open',
+                        shortcut: true,
+                        callback: self.viewDocument,
+                        class: "action-green",
+                        showInView: false,
+                        permissionKey: 'VIEW_DOCUMENT',
+                        checkShow: self.checkToShowAction
+                    },
+                    // show versions
+                    {
+                        type: 'action',
+                        icon: 'animation',
+                        text: 'grid_action_view_specific_version',
+                        shortcut: false,
+                        hide: true,
+                        callback: self.getDocumentVersions,
+                        permissionKey: "VIEW_DOCUMENT_VERSION",
+                        class: "action-green",
+                        showInView: true,
+                        checkShow: self.checkToShowAction
+                    }
+                ]
             },
             // Separator
             {
@@ -566,18 +609,6 @@ module.exports = function (app) {
                 shortcut: false,
                 callback: self.addToFavorite,
                 class: "action-green",
-                checkShow: self.checkToShowAction
-            },
-            // Open
-            {
-                type: 'action',
-                icon: 'book-open-page-variant',
-                text: 'grid_action_open',
-                shortcut: true,
-                callback: self.viewDocument,
-                class: "action-green",
-                showInView: false,
-                permissionKey: 'VIEW_DOCUMENT',
                 checkShow: self.checkToShowAction
             },
             // View Tracking Sheet
@@ -800,47 +831,50 @@ module.exports = function (app) {
                 hide: true,
                 checkShow: self.checkToShowAction
             },
-            // show versions
+            // Duplicate
             {
                 type: 'action',
-                icon: 'animation',
-                text: 'grid_action_view_specific_version',
+                icon: 'settings',
+                text: 'grid_action_duplicate',
                 shortcut: false,
-                hide: true,
-                callback: self.getDocumentVersions,
-                permissionKey: "VIEW_DOCUMENT_VERSION",
-                class: "action-green",
-                showInView: true,
-                checkShow: self.checkToShowAction
-            },
-            // duplicate current version
-            {
-                type: 'action',
-                icon: 'content-copy',
-                text: 'grid_action_duplication_current_version',
-                shortcut: false,
-                hide: true,
-                callback: self.duplicateCurrentVersion,
-                class: "action-green",
-                permissionKey: 'DUPLICATE_BOOK_CURRENT',
-                showInView: true,
-                checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    return self.checkToShowAction(action, model) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper
-                }
-            },
-            // duplicate specific version
-            {
-                type: 'action',
-                icon: 'content-duplicate',
-                text: 'grid_action_duplication_specific_version',
-                shortcut: false,
-                hide: true,
-                callback: self.duplicateVersion,
-                class: "action-green",
-                showInView: true,
-                permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
-                checkShow: self.checkToShowAction
+                showInView: false,
+                checkShow: self.checkToShowAction,
+                permissionKey: [
+                    "DUPLICATE_BOOK_CURRENT",
+                    "DUPLICATE_BOOK_FROM_VERSION"
+                ],
+                checkAnyPermission: true,
+                subMenu: [
+                    // duplicate current version
+                    {
+                        type: 'action',
+                        icon: 'content-copy',
+                        text: 'grid_action_duplication_current_version',
+                        shortcut: false,
+                        hide: true,
+                        callback: self.duplicateCurrentVersion,
+                        class: "action-green",
+                        permissionKey: 'DUPLICATE_BOOK_CURRENT',
+                        showInView: true,
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            return self.checkToShowAction(action, model) && (info.documentClass === 'outgoing' || info.documentClass === 'internal') && !info.isPaper
+                        }
+                    },
+                    // duplicate specific version
+                    {
+                        type: 'action',
+                        icon: 'content-duplicate',
+                        text: 'grid_action_duplication_specific_version',
+                        shortcut: false,
+                        hide: true,
+                        callback: self.duplicateVersion,
+                        class: "action-green",
+                        showInView: true,
+                        permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
+                        checkShow: self.checkToShowAction
+                    }
+                ]
             }
         ];
 
