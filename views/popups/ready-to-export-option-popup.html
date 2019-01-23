@@ -3,7 +3,7 @@
         <md-toolbar>
             <span class="p20">{{lang.export_message}}</span>
             <!--<span ng-if="ctrl.resend" class="p20">{{lang.resend_message}}</span>-->
-            <close-dialog-directive></close-dialog-directive>
+            <close-dialog-directive when-close="ctrl.closeExportPopupFromCtrl"></close-dialog-directive>
         </md-toolbar>
         <md-content scroll-directive>
             <form name="readyToExportOptionsForm" autocomplete="off">
