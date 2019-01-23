@@ -16,7 +16,6 @@ module.exports = function (app) {
                                                      employeeService,
                                                      viewTrackingSheetService,
                                                      contextHelpService,
-
                                                      correspondenceService,
                                                      ResolveDefer,
                                                      mailNotificationService,
@@ -574,20 +573,66 @@ module.exports = function (app) {
                 class: "action-green",
                 checkShow: self.checkToShowAction
             },
-            // Preview
+            // view
             {
                 type: 'action',
                 icon: 'book-open-variant',
-                text: 'grid_action_preview_document',
+                text: 'grid_action_view',
                 shortcut: false,
-                showInView: false,
                 callback: self.previewDocument,
                 class: "action-green",
-                permissionKey: 'VIEW_DOCUMENT',
-                checkShow: function (action, model) {
-                    //If no content or no view document permission, hide the button
-                    return self.checkToShowAction(action, model) && model.hasContent();
-                }
+                showInView: false,
+                permissionKey: [
+                    'VIEW_DOCUMENT',
+                    'VIEW_DOCUMENT_VERSION'
+                ],
+                checkAnyPermission: true,
+                checkShow: self.checkToShowAction,
+                subMenu: [
+                    // Preview
+                    {
+                        type: 'action',
+                        icon: 'book-open-variant',
+                        text: 'grid_action_preview_document',
+                        shortcut: false,
+                        showInView: false,
+                        callback: self.previewDocument,
+                        class: "action-green",
+                        permissionKey: 'VIEW_DOCUMENT',
+                        checkShow: function (action, model) {
+                            //If no content or no view document permission, hide the button
+                            return self.checkToShowAction(action, model) && model.hasContent();
+                        }
+                    },
+                    // Open
+                    {
+                        type: 'action',
+                        icon: 'book-open-page-variant',
+                        text: 'grid_action_open',
+                        shortcut: false,
+                        showInView: false,
+                        callback: self.viewDocument,
+                        class: "action-green",
+                        permissionKey: 'VIEW_DOCUMENT',
+                        checkShow: function (action, model) {
+                            //If no content or no view document permission, hide the button
+                            return self.checkToShowAction(action, model) && model.hasContent();
+                        }
+                    },
+                    // show versions
+                    {
+                        type: 'action',
+                        icon: 'animation',
+                        text: 'grid_action_view_specific_version',
+                        shortcut: false,
+                        hide: false,
+                        callback: self.getDocumentVersions,
+                        permissionKey: "VIEW_DOCUMENT_VERSION",
+                        class: "action-green",
+                        showInView: true,
+                        checkShow: self.checkToShowAction
+                    },
+                ]
             },
             {
                 type: 'separator',
@@ -795,46 +840,33 @@ module.exports = function (app) {
                 hide: true,
                 checkShow: self.checkToShowAction
             },
-            // Open
+            // Duplicate
             {
                 type: 'action',
-                icon: 'book-open-page-variant',
-                text: 'grid_action_open',
+                icon: 'settings',
+                text: 'grid_action_duplicate',
                 shortcut: false,
                 showInView: false,
-                callback: self.viewDocument,
-                class: "action-green",
-                permissionKey: 'VIEW_DOCUMENT',
-                checkShow: function (action, model) {
-                    //If no content or no view document permission, hide the button
-                    return self.checkToShowAction(action, model) && model.hasContent();
-                }
-            },
-            // show versions
-            {
-                type: 'action',
-                icon: 'animation',
-                text: 'grid_action_view_specific_version',
-                shortcut: false,
-                hide: false,
-                callback: self.getDocumentVersions,
-                permissionKey: "VIEW_DOCUMENT_VERSION",
-                class: "action-green",
-                showInView: true,
-                checkShow: self.checkToShowAction
-            },
-            // duplicate specific version
-            {
-                type: 'action',
-                icon: 'content-duplicate',
-                text: 'grid_action_duplication_specific_version',
-                shortcut: false,
-                hide: false,
-                callback: self.duplicateVersion,
-                class: "action-green",
-                showInView: true,
-                permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
-                checkShow: self.checkToShowAction
+                checkShow: self.checkToShowAction,
+                permissionKey: [
+                    "DUPLICATE_BOOK_FROM_VERSION"
+                ],
+                checkAnyPermission: true,
+                subMenu: [
+                    // duplicate specific version
+                    {
+                        type: 'action',
+                        icon: 'content-duplicate',
+                        text: 'grid_action_duplication_specific_version',
+                        shortcut: false,
+                        hide: false,
+                        callback: self.duplicateVersion,
+                        class: "action-green",
+                        showInView: true,
+                        permissionKey: 'DUPLICATE_BOOK_FROM_VERSION',
+                        checkShow: self.checkToShowAction
+                    }
+                ]
             }
         ];
     });
