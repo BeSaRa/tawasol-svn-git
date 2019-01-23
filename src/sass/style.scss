@@ -2241,3 +2241,10 @@ $ta-background-transparent: transparent !important;
 #iframe-print {
   display: none;
 }
+
+.td-comments {
+  text-overflow: ellipsis;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+}

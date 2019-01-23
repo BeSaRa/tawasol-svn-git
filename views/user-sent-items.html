@@ -17,7 +17,7 @@
                 <div class="page-padding">
                     <md-card md-whiteframe="3" layout="column" class="card-overlay">
                         <md-table-container>
-                            <div flex scroll-directive>
+                            <div flex overlay-scroll-bar-directive>
                                 <table md-table ng-model="ctrl.selectedUserSentItems"
                                        md-progress="ctrl.progress"><!-- md-row-select multiple-->
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
@@ -71,6 +71,9 @@
                                         <th ng-if="!ctrl.selectedUserSentItems.length" md-column
                                             md-order-by="{{ctrl.getSortingKey('receiverInfo', 'Information')}}">
                                             <span>{{lang.sent_items_receiver}}</span>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedUserSentItems.length" md-column>
+                                            <span>{{lang.sent_items_comment}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="dueDate">
                                             <span>{{lang.sent_items_due_date}}</span>
@@ -133,6 +136,9 @@
                                         <td md-cell>{{userSentItem.action.getTranslatedName()}}</td>
                                         <!--<td md-cell>{{userSentItem.userFromInfo.getTranslatedName()}}</td>-->
                                         <td md-cell>{{userSentItem.receiverInfo.getTranslatedName()}}</td>
+                                        <td tooltip="{{userSentItem.comments}}" md-cell>
+                                            <div class="td-comments">{{userSentItem.comments}}</div>
+                                        </td>
                                         <td md-cell class="td-data">
                                             <grid-indicator-directive record="userSentItem"
                                                                       indicator-type="dueDate"
