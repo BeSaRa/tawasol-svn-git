@@ -30,6 +30,7 @@ module.exports = function (app) {
             .addMenuPermissions('menu_item_document_templates', ['MANAGE_DOCUMENT_TEMPLATES'])
             .addMenuPermissions('menu_item_attachment_types', ['MANAGE_ATTACHMENT_TYPE'])
             .addMenuPermissions('menu_item_document_types', ['MANAGE_DOCUMENT_TYPE'])
+            .addMenuPermissions('menu_item_menu_items', ['DYNAMIC_MENU_ITEM'])
             .addMenuPermissions('menu_item_global_localization', function () {
                 return false;
             })
