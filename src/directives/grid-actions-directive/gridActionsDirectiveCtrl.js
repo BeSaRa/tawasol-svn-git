@@ -108,8 +108,8 @@ module.exports = function (app) {
             self.shortcutActions = [];
             var mainAction, action;
             direction = direction || self.menuDirection;
-            for (var i = 0; i < self.gridActions.length; i++) {
-                mainAction = self.gridActions[i];
+            for (var i = 0; i < self.gridActionsCopy.length; i++) {
+                mainAction = self.gridActionsCopy[i];
                 if (direction === 'vertical') {
                     action = _filterVerticalShortcuts(mainAction);
                 }
@@ -251,8 +251,8 @@ module.exports = function (app) {
          */
         self.filterContextMenuItems = function () {
             var contextMenu, contextMenuActions = [];
-            for (var i = 0; i < self.gridActions.length; i++) {
-                contextMenu = _filterContextMenuActions(self.gridActions[i]);
+            for (var i = 0; i < self.gridActionsCopy.length; i++) {
+                contextMenu = _filterContextMenuActions(self.gridActionsCopy[i]);
                 if (contextMenu) {
                     angular.isArray(contextMenu) ? contextMenuActions = contextMenuActions.concat(contextMenu) : contextMenuActions.push(contextMenu);
                 }

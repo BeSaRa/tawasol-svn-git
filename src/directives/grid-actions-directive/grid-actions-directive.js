@@ -11,8 +11,11 @@ module.exports = function (app) {
             scope: {
                 gridActions: '=',
                 menuDirection: '@',
-                model:'=',
+                model: '=',
                 shortcut: '='
+            },
+            link: function (scope, elem, attrs, controller) {
+                controller.gridActionsCopy = angular.copy(controller.gridActions);
             }
         }
     })

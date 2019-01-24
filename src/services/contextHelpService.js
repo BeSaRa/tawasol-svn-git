@@ -17,8 +17,8 @@ module.exports = function (app) {
             if (excludeMe) {
                 return;
             }
-            console.log(helpID + '_ar_help.html');
-            console.log(helpID + '_en_help.html');
+            /*console.log(helpID + '_ar_help.html');
+            console.log(helpID + '_en_help.html');*/
 
             self.currentHelpUrl = self.defaultHelpUrl + helpID;
         };
@@ -26,7 +26,7 @@ module.exports = function (app) {
          * display popup for
          */
         self.openContextHelp = function ($event) {
-            console.log(self.currentHelpUrl + '_' + langService.current + '_help.html');
+            // console.log(self.currentHelpUrl + '_' + langService.current + '_help.html');
             return dialog
                 .showDialog({
                     templateUrl: self.currentHelpUrl + '_' + langService.current + '_help.html',
