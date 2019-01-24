@@ -107,5 +107,4 @@ module.exports = function (app) {
     require('./dynamicMenuItemPopCtrl')(app);
     require('./subDynamicMenuItemPopCtrl')(app);
     require('./linkedDocsAttachmentPopCtrl')(app);
-    require('./applicationUserPrivateMenuCtrl')(app);
 };

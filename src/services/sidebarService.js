@@ -77,7 +77,9 @@ module.exports = function (app) {
 
             _.map(self.dynamicMenuParents, function (item, index) {
                 _.map(self.dynamicMenuParents[index].children, function (child, childIndex) {
-                    self.dynamicMenuParents[index].children[childIndex].myParent = angular.copy(self.dynamicMenuParents[index]);
+                    var menuItem = angular.copy(self.dynamicMenuParents[index]);
+                    delete menuItem.children;
+                    self.dynamicMenuParents[index].children[childIndex].myParent = menuItem;
                 });
             });
 

@@ -48,8 +48,8 @@ module.exports = function (app) {
                 });
         };
 
-        self.saveBulkUserMenuItems = function (userMenuItems) {
-            return $http.post(urlService.dynamicMenuItems.replace('menu-item', 'user-menu-item') + ['/bulk'], generator.interceptSendCollection('UserMenuItem',userMenuItems));
+        self.saveBulkUserMenuItems = function (userMenuItems, userId, ouId) {
+            return $http.post(urlService.dynamicMenuItems.replace('menu-item', 'user-menu-item') + ['/bulk', 'user-id', userId, 'ou-id', ouId].join('/'), generator.interceptSendCollection('UserMenuItem', userMenuItems));
         };
         /**
          * @description load sub dynamic menu item for given menu item id.

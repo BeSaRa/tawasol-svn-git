@@ -105,15 +105,18 @@ module.exports = function (app) {
          * @description add user ou permissions
          */
         self.saveUserOuPermissionsFromCtrl = function () {
-            var userOuPermissions = [], userMenuItemsIds = [];
+            var userOuPermissions = [], userMenuItemsIds = [],
+                userId = self.ouApplicationUser.applicationUser.id,
+                ouId = self.ouApplicationUser.ouid.id;
+
             for (var i = 0; i < self.userOuPermissionsIds.length; i++) {
                 if (_.startsWith(self.userOuPermissionsIds[i], 'dm')) {
                     userMenuItemsIds.push(_getMenuItemById(self.userOuPermissionsIds[i]));
                     continue;
                 }
                 userOuPermissions.push(new UserOuPermission({
-                    userId: self.ouApplicationUser.applicationUser.id,
-                    ouId: self.ouApplicationUser.ouid.id,
+                    userId: userId,
+                    ouId: ouId,
                     customRoleId: self.ouApplicationUser.customRoleId.id,
                     permissionId: self.userOuPermissionsIds[i]
                 }));
@@ -125,7 +128,7 @@ module.exports = function (app) {
                         return _successMessage();
                     }
                     return dynamicMenuItemService
-                        .saveBulkUserMenuItems(userMenuItemsIds)
+                        .saveBulkUserMenuItems(userMenuItemsIds, userId, ouId)
                         .then(function () {
                             return _successMessage();
                         });

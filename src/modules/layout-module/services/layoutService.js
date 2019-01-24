@@ -3,6 +3,7 @@ module.exports = function (app) {
                                            employeeService,
                                            generator,
                                            Layout,
+                                           $q,
                                            $timeout,
                                            LayoutWidget,
                                            LayoutWidgetOption,
@@ -197,10 +198,13 @@ module.exports = function (app) {
                     self.layouts = generator.interceptReceivedCollection('Layout', self.layouts);
                     self.widgets = generator.generateCollection(result.data.rs.widgets, Widget);
                     self.widgets = generator.interceptReceivedCollection('Widget', self.widgets);
-                    // dynamic menu items
+                    // // dynamic menu items
                     self.menuItems = generator.generateCollection(result.data.rs.menuItems, DynamicMenuItem);
                     self.menuItems = generator.interceptReceivedCollection('DynamicMenuItem', self.menuItems);
                     sidebarService.setDynamicMenuItems(self.menuItems);
+                })
+                .catch(function (error) {
+                    console.log(error);
                 });
         };
 
