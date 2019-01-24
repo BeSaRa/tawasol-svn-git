@@ -242,6 +242,9 @@ module.exports = function (app) {
         };
 
         self.printResult = function ($event) {
+            var printTitle = langService.get("search_module_search_results") + " " + langService.get("from") + " " + generator.convertDateToString(self.searchOutgoingIncoming.docDateFrom) +
+                " " + langService.get("to") + " " + generator.convertDateToString(self.searchOutgoingIncoming.docDateTo);
+
             var headers = ['label_serial',
                 'subject',
                 'priority_level',
@@ -251,7 +254,7 @@ module.exports = function (app) {
                 'correspondence_sites'];
 
             correspondenceService
-                .printData(self.searchedOutgoingIncomingDocuments, headers);
+                .printData(self.searchedOutgoingIncomingDocuments, headers, printTitle);
 
         };
 

@@ -674,6 +674,9 @@ module.exports = function (app) {
         };
 
         self.printResult = function ($event) {
+            var printTitle = langService.get("search_module_search_results") + " " + langService.get("from") + " " + generator.convertDateToString(self.searchOutgoing.docDateFrom) +
+                              " " + langService.get("to") + " " + generator.convertDateToString(self.searchOutgoing.docDateTo);
+
             var headers = ['label_serial',
                 'subject',
                 'priority_level',
@@ -683,7 +686,7 @@ module.exports = function (app) {
                 'correspondence_sites'];
 
             correspondenceService
-                .printData(self.searchedOutgoingDocuments, headers);
+                .printData(self.searchedOutgoingDocuments, headers, printTitle);
 
         };
 
