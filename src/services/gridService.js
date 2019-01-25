@@ -402,6 +402,7 @@ module.exports = function (app) {
                             hasPermission = false;
                     }
                     else if (actionFrom === 'sticky') {
+                        // add any condition, if required later
                         if (sticky)
                             hasPermission = true;
                     }

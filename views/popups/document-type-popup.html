@@ -41,7 +41,18 @@
                             <md-select name="lookupStrKey" id="lookupStrKey" required multiple
                                        aria-label="Document Class" maxlength="40"
                                        ng-model="ctrl.documentType.lookupStrKey"
+                                       data-md-container-class="select-header-container"
                                        ng-model-options="{trackBy: '$value.id'}">
+                                <md-select-header class="select-header">
+                                    <div class="cms-simple-checkbox-container">
+                                        <input type="checkbox" class="cms-simple-checkbox"
+                                               ng-class="{'checked': ctrl.isChecked(), 'indeterminate': ctrl.isIndeterminate()}"
+                                               ng-checked="ctrl.isChecked()"
+                                               ng-model="ctrl.documentClassCheck">
+                                        <span class="cms-simple-checkbox-text"
+                                              ng-click="ctrl.toggleAll($event)">{{ctrl.isChecked() ? lang.un_select_all : lang.select_all}}</span>
+                                    </div>
+                                </md-select-header>
                                 <md-option ng-value="dc" ng-repeat="dc in ctrl.documentClasses track by $index">
                                     {{dc.getTranslatedName()}}
                                 </md-option>

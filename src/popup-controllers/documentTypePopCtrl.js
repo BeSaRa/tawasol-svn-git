@@ -109,6 +109,38 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Check if option in dropdown is checked
+         * @returns {boolean}
+         */
+        self.isChecked = function () {
+            return !!(self.documentType.lookupStrKey && self.documentType.lookupStrKey.length === self.documentClasses.length);
+        };
+
+        /**
+         * @description Check if some of options in dropdown are selected
+         * @returns {boolean}
+         */
+        self.isIndeterminate = function () {
+            return !!(self.documentType.lookupStrKey && self.documentType.lookupStrKey.length < self.documentClasses.length);
+        };
+
+        /**
+         * @description Toggle the selection for options in dropdown
+         * @param $event
+         */
+        self.toggleAll = function ($event) {
+            if (self.documentType.lookupStrKey) {
+                if (self.documentType.lookupStrKey.length === self.documentClasses.length) {
+                    self.documentType.lookupStrKey = null;
+                } else {
+                    self.documentType.lookupStrKey = self.documentClasses;
+                }
+            } else {
+                self.documentType.lookupStrKey = self.documentClasses;
+            }
+        };
+
+        /**
          * @description Close the popup
          */
         self.closeDocumentTypePopupFromCtrl = function () {
