@@ -23,6 +23,8 @@ module.exports = function (app) {
         self.secondURL = null;
         self.loadingIndicatorService = loadingIndicatorService;
 
+        self.stickyActions = [];
+
         self.editMode = false;
 
         self.info = null;
@@ -302,19 +304,25 @@ module.exports = function (app) {
          * @returns {Array}
          */
         self.filterActionsByProperty = function (model, actions, propertyKey, propertyValue, listOfActions) {
-            var flatActions = listOfActions ? listOfActions : [];
+            var stickyActions = listOfActions ? listOfActions : [];
             for (var i = 0; i < actions.length; i++) {
-                var mainAction = actions[i];
-                if (mainAction.hasOwnProperty(propertyKey) && mainAction[propertyKey] === propertyValue && mainAction.checkShow(mainAction, model)) {
-                    flatActions.push(mainAction);
+                var mainAction = actions[i], mainActionCopy = angular.copy(mainAction);
+                mainActionCopy.actionFrom = 'sticky';
+                if (mainActionCopy.hasOwnProperty(propertyKey) && mainActionCopy[propertyKey] === propertyValue && mainActionCopy.checkShow(mainActionCopy, model)) {
+                    stickyActions.push(mainActionCopy);
                 }
-                if (mainAction.hasOwnProperty('subMenu') && mainAction.subMenu.length && mainAction.checkShow(mainAction, model)) {
-                    self.filterActionsByProperty(model, mainAction.subMenu, propertyKey, propertyValue, flatActions);
+                if (mainActionCopy.hasOwnProperty('subMenu') && mainActionCopy.subMenu.length && mainActionCopy.checkShow(mainActionCopy, model)) {
+                    self.filterActionsByProperty(model, mainActionCopy.subMenu, propertyKey, propertyValue, stickyActions);
                 }
             }
-            // the returned flat actions for the viewer
-            return flatActions;
+            // the returned sticky actions for the viewer
+            return stickyActions;
         };
+
+        $timeout(function () {
+            self.stickyActions = self.filterActionsByProperty((self.workItem || self.correspondence), self.actions, 'sticky', true);
+        })
+
 
     });
 };

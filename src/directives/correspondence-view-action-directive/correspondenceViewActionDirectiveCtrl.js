@@ -45,7 +45,7 @@ module.exports = function (app) {
          */
         self.checkDisplayAction = function (action, workItem, correspondence) {
             var actionCopy = angular.copy(action);
-            actionCopy.actionFromPopup = true;
+            actionCopy.actionFrom = 'popup';
             return actionCopy.checkShow(actionCopy, (workItem || correspondence), actionCopy.showInViewOnly);
         };
         /**

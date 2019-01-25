@@ -1259,7 +1259,7 @@ module.exports = function (app) {
                     // || model.generalStepElm.workFlowName.toLowerCase() === 'incoming';
                 }
             },
-            // View Tracking Sheet
+            // View Tracking Sheet (with sub menu)
             {
                 type: 'action',
                 icon: 'eye',
@@ -1268,18 +1268,20 @@ module.exports = function (app) {
                 checkShow: self.checkToShowAction,
                 subMenu: viewTrackingSheetService.getViewTrackingSheetOptions(self.checkToShowAction, self.viewTrackingSheet, 'grid')
             },
+            // View Tracking Sheet (Sticky Only)
             {
                 type: 'action',
                 icon: 'eye',
                 text: 'grid_action_view_tracking_sheet',
                 permissionKey: "VIEW_DOCUMENT'S_TRACKING_SHEET",
-                checkShow: self.checkToShowAction,
+                checkShow: gridService.checkToShowAction,
                 sticky: true,
+                showInView: false,
                 showInViewOnly: true,
                 callback: self.viewTrackingSheet,
                 params: ['view_tracking_sheet_full_history', 'grid']
             },
-            // View Tracking Sheet (Quick Action Only)
+            // View Tracking Sheet (Quick Action Only - All Grids)
             {
                 type: 'action',
                 icon: 'eye',

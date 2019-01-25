@@ -387,15 +387,24 @@ module.exports = function (app) {
                         }
                     }
                 }
-
-                var showInViewOnly = action.hasOwnProperty('showInViewOnly') && action.showInViewOnly,
-                    showInView = action.hasOwnProperty('showInView') && action.showInView;
-                if (action.actionFromPopup) {
-                    if (!showInView)
-                        hasPermission = false;
-                } else {
-                    if (showInViewOnly)
-                        hasPermission = false;
+                // if permission is available for action, check where to show, otherwise return permission value only
+                if (hasPermission) {
+                    var showInViewOnly = action.hasOwnProperty('showInViewOnly') && !!action.showInViewOnly,
+                        showInView = action.hasOwnProperty('showInView') && !!action.showInView,
+                        sticky = action.hasOwnProperty('sticky') && !!action.sticky,
+                        actionFrom = action.actionFrom.toLowerCase();
+                    if (actionFrom === 'popup') {
+                        if (!showInView)
+                            hasPermission = false;
+                    }
+                    else if (actionFrom === 'grid') {
+                        if (showInViewOnly)
+                            hasPermission = false;
+                    }
+                    else if (actionFrom === 'sticky') {
+                        if (sticky)
+                            hasPermission = true;
+                    }
                 }
                 return hasPermission;
             }

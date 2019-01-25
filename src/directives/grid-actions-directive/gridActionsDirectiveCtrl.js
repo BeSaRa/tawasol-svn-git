@@ -29,7 +29,7 @@ module.exports = function (app) {
          */
         self.isShowAction = function (action) {
             var actionCopy = angular.copy(action);
-            actionCopy.actionFromPopup = false;
+            actionCopy.actionFrom = 'grid';
             return actionCopy.checkShow(actionCopy, self.model);
         };
 

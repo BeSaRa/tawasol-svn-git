@@ -47,7 +47,7 @@
                         <li>
                             <div class="viewer-actions">
                                 <md-button
-                                        ng-repeat="quickAction in ctrl.filterActionsByProperty( (ctrl.workItem || ctrl.correspondence) , ctrl.actions , 'sticky' , true) track by $index"
+                                        ng-repeat="quickAction in ctrl.stickyActions track by $index"
                                         ng-if="ctrl.isShowViewerAction(quickAction)" class="md-fab md-mini"
                                         aria-label="{{ctrl.getViewerActionText(quickAction, true)}}"
                                         ng-click="ctrl.callbackViewerAction(quickAction, $event)"
