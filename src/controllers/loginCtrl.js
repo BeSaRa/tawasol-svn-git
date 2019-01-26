@@ -150,8 +150,10 @@ module.exports = function (app) {
                     _hideFixOverlay();
                     _completeLogin(callback, result);
                 })
-                .catch(function () {
+                .catch(function (error) {
                     self.loginStatus = false;
+                    dialog
+                        .errorMessage(langService.get('access_denied'));
                 });
         };
         /**
