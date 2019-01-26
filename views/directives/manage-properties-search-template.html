@@ -207,6 +207,7 @@
                     <label for="followupStatus">{{lang.pc_followupstatus}}</label>
                     <md-select multiple name="followupStatus" id="followupStatus"
                                ng-model="ctrl.document.followupStatus"
+                               ng-change="ctrl.checkFollowUpStatusValue(ctrl.document.followupStatus)"
                                ng-model-options="{trackBy: '$value.id'}">
                         <md-option ng-value="fus" ng-repeat="fus in ctrl.followupStatuses track by $index">
                             {{fus.getTranslatedName()}}
@@ -218,6 +219,7 @@
                     <label for="followupStatus">{{lang.pc_followupstatus}}</label>
                     <md-select multiple name="followupStatus" id="followupStatus"
                                ng-model="ctrl.document.followupStatus"
+                               ng-change="ctrl.checkFollowUpStatusValue(ctrl.document.followupStatus)"
                                ng-model-options="{trackBy: '$value.id'}">
                         <md-option ng-value="fus" ng-repeat="fus in ctrl.followupStatuses track by $index">
                             {{fus.getTranslatedName()}}
@@ -265,7 +267,7 @@
                         <!-- Date Label From -->
                         <md-input-container>
                             <label>{{lang.search_module_start_date}}</label>
-                            <md-datepicker id="followUpFrom" name="followUpFrom" md-open-on-focus
+                            <md-datepicker ng-disabled="!ctrl.displayFollowUpDates" id="followUpFrom" name="followUpFrom" md-open-on-focus
                                            ng-required="ctrl.document.followUpTo"
                                            ng-model="ctrl.document.followUpFrom"
                                            md-max-date="ctrl.document.followUpTo"
@@ -277,7 +279,7 @@
                         <!-- Date Label To -->
                         <md-input-container>
                             <label>{{lang.search_module_end_date}}</label>
-                            <md-datepicker id="followUpTo" name="refDocDateTo" md-open-on-focus
+                            <md-datepicker ng-disabled="!ctrl.displayFollowUpDates" id="followUpTo" name="refDocDateTo" md-open-on-focus
                                            ng-required="ctrl.document.followUpFrom"
                                            ng-model="ctrl.document.followUpTo"
                                            md-min-date="ctrl.document.followUpFrom"
@@ -315,7 +317,7 @@
                         <!-- Date Label From -->
                         <md-input-container>
                             <label>{{lang.search_module_start_date}}</label>
-                            <md-datepicker id="followUpFrom" name="followUpFrom" md-open-on-focus
+                            <md-datepicker ng-disabled="!ctrl.displayFollowUpDates" id="followUpFrom" name="followUpFrom" md-open-on-focus
                                            ng-required="ctrl.document.followUpTo"
                                            ng-model="ctrl.document.followUpFrom"
                                            md-max-date="ctrl.document.followUpTo"
@@ -327,7 +329,7 @@
                         <!-- Date Label To -->
                         <md-input-container>
                             <label>{{lang.search_module_end_date}}</label>
-                            <md-datepicker id="followUpTo" name="refDocDateTo" md-open-on-focus
+                            <md-datepicker ng-disabled="!ctrl.displayFollowUpDates" id="followUpTo" name="refDocDateTo" md-open-on-focus
                                            ng-required="ctrl.document.followUpFrom"
                                            ng-model="ctrl.document.followUpTo"
                                            md-min-date="ctrl.document.followUpFrom"

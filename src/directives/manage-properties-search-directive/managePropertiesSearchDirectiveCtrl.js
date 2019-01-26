@@ -39,6 +39,8 @@ module.exports = function (app) {
         self.documentFiles = [];
         self.classifications = [];
 
+        self.displayFollowUpDates = false;
+
         /*Types options for the type drop down*/
         self.typeOptions = [
             {
@@ -556,6 +558,17 @@ module.exports = function (app) {
                 self.document.docSerial = self.document.serialNoFrom + ',' + self.document.serialNoTo;
             else
                 self.document.docSerial = null;
+        };
+
+        self.checkFollowUpStatusValue = function () {
+            self.displayFollowUpDates = !!_.find(self.document.followupStatus, function (item) {
+                return item.lookupStrKey === 'NEED_REPLY';
+            });
+            // empty the follow up dates in case there is no 'NEED_REPLY' Selected from followup status .
+            if (!self.displayFollowUpDates) {
+                self.document.followUpTo = null;
+                self.document.followUpFrom = null;
+            }
         };
 
         $scope.$watch(function () {
