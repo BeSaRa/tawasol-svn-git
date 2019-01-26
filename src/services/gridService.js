@@ -6,6 +6,7 @@ module.exports = function (app) {
                                          langService,
                                          $filter,
                                          _,
+                                         $q,
                                          rootEntity) {
         'ngInject';
         var self = this;
@@ -336,14 +337,24 @@ module.exports = function (app) {
          * @param grid
          * @param recordsCopy
          * copy of original records which will be returned in case search is empty.
+         * @param callback
          * @returns {*}
          */
-        self.searchGridData = function (grid, recordsCopy) {
-            if (!grid.searchText)
-                return recordsCopy;
+        self.searchGridData = function (grid, recordsCopy, callback) {
+            if (callback){
+                if (!grid.searchText)
+                    return $q.resolve(recordsCopy);
+                else {
+                    return callback(grid.searchText, recordsCopy);
+                }
+            }
             else {
-                self.gridToSearch = grid;
-                return $filter('filter')(recordsCopy, _searchRecords);
+                if (!grid.searchText)
+                    return recordsCopy;
+                else {
+                    self.gridToSearch = grid;
+                    return $filter('filter')(recordsCopy, _searchRecords);
+                }
             }
         };
 

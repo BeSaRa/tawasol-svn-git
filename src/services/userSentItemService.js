@@ -2,13 +2,15 @@ module.exports = function (app) {
     app.service('userSentItemService', function (urlService,
                                                  $http,
                                                  $q,
+                                                 _,
                                                  generator,
                                                  EventHistory,
                                                  toast,
                                                  langService,
                                                  cmsTemplate,
                                                  dialog,
-                                                 errorCode) {
+                                                 errorCode,
+                                                 EventHistoryCriteria) {
             'ngInject';
             var self = this;
             self.serviceName = 'userSentItemService';
@@ -44,9 +46,64 @@ module.exports = function (app) {
             };
 
             /**
-             * @description Contains methods for CRUD operations for user sent items
+             * @description Filters the user sent items from server side according the passed criteria by user
+             * @param searchText
+             * @param searchCriteria
+             * @returns {*}
              */
-            self.controllerMethod = {};
+            self.filterUserSentItems = function (searchText, searchCriteria) {
+                if (searchText) {
+                    searchCriteria = new EventHistoryCriteria({
+                        docSubject: searchText
+                    });
+                }
+                return $http.post(urlService.userInboxSentItems, generator.interceptSendInstance('EventHistoryCriteria', searchCriteria))
+                    .then(function (result) {
+                        // don't update the original records or total count when searching as it is used in controller
+                        var userSentItems = generator.generateCollection(result.data.rs, EventHistory, self._sharedMethods);
+                        userSentItems = generator.interceptReceivedCollection('EventHistory', userSentItems);
+                        return userSentItems;
+                    })
+                    .catch(function (error) {
+                        toast.error('something_went_wrong');
+                        return $q.reject('serverError');
+                    });
+            };
+
+            self.controllerMethod = {
+                openFilterDialog: function (searchCriteria) {
+                    return dialog
+                        .showDialog({
+                            templateUrl: cmsTemplate.getPopup('user-sent-items-search'),
+                            controller: 'userSentItemFilterPopCtrl',
+                            controllerAs: 'ctrl',
+                            locals: {
+                                searchCriteria: searchCriteria
+                            },
+                            resolve: {
+                                workflowActions: function (workflowActionService) {
+                                    'ngInject';
+                                    return workflowActionService.loadCurrentUserWorkflowActions();
+                                },
+                                documentStatuses: function (documentStatusService) {
+                                    'ngInject';
+                                    return documentStatusService.getDocumentStatuses();
+                                },
+                                correspondenceSiteTypes: function (correspondenceSiteTypeService) {
+                                    'ngInject';
+                                    return correspondenceSiteTypeService.getCorrespondenceSiteTypes();
+                                },
+                                usersTo: function (ouApplicationUserService, employeeService) {
+                                    'ngInject';
+                                    return ouApplicationUserService.searchByCriteria({regOu: employeeService.getEmployee().getRegistryOUID()})
+                                        .then(function (result) {
+                                            return _.uniqBy(_.map(result, 'applicationUser'), 'domainName');
+                                        });
+                                }
+                            }
+                        });
+                }
+            };
 
             /**
              * @description Create the shared method to the model.
@@ -136,23 +193,23 @@ module.exports = function (app) {
                     });
             };
 
-           /* /!**
-             * @description Gets the information about workItem view status
-             * @param workflowId
-             * @returns {*}
-             *!/
-            self.viewWorkItem = function (workflowId) {
-                return $http.get(urlService.viewWorkItem + workflowId)
-                    .then(function (result) {
-                        return result.data.rs;
-                    }).catch(function (error) {
-                        /!*errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
-                            dialog.errorMessage(langService.get('cannot_recall_opened_non_existing_work_item'));
-                        });*!/
-                        dialog.errorMessage(langService.get('cannot_recall_opened_non_existing_work_item'));
-                        return false;
-                    });
-            };*/
+            /* /!**
+              * @description Gets the information about workItem view status
+              * @param workflowId
+              * @returns {*}
+              *!/
+             self.viewWorkItem = function (workflowId) {
+                 return $http.get(urlService.viewWorkItem + workflowId)
+                     .then(function (result) {
+                         return result.data.rs;
+                     }).catch(function (error) {
+                         /!*errorCode.checkIf(error, 'WORK_ITEM_NOT_FOUND', function () {
+                             dialog.errorMessage(langService.get('cannot_recall_opened_non_existing_work_item'));
+                         });*!/
+                         dialog.errorMessage(langService.get('cannot_recall_opened_non_existing_work_item'));
+                         return false;
+                     });
+             };*/
 
 
         }

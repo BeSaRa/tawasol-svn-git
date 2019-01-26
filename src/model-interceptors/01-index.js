@@ -98,4 +98,5 @@ module.exports = function (app) {
     require('./ReadyToExportOptionInterceptor')(app);
     require('./RootEntityInterceptor')(app);
     require('./UserMenuItemInterceptor')(app);
+    require('./EventHistoryCriteriaInterceptor')(app);
 };

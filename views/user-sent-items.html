@@ -8,7 +8,20 @@
             </md-button>
             <span flex></span>
             <!--<search-filter-directive model="ctrl.searchModel"></search-filter-directive>-->
-            <grid-search-directive grid="ctrl.grid"></grid-search-directive>
+            <md-button ng-click="ctrl.resetFilter($event)"
+                       ng-if="ctrl.searchCriteriaUsed"
+                       aria-label="{{lang.reset}}"
+                       class="md-icon-button" tooltip="{{lang.reset}}">
+                <md-icon md-svg-icon="filter-remove"></md-icon>
+            </md-button>
+            <md-button ng-click="ctrl.openFilterDialog($event)"
+                       aria-label="{{lang.filter}}"
+                       class="md-icon-button" tooltip="{{lang.filter}}">
+                <md-icon md-svg-icon="filter"></md-icon>
+            </md-button>
+            <grid-search-directive grid="ctrl.grid"
+                                   server-side="true"
+                                   placeholder="{{lang.document_subject}}"></grid-search-directive>
         </div>
         <!-- end page-header -->
         <!-- page-content -->
@@ -95,7 +108,7 @@
                                     <tr md-row md-select="userSentItem" model="userSentItem"
                                         grid-right-click-directive="userSentItem"
                                         selected-length="{{ctrl.selectedUserSentItems.length ? ctrl.selectedUserSentItems.length : 0}}"
-                                        ng-repeat="userSentItem in searchResults = (ctrl.userSentItems  | filter:ctrl.searchModel) track by $index">
+                                        ng-repeat="userSentItem in searchResults = (ctrl.userSentItems) track by $index">
                                         <!-- | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) -->
                                         <td md-cell class="indicator-td">
                                             <!-- Security Level -->

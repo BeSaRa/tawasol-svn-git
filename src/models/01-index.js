@@ -161,4 +161,5 @@ module.exports = function (app) {
     require('./Pair')(app);
     require('./DynamicMenuItem')(app);
     require('./UserMenuItem')(app);
+    require('./EventHistoryCriteria')(app);
 };

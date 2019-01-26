@@ -37,6 +37,14 @@ module.exports = function (app) {
             SiteView.prototype.getTranslatedName = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.enName : this.arName ) : (reverse ? this.arName : this.enName);
             };
+            /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            SiteView.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'];
+            };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.
             CMSModelInterceptor.runEvent('SiteView', 'init', this);

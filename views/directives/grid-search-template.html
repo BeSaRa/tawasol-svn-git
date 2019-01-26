@@ -5,6 +5,7 @@
         </md-button>
         <input flex ng-model="ctrl.grid.searchText"
                ng-change="ctrl.search($event)"
+               placeholder="{{ctrl.placeholder ? ctrl.placeholder : ''}}"
                name="search_header_query" id="search_header_query">
     </div>
 </div>

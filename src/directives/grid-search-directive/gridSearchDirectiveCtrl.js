@@ -9,10 +9,32 @@ module.exports = function (app) {
         LangWatcher($scope);
 
         self.search = function () {
-            self.grid.searchCallback();
+            if (!!self.serverSide) {
+                searchWithDebounce();
+            }
+            else {
+                self.grid.searchCallback();
+            }
         };
 
-        /*var pendingSearch, cancelSearch = angular.noop;
+        var searchWithDebounce = function () {
+            if (!pendingSearch || !debounceSearch()) {
+                cancelSearch();
+
+                return pendingSearch = $q(function (resolve, reject) {
+                    cancelSearch = reject;
+                    $timeout(function () {
+                        resolve(self.grid.searchCallback(true));
+                        refreshDebounce();
+                    }, 500, true)
+                });
+            }
+
+            return pendingSearch;
+        };
+
+
+        var pendingSearch, cancelSearch = angular.noop;
         var lastSearch;
 
         function refreshDebounce() {
@@ -21,9 +43,9 @@ module.exports = function (app) {
             cancelSearch = angular.noop;
         }
 
-        /!**
+        /**
          * Debounce if querying faster than 300ms
-         *!/
+         */
         function debounceSearch() {
             var now = new Date().getMilliseconds();
             lastSearch = lastSearch || now;
@@ -31,20 +53,6 @@ module.exports = function (app) {
             return ((now - lastSearch) < 300);
         }
 
-        self.search = function () {
-            if (!pendingSearch || !debounceSearch()) {
-                cancelSearch();
 
-                return pendingSearch = $q(function (resolve, reject) {
-                    cancelSearch = reject;
-                    $timeout(function () {
-                        resolve(self.grid.searchCallback());
-                        refreshDebounce();
-                    }, 500, true)
-                });
-            }
-
-            return pendingSearch;
-        };*/
     });
 };

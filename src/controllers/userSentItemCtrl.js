@@ -23,7 +23,8 @@ module.exports = function (app) {
                                                  WorkItem,
                                                  ResolveDefer,
                                                  generator,
-                                                 dialog) {
+                                                 dialog,
+                                                 EventHistoryCriteria) {
         'ngInject';
         var self = this;
 
@@ -40,6 +41,8 @@ module.exports = function (app) {
         self.totalRecords = userSentItemService.totalCount;
         self.userSentItemService = userSentItemService;
 
+        self.searchCriteria = new EventHistoryCriteria();
+        self.searchCriteriaUsed = false;
 
         /**
          * @description Contains the selected user sent items
@@ -98,9 +101,17 @@ module.exports = function (app) {
                 docClass: 'docClassIndicator.text'
             },
             searchText: '',
-            searchCallback: function () {
-                self.userSentItems = gridService.searchGridData(self.grid, self.userSentItemsCopy);
-                self.totalRecords = self.grid.searchText ? self.userSentItems.length : userSentItemService.totalCount;
+            searchCallback: function (serverSide) {
+                if (!!serverSide) {
+                    gridService.searchGridData(self.grid, self.userSentItemsCopy, userSentItemService.filterUserSentItems)
+                        .then(function (result) {
+                            self.userSentItems = result;
+                            self.totalRecords = self.grid.searchText ? self.userSentItems.length : userSentItemService.totalCount;
+                        });
+                } else {
+                    self.userSentItems = gridService.searchGridData(self.grid, self.userSentItemsCopy);
+                    self.totalRecords = self.grid.searchText ? self.userSentItems.length : userSentItemService.totalCount;
+                }
             }
         };
 
@@ -129,6 +140,48 @@ module.exports = function (app) {
                     self.grid.searchCallback();
                     return result;
                 });
+        };
+
+        /**
+         * @description Opens the search dialog for user sent items search
+         */
+        self.openFilterDialog = function ($event) {
+            if (self.grid.searchText) {
+                self.searchCriteria.docSubject = self.grid.searchText;
+            }
+            userSentItemService
+                .controllerMethod.openFilterDialog(self.searchCriteria)
+                .then(function (result) {
+                    self.grid.searchText = '';
+                    self.userSentItems = result.result;
+                    // if criteria is returned in result, means filter is used. otherwise, filter is reset
+                    if (result.criteria) {
+                        // when filter is used, the total count is number of items returned.
+                        self.totalRecords = self.userSentItems.length;
+                        self.searchCriteriaUsed = true;
+                        self.searchCriteria = result.criteria;
+                    }
+                    else {
+                        // when filter is reset, use the total count from service as total records
+                        self.totalRecords = userSentItemService.totalCount;
+                        self.searchCriteriaUsed = false;
+                        self.searchCriteria = new EventHistoryCriteria();
+                    }
+                })
+                .catch(function (error) {
+                    self.grid.searchText = '';
+                    if (error && error.hasOwnProperty('error') && error.error === 'serverError') {
+                        self.searchCriteriaUsed = true;
+                        self.searchCriteria = result.criteria;
+                        self.userSentItems = [];
+                        self.totalRecords = 0;
+                    }
+                });
+        };
+
+        self.resetFilter = function ($event) {
+            self.searchCriteria = new EventHistoryCriteria();
+            self.searchCriteriaUsed = false;
         };
 
         /**

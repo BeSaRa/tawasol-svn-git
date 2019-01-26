@@ -1,0 +1,187 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang.search}}">
+    <div layout="column">
+        <md-toolbar>
+            <span ng-if="!ctrl.editMode" class="p20">{{lang.search}} : {{lang.menu_item_sent_items}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <form name="userSentItemSearchForm" autocomplete="off">
+                <div layout="column" class="p20">
+                    <div layout="row">
+                        <!-- Doc Subject -->
+                        <md-input-container flex>
+                            <label for="docSubject">{{lang.subject}}</label>
+                            <input name="docSubject" id="docSubject"
+                                   ng-model="ctrl.searchCriteria.docSubject">
+                            <div ng-messages="userSentItemSearchForm.docSubject.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- Doc Serial -->
+                        <md-input-container flex>
+                            <label for="docFullSerial">{{lang.serial_number}}</label>
+                            <input name="docFullSerial" id="docFullSerial"
+                                   ng-model="ctrl.searchCriteria.docFullSerial">
+                            <div ng-messages="userSentItemSearchForm.docFullSerial.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Type / Document Class -->
+                        <md-input-container flex>
+                            <label for="docClassId">{{lang.type}}</label>
+                            <md-select name="docClassId" id="docClassId"
+                                       ng-model="ctrl.searchCriteria.docClassId">
+                                <md-option ng-value="null">{{lang.none}}</md-option>
+                                <md-option ng-repeat="option in ctrl.documentClasses track by $index"
+                                           ng-value="option.lookupKey">
+                                    {{option.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="userSentItemSearchForm.docClassId.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- Workflow Action -->
+                        <md-input-container flex>
+                            <label for="workflowActionId">{{lang.action}}</label>
+                            <md-select name="workflowActionId" id="workflowActionId"
+                                       ng-model="ctrl.searchCriteria.workflowActionId">
+                                <md-option ng-value="null">{{lang.none}}</md-option>
+                                <md-option ng-repeat="option in ctrl.workflowActions track by $index"
+                                           ng-value="option.id">
+                                    {{option.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="userSentItemSearchForm.workflowActionId.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Document Status -->
+                        <md-input-container flex>
+                            <label for="documentStatusId">{{lang.status}}</label>
+                            <md-select name="documentStatusId" id="documentStatusId"
+                                       ng-model="ctrl.searchCriteria.documentStatusId">
+                                <md-option ng-value="null">{{lang.none}}</md-option>
+                                <md-option ng-repeat="option in ctrl.documentStatuses track by $index"
+                                           ng-value="option.id">
+                                    {{option.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="userSentItemSearchForm.documentStatusId.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- User To -->
+                        <md-input-container flex>
+                            <label for="userToId">{{lang.sent_items_receiver}}</label>
+                            <md-select name="userToId" id="userToId"
+                                       ng-model="ctrl.searchCriteria.userToId">
+                                <md-option ng-value="null">{{lang.none}}</md-option>
+                                <md-option ng-repeat="userTo in ctrl.usersTo"
+                                           ng-value="userTo.id">
+                                    {{userTo.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <!-- Correspondence Site Type -->
+                        <md-input-container flex>
+                            <label for="selectedSiteType">{{lang.correspondence_site_type}}</label>
+                            <md-select name="selectedSiteType" id="selectedSiteType"
+                                       ng-model="ctrl.searchCriteria.selectedSiteType"
+                                       ng-model-options="{trackBy:'$value.id'}"
+                                       md-on-close="ctrl.clearSearchText('siteType')"
+                                       ng-change="ctrl.getMainSites($event)"
+                                       data-md-container-class="select-header-container">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.siteTypeSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <md-option ng-value="null">{{lang.none}}</md-option>
+                                <md-option
+                                        ng-repeat="option in ctrl.correspondenceSiteTypes | translatedNameFilter: ctrl.siteTypeSearchText"
+                                        ng-value="option"
+                                        md-highlight-text="ctrl.siteTypeSearchText"
+                                        md-highlight-flags="i">
+                                    {{option.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="userSentItemSearchForm.selectedSiteType.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+                        <!-- Main Site -->
+                        <md-input-container flex>
+                            <label>{{lang.main_site}}</label>
+                            <md-select ng-model="ctrl.searchCriteria.sitesInfoTo"
+                                       ng-model-options="{trackBy:'$value.id'}"
+                                       ng-disabled="!ctrl.searchCriteria.selectedSiteType || !ctrl.searchCriteria.selectedSiteType.id"
+                                       md-on-close="ctrl.clearSearchText('mainSite')"
+                                       ng-change="ctrl.getSubSites($event)"
+                                       data-md-container-class="select-header-container">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.mainSiteSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <!--<md-option ng-value="null">{{lang.none}}</md-option>-->
+                                <md-option
+                                        ng-repeat="mainSite in ctrl.mainSites | translatedNameFilter: ctrl.mainSiteSearchText"
+                                        ng-value="mainSite"
+                                        md-highlight-text="ctrl.mainSiteSearchText"
+                                        md-highlight-flags="i">
+                                    {{mainSite.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <!-- Sub Site -->
+                        <md-input-container flex>
+                            <label>{{lang.sub_site}}</label>
+                            <md-select ng-model="ctrl.searchCriteria.sitesInfoCC"
+                                       ng-model-options="{trackBy:'$value.id'}"
+                                       ng-disabled="!ctrl.searchCriteria.selectedSiteType || !ctrl.searchCriteria.selectedSiteType.id || !ctrl.searchCriteria.sitesInfoTo"
+                                       md-on-close="ctrl.clearSearchText('subSite')"
+                                       data-md-container-class="select-header-container">
+                                <md-select-header class="select-header">
+                                    <input ng-model="ctrl.subSiteSearchText"
+                                           ng-keydown="ctrl.preventSearchKeyDown($event)"
+                                           placeholder="{{lang.search}}"
+                                           class="select-header-input">
+                                </md-select-header>
+                                <!--<md-option ng-value="null">{{lang.none}}</md-option>-->
+                                <md-option
+                                        ng-repeat="subSite in ctrl.subSites | translatedNameFilter: ctrl.subSiteSearchText"
+                                        ng-value="subSite"
+                                        md-highlight-text="ctrl.subSiteSearchText"
+                                        md-highlight-flags="i">
+                                    {{subSite.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                </div>
+            </form>
+        </md-content>
+        <div>
+            <div layout="row">
+                <md-button class="md-raised" ng-disabled="userSentItemSearchForm.$invalid"
+                           ng-click="ctrl.filterUserSentItems($event)">{{lang.filter}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised"
+                           ng-click="ctrl.resetFilter($event)">{{lang.reset}}
+                </md-button>
+                <span flex></span>
+                <md-button class="md-raised" ng-click="ctrl.closePopUp()">{{lang.close}}</md-button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

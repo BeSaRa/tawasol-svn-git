@@ -37,6 +37,14 @@ module.exports = function (app) {
             CorrespondenceSiteType.prototype.getTranslatedName = function (reverse) {
                 return langService.current === 'ar' ? (reverse ? this.enName : this.arName ) : (reverse ? this.arName : this.enName);
             };
+            /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            CorrespondenceSiteType.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'];
+            };
             CorrespondenceSiteType.prototype.getTranslatedStatus = function () {
                 return this.status ? langService.get('active') : langService.get('inactive');
             };

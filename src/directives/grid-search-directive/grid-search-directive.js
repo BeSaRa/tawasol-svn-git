@@ -7,7 +7,9 @@ module.exports = function (app) {
             templateUrl: cmsTemplate.getDirective('grid-search-template.html'),
             replace: true,
             scope: {
-                grid: '='
+                grid: '=',
+                serverSide: '=',
+                placeholder: '@'
             },
             bindToController: true,
             controller: 'gridSearchDirectiveCtrl',
