@@ -9,6 +9,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
+            model.mapSend();
             return model;
         });
 

@@ -45,6 +45,7 @@ module.exports = function (app) {
 
             PartialExportSelective.prototype.mapSend = function () {
                 var self = this, keys = this.getKeys();
+                keys.push('ATTACHMENT_LINKED_DOCS');
 
                 _.map(keys, function (key) {
                     self.exportItems[key] = _.map(self.exportItems[key], function (item) {

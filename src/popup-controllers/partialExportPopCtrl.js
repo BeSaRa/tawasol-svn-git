@@ -4,6 +4,7 @@ module.exports = function (app) {
                                                      _,
                                                      $filter,
                                                      generator,
+                                                     cmsTemplate,
                                                      PartialExportCollection,
                                                      rootEntity,
                                                      langService,
@@ -303,8 +304,7 @@ module.exports = function (app) {
                 }).then(function (result) {
                     self.mainSites = result;
                 });
-            }
-            else {
+            } else {
                 self.mainSites = self.subSearchResult = self.subSearchResultCopy = [];
             }
         };
@@ -420,8 +420,7 @@ module.exports = function (app) {
                 self.followUpStatusDate_DL = null;
                 self.followupStatus_DL = null;
                 self.subSearchSelected_DL = [];
-            }
-            else {
+            } else {
                 self.followUpStatusDate = null;
                 self.followupStatus = null;
                 self.subSearchSelected = [];
@@ -445,8 +444,7 @@ module.exports = function (app) {
                 self.followUpStatusDate_DL = null;
                 self.followupStatus_DL = null;
                 self.subSearchSelected_DL = [];
-            }
-            else {
+            } else {
                 self.followUpStatusDate = null;
                 self.followupStatus = null;
                 self.subSearchSelected = [];
@@ -558,6 +556,33 @@ module.exports = function (app) {
 
             self.subSearchResult_DL = _.filter(_.map(siteViews, _mapSubSites), _filterSubSites);
 
+        };
+
+        self.openLinkedDocsAttachmentDialogFromPartialExport = function ($event) {
+            return dialog
+                .showDialog({
+                    templateUrl: cmsTemplate.getPopup('linked-docs-attachments'),
+                    controller: 'linkedDocsAttachmentPopCtrl',
+                    controllerAs: 'ctrl',
+                    locals: {
+                        exportOptions: self.partialExportList,
+                        model: self.correspondence
+                    },
+                    resolve: {
+                        linkedDocs: function (correspondenceService) {
+                            'ngInject';
+                            var info = self.correspondence.getInfo();
+                            return self.exportType === 1 ? correspondenceService
+                                .getLinkedDocumentsByVsIdClass(info.vsId, info.documentClass) : self.partialExportList.exportItems.RELATED_BOOKS;
+                        }
+                    }
+                })
+                .then(function (selectedCorrespondences) {
+                    self.partialExportList.setAttachmentLinkedDocs(selectedCorrespondences);
+                })
+                .catch(function (selectedCorrespondences) {
+                    self.partialExportList.setAttachmentLinkedDocs(selectedCorrespondences);
+                })
         };
 
         /**

@@ -241,7 +241,6 @@ module.exports = function (app) {
                     }
                 })
                 .then(function (selectedCorrespondences) {
-                    console.log("SET");
                     var currentModel = self.exportType === 1 ? self.model : self.partialExportList;
                     currentModel.setAttachmentLinkedDocs(selectedCorrespondences);
                 })

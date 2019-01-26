@@ -42,6 +42,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <div layout="row"
+                                 ng-if="ctrl.exportType === 1 || (ctrl.exportType === 2 && ctrl.partialExportList.exportItems.RELATED_BOOKS.length)">
+                                <span flex></span>
+                                <md-button class="md-raised" ng-click="ctrl.openLinkedDocsAttachmentDialogFromPartialExport($event)">
+                                    {{lang.export_attachments_related_to_linked_documents}}
+                                </md-button>
+                                <span flex></span>
+                            </div>
                         </div>
                     </md-content>
                 </md-tab>
