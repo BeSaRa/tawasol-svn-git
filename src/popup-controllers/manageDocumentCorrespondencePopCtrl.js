@@ -10,6 +10,9 @@ module.exports = function (app) {
 
         self.correspondence = correspondence;
 
+        self.model = angular.copy(correspondence);
+
+
         if (self.correspondence.getInfo().documentClass === 'outgoing') {
             if (self.correspondence.hasVsId()) {
                 self.correspondence.sitesInfoCC = sites.second;
@@ -60,12 +63,15 @@ module.exports = function (app) {
          * @description in case if outgoing
          */
         self.saveCorrespondenceSites = function () {
-            if (!self.correspondence.hasVsId())
-                return dialog.hide(self.correspondence);
+            if (!self.correspondence.hasVsId()) {
+                self.updateCurrentModel();
+                return dialog.hide(self.model);
+            }
 
             self.correspondence
                 .updateSites()
                 .then(function () {
+                    self.updateCurrentModel();
                     toast.success(langService.get('correspondence_sites_save_success'));
                 });
         };
@@ -73,18 +79,25 @@ module.exports = function (app) {
          * @description in cas if incoming
          */
         self.saveCorrespondenceSite = function () {
-            if (!self.correspondence.hasVsId())
+            if (!self.correspondence.hasVsId()) {
+                self.updateCurrentModel();
                 return dialog.hide(self.correspondence);
+            }
 
             self.correspondence
                 .saveIncomingSite()
                 .then(function () {
+                    self.updateCurrentModel();
                     toast.success(langService.get('correspondence_sites_save_success'));
                 });
         };
 
         self.closeDocumentCorrespondence = function () {
-            dialog.hide(self.correspondence);
+            dialog.hide(self.model);
         };
+
+        self.updateCurrentModel = function () {
+            self.model = angular.copy(self.correspondence);
+        }
     });
 };
