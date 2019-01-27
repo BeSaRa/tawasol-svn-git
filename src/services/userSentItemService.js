@@ -83,7 +83,7 @@ module.exports = function (app) {
                 openFilterDialog: function (grid, searchCriteria) {
                     return dialog
                         .showDialog({
-                            templateUrl: cmsTemplate.getPopup('user-sent-items-search'),
+                            templateUrl: cmsTemplate.getPopup('user-sent-items-filter'),
                             controller: 'userSentItemFilterPopCtrl',
                             controllerAs: 'ctrl',
                             locals: {

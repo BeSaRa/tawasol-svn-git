@@ -132,7 +132,7 @@
                                            placeholder="{{lang.search}}"
                                            class="select-header-input">
                                 </md-select-header>
-                                <!--<md-option ng-value="null">{{lang.none}}</md-option>-->
+                                <md-option ng-value="null">{{lang.none}}</md-option>
                                 <md-option
                                         ng-repeat="mainSite in ctrl.mainSites | translatedNameFilter: ctrl.mainSiteSearchText"
                                         ng-value="mainSite"
@@ -156,7 +156,7 @@
                                            placeholder="{{lang.search}}"
                                            class="select-header-input">
                                 </md-select-header>
-                                <!--<md-option ng-value="null">{{lang.none}}</md-option>-->
+                                <md-option ng-value="null">{{lang.none}}</md-option>
                                 <md-option
                                         ng-repeat="subSite in ctrl.subSites | translatedNameFilter: ctrl.subSiteSearchText"
                                         ng-value="subSite"
