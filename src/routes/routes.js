@@ -1637,13 +1637,15 @@ module.exports = function (app) {
                 url: '/dynamic-menu-items',
                 templateUrl: cmsTemplateProvider.getView('dynamic-menu-items'),
                 controller: 'dynamicMenuItemCtrl',
+                permission: 'menu_item_menu_items',
                 controllerAs: 'ctrl'
             })
             .state('app.central-archive.sent-items', {
                 url: '/sent-items',
                 templateUrl: cmsTemplateProvider.getView('central-archive-sent-items'),
                 controller: 'centralArchiveSentItemCtrl',
-                controllerAs: 'ctrl'
+                controllerAs: 'ctrl',
+                permission: 'menu_item_central_archive_ready_to_export'
             })
             .state('app.others', {
                 url: '/others/:menuId',
