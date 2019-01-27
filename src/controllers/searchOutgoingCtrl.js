@@ -573,6 +573,10 @@ module.exports = function (app) {
                 });
         };
 
+        self.viewInDeskTop = function (workItem) {
+            return correspondenceService.viewWordInDesktop(workItem);
+        };
+
         /**
          * @description get document versions
          * @param correspondence
@@ -765,6 +769,22 @@ module.exports = function (app) {
                         class: "action-green",
                         showInView: true,
                         checkShow: self.checkToShowAction
+                    },
+                    // viewInDeskTop
+                    {
+                        type: 'action',
+                        icon: 'monitor',
+                        text: 'grid_action_view_in_desktop',
+                        shortcut: false,
+                        hide: false,
+                        callback: self.viewInDeskTop,
+                        class: "action-green",
+                        permissionKey: 'VIEW_DOCUMENT',
+                        showInView: false,
+                        checkShow: function (action, model) {
+                            var info = model.getInfo();
+                            return self.checkToShowAction(action, model) && info.needToApprove();
+                        }
                     }
                 ]
             },
