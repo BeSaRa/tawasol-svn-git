@@ -282,6 +282,8 @@ module.exports = function (app) {
                         return employeeService.getEmployee().domainName;
                     case 'ROOT_ENTITY_IDENTIFIER':
                         return rootEntity.returnRootEntity().identifier;
+                    case 'LANGUAGE_CODE':
+                        return langService.current;
                 }
             };
 
