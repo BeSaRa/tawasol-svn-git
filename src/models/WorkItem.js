@@ -160,8 +160,7 @@ module.exports = function (app) {
                 var securityLevel = this.generalStepElm.securityLevel;
                 if (securityLevel.hasOwnProperty('lookupKey')) {
                     return securityLevel;
-                }
-                else if (securityLevel.hasOwnProperty('id')) {
+                } else if (securityLevel.hasOwnProperty('id')) {
                     return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel.id);
                 }
                 return lookupService.getLookupByLookupKey(lookupService.securityLevel, securityLevel);
@@ -547,7 +546,7 @@ module.exports = function (app) {
              */
             WorkItem.prototype.getIndicatorBookType = function (model) {
                 var types = [langService.get('electronic'), langService.get('paper')];
-                return types[typeof  model.generalStepElm.addMethod === 'undefined' ? 1 : model.generalStepElm.addMethod];
+                return types[typeof model.generalStepElm.addMethod === 'undefined' ? 1 : model.generalStepElm.addMethod];
             };
             WorkItem.prototype.getIndicatorPriorityLevel = function (model) {
                 return model.priorityLevel[langService.current + 'Name'];
@@ -568,7 +567,7 @@ module.exports = function (app) {
             };
             WorkItem.prototype.getIndicatorDocumentType = function (model) {
                 var icons = ['tablet', 'file-document'];
-                return icons[typeof  model.generalStepElm.addMethod === 'undefined' ? 1 : model.generalStepElm.addMethod];
+                return icons[typeof model.generalStepElm.addMethod === 'undefined' ? 1 : model.generalStepElm.addMethod];
             };
             WorkItem.prototype.getIndicatorHasLinkedDoc = function (model) {
                 return model.generalStepElm.linkedDocsNO ? langService.get('indicator_doc_has_linked_doc') : null;

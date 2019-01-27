@@ -341,14 +341,13 @@ module.exports = function (app) {
          * @returns {*}
          */
         self.searchGridData = function (grid, recordsCopy, callback) {
-            if (callback){
+            if (callback) {
                 if (!grid.searchText)
                     return $q.resolve(recordsCopy);
                 else {
                     return callback(grid.searchText, recordsCopy);
                 }
-            }
-            else {
+            } else {
                 if (!grid.searchText)
                     return recordsCopy;
                 else {
@@ -403,16 +402,14 @@ module.exports = function (app) {
                     var showInViewOnly = action.hasOwnProperty('showInViewOnly') && !!action.showInViewOnly,
                         showInView = action.hasOwnProperty('showInView') && !!action.showInView,
                         sticky = action.hasOwnProperty('sticky') && !!action.sticky,
-                        actionFrom = action.actionFrom.toLowerCase();
+                        actionFrom = action && action.hasOwnProperty('actionFrom') ? action.actionFrom.toLowerCase() : null;
                     if (actionFrom === 'popup') {
                         if (!showInView)
                             hasPermission = false;
-                    }
-                    else if (actionFrom === 'grid') {
+                    } else if (actionFrom === 'grid') {
                         if (showInViewOnly)
                             hasPermission = false;
-                    }
-                    else if (actionFrom === 'sticky') {
+                    } else if (actionFrom === 'sticky') {
                         // add any condition, if required later
                         if (sticky)
                             hasPermission = true;
