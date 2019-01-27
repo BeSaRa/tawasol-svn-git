@@ -44,7 +44,7 @@ module.exports = function (app) {
          * @returns {Promise|userInboxes}
          */
         self.loadUserInboxes = function (excludeLoading) {
-            return $http.get(urlService.userInbox + '/all-mails', {
+            return $http.get(urlService.userInbox + '/all-mails?optional-fields=registeryOu', {
                 excludeLoading: !!excludeLoading
             }).then(function (result) {
                 self.userInboxes = generator.generateCollection(result.data.rs, WorkItem, self._sharedMethods);
