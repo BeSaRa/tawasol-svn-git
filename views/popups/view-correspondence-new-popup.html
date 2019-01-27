@@ -17,7 +17,7 @@
                                           md-diameter="30"></md-progress-circular>
                 </div>
                 <md-button ng-disabled="ctrl.editMode" class="md-raised"
-                           ng-if="ctrl.info.needToApprove() && ctrl.employeeCanEditContent()"
+                           ng-if="ctrl.info.needToApprove() && ctrl.employeeCanEditContent() && !ctrl.correspondence.viewVersion"
                            ng-click="ctrl.toggleCorrespondenceEditMode()">
                     {{lang.edit_content}}
                 </md-button>
