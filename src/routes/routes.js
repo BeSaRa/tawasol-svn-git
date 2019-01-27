@@ -61,7 +61,11 @@ module.exports = function (app) {
                 resolve: {
                     counters: function (counterService, sidebarService, employeeService) {
                         'ngInject';
-                        return !employeeService.isAdminUser() ? counterService.loadCounters() : [];
+                        return !employeeService.isAdminUser() ? counterService.loadCounters().then(function () {
+                            counterService.loadG2GCounter().then(function () {
+                                counterService.intervalG2GCounters();
+                            })
+                        }) : [];
                     },
                     landing: function (layoutService, sidebarService, employeeService) {
                         'ngInject';

@@ -116,6 +116,16 @@ module.exports = function (app) {
                     ],
                     menu_item_folders: [
                         'foldersCount'
+                    ],
+                    menu_item_g2g:[
+                        'g2gDeptInbox',
+                        'g2gDeptReturned'
+                    ],
+                    menu_item_government_inbox: [
+                        'g2gDeptInbox'
+                    ],
+                    menu_item_government_returned_mail: [
+                        'g2gDeptReturned'
                     ]
                 };
             /*User Inbox*/
@@ -150,6 +160,11 @@ module.exports = function (app) {
             self.userFavouriteDocument = null;
 
             self.groupMail = null;
+
+            /*G2G*/
+            self.g2gDeptInbox = null;
+            self.g2gDeptReturned = null;
+
             // this property not related to the actual model
             self.foldersCount = null;
 

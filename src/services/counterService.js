@@ -5,7 +5,8 @@ module.exports = function (app) {
                                             $q,
                                             generator,
                                             Counter,
-                                            _) {
+                                            _,
+                                            $interval) {
         'ngInject';
         var self = this;
         self.serviceName = 'counterService';
@@ -38,6 +39,25 @@ module.exports = function (app) {
                     });
                 });
 
+        };
+
+        self.loadG2GCounter = function () {
+            return $http.get(urlService.g2gInbox + 'counters', {
+                excludeLoading: true
+            }).then(function (result) {
+                result = result.data.rs;
+                self.counter.g2gDeptInbox = result.deptInbox;
+                self.counter.g2gDeptReturned = result.deptReturned;
+                self.counter.mapCounter();
+                return self.counter;
+            })
+        };
+
+        self.intervalG2GCounters = function () {
+            // load g2g countess after every 15 minutes
+            $interval(function () {
+                self.loadG2GCounter();
+            }, (15 * 60 * 1000));
         };
 
 
