@@ -96,7 +96,7 @@
                                        ng-model="ctrl.searchCriteria.selectedSiteType"
                                        ng-model-options="{trackBy:'$value.id'}"
                                        md-on-close="ctrl.clearSearchText('siteType')"
-                                       ng-change="ctrl.getMainSites($event)"
+                                       ng-change="ctrl.getMainSites(true, $event)"
                                        data-md-container-class="select-header-container">
                                 <md-select-header class="select-header">
                                     <input ng-model="ctrl.siteTypeSearchText"
@@ -124,7 +124,7 @@
                                        ng-model-options="{trackBy:'$value.id'}"
                                        ng-disabled="!ctrl.searchCriteria.selectedSiteType || !ctrl.searchCriteria.selectedSiteType.id"
                                        md-on-close="ctrl.clearSearchText('mainSite')"
-                                       ng-change="ctrl.getSubSites($event)"
+                                       ng-change="ctrl.getSubSites(true, $event)"
                                        data-md-container-class="select-header-container">
                                 <md-select-header class="select-header">
                                     <input ng-model="ctrl.mainSiteSearchText"

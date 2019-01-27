@@ -30,15 +30,16 @@ module.exports = function (app) {
 
         $timeout(function () {
             if (self.searchCriteria.selectedSiteType) {
-                self.getMainSites();
+                self.getMainSites(false);
             }
         });
 
         /**
          * @description Get the main sites on change of site type
+         * @param resetMainAndSub
          * @param $event
          */
-        self.getMainSites = function ($event) {
+        self.getMainSites = function (resetMainAndSub, $event) {
             if (self.searchCriteria.selectedSiteType && self.searchCriteria.selectedSiteType.id) {
                 correspondenceViewService.correspondenceSiteSearch('main', {
                     type: self.searchCriteria.selectedSiteType.lookupKey,
@@ -48,8 +49,13 @@ module.exports = function (app) {
                     self.mainSites = result;
                     self.mainSitesCopy = angular.copy(result);
                     self.subSites = [];
-                    self.searchCriteria.sitesInfoTo = null;
-                    self.searchCriteria.sitesInfoCC = null;
+                    if (resetMainAndSub) {
+                        self.searchCriteria.sitesInfoTo = null;
+                        self.searchCriteria.sitesInfoCC = null;
+                    }
+                    if (self.searchCriteria.sitesInfoTo) {
+                        self.getSubSites(false);
+                    }
                 });
             }
             else {
@@ -62,9 +68,10 @@ module.exports = function (app) {
 
         /**
          * @description Get sub sites on change of main site
+         * @param resetSub
          * @param $event
          */
-        self.getSubSites = function ($event) {
+        self.getSubSites = function (resetSub, $event) {
             if (self.searchCriteria.sitesInfoTo && self.searchCriteria.sitesInfoTo.id) {
                 correspondenceViewService.correspondenceSiteSearch('sub', {
                     type: self.searchCriteria.selectedSiteType.lookupKey,
@@ -74,7 +81,8 @@ module.exports = function (app) {
                 }).then(function (result) {
                     self.subSites = result;
                     self.subSitesCopy = angular.copy(result);
-                    self.searchCriteria.sitesInfoCC = null;
+                    if (resetSub)
+                        self.searchCriteria.sitesInfoCC = null;
                 });
             }
             else {
