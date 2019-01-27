@@ -255,7 +255,7 @@
             <div layout="row">
                 <!-- followup status -->
                 <md-input-container flex ng-if="ctrl.checkStatus('followupStatus') &&
-                                ctrl.document.hasDocumentClass('incoming') && ctrl.document.dummySearchDocClass.toLowerCase() !== 'outgoingincoming'">
+                                ctrl.document.hasDocumentClass('incoming')">
                     <label for="followupStatus">{{lang.pc_followupstatus}}</label>
                     <md-select multiple name="followupStatus" id="followupStatus"
                                ng-model="ctrl.document.followupStatus"
