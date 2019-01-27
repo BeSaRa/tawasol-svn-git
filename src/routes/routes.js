@@ -59,7 +59,7 @@ module.exports = function (app) {
                     identifier: rootEntityProvider.getRootEntityIdentifier()
                 },
                 resolve: {
-                    counters: function (counterService, sidebarService, employeeService) {
+                    counters: function (counterService, sidebarService, employeeService, rootEntity) {
                         'ngInject';
                         return !employeeService.isAdminUser() ? counterService.loadCounters().then(function () {
                             counterService.loadG2GCounter().then(function () {
