@@ -606,7 +606,9 @@ module.exports = function (app) {
                                 hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_CONTENT");
                             }
                             return self.checkToShowAction(action, model)
-                                && info.needToApprove()
+                                && !info.isPaper
+                                && (info.documentClass !== 'incoming')
+                                && model.needApprove()
                                 && hasPermission;
                         }
                     }
