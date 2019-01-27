@@ -402,7 +402,7 @@ module.exports = function (app) {
                     var showInViewOnly = action.hasOwnProperty('showInViewOnly') && !!action.showInViewOnly,
                         showInView = action.hasOwnProperty('showInView') && !!action.showInView,
                         sticky = action.hasOwnProperty('sticky') && !!action.sticky,
-                        actionFrom = action && action.hasOwnProperty('actionFrom') ? action.actionFrom.toLowerCase() : null;
+                        actionFrom = action.hasOwnProperty('actionFrom') && action.actionFrom ? action.actionFrom.toLowerCase() : 'grid';
                     if (actionFrom === 'popup') {
                         if (!showInView)
                             hasPermission = false;
