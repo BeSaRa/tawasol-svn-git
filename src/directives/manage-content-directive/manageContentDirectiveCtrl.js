@@ -256,8 +256,10 @@ module.exports = function (app) {
          * @description open edit correspondence when editAfterApproved = true.
          */
         self.openCorrespondenceToEdit = function () {
-            if (!self.trusted)
+            if (!self.trusted){
                 self.documentInformation.viewURL = $sce.trustAsResourceUrl(self.documentInformation.viewURL);
+                self.documentInformation.editURL = $sce.trustAsResourceUrl(self.documentInformation.editURL);
+            }
 
             self.trusted = true;
             return correspondenceService
