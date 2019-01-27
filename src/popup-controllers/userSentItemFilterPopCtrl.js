@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                           userSentItemService,
                                                           correspondenceViewService,
                                                           Site,
+                                                          grid,
                                                           $timeout,
                                                           searchCriteria,
                                                           workflowActions,
@@ -22,7 +23,6 @@ module.exports = function (app) {
         self.documentStatuses = documentStatuses;
         self.correspondenceSiteTypes = correspondenceSiteTypes;
         self.usersTo = usersTo;
-        debugger;
 
         self.siteTypeSearchText = '';
         self.mainSiteSearchText = '';
@@ -115,7 +115,10 @@ module.exports = function (app) {
             return userSentItemService.getUserSentItems()
                 .then(function (result) {
                     dialog.hide({
-                        result: result,
+                        result: {
+                            records: result,
+                            count: userSentItemService.totalCount
+                        },
                         criteria: null,
                         error: null
                     });

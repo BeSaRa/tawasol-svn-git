@@ -7,6 +7,7 @@ module.exports = function (app) {
                                                  EventHistory,
                                                  toast,
                                                  langService,
+                                                 gridService,
                                                  cmsTemplate,
                                                  dialog,
                                                  errorCode,
@@ -49,20 +50,28 @@ module.exports = function (app) {
              * @description Filters the user sent items from server side according the passed criteria by user
              * @param searchText
              * @param searchCriteria
+             * @param page
              * @returns {*}
              */
-            self.filterUserSentItems = function (searchText, searchCriteria) {
-                if (searchText) {
+            self.filterUserSentItems = function (searchText, searchCriteria, page) {
+                var gridLimit = gridService.getGridPagingLimitByGridName(gridService.grids.inbox.sentItem) || 5;
+                page = page ? page : 1;
+                var offset = ((page - 1) * gridLimit);
+
+                if (searchText && !searchCriteria) {
                     searchCriteria = new EventHistoryCriteria({
                         docSubject: searchText
                     });
                 }
-                return $http.post(urlService.userInboxSentItems, generator.interceptSendInstance('EventHistoryCriteria', searchCriteria))
+                return $http.post(urlService.userInboxSentItems + "?limit=" + gridLimit + "&offset=" + offset, generator.interceptSendInstance('EventHistoryCriteria', searchCriteria))
                     .then(function (result) {
                         // don't update the original records or total count when searching as it is used in controller
                         var userSentItems = generator.generateCollection(result.data.rs, EventHistory, self._sharedMethods);
                         userSentItems = generator.interceptReceivedCollection('EventHistory', userSentItems);
-                        return userSentItems;
+                        return {
+                            records: userSentItems,
+                            count: result.data.count
+                        };
                     })
                     .catch(function (error) {
                         toast.error('something_went_wrong');
@@ -71,14 +80,15 @@ module.exports = function (app) {
             };
 
             self.controllerMethod = {
-                openFilterDialog: function (searchCriteria) {
+                openFilterDialog: function (grid, searchCriteria) {
                     return dialog
                         .showDialog({
                             templateUrl: cmsTemplate.getPopup('user-sent-items-search'),
                             controller: 'userSentItemFilterPopCtrl',
                             controllerAs: 'ctrl',
                             locals: {
-                                searchCriteria: searchCriteria
+                                searchCriteria: searchCriteria,
+                                grid: grid
                             },
                             resolve: {
                                 workflowActions: function (workflowActionService) {

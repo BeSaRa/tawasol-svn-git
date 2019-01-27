@@ -345,7 +345,7 @@ module.exports = function (app) {
                 if (!grid.searchText)
                     return $q.resolve(recordsCopy);
                 else {
-                    return callback(grid.searchText, recordsCopy);
+                    return callback(grid.searchText, null);
                 }
             } else {
                 if (!grid.searchText)

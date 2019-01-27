@@ -41,9 +41,6 @@ module.exports = function (app) {
         self.totalRecords = userSentItemService.totalCount;
         self.userSentItemService = userSentItemService;
 
-        self.searchCriteria = new EventHistoryCriteria();
-        self.searchCriteriaUsed = false;
-
         /**
          * @description Contains the selected user sent items
          * @type {Array}
@@ -105,8 +102,8 @@ module.exports = function (app) {
                 if (!!serverSide) {
                     gridService.searchGridData(self.grid, self.userSentItemsCopy, userSentItemService.filterUserSentItems)
                         .then(function (result) {
-                            self.userSentItems = result;
-                            self.totalRecords = self.grid.searchText ? self.userSentItems.length : userSentItemService.totalCount;
+                            self.userSentItems = self.grid.searchText ? result.records : result;
+                            self.totalRecords = self.grid.searchText ? result.count : userSentItemService.totalCount;
                         });
                 } else {
                     self.userSentItems = gridService.searchGridData(self.grid, self.userSentItemsCopy);
@@ -114,6 +111,10 @@ module.exports = function (app) {
                 }
             }
         };
+
+
+        self.searchCriteria = new EventHistoryCriteria();
+        self.searchCriteriaUsed = false;
 
         /**
          * @description Reload the grid of user sent item
@@ -123,6 +124,16 @@ module.exports = function (app) {
         self.reloadUserSentItems = function (pageNumber) {
             var defer = $q.defer();
             self.progress = defer.promise;
+            if (self.searchCriteriaUsed) {
+                return userSentItemService.filterUserSentItems(null, self.searchCriteria, self.grid.page)
+                    .then(function (result) {
+                        self.userSentItems = result.records;
+                        self.totalRecords = result.count;
+                        defer.resolve(true);
+                        return result;
+                    });
+            }
+
             return userSentItemService
                 .loadUserSentItems(self.grid.page, self.grid.limit)
                 .then(function (result) {
@@ -150,14 +161,15 @@ module.exports = function (app) {
                 self.searchCriteria.docSubject = self.grid.searchText;
             }
             userSentItemService
-                .controllerMethod.openFilterDialog(self.searchCriteria)
+                .controllerMethod.openFilterDialog(self.grid, self.searchCriteria)
                 .then(function (result) {
+                    self.grid.page = 1;
                     self.grid.searchText = '';
-                    self.userSentItems = result.result;
+                    self.userSentItems = result.result.records;
                     // if criteria is returned in result, means filter is used. otherwise, filter is reset
                     if (result.criteria) {
                         // when filter is used, the total count is number of items returned.
-                        self.totalRecords = self.userSentItems.length;
+                        self.totalRecords = result.result.count;
                         self.searchCriteriaUsed = true;
                         self.searchCriteria = result.criteria;
                     }
@@ -169,10 +181,11 @@ module.exports = function (app) {
                     }
                 })
                 .catch(function (error) {
-                    self.grid.searchText = '';
                     if (error && error.hasOwnProperty('error') && error.error === 'serverError') {
+                        self.grid.page = 1;
+                        self.grid.searchText = '';
                         self.searchCriteriaUsed = true;
-                        self.searchCriteria = result.criteria;
+                        self.searchCriteria = error.criteria;
                         self.userSentItems = [];
                         self.totalRecords = 0;
                     }
@@ -180,8 +193,13 @@ module.exports = function (app) {
         };
 
         self.resetFilter = function ($event) {
+            self.grid.page = 1;
+            self.grid.searchText = '';
             self.searchCriteria = new EventHistoryCriteria();
             self.searchCriteriaUsed = false;
+
+            self.userSentItems = userSentItems;
+            self.totalRecords = userSentItemService.totalCount;
         };
 
         /**
