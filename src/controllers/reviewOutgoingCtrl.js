@@ -667,7 +667,8 @@ module.exports = function (app) {
                         permissionKey: 'VIEW_DOCUMENT',
                         showInView: false,
                         checkShow: function (action, model) {
-                            return self.checkToShowAction(action, model);
+                            var info = model.getInfo();
+                            return self.checkToShowAction(action, model) && !info.isPaper;
                         }
                     }
                 ]
