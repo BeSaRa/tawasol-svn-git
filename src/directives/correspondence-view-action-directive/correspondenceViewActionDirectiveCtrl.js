@@ -4,6 +4,8 @@ module.exports = function (app) {
                                                                       dialog,
                                                                       $q,
                                                                       $scope,
+                                                                      _,
+                                                                      $timeout,
                                                                       correspondenceService) {
         'ngInject';
         var self = this;
@@ -22,8 +24,7 @@ module.exports = function (app) {
                 if (workItem) {
                     try {
                         correspondenceService.unlockWorkItem(workItem, true, $event)
-                    }
-                    catch (e) {
+                    } catch (e) {
                         console.log('ਆਈਟਮ ਅਨਲੌਕ ਅਸਫਲ');
                     }
                 }
@@ -69,15 +70,28 @@ module.exports = function (app) {
             }
 
             if (angular.isFunction(action.text)) {
-                if (isShortcutRequest)
+                if (action.hasOwnProperty('shortcut') && action.shortcut)
                     langKey = action.text().shortcutText;
                 else
                     langKey = action.text().contextText;
-            }
-            else {
+            } else {
                 langKey = action.text;
             }
             return langService.get(langKey);
-        }
+        };
+
+        self.getTranslationForAllActions = function (actions) {
+            _.map(actions, function (action, index) {
+                actions[index].translate = self.getActionText(action, self.workItem, self.correspondence);
+                if (actions[index].hasOwnProperty('subMenu') && actions[index].subMenu.length) {
+                    self.getTranslationForAllActions(actions[index].subMenu);
+                }
+            });
+        };
+
+        $timeout(function () {
+            self.getTranslationForAllActions(self.actions);
+        });
+
     });
 };
