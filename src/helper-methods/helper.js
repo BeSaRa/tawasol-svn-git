@@ -33,6 +33,24 @@ module.exports = function (app) {
                 }
             }
             return result;
+        };
+
+        self.browser = {
+            isFirefox: function () {
+                return typeof InstallTrigger !== 'undefined'
+            },
+            // Internet Explorer 6-11
+            isIE: function () {
+                return navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode
+            },
+            // Edge 20+
+            isEdge: function () {
+                return !this.isIE() && !!window.StyleMedia
+            },
+            // Chrome 1+
+            isChrome: function () {
+                return !!window.chrome
+            }
         }
     })
 };
