@@ -50,10 +50,10 @@ module.exports = function (app) {
                     self.mainSitesCopy = angular.copy(result);
                     self.subSites = [];
                     if (resetMainAndSub) {
-                        self.searchCriteria.sitesInfoTo = null;
-                        self.searchCriteria.sitesInfoCC = null;
+                        self.searchCriteria.selectedMainSite = null;
+                        self.searchCriteria.selectedSubSite = null;
                     }
-                    if (self.searchCriteria.sitesInfoTo) {
+                    if (self.searchCriteria.selectedMainSite) {
                         self.getSubSites(false);
                     }
                 });
@@ -61,8 +61,8 @@ module.exports = function (app) {
             else {
                 self.mainSites = [];
                 self.subSites = [];
-                self.searchCriteria.sitesInfoTo = null;
-                self.searchCriteria.sitesInfoCC = null;
+                self.searchCriteria.selectedMainSite = null;
+                self.searchCriteria.selectedSubSite = null;
             }
         };
 
@@ -72,22 +72,22 @@ module.exports = function (app) {
          * @param $event
          */
         self.getSubSites = function (resetSub, $event) {
-            if (self.searchCriteria.sitesInfoTo && self.searchCriteria.sitesInfoTo.id) {
+            if (self.searchCriteria.selectedMainSite && self.searchCriteria.selectedMainSite.id) {
                 correspondenceViewService.correspondenceSiteSearch('sub', {
                     type: self.searchCriteria.selectedSiteType.lookupKey,
-                    parent: self.searchCriteria.sitesInfoTo.id,
+                    parent: self.searchCriteria.selectedMainSite.id,
                     criteria: null,
                     excludeOuSites: false
                 }).then(function (result) {
                     self.subSites = result;
                     self.subSitesCopy = angular.copy(result);
                     if (resetSub)
-                        self.searchCriteria.sitesInfoCC = null;
+                        self.searchCriteria.selectedSubSite = null;
                 });
             }
             else {
                 self.subSites = [];
-                self.searchCriteria.sitesInfoCC = null;
+                self.searchCriteria.selectedSubSite = null;
             }
         };
 

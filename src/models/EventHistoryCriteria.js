@@ -17,6 +17,8 @@ module.exports = function (app) {
 
             // temporary property. to be removed before sending to backend
             self.selectedSiteType = null;
+            self.selectedMainSite = null;
+            self.selectedSubSite = null;
 
             // every model has required fields
             // if you don't need to make any required fields leave it as an empty array

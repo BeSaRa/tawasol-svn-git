@@ -9,12 +9,18 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
-            if (model.sitesInfoTo && model.sitesInfoTo.id)
-                model.sitesInfoTo = model.sitesInfoTo.id.toString();
-            if (model.sitesInfoCC && model.sitesInfoCC.id)
-                model.sitesInfoCC = model.sitesInfoCC.id.toString();
-
+            // if subsite is selected, search for sub site otherwise if only main site is selected, search for it
+            if (model.selectedSubSite && model.selectedSubSite.id) {
+                model.sitesInfoTo = model.selectedSubSite.id.toString();
+                model.sitesInfoCC = model.selectedSubSite.id.toString();
+            }
+            else if (model.selectedMainSite && model.selectedMainSite.id) {
+                model.sitesInfoTo = model.selectedMainSite.id.toString();
+                model.sitesInfoCC = model.selectedMainSite.id.toString();
+            }
             delete model.selectedSiteType;
+            delete model.selectedMainSite;
+            delete model.selectedSubSite;
 
             return model;
         });

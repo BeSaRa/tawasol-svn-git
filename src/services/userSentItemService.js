@@ -74,7 +74,7 @@ module.exports = function (app) {
                         };
                     })
                     .catch(function (error) {
-                        toast.error('something_went_wrong');
+                        toast.error(langService.get('something_went_wrong_while_processing'));
                         return $q.reject('serverError');
                     });
             };
