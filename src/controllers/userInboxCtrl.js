@@ -1721,65 +1721,6 @@ module.exports = function (app) {
                 ]
             }
         ];
-
-
-        // /**
-        //  * @description Array of shortcut actions that can be performed on magazine view
-        //  * @type {[*]}
-        //  */
-        // self.magazineQuickActions = [
-        //     // Terminate
-        //     {
-        //         type: 'action',
-        //         icon: 'stop',
-        //         text: 'grid_action_terminate',
-        //         shortcut: true,
-        //         callback: self.terminate,
-        //         class: "",
-        //         checkShow: self.checkToShowAction
-        //     },
-        //     // Reply
-        //     {
-        //         type: 'action',
-        //         icon: 'reply',
-        //         text: 'grid_action_reply',
-        //         callback: self.reply,
-        //         class: "",
-        //         checkShow: function (action, model) {
-        //             return self.checkToShowAction(action, model) && !model.isBroadcasted();
-        //         }
-        //     },
-        //     // Forward
-        //     {
-        //         type: 'action',
-        //         icon: 'share',
-        //         text: 'grid_action_forward',
-        //         shortcut: true,
-        //         callback: self.forward,
-        //         class: "",
-        //         checkShow: function (action, model) {
-        //             return self.checkToShowAction(action, model)
-        //             /*&& !model.isBroadcasted()*/ // remove the this cond. after talk  with ;
-        //         }
-        //     },
-        //     // Approve(e-Signature)
-        //     {
-        //         type: 'action',
-        //         icon: 'check-decagram',
-        //         text: 'grid_action_electronic_approve',//e_signature
-        //         callback: self.signESignature,
-        //         class: "",
-        //         permissionKey: "ELECTRONIC_SIGNATURE",
-        //         checkShow: function (action, model) {
-        //             var info = model.getInfo();
-        //             return self.checkToShowAction(action, model) && !model.isBroadcasted()
-        //                 && !info.isPaper
-        //                 && (info.documentClass !== 'incoming')
-        //                 && model.needApprove();
-        //         }
-        //     }
-        // ];
-
         /**
          * @description Mark item as read/unread
          * @param userInbox

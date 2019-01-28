@@ -2,6 +2,7 @@ module.exports = function (app) {
     app.service('downloadService', function (urlService,
                                              $http,
                                              tokenService,
+                                             helper,
                                              generator) {
         'ngInject';
         var self = this;
@@ -101,7 +102,11 @@ module.exports = function (app) {
             $http
                 .get(urlService.getDocumentEmailContent + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
                 .then(function (result) {
-                    _download(result.data.rs, 'Tawasol.msg');
+                    if (helper.browser.isFirefox()) {
+                        window.open(result.data.rs);
+                    } else {
+                        _download(result.data.rs, 'Tawasol.msg');
+                    }
                 })
         };
 
@@ -117,7 +122,11 @@ module.exports = function (app) {
             return $http
                 .get(urlService.getDocumentCompositeEmailContent + '/' + vsId + '?tawasol-auth-header=' + tokenService.getToken())
                 .then(function (result) {
-                    _download(result.data.rs, 'Tawasol.msg');
+                    if (helper.browser.isFirefox()) {
+                        window.open(result.data.rs);
+                    } else {
+                        _download(result.data.rs, 'Tawasol.msg');
+                    }
                 })
         };
 
@@ -127,6 +136,10 @@ module.exports = function (app) {
             link.href = url;
             //link.target = '_blank';
             link.click();
+        };
+
+        self.downloadRemoteFile = function (url, name) {
+            return _download(url, name);
         }
     });
 };
