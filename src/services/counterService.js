@@ -41,6 +41,7 @@ module.exports = function (app) {
 
         };
 
+        var g2gInterval;
         self.loadG2GCounter = function () {
             return $http.get(urlService.g2gInbox + 'counters', {
                 excludeLoading: true
@@ -50,16 +51,24 @@ module.exports = function (app) {
                 self.counter.g2gDeptReturned = result.deptReturned;
                 self.counter.mapCounter();
                 return self.counter;
+            }).catch(function () {
+                self.stopG2GCounter();
             })
         };
 
-        self.intervalG2GCounters = function () {
+        self.intervalG2GCounters = function (stop) {
             // load g2g countess after every 15 minutes
-            $interval(function () {
-                self.loadG2GCounter();
+            g2gInterval = $interval(function () {
+                self.loadG2GCounter().catch(function () {
+                    self.stopG2GCounter();
+                });
             }, (15 * 60 * 1000));
         };
 
+        self.stopG2GCounter = function () {
+            if (g2gInterval)
+                $interval.cancel(g2gInterval);
+        }
 
     });
 };

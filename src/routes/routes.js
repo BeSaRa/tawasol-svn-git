@@ -59,12 +59,14 @@ module.exports = function (app) {
                     identifier: rootEntityProvider.getRootEntityIdentifier()
                 },
                 resolve: {
-                    counters: function (counterService, sidebarService, employeeService, rootEntity) {
+                    counters: function (counterService, sidebarService, employeeService) {
                         'ngInject';
                         return !employeeService.isAdminUser() ? counterService.loadCounters().then(function () {
-                            counterService.loadG2GCounter().then(function () {
-                                counterService.intervalG2GCounters();
-                            })
+                            if (employeeService.getEmployee().hasPermissionTo('GOVERNMENT_TO_GOVERNMENT')) {
+                                counterService.loadG2GCounter().then(function () {
+                                    counterService.intervalG2GCounters();
+                                });
+                            }
                         }) : [];
                     },
                     landing: function (layoutService, sidebarService, employeeService) {

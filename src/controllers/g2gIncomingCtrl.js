@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                 $q,
                                                 $filter,
                                                 langService,
+                                                counterService,
                                                 toast,
                                                 dialog,
                                                 employeeService,
@@ -20,6 +21,7 @@ module.exports = function (app) {
 
         self.controllerName = 'g2gIncomingCtrl';
         contextHelpService.setHelpTo('incoming-g2g');
+        counterService.loadG2GCounter();
 
         self.progress = null;
 
@@ -79,6 +81,7 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.g2gItems = result;
                     self.selectedG2gItems = [];
+                    counterService.loadG2GCounter();
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;

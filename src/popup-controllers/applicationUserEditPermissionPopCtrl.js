@@ -91,8 +91,20 @@ module.exports = function (app) {
             if (employeeService.isCurrentOUApplicationUser(self.ouApplicationUser)) {
                 tokenService.forceTokenRefresh()
                     .then(function () {
-                        counterService.loadCounters();
                         layoutService.loadLandingPage();
+                        counterService.loadCounters().then(function () {
+                            if (employeeService.getEmployee().hasPermissionTo('GOVERNMENT_TO_GOVERNMENT')) {
+                                // console.log('permission granted');
+                                counterService.loadG2GCounter()
+                                    .then(function () {
+                                        counterService.intervalG2GCounters();
+                                    });
+                            }
+                            else {
+                                // console.log('permission revoked');
+                                counterService.stopG2GCounter();
+                            }
+                        });
                         _savePermissionsSuccess();
                         $rootScope.$broadcast('$currentEmployeePermissionsChanged');
                     })

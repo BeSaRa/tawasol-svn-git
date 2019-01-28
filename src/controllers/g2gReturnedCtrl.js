@@ -9,6 +9,7 @@ module.exports = function (app) {
                                                 dialog,
                                                 ResolveDefer,
                                                 contextHelpService,
+                                                counterService,
                                                 employeeService,
                                                 generator,
                                                 correspondenceService,
@@ -18,6 +19,7 @@ module.exports = function (app) {
 
         self.controllerName = 'g2gReturnedCtrl';
         contextHelpService.setHelpTo('returned-g2g');
+        counterService.loadG2GCounter();
         self.progress = null;
 
         /**
@@ -77,6 +79,7 @@ module.exports = function (app) {
                     self.g2gItems = result;
                     self.selectedG2gItems = [];
                     defer.resolve(true);
+                    counterService.loadG2GCounter();
                     if (pageNumber)
                         self.grid.page = pageNumber;
                     self.getSortedData();
