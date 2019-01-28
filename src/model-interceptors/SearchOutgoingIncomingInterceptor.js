@@ -1,7 +1,8 @@
 module.exports = function (app) {
     app.run(function (CMSModelInterceptor,
                       generator,
-                      moment) {
+                      moment,
+                      _) {
         'ngInject';
 
         var modelName = 'SearchOutgoingIncoming';
@@ -72,6 +73,8 @@ module.exports = function (app) {
                 model.docDate.To = '' + model.docDate.To;
 
             model.docDate = angular.toJson(model.docDate);
+            model.followupStatus = (model.followupStatus) ?
+                angular.toJson(_.map(model.followupStatus, "lookupKey")) : null;
 
             delete model.followUpFrom;
             delete model.followUpTo;
