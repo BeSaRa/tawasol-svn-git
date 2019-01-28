@@ -43,7 +43,7 @@ module.exports = function (app) {
                     .confirmMessage(message, langService.get('grid_action_edit_in_desktop'))
                     .then(function () {
                         self.editMode = false;
-                        correspondence
+                        self.correspondence
                             .editCorrespondenceInDesktop()
                             .then(function () {
                                 dialog.cancel();

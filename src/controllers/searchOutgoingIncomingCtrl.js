@@ -28,8 +28,7 @@ module.exports = function (app) {
                                                            dialog,
                                                            mailNotificationService,
                                                            favoriteDocumentsService,
-                                                           gridService
-    ) {
+                                                           gridService) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchOutgoingIncomingCtrl';
@@ -339,8 +338,7 @@ module.exports = function (app) {
                         toast.success(langService.get("add_to_favorite_specific_success").change({
                             name: correspondence.getTranslatedName()
                         }));
-                    }
-                    else {
+                    } else {
                         dialog.alertMessage(langService.get(result.message));
                     }
                 });
@@ -688,12 +686,10 @@ module.exports = function (app) {
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
                     hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                     if (action.hasOwnProperty('checkAnyPermission')) {
                         hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    }
-                    else {
+                    } else {
                         hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
