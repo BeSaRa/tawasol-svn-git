@@ -10,6 +10,7 @@ module.exports = function (app) {
                                                           attachmentService,
                                                           popupNumber,
                                                           employeeService,
+                                                          cmsTemplate,
                                                           $q,
                                                           generator) {
         'ngInject';
@@ -36,25 +37,49 @@ module.exports = function (app) {
         };
 
         self.toggleCorrespondenceEditMode = function () {
-            var message;
+            var message, defer = $q.defer();
             if (self.info.needToApprove() && self.info.editByDeskTop) {
                 message = langService.getConcatenated(['edit_in_desktop_confirmation_1', 'edit_in_desktop_confirmation_2', 'edit_in_desktop_confirmation_3']);
                 dialog
-                    .confirmMessage(message, langService.get('grid_action_edit_in_desktop'))
-                    .then(function () {
-                        self.editMode = false;
-                        self.correspondence
-                            .editCorrespondenceInDesktop()
-                            .then(function () {
+                    .showDialog({
+                        templateUrl: cmsTemplate.getPopup('edit-in-desktop-confirm-template'),
+                        controller: function (dialog) {
+                            'ngInject';
+                            var ctrl = this;
+
+                            ctrl.editInDesktopCallback = function () {
+                                self.editMode = false;
+                                self.correspondence
+                                    .editCorrespondenceInDesktop()
+                                    .then(function () {
+                                        dialog.hide('editInDesktop');
+                                    })
+                                    .catch(function () {
+                                        self.editMode = false;
+                                        dialog.hide('editInDesktop');
+                                    });
+                            };
+
+                            ctrl.editInOfficeOnlineCallback = function () {
+                                self.editMode = true;
+                                dialog.hide();
+                            };
+
+                            ctrl.cancelCallback = function () {
+                                self.editMode = false;
                                 dialog.cancel();
-                            })
-                            .catch(function () {
-                                dialog.cancel();
-                            });
+                            }
+                        },
+                        controllerAs: 'ctrl',
+                        bindToController: true,
+                        locals: {
+                            content: message
+                        }
                     })
-                    .catch(function () {
-                        self.editMode = true;
-                    });
+                    .then(function (result) {
+                        if (result && result === 'editInDesktop')
+                            dialog.cancel();
+                    })
             } else {
                 self.editMode = true;
             }
