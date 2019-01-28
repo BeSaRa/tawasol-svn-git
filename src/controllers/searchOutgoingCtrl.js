@@ -845,11 +845,7 @@ module.exports = function (app) {
                 callback: self.launchDistributionWorkflow,
                 class: "action-green",
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
-                checkShow: function (action, model) {
-                    var info = model.getInfo();
-                    return self.checkToShowAction(action, model)
-                        && (info.isPaper || (!info.isPaper && info.docStatus >= 24));
-                }
+                checkShow: self.checkToShowAction
             },
             // Broadcast
             {

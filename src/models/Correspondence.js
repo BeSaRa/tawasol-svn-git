@@ -493,10 +493,7 @@ module.exports = function (app) {
                 var info = this.getInfo();
                 var self = this;
                 return correspondenceService.checkWorkFlowForVsId(info.vsId).then(function (result) {
-                    return result ? dialog.confirmMessage(langService.get('confirm_launch_new_distribution_workflow'))
-                        .then(function () {
-                            correspondenceService.launchCorrespondenceWorkflow(self, $event, action, tab, isDeptIncoming);
-                        }) : correspondenceService.launchCorrespondenceWorkflow(self, $event, action, tab, isDeptIncoming);
+                    return result ? dialog.infoMessage(langService.get('cannot_launch_document_has_active_workflow')) : correspondenceService.launchCorrespondenceWorkflow(self, $event, action, tab, isDeptIncoming);
                 })
             };
 
@@ -718,7 +715,7 @@ module.exports = function (app) {
                 return correspondenceService.updateContentInformation(this, contentInformation);
             };
 
-            Correspondence.prototype.editCorrespondenceInDesktop = function(){
+            Correspondence.prototype.editCorrespondenceInDesktop = function () {
                 return correspondenceService.editWordInDesktop(this);
             };
 
