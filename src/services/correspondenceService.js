@@ -5,6 +5,7 @@ module.exports = function (app) {
                                                    cmsTemplate,
                                                    tokenService,
                                                    downloadService,
+                                                   helper,
                                                    CommentModel,
                                                    CMSModelInterceptor,
                                                    employeeService,
@@ -3271,14 +3272,17 @@ module.exports = function (app) {
                 .then(function (file) {
                     var oldIframe = document.getElementById('iframe-print');
                     oldIframe ? oldIframe.parentNode.removeChild(oldIframe) : null;
-                    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    if (helper.browser.isIE()) {
                         window.navigator.msSaveOrOpenBlob(file.blob);
+                    } else if (helper.browser.isFirefox()) {
+                        window.open(file.physicalPath, '_blank');
                     } else {
                         var iframe = document.createElement('iframe');
                         iframe.id = 'iframe-print';
                         iframe.onload = function (ev) {
                             iframe.contentWindow.focus();
                             iframe.contentWindow.print();
+
                         };
                         iframe.src = file.url;
                         document.body.appendChild(iframe);
