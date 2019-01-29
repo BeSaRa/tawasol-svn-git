@@ -3180,7 +3180,7 @@ module.exports = function (app) {
 
         self.unlockWorkItem = function (workItem, ignoreMessage, $event) {
             if (ignoreMessage) {
-                return _unlockWorkItem(workItem, ignoreMessage)
+                return _unlockWorkItem(workItem, ignoreMessage, true)
             } else {
                 var confirmMsg = langService.get('unlock_confirmation_msg').change({
                     user: workItem.getLockingUserInfo().getTranslatedName(),
@@ -3194,9 +3194,9 @@ module.exports = function (app) {
             }
         };
 
-        var _unlockWorkItem = function (workItem, ignoreMessage) {
+        var _unlockWorkItem = function (workItem, ignoreMessage, checkLocker) {
             var info = workItem.getInfo();
-            return $http.put(urlService.departmentInboxes + '/un-lock/wob-num/' + info.wobNumber)
+            return $http.put(urlService.departmentInboxes + '/un-lock/wob-num/' + info.wobNumber + (checkLocker ? ("?check-locker=" + checkLocker) : ''))
                 .then(function (result) {
                     result = result.data.rs;
                     if (!ignoreMessage) {
