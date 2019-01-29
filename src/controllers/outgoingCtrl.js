@@ -546,11 +546,16 @@ module.exports = function (app) {
         };
 
         self.compositeChange = function () {
-            dialog
-                .infoMessage(langService.get('please_reselect_content'))
-                .then(function () {
-                    self.documentInformation = null;
-                });
+            if (self.documentInformation) {
+                dialog
+                    .confirmMessage(langService.get('please_reselect_content'))
+                    .then(function () {
+                        self.documentInformation = null;
+                    })
+                    .catch(function () {
+                        self.outgoing.isComposite = !self.outgoing.isComposite;
+                    });
+            }
         };
 
         /**
