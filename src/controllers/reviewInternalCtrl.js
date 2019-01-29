@@ -21,7 +21,8 @@ module.exports = function (app) {
                                                    correspondenceService,
                                                    ResolveDefer,
                                                    mailNotificationService,
-                                                   gridService) {
+                                                   gridService,
+                                                   userSubscriptionService) {
         'ngInject';
         var self = this;
 
@@ -129,6 +130,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReviewInternals(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -143,7 +145,10 @@ module.exports = function (app) {
                 .controllerMethod
                 .reviewInternalRemoveBulk(self.selectedReviewInternals, $event)
                 .then(function () {
-                    self.reloadReviewInternals(self.grid.page);
+                    self.reloadReviewInternals(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -174,12 +179,14 @@ module.exports = function (app) {
          * @param $event
          */
         self.acceptInternalBulk = function ($event) {
-            //console.log('accept review internal mails bulk : ', self.selectedReviewInternals);
             reviewInternalService
                 .controllerMethod
                 .reviewInternalAcceptBulk(self.selectedReviewInternals, $event)
                 .then(function () {
-                    self.reloadReviewInternals(self.grid.page);
+                    self.reloadReviewInternals(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -203,7 +210,10 @@ module.exports = function (app) {
             correspondenceService
                 .rejectBulkCorrespondences(self.selectedReviewInternals, $event)
                 .then(function () {
-                    self.reloadReviewInternals(self.grid.page);
+                    self.reloadReviewInternals(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -227,7 +237,10 @@ module.exports = function (app) {
                 .manageDocumentProperties(reviewInternal.vsId, reviewInternal.docClassName, reviewInternal.docSubject, $event)
                 .then(function (document) {
                     reviewInternal = generator.preserveProperties(properties, reviewInternal, document);
-                    self.reloadReviewInternals(self.grid.page);
+                    self.reloadReviewInternals(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 })
                 .catch(function (document) {
                     reviewInternal = generator.preserveProperties(properties, reviewInternal, document);
@@ -242,6 +255,9 @@ module.exports = function (app) {
          */
         self.editContent = function (reviewInternal, $event) {
             managerService.manageDocumentContent(reviewInternal.vsId, reviewInternal.docClassName, reviewInternal.docSubject, $event)
+                .then(function () {
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                })
         };
 
         /**
@@ -251,13 +267,10 @@ module.exports = function (app) {
          * @param defer
          */
         self.acceptAndLaunchDistributionWorkflow = function (reviewInternal, $event, defer) {
-            //console.log('accept and launch distribution workflow', reviewInternal);
-
             if (!reviewInternal.hasContent()) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-
 
             reviewInternal.launchWorkFlow($event, 'forward', 'favorites')
                 .then(function () {
@@ -292,7 +305,10 @@ module.exports = function (app) {
             reviewInternal.rejectDocument($event)
                 .then(function () {
                     new ResolveDefer(defer);
-                    self.reloadReviewInternals(self.grid.page);
+                    self.reloadReviewInternals(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -303,15 +319,24 @@ module.exports = function (app) {
          * @param defer
          */
         self.acceptInternal = function (reviewInternal, $event, defer) {
-            //console.log('accept internal : ', reviewInternal);
             reviewInternalService.controllerMethod
                 .reviewInternalAccept(reviewInternal, $event)
                 .then(function (result) {
                     self.reloadReviewInternals(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 })
+        };
+
+        /**
+         * @description Subscribe to actions on the workItem
+         * @param correspondence
+         * @param $event
+         */
+        self.subscribe = function (correspondence, $event) {
+            userSubscriptionService.controllerMethod.openAddSubscriptionDialog(correspondence, $event);
         };
 
         /**
@@ -795,6 +820,18 @@ module.exports = function (app) {
                 permissionKey: "ACCEPT_INTERNAL",
                 class: "action-green",
                 checkShow: self.checkToShowAction
+            },
+            // Subscribe
+            {
+                type: 'action',
+                icon: 'bell-plus',
+                text: 'grid_action_subscribe',
+                callback: self.subscribe,
+                class: "action-green",
+                hide: false,
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
             },
             // View Tracking Sheet
             {

@@ -29,7 +29,8 @@ module.exports = function (app) {
                                                   mailNotificationService,
                                                   gridService,
                                                   favoriteDocumentsService,
-                                                  centralArchives) {
+                                                  centralArchives,
+                                                  userSubscriptionService) {
         'ngInject';
 
         var self = this;
@@ -397,6 +398,15 @@ module.exports = function (app) {
         };
 
         /**
+         * @description Subscribe to actions on the workItem
+         * @param correspondence
+         * @param $event
+         */
+        self.subscribe = function (correspondence, $event) {
+            userSubscriptionService.controllerMethod.openAddSubscriptionDialog(correspondence, $event);
+        };
+
+        /**
          * @description Print Barcode
          * @param searchedGeneralDocument
          * @param $event
@@ -587,15 +597,6 @@ module.exports = function (app) {
                 dialog.successMessage(langService.get('link_message').change({result: result}));
                 return true;
             });
-        };
-
-        /**
-         * @description subscribe for searched general document
-         * @param searchedGeneralDocument
-         * @param $event
-         */
-        self.subscribe = function (searchedGeneralDocument, $event) {
-            console.log('subscribe for searched general document : ', searchedGeneralDocument);
         };
 
         /**
@@ -890,6 +891,18 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: self.checkToShowAction
             },
+            // Subscribe
+            {
+                type: 'action',
+                icon: 'bell-plus',
+                text: 'grid_action_subscribe',
+                callback: self.subscribe,
+                class: "action-green",
+                hide: false,
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
+            },
             // Broadcast
             {
                 type: 'action',
@@ -1139,17 +1152,6 @@ module.exports = function (app) {
                 callback: self.getLink,
                 class: "action-green",
                 hide: false,
-                checkShow: self.checkToShowAction
-            },
-            // Subscribe
-            {
-                type: 'action',
-                icon: 'bell-plus',
-                text: 'grid_action_subscribe',
-                shortcut: false,
-                callback: self.subscribe,
-                class: "action-red",
-                hide: true,
                 checkShow: self.checkToShowAction
             },
             // Create Copy

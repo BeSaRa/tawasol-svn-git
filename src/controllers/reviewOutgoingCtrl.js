@@ -23,7 +23,8 @@ module.exports = function (app) {
                                                    distributionWFService,
                                                    broadcastService,
                                                    ResolveDefer,
-                                                   mailNotificationService) {
+                                                   mailNotificationService,
+                                                   userSubscriptionService) {
         'ngInject';
         var self = this;
 
@@ -78,16 +79,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Contains methods for CRUD operations for review outgoing emails
-         */
-        self.statusServices = {
-            'activate': reviewOutgoingService.activateBulkReviewOutgoings,
-            'deactivate': reviewOutgoingService.deactivateBulkReviewOutgoings,
-            'true': reviewOutgoingService.activateReviewOutgoing,
-            'false': reviewOutgoingService.deactivateReviewOutgoing
-        };
-
-        /**
          * @description Replaces the record in grid after update
          * @param record
          */
@@ -139,6 +130,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReviewOutgoings(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -153,7 +145,10 @@ module.exports = function (app) {
                 .controllerMethod
                 .reviewOutgoingRemoveBulk(self.selectedReviewOutgoings, $event)
                 .then(function () {
-                    self.reloadReviewOutgoings(self.grid.page);
+                    self.reloadReviewOutgoings(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -172,8 +167,10 @@ module.exports = function (app) {
             return correspondenceService
                 .launchCorrespondenceWorkflow(self.selectedReviewOutgoings, $event, 'forward', 'favorites')
                 .then(function () {
-                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
-                    self.reloadReviewOutgoings(self.grid.page);
+                    self.reloadReviewOutgoings(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -186,6 +183,7 @@ module.exports = function (app) {
                 .controllerMethod
                 .reviewOutgoingAcceptBulk(self.selectedReviewOutgoings, $event)
                 .then(function () {
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.reloadReviewOutgoings(self.grid.page);
                 });
         };
@@ -198,6 +196,7 @@ module.exports = function (app) {
             correspondenceService
                 .rejectBulkCorrespondences(self.selectedReviewOutgoings, $event)
                 .then(function () {
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.reloadReviewOutgoings(self.grid.page);
                 });
         };
@@ -218,6 +217,7 @@ module.exports = function (app) {
                 .manageDocumentProperties(reviewOutgoing.vsId, reviewOutgoing.docClassName, reviewOutgoing.docSubject, $event)
                 .then(function (document) {
                     reviewOutgoing = generator.preserveProperties(properties, reviewOutgoing, document);
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                     self.reloadReviewOutgoings(self.grid.page);
                 })
                 .catch(function (document) {
@@ -233,6 +233,9 @@ module.exports = function (app) {
          */
         self.editContent = function (reviewOutgoing, $event) {
             managerService.manageDocumentContent(reviewOutgoing.vsId, reviewOutgoing.docClassName, reviewOutgoing.docSubject, $event)
+                .then(function () {
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                })
         };
 
         /**
@@ -278,7 +281,10 @@ module.exports = function (app) {
             reviewOutgoing.rejectDocument($event)
                 .then(function () {
                     new ResolveDefer(defer);
-                    self.reloadReviewOutgoings(self.grid.page);
+                    self.reloadReviewOutgoings(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -294,9 +300,19 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.reloadReviewOutgoings(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 })
+        };
+
+        /**
+         * @description Subscribe to actions on the workItem
+         * @param correspondence
+         * @param $event
+         */
+        self.subscribe = function (correspondence, $event) {
+            userSubscriptionService.controllerMethod.openAddSubscriptionDialog(correspondence, $event);
         };
 
         /**
@@ -752,6 +768,18 @@ module.exports = function (app) {
                 permissionKey: "ACCEPT_OUTGOING",
                 class: "action-green",
                 checkShow: self.checkToShowAction
+            },
+            // Subscribe
+            {
+                type: 'action',
+                icon: 'bell-plus',
+                text: 'grid_action_subscribe',
+                callback: self.subscribe,
+                class: "action-green",
+                hide: false,
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
             },
             // Edit
             {

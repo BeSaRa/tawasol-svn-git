@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                    reviewIncomingService,
                                                    reviewIncomings,
                                                    $q,
+                                                   _,
                                                    $filter,
                                                    generator,
                                                    counterService,
@@ -21,7 +22,8 @@ module.exports = function (app) {
                                                    correspondenceService,
                                                    ResolveDefer,
                                                    mailNotificationService,
-                                                   gridService) {
+                                                   gridService,
+                                                   userSubscriptionService) {
         'ngInject';
         var self = this;
 
@@ -76,49 +78,6 @@ module.exports = function (app) {
         };
 
         /**
-         * @description Contains methods for CRUD operations for review incoming emails
-         */
-        self.statusServices = {
-            'activate': reviewIncomingService.activateBulkReviewIncomings,
-            'deactivate': reviewIncomingService.deactivateBulkReviewIncomings,
-            'true': reviewIncomingService.activateReviewIncoming,
-            'false': reviewIncomingService.deactivateReviewIncoming
-        };
-
-        /* /!**
-          * @description Opens dialog for add new review incoming email
-          * @param $event
-          *!/
-         self.openAddReviewIncomingDialog = function ($event) {
-             reviewIncomingService
-                 .controllerMethod
-                 .reviewIncomingAdd($event)
-                 .then(function (result) {
-                     self.reloadReviewIncomings(self.grid.page)
-                         .then(function () {
-                             toast.success(langService.get('add_success').change({name: result.getNames()}));
-                         });
-                 });
-         };
-
-         /!**
-          * @description Opens dialog for edit review incoming email
-          * @param $event
-          * @param reviewIncoming
-          *!/
-         self.openEditReviewIncomingDialog = function (reviewIncoming, $event) {
-             reviewIncomingService
-                 .controllerMethod
-                 .reviewIncomingEdit(reviewIncoming, $event)
-                 .then(function (result) {
-                     self.reloadReviewIncomings(self.grid.page)
-                         .then(function () {
-                             toast.success(langService.get('edit_success').change({name: result.getNames()}));
-                         });
-                 });
-         };*/
-
-        /**
          * @description Replaces the record in grid after update
          * @param record
          */
@@ -170,6 +129,7 @@ module.exports = function (app) {
                 .then(function () {
                     self.reloadReviewIncomings(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 });
@@ -184,35 +144,9 @@ module.exports = function (app) {
                 .controllerMethod
                 .reviewIncomingRemoveBulk(self.selectedReviewIncomings, $event)
                 .then(function () {
-                    self.reloadReviewIncomings(self.grid.page);
-                });
-        };
-
-        /**
-         * @description Change the status of review incoming email
-         * @param reviewIncoming
-         */
-        self.changeStatusReviewIncoming = function (reviewIncoming) {
-            self.statusServices[reviewIncoming.status](reviewIncoming)
-                .then(function () {
-                    toast.success(langService.get('status_success'));
-                })
-                .catch(function () {
-                    reviewIncoming.status = !reviewIncoming.status;
-                    dialog.errorMessage(langService.get('something_happened_when_update_status'));
-                })
-        };
-
-        /**
-         * @description Change the status of selected review incoming emails
-         * @param status
-         */
-        self.changeStatusBulkReviewIncomings = function (status) {
-            self.statusServices[status](self.selectedReviewIncomings)
-                .then(function () {
                     self.reloadReviewIncomings(self.grid.page)
                         .then(function () {
-                            toast.success(langService.get('selected_status_updated'));
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                         });
                 });
         };
@@ -249,7 +183,10 @@ module.exports = function (app) {
                 .controllerMethod
                 .reviewIncomingAcceptBulk(self.selectedReviewIncomings, $event)
                 .then(function () {
-                    self.reloadReviewIncomings(self.grid.page);
+                    self.reloadReviewIncomings(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -261,7 +198,10 @@ module.exports = function (app) {
             correspondenceService
                 .rejectBulkCorrespondences(self.selectedReviewIncomings, $event)
                 .then(function () {
-                    self.reloadReviewIncomings(self.grid.page);
+                    self.reloadReviewIncomings(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -281,7 +221,10 @@ module.exports = function (app) {
                 .manageDocumentProperties(reviewIncoming.vsId, reviewIncoming.docClassName, reviewIncoming.docSubject, $event)
                 .then(function (document) {
                     reviewIncoming = generator.preserveProperties(properties, reviewIncoming, document);
-                    self.reloadReviewIncomings(self.grid.page);
+                    self.reloadReviewIncomings(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 })
                 .catch(function (document) {
                     reviewIncoming = generator.preserveProperties(properties, reviewIncoming, document);
@@ -296,6 +239,9 @@ module.exports = function (app) {
          */
         self.editContent = function (reviewIncoming, $event) {
             managerService.manageDocumentContent(reviewIncoming.vsId, reviewIncoming.docClassName, reviewIncoming.docSubject, $event)
+                .then(function () {
+                    mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                })
         };
 
         /**
@@ -355,7 +301,10 @@ module.exports = function (app) {
             reviewIncoming.rejectDocument($event)
                 .then(function () {
                     new ResolveDefer(defer);
-                    self.reloadReviewIncomings(self.grid.page);
+                    self.reloadReviewIncomings(self.grid.page)
+                        .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
+                        });
                 });
         };
 
@@ -371,9 +320,19 @@ module.exports = function (app) {
                 .then(function (result) {
                     self.reloadReviewIncomings(self.grid.page)
                         .then(function () {
+                            mailNotificationService.loadMailNotifications(mailNotificationService.notificationsRequestCount);
                             new ResolveDefer(defer);
                         });
                 })
+        };
+
+        /**
+         * @description Subscribe to actions on the workItem
+         * @param correspondence
+         * @param $event
+         */
+        self.subscribe = function (correspondence, $event) {
+            userSubscriptionService.controllerMethod.openAddSubscriptionDialog(correspondence, $event);
         };
 
         /**
@@ -743,6 +702,18 @@ module.exports = function (app) {
                 permissionKey: "ACCEPT_INCOMING",
                 class: "action-green",
                 checkShow: self.checkToShowAction
+            },
+            // Subscribe
+            {
+                type: 'action',
+                icon: 'bell-plus',
+                text: 'grid_action_subscribe',
+                callback: self.subscribe,
+                class: "action-green",
+                hide: false,
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
             },
             // Edit
             {

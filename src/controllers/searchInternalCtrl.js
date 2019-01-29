@@ -29,7 +29,8 @@ module.exports = function (app) {
                                                    mailNotificationService,
                                                    favoriteDocumentsService,
                                                    centralArchives,
-                                                   approvers) {
+                                                   approvers,
+                                                   userSubscriptionService) {
         'ngInject';
         var self = this;
         self.controllerName = 'searchInternalCtrl';
@@ -527,12 +528,12 @@ module.exports = function (app) {
         };
 
         /**
-         * @description subscribe for searched internal document
-         * @param searchedInternalDocument
+         * @description Subscribe to actions on the workItem
+         * @param correspondence
          * @param $event
          */
-        self.subscribe = function (searchedInternalDocument, $event) {
-            console.log('subscribe for searched internal document : ', searchedInternalDocument);
+        self.subscribe = function (correspondence, $event) {
+            userSubscriptionService.controllerMethod.openAddSubscriptionDialog(correspondence, $event);
         };
 
         /**
@@ -809,6 +810,19 @@ module.exports = function (app) {
                 permissionKey: 'LAUNCH_DISTRIBUTION_WORKFLOW',
                 checkShow: self.checkToShowAction
             },
+            // Subscribe
+            {
+                type: 'action',
+                icon: 'bell-plus',
+                text: 'grid_action_subscribe',
+                callback: self.subscribe,
+                class: "action-green",
+                hide: false,
+                checkShow: function (action, model) {
+                    return self.checkToShowAction(action, model) && !model.isBroadcasted();
+                }
+            },
+            // Broadcast
             {
                 type: 'action',
                 icon: 'bullhorn',
@@ -1042,17 +1056,6 @@ module.exports = function (app) {
                 callback: self.getLink,
                 class: "action-green",
                 hide: false,
-                checkShow: self.checkToShowAction
-            },
-            // Subscribe
-            {
-                type: 'action',
-                icon: 'bell-plus',
-                text: 'grid_action_subscribe',
-                shortcut: false,
-                callback: self.subscribe,
-                class: "action-red",
-                hide: true,
                 checkShow: self.checkToShowAction
             },
             // Create Copy
