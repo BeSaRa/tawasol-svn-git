@@ -402,6 +402,7 @@ module.exports = function (app) {
                 addMethod: 1,
                 createdOn: new Date(),
                 docDate: new Date(),
+                refDocDate: new Date(),
                 registryOU: centralArchives ? null : self.employee.getRegistryOUID(),
                 securityLevel: lookups.securityLevels[0],
                 site: null
