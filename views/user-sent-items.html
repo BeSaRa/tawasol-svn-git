@@ -85,7 +85,8 @@
                                             md-order-by="{{ctrl.getSortingKey('receiverInfo', 'Information')}}">
                                             <span>{{lang.sent_items_receiver}}</span>
                                         </th>
-                                        <th ng-if="!ctrl.selectedUserSentItems.length" md-column>
+                                        <th ng-if="!ctrl.selectedUserSentItems.length" md-column
+                                            md-order-by="comments">
                                             <span>{{lang.sent_items_comment}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="dueDate">

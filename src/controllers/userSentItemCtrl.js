@@ -91,6 +91,7 @@ module.exports = function (app) {
                 receiverInfo: function () {
                     return self.getSortingKey('receiverInfo', 'Information');
                 },
+                comments: 'comments',
                 dueDate: 'dueDate',
                 mainSiteSubSiteString: function () {
                     return self.getSortingKey('mainSiteSubSiteString', 'Information');
