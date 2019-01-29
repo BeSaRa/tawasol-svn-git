@@ -6,7 +6,8 @@ module.exports = function (app) {
             .getPageName(
                 'draftOutgoing',
                 function (model) {
-                    return !employeeService.hasPermissionTo("EDIT_OUTGOING_PROPERTIES");
+                    var info = model.getInfo();
+                    return !employeeService.hasPermissionTo(employeeService.getPermissionForDocumentClass(info.documentClass).properties);
                 }, function (model) {
                     return !employeeService.hasPermissionTo("MANAGE_DESTINATIONS");
                 }, function (model) {
@@ -98,8 +99,7 @@ module.exports = function (app) {
                             hasPermission = false;
                         else
                             hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-                    }
-                    else if (info.documentClass === "incoming")
+                    } else if (info.documentClass === "incoming")
                         hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
                     else if (info.documentClass === "outgoing") {
                         //If approved outgoing electronic, don't allow to edit
@@ -126,8 +126,7 @@ module.exports = function (app) {
                             hasPermission = false;
                         else
                             hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-                    }
-                    else if (info.documentClass === "incoming")
+                    } else if (info.documentClass === "incoming")
                         hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
                     else if (info.documentClass === "outgoing") {
                         //If approved outgoing electronic, don't allow to edit
@@ -166,8 +165,7 @@ module.exports = function (app) {
                             hasPermission = false;
                         else
                             hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-                    }
-                    else if (info.documentClass === "incoming")
+                    } else if (info.documentClass === "incoming")
                         hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
                     else if (info.documentClass === "outgoing") {
                         //If approved outgoing electronic, don't allow to edit
@@ -192,8 +190,7 @@ module.exports = function (app) {
                             hasPermission = false;
                         else
                             hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-                    }
-                    else if (info.documentClass === "incoming")
+                    } else if (info.documentClass === "incoming")
                         hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
                     else if (info.documentClass === "outgoing") {
                         //If approved outgoing electronic, don't allow to edit
@@ -221,8 +218,7 @@ module.exports = function (app) {
                             hasPermission = false;
                         else
                             hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-                    }
-                    else if (info.documentClass === "incoming")
+                    } else if (info.documentClass === "incoming")
                         hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
                     else if (info.documentClass === "outgoing") {
                         //If approved outgoing electronic, don't allow to edit

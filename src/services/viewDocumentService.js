@@ -196,7 +196,6 @@ module.exports = function (app) {
 
             function _checkDisabled(pageName, model) {
                 var page = _getPage(pageName);
-                //console.log(page);
                 return {
                     disableAll: page ? page.disableAll(model) : false,
                     disableProperties: page ? page.disableProperties(model) : false,
@@ -245,7 +244,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName:pageName
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -275,13 +274,9 @@ module.exports = function (app) {
              * @param pageName
              */
             self.viewQueueDocument = function (correspondence, actions, pageName, $event) {
-                var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : new Outgoing(correspondence).getInfo();
-                var disabled = _checkDisabled(pageName, correspondence);
+                var info = typeof correspondence.getInfo === 'function' ? correspondence.getInfo() : new Outgoing(correspondence).getInfo(),
+                    disabled;
 
-                if (disabled.disableAll) {
-                    disabled.disableSites = true;
-                    disabled.disableProperties = true;
-                }
                 return $http.get(_createUrlSchema(info.vsId, info.documentClass, 'with-content'))
                     .then(function (result) {
                         var documentClass = result.data.rs.metaData.classDescription;
@@ -291,6 +286,14 @@ module.exports = function (app) {
                     .then(function (result) {
                         result.content.editURL = $sce.trustAsResourceUrl(result.content.editURL);
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
+
+                        disabled = _checkDisabled(pageName, result.metaData);
+
+                        if (disabled.disableAll) {
+                            disabled.disableSites = true;
+                            disabled.disableProperties = true;
+                        }
+
                         generator.addPopupNumber();
                         return dialog.showDialog({
                             templateUrl: cmsTemplate.getPopup('view-correspondence-new'),
@@ -307,7 +310,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName:pageName
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -375,7 +378,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName:pageName
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -435,7 +438,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName:pageName
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -503,7 +506,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: false,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName:pageName
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -581,7 +584,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: false,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName:pageName
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -650,7 +653,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName:pageName
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -723,7 +726,7 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName:pageName
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -783,7 +786,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName:pageName
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -861,7 +864,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName:pageName
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -940,7 +943,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName:pageName
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1012,7 +1015,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: false,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName:pageName
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1090,7 +1093,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 popupNumber: generator.getPopupNumber(),
                                 disableEverything: disabled.disableAll,
-                                pageName:pageName
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1150,7 +1153,7 @@ module.exports = function (app) {
                                 disableCorrespondence: disabled.disableSites,
                                 disableEverything: disabled.disableAll,
                                 popupNumber: generator.getPopupNumber(),
-                                pageName:pageName
+                                pageName: pageName
                             },
                             resolve: {
                                 organizations: function (organizationService) {
@@ -1260,7 +1263,7 @@ module.exports = function (app) {
                                 disableProperties: true,
                                 disableCorrespondence: true,
                                 g2gItemCopy: g2gItemCopy,
-                                pageName:pageName
+                                pageName: pageName
                             }
                         }).then(function (result) {
                             generator.removePopupNumber();
@@ -1336,7 +1339,7 @@ module.exports = function (app) {
                                 disableProperties: disabled.disableProperties,
                                 disableCorrespondence: disabled.disableSites,
                                 g2gItemCopy: g2gItemCopy,
-                                pageName:pageName
+                                pageName: pageName
                             }
                         }).then(function (result) {
                             generator.removePopupNumber();

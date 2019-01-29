@@ -12,6 +12,21 @@ module.exports = function (app) {
 
         self.serviceName = 'employeeService';
 
+        var classMapPermission = {
+            outgoing: {
+                properties: 'EDIT_OUTGOING_PROPERTIES',
+                content: 'EDIT_OUTGOING_CONTENT'
+            },
+            incoming: {
+                properties: 'EDIT_OUTGOING_PROPERTIES',
+                content: 'EDIT_OUTGOING_CONTENT'
+            },
+            internal: {
+                properties: 'EDIT_OUTGOING_PROPERTIES',
+                content: 'EDIT_OUTGOING_CONTENT'
+            }
+        };
+
         /**
          * get the employee from cookies
          * @return {Employee}
@@ -201,7 +216,11 @@ module.exports = function (app) {
             applicationUserSignatureService = service;
         };
 
-        self.employeePermissionChanged = function(callback){
+        self.getPermissionForDocumentClass = function (documentClass) {
+            return classMapPermission[documentClass.toLowerCase()];
+        };
+
+        self.employeePermissionChanged = function (callback) {
             return employee ? employee.listeningToPermissionsChanges(callback) : null;
         };
 

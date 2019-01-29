@@ -54,7 +54,6 @@ module.exports = function (app) {
          * @param $event
          */
         self.previewDocument = function (item, $event) {
-
             $event.preventDefault();
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
@@ -67,7 +66,7 @@ module.exports = function (app) {
                 docClassName: classname,
                 addMethod: item.addMethod,
                 docStatus: item.docStatus
-            }, [], 'review' + generator.ucFirst(classname), $event);
+            }, [], 'userInbox', $event);
         };
 
         /**
@@ -76,6 +75,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.viewDocument = function (item, $event) {
+
             $event.preventDefault();
             if (!employeeService.hasPermissionTo('VIEW_DOCUMENT')) {
                 dialog.infoMessage(langService.get('no_view_permission'));
