@@ -9,7 +9,8 @@ module.exports = function (app) {
                                                         langService,
                                                         toast,
                                                         cmsTemplate,
-                                                        errorCode) {
+                                                        errorCode,
+                                                        Organization) {
         'ngInject';
         var self = this;
         self.serviceName = 'referencePlanNumberService';
@@ -340,7 +341,7 @@ module.exports = function (app) {
             return $http
                 .get((urlService.referencePlanNumbers + '/' + referencePlanNumber.id + '/' + 'ou'))
                 .then(function (result) {
-                    self.referencePlanNumberRelatedOUs = result.data.rs;
+                    self.referencePlanNumberRelatedOUs = generator.generateCollection(result.data.rs, Organization);
                     self.referencePlanNumberRelatedOUs = generator.interceptReceivedCollection('Organization', self.referencePlanNumberRelatedOUs);
                     return self.referencePlanNumberRelatedOUs;
                 });
