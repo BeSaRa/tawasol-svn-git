@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.controller('documentEditorPopCtrl', function (dialog) {
+    app.controller('documentEditorPopCtrl', function (dialog, employeeService) {
         'ngInject';
         var self = this;
         self.controllerName = 'documentEditorPopCtrl';
@@ -23,5 +23,9 @@ module.exports = function (app) {
         self.closeEditor = function () {
             dialog.hide(false);
         };
+
+        self.isArabicOfficeOnlineLanguage = function () {
+            return employeeService.getEmployee().defaultViewerLang === 1;
+        }
     });
 };

@@ -1,6 +1,6 @@
 <md-dialog aria-label="office-online" class="dialog-size-80">
     <div flex layout="column">
-        <div id="office-full-screen">
+        <div id="office-full-screen" ng-class="{'ar-office-full-screen' : ctrl.isArabicOfficeOnlineLanguage()}">
             <md-button ng-click="ctrl.savePreparedDocument()" class="md-icon-button">
                 <md-icon md-svg-icon="content-save"></md-icon>
             </md-button>

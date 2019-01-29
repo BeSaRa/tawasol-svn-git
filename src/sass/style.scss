@@ -1425,6 +1425,15 @@ fieldset {
   md-icon {
     color: #FFF;
   }
+
+  &.ar-office-full-screen {
+    left: 20px !important;
+    right: auto !important;
+
+    button {
+      float: right !important;
+    }
+  }
 }
 
 .width-80 {
