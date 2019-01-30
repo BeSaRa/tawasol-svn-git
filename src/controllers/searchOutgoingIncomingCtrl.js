@@ -368,6 +368,11 @@ module.exports = function (app) {
                 return;
             }
 
+            // run launch for any incoming document or other documents not in the inbox
+            if (correspondence.hasDocumentClass('incoming') || correspondence.docStatus !== 22) {
+                return correspondence.launchWorkFlow($event, null, 'favorites');
+            }
+
             correspondence.launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
                     self.reloadSearchedOutgoingIncomingDocument(self.grid.page)

@@ -387,7 +387,13 @@ module.exports = function (app) {
                 return;
             }
 
-            searchedGeneralDocument
+            // run launch for any incoming document or other documents not in the inbox
+            if (searchedGeneralDocument.hasDocumentClass('incoming') || searchedGeneralDocument.docStatus !== 22) {
+                return searchedGeneralDocument.launchWorkFlow($event, null, 'favorites');
+            }
+
+
+            return searchedGeneralDocument
                 .launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
                     self.reloadSearchedGeneralDocuments(self.grid.page)

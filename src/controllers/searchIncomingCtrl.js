@@ -356,7 +356,7 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
-            searchedIncomingDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
+            searchedIncomingDocument.launchWorkFlow($event, null, 'favorites')
                 .then(function () {
                     self.reloadSearchedIncomingDocument(self.grid.page)
                         .then(function () {

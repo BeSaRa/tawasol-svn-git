@@ -462,7 +462,13 @@ module.exports = function (app) {
                 return;
             }
 
-            correspondence.launchWorkFlowAndCheckExists($event, null, 'favorites')
+            // run launch for any incoming document or other documents not in the inbox
+            if (correspondence.hasDocumentClass('incoming') || correspondence.docStatus !== 22) {
+                return correspondence.launchWorkFlow($event, null, 'favorites');
+            }
+
+
+            return correspondence.launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
                     self.reloadQuickSearchCorrespondence(self.grid.page)
                         .then(function () {

@@ -309,6 +309,12 @@ module.exports = function (app) {
                 dialog.alertMessage(langService.get("content_not_found"));
                 return;
             }
+            // we can launch the document if the document not in inbox
+            if (searchedOutgoingDocument.docStatus !== 22) {
+                return searchedOutgoingDocument.launchWorkFlow($event, null, 'favorites');
+            }
+
+            // if the document status === 22 we should check if the document have active workflow
             searchedOutgoingDocument.launchWorkFlowAndCheckExists($event, null, 'favorites')
                 .then(function () {
                     self.reloadSearchedOutgoingDocument(self.grid.page)
@@ -680,7 +686,7 @@ module.exports = function (app) {
 
         self.printResult = function ($event) {
             var printTitle = langService.get("search_module_search_results") + " " + langService.get("from") + " " + generator.convertDateToString(self.searchOutgoing.docDateFrom) +
-                              " " + langService.get("to") + " " + generator.convertDateToString(self.searchOutgoing.docDateTo);
+                " " + langService.get("to") + " " + generator.convertDateToString(self.searchOutgoing.docDateTo);
 
             var headers = ['label_serial',
                 'subject',
