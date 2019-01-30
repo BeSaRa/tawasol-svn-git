@@ -23,7 +23,7 @@
                                        md-progress="ctrl.progress">
                                     <thead md-head md-order="ctrl.grid.order" md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
-                                        <th colspan="{{ctrl.selectedIncomingDepartmentInboxes.length > 1 ? 7 : 8}}"
+                                        <th colspan="{{ctrl.selectedIncomingDepartmentInboxes.length > 1 ? 8 : 9}}"
                                             ng-if="ctrl.selectedIncomingDepartmentInboxes.length" md-column>
                                             <div layout="row" layout-align="start center">
                                                 <span>{{ctrl.selectedIncomingDepartmentInboxes.length}} {{lang.items_selected}} </span>
@@ -45,6 +45,9 @@
                                                     <md-icon md-svg-icon="lock-open" class="action-green"></md-icon>
                                                 </md-button>
                                             </div>
+                                        </th>
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="">
+                                            <!-- Transferred to RegOU Indicator -->
                                         </th>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
                                             md-order-by="generalStepElm.docFullSerial">
@@ -86,6 +89,13 @@
                                         ng-disabled="incomingDepartmentInbox.isLocked() && !incomingDepartmentInbox.isLockedByCurrentUser()"
                                         selected-length="{{ctrl.selectedIncomingDepartmentInboxes.length ? ctrl.selectedIncomingDepartmentInboxes.length : 0}}"
                                         ng-repeat="incomingDepartmentInbox in searchResults = (ctrl.incomingDepartmentInboxes | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
+                                        <td md-cell class="indicator-td">
+                                            <!-- Sent To RegOU -->
+                                            <grid-indicator-directive record-type="WorkItem"
+                                                                      record="incomingDepartmentInbox"
+                                                                      indicator-type="isTransferredDocumentIndicator">
+                                            </grid-indicator-directive>
+                                        </td>
                                         <td class="serial-td" md-cell>
                                             {{incomingDepartmentInbox.generalStepElm.docFullSerial}}
                                         </td>

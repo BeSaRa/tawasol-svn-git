@@ -55,6 +55,7 @@ module.exports = function (app) {
             icons['version_has_content'] = 'file-check';
             icons['internal_g2g'] = 'recycle';
             icons['indicator_locked_workitem'] = 'lock';
+            icons['indicator_transferred_document'] = 'bank-transfer-in';
 
 
             /**
@@ -374,6 +375,21 @@ module.exports = function (app) {
                         icon: self.getIndicatorIcons('indicator_locked_workitem'),
                         tooltip: 'indicator_locked_item_by',
                         value: record.getLockingUserInfo()
+                    }) : false;
+            };
+
+            /**
+             * @description Returns the sent to regOU(Transferred) record indicator and description
+             * @returns {Indicator}
+             * @param isTransferred
+             */
+            Indicator.prototype.getIsTransferredDocumentIndicator = function (isTransferred) {
+                return isTransferred
+                    ? new Indicator({
+                        class: 'indicator',
+                        text: 'indicator_transferred_document',
+                        icon: self.getIndicatorIcons('indicator_transferred_document'),
+                        tooltip: 'indicator_transferred_document'
                     }) : false;
             };
 

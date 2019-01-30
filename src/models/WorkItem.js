@@ -216,7 +216,12 @@ module.exports = function (app) {
             };
 
             WorkItem.prototype.getOriginalCopyIndicator = function () {
-                new indicator.getOriginalCopyIndicator(this.generalStepElm.orginality);
+                return indicator.getOriginalCopyIndicator(this.generalStepElm.orginality);
+            };
+
+            WorkItem.prototype.getIsTransferredDocumentIndicator = function () {
+                // if no incomingVSID, then its directly sent from launch(transferred)
+                return indicator.getIsTransferredDocumentIndicator((!this.generalStepElm.incomingVSID));
             };
 
             WorkItem.prototype.getWobNumber = function () {

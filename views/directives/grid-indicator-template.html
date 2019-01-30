@@ -166,3 +166,12 @@
              ng-click="ctrl.unlockWorkItem(ctrl.record, $event)"
     ></md-icon>
 </span>
+<!-- Sent To RegOU from Launch (WorkItem) -->
+<span ng-if="ctrl.indicatorType === 'isTransferredDocumentIndicator'" class="{{ctrl.spanClass}}"
+      ng-class="{'indicator-content': ctrl.record.isTransferredDocumentIndicator}">
+    <md-icon ng-if="ctrl.record.isTransferredDocumentIndicator && ctrl.isShowIndicator()"
+             class="{{ctrl.record.isTransferredDocumentIndicator.class}} {{ctrl.iconClass}} cursor-pointer"
+             md-svg-icon="{{ctrl.record.isTransferredDocumentIndicator.icon}}"
+             tooltip="{{ctrl.langService.get(ctrl.record.isTransferredDocumentIndicator.tooltip)}}"
+    ></md-icon>
+</span>
