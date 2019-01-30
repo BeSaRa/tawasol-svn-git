@@ -10,13 +10,23 @@ module.exports = function (app) {
 
         CMSModelInterceptor.whenSendModel(modelName, function (model) {
             // if subsite is selected, search for sub site otherwise if only main site is selected, search for it
-            if (model.selectedSubSite && model.selectedSubSite.id) {
+            /*if (model.selectedSubSite && model.selectedSubSite.id) {
                 model.sitesInfoTo = model.selectedSubSite.id.toString();
                 model.sitesInfoCC = model.selectedSubSite.id.toString();
             }
             else if (model.selectedMainSite && model.selectedMainSite.id) {
                 model.sitesInfoTo = model.selectedMainSite.id.toString();
                 model.sitesInfoCC = model.selectedMainSite.id.toString();
+            }*/
+            model.sitesInfo = {};
+            if (model.selectedSiteType && model.selectedSiteType.id) {
+                model.sitesInfo.siteType = model.selectedSiteType.lookupKey;
+            }
+            if (model.selectedMainSite && model.selectedMainSite.id) {
+                model.sitesInfo.mainSiteId = model.selectedMainSite.id;
+            }
+            if (model.selectedSubSite && model.selectedSubSite.id) {
+                model.sitesInfo.subSiteId = model.selectedSubSite.id;
             }
             delete model.selectedSiteType;
             delete model.selectedMainSite;

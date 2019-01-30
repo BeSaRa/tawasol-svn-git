@@ -1,6 +1,7 @@
 module.exports = function (app) {
     app.factory('Site', function (CMSModelInterceptor,
-                                  langService) {
+                                  langService,
+                                  _) {
         'ngInject';
         return function Site(model) {
             var self = this, exportTypes = {
