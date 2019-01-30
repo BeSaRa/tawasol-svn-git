@@ -1444,6 +1444,10 @@ module.exports = function (app) {
                         //var globalSetting = rootEntity.returnRootEntity().settings;
                         var limit = gridService.getGridPagingLimitByGridName(gridService.grids.inbox.sentItem) || 5;
                         return userSentItemService.loadUserSentItems(1, limit);
+                    },
+                    organizations: function (organizationService) {
+                        'ngInject';
+                        organizationService.getOrganizations();
                     }
                 }
             })
