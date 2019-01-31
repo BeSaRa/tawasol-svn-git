@@ -8,12 +8,15 @@ module.exports = function (app) {
                                             _,
                                             $interval) {
         'ngInject';
-        var self = this;
+        var self = this, g2gInterval;
         self.serviceName = 'counterService';
         self.counter = {};
         self.folderCount = {};
+        self.g2gIncomingCount = 0;
+        self.g2gReturnedCount = 0;
+
         /**
-         * load all counters for service
+         * @description load all counters for service except G2G counters
          */
         self.loadCounters = function () {
             return $http
@@ -30,6 +33,10 @@ module.exports = function (app) {
                         excludeLoading: true
                     }).then(function (result) {
                         result.data.rs.foldersCount = folderCount;
+                        // keep the g2g counters with original values unless reloaded by service after given interval
+                        result.data.rs.g2gDeptInbox = angular.copy(self.g2gIncomingCount);
+                        result.data.rs.g2gDeptReturned = angular.copy(self.g2gReturnedCount);
+
                         self.counter = generator.interceptReceivedInstance('Counter', generator.generateInstance(result.data.rs, Counter));
                         return self.counter;
                     }).catch(function (error) {
@@ -41,12 +48,17 @@ module.exports = function (app) {
 
         };
 
-        var g2gInterval;
-        self.loadG2GCounter = function () {
+        /**
+         * @description Loads the G2G counters
+         */
+        self.loadG2GCounters = function () {
             return $http.get(urlService.g2gInbox + 'counters', {
                 excludeLoading: true
             }).then(function (result) {
                 result = result.data.rs;
+                self.g2gIncomingCount = result.deptInbox;
+                self.g2gReturnedCount = result.deptReturned;
+
                 self.counter.g2gDeptInbox = result.deptInbox;
                 self.counter.g2gDeptReturned = result.deptReturned;
                 self.counter.mapCounter();
@@ -56,16 +68,22 @@ module.exports = function (app) {
             })
         };
 
-        self.intervalG2GCounters = function (stop) {
+        /**
+         * @description Starts/Reset the G2G counters request interval
+         */
+        self.intervalG2GCounters = function () {
             // load g2g countess after every 15 minutes
             self.stopG2GCounter();
             g2gInterval = $interval(function () {
-                self.loadG2GCounter().catch(function () {
+                self.loadG2GCounters().catch(function () {
                     self.stopG2GCounter();
                 });
-            }, (15 * 60 * 1000));
+            }, (20000));
         };
 
+        /**
+         * @description Stops the G2G counter service requests
+         */
         self.stopG2GCounter = function () {
             if (g2gInterval)
                 $interval.cancel(g2gInterval);

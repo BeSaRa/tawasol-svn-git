@@ -95,7 +95,7 @@ module.exports = function (app) {
                         counterService.loadCounters().then(function () {
                             if (employeeService.getEmployee().hasPermissionTo('GOVERNMENT_TO_GOVERNMENT')) {
                                 // console.log('permission granted');
-                                counterService.loadG2GCounter()
+                                counterService.loadG2GCounters()
                                     .then(function () {
                                         counterService.intervalG2GCounters();
                                     });

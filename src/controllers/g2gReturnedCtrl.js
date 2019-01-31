@@ -19,7 +19,7 @@ module.exports = function (app) {
 
         self.controllerName = 'g2gReturnedCtrl';
         contextHelpService.setHelpTo('returned-g2g');
-        counterService.loadG2GCounter();
+        counterService.loadG2GCounters();
         self.progress = null;
 
         /**
@@ -79,7 +79,7 @@ module.exports = function (app) {
                     self.g2gItems = result;
                     self.selectedG2gItems = [];
                     defer.resolve(true);
-                    counterService.loadG2GCounter();
+                    counterService.loadG2GCounters();
                     if (pageNumber)
                         self.grid.page = pageNumber;
                     self.getSortedData();

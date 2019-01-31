@@ -63,7 +63,7 @@ module.exports = function (app) {
                         'ngInject';
                         return !employeeService.isAdminUser() ? counterService.loadCounters().then(function () {
                             if (employeeService.getEmployee().hasPermissionTo('GOVERNMENT_TO_GOVERNMENT')) {
-                                counterService.loadG2GCounter().then(function () {
+                                counterService.loadG2GCounters().then(function () {
                                     counterService.intervalG2GCounters();
                                 });
                             }
