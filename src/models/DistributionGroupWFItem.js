@@ -32,7 +32,9 @@ module.exports = function (app) {
                 return this
                     .setArName(workflowGroup.arName)
                     .setEnName(workflowGroup.enName)
-                    .setWfGroupId(workflowGroup.id);
+                    .setWfGroupId(workflowGroup.id)
+                    .setSendSMS(workflowGroup.sendSMS)
+                    .setSendSMS(workflowGroup.sendEmail);
             };
             DistributionGroupWFItem.prototype.setWfGroupId = function (wfGroupId) {
                 this.wfGroupId = wfGroupId;

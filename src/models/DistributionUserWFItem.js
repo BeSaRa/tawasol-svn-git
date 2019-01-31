@@ -46,7 +46,9 @@ module.exports = function (app) {
                     .setArOUName(user.ouArName)
                     .setEnOUName(user.ouEnName)
                     .setRelationId(user.relationId)
-                    .setProxyInfo(user.proxyInfo);
+                    .setProxyInfo(user.proxyInfo)
+                    .setSendSMS(user.sendSMS)
+                    .setSendEmail(user.sendEmail);
             };
 
             DistributionUserWFItem.prototype.setToUserDomain = function (toUserDomain) {

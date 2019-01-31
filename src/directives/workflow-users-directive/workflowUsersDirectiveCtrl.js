@@ -74,15 +74,6 @@ module.exports = function (app) {
             return self.callbackDeleteFromSelected(workItem, $event);
         };
 
-        // /**
-        //  * @description Sets the workflow action
-        //  * @param workflowUser
-        //  * @param $event
-        //  */
-        // self.setWFAction = function (workflowUser, $event) {
-        //     workflowUser.setAction(workflowUser.selectedWFAction);
-        // };
-
         /**
          * @description Prevent the default dropdown behavior of keys inside the search box of workflow action dropdown
          * @param $event

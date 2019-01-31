@@ -39,7 +39,9 @@ module.exports = function (app) {
                     .setArName(organization.arName)
                     .setEnName(organization.enName)
                     .setHasRegistry(organization.hasRegistry)
-                    .setToOUId(organization.id);
+                    .setToOUId(organization.id)
+                    .setSendSMS(organization.sendSMS)
+                    .setSendEmail(organization.sendEmail);
             };
             DistributionOUWFItem.prototype.setToOUId = function (toOUId) {
                 this.toOUId = toOUId;
