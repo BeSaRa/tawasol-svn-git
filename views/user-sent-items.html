@@ -87,7 +87,7 @@
                                         </th>
                                         <th ng-if="!ctrl.selectedUserSentItems.length" md-column
                                             md-order-by="comments">
-                                            <span>{{lang.sent_items_comment}}</span>
+                                            <span>{{lang.comment}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedUserSentItems.length" md-column md-order-by="dueDate">
                                             <span>{{lang.sent_items_due_date}}</span>
@@ -95,10 +95,6 @@
                                         <th ng-if="!ctrl.selectedUserSentItems.length" md-column
                                             md-order-by="{{ctrl.getSortingKey('mainSiteSubSiteString', 'Information')}}">
                                             <span>{{lang.sent_items_correspondence_site}}</span>
-                                        </th>
-                                        <th ng-if="!ctrl.selectedUserSentItems.length" md-column
-                                            md-order-by="docClassIndicator.text">
-                                            <span>{{lang.sent_items_type}}</span>
                                         </th>
                                         <th ng-if="!ctrl.selectedUserSentItems.length" md-column>
 
@@ -162,7 +158,6 @@
                                             <main-site-sub-site-directive
                                                     item="userSentItem"></main-site-sub-site-directive>
                                         </td>
-                                        <td md-cell>{{lang[userSentItem.docClassIndicator.text]}}</td>
                                         <td md-cell ng-if="ctrl.selectedUserSentItems.length < 2">
                                             <div layout-align="start center" ng-if="!ctrl.selectedUserSentItems.length
                                                   || ctrl.selectedUserSentItems.length===1 && ctrl.selectedUserSentItems[0].id === userSentItem.id">
