@@ -98,7 +98,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('document-file-new'),
+                        templateUrl: cmsTemplate.getPopup('document-file'),
                         controller: 'documentFilePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -111,7 +111,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('document-file-new'),
+                        templateUrl: cmsTemplate.getPopup('document-file'),
                         controller: 'documentFilePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
@@ -138,7 +138,7 @@ module.exports = function (app) {
                 return dialog
                     .showDialog({
                         targetEvent: $event,
-                        templateUrl: cmsTemplate.getPopup('document-file-child-new'),
+                        templateUrl: cmsTemplate.getPopup('document-file-child'),
                         controller: 'documentFileChildrenNewPopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
