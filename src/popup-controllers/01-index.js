@@ -16,7 +16,6 @@ module.exports = function (app) {
     require('./publicAnnouncementPopCtrl')(app);
     require('./classificationPopCtrl')(app);
     require('./privateAnnouncementPopCtrl')(app);
-    require('./documentFilePopCtrl')(app);
     require('./excludeOrganizationPopCtrl')(app);
     require('./subClassificationViewPopCtrl')(app);
     require('./applicationUserPopCtrl')(app);
@@ -35,7 +34,6 @@ module.exports = function (app) {
     require('./applicationUserOutOfOfficeSettingPopCtrl')(app);
     require('./userPreferencePopCtrl')(app);
     require('./importOrganizationPopCtrl')(app);
-    require('./documentFileChildrenPopCtrl')(app);
     require('./referencePlanNumberRelatedOUsPopCtrl')(app);
     require('./viewDocumentPopCtrl')(app);
     require('./documentTemplatePopCtrl')(app);

@@ -32,7 +32,6 @@ module.exports = function (app) {
     require('./classificationService')(app);
     require('./globalSettingService')(app);
     require('./privateAnnouncementService')(app);
-    require('./documentFileService')(app);
     require('./relatedOUDocumentFileService')(app);
     require('./userClassificationViewPermissionService')(app);
     require('./customValidationService')(app);

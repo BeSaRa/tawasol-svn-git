@@ -385,25 +385,7 @@ module.exports = function (app) {
                     }
                 }
             })
-            //public document file
-            /*.state('app.administration.document-files', {
-                url: '/document-files',
-                templateUrl: templateProvider.getView('document-files'),
-                controller: 'documentFileCtrl',
-                controllerAs: 'ctrl',
-                permission: 'menu_item_document_files',
-                resolve: {
-                    organizations: function (organizationService) {
-                        'ngInject';
-                        return organizationService.loadOrganizations();
-                    },
-                    documentFiles: function (documentFileService, organizations) {
-                        'ngInject';
-                        return documentFileService.loadDocumentFilesWithLimit();
-                    }
-                }
-            })*/
-            //document files new
+            //document files
             .state('app.administration.document-files', {
                 url: '/document-files',
                 templateUrl: templateProvider.getView('document-files-new'),

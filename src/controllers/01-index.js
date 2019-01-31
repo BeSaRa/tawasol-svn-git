@@ -16,7 +16,6 @@ module.exports = function (app) {
     require('./publicAnnouncementCtrl')(app);
     require('./globalSettingCtrl')(app);
     require('./privateAnnouncementCtrl')(app);
-    require('./documentFileCtrl')(app);
     require('./applicationUserCtrl')(app);
     require('./referencePlanNumberCtrl')(app);
     require('./distributionListCtrl')(app);
