@@ -8,7 +8,6 @@ module.exports = function (app) {
                       attachmentService,
                       Attachment,
                       entityTypeService,
-                      documentFileService,
                       LinkedObject,
                       classificationService,
                       documentTypeService,

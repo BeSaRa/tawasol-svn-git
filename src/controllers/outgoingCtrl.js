@@ -11,7 +11,6 @@ module.exports = function (app) {
                                              generator,
                                              // documentFiles,
                                              managerService,
-                                             documentFileService,
                                              documentTypeService,
                                              validationService,
                                              toast,

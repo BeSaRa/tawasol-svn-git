@@ -4,7 +4,6 @@ module.exports = function (app) {
                       moment,
                       lookupService,
                       LinkedObject,
-                      documentFileService,
                       documentTypeService,
                       classificationService,
                       documentTagService,

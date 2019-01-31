@@ -60,14 +60,17 @@ module.exports = function (app) {
              * @param $event
              */
             addNewDocumentFile: function ($event) {
-                documentFileService
-                    .controllerMethod
-                    .documentFileAdd($event)
-                    .then(function (documentFile) {
-                        toast.success(langService.get('add_success').change({name: documentFile.getNames()}));
-                        self.documentFiles.unshift(documentFile);
-                        self.outgoing.fileId = documentFile;
-                    });
+                documentFileService.getDocumentFiles()
+                    .then(function () {
+                        documentFileService
+                            .controllerMethod
+                            .documentFileAdd(null, $event)
+                            .then(function (documentFile) {
+                                toast.success(langService.get('add_success').change({name: documentFile.getNames()}));
+                                self.documentFiles.unshift(documentFile);
+                                self.outgoing.fileId = documentFile;
+                            });
+                    })
             }
         };
 

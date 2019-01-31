@@ -110,7 +110,7 @@ module.exports = function (app) {
 	require('./thumbnailService')(app);
 	require('./gridService')(app);
 	require('./searchOutgoingIncomingService')(app);
-	require('./documentFileNewService')(app);
+	require('./documentFileService')(app);
 	require('./singleNotifierService')(app);
 	require('./dynamicMenuItemService')(app);
 };

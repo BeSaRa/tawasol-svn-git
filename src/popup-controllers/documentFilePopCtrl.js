@@ -1,23 +1,23 @@
 module.exports = function (app) {
-    app.controller('documentFileNewPopCtrl', function (lookupService,
-                                                       documentFileNewService,
-                                                       DocumentFile,
-                                                       $q,
-                                                       _,
-                                                       langService,
-                                                       toast,
-                                                       dialog,
-                                                       editMode,
-                                                       documentFile,
-                                                       validationService,
-                                                       generator,
-                                                       organizationService,
-                                                       OUDocumentFile,
-                                                       rootEntity,
-                                                       ouDocumentFileService) {
+    app.controller('documentFilePopCtrl', function (lookupService,
+                                                    documentFileService,
+                                                    DocumentFile,
+                                                    $q,
+                                                    _,
+                                                    langService,
+                                                    toast,
+                                                    dialog,
+                                                    editMode,
+                                                    documentFile,
+                                                    validationService,
+                                                    generator,
+                                                    organizationService,
+                                                    OUDocumentFile,
+                                                    rootEntity,
+                                                    ouDocumentFileService) {
         'ngInject';
         var self = this;
-        self.controllerName = 'documentFileNewPopCtrl';
+        self.controllerName = 'documentFilePopCtrl';
         self.editMode = editMode;
         //documentFile.relatedOus = [];
 
@@ -58,7 +58,7 @@ module.exports = function (app) {
 
 
         self.securityLevels = rootEntity.getGlobalSettings().getSecurityLevels();
-        self.parentDocumentFiles = _.filter(documentFileNewService.documentFiles, function (documentFile) {
+        self.parentDocumentFiles = _.filter(documentFileService.documentFiles, function (documentFile) {
             return !documentFile.parent;
         });
 
@@ -91,7 +91,7 @@ module.exports = function (app) {
                     });
                     generator.generateErrorFields('check_this_fields', labels);
                 })
-                .addStep('check_duplicate', true, documentFileNewService.checkDuplicateDocumentFile, [self.documentFile, false], function (result) {
+                .addStep('check_duplicate', true, documentFileService.checkDuplicateDocumentFile, [self.documentFile, false], function (result) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {
@@ -99,7 +99,7 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-                    documentFileNewService.addDocumentFile(self.documentFile).then(function (result) {
+                    documentFileService.addDocumentFile(self.documentFile).then(function (result) {
                         self.editMode = true;
                         self.documentFile = angular.copy(result);
                         self.model = angular.copy(self.documentFile);
@@ -126,7 +126,7 @@ module.exports = function (app) {
                     });
                     generator.generateErrorFields('check_this_fields', labels);
                 })
-                .addStep('check_duplicate', true, documentFileNewService.checkDuplicateDocumentFile, [self.documentFile, true], function (result) {
+                .addStep('check_duplicate', true, documentFileService.checkDuplicateDocumentFile, [self.documentFile, true], function (result) {
                     return !result;
                 }, true)
                 .notifyFailure(function () {
@@ -134,7 +134,7 @@ module.exports = function (app) {
                 })
                 .validate()
                 .then(function () {
-                    documentFileNewService
+                    documentFileService
                         .updateDocumentFile(self.documentFile)
                         .then(function (result) {
                             toast.success(langService.get('edit_success').change({name: result.getTranslatedName()}));
@@ -176,7 +176,7 @@ module.exports = function (app) {
                     self.documentFile.relatedOus.push(result);
                     // if originally, document file was global, update it to make it private
                     if (self.model.global) {
-                        documentFileNewService
+                        documentFileService
                             .updateDocumentFile(self.documentFile)
                             .then(function () {
                                 self.model = angular.copy(self.documentFile);
@@ -206,7 +206,7 @@ module.exports = function (app) {
                     self.documentFile.global = (self.documentFile.relatedOus.length === 0);
                     // if last file is removed, change the document file to global
                     if (self.documentFile.global) {
-                        documentFileNewService.updateDocumentFile(self.documentFile).then(function () {
+                        documentFileService.updateDocumentFile(self.documentFile).then(function () {
                             // update the model so that the reset will work on latest values
                             self.model = angular.copy(self.documentFile);
                             toast.success(langService.get('delete_success'));

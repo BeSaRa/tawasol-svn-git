@@ -1,6 +1,6 @@
 module.exports = function (app) {
-    app.controller('documentFileNewCtrl', function (lookupService,
-                                                    documentFileNewService,
+    app.controller('documentFileCtrl', function (lookupService,
+                                                    documentFileService,
                                                     documentFiles,
                                                     $q,
                                                     $filter,
@@ -15,10 +15,10 @@ module.exports = function (app) {
                                                     generator) {
         'ngInject';
         var self = this;
-        self.controllerName = 'documentFileNewCtrl';
+        self.controllerName = 'documentFileCtrl';
         contextHelpService.setHelpTo('document-files');
 
-        self.documentFiles = documentFileNewService.getParentDocumentFiles(documentFiles);
+        self.documentFiles = documentFileService.getParentDocumentFiles(documentFiles);
         self.organizations = organizations;
 
         self.promise = null;
@@ -58,12 +58,12 @@ module.exports = function (app) {
             self.searchMode = false;
             self.searchModel = '';
 
-            return documentFileNewService
+            return documentFileService
                 .loadDocumentFilesWithLimit()
                 .then(function (result) {
                     self.selectedDocumentFiles = [];
                     self.documentFiles = result;
-                    //self.documentFiles = documentFileNewService.getParentDocumentFiles(result);
+                    //self.documentFiles = documentFileService.getParentDocumentFiles(result);
                     defer.resolve(true);
                     if (pageNumber)
                         self.grid.page = pageNumber;
@@ -76,10 +76,10 @@ module.exports = function (app) {
          *@description Contains methods for CRUD operations for document files
          */
         self.statusServices = {
-            activate: documentFileNewService.activateBulkDocumentFiles,
-            deactivate: documentFileNewService.deactivateBulkDocumentFiles,
-            true: documentFileNewService.activateDocumentFile,
-            false: documentFileNewService.deactivateDocumentFile
+            activate: documentFileService.activateBulkDocumentFiles,
+            deactivate: documentFileService.deactivateBulkDocumentFiles,
+            true: documentFileService.activateDocumentFile,
+            false: documentFileService.deactivateDocumentFile
         };
 
         /**
@@ -87,7 +87,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.openAddDocumentFileDialog = function ($event) {
-            documentFileNewService.controllerMethod
+            documentFileService.controllerMethod
                 .documentFileAdd(null, $event)
                 .then(function (result) {
                     self.reloadDocumentFiles(self.grid.page);
@@ -103,7 +103,7 @@ module.exports = function (app) {
          * @param documentFile
          */
         self.openEditDocumentFileDialog = function (documentFile, $event) {
-            documentFileNewService
+            documentFileService
                 .controllerMethod
                 .documentFileEdit(documentFile, null, $event)
                 .then(function (result) {
@@ -120,7 +120,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeDocumentFile = function (documentFile, $event) {
-            documentFileNewService.controllerMethod
+            documentFileService.controllerMethod
                 .documentFileDelete(documentFile, $event)
                 .then(function () {
                     self.reloadDocumentFiles(self.grid.page);
@@ -132,7 +132,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkDocumentFiles = function ($event) {
-            documentFileNewService.controllerMethod
+            documentFileService.controllerMethod
                 .documentFileDeleteBulk(self.selectedDocumentFiles, $event)
                 .then(function () {
                     self.reloadDocumentFiles(self.grid.page);
@@ -172,7 +172,7 @@ module.exports = function (app) {
          * @description show related organization
          */
         self.openOrganizationDialog = function (organization, documentFile, $event) {
-            documentFileNewService.controllerMethod
+            documentFileService.controllerMethod
                 .openOrganizationPopup(organization, documentFile, $event)
                 .then(function () {
                     self.reloadDocumentFiles(self.grid.page);
@@ -188,7 +188,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.openChildDocumentFilesDialog = function (documentFile, $event) {
-            documentFileNewService.controllerMethod
+            documentFileService.controllerMethod
                 .openChildDocumentFilesPopup(documentFile, $event)
                 .then(function (result) {
                     self.reloadDocumentFiles();
@@ -207,7 +207,7 @@ module.exports = function (app) {
             if (!searchText)
                 return;
             self.searchMode = true;
-            return documentFileNewService
+            return documentFileService
                 .documentFileSearch(searchText)
                 .then(function (result) {
                     self.documentFiles = result;

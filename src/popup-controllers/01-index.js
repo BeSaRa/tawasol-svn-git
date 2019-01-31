@@ -99,7 +99,7 @@ module.exports = function (app) {
     require('./attachmentThumbnailPopCtrl')(app);
     require('./versionPopCtrl')(app);
     require('./duplicateOptionPopCtrl')(app);
-    require('./documentFileNewPopCtrl')(app);
+    require('./documentFilePopCtrl')(app);
     require('./documentFileChildrenNewPopCtrl')(app);
     require('./bulkExportOptionPopCtrl')(app);
     require('./dynamicMenuItemPopCtrl')(app);

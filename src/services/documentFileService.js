@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    app.service('documentFileNewService', function (urlService,
+    app.service('documentFileService', function (urlService,
                                                     $http,
                                                     $q,
                                                     generator,
@@ -11,7 +11,7 @@ module.exports = function (app) {
                                                     cmsTemplate) {
         'ngInject';
         var self = this;
-        self.serviceName = 'documentFileNewService';
+        self.serviceName = 'documentFileService';
         self.documentFiles = [];
 
         /**
@@ -99,7 +99,7 @@ module.exports = function (app) {
                     .showDialog({
                         targetEvent: $event,
                         templateUrl: cmsTemplate.getPopup('document-file-new'),
-                        controller: 'documentFileNewPopCtrl',
+                        controller: 'documentFilePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
                             editMode: false,
@@ -112,7 +112,7 @@ module.exports = function (app) {
                     .showDialog({
                         targetEvent: $event,
                         templateUrl: cmsTemplate.getPopup('document-file-new'),
-                        controller: 'documentFileNewPopCtrl',
+                        controller: 'documentFilePopCtrl',
                         controllerAs: 'ctrl',
                         locals: {
                             editMode: true,

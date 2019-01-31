@@ -12,7 +12,6 @@ module.exports = function (app) {
                                              $stateParams,
                                              // documentFiles,
                                              managerService,
-                                             documentFileService,
                                              documentTypeService,
                                              validationService,
                                              langService,

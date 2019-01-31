@@ -70,7 +70,7 @@ module.exports = function (app) {
     require('./simpleOutgoingCtrl')(app);
     require('./simpleIncomingCtrl')(app);
     require('./searchOutgoingIncomingCtrl')(app);
-    require('./documentFileNewCtrl')(app);
+    require('./documentFileCtrl')(app);
     require('./dynamicMenuItemCtrl')(app);
     require('./centralArchiveSentItemCtrl')(app);
 };

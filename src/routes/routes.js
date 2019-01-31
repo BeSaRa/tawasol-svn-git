@@ -388,8 +388,8 @@ module.exports = function (app) {
             //document files
             .state('app.administration.document-files', {
                 url: '/document-files',
-                templateUrl: templateProvider.getView('document-files-new'),
-                controller: 'documentFileNewCtrl',
+                templateUrl: templateProvider.getView('document-files'),
+                controller: 'documentFileCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_document_files',
                 resolve: {
@@ -397,9 +397,9 @@ module.exports = function (app) {
                         'ngInject';
                         return organizationService.loadOrganizations();
                     },
-                    documentFiles: function (documentFileNewService, organizations) {
+                    documentFiles: function (documentFileService, organizations) {
                         'ngInject';
-                        return documentFileNewService.loadDocumentFilesWithLimit();
+                        return documentFileService.loadDocumentFilesWithLimit();
                     }
                 }
             })

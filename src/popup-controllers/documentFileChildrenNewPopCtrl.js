@@ -1,6 +1,6 @@
 module.exports = function (app) {
     app.controller('documentFileChildrenNewPopCtrl', function (lookupService,
-                                                               documentFileNewService,
+                                                               documentFileService,
                                                                $q,
                                                                _,
                                                                $filter,
@@ -52,10 +52,10 @@ module.exports = function (app) {
          *@description Contains methods for CRUD operations for document files
          */
         self.statusServices = {
-            'activate': documentFileNewService.activateBulkDocumentFiles,
-            'deactivate': documentFileNewService.deactivateBulkDocumentFiles,
-            'true': documentFileNewService.activateDocumentFile,
-            'false': documentFileNewService.deactivateDocumentFile
+            'activate': documentFileService.activateBulkDocumentFiles,
+            'deactivate': documentFileService.deactivateBulkDocumentFiles,
+            'true': documentFileService.activateDocumentFile,
+            'false': documentFileService.deactivateDocumentFile
         };
 
         /**
@@ -63,7 +63,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.openAddSubDocumentFileDialog = function ($event) {
-            documentFileNewService.controllerMethod
+            documentFileService.controllerMethod
                 .documentFileAdd(self.parentDocumentFile, $event)
                 .then(function (result) {
                     self.reloadSubDocumentFiles(self.grid.page);
@@ -79,7 +79,7 @@ module.exports = function (app) {
          * @param subDocumentFile
          */
         self.openEditSubDocumentFileDialog = function (subDocumentFile, $event) {
-            documentFileNewService.controllerMethod
+            documentFileService.controllerMethod
                 .documentFileEdit(subDocumentFile, $event)
                 .then(function (result) {
                     self.reloadSubDocumentFiles(self.grid.page);
@@ -100,7 +100,7 @@ module.exports = function (app) {
             self.searchModel = '';
             self.searchMode = false;
 
-            return documentFileNewService
+            return documentFileService
                 .loadSubDocumentFiles(self.parentDocumentFile)
                 .then(function (result) {
                     self.selectedSubDocumentFiles = [];
@@ -119,7 +119,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeSubDocumentFile = function (subDocumentFile, $event) {
-            documentFileNewService.controllerMethod
+            documentFileService.controllerMethod
                 .documentFileDelete(subDocumentFile, $event)
                 .then(function () {
                     self.reloadSubDocumentFiles(self.grid.page);
@@ -131,7 +131,7 @@ module.exports = function (app) {
          * @param $event
          */
         self.removeBulkSubDocumentFiles = function ($event) {
-            documentFileNewService.controllerMethod
+            documentFileService.controllerMethod
                 .documentFileDeleteBulk(self.selectedSubDocumentFiles, $event)
                 .then(function () {
                     self.reloadSubDocumentFiles(self.grid.page);
@@ -172,7 +172,7 @@ module.exports = function (app) {
          * @description show related organization
          */
         self.openOrganizationDialog = function (organization, subDocumentFile, $event) {
-            documentFileNewService
+            documentFileService
                 .controllerMethod
                 .openOrganizationPopup(organization, subDocumentFile, $event)
                 .then(function () {
@@ -190,7 +190,7 @@ module.exports = function (app) {
             if (!searchText)
                 return;
             self.searchMode = true;
-            return documentFileNewService
+            return documentFileService
                 .documentFileSearch(searchText, self.parentDocumentFile.id)
                 .then(function (result) {
                     self.subDocumentFiles = result;

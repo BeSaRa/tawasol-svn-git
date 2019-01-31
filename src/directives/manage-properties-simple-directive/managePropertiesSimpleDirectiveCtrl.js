@@ -6,7 +6,7 @@ module.exports = function (app) {
                                                                     organizationService,
                                                                     documentTypeService,
                                                                     classificationService,
-                                                                    documentFileService,
+                                                                    //documentFileService,
                                                                     $timeout,
                                                                     toast,
                                                                     customValidationService,
@@ -188,7 +188,7 @@ module.exports = function (app) {
         //     addNewDocumentFile: function ($event) {
         //         documentFileService
         //             .controllerMethod
-        //             .documentFileAdd($event)
+        //             .documentFileAdd(null, $event)
         //             .then(function (documentFile) {
         //                 toast.success(langService.get('add_success').change({name: documentFile.getNames()}));
         //                 self.documentFiles.unshift(documentFile);
