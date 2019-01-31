@@ -58,6 +58,7 @@ module.exports = function (app) {
 
         self.intervalG2GCounters = function (stop) {
             // load g2g countess after every 15 minutes
+            self.stopG2GCounter();
             g2gInterval = $interval(function () {
                 self.loadG2GCounter().catch(function () {
                     self.stopG2GCounter();
