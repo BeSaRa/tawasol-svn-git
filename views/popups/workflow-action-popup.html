@@ -124,7 +124,7 @@
                                         <tr ng-if="ctrl.workflowAction.relatedUsers.length" md-row
                                             ng-repeat="applicationUser in ctrl.workflowAction.relatedUsers track by $index">
                                             <td md-cell>
-                                                <span tooltip="{{applicationUser.getNames()}}">{{applicationUser.loginName}} {{applicationUser.id}} </span>
+                                                <span tooltip="{{applicationUser.getNames()}}">{{applicationUser.loginName}}</span>
                                             </td>
                                             <td md-cell>
                                                 <span tooltip="{{applicationUser.getDefaultOrganization().getNames()}}">{{applicationUser.domainName}}</span>
