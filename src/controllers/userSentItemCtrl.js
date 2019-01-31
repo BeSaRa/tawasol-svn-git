@@ -95,8 +95,7 @@ module.exports = function (app) {
                 dueDate: 'dueDate',
                 mainSiteSubSiteString: function () {
                     return self.getSortingKey('mainSiteSubSiteString', 'Information');
-                },
-                docClass: 'docClassIndicator.text'
+                }
             },
             searchText: '',
             searchCallback: function (serverSide) {
