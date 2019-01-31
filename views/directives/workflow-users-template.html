@@ -160,9 +160,10 @@
                             </md-select-header>
                             <md-option
                                     ng-repeat="action in ctrl.workflowActions | translatedNameFilter: workflowUser.actionSearchText"
-                                    ng-value="action"
-                                    md-highlight-text="workflowUser.actionSearchText"
-                                    md-highlight-flags="i">{{action.getTranslatedName()}}
+                                    ng-value="action">
+                                <span
+                                        md-highlight-text="workflowUser.actionSearchText"
+                                        md-highlight-flags="i">{{action.getTranslatedName()}}</span>
                             </md-option>
                         </md-select>
                     </td>
@@ -276,9 +277,10 @@
                             </md-select-header>
                             <md-option
                                     ng-repeat="action in ctrl.workflowActions | translatedNameFilter: workflowUser.actionSearchText"
-                                    ng-value="action"
-                                    md-highlight-text="workflowUser.actionSearchText"
-                                    md-highlight-flags="i">{{action.getTranslatedName()}}
+                                    ng-value="action">
+                                <span
+                                        md-highlight-text="workflowUser.actionSearchText"
+                                        md-highlight-flags="i">{{action.getTranslatedName()}}</span>
                             </md-option>
                         </md-select>
                     </td>
