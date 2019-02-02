@@ -86,6 +86,11 @@ module.exports = function (app) {
             self.receiveG2G = true;
             self.receive = false;
             self.incoming = receiveG2G.metaData;
+            // depend on our discussion with Ahmed Abu Al Nasser.
+            if (centralArchives) {
+                self.incoming.registryOU = null;
+                self.incoming.ou = null;
+            }
             self.model = angular.copy(self.incoming);
             self.documentInformation = receiveG2G.content;
             self.isReceiveG2G = true;
@@ -125,11 +130,9 @@ module.exports = function (app) {
             //var isDocHasVsId = angular.copy(self.incoming).hasVsId();
             if (self.receive) {
                 promise = self.incoming.receiveDocument($stateParams.workItem);
-            }
-            else if (self.receiveG2G) {
+            } else if (self.receiveG2G) {
                 promise = self.incoming.receiveG2GDocument();
-            }
-            else {
+            } else {
                 promise = self.incoming
                     .saveDocument(status);
             }
@@ -182,14 +185,12 @@ module.exports = function (app) {
                 })*/
                 self.requestCompleted = true;
                 self.saveInProgress = false;
-            }
-            else {
+            } else {
                 var successKey = 'incoming_metadata_saved_success';
                 if (self.documentInformation) {
                     self.incoming.contentSize = 1;
                     successKey = 'save_success';
-                }
-                else if (self.incoming.contentFile && self.incoming.contentFile.size) {
+                } else if (self.incoming.contentFile && self.incoming.contentFile.size) {
                     self.incoming.contentSize = self.incoming.contentFile.size;
                     successKey = 'save_success';
                 }
@@ -308,12 +309,10 @@ module.exports = function (app) {
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
                     hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                     if (action.hasOwnProperty('checkAnyPermission')) {
                         hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    }
-                    else {
+                    } else {
                         hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
