@@ -78,7 +78,7 @@ module.exports = function (app) {
                 self.loadG2GCounters().catch(function () {
                     self.stopG2GCounter();
                 });
-            }, (20000));
+            }, (15 * 60 * 1000));
         };
 
         /**
