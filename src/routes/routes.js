@@ -1496,14 +1496,23 @@ module.exports = function (app) {
             .state('app.reports', {
                 url: '/reports/:menuId',
                 template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
-                controller: function ($sce, $stateParams, sidebarService, contextHelpService) {
+                controller: function ($sce, $stateParams, sidebarService, langService, contextHelpService) {
                     'ngInject';
                     contextHelpService.setHelpTo('reports');
                     var self = this;
                     var menuId = $stateParams.menuId;
                     var dynamicMenuItem = sidebarService.getDynamicMenuItemByID(menuId);
-                    var url = dynamicMenuItem.getMenuUrlAfterReplacement();
-                    self.url = $sce.trustAsResourceUrl(url);
+                    self.url = null;
+                    self.prepareUrl = function () {
+                        var url = dynamicMenuItem.getMenuUrlAfterReplacement();
+                        self.url = $sce.trustAsResourceUrl(url);
+                    };
+                    self.prepareUrl();
+                    // to change the report language
+                    langService.listeningToChange(function () {
+                        self.prepareUrl();
+                    });
+
                 },
                 isDynamic: true,
                 controllerAs: 'ctrl'
