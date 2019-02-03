@@ -14,13 +14,17 @@ module.exports = function (app) {
                                                       $timeout,
                                                       tabIndex,
                                                       UserWorkflowAction,
-                                                      userWorkflowActionService) {
+                                                      userWorkflowActionService,
+                                                      distributionWFService) {
         'ngInject';
         var self = this;
         self.controllerName = 'workflowActionPopCtrl';
         self.editMode = editMode;
         self.tabIndex = tabIndex;
         self.selectedTabName = 'basic_info';
+
+        self.selectedOrganization = null;
+
         /**
          * Select Tab Name
          * @param tabName
@@ -47,6 +51,57 @@ module.exports = function (app) {
             status: 'status',
             global: 'global'
         };
+
+        self.changeSearchBy = function ($event) {
+            self.selectedOrganization = null;
+            if (self.searchBy && self.searchBy.key === 'organizationUnit') {
+                self.searchText = '';
+                distributionWFService
+                    .loadDistWorkflowOrganizations('organizations')
+                    .then(function (result) {
+                        self.organizations = result;
+                        self.users = [];
+                    })
+            }
+            else {
+                self.users = [];
+                self.organizations = [];
+            }
+        };
+
+        self.loadUsersByOU = function ($event) {
+            if (self.selectedOrganization) {
+                return distributionWFService
+                    .searchUsersByCriteria({ou: self.selectedOrganization})
+                    .then(function (result) {
+                        self.users = result;
+                    });
+            }
+            else {
+                self.users = [];
+            }
+        };
+
+        self.searchUsersByOU = function (searchText) {
+            if (!searchText) {
+                return _.filter(self.users, function (user) {
+                    return (!self.userExists(user))
+                });
+            }
+            else {
+                searchText = searchText.toLowerCase();
+                return _.filter(self.users, function (user) {
+                    if (user.arName.indexOf(searchText) > -1
+                        || user.enName.toLowerCase().indexOf(searchText) > -1
+                        || user.domainName.toLowerCase().indexOf(searchText) > -1) {
+
+                        return (!self.userExists(user));
+                    }
+                });
+            }
+        };
+
+
         /**
          * @description Add new workflow action
          */

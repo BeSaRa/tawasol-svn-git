@@ -1,5 +1,6 @@
 module.exports = function (app) {
-    app.factory('WFUser', function (CMSModelInterceptor) {
+    app.factory('WFUser', function (CMSModelInterceptor,
+                                    langService) {
         'ngInject';
         return function WFUser(model) {
             var self = this;
@@ -26,6 +27,14 @@ module.exports = function (app) {
              */
             WFUser.prototype.getRequiredFields = function () {
                 return requiredFields;
+            };
+            /**
+             * @description get translated name of the WFUser
+             * @param reverse
+             * @returns {null}
+             */
+            WFUser.prototype.getTranslatedName = function (reverse) {
+                return langService.current === 'ar' ? (reverse ? this.enName : this.arName) : (reverse ? this.arName : this.enName);
             };
             // don't remove CMSModelInterceptor from last line
             // should be always at last thing after all methods and properties.

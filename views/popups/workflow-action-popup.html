@@ -58,11 +58,12 @@
                             </div>
                         </md-content>
                     </md-tab>
-                    <md-tab label="{{lang.security}}" md-on-select="ctrl.changeTabName('security')" ng-disabled="ctrl.workflowAction.isGlobal">
+                    <md-tab label="{{lang.security}}" md-on-select="ctrl.changeTabName('security')"
+                            ng-disabled="ctrl.workflowAction.isGlobal">
                         <md-content scroll-directive class="p20" layout="column">
                             <div flex layout="row">
                                 <md-input-container id="criteria-list" class="mt0">
-                                    <md-select aria-label="select-user"
+                                    <md-select aria-label="select-user" ng-change="ctrl.changeSearchBy($event)"
                                                ng-model="ctrl.searchBy">
                                         <md-option md-truncate ng-value="criteria"
                                                    ng-repeat="criteria in ctrl.availableSearchCriteria track by $index">
@@ -70,7 +71,57 @@
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
+                                <md-input-container flex class="mt0"
+                                                    ng-if="ctrl.searchBy && ctrl.searchBy.key === 'organizationUnit'">
+                                    <md-select ng-model="ctrl.selectedOrganization"
+                                               aria-label="{{lang.organizations}}"
+                                               ng-change="ctrl.loadUsersByOU($event)">
+                                        <md-option ng-repeat="organization in ctrl.organizations"
+                                                   ng-value="organization">
+                                            {{organization.getTranslatedName()}}
+                                        </md-option>
+                                    </md-select>
+                                </md-input-container>
                                 <md-autocomplete
+                                        ng-disabled="!ctrl.selectedOrganization"
+                                        ng-if="ctrl.searchBy && ctrl.searchBy.key === 'organizationUnit'"
+                                        flex
+                                        md-no-cache="true"
+                                        md-selected-item="ctrl.selectedAppUser"
+                                        md-search-text-change="ctrl.searchUsersByOU(ctrl.searchText)"
+                                        md-search-text="ctrl.searchText"
+                                        md-selected-item-change="ctrl.applicationUserSelected(item)"
+                                        md-items="item in ctrl.searchUsersByOU(ctrl.searchText)"
+                                        md-item-text="item.domainName"
+                                        md-min-length="0"
+                                        placeholder="{{lang.select_user}}"
+                                        md-menu-class="application-user-custom-template">
+                                    <md-item-template>
+                                        <div layout="row" flex>
+                                            <div layout="column" flex>
+                                                <div layout="row" layout-align="start center" flex>
+                                                    <span class="key"> {{lang.domain_name}} : </span>
+                                                    <span md-highlight-text="ctrl.searchText" md-highlight-flags="ig"
+                                                          class="value" flex> {{item.domainName}}</span>
+                                                </div>
+                                                <div layout="row" layout-align="start center" flex>
+                                                    <span class="key"> {{lang.ar_name}} : </span>
+                                                    <span md-highlight-text="ctrl.searchText" md-highlight-flags="ig"
+                                                          class="value" flex> {{item.arName}}</span>
+                                                </div>
+                                                <div layout="row" layout-align="start center" flex>
+                                                    <span class="key"> {{lang.en_name}} : </span>
+                                                    <span md-highlight-text="ctrl.searchText" md-highlight-flags="ig"
+                                                          class="value" flex> {{item.enName}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </md-item-template>
+                                </md-autocomplete>
+
+
+                                <md-autocomplete
+                                        ng-if="ctrl.searchBy && ctrl.searchBy.key !== 'organizationUnit'"
                                         flex
                                         md-no-cache="true"
                                         md-selected-item="ctrl.selectedAppUser"
