@@ -458,6 +458,12 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     locals: {
                         excluded: excluded
+                    },
+                    resolve: {
+                        correspondenceSites: function () {
+                            'ngInject';
+                            return self.loadCorrespondenceSitesWithLimit(100);
+                        }
                     }
                 });
             }

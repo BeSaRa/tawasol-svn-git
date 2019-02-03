@@ -409,6 +409,12 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     locals: {
                         excluded: excluded
+                    },
+                    resolve: {
+                        classifications: function () {
+                            'ngInject';
+                            return self.loadClassificationsWithLimit(100);
+                        }
                     }
                 });
             }
