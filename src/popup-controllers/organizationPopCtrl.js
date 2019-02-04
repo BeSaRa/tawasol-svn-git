@@ -341,29 +341,55 @@ module.exports = function (app) {
         self.addNewReferencePlanNumber = function () {
             // referencePlanNumberService
         };
+
+        /**
+         * @description Handles the change status of OU
+         */
+        self.onChangeOUStatus = function(){
+            dialog.confirmMessage(langService.get('confirm_change_affect_whole_system'))
+                .then(function () {
+
+                })
+                .catch(function () {
+                    self.organization.status = !self.organization.status;
+                })
+        };
+
         /**
          * centreArchive Change
          * @param centralArchive
          */
         self.centralArchiveChange = function (centralArchive) {
-            if (centralArchive) {
-                self.organization.setCentralArchiveUnitId(null);
-            } else {
-                self.organization.setCentralArchiveUnitId(self.listParentsHasCentralArchive[0])
-            }
+            dialog.confirmMessage(langService.get('confirm_change_affect_whole_system'))
+                .then(function () {
+                    if (centralArchive) {
+                        self.organization.setCentralArchiveUnitId(null);
+                    } else {
+                        self.organization.setCentralArchiveUnitId(self.listParentsHasCentralArchive[0])
+                    }
+                })
+                .catch(function () {
+                    self.organization.centralArchive = !self.organization.centralArchive;
+                })
         };
         /**
          * has registry change
          * @param hasRegistry
          */
         self.hasRegistryChange = function (hasRegistry) {
-            if (hasRegistry) {
-                self.organization.setRegistryParentId(null);
-            } else {
-                self.organization.referencePlanItemStartSerialList = [];
-                self.organization.referenceNumberPlanId = null;
-                self.organization.centralArchiveUnitId = null;
-            }
+            dialog.confirmMessage(langService.get('confirm_change_affect_whole_system'))
+                .then(function () {
+                    if (hasRegistry) {
+                        self.organization.setRegistryParentId(null);
+                    } else {
+                        self.organization.referencePlanItemStartSerialList = [];
+                        self.organization.referenceNumberPlanId = null;
+                        self.organization.centralArchiveUnitId = null;
+                    }
+                })
+                .catch(function () {
+                    self.organization.hasRegistry = !self.organization.hasRegistry;
+                })
         };
         /**
          * @description get reference planNumber Id from registry unit.

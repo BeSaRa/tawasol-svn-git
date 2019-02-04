@@ -248,6 +248,7 @@
                                 </div><!-- row -->
                                 <div layout="row">
                                     <md-switch flex ng-model="ctrl.organization.status"
+                                               ng-change="ctrl.onChangeOUStatus($event)"
                                                ng-disabled="ctrl.employeeService.getEmployee().organization.ouid === ctrl.organization.id">
                                         {{lang.status}} : {{ctrl.organization.getTranslatedStatus()}}
                                     </md-switch>
