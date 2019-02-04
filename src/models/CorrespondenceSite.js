@@ -80,7 +80,7 @@ module.exports = function (app) {
             };
 
             CorrespondenceSite.prototype.cannotSave = function () {
-                return !this.isGlobal && !this.relatedOus.length;
+                return !this.isGlobal && !this.hasChildren();
             };
 
             CorrespondenceSite.prototype.hasOrganizations = function () {
