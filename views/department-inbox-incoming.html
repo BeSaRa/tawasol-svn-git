@@ -47,7 +47,7 @@
                                             </div>
                                         </th>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="">
-                                            <!-- Transferred to RegOU Indicator -->
+                                            <!-- Indicators -->
                                         </th>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
                                             md-order-by="generalStepElm.docFullSerial">
@@ -94,6 +94,11 @@
                                             <grid-indicator-directive record-type="WorkItem"
                                                                       record="incomingDepartmentInbox"
                                                                       indicator-type="isTransferredDocumentIndicator">
+                                            </grid-indicator-directive>
+                                            <!-- Security Level -->
+                                            <grid-indicator-directive record-type="WorkItem"
+                                                                      record="incomingDepartmentInbox"
+                                                                      indicator-type="securityLevel">
                                             </grid-indicator-directive>
                                         </td>
                                         <td class="serial-td" md-cell>
