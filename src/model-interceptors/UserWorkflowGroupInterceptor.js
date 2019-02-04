@@ -17,7 +17,7 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
-            model.wfgroup = new WorkflowGroup(model.wfgroup);
+            model.wfgroup = generator.interceptReceivedInstance('WorkflowGroup', generator.generateInstance(model.wfgroup, WorkflowGroup));
             organizationService.getOrganizations().then(function (organizations) {
                 _.map(model.wfgroup.groupMembers, function (member, key) {
                     model.wfgroup.groupMembers[key].applicationUser = new ApplicationUser(member.member);
