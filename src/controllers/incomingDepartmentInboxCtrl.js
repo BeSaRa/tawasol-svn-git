@@ -22,6 +22,7 @@ module.exports = function (app) {
                                                             listGeneratorService,
                                                             Incoming,
                                                             _,
+                                                            emailItem,
                                                             mailNotificationService,
                                                             gridService) {
         'ngInject';
@@ -129,8 +130,7 @@ module.exports = function (app) {
                     if (self.selectedIncomingDepartmentInboxes.length)
                         returnBulk(selectedItems, $event);
                 })
-            }
-            else {
+            } else {
                 returnBulk(selectedItems, $event);
             }
         };
@@ -459,8 +459,7 @@ module.exports = function (app) {
                     if (self.selectedIncomingDepartmentInboxes.length)
                         _unlockBulk(selectedItems, $event);
                 })
-            }
-            else {
+            } else {
                 _unlockBulk(selectedItems, $event);
             }
         };
@@ -484,12 +483,10 @@ module.exports = function (app) {
             if (action.hasOwnProperty('permissionKey')) {
                 if (typeof action.permissionKey === 'string') {
                     hasPermission = employeeService.hasPermissionTo(action.permissionKey);
-                }
-                else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
+                } else if (angular.isArray(action.permissionKey) && action.permissionKey.length) {
                     if (action.hasOwnProperty('checkAnyPermission')) {
                         hasPermission = employeeService.getEmployee().hasAnyPermissions(action.permissionKey);
-                    }
-                    else {
+                    } else {
                         hasPermission = employeeService.getEmployee().hasThesePermissions(action.permissionKey);
                     }
                 }
@@ -768,5 +765,12 @@ module.exports = function (app) {
                 }
             }
         ];
+
+        self.openEmailItem = function () {
+            emailItem ? self.viewDocument(emailItem) : null;
+        };
+        // to open Email item if it exists.
+        self.openEmailItem();
+
     });
 };

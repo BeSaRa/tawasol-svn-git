@@ -122,31 +122,6 @@ module.exports = function (app) {
                         'ngInject';
                         return roleService.getPermissionByGroup();
                     },
-                    /*permissions: function (roleService, permissionGroupLookup) {
-                        //return roleService.getPermissions();
-                        var permissionByGroup = [];
-                        return roleService.getPermissions().then(function (result) {
-                            var permissionByGroupEN = {};
-                            var permissionByGroupAR = {};
-                            for (var i = 0; i < permissionGroupLookup.length; i++) {
-                                var getPermissionsForGroup = _.filter(result, function (permission) {
-                                    return permission.groupId === permissionGroupLookup[i].id;
-                                });
-                                if (getPermissionsForGroup.length > 0) {
-                                    getPermissionsForGroup = _.chunk(getPermissionsForGroup, 3);
-                                    roleService.fillTheRemainingItems(3, getPermissionsForGroup);
-                                    permissionByGroupEN[permissionGroupLookup[i].defaultEnName] = getPermissionsForGroup;
-                                    permissionByGroupAR[permissionGroupLookup[i].defaultArName] = getPermissionsForGroup;
-                                }
-                            }
-                            permissionByGroup.push(permissionByGroupEN);//for English
-                            permissionByGroup.push(permissionByGroupAR);//for Arabic
-                            return permissionByGroup;
-                        });
-                    },
-                    permissionGroupLookup: function (lookupService) {
-                        return lookupService.lookups.permissionGroup;
-                    },*/
                     organizations: function (organizationService) {
                         'ngInject';
                         return organizationService.getOrganizations();
@@ -734,24 +709,6 @@ module.exports = function (app) {
                         'ngInject';
                         return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
                     }
-                    /*documentFiles: function (documentFileService) {
-                        'ngInject';
-                        return documentFileService.loadDocumentFiles();
-                    },
-                    documentTypes: function (documentTypeService) {
-                        'ngInject';
-                        return documentTypeService.loadDocumentTypes();
-                    },
-                    mainClassifications: function (classificationService) {
-                        'ngInject';
-                        return classificationService.loadClassifications().then(function (classifications) {
-                            return classificationService.getMainClassifications(classifications);
-                        });
-                    },
-                    documentStatuses: function (documentStatusService) {
-                        'ngInject';
-                        return documentStatusService.getDocumentStatuses();
-                    }*/
                 }
             })
             // Internal Search
@@ -781,24 +738,6 @@ module.exports = function (app) {
                         return propertyConfigurationService
                             .loadPropertyConfigurationsByDocumentClassAndOU('internal', ouId);
                     },
-                    /*documentFiles: function (documentFileService) {
-                        'ngInject';
-                        return documentFileService.loadDocumentFiles();
-                    },
-                    documentTypes: function (documentTypeService) {
-                        'ngInject';
-                        return documentTypeService.loadDocumentTypes();
-                    },
-                    mainClassifications: function (classificationService) {
-                        'ngInject';
-                        return classificationService.loadClassifications().then(function (classifications) {
-                            return classificationService.getMainClassifications(classifications);
-                        });
-                    },
-                    documentStatuses: function (documentStatusService) {
-                        'ngInject';
-                        return documentStatusService.getDocumentStatuses();
-                    },*/
                     approvers: function (ouApplicationUserService, employeeService) {
                         'ngInject';
                         return ouApplicationUserService
@@ -843,24 +782,6 @@ module.exports = function (app) {
                         'ngInject';
                         return employeeService.isCentralArchive() ? organizationService.centralArchiveOrganizations() : $q.resolve(false);
                     }
-                    /*documentFiles: function (documentFileService) {
-                        'ngInject';
-                        return documentFileService.loadDocumentFiles();
-                    },
-                    documentTypes: function (documentTypeService) {
-                        'ngInject';
-                        return documentTypeService.loadDocumentTypes();
-                    },
-                    mainClassifications: function (classificationService) {
-                        'ngInject';
-                        return classificationService.loadClassifications().then(function (classifications) {
-                            return classificationService.getMainClassifications(classifications);
-                        });
-                    },
-                    documentStatuses: function (documentStatusService) {
-                        'ngInject';
-                        return documentStatusService.getDocumentStatuses();
-                    }*/
 
                 }
             })
@@ -1017,10 +938,6 @@ module.exports = function (app) {
                                 })
                             });
                     },
-                    /*currentEmployee: function (employeeService) {
-                        'ngInject';
-                        return employeeService.getEmployee();
-                    },*/
                     documentTemplates: function (documentTemplateService, selectedRegOU) {
                         'ngInject';
                         //return documentTemplateService.loadDocumentTemplates(currentEmployee.defaultOUID || -1);
@@ -1050,7 +967,7 @@ module.exports = function (app) {
             })
             // user inbox
             .state('app.inbox.user-inbox', {
-                url: '/user-inbox',
+                url: '/user-inbox?action?source?wob-num',
                 templateUrl: templateProvider.getView('user-inbox'),
                 controller: 'userInboxCtrl',
                 controllerAs: 'ctrl',
@@ -1063,10 +980,6 @@ module.exports = function (app) {
                         'ngInject';
                         return userInboxService.loadUserInboxes();
                     },
-                    /*userFolders: function (userFolderService) {
-                        'ngInject';
-                        return userFolderService.getUserFoldersForApplicationUser();
-                    },*/
                     userFilters: function (userFilterService) {
                         'ngInject';
                         return userFilterService.loadUserFilters();
@@ -1079,6 +992,24 @@ module.exports = function (app) {
                             .catch(function () {
                                 return [];
                             });
+                    },
+                    emailItem: function (userInboxes, langService, dialog, _, $stateParams) {
+                        'ngInject';
+                        var action = $stateParams.action, source = $stateParams.source,
+                            wobNumber = $stateParams['wob-num'], item;
+
+                        if (action && action === 'open' && source && source === 'email' && wobNumber) {
+                            item = _.find(userInboxes, function (workItem) {
+                                return workItem.generalStepElm.workObjectNumber === wobNumber;
+                            });
+
+                            return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
+                                wobNumber: wobNumber
+                            })).then(function () {
+                                return false;
+                            })) : item;
+                        }
+                        return false;
                     }
 
                 }
@@ -1101,7 +1032,7 @@ module.exports = function (app) {
             })
             // incoming department inbox
             .state('app.department-inbox.incoming', {
-                url: '/incoming',
+                url: '/incoming?action?source?wob-num',
                 templateUrl: templateProvider.getView('department-inbox-incoming'),
                 controller: 'incomingDepartmentInboxCtrl',
                 controllerAs: 'ctrl',
@@ -1110,6 +1041,24 @@ module.exports = function (app) {
                     incomingDepartmentInboxes: function (incomingDepartmentInboxService) {
                         'ngInject';
                         return incomingDepartmentInboxService.loadIncomingDepartmentInboxes();
+                    },
+                    emailItem: function (incomingDepartmentInboxes, langService, dialog, _, $stateParams) {
+                        'ngInject';
+                        var action = $stateParams.action, source = $stateParams.source,
+                            wobNumber = $stateParams['wob-num'], item;
+
+                        if (action && action === 'open' && source && source === 'email' && wobNumber) {
+                            item = _.find(incomingDepartmentInboxes, function (workItem) {
+                                return workItem.generalStepElm.workObjectNumber === wobNumber;
+                            });
+
+                            return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
+                                wobNumber: wobNumber
+                            })).then(function () {
+                                return false;
+                            })) : item;
+                        }
+                        return false;
                     }
                 }
             })
@@ -1388,12 +1337,6 @@ module.exports = function (app) {
                 controller: 'followupEmployeeInboxCtrl',
                 controllerAs: 'ctrl',
                 permission: 'menu_item_followup_employee_inbox'
-                /*resolve: {
-                    userFolders: function (userFolderService) {
-                        'ngInject';
-                        return userFolderService.getUserFoldersForApplicationUser();
-                    }
-                }*/
             })
             // proxy mail inbox
             .state('app.inbox.proxy-mail-inbox', {
@@ -1423,7 +1366,6 @@ module.exports = function (app) {
                 resolve: {
                     userSentItems: function (userSentItemService, rootEntity, gridService) {
                         'ngInject';
-                        //var globalSetting = rootEntity.returnRootEntity().settings;
                         var limit = gridService.getGridPagingLimitByGridName(gridService.grids.inbox.sentItem) || 5;
                         return userSentItemService.loadUserSentItems(1, limit);
                     },
@@ -1443,7 +1385,6 @@ module.exports = function (app) {
                 resolve: {
                     favoriteDocuments: function (favoriteDocumentsService, rootEntity, gridService) {
                         'ngInject';
-                        //var globalSetting = rootEntity.returnRootEntity().settings;
                         var limit = gridService.getGridPagingLimitByGridName(gridService.grids.inbox.favorite) || 5;
                         return favoriteDocumentsService.loadFavoriteDocuments(1, limit);
                     }
@@ -1456,7 +1397,7 @@ module.exports = function (app) {
                 controllerAs: 'ctrl'
             })
             .state('app.inbox.group-inbox', {
-                url: '/group-inbox',
+                url: '/group-inbox?action?source?wob-num',
                 templateUrl: templateProvider.getView('group-inbox'),
                 controller: 'groupInboxCtrl',
                 controllerAs: 'ctrl',
@@ -1556,28 +1497,6 @@ module.exports = function (app) {
                     }
                 }
             })
-            // .state('app.icn.add', {
-            //     url: '/add',
-            //     template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
-            //     controllerAs: 'ctrl',
-            //     permission: 'menu_item_icn_archive_add',
-            //     controller: function (urlService, $sce) {
-            //         'ngInject';
-            //         var self = this;
-            //         self.url = $sce.trustAsResourceUrl(urlService.icnAdd);
-            //     }
-            // })
-            // .state('app.icn.search', {
-            //     url: '/search',
-            //     template: '<iframe class="document-viewer-full-width-height" ng-src="{{ctrl.url}}"></iframe>',
-            //     controllerAs: 'ctrl',
-            //     permission: 'menu_item_icn_archive_search',
-            //     controller: function (urlService, $sce) {
-            //         'ngInject';
-            //         var self = this;
-            //         self.url = $sce.trustAsResourceUrl(urlService.icnSearch);
-            //     }
-            // })
             .state('app.g2g', {
                 abstract: true,
                 url: '/g2g',
@@ -1587,14 +1506,6 @@ module.exports = function (app) {
                         'ngInject';
                         return correspondenceService.getCorrespondenceLookups('common');
                     },
-                    /*g2gLookups: function (g2gLookupService) {
-                        'ngInject';
-                        return g2gLookupService.getG2gLookups();
-                    },
-                    g2gInternalLookups: function(g2gLookupService){
-                        'ngInject';
-                        return g2gLookupService.getG2gInternalLookups();
-                    },*/
                     organizations: function (organizationService) {
                         'ngInject';
                         return organizationService.getOrganizations();

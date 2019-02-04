@@ -37,6 +37,7 @@ module.exports = function (app) {
                                               UserSubscription,
                                               userSubscriptionService,
                                               fromNotification,
+                                              emailItem,
                                               gridService) {
         'ngInject';
         var self = this;
@@ -1733,6 +1734,10 @@ module.exports = function (app) {
                 })
         };
 
+        self.openEmailItem = function () {
+            emailItem ? self.openNewViewDocument(emailItem) : null;
+        };
+
         self.refreshInbox = function (time) {
             $timeout(function () {
                 $state.is('app.inbox.user-inbox') && self.reloadUserInboxes(self.grid.page);
@@ -1741,6 +1746,8 @@ module.exports = function (app) {
                     $state.is('app.inbox.user-inbox') && self.refreshInbox(time);
                 });
         };
+        // to open Email item if it exists.
+        self.openEmailItem();
 
 
         if (self.globalSetting.inboxRefreshInterval) {
@@ -1753,5 +1760,7 @@ module.exports = function (app) {
                 self.reloadUserInboxes();
             }
         });
+
+
     });
 };

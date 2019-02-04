@@ -80,7 +80,7 @@ module.exports = function (app) {
             if (!application.isReadyStatus() && stateName !== 'loading' && stateName !== 'password') {
                 var Identifier = transition.injector().get('$stateParams').identifier;
                 if ($location.path().indexOf('404') === -1 && $location.path().indexOf('access-denied') === -1) {
-                    application.setUrl($location.path());
+                    application.setUrl($location.url());
                 }
                 return transition.router.stateService.target('loading', {identifier: Identifier});
             }

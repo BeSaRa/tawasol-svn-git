@@ -511,6 +511,25 @@ module.exports = function (app) {
                 workItems: function (correspondenceService) {
                     'ngInject';
                     return correspondenceService.loadGroupInbox();
+                },
+                emailItem: function (workItems, langService, dialog, _, $stateParams) {
+                    'ngInject';
+                    console.log(workItems[0].generalStepElm.workObjectNumber);
+                    var action = $stateParams.action, source = $stateParams.source,
+                        wobNumber = $stateParams['wob-num'], item;
+
+                    if (action && action === 'open' && source && source === 'email' && wobNumber) {
+                        item = _.find(workItems, function (workItem) {
+                            return workItem.generalStepElm.workObjectNumber === wobNumber;
+                        });
+
+                        return !item ? (dialog.errorMessage(langService.get('work_item_not_found').change({
+                            wobNumber: wobNumber
+                        })).then(function () {
+                            return false;
+                        })) : item;
+                    }
+                    return false;
                 }
             })
             .bulkResolveToState('app.central-archive.ready-to-export', {

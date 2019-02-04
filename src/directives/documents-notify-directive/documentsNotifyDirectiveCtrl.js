@@ -19,8 +19,9 @@ module.exports = function (app) {
             userInboxes: [],
             userFolders: [],
             userFilters: [],
-            $scope: $scope ,
-            fromNotification : true
+            $scope: $scope,
+            fromNotification: true,
+            emailItem: false
         });
         userInboxCtrl.controllerName = 'documentsNotifyDirectiveCtrl';
         angular.extend(this, userInboxCtrl);
@@ -39,8 +40,7 @@ module.exports = function (app) {
                     hasPermission = false;
                 else
                     hasPermission = employeeService.hasPermissionTo("EDIT_INTERNAL_PROPERTIES");
-            }
-            else if (info.documentClass === "incoming")
+            } else if (info.documentClass === "incoming")
                 hasPermission = employeeService.hasPermissionTo("EDIT_INCOMING’S_PROPERTIES");
             else if (info.documentClass === "outgoing") {
                 //If approved outgoing electronic, don't allow to edit

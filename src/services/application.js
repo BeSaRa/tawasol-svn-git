@@ -18,7 +18,7 @@ module.exports = function (app) {
         self.setReadyStatus = function () {
             ready = true;
             if (self.url.type === 'url') {
-                $location.path(self.url.url);
+                $location.url(self.url.url);
             } else {
                 tokenService
                     .tokenRefresh()
