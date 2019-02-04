@@ -181,7 +181,7 @@ module.exports = function (app) {
                 var failedOrganizationTypes = [];
                 _.map(result, function (value, key) {
                     if (!value)
-                        failedOrganizationTypes.push(key);
+                        failedOrganizationTypes.push(Number(key));
                 });
                 return _.filter(organizationTypes, function (organizationType) {
                     return (failedOrganizationTypes.indexOf(organizationType.id) > -1);
