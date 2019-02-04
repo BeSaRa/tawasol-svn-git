@@ -153,11 +153,14 @@ module.exports = function (app) {
                 self.arName = self.arName ? self.arName : naValue;
                 self.enName = self.enName ? self.enName : naValue;
                 // Received date greater than
-                if (self.ui.key_4.value)
-                    self.ui.key_4.value = generator.getTimeStampFromDate(self.ui.key_4.value, true);
+                if (self.ui.key_4.value) {
+                    var key_4 = new Date(self.ui.key_4.value);
+                    self.ui.key_4.value = generator.getTimeStampFromDate(new Date(key_4.getFullYear(), key_4.getMonth(), key_4.getDate(), 23, 59, 59, 999), true);
+                }
                 // Received date less than
-                else if (self.ui.key_6.value)
+                else if (self.ui.key_6.value) {
                     self.ui.key_6.value = generator.getTimeStampFromDate(self.ui.key_6.value, true);
+                }
                 // Received date between
                 else if (self.ui.key_11.value1 && self.ui.key_11.value2) {
                     self.ui.key_11.value1 = generator.getTimeStampFromDate(self.ui.key_11.value1, true);
