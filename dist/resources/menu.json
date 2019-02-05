@@ -112,7 +112,7 @@
         "lang_key": "menu_item_system_administration",
         "icon": "settings",
         "parent": null,
-        "link": "#organization",
+        "link": "#",
         "icon_type": "font",
         "sort_order": 7,
         "active": true,
