@@ -854,6 +854,11 @@ module.exports = function (app) {
                             }));
                         }
 
+                        if (!userOuPermissions.length) {
+                            toast.success(langService.get('save_success'));
+                            return;
+                        }
+
                         return ouApplicationUserService
                             .addUserOuPermission(userOuPermissions)
                             .then(function () {
