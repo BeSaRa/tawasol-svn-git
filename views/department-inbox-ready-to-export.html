@@ -106,6 +106,12 @@
                                         ng-repeat="readyToExport in searchResults = (ctrl.readyToExports | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit)) track by $index">
                                         <td md-cell class="serial-td">{{readyToExport.generalStepElm.docFullSerial}}</td>
                                         <td md-cell class="subject">
+                                            <!-- Paper/Electronic -->
+                                            <grid-indicator-directive record-type="WorkItem"
+                                                                      record="readyToExport"
+                                                                      indicator-type="paperElectronic">
+                                            </grid-indicator-directive>
+                                            <!-- Locked Item -->
                                             <grid-indicator-directive record-type="WorkItem"
                                                                       record="readyToExport"
                                                                       indicator-type="isLockedWorkItem"
