@@ -47,10 +47,11 @@
                                             <span>{{lang.english_name}}</span>
                                         </th>
                                         </th>
-                                        <th ng-if="!ctrl.selectedReferencePlanNumbers.length" md-column
+                                        <!-- useless as discussed with Issawii-->
+                                      <!--  <th ng-if="!ctrl.selectedReferencePlanNumbers.length" md-column
                                             md-order-by="global">
                                             <span>{{lang.global}}</span>
-                                        </th>
+                                        </th>-->
                                         <th ng-if="!ctrl.selectedReferencePlanNumbers.length" md-column
                                             md-order-by="global">
                                             <span>{{lang.organization_units}}</span>
@@ -65,13 +66,14 @@
                                         ng-repeat="referencePlanNumber in ctrl.referencePlanNumbers  | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
                                         <td md-cell>{{referencePlanNumber.arName}}</td>
                                         <td md-cell>{{referencePlanNumber.enName}}</td>
-                                        <td md-cell>
+                                        <!-- useless as discussed with Issawii-->
+                                       <!-- <td md-cell>
                                             <md-switch aria-label="{{lang.global}}"
                                                        title="{{referencePlanNumber.getTranslatedGlobal()}}"
                                                        ng-change="ctrl.changeGlobalReferencePlanNumber(referencePlanNumber)"
                                                        ng-model="referencePlanNumber.isGlobal">
                                             </md-switch>
-                                        </td>
+                                        </td>-->
                                         <td md-cell>
                                             <md-button
                                                     ng-click="ctrl.openRelatedOrganizationDialog(referencePlanNumber, $event)"

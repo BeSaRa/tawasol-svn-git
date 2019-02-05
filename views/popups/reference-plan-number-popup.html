@@ -49,13 +49,14 @@
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
-                                    <div flex class="p20">
+                                    <!-- useless as discussed with Issawii-->
+                                    <!--<div flex class="p20">
                                         <md-switch aria-label="{{lang.isGlobal}}"
                                                    ng-model="ctrl.referencePlanNumber.isGlobal">
                                             <label>{{lang.global}} :
                                                 {{ctrl.referencePlanNumber.getTranslatedGlobal()}}</label>
                                         </md-switch>
-                                    </div>
+                                    </div>-->
                                     <div flex class="p20">
                                         <md-switch aria-label="{{lang.has_status_date}}"
                                                    ng-model="ctrl.hasResetDate" ng-change="ctrl.resetDayAndMonth()">
