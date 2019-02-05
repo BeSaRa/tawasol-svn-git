@@ -1379,35 +1379,36 @@ module.exports = function (app) {
                 })
                 .then(function (generalStepElementView) {
                     generator.addPopupNumber();
-                    return dialog.showDialog({
-                        templateUrl: cmsTemplate.getPopup('view-correspondence'),
-                        controller: 'viewCorrespondencePopCtrl',
-                        controllerAs: 'ctrl',
-                        bindToController: true,
-                        escapeToCancel: false,
-                        locals: {
-                            correspondence: generalStepElementView.correspondence,
-                            content: generalStepElementView.documentViewInfo,
-                            actions: actions,
-                            workItem: generalStepElementView,
-                            readyToExport: readyToExport,
-                            disableProperties: disableProperties,
-                            disableCorrespondence: disableCorrespondence,
-                            disableEverything: departmentIncoming,
-                            popupNumber: generator.getPopupNumber(),
-                            pageName: 'none'
-                        },
-                        resolve: {
-                            organizations: function (organizationService) {
-                                'ngInject';
-                                return organizationService.getOrganizations();
+                    return dialog
+                        .showDialog({
+                            templateUrl: cmsTemplate.getPopup('view-correspondence'),
+                            controller: 'viewCorrespondencePopCtrl',
+                            controllerAs: 'ctrl',
+                            bindToController: true,
+                            escapeToCancel: false,
+                            locals: {
+                                correspondence: generalStepElementView.correspondence,
+                                content: generalStepElementView.documentViewInfo,
+                                actions: actions,
+                                workItem: generalStepElementView,
+                                readyToExport: readyToExport,
+                                disableProperties: disableProperties,
+                                disableCorrespondence: disableCorrespondence,
+                                disableEverything: departmentIncoming,
+                                popupNumber: generator.getPopupNumber(),
+                                pageName: 'none'
                             },
-                            lookups: function (correspondenceService) {
-                                'ngInject';
-                                return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                            resolve: {
+                                organizations: function (organizationService) {
+                                    'ngInject';
+                                    return organizationService.getOrganizations();
+                                },
+                                lookups: function (correspondenceService) {
+                                    'ngInject';
+                                    return correspondenceService.loadCorrespondenceLookups(info.documentClass);
+                                }
                             }
-                        }
-                    })
+                        })
                         .then(function () {
                             generator.removePopupNumber();
                             return true;

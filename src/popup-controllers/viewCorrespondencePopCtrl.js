@@ -330,6 +330,9 @@ module.exports = function (app) {
          */
         self.filterActionsByProperty = function (model, actions, propertyKey, propertyValue, listOfActions) {
             var stickyActions = listOfActions ? listOfActions : [];
+            if (!actions)
+                return [];
+
             for (var i = 0; i < actions.length; i++) {
                 var mainAction = actions[i], mainActionCopy = angular.copy(mainAction);
                 mainActionCopy.actionFrom = 'sticky';
