@@ -25,6 +25,26 @@ module.exports = function (app) {
 
         //self.permissionsChunkArray = _.chunk(permissions, 3);
         self.permissionsList = permissions;
+        var allPermissionsList = [];
+        for (var key in permissions[0]) {
+            for (var i = 0; i < (permissions[0][key].length); i++) {
+                allPermissionsList = allPermissionsList.concat(_.filter(permissions[0][key][i], function (permission) {
+                    return !!permission;
+                }));
+            }
+        }
+
+        var _getPermissionIdByPermissionKey = function (permissionKey) {
+            permissionKey = permissionKey.hasOwnProperty('permissionKey') ? permissionKey.permissionKey : permissionKey;
+            var permissionResult = _.find(allPermissionsList, function (permission) {
+                return permission.permissionKey === permissionKey;
+            });
+            return permissionResult ? permissionResult.id : 0;
+        };
+
+        var userInboxPermissionId = _getPermissionIdByPermissionKey('USER_INBOX'),
+            landingPagePermissionId = _getPermissionIdByPermissionKey('LANDING_PAGE');
+
 
         if (dynamicMenuItems.length) {
             self.permissionsList[0][langService.getKey('private_menu_items', 'en')] = _.chunk(_convertMenuItems(dynamicMenuItems), 3);
@@ -99,8 +119,7 @@ module.exports = function (app) {
                                     .then(function () {
                                         counterService.intervalG2GCounters();
                                     });
-                            }
-                            else {
+                            } else {
                                 // console.log('permission revoked');
                                 counterService.stopG2GCounter();
                             }
@@ -117,34 +136,44 @@ module.exports = function (app) {
          * @description add user ou permissions
          */
         self.saveUserOuPermissionsFromCtrl = function () {
-            var userOuPermissions = [], userMenuItemsIds = [],
-                userId = self.ouApplicationUser.applicationUser.id,
-                ouId = self.ouApplicationUser.ouid.id;
+            var landingPageIndex = _.findIndex(self.userOuPermissionsIds, function (userOuPermissionId) {
+                return userOuPermissionId === landingPagePermissionId
+            }), userInboxIndex = _.findIndex(self.userOuPermissionsIds, function (userOuPermissionId) {
+                return userOuPermissionId === userInboxPermissionId
+            });
 
-            for (var i = 0; i < self.userOuPermissionsIds.length; i++) {
-                if (_.startsWith(self.userOuPermissionsIds[i], 'dm')) {
-                    userMenuItemsIds.push(_getMenuItemById(self.userOuPermissionsIds[i]));
-                    continue;
-                }
-                userOuPermissions.push(new UserOuPermission({
-                    userId: userId,
-                    ouId: ouId,
-                    customRoleId: self.ouApplicationUser.customRoleId.id,
-                    permissionId: self.userOuPermissionsIds[i]
-                }));
-            }
-            return ouApplicationUserService
-                .addUserOuPermission(userOuPermissions)
-                .then(function () {
-                    if (!dynamicMenuItems.length) {
-                        return _successMessage();
+            if (landingPagePermissionId > 0 && userInboxPermissionId > 0 && landingPageIndex === -1 && userInboxIndex === -1) {
+                toast.info(langService.get('select_landing_page_or_user_inbox_permission'));
+            } else {
+                var userOuPermissions = [], userMenuItemsIds = [],
+                    userId = self.ouApplicationUser.applicationUser.id,
+                    ouId = self.ouApplicationUser.ouid.id;
+
+                for (var i = 0; i < self.userOuPermissionsIds.length; i++) {
+                    if (_.startsWith(self.userOuPermissionsIds[i], 'dm')) {
+                        userMenuItemsIds.push(_getMenuItemById(self.userOuPermissionsIds[i]));
+                        continue;
                     }
-                    return dynamicMenuItemService
-                        .saveBulkUserMenuItems(userMenuItemsIds, userId, ouId)
-                        .then(function () {
+                    userOuPermissions.push(new UserOuPermission({
+                        userId: userId,
+                        ouId: ouId,
+                        customRoleId: self.ouApplicationUser.customRoleId.id,
+                        permissionId: self.userOuPermissionsIds[i]
+                    }));
+                }
+                return ouApplicationUserService
+                    .addUserOuPermission(userOuPermissions)
+                    .then(function () {
+                        if (!dynamicMenuItems.length) {
                             return _successMessage();
-                        });
-                });
+                        }
+                        return dynamicMenuItemService
+                            .saveBulkUserMenuItems(userMenuItemsIds, userId, ouId)
+                            .then(function () {
+                                return _successMessage();
+                            });
+                    });
+            }
         };
 
 
