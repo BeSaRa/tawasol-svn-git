@@ -51,7 +51,10 @@ module.exports = function (app) {
                     .tokenRefresh()
                     .then(function () {
                         if (!employeeService.isAdminUser()) {
-                            $state.go('app.landing-page', {identifier: rootEntity.getRootEntityIdentifier()});
+                            if (employeeService.hasPermissionTo('LANDING_PAGE'))
+                                $state.go('app.landing-page', {identifier: rootEntity.getRootEntityIdentifier()});
+                            else
+                                $state.go('app.inbox.user-inbox', {identifier: rootEntity.getRootEntityIdentifier()});
                         } else {
                             $state.go('app.administration.entities', {identifier: rootEntity.getRootEntityIdentifier()});
                         }
