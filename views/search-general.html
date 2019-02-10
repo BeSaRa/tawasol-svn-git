@@ -188,7 +188,7 @@
                                         ></md-icon>
                                     </span>
                                     </td>
-                                    <td class="serial-td" md-cell>{{searchedGeneralDocument.docFullSerial}}</td>
+                                    <td md-cell><span class="serial-td">{{searchedGeneralDocument.docFullSerial}}</span></td>
                                     <td md-cell class="td-data">
                                         <a href="" ng-if="searchedGeneralDocument.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(searchedGeneralDocument, $event)">{{searchedGeneralDocument.docSubject}}</a>

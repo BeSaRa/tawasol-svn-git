@@ -176,7 +176,7 @@
                                         ></md-icon>
                                     </span>
                                     </td>
-                                    <td class="serial-td" md-cell>{{searchedOutgoingDocument.docFullSerial}}</td>
+                                    <td md-cell><span class="serial-td">{{searchedOutgoingDocument.docFullSerial}}</span></td>
                                     <td md-cell class="td-data">
                                         <a href="" ng-if="searchedOutgoingDocument.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(searchedOutgoingDocument, $event)">{{searchedOutgoingDocument.docSubject}}</a>

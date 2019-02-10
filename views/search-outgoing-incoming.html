@@ -168,7 +168,7 @@
                                                                   indicator-type="hasLinkedDocuments"
                                                                   record-type="correspondence"></grid-indicator-directive>
                                     </td>
-                                    <td class="serial-td" md-cell>{{searchedOutgoingIncomingDocument.docFullSerial}}</td>
+                                    <td md-cell><span class="serial-td">{{searchedOutgoingIncomingDocument.docFullSerial}}</span></td>
                                     <td md-cell class="td-data">
                                         <a href="" ng-if="searchedOutgoingIncomingDocument.hasContent()" class="view-doc"
                                            ng-click="ctrl.viewDocument(searchedOutgoingIncomingDocument, $event)">{{searchedOutgoingIncomingDocument.docSubject}}</a>

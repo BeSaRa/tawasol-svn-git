@@ -78,8 +78,8 @@
                                         model="approvedInternal"
                                         selected-length="{{ctrl.selectedApprovedInternals.length ? ctrl.selectedApprovedInternals.length : 0}}"
                                         ng-repeat="approvedInternal in ctrl.approvedInternals | filter:ctrl.searchModel | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index">
-                                        <td class="serial-td" md-cell>
-                                            {{approvedInternal.generalStepElm.docFullSerial}}
+                                        <td md-cell>
+                                            <span class="serial-td">{{approvedInternal.generalStepElm.docFullSerial}}</span>
                                         </td>
                                         <td md-cell md-truncate class="subject">
                                             <grid-indicator-directive record-type="WorkItem"
