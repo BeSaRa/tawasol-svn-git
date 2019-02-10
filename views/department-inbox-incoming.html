@@ -46,7 +46,8 @@
                                                 </md-button>
                                             </div>
                                         </th>
-                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column md-order-by="">
+                                        <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
+                                            md-order-by="">
                                             <!-- Indicators -->
                                         </th>
                                         <th ng-if="!ctrl.selectedIncomingDepartmentInboxes.length" md-column
@@ -106,8 +107,8 @@
                                                                       indicator-type="priorityLevel">
                                             </grid-indicator-directive>
                                         </td>
-                                        <td class="serial-td" md-cell>
-                                            {{incomingDepartmentInbox.generalStepElm.docFullSerial}}
+                                        <td md-cell>
+                                            <span class="serial-td">{{incomingDepartmentInbox.generalStepElm.docFullSerial}}</span>
                                         </td>
                                         <td md-cell class="subject">
                                             <grid-indicator-directive record-type="WorkItem"
@@ -116,7 +117,7 @@
                                                                       callback="ctrl.unlockWorkItem">
                                             </grid-indicator-directive>
                                             <a href="" class="view-doc"
-                                                       ng-click="ctrl.viewDocument(incomingDepartmentInbox, $event)">{{incomingDepartmentInbox.generalStepElm.docSubject}}</a>
+                                               ng-click="ctrl.viewDocument(incomingDepartmentInbox, $event)">{{incomingDepartmentInbox.generalStepElm.docSubject}}</a>
                                         </td>
                                         <td md-cell>{{incomingDepartmentInbox.generalStepElm.receivedDate}}</td>
                                         <td md-cell>{{incomingDepartmentInbox.type}}</td>
