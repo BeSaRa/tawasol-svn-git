@@ -16,7 +16,8 @@ module.exports = function (app) {
                 sourceForm: '=?',
                 registryOrganizations: '=?',
                 approvers: '=?',
-                emptyResults: '='
+                emptyResults: '=',
+                loadSubOrganizations: '=?'
             },
             link: function (scope, element, attrs) {
                 scope.$watch(function () {

@@ -34,6 +34,7 @@ module.exports = function (app) {
         self.followupStatuses = lookupService.returnLookups(lookupService.followupStatus);
 
         self.approvers = [];
+        self.subOrganizations = [];
 
         self.documentFiles = [];
         self.classifications = [];
@@ -404,6 +405,10 @@ module.exports = function (app) {
          * @param organizationId
          */
         self.onRegistryChange = function (organizationId) {
+            console.log(organizationId);
+            if (!organizationId)
+                return;
+
             self.subOrganizations = [];
             organizationService
                 .loadChildrenOrganizations(organizationId)
@@ -548,6 +553,20 @@ module.exports = function (app) {
             }
         };
 
+        self.onRegistryChanged = function () {
+
+            if (!self.document.registryOU)
+                return false;
+
+            self.subOrganizations = [];
+            organizationService
+                .loadChildrenOrganizations(self.document.registryOU)
+                .then(function (result) {
+                    // self.organizations = result;
+                    self.subOrganizations = result;
+                });
+        };
+
         /**
          * @description Set the formatted serial number for search on changing the serial number from and to values
          * @param $event
@@ -569,6 +588,16 @@ module.exports = function (app) {
                 self.document.followUpFrom = null;
             }
         };
+        // this will work one time
+        var watcher = $scope.$watch(function () {
+            return self.loadSubOrganizations;
+        }, function (newVal) {
+            if (newVal) {
+                self.onRegistryChanged();
+                self.loadSubOrganizations = false;
+                watcher();
+            }
+        });
 
         $scope.$watch(function () {
             return self.emptyResults;
