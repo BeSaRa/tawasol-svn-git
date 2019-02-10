@@ -43,6 +43,15 @@ module.exports = function (app) {
 
         self.propertyConfigurations = propertyConfigurations;
         self.emptyResults = false;
+
+
+        self.loadSubOrganizations = false;
+
+        if (!self.employeeService.hasPermissionTo('SEARCH_IN_ALL_OU')) {
+            self.searchOutgoingIncoming.registryOU = self.employeeService.getEmployee().getRegistryOUID();
+            self.searchOutgoingIncoming.ou = self.employeeService.getEmployee().getOUID();
+            self.loadSubOrganizations = true;
+        }
         /**
          * @description Get the dynamic required fields
          */
