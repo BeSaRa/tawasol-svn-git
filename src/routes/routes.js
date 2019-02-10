@@ -665,7 +665,7 @@ module.exports = function (app) {
                         'ngInject';
                         return correspondenceSiteTypeService.loadCorrespondenceSiteTypes();
                     },
-                    approvers: function (ouApplicationUserService, employeeService) {
+                    approvers: function (ouApplicationUserService, employeeService, organizations) {
                         'ngInject';
                         return ouApplicationUserService
                             .searchByCriteria({
@@ -738,7 +738,7 @@ module.exports = function (app) {
                         return propertyConfigurationService
                             .loadPropertyConfigurationsByDocumentClassAndOU('internal', ouId);
                     },
-                    approvers: function (ouApplicationUserService, employeeService) {
+                    approvers: function (ouApplicationUserService, employeeService, organizations) {
                         'ngInject';
                         return ouApplicationUserService
                             .searchByCriteria({
