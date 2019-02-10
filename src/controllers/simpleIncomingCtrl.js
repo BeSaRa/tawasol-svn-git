@@ -386,7 +386,10 @@ module.exports = function (app) {
          */
         self.cancelAddCorrespondence = function ($event) {
             $timeout(function () {
-                $state.go('app.landing-page');
+                if (employeeService.hasPermissionTo('LANDING_PAGE'))
+                    $state.go('app.landing-page');
+                else
+                    $state.go('app.inbox.user-inbox');
             })
         };
 

@@ -67,7 +67,10 @@ module.exports = function (app) {
                                     .then(function (result) {
                                         employeeService.setEmployee(result);
                                         if (!employeeService.isAdminUser()) {
-                                            $state.go('app.landing-page', {identifier: rootEntity.getRootEntityIdentifier()});
+                                            if (employeeService.hasPermissionTo('LANDING_PAGE'))
+                                                $state.go('app.landing-page', {identifier: rootEntity.getRootEntityIdentifier()});
+                                            else
+                                                $state.go('app.inbox.user-inbox', {identifier: rootEntity.getRootEntityIdentifier()});
                                         } else {
                                             $state.go('app.administration.entities', {identifier: rootEntity.getRootEntityIdentifier()});
                                         }
