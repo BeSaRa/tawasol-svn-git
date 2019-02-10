@@ -72,6 +72,18 @@ module.exports = function (app) {
                 title: 'manual_user_english',
                 file: 'user-english.pdf',
                 role: 'user'
+            },
+            {
+                id: 5,
+                title: 'manual_add_in_arabic',
+                file: 'add-in-arabic.pdf',
+                role: 'user'
+            },
+            {
+                id: 6,
+                title: 'manual_add_in_english',
+                file: 'add-in-english.pdf',
+                role: 'user'
             }
         ];
 
