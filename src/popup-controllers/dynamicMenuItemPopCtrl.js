@@ -155,7 +155,7 @@ module.exports = function (app) {
         self.reloadSubDynamicMenuItems = function () {
             return self.dynamicMenuItem.loadSubDynamicMenuItems()
                 .then(function () {
-                    layoutService.loadLandingPage();
+                    return layoutService.loadLandingPage();
                 });
         };
         /**
@@ -167,7 +167,10 @@ module.exports = function (app) {
                 .controllerMethod
                 .dynamicMenuItemAddSub(self.dynamicMenuItem, $event)
                 .then(function (result) {
-                    self.reloadSubDynamicMenuItems();
+                    self.reloadSubDynamicMenuItems()
+                        .then(function () {
+                            toast.success(langService.get('add_success').change({name: result.getNames()}));
+                        });
                 });
         };
 
@@ -251,7 +254,10 @@ module.exports = function (app) {
                 .controllerMethod
                 .dynamicMenuItemEditSub(self.dynamicMenuItem, dynamicMenuItem, $event)
                 .then(function (result) {
-                    self.reloadSubDynamicMenuItems(self.grid.page);
+                    self.reloadSubDynamicMenuItems(self.grid.page)
+                        .then(function(){
+                            toast.success(langService.get('edit_success').change({name: result.getNames()}));
+                        });
                 });
         };
     });

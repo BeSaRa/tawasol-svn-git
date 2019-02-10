@@ -119,6 +119,7 @@ module.exports = function (app) {
                     .loadSubDynamicMenuItems(this)
                     .then(function (result) {
                         self.children = result;
+                        self.childCount = result.length;
                         return self.children;
                     });
             };
