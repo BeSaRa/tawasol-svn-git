@@ -1,23 +1,96 @@
-<md-dialog id="help-dialog">
+﻿<md-dialog class="context-help-background" id="help-dialog">
     <div layout="column">
-        <md-toolbar>
-            <span class="p20">{{lang.help}}</span>
+                <md-toolbar>
+            <span class="p20">Add Incoming</span>
             <close-dialog-directive></close-dialog-directive>
         </md-toolbar>
-        <md-content scroll-directive class="p20">
-            <p style="color: red;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam atque dignissimos
-                dolore ea eos id in
-                itaque labore laboriosam nam necessitatibus officia porro quaerat, quam, repellendus saepe sit suscipit
-                ullam!</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam atque dignissimos dolore ea eos id in
-                itaque labore laboriosam nam necessitatibus officia porro quaerat, quam, repellendus saepe sit suscipit
-                ullam!</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam atque dignissimos dolore ea eos id in
-                itaque labore laboriosam nam necessitatibus officia porro quaerat, quam, repellendus saepe sit suscipit
-                ullam!</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam atque dignissimos dolore ea eos id in
-                itaque labore laboriosam nam necessitatibus officia porro quaerat, quam, repellendus saepe sit suscipit
-                ullam!</p>
+        <md-content class="p20" scroll-directive>
+            
+            <p>
+			<img alt="go" height="27" src="goeng.png" width="22" class="auto-style8" /><span class="auto-style6">The 
+			system enables to users to add incoming mail .</span></p>
+		<p>
+		<img alt="go" height="27" src="goeng.png" width="22" class="auto-style8" /><span class="auto-style6"> 
+		First , user should fill the mandatory fields in document properties .</span></p>
+		<p>
+		<img alt="go" height="27" src="goeng.png" width="22" class="auto-style8" /><span class="auto-style6"> 
+		The following data user can manage it when add an incoming document :
+		</span></p>
+		<p>
+		<span class="auto-style6"> 
+		<img alt="right" height="20" src="right.png" width="22" class="auto-style8" /> 
+		Add tags from Manage Documents Tags&nbsp; </span>
+		<img alt="tags" class="auto-style4" height="40" src="help/Images/managetagseng.png" width="217" /></p>
+		<p>
+		<img alt="right" height="20" src="right.png" width="22" class="auto-style8" /><span class="auto-style6"> 
+		Add linked Documents by searching for any documents in search for 
+		document screen from manage linked documents </span></p>
+		<p>
+		<img alt="right" height="20" src="right.png" width="22" class="auto-style8" /><span class="auto-style6"> 
+		Add attachments by import the attachment </span>
+		<img alt="attachmentimport" class="auto-style4" height="40" src="help/Images/attachmentimporteng.png" width="217" /><span class="auto-style6"> 
+		or by Dragd &amp; Drop </span>
+		<img alt="drag" class="auto-style4" height="40" src="help/Images/dragdanddropeng.png" width="217" /><span class="auto-style6"> 
+		from Manage Document Attachments </span>
+		<img alt="manageattachments" class="auto-style4" height="40" src="help/Images/managedocumentattachmentseng.png" width="217" /><span class="auto-style6">
+		</span></p>
+		<p>
+		<img alt="right" height="20" src="right.png" width="22" class="auto-style8" /><span class="auto-style6"> 
+		Add comments from Manage Document Comments&nbsp;&nbsp;&nbsp;&nbsp;
+		</span>
+		<img alt="managecomments" class="auto-style4" height="40" src="help/Images/managedocumentcommenteng.png" width="217" /></p>
+		<p>
+		<img alt="right" height="20" src="right.png" width="22" class="auto-style8" /><span class="auto-style6"> 
+		&nbsp;Add external employee or new entity from Manage Linked Entities </span>
+		<img alt="managelinkeentities" class="auto-style4" height="40" src="help/Images/managelinkedentitieseng.png" width="217" /></p>
+		<p>
+		<img alt="letter" height="28" src="letter.png" width="22" class="auto-style8" />&nbsp;<span class="auto-style5">Notes 
+		: </span></p>
+		<p>
+		<img alt="star" class="auto-style8" height="27" src="star.png" width="30" /><span class="auto-style6"> 
+		The incoming documents can not be added without select the 
+		correspondence site type with main and sub site</span></p>
+		<p>
+		<img alt="star" class="auto-style8" height="27" src="star.png" width="30" /><span class="auto-style6">&nbsp;In 
+		case user add an&nbsp; incoming document without prepare document 
+		content , the content will be saved in Scan screen </span>
+		<img alt="scan" class="auto-style4" height="40" src="help/Images/scaneng.png" width="217" /></p>
+		<p class="auto-style6">
+		<img alt="star" class="auto-style8" height="27" src="star.png" width="30" />&nbsp;User 
+		can not add an incoming mail if one of mandatory fields left as blank</p>
+		<p>
+		<img alt="star" class="auto-style8" height="27" src="star.png" width="30" /><span class="auto-style6"> 
+		User can add attachments by scanner when select scanner </span>
+		<img alt="scanner" class="auto-style4" height="40" src="help/Images/scannereng.png" width="217" /><span class="auto-style6"> 
+		from Manage Document Attachments </span></p>
+		<p>
+		<img alt="star" class="auto-style8" height="27" src="star.png" width="30" /><span class="auto-style6">&nbsp;User 
+		can add the correspondence site type with&nbsp; the main and&nbsp; the sub 
+		site by one of two methods : 
+		Simple search or Advanced search and this is determined from Global 
+		Settings </span></p>
         </md-content>
     </div>
+	
+<style type="text/css">
+.auto-style4 {
+	vertical-align: middle;
+	font-size: large;
+	font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+	border-style: solid;
+	border-width: 1px;
+}
+.auto-style5 {
+	color: #FF0000;
+	font-size: large;
+	font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+.auto-style6 {
+	font-size: large;
+	font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+.auto-style8 {
+	vertical-align: middle;
+}
+</style>
 </md-dialog>

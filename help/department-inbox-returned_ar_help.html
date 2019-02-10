@@ -1,16 +1,75 @@
-<md-dialog id="help-dialog">
+﻿<md-dialog class="context-help-background" id="help-dialog">
     <div layout="column">
         <md-toolbar>
-            <span class="p20">{{lang.help}}</span>
+            <span class="p20">البريد المعاد</span>
             <close-dialog-directive></close-dialog-directive>
         </md-toolbar>
         <md-content class="p20" scroll-directive>
-            <p style="color: red;">محتوى مساعده الجهات الحكومية</p>
-            <p>محتوى مساعده الجهات الحكومية</p>
-            <p>محتوى مساعده الجهات الحكومية</p>
-            <p>محتوى مساعده الجهات الحكومية</p>
-            <p>محتوى مساعده الجهات الحكومية</p>
-            <p>محتوى مساعده الجهات الحكومية</p>
+
+            <p>
+			<img class="auto-style2" height="27" src="help/images/star_ar.png" width="22" /> 
+			<span class="auto-style5">يحتوي 
+			البريد المعاد على الكتب الصادرة التي تم إعادتها من قبل تلك الإدارات 
+			لسبب ما ويمكن للمستخدم إتخاذ بعض الإجراءات الهامة من خلال</span></p>
+		<p class="auto-style5">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; النقر على 
+			زر الفأرة الأيمن ليعرض لك النظام أهم الإجراءات التالية:</p>
+		<p>&nbsp; <img height="20" src="help/images/point.png" width="22" />
+		<span class="auto-style5">إعادة إرسال</span>
+		<img class="auto-style1" height="20" src="help/images/resend_ar.png" width="100" /> 
+		<span class="auto-style5">: يمكن للمستخدم إعادة إرسال الكتاب لنفس الجهة بحيث ينتقل الكتاب مياشرة 
+		إلى البريد المرسل.</span></p>
+		<p>&nbsp; <img height="20" src="help/images/point.png" width="22" />
+		<span class="auto-style5">بدء دورة مستندية </span>
+		<img class="auto-style1" height="20" src="help/images/launch_distribiotion_ar.png" width="100" /> 
+		<span class="auto-style5">: يمكن للمستخدم إنشاء دورة مستندية جديدة بحيث بعد النقر على الإجراء يعرض 
+		لك النظام شاشة الإرسال لبدء</span></p>
+		<p class="auto-style5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; الدورة المستندية.</p>
+		<p>&nbsp; <img height="20" src="help/images/point.png" width="22" />
+		<span class="auto-style5">تعديل بعد التصدير</span>
+		<img class="auto-style1" height="20" src="help/images/edit_after_export_ar.png" width="100" /> 
+		<span class="auto-style5">: يسمح النظام للمستخدم بعمل تعديل لكتب معتمدة 
+		تم إجراء عملية السحب عليها ويصدر النظام رسالة تحذيرية</span></p>
+		<p class="auto-style5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; كما هو موضح بالشكل 
+		التالي:</p>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<img class="auto-style1" height="123" src="help/images/edit_after_ex_msg_ar.png" width="200" />&nbsp;</p>
+		<p>
+		<img class="auto-style2" height="28" src="help/images/note%20symble.png" width="28" /><span class="auto-style6">
+		<strong>إنتبه للمعلومة التالية:</strong></span></p>
+		<p>
+		<img class="auto-style2" height="27" src="help/images/star_ar.png" width="22" />
+		<span class="auto-style5">في حال قام المستخدم بالنقر على "نعم" سيقوم 
+		النظام تلقائياً بالإنتقال إلى شاشة إضافة صادر حيث يمكن للمستخدم التعديل 
+		وسيقوم النظام بالإجراء</span></p>
+		<p class="auto-style5">
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; التالي:</p>
+		<p>&nbsp; <img height="20" src="help/images/point.png" width="22" />
+		<span class="auto-style5">سيتم حذف التوقيع والرقم المتسلسل من الكتاب.</span></p>
+		<p>&nbsp; <img height="20" src="help/images/point.png" width="22" />
+		<span class="auto-style5">سينتقل الكتاب بعد التعديل إلى مرحلة المراجعة .</span></p>
+		<p>&nbsp;<img height="20" src="help/images/point.png" width="22" />
+		<span class="auto-style5">سيتم الاحتفاظ بالرقم المسلسل الحالي ليتم 
+		إستخدامه مرة اخرى عند إعادة الإعتماد.</span></p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
         </md-content>
     </div>
+	<style type="text/css">
+.auto-style1 {
+	vertical-align: middle;
+	border-style: solid;
+	border-width: 1px;
+}
+.auto-style2 {
+	vertical-align: middle;
+}
+.auto-style5 {
+	font-size: large;
+}
+.auto-style6 {
+	font-size: large;
+	color: #FF0000;
+}
+</style>
 </md-dialog>
