@@ -908,7 +908,7 @@
         "state": "app.icn",
         "icon_type": "font",
         "sort_order": 6,
-        "active": true,
+        "active": false,
         "sort_value": 0
     },
     {
@@ -944,7 +944,7 @@
         "state": "app.reports",
         "icon_type": "font",
         "sort_order": 6,
-        "active": true,
+        "active": false,
         "sort_value": 0
     },
     {
