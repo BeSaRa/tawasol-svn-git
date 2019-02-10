@@ -108,13 +108,20 @@ module.exports = function (app) {
          */
         self.logout = function () {
             localStorageService.remove('CR');
+            var entity = rootEntity.returnRootEntity();
             return $http.post(urlService.logout, null)
                 .then(function (result) {
+                    entity.checkSSO().authenticate(function () {
+                        $cookies.put('SSO_LOGGED_OUT', true);
+                    });
                     tokenService.destroy(); // destroy the current sessions
                     employeeService.destroyEmployee(); // destroy current user data
                     return result.data.rs;
                 })
                 .catch(function () {
+                    entity.checkSSO().authenticate(function () {
+                        $cookies.put('SSO_LOGGED_OUT', true);
+                    });
                     tokenService.destroy(); // destroy the current sessions
                     employeeService.destroyEmployee(); // destroy current user data
                     return true;

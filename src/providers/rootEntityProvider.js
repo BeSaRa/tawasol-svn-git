@@ -56,8 +56,10 @@ module.exports = function (app) {
                             self.setRootEntity(new RootEntity(result.data.rs));
                             // single sign on
                             rootEntity.checkSSO().then(function (authenticationService) {
-                                if (ignoreSSO)
+                                if (ignoreSSO || $cookies.get('SSO_LOGGED_OUT')) {
+                                    $cookies.remove('SSO_LOGGED_OUT');
                                     return;
+                                }
                                 authenticationService
                                     .authenticate(new Credentials({
                                         isSSO: true

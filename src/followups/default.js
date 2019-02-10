@@ -86,8 +86,9 @@ module.exports = function (app) {
             }
         });
 
-        $transitions.onStart({to: '**'}, function () {
-            var identifier;
+        $transitions.onStart({to: '**'}, function (transition) {
+            var identifier, $cookies = transition.injector().get('$cookies');
+
             try {
                 identifier = $location.path().match(/\entity\/(.[^\/]*)/)[1];
             } catch (e) {
