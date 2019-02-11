@@ -7,22 +7,31 @@
         <md-content scroll-directive>
             <div layout="column">
                 <form name="subscriptionEventTypeForm" autocomplete="off">
-                    <div layout="column" class="p20">
-                        <div layout="row">
-                            <md-input-container flex>
-                                <label for="eventType">{{lang.user_subscription_event_type}}</label>
-                                <md-select id="eventType" name="eventType" multiple
-                                           ng-model-options="{trackBy: '$value.id'}"
-                                           ng-model="ctrl.subscribingFor" required>
-                                    <md-option ng-repeat="item in ctrl.eventTypes" ng-value="item"
-                                               ng-if="!ctrl.checkExistingEvent(item)">
-                                        {{item.getTranslatedName()}}
-                                    </md-option>
-                                </md-select>
-                                <div ng-messages="subscriptionEventTypeForm.eventType.$error">
-                                    <div ng-message="required">{{lang.field_required}}</div>
-                                </div>
-                            </md-input-container>
+                    <div layout="row" class="p20">
+                        <md-input-container flex>
+                            <label for="eventType">{{lang.user_subscription_event_type}}</label>
+                            <md-select id="eventType" name="eventType" multiple
+                                       ng-model-options="{trackBy: '$value.id'}"
+                                       ng-model="ctrl.subscribingFor" required>
+                                <md-option ng-repeat="item in ctrl.eventTypes" ng-value="item"
+                                           ng-if="!ctrl.checkExistingEvent(item)">
+                                    {{item.getTranslatedName()}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="subscriptionEventTypeForm.eventType.$error">
+                                <div ng-message="required">{{lang.field_required}}</div>
+                            </div>
+                        </md-input-container>
+
+                        <div>
+                            <md-button class="md-raised"
+                                       ng-disabled="subscriptionEventTypeForm.$invalid"
+                                       ng-click="ctrl.saveSubscribe(subscriptionEventTypeForm, $event)">
+                                {{lang.add}}
+                            </md-button>
+                            <!--<md-button class="md-raised" ng-disabled="!ctrl.selectedOrganization"
+                                       ng-click="ctrl.addOrganizationToCorrespondenceSite()">{{lang.add}}
+                            </md-button>-->
                         </div>
                     </div>
                 </form>
@@ -118,11 +127,11 @@
         </md-content>
         <div>
             <div layout="row">
-                <md-button class="md-raised"
+                <!--<md-button class="md-raised"
                            ng-disabled="subscriptionEventTypeForm.$invalid"
                            ng-click="ctrl.saveSubscribe(subscriptionEventTypeForm, $event)">
                     {{lang.save}}
-                </md-button>
+                </md-button>-->
                 <span flex></span>
                 <md-button class="md-raised" ng-click="ctrl.closeEventTypePopup()">
                     {{lang.close}}
