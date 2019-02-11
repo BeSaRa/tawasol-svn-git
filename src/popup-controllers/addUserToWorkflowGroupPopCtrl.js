@@ -3,6 +3,7 @@ module.exports = function (app) {
                                                               employeeService,
                                                               distributionWFService,
                                                               dialog,
+                                                              _,
                                                               langService,
                                                               ouApplicationUserService,
                                                               DistributionUserWFItem,
@@ -96,18 +97,74 @@ module.exports = function (app) {
                         && groupMember.ouid.id === user.appUserOUID;
                 });
             };
+            self.checkIfAdded = function (user) {
+                return !!_.find(self.addedUsers, function (addedUser) {
+                    return addedUser.toUserId === user.toUserId
+                        && addedUser.appUserOUID === user.appUserOUID;
+                });
+            };
 
             /**
-             * @description Close the dialog and sends the selected users
+             * @description Close the dialog and sends the added users to save
              */
             self.addToWorkflowGroup = function () {
-                dialog.hide(self.selectedUsers);
+                dialog.hide(self.addedUsers);
             };
 
 
             self.closeAddToWorkflowGroupPopupFromCtrl = function () {
                 dialog.cancel();
+            };
+
+            self.addedUsers = [];
+            self.selectedAddedUsers = [];
+            self.addedUsersGrid = {
+                limit: 5, //self.globalSetting.searchAmount, // default limit
+                page: 1, // first page
+                order: '', // default sorting order
+                limitOptions: [5, 10, 20, // limit options
+                    {
+                        label: langService.get('all'),
+                        value: function () {
+                            return (self.addedUsers.length + 21);
+                        }
+                    }
+                ]
+            };
+            /**
+             * @description Gets the grid records by sorting
+             */
+            self.getSortedDataAddedUsers = function () {
+                self.addedUsers = $filter('orderBy')(self.addedUsers, self.addedUsersGrid.order);
+            };
+
+            self.addSelectedUsers = function () {
+                self.addedUsers = self.addedUsers.concat(angular.copy(self.selectedUsers));
+                self.selectedUsers = [];
+            };
+
+            self.removeAddedUser = function (user) {
+                dialog.confirmMessage(langService.get('confirm_delete').change({name: user.getTranslatedName()}))
+                    .then(function () {
+                        var index = _.findIndex(self.addedUsers, function (addedUser) {
+                            return addedUser.toUserId === user.toUserId
+                                && addedUser.appUserOUID === user.appUserOUID
+                        });
+                        self.addedUsers.splice(index, 1);
+                    })
+            };
+
+        /**
+         * @description Get the search results grid total count
+         * @returns {number}
+         */
+        self.getSearchedUsersGridTotal = function () {
+                return _.filter(self.users, function (user) {
+                    return !self.checkIfExist(user) && !self.checkIfAdded(user);
+                }).length;
             }
+
+
         }
     )
 };

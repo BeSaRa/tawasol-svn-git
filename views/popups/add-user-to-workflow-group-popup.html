@@ -13,7 +13,7 @@
                             <md-select id="ou" name="ou"
                                        ng-change="ctrl.onSearchUsers()"
                                        ng-model="ctrl.usersCriteria.ou">
-                                <md-option ng-value="null">{{lang.all}}</md-option>
+                                <!--<md-option ng-value="null">{{lang.all}}</md-option>-->
                                 <md-option required ng-value="organization"
                                            ng-repeat="organization in ctrl.organizationGroups">
                                     {{organization.getTranslatedName()}}
@@ -41,18 +41,26 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- Search Results -->
                 <div layout="row" class="p20">
                     <md-card layout="column" flex class="card-overlay">
                         <md-table-container>
                             <table md-table ng-model="ctrl.selectedUsers"
                                    md-row-select="true"
                                    multiple="true">
-                                <thead md-head md-order="ctrl.searchedUsersGrid.order" md-on-reorder="ctrl.getSortedData">
+                                <thead md-head md-order="ctrl.searchedUsersGrid.order"
+                                       md-on-reorder="ctrl.getSortedData">
                                 <tr md-row>
                                     <th colspan="5" ng-if="ctrl.selectedUsers.length"
                                         md-column>
-                                        <span>{{ctrl.selectedUsers.length}} {{lang.items_selected}} </span>
+                                        <div layout="row" layout-align="start center">
+                                            <span>{{ctrl.selectedUsers.length}} {{lang.items_selected}} </span>
+                                            <span flex></span>
+                                            <md-button tooltip="{{lang.add}}" class="md-icon-button"
+                                                       ng-click="ctrl.addSelectedUsers($event)">
+                                                <md-icon md-svg-icon="plus"></md-icon>
+                                            </md-button>
+                                        </div>
                                     </th>
                                     <th md-column ng-if="!ctrl.selectedUsers.length" md-order-by="toUserDomain">
                                         {{lang.domain_name}}
@@ -63,13 +71,14 @@
                                     <th md-column ng-if="!ctrl.selectedUsers.length" md-order-by="enName">
                                         {{lang.english_name}}
                                     </th>
-                                    <th md-column ng-if="!ctrl.selectedUsers.length" md-order-by="{{ctrl.getSortingKey('organization', 'DistributionWFUser')}}">
+                                    <th md-column ng-if="!ctrl.selectedUsers.length"
+                                        md-order-by="{{ctrl.getSortingKey('organization', 'DistributionWFUser')}}">
                                         {{lang.organization_unit}}
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody md-body>
-                                <tr md-row md-select="user" ng-if="!ctrl.checkIfExist(user)"
+                                <tr md-row md-select="user" ng-if="!ctrl.checkIfExist(user) && !ctrl.checkIfAdded(user)"
                                     ng-repeat="user in ctrl.users | filter:ctrl.searchModel |limitTo: ctrl.searchedUsersGrid.limit: ((ctrl.searchedUsersGrid.page - 1) * ctrl.searchedUsersGrid.limit) track by $index">
                                     <td md-cell>
                                         <span>{{user.toUserDomain}}</span>
@@ -91,7 +100,76 @@
                                     md-limit-options="ctrl.searchedUsersGrid.limitOptions"
                                     md-limit="ctrl.searchedUsersGrid.limit"
                                     md-page="ctrl.searchedUsersGrid.page"
-                                    md-total="{{ctrl.users.length}}" md-page-select>
+                                    md-total="{{ctrl.getSearchedUsersGridTotal()}}" md-page-select>
+                            </md-table-pagination>
+                        </md-table-container>
+                    </md-card>
+                </div>
+
+                <!-- Added Members -->
+                <div layout="row" class="p20">
+                    <md-card layout="column" flex class="card-overlay">
+                        <md-table-container>
+                            <table md-table ng-model="ctrl.addedUsers"
+                                   md-row-select="false"
+                                   multiple="false">
+                                <thead md-head md-order="ctrl.addedUsersGrid.order"
+                                       md-on-reorder="ctrl.getSortedDataAddedUsers">
+                                <tr md-row>
+                                    <th colspan="5" ng-if="ctrl.selectedAddedUsers.length"
+                                        md-column>
+                                        <span>{{ctrl.selectedAddedUsers.length}} {{lang.items_selected}} </span>
+                                    </th>
+                                    <th md-column ng-if="!ctrl.selectedAddedUsers.length" md-order-by="toUserDomain">
+                                        {{lang.domain_name}}
+                                    </th>
+                                    <th md-column ng-if="!ctrl.selectedAddedUsers.length" md-order-by="arName">
+                                        {{lang.arabic_name}}
+                                    </th>
+                                    <th md-column ng-if="!ctrl.selectedAddedUsers.length" md-order-by="enName">
+                                        {{lang.english_name}}
+                                    </th>
+                                    <th md-column ng-if="!ctrl.selectedAddedUsers.length"
+                                        md-order-by="{{ctrl.getSortingKey('organization', 'DistributionWFUser')}}">
+                                        {{lang.organization_unit}}
+                                    </th>
+                                    <th md-column ng-if="!ctrl.selectedAddedUsers.length"
+                                        md-order-by="">
+                                        {{lang.actions}}
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody md-body>
+                                <tr md-row
+                                    ng-repeat="addedUser in ctrl.addedUsers | limitTo: ctrl.addedUsersGrid.limit: ((ctrl.addedUsersGrid.page - 1) * ctrl.addedUsersGrid.limit) track by $index"
+                                    md-select="addedUser">
+                                    <td md-cell>
+                                        <span>{{addedUser.toUserDomain}}</span>
+                                    </td>
+                                    <td md-cell>
+                                        <span>{{addedUser.getFullNameByKey('ar')}}</span>
+                                    </td>
+                                    <td md-cell>
+                                        <span>{{addedUser.getFullNameByKey('en')}}</span>
+                                    </td>
+                                    <td md-cell>
+                                        <span>{{addedUser.getTranslatedOrganizationName()}}</span>
+                                    </td>
+                                    <td md-cell>
+                                        <md-button tooltip="{{lang.remove}}" class="md-icon-button"
+                                                   ng-click="ctrl.removeAddedUser(addedUser, $event)">
+                                            <md-icon md-svg-icon="delete"></md-icon>
+                                        </md-button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <md-table-pagination
+                                    md-label="{page: '{{lang.page}}', rowsPerPage: '{{lang.rows_per_page}}', of: '{{lang.count_of}}'}"
+                                    md-limit-options="ctrl.addedUsersGrid.limitOptions"
+                                    md-limit="ctrl.addedUsersGrid.limit"
+                                    md-page="ctrl.addedUsersGrid.page"
+                                    md-total="{{ctrl.addedUsers.length}}" md-page-select>
                             </md-table-pagination>
                         </md-table-container>
                     </md-card>
@@ -102,7 +180,7 @@
         <div>
             <div layout="row">
                 <md-button class="md-raised"
-                           ng-disabled="!ctrl.selectedUsers.length"
+                           ng-disabled="!ctrl.addedUsers.length"
                            ng-click="ctrl.addToWorkflowGroup($event)">
                     {{lang.add}}
                 </md-button>
