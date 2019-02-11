@@ -2,6 +2,18 @@ module.exports = function (app) {
     app.service('dialog', function ($mdDialog, cmsTemplate, $q, $sce, langService, $rootScope) {
         'ngInject';
         var self = this;
+        var events = "href onabort onauxclick onbeforecopy onbeforecut onbeforepaste onblur oncancel oncanplay oncanplaythrough onchange onclick onclose oncontextmenu oncopy oncuechange oncut ondblclick ondrag ondragend ondragenter ondragleave ondragover ondragstart ondrop ondurationchange onemptied onended onerror onfocus onfullscreenchange onfullscreenerror ongotpointercapture oninput oninvalid onkeydown onkeypress onkeyup onload onloadeddata onloadedmetadata onloadstart onlostpointercapture onmousedown onmouseenter onmouseleave onmousemove onmouseout onmouseover onmouseup onmousewheel onpaste onpause onplay onplaying onpointercancel onpointerdown onpointerenter onpointerleave onpointermove onpointerout onpointerover onpointerup onprogress onratechange onreset onresize onscroll onsearch onseeked onseeking onselect onselectionchange onselectstart onstalled onsubmit onsuspend ontimeupdate ontoggle onvolumechange onwaiting onwebkitfullscreenchange onwebkitfullscreenerror onwheel";
+
+        function stripEvents(element) {
+            debugger;
+            angular
+                .element(element)
+                .removeAttr(events);
+
+            angular.element(element).children().each(function () {
+                stripEvents(angular.element(this));
+            });
+        }
 
         /**
          * strip the HTML content from <script> tags.
@@ -16,6 +28,7 @@ module.exports = function (app) {
             while (i--) {
                 scripts[i].parentNode.removeChild(scripts[i]);
             }
+            stripEvents(div);
             return div.innerHTML;
         }
 
