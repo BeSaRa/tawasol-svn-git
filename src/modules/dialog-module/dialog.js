@@ -4,6 +4,22 @@ module.exports = function (app) {
         var self = this;
 
         /**
+         * strip the HTML content from <script> tags.
+         * @param s
+         * @return {string}
+         */
+        function stripScripts(s) {
+            var div = document.createElement('div');
+            div.innerHTML = s;
+            var scripts = div.getElementsByTagName('script');
+            var i = scripts.length;
+            while (i--) {
+                scripts[i].parentNode.removeChild(scripts[i]);
+            }
+            return div.innerHTML;
+        }
+
+        /**
          * small function to get template for current special-dialog
          * @param type
          * @returns {Object}
@@ -25,7 +41,7 @@ module.exports = function (app) {
          */
         function prepareDialog(type, content, cancelButton, escapeToCancel, event, hideIcon) {
             // if just confirm content, acceptButton, rejectButton, escapeToCancel, event
-            content = $sce.trustAsHtml(content);
+            content = $sce.trustAsHtml(stripScripts(content));
             return {
                 template: getTemplate(type),
                 controller: function ($mdDialog) {
