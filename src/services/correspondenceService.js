@@ -1558,7 +1558,8 @@ module.exports = function (app) {
                     });
                     metaData.linkedDocs = self.interceptReceivedCollectionBasedOnEachDocumentClass(metaData.linkedDocList);
                     metaData.linkedEntities = _.map(metaData.linkedEntitiesList, function (item) {
-                        item.documentClass = documentClass;
+                        /*
+                        item.documentClass = documentClass;*/
                         return generator.interceptReceivedInstance('LinkedObject', new LinkedObject(item));
                     });
 

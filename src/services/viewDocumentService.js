@@ -22,6 +22,7 @@ module.exports = function (app) {
                                   $timeout,
                                   $sce,
                                   $q,
+                                  _,
                                   CMSModelInterceptor,
                                   urlService,
                                   cmsTemplate,
@@ -1283,15 +1284,7 @@ module.exports = function (app) {
              * @param pageName
              */
             self.viewG2GHistoryDocument = function (g2gItem, actions, pageName, $event) {
-                var g2gItemCopy = angular.copy(g2gItem);
-                var disabled = _checkDisabled(pageName, g2gItem);
                 var isInternal = g2gItem.isInternalG2G();
-
-                if (disabled.disableAll) {
-                    disabled.disableSites = true;
-                    disabled.disableProperties = true;
-                }
-
                 g2gItem = generator.interceptSendInstance('G2GMessagingHistory', g2gItem);
                 return $http
                     .put(urlService.g2gInbox + 'open-sent-return/' + isInternal, g2gItem)
@@ -1308,7 +1301,7 @@ module.exports = function (app) {
                         });
                         metaData.linkedDocs = self.interceptReceivedCollectionBasedOnEachDocumentClass(metaData.linkedDocList);
                         metaData.linkedEntities = _.map(metaData.linkedEntitiesList, function (item) {
-                            item.documentClass = documentClass;
+                            // item.documentClass = documentClass;
                             return generator.interceptReceivedInstance('LinkedObject', new LinkedObject(item));
                         });
 
@@ -1321,6 +1314,13 @@ module.exports = function (app) {
                         return result.data.rs;
                     })
                     .then(function (result) {
+                        var g2gItemCopy = angular.copy(g2gItem);
+                        var disabled = _checkDisabled(pageName, result.metaData);
+                        if (disabled.disableAll) {
+                            disabled.disableSites = true;
+                            disabled.disableProperties = true;
+                        }
+
                         result.content.viewURL = $sce.trustAsResourceUrl(result.content.viewURL);
                         generator.addPopupNumber();
                         return dialog.showDialog({
