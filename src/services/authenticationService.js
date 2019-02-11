@@ -112,7 +112,7 @@ module.exports = function (app) {
             return $http.post(urlService.logout, null)
                 .then(function (result) {
                     if (entity) {
-                        entity.checkSSO().authenticate(function () {
+                        entity.checkSSO().then(function () {
                             $cookies.put('SSO_LOGGED_OUT', true);
                         });
                     }
@@ -122,7 +122,7 @@ module.exports = function (app) {
                 })
                 .catch(function () {
                     if (entity) {
-                        entity.checkSSO().authenticate(function () {
+                        entity.checkSSO().then(function () {
                             $cookies.put('SSO_LOGGED_OUT', true);
                         });
                     }
