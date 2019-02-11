@@ -82,7 +82,7 @@
                                     <thead md-head md-order="ctrl.grid.order"
                                            md-on-reorder="ctrl.getSortedData">
                                     <tr md-row>
-                                        <th colspan="4" class="table-selector-header"
+                                        <th colspan="5" class="table-selector-header"
                                             ng-if="ctrl.selectedAddedOUAndWFGroupsToBroadcast.length" md-column>
                                             <div layout="row" layout-align="start center">
                                                 <span>{{ctrl.selectedAddedOUAndWFGroupsToBroadcast.length}} {{lang.items_selected}} </span>
@@ -116,7 +116,7 @@
                                     <tbody md-body>
                                     <tr md-row
                                         ng-repeat="record in ctrl.addedOUAndWFGroupsToBroadcast | limitTo: ctrl.grid.limit: ((ctrl.grid.page - 1) * ctrl.grid.limit) track by $index"
-                                        md-select="organization">
+                                        md-select="record">
                                         <td md-cell>
                                             {{record.getNameByLanguage('ar')}}
                                         </td>

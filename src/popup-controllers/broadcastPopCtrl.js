@@ -120,53 +120,72 @@ module.exports = function (app) {
                 self.ouBroadcast = null;
             };
 
-            self.removeRecordFromBroadcastGrid = function (record) {
+            /**
+             * @description Removes the added record(OU/WfGroup) from list of added records
+             * @param recordToDelete
+             */
+            self.removeRecordFromBroadcastGrid = function (recordToDelete) {
                 dialog.confirmMessage(langService.get('confirm_delete_msg'))
                     .then(function () {
-                        self.removeOrganizationBroadcast(record);
-                        self.removeWorkflowGroupBroadcast(record);
+                        var indexToDelete = _.findIndex(self.addedOUAndWFGroupsToBroadcast, function (addedRecord) {
+                            return recordToDelete.id === addedRecord.id && self.checkBroadcastRecordType(addedRecord, recordToDelete.broadcastRecordType);
+                        });
+                        if (indexToDelete > -1) {
+                            self.addedOUAndWFGroupsToBroadcast.splice(indexToDelete, 1);
+                        }
+                        /*self.removeOrganizationBroadcast(record);
+                        self.removeWorkflowGroupBroadcast(record);*/
                         self.selectedAddedOUAndWFGroupsToBroadcast = [];
                     })
             };
 
-            /**
-             * @description remove single organization from list
-             * @param ouToBroadcast
-             */
-            self.removeOrganizationBroadcast = function (ouToBroadcast) {
-                var organizationIndexToDelete = _.findIndex(self.addedOUAndWFGroupsToBroadcast, function (ou) {
-                    return ou.id === ouToBroadcast.id && self.checkBroadcastRecordType(organization, self.broadcastRecordType.organization);
-                });
-                if (organizationIndexToDelete > -1) {
-                    self.addedOUAndWFGroupsToBroadcast.splice(organizationIndexToDelete, 1);
-                }
-            };
+            /* /!**
+              * @description remove single organization from list
+              * @param recordToDelete
+              *!/
+             self.removeOrganizationBroadcast = function (recordToDelete) {
+                 var organizationIndexToDelete = _.findIndex(self.addedOUAndWFGroupsToBroadcast, function (addedRecord) {
+                     return addedRecord.id === recordToDelete.id && self.checkBroadcastRecordType(addedRecord, recordToDelete.broadcastRecordType);
+                 });
+                 if (organizationIndexToDelete > -1) {
+                     self.addedOUAndWFGroupsToBroadcast.splice(organizationIndexToDelete, 1);
+                 }
+             };
+
+             /!**
+              * @description remove single workflow group from list
+              * @param recordToDelete
+              *!/
+             self.removeWorkflowGroupBroadcast = function (recordToDelete) {
+                 var workflowGroupIndexToDelete = _.findIndex(self.addedOUAndWFGroupsToBroadcast, function (addedRecord) {
+                     return addedRecord.id === recordToDelete.id && self.checkBroadcastRecordType(addedRecord, self.broadcastRecordType.workflowGroup);
+                 });
+                 if (workflowGroupIndexToDelete > -1) {
+                     self.addedOUAndWFGroupsToBroadcast.splice(workflowGroupIndexToDelete, 1);
+                 }
+             };*/
 
             /**
-             * @description remove single workflow group from list
-             * @param wfGroupToBroadcast
+             * @description Removes the selected records(OUs/WfGroups) from list of added records
              */
-            self.removeWorkflowGroupBroadcast = function (wfGroupToBroadcast) {
-                var workflowGroupIndexToDelete = _.findIndex(self.addedOUAndWFGroupsToBroadcast, function (wfGroup) {
-                    return wfGroup.id === wfGroupToBroadcast.id && self.checkBroadcastRecordType(organization, self.broadcastRecordType.workflowGroup);
-                });
-                if (workflowGroupIndexToDelete > -1) {
-                    self.addedOUAndWFGroupsToBroadcast.splice(workflowGroupIndexToDelete, 1);
-                }
-            };
-
             self.removeBulkRecordsFromBroadcastGrid = function () {
                 dialog.confirmMessage(langService.get('confirm_delete_selected_multiple'))
                     .then(function () {
-                        self.removeBulkOrganizationBroadcast();
-                        self.removeBulkWorkflowGroupBroadcast();
+                        _.map(self.selectedAddedOUAndWFGroupsToBroadcast, function (recordToDelete) {
+                            return _.remove(self.addedOUAndWFGroupsToBroadcast, function (addedRecord) {
+                                if (addedRecord.id === recordToDelete.id && self.checkBroadcastRecordType(addedRecord, recordToDelete.broadcastRecordType))
+                                    return addedRecord;
+                            });
+                        });
+                        /*self.removeBulkOrganizationBroadcast();
+                        self.removeBulkWorkflowGroupBroadcast();*/
                         self.selectedAddedOUAndWFGroupsToBroadcast = [];
                     });
             };
-
-            /**
+/*
+            /!**
              * @description remove bulk organization from list
-             */
+             *!/
             self.removeBulkOrganizationBroadcast = function () {
                 _.map(self.selectedAddedOUAndWFGroupsToBroadcast, function (selectedOu) {
                     return _.remove(self.addedOUAndWFGroupsToBroadcast, function (Ou) {
@@ -177,9 +196,9 @@ module.exports = function (app) {
 
             };
 
-            /**
+            /!**
              * @description remove bulk workflow group from list
-             */
+             *!/
             self.removeBulkWorkflowGroupBroadcast = function () {
                 _.map(self.selectedAddedOUAndWFGroupsToBroadcast, function (selectedWf) {
                     return _.remove(self.addedOUAndWFGroupsToBroadcast, function (wfGroup) {
@@ -187,7 +206,7 @@ module.exports = function (app) {
                             return wfGroup;
                     });
                 });
-            };
+            };*/
 
             /**
              * @description add selected workflow group to grid
