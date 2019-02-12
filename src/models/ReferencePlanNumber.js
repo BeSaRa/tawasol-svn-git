@@ -95,7 +95,7 @@ module.exports = function (app) {
              * @returns {number}
              */
             ReferencePlanNumber.prototype.isValidReferencePlan = function () {
-                return this.referencePlanItems.length && this.hasAtLeastItemForAll();
+                return this.referencePlanItems.length;// && this.hasAtLeastItemForAll();
             };
             /**
              * @description to check if the reference plan has Item for all correspondence.
