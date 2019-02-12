@@ -28,16 +28,28 @@ module.exports = function (app) {
         });
 
         CMSModelInterceptor.whenReceivedModel(modelName, function (model) {
+            // debugger;
+            // model.site = model.subSiteId ? new Site({
+            //     mainSiteId: model.mainSiteId,
+            //     subSiteId: model.subSiteId,
+            //     followupStatus: new Information(model.followupStatusInfo),
+            //     followupDate: model.followupDate,
+            //     mainEnSiteText: model.mainSiteInfo ? model.mainSiteInfo.enName : null,
+            //     mainArSiteText: model.mainSiteInfo ? model.mainSiteInfo.arName : null,
+            //     subEnSiteText: model.subSiteInfo ? model.subSiteInfo.enName : null,
+            //     subArSiteText: model.subSiteInfo ? model.subSiteInfo.arName : null,
+            //     siteType: correspondenceService.getLookup('incoming', 'siteTypes', model.siteType)
+            // }) : null;
             model.site = model.subSiteId ? new Site({
                 mainSiteId: model.mainSiteId,
                 subSiteId: model.subSiteId,
-                followupStatus: new Information(model.followupStatusInfo),
-                followupDate: model.followupDate,
-                mainEnSiteText: model.mainSiteInfo ? model.mainSiteInfo.enName : null,
-                mainArSiteText: model.mainSiteInfo ? model.mainSiteInfo.arName : null,
-                subEnSiteText: model.subSiteInfo ? model.subSiteInfo.enName : null,
-                subArSiteText: model.subSiteInfo ? model.subSiteInfo.arName : null,
-                siteType: correspondenceService.getLookup('incoming', 'siteTypes', model.siteType)
+                followupStatus: new Information(model.siteInfo.followupStatusResult),
+                followupDate: model.siteInfo.followupDate,
+                mainEnSiteText: model.siteInfo.mainSite ? model.siteInfo.mainSite.enName : null,
+                mainArSiteText: model.siteInfo.mainSite ? model.siteInfo.mainSite.arName : null,
+                subEnSiteText: model.siteInfo.subSite ? model.siteInfo.subSite.enName : null,
+                subArSiteText: model.siteInfo.subSite ? model.siteInfo.subSite.arName : null,
+                siteType: correspondenceService.getLookup('incoming', 'siteTypes', model.siteInfo.siteType)
             }) : null;
             model.siteTypeInfo = model.siteTypeInfo ? new Information(model.siteTypeInfo) : new Information();
             model.subSiteInfo = model.subSiteInfo ? new Information(model.subSiteInfo) : new Information();
