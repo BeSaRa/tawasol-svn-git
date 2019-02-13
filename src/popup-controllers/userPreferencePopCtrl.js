@@ -36,6 +36,7 @@ module.exports = function (app) {
                                                       ApplicationUserSignature,
                                                       applicationUserSignatureService,
                                                       attachmentService,
+                                                      gridService,
                                                       $scope,
                                                       $rootScope,
                                                       $q,
@@ -74,6 +75,7 @@ module.exports = function (app) {
         self.userComments = userComments;
         self.workflowGroups = workflowGroups;
         self.userWorkflowGroups = userWorkflowGroups;
+        self.userWorkflowGroupsCopy = angular.copy(userWorkflowGroups);
         self.userFolderService = userFolderService;
         self.currentNode = null;
         self.viewInboxAsOptions = [
@@ -300,8 +302,7 @@ module.exports = function (app) {
                         self.applicationUser.signature = result;
                         defer.resolve(tabName);
                     });
-            }
-            else {
+            } else {
                 defer.resolve(tabName);
             }
             return defer.promise.then(function (tab) {
@@ -333,8 +334,7 @@ module.exports = function (app) {
                 self.applicationUser.newsmsEmailNotify = false;
                 self.applicationUser.deadlinesmsNotify = false;
                 self.applicationUser.reminderSmsnotify = false;
-            }
-            else {
+            } else {
                 generator.replaceWithOriginalValues(self.applicationUser, self.model, ['newsmsEmailNotify', 'deadlinesmsNotify', 'reminderSmsnotify']);
             }
             self.resetNotificationsUserPreferences('newsmsEmailNotify', 'newItemSmspriority', [userPreferencesForm.newItemSmspriority]);
@@ -352,8 +352,7 @@ module.exports = function (app) {
                 self.applicationUser.newItemEmailNotify = false;
                 self.applicationUser.deadlineEmailNotify = false;
                 self.applicationUser.reminderEmailNotify = false;
-            }
-            else {
+            } else {
                 generator.replaceWithOriginalValues(self.applicationUser, self.model, ['newItemEmailNotify', 'deadlineEmailNotify', 'reminderEmailNotify']);
             }
             self.resetNotificationsUserPreferences('newItemEmailNotify', 'newItemEmailPriority', [userPreferencesForm.newItemEmailPriority]);
@@ -387,8 +386,7 @@ module.exports = function (app) {
                 for (var i = 0; i < fields.length; i++) {
                     fields[i].$setUntouched();
                 }
-            }
-            else {
+            } else {
                 generator.replaceWithOriginalValues(self.applicationUser, self.model, resetProperties, true);
             }
         };
@@ -549,8 +547,7 @@ module.exports = function (app) {
                             });
                     });
 
-                }
-                else {
+                } else {
                     form.$setUntouched();
                     defer.resolve(true);
                 }
@@ -573,8 +570,7 @@ module.exports = function (app) {
                     }
                 }
                 return langService.get('user_on_behalf');
-            }
-            else {
+            } else {
                 if (langService.current === 'en')
                     return self.selectedProxyUser.applicationUser.getTranslatedName() + ' - ' + self.selectedProxyUser.organization.getTranslatedName();
                 return self.selectedProxyUser.organization.getTranslatedName() + ' - ' + self.selectedProxyUser.applicationUser.getTranslatedName();
@@ -600,7 +596,6 @@ module.exports = function (app) {
         self.selectedProxyUserChange = function (proxyUser) {
             self.ouApplicationUser.proxyAuthorityLevels = null;
         };
-
 
 
         self.requiredFieldsOutOfOffice = [
@@ -915,7 +910,15 @@ module.exports = function (app) {
                         return (self.userWorkflowGroups.length + 21);
                     }
                 }
-            ]
+            ],
+            searchColumns: {
+                arabicName: 'wfgroup.arName',
+                englishName: 'wfgroup.enName'
+            },
+            searchText: '',
+            searchCallback: function () {
+                self.userWorkflowGroups = gridService.searchGridData(self.userWorkflowGrid, self.userWorkflowGroupsCopy);
+            }
         };
 
         self.workflowStatusServices = {
@@ -1035,6 +1038,7 @@ module.exports = function (app) {
                 .getUserWorkflowGroupsByUser($event)
                 .then(function (result) {
                     self.userWorkflowGroups = result;
+                    self.userWorkflowGroupsCopy = angular.copy(result);
                     self.selectedUserWorkflowGroups = [];
                     defer.resolve(true);
                     if (pageNumber)
@@ -1124,8 +1128,7 @@ module.exports = function (app) {
         self.addApplicationUserSignatureFromCtrl = function () {
             if (!self.selectedFile) {
                 toast.error(langService.get('file_required'));
-            }
-            else {
+            } else {
                 validationService
                     .createValidation('ADD_APPLICATION_USER_SIGNATURE')
                     .addStep('check_required_fields', true, self.checkSignatureRequiredFields, self.signature, function (result) {

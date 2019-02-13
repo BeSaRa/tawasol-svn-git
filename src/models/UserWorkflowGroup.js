@@ -44,6 +44,15 @@ module.exports = function (app) {
             };
 
             /**
+             * @description Get the name of record with passed language name
+             * @param language
+             * @returns {string}
+             */
+            UserWorkflowGroup.prototype.getNameByLanguage = function (language) {
+                return this[language + 'Name'];
+            };
+
+            /**
              * @description Get the status of UserWorkflowGroup as Active or Inactive instead of true or false.
              * @returns {string}
              */

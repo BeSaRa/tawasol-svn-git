@@ -986,7 +986,7 @@
                                         <md-icon md-svg-icon="refresh"></md-icon>
                                     </md-button>
                                     <span flex></span>
-                                    <search-filter-directive model="ctrl.searchModel"></search-filter-directive>
+                                    <grid-search-directive grid="ctrl.userWorkflowGrid"></grid-search-directive>
                                 </div>
                                 <div layout="column" flex ng-if="ctrl.userWorkflowGroups.length">
                                     <div scroll-directive>
@@ -1031,7 +1031,7 @@
                                                             </thead>
                                                             <tbody md-body>
                                                             <tr md-select="userWorkflowGroup" md-row
-                                                                ng-repeat="userWorkflowGroup in ctrl.userWorkflowGroups | translatedNameFilter:ctrl.searchModel | limitTo: ctrl.userWorkflowGrid.limit: ((ctrl.userWorkflowGrid.page - 1) * ctrl.userWorkflowGrid.limit)  track by $index">
+                                                                ng-repeat="userWorkflowGroup in ctrl.userWorkflowGroups | limitTo: ctrl.userWorkflowGrid.limit: ((ctrl.userWorkflowGrid.page - 1) * ctrl.userWorkflowGrid.limit)  track by $index">
                                                                 <td md-cell>{{userWorkflowGroup.wfgroup.arName}}</td>
                                                                 <td md-cell>{{userWorkflowGroup.wfgroup.enName}}</td>
                                                                 <td md-cell>
