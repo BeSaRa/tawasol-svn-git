@@ -163,6 +163,7 @@ module.exports = function (app) {
                     controllerAs: 'ctrl',
                     controller: 'messageBodyPopCtrl',
                     locals: {
+                        label: 'announcement_message_body',
                         record: privateAnnouncement,
                         isHtml: true,
                         bodyProperty: {arabic: 'arBody', english: 'enBody'}

@@ -1,7 +1,7 @@
 <md-dialog class="dialog-extend" ng-attr-aria-label="{{lang[ctrl.label]}}">
     <div layout="column">
         <md-toolbar>
-            <span class="p20">{{lang.message_body}} : {{ctrl.record.getNames()}}</span>
+            <span class="p20">{{lang[ctrl.label]}} : {{ctrl.record.getNames()}}</span>
             <close-dialog-directive></close-dialog-directive>
         </md-toolbar>
         <md-content scroll-directive>

@@ -1,21 +1,21 @@
 module.exports = function (app) {
     app.controller('messageBodyPopCtrl', function (dialog,
-                                                   record,
-                                                   isHtml,
-                                                   bodyProperty,
-                                                   $sce) {
+                                                   $sce,
+                                                   $timeout) {
         'ngInject';
         var self = this;
 
         self.controllerName = 'messageBodyPopCtrl';
-        self.isHtml = isHtml;
-        if (isHtml) {
-            self.arBody = $sce.trustAsHtml(record[bodyProperty.arabic]);
-            self.enBody = $sce.trustAsHtml(record[bodyProperty.english]);
-        } else {
-            self.arBody = (record[bodyProperty.arabic]);
-            self.enBody = (record[bodyProperty.english]);
-        }
+
+        $timeout(function () {
+            if (self.isHtml) {
+                self.arBody = $sce.trustAsHtml(self.record[self.bodyProperty.arabic]);
+                self.enBody = $sce.trustAsHtml(self.record[self.bodyProperty.english]);
+            } else {
+                self.arBody = (self.record[self.bodyProperty.arabic]);
+                self.enBody = (self.record[self.bodyProperty.english]);
+            }
+        });
 
         self.closePopup = function () {
             dialog.cancel();
