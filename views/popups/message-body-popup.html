@@ -1,0 +1,23 @@
+<md-dialog class="dialog-extend" ng-attr-aria-label="{{lang[ctrl.label]}}">
+    <div layout="column">
+        <md-toolbar>
+            <span class="p20">{{lang.message_body}} : {{ctrl.record.getNames()}}</span>
+            <close-dialog-directive></close-dialog-directive>
+        </md-toolbar>
+        <md-content scroll-directive>
+            <div layout="column" class="p20">
+                <div>
+                    <md-subheader class="md-primary">{{lang.arabic_body_text}}</md-subheader>
+                    <div ng-if="ctrl.isHtml" layout="column" layout-align="none end" class="p20"
+                         ng-bind-html="ctrl.arBody"></div>
+                    <div ng-if="!ctrl.isHtml" layout="column" layout-align="none end" class="p20">{{ctrl.arBody}}</div>
+                </div>
+                <div>
+                    <md-subheader class="md-primary">{{lang.english_body_text}}</md-subheader>
+                    <div ng-if="ctrl.isHtml" class="p20" ng-bind-html="ctrl.enBody"></div>
+                    <div ng-if="!ctrl.isHtml" class="p20">{{ctrl.enBody}}</div>
+                </div>
+            </div>
+        </md-content>
+    </div>
+</md-dialog>

@@ -8,7 +8,7 @@ module.exports = function (app) {
         var self = this;
 
         self.controllerName = 'messageBodyPopCtrl';
-
+        self.isHtml = isHtml;
         if (isHtml) {
             self.arBody = $sce.trustAsHtml(record[bodyProperty.arabic]);
             self.enBody = $sce.trustAsHtml(record[bodyProperty.english]);
